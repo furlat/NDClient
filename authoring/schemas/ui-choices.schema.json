@@ -1,0 +1,160 @@
+{
+  "$defs": {
+    "ChoiceRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "owner": {
+          "$ref": "#/$defs/ContentRef"
+        },
+        "facet": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Facet"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            }
+          ],
+          "title": "Value"
+        },
+        "icon_key": {
+          "title": "Icon Key",
+          "type": "string"
+        },
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "requirements": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ]
+          },
+          "title": "Requirements",
+          "type": "object"
+        },
+        "field": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Field"
+        },
+        "field_value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Field Value"
+        }
+      },
+      "required": [
+        "owner",
+        "facet",
+        "value",
+        "icon_key",
+        "label",
+        "requirements"
+      ],
+      "title": "ChoiceRecord",
+      "type": "object"
+    },
+    "ContentDefinitionKind": {
+      "description": "Kinds of independently identifiable content definitions.",
+      "enum": [
+        "item",
+        "creature",
+        "action",
+        "spell",
+        "condition",
+        "trait",
+        "reaction",
+        "feat",
+        "class_feature",
+        "class",
+        "subclass",
+        "species",
+        "species_variant",
+        "background",
+        "starting_equipment_package",
+        "environment_object",
+        "rule_primitive"
+      ],
+      "title": "ContentDefinitionKind",
+      "type": "string"
+    },
+    "ContentRef": {
+      "additionalProperties": false,
+      "description": "Immutable identity and authenticated contract for one definition.",
+      "properties": {
+        "pack_id": {
+          "description": "Namespaced identity of the owning pack.",
+          "title": "Pack Id",
+          "type": "string"
+        },
+        "definition_kind": {
+          "$ref": "#/$defs/ContentDefinitionKind"
+        },
+        "content_id": {
+          "description": "Namespaced identity within the pack.",
+          "title": "Content Id",
+          "type": "string"
+        },
+        "content_version": {
+          "minimum": 1,
+          "title": "Content Version",
+          "type": "integer"
+        },
+        "definition_contract_hash": {
+          "description": "SHA-256 of the definition mode, kind, and typed contract.",
+          "title": "Definition Contract Hash",
+          "type": "string"
+        }
+      },
+      "required": [
+        "pack_id",
+        "definition_kind",
+        "content_id",
+        "content_version",
+        "definition_contract_hash"
+      ],
+      "title": "ContentRef",
+      "type": "object"
+    }
+  },
+  "items": {
+    "$ref": "#/$defs/ChoiceRecord"
+  },
+  "type": "array",
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

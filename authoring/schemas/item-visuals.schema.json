@@ -1,0 +1,357 @@
+{
+  "$defs": {
+    "AuthoredItemBasePresentation": {
+      "additionalProperties": false,
+      "description": "Cold renderer facts inherited by named rows in one source category.",
+      "properties": {
+        "equipment_layers": {
+          "items": {
+            "$ref": "#/$defs/AuthoredItemEquipmentLayer"
+          },
+          "title": "Equipment Layers",
+          "type": "array"
+        },
+        "registration_render_layer": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EquipmentRenderLayer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "notes": {
+          "title": "Notes",
+          "type": "string"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tags",
+          "type": "array"
+        }
+      },
+      "required": [
+        "equipment_layers",
+        "notes",
+        "tags"
+      ],
+      "title": "AuthoredItemBasePresentation",
+      "type": "object"
+    },
+    "AuthoredItemEquipmentLayer": {
+      "additionalProperties": false,
+      "description": "One fully resolved renderer layer from the reviewed source artifact.",
+      "properties": {
+        "render_layer": {
+          "$ref": "#/$defs/EquipmentRenderLayer"
+        },
+        "sprite_key": {
+          "minLength": 1,
+          "title": "Sprite Key",
+          "type": "string"
+        },
+        "tint_rgb": {
+          "maximum": 16777215,
+          "minimum": 0,
+          "title": "Tint Rgb",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "render_layer",
+        "sprite_key",
+        "tint_rgb"
+      ],
+      "title": "AuthoredItemEquipmentLayer",
+      "type": "object"
+    },
+    "AuthoredItemFactoryPresentationBinding": {
+      "additionalProperties": false,
+      "description": "One exact installed factory and slot receiving a category presentation.",
+      "properties": {
+        "equipment_slot": {
+          "$ref": "#/$defs/VisualLoadoutSlot"
+        },
+        "factory_identity": {
+          "minLength": 1,
+          "title": "Factory Identity",
+          "type": "string"
+        },
+        "root_presentation_owner": {
+          "title": "Root Presentation Owner",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "equipment_slot",
+        "factory_identity",
+        "root_presentation_owner"
+      ],
+      "title": "AuthoredItemFactoryPresentationBinding",
+      "type": "object"
+    },
+    "AuthoredItemVariantCategory": {
+      "additionalProperties": false,
+      "description": "One mechanical base and every authored named presentation row.",
+      "properties": {
+        "base_category": {
+          "minLength": 1,
+          "title": "Base Category",
+          "type": "string"
+        },
+        "base_presentation": {
+          "$ref": "#/$defs/AuthoredItemBasePresentation"
+        },
+        "classification": {
+          "enum": [
+            "supported_existing_factory",
+            "unsupported_missing_factory"
+          ],
+          "title": "Classification",
+          "type": "string"
+        },
+        "equipment_slot": {
+          "$ref": "#/$defs/VisualLoadoutSlot"
+        },
+        "factory_presentation_bindings": {
+          "items": {
+            "$ref": "#/$defs/AuthoredItemFactoryPresentationBinding"
+          },
+          "title": "Factory Presentation Bindings",
+          "type": "array"
+        },
+        "mechanical_factory_identity": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Mechanical Factory Identity"
+        },
+        "primary_render_layer": {
+          "$ref": "#/$defs/EquipmentRenderLayer"
+        },
+        "allowed_registration_layers": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/EquipmentRenderLayer"
+          },
+          "title": "Allowed Registration Layers",
+          "type": "array"
+        },
+        "source_order": {
+          "minimum": 0,
+          "title": "Source Order",
+          "type": "integer"
+        },
+        "unsupported_reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Unsupported Reason"
+        },
+        "variants": {
+          "items": {
+            "$ref": "#/$defs/AuthoredItemVariantInventoryRow"
+          },
+          "title": "Variants",
+          "type": "array"
+        }
+      },
+      "required": [
+        "base_category",
+        "base_presentation",
+        "classification",
+        "equipment_slot",
+        "factory_presentation_bindings",
+        "mechanical_factory_identity",
+        "primary_render_layer",
+        "source_order",
+        "unsupported_reason",
+        "variants"
+      ],
+      "title": "AuthoredItemVariantCategory",
+      "type": "object"
+    },
+    "AuthoredItemVariantInventoryRow": {
+      "additionalProperties": false,
+      "description": "One exact named sub-item and its migration classification.",
+      "properties": {
+        "display_name": {
+          "minLength": 1,
+          "title": "Display Name",
+          "type": "string"
+        },
+        "inventory_id": {
+          "minLength": 1,
+          "title": "Inventory Id",
+          "type": "string"
+        },
+        "mechanical_factory_identity": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Mechanical Factory Identity"
+        },
+        "notes": {
+          "title": "Notes",
+          "type": "string"
+        },
+        "preset_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Preset Id"
+        },
+        "source_order": {
+          "minimum": 0,
+          "title": "Source Order",
+          "type": "integer"
+        },
+        "source_visual_variant_id": {
+          "minLength": 1,
+          "title": "Source Visual Variant Id",
+          "type": "string"
+        },
+        "equipment_layers": {
+          "items": {
+            "$ref": "#/$defs/AuthoredItemEquipmentLayer"
+          },
+          "title": "Equipment Layers",
+          "type": "array"
+        },
+        "registration_render_layer": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EquipmentRenderLayer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tags",
+          "type": "array"
+        },
+        "visual_variant_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Visual Variant Id"
+        }
+      },
+      "required": [
+        "display_name",
+        "inventory_id",
+        "mechanical_factory_identity",
+        "notes",
+        "preset_id",
+        "source_order",
+        "source_visual_variant_id",
+        "equipment_layers",
+        "tags",
+        "visual_variant_id"
+      ],
+      "title": "AuthoredItemVariantInventoryRow",
+      "type": "object"
+    },
+    "EquipmentRenderLayer": {
+      "description": "Dependency-neutral renderer layers contributed by equipped items.",
+      "enum": [
+        "backpack",
+        "cloak",
+        "belt",
+        "chest",
+        "hands",
+        "helmet",
+        "legs",
+        "offhand",
+        "shoes",
+        "weapon"
+      ],
+      "title": "EquipmentRenderLayer",
+      "type": "string"
+    },
+    "VisualLoadoutSlot": {
+      "description": "Dependency-neutral actor presentation slots shared with transport.",
+      "enum": [
+        "weapon_melee_main",
+        "weapon_melee_off",
+        "weapon_ranged_main",
+        "weapon_ranged_off",
+        "helmet",
+        "body_armor",
+        "gauntlets",
+        "greaves",
+        "boots",
+        "amulet",
+        "cloak",
+        "backpack",
+        "ring_left",
+        "ring_right"
+      ],
+      "title": "VisualLoadoutSlot",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Normalized source rows plus explicit raw-identity anomaly evidence.",
+  "properties": {
+    "categories": {
+      "items": {
+        "$ref": "#/$defs/AuthoredItemVariantCategory"
+      },
+      "title": "Categories",
+      "type": "array"
+    },
+    "source_visual_variant_id_collisions": {
+      "additionalProperties": {
+        "items": {
+          "type": "string"
+        },
+        "type": "array"
+      },
+      "title": "Source Visual Variant Id Collisions",
+      "type": "object"
+    }
+  },
+  "required": [
+    "categories",
+    "source_visual_variant_id_collisions"
+  ],
+  "title": "AuthoredItemVariantInventory",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

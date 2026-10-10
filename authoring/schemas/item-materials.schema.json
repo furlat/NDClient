@@ -1,0 +1,95 @@
+{
+  "$defs": {
+    "DamageType": {
+      "description": "Closed damage-type vocabulary shared by rules and transport.",
+      "enum": [
+        "Acid",
+        "Bludgeoning",
+        "Cold",
+        "Fire",
+        "Force",
+        "Lightning",
+        "Necrotic",
+        "Piercing",
+        "Poison",
+        "Psychic",
+        "Radiant",
+        "Slashing",
+        "Thunder"
+      ],
+      "title": "DamageType",
+      "type": "string"
+    },
+    "ItemMaterialRecipe": {
+      "additionalProperties": false,
+      "description": "Passive received-fact selection; no gameplay or new sprite geometry.",
+      "properties": {
+        "behavior_id": {
+          "minLength": 1,
+          "title": "Behavior Id",
+          "type": "string"
+        },
+        "damage_type": {
+          "$ref": "#/$defs/DamageType"
+        },
+        "tint_rgb": {
+          "maximum": 16777215,
+          "minimum": 0,
+          "title": "Tint Rgb",
+          "type": "integer"
+        },
+        "bloom_strength": {
+          "maximum": 0.5,
+          "minimum": 0,
+          "title": "Bloom Strength",
+          "type": "number"
+        },
+        "bloom_radius": {
+          "maximum": 3,
+          "minimum": 0,
+          "title": "Bloom Radius",
+          "type": "integer"
+        },
+        "priority": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Priority",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "behavior_id",
+        "damage_type",
+        "tint_rgb",
+        "bloom_strength",
+        "bloom_radius",
+        "priority"
+      ],
+      "title": "ItemMaterialRecipe",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "maximum": 1,
+      "minimum": 1,
+      "title": "Version",
+      "type": "integer"
+    },
+    "recipes": {
+      "items": {
+        "$ref": "#/$defs/ItemMaterialRecipe"
+      },
+      "title": "Recipes",
+      "type": "array"
+    }
+  },
+  "required": [
+    "version",
+    "recipes"
+  ],
+  "title": "ItemMaterialDocument",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

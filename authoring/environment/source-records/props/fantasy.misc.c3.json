@@ -1,0 +1,1928 @@
+{
+  "section": "misc",
+  "record": {
+    "catalog_id": "fantasy.misc.c3",
+    "modified_id": "modified.fantasy.misc.c3",
+    "code": "C3",
+    "identity": {
+      "label": "wheeled cannon on timber carriage",
+      "evidence_kind": "four_view_visual_identification",
+      "confidence": 0.85
+    },
+    "role": "wheeled machine",
+    "mount": "floor: wheel contacts and rear carriage trail",
+    "footprint": {
+      "coordinate_frame": "local-east; origin is authored physical ground-contact centroid (wall-mounted: mount centroid); +X projects down/right and +Y down/left in east art",
+      "overall_extent_cells": {
+        "value": [
+          0.88,
+          0.5
+        ],
+        "evidence_kind": "visual_estimate_and_content_proposal",
+        "confidence": 0.85,
+        "uncertainty_plus_minus": 0.15,
+        "note": "An envelope for assembly extent, not a filled solid collider."
+      },
+      "overall_bounds_cells": [
+        -0.44,
+        -0.25,
+        0.44,
+        0.25
+      ],
+      "overall_polygon_cells": [
+        [
+          -0.44,
+          -0.25
+        ],
+        [
+          0.44,
+          -0.25
+        ],
+        [
+          0.44,
+          0.25
+        ],
+        [
+          -0.44,
+          0.25
+        ]
+      ],
+      "solid_representation": "union of the listed physical_components in 3D; bounds/polygon alone must not be filled"
+    },
+    "height": {
+      "extent_steps": {
+        "value": 0.65,
+        "evidence_kind": "visual_estimate_and_content_proposal",
+        "confidence": 0.85,
+        "uncertainty_plus_minus": 0.15
+      },
+      "physical_floor_extent_feet": {
+        "value": 3.25,
+        "evidence_kind": "visual_estimate_and_content_proposal",
+        "confidence": 0.85,
+        "uncertainty_plus_minus": 0.75
+      }
+    },
+    "physical_components": [
+      {
+        "name": "carriage beam",
+        "shape": "rectangular_prism",
+        "solid_xy_polygon": [
+          [
+            -0.425,
+            -0.16
+          ],
+          [
+            0.425,
+            -0.16
+          ],
+          [
+            0.425,
+            0.16
+          ],
+          [
+            -0.425,
+            0.16
+          ]
+        ],
+        "z_steps": [
+          0.12,
+          0.3
+        ],
+        "material": "wood",
+        "evidence_kind": "new_content_proposal_from_visible_members",
+        "confidence": 0.6
+      },
+      {
+        "name": "metal barrel",
+        "shape": "horizontal_cylinder",
+        "axis_xyz_cell_cell_step": [
+          [
+            -0.35,
+            0,
+            0.43
+          ],
+          [
+            0.35,
+            0,
+            0.53
+          ]
+        ],
+        "radius_cells": 0.09,
+        "solid_xy_polygon_envelope": [
+          [
+            -0.44,
+            -0.09
+          ],
+          [
+            0.44,
+            -0.09
+          ],
+          [
+            0.44,
+            0.09
+          ],
+          [
+            -0.44,
+            0.09
+          ]
+        ],
+        "z_steps": [
+          0.34,
+          0.62
+        ],
+        "material": "iron",
+        "evidence_kind": "new_content_proposal",
+        "confidence": 0.6
+      },
+      {
+        "name": "spoked wood wheel",
+        "shape": "thin_vertical_wheel_rim_and_spokes",
+        "center_xyz_cell_cell_step": [
+          0.02,
+          -0.23,
+          0.23
+        ],
+        "radius_cells_and_steps": [
+          0.23,
+          0.23
+        ],
+        "thickness_cells": 0.025,
+        "solid_xy_polygon_envelope": [
+          [
+            -0.21000000000000002,
+            -0.2475
+          ],
+          [
+            0.25,
+            -0.2475
+          ],
+          [
+            0.25,
+            -0.21250000000000002
+          ],
+          [
+            -0.21000000000000002,
+            -0.21250000000000002
+          ]
+        ],
+        "z_steps": [
+          0,
+          0.46
+        ],
+        "material": "wood/iron",
+        "evidence_kind": "new_content_proposal",
+        "confidence": 0.65,
+        "note": "Explicit annular rim/hub/spoke axes are authoritative. Plane is XZ, axle is Y. Radius/thickness/count/phase are qualified estimates; holes between these solids stay empty. XY envelope must not become a filled disc.",
+        "outer_rim_radius_cells": 0.23,
+        "inner_rim_radius_cells": 0.195,
+        "plane_basis_xyz": {
+          "radial_u": [
+            1,
+            0,
+            0
+          ],
+          "radial_v": [
+            0,
+            0,
+            1
+          ],
+          "axle_normal": [
+            0,
+            1,
+            0
+          ]
+        },
+        "rim": {
+          "shape": "annular_cylinder_in_vertical_XZ_plane",
+          "center_xyz_cell_cell_step": [
+            0.02,
+            -0.23,
+            0.23
+          ],
+          "outer_radius_cells": 0.23,
+          "inner_radius_cells": 0.195,
+          "axle_direction_xyz": [
+            0,
+            1,
+            0
+          ],
+          "axial_thickness_cells": 0.025,
+          "evidence_kind": "new_content_proposal",
+          "confidence": 0.6
+        },
+        "hub": {
+          "shape": "finite_cylinder",
+          "axis_xyz_cell_cell_step": [
+            [
+              0.02,
+              -0.2475,
+              0.23
+            ],
+            [
+              0.02,
+              -0.21250000000000002,
+              0.23
+            ]
+          ],
+          "radius_cells": 0.03,
+          "axial_thickness_cells": 0.035,
+          "evidence_kind": "new_content_proposal",
+          "confidence": 0.5
+        },
+        "spoke_count": 8,
+        "spoke_phase_radians": 0,
+        "spoke_radius_cells": 0.008,
+        "spoke_thickness_cells": 0.016,
+        "spokes": [
+          {
+            "name": "wheel 1 radial spoke 1",
+            "shape": "capsule_along_3d_axis",
+            "axis_xyz_cell_cell_step": [
+              [
+                0.05,
+                -0.23,
+                0.23
+              ],
+              [
+                0.215,
+                -0.23,
+                0.23
+              ]
+            ],
+            "radius_cells": 0.008,
+            "solid_xy_polygon_envelope": [
+              [
+                0.05,
+                -0.222
+              ],
+              [
+                0.215,
+                -0.222
+              ],
+              [
+                0.215,
+                -0.23800000000000002
+              ],
+              [
+                0.05,
+                -0.23800000000000002
+              ]
+            ],
+            "z_steps": [
+              0.23,
+              0.23
+            ],
+            "material": "wood",
+            "evidence_kind": "new_content_proposal_from_visible_member",
+            "confidence": 0.5,
+            "note": "XY envelope is a broad bound; actual solid is the thin 3D member, including its z position."
+          },
+          {
+            "name": "wheel 1 radial spoke 2",
+            "shape": "capsule_along_3d_axis",
+            "axis_xyz_cell_cell_step": [
+              [
+                0.041213203435596424,
+                -0.23,
+                0.25121320343559644
+              ],
+              [
+                0.15788582233137677,
+                -0.23,
+                0.3678858223313768
+              ]
+            ],
+            "radius_cells": 0.008,
+            "solid_xy_polygon_envelope": [
+              [
+                0.041213203435596424,
+                -0.222
+              ],
+              [
+                0.15788582233137677,
+                -0.222
+              ],
+              [
+                0.15788582233137677,
+                -0.23800000000000002
+              ],
+              [
+                0.041213203435596424,
+                -0.23800000000000002
+              ]
+            ],
+            "z_steps": [
+              0.25121320343559644,
+              0.3678858223313768
+            ],
+            "material": "wood",
+            "evidence_kind": "new_content_proposal_from_visible_member",
+            "confidence": 0.5,
+            "note": "XY envelope is a broad bound; actual solid is the thin 3D member, including its z position."
+          },
+          {
+            "name": "wheel 1 radial spoke 3",
+            "shape": "capsule_along_3d_axis",
+            "axis_xyz_cell_cell_step": [
+              [
+                0.020000000000000004,
+                -0.23,
+                0.26
+              ],
+              [
+                0.02000000000000001,
+                -0.23,
+                0.42500000000000004
+              ]
+            ],
+            "radius_cells": 0.008,
+            "solid_xy_polygon_envelope": [
+              [
+                0.020000000000000004,
+                -0.222
+              ],
+              [
+                0.02000000000000001,
+                -0.222
+              ],
+              [
+                0.02000000000000001,
+                -0.23800000000000002
+              ],
+              [
+                0.020000000000000004,
+                -0.23800000000000002
+              ]
+            ],
+            "z_steps": [
+              0.26,
+              0.42500000000000004
+            ],
+            "material": "wood",
+            "evidence_kind": "new_content_proposal_from_visible_member",
+            "confidence": 0.5,
+            "note": "XY envelope is a broad bound; actual solid is the thin 3D member, including its z position."
+          },
+          {
+            "name": "wheel 1 radial spoke 4",
+            "shape": "capsule_along_3d_axis",
+            "axis_xyz_cell_cell_step": [
+              [
+                -0.001213203435596423,
+                -0.23,
+                0.25121320343559644
+              ],
+              [
+                -0.11788582233137675,
+                -0.23,
+                0.3678858223313768
+              ]
+            ],
+            "radius_cells": 0.008,
+            "solid_xy_polygon_envelope": [
+              [
+                -0.001213203435596423,
+                -0.23800000000000002
+              ],
+              [
+                -0.11788582233137675,
+                -0.23800000000000002
+              ],
+              [
+                -0.11788582233137675,
+                -0.222
+              ],
+              [
+                -0.001213203435596423,
+                -0.222
+              ]
+            ],
+            "z_steps": [
+              0.25121320343559644,
+              0.3678858223313768
+            ],
+            "material": "wood",
+            "evidence_kind": "new_content_proposal_from_visible_member",
+            "confidence": 0.5,
+            "note": "XY envelope is a broad bound; actual solid is the thin 3D member, including its z position."
+          },
+          {
+            "name": "wheel 1 radial spoke 5",
+            "shape": "capsule_along_3d_axis",
+            "axis_xyz_cell_cell_step": [
+              [
+                -0.009999999999999998,
+                -0.23,
+                0.23
+              ],
+              [
+                -0.17500000000000002,
+                -0.23,
+                0.23000000000000004
+              ]
+            ],
+            "radius_cells": 0.008,
+            "solid_xy_polygon_envelope": [
+              [
+                -0.009999999999999998,
+                -0.23800000000000002
+              ],
+              [
+                -0.17500000000000002,
+                -0.23800000000000002
+              ],
+              [
+                -0.17500000000000002,
+                -0.222
+              ],
+              [
+                -0.009999999999999998,
+                -0.222
+              ]
+            ],
+            "z_steps": [
+              0.23,
+              0.23000000000000004
+            ],
+            "material": "wood",
+            "evidence_kind": "new_content_proposal_from_visible_member",
+            "confidence": 0.5,
+            "note": "XY envelope is a broad bound; actual solid is the thin 3D member, including its z position."
+          },
+          {
+            "name": "wheel 1 radial spoke 6",
+            "shape": "capsule_along_3d_axis",
+            "axis_xyz_cell_cell_step": [
+              [
+                -0.00121320343559643,
+                -0.23,
+                0.20878679656440358
+              ],
+              [
+                -0.1178858223313768,
+                -0.23,
+                0.09211417766862326
+              ]
+            ],
+            "radius_cells": 0.008,
+            "solid_xy_polygon_envelope": [
+              [
+                -0.00121320343559643,
+                -0.23800000000000002
+              ],
+              [
+                -0.1178858223313768,
+                -0.23800000000000002
+              ],
+              [
+                -0.1178858223313768,
+                -0.222
+              ],
+              [
+                -0.00121320343559643,
+                -0.222
+              ]
+            ],
+            "z_steps": [
+              0.09211417766862326,
+              0.20878679656440358
+            ],
+            "material": "wood",
+            "evidence_kind": "new_content_proposal_from_visible_member",
+            "confidence": 0.5,
+            "note": "XY envelope is a broad bound; actual solid is the thin 3D member, including its z position."
+          },
+          {
+            "name": "wheel 1 radial spoke 7",
+            "shape": "capsule_along_3d_axis",
+            "axis_xyz_cell_cell_step": [
+              [
+                0.019999999999999993,
+                -0.23,
+                0.2
+              ],
+              [
+                0.019999999999999966,
+                -0.23,
+                0.035
+              ]
+            ],
+            "radius_cells": 0.008,
+            "solid_xy_polygon_envelope": [
+              [
+                0.019999999999999993,
+                -0.23800000000000002
+              ],
+              [
+                0.019999999999999966,
+                -0.23800000000000002
+              ],
+              [
+                0.019999999999999966,
+                -0.222
+              ],
+              [
+                0.019999999999999993,
+                -0.222
+              ]
+            ],
+            "z_steps": [
+              0.035,
+              0.2
+            ],
+            "material": "wood",
+            "evidence_kind": "new_content_proposal_from_visible_member",
+            "confidence": 0.5,
+            "note": "XY envelope is a broad bound; actual solid is the thin 3D member, including its z position."
+          },
+          {
+            "name": "wheel 1 radial spoke 8",
+            "shape": "capsule_along_3d_axis",
+            "axis_xyz_cell_cell_step": [
+              [
+                0.041213203435596424,
+                -0.23,
+                0.20878679656440358
+              ],
+              [
+                0.15788582233137674,
+                -0.23,
+                0.0921141776686232
+              ]
+            ],
+            "radius_cells": 0.008,
+            "solid_xy_polygon_envelope": [
+              [
+                0.041213203435596424,
+                -0.222
+              ],
+              [
+                0.15788582233137674,
+                -0.222
+              ],
+              [
+                0.15788582233137674,
+                -0.23800000000000002
+              ],
+              [
+                0.041213203435596424,
+                -0.23800000000000002
+              ]
+            ],
+            "z_steps": [
+              0.0921141776686232,
+              0.20878679656440358
+            ],
+            "material": "wood",
+            "evidence_kind": "new_content_proposal_from_visible_member",
+            "confidence": 0.5,
+            "note": "XY envelope is a broad bound; actual solid is the thin 3D member, including its z position."
+          }
+        ],
+        "solid_union": "annular rim plus finite hub cylinder plus the eight explicit thin spokes; all remaining interior is open",
+        "geometry_estimates": {
+          "outer_radius_cells": {
+            "value": 0.23,
+            "evidence_kind": "visual_estimate_and_content_proposal",
+            "confidence": 0.65,
+            "uncertainty_plus_minus": 0.04
+          },
+          "inner_radius_cells": {
+            "value": 0.195,
+            "evidence_kind": "visual_estimate_and_content_proposal",
+            "confidence": 0.55,
+            "uncertainty_plus_minus": 0.03
+          },
+          "rim_axial_thickness_cells": {
+            "value": 0.025,
+            "evidence_kind": "visual_estimate_and_content_proposal",
+            "confidence": 0.45,
+            "uncertainty_plus_minus": 0.015
+          },
+          "spoke_count": {
+            "value": 8,
+            "evidence_kind": "visual_estimate_and_content_proposal",
+            "confidence": 0.5,
+            "uncertainty_plus_minus": 2,
+            "note": "Eight uniformly spaced spokes is a concrete approximation, not an asserted hidden member count."
+          },
+          "spoke_diameter_cells": {
+            "value": 0.016,
+            "evidence_kind": "visual_estimate_and_content_proposal",
+            "confidence": 0.45,
+            "uncertainty_plus_minus": 0.008
+          },
+          "hub_radius_cells": {
+            "value": 0.03,
+            "evidence_kind": "visual_estimate_and_content_proposal",
+            "confidence": 0.45,
+            "uncertainty_plus_minus": 0.015
+          },
+          "spoke_phase_radians": {
+            "value": 0,
+            "evidence_kind": "visual_estimate_and_content_proposal",
+            "confidence": 0.45,
+            "uncertainty_plus_minus": 0.39269908169872414
+          }
+        }
+      },
+      {
+        "name": "spoked wood wheel",
+        "shape": "thin_vertical_wheel_rim_and_spokes",
+        "center_xyz_cell_cell_step": [
+          0.02,
+          0.23,
+          0.23
+        ],
+        "radius_cells_and_steps": [
+          0.23,
+          0.23
+        ],
+        "thickness_cells": 0.025,
+        "solid_xy_polygon_envelope": [
+          [
+            -0.21000000000000002,
+            0.21250000000000002
+          ],
+          [
+            0.25,
+            0.21250000000000002
+          ],
+          [
+            0.25,
+            0.2475
+          ],
+          [
+            -0.21000000000000002,
+            0.2475
+          ]
+        ],
+        "z_steps": [
+          0,
+          0.46
+        ],
+        "material": "wood/iron",
+        "evidence_kind": "new_content_proposal",
+        "confidence": 0.65,
+        "note": "Explicit annular rim/hub/spoke axes are authoritative. Plane is XZ, axle is Y. Radius/thickness/count/phase are qualified estimates; holes between these solids stay empty. XY envelope must not become a filled disc.",
+        "outer_rim_radius_cells": 0.23,
+        "inner_rim_radius_cells": 0.195,
+        "plane_basis_xyz": {
+          "radial_u": [
+            1,
+            0,
+            0
+          ],
+          "radial_v": [
+            0,
+            0,
+            1
+          ],
+          "axle_normal": [
+            0,
+            1,
+            0
+          ]
+        },
+        "rim": {
+          "shape": "annular_cylinder_in_vertical_XZ_plane",
+          "center_xyz_cell_cell_step": [
+            0.02,
+            0.23,
+            0.23
+          ],
+          "outer_radius_cells": 0.23,
+          "inner_radius_cells": 0.195,
+          "axle_direction_xyz": [
+            0,
+            1,
+            0
+          ],
+          "axial_thickness_cells": 0.025,
+          "evidence_kind": "new_content_proposal",
+          "confidence": 0.6
+        },
+        "hub": {
+          "shape": "finite_cylinder",
+          "axis_xyz_cell_cell_step": [
+            [
+              0.02,
+              0.21250000000000002,
+              0.23
+            ],
+            [
+              0.02,
+              0.2475,
+              0.23
+            ]
+          ],
+          "radius_cells": 0.03,
+          "axial_thickness_cells": 0.035,
+          "evidence_kind": "new_content_proposal",
+          "confidence": 0.5
+        },
+        "spoke_count": 8,
+        "spoke_phase_radians": 0,
+        "spoke_radius_cells": 0.008,
+        "spoke_thickness_cells": 0.016,
+        "spokes": [
+          {
+            "name": "wheel 2 radial spoke 1",
+            "shape": "capsule_along_3d_axis",
+            "axis_xyz_cell_cell_step": [
+              [
+                0.05,
+                0.23,
+                0.23
+              ],
+              [
+                0.215,
+                0.23,
+                0.23
+              ]
+            ],
+            "radius_cells": 0.008,
+            "solid_xy_polygon_envelope": [
+              [
+                0.05,
+                0.23800000000000002
+              ],
+              [
+                0.215,
+                0.23800000000000002
+              ],
+              [
+                0.215,
+                0.222
+              ],
+              [
+                0.05,
+                0.222
+              ]
+            ],
+            "z_steps": [
+              0.23,
+              0.23
+            ],
+            "material": "wood",
+            "evidence_kind": "new_content_proposal_from_visible_member",
+            "confidence": 0.5,
+            "note": "XY envelope is a broad bound; actual solid is the thin 3D member, including its z position."
+          },
+          {
+            "name": "wheel 2 radial spoke 2",
+            "shape": "capsule_along_3d_axis",
+            "axis_xyz_cell_cell_step": [
+              [
+                0.041213203435596424,
+                0.23,
+                0.25121320343559644
+              ],
+              [
+                0.15788582233137677,
+                0.23,
+                0.3678858223313768
+              ]
+            ],
+            "radius_cells": 0.008,
+            "solid_xy_polygon_envelope": [
+              [
+                0.041213203435596424,
+                0.23800000000000002
+              ],
+              [
+                0.15788582233137677,
+                0.23800000000000002
+              ],
+              [
+                0.15788582233137677,
+                0.222
+              ],
+              [
+                0.041213203435596424,
+                0.222
+              ]
+            ],
+            "z_steps": [
+              0.25121320343559644,
+              0.3678858223313768
+            ],
+            "material": "wood",
+            "evidence_kind": "new_content_proposal_from_visible_member",
+            "confidence": 0.5,
+            "note": "XY envelope is a broad bound; actual solid is the thin 3D member, including its z position."
+          },
+          {
+            "name": "wheel 2 radial spoke 3",
+            "shape": "capsule_along_3d_axis",
+            "axis_xyz_cell_cell_step": [
+              [
+                0.020000000000000004,
+                0.23,
+                0.26
+              ],
+              [
+                0.02000000000000001,
+                0.23,
+                0.42500000000000004
+              ]
+            ],
+            "radius_cells": 0.008,
+            "solid_xy_polygon_envelope": [
+              [
+                0.020000000000000004,
+                0.23800000000000002
+              ],
+              [
+                0.02000000000000001,
+                0.23800000000000002
+              ],
+              [
+                0.02000000000000001,
+                0.222
+              ],
+              [
+                0.020000000000000004,
+                0.222
+              ]
+            ],
+            "z_steps": [
+              0.26,
+              0.42500000000000004
+            ],
+            "material": "wood",
+            "evidence_kind": "new_content_proposal_from_visible_member",
+            "confidence": 0.5,
+            "note": "XY envelope is a broad bound; actual solid is the thin 3D member, including its z position."
+          },
+          {
+            "name": "wheel 2 radial spoke 4",
+            "shape": "capsule_along_3d_axis",
+            "axis_xyz_cell_cell_step": [
+              [
+                -0.001213203435596423,
+                0.23,
+                0.25121320343559644
+              ],
+              [
+                -0.11788582233137675,
+                0.23,
+                0.3678858223313768
+              ]
+            ],
+            "radius_cells": 0.008,
+            "solid_xy_polygon_envelope": [
+              [
+                -0.001213203435596423,
+                0.222
+              ],
+              [
+                -0.11788582233137675,
+                0.222
+              ],
+              [
+                -0.11788582233137675,
+                0.23800000000000002
+              ],
+              [
+                -0.001213203435596423,
+                0.23800000000000002
+              ]
+            ],
+            "z_steps": [
+              0.25121320343559644,
+              0.3678858223313768
+            ],
+            "material": "wood",
+            "evidence_kind": "new_content_proposal_from_visible_member",
+            "confidence": 0.5,
+            "note": "XY envelope is a broad bound; actual solid is the thin 3D member, including its z position."
+          },
+          {
+            "name": "wheel 2 radial spoke 5",
+            "shape": "capsule_along_3d_axis",
+            "axis_xyz_cell_cell_step": [
+              [
+                -0.009999999999999998,
+                0.23,
+                0.23
+              ],
+              [
+                -0.17500000000000002,
+                0.23,
+                0.23000000000000004
+              ]
+            ],
+            "radius_cells": 0.008,
+            "solid_xy_polygon_envelope": [
+              [
+                -0.009999999999999998,
+                0.222
+              ],
+              [
+                -0.17500000000000002,
+                0.222
+              ],
+              [
+                -0.17500000000000002,
+                0.23800000000000002
+              ],
+              [
+                -0.009999999999999998,
+                0.23800000000000002
+              ]
+            ],
+            "z_steps": [
+              0.23,
+              0.23000000000000004
+            ],
+            "material": "wood",
+            "evidence_kind": "new_content_proposal_from_visible_member",
+            "confidence": 0.5,
+            "note": "XY envelope is a broad bound; actual solid is the thin 3D member, including its z position."
+          },
+          {
+            "name": "wheel 2 radial spoke 6",
+            "shape": "capsule_along_3d_axis",
+            "axis_xyz_cell_cell_step": [
+              [
+                -0.00121320343559643,
+                0.23,
+                0.20878679656440358
+              ],
+              [
+                -0.1178858223313768,
+                0.23,
+                0.09211417766862326
+              ]
+            ],
+            "radius_cells": 0.008,
+            "solid_xy_polygon_envelope": [
+              [
+                -0.00121320343559643,
+                0.222
+              ],
+              [
+                -0.1178858223313768,
+                0.222
+              ],
+              [
+                -0.1178858223313768,
+                0.23800000000000002
+              ],
+              [
+                -0.00121320343559643,
+                0.23800000000000002
+              ]
+            ],
+            "z_steps": [
+              0.09211417766862326,
+              0.20878679656440358
+            ],
+            "material": "wood",
+            "evidence_kind": "new_content_proposal_from_visible_member",
+            "confidence": 0.5,
+            "note": "XY envelope is a broad bound; actual solid is the thin 3D member, including its z position."
+          },
+          {
+            "name": "wheel 2 radial spoke 7",
+            "shape": "capsule_along_3d_axis",
+            "axis_xyz_cell_cell_step": [
+              [
+                0.019999999999999993,
+                0.23,
+                0.2
+              ],
+              [
+                0.019999999999999966,
+                0.23,
+                0.035
+              ]
+            ],
+            "radius_cells": 0.008,
+            "solid_xy_polygon_envelope": [
+              [
+                0.019999999999999993,
+                0.222
+              ],
+              [
+                0.019999999999999966,
+                0.222
+              ],
+              [
+                0.019999999999999966,
+                0.23800000000000002
+              ],
+              [
+                0.019999999999999993,
+                0.23800000000000002
+              ]
+            ],
+            "z_steps": [
+              0.035,
+              0.2
+            ],
+            "material": "wood",
+            "evidence_kind": "new_content_proposal_from_visible_member",
+            "confidence": 0.5,
+            "note": "XY envelope is a broad bound; actual solid is the thin 3D member, including its z position."
+          },
+          {
+            "name": "wheel 2 radial spoke 8",
+            "shape": "capsule_along_3d_axis",
+            "axis_xyz_cell_cell_step": [
+              [
+                0.041213203435596424,
+                0.23,
+                0.20878679656440358
+              ],
+              [
+                0.15788582233137674,
+                0.23,
+                0.0921141776686232
+              ]
+            ],
+            "radius_cells": 0.008,
+            "solid_xy_polygon_envelope": [
+              [
+                0.041213203435596424,
+                0.23800000000000002
+              ],
+              [
+                0.15788582233137674,
+                0.23800000000000002
+              ],
+              [
+                0.15788582233137674,
+                0.222
+              ],
+              [
+                0.041213203435596424,
+                0.222
+              ]
+            ],
+            "z_steps": [
+              0.0921141776686232,
+              0.20878679656440358
+            ],
+            "material": "wood",
+            "evidence_kind": "new_content_proposal_from_visible_member",
+            "confidence": 0.5,
+            "note": "XY envelope is a broad bound; actual solid is the thin 3D member, including its z position."
+          }
+        ],
+        "solid_union": "annular rim plus finite hub cylinder plus the eight explicit thin spokes; all remaining interior is open",
+        "geometry_estimates": {
+          "outer_radius_cells": {
+            "value": 0.23,
+            "evidence_kind": "visual_estimate_and_content_proposal",
+            "confidence": 0.65,
+            "uncertainty_plus_minus": 0.04
+          },
+          "inner_radius_cells": {
+            "value": 0.195,
+            "evidence_kind": "visual_estimate_and_content_proposal",
+            "confidence": 0.55,
+            "uncertainty_plus_minus": 0.03
+          },
+          "rim_axial_thickness_cells": {
+            "value": 0.025,
+            "evidence_kind": "visual_estimate_and_content_proposal",
+            "confidence": 0.45,
+            "uncertainty_plus_minus": 0.015
+          },
+          "spoke_count": {
+            "value": 8,
+            "evidence_kind": "visual_estimate_and_content_proposal",
+            "confidence": 0.5,
+            "uncertainty_plus_minus": 2,
+            "note": "Eight uniformly spaced spokes is a concrete approximation, not an asserted hidden member count."
+          },
+          "spoke_diameter_cells": {
+            "value": 0.016,
+            "evidence_kind": "visual_estimate_and_content_proposal",
+            "confidence": 0.45,
+            "uncertainty_plus_minus": 0.008
+          },
+          "hub_radius_cells": {
+            "value": 0.03,
+            "evidence_kind": "visual_estimate_and_content_proposal",
+            "confidence": 0.45,
+            "uncertainty_plus_minus": 0.015
+          },
+          "spoke_phase_radians": {
+            "value": 0,
+            "evidence_kind": "visual_estimate_and_content_proposal",
+            "confidence": 0.45,
+            "uncertainty_plus_minus": 0.39269908169872414
+          }
+        }
+      }
+    ],
+    "soft_or_empty_regions": [],
+    "blocking": {
+      "evidence_kind": "new_content_proposal",
+      "movement": "actual hard member union; preserve openings and interior voids",
+      "rays": "actual material surfaces at their z; no whole silhouette occluder",
+      "native_selection": "handoff only; no runtime behavior/binding selected"
+    },
+    "source_conflicts": [],
+    "notes": [
+      "Long-axis convention is a local-east authoring proposal; no runtime yaw/binding is inferred from label. No firing/use mechanics selected.",
+      "Wheel rim inner radius, eight proposed spoke axes/diameter/phase and finite hub are now explicit; no filled wheel disc. Whole XY envelope covers the preserved barrel envelope and wheel hub thickness."
+    ],
+    "animation_registration": {
+      "evidence_kind": "source_fact",
+      "source_metadata_path": "/home/tommaso/Dev/terrain-prefab-study-2026-09-24/house-prefabs/decor-study/candidates-v5/misc-c3/impact-a/metadata.json",
+      "source_metadata_sha256": "140575f9392f5f99e5e88645ba6e0fe1c0613a77429f6302292b00588770818b",
+      "catalog_metadata_path": "/mnt/c/Users/tommaso/Documents/assets/fantasy-unified-catalog/b-animated-versions/decor/candidates-v5/misc-c3/impact-a/metadata.json",
+      "catalog_metadata_sha256": "140575f9392f5f99e5e88645ba6e0fe1c0613a77429f6302292b00588770818b",
+      "canvas_px": [
+        384,
+        384
+      ],
+      "pivot_px": [
+        192,
+        271.36
+      ],
+      "rows": [
+        "e",
+        "s",
+        "w",
+        "n"
+      ],
+      "fps": 12,
+      "columns_per_pose": [
+        20,
+        20,
+        20,
+        20
+      ],
+      "columns": 20,
+      "duration_seconds": 1.6666666666666667,
+      "source_profile": "mixed",
+      "source_mount": "floor",
+      "immutable": true,
+      "interpretation": "Animation/media registration only, not a contact/footprint/mount height. No offsets or states adjusted."
+    },
+    "source_geometry_limitations": {
+      "method": "Blender source-UV thin meshes with semantic material masks and keyed authored deformation. Support buckling precedes connected cloth folding; source-visible rims and sides detach separately. No filled hull or voxel partition. Every raw frame rendered in Blender.",
+      "limitation": "Each camera has a separately source-mapped Blender mesh collection, not a shared 3D model or simulation. Hidden faces cannot be recovered. C3 rear-wheel hidden rim is explicitly inferred and revealed as the barrel moves away. B23 S/W has an explicitly inferred dark source-painted bottom behind the falling lid; it is not recovered original geometry. Cloth folds and cage buckling are authored shape keys. Source shadows are retained. No physical-validity or release-approval claim.",
+      "blender_files": [],
+      "blender_inspection": "not opened; no geometry dimensions claimed from Blender; source metadata explicitly describes directional painted surfaces rather than certified native collision"
+    },
+    "source_views": [
+      {
+        "pose": "e",
+        "original_source_path": "/mnt/c/Users/tommaso/Documents/Dev/assets/Fantasy tileset - 2D Isometric V1.1/Fantasy tileset - 2D Isometric/Environment/Misc C3_E.png",
+        "original_source_sha256": "82c5ab3ca3f44738db29b16899f2b70fe33f7976eff14753417f50747cb583da",
+        "catalog_source_path": "/mnt/c/Users/tommaso/Documents/assets/fantasy-unified-catalog/a-original/vendor/Fantasy tileset - 2D Isometric/Environment/Misc C3_E.png",
+        "canvas_px": [
+          256,
+          256
+        ],
+        "pixel_coordinate_convention": "top-left origin; integer pixel indices; support centroid may be subpixel/invisible within an opening",
+        "review_contact_sheet": "/mnt/c/Users/tommaso/Documents/assets/fantasy-unified-catalog/data-authoring-2026-10-09/misc-review/contact-09.png",
+        "alpha_bbox_diagnostic_only": [
+          78,
+          162,
+          166,
+          233
+        ],
+        "unity_registration": {
+          "evidence_kind": "source_fact",
+          "sprite_meta_path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Environment/Sprites/Misc C3_E.png.meta",
+          "sprite_meta_sha256": "4345310380d56a2141688e7facb31e3d6095f8548e4b2e8f141e4c860c83e23c",
+          "normalized_bottom_left_pivot": [
+            0.5,
+            0.19
+          ],
+          "original_top_left_pivot_px": [
+            128.0,
+            207.36
+          ],
+          "sprite_pixels_to_units": 127.0,
+          "sprite_guid": "ff7a14fa8c1e04145aceead4773c006e",
+          "tile_asset_path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Environment/Tiles/Misc C3_E.asset",
+          "tile_asset_sha256": "73e6559f0226f69b1c38e709a4655a0e9f5384bf0f203e7fac5ff069b9e69ed3",
+          "tile_guid": "ae8a8e2e17ad30f45828fb9922dbccf6",
+          "raw_collider_type": 1,
+          "tiledata_path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Example scene/Scripts/Tiles/TileData/DT_Misc C3_E.asset",
+          "tiledata_sha256": "89a2c2996d0504eee5ffb44fc0d0006113461c7c4c8c953c101d0fc8180ac200",
+          "tiledata_description": "Decorative object",
+          "occurrences": {
+            "scene_path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Example scene/Example scene.unity",
+            "sprite_guid_text_references": 1,
+            "tile_guid_text_references": 1,
+            "interpretation": "References in example scene are provenance only; not native physical dimensions or mount evidence."
+          }
+        },
+        "ground_contact": {
+          "anchor_type": "inferred canonical support-center projected onto ground plane",
+          "same_physical_feature_across_views": "center of the same assembly support layout (B44/B45: the single planted pole foot)",
+          "centroid_px": {
+            "value": [
+              128,
+              210
+            ],
+            "evidence_kind": "visual_estimate_and_content_proposal",
+            "confidence": 0.6,
+            "uncertainty_plus_minus": 8
+          },
+          "centroid_is_sprite_pivot": false,
+          "candidate_points_px": [
+            {
+              "xy": [
+                129,
+                223
+              ],
+              "intended_visual_estimate_px": [
+                129,
+                223
+              ],
+              "pixel_RGBA": [
+                94,
+                76,
+                44,
+                255
+              ],
+              "visible_alpha_over_128": true,
+              "anchor_type": "visible physical base/wheel tip",
+              "evidence_kind": "visual_contact_estimate_with_measured_pixel_sample",
+              "confidence": 0.55,
+              "uncertainty_px": 4,
+              "adjustment_to_visible_pixel_px": [
+                0,
+                0
+              ],
+              "sample_interpretation": "Visible pixel proves artwork coverage, not the exact 3D contact surface."
+            },
+            {
+              "xy": [
+                89,
+                203
+              ],
+              "intended_visual_estimate_px": [
+                89,
+                203
+              ],
+              "pixel_RGBA": [
+                92,
+                74,
+                43,
+                255
+              ],
+              "visible_alpha_over_128": true,
+              "anchor_type": "visible physical base/wheel tip",
+              "evidence_kind": "visual_contact_estimate_with_measured_pixel_sample",
+              "confidence": 0.55,
+              "uncertainty_px": 4,
+              "adjustment_to_visible_pixel_px": [
+                0,
+                0
+              ],
+              "sample_interpretation": "Visible pixel proves artwork coverage, not the exact 3D contact surface."
+            }
+          ],
+          "interpretation": "This is an authored estimate of the SAME full support-center across views, including occluded members; never the centroid of only the visible subset. It can lie in an empty interior. Candidate points below are individual observed landmarks and do not define the centroid by arithmetic averaging."
+        },
+        "shadow_exclusion": {
+          "evidence_kind": "four_view_visual_identification",
+          "excluded_from_contacts_and_solids": true,
+          "note": "Cast ground shadows and cloth hems are excluded as hard supporting material."
+        }
+      },
+      {
+        "pose": "s",
+        "original_source_path": "/mnt/c/Users/tommaso/Documents/Dev/assets/Fantasy tileset - 2D Isometric V1.1/Fantasy tileset - 2D Isometric/Environment/Misc C3_S.png",
+        "original_source_sha256": "94edc6a6575a3020013cbf6e6ce8af530566a83464611fffc0cf34f854cfc38e",
+        "catalog_source_path": "/mnt/c/Users/tommaso/Documents/assets/fantasy-unified-catalog/a-original/vendor/Fantasy tileset - 2D Isometric/Environment/Misc C3_S.png",
+        "canvas_px": [
+          256,
+          256
+        ],
+        "pixel_coordinate_convention": "top-left origin; integer pixel indices; support centroid may be subpixel/invisible within an opening",
+        "review_contact_sheet": "/mnt/c/Users/tommaso/Documents/assets/fantasy-unified-catalog/data-authoring-2026-10-09/misc-review/contact-09.png",
+        "alpha_bbox_diagnostic_only": [
+          78,
+          152,
+          167,
+          228
+        ],
+        "unity_registration": {
+          "evidence_kind": "source_fact",
+          "sprite_meta_path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Environment/Sprites/Misc C3_S.png.meta",
+          "sprite_meta_sha256": "5e8a61c62fe9a1d73f2f51623970704ab533b083771cce992baf4f16c25f74d3",
+          "normalized_bottom_left_pivot": [
+            0.5,
+            0.19
+          ],
+          "original_top_left_pivot_px": [
+            128.0,
+            207.36
+          ],
+          "sprite_pixels_to_units": 127.0,
+          "sprite_guid": "f2121d7d7996f704d9156a1ab397f0c4",
+          "tile_asset_path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Environment/Tiles/Misc C3_S.asset",
+          "tile_asset_sha256": "c8b7e4384af0c187e1fb642772e585745bae1c322829a89b485841b70134c019",
+          "tile_guid": "16539fb09e73582448b3376c8681d98e",
+          "raw_collider_type": 1,
+          "tiledata_path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Example scene/Scripts/Tiles/TileData/DT_Misc C3_S.asset",
+          "tiledata_sha256": "912ab4b369d853284fc031676c8c43dc8fc6f53c790118cce22883a16eb0ac26",
+          "tiledata_description": "Decorative object",
+          "occurrences": {
+            "scene_path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Example scene/Example scene.unity",
+            "sprite_guid_text_references": 1,
+            "tile_guid_text_references": 1,
+            "interpretation": "References in example scene are provenance only; not native physical dimensions or mount evidence."
+          }
+        },
+        "ground_contact": {
+          "anchor_type": "inferred canonical support-center projected onto ground plane",
+          "same_physical_feature_across_views": "center of the same assembly support layout (B44/B45: the single planted pole foot)",
+          "centroid_px": {
+            "value": [
+              128,
+              207
+            ],
+            "evidence_kind": "visual_estimate_and_content_proposal",
+            "confidence": 0.6,
+            "uncertainty_plus_minus": 8
+          },
+          "centroid_is_sprite_pivot": false,
+          "candidate_points_px": [
+            {
+              "xy": [
+                103,
+                211
+              ],
+              "intended_visual_estimate_px": [
+                103,
+                211
+              ],
+              "pixel_RGBA": [
+                80,
+                63,
+                35,
+                255
+              ],
+              "visible_alpha_over_128": true,
+              "anchor_type": "visible physical base/wheel tip",
+              "evidence_kind": "visual_contact_estimate_with_measured_pixel_sample",
+              "confidence": 0.55,
+              "uncertainty_px": 4,
+              "adjustment_to_visible_pixel_px": [
+                0,
+                0
+              ],
+              "sample_interpretation": "Visible pixel proves artwork coverage, not the exact 3D contact surface."
+            },
+            {
+              "xy": [
+                148,
+                189
+              ],
+              "intended_visual_estimate_px": [
+                150,
+                191
+              ],
+              "pixel_RGBA": [
+                58,
+                56,
+                51,
+                255
+              ],
+              "visible_alpha_over_128": true,
+              "anchor_type": "visible physical base/wheel tip",
+              "evidence_kind": "visual_contact_estimate_with_measured_pixel_sample",
+              "confidence": 0.55,
+              "uncertainty_px": 4,
+              "adjustment_to_visible_pixel_px": [
+                -2,
+                -2
+              ],
+              "sample_interpretation": "Visible pixel proves artwork coverage, not the exact 3D contact surface."
+            }
+          ],
+          "interpretation": "This is an authored estimate of the SAME full support-center across views, including occluded members; never the centroid of only the visible subset. It can lie in an empty interior. Candidate points below are individual observed landmarks and do not define the centroid by arithmetic averaging."
+        },
+        "shadow_exclusion": {
+          "evidence_kind": "four_view_visual_identification",
+          "excluded_from_contacts_and_solids": true,
+          "note": "Cast ground shadows and cloth hems are excluded as hard supporting material."
+        }
+      },
+      {
+        "pose": "w",
+        "original_source_path": "/mnt/c/Users/tommaso/Documents/Dev/assets/Fantasy tileset - 2D Isometric V1.1/Fantasy tileset - 2D Isometric/Environment/Misc C3_W.png",
+        "original_source_sha256": "b2b582c8c03646ff9f1b0143ca11b9cbdf5b30941a3268b016083e5c9c049ad6",
+        "catalog_source_path": "/mnt/c/Users/tommaso/Documents/assets/fantasy-unified-catalog/a-original/vendor/Fantasy tileset - 2D Isometric/Environment/Misc C3_W.png",
+        "canvas_px": [
+          256,
+          256
+        ],
+        "pixel_coordinate_convention": "top-left origin; integer pixel indices; support centroid may be subpixel/invisible within an opening",
+        "review_contact_sheet": "/mnt/c/Users/tommaso/Documents/assets/fantasy-unified-catalog/data-authoring-2026-10-09/misc-review/contact-09.png",
+        "alpha_bbox_diagnostic_only": [
+          89,
+          152,
+          174,
+          228
+        ],
+        "unity_registration": {
+          "evidence_kind": "source_fact",
+          "sprite_meta_path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Environment/Sprites/Misc C3_W.png.meta",
+          "sprite_meta_sha256": "628d2ebc4cda33f9c4d18f7193c7ffd5f966e908dc6f49329ae42e0734aaf592",
+          "normalized_bottom_left_pivot": [
+            0.5,
+            0.19
+          ],
+          "original_top_left_pivot_px": [
+            128.0,
+            207.36
+          ],
+          "sprite_pixels_to_units": 127.0,
+          "sprite_guid": "38dae0ad667065f4391153dafc243a67",
+          "tile_asset_path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Environment/Tiles/Misc C3_W.asset",
+          "tile_asset_sha256": "6c4a3a66de285357b1e4fbbf0260f990883e9acb18cac9d6dfa1f1b247f999f3",
+          "tile_guid": "8861d6f1e3e92e245a1886442c757ff2",
+          "raw_collider_type": 1,
+          "tiledata_path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Example scene/Scripts/Tiles/TileData/DT_Misc C3_W.asset",
+          "tiledata_sha256": "289f87c6c7c24b31e9101c8f25e7c9a3a88dd3e3beab79a29725c7ad844a440a",
+          "tiledata_description": "Decorative object",
+          "occurrences": {
+            "scene_path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Example scene/Example scene.unity",
+            "sprite_guid_text_references": 0,
+            "tile_guid_text_references": 0,
+            "interpretation": "References in example scene are provenance only; not native physical dimensions or mount evidence."
+          }
+        },
+        "ground_contact": {
+          "anchor_type": "inferred canonical support-center projected onto ground plane",
+          "same_physical_feature_across_views": "center of the same assembly support layout (B44/B45: the single planted pole foot)",
+          "centroid_px": {
+            "value": [
+              128,
+              207
+            ],
+            "evidence_kind": "visual_estimate_and_content_proposal",
+            "confidence": 0.6,
+            "uncertainty_plus_minus": 8
+          },
+          "centroid_is_sprite_pivot": false,
+          "candidate_points_px": [
+            {
+              "xy": [
+                153,
+                211
+              ],
+              "intended_visual_estimate_px": [
+                153,
+                211
+              ],
+              "pixel_RGBA": [
+                80,
+                63,
+                35,
+                255
+              ],
+              "visible_alpha_over_128": true,
+              "anchor_type": "visible physical base/wheel tip",
+              "evidence_kind": "visual_contact_estimate_with_measured_pixel_sample",
+              "confidence": 0.55,
+              "uncertainty_px": 4,
+              "adjustment_to_visible_pixel_px": [
+                0,
+                0
+              ],
+              "sample_interpretation": "Visible pixel proves artwork coverage, not the exact 3D contact surface."
+            },
+            {
+              "xy": [
+                107,
+                189
+              ],
+              "intended_visual_estimate_px": [
+                106,
+                191
+              ],
+              "pixel_RGBA": [
+                49,
+                47,
+                43,
+                255
+              ],
+              "visible_alpha_over_128": true,
+              "anchor_type": "visible physical base/wheel tip",
+              "evidence_kind": "visual_contact_estimate_with_measured_pixel_sample",
+              "confidence": 0.55,
+              "uncertainty_px": 4,
+              "adjustment_to_visible_pixel_px": [
+                1,
+                -2
+              ],
+              "sample_interpretation": "Visible pixel proves artwork coverage, not the exact 3D contact surface."
+            }
+          ],
+          "interpretation": "This is an authored estimate of the SAME full support-center across views, including occluded members; never the centroid of only the visible subset. It can lie in an empty interior. Candidate points below are individual observed landmarks and do not define the centroid by arithmetic averaging."
+        },
+        "shadow_exclusion": {
+          "evidence_kind": "four_view_visual_identification",
+          "excluded_from_contacts_and_solids": true,
+          "note": "Cast ground shadows and cloth hems are excluded as hard supporting material."
+        }
+      },
+      {
+        "pose": "n",
+        "original_source_path": "/mnt/c/Users/tommaso/Documents/Dev/assets/Fantasy tileset - 2D Isometric V1.1/Fantasy tileset - 2D Isometric/Environment/Misc C3_N.png",
+        "original_source_sha256": "5486da0963622834b7cca3ae7f70091fab8aa1bbb7dac428f52e1687aa51a90b",
+        "catalog_source_path": "/mnt/c/Users/tommaso/Documents/assets/fantasy-unified-catalog/a-original/vendor/Fantasy tileset - 2D Isometric/Environment/Misc C3_N.png",
+        "canvas_px": [
+          256,
+          256
+        ],
+        "pixel_coordinate_convention": "top-left origin; integer pixel indices; support centroid may be subpixel/invisible within an opening",
+        "review_contact_sheet": "/mnt/c/Users/tommaso/Documents/assets/fantasy-unified-catalog/data-authoring-2026-10-09/misc-review/contact-09.png",
+        "alpha_bbox_diagnostic_only": [
+          89,
+          162,
+          174,
+          233
+        ],
+        "unity_registration": {
+          "evidence_kind": "source_fact",
+          "sprite_meta_path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Environment/Sprites/Misc C3_N.png.meta",
+          "sprite_meta_sha256": "dc87a2a7eb18f9358b09e41097d7f333924f1b4dbd3308808a13462343cfd043",
+          "normalized_bottom_left_pivot": [
+            0.5,
+            0.19
+          ],
+          "original_top_left_pivot_px": [
+            128.0,
+            207.36
+          ],
+          "sprite_pixels_to_units": 127.0,
+          "sprite_guid": "aa8fd6b68e478c84d81521dc81e63335",
+          "tile_asset_path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Environment/Tiles/Misc C3_N.asset",
+          "tile_asset_sha256": "3620aaf735fd296eda657d04bd7c7b0480951c62f159b6a70f5148eabafa5def",
+          "tile_guid": "488f9216bffc15e4986c085dbec946c9",
+          "raw_collider_type": 1,
+          "tiledata_path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Example scene/Scripts/Tiles/TileData/DT_Misc C3_N.asset",
+          "tiledata_sha256": "5c03e2380c5585faf12ce2cdbb1f1016a7c6853807b6e4a5251e2d1a4d35b8bf",
+          "tiledata_description": "Decorative object",
+          "occurrences": {
+            "scene_path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Example scene/Example scene.unity",
+            "sprite_guid_text_references": 1,
+            "tile_guid_text_references": 1,
+            "interpretation": "References in example scene are provenance only; not native physical dimensions or mount evidence."
+          }
+        },
+        "ground_contact": {
+          "anchor_type": "inferred canonical support-center projected onto ground plane",
+          "same_physical_feature_across_views": "center of the same assembly support layout (B44/B45: the single planted pole foot)",
+          "centroid_px": {
+            "value": [
+              128,
+              210
+            ],
+            "evidence_kind": "visual_estimate_and_content_proposal",
+            "confidence": 0.6,
+            "uncertainty_plus_minus": 8
+          },
+          "centroid_is_sprite_pivot": false,
+          "candidate_points_px": [
+            {
+              "xy": [
+                126,
+                223
+              ],
+              "intended_visual_estimate_px": [
+                126,
+                223
+              ],
+              "pixel_RGBA": [
+                80,
+                63,
+                35,
+                255
+              ],
+              "visible_alpha_over_128": true,
+              "anchor_type": "visible physical base/wheel tip",
+              "evidence_kind": "visual_contact_estimate_with_measured_pixel_sample",
+              "confidence": 0.55,
+              "uncertainty_px": 4,
+              "adjustment_to_visible_pixel_px": [
+                0,
+                0
+              ],
+              "sample_interpretation": "Visible pixel proves artwork coverage, not the exact 3D contact surface."
+            },
+            {
+              "xy": [
+                166,
+                203
+              ],
+              "intended_visual_estimate_px": [
+                166,
+                203
+              ],
+              "pixel_RGBA": [
+                81,
+                64,
+                36,
+                255
+              ],
+              "visible_alpha_over_128": true,
+              "anchor_type": "visible physical base/wheel tip",
+              "evidence_kind": "visual_contact_estimate_with_measured_pixel_sample",
+              "confidence": 0.55,
+              "uncertainty_px": 4,
+              "adjustment_to_visible_pixel_px": [
+                0,
+                0
+              ],
+              "sample_interpretation": "Visible pixel proves artwork coverage, not the exact 3D contact surface."
+            }
+          ],
+          "interpretation": "This is an authored estimate of the SAME full support-center across views, including occluded members; never the centroid of only the visible subset. It can lie in an empty interior. Candidate points below are individual observed landmarks and do not define the centroid by arithmetic averaging."
+        },
+        "shadow_exclusion": {
+          "evidence_kind": "four_view_visual_identification",
+          "excluded_from_contacts_and_solids": true,
+          "note": "Cast ground shadows and cloth hems are excluded as hard supporting material."
+        }
+      }
+    ],
+    "contact_by_pose": {
+      "e": {
+        "image_path": "/mnt/c/Users/tommaso/Documents/Dev/assets/Fantasy tileset - 2D Isometric V1.1/Fantasy tileset - 2D Isometric/Environment/Misc C3_E.png",
+        "source_sha256": "82c5ab3ca3f44738db29b16899f2b70fe33f7976eff14753417f50747cb583da",
+        "canvas_px": [
+          256,
+          256
+        ],
+        "frame_rect_px": null,
+        "source_pivot_px": [
+          128.0,
+          207.36
+        ],
+        "animation_source_pivot_px": [
+          128,
+          207.36
+        ],
+        "placement_contact_px": [
+          128,
+          210
+        ],
+        "placement_contact_anchor_type": "inferred canonical support-center projected onto ground plane",
+        "same_physical_feature_across_views": "center of the same assembly support layout (B44/B45: the single planted pole foot)",
+        "placement_contact_evidence_kind": "new_content_proposal_inferred_from_four_views",
+        "placement_contact_confidence": 0.6,
+        "placement_contact_uncertainty_px": 8,
+        "contacts_px": [
+          [
+            129,
+            223
+          ],
+          [
+            89,
+            203
+          ]
+        ],
+        "contacts_semantics": "Observed individual landmarks only; not a canonical origin and not a complete support layout. Full per-point evidence and RGBA samples are in source_views.",
+        "source_pivot_semantics": "Actual Unity sprite import pivot, immutable. Separate animation_source_pivot_px is the preserved 384px bank pivot expressed on centered original256 canvas; it is not a physical contact."
+      },
+      "s": {
+        "image_path": "/mnt/c/Users/tommaso/Documents/Dev/assets/Fantasy tileset - 2D Isometric V1.1/Fantasy tileset - 2D Isometric/Environment/Misc C3_S.png",
+        "source_sha256": "94edc6a6575a3020013cbf6e6ce8af530566a83464611fffc0cf34f854cfc38e",
+        "canvas_px": [
+          256,
+          256
+        ],
+        "frame_rect_px": null,
+        "source_pivot_px": [
+          128.0,
+          207.36
+        ],
+        "animation_source_pivot_px": [
+          128,
+          207.36
+        ],
+        "placement_contact_px": [
+          128,
+          207
+        ],
+        "placement_contact_anchor_type": "inferred canonical support-center projected onto ground plane",
+        "same_physical_feature_across_views": "center of the same assembly support layout (B44/B45: the single planted pole foot)",
+        "placement_contact_evidence_kind": "new_content_proposal_inferred_from_four_views",
+        "placement_contact_confidence": 0.6,
+        "placement_contact_uncertainty_px": 8,
+        "contacts_px": [
+          [
+            103,
+            211
+          ],
+          [
+            148,
+            189
+          ]
+        ],
+        "contacts_semantics": "Observed individual landmarks only; not a canonical origin and not a complete support layout. Full per-point evidence and RGBA samples are in source_views.",
+        "source_pivot_semantics": "Actual Unity sprite import pivot, immutable. Separate animation_source_pivot_px is the preserved 384px bank pivot expressed on centered original256 canvas; it is not a physical contact."
+      },
+      "w": {
+        "image_path": "/mnt/c/Users/tommaso/Documents/Dev/assets/Fantasy tileset - 2D Isometric V1.1/Fantasy tileset - 2D Isometric/Environment/Misc C3_W.png",
+        "source_sha256": "b2b582c8c03646ff9f1b0143ca11b9cbdf5b30941a3268b016083e5c9c049ad6",
+        "canvas_px": [
+          256,
+          256
+        ],
+        "frame_rect_px": null,
+        "source_pivot_px": [
+          128.0,
+          207.36
+        ],
+        "animation_source_pivot_px": [
+          128,
+          207.36
+        ],
+        "placement_contact_px": [
+          128,
+          207
+        ],
+        "placement_contact_anchor_type": "inferred canonical support-center projected onto ground plane",
+        "same_physical_feature_across_views": "center of the same assembly support layout (B44/B45: the single planted pole foot)",
+        "placement_contact_evidence_kind": "new_content_proposal_inferred_from_four_views",
+        "placement_contact_confidence": 0.6,
+        "placement_contact_uncertainty_px": 8,
+        "contacts_px": [
+          [
+            153,
+            211
+          ],
+          [
+            107,
+            189
+          ]
+        ],
+        "contacts_semantics": "Observed individual landmarks only; not a canonical origin and not a complete support layout. Full per-point evidence and RGBA samples are in source_views.",
+        "source_pivot_semantics": "Actual Unity sprite import pivot, immutable. Separate animation_source_pivot_px is the preserved 384px bank pivot expressed on centered original256 canvas; it is not a physical contact."
+      },
+      "n": {
+        "image_path": "/mnt/c/Users/tommaso/Documents/Dev/assets/Fantasy tileset - 2D Isometric V1.1/Fantasy tileset - 2D Isometric/Environment/Misc C3_N.png",
+        "source_sha256": "5486da0963622834b7cca3ae7f70091fab8aa1bbb7dac428f52e1687aa51a90b",
+        "canvas_px": [
+          256,
+          256
+        ],
+        "frame_rect_px": null,
+        "source_pivot_px": [
+          128.0,
+          207.36
+        ],
+        "animation_source_pivot_px": [
+          128,
+          207.36
+        ],
+        "placement_contact_px": [
+          128,
+          210
+        ],
+        "placement_contact_anchor_type": "inferred canonical support-center projected onto ground plane",
+        "same_physical_feature_across_views": "center of the same assembly support layout (B44/B45: the single planted pole foot)",
+        "placement_contact_evidence_kind": "new_content_proposal_inferred_from_four_views",
+        "placement_contact_confidence": 0.6,
+        "placement_contact_uncertainty_px": 8,
+        "contacts_px": [
+          [
+            126,
+            223
+          ],
+          [
+            166,
+            203
+          ]
+        ],
+        "contacts_semantics": "Observed individual landmarks only; not a canonical origin and not a complete support layout. Full per-point evidence and RGBA samples are in source_views.",
+        "source_pivot_semantics": "Actual Unity sprite import pivot, immutable. Separate animation_source_pivot_px is the preserved 384px bank pivot expressed on centered original256 canvas; it is not a physical contact."
+      }
+    },
+    "evidence": {
+      "inspected_views": [
+        "e",
+        "s",
+        "w",
+        "n"
+      ],
+      "inspection": "actual vendor original PNGs, contact sheets, Unity sprite/tile/TileData sidecars and example scene text references; accepted animation metadata read without modifications",
+      "physical_values": "All new continuous dimensions/components are explicit visual estimates/content proposals; no native geometry imported from alpha bounds or animation pivot.",
+      "confidence_scale": "0 to 1; confidence below 0.6 marks coarse placement/member reconstruction or ambiguity."
+    },
+    "sources": [
+      {
+        "path": "/mnt/c/Users/tommaso/Documents/Dev/assets/Fantasy tileset - 2D Isometric V1.1/Fantasy tileset - 2D Isometric/Environment/Misc C3_E.png",
+        "sha256": "82c5ab3ca3f44738db29b16899f2b70fe33f7976eff14753417f50747cb583da"
+      },
+      {
+        "path": "/mnt/c/Users/tommaso/Documents/assets/fantasy-unified-catalog/a-original/vendor/Fantasy tileset - 2D Isometric/Environment/Misc C3_E.png",
+        "sha256": "82c5ab3ca3f44738db29b16899f2b70fe33f7976eff14753417f50747cb583da"
+      },
+      {
+        "path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Environment/Sprites/Misc C3_E.png.meta",
+        "sha256": "4345310380d56a2141688e7facb31e3d6095f8548e4b2e8f141e4c860c83e23c"
+      },
+      {
+        "path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Environment/Tiles/Misc C3_E.asset",
+        "sha256": "73e6559f0226f69b1c38e709a4655a0e9f5384bf0f203e7fac5ff069b9e69ed3"
+      },
+      {
+        "path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Example scene/Scripts/Tiles/TileData/DT_Misc C3_E.asset",
+        "sha256": "89a2c2996d0504eee5ffb44fc0d0006113461c7c4c8c953c101d0fc8180ac200"
+      },
+      {
+        "path": "/mnt/c/Users/tommaso/Documents/Dev/assets/Fantasy tileset - 2D Isometric V1.1/Fantasy tileset - 2D Isometric/Environment/Misc C3_S.png",
+        "sha256": "94edc6a6575a3020013cbf6e6ce8af530566a83464611fffc0cf34f854cfc38e"
+      },
+      {
+        "path": "/mnt/c/Users/tommaso/Documents/assets/fantasy-unified-catalog/a-original/vendor/Fantasy tileset - 2D Isometric/Environment/Misc C3_S.png",
+        "sha256": "94edc6a6575a3020013cbf6e6ce8af530566a83464611fffc0cf34f854cfc38e"
+      },
+      {
+        "path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Environment/Sprites/Misc C3_S.png.meta",
+        "sha256": "5e8a61c62fe9a1d73f2f51623970704ab533b083771cce992baf4f16c25f74d3"
+      },
+      {
+        "path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Environment/Tiles/Misc C3_S.asset",
+        "sha256": "c8b7e4384af0c187e1fb642772e585745bae1c322829a89b485841b70134c019"
+      },
+      {
+        "path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Example scene/Scripts/Tiles/TileData/DT_Misc C3_S.asset",
+        "sha256": "912ab4b369d853284fc031676c8c43dc8fc6f53c790118cce22883a16eb0ac26"
+      },
+      {
+        "path": "/mnt/c/Users/tommaso/Documents/Dev/assets/Fantasy tileset - 2D Isometric V1.1/Fantasy tileset - 2D Isometric/Environment/Misc C3_W.png",
+        "sha256": "b2b582c8c03646ff9f1b0143ca11b9cbdf5b30941a3268b016083e5c9c049ad6"
+      },
+      {
+        "path": "/mnt/c/Users/tommaso/Documents/assets/fantasy-unified-catalog/a-original/vendor/Fantasy tileset - 2D Isometric/Environment/Misc C3_W.png",
+        "sha256": "b2b582c8c03646ff9f1b0143ca11b9cbdf5b30941a3268b016083e5c9c049ad6"
+      },
+      {
+        "path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Environment/Sprites/Misc C3_W.png.meta",
+        "sha256": "628d2ebc4cda33f9c4d18f7193c7ffd5f966e908dc6f49329ae42e0734aaf592"
+      },
+      {
+        "path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Environment/Tiles/Misc C3_W.asset",
+        "sha256": "6c4a3a66de285357b1e4fbbf0260f990883e9acb18cac9d6dfa1f1b247f999f3"
+      },
+      {
+        "path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Example scene/Scripts/Tiles/TileData/DT_Misc C3_W.asset",
+        "sha256": "289f87c6c7c24b31e9101c8f25e7c9a3a88dd3e3beab79a29725c7ad844a440a"
+      },
+      {
+        "path": "/mnt/c/Users/tommaso/Documents/Dev/assets/Fantasy tileset - 2D Isometric V1.1/Fantasy tileset - 2D Isometric/Environment/Misc C3_N.png",
+        "sha256": "5486da0963622834b7cca3ae7f70091fab8aa1bbb7dac428f52e1687aa51a90b"
+      },
+      {
+        "path": "/mnt/c/Users/tommaso/Documents/assets/fantasy-unified-catalog/a-original/vendor/Fantasy tileset - 2D Isometric/Environment/Misc C3_N.png",
+        "sha256": "5486da0963622834b7cca3ae7f70091fab8aa1bbb7dac428f52e1687aa51a90b"
+      },
+      {
+        "path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Environment/Sprites/Misc C3_N.png.meta",
+        "sha256": "dc87a2a7eb18f9358b09e41097d7f333924f1b4dbd3308808a13462343cfd043"
+      },
+      {
+        "path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Environment/Tiles/Misc C3_N.asset",
+        "sha256": "3620aaf735fd296eda657d04bd7c7b0480951c62f159b6a70f5148eabafa5def"
+      },
+      {
+        "path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Example scene/Scripts/Tiles/TileData/DT_Misc C3_N.asset",
+        "sha256": "5c03e2380c5585faf12ce2cdbb1f1016a7c6853807b6e4a5251e2d1a4d35b8bf"
+      },
+      {
+        "path": "/home/tommaso/Dev/terrain-prefab-study-2026-09-24/house-prefabs/decor-study/candidates-v5/misc-c3/impact-a/metadata.json",
+        "sha256": "140575f9392f5f99e5e88645ba6e0fe1c0613a77429f6302292b00588770818b"
+      },
+      {
+        "path": "/mnt/c/Users/tommaso/Documents/assets/fantasy-unified-catalog/b-animated-versions/decor/candidates-v5/misc-c3/impact-a/metadata.json",
+        "sha256": "140575f9392f5f99e5e88645ba6e0fe1c0613a77429f6302292b00588770818b"
+      }
+    ]
+  },
+  "context": "../context.json",
+  "installed_media": {
+    "a-original/vendor/Fantasy tileset - 2D Isometric/Environment/Misc C3_E.png": "/media/environment/library/fantasy/Fantasy tileset - 2D Isometric/Environment/Misc C3_E.png",
+    "a-original/vendor/Fantasy tileset - 2D Isometric/Environment/Misc C3_N.png": "/media/environment/library/fantasy/Fantasy tileset - 2D Isometric/Environment/Misc C3_N.png",
+    "a-original/vendor/Fantasy tileset - 2D Isometric/Environment/Misc C3_S.png": "/media/environment/library/fantasy/Fantasy tileset - 2D Isometric/Environment/Misc C3_S.png",
+    "a-original/vendor/Fantasy tileset - 2D Isometric/Environment/Misc C3_W.png": "/media/environment/library/fantasy/Fantasy tileset - 2D Isometric/Environment/Misc C3_W.png",
+    "b-animated-versions/decor/candidates-v5/misc-c3/impact-a/evidence.png": "/media/environment/library/animated/decor/candidates-v5/misc-c3/impact-a/evidence.png",
+    "b-animated-versions/decor/candidates-v5/misc-c3/impact-a/intact.png": "/media/environment/library/animated/decor/candidates-v5/misc-c3/impact-a/intact.png",
+    "b-animated-versions/decor/candidates-v5/misc-c3/impact-a/sheet-e.png": "/media/environment/library/animated/decor/candidates-v5/misc-c3/impact-a/sheet-e.png",
+    "b-animated-versions/decor/candidates-v5/misc-c3/impact-a/sheet-n.png": "/media/environment/library/animated/decor/candidates-v5/misc-c3/impact-a/sheet-n.png",
+    "b-animated-versions/decor/candidates-v5/misc-c3/impact-a/sheet-s.png": "/media/environment/library/animated/decor/candidates-v5/misc-c3/impact-a/sheet-s.png",
+    "b-animated-versions/decor/candidates-v5/misc-c3/impact-a/sheet-w.png": "/media/environment/library/animated/decor/candidates-v5/misc-c3/impact-a/sheet-w.png",
+    "b-animated-versions/decor/candidates-v5/misc-c3/impact-a/sheet.png": "/media/environment/library/animated/decor/candidates-v5/misc-c3/impact-a/sheet.png",
+    "b-animated-versions/decor/candidates-v5/misc-c3/impact-a/wreck.png": "/media/environment/library/animated/decor/candidates-v5/misc-c3/impact-a/wreck.png"
+  }
+}

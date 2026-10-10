@@ -1,0 +1,1018 @@
+{
+  "section": "interior",
+  "record": {
+    "catalog_id": "generated-papers-and-ink",
+    "intended_role": "Writing materials arranged on a table or desk",
+    "description": "Three overlapping pale papers, a dark inkpot and an upright quill. Anchor to a horizontal carrier surface; the ground-looking source pivot is a support-local reference.",
+    "mounting": {
+      "receiver": "surface",
+      "anchor_source_xyz": [
+        0,
+        0,
+        0
+      ],
+      "anchor_local_east_xy_z_steps": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "align": "Align placement_contact_px in chosen native view to the projected receiver contact; source pivot remains the art registration.",
+      "floor_contact": null,
+      "default_source_mount_height_steps": 0.0,
+      "default_source_mount_height_status": "measured source embedding, not a separate room-height choice",
+      "world_geometry_transform": "worldPoint = receiverAnchor + T(sourcePoint - anchor_source_xyz), T recorded under units.source_model_conversion. Footprints/heights/solid_parts use source geometric origin; subtract anchor offset for placement.",
+      "sprite_alignment": "screenPoint(u) = project(receiverAnchor) + pixelScale*(u - placement_contact_px); with preserved pivot p, sprite.position = project(receiverAnchor) + pixelScale*(p - placement_contact_px).",
+      "height_interval_relative_to_mount_steps": [
+        0.005611,
+        0.214523
+      ],
+      "receiver_normal_local_east_xyz": [
+        0,
+        0,
+        1
+      ],
+      "receiver_height": "Use the actual carrier top height, then apply local source offsets.",
+      "floor_navigation_footprint": [],
+      "source_mesh_minimum_clearance_steps": 0.005611
+    },
+    "contact_by_pose": {
+      "e": {
+        "image_path": "c-new-props/decor/native-candidates-v5/papers-and-ink/sheet-e.png",
+        "image_dimensions_px": [
+          8064,
+          384
+        ],
+        "frame_rect_px": [
+          0,
+          0,
+          384,
+          384
+        ],
+        "frame_dimensions_px": [
+          384,
+          384
+        ],
+        "source_pivot_px": [
+          192,
+          272
+        ],
+        "placement_contact_kind": "support",
+        "placement_contact_px": [
+          192.000031,
+          271.999989
+        ],
+        "contacts_px": {
+          "support": [
+            192.000031,
+            271.999989
+          ]
+        },
+        "derivation": "Source-model anchor projected with preserved camera; +64px x/y padding maps 256px static art to existing 384px catalog frame. Per-view contact is separate from source pivot.",
+        "confidence": "medium: exact source rest projection, catalog padding evidenced by matching registrations; frame0 has documented pixel differences in some families"
+      },
+      "s": {
+        "image_path": "c-new-props/decor/native-candidates-v5/papers-and-ink/sheet-s.png",
+        "image_dimensions_px": [
+          8064,
+          384
+        ],
+        "frame_rect_px": [
+          0,
+          0,
+          384,
+          384
+        ],
+        "frame_dimensions_px": [
+          384,
+          384
+        ],
+        "source_pivot_px": [
+          192,
+          272
+        ],
+        "placement_contact_kind": "support",
+        "placement_contact_px": [
+          191.999962,
+          271.999989
+        ],
+        "contacts_px": {
+          "support": [
+            191.999962,
+            271.999989
+          ]
+        },
+        "derivation": "Source-model anchor projected with preserved camera; +64px x/y padding maps 256px static art to existing 384px catalog frame. Per-view contact is separate from source pivot.",
+        "confidence": "medium: exact source rest projection, catalog padding evidenced by matching registrations; frame0 has documented pixel differences in some families"
+      },
+      "w": {
+        "image_path": "c-new-props/decor/native-candidates-v5/papers-and-ink/sheet-w.png",
+        "image_dimensions_px": [
+          8064,
+          384
+        ],
+        "frame_rect_px": [
+          0,
+          0,
+          384,
+          384
+        ],
+        "frame_dimensions_px": [
+          384,
+          384
+        ],
+        "source_pivot_px": [
+          192,
+          272
+        ],
+        "placement_contact_kind": "support",
+        "placement_contact_px": [
+          192.000015,
+          271.999935
+        ],
+        "contacts_px": {
+          "support": [
+            192.000015,
+            271.999935
+          ]
+        },
+        "derivation": "Source-model anchor projected with preserved camera; +64px x/y padding maps 256px static art to existing 384px catalog frame. Per-view contact is separate from source pivot.",
+        "confidence": "medium: exact source rest projection, catalog padding evidenced by matching registrations; frame0 has documented pixel differences in some families"
+      },
+      "n": {
+        "image_path": "c-new-props/decor/native-candidates-v5/papers-and-ink/sheet-n.png",
+        "image_dimensions_px": [
+          8064,
+          384
+        ],
+        "frame_rect_px": [
+          0,
+          0,
+          384,
+          384
+        ],
+        "frame_dimensions_px": [
+          384,
+          384
+        ],
+        "source_pivot_px": [
+          192,
+          272
+        ],
+        "placement_contact_kind": "support",
+        "placement_contact_px": [
+          191.999985,
+          271.999935
+        ],
+        "contacts_px": {
+          "support": [
+            191.999985,
+            271.999935
+          ]
+        },
+        "derivation": "Source-model anchor projected with preserved camera; +64px x/y padding maps 256px static art to existing 384px catalog frame. Per-view contact is separate from source pivot.",
+        "confidence": "medium: exact source rest projection, catalog padding evidenced by matching registrations; frame0 has documented pixel differences in some families"
+      }
+    },
+    "static_contact_by_pose": {
+      "e": {
+        "image_path": "c-new-props/generated-interiors/papers-and-ink/e.png",
+        "image_dimensions_px": [
+          256,
+          256
+        ],
+        "source_pivot_px": [
+          128,
+          208
+        ],
+        "contacts_px": {
+          "support": [
+            128.000031,
+            207.999989
+          ]
+        }
+      },
+      "s": {
+        "image_path": "c-new-props/generated-interiors/papers-and-ink/s.png",
+        "image_dimensions_px": [
+          256,
+          256
+        ],
+        "source_pivot_px": [
+          128,
+          208
+        ],
+        "contacts_px": {
+          "support": [
+            127.999962,
+            207.999989
+          ]
+        }
+      },
+      "w": {
+        "image_path": "c-new-props/generated-interiors/papers-and-ink/w.png",
+        "image_dimensions_px": [
+          256,
+          256
+        ],
+        "source_pivot_px": [
+          128,
+          208
+        ],
+        "contacts_px": {
+          "support": [
+            128.000015,
+            207.999935
+          ]
+        }
+      },
+      "n": {
+        "image_path": "c-new-props/generated-interiors/papers-and-ink/n.png",
+        "image_dimensions_px": [
+          256,
+          256
+        ],
+        "source_pivot_px": [
+          128,
+          208
+        ],
+        "contacts_px": {
+          "support": [
+            127.999985,
+            207.999935
+          ]
+        }
+      }
+    },
+    "footprint": {
+      "coordinate_origin": "Preserved source geometric origin (0,0,0); mounting anchor has separate XYZ below. Rotate footprint with family orientation, never camera pose.",
+      "bounds_xy_cells": {
+        "min": [
+          -0.127263,
+          -0.112592
+        ],
+        "max": [
+          0.191945,
+          0.112592
+        ]
+      },
+      "dimensions_xy_cells": [
+        0.319208,
+        0.225184
+      ],
+      "polygon_xy_cells": [
+        [
+          -0.127263,
+          0.089084
+        ],
+        [
+          -0.107553,
+          0.101344
+        ],
+        [
+          -0.086666,
+          0.112592
+        ],
+        [
+          0.127263,
+          0.089084
+        ],
+        [
+          0.145702,
+          0.075934
+        ],
+        [
+          0.162787,
+          0.062025
+        ],
+        [
+          0.191945,
+          -0.016014
+        ],
+        [
+          0.191945,
+          -0.034891
+        ],
+        [
+          0.18085,
+          -0.050163
+        ],
+        [
+          0.12739,
+          -0.112592
+        ],
+        [
+          -0.127263,
+          -0.089084
+        ]
+      ],
+      "meaning": "Convex enclosure of actual rest-mesh XY projection, for extent/placement fit only. Blocking uses component solids; this enclosure is not automatically a filled collision region.",
+      "provenance": "measured preserved source meshes, converted by recorded camera registration"
+    },
+    "height": {
+      "coordinate_origin": "All heights below are relative to preserved source geometric origin, before placement; mounting includes its own source anchor height to subtract when attached elsewhere.",
+      "base_z_steps": 0.005611,
+      "top_z_steps": 0.214523,
+      "span_steps": 0.208912,
+      "top_height_ft_from_source_origin": 1.072615,
+      "provenance": "measured source rest-model bounds, render-equivalent registration conversion"
+    },
+    "blocking": {
+      "coordinate_origin": "Component XY polygons and Z intervals use the source geometric origin; apply the same mounting.world_geometry_transform to every component.",
+      "physical_solids": "Individual wooden/iron/ceramic components at their actual heights; water is excluded.",
+      "blocks_floor_as_filled_cell": false,
+      "floor_footprint_policy": "none: suspended or carrier-local dressing",
+      "solid_parts": [
+        {
+          "source_mesh": "paper",
+          "materials": [
+            "paper"
+          ],
+          "footprint_polygon_xy_cells": [
+            [
+              -0.127263,
+              0.089084
+            ],
+            [
+              0.127263,
+              0.089084
+            ],
+            [
+              0.127263,
+              -0.089084
+            ],
+            [
+              -0.127263,
+              -0.089084
+            ]
+          ],
+          "z_interval_steps": [
+            0.005611,
+            0.013093
+          ],
+          "geometry_ref": "c-new-props/generated-interiors/papers-and-ink/papers-and-ink.blend#paper",
+          "volume_interpretation": "oriented source mesh; XY polygon and z interval bound its occupied solid, not a filled extrusion unless the component is an axis-aligned board/leg"
+        },
+        {
+          "source_mesh": "paper.001",
+          "materials": [
+            "paper"
+          ],
+          "footprint_polygon_xy_cells": [
+            [
+              -0.12534,
+              -0.075934
+            ],
+            [
+              -0.107553,
+              0.101344
+            ],
+            [
+              0.145702,
+              0.075934
+            ],
+            [
+              0.127915,
+              -0.101344
+            ]
+          ],
+          "z_interval_steps": [
+            0.014963,
+            0.022445
+          ],
+          "geometry_ref": "c-new-props/generated-interiors/papers-and-ink/papers-and-ink.blend#paper.001",
+          "volume_interpretation": "oriented source mesh; XY polygon and z interval bound its occupied solid, not a filled extrusion unless the component is an axis-aligned board/leg"
+        },
+        {
+          "source_mesh": "paper.002",
+          "materials": [
+            "paper"
+          ],
+          "footprint_polygon_xy_cells": [
+            [
+              -0.122063,
+              -0.062025
+            ],
+            [
+              -0.086666,
+              0.112592
+            ],
+            [
+              0.162787,
+              0.062025
+            ],
+            [
+              0.12739,
+              -0.112592
+            ]
+          ],
+          "z_interval_steps": [
+            0.024315,
+            0.031796
+          ],
+          "geometry_ref": "c-new-props/generated-interiors/papers-and-ink/papers-and-ink.blend#paper.002",
+          "volume_interpretation": "oriented source mesh; XY polygon and z interval bound its occupied solid, not a filled extrusion unless the component is an axis-aligned board/leg"
+        },
+        {
+          "source_mesh": "inkpot",
+          "materials": [
+            "iron"
+          ],
+          "footprint_polygon_xy_cells": [
+            [
+              0.133849,
+              -0.016014
+            ],
+            [
+              0.144944,
+              -0.000743
+            ],
+            [
+              0.162897,
+              0.005091
+            ],
+            [
+              0.18085,
+              -0.000743
+            ],
+            [
+              0.191945,
+              -0.016014
+            ],
+            [
+              0.191945,
+              -0.034891
+            ],
+            [
+              0.18085,
+              -0.050163
+            ],
+            [
+              0.162897,
+              -0.055996
+            ],
+            [
+              0.144944,
+              -0.050163
+            ],
+            [
+              0.133849,
+              -0.034891
+            ]
+          ],
+          "z_interval_steps": [
+            0.006235,
+            0.068581
+          ],
+          "geometry_ref": "c-new-props/generated-interiors/papers-and-ink/papers-and-ink.blend#inkpot",
+          "volume_interpretation": "oriented source mesh; XY polygon and z interval bound its occupied solid, not a filled extrusion unless the component is an axis-aligned board/leg"
+        },
+        {
+          "source_mesh": "quill",
+          "materials": [
+            "paper"
+          ],
+          "footprint_polygon_xy_cells": [
+            [
+              0.129783,
+              -0.019089
+            ],
+            [
+              0.18583,
+              -0.019089
+            ],
+            [
+              0.18583,
+              -0.031816
+            ],
+            [
+              0.129783,
+              -0.031816
+            ]
+          ],
+          "z_interval_steps": [
+            0.047331,
+            0.214523
+          ],
+          "geometry_ref": "c-new-props/generated-interiors/papers-and-ink/papers-and-ink.blend#quill",
+          "volume_interpretation": "oriented source mesh; XY polygon and z interval bound its occupied solid, not a filled extrusion unless the component is an axis-aligned board/leg"
+        }
+      ],
+      "status": "authored physical interpretation using measured component bounds; runtime collision/navigation selection is separate",
+      "dressing_contact": "Paper layers and quill are thin dressing; inkpot is a small rigid solid on the carrier. No floor obstruction is created."
+    },
+    "sources": [
+      {
+        "path": "c-new-props/generated-interiors/papers-and-ink/papers-and-ink.blend",
+        "sha256": "ff961bc817d04a241c8cf1897a2df5ddfd6b97f803811378ade4f1fb57c3124a",
+        "kind": "preserved_Blender_rest_geometry"
+      },
+      {
+        "path": "c-new-props/generated-interiors/manifest.json",
+        "sha256": "428ba878ff9a848f0b7884db32c52b411bb2cf19ccb1b989b4bd9c681ee2ee5b",
+        "kind": "existing_static_registration"
+      },
+      {
+        "path": "c-new-props/decor/native-candidates-v5/papers-and-ink/metadata.json",
+        "sha256": "ff9b9259d9401ef508746361ccbb13ee88cb1ae3295e5cb477b7996d1f92af48",
+        "kind": "existing_animation_metadata"
+      },
+      {
+        "path": "c-new-props/decor/native-candidates-v5/papers-and-ink/sheet-e.png",
+        "sha256": "cd8d87d1af9f62f47fdb0e1cd36ea934724a0e8c6501c12ea6394b9f7e69a455",
+        "kind": "existing_catalog_art"
+      },
+      {
+        "path": "c-new-props/generated-interiors/papers-and-ink/e.png",
+        "sha256": "1b2775c17c8aafeffeb73d2a61126652029a4b03767d0ff9374fdc4e82e29f09",
+        "kind": "existing_static_art"
+      },
+      {
+        "path": "c-new-props/decor/native-candidates-v5/papers-and-ink/sheet-s.png",
+        "sha256": "2ca7854ccf42fdcd29b08541eba181b4870e789e91ceaf85fdbe305886c4c9ef",
+        "kind": "existing_catalog_art"
+      },
+      {
+        "path": "c-new-props/generated-interiors/papers-and-ink/s.png",
+        "sha256": "e4c90db9504d15012a41fbe08609e31b890f70976edd56ada3b4b3275d133837",
+        "kind": "existing_static_art"
+      },
+      {
+        "path": "c-new-props/decor/native-candidates-v5/papers-and-ink/sheet-w.png",
+        "sha256": "d02062a6adb5ca5cede5b8eccd747c0167cd1567b1fe6ba824b8c564afb82965",
+        "kind": "existing_catalog_art"
+      },
+      {
+        "path": "c-new-props/generated-interiors/papers-and-ink/w.png",
+        "sha256": "3b3c9c23c6ea7bba6263c9c9db5e9bfb0535096a7f398ce7d34ecdaa94091ebc",
+        "kind": "existing_static_art"
+      },
+      {
+        "path": "c-new-props/decor/native-candidates-v5/papers-and-ink/sheet-n.png",
+        "sha256": "d46b12a0ee71fc0770358704e59f626238da95b9d56de5dd8d32122c8ba93481",
+        "kind": "existing_catalog_art"
+      },
+      {
+        "path": "c-new-props/generated-interiors/papers-and-ink/n.png",
+        "sha256": "a07523a62d7569e400e03acb475ba065819614b9bff693e37e61d2dabe0dae31",
+        "kind": "existing_static_art"
+      }
+    ],
+    "preserved_metadata": {
+      "static_manifest": "c-new-props/generated-interiors/manifest.json#papers-and-ink",
+      "source_static_pivot_px": [
+        128,
+        208
+      ],
+      "catalog_metadata_path": "c-new-props/decor/native-candidates-v5/papers-and-ink/metadata.json",
+      "catalog_pivot_px": [
+        192,
+        272
+      ],
+      "first_frame_audit": "provenance/first-frame-audit.json",
+      "animation_scope": "Existing clocks, rows, pivots, source frames, candidate/destruction status and bindings remain owned by these existing records."
+    },
+    "evidence": {
+      "geometry": "data-authoring-2026-10-09/evidence/interior-source-geometry.json#papers-and-ink",
+      "all_four_views_inspected": true,
+      "view_sheet": "data-authoring-2026-10-09/evidence/generated-interiors-four-views.png",
+      "alpha_bbox_measurements": {
+        "e": {
+          "static_alpha_bbox_px": [
+            114,
+            200,
+            142,
+            214
+          ],
+          "catalog_frame0_alpha_bbox_px": [
+            180,
+            264,
+            206,
+            278
+          ]
+        },
+        "s": {
+          "static_alpha_bbox_px": [
+            114,
+            190,
+            142,
+            214
+          ],
+          "catalog_frame0_alpha_bbox_px": [
+            178,
+            252,
+            206,
+            278
+          ]
+        },
+        "w": {
+          "static_alpha_bbox_px": [
+            114,
+            190,
+            142,
+            214
+          ],
+          "catalog_frame0_alpha_bbox_px": [
+            178,
+            254,
+            206,
+            278
+          ]
+        },
+        "n": {
+          "static_alpha_bbox_px": [
+            114,
+            200,
+            140,
+            214
+          ],
+          "catalog_frame0_alpha_bbox_px": [
+            178,
+            264,
+            204,
+            278
+          ]
+        }
+      },
+      "source_manifest_receiver": "surface",
+      "source_manifest_footprint_tiles": [
+        1,
+        1
+      ],
+      "source_manifest_footprint_status": "Existing packaging placeholders; concrete measured footprint supplied here.",
+      "camera_basis_static_px": {
+        "e": {
+          "X": [
+            32.324874,
+            16.162452
+          ],
+          "Y": [
+            32.32489,
+            -16.162442
+          ],
+          "Z": [
+            1.5e-05,
+            -39.589726
+          ]
+        },
+        "s": {
+          "X": [
+            32.324882,
+            -16.162449
+          ],
+          "Y": [
+            -32.324883,
+            -16.162442
+          ],
+          "Z": [
+            0.0,
+            -39.589726
+          ]
+        },
+        "w": {
+          "X": [
+            -32.324882,
+            -16.162449
+          ],
+          "Y": [
+            -32.324882,
+            16.162449
+          ],
+          "Z": [
+            0.0,
+            -39.589725
+          ]
+        },
+        "n": {
+          "X": [
+            -32.324883,
+            16.162447
+          ],
+          "Y": [
+            32.32489,
+            16.162449
+          ],
+          "Z": [
+            7e-06,
+            -39.589725
+          ]
+        }
+      },
+      "source_pose_to_engine_geometric_quadrant": {
+        "e": 0,
+        "s": 3,
+        "w": 2,
+        "n": 1
+      },
+      "geometry_confidence": "high for preserved source mesh and source camera registration; this does not certify exact frame0-rest pixel equality.",
+      "semantic_confidence": "medium, artwork/source naming support the authored role.",
+      "blocking_confidence": "medium; basin cavity thickness low/estimated."
+    },
+    "notes": [
+      "Native generated camera labels map geometrically to engine quarters e=0,s=3,w=2,n=1 for the declared local-east XYZ conversion. Direct e/s/w/n to engine quarter0/1/2/3 swaps the two side views. Source rows and current selected bindings are preserved; consumers must use the measured crosswalk for these new profiles."
+    ]
+  },
+  "context": "../context.json",
+  "installed_media": {
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-0-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-0-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-0.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-0.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-1-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-1-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-1.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-1.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-10-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-10-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-10.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-10.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-11-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-11-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-11.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-11.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-12-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-12-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-12.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-12.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-13-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-13-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-13.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-13.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-14-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-14-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-14.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-14.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-15-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-15-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-15.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-15.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-16-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-16-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-16.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-16.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-17-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-17-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-17.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-17.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-18-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-18-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-18.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-18.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-19-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-19-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-19.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-19.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-2-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-2-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-2.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-2.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-20-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-20-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-20.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-20.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-21-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-21-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-21.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-21.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-22-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-22-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-22.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-22.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-23-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-23-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-23.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-23.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-24-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-24-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-24.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-24.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-25-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-25-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-25.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-25.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-26-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-26-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-26.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-26.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-27-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-27-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-27.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-27.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-28-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-28-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-28.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-28.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-29-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-29-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-29.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-29.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-3-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-3-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-3.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-3.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-30-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-30-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-30.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-30.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-31-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-31-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-31.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-31.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-32-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-32-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-32.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-32.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-33-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-33-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-33.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-33.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-34-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-34-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-34.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-34.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-35-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-35-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-35.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-35.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-36-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-36-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-36.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-36.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-4-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-4-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-4.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-4.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-5-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-5-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-5.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-5.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-6-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-6-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-6.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-6.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-7-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-7-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-7.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-7.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-8-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-8-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-8.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-8.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-9-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-9-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/e-9.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/e-9.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-0-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-0-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-0.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-0.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-1-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-1-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-1.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-1.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-10-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-10-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-10.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-10.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-11-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-11-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-11.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-11.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-12-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-12-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-12.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-12.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-13-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-13-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-13.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-13.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-14-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-14-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-14.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-14.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-15-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-15-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-15.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-15.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-16-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-16-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-16.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-16.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-17-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-17-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-17.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-17.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-18-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-18-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-18.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-18.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-19-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-19-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-19.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-19.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-2-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-2-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-2.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-2.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-20-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-20-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-20.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-20.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-21-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-21-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-21.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-21.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-22-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-22-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-22.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-22.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-23-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-23-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-23.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-23.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-24-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-24-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-24.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-24.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-25-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-25-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-25.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-25.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-26-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-26-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-26.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-26.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-27-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-27-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-27.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-27.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-28-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-28-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-28.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-28.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-29-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-29-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-29.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-29.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-3-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-3-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-3.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-3.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-30-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-30-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-30.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-30.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-31-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-31-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-31.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-31.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-32-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-32-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-32.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-32.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-33-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-33-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-33.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-33.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-34-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-34-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-34.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-34.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-35-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-35-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-35.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-35.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-36-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-36-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-36.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-36.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-4-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-4-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-4.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-4.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-5-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-5-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-5.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-5.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-6-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-6-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-6.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-6.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-7-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-7-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-7.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-7.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-8-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-8-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-8.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-8.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-9-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-9-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/n-9.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/n-9.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-0-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-0-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-0.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-0.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-1-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-1-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-1.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-1.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-10-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-10-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-10.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-10.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-11-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-11-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-11.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-11.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-12-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-12-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-12.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-12.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-13-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-13-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-13.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-13.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-14-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-14-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-14.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-14.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-15-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-15-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-15.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-15.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-16-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-16-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-16.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-16.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-17-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-17-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-17.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-17.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-18-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-18-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-18.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-18.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-19-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-19-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-19.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-19.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-2-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-2-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-2.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-2.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-20-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-20-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-20.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-20.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-21-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-21-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-21.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-21.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-22-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-22-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-22.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-22.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-23-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-23-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-23.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-23.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-24-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-24-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-24.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-24.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-25-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-25-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-25.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-25.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-26-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-26-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-26.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-26.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-27-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-27-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-27.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-27.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-28-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-28-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-28.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-28.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-29-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-29-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-29.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-29.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-3-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-3-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-3.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-3.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-30-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-30-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-30.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-30.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-31-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-31-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-31.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-31.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-32-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-32-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-32.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-32.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-33-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-33-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-33.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-33.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-34-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-34-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-34.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-34.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-35-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-35-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-35.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-35.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-36-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-36-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-36.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-36.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-4-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-4-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-4.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-4.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-5-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-5-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-5.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-5.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-6-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-6-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-6.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-6.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-7-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-7-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-7.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-7.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-8-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-8-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-8.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-8.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-9-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-9-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/s-9.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/s-9.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/sheet-e.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/sheet-e.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/sheet-n.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/sheet-n.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/sheet-s.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/sheet-s.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/sheet-w.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/sheet-w.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/spritesheet.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/spritesheet.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-0-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-0-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-0.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-0.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-1-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-1-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-1.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-1.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-10-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-10-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-10.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-10.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-11-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-11-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-11.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-11.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-12-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-12-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-12.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-12.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-13-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-13-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-13.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-13.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-14-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-14-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-14.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-14.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-15-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-15-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-15.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-15.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-16-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-16-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-16.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-16.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-17-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-17-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-17.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-17.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-18-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-18-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-18.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-18.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-19-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-19-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-19.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-19.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-2-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-2-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-2.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-2.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-20-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-20-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-20.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-20.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-21-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-21-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-21.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-21.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-22-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-22-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-22.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-22.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-23-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-23-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-23.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-23.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-24-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-24-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-24.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-24.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-25-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-25-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-25.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-25.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-26-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-26-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-26.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-26.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-27-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-27-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-27.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-27.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-28-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-28-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-28.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-28.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-29-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-29-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-29.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-29.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-3-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-3-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-3.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-3.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-30-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-30-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-30.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-30.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-31-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-31-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-31.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-31.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-32-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-32-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-32.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-32.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-33-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-33-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-33.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-33.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-34-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-34-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-34.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-34.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-35-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-35-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-35.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-35.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-36-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-36-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-36.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-36.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-4-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-4-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-4.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-4.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-5-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-5-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-5.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-5.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-6-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-6-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-6.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-6.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-7-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-7-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-7.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-7.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-8-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-8-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-8.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-8.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-9-raw.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-9-raw.png",
+    "c-new-props/decor/native-candidates-v5/papers-and-ink/w-9.png": "/media/environment/library/props/decor/native-candidates-v5/papers-and-ink/w-9.png"
+  }
+}

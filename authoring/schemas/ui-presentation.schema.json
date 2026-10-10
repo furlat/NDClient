@@ -1,0 +1,259 @@
+{
+  "$defs": {
+    "ContentPresentation": {
+      "additionalProperties": false,
+      "description": "Cold presentation keys authored by the backend content definition.",
+      "properties": {
+        "icon_key": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Icon Key"
+        },
+        "portrait_key": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Portrait Key"
+        },
+        "sprite_key": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sprite Key"
+        },
+        "visual_variant_key": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Visual Variant Key"
+        },
+        "tint_rgb": {
+          "anyOf": [
+            {
+              "maximum": 16777215,
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional authored 24-bit RGB tint for this presentation.",
+          "title": "Tint Rgb"
+        },
+        "vfx_profile": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Vfx Profile"
+        },
+        "audio_key": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Audio Key"
+        },
+        "ui_group": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ui Group"
+        },
+        "equipment_sprites": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/EquipmentSpritePresentation"
+          },
+          "title": "Equipment Sprites",
+          "type": "array"
+        }
+      },
+      "title": "ContentPresentation",
+      "type": "object"
+    },
+    "EquipmentRenderLayer": {
+      "description": "Dependency-neutral renderer layers contributed by equipped items.",
+      "enum": [
+        "backpack",
+        "cloak",
+        "belt",
+        "chest",
+        "hands",
+        "helmet",
+        "legs",
+        "offhand",
+        "shoes",
+        "weapon"
+      ],
+      "title": "EquipmentRenderLayer",
+      "type": "string"
+    },
+    "EquipmentSpritePresentation": {
+      "additionalProperties": false,
+      "description": "One exact actor render layer contributed by an equipped loadout slot.",
+      "properties": {
+        "equipment_slot": {
+          "$ref": "#/$defs/VisualLoadoutSlot"
+        },
+        "render_layer": {
+          "$ref": "#/$defs/EquipmentRenderLayer"
+        },
+        "sprite_key": {
+          "minLength": 1,
+          "title": "Sprite Key",
+          "type": "string"
+        },
+        "tint_rgb": {
+          "description": "Exact authored 24-bit RGB tint for this actor layer.",
+          "maximum": 16777215,
+          "minimum": 0,
+          "title": "Tint Rgb",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "equipment_slot",
+        "render_layer",
+        "sprite_key",
+        "tint_rgb"
+      ],
+      "title": "EquipmentSpritePresentation",
+      "type": "object"
+    },
+    "PresentationRecord": {
+      "additionalProperties": false,
+      "properties": {
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "presentation": {
+          "$ref": "#/$defs/ContentPresentation"
+        },
+        "approximation": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Approximation"
+        }
+      },
+      "required": [
+        "label",
+        "presentation"
+      ],
+      "title": "PresentationRecord",
+      "type": "object"
+    },
+    "VisualLoadoutSlot": {
+      "description": "Dependency-neutral actor presentation slots shared with transport.",
+      "enum": [
+        "weapon_melee_main",
+        "weapon_melee_off",
+        "weapon_ranged_main",
+        "weapon_ranged_off",
+        "helmet",
+        "body_armor",
+        "gauntlets",
+        "greaves",
+        "boots",
+        "amulet",
+        "cloak",
+        "backpack",
+        "ring_left",
+        "ring_right"
+      ],
+      "title": "VisualLoadoutSlot",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "direct_features": {
+      "additionalProperties": {
+        "$ref": "#/$defs/PresentationRecord"
+      },
+      "title": "Direct Features",
+      "type": "object"
+    },
+    "direct_items": {
+      "additionalProperties": {
+        "$ref": "#/$defs/PresentationRecord"
+      },
+      "title": "Direct Items",
+      "type": "object"
+    },
+    "portrait_choices": {
+      "additionalProperties": {
+        "$ref": "#/$defs/PresentationRecord"
+      },
+      "title": "Portrait Choices",
+      "type": "object"
+    },
+    "common": {
+      "additionalProperties": {
+        "$ref": "#/$defs/PresentationRecord"
+      },
+      "title": "Common",
+      "type": "object"
+    }
+  },
+  "required": [
+    "direct_features",
+    "direct_items",
+    "portrait_choices",
+    "common"
+  ],
+  "title": "UIPresentationDocument",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

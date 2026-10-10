@@ -1,0 +1,696 @@
+{
+  "section": "interior",
+  "record": {
+    "catalog_id": "generated-wall-candle-holder",
+    "intended_role": "Wall mounted iron candle bracket",
+    "description": "An iron back plate and projecting bracket hold an unlit wax candle. Placement profile does not select lighting or candle gameplay.",
+    "mounting": {
+      "receiver": "wall",
+      "anchor_source_xyz": [
+        0,
+        0.15,
+        0.55
+      ],
+      "anchor_local_east_xy_z_steps": [
+        0.0,
+        -0.076358,
+        0.342903
+      ],
+      "align": "Align placement_contact_px in chosen native view to the projected receiver contact; source pivot remains the art registration.",
+      "floor_contact": null,
+      "default_source_mount_height_steps": 0.342903,
+      "default_source_mount_height_status": "measured source embedding, not a separate room-height choice",
+      "world_geometry_transform": "worldPoint = receiverAnchor + T(sourcePoint - anchor_source_xyz), T recorded under units.source_model_conversion. Footprints/heights/solid_parts use source geometric origin; subtract anchor offset for placement.",
+      "sprite_alignment": "screenPoint(u) = project(receiverAnchor) + pixelScale*(u - placement_contact_px); with preserved pivot p, sprite.position = project(receiverAnchor) + pixelScale*(p - placement_contact_px).",
+      "height_interval_relative_to_mount_steps": [
+        -0.140278,
+        0.140279
+      ],
+      "receiver_plane_source_y": 0.15,
+      "receiver_normal_local_east_xyz": [
+        0,
+        1,
+        0
+      ],
+      "plane_definition": "Rear face of mounting board/plate; wall-shelves uses rear edges of both shelves.",
+      "floor_base_contact_source_xyz": [
+        0,
+        0.15,
+        0
+      ],
+      "floor_navigation_footprint": [],
+      "contact_policy": "Object is suspended from this wall plane; empty floor space below it is not filled by its 2D sprite.",
+      "embedded_height_range_steps": [
+        0.202625,
+        0.483182
+      ]
+    },
+    "contact_by_pose": {
+      "e": {
+        "image_path": "c-new-props/decor/native-breakables/wall-candle-holder/sheet-e.png",
+        "image_dimensions_px": [
+          9216,
+          384
+        ],
+        "frame_rect_px": [
+          0,
+          0,
+          384,
+          384
+        ],
+        "frame_dimensions_px": [
+          384,
+          384
+        ],
+        "source_pivot_px": [
+          192,
+          272
+        ],
+        "placement_contact_kind": "wall_mount",
+        "placement_contact_px": [
+          196.84877,
+          247.80127
+        ],
+        "contacts_px": {
+          "wall_mount": [
+            196.84877,
+            247.80127
+          ],
+          "wall_base": [
+            196.84877,
+            269.575623
+          ]
+        },
+        "derivation": "Source-model anchor projected with preserved camera; +64px x/y padding maps 256px static art to existing 384px catalog frame. Per-view contact is separate from source pivot.",
+        "confidence": "medium: exact source rest projection, catalog padding evidenced by matching registrations; frame0 has documented pixel differences in some families"
+      },
+      "s": {
+        "image_path": "c-new-props/decor/native-breakables/wall-candle-holder/sheet-s.png",
+        "image_dimensions_px": [
+          9216,
+          384
+        ],
+        "frame_rect_px": [
+          0,
+          0,
+          384,
+          384
+        ],
+        "frame_dimensions_px": [
+          384,
+          384
+        ],
+        "source_pivot_px": [
+          192,
+          272
+        ],
+        "placement_contact_kind": "wall_mount",
+        "placement_contact_px": [
+          187.15123,
+          247.80127
+        ],
+        "contacts_px": {
+          "wall_mount": [
+            187.15123,
+            247.80127
+          ],
+          "wall_base": [
+            187.15123,
+            269.575623
+          ]
+        },
+        "derivation": "Source-model anchor projected with preserved camera; +64px x/y padding maps 256px static art to existing 384px catalog frame. Per-view contact is separate from source pivot.",
+        "confidence": "medium: exact source rest projection, catalog padding evidenced by matching registrations; frame0 has documented pixel differences in some families"
+      },
+      "w": {
+        "image_path": "c-new-props/decor/native-breakables/wall-candle-holder/sheet-w.png",
+        "image_dimensions_px": [
+          9216,
+          384
+        ],
+        "frame_rect_px": [
+          0,
+          0,
+          384,
+          384
+        ],
+        "frame_dimensions_px": [
+          384,
+          384
+        ],
+        "source_pivot_px": [
+          192,
+          272
+        ],
+        "placement_contact_kind": "wall_mount",
+        "placement_contact_px": [
+          187.151283,
+          252.649956
+        ],
+        "contacts_px": {
+          "wall_mount": [
+            187.151283,
+            252.649956
+          ],
+          "wall_base": [
+            187.151283,
+            274.424301
+          ]
+        },
+        "derivation": "Source-model anchor projected with preserved camera; +64px x/y padding maps 256px static art to existing 384px catalog frame. Per-view contact is separate from source pivot.",
+        "confidence": "medium: exact source rest projection, catalog padding evidenced by matching registrations; frame0 has documented pixel differences in some families"
+      },
+      "n": {
+        "image_path": "c-new-props/decor/native-breakables/wall-candle-holder/sheet-n.png",
+        "image_dimensions_px": [
+          9216,
+          384
+        ],
+        "frame_rect_px": [
+          0,
+          0,
+          384,
+          384
+        ],
+        "frame_dimensions_px": [
+          384,
+          384
+        ],
+        "source_pivot_px": [
+          192,
+          272
+        ],
+        "placement_contact_kind": "wall_mount",
+        "placement_contact_px": [
+          196.848724,
+          252.649956
+        ],
+        "contacts_px": {
+          "wall_mount": [
+            196.848724,
+            252.649956
+          ],
+          "wall_base": [
+            196.848724,
+            274.424301
+          ]
+        },
+        "derivation": "Source-model anchor projected with preserved camera; +64px x/y padding maps 256px static art to existing 384px catalog frame. Per-view contact is separate from source pivot.",
+        "confidence": "medium: exact source rest projection, catalog padding evidenced by matching registrations; frame0 has documented pixel differences in some families"
+      }
+    },
+    "static_contact_by_pose": {
+      "e": {
+        "image_path": "c-new-props/generated-interiors/wall-candle-holder/e.png",
+        "image_dimensions_px": [
+          256,
+          256
+        ],
+        "source_pivot_px": [
+          128,
+          208
+        ],
+        "contacts_px": {
+          "wall_mount": [
+            132.84877,
+            183.80127
+          ],
+          "wall_base": [
+            132.84877,
+            205.575623
+          ]
+        }
+      },
+      "s": {
+        "image_path": "c-new-props/generated-interiors/wall-candle-holder/s.png",
+        "image_dimensions_px": [
+          256,
+          256
+        ],
+        "source_pivot_px": [
+          128,
+          208
+        ],
+        "contacts_px": {
+          "wall_mount": [
+            123.15123,
+            183.80127
+          ],
+          "wall_base": [
+            123.15123,
+            205.575623
+          ]
+        }
+      },
+      "w": {
+        "image_path": "c-new-props/generated-interiors/wall-candle-holder/w.png",
+        "image_dimensions_px": [
+          256,
+          256
+        ],
+        "source_pivot_px": [
+          128,
+          208
+        ],
+        "contacts_px": {
+          "wall_mount": [
+            123.151283,
+            188.649956
+          ],
+          "wall_base": [
+            123.151283,
+            210.424301
+          ]
+        }
+      },
+      "n": {
+        "image_path": "c-new-props/generated-interiors/wall-candle-holder/n.png",
+        "image_dimensions_px": [
+          256,
+          256
+        ],
+        "source_pivot_px": [
+          128,
+          208
+        ],
+        "contacts_px": {
+          "wall_mount": [
+            132.848724,
+            188.649956
+          ],
+          "wall_base": [
+            132.848724,
+            210.424301
+          ]
+        }
+      }
+    },
+    "footprint": {
+      "coordinate_origin": "Preserved source geometric origin (0,0,0); mounting anchor has separate XYZ below. Rotate footprint with family orientation, never camera pose.",
+      "bounds_xy_cells": {
+        "min": [
+          -0.038179,
+          -0.076358
+        ],
+        "max": [
+          0.038179,
+          0.094175
+        ]
+      },
+      "dimensions_xy_cells": [
+        0.076358,
+        0.170533
+      ],
+      "polygon_xy_cells": [
+        [
+          -0.038179,
+          -0.045815
+        ],
+        [
+          -0.031469,
+          0.071311
+        ],
+        [
+          -0.019449,
+          0.087855
+        ],
+        [
+          0.0,
+          0.094175
+        ],
+        [
+          0.019449,
+          0.087855
+        ],
+        [
+          0.031469,
+          0.071311
+        ],
+        [
+          0.038179,
+          -0.045815
+        ],
+        [
+          0.038179,
+          -0.076358
+        ],
+        [
+          -0.038179,
+          -0.076358
+        ]
+      ],
+      "meaning": "Convex enclosure of actual rest-mesh XY projection, for extent/placement fit only. Blocking uses component solids; this enclosure is not automatically a filled collision region.",
+      "provenance": "measured preserved source meshes, converted by recorded camera registration"
+    },
+    "height": {
+      "coordinate_origin": "All heights below are relative to preserved source geometric origin, before placement; mounting includes its own source anchor height to subtract when attached elsewhere.",
+      "base_z_steps": 0.202625,
+      "top_z_steps": 0.483182,
+      "span_steps": 0.280557,
+      "top_height_ft_from_source_origin": 2.41591,
+      "provenance": "measured source rest-model bounds, render-equivalent registration conversion"
+    },
+    "blocking": {
+      "coordinate_origin": "Component XY polygons and Z intervals use the source geometric origin; apply the same mounting.world_geometry_transform to every component.",
+      "physical_solids": "Individual wooden/iron/ceramic components at their actual heights; water is excluded.",
+      "blocks_floor_as_filled_cell": false,
+      "floor_footprint_policy": "none: suspended or carrier-local dressing",
+      "solid_parts": [
+        {
+          "source_mesh": "wall plate",
+          "materials": [
+            "iron"
+          ],
+          "footprint_polygon_xy_cells": [
+            [
+              -0.038179,
+              -0.045815
+            ],
+            [
+              0.038179,
+              -0.045815
+            ],
+            [
+              0.038179,
+              -0.076358
+            ],
+            [
+              -0.038179,
+              -0.076358
+            ]
+          ],
+          "z_interval_steps": [
+            0.202625,
+            0.483182
+          ],
+          "geometry_ref": "c-new-props/generated-interiors/wall-candle-holder/wall-candle-holder.blend#wall plate",
+          "volume_interpretation": "oriented source mesh; XY polygon and z interval bound its occupied solid, not a filled extrusion unless the component is an axis-aligned board/leg"
+        },
+        {
+          "source_mesh": "bracket",
+          "materials": [
+            "iron"
+          ],
+          "footprint_polygon_xy_cells": [
+            [
+              -0.017817,
+              0.076358
+            ],
+            [
+              0.017817,
+              0.076358
+            ],
+            [
+              0.017817,
+              -0.076358
+            ],
+            [
+              -0.017817,
+              -0.076358
+            ]
+          ],
+          "z_interval_steps": [
+            0.227563,
+            0.271205
+          ],
+          "geometry_ref": "c-new-props/generated-interiors/wall-candle-holder/wall-candle-holder.blend#bracket",
+          "volume_interpretation": "oriented source mesh; XY polygon and z interval bound its occupied solid, not a filled extrusion unless the component is an axis-aligned board/leg"
+        },
+        {
+          "source_mesh": "wax candle",
+          "materials": [
+            "wax"
+          ],
+          "footprint_polygon_xy_cells": [
+            [
+              -0.031469,
+              0.071311
+            ],
+            [
+              -0.019449,
+              0.087855
+            ],
+            [
+              0.0,
+              0.094175
+            ],
+            [
+              0.019449,
+              0.087855
+            ],
+            [
+              0.031469,
+              0.071311
+            ],
+            [
+              0.031469,
+              0.050861
+            ],
+            [
+              0.019449,
+              0.034317
+            ],
+            [
+              0.0,
+              0.027998
+            ],
+            [
+              -0.019449,
+              0.034317
+            ],
+            [
+              -0.031469,
+              0.050861
+            ]
+          ],
+          "z_interval_steps": [
+            0.268088,
+            0.455126
+          ],
+          "geometry_ref": "c-new-props/generated-interiors/wall-candle-holder/wall-candle-holder.blend#wax candle",
+          "volume_interpretation": "oriented source mesh; XY polygon and z interval bound its occupied solid, not a filled extrusion unless the component is an axis-aligned board/leg"
+        }
+      ],
+      "status": "authored physical interpretation using measured component bounds; runtime collision/navigation selection is separate"
+    },
+    "sources": [
+      {
+        "path": "c-new-props/generated-interiors/wall-candle-holder/wall-candle-holder.blend",
+        "sha256": "78f3a83823bbc695326c30936850dcb4a61019bc3d545b26b466eed0d47b7bb1",
+        "kind": "preserved_Blender_rest_geometry"
+      },
+      {
+        "path": "c-new-props/generated-interiors/manifest.json",
+        "sha256": "428ba878ff9a848f0b7884db32c52b411bb2cf19ccb1b989b4bd9c681ee2ee5b",
+        "kind": "existing_static_registration"
+      },
+      {
+        "path": "c-new-props/decor/native-breakables/wall-candle-holder/metadata.json",
+        "sha256": "d3763b903aa232844e8549d8b7884a04ad619e9f5e16501df6b397a65153b5a7",
+        "kind": "existing_animation_metadata"
+      },
+      {
+        "path": "c-new-props/decor/native-breakables/wall-candle-holder/sheet-e.png",
+        "sha256": "45fe01947873443a9a7455dda1d75943132b7261e15061b66b6b7c25f75bfe04",
+        "kind": "existing_catalog_art"
+      },
+      {
+        "path": "c-new-props/generated-interiors/wall-candle-holder/e.png",
+        "sha256": "7cc31504188c5a790151bfd3bc452c17c149a0a2d17482945c943bae3788ba0e",
+        "kind": "existing_static_art"
+      },
+      {
+        "path": "c-new-props/decor/native-breakables/wall-candle-holder/sheet-s.png",
+        "sha256": "dd4c811741af31b3ef125c5421203d673cf0816d138c67bd2d7edd43e8a4da47",
+        "kind": "existing_catalog_art"
+      },
+      {
+        "path": "c-new-props/generated-interiors/wall-candle-holder/s.png",
+        "sha256": "b12ff42bfce7847eae1be48dc7434d572a04db377f25a84caf264f535f5b054f",
+        "kind": "existing_static_art"
+      },
+      {
+        "path": "c-new-props/decor/native-breakables/wall-candle-holder/sheet-w.png",
+        "sha256": "486f665005bb2de2a7a67e12299eea79e573c6520cb2a0778f3e9714c9f55ddf",
+        "kind": "existing_catalog_art"
+      },
+      {
+        "path": "c-new-props/generated-interiors/wall-candle-holder/w.png",
+        "sha256": "65268b822f0d7f88c8fb26d04a560a2f8f289fdad2288acc3af20429558e9559",
+        "kind": "existing_static_art"
+      },
+      {
+        "path": "c-new-props/decor/native-breakables/wall-candle-holder/sheet-n.png",
+        "sha256": "787f9c5389b08d39b86debae450fa6d3a34842d3202d8791c13870b7f19ca405",
+        "kind": "existing_catalog_art"
+      },
+      {
+        "path": "c-new-props/generated-interiors/wall-candle-holder/n.png",
+        "sha256": "24f77882bd56b12d6b33f95ec59d20c78e2f422a0c4c0377ec8fff85f52496d1",
+        "kind": "existing_static_art"
+      }
+    ],
+    "preserved_metadata": {
+      "static_manifest": "c-new-props/generated-interiors/manifest.json#wall-candle-holder",
+      "source_static_pivot_px": [
+        128,
+        208
+      ],
+      "catalog_metadata_path": "c-new-props/decor/native-breakables/wall-candle-holder/metadata.json",
+      "catalog_pivot_px": [
+        192,
+        272
+      ],
+      "first_frame_audit": "provenance/first-frame-audit.json",
+      "animation_scope": "Existing clocks, rows, pivots, source frames, candidate/destruction status and bindings remain owned by these existing records."
+    },
+    "evidence": {
+      "geometry": "data-authoring-2026-10-09/evidence/interior-source-geometry.json#wall-candle-holder",
+      "all_four_views_inspected": true,
+      "view_sheet": "data-authoring-2026-10-09/evidence/generated-interiors-four-views.png",
+      "alpha_bbox_measurements": {
+        "e": {
+          "static_alpha_bbox_px": [
+            122,
+            174,
+            136,
+            196
+          ],
+          "catalog_frame0_alpha_bbox_px": [
+            186,
+            238,
+            200,
+            260
+          ]
+        },
+        "s": {
+          "static_alpha_bbox_px": [
+            120,
+            174,
+            134,
+            196
+          ],
+          "catalog_frame0_alpha_bbox_px": [
+            184,
+            238,
+            198,
+            260
+          ]
+        },
+        "w": {
+          "static_alpha_bbox_px": [
+            120,
+            176,
+            134,
+            198
+          ],
+          "catalog_frame0_alpha_bbox_px": [
+            184,
+            240,
+            198,
+            262
+          ]
+        },
+        "n": {
+          "static_alpha_bbox_px": [
+            122,
+            176,
+            136,
+            198
+          ],
+          "catalog_frame0_alpha_bbox_px": [
+            186,
+            240,
+            200,
+            262
+          ]
+        }
+      },
+      "source_manifest_receiver": "wall",
+      "source_manifest_footprint_tiles": [
+        1,
+        1
+      ],
+      "source_manifest_footprint_status": "Existing packaging placeholders; concrete measured footprint supplied here.",
+      "camera_basis_static_px": {
+        "e": {
+          "X": [
+            32.324874,
+            16.162452
+          ],
+          "Y": [
+            32.32489,
+            -16.162442
+          ],
+          "Z": [
+            1.5e-05,
+            -39.589726
+          ]
+        },
+        "s": {
+          "X": [
+            32.324882,
+            -16.162449
+          ],
+          "Y": [
+            -32.324883,
+            -16.162442
+          ],
+          "Z": [
+            0.0,
+            -39.589726
+          ]
+        },
+        "w": {
+          "X": [
+            -32.324882,
+            -16.162449
+          ],
+          "Y": [
+            -32.324882,
+            16.162449
+          ],
+          "Z": [
+            0.0,
+            -39.589725
+          ]
+        },
+        "n": {
+          "X": [
+            -32.324883,
+            16.162447
+          ],
+          "Y": [
+            32.32489,
+            16.162449
+          ],
+          "Z": [
+            7e-06,
+            -39.589725
+          ]
+        }
+      },
+      "source_pose_to_engine_geometric_quadrant": {
+        "e": 0,
+        "s": 3,
+        "w": 2,
+        "n": 1
+      },
+      "geometry_confidence": "high for preserved source mesh and source camera registration; this does not certify exact frame0-rest pixel equality.",
+      "semantic_confidence": "medium, artwork/source naming support the authored role.",
+      "blocking_confidence": "medium; basin cavity thickness low/estimated."
+    },
+    "notes": [
+      "Native generated camera labels map geometrically to engine quarters e=0,s=3,w=2,n=1 for the declared local-east XYZ conversion. Direct e/s/w/n to engine quarter0/1/2/3 swaps the two side views. Source rows and current selected bindings are preserved; consumers must use the measured crosswalk for these new profiles.",
+      "Source material/geometry is an unlit candle; no flame, light radius, fuel or gameplay effect is authored."
+    ]
+  },
+  "context": "../context.json",
+  "installed_media": {
+    "c-new-props/decor/native-breakables/wall-candle-holder/sheet-e.png": "/media/environment/library/props/decor/native-breakables/wall-candle-holder/sheet-e.png",
+    "c-new-props/decor/native-breakables/wall-candle-holder/sheet-n.png": "/media/environment/library/props/decor/native-breakables/wall-candle-holder/sheet-n.png",
+    "c-new-props/decor/native-breakables/wall-candle-holder/sheet-s.png": "/media/environment/library/props/decor/native-breakables/wall-candle-holder/sheet-s.png",
+    "c-new-props/decor/native-breakables/wall-candle-holder/sheet-w.png": "/media/environment/library/props/decor/native-breakables/wall-candle-holder/sheet-w.png",
+    "c-new-props/decor/native-breakables/wall-candle-holder/sheet.png": "/media/environment/library/props/decor/native-breakables/wall-candle-holder/sheet.png"
+  }
+}

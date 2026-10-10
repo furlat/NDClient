@@ -1,0 +1,1125 @@
+{
+  "section": "interior",
+  "record": {
+    "catalog_id": "generated-washstand",
+    "intended_role": "Floor stand carrying a wash bowl",
+    "description": "Four wood legs, plank tabletop and apron carry a clay basin and blue-grey water surface.",
+    "mounting": {
+      "receiver": "floor",
+      "anchor_source_xyz": [
+        0,
+        0,
+        0
+      ],
+      "anchor_local_east_xy_z_steps": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "align": "Align placement_contact_px in chosen native view to the projected receiver contact; source pivot remains the art registration.",
+      "floor_contact": "source origin floor plane; geometric mesh clearance is retained below",
+      "default_source_mount_height_steps": 0.0,
+      "default_source_mount_height_status": "measured source embedding, not a separate room-height choice",
+      "world_geometry_transform": "worldPoint = receiverAnchor + T(sourcePoint - anchor_source_xyz), T recorded under units.source_model_conversion. Footprints/heights/solid_parts use source geometric origin; subtract anchor offset for placement.",
+      "sprite_alignment": "screenPoint(u) = project(receiverAnchor) + pixelScale*(u - placement_contact_px); with preserved pivot p, sprite.position = project(receiverAnchor) + pixelScale*(p - placement_contact_px).",
+      "height_interval_relative_to_mount_steps": [
+        0.0,
+        0.633436
+      ],
+      "source_mesh_minimum_clearance_steps": 0.0
+    },
+    "contact_by_pose": {
+      "e": {
+        "image_path": "c-new-props/decor/native-candidates-v5/washstand/sheet-e.png",
+        "image_dimensions_px": [
+          6912,
+          384
+        ],
+        "frame_rect_px": [
+          0,
+          0,
+          384,
+          384
+        ],
+        "frame_dimensions_px": [
+          384,
+          384
+        ],
+        "source_pivot_px": [
+          192,
+          272
+        ],
+        "placement_contact_kind": "ground",
+        "placement_contact_px": [
+          192.000031,
+          271.999989
+        ],
+        "contacts_px": {
+          "ground": [
+            192.000031,
+            271.999989
+          ],
+          "tabletop_support": [
+            192.000046,
+            238.546669
+          ]
+        },
+        "derivation": "Source-model anchor projected with preserved camera; +64px x/y padding maps 256px static art to existing 384px catalog frame. Per-view contact is separate from source pivot.",
+        "confidence": "medium: exact source rest projection, catalog padding evidenced by matching registrations; frame0 has documented pixel differences in some families"
+      },
+      "s": {
+        "image_path": "c-new-props/decor/native-candidates-v5/washstand/sheet-s.png",
+        "image_dimensions_px": [
+          6912,
+          384
+        ],
+        "frame_rect_px": [
+          0,
+          0,
+          384,
+          384
+        ],
+        "frame_dimensions_px": [
+          384,
+          384
+        ],
+        "source_pivot_px": [
+          192,
+          272
+        ],
+        "placement_contact_kind": "ground",
+        "placement_contact_px": [
+          191.999962,
+          271.999989
+        ],
+        "contacts_px": {
+          "ground": [
+            191.999962,
+            271.999989
+          ],
+          "tabletop_support": [
+            191.999962,
+            238.546669
+          ]
+        },
+        "derivation": "Source-model anchor projected with preserved camera; +64px x/y padding maps 256px static art to existing 384px catalog frame. Per-view contact is separate from source pivot.",
+        "confidence": "medium: exact source rest projection, catalog padding evidenced by matching registrations; frame0 has documented pixel differences in some families"
+      },
+      "w": {
+        "image_path": "c-new-props/decor/native-candidates-v5/washstand/sheet-w.png",
+        "image_dimensions_px": [
+          6912,
+          384
+        ],
+        "frame_rect_px": [
+          0,
+          0,
+          384,
+          384
+        ],
+        "frame_dimensions_px": [
+          384,
+          384
+        ],
+        "source_pivot_px": [
+          192,
+          272
+        ],
+        "placement_contact_kind": "ground",
+        "placement_contact_px": [
+          192.000015,
+          271.999935
+        ],
+        "contacts_px": {
+          "ground": [
+            192.000015,
+            271.999935
+          ],
+          "tabletop_support": [
+            192.000015,
+            238.546616
+          ]
+        },
+        "derivation": "Source-model anchor projected with preserved camera; +64px x/y padding maps 256px static art to existing 384px catalog frame. Per-view contact is separate from source pivot.",
+        "confidence": "medium: exact source rest projection, catalog padding evidenced by matching registrations; frame0 has documented pixel differences in some families"
+      },
+      "n": {
+        "image_path": "c-new-props/decor/native-candidates-v5/washstand/sheet-n.png",
+        "image_dimensions_px": [
+          6912,
+          384
+        ],
+        "frame_rect_px": [
+          0,
+          0,
+          384,
+          384
+        ],
+        "frame_dimensions_px": [
+          384,
+          384
+        ],
+        "source_pivot_px": [
+          192,
+          272
+        ],
+        "placement_contact_kind": "ground",
+        "placement_contact_px": [
+          191.999985,
+          271.999935
+        ],
+        "contacts_px": {
+          "ground": [
+            191.999985,
+            271.999935
+          ],
+          "tabletop_support": [
+            191.999992,
+            238.546616
+          ]
+        },
+        "derivation": "Source-model anchor projected with preserved camera; +64px x/y padding maps 256px static art to existing 384px catalog frame. Per-view contact is separate from source pivot.",
+        "confidence": "medium: exact source rest projection, catalog padding evidenced by matching registrations; frame0 has documented pixel differences in some families"
+      }
+    },
+    "static_contact_by_pose": {
+      "e": {
+        "image_path": "c-new-props/generated-interiors/washstand/e.png",
+        "image_dimensions_px": [
+          256,
+          256
+        ],
+        "source_pivot_px": [
+          128,
+          208
+        ],
+        "contacts_px": {
+          "ground": [
+            128.000031,
+            207.999989
+          ],
+          "tabletop_support": [
+            128.000046,
+            174.546669
+          ]
+        }
+      },
+      "s": {
+        "image_path": "c-new-props/generated-interiors/washstand/s.png",
+        "image_dimensions_px": [
+          256,
+          256
+        ],
+        "source_pivot_px": [
+          128,
+          208
+        ],
+        "contacts_px": {
+          "ground": [
+            127.999962,
+            207.999989
+          ],
+          "tabletop_support": [
+            127.999962,
+            174.546669
+          ]
+        }
+      },
+      "w": {
+        "image_path": "c-new-props/generated-interiors/washstand/w.png",
+        "image_dimensions_px": [
+          256,
+          256
+        ],
+        "source_pivot_px": [
+          128,
+          208
+        ],
+        "contacts_px": {
+          "ground": [
+            128.000015,
+            207.999935
+          ],
+          "tabletop_support": [
+            128.000015,
+            174.546616
+          ]
+        }
+      },
+      "n": {
+        "image_path": "c-new-props/generated-interiors/washstand/n.png",
+        "image_dimensions_px": [
+          256,
+          256
+        ],
+        "source_pivot_px": [
+          128,
+          208
+        ],
+        "contacts_px": {
+          "ground": [
+            127.999985,
+            207.999935
+          ],
+          "tabletop_support": [
+            127.999992,
+            174.546616
+          ]
+        }
+      }
+    },
+    "footprint": {
+      "coordinate_origin": "Preserved source geometric origin (0,0,0); mounting anchor has separate XYZ below. Rotate footprint with family orientation, never camera pose.",
+      "bounds_xy_cells": {
+        "min": [
+          -0.318158,
+          -0.178169
+        ],
+        "max": [
+          0.318158,
+          0.178169
+        ]
+      },
+      "dimensions_xy_cells": [
+        0.636316,
+        0.356338
+      ],
+      "polygon_xy_cells": [
+        [
+          -0.318158,
+          0.160352
+        ],
+        [
+          -0.315104,
+          0.178169
+        ],
+        [
+          0.315104,
+          0.178169
+        ],
+        [
+          0.318158,
+          0.160352
+        ],
+        [
+          0.318158,
+          0.124718
+        ],
+        [
+          0.315104,
+          -0.178169
+        ],
+        [
+          -0.315104,
+          -0.178169
+        ],
+        [
+          -0.318158,
+          0.124718
+        ]
+      ],
+      "meaning": "Convex enclosure of actual rest-mesh XY projection, for extent/placement fit only. Blocking uses component solids; this enclosure is not automatically a filled collision region.",
+      "provenance": "measured preserved source meshes, converted by recorded camera registration"
+    },
+    "height": {
+      "coordinate_origin": "All heights below are relative to preserved source geometric origin, before placement; mounting includes its own source anchor height to subtract when attached elsewhere.",
+      "base_z_steps": 0.0,
+      "top_z_steps": 0.633436,
+      "span_steps": 0.633436,
+      "top_height_ft_from_source_origin": 3.16718,
+      "provenance": "measured source rest-model bounds, render-equivalent registration conversion"
+    },
+    "blocking": {
+      "coordinate_origin": "Component XY polygons and Z intervals use the source geometric origin; apply the same mounting.world_geometry_transform to every component.",
+      "physical_solids": "Individual wooden/iron/ceramic components at their actual heights; water is excluded.",
+      "blocks_floor_as_filled_cell": false,
+      "floor_footprint_policy": "continuous occupied solids, not a full-cell assignment",
+      "solid_parts": [
+        {
+          "source_mesh": "square leg",
+          "materials": [
+            "darkwood"
+          ],
+          "footprint_polygon_xy_cells": [
+            [
+              -0.302887,
+              0.162897
+            ],
+            [
+              -0.251981,
+              0.162897
+            ],
+            [
+              -0.251981,
+              0.111992
+            ],
+            [
+              -0.302887,
+              0.111992
+            ]
+          ],
+          "z_interval_steps": [
+            0.0,
+            0.498768
+          ],
+          "geometry_ref": "c-new-props/generated-interiors/washstand/washstand.blend#square leg",
+          "volume_interpretation": "oriented source mesh; XY polygon and z interval bound its occupied solid, not a filled extrusion unless the component is an axis-aligned board/leg"
+        },
+        {
+          "source_mesh": "square leg.001",
+          "materials": [
+            "darkwood"
+          ],
+          "footprint_polygon_xy_cells": [
+            [
+              -0.302887,
+              -0.111992
+            ],
+            [
+              -0.251981,
+              -0.111992
+            ],
+            [
+              -0.251981,
+              -0.162897
+            ],
+            [
+              -0.302887,
+              -0.162897
+            ]
+          ],
+          "z_interval_steps": [
+            0.0,
+            0.498768
+          ],
+          "geometry_ref": "c-new-props/generated-interiors/washstand/washstand.blend#square leg.001",
+          "volume_interpretation": "oriented source mesh; XY polygon and z interval bound its occupied solid, not a filled extrusion unless the component is an axis-aligned board/leg"
+        },
+        {
+          "source_mesh": "square leg.002",
+          "materials": [
+            "darkwood"
+          ],
+          "footprint_polygon_xy_cells": [
+            [
+              0.251981,
+              0.162897
+            ],
+            [
+              0.302887,
+              0.162897
+            ],
+            [
+              0.302887,
+              0.111992
+            ],
+            [
+              0.251981,
+              0.111992
+            ]
+          ],
+          "z_interval_steps": [
+            0.0,
+            0.498768
+          ],
+          "geometry_ref": "c-new-props/generated-interiors/washstand/washstand.blend#square leg.002",
+          "volume_interpretation": "oriented source mesh; XY polygon and z interval bound its occupied solid, not a filled extrusion unless the component is an axis-aligned board/leg"
+        },
+        {
+          "source_mesh": "square leg.003",
+          "materials": [
+            "darkwood"
+          ],
+          "footprint_polygon_xy_cells": [
+            [
+              0.251981,
+              -0.111992
+            ],
+            [
+              0.302887,
+              -0.111992
+            ],
+            [
+              0.302887,
+              -0.162897
+            ],
+            [
+              0.251981,
+              -0.162897
+            ]
+          ],
+          "z_interval_steps": [
+            0.0,
+            0.498768
+          ],
+          "geometry_ref": "c-new-props/generated-interiors/washstand/washstand.blend#square leg.003",
+          "volume_interpretation": "oriented source mesh; XY polygon and z interval bound its occupied solid, not a filled extrusion unless the component is an axis-aligned board/leg"
+        },
+        {
+          "source_mesh": "tabletop plank",
+          "materials": [
+            "wood"
+          ],
+          "footprint_polygon_xy_cells": [
+            [
+              -0.315104,
+              0.178169
+            ],
+            [
+              -0.162133,
+              0.178169
+            ],
+            [
+              -0.162133,
+              -0.178169
+            ],
+            [
+              -0.315104,
+              -0.178169
+            ]
+          ],
+          "z_interval_steps": [
+            0.470712,
+            0.526824
+          ],
+          "geometry_ref": "c-new-props/generated-interiors/washstand/washstand.blend#tabletop plank",
+          "volume_interpretation": "oriented source mesh; XY polygon and z interval bound its occupied solid, not a filled extrusion unless the component is an axis-aligned board/leg"
+        },
+        {
+          "source_mesh": "tabletop plank.001",
+          "materials": [
+            "wood"
+          ],
+          "footprint_polygon_xy_cells": [
+            [
+              -0.156025,
+              0.178169
+            ],
+            [
+              -0.003054,
+              0.178169
+            ],
+            [
+              -0.003054,
+              -0.178169
+            ],
+            [
+              -0.156025,
+              -0.178169
+            ]
+          ],
+          "z_interval_steps": [
+            0.470712,
+            0.526824
+          ],
+          "geometry_ref": "c-new-props/generated-interiors/washstand/washstand.blend#tabletop plank.001",
+          "volume_interpretation": "oriented source mesh; XY polygon and z interval bound its occupied solid, not a filled extrusion unless the component is an axis-aligned board/leg"
+        },
+        {
+          "source_mesh": "tabletop plank.002",
+          "materials": [
+            "wood"
+          ],
+          "footprint_polygon_xy_cells": [
+            [
+              0.003054,
+              0.178169
+            ],
+            [
+              0.156025,
+              0.178169
+            ],
+            [
+              0.156025,
+              -0.178169
+            ],
+            [
+              0.003054,
+              -0.178169
+            ]
+          ],
+          "z_interval_steps": [
+            0.470712,
+            0.526824
+          ],
+          "geometry_ref": "c-new-props/generated-interiors/washstand/washstand.blend#tabletop plank.002",
+          "volume_interpretation": "oriented source mesh; XY polygon and z interval bound its occupied solid, not a filled extrusion unless the component is an axis-aligned board/leg"
+        },
+        {
+          "source_mesh": "tabletop plank.003",
+          "materials": [
+            "wood"
+          ],
+          "footprint_polygon_xy_cells": [
+            [
+              0.162133,
+              0.178169
+            ],
+            [
+              0.315104,
+              0.178169
+            ],
+            [
+              0.315104,
+              -0.178169
+            ],
+            [
+              0.162133,
+              -0.178169
+            ]
+          ],
+          "z_interval_steps": [
+            0.470712,
+            0.526824
+          ],
+          "geometry_ref": "c-new-props/generated-interiors/washstand/washstand.blend#tabletop plank.003",
+          "volume_interpretation": "oriented source mesh; XY polygon and z interval bound its occupied solid, not a filled extrusion unless the component is an axis-aligned board/leg"
+        },
+        {
+          "source_mesh": "apron",
+          "materials": [
+            "darkwood"
+          ],
+          "footprint_polygon_xy_cells": [
+            [
+              -0.318158,
+              0.160352
+            ],
+            [
+              0.318158,
+              0.160352
+            ],
+            [
+              0.318158,
+              0.124718
+            ],
+            [
+              -0.318158,
+              0.124718
+            ]
+          ],
+          "z_interval_steps": [
+            0.342903,
+            0.467595
+          ],
+          "geometry_ref": "c-new-props/generated-interiors/washstand/washstand.blend#apron",
+          "volume_interpretation": "oriented source mesh; XY polygon and z interval bound its occupied solid, not a filled extrusion unless the component is an axis-aligned board/leg"
+        },
+        {
+          "source_mesh": "basin rim",
+          "materials": [
+            "clay"
+          ],
+          "footprint_polygon_xy_cells": [
+            [
+              -0.121035,
+              0.039327
+            ],
+            [
+              -0.074803,
+              0.102958
+            ],
+            [
+              0.0,
+              0.127263
+            ],
+            [
+              0.074803,
+              0.102958
+            ],
+            [
+              0.121035,
+              0.039327
+            ],
+            [
+              0.121035,
+              -0.039327
+            ],
+            [
+              0.074803,
+              -0.102958
+            ],
+            [
+              0.0,
+              -0.127263
+            ],
+            [
+              -0.074803,
+              -0.102958
+            ],
+            [
+              -0.121035,
+              -0.039327
+            ]
+          ],
+          "z_interval_steps": [
+            0.511237,
+            0.62346
+          ],
+          "geometry_ref": "c-new-props/generated-interiors/washstand/washstand.blend#basin rim",
+          "volume_interpretation": "oriented source mesh; XY polygon and z interval bound its occupied solid, not a filled extrusion unless the component is an axis-aligned board/leg"
+        }
+      ],
+      "status": "authored physical interpretation using measured component bounds; runtime collision/navigation selection is separate",
+      "basin_interpretation": "Thin ceramic/clay shell intended by basin role; original static Blender uses a capped cylindrical proxy. Exterior dimensions are measured, interior cavity/solid-shell thickness is an estimate and must not be inferred from water pixels.",
+      "solid_shell_estimate": {
+        "wall_thickness_cells": 0.02,
+        "bottom_thickness_steps": 0.02,
+        "confidence": "low, new physical content estimate; no source mesh modification"
+      },
+      "floor_contact_polygons_xy_cells": [
+        [
+          [
+            -0.302887,
+            0.162897
+          ],
+          [
+            -0.251981,
+            0.162897
+          ],
+          [
+            -0.251981,
+            0.111992
+          ],
+          [
+            -0.302887,
+            0.111992
+          ]
+        ],
+        [
+          [
+            -0.302887,
+            -0.111992
+          ],
+          [
+            -0.251981,
+            -0.111992
+          ],
+          [
+            -0.251981,
+            -0.162897
+          ],
+          [
+            -0.302887,
+            -0.162897
+          ]
+        ],
+        [
+          [
+            0.251981,
+            0.162897
+          ],
+          [
+            0.302887,
+            0.162897
+          ],
+          [
+            0.302887,
+            0.111992
+          ],
+          [
+            0.251981,
+            0.111992
+          ]
+        ],
+        [
+          [
+            0.251981,
+            -0.111992
+          ],
+          [
+            0.302887,
+            -0.111992
+          ],
+          [
+            0.302887,
+            -0.162897
+          ],
+          [
+            0.251981,
+            -0.162897
+          ]
+        ]
+      ]
+    },
+    "sources": [
+      {
+        "path": "c-new-props/generated-interiors/washstand/washstand.blend",
+        "sha256": "5847e09c8c212641a09292d8ddd02b84b89ac1b103c5ad8ae7a7959a8477784e",
+        "kind": "preserved_Blender_rest_geometry"
+      },
+      {
+        "path": "c-new-props/generated-interiors/manifest.json",
+        "sha256": "428ba878ff9a848f0b7884db32c52b411bb2cf19ccb1b989b4bd9c681ee2ee5b",
+        "kind": "existing_static_registration"
+      },
+      {
+        "path": "c-new-props/decor/native-candidates-v5/washstand/metadata.json",
+        "sha256": "ffe9db93632e322a2ca23024bb2d9852422ed71686ff4d86634d1aff3f258e2c",
+        "kind": "existing_animation_metadata"
+      },
+      {
+        "path": "c-new-props/decor/native-candidates-v5/washstand/sheet-e.png",
+        "sha256": "44d503c188431cd8a4f8166346bdf2ba7401309024f5ce6f0c964b885212c67f",
+        "kind": "existing_catalog_art"
+      },
+      {
+        "path": "c-new-props/generated-interiors/washstand/e.png",
+        "sha256": "7cf715b048c84e784827003d654ba9ea6129d5b37728cf52a88b502d1d330a57",
+        "kind": "existing_static_art"
+      },
+      {
+        "path": "c-new-props/decor/native-candidates-v5/washstand/sheet-s.png",
+        "sha256": "4ab6928066b13c6d0b32757e6652b25182448c33a9dcb01ef6d9a5441451c9ae",
+        "kind": "existing_catalog_art"
+      },
+      {
+        "path": "c-new-props/generated-interiors/washstand/s.png",
+        "sha256": "f07601f24fb764637b6e139864d2dcde719365a52e856202fd17a6c38247724e",
+        "kind": "existing_static_art"
+      },
+      {
+        "path": "c-new-props/decor/native-candidates-v5/washstand/sheet-w.png",
+        "sha256": "a1e3084c0358724bfd892f2fedda873e21b8541ccdf195bb64ec141608dfa216",
+        "kind": "existing_catalog_art"
+      },
+      {
+        "path": "c-new-props/generated-interiors/washstand/w.png",
+        "sha256": "2f9404ee593d33e84b8ccc5270f87637d1d47ddabedd80ece7dc98766c17bac9",
+        "kind": "existing_static_art"
+      },
+      {
+        "path": "c-new-props/decor/native-candidates-v5/washstand/sheet-n.png",
+        "sha256": "a58d7f5c43114bcd1b10ebc9161dcccd92b1af353e1a3bee8e80f1c104931f6d",
+        "kind": "existing_catalog_art"
+      },
+      {
+        "path": "c-new-props/generated-interiors/washstand/n.png",
+        "sha256": "c6212f71b5e812b6b463e12be84502b46d18a5b63ee70843744424cb9bff3882",
+        "kind": "existing_static_art"
+      }
+    ],
+    "preserved_metadata": {
+      "static_manifest": "c-new-props/generated-interiors/manifest.json#washstand",
+      "source_static_pivot_px": [
+        128,
+        208
+      ],
+      "catalog_metadata_path": "c-new-props/decor/native-candidates-v5/washstand/metadata.json",
+      "catalog_pivot_px": [
+        192,
+        272
+      ],
+      "first_frame_audit": "provenance/first-frame-audit.json",
+      "animation_scope": "Existing clocks, rows, pivots, source frames, candidate/destruction status and bindings remain owned by these existing records."
+    },
+    "evidence": {
+      "geometry": "data-authoring-2026-10-09/evidence/interior-source-geometry.json#washstand",
+      "all_four_views_inspected": true,
+      "view_sheet": "data-authoring-2026-10-09/evidence/generated-interiors-four-views.png",
+      "alpha_bbox_measurements": {
+        "e": {
+          "static_alpha_bbox_px": [
+            96,
+            160,
+            160,
+            222
+          ],
+          "catalog_frame0_alpha_bbox_px": [
+            160,
+            224,
+            224,
+            286
+          ]
+        },
+        "s": {
+          "static_alpha_bbox_px": [
+            96,
+            160,
+            160,
+            222
+          ],
+          "catalog_frame0_alpha_bbox_px": [
+            160,
+            224,
+            224,
+            286
+          ]
+        },
+        "w": {
+          "static_alpha_bbox_px": [
+            96,
+            160,
+            160,
+            222
+          ],
+          "catalog_frame0_alpha_bbox_px": [
+            160,
+            224,
+            224,
+            286
+          ]
+        },
+        "n": {
+          "static_alpha_bbox_px": [
+            96,
+            160,
+            160,
+            222
+          ],
+          "catalog_frame0_alpha_bbox_px": [
+            160,
+            224,
+            224,
+            286
+          ]
+        }
+      },
+      "source_manifest_receiver": "floor",
+      "source_manifest_footprint_tiles": [
+        1,
+        1
+      ],
+      "source_manifest_footprint_status": "Existing packaging placeholders; concrete measured footprint supplied here.",
+      "camera_basis_static_px": {
+        "e": {
+          "X": [
+            32.324874,
+            16.162452
+          ],
+          "Y": [
+            32.32489,
+            -16.162442
+          ],
+          "Z": [
+            1.5e-05,
+            -39.589726
+          ]
+        },
+        "s": {
+          "X": [
+            32.324882,
+            -16.162449
+          ],
+          "Y": [
+            -32.324883,
+            -16.162442
+          ],
+          "Z": [
+            0.0,
+            -39.589726
+          ]
+        },
+        "w": {
+          "X": [
+            -32.324882,
+            -16.162449
+          ],
+          "Y": [
+            -32.324882,
+            16.162449
+          ],
+          "Z": [
+            0.0,
+            -39.589725
+          ]
+        },
+        "n": {
+          "X": [
+            -32.324883,
+            16.162447
+          ],
+          "Y": [
+            32.32489,
+            16.162449
+          ],
+          "Z": [
+            7e-06,
+            -39.589725
+          ]
+        }
+      },
+      "source_pose_to_engine_geometric_quadrant": {
+        "e": 0,
+        "s": 3,
+        "w": 2,
+        "n": 1
+      },
+      "geometry_confidence": "high for preserved source mesh and source camera registration; this does not certify exact frame0-rest pixel equality.",
+      "semantic_confidence": "medium, artwork/source naming support the authored role.",
+      "blocking_confidence": "medium; basin cavity thickness low/estimated."
+    },
+    "notes": [
+      "Native generated camera labels map geometrically to engine quarters e=0,s=3,w=2,n=1 for the declared local-east XYZ conversion. Direct e/s/w/n to engine quarter0/1/2/3 swaps the two side views. Source rows and current selected bindings are preserved; consumers must use the measured crosswalk for these new profiles."
+    ],
+    "support_surfaces": [
+      {
+        "role": "tabletop around basin",
+        "source_xyz": [
+          0,
+          0,
+          0.845
+        ],
+        "local_xyz": [
+          0.0,
+          0.0,
+          0.526824
+        ],
+        "top_height_steps": 0.526824,
+        "geometry": "top surfaces of existing tabletop planks; basin occupies central circular patch"
+      }
+    ]
+  },
+  "context": "../context.json",
+  "installed_media": {
+    "c-new-props/decor/native-candidates-v5/washstand/e-0-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/e-0-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/e-0.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/e-0.png",
+    "c-new-props/decor/native-candidates-v5/washstand/e-1-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/e-1-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/e-1.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/e-1.png",
+    "c-new-props/decor/native-candidates-v5/washstand/e-10-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/e-10-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/e-10.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/e-10.png",
+    "c-new-props/decor/native-candidates-v5/washstand/e-11-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/e-11-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/e-11.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/e-11.png",
+    "c-new-props/decor/native-candidates-v5/washstand/e-12-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/e-12-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/e-12.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/e-12.png",
+    "c-new-props/decor/native-candidates-v5/washstand/e-13-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/e-13-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/e-13.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/e-13.png",
+    "c-new-props/decor/native-candidates-v5/washstand/e-14-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/e-14-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/e-14.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/e-14.png",
+    "c-new-props/decor/native-candidates-v5/washstand/e-15-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/e-15-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/e-15.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/e-15.png",
+    "c-new-props/decor/native-candidates-v5/washstand/e-16-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/e-16-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/e-16.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/e-16.png",
+    "c-new-props/decor/native-candidates-v5/washstand/e-17-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/e-17-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/e-17.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/e-17.png",
+    "c-new-props/decor/native-candidates-v5/washstand/e-2-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/e-2-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/e-2.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/e-2.png",
+    "c-new-props/decor/native-candidates-v5/washstand/e-3-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/e-3-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/e-3.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/e-3.png",
+    "c-new-props/decor/native-candidates-v5/washstand/e-4-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/e-4-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/e-4.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/e-4.png",
+    "c-new-props/decor/native-candidates-v5/washstand/e-5-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/e-5-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/e-5.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/e-5.png",
+    "c-new-props/decor/native-candidates-v5/washstand/e-6-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/e-6-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/e-6.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/e-6.png",
+    "c-new-props/decor/native-candidates-v5/washstand/e-7-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/e-7-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/e-7.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/e-7.png",
+    "c-new-props/decor/native-candidates-v5/washstand/e-8-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/e-8-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/e-8.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/e-8.png",
+    "c-new-props/decor/native-candidates-v5/washstand/e-9-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/e-9-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/e-9.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/e-9.png",
+    "c-new-props/decor/native-candidates-v5/washstand/n-0-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/n-0-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/n-0.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/n-0.png",
+    "c-new-props/decor/native-candidates-v5/washstand/n-1-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/n-1-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/n-1.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/n-1.png",
+    "c-new-props/decor/native-candidates-v5/washstand/n-10-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/n-10-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/n-10.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/n-10.png",
+    "c-new-props/decor/native-candidates-v5/washstand/n-11-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/n-11-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/n-11.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/n-11.png",
+    "c-new-props/decor/native-candidates-v5/washstand/n-12-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/n-12-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/n-12.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/n-12.png",
+    "c-new-props/decor/native-candidates-v5/washstand/n-13-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/n-13-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/n-13.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/n-13.png",
+    "c-new-props/decor/native-candidates-v5/washstand/n-14-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/n-14-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/n-14.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/n-14.png",
+    "c-new-props/decor/native-candidates-v5/washstand/n-15-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/n-15-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/n-15.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/n-15.png",
+    "c-new-props/decor/native-candidates-v5/washstand/n-16-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/n-16-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/n-16.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/n-16.png",
+    "c-new-props/decor/native-candidates-v5/washstand/n-17-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/n-17-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/n-17.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/n-17.png",
+    "c-new-props/decor/native-candidates-v5/washstand/n-2-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/n-2-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/n-2.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/n-2.png",
+    "c-new-props/decor/native-candidates-v5/washstand/n-3-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/n-3-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/n-3.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/n-3.png",
+    "c-new-props/decor/native-candidates-v5/washstand/n-4-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/n-4-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/n-4.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/n-4.png",
+    "c-new-props/decor/native-candidates-v5/washstand/n-5-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/n-5-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/n-5.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/n-5.png",
+    "c-new-props/decor/native-candidates-v5/washstand/n-6-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/n-6-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/n-6.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/n-6.png",
+    "c-new-props/decor/native-candidates-v5/washstand/n-7-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/n-7-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/n-7.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/n-7.png",
+    "c-new-props/decor/native-candidates-v5/washstand/n-8-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/n-8-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/n-8.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/n-8.png",
+    "c-new-props/decor/native-candidates-v5/washstand/n-9-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/n-9-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/n-9.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/n-9.png",
+    "c-new-props/decor/native-candidates-v5/washstand/s-0-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/s-0-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/s-0.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/s-0.png",
+    "c-new-props/decor/native-candidates-v5/washstand/s-1-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/s-1-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/s-1.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/s-1.png",
+    "c-new-props/decor/native-candidates-v5/washstand/s-10-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/s-10-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/s-10.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/s-10.png",
+    "c-new-props/decor/native-candidates-v5/washstand/s-11-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/s-11-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/s-11.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/s-11.png",
+    "c-new-props/decor/native-candidates-v5/washstand/s-12-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/s-12-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/s-12.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/s-12.png",
+    "c-new-props/decor/native-candidates-v5/washstand/s-13-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/s-13-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/s-13.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/s-13.png",
+    "c-new-props/decor/native-candidates-v5/washstand/s-14-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/s-14-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/s-14.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/s-14.png",
+    "c-new-props/decor/native-candidates-v5/washstand/s-15-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/s-15-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/s-15.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/s-15.png",
+    "c-new-props/decor/native-candidates-v5/washstand/s-16-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/s-16-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/s-16.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/s-16.png",
+    "c-new-props/decor/native-candidates-v5/washstand/s-17-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/s-17-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/s-17.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/s-17.png",
+    "c-new-props/decor/native-candidates-v5/washstand/s-2-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/s-2-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/s-2.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/s-2.png",
+    "c-new-props/decor/native-candidates-v5/washstand/s-3-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/s-3-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/s-3.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/s-3.png",
+    "c-new-props/decor/native-candidates-v5/washstand/s-4-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/s-4-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/s-4.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/s-4.png",
+    "c-new-props/decor/native-candidates-v5/washstand/s-5-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/s-5-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/s-5.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/s-5.png",
+    "c-new-props/decor/native-candidates-v5/washstand/s-6-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/s-6-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/s-6.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/s-6.png",
+    "c-new-props/decor/native-candidates-v5/washstand/s-7-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/s-7-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/s-7.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/s-7.png",
+    "c-new-props/decor/native-candidates-v5/washstand/s-8-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/s-8-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/s-8.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/s-8.png",
+    "c-new-props/decor/native-candidates-v5/washstand/s-9-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/s-9-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/s-9.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/s-9.png",
+    "c-new-props/decor/native-candidates-v5/washstand/sheet-e.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/sheet-e.png",
+    "c-new-props/decor/native-candidates-v5/washstand/sheet-n.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/sheet-n.png",
+    "c-new-props/decor/native-candidates-v5/washstand/sheet-s.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/sheet-s.png",
+    "c-new-props/decor/native-candidates-v5/washstand/sheet-w.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/sheet-w.png",
+    "c-new-props/decor/native-candidates-v5/washstand/spritesheet.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/spritesheet.png",
+    "c-new-props/decor/native-candidates-v5/washstand/w-0-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/w-0-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/w-0.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/w-0.png",
+    "c-new-props/decor/native-candidates-v5/washstand/w-1-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/w-1-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/w-1.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/w-1.png",
+    "c-new-props/decor/native-candidates-v5/washstand/w-10-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/w-10-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/w-10.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/w-10.png",
+    "c-new-props/decor/native-candidates-v5/washstand/w-11-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/w-11-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/w-11.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/w-11.png",
+    "c-new-props/decor/native-candidates-v5/washstand/w-12-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/w-12-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/w-12.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/w-12.png",
+    "c-new-props/decor/native-candidates-v5/washstand/w-13-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/w-13-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/w-13.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/w-13.png",
+    "c-new-props/decor/native-candidates-v5/washstand/w-14-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/w-14-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/w-14.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/w-14.png",
+    "c-new-props/decor/native-candidates-v5/washstand/w-15-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/w-15-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/w-15.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/w-15.png",
+    "c-new-props/decor/native-candidates-v5/washstand/w-16-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/w-16-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/w-16.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/w-16.png",
+    "c-new-props/decor/native-candidates-v5/washstand/w-17-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/w-17-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/w-17.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/w-17.png",
+    "c-new-props/decor/native-candidates-v5/washstand/w-2-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/w-2-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/w-2.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/w-2.png",
+    "c-new-props/decor/native-candidates-v5/washstand/w-3-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/w-3-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/w-3.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/w-3.png",
+    "c-new-props/decor/native-candidates-v5/washstand/w-4-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/w-4-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/w-4.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/w-4.png",
+    "c-new-props/decor/native-candidates-v5/washstand/w-5-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/w-5-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/w-5.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/w-5.png",
+    "c-new-props/decor/native-candidates-v5/washstand/w-6-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/w-6-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/w-6.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/w-6.png",
+    "c-new-props/decor/native-candidates-v5/washstand/w-7-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/w-7-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/w-7.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/w-7.png",
+    "c-new-props/decor/native-candidates-v5/washstand/w-8-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/w-8-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/w-8.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/w-8.png",
+    "c-new-props/decor/native-candidates-v5/washstand/w-9-raw.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/w-9-raw.png",
+    "c-new-props/decor/native-candidates-v5/washstand/w-9.png": "/media/environment/library/props/decor/native-candidates-v5/washstand/w-9.png"
+  }
+}

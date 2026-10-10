@@ -1,0 +1,55 @@
+{
+  "$defs": {
+    "SourcePalette": {
+      "additionalProperties": false,
+      "properties": {
+        "category": {
+          "title": "Category",
+          "type": "string"
+        },
+        "colors": {
+          "items": {
+            "type": "integer"
+          },
+          "title": "Colors",
+          "type": "array"
+        },
+        "isGray": {
+          "items": {
+            "type": "boolean"
+          },
+          "title": "Isgray",
+          "type": "array"
+        }
+      },
+      "required": [
+        "category",
+        "colors",
+        "isGray"
+      ],
+      "title": "SourcePalette",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "title": "Schemaversion",
+      "type": "integer"
+    },
+    "entries": {
+      "items": {
+        "$ref": "#/$defs/SourcePalette"
+      },
+      "title": "Entries",
+      "type": "array"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "entries"
+  ],
+  "title": "SourcePaletteDocument",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

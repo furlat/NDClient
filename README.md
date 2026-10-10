@@ -1,89 +1,142 @@
 # NDClient
 
-WSL repository recreated on 9 October 2026, branch `codex/ndclient`.
-Current step: repository setup and preparation of Smallscale character assets
-only. The renderer, UI, SDK integration and other asset families are not started.
+Fresh WSL repository, branch `codex/ndclient`. Current work is asset and editable-authoring preparation;
+the Goblin/Demon character material and its inspection page are implemented.
+The game renderer, UI and SDK integration have not started.
 
-The single implementation plan remains in the engine repository:
+The sole detailed specification is the engine's
 [NDClient implementation plan](/mnt/c/users/tommaso/documents/dev/dnd_engine/agent_docs/NDCLIENT_IMPLEMENTATION_PLAN_COMPLETE_2026-10-08.md).
-There is no second plan in this repository.
 
-## Prepared artwork
-
-| Family | Copied original sheets |
-| --- | ---: |
-| A: complete modular Character Creator V1.3 plus the existing x256 comparison source | 4,368 |
-| B: all sheets from ten owned fixed-character packs | 11,742 |
-| Existing authored character resource references, including derived shadows | 2,146 |
-
-The source records resolve to **15,320 unique PNG payloads / 2,844,969,775 bytes
-(2.650 GiB)** after byte-identical files share storage. The 2,146 references are
-not necessarily additional files. They retain already-installed adaptations
-alongside the complete vendor sheets. No image is resized, recolored or repacked.
-
-B includes Animals, Dinosaurs, Orcs/Goblins, Demons, HD Barbarian, HD Character,
-HD Enemy, HD Undead, HD Zombie and Top-down Zombie Pack 2. Every sheet variant
-in these packs is included, independently of whether native content currently
-uses it. Separate body/shadow/effect sheets and combined versions are preserved.
-Duplicate loose frame exports, pack executables, videos and unrelated assets
-remain in the original archives. Existing content exclusions stay unchanged;
-having a sheet installed does not enable a creature or override its authoring.
-
-No standalone VFX, icons/portraits or environment banks are migrated in this step.
-Original Magic/Effect layers that belong to A, and baked/separated creature
-effects belonging to B, are part of their character packs.
-
-## Existing bindings remain authoritative
-
-Use the existing [reviewed fixed-character mappings](/mnt/c/users/tommaso/documents/dev/dnd_engine/agent_docs/audits/FIXED_CHARACTER_ANIMATION_MAPPINGS_2026-10-01.json)
-and [integration handoff](/mnt/c/users/tommaso/documents/dev/dnd_engine/agent_docs/audits/FIXED_CHARACTER_RENDERER_INTEGRATION_2026-10-01.md),
-the [art-led roster](/mnt/c/users/tommaso/documents/dev/dnd_engine/agent_docs/ART_LED_NPC_ROSTER_DESIGN_2026-09-30.md),
-and the later canonical `game/data/rigs/*.json` in that engine checkout.
-The older mapping document contains 150 nonanimal character selections and
-explicit calibration limitations; it is not permission to invent missing values.
-
-All 43 current fixed-rig JSON documents, modular bindings/rig tables/sockets and
-the three mapping/handoff documents have exact local reference snapshots under
-`.runtime/character-assets/authoring-reference/` (49 files). They remain unchanged,
-not newly generated bindings or an alternative editable source of truth.
-All 1,205 body/effect hash references in the 150-character mapping were found in
-the prepared payloads. No action assignment, FPS, pivot or creature binding is
-created by this intake.
-
-## Local storage and Pixi
+## Artwork folders
 
 ```text
-.media/objects/                  original PNG bytes, one copy per content hash
-.runtime/character-assets/      intake receipt and exact authoring references
-src/                           reserved; no client implementation yet
-tools/prepare_character_assets.py
+.media/
+  smallscale/
+    modular/                 complete Fantasy Character Creator V1.3
+      NakedBody/Idle.png     original layer/action filenames
+      ...
+    authored/                all owned non-modular creature packs
+      animals/
+      barbarians/
+      characters/
+      demons/
+      dinosaurs/
+      enemies/
+      orcs-and-goblins/
+      undead/
+      zombies-hd/
+      zombies-top-down/
+  environment/
+    doors/ walls/ windows/   selected banks, frames, masks and companions
+    props/ traps/ devices/   selected objects and their state animations
+    terrain/ portals/        registered surfaces and hatch layers
+    fixtures/ lighting/ water/
+    library/                 preserved Fantasy originals and source exports
+  ui/icons/smooth48/          selected smooth icons
+  ui/portraits/192x256/       selected portraits by source bank and art key
+  vfx/                       spells, conditions, areas, actions, shared effects
 ```
 
-`files.jsonl` in the intake directory records original pack/member names and
-payload locations; `summary.json` records counts and bytes. These are copy
-receipts, not runtime asset bindings or a complete presentation release.
-Original archives and canonical engine data remain untouched.
+**Modular: 3,888 source sheets from the unified Fantasy V1.3 archive.**
+The old 1,281-sheet selection is not a second library or an override. Its 50
+pixel differences matched old NeuroClient, while both delivered V1.3 packages
+agreed with each other. Original engine/source copies remain untouched.
+Source files include transparent vendor placeholders; counts are files, not
+claims that every sheet contains useful artwork.
 
-[Pixi Assets](https://pixijs.com/8.x/guides/components/assets) loads relative or
-absolute URLs and supports `basePath`; it does not require a disk folder named
-`public`. The plan serves this ignored store at `/media/` via an explicit static
-mapping when the app is set up. [Vite's public directory](https://vite.dev/guide/assets.html#the-public-directory)
-is copied into build output, so the media store stays outside `public` and `dist`.
-No web server or Vite application has been created in this step.
+**Authored: 7,351 selected original sheets from all ten owned packs**, including
+creatures not yet implemented. Combined/with-shadow bodies are selected instead
+of redundant shadowless variants. For Goblins/Demons, the authorized separate
+clean bodies are now installed too: 1,368 originals in the packs' `Bodies/` folders
+(198.69 MiB) for independent body/effect/shadow controls. Original separate
+shadows/effects are retained.
+The existing 98 derived animal/dinosaur shadow sheets sit in those packs' named
+`Derived shadows` folders. Existing rig references reuse the original pack files;
+there is no separate `rigs` image-library duplicate.
 
-Reproduce the offline intake with the original sources in their recorded locations:
+Existing bindings, timings, sockets, layer order and creature assignments are
+preserved in the tracked [client authoring](authoring/README.md). The initial copy
+was seeded from the engine; Pygame authoring remains unchanged. Copying an
+unimplemented creature does not invent gameplay or animation assignments.
+`.runtime/character-assets/` retains original source evidence and copy locations.
 
-```bash
-python3 tools/prepare_character_assets.py \
-  --engine /mnt/c/users/tommaso/documents/dev/dnd_engine
+[Character component authoring](authoring/characters/README.md) owns source roles
+and the completed Goblin/Demon interaction material: all 65 characters and 1,368
+combined sheets. Original combined/body/shadow/effect sources preserve neutral
+appearance and allow independent strengths and body/VFX hue/tint. The original
+43 fixed rigs and modular rig remain unchanged. Other packs retain their initial
+partition annotations and qualifications.
+
+```sh
+npm ci
+npm run review:characters
+# http://127.0.0.1:8798/ — all sheets, source comparison and layer controls
 ```
 
-The tool checks copied bytes and reuses identical payloads. Dinosaur sheets use
-the already extracted source, checked against the original RAR member sizes and
-CRCs through the installed Windows 7-Zip. It does not install software, change
-bindings, regenerate SDKs or scan art at normal application startup.
+The review uses `src/rendering/character-material.mjs`, the same leaf material
+intended for the game; it is an asset inspection tool, not event-stream Studio.
 
-Artwork, receipts/reference snapshots, dependency caches and builds are ignored
-by Git. No remote has been configured. A leftover `node_modules` directory was
-already present; it was left untouched and ignored, and is not a new dependency
-installation or part of the asset size above.
+Modular casting accents referenced by VFX use this same V1.3 modular folder.
+Other VFX stay separated by spells, conditions, areas, actions and shared media.
+The selected Factory delivery adds 28 spell families, 193 paired depth/normal
+banks and preserved flat/live dependencies. They sit directly in the relevant
+named folders, such as `vfx/areas/fireball/explosion/` and
+`vfx/conditions/protection-from-energy/`, without batch-name or nested `media/`
+wrappers. All 38 formerly pending XYZ references have replacements; retired XYZ
+banks remain excluded. Desert remains deferred.
+
+## Tracked authoring
+
+[authoring/README.md](authoring/README.md) describes the editable JSON and binding
+flow. `authoring/catalog-index.json` is its entry point. Existing IDs now resolve
+to installed `/media/` files, including the replacement clocks, directions,
+components, geometry and normals. Conditions retain independent lifecycles.
+
+```sh
+python3 tools/build_authoring.py
+python3 -m unittest discover -s tests -v
+```
+
+The one-time importer refuses to overwrite client authoring. Copy tools do not
+change it. The current assembler prepares catalog/world/assets/environment and
+the existing item appearance/material/variant/source-palette and UI sections; complete client
+release integration, renderer, Studio and gameplay UI remain future work.
+
+UI selection remains 594 smooth48 icons and 661 portraits at 192×256, preserving
+43 existing creature assignments and the unassigned/player portrait choices.
+Selected environment banks and state bindings are adopted in tracked
+`authoring/environment/index.json`; its family files assemble the same existing
+EnvironmentDocument. [Environment authoring](authoring/environment/README.md)
+locates clocks, states, contacts, source assemblies and remaining qualifications.
+The 60 delivered source records are tracked, with installed-media links; existing
+native door/prop records link to their relevant source records. Wall corner
+directions live in `world.json`, separately from cliff corner directions.
+Runtime placement/rendering consumers are still pending.
+
+[Item authoring](authoring/items/README.md) now preserves the existing hand and
+ground appearances, item variants, material treatments and source palettes.
+Equipment references connect to the installed modular library through existing
+rig clips; no artwork was copied again. [UI authoring](authoring/ui/README.md) now
+connects all 620 icon keys, 43 delivered creature portrait assignments, 618 free
+portraits, five premade defaults and 103 choice records. Its existing passive types
+are retained. The modular Skeleton Warrior portrait assignment and dedicated
+Unarmed icon remain explicit artwork gaps; gameplay UI consumption remains pending.
+
+## Copy tools
+
+`tools/prepare_character_assets.py --engine <engine-path>` copies the full selected
+Smallscale library. `prepare_environment_assets.py`, `prepare_ui_assets.py` and
+`prepare_vfx_assets.py` own their existing family selections. UI preparation uses
+the engine's Python/Pillow environment. VFX copies require `--copy`; otherwise the
+tool reports its selection. `prepare_vfx_replacements.py --factory <VFXFactory-path>
+--delivery <delivery/manifest.json> --engine <engine-path> --copy` installs the
+completed Factory selection and follows its existing bindings, without old XYZ. Preparation follows readable names without checksum
+or content-addressed storage machinery.
+
+Authoring, schema, tools and tests are Git-tracked. Artwork and local intake
+records are Git-ignored. Original sources remain untouched.
+Serve `.media/` through `/media/` when the app is implemented; keep it outside
+Vite's `public/` and `dist/` so builds do not duplicate the artwork library.
+Factory bank source manifests and the localized delivery manifest remain in
+`.runtime/vfx-replacements/` as provenance. Runtime selections and bank metadata
+are in tracked `authoring/`, independent of those receipts.

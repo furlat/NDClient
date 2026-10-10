@@ -1,0 +1,51 @@
+{
+  "$defs": {
+    "SkinSource": {
+      "additionalProperties": false,
+      "properties": {
+        "resource_id": {
+          "title": "Resource Id",
+          "type": "string"
+        },
+        "inset": {
+          "maxItems": 4,
+          "minItems": 4,
+          "prefixItems": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "minimum": 0,
+              "type": "integer"
+            }
+          ],
+          "title": "Inset",
+          "type": "array"
+        }
+      },
+      "required": [
+        "resource_id",
+        "inset"
+      ],
+      "title": "SkinSource",
+      "type": "object"
+    }
+  },
+  "additionalProperties": {
+    "additionalProperties": {
+      "$ref": "#/$defs/SkinSource"
+    },
+    "type": "object"
+  },
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

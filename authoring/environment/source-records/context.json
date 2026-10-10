@@ -1,0 +1,129 @@
+{
+  "schema": "fantasy-bounded-data-authoring-handoff/v1",
+  "authored_date": "2026-10-09",
+  "status": "Authoring records for review and canonical-owner intake; not runtime-selected bindings",
+  "units": {
+    "xy_cells_ft": 5,
+    "height_step_ft": 5,
+    "tile_projection_px": [
+      128,
+      64
+    ],
+    "height_step_projection_px": 64,
+    "source_pixels": "x right, y down",
+    "source_conversion": "Use each component source document: no universal Blender-unit conversion"
+  },
+  "source_documents": {
+    "misc-profiles.json": {
+      "schema": "fantasy-environment-physical-authoring/misc-v1",
+      "geometry_schema_notes": {
+        "capsule_authority": "For capsule_along_3d_axis, axis_xyz_cell_cell_step and radius_cells define the solid. The radius is isotropic in world distance; convert cell radius to z steps by cell_feet / elevation_step_feet (here both5ft, so the numerical radius is unchanged).",
+        "capsule_z_steps": "On capsules, z_steps is the centerline axis interval, not the radius-expanded solid z bounds. A horizontal crossbar may therefore have [z,z] while its actual solid spans z +/- radius_steps. Derive complete bounds from the axis plus radius; XY polygons are guides and may omit rounded end caps.",
+        "composite_geometry": "Explicit panel quads/extrusion and wheel annular rim/hub/spoke axes define the proposed member unions. Do not fill their XY/z envelopes or gaps.",
+        "evidence": "All added physical member dimensions, panel vertices and spoke counts are qualified authoring proposals/visual estimates; immutable source media metadata remains separate."
+      },
+      "units": {
+        "cell_feet": 5,
+        "elevation_step_feet": 5,
+        "xy_units": "continuous cells",
+        "z_units": "continuous elevation steps",
+        "engine_projection_cell_width_px": 128,
+        "engine_projection_cell_height_px": 64,
+        "engine_projection_elevation_step_px": 64,
+        "source_cell_width_px": 127,
+        "source_to_engine_scale": 1.0078740157480315,
+        "source_pixel_coordinates": "original PNG pixels, top-left origin, untransformed",
+        "local_east_xy_convention": "+X projects [+63.5,+31.75] source pixels; +Y projects [-63.5,+31.75]; +Z step projects [0,-63.5]. Local axes/mount dimensions are authoring proposals, not runtime yaw selection."
+      },
+      "notes": [
+        "Handoff data only. No code, engine selection, art, animation, pivot, or state changes.",
+        "Original source PNG SHA pins and identical catalog copies verified for all 132 views. Pixel contact candidates and supporting centroids are authoring estimates; sampled RGBA is measured evidence only.",
+        "Unity normalized import pivots and preserved destruction-bank pivots remain immutable. TileData generic Decorative object and raw 2D collider type do not supply native XYZ collision.",
+        "Bounding polygons are assembly envelopes and must not become solid rectangles. Use hard member union with z, holes/openings and cloth exclusion.",
+        "Where hidden supports or symmetry are proposed, low confidence is explicit; no asserted physical role/height comes from a shadow or generic metadata pivot.",
+        "C12 and C13 retain distinct family IDs and a qualified closed/open gate state relationship; B13 metadata floorboard geometry history conflicts with visible supported original."
+      ],
+      "sha256": "b3815d4d61353b25d12dd8bda62016e01bb90a8eaff2283eecf7d45c8f2cf9bc"
+    },
+    "interior-decal-profiles.json": {
+      "schema": "fantasy-interior-decal-placement-authoring.v1",
+      "authored_at": "2026-10-09",
+      "status": "Authoring data and evidence; no runtime binding or source media replacement",
+      "units": {
+        "xy": "continuous cells, one cell = 5 ft",
+        "z": "continuous elevation steps, one step = 5 ft and projects 64 engine px",
+        "pixel": "source image pixels, x right/y down; raw pivots never rewritten",
+        "local_pose": "east (source Blender +X maps +X; source +Y maps -Y)",
+        "engine_projection": "128x64 diamond, east local +X=(64,32)px, +Y=(-64,32)px, +Zstep=(0,-64)px",
+        "source_pixel_scale_to_engine": 1.0078740157480315,
+        "native_source_pose_to_engine_geometric_quadrant": {
+          "e": 0,
+          "s": 3,
+          "w": 2,
+          "n": 1
+        },
+        "pose_crosswalk_note": "Derived from all measured camera basis vectors and engine quarter-turn rotation(x,y)->(-y,x). Native source labels are preserved. This geometrical crosswalk does not rewrite existing selected camera-pose bindings.",
+        "source_model_conversion": {
+          "xy_cells_per_source_unit": 0.5090531338582678,
+          "height_steps_per_source_unit": 0.623460251968504,
+          "matrix": [
+            [
+              0.5090531338582678,
+              0,
+              0
+            ],
+            [
+              0,
+              -0.5090531338582678,
+              0
+            ],
+            [
+              0,
+              0,
+              0.623460251968504
+            ]
+          ],
+          "basis": "Measured source camera projection, then 128/127 source-pixel scale. Anisotropic registration conversion; source unit is not asserted to equal metre, foot, cell or height step. Applies only to these matching source camera intrinsics."
+        }
+      },
+      "notes": [
+        "All 9 generated interiors use existing four-view pixels and preserved source Blender rest meshes. Existing source metadata is reused by reference.",
+        "All 12 decals keep declared receiver/material/UV projection; anchors and physical application extents are explicit authoring proposals.",
+        "Generated source manifest one-cell footprints were packaging placeholders; measured continuous profile geometry now supplements them.",
+        "Timber twelve-tread geometry and contacts do not substitute the established native two-step flight.",
+        "No existing stairs, cliff contacts, corrected table pivots, large-prop registrations or recovered adjacency records were reauthored."
+      ],
+      "sha256": "7cd30d33206d5a12c940415a26c2fda8f8c0ba0e0c523bdac0dfd1a3520088f1"
+    },
+    "door-assemblies.json": {
+      "schema": "fantasy-bounded-door-assemblies-authoring-2026-10-09-v1",
+      "units": {
+        "cell_feet": 5,
+        "height_step_feet": 5,
+        "native_projection_tile_px": [
+          128,
+          64
+        ],
+        "native_projection_height_step_px": 64,
+        "existing_source_width_registration_scale": 1.0078740157480315,
+        "source_blender_units": "Authoring coordinates. Conversion is projection-equivalent and anisotropic; never claim one Blender unit is one cell or one meter."
+      },
+      "notes": [
+        "Data-only authoring artifact. It is not a gameplay registry and is not loaded by an engine or renderer.",
+        "Five primary selections reuse actual authored prefab assemblies; original shabby is an explicit new G10/G1 composition proposal using existing parts.",
+        "All six original Blender files and existing animation/media hashes were checked unchanged. No images, scenes, animation curves, depth or normals exported.",
+        "Recovered2D mounting pivots rotate with legacy quarters0/1/2/3; door-local measured geometry uses0/3/2/1. A shared physical mount is not validated and S/N registration is incompatible under the declared axes. No pivot/row correction is authored.",
+        "Measured frame feet retain source Z\u2212.075 below nominal source floor0; continuous profiles keep this signed extent rather than clamping it.",
+        "Existing eight layouts contain56 specific header/door pairs. No original generated-door composition was recovered from preserved vendor Unity material.",
+        "Architecture-profiles/door-opening-contracts named by older documents are unavailable; no compatibility claim is based on those absent files.",
+        "Do not expand this authoring task into mechanics, client placement repair, stairs/cliff edits, table re-registration, trap/fork behavior or destruction selection."
+      ],
+      "sha256": "171154a661b91e72b8ac2a05c2f2831866ae3ecb5b1def5131a2bbbae4b2f667"
+    }
+  },
+  "excluded_content_decisions": [
+    "fork gameplay",
+    "alternative trap styles",
+    "candidate destruction selection"
+  ]
+}

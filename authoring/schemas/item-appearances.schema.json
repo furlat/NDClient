@@ -1,0 +1,338 @@
+{
+  "$defs": {
+    "AuthoredItemEquipmentLayer": {
+      "additionalProperties": false,
+      "description": "One fully resolved renderer layer from the reviewed source artifact.",
+      "properties": {
+        "render_layer": {
+          "$ref": "#/$defs/EquipmentRenderLayer"
+        },
+        "sprite_key": {
+          "minLength": 1,
+          "title": "Sprite Key",
+          "type": "string"
+        },
+        "tint_rgb": {
+          "maximum": 16777215,
+          "minimum": 0,
+          "title": "Tint Rgb",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "render_layer",
+        "sprite_key",
+        "tint_rgb"
+      ],
+      "title": "AuthoredItemEquipmentLayer",
+      "type": "object"
+    },
+    "EquipmentRenderLayer": {
+      "description": "Dependency-neutral renderer layers contributed by equipped items.",
+      "enum": [
+        "backpack",
+        "cloak",
+        "belt",
+        "chest",
+        "hands",
+        "helmet",
+        "legs",
+        "offhand",
+        "shoes",
+        "weapon"
+      ],
+      "title": "EquipmentRenderLayer",
+      "type": "string"
+    },
+    "GroundAppearance": {
+      "additionalProperties": false,
+      "properties": {
+        "category": {
+          "title": "Category",
+          "type": "string"
+        },
+        "variant": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Variant"
+        },
+        "sprite_key": {
+          "title": "Sprite Key",
+          "type": "string"
+        },
+        "layers": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/AuthoredItemEquipmentLayer"
+          },
+          "title": "Layers",
+          "type": "array"
+        },
+        "clip": {
+          "default": "Idle",
+          "title": "Clip",
+          "type": "string"
+        },
+        "frame": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Frame",
+          "type": "integer"
+        },
+        "rows_by_camera": {
+          "maxItems": 4,
+          "minItems": 4,
+          "prefixItems": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "integer"
+            }
+          ],
+          "title": "Rows By Camera",
+          "type": "array"
+        },
+        "cell": {
+          "default": [
+            128,
+            128
+          ],
+          "maxItems": 2,
+          "minItems": 2,
+          "prefixItems": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "integer"
+            }
+          ],
+          "title": "Cell",
+          "type": "array"
+        },
+        "pivots_by_camera": {
+          "maxItems": 4,
+          "minItems": 4,
+          "prefixItems": [
+            {
+              "maxItems": 2,
+              "minItems": 2,
+              "prefixItems": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "type": "array"
+            },
+            {
+              "maxItems": 2,
+              "minItems": 2,
+              "prefixItems": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "type": "array"
+            },
+            {
+              "maxItems": 2,
+              "minItems": 2,
+              "prefixItems": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "type": "array"
+            },
+            {
+              "maxItems": 2,
+              "minItems": 2,
+              "prefixItems": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "type": "array"
+            }
+          ],
+          "title": "Pivots By Camera",
+          "type": "array"
+        },
+        "scale": {
+          "exclusiveMinimum": 0,
+          "title": "Scale",
+          "type": "number"
+        },
+        "reference_tile_width": {
+          "exclusiveMinimum": 0,
+          "title": "Reference Tile Width",
+          "type": "number"
+        },
+        "tint": {
+          "maximum": 16777215,
+          "minimum": 0,
+          "title": "Tint",
+          "type": "integer"
+        },
+        "rotation": {
+          "default": 0,
+          "title": "Rotation",
+          "type": "number"
+        },
+        "shadow_sprite_key": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Shadow Sprite Key"
+        },
+        "shadow_scale": {
+          "default": 0.18,
+          "exclusiveMinimum": 0,
+          "title": "Shadow Scale",
+          "type": "number"
+        },
+        "notes": {
+          "title": "Notes",
+          "type": "string"
+        }
+      },
+      "required": [
+        "category",
+        "sprite_key",
+        "rows_by_camera",
+        "pivots_by_camera",
+        "scale",
+        "reference_tile_width",
+        "tint",
+        "notes"
+      ],
+      "title": "GroundAppearance",
+      "type": "object"
+    },
+    "HandAppearance": {
+      "additionalProperties": false,
+      "properties": {
+        "category": {
+          "title": "Category",
+          "type": "string"
+        },
+        "variant": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Variant"
+        },
+        "slot": {
+          "$ref": "#/$defs/VisualLoadoutSlot"
+        },
+        "layers": {
+          "items": {
+            "$ref": "#/$defs/AuthoredItemEquipmentLayer"
+          },
+          "title": "Layers",
+          "type": "array"
+        },
+        "notes": {
+          "title": "Notes",
+          "type": "string"
+        }
+      },
+      "required": [
+        "category",
+        "slot",
+        "layers",
+        "notes"
+      ],
+      "title": "HandAppearance",
+      "type": "object"
+    },
+    "VisualLoadoutSlot": {
+      "description": "Dependency-neutral actor presentation slots shared with transport.",
+      "enum": [
+        "weapon_melee_main",
+        "weapon_melee_off",
+        "weapon_ranged_main",
+        "weapon_ranged_off",
+        "helmet",
+        "body_armor",
+        "gauntlets",
+        "greaves",
+        "boots",
+        "amulet",
+        "cloak",
+        "backpack",
+        "ring_left",
+        "ring_right"
+      ],
+      "title": "VisualLoadoutSlot",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "title": "Version",
+      "type": "integer"
+    },
+    "hands": {
+      "items": {
+        "$ref": "#/$defs/HandAppearance"
+      },
+      "title": "Hands",
+      "type": "array"
+    },
+    "ground": {
+      "items": {
+        "$ref": "#/$defs/GroundAppearance"
+      },
+      "title": "Ground",
+      "type": "array"
+    }
+  },
+  "required": [
+    "version",
+    "hands",
+    "ground"
+  ],
+  "title": "ItemAppearanceDocument",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}
