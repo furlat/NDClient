@@ -124,6 +124,7 @@ func update_bounds(entry: Dictionary) -> void:
     entry.screen_rect = Rect2(origin - entry.pivot * entry.scale, entry.cell * entry.scale)
 
 func set_environment(entry: Dictionary, rotation: Basis) -> void:
+    entry.source_version = entry.get("source_version",0)+1
     var row: Dictionary = entry.placement
     var record = Catalog.door_frame(row,quarter,catalog_cache) if entry.source_role == 2 else record_for(row)
     if record.is_empty(): entry.node.visible = false; return
@@ -336,6 +337,7 @@ func _ground_finish(job: Dictionary) -> void:
     static_entries.append(entry)
 
 func _ground_update(entry: Dictionary, rows: Array) -> void:
+    entry.ground_version = entry.get("ground_version",0)+1
     var packets: Dictionary = entry.ground_packets
     _ground_sort(rows,packets)
     var retained = {}; var indices = {}; var buffer = PackedFloat32Array(); var bounds = AABB(); var values: Array = []
@@ -362,6 +364,7 @@ func _ground_update(entry: Dictionary, rows: Array) -> void:
     update_bounds(entry)
 
 func _ground_publish(entry: Dictionary, packet: Dictionary) -> void:
+    entry.ground_version = entry.get("ground_version",0)+1
     var multi: MultiMesh = entry.node.multimesh
     var rows: Array = packet.rows
     if multi.instance_count<rows.size(): multi.instance_count = ceili(rows.size()/256.0)*256

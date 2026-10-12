@@ -11,7 +11,12 @@ const Characters = preload("res://presentation/characters.gd")
 const WorldRows = preload("res://presentation/world.gd")
 const PlayerHUD = preload("res://play_hud.gd")
 const Interaction = preload("res://presentation/interaction.gd")
-const Lighting = preload("res://presentation/lighting.gd")
+const Lighting = preload("res://presentation/lighting_2d.gd")
+const NativeLightAtlas = preload("res://presentation/native_light_atlas.gd")
+const GeneratedShadows = preload("res://presentation/canvas_shadows.gd")
+var native_light_atlas = NativeLightAtlas.new()
+var generated_shadows = GeneratedShadows.new()
+var generated_shadow_ids: Array = []
 const RenderSettings = preload("res://presentation/render_settings.gd")
 var character_light_profile = RenderSettings.DEFAULT_PROFILE
 const PLAYER_ENVIRONMENT = preload("res://presentation/player_environment.tres")
@@ -149,7 +154,9 @@ func _ready() -> void:
     var settings = RenderSettings.read()
     character_light_profile = settings.profile
     if settings.error != OK: presentation_errors.append("Cannot read local rendering settings: "+error_string(settings.error))
-    source_lighting.attach(self)
+    native_light_atlas.attach(self)
+    source_lighting.attach(native_light_atlas.viewport)
+    generated_shadows.attach(self)
     timeline.media_ready = _media_ready
     timeline.world_ready = _world_ready
     timeline.retire_group = session.retire_group
@@ -176,9 +183,8 @@ func _ready() -> void:
     # Retained terrain/objects are last-known data; ambient is not a FOW mask.
     environment.environment = PLAYER_ENVIRONMENT.duplicate()
     add_child(environment)
-    var authored_lights = Lighting.directionals(Catalog.read_file("world.json",catalog_cache).lighting)
-    for light in authored_lights.nodes: add_child(light)
-    presentation_errors.append_array(authored_lights.issues)
+    source_lighting.set_directionals(Catalog.read_file("world.json",catalog_cache).lighting)
+    presentation_errors.append_array(source_lighting.issues)
     hud = PlayerHUD.new()
     hud.world = self
     var canvas = CanvasLayer.new()
@@ -266,9 +272,13 @@ func _process(delta: float) -> void:
                 update_wall_visibility(false)
             wall_visibility_revision = timeline.revision
         _prepare_rotation()
+        phase = Time.get_ticks_usec()
+        _sync_native_lighting()
+        FrameProfile.end_phase(profile,"native_2d_lighting",phase)
         # Wall member selection precedes the final painter order and coverage mask.
         phase = Time.get_ticks_usec()
         _sort_draws()
+        native_light_atlas.sync_output(self,[world_generation,quarter,scenery_revision,wall_mode,native_light_atlas.revision])
         FrameProfile.end_phase(profile,"draw_order",phase)
         phase = Time.get_ticks_usec()
         _discover()
@@ -294,6 +304,10 @@ func _process(delta: float) -> void:
         push_error("PLAYER_CONNECTION_FAILED: " + session.issue.message)
     FrameProfile.end_phase(profile,"player_process",started)
     FrameProfile.frame(profile,get_viewport(),{"scene":"live_player","zoom":camera.size,"quarter":quarter,
+        "native_2d_repack_count":native_light_atlas.repack_count,"native_2d_receivers":native_light_atlas.live_receivers,"native_2d_atlas_pixels":native_light_atlas.packed_pixels,"generated_shadows":generated_shadows.diagnostics(),
+        "native_2d_reconcile_ms":native_light_atlas.last_reconcile_ms,"native_2d_projection_ms":native_light_atlas.last_projection_ms,"native_2d_pack_ms":native_light_atlas.last_pack_ms,
+        "native_2d_reconcile_phases":native_light_atlas.last_reconcile_phases,
+        "native_2d_gpu_ms":RenderingServer.viewport_get_measured_render_time_gpu(native_light_atlas.viewport.get_viewport_rid()),
         "prediction":Prediction.diagnostics(prediction),"rotation_pending":rotation_pending(),"requested_quarter":requested_quarter,"cached_quarters":static_views.size(),"retiring_views":retiring_views.size(),"retiring_nodes":retiring_node_count,"world_generation":world_generation,"world_preparing":pending_world!=null,"world_prepare_phase":pending_world.phase if pending_world!=null else "idle","world_prepared_count":world_prepared_count,"world_prepare_worker_ms":world_prepare_worker_ms,"world_waiting":timeline.waiting_for_world,"session_execution":session.diagnostics(),"displayed_sequence":timeline.sequence,"consumed_sequence":session.latest_sequence,"queued_groups":timeline.queue.size(),
         "profile_stage":profile.label,"wall_mode":wall_mode,"wall_support_candidates":wall_support_candidates,"wall_max_member_candidates":wall_max_member_candidates,
         "wall_mask_gpu_ms":RenderingServer.viewport_get_measured_render_time_gpu(wall_mask_viewport.get_viewport_rid()) if wall_mask_viewport!=null and wall_mode=="translucent" else 0.0,
@@ -644,6 +658,7 @@ func _sample_fixtures() -> void:
             entry.flame_frame = clip.index
             entry.record = assets.resources[clip.authored.frames[clip.index]]
             entry.material.set_shader_parameter("frame_index",clip.index)
+            entry.source_version = entry.get("source_version",0)+1
 
 func _scenery_remove(group_entries: Array) -> void:
     for entry in group_entries:
@@ -1043,6 +1058,10 @@ func _sample_actors() -> void:
                 continue
             var sheet: Texture2D = textures[path]
             MediaWarmup.touch(media_warmup,path)
+            var source_key = [path,frame,facing,character_light_profile,source_depth,source_normals,row.get("scale_x",1.0)]
+            if entry.get("sampled_source_key",[]) != source_key:
+                entry.sampled_source_key = source_key
+                entry.source_version = entry.get("source_version",0)+1
             entry.texture_path = path
             entry.material.set_shader_parameter("sheet",sheet)
             entry.material.set_shader_parameter("frame_uv",Vector4(frame*rig.cell_width/sheet.get_width(),rig.facing_rows[facing]*rig.cell_height/sheet.get_height(),float(rig.cell_width)/sheet.get_width(),float(rig.cell_height)/sheet.get_height()))
@@ -1055,6 +1074,29 @@ func _sample_actors() -> void:
 func _facing(direction: Vector2) -> String:
     var cycle: Array = rig_config.FACING_CYCLE
     return cycle[posmod(roundi((atan2(direction.y,direction.x)+PI/4)/(TAU/8))+cycle.find("E"),8)]
+
+func _sync_native_lighting() -> void:
+    var phase = Time.get_ticks_usec()
+    source_lighting.project(camera)
+    FrameProfile.end_phase(profile,"native_2d_projection",phase)
+    phase = Time.get_ticks_usec()
+    native_light_atlas.sync(self,
+        [world_generation,world_revision,quarter,wall_mode,scenery_revision,source_depth,source_normals],
+        [world_generation,quarter,scenery_revision,wall_mode])
+    FrameProfile.end_phase(profile,"native_2d_atlas",phase)
+    phase = Time.get_ticks_usec()
+    # Remove stale handles before the helper retires hidden actors. Source
+    # components and picking continue to use the original visual.entries list.
+    actor_entries = actor_entries.filter(func(entry):return not entry.get("generated_shadow",false))
+    var shadows = generated_shadows.sync(visual_actors.values(),camera,source_lighting.canvas_sources())
+    var ids = shadows.map(func(entry):return entry.node.get_instance_id())
+    if ids != generated_shadow_ids:
+        generated_shadow_ids = ids
+        draw_order_dirty = true
+    actor_entries.append_array(shadows)
+    FrameProfile.end_phase(profile,"modular_shadows",phase)
+    for issue in source_lighting.issues+generated_shadows.issues:
+        if issue not in presentation_errors: presentation_errors.append(issue)
 
 func _sort_draws() -> void:
     # Source geometry establishes one total order. Changing which wall variants
@@ -1975,6 +2017,9 @@ func pick_actor(screen: Vector2) -> String:
     return ""
 
 func _exit_tree() -> void:
+    generated_shadows.close()
+    source_lighting.clear_pages()
+    native_light_atlas.close()
     Prediction.reset(prediction,"closed")
     if pending_world!=null: pending_world.join()
     session.close()

@@ -1,0 +1,137 @@
+{
+  "observations": [
+    {
+      "mode": "normal",
+      "pixels": [
+        {
+          "cropped_rgba": [
+            91,
+            111,
+            249,
+            255
+          ],
+          "full_rgba": [
+            91,
+            111,
+            249,
+            255
+          ],
+          "source_pixel": [
+            126,
+            136
+          ]
+        }
+      ],
+      "quarter": 1
+    },
+    {
+      "mode": "receiving_subpixel",
+      "pixels": [
+        {
+          "cropped_rgba": [
+            112,
+            112,
+            0,
+            255
+          ],
+          "full_rgba": [
+            127,
+            127,
+            0,
+            255
+          ],
+          "source_pixel": [
+            126,
+            136
+          ]
+        }
+      ],
+      "quarter": 1
+    },
+    {
+      "mode": "normal",
+      "pixels": [
+        {
+          "cropped_rgba": [
+            89,
+            92,
+            244,
+            255
+          ],
+          "full_rgba": [
+            89,
+            92,
+            244,
+            255
+          ],
+          "source_pixel": [
+            136,
+            88
+          ]
+        },
+        {
+          "cropped_rgba": [
+            144,
+            106,
+            252,
+            255
+          ],
+          "full_rgba": [
+            144,
+            106,
+            252,
+            255
+          ],
+          "source_pixel": [
+            117,
+            136
+          ]
+        }
+      ],
+      "quarter": 3
+    },
+    {
+      "mode": "receiving_subpixel",
+      "pixels": [
+        {
+          "cropped_rgba": [
+            112,
+            112,
+            0,
+            255
+          ],
+          "full_rgba": [
+            127,
+            127,
+            0,
+            255
+          ],
+          "source_pixel": [
+            136,
+            88
+          ]
+        },
+        {
+          "cropped_rgba": [
+            112,
+            112,
+            0,
+            255
+          ],
+          "full_rgba": [
+            127,
+            127,
+            0,
+            255
+          ],
+          "source_pixel": [
+            117,
+            136
+          ]
+        }
+      ],
+      "quarter": 3
+    }
+  ],
+  "scope": "Test-only unshaded production shader instrumentation at the three differing lit pixels. NORMAL encoded as n*.5+.5. Receiving XY residual to half-pixel centers encoded as .5+residual*4096; this amplified diagnostic is not a rendering correction."
+}

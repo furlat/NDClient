@@ -1,0 +1,115 @@
+{
+  "date": "2026-10-12",
+  "status": "Implemented and verified within the recorded cases; performance limits remain open.",
+  "architecture": {
+    "world": "Original Camera3D, source quads, floor MultiMeshes, placement, painter order and original-alpha picking.",
+    "receiving": "Native PointLight2D/DirectionalLight2D + CanvasModulate in cropped original-source cells; no custom light loop or main-world Light3D.",
+    "cap": "Maximum accumulated illumination gain1.0, bounded by shared original source colour in the existing 3D output pass. No extra pass.",
+    "shadows": "Original modular depth/support/alpha, isolated native3D visibility helper, dominant point source/all-point fill; no baked modular Shadow fallback.",
+    "height": "Handoff20source pixels scaled with zoom; physical fixture/carried source elevation remains separate and changes its actual screen anchor.",
+    "settings": "Escape offers Original/Gentle/Reference normal profiles; Reference default; local persistence; modal input without paused SDK/timeline."
+  },
+  "checks": [
+    {
+      "report": "generated/native_2d_integration_checks.json",
+      "checks": 677,
+      "failures": 0,
+      "scope": "Actual Crypt recording initialization, displayed actor/source rows, four3D camera quarters, three delivered normal profiles, native settings and original source/painter invariants. No canonical edits or geometry fixtures. Large-map timing is a separate lane."
+    },
+    {
+      "report": "generated/native_illumination_cap_checks.json",
+      "checks": 37,
+      "failures": 0,
+      "scope": "Native PointLight2D zero/one/two/eight overlap, actual modular/wall/water source colours, fixed maximum total gain1.0; exact received alpha/dim appearance. Spatial output transfer uses explicit \u22642 RGB-byte bound against separately rendered original source. Native20/56 height response, zoom scaling and unchanged physical source projection."
+    },
+    {
+      "report": "generated/native_2d_source_checks.json",
+      "checks": 66,
+      "failures": 0,
+      "scope": "Actual authored Head15/Chest14 Idle and all four stone corner source views. Production cropped REGION Canvas receivers vs exact full-cell native GPU source and independent direct native Canvas with CPU-decoded original normals, same native cookie/ambient. Exact alpha and unlit storage everywhere; lit environment corners permit at most one RGB byte for measured native receiving interpolation/CPU-to-GPU normal rounding, with actual differing pixel counts and a separate production-coordinate diagnostic retained. No gameplay/SDK inference; generated shadows excluded."
+    },
+    {
+      "report": "generated/native_2d_atlas_lifecycle.json",
+      "checks": 36,
+      "failures": 0,
+      "scope": "Mathematical source fixture; original alpha bytes1/63/194/255; native cropped vs independent full-source receiver; lifecycle/transaction/viewport/packet publication. No gameplay expectation fabricated."
+    },
+    {
+      "report": "generated/native_2d_shadow_checks.json",
+      "checks": 37,
+      "failures": 0,
+      "scope": "Original recorded outfit/geometry selection checks."
+    },
+    {
+      "report": "generated/native_2d_region_capacity.json",
+      "checks": 20,
+      "failures": 0,
+      "scope": "Isolated mathematical source RGBA/normal fixtures; original native cookie; each receiver is a transformed 1px Sprite2D with native projected bounds and one shared material. No custom rect, per-receiver materials, instance uniforms or custom light() function; native Sprite2D region UV carries atlas coordinates. Exact byte parity uses corresponding raster centres for integer affine transforms."
+    },
+    {
+      "report": "generated/lighting_2d_checks.json",
+      "checks": 193,
+      "failures": 0,
+      "scope": "Actual admitted Crypt source rows plus named typed unknown/extinguish/loss-of-sight and directional variations; no backend outcomes invented. Native node contract and projection checks are headless; atlas RGBA proof is the separate native probe."
+    },
+    {
+      "report": "generated/normal_profile_checks.json",
+      "checks": 30,
+      "failures": 0,
+      "scope": "Headless original-profile mapping, actual source worker/readiness and material sampler binding; native receiving-light pixels owned by renderer integration."
+    },
+    {
+      "report": "generated/settings_checks.json",
+      "checks": 29,
+      "failures": 0,
+      "scope": "Native Control push_input, focus/foreground Escape order, three fixed profiles, pointer/keyboard blocking, continuing display clock and temporary ConfigFile round trips. Rendering profile pixels and real SDK delivery remain integration tests."
+    },
+    {
+      "report": "generated/character_geometry_cases.json",
+      "checks": 185,
+      "failures": 0,
+      "scope": "Original recorded outfit/geometry selection checks."
+    },
+    {
+      "report": "generated/encounter_media_checks.json",
+      "checks": 79,
+      "failures": 0,
+      "scope": "Actual disclosed Crypt authoring closure; finite-budget/source-publication fixtures. RGBA8 estimates are not measured hardware residency."
+    },
+    {
+      "report": "generated/canvas_shader_contract_checks.json",
+      "checks": 9,
+      "failures": 0,
+      "scope": "Headless native shader parser and source-uniform contract; no rendered pixel/lighting claim."
+    }
+  ],
+  "clean_native_logs": [
+    ".runtime/native-2d-integration-final.log",
+    ".runtime/native-illumination-cap.log",
+    ".runtime/native-2d-source.log",
+    ".runtime/gallery-native-2d-cached-bindings.log",
+    ".runtime/native-2d-final-import.log"
+  ],
+  "gallery_receipts": [
+    "PROFILE_SAVED C:/Users/tommaso/Documents/Dev/NDClientGodot/generated/profiles/2026-10-12T20-36-45-gallery-native-2d-cached-bindings.json",
+    "NATIVE_2D_LIGHT_OVERLAP {\"maximum_per_receiver\":7,\"receiver_counts\":{\"0\":163,\"1\":78,\"2\":583,\"3\":779,\"4\":353,\"5\":149,\"6\":27,\"7\":2},\"scope\":\"Final visible Gallery view; conservative native culling rectangles, not a whole-route guarantee.\",\"sources\":26}",
+    "SCALE_PROFILE_COMPLETE iterations=24269 advanced_steps=10111 display_ms=167834.691790735 completed_groups=122 final_group={ \"id\": \"f1dda71a-af7e-455e-83a2-f0cccdde290e\", \"at_ms\": 167834.691790735, \"sequence\": 101 } canonical_match=true drained=true tiles=1761 objects=360 cached_world_invalidation=true errors=[]"
+  ],
+  "profiles": "generated/native_2d_profiles.json",
+  "captures": ".captures/native-2d/",
+  "known_limits": [
+    "Remaining world/atlas/media/style publication spikes: final worst122.047ms;118 traversal intervals above33.333ms. Final steady p95 8.584\u201311.795ms. Slower than prior3D receiving path despite improvement over first2D implementation.",
+    "Finite8192x8192 atlas; overflow preserves prior published layout and reports an error. Native Compatibility per-CanvasItem point-light limit15; final Gallery view measured maximum7 of26 sources.",
+    "Generated shadow fill currently considers point sources, not directional sources; current authored directional source list is empty. Dense original-depth casters and conservative unbounded-depth receiver footprints remain measurable costs.",
+    "Three lit remembered-corner pixels differ by1RGB byte between source-cell rasterizations; original alpha and unlit RGBA remain exact. Cap output comparison differs by up to1byte after native spatial transfer; accepted bound2.",
+    "External focused probes exercise finite original sources/fixtures; this is not artistic certification of every outfit/frame or an arbitrary-map scaling guarantee."
+  ],
+  "superseded_failure_evidence": "generated/native_2d_integration_instance_limit.json records the rejected per-item uniform implementation and its native allocation errors. Production uses native region coordinates; later scene logs are clean.",
+  "reviews": "Same-root plan-adherence, anti-slop/anti-OOP and correctness review completed. Rank-cache bookkeeping correction passed final677-check actual scene regression.",
+  "repository": {
+    "active": "C:/Users/tommaso/Documents/Dev/NDClientGodot",
+    "authoring": "Tracked authoring/ in active repo",
+    "artwork": "External and gitignored; original files unmodified",
+    "archive_receipt": ".runtime/repository-migration-archives.json"
+  }
+}

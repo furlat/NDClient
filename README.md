@@ -24,7 +24,10 @@ initialization, acknowledgement and current command choices are available.
   Unavailable choices remain inspectable and cannot execute.
 - **M / J** select move or jump. Targeted actions retain the ordered target
   selection: **Enter** confirms, **Backspace** removes its last selection and
-  **Escape** cancels the most local popup, panel or targeting interaction.
+  **Escape** cancels the most local popup, panel or targeting interaction;
+  otherwise it opens Settings. Character light smoothness offers Original,
+  Gentle and Reference (the handoff default), saved locally. The modal owns
+  keyboard/mouse input while the displayed timeline and SDK intake continue.
   Legal self actions execute once from their icon. **Space** ends the turn.
 - **I** opens equipment and the searchable carried inventory. Hover an item or
   slot to see native compatibility; equip, unequip, use and drop preserve the
@@ -77,24 +80,29 @@ The renderer reads the surviving authoring JSON directly: creature rigs,
 modular appearance, exact equipment variants, movement contexts, attack recipes,
 body contexts, source frame keys and environment registrations. Native
 AnimationPlayer/AnimationTree sample the displayed clock. Camera changes do not
-restart actions. Lighting receives on the environment's existing depth and
-normal channels; backend disclosure still decides visibility and gameplay light.
+restart actions. The player retains Camera3D, original 3D quads, floor MultiMeshes,
+elevation, painter order and original-alpha picking. Only receiving light changes:
+native PointLight2D/DirectionalLight2D illuminate separate source cells in a
+SubViewport; unshaded 3D materials consume those straight-RGBA results. A gray
+CanvasModulate at 0.18 provides readability. The painted world has no 3D receiving
+lights and no custom diffuse-light loop.
 
-Disclosed, active item lights supply their own very-bright, bright and dim radii.
-Native OmniLight3D nodes use the disclosed outer radius with smooth spherical
-attenuation; this optical convention does not reproduce backend horizontal range
-bands. Emitters and radii are not inferred from categorical tile brightness or
-observer darkvision. Carried emitters follow the displayed actor, and displayed
-ignite/extinguish commits change their activation. Authored directional sources
-come from `world.json` when present; that source list is currently empty.
+Accumulated illumination is capped at a gain of one: the existing final 3D
+output bounds each lit channel by its original tinted/styled source colour.
+This prevents overlapping lights from whitening the artwork while leaving dim
+light unchanged. Canvas and output use the same colour functions, including
+memory, highlighting and the original water graph; alpha remains atlas-owned.
+Emissive flame and unlit source-shadow artwork bypass this cap. There is no
+second atlas or additional rendering pass.
 
-The live player uses a native `WorldEnvironment` resource at
-`presentation/player_environment.tres`: neutral colour ambient, energy 0.18.
-This keeps disclosed scenery and bodies readable when direct lighting is absent.
-It adds to the existing source response through Godot's ALBEDO path; it is not a
-shader emission floor. Item lighting uses Godot's native light accumulation;
-the former custom circular-range loop has been removed. Native lights and ambient
-leave source alpha, tint, authored ordering and gameplay disclosure unchanged.
+Disclosed, active items supply their original very-bright, bright and dim radii.
+Their outer radius sets the native 2D cookie diameter. The recovered light cookie
+and warm Torch/Wall Torch colour come from NDCharacterLight; other semantic item
+IDs remain white. Carried sources follow displayed support/jump positions, and
+ignite/extinguish follows displayed commits. The normal-light height is 20 source
+pixels at the current zoom, separate from world elevation. Directional sources
+come from world.json (currently empty). The native 2D directional behind-plane
+limitation is reported explicitly rather than silently flipping its direction.
 
 Retained terrain/objects remain rendered from their last-known subjective state;
 only currently admitted actors and light sources are active. Remembered scenery
@@ -117,66 +125,48 @@ activation and radii stay unchanged; inventory-only Torch has no authored hand
 attachment. Registered torch fixtures use the original flame's brightness-weighted
 vertical centroid and pivot/scale, prepared once with their source images. Other
 unregistered item emitters retain the one-step optical fallback.
-Neutral white radiance and the smooth falloff curve are explicit display
-conventions because the packet supplies range, not flame socket, color or
-radiance. Native attenuation tapers toward zero at the disclosed outer radius;
-inner gameplay bands remain backend facts. The original
-`torch.flame` resource supplies 16 frames at 10 FPS with its original pivot and
-scale. Its native AnimationPlayer/AnimationTree clock also drives a gentle
-light fluctuation derived from the frame brightness, bounded to ±15%. Pausing
-displayed time pauses both. Extinguished or no-longer-visible fixtures have no
-active flame. No second emitter is added for the flame sprite. Environment
-receivers use their authored normals. Walls and doors receive light from either
-side (`abs(N·L)`), an explicit isometric presentation convention that keeps
-exterior faces readable from interior lights; other receivers use one-sided
-Lambert lighting. Source ranges, normal/depth samples and directional sources
-are preserved. Lighting is evaluated before wall alpha. This does not model
-physical light transmission through stone.
-Modular layers use the selected
-[full-component delivery](/mnt/c/Users/tommaso/Documents/assets/fantasy-unified-catalog/modular-character-geometry-2026-10-11/full-components/exports/queue/package/HANDOFF.md).
-`generated/character_geometry.json` indexes exact original media identities and
-permitted slots; `tools/register_character_geometry.py` reads final references
-without copying artwork or their large observation payloads. The 3,410 delivered
-nonempty component sheets cover all eight facings and native frames; partial
-support remains explicit. The current/upcoming media window prepares each
-selected sheet's depth, normal, raw-support and normal-valid PNGs together.
-Normals are linear RGB in the reconstruction camera axes with facing already
-baked. Paired depth uses each reference's affine byte range. Receiving positions
-and normals use the source observation kernel's 45-degree elevation and integer
-pixel rays around reconstruction origin (64,96), then transform into the live
-camera. The painted quad retains its authored pivot (64,87) and live camera;
-copying source depth straight into that 30-degree camera was an integration error.
-Horizontal scale/mirror affects the source coordinate and inverse normal scale
-once. One reconstruction unit provisionally maps to one source pixel at the
-existing quad scale; this is optical receiving, not physical calibration,
-game Z or component sorting. Original tint, alpha, layer order, pivots and clocks
-remain authoritative. Unsupported pixels, shadows/effects and other creature
-rigs retain their original colour and flat receiver. No magenta diagnostic enters
-the game. The old fixed-outfit handoff remains historical evidence only.
-Validation is recorded in `generated/character_geometry_numeric.json` (543
-checks across 60 exact outfit/swap sheets), `character_geometry_render_checks.json`
-(490 native checks, 96 outfit/clip/facing compositions), and
-`character_geometry_scene_checks.json` (10 actual Crypt checks covering three
-receiver comparisons, GPU-only companion residency and original-alpha picking).
-The existing 117 tint checks and media-readiness suite also pass. Native directional,
-Omni and disclosed-item lighting were compared with decoded reference surfaces,
-including mirrored/nonuniform horizontal scales and unsupported original pixels.
-The corrected source-camera registration and carried height were compared with
-actual Crypt closeups, unchanged unlit source×tint, and extinguished sources.
-The 43 emitter checks retain native XY/ranges and follow raised support/jump lift;
-108 fixture checks cover original flame timing, pause and extinguish. Independent
-CPU evaluation reproduces the current native receiving pixels within one output
-byte. This proves integration agreement, not physical quality of the delivered
-estimated surface. `generated/character_geometry_quantization.json` isolates
-original float versus exported fields: 80 of 81 byte-zero light responses are
-also zero in the original float data across the 491 sampled opaque pixels.
-`generated/native_lighting_comparison.json` records 13 actual-scene checks:
-native ambient reduces near-black sampled body pixels from 129 to 1 while
-preserving direct illumination. Native point lights alone retain black patches.
-These are bounded source/presentation samples, not a whole-library quality claim.
-No handheld socket is claimed.
-There are no optical wall shadows or private spell emitters
-in this pass. Backend perception and light propagation remain authoritative.
+The original torch.flame supplies 16 frames at 10 FPS with its original pivot and
+scale. Its AnimationPlayer/AnimationTree clock drives brightness fluctuation
+bounded to ±15% and the original flame centroid. Pausing displayed time pauses
+both. No second emitter is added for the flame sprite. Environment normals retain
+their authored octahedral encoding and source-to-world transforms; native Canvas
+lighting runs before final wall opacity and the existing wall-join coverage mask.
+This does not model light transmission through stone or add wall shadows.
+
+Modular layers use the full-component delivery and
+`NDCharacterLight/NORMALS_PRODUCTION_HANDOFF.md`. Exact source identities select
+original depth/support/normal-valid data plus Original/Gentle/Reference normals.
+All RGB channels decode as linear numeric data; Canvas Y flips once. Original
+alpha, tint, registration and animation clocks stay unchanged. Profile changes
+replace only the prepared normal sampler. The same source pixel can remain
+unsupported; unsupported pixels use the original flat receiver.
+
+Generated modular ground shadows use original component depth/support/alpha,
+including weapons, with no baked Shadow fallback. Each displayed actor has an
+isolated native 3D shadow-measurement viewport; its helper never lights the painted
+world. The strongest disclosed point source casts, and all other point sources
+contribute fill through their original cookies. A black source-over output preserves
+existing terrain colour. Helpers stop rendering when their inputs are unchanged.
+These dense casters require measured gameplay profiling; directional shadow fill
+is not implemented (the current source list contains no directional lights).
+Nonmodular creature shadows retain their existing authored source layer.
+
+The atlas shares native materials across identical floor-source instances and
+stores only nonzero-alpha bounds for static colour receivers. Animated sources
+and water retain stable full cells. Storage crops never alter source registration,
+3D quad sizes or picking. Artwork remains external and unchanged. Older 3D
+receiving-light reports in generated/ are historical evidence; current migration
+checks and frame profiles are recorded separately.
+
+Static receiving transforms are cached against their original quad and instance
+data. Orthographic pan/zoom uses one native parent transform; published changes
+update only changed projections, and floor atlas addresses upload once per batch.
+Dynamic frames, highlights, water time and current/remembered styles retain their
+own update paths. Preparation never publishes future state into the light atlas.
+The current atlas has a finite 8192×8192 capacity; overflow reports an error and
+retains the previous published layout. Compatibility admits at most 15 positional
+lights per CanvasItem; the Gallery profile reports conservative overlapping
+source counts rather than assuming the 3D light-count setting applies to Canvas.
 
 `presentation/session.gd` connects the existing SDK to a worker-prepared causal
 timeline. The latest consumed state and displayed state have separate ownership.
@@ -1043,3 +1033,38 @@ normal-profile delivery folders. Media, imports, private runtime recordings,
 captures and raw frame profiles are ignored. Fresh full WSL and Windows-source
 ZIP backups were CRC-verified before importing Git; see local
 `.runtime/repository-migration-archives.json` for exact locations.
+
+## Native 2D migration validation
+
+[Validation index](generated/native_2d_validation.json) and
+[profile comparison](generated/native_2d_profiles.json) record the current player
+path. Native checks cover actual Crypt actors, all four camera quarters, the three
+normal profiles, wall modes, source alpha/picking, settings and generated-shadow
+lifetime. Separate original-source comparisons retain their measured one-byte
+lit-corner interpolation differences; illumination-cap checks preserve alpha and
+dim pixels, bound eight overlapping lights, and verify normal-light height and
+zoom response. The shadow probe covers dominant selection and five-source fill.
+
+The final full Gallery replay completes all 122 groups at sequence 101 with
+canonical agreement, 1,761 tiles, 360 objects, a drained queue and no presentation
+errors. Final-view culling rectangles overlap at most seven of its 26 sources;
+this is a measured view, not an arbitrary-map light-count guarantee.
+
+On the Windows RTX5090 at 1440×900 with VSync off, steady Gallery p95 is
+8.58–11.80 ms (first 2D implementation: 20.42–26.33 ms). Whole traversal p95 is
+10.914 ms; after preload it is 12.676 ms. The worst traversal interval is
+122.047 ms, with 118 intervals above 33.333 ms. Startup preload takes 21.0 seconds.
+This remains slower than the prior 3D receiving path, whose post-preload p95 was
+4.475 ms. Atlas reconciliation, world/media/style publication and cold camera
+preparation remain open costs; the migration does not claim to eliminate stutters.
+The separate lighting demo remained running during these comparisons.
+
+Run the native lanes with the Windows Godot executable and this project path:
+`--script res://tests/native_2d_integration_checks.gd -- --recording <Crypt journal>`,
+`--script res://tests/native_2d_source_checks.gd`, and
+`--script res://tests/native_illumination_cap_checks.gd`.
+The full map lane is `--script res://tests/scale_profile.gd -- --recording
+<Gallery journal> --profile-label <label> --background-check
+--exercise-cache-invalidation`. Private recordings, captures and raw profiles
+remain ignored. Original input paths and the external shadow/capacity probes are
+listed in the validation index.

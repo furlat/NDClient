@@ -64,7 +64,7 @@ static func _select_layers(actor: Dictionary, rig: Dictionary, modular: bool, ca
     else:
         var appearance: Dictionary = actor.appearance
         if appearance.presentation_kind != "layered": return _error("Root rig requires layered actor appearance")
-        selected.shadow = _layer("Shadow", 0xFFFFFF, 0.5)
+        # Modular shadows are generated from original component geometry.
         selected.body = _layer(appearance.body_category, int(appearance.skin_tint))
         if appearance.head_category != null: selected.head = _layer(appearance.head_category, int(appearance.hair_tint))
         if appearance.has_beard: selected.beard = _layer("Head2", int(appearance.beard_tint))

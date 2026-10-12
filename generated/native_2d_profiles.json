@@ -1,0 +1,692 @@
+{
+  "profiles": {
+    "previous_3d_receiving": {
+      "path": "generated/profiles/2026-10-12T18-32-15-gallery-prediction-media.json",
+      "gpu": "NVIDIA GeForce RTX 5090",
+      "renderer": "gl_compatibility",
+      "resolution": [
+        1440.0,
+        900.0
+      ],
+      "traversal_including_loading": {
+        "frames": 34452,
+        "mean_ms": 2.0823459305700687,
+        "p95_ms": 3.829,
+        "max_ms": 46.233,
+        "over_33_333_ms": 16
+      },
+      "traversal_after_startup_preload": {
+        "frames": 22584,
+        "mean_ms": 2.5673797378675167,
+        "p95_ms": 4.475,
+        "max_ms": 46.233,
+        "over_33_333_ms": 15
+      },
+      "startup_preload_complete_ms_from_profile_start": 14493.102,
+      "stages": {
+        "initialization": {
+          "frames": 1284,
+          "mean_ms": 0.4019657320872274,
+          "p95_ms": 0.517,
+          "max_ms": 4.471,
+          "over_33_333_ms": 0
+        },
+        "traversal": {
+          "frames": 33734,
+          "mean_ms": 2.0650773107250844,
+          "p95_ms": 3.768,
+          "max_ms": 46.233,
+          "over_33_333_ms": 15
+        },
+        "midroute_prepare_q1": {
+          "frames": 41,
+          "mean_ms": 5.875975609756098,
+          "p95_ms": 8.399,
+          "max_ms": 12.898,
+          "over_33_333_ms": 0
+        },
+        "midroute_prepare_q2": {
+          "frames": 42,
+          "mean_ms": 5.955214285714286,
+          "p95_ms": 7.071,
+          "max_ms": 14.223,
+          "over_33_333_ms": 0
+        },
+        "midroute_prepare_q3": {
+          "frames": 45,
+          "mean_ms": 6.144733333333333,
+          "p95_ms": 7.625,
+          "max_ms": 15.003,
+          "over_33_333_ms": 0
+        },
+        "midroute_prepare_q0": {
+          "frames": 2,
+          "mean_ms": 10.006,
+          "p95_ms": 7.836,
+          "max_ms": 12.176,
+          "over_33_333_ms": 0
+        },
+        "traversal_cached_views": {
+          "frames": 529,
+          "mean_ms": 2.1565652173913046,
+          "p95_ms": 2.81,
+          "max_ms": 35.885,
+          "over_33_333_ms": 1
+        },
+        "traversal_cached_invalidation": {
+          "frames": 189,
+          "mean_ms": 4.956830687830688,
+          "p95_ms": 10.654,
+          "max_ms": 27.334,
+          "over_33_333_ms": 0
+        },
+        "rotate_z20_q0": {
+          "frames": 20,
+          "mean_ms": 3.3912,
+          "p95_ms": 4.541,
+          "max_ms": 19.13,
+          "over_33_333_ms": 0
+        },
+        "gallery_z20_q0": {
+          "frames": 180,
+          "mean_ms": 2.2795666666666667,
+          "p95_ms": 2.682,
+          "max_ms": 3.381,
+          "over_33_333_ms": 0
+        },
+        "rotate_z20_q1": {
+          "frames": 64,
+          "mean_ms": 5.2390625,
+          "p95_ms": 8.434,
+          "max_ms": 12.658,
+          "over_33_333_ms": 0
+        },
+        "gallery_z20_q1": {
+          "frames": 180,
+          "mean_ms": 2.2425888888888887,
+          "p95_ms": 2.489,
+          "max_ms": 3.569,
+          "over_33_333_ms": 0
+        },
+        "rotate_z20_q2": {
+          "frames": 63,
+          "mean_ms": 5.14984126984127,
+          "p95_ms": 7.362,
+          "max_ms": 14.238,
+          "over_33_333_ms": 0
+        },
+        "gallery_z20_q2": {
+          "frames": 180,
+          "mean_ms": 2.2924166666666665,
+          "p95_ms": 2.853,
+          "max_ms": 3.17,
+          "over_33_333_ms": 0
+        },
+        "rotate_z20_q3": {
+          "frames": 68,
+          "mean_ms": 5.445911764705882,
+          "p95_ms": 8.496,
+          "max_ms": 14.264,
+          "over_33_333_ms": 0
+        },
+        "gallery_z20_q3": {
+          "frames": 180,
+          "mean_ms": 2.2422555555555554,
+          "p95_ms": 2.737,
+          "max_ms": 3.472,
+          "over_33_333_ms": 0
+        },
+        "rotate_z70_q0": {
+          "frames": 22,
+          "mean_ms": 4.437454545454545,
+          "p95_ms": 9.517,
+          "max_ms": 19.109,
+          "over_33_333_ms": 0
+        },
+        "gallery_z70_q0": {
+          "frames": 180,
+          "mean_ms": 3.3149,
+          "p95_ms": 5.067,
+          "max_ms": 6.107,
+          "over_33_333_ms": 0
+        },
+        "rotate_z70_q1": {
+          "frames": 22,
+          "mean_ms": 5.608136363636364,
+          "p95_ms": 12.786,
+          "max_ms": 15.64,
+          "over_33_333_ms": 0
+        },
+        "gallery_z70_q1": {
+          "frames": 180,
+          "mean_ms": 3.3273888888888887,
+          "p95_ms": 5.141,
+          "max_ms": 7.07,
+          "over_33_333_ms": 0
+        },
+        "rotate_z70_q2": {
+          "frames": 22,
+          "mean_ms": 3.904818181818182,
+          "p95_ms": 9.681,
+          "max_ms": 10.41,
+          "over_33_333_ms": 0
+        },
+        "gallery_z70_q2": {
+          "frames": 180,
+          "mean_ms": 3.50745,
+          "p95_ms": 5.142,
+          "max_ms": 6.854,
+          "over_33_333_ms": 0
+        },
+        "rotate_z70_q3": {
+          "frames": 22,
+          "mean_ms": 3.8958636363636363,
+          "p95_ms": 8.592,
+          "max_ms": 9.719,
+          "over_33_333_ms": 0
+        },
+        "gallery_z70_q3": {
+          "frames": 180,
+          "mean_ms": 3.0197555555555557,
+          "p95_ms": 3.322,
+          "max_ms": 3.486,
+          "over_33_333_ms": 0
+        },
+        "solid_wide": {
+          "frames": 180,
+          "mean_ms": 2.6468,
+          "p95_ms": 3.168,
+          "max_ms": 24.943,
+          "over_33_333_ms": 0
+        },
+        "hidden_wide": {
+          "frames": 180,
+          "mean_ms": 2.3566333333333334,
+          "p95_ms": 2.608,
+          "max_ms": 17.638,
+          "over_33_333_ms": 0
+        }
+      },
+      "steady_atlas_cpu": {
+        "frames": 1440,
+        "mean_ms": 0.0,
+        "p95_ms": 0,
+        "max_ms": 0,
+        "over_33_333_ms": 0
+      },
+      "steady_atlas_gpu": {
+        "frames": 1440,
+        "mean_ms": 0.0,
+        "p95_ms": 0,
+        "max_ms": 0,
+        "over_33_333_ms": 0
+      },
+      "atlas_cpu_including_publication": {}
+    },
+    "first_2d_receiving": {
+      "path": "generated/profiles/2026-10-12T20-04-51-gallery-native-2d.json",
+      "gpu": "NVIDIA GeForce RTX 5090",
+      "renderer": "gl_compatibility",
+      "resolution": [
+        1440.0,
+        900.0
+      ],
+      "traversal_including_loading": {
+        "frames": 18606,
+        "mean_ms": 8.039834354509297,
+        "p95_ms": 23.641,
+        "max_ms": 121.353,
+        "over_33_333_ms": 160
+      },
+      "traversal_after_startup_preload": {
+        "frames": 7945,
+        "mean_ms": 16.258070610446822,
+        "p95_ms": 26.817,
+        "max_ms": 121.353,
+        "over_33_333_ms": 160
+      },
+      "startup_preload_complete_ms_from_profile_start": 21166.318,
+      "stages": {
+        "initialization": {
+          "frames": 1214,
+          "mean_ms": 0.42621581548599674,
+          "p95_ms": 0.514,
+          "max_ms": 5.724,
+          "over_33_333_ms": 0
+        },
+        "traversal": {
+          "frames": 18394,
+          "mean_ms": 7.853008535391976,
+          "p95_ms": 23.486,
+          "max_ms": 121.353,
+          "over_33_333_ms": 152
+        },
+        "midroute_prepare_q1": {
+          "frames": 46,
+          "mean_ms": 25.762065217391307,
+          "p95_ms": 25.732,
+          "max_ms": 125.235,
+          "over_33_333_ms": 2
+        },
+        "midroute_prepare_q2": {
+          "frames": 46,
+          "mean_ms": 24.73426086956522,
+          "p95_ms": 27.872,
+          "max_ms": 113.649,
+          "over_33_333_ms": 3
+        },
+        "midroute_prepare_q3": {
+          "frames": 44,
+          "mean_ms": 23.126204545454545,
+          "p95_ms": 24.468,
+          "max_ms": 113.063,
+          "over_33_333_ms": 2
+        },
+        "midroute_prepare_q0": {
+          "frames": 2,
+          "mean_ms": 80.491,
+          "p95_ms": 58.515,
+          "max_ms": 102.467,
+          "over_33_333_ms": 2
+        },
+        "traversal_cached_views": {
+          "frames": 26,
+          "mean_ms": 26.939115384615384,
+          "p95_ms": 28.607,
+          "max_ms": 98.518,
+          "over_33_333_ms": 2
+        },
+        "traversal_cached_invalidation": {
+          "frames": 186,
+          "mean_ms": 23.87366666666667,
+          "p95_ms": 29.567,
+          "max_ms": 105.63,
+          "over_33_333_ms": 6
+        },
+        "rotate_z20_q0": {
+          "frames": 20,
+          "mean_ms": 21.192500000000003,
+          "p95_ms": 26.31,
+          "max_ms": 65.331,
+          "over_33_333_ms": 1
+        },
+        "gallery_z20_q0": {
+          "frames": 180,
+          "mean_ms": 18.452316666666665,
+          "p95_ms": 21.413,
+          "max_ms": 24.819,
+          "over_33_333_ms": 0
+        },
+        "rotate_z20_q1": {
+          "frames": 66,
+          "mean_ms": 23.704863636363637,
+          "p95_ms": 26.53,
+          "max_ms": 120.441,
+          "over_33_333_ms": 2
+        },
+        "gallery_z20_q1": {
+          "frames": 180,
+          "mean_ms": 18.05226111111111,
+          "p95_ms": 20.421,
+          "max_ms": 22.551,
+          "over_33_333_ms": 0
+        },
+        "rotate_z20_q2": {
+          "frames": 71,
+          "mean_ms": 25.634971830985915,
+          "p95_ms": 28.77,
+          "max_ms": 130.897,
+          "over_33_333_ms": 2
+        },
+        "gallery_z20_q2": {
+          "frames": 180,
+          "mean_ms": 18.574644444444445,
+          "p95_ms": 21.009,
+          "max_ms": 24.225,
+          "over_33_333_ms": 0
+        },
+        "rotate_z20_q3": {
+          "frames": 68,
+          "mean_ms": 24.121088235294117,
+          "p95_ms": 26.656,
+          "max_ms": 119.184,
+          "over_33_333_ms": 3
+        },
+        "gallery_z20_q3": {
+          "frames": 180,
+          "mean_ms": 18.34026666666667,
+          "p95_ms": 21.711,
+          "max_ms": 27.892,
+          "over_33_333_ms": 0
+        },
+        "rotate_z70_q0": {
+          "frames": 22,
+          "mean_ms": 28.939954545454544,
+          "p95_ms": 49.552,
+          "max_ms": 124.491,
+          "over_33_333_ms": 3
+        },
+        "gallery_z70_q0": {
+          "frames": 180,
+          "mean_ms": 20.7967,
+          "p95_ms": 23.596,
+          "max_ms": 26.019,
+          "over_33_333_ms": 0
+        },
+        "rotate_z70_q1": {
+          "frames": 22,
+          "mean_ms": 27.416999999999998,
+          "p95_ms": 28.669,
+          "max_ms": 116.643,
+          "over_33_333_ms": 2
+        },
+        "gallery_z70_q1": {
+          "frames": 180,
+          "mean_ms": 20.209033333333334,
+          "p95_ms": 22.313,
+          "max_ms": 27.66,
+          "over_33_333_ms": 0
+        },
+        "rotate_z70_q2": {
+          "frames": 22,
+          "mean_ms": 27.237181818181817,
+          "p95_ms": 30.004,
+          "max_ms": 117.365,
+          "over_33_333_ms": 2
+        },
+        "gallery_z70_q2": {
+          "frames": 180,
+          "mean_ms": 20.336833333333335,
+          "p95_ms": 22.367,
+          "max_ms": 23.472,
+          "over_33_333_ms": 0
+        },
+        "rotate_z70_q3": {
+          "frames": 22,
+          "mean_ms": 26.527363636363635,
+          "p95_ms": 28.891,
+          "max_ms": 114.982,
+          "over_33_333_ms": 2
+        },
+        "gallery_z70_q3": {
+          "frames": 180,
+          "mean_ms": 21.27367222222222,
+          "p95_ms": 26.325,
+          "max_ms": 31.406,
+          "over_33_333_ms": 0
+        },
+        "solid_wide": {
+          "frames": 180,
+          "mean_ms": 21.480233333333334,
+          "p95_ms": 26.474,
+          "max_ms": 52.663,
+          "over_33_333_ms": 1
+        },
+        "hidden_wide": {
+          "frames": 180,
+          "mean_ms": 19.781244444444443,
+          "p95_ms": 23.91,
+          "max_ms": 36.856,
+          "over_33_333_ms": 1
+        }
+      },
+      "steady_atlas_cpu": {
+        "frames": 1440,
+        "mean_ms": 12.334070833333335,
+        "p95_ms": 14.418,
+        "max_ms": 20.422,
+        "over_33_333_ms": 0
+      },
+      "steady_atlas_gpu": {
+        "frames": 1440,
+        "mean_ms": 0.6300256950573788,
+        "p95_ms": 0.861999988555908,
+        "max_ms": 1.70700001716614,
+        "over_33_333_ms": 0
+      },
+      "atlas_cpu_including_publication": {
+        "frames": 14981,
+        "mean_ms": 5.174737400707563,
+        "p95_ms": 14.65,
+        "max_ms": 80.323,
+        "over_33_333_ms": 80
+      }
+    },
+    "final_2d_capped": {
+      "path": "generated/profiles/2026-10-12T20-36-45-gallery-native-2d-cached-bindings.json",
+      "gpu": "NVIDIA GeForce RTX 5090",
+      "renderer": "gl_compatibility",
+      "resolution": [
+        1440.0,
+        900.0
+      ],
+      "traversal_including_loading": {
+        "frames": 24269,
+        "mean_ms": 4.667253986567226,
+        "p95_ms": 10.914,
+        "max_ms": 122.047,
+        "over_33_333_ms": 118
+      },
+      "traversal_after_startup_preload": {
+        "frames": 11957,
+        "mean_ms": 7.777690557832233,
+        "p95_ms": 12.676,
+        "max_ms": 122.047,
+        "over_33_333_ms": 116
+      },
+      "startup_preload_complete_ms_from_profile_start": 21035.45,
+      "stages": {
+        "initialization": {
+          "frames": 1191,
+          "mean_ms": 0.44383459277917714,
+          "p95_ms": 0.559,
+          "max_ms": 6.467,
+          "over_33_333_ms": 0
+        },
+        "traversal": {
+          "frames": 24056,
+          "mean_ms": 4.581947580645162,
+          "p95_ms": 10.668,
+          "max_ms": 122.047,
+          "over_33_333_ms": 111
+        },
+        "midroute_prepare_q1": {
+          "frames": 49,
+          "mean_ms": 13.290755102040816,
+          "p95_ms": 14.023,
+          "max_ms": 147.346,
+          "over_33_333_ms": 1
+        },
+        "midroute_prepare_q2": {
+          "frames": 49,
+          "mean_ms": 13.027122448979593,
+          "p95_ms": 11.004,
+          "max_ms": 150.407,
+          "over_33_333_ms": 1
+        },
+        "midroute_prepare_q3": {
+          "frames": 53,
+          "mean_ms": 14.228509433962264,
+          "p95_ms": 18.915,
+          "max_ms": 151.816,
+          "over_33_333_ms": 1
+        },
+        "midroute_prepare_q0": {
+          "frames": 2,
+          "mean_ms": 85.928,
+          "p95_ms": 33.425,
+          "max_ms": 138.431,
+          "over_33_333_ms": 2
+        },
+        "traversal_cached_views": {
+          "frames": 26,
+          "mean_ms": 16.206038461538462,
+          "p95_ms": 14.8,
+          "max_ms": 107.567,
+          "over_33_333_ms": 2
+        },
+        "traversal_cached_invalidation": {
+          "frames": 187,
+          "mean_ms": 14.036893048128341,
+          "p95_ms": 18.333,
+          "max_ms": 113.844,
+          "over_33_333_ms": 5
+        },
+        "rotate_z20_q0": {
+          "frames": 20,
+          "mean_ms": 9.81895,
+          "p95_ms": 26.372,
+          "max_ms": 30.595,
+          "over_33_333_ms": 0
+        },
+        "gallery_z20_q0": {
+          "frames": 180,
+          "mean_ms": 7.110033333333334,
+          "p95_ms": 9.262,
+          "max_ms": 11.202,
+          "over_33_333_ms": 0
+        },
+        "rotate_z20_q1": {
+          "frames": 73,
+          "mean_ms": 13.176753424657534,
+          "p95_ms": 14.589,
+          "max_ms": 172.049,
+          "over_33_333_ms": 1
+        },
+        "gallery_z20_q1": {
+          "frames": 180,
+          "mean_ms": 7.637038888888888,
+          "p95_ms": 9.133,
+          "max_ms": 9.645,
+          "over_33_333_ms": 0
+        },
+        "rotate_z20_q2": {
+          "frames": 75,
+          "mean_ms": 12.943733333333332,
+          "p95_ms": 14.151,
+          "max_ms": 161.762,
+          "over_33_333_ms": 1
+        },
+        "gallery_z20_q2": {
+          "frames": 180,
+          "mean_ms": 7.31786111111111,
+          "p95_ms": 8.653,
+          "max_ms": 11.04,
+          "over_33_333_ms": 0
+        },
+        "rotate_z20_q3": {
+          "frames": 78,
+          "mean_ms": 12.890846153846153,
+          "p95_ms": 15.063,
+          "max_ms": 158.936,
+          "over_33_333_ms": 1
+        },
+        "gallery_z20_q3": {
+          "frames": 180,
+          "mean_ms": 6.803055555555555,
+          "p95_ms": 8.584,
+          "max_ms": 9.436,
+          "over_33_333_ms": 0
+        },
+        "rotate_z70_q0": {
+          "frames": 22,
+          "mean_ms": 17.779863636363636,
+          "p95_ms": 24.699,
+          "max_ms": 150.96,
+          "over_33_333_ms": 2
+        },
+        "gallery_z70_q0": {
+          "frames": 180,
+          "mean_ms": 10.247805555555555,
+          "p95_ms": 11.795,
+          "max_ms": 12.58,
+          "over_33_333_ms": 0
+        },
+        "rotate_z70_q1": {
+          "frames": 22,
+          "mean_ms": 17.600545454545454,
+          "p95_ms": 17.757,
+          "max_ms": 147.339,
+          "over_33_333_ms": 1
+        },
+        "gallery_z70_q1": {
+          "frames": 180,
+          "mean_ms": 9.895505555555555,
+          "p95_ms": 11.338,
+          "max_ms": 13.795,
+          "over_33_333_ms": 0
+        },
+        "rotate_z70_q2": {
+          "frames": 22,
+          "mean_ms": 16.85631818181818,
+          "p95_ms": 17.321,
+          "max_ms": 144.107,
+          "over_33_333_ms": 1
+        },
+        "gallery_z70_q2": {
+          "frames": 180,
+          "mean_ms": 9.735755555555555,
+          "p95_ms": 10.783,
+          "max_ms": 12.571,
+          "over_33_333_ms": 0
+        },
+        "rotate_z70_q3": {
+          "frames": 22,
+          "mean_ms": 17.105136363636362,
+          "p95_ms": 16.274,
+          "max_ms": 143.491,
+          "over_33_333_ms": 1
+        },
+        "gallery_z70_q3": {
+          "frames": 180,
+          "mean_ms": 10.086744444444445,
+          "p95_ms": 11.015,
+          "max_ms": 13.488,
+          "over_33_333_ms": 0
+        },
+        "solid_wide": {
+          "frames": 180,
+          "mean_ms": 9.55128888888889,
+          "p95_ms": 10.413,
+          "max_ms": 46.973,
+          "over_33_333_ms": 1
+        },
+        "hidden_wide": {
+          "frames": 180,
+          "mean_ms": 8.809077777777778,
+          "p95_ms": 9.97,
+          "max_ms": 39.035,
+          "over_33_333_ms": 1
+        }
+      },
+      "steady_atlas_cpu": {
+        "frames": 1440,
+        "mean_ms": 2.5120979166666664,
+        "p95_ms": 3.123,
+        "max_ms": 3.918,
+        "over_33_333_ms": 0
+      },
+      "steady_atlas_gpu": {
+        "frames": 1440,
+        "mean_ms": 0.4403687512502074,
+        "p95_ms": 0.704999983310699,
+        "max_ms": 1.5460000038147,
+        "over_33_333_ms": 0
+      },
+      "atlas_cpu_including_publication": {
+        "frames": 20642,
+        "mean_ms": 1.3908303458967155,
+        "p95_ms": 3.15,
+        "max_ms": 85.32,
+        "over_33_333_ms": 80
+      }
+    }
+  },
+  "notes": [
+    "Native Windows RTX5090 Compatibility,1440x900,VSync off. Separate user-owned lighting demo remained running; no GPU stress test ran concurrently.",
+    "Same complete recorded commands and canonical final state; asynchronous admission and sampling counts differ. OS caches were not flushed.",
+    "Whole traversal retains preload/publication frames; post-preload figures do not replace it. Inclusive CPU phases overlap.",
+    "The final 2D migration improves on its first implementation but remains slower than the prior 3D path. World-publication spikes and cold camera preparation are open costs.",
+    "Final profile includes the illumination cap. A later cache-bookkeeping correction keeps stored Canvas Z rank synchronized with style changes; it is covered by the final scene regression, not separately retimed."
+  ]
+}

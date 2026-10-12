@@ -903,3 +903,25 @@ actual recorded gameplay canonical completion and same large-map whole-frame
 profiling. Generated shadows must use original depth/support and dominant-source
 selection, not the original modular Shadow artwork or the demo's fixed three-light
 limit. Record measured limits honestly. Native GPU runs serialize.
+
+Further user direction in this run: light height is fundamental; excessive
+overlap must be clipped as a maximum accumulated illumination, not as wall
+occlusion or a shorter radius. Preserve the handoff's normal-light height and
+the distinct actual fixture/carried elevation and shadow-height conversion.
+Keep native Godot light accumulation and cap its final gain to one using the
+original tinted source colour as the upper bound. This prevents bright sources
+from washing artwork to white without a second atlas or a custom light loop.
+Shared source-colour sampling must retain memory, highlight, water, flame and
+alpha behavior. Verify overlapping lights and native height response, then
+repeat actual scene checks and Gallery profiling. Continue the existing
+anti-slop/anti-OOP and plan-adherence review through scope_review.
+
+Migration acceptance is recorded in `generated/native_2d_validation.json` and
+`generated/native_2d_profiles.json`: original source and actual-scene checks pass,
+and the full Gallery drains canonically. The cap and normal-height response are
+verified with native lights. Same-root review found no remaining correctness
+blocker. Performance is explicitly incomplete: steady final Gallery p95 is
+8.58–11.80 ms, and publication reaches 122.047 ms. This is faster than the first
+2D implementation but slower than the prior 3D receiving path. Those spikes,
+cold view preparation, finite atlas capacity and directional shadow fill remain
+documented limits, not completed optimization claims. No VFX/Studio work was added.
