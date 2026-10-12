@@ -2,6 +2,9 @@ extends RefCounted
 const GroundReceiving = preload("res://presentation/ground_receiving.gd")
 # Native Canvas lights receive into isolated straight-RGBA cells. Original 3D
 # quads, source materials, painter order and picking remain their original owners.
+const CappedEnvironment = preload("res://presentation/canvas_capped_environment.gdshader")
+const CappedModular = preload("res://presentation/canvas_capped_modular.gdshader")
+const CappedWater = preload("res://presentation/canvas_capped_water.gdshader")
 const Output = preload("res://presentation/canvas_received.gdshader")
 const EnvironmentReceiver = preload("res://presentation/canvas_environment.gdshader")
 const ShadowReceiver = preload("res://presentation/canvas_environment_unshaded.gdshader")
@@ -10,6 +13,8 @@ const WaterReceiver = preload("res://presentation/canvas_water.gdshader")
 const NonreceivingDebug = preload("res://presentation/canvas_nonreceiving_debug.gdshader")
 const FlameReceiver = preload("res://presentation/canvas_fixture_flame.gdshader")
 const MAX_SIZE = 8192
+var light_cap: float = 0.0
+var ambient: CanvasModulate
 var viewport: SubViewport
 var receivers: Array = []
 var membership: Array = []
@@ -52,6 +57,7 @@ func attach(parent: Node3D) -> void:
     viewport.name = "Native2DReceiving"
     viewport.disable_3d = true
     viewport.transparent_bg = true
+    viewport.use_hdr_2d = _uses_hdr()
     viewport.size = Vector2i(MAX_SIZE,1024)
     viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
     viewport.canvas_item_default_texture_filter = Viewport.DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_NEAREST
@@ -59,21 +65,41 @@ func attach(parent: Node3D) -> void:
     projection_root=Node2D.new()
     projection_root.name="ReceivingProjection"
     viewport.add_child(projection_root)
-    var ambient = CanvasModulate.new()
-    ambient.color = Color(0.18,0.18,0.18,1.0)
+    ambient = CanvasModulate.new()
+    ambient.color = Color(0.18,0.18,0.18,1.0).linear_to_srgb() if _uses_hdr() else Color(0.18,0.18,0.18,1.0)
     viewport.add_child(ambient)
     RenderingServer.viewport_set_measure_render_time(viewport.get_viewport_rid(),true)
     var pixel = Image.create(1,1,false,Image.FORMAT_RGBA8)
     pixel.fill(Color.WHITE)
     white = ImageTexture.create_from_image(pixel)
 
+func set_light_cap(value: float) -> void:
+    var selected = maxf(value,0.0)
+    if is_equal_approx(light_cap,selected): return
+    light_cap=selected
+    if is_instance_valid(viewport):
+        viewport.use_hdr_2d=_uses_hdr()
+        # Godot4.7.2 converts CanvasModulate for HDR, while native light colour
+        # and cookie atlas values are unchanged. Retain former numeric ambient.
+        ambient.color=Color(0.18,0.18,0.18,1.0).linear_to_srgb() if _uses_hdr() else Color(0.18,0.18,0.18,1.0)
+    for group in groups.values(): group.version=-1
+    membership.clear(); admission_stamp.clear(); output_stamp.clear()
+    revision+=1
+
 var normals_visible = false
 var normal_shaders: Dictionary = {}
+
+func _uses_hdr() -> bool:
+    return light_cap>0.0 and not normals_visible
 
 func set_normals_visible(value: bool) -> void:
     if normals_visible==value: return
     normals_visible=value
-    membership.clear(); admission_stamp.clear()
+    if is_instance_valid(viewport):
+        viewport.use_hdr_2d=_uses_hdr()
+        ambient.color=Color(0.18,0.18,0.18,1.0).linear_to_srgb() if _uses_hdr() else Color(0.18,0.18,0.18,1.0)
+    for group in groups.values(): group.version=-1
+    membership.clear(); admission_stamp.clear(); output_stamp.clear()
 
 func _normal_shader(source: Shader) -> Shader:
     if not normal_shaders.has(source):
@@ -87,7 +113,7 @@ func _normal_shader(source: Shader) -> Shader:
 func _entry_info(entry: Dictionary) -> Dictionary:
     var source: Shader = entry.material.shader
     var previous: Dictionary = entry.get("atlas_source_info",{})
-    if not previous.is_empty() and previous.source==source and previous.role==entry.role and previous.kind==entry.placement.kind and previous.get("normals_visible",false)==normals_visible: return previous
+    if not previous.is_empty() and previous.source==source and previous.role==entry.role and previous.kind==entry.placement.kind and previous.get("normals_visible",false)==normals_visible and previous.get("light_cap",0.0)==light_cap: return previous
     var path: String = source.resource_path
     var modular: bool = path.ends_with("modular.gdshader")
     var water: bool = path.ends_with("water.gdshader")
@@ -96,8 +122,9 @@ func _entry_info(entry: Dictionary) -> Dictionary:
     if normals_visible:
         if entry.role=="shadow" or flame: shader=NonreceivingDebug
         elif shader in [ModularReceiver,WaterReceiver,EnvironmentReceiver]: shader=_normal_shader(shader)
-    var output: Shader = Output
-    var result={"normals_visible":normals_visible,"source":source,"role":entry.role,"kind":entry.placement.kind,"shader":shader,"output":output,"water":water,"dynamic":entry.placement.kind=="actor" or flame}
+    var capped: bool = light_cap>0.0 and not normals_visible and entry.role!="shadow" and not flame
+    var output: Shader = (CappedModular if modular else CappedWater if water else CappedEnvironment) if capped else Output
+    var result={"capped":capped,"light_cap":light_cap,"normals_visible":normals_visible,"source":source,"role":entry.role,"kind":entry.placement.kind,"shader":shader,"output":output,"water":water,"dynamic":entry.placement.kind=="actor" or flame}
     entry.atlas_source_info=result
     return result
 
@@ -244,6 +271,26 @@ func _candidate_specs(entries: Array, information: Dictionary, geometry: Diction
         for spec in candidate.specs: members[spec.id]=spec.crop
     return {"ok":true,"specs":specs,"members":members,"entries":caches,"indices":indices,"supports":supports,"reused":reused}
 
+func _copy_output_source(entry: Dictionary) -> void:
+    if not entry.has("received_material") or not _entry_info(entry).capped: return
+    var output: ShaderMaterial=entry.received_material
+    var source: ShaderMaterial=entry.material
+    var signature=[source,source.shader,entry.get("source_version",0),output,output.shader]
+    if entry.get("received_source_key",[])==signature: return
+    var key=[source.shader.get_instance_id(),output.shader.get_instance_id()]
+    if not parameter_names.has(key):
+        var accepted={}
+        for row in output.shader.get_shader_uniform_list(): accepted[row.name]=true
+        var names=[]
+        for row in source.shader.get_shader_uniform_list():
+            if accepted.has(row.name) and not str(row.name).begins_with("wall_") and row.name!="use_instance_visibility": names.append(row.name)
+        parameter_names[key]=names
+    for name in parameter_names[key]: output.set_shader_parameter(name,source.get_shader_parameter(name))
+    output.set_shader_parameter("use_instance_visibility",entry.has("batch_rows"))
+    var mesh: QuadMesh=entry.node.multimesh.mesh if entry.has("batch_rows") else entry.node.mesh
+    output.set_shader_parameter("source_quad_size",mesh.size)
+    entry.received_source_key=signature
+
 func _copy_parameters(group: Dictionary) -> void:
     var source: ShaderMaterial = group.entry.material
     var key = [source.shader.get_instance_id(),group.material.shader.get_instance_id()]
@@ -260,6 +307,7 @@ func _copy_parameters(group: Dictionary) -> void:
     group.material.set_shader_parameter("atlas_cell_size",Vector2(group.crop.pixels.size))
     group.material.set_shader_parameter("receiver_visibility",group.visibility)
     group.material.set_shader_parameter("ground_join_mask",group.get("join_mask",0))
+    group.material.set_shader_parameter("store_irradiance",_entry_info(group.entry).capped)
     group.version = group.entry.get("source_version",0)
     group.source_shader = source.shader
     group.highlighted = null
@@ -372,7 +420,7 @@ func _reconcile(world: Node) -> bool:
     var address_floors={}; var changed_outputs: Array=[]
     var dirty_floors={}
     for id in candidate.entries:
-        if dimensions_changed or not entry_specs.has(id) or not is_same(entry_specs[id].entry,candidate.entries[id].entry) or not candidate.entries[id].entry.has("received_material") or entry_specs[id].ground_version!=candidate.entries[id].ground_version: dirty_floors[id]=true
+        if dimensions_changed or not entry_specs.has(id) or not is_same(entry_specs[id].entry,candidate.entries[id].entry) or not candidate.entries[id].entry.has("received_material") or candidate.entries[id].entry.received_material.shader!=information[id].output or entry_specs[id].ground_version!=candidate.entries[id].ground_version: dirty_floors[id]=true
     var kept = {}; var next: Array = []; var used_groups = {}; var reusable: Array = []
     var entry_groups: Dictionary = {}
     for receiver in receivers:
@@ -428,7 +476,7 @@ func _reconcile(world: Node) -> bool:
             if relocated: dirty_floors[spec.source_id]=true
             if not address_floors.has(spec.source_id): address_floors[spec.source_id]={"entry":spec.entry,"receivers":[]}
             address_floors[spec.source_id].receivers.append(receiver)
-        elif relocated or dimensions_changed or not spec.entry.has("received_material"):
+        elif relocated or dimensions_changed or not spec.entry.has("received_material") or spec.entry.received_material.shader!=_output_shader(spec.entry):
             changed_outputs.append(receiver)
         next.append(receiver)
     # All dimensions were validated before any published state changed.
@@ -456,9 +504,15 @@ func _reconcile(world: Node) -> bool:
         if new_output:
             var output = ShaderMaterial.new(); output.shader=_output_shader(entry)
             entry.received_material=output
-        if new_output:
-            entry.received_material.set_shader_parameter("received",viewport.get_texture())
-            entry.received_material.set_shader_parameter("use_instance_atlas",entry.has("batch_rows"))
+        var output_shader: Shader=_output_shader(entry)
+        if entry.received_material.shader!=output_shader:
+            entry.received_material.shader=output_shader
+            entry.erase("received_source_key")
+        entry.received_material.set_shader_parameter("received",viewport.get_texture())
+        entry.received_material.set_shader_parameter("use_instance_atlas",entry.has("batch_rows"))
+        entry.received_material.set_shader_parameter("received_is_encoded_hdr",_uses_hdr())
+        entry.received_material.set_shader_parameter("light_cap",light_cap)
+        _copy_output_source(entry)
         if entry.node.material_override!=entry.received_material: entry.node.material_override=entry.received_material
     # A prepared floor publication can replace its packed buffer while retaining
     # exactly the same tile IDs. Restore addresses even when no repack occurred.
@@ -563,6 +617,12 @@ func sync(world: Node, published: Array = [], styles: Array = []) -> void:
         var entry: Dictionary = group.entry
         var copied: bool = group.version!=entry.get("source_version",0) or group.source_shader!=entry.material.shader
         if copied: _copy_parameters(group)
+        _copy_output_source(entry)
+        if entry.has("received_material") and _entry_info(entry).capped:
+            var output: ShaderMaterial=entry.received_material
+            output.set_shader_parameter("current_visibility",float(entry.get("scenery_value",1.0)))
+            output.set_shader_parameter("highlighted",entry.material.get_shader_parameter("highlighted"))
+            if group.water: output.set_shader_parameter("displayed_time_seconds",entry.material.get_shader_parameter("displayed_time_seconds"))
         var highlighted = entry.material.get_shader_parameter("highlighted")
         if highlighted!=group.highlighted:
             group.material.set_shader_parameter("highlighted",highlighted); group.highlighted=highlighted

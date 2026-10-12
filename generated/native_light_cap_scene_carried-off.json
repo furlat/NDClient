@@ -1,0 +1,123 @@
+{
+  "cases": [
+    {
+      "atlas_size": [
+        8192,
+        1024
+      ],
+      "delta": {
+        "alpha": 0,
+        "changed": 74941,
+        "maximum": 25
+      },
+      "native_2d_gpu_ms": 0.0120000001043081,
+      "quarter": 0
+    },
+    {
+      "atlas_size": [
+        8192,
+        1024
+      ],
+      "delta": {
+        "alpha": 0,
+        "changed": 64858,
+        "maximum": 20
+      },
+      "native_2d_gpu_ms": 0.0120000001043081,
+      "quarter": 1
+    },
+    {
+      "atlas_size": [
+        8192,
+        2048
+      ],
+      "delta": {
+        "alpha": 0,
+        "changed": 63786,
+        "maximum": 20
+      },
+      "native_2d_gpu_ms": 0.0219999998807907,
+      "quarter": 2
+    },
+    {
+      "atlas_size": [
+        8192,
+        2048
+      ],
+      "delta": {
+        "alpha": 0,
+        "changed": 73868,
+        "maximum": 23
+      },
+      "native_2d_gpu_ms": 0.0199999995529652,
+      "quarter": 3
+    }
+  ],
+  "checks": 29,
+  "driver": "vulkan",
+  "failures": [],
+  "lighting": {
+    "actors": [
+      {
+        "id": "ea489443-e110-4f27-b8d0-37d6b6310ad9",
+        "name": "Shield Fighter",
+        "position": [
+          3,
+          5
+        ],
+        "torches": [
+          {
+            "id": "8688915d-aec3-4a04-ac61-66bdd164b954",
+            "is_lit": false,
+            "name": "Torch"
+          }
+        ]
+      },
+      {
+        "id": "4b4090e8-3c0d-4e72-b925-b35ea769539e",
+        "name": "Draconic Sorcerer",
+        "position": [
+          4,
+          5
+        ],
+        "torches": [
+          {
+            "id": "8b3e08da-2aee-401c-8118-840bc8c9571c",
+            "is_lit": false,
+            "name": "Torch"
+          }
+        ]
+      }
+    ],
+    "light_strength": 0.41,
+    "resolved_sources": [
+      {
+        "actor_id": "",
+        "enabled": true,
+        "id": "88985999-fdfa-410f-a415-8e77ec670e5e",
+        "name": "Wall Torch",
+        "position": [
+          2.0,
+          0.816496610641479,
+          3.0
+        ]
+      },
+      {
+        "actor_id": "",
+        "enabled": true,
+        "id": "c66b835b-e7a6-4ac3-b9ed-9e0126001382",
+        "name": "Wall Torch",
+        "position": [
+          6.0,
+          0.816496610641479,
+          3.0
+        ]
+      }
+    ],
+    "sequence": 9,
+    "source_override": false,
+    "wall_mode": "hidden"
+  },
+  "renderer": "forward_plus",
+  "scope": "Actual recorded room, four camera quarters, final3D pixels. Off restores baseline, alpha and canonical state stay unchanged, and unlit Normals is invariant. Pixel differences/captures support visual inspection; independent isolated cap oracles are separate."
+}

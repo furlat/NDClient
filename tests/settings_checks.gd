@@ -14,6 +14,7 @@ class SettingsWorld extends FixtureWorld:
     var character_light_profile=Settings.DEFAULT_PROFILE
     var fire_light_flicker=Settings.DEFAULT_FIRE_LIGHT_FLICKER
     var light_strength=Settings.DEFAULT_LIGHT_STRENGTH
+    var light_cap_enabled=Settings.DEFAULT_LIGHT_CAP_ENABLED
     var settings_path=""
     var accepted=[]
     var media_issue=""
@@ -28,6 +29,9 @@ class SettingsWorld extends FixtureWorld:
     func set_light_strength(value:float,persist:bool=true)->void:
         light_strength=value
         if persist:Settings.write_light_strength(value,settings_path)
+    func set_light_cap_enabled(enabled:bool)->void:
+        light_cap_enabled=enabled
+        Settings.write_light_cap(enabled,settings_path)
     func close_storage()->void:
         loot_object_uuid=""
         if owner_hud!=null:owner_hud.loot_panel.hide()
@@ -55,7 +59,7 @@ func run()->void:
     root.size=Vector2i(1280,720)
     root.gui_embed_subwindows=true
     check(Settings.PROFILES.keys()==["original","gentle","reference"],"Only three delivered normal profiles are offered")
-    check(Settings.read(config_path)=={"profile":"reference","fire_light_flicker":false,"light_strength":1.0,"error":OK} and not FileAccess.file_exists(config_path),"Missing setting uses current demo Reference default without writing a file")
+    check(Settings.read(config_path)=={"profile":"reference","fire_light_flicker":false,"light_strength":1.0,"light_cap_enabled":true,"error":OK} and not FileAccess.file_exists(config_path),"Missing settings use Reference, static fire, full strength and overlap cap without writing a file")
     check(Settings.write("gentle",config_path)==OK and Settings.read(config_path).profile=="gentle","ConfigFile round trip preserves a selected profile")
     check(Settings.write("unregistered-profile",config_path)==ERR_INVALID_PARAMETER and Settings.read(config_path).profile=="gentle","Unknown profile cannot overwrite saved selection")
     var saved=ConfigFile.new();saved.load(config_path);saved.set_value("unrelated","keep",73);saved.save(config_path)
@@ -100,6 +104,12 @@ func run()->void:
     await create_timer(.25).timeout
     check(is_equal_approx(Settings.read(config_path).light_strength,.99),"Settled slider value is persisted without changing normal/flicker settings")
     check(Settings.read(config_path).profile=="reference" and not Settings.read(config_path).fire_light_flicker,"Light strength preserves independent rendering preferences")
+    check(hud.settings_panel.light_cap.button_pressed,"Overlapping light limit defaults on")
+    click(hud.settings_panel.light_cap.get_global_rect().get_center());await process_frame
+    check(not world.light_cap_enabled and not Settings.read(config_path).light_cap_enabled,"Native checkbox disables and persists the light cap")
+    click(hud.settings_panel.light_cap.get_global_rect().get_center());await process_frame
+    check(world.light_cap_enabled and Settings.read(config_path).light_cap_enabled,"Native checkbox restores and persists the light cap")
+    check(is_equal_approx(world.light_strength,.99) and Settings.read(config_path).profile=="reference" and not Settings.read(config_path).fire_light_flicker,"Cap toggle preserves source strength, normal profile and flicker")
     check(hud.owns_keyboard_focus() and hud.pointer_over_controls(Vector2(5,360)),"Modal owns keyboard and complete viewport pointer boundary")
     var normals_before: bool = world.normals_visible
     click(hud.normals_button.get_global_rect().get_center());await process_frame
@@ -129,6 +139,7 @@ func run()->void:
     check(not hud.settings_open() and not hud.owns_keyboard_focus(),"Escape resumes game input from settings")
     key(KEY_ESCAPE);await process_frame;await process_frame
     check(hud.settings_panel.profiles.get_item_metadata(hud.settings_panel.profiles.selected)=="gentle","Reopening settings retains accepted renderer profile")
+    check(hud.settings_panel.light_cap.button_pressed,"Reopening settings retains the accepted light cap")
     click(hud.settings_panel.resume_button.get_global_rect().get_center());await process_frame
     check(not hud.settings_open() and hits==1,"Back to game closes without leaking its click underneath")
     var reopened=Settings.read(config_path)

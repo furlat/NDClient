@@ -5,6 +5,7 @@ var hud: Control
 var card = PanelContainer.new()
 var profiles = OptionButton.new()
 var fire_flicker = CheckBox.new()
+var light_cap = CheckBox.new()
 var strength = HSlider.new()
 var strength_value = Label.new()
 var strength_save = Timer.new()
@@ -94,6 +95,10 @@ func _ready() -> void:
     strength_save.wait_time = .2
     strength_save.timeout.connect(_save_strength)
     add_child(strength_save)
+    light_cap.text = "Limit overlapping lights"
+    light_cap.tooltip_text = "Limit combined illumination while preserving the light colour. Dim lighting and source transparency are unchanged."
+    light_cap.toggled.connect(_select_light_cap)
+    lighting.add_child(light_cap)
     var note = Label.new()
     note.text = "The game continues while settings are open."
     note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -118,6 +123,7 @@ func refresh() -> void:
     strength.set_value_no_signal(hud.world.light_strength)
     strength_value.text = "%d%%" % roundi(hud.world.light_strength*100)
     fire_flicker.set_pressed_no_signal(hud.world.fire_light_flicker)
+    light_cap.set_pressed_no_signal(hud.world.light_cap_enabled)
     var profile: String = hud.world.character_light_profile
     for index in range(profiles.item_count):
         if profiles.get_item_metadata(index)==profile: profiles.select(index);break
@@ -154,6 +160,9 @@ func _select_profile(index: int) -> void:
 
 func _select_fire_flicker(enabled: bool) -> void:
     hud.world.set_fire_light_flicker(enabled)
+
+func _select_light_cap(enabled: bool) -> void:
+    hud.world.set_light_cap_enabled(enabled)
 
 func _select_strength(value: float) -> void:
     hud.world.set_light_strength(value,false)

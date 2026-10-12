@@ -52,6 +52,6 @@ void fragment() {
 #ifdef SHOW_SOURCE_NORMALS
     COLOR = vec4(vec3(n.x,-n.y,n.z)*0.5+0.5,colour.a);
 #else
-    COLOR = colour;
+    COLOR = vec4(store_irradiance ? vec3(1.0) : colour.rgb,colour.a);
 #endif
 }

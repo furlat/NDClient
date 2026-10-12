@@ -20,3 +20,7 @@ vec4 atlas_normal_inverse(mat4 model) {
 vec3 atlas_canvas_normal(vec3 normal) {
     return vec3(mat2(atlas_inverse_normal_basis.xy, atlas_inverse_normal_basis.zw) * normal.xy, normal.z);
 }
+
+// White receivers leave source alpha untouched. Native HDR storage retains its
+// fractional coverage; the final spatial pass applies the original wall opacity.
+uniform bool store_irradiance = false;

@@ -1,4 +1,20 @@
 uniform sampler2D received : source_color, filter_nearest, repeat_disable;
+// Float atlas values have no sRGB texture format: these are encoded numeric
+// data, or white native irradiance for the capped receiving families.
+uniform bool received_is_encoded_hdr = false;
+uniform float light_cap = 0.0;
+uniform vec2 source_quad_size = vec2(1.0);
+uniform float current_visibility = 1.0;
+uniform bool use_instance_visibility = false;
+varying float source_visibility;
+varying vec3 source_world_origin;
+varying vec2 source_screen_origin;
+varying vec2 source_screen_axis_x;
+varying vec2 source_screen_axis_y;
+vec2 source_projected_uv(mat4 projection, vec3 at) {
+    vec4 projected = projection * vec4(at,1.0);
+    return projected.xy/projected.w*0.5+0.5;
+}
 uniform vec4 atlas_region;
 uniform vec4 source_crop = vec4(0.0,0.0,1.0,1.0);
 uniform bool use_instance_atlas = false;
@@ -11,6 +27,12 @@ varying vec2 atlas_origin;
 void vertex() {
     vec2 pixel = INSTANCE_CUSTOM.gb + vec2(mod(INSTANCE_CUSTOM.a,8.0),floor(INSTANCE_CUSTOM.a/8.0))*1024.0;
     atlas_origin = use_instance_atlas ? pixel/vec2(textureSize(received,0)) : atlas_region.xy;
+    source_visibility = use_instance_visibility ? INSTANCE_CUSTOM.r : current_visibility;
+    source_world_origin = MODEL_MATRIX[3].xyz;
+    vec3 top_left = VERTEX - vec3(UV.x*source_quad_size.x,-UV.y*source_quad_size.y,0.0);
+    source_screen_origin = source_projected_uv(PROJECTION_MATRIX * MODELVIEW_MATRIX,top_left);
+    source_screen_axis_x = source_projected_uv(PROJECTION_MATRIX * MODELVIEW_MATRIX,top_left+vec3(source_quad_size.x,0.0,0.0))-source_screen_origin;
+    source_screen_axis_y = source_projected_uv(PROJECTION_MATRIX * MODELVIEW_MATRIX,top_left-vec3(0.0,source_quad_size.y,0.0))-source_screen_origin;
 }
 // Godot4.7.2 Compatibility scene.glsl converts even unshaded ALBEDO with
 // tonemap_inc.glsl's approximate cubic, then its power-based sRGB encode.
@@ -28,6 +50,22 @@ vec3 canvas_encoded_for_spatial(vec3 encoded) {
     // Preserve true zero without adding a new ambient floor.
     return mix(value, vec3(0.0), equal(encoded, vec3(0.0)));
 }
+vec3 received_encoded_to_linear(vec3 value) {
+    return mix(pow((value+vec3(0.055))/1.055,vec3(2.4)),value/12.92,lessThanEqual(value,vec3(0.04045)));
+}
+#ifdef CAPPED_RECEIVING
+vec3 received_source_colour(vec2 uv,vec2 screen_uv) {
+#ifdef CAPPED_ENVIRONMENT
+    return environment_source_colour(environment_source_sample(uv),source_visibility).rgb;
+#endif
+#ifdef CAPPED_MODULAR
+    return modular_source_colour(uv).rgb;
+#endif
+#ifdef CAPPED_WATER
+    return water_source_colour(uv,water_source_shift(source_world_origin),screen_uv,source_visibility).rgb;
+#endif
+}
+#endif
 void fragment() {
     vec2 size = use_instance_atlas ? atlas_cell_size : atlas_region.zw;
     if (any(lessThan(UV,source_crop.xy)) || any(greaterThanEqual(UV,source_crop.xy+source_crop.zw))) discard;
@@ -50,8 +88,27 @@ void fragment() {
             if(covered) discard;
         }
     }
-    // Native Canvas owns source tint, style, normals and light accumulation.
-    // Preserve its bounded framebuffer result, like the supplied demo.
+#ifdef CAPPED_RECEIVING
+    // Address the SAME nearest atlas texel for colour reconstruction. Raw UV
+    // can select an adjacent original texel at fractional zoom/crop boundaries.
+    vec2 dimensions = vec2(textureSize(received,0));
+    vec2 selected_pixel = floor((atlas_origin+cell_uv*size)*dimensions);
+    vec2 selected_uv = source_crop.xy + (selected_pixel+vec2(0.5)-atlas_origin*dimensions)/(size*dimensions)*source_crop.zw;
+    vec2 selected_screen = source_screen_origin+selected_uv.x*source_screen_axis_x+selected_uv.y*source_screen_axis_y;
+    vec3 irradiance = max(colour.rgb,vec3(0.0));
+    float peak = max(irradiance.r,max(irradiance.g,irradiance.b));
+    float gain = light_cap>0.0 && peak>light_cap ? light_cap/peak : 1.0;
+    vec3 encoded = clamp(received_source_colour(selected_uv,selected_screen)*irradiance*gain,vec3(0.0),vec3(1.0));
+    colour.rgb = received_encoded_to_linear(unpackUnorm4x8(packUnorm4x8(vec4(encoded,1.0))).rgb);
+#else
+    // Emissive/source-shadow/Normals pixels bypass the accumulated-light cap.
+    // Match their former LDR storage quantization before the existing 3D blend.
+    if (received_is_encoded_hdr) {
+        colour.rgb = unpackUnorm4x8(packUnorm4x8(vec4(colour.rgb,1.0))).rgb;
+        colour.rgb = received_encoded_to_linear(colour.rgb);
+    }
+#endif
+    // Off retains the original native LDR texture/3D transfer path.
     ALBEDO=OUTPUT_IS_SRGB ? canvas_encoded_for_spatial(colour.rgb) : colour.rgb;
     ALPHA=colour.a*wall_opacity;
 }

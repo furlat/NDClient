@@ -33,6 +33,6 @@ void fragment() {
 #ifdef SHOW_SOURCE_NORMALS
     COLOR = vec4(normalize(world_to_canvas*vec3(0.0,1.0,0.0))*0.5+0.5,colour.a);
 #else
-    COLOR = colour;
+    COLOR = vec4(store_irradiance ? vec3(1.0) : colour.rgb,colour.a);
 #endif
 }

@@ -17,6 +17,7 @@ const RenderSettings = preload("res://presentation/render_settings.gd")
 var character_light_profile = RenderSettings.DEFAULT_PROFILE
 var fire_light_flicker = RenderSettings.DEFAULT_FIRE_LIGHT_FLICKER
 var light_strength = RenderSettings.DEFAULT_LIGHT_STRENGTH
+var light_cap_enabled = RenderSettings.DEFAULT_LIGHT_CAP_ENABLED
 const PLAYER_ENVIRONMENT = preload("res://presentation/player_environment.tres")
 const MediaWarmup = preload("res://presentation/media_warmup.gd")
 const WallReveal = preload("res://presentation/wall_reveal.gd")
@@ -159,6 +160,8 @@ func _ready() -> void:
     source_lighting.light_strength = light_strength
     if settings.error != OK: presentation_errors.append("Cannot read local rendering settings: "+error_string(settings.error))
     native_light_atlas.attach(self)
+    light_cap_enabled = settings.light_cap_enabled
+    native_light_atlas.set_light_cap(1.0 if light_cap_enabled else 0.0)
     source_lighting.attach(native_light_atlas.viewport)
     generated_shadows.attach(self)
     timeline.media_ready = _media_ready
@@ -228,6 +231,12 @@ func set_light_strength(value: float, persist: bool = true) -> void:
     if persist:
         var error = RenderSettings.write_light_strength(light_strength)
         if error != OK: notice_text = "Setting applied; cannot save it: "+error_string(error)
+
+func set_light_cap_enabled(enabled: bool) -> void:
+    light_cap_enabled = enabled
+    native_light_atlas.set_light_cap(1.0 if enabled else 0.0)
+    var error = RenderSettings.write_light_cap(enabled)
+    if error != OK: notice_text = "Setting applied; cannot save it: "+error_string(error)
 
 func _process(delta: float) -> void:
     var started = Time.get_ticks_usec()
