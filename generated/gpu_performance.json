@@ -1,0 +1,803 @@
+{
+  "hardware": "RTX5090,Godot4.7.2 Compatibility,1440x900,143.933Hz display with VSync",
+  "comparison_notes": "Original per-sprite baseline, not the later intermediate cached/staged variants. Fixed-camera walking at zoom50 uses the same camera and resolution; baseline83642 placements, current86247 including subsequent source elevation/closure corrections. GPU/renderer timers can lag. Cold startup is outside these seven post-load samples; first movement, zoom and rotation intervals are included. No frame-time claim for other hardware.",
+  "baseline": [
+    {
+      "file": "generated/profiles/2026-10-11T17-23-35-unity-close-idle.json",
+      "sample_count": 120,
+      "frame_ms": {
+        "max": 13.869,
+        "mean": 7.02479166666667,
+        "p50": 6.946,
+        "p95": 7.817,
+        "p99": 13.243
+      },
+      "render_cpu_ms": {
+        "max": 7.14900016784668,
+        "mean": 4.6143083413442,
+        "p50": 4.35500001907349,
+        "p95": 6.59000015258789,
+        "p99": 6.88100004196167
+      },
+      "gpu_ms": {
+        "max": 3.50999999046326,
+        "mean": 1.88269999921322,
+        "p50": 1.7940000295639,
+        "p95": 2.95600008964539,
+        "p99": 3.10199999809265
+      },
+      "cpu_ms": {
+        "process": {
+          "max": 7.021,
+          "mean": 0.177658333333333,
+          "p50": 0.005,
+          "p95": 0.009,
+          "p99": 6.796
+        }
+      },
+      "native_draw_calls": {
+        "min": 3060,
+        "median": 3062.0,
+        "max": 3062
+      },
+      "frames_over_33ms": 0,
+      "max_video_memory_mib": 269.700650215149,
+      "max_static_memory_mib": 791.269576072693,
+      "first_view": {
+        "actor_height": 0.0,
+        "draws": 3133,
+        "focus": [
+          -11.1300001144409,
+          0.0,
+          5.53000020980835
+        ],
+        "loaded": 3126,
+        "pending": 0,
+        "placements": 83642,
+        "quarter": 0,
+        "scene": "smallscale-explore",
+        "textures": 408,
+        "zoom": 16.9705619812012
+      }
+    },
+    {
+      "file": "generated/profiles/2026-10-11T17-26-31-unity-wide-idle.json",
+      "sample_count": 120,
+      "frame_ms": {
+        "max": 53.324,
+        "mean": 19.6376166666667,
+        "p50": 17.062,
+        "p95": 49.695,
+        "p99": 52.171
+      },
+      "render_cpu_ms": {
+        "max": 19.2129993438721,
+        "mean": 16.5920416673025,
+        "p50": 16.4529991149902,
+        "p95": 17.9680004119873,
+        "p99": 18.4909992218018
+      },
+      "gpu_ms": {
+        "max": 14.9490003585815,
+        "mean": 12.6866416851679,
+        "p50": 12.5959997177124,
+        "p95": 13.7650003433228,
+        "p99": 14.5059995651245
+      },
+      "cpu_ms": {
+        "process": {
+          "max": 33.242,
+          "mean": 2.41003333333333,
+          "p50": 0.006,
+          "p95": 31.44,
+          "p99": 32.979
+        }
+      },
+      "native_draw_calls": {
+        "min": 9602,
+        "median": 9604.0,
+        "max": 9604
+      },
+      "frames_over_33ms": 9,
+      "max_video_memory_mib": 564.659692764282,
+      "max_static_memory_mib": 1268.53585338593,
+      "first_view": {
+        "actor_height": 0.0,
+        "draws": 16191,
+        "focus": [
+          -11.1300001144409,
+          0.0,
+          5.53000020980835
+        ],
+        "loaded": 16184,
+        "pending": 0,
+        "placements": 83642,
+        "quarter": 0,
+        "scene": "smallscale-explore",
+        "textures": 1292,
+        "zoom": 50.0
+      }
+    },
+    {
+      "file": "generated/profiles/2026-10-11T17-27-17-unity-wide-walking.json",
+      "sample_count": 120,
+      "frame_ms": {
+        "max": 407.486,
+        "mean": 377.927833333333,
+        "p50": 375.36,
+        "p95": 398.177,
+        "p99": 403.797
+      },
+      "render_cpu_ms": {
+        "max": 23.6439990997314,
+        "mean": 17.902316681544,
+        "p50": 17.7830009460449,
+        "p95": 18.8490009307861,
+        "p99": 18.9990005493164
+      },
+      "gpu_ms": {
+        "max": 17.6389999389648,
+        "mean": 13.3534249941508,
+        "p50": 13.1929998397827,
+        "p95": 14.0100002288818,
+        "p99": 14.7399997711182
+      },
+      "cpu_ms": {
+        "actor_frames": {
+          "max": 0.179,
+          "mean": 0.109433333333333,
+          "p50": 0.108,
+          "p95": 0.122,
+          "p99": 0.147
+        },
+        "animation": {
+          "max": 0.125,
+          "mean": 0.0485083333333334,
+          "p50": 0.047,
+          "p95": 0.051,
+          "p99": 0.067
+        },
+        "composition": {
+          "max": 355.594,
+          "mean": 342.595758333333,
+          "p50": 341.843,
+          "p95": 347.879,
+          "p99": 353.29
+        },
+        "composition_apply": {
+          "max": 12.457,
+          "mean": 10.0037833333333,
+          "p50": 9.985,
+          "p95": 10.47,
+          "p99": 11.119
+        },
+        "composition_order": {
+          "max": 334.68,
+          "mean": 321.981975,
+          "p50": 321.212,
+          "p95": 326.396,
+          "p99": 332.223
+        },
+        "process": {
+          "max": 388.109,
+          "mean": 359.034016666667,
+          "p50": 355.959,
+          "p95": 379.419,
+          "p99": 384.574
+        },
+        "walking": {
+          "max": 0.091,
+          "mean": 0.0681,
+          "p50": 0.069,
+          "p95": 0.079,
+          "p99": 0.082
+        }
+      },
+      "native_draw_calls": {
+        "min": 9602,
+        "median": 9604.0,
+        "max": 9604
+      },
+      "frames_over_33ms": 120,
+      "max_video_memory_mib": 644.659540176392,
+      "max_static_memory_mib": 1328.94557476044,
+      "first_view": {
+        "actor_height": 0.0,
+        "draws": 16191,
+        "focus": [
+          -11.1300001144409,
+          0.0,
+          5.53000020980835
+        ],
+        "loaded": 16184,
+        "pending": 0,
+        "placements": 83642,
+        "quarter": 0,
+        "scene": "smallscale-explore",
+        "textures": 1300,
+        "zoom": 50.0
+      }
+    }
+  ],
+  "gpu_grid": [
+    {
+      "file": "generated/profiles/2026-10-11T19-03-36-unity-close-idle.json",
+      "sample_count": 120,
+      "frame_ms": {
+        "max": 7.071,
+        "mean": 6.88932499999999,
+        "p50": 6.946,
+        "p95": 7.012,
+        "p99": 7.043
+      },
+      "render_cpu_ms": {
+        "max": 0.53600001335144,
+        "mean": 0.31071666876475,
+        "p50": 0.280000001192093,
+        "p95": 0.465000003576279,
+        "p99": 0.527999997138977
+      },
+      "gpu_ms": {
+        "max": 0.632000029087067,
+        "mean": 0.333674998953938,
+        "p50": 0.254000008106232,
+        "p95": 0.601000010967255,
+        "p99": 0.609000027179718
+      },
+      "cpu_ms": {
+        "process": {
+          "max": 0.035,
+          "mean": 0.0153166666666667,
+          "p50": 0.014,
+          "p95": 0.026,
+          "p99": 0.028
+        }
+      },
+      "native_draw_calls": {
+        "min": 97,
+        "median": 103.0,
+        "max": 103
+      },
+      "frames_over_33ms": 0,
+      "max_video_memory_mib": 1396.36518001556,
+      "max_static_memory_mib": 864.982594490051,
+      "first_view": {
+        "actor_height": 0.0,
+        "background_sort_wall_ms": 0.0,
+        "draws": 8,
+        "focus": [
+          -11.1300001144409,
+          0.0,
+          5.53000020980835
+        ],
+        "loaded": 1,
+        "pending": 0,
+        "placements": 86247,
+        "quarter": 0,
+        "renderer": "gpu_grid",
+        "resident_static_blocks": 344.0,
+        "resident_static_components": 87786.0,
+        "scene": "smallscale-explore",
+        "textures": 17,
+        "view_stage": "ready",
+        "zoom": 16.9705619812012
+      }
+    },
+    {
+      "file": "generated/profiles/2026-10-11T19-03-37-unity-zoom-loading.json",
+      "sample_count": 60,
+      "frame_ms": {
+        "max": 10.617,
+        "mean": 6.94755,
+        "p50": 6.946,
+        "p95": 6.987,
+        "p99": 7.053
+      },
+      "render_cpu_ms": {
+        "max": 0.476999998092651,
+        "mean": 0.311833331485589,
+        "p50": 0.294999986886978,
+        "p95": 0.409000009298325,
+        "p99": 0.46399998664856
+      },
+      "gpu_ms": {
+        "max": 0.796999990940094,
+        "mean": 0.39918333341678,
+        "p50": 0.294999986886978,
+        "p95": 0.635999977588654,
+        "p99": 0.676999986171722
+      },
+      "cpu_ms": {
+        "camera_update": {
+          "max": 0.014,
+          "mean": 0.000233333333333333,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0
+        },
+        "process": {
+          "max": 0.039,
+          "mean": 0.0159333333333333,
+          "p50": 0.014,
+          "p95": 0.026,
+          "p99": 0.028
+        }
+      },
+      "native_draw_calls": {
+        "min": 101,
+        "median": 101.0,
+        "max": 103
+      },
+      "frames_over_33ms": 0,
+      "max_video_memory_mib": 1396.36518001556,
+      "max_static_memory_mib": 865.16881275177,
+      "first_view": {
+        "actor_height": 0.0,
+        "background_sort_wall_ms": 0.0,
+        "draws": 8,
+        "focus": [
+          -11.1300001144409,
+          0.0,
+          5.53000020980835
+        ],
+        "loaded": 1,
+        "pending": 0,
+        "placements": 86247,
+        "quarter": 0,
+        "renderer": "gpu_grid",
+        "resident_static_blocks": 344.0,
+        "resident_static_components": 87786.0,
+        "scene": "smallscale-explore",
+        "textures": 17,
+        "view_stage": "ready",
+        "zoom": 50.0
+      }
+    },
+    {
+      "file": "generated/profiles/2026-10-11T19-03-37-unity-wide-idle.json",
+      "sample_count": 120,
+      "frame_ms": {
+        "max": 7.591,
+        "mean": 6.94836666666667,
+        "p50": 6.948,
+        "p95": 7.009,
+        "p99": 7.029
+      },
+      "render_cpu_ms": {
+        "max": 0.481000006198883,
+        "mean": 0.296816666424274,
+        "p50": 0.280000001192093,
+        "p95": 0.377999991178513,
+        "p99": 0.453999996185303
+      },
+      "gpu_ms": {
+        "max": 0.837999999523163,
+        "mean": 0.381866665184498,
+        "p50": 0.291999995708466,
+        "p95": 0.681999981403351,
+        "p99": 0.718999981880188
+      },
+      "cpu_ms": {
+        "process": {
+          "max": 0.028,
+          "mean": 0.0142666666666667,
+          "p50": 0.014,
+          "p95": 0.02,
+          "p99": 0.026
+        }
+      },
+      "native_draw_calls": {
+        "min": 95,
+        "median": 101.0,
+        "max": 101
+      },
+      "frames_over_33ms": 0,
+      "max_video_memory_mib": 1396.36449337006,
+      "max_static_memory_mib": 865.559914588928,
+      "first_view": {
+        "actor_height": 0.0,
+        "background_sort_wall_ms": 0.0,
+        "draws": 8,
+        "focus": [
+          -11.1300001144409,
+          0.0,
+          5.53000020980835
+        ],
+        "loaded": 1,
+        "pending": 0,
+        "placements": 86247,
+        "quarter": 0,
+        "renderer": "gpu_grid",
+        "resident_static_blocks": 344.0,
+        "resident_static_components": 87786.0,
+        "scene": "smallscale-explore",
+        "textures": 17,
+        "view_stage": "ready",
+        "zoom": 50.0
+      }
+    },
+    {
+      "file": "generated/profiles/2026-10-11T19-03-38-unity-first-walk.json",
+      "sample_count": 60,
+      "frame_ms": {
+        "max": 10.5,
+        "mean": 6.94741666666667,
+        "p50": 6.947,
+        "p95": 7.001,
+        "p99": 7.141
+      },
+      "render_cpu_ms": {
+        "max": 0.495000004768372,
+        "mean": 0.303633332749208,
+        "p50": 0.282000005245209,
+        "p95": 0.400999993085861,
+        "p99": 0.469999998807907
+      },
+      "gpu_ms": {
+        "max": 0.848999977111816,
+        "mean": 0.398383332788944,
+        "p50": 0.28999999165535,
+        "p95": 0.727999985218048,
+        "p99": 0.748000025749207
+      },
+      "cpu_ms": {
+        "actor_frames": {
+          "max": 0.125,
+          "mean": 0.0550166666666667,
+          "p50": 0.05,
+          "p95": 0.102,
+          "p99": 0.108
+        },
+        "animation": {
+          "max": 0.056,
+          "mean": 0.0184333333333333,
+          "p50": 0.016,
+          "p95": 0.031,
+          "p99": 0.04
+        },
+        "composition": {
+          "max": 0.303,
+          "mean": 0.07895,
+          "p50": 0.071,
+          "p95": 0.143,
+          "p99": 0.143
+        },
+        "process": {
+          "max": 0.397,
+          "mean": 0.190816666666667,
+          "p50": 0.172,
+          "p95": 0.337,
+          "p99": 0.354
+        },
+        "walking": {
+          "max": 0.106,
+          "mean": 0.0227333333333333,
+          "p50": 0.02,
+          "p95": 0.039,
+          "p99": 0.041
+        }
+      },
+      "native_draw_calls": {
+        "min": 101,
+        "median": 101.0,
+        "max": 101
+      },
+      "frames_over_33ms": 0,
+      "max_video_memory_mib": 1396.36449337006,
+      "max_static_memory_mib": 865.756348609924,
+      "first_view": {
+        "actor_height": 0.0,
+        "background_sort_wall_ms": 0.0,
+        "draws": 8,
+        "focus": [
+          -11.1300001144409,
+          0.0,
+          5.53000020980835
+        ],
+        "loaded": 1,
+        "pending": 0,
+        "placements": 86247,
+        "quarter": 0,
+        "renderer": "gpu_grid",
+        "resident_static_blocks": 344.0,
+        "resident_static_components": 87786.0,
+        "scene": "smallscale-explore",
+        "textures": 17,
+        "view_stage": "ready",
+        "zoom": 50.0
+      }
+    },
+    {
+      "file": "generated/profiles/2026-10-11T19-03-39-unity-wide-walking.json",
+      "sample_count": 240,
+      "frame_ms": {
+        "max": 7.066,
+        "mean": 6.94777916666666,
+        "p50": 6.947,
+        "p95": 7.009,
+        "p99": 7.038
+      },
+      "render_cpu_ms": {
+        "max": 0.486000001430511,
+        "mean": 0.302425000195702,
+        "p50": 0.282999992370605,
+        "p95": 0.400999993085861,
+        "p99": 0.453999996185303
+      },
+      "gpu_ms": {
+        "max": 0.833000004291534,
+        "mean": 0.367275000611941,
+        "p50": 0.287999987602234,
+        "p95": 0.680999994277954,
+        "p99": 0.699000000953674
+      },
+      "cpu_ms": {
+        "actor_frames": {
+          "max": 0.141,
+          "mean": 0.056,
+          "p50": 0.05,
+          "p95": 0.096,
+          "p99": 0.106
+        },
+        "animation": {
+          "max": 0.041,
+          "mean": 0.0185208333333333,
+          "p50": 0.016,
+          "p95": 0.03,
+          "p99": 0.034
+        },
+        "composition": {
+          "max": 0.35,
+          "mean": 0.0827708333333333,
+          "p50": 0.073,
+          "p95": 0.14,
+          "p99": 0.194
+        },
+        "process": {
+          "max": 0.46,
+          "mean": 0.195766666666667,
+          "p50": 0.174,
+          "p95": 0.334,
+          "p99": 0.41
+        },
+        "walking": {
+          "max": 0.057,
+          "mean": 0.0224375,
+          "p50": 0.019,
+          "p95": 0.039,
+          "p99": 0.048
+        }
+      },
+      "native_draw_calls": {
+        "min": 95,
+        "median": 101.0,
+        "max": 102
+      },
+      "frames_over_33ms": 0,
+      "max_video_memory_mib": 1396.36449337006,
+      "max_static_memory_mib": 866.579579353333,
+      "first_view": {
+        "actor_height": 0.0,
+        "background_sort_wall_ms": 0.0,
+        "draws": 8,
+        "focus": [
+          -11.1300001144409,
+          0.0,
+          5.53000020980835
+        ],
+        "loaded": 1,
+        "pending": 0,
+        "placements": 86247,
+        "quarter": 0,
+        "renderer": "gpu_grid",
+        "resident_static_blocks": 344.0,
+        "resident_static_components": 87786.0,
+        "scene": "smallscale-explore",
+        "textures": 17,
+        "view_stage": "ready",
+        "zoom": 50.0
+      }
+    },
+    {
+      "file": "generated/profiles/2026-10-11T19-03-41-unity-wide-follow-walking.json",
+      "sample_count": 240,
+      "frame_ms": {
+        "max": 7.088,
+        "mean": 6.94792916666667,
+        "p50": 6.947,
+        "p95": 7.006,
+        "p99": 7.039
+      },
+      "render_cpu_ms": {
+        "max": 0.559000015258789,
+        "mean": 0.293966667850812,
+        "p50": 0.27700001001358,
+        "p95": 0.377999991178513,
+        "p99": 0.476000010967255
+      },
+      "gpu_ms": {
+        "max": 2.03900003433228,
+        "mean": 0.457541666800777,
+        "p50": 0.301999986171722,
+        "p95": 0.978999972343445,
+        "p99": 1.90900003910065
+      },
+      "cpu_ms": {
+        "actor_frames": {
+          "max": 0.114,
+          "mean": 0.0545958333333334,
+          "p50": 0.049,
+          "p95": 0.098,
+          "p99": 0.108
+        },
+        "animation": {
+          "max": 0.048,
+          "mean": 0.0176083333333333,
+          "p50": 0.015,
+          "p95": 0.032,
+          "p99": 0.043
+        },
+        "camera_update": {
+          "max": 0.006,
+          "mean": 0.00222083333333333,
+          "p50": 0.002,
+          "p95": 0.004,
+          "p99": 0.004
+        },
+        "composition": {
+          "max": 0.354,
+          "mean": 0.0820666666666666,
+          "p50": 0.072,
+          "p95": 0.137,
+          "p99": 0.298
+        },
+        "process": {
+          "max": 0.463,
+          "mean": 0.2015625,
+          "p50": 0.179,
+          "p95": 0.358,
+          "p99": 0.421
+        },
+        "walking": {
+          "max": 0.067,
+          "mean": 0.0229666666666667,
+          "p50": 0.02,
+          "p95": 0.042,
+          "p99": 0.054
+        }
+      },
+      "native_draw_calls": {
+        "min": 95,
+        "median": 102.0,
+        "max": 102
+      },
+      "frames_over_33ms": 0,
+      "max_video_memory_mib": 1396.36449337006,
+      "max_static_memory_mib": 867.421689033508,
+      "first_view": {
+        "actor_height": 0.0,
+        "background_sort_wall_ms": 0.0,
+        "draws": 8,
+        "focus": [
+          -9.03998851776123,
+          0.0,
+          3.44013357162476
+        ],
+        "loaded": 1,
+        "pending": 0,
+        "placements": 86247,
+        "quarter": 0,
+        "renderer": "gpu_grid",
+        "resident_static_blocks": 344.0,
+        "resident_static_components": 87786.0,
+        "scene": "smallscale-explore",
+        "textures": 17,
+        "view_stage": "ready",
+        "zoom": 50.0
+      }
+    },
+    {
+      "file": "generated/profiles/2026-10-11T19-03-42-unity-wide-rotation-loading.json",
+      "sample_count": 60,
+      "frame_ms": {
+        "max": 17.084,
+        "mean": 6.94786666666667,
+        "p50": 6.949,
+        "p95": 7.001,
+        "p99": 7.056
+      },
+      "render_cpu_ms": {
+        "max": 0.488000005483627,
+        "mean": 0.311499999463558,
+        "p50": 0.289000004529953,
+        "p95": 0.428999990224838,
+        "p99": 0.453000009059906
+      },
+      "gpu_ms": {
+        "max": 0.837000012397766,
+        "mean": 0.511216666301092,
+        "p50": 0.389999985694885,
+        "p95": 0.77700001001358,
+        "p99": 0.782000005245209
+      },
+      "cpu_ms": {
+        "actor_frames": {
+          "max": 0.115,
+          "mean": 0.00191666666666667,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0
+        },
+        "animation": {
+          "max": 0.018,
+          "mean": 0.0003,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0
+        },
+        "camera_update": {
+          "max": 1.346,
+          "mean": 0.0224333333333333,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0
+        },
+        "composition": {
+          "max": 0.073,
+          "mean": 0.00121666666666667,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0
+        },
+        "process": {
+          "max": 0.19,
+          "mean": 0.0185333333333333,
+          "p50": 0.014,
+          "p95": 0.028,
+          "p99": 0.029
+        },
+        "walking": {
+          "max": 0.022,
+          "mean": 0.000366666666666667,
+          "p50": 0.0,
+          "p95": 0.0,
+          "p99": 0.0
+        }
+      },
+      "native_draw_calls": {
+        "min": 102,
+        "median": 109.0,
+        "max": 109
+      },
+      "frames_over_33ms": 0,
+      "max_video_memory_mib": 1396.36449337006,
+      "max_static_memory_mib": 867.588280677795,
+      "first_view": {
+        "actor_height": 0.0,
+        "background_sort_wall_ms": 0.0,
+        "draws": 8,
+        "focus": [
+          -7.39002180099487,
+          0.0,
+          1.79023516178131
+        ],
+        "loaded": 1,
+        "pending": 0,
+        "placements": 86247,
+        "quarter": 2,
+        "renderer": "gpu_grid",
+        "resident_static_blocks": 344.0,
+        "resident_static_components": 87786.0,
+        "scene": "smallscale-explore",
+        "textures": 17,
+        "view_stage": "ready",
+        "zoom": 50.0
+      }
+    }
+  ],
+  "ratios": {
+    "wide_walking_frame_time": 54.39548728700479,
+    "wide_walking_draw_submissions": 95.08910891089108,
+    "wide_walking_render_cpu": 59.195888798740995
+  }
+}

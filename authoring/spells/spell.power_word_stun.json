@@ -36,7 +36,8 @@
           9998063
         ],
         "noiseSheet": "/spell-palettes/source-hand-noise.png"
-      }
+      },
+      "role": "hand_magic"
     },
     "aura": {
       "id": "cast-aura",
@@ -56,7 +57,8 @@
           9998063
         ],
         "noiseSheet": "/spell-palettes/source-hand-noise.png"
-      }
+      },
+      "role": "aura"
     },
     "effects": [],
     "recovery": {
@@ -607,7 +609,11 @@
       "fps": 32.0,
       "scale": 0.43,
       "scaleWithActor": true,
-      "depth": "behind_body"
+      "depth": "behind_body",
+      "effectGroup": {
+        "id": "power_word_stun",
+        "label": "Power Word Stun"
+      }
     },
     {
       "requireAppliedConditionId": "condition.spell.power_word_stun",
@@ -617,7 +623,11 @@
       "fps": 32.0,
       "scale": 0.43,
       "scaleWithActor": true,
-      "depth": "front_body"
+      "depth": "front_body",
+      "effectGroup": {
+        "id": "power_word_stun",
+        "label": "Power Word Stun"
+      }
     }
   ],
   "contact": {

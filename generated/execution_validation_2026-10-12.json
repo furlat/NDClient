@@ -1,0 +1,229 @@
+{
+  "scope": "Cancellable bounded presentation preparation, exact durable SDK admission, delta-only source planning, source JSON transfer, and real delayed-server responsiveness.",
+  "sdk": {
+    "checks": 11733,
+    "passed": true,
+    "report": "generated/sdk_checks.json"
+  },
+  "session": {
+    "checks": 31,
+    "passed": true,
+    "report": "generated/session_execution_checks.json",
+    "log": ".runtime/session-execution-retirement.log"
+  },
+  "metadata": {
+    "checks": 371,
+    "passed": true,
+    "report": "generated/environment_media_delta_checks.json",
+    "log": ".runtime/environment-media-delta-checks.log"
+  },
+  "media": {
+    "checks": 62,
+    "passed": true,
+    "report": "generated/media_warmup_checks.json",
+    "log": ".runtime/session-media-checks.log"
+  },
+  "trace": {
+    "checks": 3458,
+    "passed": true,
+    "log": ".runtime/session-trace-retirement.log"
+  },
+  "defaults": {
+    "checks": 16,
+    "passed": true,
+    "log": ".runtime/session-defaults-checks.log"
+  },
+  "real_delayed_command": {
+    "native_report": ".runtime/player-runs/20261012T132330.436620Z/player-live-checks.json",
+    "native_log": ".runtime/player-runs/20261012T132330.436620Z/godot.log",
+    "native_screenshot": ".runtime/player-runs/20261012T132330.436620Z/player-wait.png",
+    "native_checks": 15,
+    "delay_ms": 2000,
+    "native_observation": {
+      "client_execution": {
+        "active": false,
+        "admitted_handoff": 0,
+        "available_sequence": 3,
+        "backlog_operations": 0,
+        "compile_ms": 29.425999999999995,
+        "compiled_operations": 4,
+        "disk_reloads": 0,
+        "displayed_sequence": 3,
+        "handoff_hits": 4,
+        "held_for_display": false,
+        "journal_ms": 124.83000000000001,
+        "lookahead_operations": 2,
+        "network": {
+          "active_requests": 0,
+          "admission_ms": 306.548,
+          "commands_waiting": 0,
+          "completed_requests": 41,
+          "consumer_ms": 124.95400000000001,
+          "follower_phase": "stream",
+          "maximum_request_wall_ms": 1995.0,
+          "oldest_request_ms": 0,
+          "pending_notices": 0,
+          "queued_requests": 0,
+          "request_wall_ms": 2736.0
+        },
+        "packet_prepare_ms": 2.7430000000000003,
+        "preparation_wait_ms": 27,
+        "prepared_messages": 0,
+        "prepared_sequence": 3,
+        "retired_groups": 3,
+        "retirement_ms": 0.003,
+        "retirement_peak_groups": 1,
+        "retirement_pending_groups": 0,
+        "waiting_for_preparation": false
+      },
+      "delay_ms": 2000.0,
+      "distinct_animation_samples": 192,
+      "frame_max_ms": 10.361,
+      "frame_p95_ms": 7.46,
+      "frames": 307,
+      "network_oldest_ms": 1994,
+      "observed_command_ms": 2122
+    },
+    "native_close_ms": 1,
+    "retirement_after_close": {
+      "active": false,
+      "admitted_handoff": 0,
+      "available_sequence": 3,
+      "backlog_operations": 0,
+      "compile_ms": 29.425999999999995,
+      "compiled_operations": 4,
+      "disk_reloads": 0,
+      "displayed_sequence": 3,
+      "handoff_hits": 4,
+      "held_for_display": false,
+      "journal_ms": 124.83000000000001,
+      "lookahead_operations": 2,
+      "network": {
+        "active_requests": 0,
+        "admission_ms": 360.19100000000003,
+        "commands_waiting": 0,
+        "completed_requests": 44,
+        "consumer_ms": 124.95400000000001,
+        "follower_phase": "stream",
+        "maximum_request_wall_ms": 1995.0,
+        "oldest_request_ms": 0,
+        "pending_notices": 0,
+        "queued_requests": 0,
+        "request_wall_ms": 2847.0
+      },
+      "packet_prepare_ms": 2.7430000000000003,
+      "preparation_wait_ms": 27,
+      "prepared_messages": 0,
+      "prepared_sequence": 3,
+      "retired_groups": 3,
+      "retirement_ms": 0.003,
+      "retirement_peak_groups": 1,
+      "retirement_pending_groups": 0,
+      "waiting_for_preparation": false
+    },
+    "passed": true,
+    "note": "Final native run uses immediate-close forwarding and completed-group worker retirement. Separate user lighting demo was running; responsiveness and canonical parity proof, not an isolated renderer benchmark."
+  },
+  "limits": [
+    "Lookahead bounds complete operations, not lineage groups or bytes within one 64 MiB-admitted packet. Canonical state and durable raw history remain complete.",
+    "Cancellation waits for at most the active atomic decode/reduce/compile; it does not interrupt pure numeric/schema work midway.",
+    "Metadata timing is worker CPU work; HTTP wall times overlap and are not frame CPU time; no whole-game speedup follows from either.",
+    "Native late-lethal player view and ranged history fully drain their authentic recordings. Independent full Gallery canonical replay remains a separate headless102-packet122-group check; these are not one conflated fixture."
+  ],
+  "retirement_attribution": {
+    "scope": "Pure compiled data destruction, not GPU cleanup. Full real102-packet122-group Gallery canonical replay.",
+    "controlled_last_reference_report": "generated/gallery_timeline_cpu.json",
+    "controlled_release_sequence_99_ms": 35.718,
+    "controlled_release_max_ms": 43.254,
+    "worker_report": "generated/gallery_timeline_cpu_worker.json",
+    "immediate_consumption_inline_report": "generated/gallery_timeline_cpu_inline.json",
+    "limits": "Immediate consumption can leave the last group reference on the preparer even without retirement; it is not an equivalent slow-playback frame benchmark. Native after-profile owns any frame-time improvement claim. Staged/active retirement follows prepared-operation ownership, not a fixed group/byte cap.",
+    "implemented": "Completed groups stage until next scene poll, then the existing preparer releases references outside its mutex. Close drains staged groups; native Resources never move to the worker."
+  },
+  "prior_delayed_command_evidence": {
+    "native_report": ".runtime/player-runs/20261012T123334.146365Z/player-live-checks.json",
+    "native_log": ".runtime/player-runs/20261012T123334.146365Z/godot.log",
+    "native_screenshot": ".runtime/player-runs/20261012T123334.146365Z/player-wait.png",
+    "headless_report": ".runtime/player-runs/20261012T123828.067377Z/player-live-checks.json",
+    "headless_log": ".runtime/player-runs/20261012T123828.067377Z/godot.log",
+    "delay_ms": 2000,
+    "native_checks": 14,
+    "headless_checks": 13,
+    "native_observation": {
+      "client_execution": {
+        "active": false,
+        "admitted_handoff": 0,
+        "available_sequence": 3,
+        "backlog_operations": 0,
+        "compile_ms": 38.66,
+        "compiled_operations": 4,
+        "decode_ms": 2.657,
+        "disk_reloads": 0,
+        "displayed_sequence": 3,
+        "handoff_hits": 4,
+        "held_for_display": false,
+        "journal_ms": 124.25899999999999,
+        "lookahead_operations": 2,
+        "network": {
+          "active_requests": 0,
+          "admission_ms": 302.054,
+          "commands_waiting": 0,
+          "completed_requests": 43,
+          "consumer_ms": 124.371,
+          "follower_phase": "stream",
+          "maximum_request_wall_ms": 2009.0,
+          "oldest_request_ms": 0,
+          "pending_notices": 0,
+          "queued_requests": 0,
+          "request_wall_ms": 2852.0
+        },
+        "preparation_wait_ms": 28,
+        "prepared_messages": 0,
+        "prepared_sequence": 3,
+        "waiting_for_preparation": false
+      },
+      "delay_ms": 2000.0,
+      "distinct_animation_samples": 196,
+      "frame_max_ms": 9.686,
+      "frame_p95_ms": 7.377,
+      "frames": 309,
+      "network_oldest_ms": 2007,
+      "observed_command_ms": 2141
+    },
+    "note": "Native run used a graceful-close test forwarder. Its startup attempts exposed an SDK completed-body repoll bug, reproduced/fixed with immediate-close and truncated-close loopback tests; subsequent actual headless run uses immediate close with the corrected SDK."
+  },
+  "native_interaction": {
+    "checks": 32,
+    "passed": true,
+    "report": ".runtime/player-runs/20261012T132421.485586Z/player-live-checks.json",
+    "log": ".runtime/player-runs/20261012T132421.485586Z/godot.log"
+  },
+  "native_ranged_history": {
+    "checks": 43,
+    "passed": true,
+    "report": ".runtime/execution-native/history-ranged-final.json",
+    "log": ".runtime/execution-native/history-ranged-published.log",
+    "packets": 16,
+    "note": "All10 ranged action events legitimately partial; native body samples are witnessed, excluded projectile/effects remain red. Two earlier fixture-only assertion failures are retained."
+  },
+  "native_player_view": {
+    "checks": 51,
+    "passed": true,
+    "report": ".runtime/execution-native/player-view-published.json",
+    "log": ".runtime/execution-native/player-view-published.log",
+    "note": "Actual late-lethal OA jump, exact full recording endpoint and original actor contact/source time across four asynchronously published quarters."
+  },
+  "native_lethal_history": {
+    "checks": 47,
+    "passed": true,
+    "report": ".runtime/execution-native/history-late-lethal-final.json",
+    "log": ".runtime/execution-native/history-late-lethal-final.log",
+    "screenshot": ".runtime/execution-native/combat-hierarchy-final.png",
+    "counts": {
+      "presented": 2,
+      "missing": 3,
+      "state_only": 24
+    },
+    "note": "Actual attack/damage/death hierarchy, admitted source text, native frame witnesses, clipboard, input ownership, async rotation completion and full canonical endpoint."
+  }
+}

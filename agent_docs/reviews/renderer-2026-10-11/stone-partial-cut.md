@@ -1,0 +1,27 @@
+# Native Stone section cut — 11 October
+
+The original `stone-partial-cut` recording contains eight admitted SDK packets. Sequence 2 creates one 20 ft Wall of Stone panel from [6,5] to [10,5], 10 ft high. Sequence 7 applies the actual Disintegrate cube at minimum [6,5], base 0. Object `c9befa39-f6eb-4a68-af40-4f889fdc2be6` survives with the native removed sections and resulting placement. All eight recording packets match the private native spool byte for byte. The unchanged server used the existing level-13 generic caster and existing spell grants; no outcome, hit points, geometry or packet was modified. The owned capture process was stopped after capture.
+
+## Consumer and ownership
+
+The existing section-bank consumer selects its original intact near/far packets, direction and variation. A source-sized binary selection derives from those packets' original RG16BE ray depth and capture matrices, the admitted source registration and the native cube. It applies the original `_section_mask` bounds: strict X/Z, inclusive bottom and exclusive top. Missing depth samples receive no invented position. The surviving paired source and original hit node share that selection; the native object identity stays unchanged.
+
+Finite affected dust starts from the preceding intact source, subtracts any earlier removed sections, and selects the newly affected cube. The delivered Stone appearance is RGBA8 linear premultiplied radiance; the scoped source filter resolves its encoded byte silhouette before the existing original silhouette-dust consumer. The actual selected packets contain no alpha-zero radiance. Dust is noninteractive and does not replace the surviving owner's held bands. The same source lease, derived-source lifetime, target cache and context generation owners handle the new mask. There is no new geometry, renderer, cache or state reduction.
+
+The original section-mask and dust operators are composed against the current delivered packets. This does not claim exact parity with the old registered-media dispatch or its old geometry representation. Moving section banks after a prior cut still require actual rest-surface correspondence; they remain an explicit unsupported consumer rather than selecting moving pixels as though they were the original material. Source suppression and unsupported direction/height profiles retain their existing explicit limitations.
+
+## Evidence
+
+`tests/construction-sections.test.ts` reproduced the former rejection and now checks the actual eight-packet state transition, surviving native identity, source phase, original dust duration, cold acquisition in every quarter, finite retirement and event attribution. The construction/Ice/paired-media focused batch and whole TypeScript check pass.
+
+`tests/stone-partial-cut.browser.mjs` records 40 source views (four quarters, two zooms, before/held and three dust ages) and eight native operation views. All 96 picks pass: 80 cut-hole samples return no object and 16 surviving samples retain the native owner. During the cut, four held bands coexist with four finite dust bands; at completion, all four held bands remain and dust is gone. Cold held preparation takes three passes, cold dust nine; an advancing dust frame takes five and an unchanged frame one world pass. Repeated output and rewind are exact. Context restoration changes generation once with zero new decodes and exact output. Final views, source leases and hits are zero, owned targets are destroyed, and issues/browser errors are empty. Native cut and completed screenshots were visually inspected.
+
+`tests/stone-partial-cut-reference.py` independently reads the original bank matrices and packet bytes and calls the unchanged original Python `_section_mask` and `silhouette_dust`. All 64 source selections are pixel-exact. The 24 nonempty dust outputs have mean premultiplied error 0.00335–0.18834/255 and occupied-pixel IoU at least 99.9915%. An isolated particle-boundary alpha difference reaches 202 bytes; this is qualified numerical agreement, not byte parity. Empty selected bands remain empty. The oracle thresholds and original operators were not changed to accept the result.
+
+Artifacts: `.runtime/reviews/stone-partial-cut/{input.json,reference.json,*.png,*.mask,*.rgba}`; browser log `stone-partial-cut-full.log`, independent oracle `stone-partial-cut-reference.log`, focused tests `stone-partial-cut-tests-final.log`, typecheck `stone-partial-cut-typecheck-final.log`. The initial q0 pick failure is retained: the mask was bound to the shader but absent from the prepared hit-node record. The narrow record/source-list correction made the same original owner use the same selection for drawing and picking.
+
+Hardware performance, bank fracture/removal after a cut, overlapping suppression providers, Fire safe-side selection and the rest of R12/global coverage remain separate work.
+
+The existing paired Fireball source, mixed blood interval and context-restoration GPU regression also passes with the optional section selection disabled: original source/display error stays at its existing one-byte bound, restoration is exact with zero decodes, and cleanup/issues/errors are empty. Log: `.runtime/reviews/stone-partial-cut-paired-regression.log`.
+
+Independent ECS/source readback passes the bounded Stone delta: original cube and packet coordinates, shared draw/pick selection, preceding-source dust and held bands, and existing derived-source disposal ownership. It identifies no further concrete defect in this scope.

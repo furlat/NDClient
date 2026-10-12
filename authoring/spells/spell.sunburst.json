@@ -36,7 +36,8 @@
           16777208
         ],
         "noiseSheet": "/spell-palettes/source-hand-noise.png"
-      }
+      },
+      "role": "hand_magic"
     },
     "aura": {
       "id": "cast-aura",
@@ -56,7 +57,8 @@
           16777208
         ],
         "noiseSheet": "/spell-palettes/source-hand-noise.png"
-      }
+      },
+      "role": "aura"
     },
     "effects": [],
     "recovery": {
@@ -659,7 +661,11 @@
       "composition": "paired_depth",
       "attachment": "area_ground",
       "fps": 32.0,
-      "viewFacing": "E"
+      "viewFacing": "E",
+      "effectGroup": {
+        "id": "shell",
+        "label": "Sunburst · Shell"
+      }
     },
     {
       "id": "shell-front",
@@ -667,7 +673,11 @@
       "composition": "paired_depth",
       "attachment": "area_ground",
       "fps": 32.0,
-      "viewFacing": "E"
+      "viewFacing": "E",
+      "effectGroup": {
+        "id": "shell",
+        "label": "Sunburst · Shell"
+      }
     },
     {
       "id": "recipient-radiant",

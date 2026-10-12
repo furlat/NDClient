@@ -1,0 +1,116 @@
+{
+  "date": "2026-10-12",
+  "scope": [
+    "Native contextual world input",
+    "Grouped authored action icons",
+    "Displayed equipment/search",
+    "Disclosed source GPU lighting",
+    "Diablo-style wall opacity",
+    "Original chest rest rendering"
+  ],
+  "tests": {
+    "native_interactions": {
+      "checks": 32,
+      "failures": [],
+      "runtime_error": false,
+      "run": ".runtime/player-runs/20261011T225326.526790Z",
+      "elapsed_ms": 13927
+    },
+    "native_movement_jump_reconnect": {
+      "checks": 44,
+      "failures": [],
+      "runtime_error": false,
+      "run": ".runtime/player-runs/20261011T224138.240176Z",
+      "elapsed_ms": 10434
+    },
+    "native_chest_open_close": {
+      "checks": 15,
+      "failures": [],
+      "runtime_error": false,
+      "run": ".runtime/player-runs/20261011T224226.978087Z",
+      "elapsed_ms": 9567
+    },
+    "wall_visibility": {
+      "report": "generated/wall_visibility_checks.json",
+      "checks": 565,
+      "failures": [],
+      "note": "Three Z modes, per-fragment eligible visible tile coverage, rear-wall retention, picking, inventory focus, four views and terminal state.",
+      "update_ms": [
+        1.193,
+        1.287,
+        1.539,
+        1.478
+      ]
+    },
+    "chest_original_pixels": {
+      "checks": 148,
+      "failures": [],
+      "report": ".runtime/presentation-checks/chest_render_checks.json"
+    },
+    "ui_boundary": {
+      "checks": 37,
+      "failures": 0,
+      "report": ".runtime/ui/checks.json"
+    },
+    "ui_recorded": {
+      "checks": 67,
+      "failures": [],
+      "report": ".runtime/ui/recorded-checks.json",
+      "note": "Mixed header controls retain aligned icon rows after paging and resizing at960/1280/1920 widths."
+    },
+    "ui_portraits": {
+      "checks": 34,
+      "failures": [],
+      "report": ".runtime/ui/portrait-checks.json"
+    },
+    "historical_oa_playback": {
+      "checks": 33,
+      "failures": [],
+      "note": "Historical lethal-OA recording passed 33 assertions in the prior pass. The shared player_view_checks.json now holds the current 65-packet encounter replay; current evidence is in render_repair_validation.json."
+    },
+    "wall_fragments": {
+      "report": "generated/wall_fragment_checks.json",
+      "checks": 22,
+      "failures": []
+    }
+  },
+  "sdk": {
+    "report": "generated/sdk_checks.json",
+    "passed": true,
+    "note": "Earlier SDK tests passed; current full-codebase audit found raw/default integration gaps in the scene. See audit_correctness_2026-10-12.md."
+  },
+  "lighting": {
+    "report": "generated/lighting_validation.json",
+    "note": "59 native shader /44 architectural /106 earlier fixture-animation checks; other historical validation retained."
+  },
+  "limits": [
+    "Ordinary optical wall occlusion is not reproduced: the SDK does not disclose per-source affected_tiles; transparent sprite quads do not cast equivalent shadows. Backend visibility remains authoritative.",
+    "Private noncontrolled inventory and standalone spell/contribution emitters are not disclosed as light sources and are not inferred from tile brightness.",
+    "Current modular runtime illumination uses flat billboard receivers; the newly supplied one-outfit experimental depth/normal delivery is available but not adopted.",
+    "Source lift, neutral colour and smooth radial radiance gains are explicit optical conventions; emitter sockets/heights/hues/intensity are not authored or disclosed.",
+    "The shader loops disclosed source count per fragment; 25-source correctness is tested, not large-map lighting performance.",
+    "Historical live screenshot timings include startup and capture waits; current staged profiling is linked in render_repair_validation.json and is not a large-map benchmark.",
+    "No generic-caster portrait image exists in the authored UI registry; missing portrait is reported and omitted.",
+    "The original chest source is byte-identical to Unity; native Compatibility colour conversion produces a measured raw Canvas/Spatial difference up to5/255, within1/255 after the documented native transfer.",
+    "World interactions are rediscovered after approach. If movement invalidates an option (including occupying a closing doorway), the client stops and reports that it is no longer offered; it does not invent another action."
+  ],
+  "performance": {
+    "report": "generated/profiles/2026-10-12T00-39-48-player-live.json",
+    "post_ready_frames": 619,
+    "mean_frame_ms": 7.436302100161551,
+    "p95_frame_ms": 7.861,
+    "max_frame_ms": 73.96,
+    "mean_gpu_ms": 0.14615024307288338,
+    "notes": "Short real Crypt interaction run at1440x900 onRTX5090, including UI changes and screenshot readback. Initial texture loading excluded; first-use texture decode still appears later. Not a large-map benchmark; maximum73.96ms remains, with a separate39.353ms frame including12.375ms texture decode."
+  },
+  "references": {
+    "local": "game_obsolete/ui/world_interaction.py and encounter_play.py; original NDClient authoring/ui and registered library rest samples",
+    "ui_design": "https://bg3.wiki/wiki/Options",
+    "godot_controls": "https://docs.godotengine.org/en/stable/tutorials/ui/index.html"
+  },
+  "passed": true,
+  "render_repair_report": "generated/render_repair_validation.json",
+  "historical_checkpoint": true,
+  "latest_validation": "generated/performance_scale_validation.json",
+  "historical_note": "Counts and timings below describe this earlier checkpoint. Linked per-test files may contain newer runs; use latest_validation for the final performance and repair pass."
+}

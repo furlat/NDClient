@@ -1,0 +1,3071 @@
+{
+  "profiles": {
+    "crypt_after": {
+      "gpu": "NVIDIA GeForce RTX 5090",
+      "renderer": "gl_compatibility",
+      "resolution": [
+        1440.0,
+        900.0
+      ],
+      "vsync_mode": 0,
+      "sample_count": 19274,
+      "recording_total": 19274,
+      "recording_evicted": 0,
+      "path": "generated/profiles/2026-10-12T18-04-40-crypt-prepared-accepted.json",
+      "stages": {
+        "initialization": {
+          "frames": 1301,
+          "mean_ms": 0.4002697924673328,
+          "p95_ms": 0.511,
+          "max_ms": 4.495,
+          "over_33_333_ms": 0
+        },
+        "playback": {
+          "frames": 16713,
+          "mean_ms": 1.2275377251241548,
+          "p95_ms": 1.945,
+          "max_ms": 28.593,
+          "over_33_333_ms": 0
+        },
+        "first_inventory_open": {
+          "frames": 60,
+          "mean_ms": 1.6892666666666665,
+          "p95_ms": 1.705,
+          "max_ms": 15.69,
+          "over_33_333_ms": 0
+        },
+        "settled": {
+          "frames": 300,
+          "mean_ms": 1.2769633333333332,
+          "p95_ms": 1.429,
+          "max_ms": 2.084,
+          "over_33_333_ms": 0
+        },
+        "wide": {
+          "frames": 300,
+          "mean_ms": 1.29955,
+          "p95_ms": 1.422,
+          "max_ms": 1.94,
+          "over_33_333_ms": 0
+        },
+        "solid_wide": {
+          "frames": 300,
+          "mean_ms": 1.13809,
+          "p95_ms": 1.239,
+          "max_ms": 4.939,
+          "over_33_333_ms": 0
+        },
+        "hidden_wide": {
+          "frames": 300,
+          "mean_ms": 1.1230833333333334,
+          "p95_ms": 1.283,
+          "max_ms": 4.319,
+          "over_33_333_ms": 0
+        }
+      },
+      "traversal_including_loading": {
+        "frames": 16713,
+        "mean_ms": 1.2275377251241548,
+        "p95_ms": 1.945,
+        "max_ms": 28.593,
+        "over_33_333_ms": 0
+      },
+      "slowest_traversal": [
+        {
+          "frame": 14491,
+          "frame_ms": 28.593,
+          "cpu_ms": {
+            "actor_sample": 0.529,
+            "actor_sync": 0.694,
+            "draw_order": 0.054,
+            "hud_draw": 0.028,
+            "hud_process": 0.023,
+            "interaction": 0.044,
+            "manual_timeline_advance": 0.004,
+            "mask_sync": 0.008,
+            "media_plan": 23.838,
+            "player_process": 27.916,
+            "scenery_sync": 0.204,
+            "session_timeline": 24.911,
+            "source_lighting": 0.262,
+            "static_order": 0.094,
+            "view_retirement": 0.072,
+            "wall_candidates": 0.269,
+            "wall_targets": 0.004,
+            "wall_visibility": 0.623,
+            "world_ground": 0.006,
+            "world_objects": 0.153,
+            "world_rows": 0.018,
+            "world_sync": 0.666,
+            "world_views": 0.004
+          },
+          "sequence": 13,
+          "stage": "playback",
+          "world_preparing": false,
+          "world_waiting": false,
+          "retiring_nodes": 0,
+          "cached_quarters": 0
+        },
+        {
+          "frame": 15012,
+          "frame_ms": 27.545,
+          "cpu_ms": {
+            "actor_sample": 0.616,
+            "actor_sync": 0.006,
+            "draw_order": 0.092,
+            "hud_draw": 0.035,
+            "hud_process": 0.025,
+            "interaction": 0.21,
+            "manual_timeline_advance": 0.006,
+            "mask_sync": 0.006,
+            "media_plan": 24.367,
+            "player_process": 26.746,
+            "scenery_sync": 0.004,
+            "session_timeline": 25.675,
+            "source_lighting": 0.101
+          },
+          "sequence": 21,
+          "stage": "playback",
+          "world_preparing": true,
+          "world_waiting": false,
+          "retiring_nodes": 0,
+          "cached_quarters": 0
+        },
+        {
+          "frame": 14429,
+          "frame_ms": 25.904,
+          "cpu_ms": {
+            "actor_sample": 0.445,
+            "actor_sync": 0.006,
+            "draw_order": 0.078,
+            "hud_draw": 0.028,
+            "hud_process": 0.023,
+            "interaction": 0.041,
+            "manual_timeline_advance": 0.172,
+            "mask_sync": 0.004,
+            "media_plan": 23.323,
+            "player_process": 25.079,
+            "scenery_sync": 0.002,
+            "session_timeline": 24.417,
+            "source_lighting": 0.044
+          },
+          "sequence": 11,
+          "stage": "playback",
+          "world_preparing": true,
+          "world_waiting": false,
+          "retiring_nodes": 0,
+          "cached_quarters": 0
+        },
+        {
+          "frame": 14871,
+          "frame_ms": 25.778,
+          "cpu_ms": {
+            "actor_sample": 0.427,
+            "actor_sync": 0.004,
+            "draw_order": 0.078,
+            "hud_draw": 0.029,
+            "hud_process": 0.026,
+            "interaction": 0.016,
+            "manual_timeline_advance": 0.101,
+            "mask_sync": 0.006,
+            "media_plan": 23.128,
+            "player_process": 24.962,
+            "scenery_sync": 0.002,
+            "session_timeline": 24.332,
+            "source_lighting": 0.048,
+            "world_prepare_native": 0.049
+          },
+          "sequence": 19,
+          "stage": "playback",
+          "world_preparing": true,
+          "world_waiting": true,
+          "retiring_nodes": 0,
+          "cached_quarters": 0
+        },
+        {
+          "frame": 4244,
+          "frame_ms": 24.286,
+          "cpu_ms": {
+            "actor_sample": 0.586,
+            "actor_sync": 0.006,
+            "draw_order": 0.106,
+            "hud_draw": 0.198,
+            "hud_process": 0.036,
+            "interaction": 0.009,
+            "manual_timeline_advance": 0.117,
+            "mask_sync": 0.008,
+            "media_upload": 0.82,
+            "player_process": 2.413,
+            "scenery_sync": 0.003,
+            "session_timeline": 1.591,
+            "source_lighting": 0.061
+          },
+          "sequence": 0,
+          "stage": "playback",
+          "world_preparing": true,
+          "world_waiting": false,
+          "retiring_nodes": 0,
+          "cached_quarters": 0
+        },
+        {
+          "frame": 2026,
+          "frame_ms": 13.436,
+          "cpu_ms": {
+            "hud_draw": 0.009,
+            "hud_process": 0.02,
+            "manual_timeline_advance": 0.005,
+            "media_plan": 12.042,
+            "player_process": 13.057,
+            "session_timeline": 13.045
+          },
+          "sequence": 0,
+          "stage": "playback",
+          "world_preparing": false,
+          "world_waiting": false,
+          "retiring_nodes": 0,
+          "cached_quarters": 0
+        },
+        {
+          "frame": 4243,
+          "frame_ms": 12.546,
+          "cpu_ms": {
+            "actor_sample": 0.926,
+            "actor_sync": 4.244,
+            "draw_order": 0.07,
+            "hud_draw": 0.01,
+            "hud_process": 0.029,
+            "interaction": 0.044,
+            "manual_timeline_advance": 0.068,
+            "mask_sync": 4.079,
+            "player_process": 11.948,
+            "scenery_sync": 0.619,
+            "session_timeline": 0.023,
+            "source_lighting": 0.827,
+            "source_lighting_resolve": 0.3,
+            "static_order": 0.098,
+            "view_retirement": 0.064,
+            "wall_candidates": 0.349,
+            "wall_targets": 0.004,
+            "wall_visibility": 4.721,
+            "world_ground": 0.034,
+            "world_objects": 0.391,
+            "world_rows": 0.01,
+            "world_sync": 0.661,
+            "world_views": 0.009
+          },
+          "sequence": 0,
+          "stage": "playback",
+          "world_preparing": false,
+          "world_waiting": false,
+          "retiring_nodes": 0,
+          "cached_quarters": 0
+        },
+        {
+          "frame": 17918,
+          "frame_ms": 10.978,
+          "cpu_ms": {
+            "actor_sample": 0.808,
+            "actor_sync": 0.844,
+            "draw_order": 0.076,
+            "hud_draw": 0.132,
+            "hud_process": 0.133,
+            "interaction": 0.01,
+            "manual_timeline_advance": 1.056,
+            "mask_sync": 1.004,
+            "media_plan": 3.085,
+            "player_process": 8.769,
+            "scenery_sync": 0.497,
+            "session_timeline": 3.12,
+            "source_lighting": 0.538,
+            "source_lighting_resolve": 0.345,
+            "static_order": 0.441,
+            "view_retirement": 0.127,
+            "wall_candidates": 0.872,
+            "wall_targets": 0.005,
+            "wall_visibility": 2.761,
+            "world_rows": 0.021,
+            "world_sync": 0.05
+          },
+          "sequence": 60,
+          "stage": "playback",
+          "world_preparing": false,
+          "world_waiting": false,
+          "retiring_nodes": 0,
+          "cached_quarters": 0
+        },
+        {
+          "frame": 17648,
+          "frame_ms": 10.972,
+          "cpu_ms": {
+            "actor_sample": 0.72,
+            "actor_sync": 0.722,
+            "draw_order": 0.072,
+            "hud_draw": 0.129,
+            "hud_process": 0.134,
+            "interaction": 0.009,
+            "manual_timeline_advance": 0.541,
+            "mask_sync": 0.821,
+            "media_plan": 3.361,
+            "player_process": 9.205,
+            "scenery_sync": 0.454,
+            "session_timeline": 3.399,
+            "source_lighting": 0.5,
+            "source_lighting_resolve": 0.34,
+            "static_order": 0.257,
+            "view_retirement": 0.06,
+            "wall_candidates": 0.725,
+            "wall_targets": 0.005,
+            "wall_visibility": 2.225,
+            "world_ground": 0.005,
+            "world_objects": 0.253,
+            "world_rows": 0.015,
+            "world_sync": 1.095,
+            "world_views": 0.004
+          },
+          "sequence": 58,
+          "stage": "playback",
+          "world_preparing": false,
+          "world_waiting": false,
+          "retiring_nodes": 0,
+          "cached_quarters": 0
+        },
+        {
+          "frame": 15318,
+          "frame_ms": 10.542,
+          "cpu_ms": {
+            "actor_sample": 0.715,
+            "actor_sync": 0.665,
+            "draw_order": 0.067,
+            "hud_draw": 0.121,
+            "hud_process": 0.118,
+            "interaction": 0.005,
+            "manual_timeline_advance": 0.5,
+            "mask_sync": 0.005,
+            "media_plan": 2.665,
+            "player_process": 8.806,
+            "scenery_sync": 0.488,
+            "session_timeline": 3.669,
+            "source_lighting": 0.533,
+            "source_lighting_resolve": 0.404,
+            "static_order": 0.246,
+            "view_retirement": 0.101,
+            "wall_candidates": 0.66,
+            "wall_targets": 0.005,
+            "wall_visibility": 1.259,
+            "world_ground": 0.005,
+            "world_objects": 0.209,
+            "world_rows": 0.017,
+            "world_sync": 1.335,
+            "world_views": 0.003
+          },
+          "sequence": 26,
+          "stage": "playback",
+          "world_preparing": false,
+          "world_waiting": false,
+          "retiring_nodes": 0,
+          "cached_quarters": 0
+        }
+      ],
+      "matched_sequence_maxima": {
+        "40": {
+          "frame": 16117,
+          "frame_ms": 4.992,
+          "cpu_ms": {
+            "actor_sample": 0.388,
+            "actor_sync": 0.666,
+            "draw_order": 0.072,
+            "hud_draw": 0.033,
+            "hud_process": 0.025,
+            "interaction": 0.003,
+            "manual_timeline_advance": 0.005,
+            "mask_sync": 0.003,
+            "media_plan": 2.1,
+            "player_process": 4.166,
+            "scenery_sync": 0.001,
+            "session_timeline": 2.968,
+            "source_lighting": 0.028
+          },
+          "sequence": 40,
+          "stage": "playback",
+          "world_preparing": false,
+          "world_waiting": false,
+          "retiring_nodes": 0,
+          "cached_quarters": 0
+        }
+      },
+      "final_media": {
+        "encounter_preload": {
+          "budget_bytes": 17179869184,
+          "errors": [],
+          "failed": {},
+          "ready": 1708,
+          "required_estimated_bytes": 1083703296,
+          "required_unknown_estimates": 0,
+          "scope": "Authored families from displayed state and the bounded already-received operation window; no future-state publication.",
+          "selected": 1708,
+          "selected_estimated_bytes": 15909519360,
+          "skipped": 0
+        },
+        "character_media": {
+          "accounting": "Decoded CPU bytes plus conservative RGBA8 GPU estimate; not measured VRAM/RSS; combined environment and character budget.",
+          "budget_bytes": 17179869184,
+          "combined_estimated_bytes": 15897198592,
+          "cpu_bytes": 3026714624,
+          "decode_ms": 12528.067,
+          "decoded": 1716,
+          "estimated_bytes": 15679356928,
+          "evicted": 0,
+          "eviction_pending_bytes": 0,
+          "failed": {},
+          "gpu_estimated_bytes": 12652642304,
+          "metadata_jobs": 110,
+          "metadata_ms": 1486.782,
+          "pending": 0,
+          "pinned_bytes": 15675162624,
+          "pinned_over_budget_bytes": 0,
+          "resident_sheets": 1619,
+          "selection_jobs": 5
+        },
+        "environment_media": {
+          "accounting": "Decoded CPU bytes plus conservative RGBA8 GPU estimate; not measured VRAM/RSS; combined environment and character budget.",
+          "budget_bytes": 17179869184,
+          "combined_estimated_bytes": 15897198592,
+          "cpu_bytes": 100663296,
+          "decode_ms": 12528.067,
+          "decoded": 1716,
+          "estimated_bytes": 217841664,
+          "evicted": 0,
+          "eviction_pending_bytes": 0,
+          "failed": {},
+          "gpu_estimated_bytes": 117178368,
+          "metadata_jobs": 110,
+          "metadata_ms": 1486.782,
+          "pending": 0,
+          "pinned_bytes": 217841664,
+          "pinned_over_budget_bytes": 0,
+          "resident_sheets": 97,
+          "selection_jobs": 5
+        }
+      },
+      "startup_preload_complete_ms_from_profile_start": 14082.751,
+      "traversal_after_startup_preload": {
+        "frames": 4077,
+        "mean_ms": 1.7595062545989697,
+        "p95_ms": 3.484,
+        "max_ms": 28.593,
+        "over_33_333_ms": 0
+      },
+      "world_waiting_intervals_ms": 165.004,
+      "prepared_worlds": 78,
+      "nonzero_inclusive_cpu_phases": {
+        "hud_draw": {
+          "frames": 16713,
+          "mean_ms": 0.016341111709447735,
+          "p95_ms": 0.037,
+          "max_ms": 0.229,
+          "over_33_333_ms": 0
+        },
+        "hud_process": {
+          "frames": 16713,
+          "mean_ms": 0.025575779333452998,
+          "p95_ms": 0.031,
+          "max_ms": 1.149,
+          "over_33_333_ms": 0
+        },
+        "manual_timeline_advance": {
+          "frames": 16713,
+          "mean_ms": 0.078266798300724,
+          "p95_ms": 0.193,
+          "max_ms": 1.056,
+          "over_33_333_ms": 0
+        },
+        "player_process": {
+          "frames": 16713,
+          "mean_ms": 0.5176529647579728,
+          "p95_ms": 1.22,
+          "max_ms": 27.916,
+          "over_33_333_ms": 0
+        },
+        "session_timeline": {
+          "frames": 16713,
+          "mean_ms": 0.14223101777059774,
+          "p95_ms": 0.76,
+          "max_ms": 25.675,
+          "over_33_333_ms": 0
+        },
+        "media_plan": {
+          "frames": 242,
+          "mean_ms": 1.962797520661157,
+          "p95_ms": 3.241,
+          "max_ms": 24.367,
+          "over_33_333_ms": 0
+        },
+        "media_upload": {
+          "frames": 1716,
+          "mean_ms": 0.44574941724941725,
+          "p95_ms": 0.665,
+          "max_ms": 1.389,
+          "over_33_333_ms": 0
+        },
+        "world_prepare_native": {
+          "frames": 112,
+          "mean_ms": 0.40004464285714286,
+          "p95_ms": 2.055,
+          "max_ms": 2.48,
+          "over_33_333_ms": 0
+        },
+        "texture_upload": {
+          "frames": 1,
+          "mean_ms": 0.566,
+          "p95_ms": 0.566,
+          "max_ms": 0.566,
+          "over_33_333_ms": 0
+        },
+        "actor_sample": {
+          "frames": 13772,
+          "mean_ms": 0.2928355358698809,
+          "p95_ms": 0.363,
+          "max_ms": 0.926,
+          "over_33_333_ms": 0
+        },
+        "actor_sync": {
+          "frames": 13548,
+          "mean_ms": 0.01136957484499557,
+          "p95_ms": 0.004,
+          "max_ms": 4.244,
+          "over_33_333_ms": 0
+        },
+        "draw_order": {
+          "frames": 13772,
+          "mean_ms": 0.07403688643624745,
+          "p95_ms": 0.23,
+          "max_ms": 0.534,
+          "over_33_333_ms": 0
+        },
+        "interaction": {
+          "frames": 13772,
+          "mean_ms": 0.0047767208829509146,
+          "p95_ms": 0.011,
+          "max_ms": 0.21,
+          "over_33_333_ms": 0
+        },
+        "mask_sync": {
+          "frames": 13772,
+          "mean_ms": 0.0033364072030206216,
+          "p95_ms": 0.003,
+          "max_ms": 4.079,
+          "over_33_333_ms": 0
+        },
+        "scenery_sync": {
+          "frames": 13772,
+          "mean_ms": 0.003114652918966018,
+          "p95_ms": 0.002,
+          "max_ms": 0.619,
+          "over_33_333_ms": 0
+        },
+        "source_lighting": {
+          "frames": 13772,
+          "mean_ms": 0.027723279117049086,
+          "p95_ms": 0.034,
+          "max_ms": 0.827,
+          "over_33_333_ms": 0
+        },
+        "source_lighting_resolve": {
+          "frames": 123,
+          "mean_ms": 0.2828130081300813,
+          "p95_ms": 0.401,
+          "max_ms": 0.538,
+          "over_33_333_ms": 0
+        },
+        "static_order": {
+          "frames": 19,
+          "mean_ms": 0.2744736842105263,
+          "p95_ms": 0.392,
+          "max_ms": 0.441,
+          "over_33_333_ms": 0
+        },
+        "view_retirement": {
+          "frames": 103,
+          "mean_ms": 0.11455339805825242,
+          "p95_ms": 0.35,
+          "max_ms": 0.537,
+          "over_33_333_ms": 0
+        },
+        "wall_candidates": {
+          "frames": 30,
+          "mean_ms": 0.6332,
+          "p95_ms": 0.77,
+          "max_ms": 0.872,
+          "over_33_333_ms": 0
+        },
+        "wall_targets": {
+          "frames": 30,
+          "mean_ms": 0.004533333333333334,
+          "p95_ms": 0.005,
+          "max_ms": 0.005,
+          "over_33_333_ms": 0
+        },
+        "wall_visibility": {
+          "frames": 30,
+          "mean_ms": 1.5995,
+          "p95_ms": 2.355,
+          "max_ms": 4.721,
+          "over_33_333_ms": 0
+        },
+        "world_ground": {
+          "frames": 12,
+          "mean_ms": 0.03191666666666667,
+          "p95_ms": 0.093,
+          "max_ms": 0.132,
+          "over_33_333_ms": 0
+        },
+        "world_objects": {
+          "frames": 12,
+          "mean_ms": 0.2584166666666667,
+          "p95_ms": 0.391,
+          "max_ms": 0.495,
+          "over_33_333_ms": 0
+        },
+        "world_rows": {
+          "frames": 78,
+          "mean_ms": 0.01658974358974359,
+          "p95_ms": 0.025,
+          "max_ms": 0.028,
+          "over_33_333_ms": 0
+        },
+        "world_sync": {
+          "frames": 78,
+          "mean_ms": 0.27947435897435896,
+          "p95_ms": 1.165,
+          "max_ms": 1.374,
+          "over_33_333_ms": 0
+        },
+        "world_views": {
+          "frames": 12,
+          "mean_ms": 0.0035,
+          "p95_ms": 0.004,
+          "max_ms": 0.009,
+          "over_33_333_ms": 0
+        }
+      },
+      "active_retirement_intervals_ms": 4.811
+    },
+    "gallery_after": {
+      "gpu": "NVIDIA GeForce RTX 5090",
+      "renderer": "gl_compatibility",
+      "resolution": [
+        1440.0,
+        900.0
+      ],
+      "vsync_mode": 0,
+      "sample_count": 39881,
+      "recording_total": 39881,
+      "recording_evicted": 0,
+      "path": "generated/profiles/2026-10-12T18-03-27-gallery-prepared-final.json",
+      "stages": {
+        "initialization": {
+          "frames": 1346,
+          "mean_ms": 0.4178595839524517,
+          "p95_ms": 0.567,
+          "max_ms": 5.419,
+          "over_33_333_ms": 0
+        },
+        "traversal": {
+          "frames": 35519,
+          "mean_ms": 1.9835971451898984,
+          "p95_ms": 3.259,
+          "max_ms": 45.139,
+          "over_33_333_ms": 19
+        },
+        "midroute_prepare_q1": {
+          "frames": 43,
+          "mean_ms": 5.905813953488372,
+          "p95_ms": 6.887,
+          "max_ms": 13.811,
+          "over_33_333_ms": 0
+        },
+        "midroute_prepare_q2": {
+          "frames": 44,
+          "mean_ms": 6.22390909090909,
+          "p95_ms": 8.147,
+          "max_ms": 14.204,
+          "over_33_333_ms": 0
+        },
+        "midroute_prepare_q3": {
+          "frames": 45,
+          "mean_ms": 6.072844444444445,
+          "p95_ms": 7.777,
+          "max_ms": 14.461,
+          "over_33_333_ms": 0
+        },
+        "midroute_prepare_q0": {
+          "frames": 2,
+          "mean_ms": 10.5685,
+          "p95_ms": 8.596,
+          "max_ms": 12.541,
+          "over_33_333_ms": 0
+        },
+        "traversal_cached_views": {
+          "frames": 579,
+          "mean_ms": 2.186901554404145,
+          "p95_ms": 3.219,
+          "max_ms": 39.97,
+          "over_33_333_ms": 1
+        },
+        "traversal_cached_invalidation": {
+          "frames": 189,
+          "mean_ms": 4.68221164021164,
+          "p95_ms": 9.523,
+          "max_ms": 27.589,
+          "over_33_333_ms": 0
+        },
+        "rotate_z20_q0": {
+          "frames": 20,
+          "mean_ms": 3.11355,
+          "p95_ms": 3.497,
+          "max_ms": 19.005,
+          "over_33_333_ms": 0
+        },
+        "gallery_z20_q0": {
+          "frames": 180,
+          "mean_ms": 2.1104833333333333,
+          "p95_ms": 2.5,
+          "max_ms": 3.155,
+          "over_33_333_ms": 0
+        },
+        "rotate_z20_q1": {
+          "frames": 65,
+          "mean_ms": 5.453030769230769,
+          "p95_ms": 8.829,
+          "max_ms": 13.575,
+          "over_33_333_ms": 0
+        },
+        "gallery_z20_q1": {
+          "frames": 180,
+          "mean_ms": 2.172022222222222,
+          "p95_ms": 2.922,
+          "max_ms": 3.306,
+          "over_33_333_ms": 0
+        },
+        "rotate_z20_q2": {
+          "frames": 68,
+          "mean_ms": 5.851088235294118,
+          "p95_ms": 8.533,
+          "max_ms": 13.49,
+          "over_33_333_ms": 0
+        },
+        "gallery_z20_q2": {
+          "frames": 180,
+          "mean_ms": 2.388338888888889,
+          "p95_ms": 3.269,
+          "max_ms": 3.483,
+          "over_33_333_ms": 0
+        },
+        "rotate_z20_q3": {
+          "frames": 73,
+          "mean_ms": 6.264534246575342,
+          "p95_ms": 9.518,
+          "max_ms": 19.574,
+          "over_33_333_ms": 0
+        },
+        "gallery_z20_q3": {
+          "frames": 180,
+          "mean_ms": 2.3519,
+          "p95_ms": 3.071,
+          "max_ms": 4.312,
+          "over_33_333_ms": 0
+        },
+        "rotate_z70_q0": {
+          "frames": 22,
+          "mean_ms": 4.543227272727273,
+          "p95_ms": 9.984,
+          "max_ms": 19.508,
+          "over_33_333_ms": 0
+        },
+        "gallery_z70_q0": {
+          "frames": 180,
+          "mean_ms": 3.0027,
+          "p95_ms": 3.555,
+          "max_ms": 3.986,
+          "over_33_333_ms": 0
+        },
+        "rotate_z70_q1": {
+          "frames": 22,
+          "mean_ms": 4.2319545454545455,
+          "p95_ms": 10.967,
+          "max_ms": 11.84,
+          "over_33_333_ms": 0
+        },
+        "gallery_z70_q1": {
+          "frames": 180,
+          "mean_ms": 3.2428333333333335,
+          "p95_ms": 4.63,
+          "max_ms": 5.108,
+          "over_33_333_ms": 0
+        },
+        "rotate_z70_q2": {
+          "frames": 22,
+          "mean_ms": 4.169363636363636,
+          "p95_ms": 10.429,
+          "max_ms": 12.374,
+          "over_33_333_ms": 0
+        },
+        "gallery_z70_q2": {
+          "frames": 180,
+          "mean_ms": 3.0369555555555556,
+          "p95_ms": 3.871,
+          "max_ms": 4.836,
+          "over_33_333_ms": 0
+        },
+        "rotate_z70_q3": {
+          "frames": 22,
+          "mean_ms": 4.533818181818182,
+          "p95_ms": 9.223,
+          "max_ms": 10.911,
+          "over_33_333_ms": 0
+        },
+        "gallery_z70_q3": {
+          "frames": 180,
+          "mean_ms": 3.350861111111111,
+          "p95_ms": 3.968,
+          "max_ms": 5.029,
+          "over_33_333_ms": 0
+        },
+        "solid_wide": {
+          "frames": 180,
+          "mean_ms": 2.851422222222222,
+          "p95_ms": 3.759,
+          "max_ms": 25.869,
+          "over_33_333_ms": 0
+        },
+        "hidden_wide": {
+          "frames": 180,
+          "mean_ms": 2.6273055555555556,
+          "p95_ms": 3.399,
+          "max_ms": 19.645,
+          "over_33_333_ms": 0
+        }
+      },
+      "traversal_including_loading": {
+        "frames": 36287,
+        "mean_ms": 2.000896767437374,
+        "p95_ms": 3.318,
+        "max_ms": 45.139,
+        "over_33_333_ms": 20
+      },
+      "slowest_traversal": [
+        {
+          "frame": 19328,
+          "frame_ms": 45.139,
+          "cpu_ms": {
+            "actor_sample": 1.304,
+            "actor_sync": 1.128,
+            "draw_order": 0.139,
+            "hud_draw": 5.379,
+            "hud_process": 0.845,
+            "interaction": 0.048,
+            "manual_timeline_advance": 1.752,
+            "mask_sync": 3.795,
+            "media_plan": 5.113,
+            "player_process": 34.911,
+            "scenery_sync": 5.6,
+            "session_timeline": 5.171,
+            "source_lighting": 5.844,
+            "source_lighting_resolve": 1.606,
+            "static_order": 1.994,
+            "view_retirement": 0.534,
+            "wall_candidates": 3.15,
+            "wall_targets": 0.007,
+            "wall_visibility": 10.929,
+            "world_ground": 1.672,
+            "world_objects": 0.955,
+            "world_rows": 0.044,
+            "world_sync": 8.023,
+            "world_views": 0.008
+          },
+          "sequence": 51,
+          "stage": "traversal",
+          "world_preparing": false,
+          "world_waiting": false,
+          "retiring_nodes": 0,
+          "cached_quarters": 0
+        },
+        {
+          "frame": 32550,
+          "frame_ms": 42.849,
+          "cpu_ms": {
+            "actor_sample": 1.149,
+            "actor_sync": 0.869,
+            "draw_order": 0.122,
+            "hud_draw": 4.5,
+            "hud_process": 1.101,
+            "interaction": 0.058,
+            "manual_timeline_advance": 1.713,
+            "mask_sync": 3.089,
+            "media_plan": 4.283,
+            "player_process": 32.756,
+            "scenery_sync": 4.923,
+            "session_timeline": 4.368,
+            "source_lighting": 5.168,
+            "source_lighting_resolve": 1.459,
+            "static_order": 1.824,
+            "view_retirement": 0.523,
+            "wall_candidates": 2.945,
+            "wall_targets": 0.007,
+            "wall_visibility": 9.598,
+            "world_ground": 2.069,
+            "world_objects": 1.047,
+            "world_rows": 0.113,
+            "world_sync": 9.245,
+            "world_views": 0.006
+          },
+          "sequence": 87,
+          "stage": "traversal",
+          "world_preparing": false,
+          "world_waiting": false,
+          "retiring_nodes": 0,
+          "cached_quarters": 0
+        },
+        {
+          "frame": 28667,
+          "frame_ms": 39.97,
+          "cpu_ms": {
+            "actor_sample": 0.954,
+            "actor_sync": 0.972,
+            "draw_order": 0.08,
+            "hud_draw": 4.291,
+            "hud_process": 1.133,
+            "interaction": 0.059,
+            "manual_timeline_advance": 3.305,
+            "mask_sync": 0.607,
+            "player_process": 29.338,
+            "scenery_sync": 5.274,
+            "session_timeline": 0.155,
+            "source_lighting": 5.521,
+            "source_lighting_resolve": 1.263,
+            "view_retirement": 0.619,
+            "wall_candidates": 3.354,
+            "wall_targets": 0.008,
+            "wall_visibility": 5.775,
+            "world_ground": 1.483,
+            "world_objects": 0.697,
+            "world_rows": 0.105,
+            "world_sync": 13.77,
+            "world_views": 8.914
+          },
+          "sequence": 76,
+          "stage": "traversal_cached_views",
+          "world_preparing": false,
+          "world_waiting": false,
+          "retiring_nodes": 2847,
+          "cached_quarters": 0
+        },
+        {
+          "frame": 30234,
+          "frame_ms": 36.651,
+          "cpu_ms": {
+            "actor_sample": 0.983,
+            "actor_sync": 0.852,
+            "draw_order": 0.081,
+            "hud_draw": 4.437,
+            "hud_process": 1.072,
+            "interaction": 0.012,
+            "manual_timeline_advance": 1.575,
+            "mask_sync": 0.661,
+            "media_plan": 3.885,
+            "player_process": 27.09,
+            "scenery_sync": 5.726,
+            "session_timeline": 3.954,
+            "source_lighting": 5.974,
+            "source_lighting_resolve": 1.287,
+            "view_retirement": 0.545,
+            "wall_candidates": 2.921,
+            "wall_targets": 0.008,
+            "wall_visibility": 5.396,
+            "world_ground": 1.656,
+            "world_objects": 0.823,
+            "world_rows": 0.097,
+            "world_sync": 7.819,
+            "world_views": 0.006
+          },
+          "sequence": 82,
+          "stage": "traversal",
+          "world_preparing": false,
+          "world_waiting": false,
+          "retiring_nodes": 0,
+          "cached_quarters": 0
+        },
+        {
+          "frame": 32425,
+          "frame_ms": 36.517,
+          "cpu_ms": {
+            "actor_sample": 0.805,
+            "actor_sync": 0.668,
+            "draw_order": 0.084,
+            "hud_draw": 4.151,
+            "hud_process": 1.1,
+            "interaction": 0.025,
+            "manual_timeline_advance": 4.341,
+            "mask_sync": 0.715,
+            "media_plan": 4.169,
+            "player_process": 24.938,
+            "scenery_sync": 4.047,
+            "session_timeline": 4.275,
+            "source_lighting": 4.23,
+            "source_lighting_resolve": 1.165,
+            "static_order": 1.567,
+            "view_retirement": 0.376,
+            "wall_candidates": 2.499,
+            "wall_targets": 0.006,
+            "wall_visibility": 6.267,
+            "world_ground": 1.404,
+            "world_objects": 0.796,
+            "world_rows": 0.087,
+            "world_sync": 6.878,
+            "world_views": 0.004
+          },
+          "sequence": 86,
+          "stage": "traversal",
+          "world_preparing": false,
+          "world_waiting": false,
+          "retiring_nodes": 0,
+          "cached_quarters": 0
+        },
+        {
+          "frame": 37237,
+          "frame_ms": 36.365,
+          "cpu_ms": {
+            "actor_sample": 0.995,
+            "actor_sync": 0.834,
+            "draw_order": 0.081,
+            "hud_draw": 4.395,
+            "hud_process": 1.043,
+            "interaction": 0.046,
+            "manual_timeline_advance": 1.48,
+            "mask_sync": 0.62,
+            "media_plan": 3.532,
+            "player_process": 27.559,
+            "scenery_sync": 4.422,
+            "session_timeline": 3.588,
+            "source_lighting": 4.629,
+            "source_lighting_resolve": 1.329,
+            "static_order": 1.645,
+            "view_retirement": 0.431,
+            "wall_candidates": 2.756,
+            "wall_targets": 0.008,
+            "wall_visibility": 6.824,
+            "world_ground": 1.671,
+            "world_objects": 0.966,
+            "world_rows": 0.074,
+            "world_sync": 8.652,
+            "world_views": 0.004
+          },
+          "sequence": 99,
+          "stage": "traversal",
+          "world_preparing": false,
+          "world_waiting": false,
+          "retiring_nodes": 0,
+          "cached_quarters": 0
+        },
+        {
+          "frame": 34887,
+          "frame_ms": 35.941,
+          "cpu_ms": {
+            "actor_sample": 0.644,
+            "actor_sync": 0.76,
+            "draw_order": 0.078,
+            "hud_draw": 4.478,
+            "hud_process": 0.991,
+            "interaction": 0.062,
+            "manual_timeline_advance": 4.404,
+            "mask_sync": 0.596,
+            "media_plan": 4.17,
+            "player_process": 24.03,
+            "scenery_sync": 4.13,
+            "session_timeline": 4.282,
+            "source_lighting": 4.322,
+            "source_lighting_resolve": 1.215,
+            "view_retirement": 0.386,
+            "wall_candidates": 2.627,
+            "wall_targets": 0.006,
+            "wall_visibility": 4.795,
+            "world_ground": 1.574,
+            "world_objects": 0.754,
+            "world_rows": 0.091,
+            "world_sync": 7.337,
+            "world_views": 0.005
+          },
+          "sequence": 92,
+          "stage": "traversal",
+          "world_preparing": false,
+          "world_waiting": false,
+          "retiring_nodes": 0,
+          "cached_quarters": 0
+        },
+        {
+          "frame": 37112,
+          "frame_ms": 35.715,
+          "cpu_ms": {
+            "actor_sample": 0.635,
+            "actor_sync": 0.791,
+            "draw_order": 0.082,
+            "hud_draw": 4.561,
+            "hud_process": 1.063,
+            "interaction": 0.023,
+            "manual_timeline_advance": 4.678,
+            "mask_sync": 2.81,
+            "player_process": 23.229,
+            "scenery_sync": 3.866,
+            "session_timeline": 0.153,
+            "source_lighting": 4.053,
+            "source_lighting_resolve": 1.188,
+            "static_order": 1.494,
+            "view_retirement": 0.415,
+            "wall_candidates": 2.51,
+            "wall_targets": 0.005,
+            "wall_visibility": 8.365,
+            "world_ground": 1.574,
+            "world_objects": 0.983,
+            "world_rows": 0.086,
+            "world_sync": 7.369,
+            "world_views": 0.009
+          },
+          "sequence": 98,
+          "stage": "traversal",
+          "world_preparing": false,
+          "world_waiting": false,
+          "retiring_nodes": 0,
+          "cached_quarters": 0
+        },
+        {
+          "frame": 24532,
+          "frame_ms": 35.387,
+          "cpu_ms": {
+            "actor_sample": 0.543,
+            "actor_sync": 0.765,
+            "draw_order": 0.08,
+            "hud_draw": 5.721,
+            "hud_process": 1.022,
+            "interaction": 0.022,
+            "manual_timeline_advance": 2.622,
+            "mask_sync": 0.597,
+            "media_plan": 3.742,
+            "player_process": 24.646,
+            "scenery_sync": 3.829,
+            "session_timeline": 6.198,
+            "source_lighting": 3.977,
+            "source_lighting_resolve": 1.174,
+            "view_retirement": 0.568,
+            "wall_candidates": 2.461,
+            "wall_targets": 0.006,
+            "wall_visibility": 4.605,
+            "world_ground": 1.334,
+            "world_objects": 0.72,
+            "world_rows": 0.04,
+            "world_sync": 6.57,
+            "world_views": 0.004
+          },
+          "sequence": 65,
+          "stage": "traversal",
+          "world_preparing": false,
+          "world_waiting": false,
+          "retiring_nodes": 0,
+          "cached_quarters": 0
+        },
+        {
+          "frame": 21162,
+          "frame_ms": 35.281,
+          "cpu_ms": {
+            "actor_sample": 0.883,
+            "actor_sync": 0.77,
+            "draw_order": 0.111,
+            "hud_draw": 4.739,
+            "hud_process": 0.931,
+            "interaction": 0.012,
+            "manual_timeline_advance": 1.361,
+            "mask_sync": 2.779,
+            "media_plan": 3.651,
+            "player_process": 25.447,
+            "scenery_sync": 4.11,
+            "session_timeline": 3.71,
+            "source_lighting": 4.278,
+            "source_lighting_resolve": 1.261,
+            "static_order": 1.496,
+            "view_retirement": 0.447,
+            "wall_candidates": 2.451,
+            "wall_targets": 0.005,
+            "wall_visibility": 8.154,
+            "world_ground": 0.01,
+            "world_objects": 0.81,
+            "world_rows": 0.023,
+            "world_sync": 5.668,
+            "world_views": 0.007
+          },
+          "sequence": 57,
+          "stage": "traversal",
+          "world_preparing": false,
+          "world_waiting": false,
+          "retiring_nodes": 0,
+          "cached_quarters": 0
+        }
+      ],
+      "matched_sequence_maxima": {
+        "40": {
+          "frame": 17200,
+          "frame_ms": 32.833,
+          "cpu_ms": {
+            "actor_sample": 0.61,
+            "actor_sync": 0.006,
+            "draw_order": 0.101,
+            "hud_draw": 0.074,
+            "hud_process": 0.025,
+            "interaction": 0.009,
+            "manual_timeline_advance": 0.006,
+            "mask_sync": 0.008,
+            "media_plan": 29.112,
+            "player_process": 31.739,
+            "scenery_sync": 0.003,
+            "session_timeline": 30.802,
+            "source_lighting": 0.151
+          },
+          "sequence": 40,
+          "stage": "traversal",
+          "world_preparing": true,
+          "world_waiting": false,
+          "retiring_nodes": 0,
+          "cached_quarters": 0
+        },
+        "77": {
+          "frame": 28874,
+          "frame_ms": 33.178,
+          "cpu_ms": {
+            "actor_sample": 0.613,
+            "actor_sync": 0.756,
+            "draw_order": 0.093,
+            "hud_draw": 4.159,
+            "hud_process": 1.036,
+            "interaction": 0.026,
+            "manual_timeline_advance": 3.362,
+            "mask_sync": 2.791,
+            "player_process": 22.659,
+            "scenery_sync": 4.108,
+            "session_timeline": 0.14,
+            "source_lighting": 4.268,
+            "source_lighting_resolve": 1.223,
+            "static_order": 1.449,
+            "view_retirement": 0.621,
+            "wall_candidates": 2.423,
+            "wall_targets": 0.007,
+            "wall_visibility": 8.116,
+            "world_ground": 1.336,
+            "world_objects": 0.894,
+            "world_rows": 0.085,
+            "world_sync": 6.661,
+            "world_views": 0.004
+          },
+          "sequence": 77,
+          "stage": "traversal",
+          "world_preparing": false,
+          "world_waiting": false,
+          "retiring_nodes": 0,
+          "cached_quarters": 0
+        },
+        "98": {
+          "frame": 37112,
+          "frame_ms": 35.715,
+          "cpu_ms": {
+            "actor_sample": 0.635,
+            "actor_sync": 0.791,
+            "draw_order": 0.082,
+            "hud_draw": 4.561,
+            "hud_process": 1.063,
+            "interaction": 0.023,
+            "manual_timeline_advance": 4.678,
+            "mask_sync": 2.81,
+            "player_process": 23.229,
+            "scenery_sync": 3.866,
+            "session_timeline": 0.153,
+            "source_lighting": 4.053,
+            "source_lighting_resolve": 1.188,
+            "static_order": 1.494,
+            "view_retirement": 0.415,
+            "wall_candidates": 2.51,
+            "wall_targets": 0.005,
+            "wall_visibility": 8.365,
+            "world_ground": 1.574,
+            "world_objects": 0.983,
+            "world_rows": 0.086,
+            "world_sync": 7.369,
+            "world_views": 0.009
+          },
+          "sequence": 98,
+          "stage": "traversal",
+          "world_preparing": false,
+          "world_waiting": false,
+          "retiring_nodes": 0,
+          "cached_quarters": 0
+        }
+      },
+      "final_media": {
+        "encounter_preload": {
+          "budget_bytes": 17179869184,
+          "errors": [],
+          "failed": {},
+          "ready": 1770,
+          "required_estimated_bytes": 1252392960,
+          "required_unknown_estimates": 0,
+          "scope": "Authored families from displayed state and the bounded already-received operation window; no future-state publication.",
+          "selected": 1770,
+          "selected_estimated_bytes": 16078209024,
+          "skipped": 0
+        },
+        "character_media": {
+          "accounting": "Decoded CPU bytes plus conservative RGBA8 GPU estimate; not measured VRAM/RSS; combined environment and character budget.",
+          "budget_bytes": 17179869184,
+          "combined_estimated_bytes": 16033382400,
+          "cpu_bytes": 3024617472,
+          "decode_ms": 13284.226,
+          "decoded": 1770,
+          "estimated_bytes": 15675162624,
+          "evicted": 0,
+          "eviction_pending_bytes": 0,
+          "failed": {},
+          "gpu_estimated_bytes": 12650545152,
+          "metadata_jobs": 170,
+          "metadata_ms": 3262.009,
+          "pending": 0,
+          "pinned_bytes": 15675162624,
+          "pinned_over_budget_bytes": 0,
+          "resident_sheets": 1611,
+          "selection_jobs": 4
+        },
+        "environment_media": {
+          "accounting": "Decoded CPU bytes plus conservative RGBA8 GPU estimate; not measured VRAM/RSS; combined environment and character budget.",
+          "budget_bytes": 17179869184,
+          "combined_estimated_bytes": 16033382400,
+          "cpu_bytes": 156696576,
+          "decode_ms": 13284.226,
+          "decoded": 1770,
+          "estimated_bytes": 358219776,
+          "evicted": 0,
+          "eviction_pending_bytes": 0,
+          "failed": {},
+          "gpu_estimated_bytes": 201523200,
+          "metadata_jobs": 170,
+          "metadata_ms": 3262.009,
+          "pending": 0,
+          "pinned_bytes": 358219776,
+          "pinned_over_budget_bytes": 0,
+          "resident_sheets": 159,
+          "selection_jobs": 4
+        }
+      },
+      "startup_preload_complete_ms_from_profile_start": 15019.387,
+      "traversal_after_startup_preload": {
+        "frames": 24270,
+        "mean_ms": 2.40556876802637,
+        "p95_ms": 3.816,
+        "max_ms": 45.139,
+        "over_33_333_ms": 20
+      },
+      "world_waiting_intervals_ms": 1765.28,
+      "prepared_worlds": 173,
+      "nonzero_inclusive_cpu_phases": {
+        "hud_draw": {
+          "frames": 36287,
+          "mean_ms": 0.0866500675172927,
+          "p95_ms": 0.157,
+          "max_ms": 6.894,
+          "over_33_333_ms": 0
+        },
+        "hud_process": {
+          "frames": 36287,
+          "mean_ms": 0.03367244467715711,
+          "p95_ms": 0.053,
+          "max_ms": 1.586,
+          "over_33_333_ms": 0
+        },
+        "manual_timeline_advance": {
+          "frames": 36287,
+          "mean_ms": 0.11103229806817869,
+          "p95_ms": 0.254,
+          "max_ms": 4.678,
+          "over_33_333_ms": 0
+        },
+        "player_process": {
+          "frames": 36287,
+          "mean_ms": 0.745427756496817,
+          "p95_ms": 1.456,
+          "max_ms": 34.911,
+          "over_33_333_ms": 1
+        },
+        "session_timeline": {
+          "frames": 36287,
+          "mean_ms": 0.11745619643398461,
+          "p95_ms": 0.504,
+          "max_ms": 30.802,
+          "over_33_333_ms": 0
+        },
+        "media_plan": {
+          "frames": 389,
+          "mean_ms": 2.4281748071979434,
+          "p95_ms": 4.17,
+          "max_ms": 29.112,
+          "over_33_333_ms": 0
+        },
+        "media_upload": {
+          "frames": 1770,
+          "mean_ms": 0.509167231638418,
+          "p95_ms": 0.796,
+          "max_ms": 1.554,
+          "over_33_333_ms": 0
+        },
+        "world_prepare_native": {
+          "frames": 462,
+          "mean_ms": 1.2540757575757577,
+          "p95_ms": 2.058,
+          "max_ms": 3.283,
+          "over_33_333_ms": 0
+        },
+        "texture_upload": {
+          "frames": 1,
+          "mean_ms": 0.62,
+          "p95_ms": 0.62,
+          "max_ms": 0.62,
+          "over_33_333_ms": 0
+        },
+        "actor_sample": {
+          "frames": 33426,
+          "mean_ms": 0.343703314784898,
+          "p95_ms": 0.479,
+          "max_ms": 1.418,
+          "over_33_333_ms": 0
+        },
+        "actor_sync": {
+          "frames": 33119,
+          "mean_ms": 0.011680153386273739,
+          "p95_ms": 0.012,
+          "max_ms": 4.32,
+          "over_33_333_ms": 0
+        },
+        "draw_order": {
+          "frames": 33426,
+          "mean_ms": 0.1277072338897864,
+          "p95_ms": 0.588,
+          "max_ms": 2.196,
+          "over_33_333_ms": 0
+        },
+        "interaction": {
+          "frames": 33426,
+          "mean_ms": 0.005853946030036499,
+          "p95_ms": 0.015,
+          "max_ms": 0.403,
+          "over_33_333_ms": 0
+        },
+        "mask_sync": {
+          "frames": 33426,
+          "mean_ms": 0.008199635014659248,
+          "p95_ms": 0.004,
+          "max_ms": 3.795,
+          "over_33_333_ms": 0
+        },
+        "scenery_sync": {
+          "frames": 33426,
+          "mean_ms": 0.017138365344342727,
+          "p95_ms": 0.002,
+          "max_ms": 5.726,
+          "over_33_333_ms": 0
+        },
+        "source_lighting": {
+          "frames": 33426,
+          "mean_ms": 0.08408391671154192,
+          "p95_ms": 0.13,
+          "max_ms": 5.974,
+          "over_33_333_ms": 0
+        },
+        "source_lighting_resolve": {
+          "frames": 253,
+          "mean_ms": 0.9134545454545454,
+          "p95_ms": 1.404,
+          "max_ms": 1.701,
+          "over_33_333_ms": 0
+        },
+        "static_order": {
+          "frames": 70,
+          "mean_ms": 1.3313,
+          "p95_ms": 1.766,
+          "max_ms": 2.095,
+          "over_33_333_ms": 0
+        },
+        "view_retirement": {
+          "frames": 425,
+          "mean_ms": 0.7466564705882354,
+          "p95_ms": 3.82,
+          "max_ms": 9.072,
+          "over_33_333_ms": 0
+        },
+        "wall_candidates": {
+          "frames": 106,
+          "mean_ms": 2.2991981132075474,
+          "p95_ms": 2.945,
+          "max_ms": 3.354,
+          "over_33_333_ms": 0
+        },
+        "wall_targets": {
+          "frames": 106,
+          "mean_ms": 0.00710377358490566,
+          "p95_ms": 0.008,
+          "max_ms": 0.103,
+          "over_33_333_ms": 0
+        },
+        "wall_visibility": {
+          "frames": 106,
+          "mean_ms": 5.967830188679246,
+          "p95_ms": 8.863,
+          "max_ms": 10.929,
+          "over_33_333_ms": 0
+        },
+        "world_ground": {
+          "frames": 85,
+          "mean_ms": 1.0939529411764706,
+          "p95_ms": 1.671,
+          "max_ms": 2.069,
+          "over_33_333_ms": 0
+        },
+        "world_objects": {
+          "frames": 85,
+          "mean_ms": 0.7853411764705883,
+          "p95_ms": 0.966,
+          "max_ms": 1.925,
+          "over_33_333_ms": 0
+        },
+        "world_rows": {
+          "frames": 172,
+          "mean_ms": 0.045680232558139536,
+          "p95_ms": 0.113,
+          "max_ms": 0.301,
+          "over_33_333_ms": 0
+        },
+        "world_sync": {
+          "frames": 172,
+          "mean_ms": 3.234383720930232,
+          "p95_ms": 7.686,
+          "max_ms": 13.77,
+          "over_33_333_ms": 0
+        },
+        "world_views": {
+          "frames": 85,
+          "mean_ms": 0.11028235294117647,
+          "p95_ms": 0.008,
+          "max_ms": 8.914,
+          "over_33_333_ms": 0
+        }
+      },
+      "active_retirement_intervals_ms": 947.395
+    },
+    "crypt_before": {
+      "gpu": "NVIDIA GeForce RTX 5090",
+      "renderer": "gl_compatibility",
+      "resolution": [
+        1440.0,
+        900.0
+      ],
+      "vsync_mode": 0,
+      "sample_count": 10858,
+      "recording_total": 10858,
+      "recording_evicted": 0,
+      "path": "generated/profiles/2026-10-12T16-52-23-crypt-order-native.json",
+      "stages": {
+        "initialization": {
+          "frames": 1327,
+          "mean_ms": 0.3850994724943481,
+          "p95_ms": 0.473,
+          "max_ms": 4.852,
+          "over_33_333_ms": 0
+        },
+        "playback": {
+          "frames": 8271,
+          "mean_ms": 1.8979083544915971,
+          "p95_ms": 2.885,
+          "max_ms": 25.209,
+          "over_33_333_ms": 0
+        },
+        "first_inventory_open": {
+          "frames": 60,
+          "mean_ms": 1.9829,
+          "p95_ms": 2.561,
+          "max_ms": 13.229,
+          "over_33_333_ms": 0
+        },
+        "settled": {
+          "frames": 300,
+          "mean_ms": 1.61894,
+          "p95_ms": 1.962,
+          "max_ms": 2.999,
+          "over_33_333_ms": 0
+        },
+        "wide": {
+          "frames": 300,
+          "mean_ms": 1.6574433333333334,
+          "p95_ms": 2.117,
+          "max_ms": 2.451,
+          "over_33_333_ms": 0
+        },
+        "solid_wide": {
+          "frames": 300,
+          "mean_ms": 1.4640866666666668,
+          "p95_ms": 1.645,
+          "max_ms": 5.159,
+          "over_33_333_ms": 0
+        },
+        "hidden_wide": {
+          "frames": 300,
+          "mean_ms": 1.4075166666666667,
+          "p95_ms": 1.524,
+          "max_ms": 4.535,
+          "over_33_333_ms": 0
+        }
+      },
+      "traversal_including_loading": {
+        "frames": 8271,
+        "mean_ms": 1.8979083544915971,
+        "p95_ms": 2.885,
+        "max_ms": 25.209,
+        "over_33_333_ms": 0
+      },
+      "slowest_traversal": [
+        {
+          "frame": 2853,
+          "frame_ms": 25.209,
+          "cpu_ms": {
+            "actor_sample": 0.372,
+            "actor_sync": 0.005,
+            "draw_order": 0.083,
+            "hud_draw": 0.01,
+            "hud_process": 0.025,
+            "interaction": 0.01,
+            "manual_timeline_advance": 0.211,
+            "mask_sync": 9.008,
+            "media_upload": 0.221,
+            "player_process": 24.126,
+            "scenery_sync": 0.54,
+            "session_timeline": 0.246,
+            "source_lighting": 0.789,
+            "static_order": 0.541,
+            "texture_upload": 0.581,
+            "wall_candidates": 0.743,
+            "wall_targets": 0.149,
+            "wall_visibility": 10.668,
+            "world_ground": 0.449,
+            "world_objects": 10.051,
+            "world_rows": 1.212,
+            "world_sync": 11.851,
+            "world_views": 0.016
+          },
+          "sequence": 0,
+          "stage": "playback",
+          "world_preparing": null,
+          "world_waiting": null,
+          "retiring_nodes": 0,
+          "cached_quarters": 0
+        },
+        {
+          "frame": 2854,
+          "frame_ms": 22.849,
+          "cpu_ms": {
+            "actor_sample": 0.542,
+            "actor_sync": 0.719,
+            "draw_order": 0.101,
+            "hud_draw": 0.06,
+            "hud_process": 0.214,
+            "interaction": 0.043,
+            "manual_timeline_advance": 1.815,
+            "mask_sync": 0.009,
+            "media_plan": 0.916,
+            "media_upload": 1.436,
+            "player_process": 3.442,
+            "scenery_sync": 0.003,
+            "session_timeline": 1.534,
+            "source_lighting": 0.048,
+            "source_lighting_resolve": 0.323
+          },
+          "sequence": 1,
+          "stage": "playback",
+          "world_preparing": null,
+          "world_waiting": null,
+          "retiring_nodes": 0,
+          "cached_quarters": 0
+        },
+        {
+          "frame": 4759,
+          "frame_ms": 15.093,
+          "cpu_ms": {
+            "actor_sample": 0.337,
+            "actor_sync": 0.502,
+            "draw_order": 0.063,
+            "hud_draw": 0.038,
+            "hud_process": 0.03,
+            "interaction": 0.009,
+            "manual_timeline_advance": 0.006,
+            "mask_sync": 0.973,
+            "media_plan": 0.818,
+            "player_process": 13.894,
+            "scenery_sync": 0.57,
+            "session_timeline": 0.966,
+            "source_lighting": 0.617,
+            "static_order": 1.248,
+            "wall_candidates": 1.097,
+            "wall_targets": 0.426,
+            "wall_visibility": 4.059,
+            "world_ground": 0.557,
+            "world_objects": 5.25,
+            "world_rows": 1.102,
+            "world_sync": 7.213,
+            "world_views": 0.002
+          },
+          "sequence": 21,
+          "stage": "playback",
+          "world_preparing": null,
+          "world_waiting": null,
+          "retiring_nodes": 0,
+          "cached_quarters": 0
+        },
+        {
+          "frame": 5027,
+          "frame_ms": 14.576,
+          "cpu_ms": {
+            "actor_sample": 0.409,
+            "actor_sync": 2.509,
+            "draw_order": 0.067,
+            "hud_draw": 0.15,
+            "hud_process": 0.145,
+            "interaction": 0.011,
+            "manual_timeline_advance": 0.956,
+            "mask_sync": 0.861,
+            "player_process": 12.21,
+            "scenery_sync": 0.543,
+            "session_timeline": 0.012,
+            "source_lighting": 0.587,
+            "source_lighting_resolve": 0.468,
+            "static_order": 1.294,
+            "wall_candidates": 1.385,
+            "wall_targets": 0.238,
+            "wall_visibility": 4.069,
+            "world_ground": 0.53,
+            "world_objects": 2.49,
+            "world_rows": 0.65,
+            "world_sync": 3.945,
+            "world_views": 0.002
+          },
+          "sequence": 21,
+          "stage": "playback",
+          "world_preparing": null,
+          "world_waiting": null,
+          "retiring_nodes": 0,
+          "cached_quarters": 0
+        },
+        {
+          "frame": 9528,
+          "frame_ms": 13.554,
+          "cpu_ms": {
+            "actor_sample": 0.714,
+            "actor_sync": 0.001,
+            "draw_order": 0.066,
+            "hud_draw": 0.142,
+            "hud_process": 0.168,
+            "interaction": 0.007,
+            "manual_timeline_advance": 7.533,
+            "mask_sync": 0.83,
+            "media_plan": 6.123,
+            "player_process": 4.113,
+            "scenery_sync": 0.466,
+            "session_timeline": 0.121,
+            "source_lighting": 0.511,
+            "source_lighting_resolve": 0.35,
+            "static_order": 0.385,
+            "wall_candidates": 0.662,
+            "wall_targets": 0.038,
+            "wall_visibility": 2.319
+          },
+          "sequence": 61,
+          "stage": "playback",
+          "world_preparing": null,
+          "world_waiting": null,
+          "retiring_nodes": 0,
+          "cached_quarters": 0
+        },
+        {
+          "frame": 8996,
+          "frame_ms": 12.949,
+          "cpu_ms": {
+            "actor_sample": 0.624,
+            "actor_sync": 0.73,
+            "draw_order": 0.06,
+            "hud_draw": 0.184,
+            "hud_process": 0.189,
+            "interaction": 0.032,
+            "manual_timeline_advance": 4.578,
+            "mask_sync": 0.73,
+            "media_plan": 3.48,
+            "player_process": 6.57,
+            "scenery_sync": 0.442,
+            "session_timeline": 0.02,
+            "source_lighting": 0.471,
+            "source_lighting_resolve": 0.34,
+            "static_order": 1.306,
+            "wall_candidates": 0.625,
+            "wall_targets": 0.005,
+            "wall_visibility": 3.038,
+            "world_ground": 0.004,
+            "world_objects": 0.489,
+            "world_rows": 0.176,
+            "world_sync": 1.121,
+            "world_views": 0.003
+          },
+          "sequence": 58,
+          "stage": "playback",
+          "world_preparing": null,
+          "world_waiting": null,
+          "retiring_nodes": 0,
+          "cached_quarters": 0
+        },
+        {
+          "frame": 7079,
+          "frame_ms": 10.454,
+          "cpu_ms": {
+            "actor_sample": 0.746,
+            "actor_sync": 0.001,
+            "draw_order": 0.07,
+            "hud_draw": 0.132,
+            "hud_process": 0.216,
+            "interaction": 0.008,
+            "manual_timeline_advance": 4.349,
+            "mask_sync": 0.811,
+            "media_plan": 3.519,
+            "player_process": 4.24,
+            "scenery_sync": 0.528,
+            "session_timeline": 0.118,
+            "source_lighting": 0.572,
+            "source_lighting_resolve": 0.353,
+            "static_order": 0.412,
+            "wall_candidates": 0.687,
+            "wall_targets": 0.006,
+            "wall_visibility": 2.342
+          },
+          "sequence": 43,
+          "stage": "playback",
+          "world_preparing": null,
+          "world_waiting": null,
+          "retiring_nodes": 0,
+          "cached_quarters": 0
+        },
+        {
+          "frame": 5463,
+          "frame_ms": 10.303,
+          "cpu_ms": {
+            "actor_sample": 0.49,
+            "actor_sync": 0.754,
+            "draw_order": 0.061,
+            "hud_draw": 0.126,
+            "hud_process": 0.133,
+            "interaction": 0.016,
+            "manual_timeline_advance": 2.447,
+            "mask_sync": 0.006,
+            "media_plan": 1.112,
+            "player_process": 6.111,
+            "scenery_sync": 0.564,
+            "session_timeline": 0.024,
+            "source_lighting": 0.627,
+            "source_lighting_resolve": 0.552,
+            "static_order": 1.294,
+            "wall_candidates": 0.536,
+            "wall_targets": 0.025,
+            "wall_visibility": 2.214,
+            "world_ground": 0.004,
+            "world_objects": 0.535,
+            "world_rows": 0.265,
+            "world_sync": 1.22,
+            "world_views": 0.003
+          },
+          "sequence": 26,
+          "stage": "playback",
+          "world_preparing": null,
+          "world_waiting": null,
+          "retiring_nodes": 0,
+          "cached_quarters": 0
+        },
+        {
+          "frame": 5538,
+          "frame_ms": 10.229,
+          "cpu_ms": {
+            "actor_sample": 0.67,
+            "actor_sync": 0.798,
+            "draw_order": 0.062,
+            "hud_draw": 0.144,
+            "hud_process": 0.151,
+            "interaction": 0.017,
+            "manual_timeline_advance": 1.017,
+            "mask_sync": 0.006,
+            "player_process": 6.421,
+            "scenery_sync": 0.496,
+            "session_timeline": 0.019,
+            "source_lighting": 0.551,
+            "source_lighting_resolve": 0.388,
+            "static_order": 1.299,
+            "wall_candidates": 0.671,
+            "wall_targets": 0.019,
+            "wall_visibility": 2.386,
+            "world_ground": 0.005,
+            "world_objects": 0.6,
+            "world_rows": 0.244,
+            "world_sync": 1.342,
+            "world_views": 0.004
+          },
+          "sequence": 27,
+          "stage": "playback",
+          "world_preparing": null,
+          "world_waiting": null,
+          "retiring_nodes": 0,
+          "cached_quarters": 0
+        },
+        {
+          "frame": 8340,
+          "frame_ms": 9.706,
+          "cpu_ms": {
+            "actor_sample": 0.407,
+            "actor_sync": 0.6,
+            "draw_order": 0.074,
+            "hud_draw": 0.018,
+            "hud_process": 0.094,
+            "interaction": 0.005,
+            "manual_timeline_advance": 5.885,
+            "mask_sync": 0.003,
+            "media_plan": 5.968,
+            "player_process": 2.559,
+            "scenery_sync": 0.002,
+            "session_timeline": 1.063,
+            "source_lighting": 0.036,
+            "source_lighting_resolve": 0.258
+          },
+          "sequence": 51,
+          "stage": "playback",
+          "world_preparing": null,
+          "world_waiting": null,
+          "retiring_nodes": 0,
+          "cached_quarters": 0
+        }
+      ],
+      "matched_sequence_maxima": {
+        "40": {
+          "frame": 6638,
+          "frame_ms": 3.321,
+          "cpu_ms": {
+            "actor_sample": 0.353,
+            "actor_sync": 0.53,
+            "draw_order": 0.074,
+            "hud_draw": 0.095,
+            "hud_process": 0.039,
+            "interaction": 0.003,
+            "manual_timeline_advance": 0.005,
+            "mask_sync": 0.003,
+            "media_plan": 0.839,
+            "player_process": 2.108,
+            "scenery_sync": 0.002,
+            "session_timeline": 0.981,
+            "source_lighting": 0.03
+          },
+          "sequence": 40,
+          "stage": "playback",
+          "world_preparing": null,
+          "world_waiting": null,
+          "retiring_nodes": 0,
+          "cached_quarters": 0
+        }
+      },
+      "final_media": {
+        "encounter_preload": null,
+        "character_media": {
+          "budget_bytes": 536870912,
+          "decode_ms": 7246.002,
+          "decoded": 1002,
+          "estimated_bytes": 849346560,
+          "evicted": 817,
+          "failed": {},
+          "metadata_jobs": 107,
+          "metadata_ms": 518.399,
+          "pending": 0,
+          "pinned_bytes": 849346560,
+          "pinned_over_budget_bytes": 312475648,
+          "resident_sheets": 88
+        },
+        "environment_media": {
+          "budget_bytes": null,
+          "decode_ms": 7246.002,
+          "decoded": 1002,
+          "estimated_bytes": 217841664,
+          "evicted": 817,
+          "failed": {},
+          "metadata_jobs": 107,
+          "metadata_ms": 518.399,
+          "pending": 0,
+          "pinned_bytes": 217841664,
+          "pinned_over_budget_bytes": 0,
+          "resident_sheets": 97
+        }
+      },
+      "nonzero_inclusive_cpu_phases": {
+        "actor_sample": {
+          "frames": 8271,
+          "mean_ms": 0.29161927215572486,
+          "p95_ms": 0.378,
+          "max_ms": 0.879,
+          "over_33_333_ms": 0
+        },
+        "actor_sync": {
+          "frames": 8080,
+          "mean_ms": 0.015200618811881188,
+          "p95_ms": 0.005,
+          "max_ms": 4.216,
+          "over_33_333_ms": 0
+        },
+        "draw_order": {
+          "frames": 8271,
+          "mean_ms": 0.08044831338411317,
+          "p95_ms": 0.244,
+          "max_ms": 0.45,
+          "over_33_333_ms": 0
+        },
+        "hud_draw": {
+          "frames": 8271,
+          "mean_ms": 0.03187970015717568,
+          "p95_ms": 0.049,
+          "max_ms": 0.316,
+          "over_33_333_ms": 0
+        },
+        "hud_process": {
+          "frames": 8271,
+          "mean_ms": 0.029087776568734132,
+          "p95_ms": 0.056,
+          "max_ms": 0.508,
+          "over_33_333_ms": 0
+        },
+        "interaction": {
+          "frames": 8271,
+          "mean_ms": 0.0060281707169628825,
+          "p95_ms": 0.013,
+          "max_ms": 0.095,
+          "over_33_333_ms": 0
+        },
+        "manual_timeline_advance": {
+          "frames": 8271,
+          "mean_ms": 0.22175661951396444,
+          "p95_ms": 0.344,
+          "max_ms": 7.533,
+          "over_33_333_ms": 0
+        },
+        "mask_sync": {
+          "frames": 8271,
+          "mean_ms": 0.0047231290049570785,
+          "p95_ms": 0.003,
+          "max_ms": 9.008,
+          "over_33_333_ms": 0
+        },
+        "player_process": {
+          "frames": 8271,
+          "mean_ms": 0.6482875105791319,
+          "p95_ms": 1.499,
+          "max_ms": 24.126,
+          "over_33_333_ms": 0
+        },
+        "scenery_sync": {
+          "frames": 8271,
+          "mean_ms": 0.004387256679966147,
+          "p95_ms": 0.002,
+          "max_ms": 0.57,
+          "over_33_333_ms": 0
+        },
+        "session_timeline": {
+          "frames": 8271,
+          "mean_ms": 0.11724458952968203,
+          "p95_ms": 0.876,
+          "max_ms": 4.203,
+          "over_33_333_ms": 0
+        },
+        "source_lighting": {
+          "frames": 8271,
+          "mean_ms": 0.02935533792769919,
+          "p95_ms": 0.037,
+          "max_ms": 0.789,
+          "over_33_333_ms": 0
+        },
+        "media_plan": {
+          "frames": 216,
+          "mean_ms": 1.0000092592592593,
+          "p95_ms": 3.48,
+          "max_ms": 6.123,
+          "over_33_333_ms": 0
+        },
+        "media_upload": {
+          "frames": 1002,
+          "mean_ms": 0.5740449101796407,
+          "p95_ms": 0.856,
+          "max_ms": 1.436,
+          "over_33_333_ms": 0
+        },
+        "static_order": {
+          "frames": 19,
+          "mean_ms": 0.8360526315789474,
+          "p95_ms": 1.306,
+          "max_ms": 1.348,
+          "over_33_333_ms": 0
+        },
+        "texture_upload": {
+          "frames": 1,
+          "mean_ms": 0.581,
+          "p95_ms": 0.581,
+          "max_ms": 0.581,
+          "over_33_333_ms": 0
+        },
+        "wall_candidates": {
+          "frames": 30,
+          "mean_ms": 0.5967,
+          "p95_ms": 0.743,
+          "max_ms": 1.385,
+          "over_33_333_ms": 0
+        },
+        "wall_targets": {
+          "frames": 30,
+          "mean_ms": 0.05503333333333334,
+          "p95_ms": 0.149,
+          "max_ms": 0.426,
+          "over_33_333_ms": 0
+        },
+        "wall_visibility": {
+          "frames": 30,
+          "mean_ms": 2.1287666666666665,
+          "p95_ms": 4.059,
+          "max_ms": 10.668,
+          "over_33_333_ms": 0
+        },
+        "world_ground": {
+          "frames": 12,
+          "mean_ms": 0.15241666666666667,
+          "p95_ms": 0.53,
+          "max_ms": 0.557,
+          "over_33_333_ms": 0
+        },
+        "world_objects": {
+          "frames": 12,
+          "mean_ms": 2.04225,
+          "p95_ms": 5.25,
+          "max_ms": 10.051,
+          "over_33_333_ms": 0
+        },
+        "world_rows": {
+          "frames": 75,
+          "mean_ms": 0.13237333333333334,
+          "p95_ms": 0.265,
+          "max_ms": 1.212,
+          "over_33_333_ms": 0
+        },
+        "world_sync": {
+          "frames": 75,
+          "mean_ms": 0.53852,
+          "p95_ms": 1.342,
+          "max_ms": 11.851,
+          "over_33_333_ms": 0
+        },
+        "world_views": {
+          "frames": 12,
+          "mean_ms": 0.00375,
+          "p95_ms": 0.004,
+          "max_ms": 0.016,
+          "over_33_333_ms": 0
+        },
+        "source_lighting_resolve": {
+          "frames": 113,
+          "mean_ms": 0.29430088495575224,
+          "p95_ms": 0.399,
+          "max_ms": 0.552,
+          "over_33_333_ms": 0
+        }
+      },
+      "active_retirement_intervals_ms": 0
+    },
+    "gallery_before": {
+      "gpu": "NVIDIA GeForce RTX 5090",
+      "renderer": "gl_compatibility",
+      "resolution": [
+        1440.0,
+        900.0
+      ],
+      "vsync_mode": 0,
+      "sample_count": 28644,
+      "recording_total": 28644,
+      "recording_evicted": 0,
+      "path": "generated/profiles/2026-10-12T16-53-45-gallery-order-native.json",
+      "stages": {
+        "initialization": {
+          "frames": 1348,
+          "mean_ms": 0.3797626112759644,
+          "p95_ms": 0.463,
+          "max_ms": 4.822,
+          "over_33_333_ms": 0
+        },
+        "traversal": {
+          "frames": 24363,
+          "mean_ms": 2.7770529901900423,
+          "p95_ms": 4.038,
+          "max_ms": 59.405,
+          "over_33_333_ms": 47
+        },
+        "midroute_prepare_q1": {
+          "frames": 42,
+          "mean_ms": 6.212214285714286,
+          "p95_ms": 7.178,
+          "max_ms": 11.902,
+          "over_33_333_ms": 0
+        },
+        "midroute_prepare_q2": {
+          "frames": 46,
+          "mean_ms": 6.5863695652173915,
+          "p95_ms": 8.306,
+          "max_ms": 14.749,
+          "over_33_333_ms": 0
+        },
+        "midroute_prepare_q3": {
+          "frames": 47,
+          "mean_ms": 6.797085106382979,
+          "p95_ms": 7.46,
+          "max_ms": 15.653,
+          "over_33_333_ms": 0
+        },
+        "midroute_prepare_q0": {
+          "frames": 2,
+          "mean_ms": 10.622499999999999,
+          "p95_ms": 8.722,
+          "max_ms": 12.523,
+          "over_33_333_ms": 0
+        },
+        "traversal_cached_views": {
+          "frames": 513,
+          "mean_ms": 2.753947368421053,
+          "p95_ms": 3.519,
+          "max_ms": 40.985,
+          "over_33_333_ms": 1
+        },
+        "traversal_cached_invalidation": {
+          "frames": 181,
+          "mean_ms": 4.571618784530386,
+          "p95_ms": 6.84,
+          "max_ms": 43.89,
+          "over_33_333_ms": 3
+        },
+        "rotate_z20_q0": {
+          "frames": 20,
+          "mean_ms": 4.47035,
+          "p95_ms": 5.267,
+          "max_ms": 18.176,
+          "over_33_333_ms": 0
+        },
+        "gallery_z20_q0": {
+          "frames": 180,
+          "mean_ms": 3.6500833333333333,
+          "p95_ms": 5.045,
+          "max_ms": 6.689,
+          "over_33_333_ms": 0
+        },
+        "rotate_z20_q1": {
+          "frames": 68,
+          "mean_ms": 6.347955882352942,
+          "p95_ms": 10.15,
+          "max_ms": 15.175,
+          "over_33_333_ms": 0
+        },
+        "gallery_z20_q1": {
+          "frames": 180,
+          "mean_ms": 2.7557833333333335,
+          "p95_ms": 3.714,
+          "max_ms": 5.403,
+          "over_33_333_ms": 0
+        },
+        "rotate_z20_q2": {
+          "frames": 64,
+          "mean_ms": 5.962,
+          "p95_ms": 10.145,
+          "max_ms": 16.675,
+          "over_33_333_ms": 0
+        },
+        "gallery_z20_q2": {
+          "frames": 180,
+          "mean_ms": 2.494266666666667,
+          "p95_ms": 2.848,
+          "max_ms": 3.7,
+          "over_33_333_ms": 0
+        },
+        "rotate_z20_q3": {
+          "frames": 62,
+          "mean_ms": 5.208419354838709,
+          "p95_ms": 7.236,
+          "max_ms": 12.806,
+          "over_33_333_ms": 0
+        },
+        "gallery_z20_q3": {
+          "frames": 180,
+          "mean_ms": 2.4700555555555557,
+          "p95_ms": 3.224,
+          "max_ms": 3.613,
+          "over_33_333_ms": 0
+        },
+        "rotate_z70_q0": {
+          "frames": 22,
+          "mean_ms": 4.339363636363637,
+          "p95_ms": 9.057,
+          "max_ms": 16.793,
+          "over_33_333_ms": 0
+        },
+        "gallery_z70_q0": {
+          "frames": 180,
+          "mean_ms": 3.0580611111111113,
+          "p95_ms": 3.318,
+          "max_ms": 4.013,
+          "over_33_333_ms": 0
+        },
+        "rotate_z70_q1": {
+          "frames": 22,
+          "mean_ms": 4.060727272727273,
+          "p95_ms": 9.248,
+          "max_ms": 10.05,
+          "over_33_333_ms": 0
+        },
+        "gallery_z70_q1": {
+          "frames": 180,
+          "mean_ms": 3.0648944444444446,
+          "p95_ms": 3.25,
+          "max_ms": 3.664,
+          "over_33_333_ms": 0
+        },
+        "rotate_z70_q2": {
+          "frames": 22,
+          "mean_ms": 3.9377272727272725,
+          "p95_ms": 8.688,
+          "max_ms": 9.592,
+          "over_33_333_ms": 0
+        },
+        "gallery_z70_q2": {
+          "frames": 180,
+          "mean_ms": 2.9646055555555555,
+          "p95_ms": 3.214,
+          "max_ms": 3.52,
+          "over_33_333_ms": 0
+        },
+        "rotate_z70_q3": {
+          "frames": 22,
+          "mean_ms": 3.8701818181818184,
+          "p95_ms": 8.239,
+          "max_ms": 9.161,
+          "over_33_333_ms": 0
+        },
+        "gallery_z70_q3": {
+          "frames": 180,
+          "mean_ms": 3.1551055555555556,
+          "p95_ms": 3.654,
+          "max_ms": 4.654,
+          "over_33_333_ms": 0
+        },
+        "solid_wide": {
+          "frames": 180,
+          "mean_ms": 2.806477777777778,
+          "p95_ms": 3.108,
+          "max_ms": 23.151,
+          "over_33_333_ms": 0
+        },
+        "hidden_wide": {
+          "frames": 180,
+          "mean_ms": 2.792038888888889,
+          "p95_ms": 3.292,
+          "max_ms": 17.71,
+          "over_33_333_ms": 0
+        }
+      },
+      "traversal_including_loading": {
+        "frames": 25057,
+        "mean_ms": 2.789543041864549,
+        "p95_ms": 4.05,
+        "max_ms": 59.405,
+        "over_33_333_ms": 51
+      },
+      "slowest_traversal": [
+        {
+          "frame": 8899,
+          "frame_ms": 59.405,
+          "cpu_ms": {
+            "actor_sample": 0.598,
+            "actor_sync": 0.801,
+            "draw_order": 0.063,
+            "hud_draw": 3.087,
+            "hud_process": 0.823,
+            "interaction": 0.138,
+            "manual_timeline_advance": 2.472,
+            "mask_sync": 2.792,
+            "player_process": 50.376,
+            "scenery_sync": 4.278,
+            "session_timeline": 0.021,
+            "source_lighting": 4.45,
+            "source_lighting_resolve": 1.372,
+            "static_order": 6.669,
+            "wall_candidates": 3.766,
+            "wall_targets": 2.149,
+            "wall_visibility": 16.467,
+            "world_ground": 5.478,
+            "world_objects": 14.513,
+            "world_rows": 4.448,
+            "world_sync": 26.155,
+            "world_views": 0.002
+          },
+          "sequence": 40,
+          "stage": "traversal",
+          "world_preparing": null,
+          "world_waiting": null,
+          "retiring_nodes": 0,
+          "cached_quarters": 0
+        },
+        {
+          "frame": 8504,
+          "frame_ms": 56.055,
+          "cpu_ms": {
+            "actor_sample": 0.552,
+            "actor_sync": 0.749,
+            "draw_order": 0.078,
+            "hud_draw": 0.09,
+            "hud_process": 0.037,
+            "interaction": 0.013,
+            "manual_timeline_advance": 0.005,
+            "mask_sync": 2.339,
+            "media_plan": 1.154,
+            "player_process": 54.199,
+            "scenery_sync": 4.689,
+            "session_timeline": 1.362,
+            "source_lighting": 4.846,
+            "static_order": 4.585,
+            "wall_candidates": 3.356,
+            "wall_targets": 3.904,
+            "wall_visibility": 15.244,
+            "world_ground": 5.145,
+            "world_objects": 18.088,
+            "world_rows": 6.127,
+            "world_sync": 31.133,
+            "world_views": 0.002
+          },
+          "sequence": 40,
+          "stage": "traversal",
+          "world_preparing": null,
+          "world_waiting": null,
+          "retiring_nodes": 0,
+          "cached_quarters": 0
+        },
+        {
+          "frame": 18945,
+          "frame_ms": 43.89,
+          "cpu_ms": {
+            "actor_sample": 0.617,
+            "actor_sync": 0.76,
+            "draw_order": 0.101,
+            "hud_draw": 3.781,
+            "hud_process": 0.97,
+            "interaction": 0.031,
+            "manual_timeline_advance": 3.435,
+            "mask_sync": 2.815,
+            "player_process": 33.449,
+            "scenery_sync": 4.077,
+            "session_timeline": 0.015,
+            "source_lighting": 4.241,
+            "source_lighting_resolve": 1.114,
+            "static_order": 7.07,
+            "view_retirement": 1.579,
+            "wall_candidates": 1.975,
+            "wall_targets": 0.927,
+            "wall_visibility": 14.264,
+            "world_ground": 6.241,
+            "world_objects": 0.94,
+            "world_rows": 1.207,
+            "world_sync": 10.443,
+            "world_views": 0.003
+          },
+          "sequence": 77,
+          "stage": "traversal_cached_invalidation",
+          "world_preparing": null,
+          "world_waiting": null,
+          "retiring_nodes": 854,
+          "cached_quarters": 0
+        },
+        {
+          "frame": 25967,
+          "frame_ms": 43.005,
+          "cpu_ms": {
+            "actor_sample": 0.574,
+            "actor_sync": 0.77,
+            "draw_order": 0.069,
+            "hud_draw": 4.121,
+            "hud_process": 1.2,
+            "interaction": 0.048,
+            "manual_timeline_advance": 0.598,
+            "mask_sync": 2.777,
+            "player_process": 35.033,
+            "scenery_sync": 4.057,
+            "session_timeline": 0.015,
+            "source_lighting": 4.242,
+            "source_lighting_resolve": 1.252,
+            "static_order": 7.298,
+            "wall_candidates": 2.086,
+            "wall_targets": 0.846,
+            "wall_visibility": 14.465,
+            "world_ground": 7.289,
+            "world_objects": 2.054,
+            "world_rows": 1.258,
+            "world_sync": 13.329,
+            "world_views": 0.003
+          },
+          "sequence": 98,
+          "stage": "traversal",
+          "world_preparing": null,
+          "world_waiting": null,
+          "retiring_nodes": 0,
+          "cached_quarters": 0
+        },
+        {
+          "frame": 25867,
+          "frame_ms": 42.939,
+          "cpu_ms": {
+            "actor_sample": 0.548,
+            "actor_sync": 0.72,
+            "draw_order": 0.071,
+            "hud_draw": 4.225,
+            "hud_process": 1.091,
+            "interaction": 0.055,
+            "manual_timeline_advance": 3.125,
+            "mask_sync": 2.749,
+            "player_process": 31.999,
+            "scenery_sync": 3.308,
+            "session_timeline": 0.019,
+            "source_lighting": 3.444,
+            "source_lighting_resolve": 1.168,
+            "static_order": 7.675,
+            "wall_candidates": 2.123,
+            "wall_targets": 0.818,
+            "wall_visibility": 14.679,
+            "world_ground": 6.436,
+            "world_objects": 1.154,
+            "world_rows": 1.21,
+            "world_sync": 10.995,
+            "world_views": 0.002
+          },
+          "sequence": 98,
+          "stage": "traversal",
+          "world_preparing": null,
+          "world_waiting": null,
+          "retiring_nodes": 0,
+          "cached_quarters": 0
+        },
+        {
+          "frame": 18144,
+          "frame_ms": 42.35,
+          "cpu_ms": {
+            "actor_sample": 0.707,
+            "actor_sync": 0.878,
+            "draw_order": 0.082,
+            "hud_draw": 4.008,
+            "hud_process": 1.001,
+            "interaction": 0.068,
+            "manual_timeline_advance": 0.649,
+            "mask_sync": 2.737,
+            "player_process": 34.439,
+            "scenery_sync": 4.461,
+            "session_timeline": 0.017,
+            "source_lighting": 4.689,
+            "source_lighting_resolve": 1.285,
+            "static_order": 7.283,
+            "wall_candidates": 2.335,
+            "wall_targets": 0.209,
+            "wall_visibility": 14.076,
+            "world_ground": 6.569,
+            "world_objects": 1.742,
+            "world_rows": 1.173,
+            "world_sync": 12.258,
+            "world_views": 0.003
+          },
+          "sequence": 74,
+          "stage": "traversal",
+          "world_preparing": null,
+          "world_waiting": null,
+          "retiring_nodes": 0,
+          "cached_quarters": 0
+        },
+        {
+          "frame": 21858,
+          "frame_ms": 41.787,
+          "cpu_ms": {
+            "actor_sample": 0.578,
+            "actor_sync": 0.82,
+            "draw_order": 0.071,
+            "hud_draw": 4.133,
+            "hud_process": 1.113,
+            "interaction": 0.053,
+            "manual_timeline_advance": 0.691,
+            "mask_sync": 2.691,
+            "player_process": 33.684,
+            "scenery_sync": 3.986,
+            "session_timeline": 0.015,
+            "source_lighting": 4.149,
+            "source_lighting_resolve": 1.174,
+            "static_order": 6.717,
+            "wall_candidates": 1.855,
+            "wall_targets": 0.857,
+            "wall_visibility": 13.413,
+            "world_ground": 8.237,
+            "world_objects": 1.144,
+            "world_rows": 1.203,
+            "world_sync": 13.15,
+            "world_views": 0.003
+          },
+          "sequence": 86,
+          "stage": "traversal",
+          "world_preparing": null,
+          "world_waiting": null,
+          "retiring_nodes": 0,
+          "cached_quarters": 0
+        },
+        {
+          "frame": 22907,
+          "frame_ms": 41.776,
+          "cpu_ms": {
+            "actor_sample": 0.629,
+            "actor_sync": 0.8,
+            "draw_order": 0.082,
+            "hud_draw": 4.266,
+            "hud_process": 1.105,
+            "interaction": 0.061,
+            "manual_timeline_advance": 0.639,
+            "mask_sync": 2.883,
+            "player_process": 33.522,
+            "scenery_sync": 4.057,
+            "session_timeline": 0.02,
+            "source_lighting": 4.227,
+            "source_lighting_resolve": 1.27,
+            "static_order": 7.2,
+            "wall_candidates": 2.193,
+            "wall_targets": 0.992,
+            "wall_visibility": 14.738,
+            "world_ground": 6.614,
+            "world_objects": 1.057,
+            "world_rows": 1.374,
+            "world_sync": 11.353,
+            "world_views": 0.003
+          },
+          "sequence": 88,
+          "stage": "traversal",
+          "world_preparing": null,
+          "world_waiting": null,
+          "retiring_nodes": 0,
+          "cached_quarters": 0
+        },
+        {
+          "frame": 18820,
+          "frame_ms": 40.985,
+          "cpu_ms": {
+            "actor_sample": 0.607,
+            "actor_sync": 0.78,
+            "draw_order": 0.069,
+            "hud_draw": 3.568,
+            "hud_process": 0.951,
+            "interaction": 0.02,
+            "manual_timeline_advance": 2.955,
+            "mask_sync": 0.553,
+            "player_process": 31.55,
+            "scenery_sync": 3.869,
+            "session_timeline": 0.014,
+            "source_lighting": 4.034,
+            "source_lighting_resolve": 1.122,
+            "view_retirement": 0.535,
+            "wall_candidates": 1.978,
+            "wall_targets": 0.164,
+            "wall_visibility": 4.069,
+            "world_ground": 8.311,
+            "world_objects": 0.585,
+            "world_rows": 1.031,
+            "world_sync": 20.048,
+            "world_views": 8.029
+          },
+          "sequence": 76,
+          "stage": "traversal_cached_views",
+          "world_preparing": null,
+          "world_waiting": null,
+          "retiring_nodes": 2845,
+          "cached_quarters": 0
+        },
+        {
+          "frame": 14324,
+          "frame_ms": 40.917,
+          "cpu_ms": {
+            "actor_sample": 0.642,
+            "actor_sync": 0.82,
+            "draw_order": 0.072,
+            "hud_draw": 3.864,
+            "hud_process": 0.91,
+            "interaction": 0.022,
+            "manual_timeline_advance": 3.399,
+            "mask_sync": 2.713,
+            "player_process": 29.502,
+            "scenery_sync": 3.497,
+            "session_timeline": 0.03,
+            "source_lighting": 3.653,
+            "source_lighting_resolve": 1.207,
+            "static_order": 6.515,
+            "wall_candidates": 1.839,
+            "wall_targets": 0.856,
+            "wall_visibility": 13.108,
+            "world_ground": 5.235,
+            "world_objects": 1.321,
+            "world_rows": 1.107,
+            "world_sync": 9.589,
+            "world_views": 0.003
+          },
+          "sequence": 62,
+          "stage": "traversal",
+          "world_preparing": null,
+          "world_waiting": null,
+          "retiring_nodes": 0,
+          "cached_quarters": 0
+        }
+      ],
+      "matched_sequence_maxima": {
+        "40": {
+          "frame": 8899,
+          "frame_ms": 59.405,
+          "cpu_ms": {
+            "actor_sample": 0.598,
+            "actor_sync": 0.801,
+            "draw_order": 0.063,
+            "hud_draw": 3.087,
+            "hud_process": 0.823,
+            "interaction": 0.138,
+            "manual_timeline_advance": 2.472,
+            "mask_sync": 2.792,
+            "player_process": 50.376,
+            "scenery_sync": 4.278,
+            "session_timeline": 0.021,
+            "source_lighting": 4.45,
+            "source_lighting_resolve": 1.372,
+            "static_order": 6.669,
+            "wall_candidates": 3.766,
+            "wall_targets": 2.149,
+            "wall_visibility": 16.467,
+            "world_ground": 5.478,
+            "world_objects": 14.513,
+            "world_rows": 4.448,
+            "world_sync": 26.155,
+            "world_views": 0.002
+          },
+          "sequence": 40,
+          "stage": "traversal",
+          "world_preparing": null,
+          "world_waiting": null,
+          "retiring_nodes": 0,
+          "cached_quarters": 0
+        },
+        "77": {
+          "frame": 18945,
+          "frame_ms": 43.89,
+          "cpu_ms": {
+            "actor_sample": 0.617,
+            "actor_sync": 0.76,
+            "draw_order": 0.101,
+            "hud_draw": 3.781,
+            "hud_process": 0.97,
+            "interaction": 0.031,
+            "manual_timeline_advance": 3.435,
+            "mask_sync": 2.815,
+            "player_process": 33.449,
+            "scenery_sync": 4.077,
+            "session_timeline": 0.015,
+            "source_lighting": 4.241,
+            "source_lighting_resolve": 1.114,
+            "static_order": 7.07,
+            "view_retirement": 1.579,
+            "wall_candidates": 1.975,
+            "wall_targets": 0.927,
+            "wall_visibility": 14.264,
+            "world_ground": 6.241,
+            "world_objects": 0.94,
+            "world_rows": 1.207,
+            "world_sync": 10.443,
+            "world_views": 0.003
+          },
+          "sequence": 77,
+          "stage": "traversal_cached_invalidation",
+          "world_preparing": null,
+          "world_waiting": null,
+          "retiring_nodes": 854,
+          "cached_quarters": 0
+        },
+        "98": {
+          "frame": 25967,
+          "frame_ms": 43.005,
+          "cpu_ms": {
+            "actor_sample": 0.574,
+            "actor_sync": 0.77,
+            "draw_order": 0.069,
+            "hud_draw": 4.121,
+            "hud_process": 1.2,
+            "interaction": 0.048,
+            "manual_timeline_advance": 0.598,
+            "mask_sync": 2.777,
+            "player_process": 35.033,
+            "scenery_sync": 4.057,
+            "session_timeline": 0.015,
+            "source_lighting": 4.242,
+            "source_lighting_resolve": 1.252,
+            "static_order": 7.298,
+            "wall_candidates": 2.086,
+            "wall_targets": 0.846,
+            "wall_visibility": 14.465,
+            "world_ground": 7.289,
+            "world_objects": 2.054,
+            "world_rows": 1.258,
+            "world_sync": 13.329,
+            "world_views": 0.003
+          },
+          "sequence": 98,
+          "stage": "traversal",
+          "world_preparing": null,
+          "world_waiting": null,
+          "retiring_nodes": 0,
+          "cached_quarters": 0
+        }
+      },
+      "final_media": {
+        "encounter_preload": null,
+        "character_media": {
+          "budget_bytes": 536870912,
+          "decode_ms": 13867.525,
+          "decoded": 1908,
+          "estimated_bytes": 849346560,
+          "evicted": 1661,
+          "failed": {},
+          "metadata_jobs": 172,
+          "metadata_ms": 1462.16,
+          "pending": 0,
+          "pinned_bytes": 849346560,
+          "pinned_over_budget_bytes": 312475648,
+          "resident_sheets": 88
+        },
+        "environment_media": {
+          "budget_bytes": null,
+          "decode_ms": 13867.525,
+          "decoded": 1908,
+          "estimated_bytes": 358219776,
+          "evicted": 1661,
+          "failed": {},
+          "metadata_jobs": 172,
+          "metadata_ms": 1462.16,
+          "pending": 0,
+          "pinned_bytes": 358219776,
+          "pinned_over_budget_bytes": 0,
+          "resident_sheets": 159
+        }
+      },
+      "nonzero_inclusive_cpu_phases": {
+        "actor_sample": {
+          "frames": 25057,
+          "mean_ms": 0.3294412339865107,
+          "p95_ms": 0.438,
+          "max_ms": 1.141,
+          "over_33_333_ms": 0
+        },
+        "actor_sync": {
+          "frames": 24800,
+          "mean_ms": 0.01232274193548387,
+          "p95_ms": 0.013,
+          "max_ms": 4.657,
+          "over_33_333_ms": 0
+        },
+        "draw_order": {
+          "frames": 25057,
+          "mean_ms": 0.13755198148222053,
+          "p95_ms": 0.587,
+          "max_ms": 2.57,
+          "over_33_333_ms": 0
+        },
+        "hud_draw": {
+          "frames": 25057,
+          "mean_ms": 0.10878612762900586,
+          "p95_ms": 0.164,
+          "max_ms": 5.376,
+          "over_33_333_ms": 0
+        },
+        "hud_process": {
+          "frames": 25057,
+          "mean_ms": 0.037601588378497024,
+          "p95_ms": 0.081,
+          "max_ms": 1.575,
+          "over_33_333_ms": 0
+        },
+        "interaction": {
+          "frames": 25057,
+          "mean_ms": 0.006290258211278286,
+          "p95_ms": 0.016,
+          "max_ms": 0.172,
+          "over_33_333_ms": 0
+        },
+        "manual_timeline_advance": {
+          "frames": 25057,
+          "mean_ms": 0.28429221375264396,
+          "p95_ms": 0.408,
+          "max_ms": 8.627,
+          "over_33_333_ms": 0
+        },
+        "mask_sync": {
+          "frames": 25057,
+          "mean_ms": 0.009800854052759708,
+          "p95_ms": 0.004,
+          "max_ms": 4.71,
+          "over_33_333_ms": 0
+        },
+        "player_process": {
+          "frames": 25057,
+          "mean_ms": 0.909453326415772,
+          "p95_ms": 1.658,
+          "max_ms": 54.199,
+          "over_33_333_ms": 9
+        },
+        "scenery_sync": {
+          "frames": 25057,
+          "mean_ms": 0.022033882747336073,
+          "p95_ms": 0.002,
+          "max_ms": 5.356,
+          "over_33_333_ms": 0
+        },
+        "session_timeline": {
+          "frames": 25057,
+          "mean_ms": 0.09000407071876122,
+          "p95_ms": 0.739,
+          "max_ms": 4.835,
+          "over_33_333_ms": 0
+        },
+        "source_lighting": {
+          "frames": 25057,
+          "mean_ms": 0.09235981961128628,
+          "p95_ms": 0.13,
+          "max_ms": 5.66,
+          "over_33_333_ms": 0
+        },
+        "media_plan": {
+          "frames": 341,
+          "mean_ms": 1.340357771260997,
+          "p95_ms": 4.321,
+          "max_ms": 7.863,
+          "over_33_333_ms": 0
+        },
+        "media_upload": {
+          "frames": 1908,
+          "mean_ms": 0.6686194968553459,
+          "p95_ms": 0.965,
+          "max_ms": 1.592,
+          "over_33_333_ms": 0
+        },
+        "static_order": {
+          "frames": 72,
+          "mean_ms": 5.607861111111111,
+          "p95_ms": 7.516,
+          "max_ms": 7.846,
+          "over_33_333_ms": 0
+        },
+        "texture_upload": {
+          "frames": 1,
+          "mean_ms": 0.573,
+          "p95_ms": 0.573,
+          "max_ms": 0.573,
+          "over_33_333_ms": 0
+        },
+        "wall_candidates": {
+          "frames": 116,
+          "mean_ms": 1.8195689655172413,
+          "p95_ms": 2.272,
+          "max_ms": 3.766,
+          "over_33_333_ms": 0
+        },
+        "wall_targets": {
+          "frames": 116,
+          "mean_ms": 0.40869827586206897,
+          "p95_ms": 0.927,
+          "max_ms": 3.904,
+          "over_33_333_ms": 0
+        },
+        "wall_visibility": {
+          "frames": 116,
+          "mean_ms": 8.21830172413793,
+          "p95_ms": 14.331,
+          "max_ms": 16.467,
+          "over_33_333_ms": 0
+        },
+        "world_ground": {
+          "frames": 85,
+          "mean_ms": 5.186870588235294,
+          "p95_ms": 6.879,
+          "max_ms": 8.311,
+          "over_33_333_ms": 0
+        },
+        "world_objects": {
+          "frames": 85,
+          "mean_ms": 1.5799882352941177,
+          "p95_ms": 2.444,
+          "max_ms": 18.088,
+          "over_33_333_ms": 0
+        },
+        "world_rows": {
+          "frames": 169,
+          "mean_ms": 0.6654911242603551,
+          "p95_ms": 1.266,
+          "max_ms": 6.127,
+          "over_33_333_ms": 0
+        },
+        "world_sync": {
+          "frames": 169,
+          "mean_ms": 5.1258106508875745,
+          "p95_ms": 11.549,
+          "max_ms": 31.133,
+          "over_33_333_ms": 0
+        },
+        "world_views": {
+          "frames": 85,
+          "mean_ms": 0.09761176470588236,
+          "p95_ms": 0.004,
+          "max_ms": 8.029,
+          "over_33_333_ms": 0
+        },
+        "source_lighting_resolve": {
+          "frames": 222,
+          "mean_ms": 0.9077432432432433,
+          "p95_ms": 1.309,
+          "max_ms": 1.567,
+          "over_33_333_ms": 0
+        },
+        "view_retirement": {
+          "frames": 180,
+          "mean_ms": 0.48178333333333334,
+          "p95_ms": 0.63,
+          "max_ms": 3.662,
+          "over_33_333_ms": 0
+        }
+      },
+      "active_retirement_intervals_ms": 858.775
+    }
+  },
+  "notes": [
+    "Whole traversal retains loading/preparation frames. Post-startup statistics are separate, not a replacement.",
+    "Same recorded commands and final states; asynchronous idle gaps and sampling trajectories differ. OS caches were not flushed.",
+    "Inclusive CPU phases overlap. View context is sampled at interval end; GPU timing can lag.",
+    "Native Windows RTX5090 Compatibility, 1440x900, VSync off. User-owned lighting demo was not stopped.",
+    "Media byte counts combine decoded CPU bytes and conservative GPU estimates, not measured VRAM residency."
+  ]
+}

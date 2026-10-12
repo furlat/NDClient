@@ -36,7 +36,8 @@
           16777208
         ],
         "noiseSheet": "/spell-palettes/source-hand-noise.png"
-      }
+      },
+      "role": "hand_magic"
     },
     "effects": [],
     "recovery": {
@@ -640,7 +641,11 @@
       "startOffsetMs": -303.57142857142856,
       "fps": 32.0,
       "scale": 0.5,
-      "depth": "behind_body"
+      "depth": "behind_body",
+      "effectGroup": {
+        "id": "effect",
+        "label": "Sacred Flame"
+      }
     },
     {
       "id": "front",
@@ -649,7 +654,11 @@
       "startOffsetMs": -303.57142857142856,
       "fps": 32.0,
       "scale": 0.5,
-      "depth": "front_body"
+      "depth": "front_body",
+      "effectGroup": {
+        "id": "effect",
+        "label": "Sacred Flame"
+      }
     }
   ],
   "contact": {

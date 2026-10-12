@@ -1,0 +1,142 @@
+{
+  "status": "passed_finite_scope",
+  "runtime": "Native Windows Godot4.7.2; original source data; renderer Compatibility1440x900 RTX5090",
+  "implementation": {
+    "shared_tracks": "presentation/tracks.gd",
+    "prefix_adapter": "presentation/prediction_recipes.gd",
+    "lifecycle": "presentation/prediction.gd",
+    "player": "play.gd",
+    "identity": [
+      "presentation/compiler.gd",
+      "presentation/session.gd"
+    ],
+    "media": [
+      "presentation/media_warmup.gd",
+      "presentation/encounter_media.gd"
+    ]
+  },
+  "tests": {
+    "presentation_identity_checks": {
+      "path": "generated/presentation_identity_checks.json",
+      "checks": 769,
+      "failures": []
+    },
+    "prediction_recording_checks": {
+      "path": "generated/prediction_recording_checks.json",
+      "checks": 3079,
+      "failures": []
+    },
+    "encounter_media_checks": {
+      "path": "generated/encounter_media_checks.json",
+      "checks": 79,
+      "failures": []
+    },
+    "media_warmup_checks": {
+      "path": "generated/media_warmup_checks.json",
+      "checks": 64,
+      "failures": []
+    },
+    "media_role_race_checks": {
+      "path": "generated/media_role_race_checks.json",
+      "checks": 10,
+      "failures": []
+    },
+    "prediction-source-attack": {
+      "log": ".runtime/prediction-source-attack.log",
+      "checks": 50,
+      "failures": 0,
+      "operations": 2
+    },
+    "prediction-source-canceled": {
+      "log": ".runtime/prediction-source-canceled.log",
+      "checks": 302,
+      "failures": 0,
+      "operations": 20
+    },
+    "prediction-source-gallery": {
+      "log": ".runtime/prediction-source-gallery.log",
+      "checks": 7969,
+      "failures": 0,
+      "operations": 101
+    },
+    "prediction-source-jump": {
+      "log": ".runtime/prediction-source-jump.log",
+      "checks": 97,
+      "failures": 0,
+      "operations": 2
+    },
+    "prediction-source-oa-jump-hit": {
+      "log": ".runtime/prediction-source-oa-jump-hit.log",
+      "checks": 107,
+      "failures": 0,
+      "operations": 2
+    },
+    "prediction-source-oa-jump-late-lethal": {
+      "log": ".runtime/prediction-source-oa-jump-late-lethal.log",
+      "checks": 98,
+      "failures": 0,
+      "operations": 2
+    },
+    "prediction-source-oa-walk-3": {
+      "log": ".runtime/prediction-source-oa-walk-3.log",
+      "checks": 75,
+      "failures": 0,
+      "operations": 2
+    },
+    "prediction-source-walk-diagonal": {
+      "log": ".runtime/prediction-source-walk-diagonal.log",
+      "checks": 81,
+      "failures": 0,
+      "operations": 2
+    },
+    "prediction-source-walk-fast": {
+      "log": ".runtime/prediction-source-walk-fast.log",
+      "checks": 81,
+      "failures": 0,
+      "operations": 2
+    },
+    "prediction-source-walk": {
+      "log": ".runtime/prediction-source-walk.log",
+      "checks": 81,
+      "failures": 0,
+      "operations": 2
+    },
+    "native_delayed_command": {
+      "path": ".runtime/player-runs/20261012T162732.811227Z/player-live-checks.json",
+      "checks": 32,
+      "failures": [],
+      "delay_ms": 2000,
+      "camera_quarter_changed_during_prediction": true,
+      "walk_and_jump_native_handoffs": 2
+    }
+  },
+  "profile": "generated/prediction_profiles.json",
+  "native_gallery_log": ".runtime/gallery-prediction-media.log",
+  "gallery": {
+    "packets": 102,
+    "groups": 122,
+    "tiles": 1761,
+    "objects": 360,
+    "canonical_match": true,
+    "drained": true,
+    "presentation_errors": [],
+    "frame_evictions": 0
+  },
+  "limitations": [
+    "Prediction begins on submission after a native preview, not before preview network latency.",
+    "Unconfirmed body prefix is at most120ms and before first entry/contact; missing media/support and known immediate reactions suppress it.",
+    "Outcome-dependent body changes (e.g. dagger critical), weapon-set changes, connectors and unsupported families remain confirmed-only.",
+    "No speculative gameplay reducer, outcomes, visibility, trace/log events or VFX; no1\u20132frame correction guarantee.",
+    "Future effects require their own authored samplers on the same scoped command lifetime; character-light integration/studio/VFX remain subsequent.",
+    "Full-map performance is mixed: fewer>33ms frames but higher post-preload p95/max; remaining wall/world/scenery/HUD publication and native view retirement remain measured costs.",
+    "The replay profiles only idle prediction overhead; real delayed movement/jump/rotation tested separately.",
+    "Existing one-byte native lighting comparison deviations from prior preparation pass are unchanged/not claimed repaired in this task."
+  ],
+  "reviews": {
+    "plan_adherence": "scope_review",
+    "anti_slop_anti_oop": "scope_review",
+    "identity_recordings": "map_audit",
+    "media": "render_audit",
+    "fixed_finding": "Use native equipped attack-source metadata instead of item category; test all plausible outcome variants and source cache immutability."
+  }
+}

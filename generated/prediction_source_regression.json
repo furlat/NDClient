@@ -1,0 +1,58 @@
+[
+  {
+    "case": "walk",
+    "exit_code": 0,
+    "summary": "PRESENTATION_CHECKS checks=81 failures=0 operations=2 tracks=3 kinds=[\"path\"] evidence={ \"committed_steps\": 3, \"uncommitted_steps\": 0, \"jump_segments\": 0, \"oa\": 0, \"damage_contacts\": 0, \"canceled\": 0 }",
+    "log": ".runtime/prediction-source-walk.log",
+    "script_errors": false
+  },
+  {
+    "case": "walk-diagonal",
+    "exit_code": 0,
+    "summary": "PRESENTATION_CHECKS checks=81 failures=0 operations=2 tracks=3 kinds=[\"path\"] evidence={ \"committed_steps\": 3, \"uncommitted_steps\": 0, \"jump_segments\": 0, \"oa\": 0, \"damage_contacts\": 0, \"canceled\": 0 }",
+    "log": ".runtime/prediction-source-walk-diagonal.log",
+    "script_errors": false
+  },
+  {
+    "case": "walk-fast",
+    "exit_code": 0,
+    "summary": "PRESENTATION_CHECKS checks=81 failures=0 operations=2 tracks=3 kinds=[\"path\"] evidence={ \"committed_steps\": 3, \"uncommitted_steps\": 0, \"jump_segments\": 0, \"oa\": 0, \"damage_contacts\": 0, \"canceled\": 0 }",
+    "log": ".runtime/prediction-source-walk-fast.log",
+    "script_errors": false
+  },
+  {
+    "case": "jump",
+    "exit_code": 0,
+    "summary": "PRESENTATION_CHECKS checks=97 failures=0 operations=2 tracks=3 kinds=[\"direct_arc\"] evidence={ \"committed_steps\": 3, \"uncommitted_steps\": 0, \"jump_segments\": 3, \"oa\": 0, \"damage_contacts\": 0, \"canceled\": 0 }",
+    "log": ".runtime/prediction-source-jump.log",
+    "script_errors": false
+  },
+  {
+    "case": "attack",
+    "exit_code": 0,
+    "summary": "PRESENTATION_CHECKS checks=50 failures=0 operations=2 tracks=2 kinds=[\"stationary\"] evidence={ \"committed_steps\": 0, \"uncommitted_steps\": 0, \"jump_segments\": 0, \"oa\": 0, \"damage_contacts\": 1, \"canceled\": 0 }",
+    "log": ".runtime/prediction-source-attack.log",
+    "script_errors": false
+  },
+  {
+    "case": "oa-walk-3",
+    "exit_code": 0,
+    "summary": "PRESENTATION_CHECKS checks=75 failures=0 operations=2 tracks=4 kinds=[\"stationary\", \"path\"] evidence={ \"committed_steps\": 1, \"uncommitted_steps\": 0, \"jump_segments\": 0, \"oa\": 1, \"damage_contacts\": 1, \"canceled\": 0 }",
+    "log": ".runtime/prediction-source-oa-walk-3.log",
+    "script_errors": false
+  },
+  {
+    "case": "oa-jump-hit",
+    "exit_code": 0,
+    "summary": "PRESENTATION_CHECKS checks=107 failures=0 operations=2 tracks=5 kinds=[\"stationary\", \"direct_arc\"] evidence={ \"committed_steps\": 2, \"uncommitted_steps\": 0, \"jump_segments\": 2, \"oa\": 1, \"damage_contacts\": 1, \"canceled\": 0 }",
+    "log": ".runtime/prediction-source-oa-jump-hit.log",
+    "script_errors": false
+  },
+  {
+    "case": "oa-jump-late-lethal",
+    "exit_code": 0,
+    "summary": "PRESENTATION_CHECKS checks=98 failures=0 operations=2 tracks=6 kinds=[\"direct_arc\", \"stationary\"] evidence={ \"committed_steps\": 2, \"uncommitted_steps\": 1, \"jump_segments\": 2, \"oa\": 1, \"damage_contacts\": 1, \"canceled\": 0 }",
+    "log": ".runtime/prediction-source-oa-jump-late-lethal.log",
+    "script_errors": false
+  }
+]

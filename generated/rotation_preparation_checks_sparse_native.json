@@ -1,0 +1,112 @@
+{
+  "checks": 74,
+  "failures": [],
+  "scope": "Actual Crypt sources with atomic cold publication, advancing native poses, rapid cached cancellation, and named visibility/projection/elevation renderer fixtures. Pixel comparison retains original tolerance.",
+  "timings": [
+    {
+      "elapsed_ms": 32.534,
+      "frames": 5,
+      "max_prepare_and_publish_cpu_ms": 4.601,
+      "old_view_pose_samples": 4,
+      "phases": [
+        "rows",
+        "mask",
+        "finish"
+      ],
+      "target": 1
+    },
+    {
+      "elapsed_ms": 36.133,
+      "frames": 6,
+      "max_prepare_and_publish_cpu_ms": 4.864,
+      "old_view_pose_samples": 5,
+      "phases": [
+        "rows",
+        "style",
+        "finish"
+      ],
+      "target": 2
+    },
+    {
+      "elapsed_ms": 41.416,
+      "frames": 7,
+      "max_prepare_and_publish_cpu_ms": 3.962,
+      "old_view_pose_samples": 6,
+      "phases": [
+        "rows",
+        "style",
+        "mask_position",
+        "finish"
+      ],
+      "target": 3
+    },
+    {
+      "elapsed_ms": 38.374,
+      "frames": 6,
+      "max_prepare_and_publish_cpu_ms": 5.478,
+      "old_view_pose_samples": 5,
+      "phases": [
+        "rows",
+        "mask",
+        "finish"
+      ],
+      "target": 0
+    },
+    {
+      "elapsed_ms": 38.43,
+      "frames": 6,
+      "max_prepare_and_publish_cpu_ms": 5.162,
+      "old_view_pose_samples": 5,
+      "phases": [
+        "rows",
+        "tiles",
+        "mask",
+        "finish"
+      ],
+      "target": 1
+    },
+    {
+      "elapsed_ms": 11.899,
+      "frames": 2,
+      "max_prepare_and_publish_cpu_ms": 1.253,
+      "old_view_pose_samples": 1,
+      "phases": [
+        "finish"
+      ],
+      "target": 2
+    },
+    {
+      "elapsed_ms": 175.974,
+      "frames": 26,
+      "max_prepare_and_publish_cpu_ms": 5.273,
+      "old_view_pose_samples": 25,
+      "phases": [
+        "rows",
+        "style",
+        "mask",
+        "finish"
+      ],
+      "target": 3
+    },
+    {
+      "case": "three_cached_view_invalidation",
+      "disposal": {
+        "elapsed_ms": 175.974,
+        "frames": 26,
+        "max_prepare_and_publish_cpu_ms": 5.273,
+        "old_view_pose_samples": 25,
+        "phases": [
+          "rows",
+          "style",
+          "mask",
+          "finish"
+        ],
+        "request_to_publication_ms": 176.23,
+        "target": 3
+      },
+      "disposal_elapsed_ms": 180.899,
+      "retired_native_nodes": 298,
+      "sync_cpu_ms": 4.378
+    }
+  ]
+}

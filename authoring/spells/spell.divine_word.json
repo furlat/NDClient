@@ -36,7 +36,8 @@
           16312503
         ],
         "noiseSheet": "/spell-palettes/source-hand-noise.png"
-      }
+      },
+      "role": "hand_magic"
     },
     "aura": {
       "id": "cast-aura",
@@ -56,7 +57,8 @@
           16312503
         ],
         "noiseSheet": "/spell-palettes/source-hand-noise.png"
-      }
+      },
+      "role": "aura"
     },
     "effects": [],
     "recovery": {
@@ -612,7 +614,11 @@
       "fps": 32.0,
       "scale": 0.5,
       "depth": "behind_body",
-      "viewFacing": "E"
+      "viewFacing": "E",
+      "effectGroup": {
+        "id": "divine_word",
+        "label": "Divine Word"
+      }
     },
     {
       "id": "divine_word.front",
@@ -621,7 +627,11 @@
       "fps": 32.0,
       "scale": 0.5,
       "depth": "front_body",
-      "viewFacing": "E"
+      "viewFacing": "E",
+      "effectGroup": {
+        "id": "divine_word",
+        "label": "Divine Word"
+      }
     },
     {
       "id": "proclamation.back",
@@ -630,7 +640,11 @@
       "fps": 32.0,
       "scale": 0.5,
       "depth": "behind_body",
-      "viewFacing": "E"
+      "viewFacing": "E",
+      "effectGroup": {
+        "id": "proclamation",
+        "label": "Divine Word · Proclamation"
+      }
     },
     {
       "id": "proclamation.front",
@@ -639,7 +653,11 @@
       "fps": 32.0,
       "scale": 0.5,
       "depth": "front_body",
-      "viewFacing": "E"
+      "viewFacing": "E",
+      "effectGroup": {
+        "id": "proclamation",
+        "label": "Divine Word · Proclamation"
+      }
     }
   ],
   "contact": {

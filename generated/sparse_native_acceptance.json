@@ -1,0 +1,67 @@
+[
+  {
+    "test": "world_incremental_checks",
+    "exit_code": 0,
+    "log": ".runtime/world_incremental_checks-sparse-native.log",
+    "errors": [],
+    "report": "generated/world_incremental_checks_sparse_native.json",
+    "checks": 93,
+    "failures": []
+  },
+  {
+    "test": "world_view_cache_checks",
+    "exit_code": 0,
+    "log": ".runtime/world_view_cache_checks-sparse-native.log",
+    "errors": [],
+    "report": "generated/world_view_cache_checks_sparse_native.json",
+    "checks": 123,
+    "failures": []
+  },
+  {
+    "test": "rotation_preparation_checks",
+    "exit_code": 0,
+    "log": ".runtime/rotation_preparation_checks-sparse-native.log",
+    "errors": [],
+    "report": "generated/rotation_preparation_checks_sparse_native.json",
+    "checks": 74,
+    "failures": []
+  },
+  {
+    "test": "wall_visibility_checks",
+    "exit_code": 0,
+    "log": ".runtime/wall_visibility_checks-sparse-native.log",
+    "errors": [],
+    "report": "generated/wall_visibility_checks_sparse_native.json",
+    "checks": 358,
+    "failures": []
+  },
+  {
+    "test": "wall_compositing_checks",
+    "exit_code": 0,
+    "log": ".runtime/wall_compositing_checks-sparse-native.log",
+    "errors": [],
+    "report": "generated/wall_compositing_checks_sparse_native.json",
+    "checks": 27,
+    "failures": []
+  },
+  {
+    "test": "wall_member_view_checks",
+    "exit_code": 1,
+    "log": ".runtime/wall_member_view_checks-sparse-native.log",
+    "errors": [],
+    "report": "generated/wall_member_view_checks_sparse_native.json",
+    "checks": 73,
+    "failures": [
+      "q2 no visible supports restores all members: complete room equals independent native-member composition (differing 1, max 0.00392156839371)"
+    ]
+  },
+  {
+    "test": "wall_member_view_checks-fixed",
+    "exit_code": 0,
+    "log": ".runtime/wall_member_view_checks-fixed-sparse-native.log",
+    "errors": [],
+    "report": "generated/wall_member_view_checks-fixed_sparse_native.json",
+    "checks": 73,
+    "failures": []
+  }
+]

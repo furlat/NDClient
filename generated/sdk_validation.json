@@ -1,0 +1,180 @@
+{
+  "completed_at_utc": "2026-10-11T20:58:40.369343+00:00",
+  "passed": true,
+  "scope": "Project-local Godot player SDK for current backend protocol 1 / player schema 5. Exploration renderer remains offline.",
+  "runtime": "Native Windows Godot 4.7.2 headless",
+  "protocol_identity": {
+    "protocol_version": 1,
+    "player_schema_version": 5,
+    "schema_digest": "e1bef8326fa0c5d44f079b32e69f439784e4ef8a4c4fd484234677bb7f26fac5"
+  },
+  "fast_suite_report": "/mnt/c/Users/tommaso/Documents/Dev/NDClientGodot/generated/sdk_checks.json",
+  "fast_suites": [
+    {
+      "test": "sdk_decimal_checks",
+      "checks": 3404,
+      "passed": true,
+      "seconds": 0.933,
+      "log": "/mnt/c/Users/tommaso/Documents/Dev/NDClientGodot/.runtime/sdk-checks/sdk_decimal_checks.log"
+    },
+    {
+      "test": "sdk_protocol_checks",
+      "checks": 53,
+      "passed": true,
+      "seconds": 0.287,
+      "log": "/mnt/c/Users/tommaso/Documents/Dev/NDClientGodot/.runtime/sdk-checks/sdk_protocol_checks.log"
+    },
+    {
+      "test": "sdk_protocol_parity",
+      "checks": 7754,
+      "passed": true,
+      "seconds": 1.765,
+      "log": "/mnt/c/Users/tommaso/Documents/Dev/NDClientGodot/.runtime/sdk-checks/sdk_protocol_parity.log"
+    },
+    {
+      "test": "sdk_reducer_checks",
+      "checks": 125,
+      "passed": true,
+      "seconds": 0.564,
+      "log": "/mnt/c/Users/tommaso/Documents/Dev/NDClientGodot/.runtime/sdk-checks/sdk_reducer_checks.log"
+    },
+    {
+      "test": "sdk_journal_checks",
+      "checks": 18,
+      "passed": true,
+      "seconds": 2.976,
+      "log": "/mnt/c/Users/tommaso/Documents/Dev/NDClientGodot/.runtime/sdk-checks/sdk_journal_checks.log"
+    },
+    {
+      "test": "sdk_transport_checks",
+      "checks": 341,
+      "passed": true,
+      "seconds": 4.505,
+      "log": "/mnt/c/Users/tommaso/Documents/Dev/NDClientGodot/.runtime/sdk-checks/sdk_transport_checks.log"
+    }
+  ],
+  "live_encounters": [
+    {
+      "case": "ranged",
+      "passed": true,
+      "commands": 9,
+      "behaviors": [
+        "action.attack",
+        "end_turn"
+      ],
+      "recorded_state_prefixes": 32,
+      "reconnects": 1,
+      "elapsed_godot_ms": 9550,
+      "seats": [
+        {
+          "seat": "amber",
+          "terminal": true,
+          "final_sequence": 15,
+          "cold_replay_matches": true
+        },
+        {
+          "seat": "blue",
+          "terminal": true,
+          "final_sequence": 15,
+          "cold_replay_matches": true
+        }
+      ],
+      "host_worker_returncode": 0,
+      "runtime_errors": false,
+      "evidence_directory": "/mnt/c/Users/tommaso/AppData/Local/Temp/ndclient-sdk-ranged-exact",
+      "game_result": "/mnt/c/Users/tommaso/AppData/Local/Temp/ndclient-sdk-ranged-exact/godot-result.json",
+      "host_result": "/mnt/c/Users/tommaso/AppData/Local/Temp/ndclient-sdk-ranged-exact/host-result.json"
+    },
+    {
+      "case": "magic_missile",
+      "passed": true,
+      "commands": 39,
+      "behaviors": [
+        "action.attack",
+        "end_turn",
+        "spell.fire_bolt",
+        "spell.magic_missile"
+      ],
+      "recorded_state_prefixes": 120,
+      "reconnects": 1,
+      "elapsed_godot_ms": 28813,
+      "seats": [
+        {
+          "seat": "amber",
+          "terminal": true,
+          "final_sequence": 59,
+          "cold_replay_matches": true
+        },
+        {
+          "seat": "blue",
+          "terminal": true,
+          "final_sequence": 59,
+          "cold_replay_matches": true
+        }
+      ],
+      "host_worker_returncode": 0,
+      "runtime_errors": false,
+      "evidence_directory": "/mnt/c/Users/tommaso/AppData/Local/Temp/ndclient-sdk-spells-verified",
+      "game_result": "/mnt/c/Users/tommaso/AppData/Local/Temp/ndclient-sdk-spells-verified/godot-result.json",
+      "host_result": "/mnt/c/Users/tommaso/AppData/Local/Temp/ndclient-sdk-spells-verified/host-result.json"
+    }
+  ],
+  "canonical_reduction": {
+    "passed": true,
+    "recorded_prefixes_compared_exactly": 152,
+    "combined_reducer_and_causal_cases": 459,
+    "typed_fact_classes": [
+      "ActionFact",
+      "AreaReachFact",
+      "AttackFact",
+      "ConditionChangeFact",
+      "DamageRequestFact",
+      "DamageResultFact",
+      "DeathSaveFact",
+      "EquipmentFact",
+      "FactionFact",
+      "ForcedMovementFact",
+      "HealFact",
+      "ItemChargeFact",
+      "ItemEffectChangeFact",
+      "LifeFact",
+      "MechanismActivationFact",
+      "MovementFact",
+      "ObjectDamageFact",
+      "ObjectDestroyedFact",
+      "PortalTransferFact",
+      "SavingThrowFact",
+      "SensoryFact",
+      "ShoveFact",
+      "SpatialEffectStateFact",
+      "SpatialFact",
+      "SpellFact",
+      "StepFact",
+      "TemporaryHitPointsFact",
+      "TurnFact"
+    ],
+    "normalization": "Only visible/seen set order and process-local sense_modes_hash",
+    "float_tolerance": null,
+    "oracle_corpus": "/mnt/c/Users/tommaso/Documents/Dev/NDClientGodot/.runtime/sdk-study/reducer-final-oracle.json",
+    "godot_test": "res://tests/sdk_reducer_checks.gd -- --cases=res://.runtime/sdk-study/reducer-final-oracle.json"
+  },
+  "limits": [
+    "Godot cannot preserve embedded NUL: explicit admission rejection, including JSON escaped NUL accepted by the Python SDK.",
+    "JSON nesting limit 512; maximum record 64 MiB. Validator supports the exact shipped schema vocabulary.",
+    "Consumer runs synchronously on the transport worker and must terminate; close joins and cannot forcibly interrupt caller code.",
+    "Journal recovery validated across process reopening, not hardware power loss.",
+    "Live gameplay coverage is ranged and Magic Missile/Fire Bolt encounters; the other typed fact classes are exercised by boundary fixtures.",
+    "Counts from overlapping suites must not be added as distinct gameplay scenarios."
+  ],
+  "review": {
+    "same_task_scope_and_anti_oop_review": "No critical blocker or scope drift reported.",
+    "unsigned_native_addon_required": false,
+    "windows_security_changes": false,
+    "backend_source_changes": false
+  },
+  "cleanup": {
+    "owned_test_hosts_stopped": true,
+    "owned_headless_godot_stopped": true,
+    "existing_graphical_preview_preserved": true
+  }
+}

@@ -36,7 +36,8 @@
           8679765
         ],
         "noiseSheet": "/spell-palettes/source-hand-noise.png"
-      }
+      },
+      "role": "hand_magic"
     },
     "aura": {
       "id": "cast-aura",
@@ -56,7 +57,8 @@
           8679765
         ],
         "noiseSheet": "/spell-palettes/source-hand-noise.png"
-      }
+      },
+      "role": "aura"
     },
     "effects": [],
     "recovery": {
@@ -614,7 +616,11 @@
       "fps": 32.0,
       "durationMs": 3250.0,
       "scale": 0.75,
-      "depth": "behind_body"
+      "depth": "behind_body",
+      "effectGroup": {
+        "id": "finger.hand",
+        "label": "Finger Of Death · Finger hand"
+      }
     },
     {
       "id": "finger.hand.front",
@@ -630,7 +636,11 @@
       "fps": 32.0,
       "durationMs": 3250.0,
       "scale": 0.75,
-      "depth": "front_body"
+      "depth": "front_body",
+      "effectGroup": {
+        "id": "finger.hand",
+        "label": "Finger Of Death · Finger hand"
+      }
     },
     {
       "requireDamageApplied": true,
@@ -681,6 +691,10 @@
           "x": 0.0,
           "y": -44.340500673536
         }
+      },
+      "effectGroup": {
+        "id": "finger.contact",
+        "label": "Finger Of Death · Finger contact"
       }
     },
     {
@@ -732,6 +746,10 @@
           "x": 0.0,
           "y": -44.340500673536
         }
+      },
+      "effectGroup": {
+        "id": "finger.contact",
+        "label": "Finger Of Death · Finger contact"
       }
     }
   ],

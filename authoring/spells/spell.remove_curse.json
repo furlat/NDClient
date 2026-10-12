@@ -36,7 +36,8 @@
           14409711
         ],
         "noiseSheet": "/spell-palettes/source-hand-noise.png"
-      }
+      },
+      "role": "hand_magic"
     },
     "aura": {
       "id": "cast-aura",
@@ -56,7 +57,8 @@
           14409711
         ],
         "noiseSheet": "/spell-palettes/source-hand-noise.png"
-      }
+      },
+      "role": "aura"
     },
     "effects": [],
     "recovery": {
@@ -608,7 +610,11 @@
       "scale": 0.5,
       "scaleWithActor": true,
       "depth": "behind_body",
-      "viewFacing": "E"
+      "viewFacing": "E",
+      "effectGroup": {
+        "id": "effect",
+        "label": "Remove Curse"
+      }
     },
     {
       "requireRemovedConditionTag": "curse",
@@ -619,7 +625,11 @@
       "scale": 0.5,
       "scaleWithActor": true,
       "depth": "front_body",
-      "viewFacing": "E"
+      "viewFacing": "E",
+      "effectGroup": {
+        "id": "effect",
+        "label": "Remove Curse"
+      }
     }
   ],
   "contact": {

@@ -1,0 +1,166 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://animation/playback.gd" id="1_lqg6h"]
+
+[sub_resource type="Animation" id="Animation_epgnw"]
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:clip")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": ["Breaking"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:phase")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:sample_seconds")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+
+[sub_resource type="Animation" id="Animation_18kr5"]
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:clip")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": ["Intact"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:phase")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:sample_seconds")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+
+[sub_resource type="Animation" id="Animation_g2ew3"]
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:clip")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": ["Settled"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:phase")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [2]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:sample_seconds")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_bvpxh"]
+_data = {
+&"Breaking": SubResource("Animation_epgnw"),
+&"Intact": SubResource("Animation_18kr5"),
+&"Settled": SubResource("Animation_g2ew3")
+}
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_dobg1"]
+animation = &"Breaking"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_wtuwh"]
+animation = &"Intact"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_t5tar"]
+animation = &"Settled"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_4tfji"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_xi88a"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_yolku"]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_ueicw"]
+switch_mode = 2
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_dwc7q"]
+states/Breaking/node = SubResource("AnimationNodeAnimation_dobg1")
+states/Breaking/position = Vector2(220, 0)
+states/Intact/node = SubResource("AnimationNodeAnimation_wtuwh")
+states/Intact/position = Vector2(0, 0)
+states/Settled/node = SubResource("AnimationNodeAnimation_t5tar")
+states/Settled/position = Vector2(440, 0)
+transitions = ["Intact", "Breaking", SubResource("AnimationNodeStateMachineTransition_4tfji"), "Intact", "Settled", SubResource("AnimationNodeStateMachineTransition_xi88a"), "Settled", "Intact", SubResource("AnimationNodeStateMachineTransition_yolku"), "Breaking", "Settled", SubResource("AnimationNodeStateMachineTransition_ueicw")]
+
+[node name="AnimationPlayback" type="Node" unique_id=1636267375]
+script = ExtResource("1_lqg6h")
+clip = "Intact"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=761248721]
+libraries/ = SubResource("AnimationLibrary_bvpxh")
+
+[node name="AnimationTree" type="AnimationTree" parent="." unique_id=1797087898]
+callback_mode_process = 2
+tree_root = SubResource("AnimationNodeStateMachine_dwc7q")
+anim_player = NodePath("../AnimationPlayer")

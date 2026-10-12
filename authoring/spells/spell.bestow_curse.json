@@ -36,7 +36,8 @@
           16410453
         ],
         "noiseSheet": "/spell-palettes/source-hand-noise.png"
-      }
+      },
+      "role": "hand_magic"
     },
     "aura": {
       "id": "cast-aura",
@@ -56,7 +57,8 @@
           16410453
         ],
         "noiseSheet": "/spell-palettes/source-hand-noise.png"
-      }
+      },
+      "role": "aura"
     },
     "effects": [],
     "recovery": {
@@ -605,7 +607,11 @@
       "attachment": "target_ground",
       "fps": 32.0,
       "depth": "behind_body",
-      "viewFacing": "E"
+      "viewFacing": "E",
+      "effectGroup": {
+        "id": "touch",
+        "label": "Bestow Curse · Touch"
+      }
     },
     {
       "id": "touch.front",
@@ -613,7 +619,11 @@
       "attachment": "target_ground",
       "fps": 32.0,
       "depth": "front_body",
-      "viewFacing": "E"
+      "viewFacing": "E",
+      "effectGroup": {
+        "id": "touch",
+        "label": "Bestow Curse · Touch"
+      }
     }
   ],
   "contact": {

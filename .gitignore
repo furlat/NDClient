@@ -1,19 +1,41 @@
-# Private media and local preparation
-.media/
-.runtime/
-.references/
-# Dependencies and generated output
-node_modules/
-dist/
-.vite/
-coverage/
-# Local configuration
-.env
-.env.*
-!.env.example
-*.log
+# External/private artwork and derived render data stay local.
+/.media/
+/assets/
+/.derived/
+/.reference-template/
+*.png
+*.PNG
+*.jpg
+*.jpeg
+*.webp
+*.gif
+*.wav
+*.ogg
+*.mp3
+*.flac
+*.mp4
+*.webm
+*.mov
+*.blend
+*.blend1
+*.psd
+*.aseprite
+*.exr
+*.hdr
+*.ktx
+*.ktx2
+*.dds
+*.glb
+*.fbx
+*.zip
 
-# Python preparation caches
+# Native imports, private encounters, captures and disposable profiles.
+/.godot/
+/.runtime/
+/.captures/
+/generated/render_cache/
+/generated/profiles/
 __pycache__/
 *.py[cod]
 .pytest_cache/
+.venv/

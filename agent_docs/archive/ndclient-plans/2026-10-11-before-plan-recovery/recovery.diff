@@ -1,0 +1,93 @@
+--- before/NDCLIENT_IMPLEMENTATION_PLAN_COMPLETE_2026-10-11_v3.md
++++ after/NDCLIENT_IMPLEMENTATION_PLAN_COMPLETE_2026-10-11_v3.md
+@@ -1,6 +1,8 @@
+ OUR OBJECTIVE IS A COMPLETE IMPLEMENTATION
+ 
+ # NDCLIENT IMPLEMENTATION PLAN — complete consolidated edition · v3
++
++> Recovery note, 11 October 2026: this copy has had identified later implementation prescriptions and acceptance claims removed. It is **not** a byte-for-byte recovery of the final approved v3. [Recovery evidence and exact removals](NDCLIENT_PLAN_RECOVERY_2026-10-11.md) records the available snapshot and the limits.
+ 
+ Date: 11 October 2026 · revision 3. The [renderer repair plan](NDCLIENT_PIXI_RENDERER_PLAN_2026-10-11_v3.md) replaces the former permission to draw ordinary materials/lighting through a catch-all Mesh. Ordinary images use Pixi Sprites with separate tint, precise-swap and material filters plus dedicated lighting. Environment keeps native textures; characters receive fixed 2× cleanEdge source processing without changing world proportions. The chapter also owns camera continuity, blood repair and presentation of received lethal events. The [code audit](NDCLIENT_RENDERER_CODE_AUDIT_2026-10-11.md) records measured defects, retained work and verification limits. [General v2 and renderer v2](archive/ndclient-plans/2026-10-11-before-renderer-v3/README.md) are archived unchanged. N0–N5 and the R01–R23 feature inventory remain the complete client scope.
+ 
+@@ -1514,7 +1516,7 @@
+ The following source cases refine the existing renderer families; they do not add parallel effect systems:
+ 
+ - **World-launched projectiles:** `game_obsolete/mechanism_projectile.py::{mechanism_projectile_duration,mechanism_projectile_target,sample_mechanism_projectile}` uses an admitted mechanism's world origin, elevation and pose-dependent muzzle instead of an actor socket. The common trajectory channel supports both source kinds, retained target contacts, camera-independent travel duration, directional bank choice and permitted residual rotation. A hidden muzzle must not produce a revealing launch flash or synthesized caster; separately admitted travel/impact facts may still render.
+-- **Portal transfer:** `game_obsolete/portal_draw.py::{portal_draw_commands,_doorway_commands,clip_portal_bodies}` supplies entrance/exit front/back media and local aperture clipping during transfer. A body and its decorative copies/trails enter or emerge through that registered aperture; its contact shadow follows the actual transfer phase. Use the shared geometry/material path, not a global tile mask or copied CPU raster loop. One admitted endpoint never becomes a window into an undisclosed remote room. Focused native Dimension Door acceptance now covers original front/back banks, opening wait, crossing, arrival and closing at four quarters/two zooms; opening-time body clipping and shadow suppression were corrected to the original crossing-only rule. Hatch departure now consumes the original front-image alpha in the same coverage filter. The unchanged original native hatch scenarios supply traveler and independent endpoint witnesses; 24 native-pixel samples match original clipping exactly, while half-scale nearest-sampling residuals remain explicitly qualified. Supported SDK encounter setup has no hatch portal placement, so hatch SDK/Studio acceptance remains open; this does not complete R16. See the existing movement/portal review for evidence and the input boundary.
++- **Portal transfer:** `game_obsolete/portal_draw.py::{portal_draw_commands,_doorway_commands,clip_portal_bodies}` supplies entrance/exit front/back media and local aperture clipping during transfer. A body and its decorative copies/trails enter or emerge through that registered aperture; its contact shadow follows the actual transfer phase. Use the shared geometry/material path, not a global tile mask or copied CPU raster loop. One admitted endpoint never becomes a window into an undisclosed remote room.
+ - **Prop disintegration:** `game_obsolete/object_dust.py::object_dust_commands` retains the object's alpha silhouette, contact and deterministic seed for its retirement effect. Support this through the existing particle/material owner, separately from actor blood and wall debris. At the native destruction commit the retired prop is no longer an interactive/blocking object merely because decorative dust remains. No new CPU XYZ payload or second debris engine is required.
+ - **Appearance-only updates:** the old NeuroClient's `AnimatedEntity` recomposition/patch/readiness methods show the needed behavior: preserve the active source clip/frame while changing equipment or temporary appearance layers, prepare the complete replacement atomically, and remove only an ending modifier's contribution. Do not restore an old tint/slot snapshot over more recent admitted changes or copy the old class/visibility-closure design.
+ 
+@@ -1636,8 +1638,6 @@
+ Geometry supplies normals for known planes/meshes; a second full-size normal texture is unnecessary there. Compact irregular effect depth can carry oct8 normals in BA. A cutout-only body/prop uses its declared billboard surface normal for cosmetic diffuse response, transformed with its camera/source basis; its ground-support association does not turn that material normal into an upward-facing floor normal. This is explicitly flat-surface lighting for art without a normal companion, not a claim of anatomical or carved-surface relief. Existing supplied normals take precedence; absent normals do not trigger mandatory new artwork exports.
+ 
+ The whole combined Fireball can receive light while emitting light. Decode the selected Factory appearance as radiance/opacity with its declared radiance scale, then apply the bounded source-defined diffuse contribution; no old separate smoke system is recovered merely to receive light. Emission is a separate authored timeline curve with position/color/intensity/range keys.
+-
+-The installed client source inventory currently supplies Fireball's impact `VisualEmitter`. Standing/wall torch bindings supply `is_lit`-selected flame animation art, but no client positional emitter colour/intensity/range definition. The installed SDK exposes categorical perception light and item state rather than a positioned photometric-source list. Keep the art and report this source gap; do not invent torch parameters or backend fields. Existing source-authored emitters remain the illumination inputs.
+ 
+ **Fireball emitter adopted, 10 October, at the user's explicit request.** The existing
+ impact storage `authoring/media/storage/shared.fireball.20ft-ground.smoke.v3.json`
+@@ -2352,8 +2352,6 @@
+ ## 10. Implementation sequence with concrete outputs
+ 
+ **Next work:** follow [renderer plan v3 §10](/home/tommaso/Dev/NDClient/agent_docs/NDCLIENT_PIXI_RENDERER_PLAN_2026-10-11_v3.md#10-implementation-order-and-owners) for the rendering repair within N1–N3, then continue the full scope below. Retain working reduction/compilation/source functions; do not rewrite the backend or build another demo. Native Pixi interaction/hit areas are the default, not a new CPU picker.
+-
+-**11 October implementation checkpoint:** the plan is not complete. Integrate the reported Fireball disappearance/colour/trajectory, invalid spell and weapon scenarios, missing recorded rig assignments, and Call Lightning playback hitch into N1–N3 and N5 below. Their current evidence is at the top of implementation progress. Close the bounded corrections and remaining validation, then continue missing content consumers, Studio inspection and playable-client workflows. Do not restart already verified renderer work or let repeated checks of one effect replace the rest of the port.
+ 
+ Use one application-owned frame loop. Paused unchanged views need no busy redraw; camera/sample/resource/layout changes request a frame. Keep existing decoded/uploaded source reuse, incremental worker decoding and uploads; explicitly prepare shader companion textures. Pixi Prepare does not compile arbitrary shaders: first-use compilation belongs to the actual needed Pixi draw path and is measured separately. Do not do synchronous readback, bulk decode or repeated scene-wide preparation in the frame loop. The detailed renderer chapter defines readiness, previews and cache invalidation without arbitrary quotas.
+ 
+@@ -2529,11 +2527,6 @@
+   Reuse current native body composition with scoped material filters before
+   cleanEdge (§5.3/renderer §§3–4); do not restore a general depth Mesh or treat
+   hand magic as a body material. Their broader gameplay acceptance remains open.
+-- Finger of Death's original open-shell consumer and the original potion strip
+-  are connected and checked. Finger's original-Python comparison and authentic
+-  single-enemy cast pass with the explicitly recorded GPU rasterization
+-  qualification; see [its focused review](reviews/renderer-2026-10-11/finger-of-death.md).
+-  Do not repeat asset intake or fabricate substitute artwork for either case.
+ - Six indoor door variants have prepared compatible source members, but selecting
+   a compatible family for a native occurrence/scenario must use an actual authored
+   assignment. Do not invent adjacent structures or shift native supports to make
+--- before/NDCLIENT_PIXI_RENDERER_PLAN_2026-10-11_v3.md
++++ after/NDCLIENT_PIXI_RENDERER_PLAN_2026-10-11_v3.md
+@@ -1,6 +1,8 @@
+ OUR OBJECTIVE IS A COMPLETE IMPLEMENTATION
+ 
+ # NDClient renderer repair plan — v3
++
++> Recovery note, 11 October 2026: this copy has had identified later implementation prescriptions and acceptance claims removed. It is **not** a byte-for-byte recovery of the final approved v3. [Recovery evidence and exact removals](NDCLIENT_PLAN_RECOVERY_2026-10-11.md) records the available snapshot and the limits.
+ 
+ 11 October 2026. Renderer chapter of the [complete client plan](NDCLIENT_IMPLEMENTATION_PLAN_COMPLETE_2026-10-11_v3.md). This revision replaces renderer v2; it does not replace the remaining gameplay, Studio, UI or authored-feature scope. The [code audit](NDCLIENT_RENDERER_CODE_AUDIT_2026-10-11.md) contains evidence, file ownership and qualifications. Implementation follows §10; the audit is evidence, not another list of mandatory architecture requirements.
+ 
+@@ -51,7 +53,7 @@
+ 
+ Filters use Pixi's valid input frame/clamp and the Sprite transform, including anchor and cropped frame. Do not derive world positions from `gl_FragCoord`. Do not let wall alpha, neighboring artwork, pooled target padding or a different atlas cell enter a character's source operation. Neutral filters preserve colour and alpha. Keep premultiplied output conventions explicit; emitted radiance with zero alpha is handled separately (§5).
+ 
+-Share immutable programs and decoded sources; keep mutable values per occurrence/view. Preview preparation cannot change the active actor. Donor sampling must not mutate a shared TextureSource. Pinned Pixi 8.22 WebGL binds only the source’s own style, so the frost and directed material shaders use bounded four-texel donor reads: frost preserves fract-then-clamp linear sampling, and directed donors preserve repeat-linear sampling across wrap edges. This does not alter ordinary image or viewport sampling. Allocate material ping-pong/wither targets only when used. Rebuild private derived pixels and admit all their donor sources after context loss through the existing resource lifecycle.
++Share immutable programs and decoded sources; keep mutable values per occurrence/view. Preview preparation cannot change the active actor. Donor sampling must not mutate a shared TextureSource. Allocate material ping-pong/wither targets only when used. Rebuild private derived pixels and admit all their donor sources after context loss through the existing resource lifecycle.
+ 
+ ### 3.4 Spell dimensions under the final texture policy
+ 
+@@ -91,11 +93,11 @@
+ 
+ Move the existing receiving mathematics into a dedicated bounded Pixi filter attached only to a receiver needing it. Bind supplied geometry/normal companions, original-frame sampling, occurrence-to-world transform, camera basis, inverse-transpose normal transform and actual positioned emitters. Map the filtered Sprite back to the **original** source coordinates; cleanEdge's extra texture pixels do not double geometry coordinates. Preserve colour coverage where a solid-depth sample is absent.
+ 
+-**Human correction, 11 October:** backend effective light categories govern native perception; they do not multiply artwork RGB or supply shader illumination. Remove categorical cell gains, their interpolation and ambient/base-response multipliers. Preserve current-versus-memory disclosure as explicit remembered-state styling, separate from lighting. Neutral source colour stays unchanged without an actual emitter. Do not invent a global or ambient multiplier to replace it. The subsequent explicit request for directional-light testing is implemented as an authored source with a nonzero world-space `directionToSource`, linear colour and intensity, using the same receiving normals/filter as positioned lights. It is not derived from backend categories and is absent unless explicitly configured in `world.lighting.directionalSources`.
++**Human correction, 11 October:** backend effective light categories govern native perception; they do not multiply artwork RGB or supply shader illumination. Remove categorical cell gains, their interpolation and ambient/base-response multipliers. Preserve current-versus-memory disclosure as explicit remembered-state styling, separate from lighting. Neutral source colour stays unchanged without an actual emitter. Do not invent a global or ambient multiplier to replace it. Include an actual directional light source in the receiving-light checks, as requested. Backend perception categories are not a substitute.
+ 
+ Use linear arithmetic for light, with one defined decode/encode boundary around ordinary colour. Preserve the separate Factory linear-radiance path, including RGB at alpha zero, near/far order, source registration and emitted energy. A default RGBA filter must not erase that energy. Migrate its image sampling/emission to the ordinary Sprite/filter route while keeping effect-specific geometry operations narrowly scoped. Reuse existing source/geometry definitions rather than inventing a G-buffer or global depth compositor.
+ 
+-Use Fireball's existing authored emitter curve once per logical impact. Its receiving smoke can remain lit by other actual disclosed lights after emission fades when their installed definitions supply that source. Other spells' world emitters remain deferred as previously agreed. The installed standing/wall torches currently provide lit-state and flame animation art, but no client emitter colour/intensity/range definition; do not infer one from bright pixels or native categorical light. Record that source gap. Preserve static floor/disclosure caching; moving direct light invalidates only the affected receiving result, not source decoding or character cleanEdge.
++Use Fireball's existing authored emitter curve once per logical impact. Its receiving smoke can remain lit by other actual disclosed lights after emission fades when their installed definitions supply that source. Other spells' world emitters remain deferred as previously agreed. Preserve static floor/disclosure caching; moving direct light invalidates only the affected receiving result, not source decoding or character cleanEdge.
+ 
+ Demonstrate the change in the real Fireball recording and existing environment: visible light variation over time, correctly oriented receiving normals, unchanged neutral appearance and rotation during the event. Retain the selected Fireball/wall front/behind interaction from the general plan as a bounded effect consumer. If that particular interaction remains unimplemented, report it separately and continue the other steps; do not call a CPU coordinate test a GPU lighting demonstration.
+ 
+@@ -164,7 +166,7 @@
+ 
+ **Current user-directed order:** complete this renderer chapter and establish its single production drawing path before resuming general N3/N4 implementation. Partial general-plan changes already written remain preserved and explicitly unverified. The current step evidence and remaining renderer acceptance are tracked at the top of `NDCLIENT_IMPLEMENTATION_PROGRESS.md`; this sequencing does not reduce the subsequent full-port scope.
+ 
+-**11 October feedback integrated into the current steps:** retain the verified material-branch fix for disappearing Fireball recipients, preserve the authored final blend when scoped filters are enabled, and remove backend light-category RGB multiplication under §5. Verify projectile release/direction/contact against actual native targets. Replace misleading spell/weapon capture setups through the existing server capture procedure and repair stale presentation pins without editing delivered events. Trace the measured Call Lightning playback hitch separately from scenario correctness. Record each result in progress, then continue the complete client plan; this feedback does not open another renderer architecture phase.
++**User-reported defects to address in the current steps:** Fireball recipients must remain visible through their admitted damage presentation. Preserve the authored final blend when scoped filters are enabled, and remove backend light-category RGB multiplication under §5. Verify projectile release/direction/contact against actual native targets. Replace misleading spell/weapon capture setups through the existing server capture procedure and repair stale presentation pins without editing delivered events. Diagnose the Call Lightning playback hitch separately from scenario correctness. Record observed results in progress; a claimed material-branch fix is not acceptance of the reported disappearance.
+ 
+ | Step | Work and existing owners | Completion evidence |
+ | --- | --- | --- |

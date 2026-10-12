@@ -36,7 +36,8 @@
           15980733
         ],
         "noiseSheet": "/spell-palettes/source-hand-noise.png"
-      }
+      },
+      "role": "hand_magic"
     },
     "effects": [],
     "recovery": {
@@ -592,7 +593,11 @@
       "fps": 32.0,
       "durationMs": 1000.0,
       "scale": 0.5,
-      "depth": "behind_body"
+      "depth": "behind_body",
+      "effectGroup": {
+        "id": "effect",
+        "label": "Thaumaturgy"
+      }
     },
     {
       "id": "front",
@@ -601,7 +606,11 @@
       "fps": 32.0,
       "durationMs": 1000.0,
       "scale": 0.5,
-      "depth": "front_body"
+      "depth": "front_body",
+      "effectGroup": {
+        "id": "effect",
+        "label": "Thaumaturgy"
+      }
     }
   ],
   "contact": {

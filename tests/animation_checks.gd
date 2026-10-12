@@ -1,0 +1,41 @@
+extends SceneTree
+const Graphs = preload("res://animation/graphs.gd")
+const Catalog = preload("res://source_catalog.gd")
+var failures = 0
+func check(value: bool, label: String) -> void:
+    if not value: failures += 1; push_error(label)
+func _initialize() -> void:
+    run.call_deferred()
+func run() -> void:
+    var cache = {}
+    var rig = Catalog.read_file("catalog/rigs.json",cache)["neuroclient.modular"]
+    var actor = Graphs.character(root,rig)
+    check(actor.clip == "Idle", "Character starts Idle")
+    Graphs.request(actor,"Attack1")
+    Graphs.advance(actor,0.5)
+    check(actor.clip == "Attack1" and absf(actor.sample_seconds - 0.5) < 0.001,"Native player samples action clock")
+    Graphs.advance(actor,0.8)
+    Graphs.advance(actor,0.01)
+    check(actor.clip == "Idle","Completed action returns through Idle")
+    Graphs.request(actor,"Run")
+    Graphs.advance(actor,2.0)
+    check(actor.clip == "Run" and actor.sample_seconds < 1.25,"Locomotion loops in native tree")
+    Graphs.request(actor,"Attack1")
+    Graphs.advance(actor,0.4)
+    Graphs.request(actor,"Kick")
+    Graphs.advance(actor,1.0)
+    Graphs.advance(actor,0.01)
+    Graphs.advance(actor,0.01)
+    check(actor.clip=="Kick","Queued action travels through Idle into requested action")
+    Graphs.advance(actor,1.4)
+    Graphs.advance(actor,0.01)
+    check(actor.clip=="Idle","Queued action returns to Idle")
+    var prop = Graphs.destruction(root,2.166666667)
+    Graphs.request(prop,"Breaking")
+    Graphs.advance(prop,0.5)
+    check(prop.phase == 1 and absf(prop.sample_seconds-0.5)<0.001,"Breaking samples source time")
+    Graphs.advance(prop,1.8)
+    Graphs.advance(prop,0.01)
+    check(prop.phase == 2,"Breaking settles without restarting")
+    print("ANIMATION_CHECKS failures=",failures)
+    quit(failures)

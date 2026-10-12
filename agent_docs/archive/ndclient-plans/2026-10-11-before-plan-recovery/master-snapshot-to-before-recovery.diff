@@ -1,0 +1,975 @@
+--- recovered-v3-before-consistency-review
++++ master-immediately-before-recovery
+@@ -4,7 +4,7 @@
+ 
+ Date: 11 October 2026 · revision 3. The [renderer repair plan](NDCLIENT_PIXI_RENDERER_PLAN_2026-10-11_v3.md) replaces the former permission to draw ordinary materials/lighting through a catch-all Mesh. Ordinary images use Pixi Sprites with separate tint, precise-swap and material filters plus dedicated lighting. Environment keeps native textures; characters receive fixed 2× cleanEdge source processing without changing world proportions. The chapter also owns camera continuity, blood repair and presentation of received lethal events. The [code audit](NDCLIENT_RENDERER_CODE_AUDIT_2026-10-11.md) records measured defects, retained work and verification limits. [General v2 and renderer v2](archive/ndclient-plans/2026-10-11-before-renderer-v3/README.md) are archived unchanged. N0–N5 and the R01–R23 feature inventory remain the complete client scope.
+ 
+-**Execution:** complete this plan update and review, then resume the agreed client implementation. No additional approval is required. Preparation is complete and N0–N4 have partial client consumers; the current compositor has reported visual and performance failures and must not be treated as accepted. §12 retains implementation history with that qualification; N0–N5 remain the complete client objective.
++**Execution:** start from the current implementation status and renderer v3 §10, then complete the remaining N0–N5 work. Preparation is complete and N0–N4 have partial client consumers; the current compositor has reported visual and performance failures and must not be treated as accepted. §12 points to current progress and unresolved work; N0–N5 remain the complete client objective.
+ 
+ **Committed starting point:** NDClient `df5397e` (`first push - pre implementation`)
+ records the completed tracked preparation. It is a reference checkpoint, not an
+@@ -29,7 +29,7 @@
+    patch individual assets/spells, fabricate data or silently change requirements.
+ 3. **A noncritical uncertainty does not stop the project.** Record the affected
+    requirement, concrete evidence, what cannot yet work and the decision needed in
+-   the existing status section (§12). Leave that part honestly incomplete and move
++   the implementation progress document linked in §12. Leave that part honestly incomplete and move
+    to the next specified, unblocked task. Do not turn the note into a new subsystem,
+    research campaign, provisional fix or automatic backend task.
+ 4. **Discuss genuine blockers with the user.** A blocker is a demonstrated missing
+@@ -50,7 +50,7 @@
+ 
+ **Scope for implementation:** NDClient source, its tracked authoring and client-side
+ SDK capture/configuration tools only. Consume `dnd/`, `server/` and `sdk/` as delivered;
+-this plan contains no engine, server, transport, projection or SDK implementation
++this plan contains no engine, server, transport, native API projection or SDK implementation
+ work. A missing native capability is reported to the user, not silently added or
+ simulated in the client. Existing server launch/configuration and SDK consumption
+ remain part of client integration. The implemented movement preference is already
+@@ -65,7 +65,7 @@
+ 
+ **Current resume order:** follow renderer v3 §10 within the existing client, then continue the uncompleted N0–N5 items in §10 below. Application loading, SDK integration and Play/Studio already have partial consumers; do not start them from scratch. The prepared layer/contact/elevation/material data remains authoritative. The preparation inventory below records the original starting point, not current runtime completion; use the current progress document and code audit for that status.
+ 
+-- `/home/tommaso/Dev/NDClient`, branch `codex/ndclient`, is the authorized fresh
++- `/home/tommaso/Dev/NDClient`, branch `codex/ndclient`, is the existing authorized
+   source repository. The previously deleted application is not a baseline.
+ - `.media/smallscale/modular/` holds the complete unified Fantasy V1.3 library;
+   `.media/smallscale/authored/` holds all ten owned fixed-creature packs, including
+@@ -77,7 +77,8 @@
+   (§6.1). No new artwork or physical measurement is requested.
+ - UI selection is smooth48 icons and 192×256 portraits only. Their existing UI
+   source sections are now adopted under `authoring/ui/`; §5.7 records the exact
+-  mappings, choice values and remaining art gaps. Runtime UI is still pending.
++  mappings, choice values and remaining art gaps. Runtime UI is partially connected;
++  remaining behavior and acceptance are recorded in the progress document.
+ - Ordinary VFX and the completed Factory replacement delivery are copied:
+   28 spell families, 193 paired banks, 400 media IDs and all 38 previously pending
+   XYZ references, including ground-fire/Web aliases. No retired XYZ is imported.
+@@ -89,8 +90,8 @@
+ [ASSETS.md](/mnt/c/users/tommaso/documents/dev/dnd_engine/ASSETS.md) is the compact current location/selection guide;
+ [the VFX intake](/mnt/c/users/tommaso/documents/dev/dnd_engine/agent_docs/audits/NDCLIENT_VFX_ASSET_INTAKE_2026-10-09.md) records copy evidence.
+ The recovery and asset diaries are historical references, not extra instructions
+-or documents to reread routinely. Asset preparation is complete. After this plan update and review, continue the
+-agreed client implementation without reopening intake or adding an approval gate.
++or documents to reread routinely. Asset preparation is complete; remaining work
++extends the existing client through §10 without reopening intake.
+ 
+ This is the general specification for the next NDClient implementation; the [renderer plan v3](/home/tommaso/Dev/NDClient/agent_docs/NDCLIENT_PIXI_RENDERER_PLAN_2026-10-11_v3.md) supplies its detailed rendering execution chapter. It contains the required behavior, existing source owners, rendering algorithms, Studio and UI features, asset installation, network integration, delivery sequence and acceptance cases. Source files and historical documents linked as evidence do not contain additional mandatory plan chapters: the implementation requirements are here and in that explicitly linked renderer chapter.
+ 
+@@ -266,46 +267,35 @@
+ original sources remain available for an intentional new delivery or a fresh
+ installation; ordinary builds, launches and JSON edits do not invoke them.
+ 
+-**Next implementation chunk:** make these prepared inputs load through the real
+-application and current SDK. Its finite outputs are:
+-
+-1. Extend the existing package and lockfile (already pinned to PixiJS 8.22.0)
+-   with TypeScript/Vite and the module DAG of §3; install the delivered
+-   `@neurodragon/player-sdk`. Preserve the working character material/review
+-   tool while connecting that material to the production renderer.
+-   Generate authored TS types from the prepared client section schemas once. No new transport, ECS framework, plugin manager or actor
+-   hierarchy is required. Preserve useful old-client code references read-only;
+-   reuse existing snapshots rather than cloning another media library.
+-2. Connect the existing `PresentationCatalogExport` sections to the application
+-   using the tracked client source described in §5.4. Catalog/world/assets/environment are already
+-   assembled. Environment family organization and the 60 delivered source-record
+-   copies/links are complete, including existing wall corner rules, restored
+-   water registrations and the static geometry companion slot. The §6.1 physical
+-   contacts, camera registration, door members and timber supports are now connected
+-   in typed authoring. Consume those fields; do not redo their adoption or read
+-   supplier records at runtime.
+-   Item appearance/material/variant/source-palette documents are now adopted and
+-   assembled from `authoring/items/index.json`, preserving existing owners and
+-   values. Another 325 equipment sheet references connect already installed
+-   modular files across the existing authored actions; no clocks, sockets or
+-   body dimensions changed. UI metadata, exact assignments and relocated paths
+-   are also adopted in `authoring/ui/`. Connect these existing sections to the
+-   application loader; do not reload obsolete bindings from Pygame or rerun
+-   intake. Preserve the two explicit artwork follow-ups in §5.7.
+-3. Serve the installed `.media/` directly at `/media/`; serve generated metadata
+-   from a separate ordinary static route. Keep both outside Vite's `public/`
+-   copying and application `dist/`. No asset-library copy or scan during startup.
+-4. Configure the existing server's allowed browser origin and explicit API URL.
+-   Windows server plus WSL frontend is supported. Exercise the real SDK bootstrap,
+-   audience attachment, choices, command receipt and event follower; install its
+-   package without copying generated wire models into the client.
+-5. Start the shared reduction/compilation/resource/renderer path against that
+-   input. A Studio case is a recorded current-server SDK stream consumed through
+-   the same functions. Its first functioning family is implementation progress;
+-   it does not close N1–N5 or justify a throwaway preview renderer.
+-6. Document repeatable server, client and Studio launch commands. They must not
+-   depend on orphaned preview processes, Python rendering, boot-time schema
+-   generation or receipt files.
++**Existing integration to preserve and complete:** TypeScript/Vite, pinned Pixi,
++the delivered player SDK, generated authored types, versioned release assembly,
++media serving and shared session/presentation consumers already exist. Renderer
++v3 §10 is the current work sequence; the following names the owners and remaining
++coverage, not another setup phase.
++
++1. Extend the existing package/module DAG and production functions. Regenerate
++   authored types when their client schemas change; ordinary authoring edits do
++   not require SDK generation. Keep the character source inspection tool as a
++   reference while its production display moves onto the shared Sprite/filter path.
++2. Consume the assembled catalog/world/assets/environment, item/palette and UI
++   sections through the existing indexed loader. Complete missing field consumers
++   and dependency records in those owners. Door/timber physical registration,
++   compatible members, environment companion adoption, equipment references and
++   UI assignments are prepared; do not repeat their import or read supplier
++   receipts at runtime. Preserve the explicit artwork follow-ups in §5.7.
++3. Preserve the existing Vite routes for installed `.media/` at `/media/` and
++   generated metadata at `/presentation/`. Keep artwork outside `public/` and
++   `dist/`; startup does not scan or copy the library.
++4. Use the delivered server's configured origin/API URL and the existing SDK
++   session worker. Finish bootstrap, audience, choice, command, follower and
++   reconnect cases that remain unverified; do not build another connection layer.
++5. Extend the current reduction/compiler/resource/renderer functions used by both
++   gameplay and real recorded Studio cases. Complete remaining feature consumers
++   and interaction checks without replacing working baseline code or preparing a
++   separate preview application.
++6. Maintain repeatable server/client/Studio launch and JSON-reload instructions
++   as those existing owners change. They must not require orphaned preview
++   processes, Python rendering, startup schema generation or intake receipts.
+ 
+ The delivered engine/server/SDK are inputs to this client work. Ordinary
+ asset/authoring work does not regenerate the player SDK. N0–N5 remain the complete delivery scope; no additional certification
+@@ -543,7 +533,7 @@
+ 
+ These are application recording metadata, not additions to server packets. If a compiled presentation group spans source operations, retain its source operation ranges and commit mapping so the operation-level position stays meaningful; never invent a replacement transport sequence.
+ 
+-- Idle between operations advances absolute time while the last completed sequence and zero next-operation offset remain stable. Existing loops continue.
++- Idle between operations advances absolute time while the last completed sequence and zero next-operation offset remain stable. Existing loops continue. Natural completion of a Studio recording also keeps visible living actors in advancing Idle with the final recording time/cursor held; it does not automatically Pause. Explicit Pause, timeline seek or frame-step transport freezes every animation, including Idle. Selecting a thumbnail for source inspection alone does not change playback. Dead and remembered actors retain their permitted held poses. After Pause at completion, Play restarts the recording from its beginning.
+ - A prepared next group starts at the current displayed clock when it is ready. Time spent waiting for an asset does not become a hidden gap inside a cast that has not started.
+ - Pause freezes the displayed clock. In live play, network reception/journaling continues. In Studio, the available source is already prerecorded. Seek/replay prepares and samples the requested absolute position through the same implementation in either mode.
+ - Restoring a local recording restores the saved absolute position and starts. It does not advance by elapsed wall-clock time while the app was closed.
+@@ -587,7 +577,7 @@
+ 3. Publish the candidate time, player/retained state, projection, drawn content, picking, light/visibility and HUD together at one frame boundary.
+ 4. Release resources no longer needed after that swap. Dispose canceled candidates without touching the still-displayed owner's leases.
+ 
+-If a reached sample is not ready, hold the previous coherent frame/state/cursor at that boundary. Resume from that position without skipping phases or commits, resetting effect starts or discarding retained tails. Continue network work, UI and camera intent; do not advance invisible state behind a frozen image. Requested camera/seek/release and displayed camera/seek/release are distinct until commit. Picking must use the projection actually drawn, not the requested rotation whose images are still loading.
++If resources required by the progressing displayed operation are unavailable at its reached boundary, hold the previous coherent frame/state/cursor there. Resume without skipping phases or commits, resetting effect starts or discarding retained tails. This operation-resource hold does not apply to camera-only preparation: continue sampling and playing the displayed quarter while the requested quarter prepares, then publish it at the current playhead under renderer §6. Requested camera/seek/release and displayed camera/seek/release remain distinct until publication. Picking follows the projection actually drawn. Network work and UI remain responsive in either case.
+ 
+ Use one rendering resource owner with explicit demand/lease records; texture interpretation includes resource URL/revision, dimensions/layout, encoding, sampling and alpha convention. Public identical payloads can share bytes, while a numeric plane and a color texture cannot accidentally share incompatible TextureSource settings merely because their URL matches. Registered frame planes are acquired/swapped together. There is no separate loader per spell, actor, Studio pane or camera.
+ 
+@@ -670,10 +660,10 @@
+ 
+ ### 5.1 One complete release
+ 
+-Connect the already assembled client sections through the existing
+-`PresentationCatalogExport` envelope/defaults and source-derived schemas. Add
+-the generated release index and resource descriptors needed by the application
+-loader; this is not another authoring adoption or editable catalog. The release contains:
++Preserve the assembled client sections, source-derived schemas, indexed metadata
++release and application loader. Complete missing dependencies and consumers in
++those existing owners; this is not another authoring adoption or editable catalog.
++The complete release contains:
+ 
+ * AnimationData, including all recipes, rig registrations and bindings;
+ * WorldBindingsSource/AssetDocument, water and residue materials;
+@@ -803,20 +793,27 @@
+ 
+ ### 5.3 Full materials on isolated layers
+ 
+-The authoring connection is implemented: `RigLayer.material` and
+-`StudioActorLayer.material` optionally carry the existing `ConditionBodyRamp`
+-record. Reuse its finite material operators for hand, Magic and Effect masks;
+-do not add another hand-material schema or repeat this owner extension. No new
+-artistic treatment was automatically assigned. An explicit `material` supplies
+-the full operation instead of the legacy palette/tint operation on that layer;
+-`None` preserves the existing authored palette, automatic spell-colour resolution
+-and tint path. Visibility, opacity, coverage, blend and clocks keep their existing
+-owners. Shader consumption remains runtime implementation.
+-
+-Retain the resolved spell/variant palette, explicit overrides, source mask, donor
+-texture, noise phase, alpha and authored blend. Existing accepted palette swaps
+-remain valid. Material texture transfer is not multiplication tint and does not
+-recolour the already-accepted external Godot effect without an authored instruction.
++`RigLayer.material` and `StudioActorLayer.material` carry the existing optional
++`ConditionBodyRamp`; retain that owner for hand-magic/Effect materials rather
++than adding another schema. Resolve a spell's material only onto its designated
++effect layer. Body and item materials retain their explicit separate owners.
++
++An explicit material overrides that layer's legacy automatic ramp/hue treatment;
++do not apply both alternatives. Independently authored exact colour swap and
++ordinary tint keep their own meanings and follow renderer §4's order: original
++mapped colours first, tint once, then the selected material. A legacy field named
++`paletteSwap` may encode a brightness/noise material; inspect its operands rather
++than treating its name as an exact swap. A missing explicit material retains the
++existing authored automatic material resolution. Visibility, opacity, coverage,
++blend and clocks remain with their current owners.
++
++Preserve source masks, donor textures, noise phase, alpha and explicit overrides.
++Layer-owned material applies to that layer. Existing nonlinear whole-body/gear
++operations apply at their declared composite stage through native composition and
++scoped filters before cleanEdge; they do not spread a hand-magic material over the
++physical body. Preserve separately owned effects and shadows and original slot
++order. Material transfer is distinct from tint and exact colour replacement;
++external Godot effects receive additional treatment only where explicitly authored.
+ 
+ ### 5.4 Complete export, dependency closure and consumers
+ 
+@@ -827,19 +824,19 @@
+ four item/palette sections and five UI sections without engine imports.
+ The current source-derived section schemas are in `authoring/schemas/*.schema.json`;
+ use these for authored TS declarations, separately from SDK-owned wire types.
+-The remaining envelope follows `game_obsolete/presentation_export.py`: schema version 2,
++The adopted envelope follows `game_obsolete/presentation_export.py`: schema version 2,
+ milliseconds, cells, five feet per elevation step and the existing default-empty
+ `byte_planes` field. These are existing source values, not a new release schema.
+-Complete release indexing/dependencies and application loading; do not add a competing exporter or
++Extend existing release indexing/loading where a supported dependency is missing; do not add a competing exporter or
+ narrow scene-only format. Separately addressable sections avoid parsing all
+ metadata at startup without creating another editable model.
+ 
+-| Current boundary | Remaining action in the next integration chunk |
++| Existing boundary | Required coverage in its current consumer |
+ |---|---|
+ | `catalog`, `world`, `assets` | Already tracked and assembled. Load with schema defaults and existing IDs; do not re-import. Keep shared world mappings single-owned. |
+-| `environment` | Selected `EnvironmentDocument` is assembled from `authoring/environment/index.json` and family/state files, retaining the original 1,030 bank/pose/mask paths and adding the adopted companion/library sources in §6.1. The six-door/timber physical contacts, camera registration, effective mounts, compatible members and fractional supports are now connected at their typed owners. Existing clocks, depth and attachment states are preserved. The 60 supplemental records are tracked under `source-records/`, linked from the six relevant doors and three relevant props through optional `authoring_record`. These inspection records retain source IDs, installed-media addresses and source qualifications; they are not runtime geometry inputs. Shared rendering consumers remain to implement. |
+-| `item_appearances`, `item_materials`, `item_visuals`, `source_palettes` | Adopted and assembled through `authoring/items/index.json`: 100 hand and 404 ground selections, nine material recipes, 85 categories/318 variants and 118 palettes. Existing typed-owner values, factory/slot associations, ground registration and unsupported classifications are preserved; the ledger contributes its inventory, not its import wrapper. Equipment references use existing root-rig clips and `/media/smallscale/modular/` resources. Existing attached effects remain single-owned in the catalog. Shared runtime consumption remains to implement. |
+-| `ui_resources`, `ui_presentation`, `ui_choices`, `ui_skin`, `ui_fonts` | Adopted in tracked `authoring/ui/index.json`, using existing owners and delivered smooth48/192×256 assignments; all 103 choice mappings retained. Skin is empty because no legacy chrome was selected. No full native content manifest. Shared runtime UI consumption remains pending. |
++| `environment` | Selected `EnvironmentDocument` is assembled from `authoring/environment/index.json` and family/state files, retaining the original 1,030 bank/pose/mask paths and adding the adopted companion/library sources in §6.1. The six-door/timber physical contacts, camera registration, effective mounts, compatible members and fractional supports are now connected at their typed owners. Existing clocks, depth and attachment states are preserved. The 60 supplemental records are tracked under `source-records/`, linked from the six relevant doors and three relevant props through optional `authoring_record`. These inspection records retain source IDs, installed-media addresses and source qualifications; they are not runtime geometry inputs. Shared rendering consumers are partial; complete their source-field coverage and visual acceptance in the existing renderer. |
++| `item_appearances`, `item_materials`, `item_visuals`, `source_palettes` | Adopted and assembled through `authoring/items/index.json`: 100 hand and 404 ground selections, nine material recipes, 85 categories/318 variants and 118 palettes. Existing typed-owner values, factory/slot associations, ground registration and unsupported classifications are preserved; the ledger contributes its inventory, not its import wrapper. Equipment references use existing root-rig clips and `/media/smallscale/modular/` resources. Existing attached effects remain single-owned in the catalog. Shared runtime consumers are partial; finish their remaining owned-appearance and lifecycle behavior. |
++| `ui_resources`, `ui_presentation`, `ui_choices`, `ui_skin`, `ui_fonts` | Adopted in tracked `authoring/ui/index.json`, using existing owners and delivered smooth48/192×256 assignments; all 103 choice mappings retained. Skin is empty because no legacy chrome was selected. No full native content manifest. Shared runtime UI consumers are partial; finish the remaining interaction and display checks. |
+ | `byte_planes` and resource dependencies | Include references where existing representations use them; paired banks already declare their files/encoding/calibration and are not duplicated here as a second bank registry. |
+ 
+ Once adopted, these client files are tracked and edited in NDClient. The original
+@@ -1030,7 +1027,7 @@
+ `wood_door_open`, `props`, `treatments`, `spatial_effects`, `residue_wall_faces`,
+ `residue_particles`, `residue_ground`, `residue_surfaces`, `liquid_surfaces`,
+ `spatial_media`, `concentration_media`, `construction_media`, `deposit_media`, `lighting` are
+-source-editable structured references/parameters. Current source has 24 fields including `lighting`; the historical 23-field census predates it. `WorldLightingPolicy` already owns `edgeHalfWidthCells`, `treatmentSpace`, `baseResponse`, `directCeilingLinear` and `directFalloff`; edit these existing fields rather than inventing another light policy. Where AnimationData consumes
++source-editable structured references/parameters. Current source has 24 fields including `lighting`; the historical 23-field census predates it. The 11 October correction removes the legacy `edgeHalfWidthCells`, `treatmentSpace` and `baseResponse` fields and their categorical/ambient rendering behavior. `WorldLightingPolicy` retains direct-response parameters and explicitly authored `directionalSources`; it supplies no implicit ambient light. Do not reintroduce the removed fields or a second light policy. Where AnimationData consumes
+ one of them it is the same source document and edit, not an additional owner.
+ 
+ AssetDocument fields: schema_version is version metadata; resources and animations
+@@ -1079,7 +1076,8 @@
+ silently. The five human premade defaults are clearly labelled as newly selected
+ defaults, not claimed as delivered exact assignments. Details and source locations
+ are in client `authoring/ui/README.md`. UI resource adoption is complete; shared
+-UI lookup, widgets, SDK admission and HUD rendering are not implemented.
++UI lookup, widgets, SDK admission and HUD rendering have partial consumers. Use
++the current progress document for remaining behavior and acceptance gaps.
+ 
+ Do not restore obsolete
+ Pygame image selection over the new smooth48/192×256 bank. Native content
+@@ -1138,8 +1136,9 @@
+ 
+ The companion source schema, effective receipt normalization and required copies
+ are installed; the ordinary assembler consumes those tracked values, including
+-the completed assembly amendment recorded below. Renderer/light
+-consumption and live visual acceptance remain future implementation. The
++the completed assembly amendment recorded below. Current renderer/light
++coverage and remaining visual acceptance are tracked in §12 and the active
++renderer chapter; completed data preparation does not establish that acceptance. The
+ corrected supplier selection is recorded in
+ `ENVIRONMENT_GEOMETRY_INTAKE_RESPONSE_2026-10-10.md`; the client local intake report
+ is `.runtime/environment-geometry/adoption.json`. Do not rerun this preparation
+@@ -1277,8 +1276,9 @@
+ 
+ Completion is normal assembled authoring carrying those values without a supplier
+ receipt interpreter. No artwork recopy, client renderer or SDK work belongs to
+-that pre-phase. Shared-renderer placement, layers, depth and lighting acceptance
+-remain later implementation work; data completion alone does not claim them.
++that pre-phase. Shared-renderer placement, layers, selected depth interactions
++and lighting acceptance belong to the client implementation tracked in §12 and
++the active renderer chapter; data completion alone does not claim them.
+ 
+ #### One material/light calculation, three different geometric questions
+ 
+@@ -1318,8 +1318,9 @@
+ association. Fireball’s accepted proof curve is now authored at its existing impact
+ storage owner, explicitly requested by the user on 10 October. Preserve it as
+ described below; do not add a second bank emitter or a global intensity multiplier.
+-Cosmetic lighting supplements the admitted native baseline and cannot disclose
+-unknown geometry or change mechanics.
++Cosmetic illumination comes from actual disclosed positioned sources or explicitly authored directional sources and cannot
++disclose unknown geometry or change mechanics. Native categorical light remains
++perception data; it is not an artwork colour multiplier.
+ 
+ #### Pixi resource path and work sequence
+ 
+@@ -1481,7 +1482,7 @@
+ | w | (96,192) | (160,160) | (224,128) |
+ | n | (160,192) | (96,160) | (32,128) |
+ 
+-Each projected native support must coincide with that source contact after the registered transform. The installed G17 e/s art is a sloping whole-flight raster; its current four registered source corners and three contacts define a usable sloping depth proxy. The w/n art is a narrow edge-on stripe and uses the registered contact-chain continuation above. Keep this explicit representation rather than claiming that its generic face name `slope` provides separately measured tread/riser topology. There is no need to invent or export hypothetical individual steps just to replace the word "slope." Other stair artwork with actual registered treads/risers uses those surfaces, and newly supplied sampled depth takes precedence. Source contacts alone do not establish an unrelated family's width/side faces. The imported study's G16 edge lane and G17 width extension share the same rise; width extension does not mean stacking another rise. Do not emit a full intermediate flat floor over the flight.
++Each projected native support must coincide with that source contact after the registered transform. The installed G17 e/s art is a sloping whole-flight raster; its current four registered source corners and three contacts define a usable sloping depth proxy. The w/n art is a narrow edge-on stripe and retains its registered source contacts for placement. Delivered companions support actual lighting/spell geometry; the older contact proxy does not define ordinary visibility or picking. Keep this explicit representation rather than claiming that its generic face name `slope` provides separately measured tread/riser topology. There is no need to invent or export hypothetical individual steps just to replace the word "slope." Other stair artwork with actual registered treads/risers uses those surfaces, and newly supplied sampled depth takes precedence. Source contacts alone do not establish an unrelated family's width/side faces. The imported study's G16 edge lane and G17 width extension share the same rise; width extension does not mean stacking another rise. Do not emit a full intermediate flat floor over the flight.
+ 
+ The calibration table below records the installed source data and remaining renderer consumers. Consume those prepared values; it does not request another authoring pass.
+ 
+@@ -1513,7 +1514,7 @@
+ The following source cases refine the existing renderer families; they do not add parallel effect systems:
+ 
+ - **World-launched projectiles:** `game_obsolete/mechanism_projectile.py::{mechanism_projectile_duration,mechanism_projectile_target,sample_mechanism_projectile}` uses an admitted mechanism's world origin, elevation and pose-dependent muzzle instead of an actor socket. The common trajectory channel supports both source kinds, retained target contacts, camera-independent travel duration, directional bank choice and permitted residual rotation. A hidden muzzle must not produce a revealing launch flash or synthesized caster; separately admitted travel/impact facts may still render.
+-- **Portal transfer:** `game_obsolete/portal_draw.py::{portal_draw_commands,_doorway_commands,clip_portal_bodies}` supplies entrance/exit front/back media and local aperture clipping during transfer. A body and its decorative copies/trails enter or emerge through that registered aperture; its contact shadow follows the actual transfer phase. Use the shared geometry/material path, not a global tile mask or copied CPU raster loop. One admitted endpoint never becomes a window into an undisclosed remote room.
++- **Portal transfer:** `game_obsolete/portal_draw.py::{portal_draw_commands,_doorway_commands,clip_portal_bodies}` supplies entrance/exit front/back media and local aperture clipping during transfer. A body and its decorative copies/trails enter or emerge through that registered aperture; its contact shadow follows the actual transfer phase. Use the shared geometry/material path, not a global tile mask or copied CPU raster loop. One admitted endpoint never becomes a window into an undisclosed remote room. Focused native Dimension Door acceptance now covers original front/back banks, opening wait, crossing, arrival and closing at four quarters/two zooms; opening-time body clipping and shadow suppression were corrected to the original crossing-only rule. Hatch departure now consumes the original front-image alpha in the same coverage filter. The unchanged original native hatch scenarios supply traveler and independent endpoint witnesses; 24 native-pixel samples match original clipping exactly, while half-scale nearest-sampling residuals remain explicitly qualified. Supported SDK encounter setup has no hatch portal placement, so hatch SDK/Studio acceptance remains open; this does not complete R16. See the existing movement/portal review for evidence and the input boundary.
+ - **Prop disintegration:** `game_obsolete/object_dust.py::object_dust_commands` retains the object's alpha silhouette, contact and deterministic seed for its retirement effect. Support this through the existing particle/material owner, separately from actor blood and wall debris. At the native destruction commit the retired prop is no longer an interactive/blocking object merely because decorative dust remains. No new CPU XYZ payload or second debris engine is required.
+ - **Appearance-only updates:** the old NeuroClient's `AnimatedEntity` recomposition/patch/readiness methods show the needed behavior: preserve the active source clip/frame while changing equipment or temporary appearance layers, prepare the complete replacement atomically, and remove only an ending modifier's contribution. Do not restore an old tint/slot snapshot over more recent admitted changes or copy the old class/visibility-closure design.
+ 
+@@ -1611,31 +1612,32 @@
+ 
+ Recover existing finite material operations and their source masks rather than replacing all material work with tint. This includes the already authored maximum-RGB/luminance transfer, bark, wither, fracture wave, energy burn, rising bands, etched burn, flowing film and frost families. Additional entries are ported from the actual source union/formula, not inferred from spell names. The per-fragment order is declared:
+ 
+-`source decode → source palette/material operation → receiving light → authored emission → Pixi scene order (selected effect-depth comparison where needed) → original blend`.
++`original source bytes → exact mapped-colour swap when authored → encoded-colour tint once → layer-owned material → native character composition with whole-body/gear operations at their declared composite stage → separate fixed 2× character cleanEdge → dedicated receiving light → authored emission → Pixi order and original blend`.
++
++Only applicable stages run: world VFX and environment do not receive character cleanEdge. Exact swap, tint and material are separate filters, with the explicit override rules in §5.3 and renderer §4. Decode/encode the ordinary colour boundary once for linear lighting. Factory appearance is already linear radiance: preserve its declared radiance scale and RGB at alpha zero instead of applying an ordinary colour decode or discarding its emission. Selected effect-depth comparisons remain local to those effects.
+ 
+ Original alpha/coverage is preserved unless that particular authored operation changes it. Equipment and body have their correct separate owned material modifiers. Shared immutable source pages do not cache another entity's material result. No camera-specific recolored image copies or CPU XYZ/color calculations are introduced.
+ 
+-Native effective light is the admitted baseline. A finite authored `WorldLightingPolicy` supplies linear-space treatment gains, smoothing width and cosmetic direct-light response. Those are artist-tunable rendering values, not invented performance/validation quotas. Convert source color to the declared working space once and premultiply once. Do not mix the old sRGB multiplication constants into a purported linear-light calculation.
+-
+-For a receiving face, interpolate the native treatment only across admitted physically connected compatible receiving surfaces. Smooth neighboring cell transitions with the selected smoothstep width; use renormalized product weights at compatible corners. A diagonal sample requires both connecting cardinal routes. Do not smooth through a wall, aperture still blocked by a current leaf, magical darkness discontinuity, unknown/memory boundary or incompatible height. Floor light, door light and wall light use their actual corresponding receiving support/face rather than sampling the tile under the top of the image.
+-
+-Cosmetic disclosed emitters add a bounded response, without introducing undisclosed lights or a second visibility simulator:
++**Human correction, 11 October:** native `effective_light_levels` remains authoritative perception data but supplies no RGB multiplier to artwork. Remove categorical treatment gains, interpolation and global ambient/base-response multipliers from rendering. Current artwork retains its source colour without actual lights. Remembered terrain keeps explicit disclosure styling; that styling is not illumination and does not smooth into currently visible cells. Convert source colour to the declared working space once and premultiply once.
++
++Only actual disclosed positioned emitters or explicitly authored directional sources add illumination, with the existing bounded receiving-material response and no second visibility simulator:
+ 
+ ```text
+-I_base = mix(1, smoothedNativeTreatment, baseResponse)
+ I_direct = sum(
+     visible(light, receiver)
+     * lightColor * intensity * authoredAttenuation(distance, range)
+     * max(dot(receiverNormal, lightDirection), 0)
+ )
+-I_receive = I_base + min(I_direct, max(0, directCeiling-I_base))
++receivedRadiance = sourceRadiance + diffuseReflectance * coverage * min(I_direct, directCeiling)
+ ```
+ 
+ The selected material's diffuse reflectance controls its direct response. The shadow/visibility term tests a light-to-receiver segment against the same current calibrated finite blocking faces and apertures used elsewhere; camera occlusion is a different ray/test. Derive the compact barrier list when its consumed displayed geometry/state changes. Pan/zoom does not rebuild it. Walls joined for a continuous receiving surface do not fill an aperture's shadow geometry.
+ 
+-Geometry supplies normals for known planes/meshes; a second full-size normal texture is unnecessary there. Compact irregular effect depth can carry oct8 normals in BA. A cutout-only body/prop uses its declared billboard surface normal for cosmetic diffuse response, transformed with its camera/source basis; its ground-support association does not turn that material normal into an upward-facing floor normal. The native baseline still comes from its displayed support/contact. This is explicitly flat-surface lighting for art without a normal companion, not a claim of anatomical or carved-surface relief. Existing supplied normals take precedence; absent normals do not trigger mandatory new artwork exports.
++Geometry supplies normals for known planes/meshes; a second full-size normal texture is unnecessary there. Compact irregular effect depth can carry oct8 normals in BA. A cutout-only body/prop uses its declared billboard surface normal for cosmetic diffuse response, transformed with its camera/source basis; its ground-support association does not turn that material normal into an upward-facing floor normal. This is explicitly flat-surface lighting for art without a normal companion, not a claim of anatomical or carved-surface relief. Existing supplied normals take precedence; absent normals do not trigger mandatory new artwork exports.
+ 
+ The whole combined Fireball can receive light while emitting light. Decode the selected Factory appearance as radiance/opacity with its declared radiance scale, then apply the bounded source-defined diffuse contribution; no old separate smoke system is recovered merely to receive light. Emission is a separate authored timeline curve with position/color/intensity/range keys.
++
++The installed client source inventory currently supplies Fireball's impact `VisualEmitter`. Standing/wall torch bindings supply `is_lit`-selected flame animation art, but no client positional emitter colour/intensity/range definition. The installed SDK exposes categorical perception light and item state rather than a positioned photometric-source list. Keep the art and report this source gap; do not invent torch parameters or backend fields. Existing source-authored emitters remain the illumination inputs.
+ 
+ **Fireball emitter adopted, 10 October, at the user's explicit request.** The existing
+ impact storage `authoring/media/storage/shared.fireball.20ft-ground.smoke.v3.json`
+@@ -1675,13 +1677,13 @@
+ 
+ Use the actually presented injured body's contact, including interrupted movement. Preserve the existing critical-flight styling, non-red/bone/vapor/frozen response and original release law; a longer dramatic flight does not increase deposited native amount. A shared Pixi mesh can evaluate those analytic particle/deposit functions and participate in the appropriate scene order. This is not a requirement to supply per-fragment world depth or a general collision/occlusion solver. Pixi ParticleContainer remains available for simple independent cosmetic sprites; do not introduce an extra adapter layer merely to rename the existing finite analytic path.
+ 
+-The source's `particle_schedule`/`landed_fraction` is shared by air motion and deposition so a mark appears when its own particle arrives. Receiving deposits are keyed to actual support/face local UVs. Wall soot stays on the registered wall face; it does not tint an entire provider or use the floor's UVs.
++The source's `particle_schedule`/`landed_fraction` is shared by air motion and deposition so a mark appears when its own particle arrives. Existing floor blood evaluates its original 64×64 source-grid colour/alpha on the admitted floor plane and footprint, at that support's height. It does not inherit the tile image's vertical skirt geometry. Preserve separately authored non-floor receiver UVs; existing wall soot stays on its registered wall face rather than tinting an entire provider or using floor UVs. This does not add wall-blood or drip behavior.
+ 
+ Cache settled coverage per receiving surface/chunk and update only arriving/changed contributions. The cache key does not contain camera quadrant, zoom, current light or the whole world JSON. Keep settled older material separate from the active incremental response so a fresh injury does not restart all old blood's material clock. For the existing kernel, preserve the source's `sqrt(fraction*weight)` footprint evolution, source centers/radii, and `max(0,1-q/1.5)^2` density rather than replacing it with arbitrary circles. Owned deposit media suppresses any duplicate generic deposit drawing.
+ 
+ Receiver fields are a derived cache, never authority. Seeking backward, removal, rollback, scope replacement and eviction rebuild the affected receiver from retained source contribution state; they do not replay every historic injury into every tile. A witness's observed deposition animation and a cold-discovered settled residue are distinct source facts. Water, ice/frost/burning transitions and other ground fields use their existing material state/timing and actual receiving geometry; no new chemistry is introduced.
+ 
+-Chunk shape, gutter and texel density are concrete tunable implementation choices, not human requirements or fixed readiness gates. The earlier 4×4/64-texel suggestions must not become a repacking/validation campaign. Choose a useful source-scale layout, preserve face seams, record actual memory and visual behavior, and continue delivery unless a real failure requires adjustment.
++Chunk grouping and gutter remain tunable cache choices. Preserve the original 64×64 blood appearance grid and source-pixel-centre evaluation established by the Pygame comparison; packing may not change that sampling. Preserve other fields' authored sampling and face seams, and measure memory/visual behavior without turning cache layout into a repacking campaign.
+ 
+ ### Picking, grid, highlights and automatic cutaway
+ 
+@@ -1772,7 +1774,7 @@
+ 
+ ### 7.2 One private installation, explicit footprint
+ 
+-The repository's source, authoring JSON/schema, shaders, tools and small fixtures are tracked. Artwork, private recordings, intake receipts, dependency caches, captures and builds are ignored. The installation and core authoring are prepared; full release assembly/loading and application consumers remain to be implemented.
++The repository's source, authoring JSON/schema, shaders, tools and small fixtures are tracked. Artwork, private recordings, intake receipts, dependency caches, captures and builds are ignored. Installation and core authoring are prepared; release assembly/loading and application consumers already exist. Their remaining content and acceptance gaps are recorded in the progress document.
+ 
+ Use one physical private media installation outside Vite's `public/` tree and outside `dist/`:
+ 
+@@ -1780,7 +1782,7 @@
+ |---|---|
+ | `NDClient/.media/smallscale/`, `environment/`, `ui/`, `vfx/` | Actual artwork in family/source subfolders, retaining original meaningful filenames. Spells, conditions, areas and actions have separate VFX folders. No hash filenames or checksum/deduplication machinery. |
+ | `NDClient/authoring/` — tracked, present | Editable client values; `catalog-index.json` resolves canonical files/JSON pointers. Environment, item/palette and UI sections are also adopted under their own indexes, using existing owners. |
+-| `NDClient/.runtime/releases/<release-id>/` — generated when integrated | Prepared metadata/section index referencing the single installed artwork tree. Serve through an ordinary static metadata route; no binary copy per release. |
++| `NDClient/.runtime/presentation/releases/<revision>/` — generated metadata | Prepared metadata/section index referencing the single installed artwork tree. Serve through an ordinary static metadata route; no binary copy per release. |
+ | `NDClient/.runtime/` | Local SDK package, development recordings, captures and bounded diagnostic output. It is not another media installation. |
+ | `NDClient/dist/` | Built application code only; no duplicate library or copied `.media` tree. |
+ | Existing source/art owners | Original artwork, accepted handoffs and canonical authoring documents remain untouched. Their preservation is separate from browser-ready installed bytes. |
+@@ -1871,8 +1873,7 @@
+ leave the baked effect visible through the combined source. Preserve these authored
+ defaults; do not automatically enable every available effect. Apply the existing rig shadow alpha once, and
+ keep ground shadow separate from body depth/hit coverage.
+-This leaf material and asset inspection page are complete; game/Studio stream,
+-world ordering, common resource ownership and the rest of N0/N1 remain pending.
++The source component algebra and asset inspection page are prepared. Game/Studio streaming, world ordering and the common resource owner have partial consumers; their remaining corrections follow renderer v3, including migration of the ordinary material display path.
+ Other fixed packs retain their initial partition qualifications. Their remaining
+ experimental material masks are unaccepted and are not inputs to this method.
+ Do not generalize the Goblin/Demon result to those different source structures.
+@@ -1988,8 +1989,8 @@
+ omission policy.
+ 
+ Lease identity is `(scope generation, consumer kind, consumer identity, revision)`.
+-Consumers are displayed scene, active occurrence, lookahead occurrence or Studio
+-candidate. Acquire the complete required frame set before publishing its readiness.
++Consumers are displayed scene, active occurrence, lookahead occurrence, adjacent-view
++preparation or Studio candidate. Acquire the complete required frame set before publishing its readiness.
+ Retain current sampled pages, next source sample pages and persistent displayed
+ lifetimes; release on sample-page transition, occurrence retirement, lifetime end,
+ candidate release replacement, seek or scope reset. Shared references keep a source alive until
+@@ -2003,6 +2004,14 @@
+ compressed responses use the browser HTTP cache/local release files; no second
+ unbounded JavaScript archive cache is retained.
+ 
++Adjacent-view work uses these same leases and decoded/uploaded sources. Renderer
++§6 specifies q±1 dependencies for admitted content, with current rendering,
++explicit camera requests and next-operation preparation ahead of bounded background
++fetch/decode/upload. Stop feeding obsolete requests; retire their leases only when
++in-flight work can safely finish. Do not queue two full views ahead of urgent work
++or compile a whole recording merely to rotate. Background preparation does not
++advance another simulation or hold the displayed playback clock.
++
+ Preserve the accepted frames and suitable existing atlases. Do not split or repack
+ them to satisfy an invented byte target. Use the actual renderer's texture limits;
+ if a source exceeds them, use lossless existing part/region registration. Further
+@@ -2018,7 +2027,9 @@
+ 
+ If the next semantic group/current next-frame prerequisites are unavailable, hold
+ the presentation clock at the last complete boundary/frame while the render/UI/SDK
+-loops continue. Do not retire its planes and display a half-ready frame. If measured
++loops continue. This hold concerns the displayed operation's missing resources;
++camera-only requests keep the current quarter playing under renderer §6. Do not
++retire its planes and display a half-ready frame. If measured
+ memory pressure requires eviction, release unleased resources first; never omit a
+ cast or stall playback to enforce an unmeasured quota. The current scene's
+ lease transitions must acquire the replacement set before releasing the old one.
+@@ -2129,22 +2140,28 @@
+ 
+ | Channel group | Required visible content |
+ |---|---|
+-| Body and attached layers | Rig/source clip, body/shadow, each equipment slot, Magic, Effect, original fixed-rig accents, recovery/hold and socket samples. |
++| Body and attached layers | Full composed Body preview including attached effects. Individual body/shadow/gear sources are collapsed by default. Magic/Effect/hand-glow operations remain visible subordinate tracks; their material operations sit below the affected effect. Rig/source clip, recovery/hold and sockets remain inspectable. |
+ | Delivery and motion | Each actual projectile, beam, area and repeated recipient; movement legs, flight/jump/portal phases, attachment and path. |
+-| Material and appearance | Resolved palette/override, masks/donor selection, existing material envelopes, fades/time maps and authored enablement. |
++| Material and appearance | Actual timed operations below their affected owner, with resolved tint/swap/material, masks/donors and envelopes. Static clothing tint is baseline appearance, not a separate timed operation. Equipment appearance changes remain identifiable at the affected part. |
+ | Reaction and lifecycle | Damage/heal/death, interrupts, condition entry/sustain/removal/suppression, head-marker intervals and summon/despawn. |
+ | World and deposits | Formation/retirement/clearance, door/prop transitions, blood release/landing, ground contributions and relevant state commits. |
+ | Recorded causes | Event ancestry, actual recipient/outcome and release/contact/commit dependencies; these native facts are read-only. |
+ 
+ Group by actual occurrence, owner and cause. Repeated A/B/A applications have distinct lanes even when two target identities match. A case is not reduced to one caster, one projectile and one target. New content using supported record kinds automatically appears through those shared projections; it does not need a spell-specific timeline builder.
+ 
++A spell's foreground/background images are parallel components of one media group
++subordinate to its owning action. Effect/material subtracks describe operations
++on that group or layer; opening the physical Body parts is a separate preference.
++Indent subordinate operations, keep the complete Body preview at full row size,
++and show effects without requiring the user to expand the body-part list.
++
+ **Sprite-backed clips show actual frame thumbnails.** Recover the existing actor-layer and projectile-phase strip capability. Thumbnails use the selected source clip/phase/facing and current resolved palette/material, preserving full-cell registration. Their positions correspond to samples on that lane's actual source-to-presentation time mapping. Selecting a sample reveals source frame/sample time and resolved time. The inspector can compare the original layer with the resolved composition. Empty source intervals, missing resources and intentionally hidden diagnostic layers are distinct states.
+ 
+-Thumbnail generation uses production sampling, TextureSources and material functions with separate preview display handles and mutable material inputs. Cache GPU-resident previews for demanded visible rows/samples and show them in the same application canvas's clipped timeline viewport. Do not reparent or mutate live scene objects, synchronously extract/readPixels for routine thumbnails, create a separate WebGL context per lane or add another animation clock. Selection/source/material/view changes invalidate affected samples; playhead movement alone does not rebuild every strip. Shader/tint/particle channels show their actual sampled result on the relevant source, with meaningful values/curves; empty colored bars are insufficient.
+-
+-Derive tracks from compiled metadata, not GPU prepared objects. Keep the selected operation's tracks visible before Play, during preparation, while paused and at its end. Divider resize updates layout/clipping in the scheduled frame without blanking the scene. The recording selector identifies actual existing scene/action variety; renamed duplicate scenes are not additional coverage. Record missing examples explicitly without starting a speculative capture campaign.
+-
+-Resolved seconds/milliseconds form the common ruler. Selected channels also expose source frames or uneven sample times, source FPS and effective playback rate. Measured render FPS is a separate diagnostic. Source-frame stepping follows the selected track's real sample boundaries; there is no fictitious global 24/30 FPS editor clock. Release/contact/commit/removal markers indicate whether their value is authored or derived from recorded causality.
++Thumbnail generation uses production sampling, TextureSources and material functions with separate preview display handles and mutable material inputs. Cache GPU-resident previews for demanded visible rows/samples and show them in the same application's clipped timeline viewport. Prepare samples in bounded batches and retain already prepared samples for the active inspection across scrolling/resizing. Labels distinguish the source frame count from the number of preview samples. Do not reparent or mutate live scene objects, synchronously extract/readPixels for routine thumbnails, create a separate WebGL context per lane or add another animation clock. Source/material/view changes invalidate only affected images; inspecting or expanding a track preserves time, scroll and selection, and playhead movement does not rebuild strips. Shader/tint/particle channels show their actual sampled result on the relevant source, with meaningful values/curves; empty colored bars are insufficient.
++
++Derive tracks from compiled metadata, not GPU prepared objects. The complete recording's semantic tracks appear on load before Play; this does not GPU-prepare the whole recording. A selected-operation view remains optional. Preserve rows at pause/end and during preparation. Divider resize updates existing layout/clipping without blanking the scene or recreating tracks. Camera changes update view-dependent previews while preserving semantic rows, expansion, scroll, selection and playback time. The recording selector identifies actual existing scene/action variety; renamed duplicate scenes are not additional coverage. Record missing examples explicitly without starting a speculative capture campaign.
++
++Authored timing markers remain source-frame markers; source FPS and the sampled playback rate resolve their displayed times. Resolved seconds/milliseconds form the common ruler, not replacement authored markers. Selected channels expose source frames or uneven sample times, source FPS and effective playback rate. Measured render FPS is a separate diagnostic. Source-frame stepping follows the selected track's real sample boundaries; there is no fictitious global 24/30 FPS editor clock. Release/contact/commit/removal markers identify their authored source or recorded causal origin.
+ 
+ Provide play/pause, rate, source-frame step, forward/backward scrub, loop range, camera rotation, fit/pan/zoom, track selection/expansion and optional equal-time comparison of explicitly loaded baseline/candidate source versions when straightforward. A seek restores a retained prefix/checkpoint and samples the same runtime; it cannot reroll or redispatch gameplay. Persistent loops, condition effects, environment frames, light and feedback all use the same presentation time.
+ 
+@@ -2231,7 +2248,7 @@
+ 
+ ### 9.2 Camera, focus, picking and world commands
+ 
+-- WASD/drag pan, cursor-anchored wheel zoom, Q/E rotation, optional G grid and fullscreen/window resize recover the useful existing browser behavior. Camera changes update transforms/culling rather than decoding or rebuilding the world.
++- WASD/drag pan, cursor-anchored wheel zoom, Q/E rotation, optional G grid and fullscreen/window resize recover the useful existing browser behavior. Pan/zoom updates transforms/culling and reuses textures. Q/E retains the viewed world centre, zoom, advancing playhead, tails and feedback; resident adjacent sources are reused. Missing quarter sources prepare while the displayed quarter continues, then the new view publishes at the current time under renderer §6. Rotation does not replay a historical prefix or rebuild the recording's timeline.
+ - Pointer focus and capture are explicit. Typing/searching/scrolling in a panel cannot move the camera or issue a world command. Focus loss releases Alt/Ctrl/drag state; a modal/Studio owns its input until closed.
+ - Escape consumes the most local transient interaction: choices/context popup, targeting/approach, panel/pinned tooltip, then the application menu. Dismissal never falls through into a world command. User UI scale is adjustable independently of camera zoom through the shared layout; it changes neither world projection nor sprite proportions. No native-process restart or new browser menu framework is implied.
+ - Pixi pointer interaction uses displayed transforms and authored object/support hit areas, with the current cutaway policy. It returns the displayed object/actor/support identity; native choices/preview decide legality. No general CPU alpha-mask picker or GPU ID readback is required; add precise silhouette testing only for a demonstrated need.
+@@ -2334,11 +2351,13 @@
+ 
+ ## 10. Implementation sequence with concrete outputs
+ 
+-**Next work:** after this plan update and review, follow [renderer plan v3 §10](/home/tommaso/Dev/NDClient/agent_docs/NDCLIENT_PIXI_RENDERER_PLAN_2026-10-11_v3.md#10-implementation-order-and-owners) for the rendering repair within N1–N3, then continue the full scope below. Retain working reduction/compilation/source functions; do not rewrite the backend or build another demo. Native Pixi interaction/hit areas are the default, not a new CPU picker.
++**Next work:** follow [renderer plan v3 §10](/home/tommaso/Dev/NDClient/agent_docs/NDCLIENT_PIXI_RENDERER_PLAN_2026-10-11_v3.md#10-implementation-order-and-owners) for the rendering repair within N1–N3, then continue the full scope below. Retain working reduction/compilation/source functions; do not rewrite the backend or build another demo. Native Pixi interaction/hit areas are the default, not a new CPU picker.
++
++**11 October implementation checkpoint:** the plan is not complete. Integrate the reported Fireball disappearance/colour/trajectory, invalid spell and weapon scenarios, missing recorded rig assignments, and Call Lightning playback hitch into N1–N3 and N5 below. Their current evidence is at the top of implementation progress. Close the bounded corrections and remaining validation, then continue missing content consumers, Studio inspection and playable-client workflows. Do not restart already verified renderer work or let repeated checks of one effect replace the rest of the port.
+ 
+ Use one application-owned frame loop. Paused unchanged views need no busy redraw; camera/sample/resource/layout changes request a frame. Keep existing decoded/uploaded source reuse, incremental worker decoding and uploads; explicitly prepare shader companion textures. Pixi Prepare does not compile arbitrary shaders: first-use compilation belongs to the actual needed Pixi draw path and is measured separately. Do not do synchronous readback, bulk decode or repeated scene-wide preparation in the frame loop. The detailed renderer chapter defines readiness, previews and cache invalidation without arbitrary quotas.
+ 
+-These packages describe dependencies and completed functionality, not serial permission gates. Independent UI/source-inspection work can proceed while geometry consumers are implemented. Use the complete production types/runtime from the beginning; an available family can run before another is finished without creating a second reduced release or demo renderer. The whole scope stays visible in the coverage matrix.
++These packages describe dependencies and completed functionality. The user's latest execution instruction is to **finish renderer v3 and verify the single drawing path first, then resume the general plan**. Preserve partial N3/N4 work without claiming acceptance or advancing it ahead of that renderer work. Afterward, independent UI/source-inspection and ready geometry consumers can proceed together. Use the complete production types/runtime; no second reduced release or demo renderer. The whole scope stays visible in the coverage matrix.
+ 
+ | Package | Concrete output | Actual dependency and completion evidence |
+ |---|---|---|
+@@ -2351,35 +2370,36 @@
+ 
+ ### Work order and what to do when one item is blocked
+ 
+-1. **Finish N0:** application scaffold, prepared schema/types and indexed release,
+-   installed media serving, current SDK connection. No copying or reauthoring work.
+-2. **Build N1 and N2 on those inputs:** registered world/resource/render functions
+-   and the shared stream/reducer/compiler/sampler. Integrate them continuously;
+-   do not finish a standalone world preview before connecting real event playback.
+-3. **Connect N3 and N4 as shared capabilities land:** full authored content and
+-   Studio tracks/inspection use the same path as playable interaction and UI.
+-   Start with available real recordings and the existing crypt configuration;
+-   additional family coverage fills the same production path.
+-4. **Finish N5:** close recorded client defects, exercise the complete playable
+-   encounter and Studio, and provide working launch instructions. Focused checks
+-   accompany each meaningful change; final integration does not replace them.
++1. **Complete renderer v3 §10 in the existing client.** Its source/colour,
++   ordinary drawing, lighting, blood, camera and lethal-event corrections work
++   through current N1–N3 owners. Preserve working SDK, reduction and UI functions.
++2. **Continue the remaining N0–N5 items below.** Use current progress and actual
++   consumers to select missing behavior or acceptance; do not restart completed
++   scaffolding, source adoption, release loading or recording infrastructure.
++3. **Integrate content and UI as shared capabilities become ready.** Studio and
++   gameplay use the same functions. Existing real recordings and the configured
++   crypt provide cases; add only the cases needed to exercise missing coverage.
++4. **Close N5 with the complete product.** Finish recorded defects, exercise the
++   playable encounter and Studio, and maintain repeatable launch instructions.
++   Focused checks accompany substantive changes; final integration retains the
++   full N0–N5 and R01–R23 scope.
+ 
+ If one family or case cannot follow the agreed approach, apply the working rules
+-above: document it in §12 and select an independent ready item from these tasks.
++above: document it in implementation progress (§12) and select an independent ready item from these tasks.
+ Do not replan the architecture, touch the backend, build a substitute demo, or keep
+ circling that case. Deferred issues stay visible for discussion with the user and
+ cannot be counted as delivered. The same rule applies to review findings.
+ 
+ ### N0 tasks and ownership
+ 
+-1. §6.1's narrow door/timber authoring connection is complete; no new asset intake. Reuse completed repository/reference/media setup in §1 and extend its existing package/lockfile. Install the current SDK package without copying its generated models. Add the ordinary application scaffold and static routes; keep source references read-only.
++1. §6.1's narrow door/timber authoring connection is complete; no new asset intake. Reuse completed repository/reference/media setup in §1 and extend its existing package/lockfile. Preserve the installed current SDK package, application scaffold and static routes; keep source references read-only.
+ 2. Use the existing passive owners and authored-schema export; `game_obsolete/presentation_export.py` remains the original seed/reference, not a second current producer. §5.1.1's initial replacement/relocation import is complete; consume tracked client authoring and complete the full release shape, existing release/catalog revision, resource descriptors and tool-only source provenance. No media-content hashing is required. Reuse the prepared installation, client section schemas and existing storage/geometry types; no engine-side field changes. No `SceneRelease`, reduced `Pick<AnimationData,…>` or hand-maintained client asset catalog.
+-3. Complete release indexing, resource dependencies and application loading in §5.4 over the already assembled client sections. Preserve accepted sheets and rates; do not re-copy artwork or rerun initial authoring import. Report unresolved references at their owning files; affected capabilities remain incomplete while unrelated consumers proceed.
+-4. Establish SDK worker intake, durable journal, one TS reduction and source-derived types. Exercise bootstrap, attach, content admission, legal choice/preview/command, receipt and reconnect with the existing server. Do not introduce new endpoints to avoid learning delivered ones.
++3. Complete missing dependencies and supported consumer coverage in the existing indexed release/application loader (§5.4). Preserve accepted sheets and rates; do not re-copy artwork or rerun initial authoring import. Report unresolved references at their owning files; affected capabilities remain incomplete while unrelated consumers proceed.
++4. Complete unverified integration boundaries in the existing SDK worker intake, durable journal, TS reducer and source-derived types. Exercise bootstrap, attach, content admission, legal choice/preview/command, receipt and reconnect with the existing server. Do not introduce new endpoints to avoid learning delivered ones.
+ 
+ ### N1 tasks and ownership
+ 
+-1. Adapt source camera controls with one calibrated projection and inverse. Apply owner contact, pose/bank offset, source pivot/crop and elevation exactly once. Implement current world geometry from registered source data before judging draw order.
++1. Correct the existing camera controls using the shared calibrated projection and inverse. Apply owner contact, pose/bank offset, source pivot/crop and elevation exactly once. Consume the prepared registrations; ordinary layer/contact order does not wait for every depth or lighting consumer.
+ 2. Connect support, wall, aperture, stair/cliff and prop registrations to ordinary Pixi scene layers and authored contact order. Keep geometry for lighting and selected spell operators. Own-support precedence is a layer relationship, not fragment-depth continuation. Recover compatible assemblies/adjacency.
+ 3. Connect finite material operators and compatible Pixi batching without a generic opaque/transparent solver. Integrate the accepted Fireball registration/light math and selected bounded wall interactions into this same renderer. Keep raw companions and source interpretation in the shared resource owner.
+ 4. Produce the valid in-app foundation set described in §11. Compare the recovered source registrations/order and available prior evidence for those same assets. Archived Pygame remains read-only; fixing its imports or restoring an executable Pygame app is not a prerequisite.
+@@ -2387,11 +2407,11 @@
+ 
+ ### N2 tasks and ownership
+ 
+-1. Port current native reduction semantics and causal/retained presentation meanings into the one pure TS implementation. Enumerate the actual `PlayerFact` union; no default branch silently skips unsupported action families.
++1. Complete missing native reduction and causal/retained presentation cases in the existing pure TS implementation. Enumerate the actual `PlayerFact` union; no default branch silently skips unsupported action families.
+ 2. Compile occurrence/recipient/cause identity, body and all attached layers, trajectories, reactions, commit points and retained lifetimes. Missing parents caused by projection remain absent. A shared recipe is not copied per test case.
+ 3. Latest reduction remains available for discovery and command admission; the displayed projection supplies every visible scene/HUD/log consumer. Pause/slow playback/resource waits do not block intake or advance one subsystem secretly.
+ 4. Save exact SDK records before acknowledging consumption, retain started-operation timing and compatible checkpoints, and restore acknowledged-but-unplayed work after reload. Test offline playback after host history expiry and scope replacement during pending callbacks.
+-5. Load the first actual-server SDK recordings from §8.2.1 using these same functions. Timeline is a view over compiled channels. Do not implement a throwaway timeline, synthetic server-shaped input or temporary alternate event model.
++5. Use the existing actual-server SDK recordings and add needed family cases through §8.2.1 using these same functions. Timeline is a view over compiled channels. Do not implement a throwaway timeline, synthetic server-shaped input or temporary alternate event model.
+ 
+ ### N3 tasks and ownership
+ 
+@@ -2420,7 +2440,11 @@
+ 
+ ### 11.1 Physically valid visual case set
+ 
++Prefer a focused demonstration for each behavior: one spell/action and its necessary actors/environment, followed by observable Idle aftermath. Combined-effect and complete encounter checks remain dedicated integration cases rather than the default for every visual test. Include an explicit directional source in the receiving-light checks; changing backend perception is not a substitute.
++
+ The user reviews these in the running application. All cases use source-compatible assets, known registrations and full physical enclosures where a raised area requires them. Distinct existing floor treatments identify upper/lower supports. An unknown disclosure boundary is not falsely built into a cliff. Whole-area construction references do not provide synthetic observations to Studio; gameplay scenes use the actual configured server audience. Source geometry overlays remain diagnostic inspection of those recorded scenes.
++
++An authentic server recording must also exercise the intended situation. For a targeted spell demonstration, select the admitted target/area through the SDK, check discovery `affected_entity_uuids`, preview `affected_positions`/`can_confirm`, and the committed `declared_target_entity_uuids` and outcome. Do not require the positional preview's `effective_target_uuids` to be populated when its actual contract reports affected positions. A line aimed at an arbitrary map corner or a spell canceled by Counterspell does not demonstrate a successful cast at the intended enemy. Preserve genuine cancellation as its own behavior; do not suppress native reactions or edit packets to manufacture success. Use existing actors whose authored equipment matches the demonstrated action, such as a native bow wielder for a bow attack. Check the recording's declared presentation release on initial load, before any authoring reload; missing rig assignments cannot be hidden by reloading a different release or installing a generic actor fallback. These are checks in the existing capture/tests, not a second scenario generator.
+ 
+ | Case | Required construction and result |
+ |---|---|
+@@ -2437,7 +2461,7 @@
+ | Volumes against surfaces | Selected Factory Fireball, Sunburst, Fog/Sleep and Globe with near/far sides, finite/L/angled walls, arch/window opening, upper receiver and overlapping bodies. Preserve source silhouettes; no tile-grid sawtooth or blast-centre hard shadow hack. |
+ | Effect depth and outcomes | Recorded wall versus open doorway, displayed break, full cosmetic plume at a dark boundary and existing suppression/cancellation. Actual damage/stage/lifetime follows received facts; unavailable provider/shell data does not produce an invented impact. |
+ | Transparency/light | Actual authored source layers/blends and selected Fireball/wall interaction retain their silhouettes and stable order; whole Fireball receives light and emits through its authored envelope. Record unresolved exceptional transparent crossings for discussion, without making a general solver a prerequisite. |
+-| Blood/deposits/water | Concurrent impacts, fragments/vapor, airborne-to-ground continuity, wall/raised receiver, old versus fresh deposits, removal/seek/reobserve and existing liquid response without duplicate stain systems. |
++| Blood/deposits/water | Concurrent impacts, fragments/vapor, airborne-to-floor continuity, the original 64×64 floor-blood appearance at flat/raised support heights without skirt streaks, old versus fresh deposits, removal/seek/reobserve and existing declared wall-soot/liquid behavior. No invented wall-blood/drip or duplicate stain system. |
+ | Camera/sampling | Pan/zoom/resize/DPR/rotate while idle, casting and reloading source data; no skew/non-uniform body stretching, unstable pixel scale, incorrect RGB data interpretation or alpha fringes. |
+ | Detailed condition/body phases | Finite application, loop crossfade and early removal, frozen pose, live copies, absence echo, historical trails and independently lasting feedback preserve source ages/owners. Head/helmet/crown/wings and owner-only appearance changes keep the current clip/frame without decorative hit targets. |
+ | Mechanisms, portals and prop retirement | A device uses its admitted elevated muzzle; an unseen source cannot leak through launch flashes. Transferring bodies/copies pass through registered local portal apertures without revealing the other room. Destroyed prop dust retains its silhouette while gameplay picking/blocking follows the native commit. |
+@@ -2451,6 +2475,8 @@
+ | Native versus TS reduction | Same exact current records yield matching actor/world/audience observations, occurrence order, nested spatial commits, content admission, HUD/log and terminal state. Existing Python reducer is the semantic reference; no extra headless rules implementation. |
+ | Reactions and repeated targets | A/B/A, interrupted movement, lethal/nonlethal opportunity attacks and spell cancellation retain actual distinct occurrences and author-controlled release/contact/application timing. |
+ | Delayed preparation | Block one needed body/gear/world/VFX companion; old complete frame remains, intake continues, no hidden clock advances, then correct full frame appears atomically. |
++| Camera preparation | Rotate during projectile/impact/persistent effects while playback crosses an operation boundary; rapid Q/E finishes at the desired quarter. Seek/reload/case changes supersede old view requests. Old-view playback advances; centre/zoom/tails and timeline rows remain. Warm adjacent sources require no repeat fetch/decode/upload; measure prefetch cost and yielding to foreground work. |
++| Admitted lethal event | Original six-observer and surviving-caster Fireball: canonical contact loss does not erase the already admitted burst/falls/tails before they complete. Cold seek retains the explainable aftermath; unrelated blindness and loss of target eligibility remain correct. No later unseen actor motion is fabricated, and no backend sight change is assumed. |
+ | Backlog | AI advances while playback is paused/slowed. Every admitted turn plays when resumed, with displayed HP/light/equipment/log/portraits aligned; no jump to latest. |
+ | Reload/reconnect | ACKed unplayed records remain replayable; fresh SDK follower init0 is reconciled; running follower resumes consumed; displayed local time restores independently; duplicate/failed/missing history is handled truthfully. |
+ | Scope replacement | Switch audience/recording during fetch/SDK consumer/decode/upload; old private pixels/UI/picker clear immediately and late completions cannot install in the new scope. |
+@@ -2467,210 +2493,68 @@
+ 
+ Measure idle, sustained WASD/pan/zoom, rotation with new genuine banks, first/repeated spell use, mixed-age Fireballs, queued AI, dense blood/ground, inventory/log changes and Studio source reloads. CPU and GPU timings, peak/decode/resident bytes, upload counts and repeated lifecycle ownership make causes inspectable. If GPU timers are unavailable, display “unavailable,” not a fabricated CPU-derived GPU number.
+ 
+-Fix actual repeated decoding/upload, geometry rebuilds, global dirty propagation, scene sorting, material compilation, widget re-layout or unbounded resident resources. Camera-only changes update transforms; operation changes invalidate only affected source/fact dependencies. Color swaps/rest-coordinate/material sampling belong on the GPU; no port of Python per-pixel arrays. Do not demand an optimization in advance merely to satisfy a made-up number, and do not accept persistent frame drops without tracing the stage that causes them.
++Fix actual repeated decoding/upload, geometry rebuilds, global dirty propagation, scene sorting, material compilation, widget re-layout or unbounded resident resources. Pan/zoom changes transforms; quarter changes reuse resident view sources and prepare genuinely missing ones without freezing current playback. Operation changes invalidate only affected source/fact dependencies. Color swaps/rest-coordinate/material sampling belong on the GPU; no port of Python per-pixel arrays. Do not demand an optimization in advance merely to satisfy a made-up number, and do not accept persistent frame drops without tracing the stage that causes them.
+ 
+ ## 12. Delivery status and acceptance language
+ 
+-**Revision 3 status:** the new Sprite/filter/source-preparation repair is planned and reviewed, not implemented by this documentation update. The current code already replaced the older general depth/ID-picking path and fixed ordinary Sprite frame notification and divider preview retention. The [current audit](NDCLIENT_RENDERER_CODE_AUDIT_2026-10-11.md) identifies the remaining dual ordinary path, colour, blood, camera and lethal-event defects. Baseline 33 Node tests and typecheck pass; they are not visual or hardware performance acceptance. Renderer §6 now requires foreground-priority preloading of adjacent view assets through the existing resource owner, with GPU upload staged before rotation where frame time permits.
+-
+-The implementation observations below predate this correction. They preserve what was connected/tested then, not proof of current visual or performance acceptance and not instructions to retain the rejected compositor. Preserve useful source/reduction/material work; use the active renderer chapter for its replacement. Reviewer completion does not certify the running app.
+-
+-Preparation remains complete at the committed `df5397e` baseline. No new artwork
+-intake, backend implementation or SDK regeneration is part of current work.
+-
+-Current client implementation (10 October; uncommitted):
+-
+-- **N0 partial:** existing typed authoring release/index, demand loading, current
+-  packaged SDK, worker intake/reduction, durable original-record journal and
+-  displayed-position restoration are connected. Immutable metadata revisions,
+-  per-session revision pinning and explicit authoring reload are connected. A
+-  candidate is prepared through the same pipeline and published only after
+-  success; failure preserves the current scene. Legacy URL-only recordings are
+-  explicitly unpinned. Broader integration acceptance remains open.
+-- **N1 partial:** calibrated projection/registration, ray-depth and normals,
+-  support-aware floor composition, palette/embedded-character controls, source
+-  resources, actual Fireball emitter and GPU picking are connected. Ordinary
+-  terrain, stairs/cliff source selection and native route/AoE feedback have
+-  consumers. Full matched assembly placement, stair support/light/pick integration,
+-  and remaining geometry consumers remain open. Automatic wall cutaway and
+-  pick-through share calibrated depth against visible receiving support; doors
+-  retain their own direct interaction identity. Transparent
+-  composition now partitions occupied screen regions, orders disjoint depth
+-  intervals directly and peels crossing contributors locally. Compatible repeated
+-  static floors now use GPU instancing through the same material/depth shader.
+-  Actual grid-on scene output matches individual draws byte-for-byte in all four
+-  cameras; broader batching and measured performance remain open. This is not N1 acceptance.
+-- **N2 partial:** shared native reduction, event-time commits, walking/reaction
+-  branches, attack, sprite-spell and ordinary anchored-spell tracks, damage feedback, item/actor observation,
+-  retained idle/flame clocks, authored door/destruction tracks and saved partial
+-  playback are connected. Condition application/hold/release, suppression, retained
+-  owner dates and source layers now use a shared absolute sampler and Studio
+-  inspection channels. Owned equipment/ground appearances use their source
+-  palettes, coatings, suppression, glints and emission. Item attachment phases
+-  retain their effect identity across held/carried/floor placement and animated
+-  environment bodies. These share source sampling and Studio channels.
+-  Native class/item body actions use authored release, body/equipment and finite
+-  media clocks. Healing numbers use the received actual amount; damage flashes
+-  use their authored frame/palette/duration and the shared body material path.
+-  Broader body-material/copy/response consumers, remaining movement
+-  and recipe families, all reaction outcomes and full historical-clock acceptance
+-  remain open. No client-owned gameplay simulation was added.
+-- **N3/N4 partial:** Studio reads real SDK recordings and shows production tracks,
+-  source-frame thumbnails and source inspection. Live UI has the four bar groups,
+-  native choices/variants/ordered targets, initial inventory/details/reactions,
+-  party/initiative, exact native combat-log content and native preview input.
+-  Required content families, complete Studio diagnostics and end-to-end
+-  interaction workflows still need implementation and acceptance. N5 is pending.
+-
+-Evidence so far: actual unchanged-server recordings of crypt movement, ranged
+-attacks and a premade Sorcerer's Fireball; native Python reducer-prefix comparison;
+-focused movement/rewind/retained-scene and admission checks. Headless browser
+-checks use software WebGL and are not hardware performance evidence. Asset
+-registration and UI requirements in §§11/13/14 remain the acceptance denominator.
+-The actual crypt potion-of-Haste recording additionally covers retained condition
+-formation and movement. Focused type/reduction/playback checks pass. Continuous
+-Haste playback stalled under headless software WebGL; a paused sample loaded,
+-but smooth playback is unresolved. Expired condition media retire on prepared
+-scene replacement; an idle prepared scene still retains their resource leases.
+-An actual Handaxe drop verifies owned identity, inventory removal and the authored
+-ground row/pivot/scale in all four cameras. Studio thumbnail readbacks now stop
+-during playback and reuse one target set; opaque submissions skip known
+-translucency and partition caching uses the same rounded bounds as its consumer.
+-The same-frame grid instability was traced to derivatives after fragment discard
+-and corrected before accepting floor instancing (2,392 → 1,863 draw submissions
+-in three views; 2,600 → 2,025 in the fourth). This is not a hardware FPS result.
+-Native jump, flight/connector and forced-motion consumers are being connected;
+-actual jump and Dash records now cover continuous body/ground contact separation
+-and finite movement tails across subsequent native operations. Tails preserve
+-the original source date/contact and expire during idle without extending the
+-movement join. The actual Dash browser sample loads with 13 channels and no
+-reported browser error. Flight/window/forced-motion visual cases, nested forced
+-movement and support receivers across elevation changes remain open.
+-Retained spatial cloud/area source windows, shared maintained-media sampling
+-and Studio channels are connected for their current supported placements.
+-Actual Fog Cloud creation/movement/concentration-removal records pass formation,
+-retention, camera-plane registration, removal fade and no-resurrection checks.
+-The field commits at its authored formation anchor and does not restart on a
+-later movement command. Actual Healing Word/Bless/Burning Hands records pass
+-recipient state timing, native numeric outcomes and selected source-media
+-checks; Burning Hands loads in the production Studio renderer with depth/normal
+-planes. Arc/directed/child-weapon delivery, finite material envelopes and
+-transport-specific attachments remain explicit incomplete spell consumers.
+-Actual Action Surge, Second Wind and Haste-potion records pass shared action
+-body/media/equipment timing and native healing checks. The selected potion
+-source has a missing strip.effect2.special1.phase1 reference; it remains an
+-explicit authoring gap, with no fabricated replacement.
+-Explicit JSON reload was exercised in the browser: modified movement timing was
+-published, a failing candidate retained the prior usable scene, and a concurrent
+-camera change retained the displayed clock. The temporary source edit was restored.
+-Native cell modules and straight wall modules now use the authored banks and
+-original footprint/height data, including witnessed per-cell retirement. Actual
+-Wall of Fire segment/removal records pass four-camera source/depth/normal checks.
+-Whole-ring media are omitted with an explicit issue when only part of the native
+-ring footprint is disclosed; no false complete ring or tile-shaped image clipping
+-is added. Ring segments, safe-side tint, wall assemblies, orbit/motes/recipient
+-placement, suppression geometry and remaining response families remain open.
+-
+-Automatic cutaway passed actual crypt GPU/picking checks in all four cameras:
+-covering wall samples fade over visible receiving support, the same samples
+-yield floor picks, and doors remain directly selectable. Its receiving pass is
+-cached per changed scene/camera (49 additional submissions during preparation,
+-none in the unchanged frame); this is software-WebGL correctness evidence.
+-Inventory uses native visual-loadout slots and exact discovered item commands.
+-Actual SDK and live control checks cover equip/unequip/reequip, Handaxe drop and
+-pickup, potion consumption, native HP/charge/bonus-action updates, and reaction
+-preference changes. These establish those workflows, not full N4 acceptance.
+-Explicit melee/ranged preference and native allocation/undisclosed-support
+-preview consumers are connected; broader multi-target interaction acceptance
+-remains open. The full live crypt browser is slow under software WebGL; native
+-Fighter-to-Sorcerer turn commands work, but hardware throughput is not established.
+-
+-Further connected client slices (still partial N2–N4):
+-
+-- Periodic result/life/death-save feedback uses existing causal dates and shared
+-  damage/healing/body consumers. Received pre-result state plus actual sampled
+-  motion contacts supplies later nested feedback; a delayed damage-owned body
+-  response retains its previous presented pose until its authored start. Five
+-  existing native suites pass. Exact later-step injury and delayed lethal Fire
+-  Bolt captures are not available and those scenarios remain unverified.
+-- Blood uses native release/contribution records, authored material templates,
+-  analytic GPU flight/vapor and cached receiving fields on actual floor/stair
+-  geometry. Burning Hands passes air/settled/rewind browser checks with no shader
+-  errors; settled fields stop redrawing. All-camera envelopes and native amounts
+-  pass focused tests. Other body-release material variants share this consumer but lack
+-  equivalent native visual evidence; soot and water/ice transitions remain open.
+-- Per-actor shortcut pinning, ability filters and nonspending world inspection
+-  are connected. Native-record browser checks cover actor changes, pin changes,
+-  displayed door updates and pickup invalidation. Full rendered right-click and
+-  broader interaction acceptance remain open. Live Fighter → Sorcerer → Fighter
+-  native turn commands work; software WebGL remains unsuitable for claiming
+-  hardware throughput.
+-- Studio now recovers NeuroClient track-label/preview-bed styling around its
+-  actual production channels, with horizontal zoom, source-layer expansion,
+-  lazy read-only fields, subjective received-event ancestry and the shared native
+-  combat log. No objective store, fake events, editing or asset-loading workspace
+-  was added. Review corrections cover visible-only thumbnail allocation, resize
+-  refresh and keyboard focus. At 960×720, pointer checks confirm the full upper
+-  map keeps its width when overlays open; layer expansion, timeline zoom/scrub,
+-  event selection and log rows work. A following software-WebGL screenshot
+-  capture timed out; this does not establish native-GPU performance acceptance.
+-  Full typed canonical-source inspectors and remaining diagnostic coverage remain
+-  unfinished; this is not complete N3 acceptance.
+-
+-Specific unresolved inputs/limitations (continue independent specified work):
+-
+-- Finite body-material shader connection: the accepted reference applies these
+-  effects after composing current body and gear (`game_obsolete/animation_draw.py`,
+-  finite-material stage). Wither uses the composite alpha>180 silhouette bounds;
+-  edge treatments read its neighboring alpha, and source-over treatments may
+-  change alpha. Current `TREAT_BODY` runs separately on modular layers. Merely
+-  sharing bounds does not make nonlinear colour ramps commute with blending.
+-  Keep the authored timing helper and explicit unsupported-consumer diagnostic;
+-  do not claim a per-layer approximation is equivalent. Exact connection needs
+-  a combined body/gear colour-and-mask input (excluding separate shadow/accent)
+-  that preserves existing world depth/lighting/ownership. Discuss that renderer
+-  connection before extending it; continue other specified consumers meanwhile.
+-  The standalone authored-envelope sampler is tested. The ordinary resource
+-  worker now accepts the actual WebP colour donors as well as PNG; browser
+-  decode/reuse checks passed. Numeric depth packets keep their existing path.
+-  No unfinished material track/renderer integration remains wired into play.
+-- Normal combat-log entries come from native `PlayerNode.combat_log`, so their
+-  event and ancestry attribution is available. Game and Studio now share a
+-  displayed-log projection using compiled event commits; ready child entries
+-  appear until the exact native parent summary is complete and replaces them.
+-  Rewind reconstructs that same visible prefix. Typed roll details show received
+-  dice, totals, modifiers and adjustments without recalculation. Only standalone
+-  `CombatLogAppend` records lack finer event attribution and remain at their
+-  declared operation boundary. Do not infer matches or change the backend.
+-  Original-packet tests cover Shortbow, Second Wind and Burning Hands timing,
+-  grouping, direct prefix equality and backward seek; the canonical reducer is
+-  unchanged. Shared roll-detail browser checks cover native dice/modifiers,
+-  copying and participant-filter reset on rewind.
+-- Ordinary Fantasy A1/C1/C3/C5 doors already consume their authored leaf/frame
+-  registration. The remaining assembly gap concerns six indoor variants:
+-  their banks already include frame and leaf, but compatible headers/partitions
+-  lack a declared native-occurrence visual assignment. Current generic wall
+-  selection is D1/C1; for example, Elegant requires D5/D8 or F5/F8. Native object
+-  identity/material/support data does not select between those visual families.
+-  Supplier stencil offsets are asset-relative registration, not permission to
+-  shift gameplay supports or manufacture adjacent walls/floors. Preserve this
+-  noncritical authoring/scenario decision for discussion; do not add another
+-  frame, invent bindings or change the backend. Continue other specified work.
+-- Partial staircase disclosure remains accepted/deferred; it is not a backend task.
+-  Other light-emitter curves remain deferred by the user until shared Fireball
+-  testing. Skeleton Warrior portrait and dedicated Unarmed art remain the two
+-  previously accepted nonblocking artwork follow-ups.
+-
+-Review corrections are being implemented in the existing owners: earliest-only
+-entry observation staging; canceled attack guard; trap-state invalidation; native
+-creature accent enable/opacity/tint; continuous displayed cosmetic clock; retained
+-predecessor reuse; resource unbinding before destruction. Their presence does not
+-close the broader capability or whole-game acceptance. Record newly discovered
+-source contradictions here; do not substitute local perfection for N0–N5 delivery.
+-
+-During implementation, keep evidence beside the corresponding row here or in the existing machine coverage report: source owner, implemented consumer, native/visual/interaction case, observed result and any exact remaining defect. Do not create a competing plan or replace whole-product status with the latest locally fixed screenshot. Existing catalog identifiers remain the coverage denominator.
+-
+-Full completion requires the playable encounter, complete selected content, complete read-only Studio inspection and all interaction/ordering/history requirements. A disabled button, source JSON printed on screen, correct arithmetic without matched art, files copied without consumers, or a successful build is not completion. Show unresolved required failures honestly without relabeling the product complete; repair client defects in their existing owner and report any native/source limitation separately.
++Preparation is complete at the committed `df5397e` baseline. The existing client
++has partial N0–N4 consumers; renderer v3 describes the current corrections and
++N5 remains whole-product acceptance. The baseline of 33 Node tests and passing
++typecheck does not establish visual correctness or hardware performance.
++
++Use [implementation progress](NDCLIENT_IMPLEMENTATION_PROGRESS.md) and the
++[current code audit](NDCLIENT_RENDERER_CODE_AUDIT_2026-10-11.md) for current
++consumer evidence and concrete gaps. The [10 October implementation log](archive/ndclient-plans/2026-10-11-before-renderer-v3/NDCLIENT_IMPLEMENTATION_PLAN_COMPLETE_2026-10-10_v2.md#12-delivery-status-and-acceptance-language)
++is preserved in the archive; its depth-peeling, GPU-picking, floor-instancing and
++old body-material blocker descriptions are historical, not active implementation
++instructions or acceptance results.
++
++| Package | Current boundary and remaining work |
++| --- | --- |
++| N0 | Repository, private artwork, typed/indexed release, serving, SDK worker and record journal exist. Complete missing dependency/consumer coverage and unverified connection/reconnect cases in those owners. |
++| N1 | Projection, source registration, persistent Pixi scene and source reuse exist. Complete renderer v3's single ordinary Sprite/filter route, native environment and fixed character cleanEdge, calibrated media dimensions, lighting, blood and camera corrections. |
++| N2 | Shared reduction, causal tracks/commits and retained lifetimes exist. Complete remaining movement, effect, equipment and lifecycle consumers and their native-record checks, including admitted lethal-event presentation. |
++| N3 | Real recordings, timeline and source previews exist. Complete supported content and inspectors; enforce full-recording tracks before Play, composed Body/effect hierarchy, shared sources and stable rows during resize/rotation. |
++| N4 | Native action/choice/target, inventory, party and log consumers exist. Finish whole-screen interaction and playable-encounter checks; partial workflow tests are not full N4 acceptance. |
++| N5 | Complete in-app feature/interaction/visual review and measured performance/lifecycle checks across the finished scope. Software WebGL results do not establish RTX hardware throughput. |
++
++Keep the named unresolved work visible rather than recreating solved preparation:
++
++- The source audit records incomplete action/projectile variants, equipment media,
++  movement/recovery, retained constructions/recipient deposits and selected
++  Fireball/wall interaction. Their existing owners remain the implementation
++  targets; the audit identifies exact missing consumers.
++- Finite whole-body/gear materials retain their nonlinear composite semantics,
++  including wither bounds, neighbor alpha and explicitly authored alpha changes.
++  Reuse current native body composition with scoped material filters before
++  cleanEdge (§5.3/renderer §§3–4); do not restore a general depth Mesh or treat
++  hand magic as a body material. Their broader gameplay acceptance remains open.
++- Finger of Death's original open-shell consumer and the original potion strip
++  are connected and checked. Finger's original-Python comparison and authentic
++  single-enemy cast pass with the explicitly recorded GPU rasterization
++  qualification; see [its focused review](reviews/renderer-2026-10-11/finger-of-death.md).
++  Do not repeat asset intake or fabricate substitute artwork for either case.
++- Six indoor door variants have prepared compatible source members, but selecting
++  a compatible family for a native occurrence/scenario must use an actual authored
++  assignment. Do not invent adjacent structures or shift native supports to make
++  a screenshot fit. Preserve the noncritical decision for discussion while other
++  complete source families remain usable.
++- Partial staircase disclosure remains deferred; other spell-emitter curves wait
++  for shared Fireball testing. Skeleton Warrior portrait and dedicated Unarmed
++  art remain accepted nonblocking artwork follow-ups. DEAD-only native sight is
++  the separate proposal in renderer §8.2 and still requires explicit approval.
++
++Record new gaps and completion evidence in the progress document or existing
++machine coverage report: source owner, implemented consumer, real case, observed
++result and exact remaining defect. This section preserves the scope and status
++boundary; it is not another accumulating per-turn work diary.
++
++Full completion requires the playable encounter, complete selected content,
++read-only Studio inspection and all required interaction/ordering/history behavior.
++A disabled button, source JSON printed on screen, correct arithmetic without
++matched art, copied files without consumers or a successful build is not completion.
++Report unresolved required failures honestly; correct client defects in their
++existing owners and raise native/source limitations separately.
+ 
+ ## 13. Complete production renderer capability coverage
+ 
+@@ -2687,7 +2571,7 @@
+ | R03 Boundaries/devices | Registered wall/door/window/prop/trap state and aperture geometry; displayed state commits update draw/pick/light together | Open, break, parent/insert destruction and threshold from four views; N1/N3 |
+ | R04 Body rigs | Shared modular/fixed clip sampler and layer operations; source frames, original accents, sockets, explicit scales | Every one of 44 rigs mapped; native wing flight, wolf 200%, prone death without standing; N3 |
+ | R05 Equipment/floor items | Existing item identity, attachment and material data; same owned appearance across locations | Coated/enhanced item equipped, dropped, looted and re-equipped; no ghost floor copy; N3 |
+-| R06 Palette/material | Finite shared GPU operations over isolated masks and authored donor textures; explicit override wins | Hand/Magic/Effect/external-VFX correspondence and item/body independence; N1/N3 |
++| R06 Tint/swap/material | Separate exact-swap, tint and finite authored-material filters on the ordinary Sprite path; source masks/donors and explicit material override ownership | Hand/Magic/Effect/external-VFX correspondence, unmapped colours unchanged and item/body independence; N1/N3 |
+ | R07 Media/resources | Existing source registration, compact derived delivery specified in §6, shared source/region views and bounded readiness | Coupled crop/pivot/mask alignment, first-use, four-camera switching and unload; N0/N1/N3 |
+ | R08 Projectiles/beams | Absolute path/socket sampling, bank plus permitted residual alignment, release/arrival and child application timing | Oblique elevated Fireball/rays, beam source continuity, Magic Missile A/B/A, interception; N2/N3 |
+ | R09 Areas/volumes | Preserve appearance, received ownership/suppression and source layers; use registered depth/normals for selected spell/light interactions, without a floor-visibility stencil or general transparency solver | Continuous Fireball/Sunburst/Sleep, inside/outside actors, received suppression and elevated surfaces; N1/N3 |
+@@ -2699,7 +2583,7 @@
+ | R15 Owned lifetimes | Shared retained item/spatial/concentration state with occurrence identity and cold-acquisition rules | Suppressed Shield expires; re-observation is not reapplication; removal retires only its owner; N2/N3 |
+ | R16 Movement/portals | Received legs/modes/connectors with reaction holds, relocation/absence and ground-to-ground flight | Ally corridor, jump/window, interrupted movement, ledge landing, one-end portal visibility; N2/N3 |
+ | R17 Feedback/lifecycle | Actual damage/heal/save/temporary-HP/death/summon facts revealed at authored contacts | Lethal OA at doorway; sleep/rest/death; summon/despawn/hostility and real blood impacts; N2/N3 |
+-| R18 Deposits/ground/water | Native contribution ownership; receiver-local settled coverage and finite changing materials | Fresh/old stains, wall soot, raised floor, response/removal, witnessed break, rewind; N3 |
++| R18 Deposits/ground/water | Native contribution ownership; original source-grid floor blood on its support plane, separately authored face receivers and finite changing materials | Fresh/old stains without skirt streaks, existing wall soot, raised floor, response/removal, witnessed break, rewind; N3 |
+ | R19 Spatial contacts | Recorded entry/exit/activation/response facts resolve existing recipe primitives | Hot-side spread before feedback, ignition/extinguish already implemented, suppression; N3 |
+ | R20 Temporal orchestration | One typed reduction/index, causal compiler, retained facts and absolute sampler; no animation-owned gameplay | Delayed resources, slow/pause, queued AI, reconnect/reload and historical scene/HUD/log agreement; N2 |
+ | R21 Picking/highlights | Pixi pointer events, authored object/support hit areas and displayed transform/cutaway policy | Known door/item set stable across cameras, click through cutaway, Alt, Ctrl attack; N1/N4 |
+@@ -2707,9 +2591,9 @@
+ | R23 Studio/capture/replay | Same production runtime, actual SDK recordings, canonical source inspection/manual reload and optional capture | Load/seek/inspect actual spell/action/condition/rig/world case; manual JSON reload uses the same production compiler; N2/N3/N5 |
+ 
+ Lighting spans R02–R06/R09/R18/R21 rather than becoming another world simulation.
+-Recorded categorical effective light is smoothed only across admitted compatible
+-supports; body/item receiver treatment, emitters and head/UI exemptions follow
+-§6. Existing audio, if selected in current registrations, follows
++Recorded categorical effective light stays in native perception and never becomes
++an artwork colour gain; actual positioned emitters, receiver treatment and separate
++remembered-state disclosure follow §6. Existing audio, if selected in current registrations, follows
+ the same contact/lifetime clock and resource owner; seeking does not replay all past
+ one-shots. No new sound content or independent audio-event schema is implied.
+ 
+@@ -2747,7 +2631,7 @@
+ | 44 | Review via running app | Reproducible launch plus navigable Studio cases; no forced export-video review workflow |
+ | 46 | Correct projectile launch/alignment and fixed-rig layer meaning; no camera morphing | Real shortbow release socket, declared source bank, original goblin accent and four-camera path alignment |
+ | 47, 48 | Correct camera/DPR/sampling and alpha conventions; preserve sprite proportions and edges | Smooth pan/resize/zoom with original scale, no chest halo or non-uniform transformation |
+-| 50, 52, 54 | Honor stop/deletion boundaries | Do not recreate a deleted application or override a future stop request; the current client implementation is already authorized to resume after this plan review |
++| 50, 52, 54 | Honor stop/deletion boundaries | Do not recreate a deleted application or override a future stop request; preserve the current working client and follow the active task scope and §10 execution order |
+ | 55 | Keep phase and evidence scope correct | Migration complaints above, previous-system parity below; no unsupported deleted-code diagnosis presented as fact |
+ 
+ ### 14.2 Earlier-system parity requirements for the new client
+@@ -2761,7 +2645,7 @@
+ | P03 | Pass through allies, finish on an admitted free destination | Native movement + presented overlaps |
+ | P04 | Walls covering visible ground fade automatically and allow intended picking | Rendering/picking |
+ | P05 | Cold/warm startup prepares the actual scene closure without library scans or avoidable main-thread stalls; stages and remaining latency are measured | Server/import, release/decode/upload and browser stages |
+-| P06 | Continuous WASD/pan/zoom/rotate does not rebuild or decode the scene | Interactive frame profile |
++| P06 | Pan/zoom reuses sources and changes transforms; rotation reuses resident quarter sources and prepares missing ones while current playback advances | Interactive frame profile, warm/cold adjacent-view preparation |
+ | P07 | Disclosed enemy initiative entry has the correct portrait | Admitted identity, binding and historical HUD |
+ | P08 | All projectile families select direction and align to travel; authored speeds make sense | Four-camera oblique/elevated real-event cases |
+ | P09 | Hand/cast material matches the resolved spell palette unless explicitly overridden | Shared source material and visual comparison |
+@@ -2838,48 +2722,22 @@
+ 
+ ## 15. Review responsibilities and recorded disposition
+ 
+-### Renderer revision 3 — 11 October
+-
+-The current review is recorded in [the renderer code audit](NDCLIENT_RENDERER_CODE_AUDIT_2026-10-11.md#plan-review). Anti-slop/rendering, anti-OOP/ECS and camera/visibility reviewers checked the new chapter and changed general-plan instructions. Revision 3 replaces ordinary-image Mesh/material routing with three colour filters and dedicated lighting on Sprites, native environment textures and fixed 2× character cleanEdge preparation. It preserves full client feature scope. The review is document validation, not a claim of runtime fixes.
+-
+-### Historical renderer revision 2 — 10 October
+-
+-Anti-slop and anti-OOP/ECS reviewers checked the archived revision 2 and its renderer chapter. Their corrections to optional silhouette picking, specialized depth consumers, crossing cases and chapter ownership were incorporated at that time. That change preserved full client capabilities while removing universal physical-depth visibility, peeling, numerical own-floor continuation and mandatory custom CPU mask picking. Its permission for ordinary material Meshes is superseded by revision 3. The dated dispositions below are historical and do not override the current chapter.
+-
+-### 10 October scope cleanup
+-
+-The primary agent checked the plan for direct and indirect requirements to modify
+-engine/server/SDK code, undeclared inputs and choices deferred until implementation.
+-Anti-slop and anti-OOP/ECS reviewers independently cross-checked those boundaries;
+-the plan-adherence reviewer checked that this edit remained documentation-only.
+-
+-Current preparation results remain in §§5–7/12; historical test counts are not
+-acceptance of an unbuilt client.
+-
+-The corrections remove backend implementation and regeneration tasks from setup,
+-rendering, Studio capture, acceptance and delivery criteria, not just their original
+-chapters. Current SDK movement preference is an input, client authoring schemas
+-already live in NDClient, and archived renderers remain read-only references.
+-§0.3 records existing inputs and accepted limits; it does not create another phase.
+-
+-During implementation, keep a plan-adherence sub-agent focused on the full delivery.
+-Use anti-slop and anti-OOP/ECS reviews for concrete ownership/duplication defects;
+-rendering and UI reviews inspect real consumers and behavior. Findings identify
+-an actual contradiction or failing case. Review only changed requirements and
+-identified defects; no repeating certification, checksum or SDK-regeneration cycle.
+-No review finding authorizes a backend expansion or an improvised workaround.
+-For noncritical uncertainty, record it and continue known planned work; discuss
+-a necessary design change with the user before implementing it.
+-
+-Final targeted readback found no remaining backend-work obligation in this
+-cleanup. Anti-slop/adherence findings corrected accidental prose path replacements
+-and a stale instruction to repeat calibration authoring. The ECS review confirmed
+-that current event lifetimes, depth/lighting, geometry and the shared play/Studio
+-path remain required. Local document links and removed-section references were
+-checked; the NDClient copy matches this master. These are documentation checks,
+-not runtime tests or a claim that every unbuilt component has been validated.
+-
+-This document update is not a runtime, visual or performance acceptance result.
++The [renderer audit](NDCLIENT_RENDERER_CODE_AUDIT_2026-10-11.md#plan-review) records
++the renderer v3, adjacent-view and source-scale reviews. The [complete-plan
++consistency review](reviews/renderer-2026-10-11/master-plan-consistency.md) records
++the subsequent read-through of all master sections and corrections to obsolete
++instructions. Previous review dispositions remain in the archived plans; they do
++not supply current execution instructions.
++
++During implementation, keep a plan-adherence subagent focused on the full delivery.
++Anti-slop and anti-OOP/ECS reviews identify concrete ownership, scope and duplication
++defects; renderer/UI reviews inspect actual consumers and behavior. Review changed
++requirements and identified failures without a repeating certification, checksum
++or SDK-regeneration cycle. A review finding does not authorize backend work or a
++new workaround. Document noncritical uncertainty in progress and continue known
++planned work; discuss a necessary design change with the user before implementing it.
++
++Document-review success does not establish runtime, visual or performance acceptance.
+ 
+ ## 16. Source/API evidence and scope boundary
+ 

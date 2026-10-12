@@ -1,0 +1,68 @@
+{
+  "actors": {
+    "all-off": {
+      "6615387d-bc56-459b-958d-d953b54ebedf": {
+        "dark_pixels": 574,
+        "mean_luminance": 0.0,
+        "pixels": 574
+      },
+      "78dc6e12-3472-4d8d-a940-d4ad60b7752e": {
+        "dark_pixels": 472,
+        "mean_luminance": 0.0,
+        "pixels": 472
+      }
+    },
+    "ambient-only-018": {
+      "6615387d-bc56-459b-958d-d953b54ebedf": {
+        "dark_pixels": 0,
+        "mean_luminance": 0.126312097956391,
+        "pixels": 574
+      },
+      "78dc6e12-3472-4d8d-a940-d4ad60b7752e": {
+        "dark_pixels": 8,
+        "mean_luminance": 0.0765948715339557,
+        "pixels": 472
+      }
+    },
+    "native-omni-ambient-018": {
+      "6615387d-bc56-459b-958d-d953b54ebedf": {
+        "dark_pixels": 0,
+        "mean_luminance": 0.398593842840465,
+        "pixels": 574
+      },
+      "78dc6e12-3472-4d8d-a940-d4ad60b7752e": {
+        "dark_pixels": 1,
+        "mean_luminance": 0.207044344488137,
+        "pixels": 472
+      }
+    },
+    "native-omni-ambient-030": {
+      "6615387d-bc56-459b-958d-d953b54ebedf": {
+        "dark_pixels": 0,
+        "mean_luminance": 0.414311554179063,
+        "pixels": 574
+      },
+      "78dc6e12-3472-4d8d-a940-d4ad60b7752e": {
+        "dark_pixels": 0,
+        "mean_luminance": 0.223631985856504,
+        "pixels": 472
+      }
+    },
+    "native-omni-direct": {
+      "6615387d-bc56-459b-958d-d953b54ebedf": {
+        "dark_pixels": 28,
+        "mean_luminance": 0.37093716538925,
+        "pixels": 574
+      },
+      "78dc6e12-3472-4d8d-a940-d4ad60b7752e": {
+        "dark_pixels": 85,
+        "mean_luminance": 0.174866964227877,
+        "pixels": 472
+      }
+    }
+  },
+  "checks": 14,
+  "failures": [],
+  "renderer": "NVIDIA GeForce RTX 5090",
+  "scope": "Actual frozen initial Crypt; native WorldEnvironment white ambient 0.18/0.30 and four native OmniLight3D at disclosed source positions; Omni energy 2, attenuation 1, spherical outer range, no shadows. Comparison only: native attenuation is intentionally not claimed equivalent to canonical circular band response. Actor pixel summaries include the whole assembled silhouette."
+}

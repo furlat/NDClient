@@ -1,0 +1,51 @@
+{
+  "cases": [
+    {
+      "light": "(2.009831, 4.712181, 2.347483)",
+      "lit": 0.674509823322296,
+      "pixel": [
+        54,
+        428
+      ],
+      "quad_only": 0.0,
+      "quarter": 0,
+      "receiver": "(2.020526, 4.703427, 2.333027)"
+    },
+    {
+      "light": "(2.347483, 4.712181, -2.009831)",
+      "lit": 0.674509823322296,
+      "pixel": [
+        54,
+        428
+      ],
+      "quad_only": 0.0,
+      "quarter": 1,
+      "receiver": "(2.333026, 4.703427, -2.020527)"
+    },
+    {
+      "light": "(-2.009831, 4.712181, -2.347483)",
+      "lit": 0.674509823322296,
+      "pixel": [
+        54,
+        428
+      ],
+      "quad_only": 0.0,
+      "quarter": 2,
+      "receiver": "(-2.020527, 4.703427, -2.333026)"
+    },
+    {
+      "light": "(-2.347483, 4.712181, 2.009831)",
+      "lit": 0.674509823322296,
+      "pixel": [
+        54,
+        428
+      ],
+      "quad_only": 0.0,
+      "quarter": 3,
+      "receiver": "(-2.333027, 4.703427, 2.020526)"
+    }
+  ],
+  "checks": 17,
+  "failures": [],
+  "scope": "Explicit synthetic admitted depth-extremum on one supported original Head15 texel; source colour/normal/masks and painted geometry unchanged. Production decoder and expanded bounds receive native range0.04 light entirely beyond painted world AABB, all4quarters. No claim this extremum occurs naturally in Head15."
+}

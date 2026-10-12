@@ -1,0 +1,159 @@
+CHARACTER GEOMETRY HANDOFF — 12 OCTOBER 2026
+
+Purpose
+Provide normal/depth data that the Godot player can use with actual modular
+characters and equipment changes. Preserve the existing colour artwork,
+placement, facing and animation timing. Another bake for one fixed sample
+outfit alone does not complete modular coverage.
+
+WHAT EXISTS
+
+Asset experiment:
+C:\Users\tommaso\Documents\assets\fantasy-unified-catalog\modular-character-geometry-2026-10-11
+WSL equivalent:
+/mnt/c/Users/tommaso/Documents/assets/fantasy-unified-catalog/modular-character-geometry-2026-10-11
+
+Read delivery/HANDOFF.md and delivery/catalog.json there first. The selected
+delivery contains colour, depth, normals, raw-support, normal-valid and float
+geometry for 30 actions, 450 poses and 3,600 facing frames. It is coarse
+whole-outfit geometry for exactly these eight components:
+  body=NakedBody; legs=Legs3; shoes=Shoes2; chest=Chest3;
+  hands=Hands2; offhand=Shield1; weapon=Melee1; helmet=Head3.
+
+This is real delivered geometry, not missing files. Its limitation is outfit
+coverage. It does not independently describe arbitrary component combinations.
+The selected outputs cover about96.17% of source pixels; preserve unsupported
+samples and do not turn the hull outside the original silhouette into colour.
+
+All selected sheets:1920x1024; cells128x128;15 columns;8 rows.
+Rows:E,SE,S,SW,W,NW,N,NE. Match action/frame/row between colour and geometry.
+Normals:linear RGB, normalize(2*RGB-1), axes screen-right/screen-up/toward-camera.
+Facing is already baked; apply the camera transform once, no second facing turn.
+Depth:lo=-52.000000000000014,hi=142.50966799187808;
+  depth=lo+(Rbyte-32)/192*(hi-lo).
+This depth is provisional reconstruction space, not calibrated game elevation.
+Depth/normal alpha is geometry support, NOT original colour alpha.
+Use the raw-support and normal-valid masks. Original colour alpha owns coverage.
+Keep authored origin_y_from_ground=41 and body anchor(64,60).
+Reconstruction origin(64,96) must not replace the sprite pivot/contact.
+17 actions have authored12FPS;13 library actions have no runtime timing.
+Do not invent clocks or gameplay bindings for them.
+
+EXISTING SOURCES AND PIPELINE
+
+Authoring owners:
+/home/tommaso/Dev/NDClient/authoring/catalog-index.json
+/home/tommaso/Dev/NDClient/authoring/catalog/rigs.json
+/home/tommaso/Dev/NDClient/authoring/catalog/resources.json
+/home/tommaso/Dev/NDClient/authoring/characters/sheet-components.json
+Original modular sheets:
+/home/tommaso/Dev/NDClient/.media/smallscale/modular/{Category}/{Action}.png
+
+Existing experiment files, relative to the asset experiment above:
+  all-actions/prepare_sources.py
+  all-actions/reconstruct_actions.py
+  three-actions/depth-guided/hull-pilot/visual_hull_v2.py
+  three-actions/depth-guided/component-hull-pilot/FINDINGS.txt
+  three-actions/depth-guided/component-hull-pilot/component_hulls_v2.py
+
+Read FINDINGS.txt before attempting per-component carving. The earlier independent
+hull test was REJECTED: refined Shield1 source coverage was4.04%, Chest3 was56.30%.
+Component sheets already contain occlusion by neighbouring body/equipment parts.
+Treating every transparent component pixel as known empty space destroys the
+reconstruction. Missing hidden regions are unknown. The documented next step is
+occlusion-aware constraints or genuinely exposed observations. Merely masking
+whole-outfit normals is not a validated independent-component reconstruction.
+
+WHAT THE LIVE GAME ACTUALLY USES
+
+Observed through the real65-packet Crypt replay, not guessed categories:
+
+Shield Fighter:
+  body=NakedBody
+  legs=Legs7
+  shoes=Shoes2
+  chest=Chest7
+  belt=Belt1
+  offhand=Shield5
+  weapon=Melee2
+  beard=Head2
+  head=Head10
+  helmet=Head13
+
+Sorcerer:
+  body=NakedBody
+  legs=Legs1
+  shoes=Shoes1
+  chest=Chest14
+  belt=Belt2
+  weapon=Melee1
+  head=Head22
+  helmet=Head15
+
+Both also have the existing separate Shadow layer. Shadow and transient effect
+layers must not be treated as solid character surfaces. Tint/palette changes do
+not require a new geometry bake; different categories or equipment do.
+
+The black goblin in the latest screenshot uses rig smallscale.goblin15.
+Its clean body Idle source is:
+/home/tommaso/Dev/NDClient/.media/smallscale/authored/orcs-and-goblins/Bodies/Goblin 15/Idle.png
+Resolve its other clips from the existing rig/resource/component owners above.
+No selected Goblin normal/depth companions were found in those owners or the
+searched installed artwork. The modular delivery does not cover Goblin15.
+
+WHAT IS NEEDED FROM THE ASSET WORK
+
+1. Resolve modular coverage, beginning with the two exact live combinations
+   above. The end result must support changing/removing equipment, heads and
+   weapons among covered components. Use occlusion-aware component data or
+   explicitly qualified supported compositions; retain an honest coverage table.
+   Do not call a fixed whole-outfit map universal modular geometry.
+2. Export matching normals, depth and validity/support for the existing authored
+   action frames and facings. Preserve original canvases, contacts and source
+   colour. Reuse the working pipeline and source registrations where applicable.
+3. Supply a machine-readable index keyed to the existing rig/category/action
+   identities, with explicit files, frame layout, encoding, basis and support.
+   For composition-dependent data, identify the exact required component set.
+   Missing combinations/pixels must remain detectable, not silently substituted.
+4. Cover Goblin15 separately from its clean body sheets, with its own existing
+   rig timing/registration. Do not apply human modular normals to goblins.
+5. Provide visual evidence with the real fighter and sorcerer, equipment removed
+   and swapped, and moving lights across all eight facings. Check original alpha,
+   frame alignment, normal direction, depth-normal consistency and unsupported
+   pixels. Use current action timing; show Idle, movement, attacks and jumps.
+
+GODOT CONSUMER AND CURRENT STATE
+
+Client:
+C:\Users\tommaso\Documents\Dev\NDClientGodot
+/mnt/c/Users/tommaso/Documents/Dev/NDClientGodot
+Relevant files:
+  presentation/characters.gd — selects original actor/equipment categories
+  play.gd — selects native animation clip/frame/facing and builds layer entries
+  modular.gdshader — current character colour/lighting shader
+  presentation/source_lighting.gdshaderinc — disclosed circular source falloff
+  presentation/lighting.gd — backend emitter activation/position/range
+
+As of this handoff, modular normal/depth maps are NOT connected to the runtime.
+No permission was given to silently apply the sample outfit as approximate
+geometry to unrelated outfits. The user requested this handoff instead.
+
+Client work remains: load the matching companions, sample exact native frames,
+transform normals correctly, preserve source alpha, and use supported depth only
+for optical receiving positions without changing sprite placement or game Z.
+Data textures must stay linear. Do not treat these RGB normals/depth as the
+separate environment RG16-depth/BA-octahedral packet format.
+
+There is also a suspected independent colour-transfer bug: modular.gdshader
+explicitly linearizes sampled colour before the Compatibility renderer's output
+path. This needs a native colour-reference test and correction in the client;
+new asset generation cannot repair a shader colour-space error. Flat billboard
+Lambert normals are another limitation of the current shader, not proof that
+the supplied normal maps are bad.
+
+Other accumulated client issues remain open: the side-facing corner selected
+in the user's latest screenshot, and unnecessary wall fading near the terminal
+replay state. Earlier corner tests verified JSON selection and targeting, but
+have not cleared these later visual reports. They are not asset-normal blockers.
+No claim is made that this rendering pass is finished or that a new playable
+preview has been left running.

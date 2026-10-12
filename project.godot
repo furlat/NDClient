@@ -1,0 +1,29 @@
+config_version=5
+
+[application]
+config/name="NDClient — Sprites in 3D"
+run/main_scene="res://demo.tscn"
+config/features=PackedStringArray("4.7", "GL Compatibility")
+
+[display]
+window/size/viewport_width=1440
+window/size/viewport_height=900
+window/size/window_width_override=1440
+window/size/window_height_override=900
+
+[rendering]
+limits/opengl/max_lights_per_object=64
+limits/opengl/max_renderable_lights=256
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+textures/default_filters/use_nearest_mipmap_filter=false
+anti_aliasing/quality/msaa_3d=0
+environment/defaults/default_clear_color=Color(0.035,0.043,0.058,1)
+
+[source_data]
+normal_profiles_root="C:/Users/tommaso/Documents/Dev/NDCharacterLight/.derived/normals"
+encounter_cache_mib=16384
+character_geometry_root="C:/Users/tommaso/Documents/assets/fantasy-unified-catalog/modular-character-geometry-2026-10-11/full-components"
+authoring_root="C:/Users/tommaso/Documents/Dev/NDClientGodot/authoring"
+media_root="C:/Users/tommaso/Documents/Dev/NDClientData/.media"
+

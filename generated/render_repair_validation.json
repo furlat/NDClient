@@ -1,0 +1,204 @@
+{
+  "date": "2026-10-12",
+  "passed": true,
+  "overall_project_clear": false,
+  "scope": "Corner selection, fragment-level wall reveal, Z cycle, architectural lighting and zoom edge repair. This is not blanket SDK or large-map certification.",
+  "status": "Scoped native checks pass; complete recorded replay drains to canonical state without presentation errors. Full-codebase audit findings remain for follow-up.",
+  "tests": {
+    "wall_corners": {
+      "report": "generated/wall_corner_checks.json",
+      "checks": 82,
+      "failures": []
+    },
+    "wall_visibility": {
+      "report": "generated/wall_visibility_checks.json",
+      "checks": 565,
+      "failures": []
+    },
+    "wall_fragments": {
+      "report": "generated/wall_fragment_checks.json",
+      "checks": 22,
+      "failures": []
+    },
+    "wall_compositing": {
+      "report": "generated/wall_compositing_checks.json",
+      "checks": 20,
+      "failures": []
+    },
+    "architectural_lighting": {
+      "report": "generated/architectural_lighting_checks.json",
+      "checks": 44,
+      "failures": []
+    },
+    "source_lighting_pixels": {
+      "report": ".runtime/presentation-checks/lighting_render_checks.json",
+      "checks": 59,
+      "failures": []
+    },
+    "recorded_player": {
+      "report": "generated/player_view_checks.json",
+      "checks": 236,
+      "failures": [],
+      "note": "Earlier validation retained; not rerun in the final fragment-mask batch."
+    },
+    "fixture_animation": {
+      "report": "generated/fixture_light_checks.json",
+      "checks": 106,
+      "failures": [],
+      "note": "Earlier validation retained; not rerun in the final fragment-mask batch."
+    }
+  },
+  "profile_after": "generated/profiles/2026-10-12T02-49-15-encounter-fragments.json",
+  "profile_summary": {
+    "file": "generated/profiles/2026-10-12T02-49-15-encounter-fragments.json",
+    "stages": {
+      "initialization": {
+        "samples": 13596,
+        "frame_ms": {
+          "p50": 0.548,
+          "p95": 2.763,
+          "max": 867.39
+        },
+        "mask_gpu_ms": {
+          "p50": 0.0,
+          "p95": 0.352999985218048,
+          "max": 15.8610000610352
+        },
+        "mask_cpu_ms": {
+          "p50": 0.0,
+          "p95": 0.296000003814697,
+          "max": 1.87199997901917
+        }
+      },
+      "playback": {
+        "samples": 2620,
+        "frame_ms": {
+          "p50": 2.7735000000000003,
+          "p95": 5.465,
+          "max": 127.772
+        },
+        "mask_gpu_ms": {
+          "p50": 0.319000005722046,
+          "p95": 0.658999979496002,
+          "max": 1.0900000333786
+        },
+        "mask_cpu_ms": {
+          "p50": 0.264999985694885,
+          "p95": 0.523000001907349,
+          "max": 0.906000018119812
+        }
+      },
+      "settled": {
+        "samples": 300,
+        "frame_ms": {
+          "p50": 1.9940000000000002,
+          "p95": 3.837,
+          "max": 5.036
+        },
+        "mask_gpu_ms": {
+          "p50": 0.28800000250339497,
+          "p95": 0.607999980449677,
+          "max": 0.892000019550323
+        },
+        "mask_cpu_ms": {
+          "p50": 0.228000000119209,
+          "p95": 0.493999987840652,
+          "max": 0.709999978542328
+        }
+      },
+      "wide": {
+        "samples": 300,
+        "frame_ms": {
+          "p50": 1.8205,
+          "p95": 4.216,
+          "max": 5.917
+        },
+        "mask_gpu_ms": {
+          "p50": 0.2925000041723255,
+          "p95": 0.685999989509583,
+          "max": 1.03100001811981
+        },
+        "mask_cpu_ms": {
+          "p50": 0.234999999403954,
+          "p95": 0.535000026226044,
+          "max": 0.791999995708466
+        }
+      },
+      "solid_wide": {
+        "samples": 300,
+        "frame_ms": {
+          "p50": 1.679,
+          "p95": 3.504,
+          "max": 4.994
+        },
+        "mask_gpu_ms": {
+          "p50": 0.0,
+          "p95": 0.0,
+          "max": 0.0
+        },
+        "mask_cpu_ms": {
+          "p50": 0.0,
+          "p95": 0.0,
+          "max": 0.0
+        }
+      },
+      "hidden_wide": {
+        "samples": 300,
+        "frame_ms": {
+          "p50": 1.5255,
+          "p95": 3.17,
+          "max": 5.355
+        },
+        "mask_gpu_ms": {
+          "p50": 0.0,
+          "p95": 0.0,
+          "max": 0.0
+        },
+        "mask_cpu_ms": {
+          "p50": 0.0,
+          "p95": 0.0,
+          "max": 0.0
+        }
+      }
+    },
+    "maximum_candidates": 29,
+    "maximum_tile_references": 721,
+    "wall_update_ms": {
+      "p50": 3.4225000000000003,
+      "p95": 4.626,
+      "max": 5.349
+    },
+    "final_memory": {
+      "static_memory_mib": 3115.69449138641,
+      "video_memory_mib": 3840.85429859161
+    },
+    "canonical_match": true,
+    "drained": true,
+    "presentation_errors": []
+  },
+  "profile_context": "Native Windows Godot4.7.2 Compatibility, RTX5090,1440x900,VSync off,65-packet Crypt recording; 4 actors/229 placements. Stages separated. CPU phases inclusive, GPU timing last available. No large-map capacity or universal FPS claim.",
+  "audit_reports": [
+    "generated/audit_correctness_2026-10-12.md",
+    "generated/audit_efficiency_2026-10-12.md",
+    "generated/audit_scope_2026-10-12.md"
+  ],
+  "limits": [
+    "Mask covers visible grid tile diamonds at their support heights, not arbitrary actor/prop silhouettes or frontmost content across overlapping elevations.",
+    "One-pixel ownership boundary retains ordinary source-over to avoid holes. Native opaque comparisons have zero error; translucent edge composition is approximate.",
+    "Walls/doors use two-sided diffuse receiving as an explicit isometric presentation policy, not physical light transmission. Original normals/depth, backend ranges and visibility retained.",
+    "Modular character normal/depth maps remain deferred until matching assets arrive.",
+    "First-use texture stalls and unbounded clip residency remain; latest playback maximum127.772ms, initialization867.39ms and reported video memory3840.85MiB.",
+    "Review identified admitted-default handling and height-only UI resize bugs plus scaling issues; details and shader follow-up in audits."
+  ],
+  "latest_native_interaction_run": ".runtime/player-runs/20261011T235657.996050Z",
+  "latest_native_interaction_checks": 32,
+  "handoff": "GEOMETRY_HANDOFF.txt",
+  "live_preview": {
+    "run": ".runtime/player-runs/20261012T005012.287831Z",
+    "ready": true,
+    "evidence": "tools/play.py reported Player connected and ready after PLAYER_READY initialization and choices. Left running for user."
+  },
+  "historical_checkpoint": true,
+  "latest_validation": "generated/performance_scale_validation.json",
+  "historical_note": "Counts and timings below describe this earlier checkpoint. Linked per-test files may contain newer runs; use latest_validation for the final performance and repair pass."
+}

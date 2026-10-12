@@ -26,9 +26,11 @@ page does not select a semantic body context or apply its playback-speed modifie
 Library-only actions explicitly use a 12 FPS inspection clock, not a new authored
 gameplay rate. Slider values are temporary review inputs, not saved animation recipes.
 
-The review imports the reusable **`src/rendering/character-material.mjs`**;
-it does not implement a second compositor. This is an asset/material review,
-not Studio, an event player, or a completed game renderer.
+The review imports **`tools/character-review/material-reference.mjs`**, a bounded
+source-comparison harness. It shares the component equations in
+`src/rendering/character-material.mjs`; production uses `character-filter.ts`
+and ordinary Sprites through the shared gameplay/Studio renderer. The harness
+is not imported by either application.
 
 ## Goblin and Demon source interaction
 

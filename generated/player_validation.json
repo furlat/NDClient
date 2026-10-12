@@ -1,0 +1,158 @@
+{
+  "completed_at_utc": "2026-10-11T21:44:56.960462+00:00",
+  "passed": true,
+  "scope": "Existing authoring JSON and native AnimationTree connected to live and recorded subjective SDK operations: movement, jumps, attacks, damage/life and opportunity attacks. VFX disabled.",
+  "launch": "play.cmd",
+  "scene": "play.tscn",
+  "source_authoring": "/home/tommaso/Dev/NDClient/authoring",
+  "backend_changed": false,
+  "source_authoring_changed": false,
+  "sdk_replaced": false,
+  "compiler": {
+    "checks": 3520,
+    "subjective_seat_streams": 24,
+    "actual_recordings": 12,
+    "report": ".runtime/presentation/compiler-checks.json",
+    "coverage": [
+      "ordinary and diagonal walking",
+      "native 30ft and40ft movement speeds",
+      "continuous gait source clock",
+      "authored jump arc/source clocks",
+      "melee and ranged attack contact/release",
+      "HP/life commit at effect contact",
+      "OA hit/miss and held movement",
+      "first-edge lethal jump: no takeoff",
+      "late lethal jump: retain committed edges, stop before uncommitted edge",
+      "canceled damage occurrences",
+      "partial subjective disclosure",
+      "exact canonical end state"
+    ]
+  },
+  "staging_fixture": {
+    "checks": 15,
+    "provenance": "Explicit boundary fixture assembled from captured actor, first support tile, and attack occurrence; not a new native gameplay outcome.",
+    "test": "tests/presentation_staging_checks.gd"
+  },
+  "production_recorded_scenes": {
+    "matrix": ".runtime/presentation-view/matrix.json",
+    "runs": 9,
+    "checks": 325,
+    "coverage": [
+      "intake while paused",
+      "all four camera quarters preserve source time/contact",
+      "native mesh midpoint positions",
+      "authored pixel-scale jump lift",
+      "settled final contacts",
+      "exact final canonical state"
+    ],
+    "native_views": [
+      {
+        "case": "Crypt",
+        "checks": 33,
+        "report": ".runtime/presentation-view/crypt-native.json"
+      },
+      {
+        "case": "OA jump with hit",
+        "checks": 40,
+        "report": ".runtime/presentation-view/oa-jump-native.json"
+      },
+      {
+        "case": "ranged attack",
+        "checks": 49,
+        "report": ".runtime/presentation-view/ranged-native.json"
+      }
+    ]
+  },
+  "live_headless": {
+    "checks": 42,
+    "elapsed_ms": 9862,
+    "report": ".runtime/player-runs/20261011T214326.081363Z/player-live-checks.json",
+    "failures": []
+  },
+  "live_native": {
+    "checks": 43,
+    "elapsed_ms": 10099,
+    "report": ".runtime/presentation-checks/player_live_native_summary.json",
+    "profile": "generated/profiles/2026-10-11T23-39-10-player-live.json",
+    "screenshot": ".runtime/player-runs/20261011T213858.695381Z/player-live.png",
+    "coverage": [
+      "actual viewport click through GUI",
+      "choices / preview / command / receipt",
+      "walking and jumping with ground shadow",
+      "end turn",
+      "reconnect without duplicate groups",
+      "cold replay exact state"
+    ]
+  },
+  "native_performance": {
+    "gpu": "NVIDIA GeForce RTX 5090",
+    "resolution": [
+      1440.0,
+      900.0
+    ],
+    "ready_elapsed_ms": 7096,
+    "cold_load_peak_ms": 3207.149,
+    "post_ready": {
+      "count": 310,
+      "frame_ms": {
+        "mean": 6.992383870967743,
+        "p50": 6.948,
+        "p95": 7.397,
+        "max": 16.874
+      },
+      "player_process_ms": {
+        "mean": 1.7776612903225808,
+        "p50": 1.576,
+        "p95": 2.254,
+        "max": 11.557
+      },
+      "render_cpu_ms": {
+        "mean": 0.39727741874033407,
+        "p50": 0.372999995946884,
+        "p95": 0.60699999332428,
+        "max": 0.800999999046326
+      },
+      "gpu_ms": {
+        "mean": 0.1331225809551055,
+        "p50": 0.120999999344349,
+        "p95": 0.200000002980232,
+        "max": 0.335999995470047
+      },
+      "frames_over_33ms": 0,
+      "frames_over_100ms": 0,
+      "draw_calls_range": [
+        78,
+        83
+      ]
+    },
+    "notes": "Short small-Crypt interaction sample. Initial readiness and cold texture-loading stall are excluded from post_ready. This is not a large-map benchmark. Nested CPU phases overlap."
+  },
+  "shader_regressions": {
+    "pixel_comparisons": 16,
+    "pixel_failures": 0,
+    "pixel_report": "generated/grid-reference-checks.json",
+    "alpha_comparisons": 4,
+    "alpha_log": ".runtime/presentation-view/grid-alpha.log"
+  },
+  "characters": {
+    "actual_records_checks": 73,
+    "log": ".runtime/presentation-checks/presentation_character_records.log",
+    "animation_regression_log": ".runtime/presentation-checks/animation_checks.log"
+  },
+  "launcher_lifecycle": ".runtime/presentation-checks/launcher_validation.json",
+  "review": "Same-task plan adherence, anti-slop and anti-OOP review: no remaining blocker after source timing, jump-scale and first-admission support fixes. Receipt recovery only queries original command numbers.",
+  "limits": [
+    "VFX/projectiles and spell/condition-specific visual families are omitted, while all canonical facts still reduce.",
+    "Connector-transfer choreography and general object interaction UI are outside this pass.",
+    "The launch encounter is the existing backend Crypt; offline Unity exploration remains separately available.",
+    "Initial texture loading can stall the main thread; uncached actor media can incur first-use cost.",
+    "Only disclosed jump edges animate when subjective packets omit a full trajectory.",
+    "Counts overlap by layer and seat; do not sum them as distinct gameplay scenarios."
+  ],
+  "open_preview": {
+    "run": ".runtime/player-runs/20261011T214416.339290Z",
+    "journal_sequences_at_check": 2,
+    "backend_owned_by_launcher": true,
+    "closing_window_stops_backend": true
+  }
+}

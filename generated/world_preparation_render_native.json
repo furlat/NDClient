@@ -1,0 +1,108 @@
+{
+  "checks": 125,
+  "comparisons": [
+    {
+      "byte_exact": false,
+      "case": "door-q0",
+      "quarter": 0,
+      "different_pixels": 1,
+      "maximum_byte_difference": 1,
+      "pixel_bounds": [
+        457,
+        314,
+        457,
+        314
+      ]
+    },
+    {
+      "byte_exact": true,
+      "case": "floor-representative-q0",
+      "quarter": 0
+    },
+    {
+      "byte_exact": false,
+      "case": "door-q1",
+      "quarter": 1,
+      "different_pixels": 1,
+      "maximum_byte_difference": 1,
+      "pixel_bounds": [
+        548,
+        426,
+        548,
+        426
+      ]
+    },
+    {
+      "byte_exact": false,
+      "case": "floor-representative-q1",
+      "quarter": 1,
+      "different_pixels": 1,
+      "maximum_byte_difference": 1,
+      "pixel_bounds": [
+        548,
+        426,
+        548,
+        426
+      ]
+    },
+    {
+      "byte_exact": false,
+      "case": "door-q2",
+      "quarter": 2,
+      "different_pixels": 1,
+      "maximum_byte_difference": 1,
+      "pixel_bounds": [
+        550,
+        299,
+        550,
+        299
+      ]
+    },
+    {
+      "byte_exact": false,
+      "case": "floor-representative-q2",
+      "quarter": 2,
+      "different_pixels": 1,
+      "maximum_byte_difference": 1,
+      "pixel_bounds": [
+        550,
+        299,
+        550,
+        299
+      ]
+    },
+    {
+      "byte_exact": false,
+      "case": "door-q3",
+      "quarter": 3,
+      "different_pixels": 1,
+      "maximum_byte_difference": 1,
+      "pixel_bounds": [
+        296,
+        367,
+        296,
+        367
+      ]
+    },
+    {
+      "byte_exact": true,
+      "case": "floor-representative-q3",
+      "quarter": 3
+    },
+    {
+      "byte_exact": true,
+      "case": "rotated-target",
+      "quarter": 0
+    }
+  ],
+  "direct_lights_enabled": true,
+  "failures": [
+    "door-q0 exact native pixels equal independent full original-source construction",
+    "door-q1 exact native pixels equal independent full original-source construction",
+    "floor-representative-q1 exact native pixels equal independent full original-source construction",
+    "door-q2 exact native pixels equal independent full original-source construction",
+    "floor-representative-q2 exact native pixels equal independent full original-source construction",
+    "door-q3 exact native pixels equal independent full original-source construction"
+  ],
+  "scope": "Actual Crypt originals with named door and floor-representative elevation after-values; original total painter order including hidden variants; held native preparation, source-state/picking/trace/time isolation, four solid quarters and independent full native construction, pending rotation replacement, received future preparation, initialization epoch replacement, explicit worker-receipt failure and close cleanup. Optional whole-encounter preload budget0 for this correctness fixture."
+}

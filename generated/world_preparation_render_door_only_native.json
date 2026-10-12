@@ -1,0 +1,37 @@
+{
+  "checks": 65,
+  "comparisons": [
+    {
+      "byte_exact": false,
+      "case": "door-q0",
+      "quarter": 0
+    },
+    {
+      "byte_exact": false,
+      "case": "door-q1",
+      "quarter": 1
+    },
+    {
+      "byte_exact": false,
+      "case": "door-q2",
+      "quarter": 2
+    },
+    {
+      "byte_exact": false,
+      "case": "door-q3",
+      "quarter": 3
+    },
+    {
+      "byte_exact": true,
+      "case": "rotated-target",
+      "quarter": 0
+    }
+  ],
+  "failures": [
+    "door-q0 exact native pixels equal independent full original-source construction",
+    "door-q1 exact native pixels equal independent full original-source construction",
+    "door-q2 exact native pixels equal independent full original-source construction",
+    "door-q3 exact native pixels equal independent full original-source construction"
+  ],
+  "scope": "Actual Crypt originals with named door after-values; held native preparation, source-state/picking/trace/time isolation, four solid quarters and independent full native construction, pending rotation replacement, received future preparation, initialization epoch replacement, explicit worker-receipt failure and close cleanup. Optional whole-encounter preload budget0 for this correctness fixture."
+}

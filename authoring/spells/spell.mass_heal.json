@@ -36,7 +36,8 @@
           14874332
         ],
         "noiseSheet": "/spell-palettes/source-hand-noise.png"
-      }
+      },
+      "role": "hand_magic"
     },
     "effects": [
       {
@@ -57,7 +58,8 @@
             14874332
           ],
           "noiseSheet": "/spell-palettes/source-hand-noise.png"
-        }
+        },
+        "role": "effect"
       }
     ],
     "recovery": {
@@ -614,7 +616,11 @@
       "scale": 0.5,
       "scaleWithActor": true,
       "depth": "behind_body",
-      "viewFacing": "E"
+      "viewFacing": "E",
+      "effectGroup": {
+        "id": "effect",
+        "label": "Mass Heal"
+      }
     },
     {
       "id": "front",
@@ -624,7 +630,11 @@
       "scale": 0.5,
       "scaleWithActor": true,
       "depth": "front_body",
-      "viewFacing": "E"
+      "viewFacing": "E",
+      "effectGroup": {
+        "id": "effect",
+        "label": "Mass Heal"
+      }
     }
   ],
   "contact": {

@@ -1,0 +1,83 @@
+{
+  "schema_identity": {
+    "protocol_version": 1,
+    "player_schema_version": 5,
+    "schema_digest": "086fcde5803c5cd3937f7375182005cc2ace80643ff73a2eb1bde89c82ac937c"
+  },
+  "disclosure": "Existing FloorItem radii and VisualItem activation/radii; existing controlled ItemPresentationState unchanged. No undisclosed emitter enumeration.",
+  "shader": "Circular XZ source receiving radiance in Godot; original environment RG16BE depth and octahedral BA normals; native authored DirectionalLight3D; no constant base emission in live scene.",
+  "source_units": "One cell=5ft. Backend bright and bright+dim outer radius floor to integer cells with minimum1; very-bright is fractional feet/5.",
+  "optical_conventions": {
+    "source_lift_steps": 1,
+    "source_colour": "neutral white",
+    "very_bright_gain": 1.5,
+    "bright_gain": 1,
+    "dim_gain": 0.25,
+    "falloff": "Continuous smoothstep bands through backend very-bright/bright/outer anchors, zero at outer radius; collapsed bands taper across their remaining radius.",
+    "fixture_energy": "Original torch.flame image luminance, normalized to clip mean and bounded 0.85-1.15; interpolated on the same native display clock. Backend activation/range unchanged.",
+    "architecture": "Walls and doors opt into abs(N dot L) for two-sided isometric readability, before alpha. Other receivers stay one-sided."
+  },
+  "tests": {
+    "adapter": {
+      "checks": 29,
+      "failures": 0,
+      "log": ".runtime/presentation-checks/lighting_checks.log"
+    },
+    "native_pixels": {
+      "checks": 59,
+      "elapsed_ms": 541,
+      "evidence": {
+        "renderer": "NVIDIA GeForce RTX 5090",
+        "source_count_stress": 25,
+        "wall_depth_mean_pixel_delta": 0.00149929194893317,
+        "wall_lit_mean": 0.0107703706489163,
+        "wall_normal_mean_pixel_delta": 0.00397570815230008
+      },
+      "failures": [],
+      "log": ".runtime/lighting-fragment-final.log"
+    },
+    "native_live": {
+      "checks": 111,
+      "failures": 0,
+      "run": ".runtime/player-runs/20261011T223034.591678Z",
+      "report": ".runtime/presentation-checks/lighting_live_checks.json",
+      "log": ".runtime/presentation-checks/lighting_live_checks.log"
+    },
+    "backend_python": {
+      "passed": 86,
+      "log": ".runtime/presentation-checks/lighting_backend_checks.log"
+    },
+    "typescript_sdk": {
+      "passed": 30,
+      "command": "npm test (dnd_engine/sdk/player-typescript)"
+    },
+    "shared_offline_pixels": {
+      "comparisons": 16,
+      "failures": 0,
+      "log": ".runtime/presentation-checks/lighting_grid_render_checks.log"
+    },
+    "shared_alpha": {
+      "comparisons": 4,
+      "failures": 0,
+      "log": ".runtime/presentation-checks/lighting_grid_alpha_checks.log"
+    },
+    "native_fixture_animation": {
+      "report": "generated/fixture_light_checks.json",
+      "checks": 106,
+      "failures": []
+    },
+    "architectural_lighting": {
+      "report": "generated/architectural_lighting_checks.json",
+      "checks": 44,
+      "failures": []
+    }
+  },
+  "limits": [
+    "Ordinary optical wall occlusion is not reproduced: the SDK does not disclose per-source affected_tiles; transparent sprite quads do not cast equivalent shadows. Backend visibility remains authoritative.",
+    "Private noncontrolled inventory and standalone spell/contribution emitters are not disclosed as light sources and are not inferred from tile brightness.",
+    "Current modular runtime illumination uses flat billboard receivers; the newly supplied one-outfit experimental depth/normal delivery is available but not adopted.",
+    "Source lift, neutral colour and smooth radial radiance gains are explicit optical conventions; emitter sockets/heights/hues/intensity are not authored or disclosed.",
+    "The shader loops disclosed source count per fragment; 25-source correctness is tested, not large-map lighting performance.",
+    "Original live screenshot timings include startup and capture waits; controlled recorded playback, settled and zoom40 measurements are in generated/render_repair_validation.json, not a large-map benchmark."
+  ]
+}

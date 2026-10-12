@@ -1,0 +1,82 @@
+[
+  {
+    "file": "NDCLIENT_IMPLEMENTATION_PLAN_COMPLETE_2026-10-11_v3.md",
+    "line_before": 1517,
+    "removed": "- **Portal transfer:** `game_obsolete/portal_draw.py::{portal_draw_commands,_doorway_commands,clip_portal_bodies}` supplies entrance/exit front/back media and local aperture clipping during transfer. A body and its decorative copies/trails enter or emerge through that registered aperture; its contact shadow follows the actual transfer phase. Use the shared geometry/material path, not a global tile mask or copied CPU raster loop. One admitted endpoint never becomes a window into an undisclosed remote room. Focused native Dimension Door acceptance now covers original front/back banks, opening wait, crossing, arrival and closing at four quarters/two zooms; opening-time body clipping and shadow suppression were corrected to the original crossing-only rule. Hatch departure now consumes the original front-image alpha in the same coverage filter. The unchanged original native hatch scenarios supply traveler and independent endpoint witnesses; 24 native-pixel samples match original clipping exactly, while half-scale nearest-sampling residuals remain explicitly qualified. Supported SDK encounter setup has no hatch portal placement, so hatch SDK/Studio acceptance remains open; this does not complete R16. See the existing movement/portal review for evidence and the input boundary.",
+    "replacement": "- **Portal transfer:** `game_obsolete/portal_draw.py::{portal_draw_commands,_doorway_commands,clip_portal_bodies}` supplies entrance/exit front/back media and local aperture clipping during transfer. A body and its decorative copies/trails enter or emerge through that registered aperture; its contact shadow follows the actual transfer phase. Use the shared geometry/material path, not a global tile mask or copied CPU raster loop. One admitted endpoint never becomes a window into an undisclosed remote room.",
+    "reason": "Remove later portal/hatch acceptance reporting and implementation qualifications from the specification.",
+    "evidence": "The shorter requirement is identical in the recovered v3 snapshot and archived v2."
+  },
+  {
+    "file": "NDCLIENT_IMPLEMENTATION_PLAN_COMPLETE_2026-10-11_v3.md",
+    "line_before": 1640,
+    "removed": "The installed client source inventory currently supplies Fireball's impact `VisualEmitter`. Standing/wall torch bindings supply `is_lit`-selected flame animation art, but no client positional emitter colour/intensity/range definition. The installed SDK exposes categorical perception light and item state rather than a positioned photometric-source list. Keep the art and report this source gap; do not invent torch parameters or backend fields. Existing source-authored emitters remain the illumination inputs.\n\n",
+    "replacement": "",
+    "reason": "Remove later torch/SDK inventory findings from normative lighting requirements; actual-light requirements remain.",
+    "evidence": "Absent from the recovered master snapshot; text reports subsequent implementation findings/status."
+  },
+  {
+    "file": "NDCLIENT_IMPLEMENTATION_PLAN_COMPLETE_2026-10-11_v3.md",
+    "line_before": 2356,
+    "removed": "**11 October implementation checkpoint:** the plan is not complete. Integrate the reported Fireball disappearance/colour/trajectory, invalid spell and weapon scenarios, missing recorded rig assignments, and Call Lightning playback hitch into N1–N3 and N5 below. Their current evidence is at the top of implementation progress. Close the bounded corrections and remaining validation, then continue missing content consumers, Studio inspection and playable-client workflows. Do not restart already verified renderer work or let repeated checks of one effect replace the rest of the port.\n\n",
+    "replacement": "",
+    "reason": "Remove the later status/next-work overlay and its instruction not to revisit supposedly verified rendering; preserve the reported defects as requirements in renderer section 10.",
+    "evidence": "Absent from the recovered master snapshot; text reports subsequent implementation findings/status."
+  },
+  {
+    "file": "NDCLIENT_IMPLEMENTATION_PLAN_COMPLETE_2026-10-11_v3.md",
+    "line_before": 2532,
+    "removed": "- Finger of Death's original open-shell consumer and the original potion strip\n  are connected and checked. Finger's original-Python comparison and authentic\n  single-enemy cast pass with the explicitly recorded GPU rasterization\n  qualification; see [its focused review](reviews/renderer-2026-10-11/finger-of-death.md).\n  Do not repeat asset intake or fabricate substitute artwork for either case.\n",
+    "replacement": "",
+    "reason": "Remove later Finger of Death/potion completion claims and attached intake instruction; original feature and artwork requirements remain.",
+    "evidence": "Absent from the recovered master snapshot; the linked review reports later implementation work."
+  },
+  {
+    "file": "NDCLIENT_PIXI_RENDERER_PLAN_2026-10-11_v3.md",
+    "line_before": 54,
+    "removed": "Pinned Pixi 8.22 WebGL binds only the source’s own style, so the frost and directed material shaders use bounded four-texel donor reads: frost preserves fract-then-clamp linear sampling, and directed donors preserve repeat-linear sampling across wrap edges. This does not alter ordinary image or viewport sampling. ",
+    "replacement": "",
+    "reason": "Remove the specific manual donor-sampling workaround from the plan. Preserve correct authored sampling and shared-source ownership requirements.",
+    "evidence": "Implementation progress records the workaround. No earlier full renderer-v3 text survives to establish its exact insertion time."
+  },
+  {
+    "file": "NDCLIENT_PIXI_RENDERER_PLAN_2026-10-11_v3.md",
+    "line_before": 98,
+    "removed": "The installed standing/wall torches currently provide lit-state and flame animation art, but no client emitter colour/intensity/range definition; do not infer one from bright pixels or native categorical light. Record that source gap. ",
+    "replacement": "",
+    "reason": "Remove the later torch-source inventory account; no replacement lighting design is introduced.",
+    "evidence": "Matches the later inventory paragraph absent from the recovered master. No earlier full renderer-v3 snapshot found."
+  },
+  {
+    "file": "NDCLIENT_PIXI_RENDERER_PLAN_2026-10-11_v3.md",
+    "line_before": 94,
+    "removed": "The subsequent explicit request for directional-light testing is implemented as an authored source with a nonzero world-space `directionToSource`, linear colour and intensity, using the same receiving normals/filter as positioned lights. It is not derived from backend categories and is absent unless explicitly configured in `world.lighting.directionalSources`.",
+    "replacement": "Include an actual directional light source in the receiving-light checks, as requested. Backend perception categories are not a substitute.",
+    "reason": "Preserve the user-requested directional-light check; remove the implementation claim and chosen JSON field design from that claim.",
+    "evidence": "The user explicitly requested real directional light in tests. The exact fields and “is implemented” account describe the assistant’s realization."
+  },
+  {
+    "file": "NDCLIENT_PIXI_RENDERER_PLAN_2026-10-11_v3.md",
+    "line_before": 167,
+    "removed": "**11 October feedback integrated into the current steps:** retain the verified material-branch fix for disappearing Fireball recipients, preserve the authored final blend when scoped filters are enabled, and remove backend light-category RGB multiplication under §5. Verify projectile release/direction/contact against actual native targets. Replace misleading spell/weapon capture setups through the existing server capture procedure and repair stale presentation pins without editing delivered events. Trace the measured Call Lightning playback hitch separately from scenario correctness. Record each result in progress, then continue the complete client plan; this feedback does not open another renderer architecture phase.",
+    "replacement": "**User-reported defects to address in the current steps:** Fireball recipients must remain visible through their admitted damage presentation. Preserve the authored final blend when scoped filters are enabled, and remove backend light-category RGB multiplication under §5. Verify projectile release/direction/contact against actual native targets. Replace misleading spell/weapon capture setups through the existing server capture procedure and repair stale presentation pins without editing delivered events. Diagnose the Call Lightning playback hitch separately from scenario correctness. Record observed results in progress; a claimed material-branch fix is not acceptance of the reported disappearance.",
+    "reason": "Preserve accumulated user complaints while removing “retain the verified material-branch fix” and the progress directive tied to that claim.",
+    "evidence": "User requested these defects be integrated into the plan. The asserted verified fix is later implementation reporting, not user authorization."
+  },
+  {
+    "file": "NDCLIENT_IMPLEMENTATION_PLAN_COMPLETE_2026-10-11_v3.md",
+    "line_before": 3,
+    "removed": "# NDCLIENT IMPLEMENTATION PLAN — complete consolidated edition · v3\n\n",
+    "replacement": "# NDCLIENT IMPLEMENTATION PLAN — complete consolidated edition · v3\n\n> Recovery note, 11 October 2026: this copy has had identified later implementation prescriptions and acceptance claims removed. It is **not** a byte-for-byte recovery of the final approved v3. [Recovery evidence and exact removals](NDCLIENT_PLAN_RECOVERY_2026-10-11.md) records the available snapshot and the limits.\n\n",
+    "reason": "Label the recovery accurately without changing implementation scope.",
+    "evidence": "New recovery provenance note, not a historical claim or permission to resume implementation."
+  },
+  {
+    "file": "NDCLIENT_PIXI_RENDERER_PLAN_2026-10-11_v3.md",
+    "line_before": 3,
+    "removed": "# NDClient renderer repair plan — v3\n\n",
+    "replacement": "# NDClient renderer repair plan — v3\n\n> Recovery note, 11 October 2026: this copy has had identified later implementation prescriptions and acceptance claims removed. It is **not** a byte-for-byte recovery of the final approved v3. [Recovery evidence and exact removals](NDCLIENT_PLAN_RECOVERY_2026-10-11.md) records the available snapshot and the limits.\n\n",
+    "reason": "Label the recovery accurately without changing implementation scope.",
+    "evidence": "New recovery provenance note, not a historical claim or permission to resume implementation."
+  }
+]

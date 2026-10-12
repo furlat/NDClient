@@ -36,7 +36,8 @@
           10001839
         ],
         "noiseSheet": "/spell-palettes/source-hand-noise.png"
-      }
+      },
+      "role": "hand_magic"
     },
     "effects": [
       {
@@ -57,7 +58,8 @@
             10001839
           ],
           "noiseSheet": "/spell-palettes/source-hand-noise.png"
-        }
+        },
+        "role": "effect"
       }
     ],
     "recovery": {
@@ -610,7 +612,11 @@
       "fps": 32.0,
       "scale": 0.43,
       "scaleWithActor": true,
-      "depth": "behind_body"
+      "depth": "behind_body",
+      "effectGroup": {
+        "id": "harm.False",
+        "label": "Harm · Harm false"
+      }
     },
     {
       "requiredSaveSuccess": false,
@@ -622,7 +628,11 @@
       "fps": 32.0,
       "scale": 0.43,
       "scaleWithActor": true,
-      "depth": "front_body"
+      "depth": "front_body",
+      "effectGroup": {
+        "id": "harm.False",
+        "label": "Harm · Harm false"
+      }
     },
     {
       "requiredSaveSuccess": true,
@@ -635,7 +645,11 @@
       "scale": 0.43,
       "scaleWithActor": true,
       "alpha": 0.55,
-      "depth": "behind_body"
+      "depth": "behind_body",
+      "effectGroup": {
+        "id": "harm.True",
+        "label": "Harm · Harm true"
+      }
     },
     {
       "requiredSaveSuccess": true,
@@ -648,7 +662,11 @@
       "scale": 0.43,
       "scaleWithActor": true,
       "alpha": 0.55,
-      "depth": "front_body"
+      "depth": "front_body",
+      "effectGroup": {
+        "id": "harm.True",
+        "label": "Harm · Harm true"
+      }
     }
   ],
   "bodyMaterials": [

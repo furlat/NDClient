@@ -1,0 +1,129 @@
+{
+  "validated_at_utc": "2026-10-12T02:52:46.058605+00:00",
+  "ok": true,
+  "public_schema_version": 6,
+  "implemented": [
+    "Native exact-child Loot action and disclosed nullable container contents",
+    "Closable storage popup: Take selected, double-click Take, Loot All, local reopen",
+    "Displayed native combat text and nested detail without duplicate child rows",
+    "Causally gated event coverage with post-draw native body witnesses",
+    "Missing-only retained-history filter, component detail and native clipboard export"
+  ],
+  "validation": {
+    "native_loot": {
+      "checks": 63,
+      "report": ".runtime/loot-ui-live-02/loot-checks.json",
+      "log": ".runtime/loot-ui-live-02/godot.log"
+    },
+    "native_history": {
+      "checks": 88,
+      "report": "generated/history_view_checks.json",
+      "log": ".runtime/history-view-checks.log"
+    },
+    "trace_semantics": {
+      "checks": 2341,
+      "report": "generated/event_trace_checks.json",
+      "log": ".runtime/event_trace_checks-trace-final.log"
+    },
+    "godot_sdk": {
+      "checks": 11725,
+      "lanes": 6,
+      "report": "generated/sdk_checks.json"
+    },
+    "python_reduction_parity": {
+      "packets": 8,
+      "equal": true,
+      "report": ".runtime/loot-ui-live-02/python-parity.json",
+      "normalization": "unordered sensory sets and process-local sense_modes_hash only"
+    },
+    "existing_ui_boundary": {
+      "checks": 39,
+      "log": ".runtime/ui-checks-loot-history.log"
+    },
+    "existing_recorded_ui": {
+      "checks": 67,
+      "log": ".runtime/ui-recorded-loot-history.log"
+    },
+    "backend_and_generated_clients": {
+      "focused_backend_checks": 58,
+      "related_backend_checks": 28,
+      "python_sdk_checks": 48,
+      "typescript_sdk_checks": 30,
+      "passed": true
+    }
+  },
+  "rendered_recording": {
+    "counts": {
+      "missing": 40,
+      "presented": 60,
+      "state_only": 439
+    },
+    "combat_log_entries": 147,
+    "renderer": "gl_compatibility"
+  },
+  "idle_hud_profile": {
+    "result": {
+      "closed": {
+        "frame_ms": {
+          "max": 7.39,
+          "mean": 6.89648888888889,
+          "p50": 6.945,
+          "p95": 7.259,
+          "p99": 7.388
+        },
+        "hud_ms": {
+          "max": 0.177,
+          "mean": 0.0329555555555556,
+          "p50": 0.026,
+          "p95": 0.071,
+          "p99": 0.093
+        },
+        "player_ms": {
+          "max": 0.96,
+          "mean": 0.437788888888889,
+          "p50": 0.377,
+          "p95": 0.77,
+          "p99": 0.937
+        },
+        "samples": 90
+      },
+      "open": {
+        "frame_ms": {
+          "max": 7.481,
+          "mean": 6.93361111111111,
+          "p50": 6.948,
+          "p95": 7.195,
+          "p99": 7.447
+        },
+        "hud_ms": {
+          "max": 0.083,
+          "mean": 0.0290111111111111,
+          "p50": 0.027,
+          "p95": 0.037,
+          "p99": 0.068
+        },
+        "player_ms": {
+          "max": 0.755,
+          "mean": 0.400333333333333,
+          "p50": 0.369,
+          "p95": 0.587,
+          "p99": 0.728
+        },
+        "samples": 90
+      }
+    },
+    "scope": "90 frames with history closed and 90 open at paused terminal replay state; not a large-room or actively growing-log stress benchmark."
+  },
+  "limits": [
+    "Green proves at least one submitted valid onscreen body sample for each required supported track, not every source frame or occlusion-resolved pixel visibility.",
+    "Authored projectile, VFX and other unsupported feedback remain red; no new VFX implementation in this task.",
+    "UI retains 2000 diagnostic rows and shows/copies the latest 200 matching rows; complete subjective source remains in the SDK recording.",
+    "The existing authoring maps all five test-cache item IDs to the same potion icon; bindings were preserved.",
+    "Missing modular outfit geometry remains deferred as previously requested."
+  ],
+  "screenshots": [
+    ".runtime/loot-ui-live-02/storage-popup.png",
+    ".runtime/ui/combat-log.png",
+    ".runtime/ui/event-stream.png"
+  ]
+}
