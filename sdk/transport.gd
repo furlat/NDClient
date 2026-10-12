@@ -15,6 +15,18 @@ var _serial = 0
 var _diagnostics: Dictionary = {}
 var _timings = {"completed_requests":0,"request_wall_ms":0.0,"maximum_request_wall_ms":0.0,
     "admission_ms":0.0,"consumer_ms":0.0,"response_normalization_ms":0.0}
+# Opt-in diagnostic records contain only numeric timing/size and protocol labels.
+# A separate fixed ring keeps profiling independent of the payload mailbox.
+const PROFILE_CAPACITY = 4096
+var _profile_enabled = false
+var _profile_mutex = Mutex.new()
+var _profile_ring: Array = []
+var _profile_head = 0
+var _profile_count = 0
+var _profile_total = 0
+var _profile_dropped = 0
+var _profile_job_serial = 0
+var _profile_frame_serial = 0
 var _consumer: Callable
 var _options: Dictionary
 var _origin: Dictionary
@@ -75,7 +87,63 @@ func start(base_url: String, credential: String, consumer: Callable = Callable()
         return failure("transport","Could not start SDK worker")
     return success()
 
+func set_profiling(enabled: bool) -> Dictionary:
+    if _thread.is_started() or _protocol != null: return failure("protocol","Configure profiling before transport start")
+    _profile_enabled = enabled
+    _profile_ring = []
+    if enabled: _profile_ring.resize(PROFILE_CAPACITY)
+    _profile_head = 0; _profile_count = 0; _profile_total = 0; _profile_dropped = 0
+    return success()
+
+func _profile_record(record: Dictionary) -> void:
+    if not _profile_enabled: return
+    _profile_mutex.lock()
+    if _profile_count == PROFILE_CAPACITY:
+        _profile_ring[_profile_head] = record
+        _profile_head = (_profile_head+1)%PROFILE_CAPACITY
+        _profile_dropped += 1
+    else:
+        _profile_ring[(_profile_head+_profile_count)%PROFILE_CAPACITY] = record
+        _profile_count += 1
+    _profile_total += 1
+    _profile_mutex.unlock()
+
+func drain_profile() -> Dictionary:
+    var replacement: Array = []
+    if _profile_enabled: replacement.resize(PROFILE_CAPACITY)
+    _profile_mutex.lock()
+    var ring = _profile_ring
+    var head = _profile_head
+    var count = _profile_count
+    var total = _profile_total
+    var dropped = _profile_dropped
+    _profile_ring = replacement; _profile_head = 0; _profile_count = 0
+    _profile_mutex.unlock()
+    var records: Array = []
+    for index in count: records.append(ring[(head+index)%PROFILE_CAPACITY])
+    return {"records":records,"total":total,"dropped":dropped,"capacity":PROFILE_CAPACITY,"clock":"godot_monotonic_usec"}
+
+static func _profile_operation(operation: String) -> String:
+    return operation if operation in ["health","status","attach","choices","preview","submit_command","acknowledge","receipt","content","follow","reconnect","wait_for_cursor","bootstrap","initialization","resume_ack","operation_ack","stream"] else "unknown"
+
+func _profile_job(job: Dictionary, stage: String, extra: Dictionary = {}) -> void:
+    if not _profile_enabled: return
+    var command: Dictionary = job.get("command",{})
+    var record = {"stage":stage,"time_us":Time.get_ticks_usec(),"http_id":job.get("profile_id",0),
+        "request_id":command.get("id",0),"operation":_profile_operation(command.get("operation",job.get("purpose",""))),
+        "purpose":job.get("purpose",""),"schema":job.get("root","")}
+    record.merge(extra,true)
+    _profile_record(record)
+
+func profile_preparation(sequence: int, packet_started_us: int, compile_started_us: int, end_us: int, ok: bool, from_disk: bool) -> void:
+    if not _profile_enabled: return
+    _profile_record({"stage":"presentation_prepare","time_us":end_us,"sequence":sequence,
+        "packet_started_us":packet_started_us,"compile_started_us":compile_started_us,"end_us":end_us,
+        "ok":ok,"from_disk":from_disk})
+
 func request(operation: String, arguments: Dictionary = {}) -> int:
+    var started_us = Time.get_ticks_usec() if _profile_enabled else 0
+    var queued = false
     _mutex.lock()
     _serial += 1
     var id = _serial
@@ -87,7 +155,12 @@ func request(operation: String, arguments: Dictionary = {}) -> int:
             "result":failure("transport","SDK request queue is full",true)})
     else:
         _incoming.append({"id":id,"operation":operation,"arguments":arguments.duplicate(true)})
+        queued = true
+    var enqueued_us = Time.get_ticks_usec() if _profile_enabled else 0
     _mutex.unlock()
+    if _profile_enabled:
+        _profile_record({"stage":"request_enqueued" if queued else "request_rejected","time_us":enqueued_us,
+            "started_us":started_us,"request_id":id,"operation":_profile_operation(operation)})
     return id
 
 func follow() -> int: return request("follow")
@@ -144,7 +217,11 @@ func _emit(value: Dictionary) -> void:
     _mutex.lock(); _outgoing.append(publication); _mutex.unlock()
 
 func _reply(command: Dictionary, result: Dictionary) -> void:
+    var started = Time.get_ticks_usec() if _profile_enabled else 0
     _emit({"kind":"response","request_id":command.id,"operation":command.operation,"result":result})
+    if _profile_enabled:
+        _profile_record({"stage":"response_published","time_us":Time.get_ticks_usec(),"started_us":started,
+            "request_id":command.id,"operation":_profile_operation(command.operation),"ok":result.ok})
 
 func _take_requests() -> Array:
     _mutex.lock(); var result = _incoming; _incoming = []; _mutex.unlock()
@@ -183,6 +260,10 @@ func _new_job(method: int, path: String, root_name: String, body: Variant,
         "body":body,"purpose":purpose,"command":command,"raw":PackedByteArray(),
         "started":Time.get_ticks_msec(),"last_byte":Time.get_ticks_msec(),"phase":"connect",
         "headers":{},"code":0,"sent":false}
+    if _profile_enabled:
+        _profile_job_serial += 1
+        job.profile_id = _profile_job_serial
+        _profile_job(job,"http_created")
     client.blocking_mode_enabled = false
     client.read_chunk_size = 65536
     if client.get_status() != HTTPClient.STATUS_CONNECTED:
@@ -194,7 +275,9 @@ func _new_job(method: int, path: String, root_name: String, body: Variant,
 func _request_job(job: Dictionary) -> Dictionary:
     var client: HTTPClient = job.client
     var encoded = PackedByteArray() if job.body == null else JSON.stringify(job.body,"",true,true).to_utf8_buffer()
+    var send_started = Time.get_ticks_usec() if _profile_enabled else 0
     var result = client.request_raw(job.method,job.path,_headers(job.body != null),encoded)
+    if _profile_enabled: _profile_job(job,"request_sent",{"started_us":send_started,"request_bytes":encoded.size(),"ok":result==OK})
     if result != OK: return failure("transport","HTTP request could not start",true)
     job.phase = "headers"; job.sent = true
     return success()
@@ -224,6 +307,7 @@ func _http_tick(job: Dictionary, streaming: bool = false) -> Dictionary:
     if job.phase == "headers":
         if client.has_response():
             job.code = client.get_response_code()
+            if _profile_enabled: _profile_job(job,"response_headers",{"status":job.code,"declared_bytes":client.get_response_body_length()})
             for header in client.get_response_headers():
                 var colon = header.find(":")
                 if colon >= 0: job.headers[header.substr(0,colon).strip_edges().to_lower()] = header.substr(colon+1).strip_edges()
@@ -245,6 +329,7 @@ func _http_tick(job: Dictionary, streaming: bool = false) -> Dictionary:
             var chunk = client.read_response_body_chunk()
             if not chunk.is_empty():
                 job.last_byte = now
+                if _profile_enabled: _profile_job(job,"sse_chunk",{"bytes":chunk.size()})
                 return {"chunk":chunk}
             if now-job.last_byte > float(_options.stream_idle_timeout)*1000:
                 return failure("transport","Event stream read timed out",true)
@@ -264,18 +349,24 @@ func _http_tick(job: Dictionary, streaming: bool = false) -> Dictionary:
         if state in [HTTPClient.STATUS_CONNECTED,HTTPClient.STATUS_DISCONNECTED]:
             if client.get_response_body_length() >= 0 and job.raw.size() != client.get_response_body_length():
                 return failure("transport","Truncated HTTP response",true)
+            if _profile_enabled: _profile_job(job,"body_complete",{"bytes":job.raw.size(),"status":job.code})
             if job.code < 200 or job.code >= 300: return _api_error(job)
             var admission_started = Time.get_ticks_usec()
             var admitted: Dictionary = _protocol.decode(job.root,job.raw)
             _timings.admission_ms += (Time.get_ticks_usec()-admission_started)/1000.0
+            if _profile_enabled: _profile_job(job,"http_admission",{"started_us":admission_started,"bytes":job.raw.size(),"ok":admitted.ok})
             if admitted.ok: admitted.raw = job.raw
             return admitted
     return {"pending":true}
 
 func _api_error(job: Dictionary) -> Dictionary:
+    var started = Time.get_ticks_usec() if _profile_enabled else 0
     var decoded: Dictionary = _protocol.decode("ApiError",job.raw)
+    if _profile_enabled: _profile_job(job,"http_admission",{"started_us":started,"bytes":job.raw.size(),"ok":decoded.ok,"schema":"ApiError"})
     if not decoded.ok: return decoded
+    started = Time.get_ticks_usec() if _profile_enabled else 0
     decoded.value = _protocol.normalize("ApiError",decoded.value)
+    if _profile_enabled: _profile_job(job,"response_normalization",{"started_us":started,"schema":"ApiError"})
     if int(decoded.value.http_status) != job.code: return failure("protocol","HTTP error status mismatch")
     var error = {"kind":"api","message":decoded.value.code,"retryable":decoded.value.retryable,
         "value":decoded.value,"retry_after_ms":mini(5000,int(decoded.value.get("retry_after_ms",0)))}
@@ -394,6 +485,9 @@ func _consume(packet: Dictionary, raw: PackedByteArray) -> Dictionary:
     var started = Time.get_ticks_usec()
     var result: Variant = _consumer.call(packet,raw)
     _timings.consumer_ms += (Time.get_ticks_usec()-started)/1000.0
+    if _profile_enabled:
+        _profile_record({"stage":"canonical_consumer","time_us":Time.get_ticks_usec(),"started_us":started,
+            "sequence":int(packet.cursor.sequence),"bytes":raw.size(),"ok":result is Dictionary and result.get("ok",false)})
     if _stopping(): return failure("cancelled","SDK cancelled")
     if not (result is Dictionary) or not result.has("ok"):
         return failure("protocol","Consumer must return a result")
@@ -451,6 +545,10 @@ func _event(record: Dictionary) -> void:
     var admission_started = Time.get_ticks_usec()
     var decoded: Dictionary = _protocol.decode(roots[record.event],record.raw)
     _timings.admission_ms += (Time.get_ticks_usec()-admission_started)/1000.0
+    if _profile_enabled:
+        _profile_job(_stream,"sse_admission",{"started_us":admission_started,"frame_id":record.get("profile_frame_id",0),
+            "event":record.event,"bytes":record.raw.size(),"ok":decoded.ok,
+            "sequence":int(decoded.value.cursor.sequence) if decoded.ok and record.event=="operation" else -1})
     if not decoded.ok: _fail_follow(decoded); return
     var packet: Dictionary = decoded.value
     if record.event == "error":
@@ -500,13 +598,16 @@ func _finish_job(job: Dictionary, result: Dictionary) -> void:
                     if not scoped.ok: result = scoped; _bootstrap = {}
             _emit({"kind":"connected" if result.ok else "failure","result":result})
         "endpoint":
+            var checked_started = Time.get_ticks_usec() if _profile_enabled else 0
             if result.ok: result = _check_reply(job.command,result.value)
+            if _profile_enabled: _profile_job(job,"reply_check",{"started_us":checked_started,"ok":result.ok})
             if result.ok and job.command.operation in ["choices","preview","submit_command","receipt"]:
                 # Keep the exact admitted value available to SDK callers, with
                 # a separate defaulted presentation copy prepared off-thread.
                 var normalization_started = Time.get_ticks_usec()
                 result.normalized = _protocol.normalize(job.root,result.value)
                 _timings.response_normalization_ms += (Time.get_ticks_usec()-normalization_started)/1000.0
+                if _profile_enabled: _profile_job(job,"response_normalization",{"started_us":normalization_started})
             _reply(job.command,result)
         "initialization":
             if result.ok:
@@ -528,6 +629,7 @@ func _finish_job(job: Dictionary, result: Dictionary) -> void:
                 _follower.phase = "stream"
                 if not _stream.is_empty(): _stream.last_byte = Time.get_ticks_msec()
                 _maybe_complete()
+    if _profile_enabled: _profile_job(job,"http_end",{"ok":result.ok,"status":job.code,"bytes":job.raw.size()})
 
 func _accept(command: Dictionary) -> void:
     match command.operation:
@@ -591,7 +693,15 @@ func _run() -> void:
                     else:
                         var result = _http_tick(_stream,true)
                         if result.has("chunk"):
+                            var framing_started = Time.get_ticks_usec() if _profile_enabled else 0
                             var framed: Dictionary = _parser.feed(result.chunk)
+                            if _profile_enabled:
+                                var completed: Array = framed.value if framed.ok else framed.get("records",[])
+                                _profile_job(_stream,"sse_framing",{"started_us":framing_started,"bytes":result.chunk.size(),"records":completed.size(),"ok":framed.ok})
+                                for record in completed:
+                                    _profile_frame_serial += 1
+                                    record.profile_frame_id = _profile_frame_serial
+                                    _profile_job(_stream,"sse_record_ready",{"frame_id":_profile_frame_serial,"event":record.event if record.event in ["ready","status","operation","error"] else "unknown","bytes":record.raw.size()})
                             _events.append_array(framed.value if framed.ok else framed.get("records",[]))
                             if not framed.ok: _framing_failure = {"ok":false,"error":framed.error}
                         elif result.has("ok"):

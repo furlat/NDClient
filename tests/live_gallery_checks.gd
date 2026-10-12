@@ -10,6 +10,17 @@ const ROUTE = [["Crypt passage","open"],["move",[10,6]],
 var command_trace: Array = []
 var stage = 0
 var leader = ""
+var pipeline_trace: Array = []
+var pipeline_dropped = 0
+var pipeline_poll_us = 0
+
+func collect_pipeline(force: bool = false) -> void:
+    var now=Time.get_ticks_usec()
+    if not force and now-pipeline_poll_us<250000:return
+    pipeline_poll_us=now
+    var stream: Dictionary=scene.session.transport.drain_profile()
+    pipeline_trace.append_array(stream.records)
+    pipeline_dropped=maxi(pipeline_dropped,stream.dropped)
 
 func healthy() -> bool:
     return scene.session.issue.is_empty() and scene.presentation_errors.is_empty() and Time.get_ticks_msec()-started<1200000
@@ -87,16 +98,30 @@ func issue(selected: Dictionary) -> bool:
     var command_start=Time.get_ticks_usec()
     var label: String=selected.action.behavior_id if not selected.is_empty() else "end_turn"
     scene.profile.label="command_%d_%s" % [number,label]
-    var record={"number":number,"behavior":label,"stage":stage,"actor":actor,"from":scene.timeline.state.actors[actor].last_visual_position.duplicate(),
+    collect_pipeline(true)
+    var record={"number":number,"behavior":label,"stage":stage,"actor":actor,"from":scene.timeline.state.actors[actor].last_visual_position.duplicate(),"start_us":command_start,
+        "first_movement_ms":null,"first_animation_ms":null,"published_packet_ms":null,"input":"admitted_action_handler",
         "start_frame":Engine.get_process_frames(),"phases":[],"samples":[],"frame_intervals":[],"phase_peaks":{},"slow_frames":[]}
     if selected.is_empty():scene.end_turn()
-    else:scene._execute_admitted({"action":selected.action,"selection":scene.Interaction.selection(selected.action,[selected.target.index])})
+    else:
+        var target: Variant=selected.target.get("position")
+        var click=false
+        if label=="action.move" and target!=null:
+            var screen=grid_screen(target)
+            click=root.get_visible_rect().has_point(screen) and not scene.hud.pointer_over_controls(screen) and scene.pick_world(screen).get("kind")=="ground" and scene.pick_cell(screen).get("position")==target
+        if click:
+            scene.cancel_selection();scene.selected_mode="action.move"
+            record.input="viewport_click"
+            click_grid(target)
+        else:scene._execute_admitted({"action":selected.action,"selection":scene.Interaction.selection(selected.action,[selected.target.index])})
     var previous={};var native_previous={}
     var deadline=Time.get_ticks_msec()+60000
     while healthy() and Time.get_ticks_msec()<deadline:
         await RenderingServer.frame_post_draw
+        collect_pipeline()
         var phase=phase_value()
         var elapsed=(Time.get_ticks_usec()-command_start)/1000.0
+        if record.published_packet_ms==null and scene.session.latest_sequence>sequence:record.published_packet_ms=elapsed
         if not scene.profile.frames.is_empty():
             var sampled_frame: Dictionary=scene.profile.frames[posmod(scene.profile.cursor-1,scene.profile.frames.size())]
             record.frame_intervals.append(sampled_frame.frame_ms)
@@ -110,6 +135,8 @@ func issue(selected: Dictionary) -> bool:
         observe_actor(actor,observations)
         if not observations.is_empty():
             var native: Dictionary=observations[0]
+            if record.first_movement_ms==null and native.position!=record.from:record.first_movement_ms=elapsed
+            if record.first_animation_ms==null and str(native.clip).to_lower()!="idle":record.first_animation_ms=elapsed
             native.occurrence=scene.displayed_samples.get(actor,{}).get("occurrence","")
             native.frame_uv=[]
             if scene.visual_actors.has(actor):
@@ -127,6 +154,7 @@ func issue(selected: Dictionary) -> bool:
                 scene._request_selection(true)
         if ready() and scene.timeline.sequence>sequence and scene.session.status.next_command_number>number:break
     record.elapsed_ms=(Time.get_ticks_usec()-command_start)/1000.0
+    record.end_us=Time.get_ticks_usec()
     record.frame_ms=FrameProfile.distribution(record.frame_intervals)
     record.erase("frame_intervals")
     record.end_frame=Engine.get_process_frames()
@@ -148,7 +176,14 @@ func issue(selected: Dictionary) -> bool:
 func _run() -> void:
     root.unfocusable=true;root.position=Vector2i(-16000,-16000)
     DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
-    scene=Player.instantiate();scene.profile.recording=true;root.add_child(scene)
+    scene=Player.instantiate();scene.profile.recording=true
+    scene.session.transport.set_profiling(true)
+    root.add_child(scene)
+    # Match the user's current approved graphics while diagnosing response
+    # latency. Cap-on pixel acceptance is measured in a separate native lane.
+    scene.light_cap_enabled=false
+    scene.native_light_atlas.set_light_cap(0.0)
+    evidence.light_cap_enabled=false
     if not await until(ready,"Live Gallery initial choices",120000):await finish();return
     evidence.ready_frame=Engine.get_process_frames()
     evidence.ready_elapsed_ms=Time.get_ticks_msec()-started
@@ -186,6 +221,11 @@ func _run() -> void:
     evidence.disclosed_tiles=scene.timeline.state.tiles.size()
     evidence.disclosed_objects=scene.timeline.state.objects.size()
     scene.set_process(false)
+    scene.session.close()
+    collect_pipeline(true)
+    evidence.pipeline_trace=scene.game_config.test_result.get_base_dir().path_join("client-pipeline-trace.json")
+    check(pipeline_dropped==0,"Bounded pipeline diagnostics are drained without losing records")
+    FileAccess.open(evidence.pipeline_trace,FileAccess.WRITE).store_string(JSON.stringify({"clock":"godot_monotonic_usec","dropped":pipeline_dropped,"records":pipeline_trace}))
     FileAccess.open(evidence.command_trace,FileAccess.WRITE).store_string(JSON.stringify(command_trace))
     evidence.full_profile=FrameProfile.save(scene.profile,root,"gallery-live-commands",true)
     await finish()

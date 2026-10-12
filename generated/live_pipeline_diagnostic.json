@@ -1,0 +1,5359 @@
+{
+  "run": "/mnt/c/Users/tommaso/Documents/Dev/NDClientGodot/.runtime/player-runs/20261012T212010.040988Z",
+  "dropped_client_trace_records": 0,
+  "sections": {
+    "before_gallery": {
+      "moves": 10,
+      "viewport_clicks": 2,
+      "first_movement_ms": {
+        "median": 332.7655,
+        "min": 185.092,
+        "max": 1541.791
+      },
+      "server_dispatch_ms": {
+        "median": 149.94849800132215,
+        "min": 59.952971001621336,
+        "max": 693.4285239985911
+      },
+      "server_exchange_ms": {
+        "median": 152.022041,
+        "min": 61.591911,
+        "max": 696.879224
+      },
+      "operation_bytes": {
+        "median": 38223.5,
+        "min": 22265,
+        "max": 136111
+      },
+      "sse_schema_ms": {
+        "median": 16.957,
+        "min": 9.101,
+        "max": 66.551
+      },
+      "canonical_consumer_ms": {
+        "median": 40.453,
+        "min": 25.475,
+        "max": 112.392
+      },
+      "presentation_compile_ms": {
+        "median": 34.749,
+        "min": 17.859,
+        "max": 97.639
+      },
+      "client_after_complete_sse_ms": {
+        "median": 154.87949999999998,
+        "min": 101.51200000000001,
+        "max": 800.67
+      }
+    },
+    "gallery_entry": {
+      "moves": 3,
+      "viewport_clicks": 3,
+      "first_movement_ms": {
+        "median": 1701.138,
+        "min": 857.95,
+        "max": 3389.607
+      },
+      "server_dispatch_ms": {
+        "median": 761.5668170037679,
+        "min": 409.40490999491885,
+        "max": 1419.3592069932492
+      },
+      "server_exchange_ms": {
+        "median": 767.526475,
+        "min": 412.516971,
+        "max": 1422.333876
+      },
+      "operation_bytes": {
+        "median": 130083,
+        "min": 36378,
+        "max": 352788
+      },
+      "sse_schema_ms": {
+        "median": 65.317,
+        "min": 15.338,
+        "max": 152.443
+      },
+      "canonical_consumer_ms": {
+        "median": 272.443,
+        "min": 176.125,
+        "max": 553.727
+      },
+      "presentation_compile_ms": {
+        "median": 243.508,
+        "min": 155.503,
+        "max": 606.897
+      },
+      "client_after_complete_sse_ms": {
+        "median": 891.0249999999999,
+        "min": 414.56600000000003,
+        "max": 1931.055
+      }
+    },
+    "inside_gallery": {
+      "moves": 16,
+      "viewport_clicks": 16,
+      "first_movement_ms": {
+        "median": 4267.7835,
+        "min": 1189.599,
+        "max": 5580.699
+      },
+      "server_dispatch_ms": {
+        "median": 2220.443972000794,
+        "min": 627.5955560122384,
+        "max": 3112.8859559976263
+      },
+      "server_exchange_ms": {
+        "median": 2224.271673,
+        "min": 629.577153,
+        "max": 3117.198094
+      },
+      "operation_bytes": {
+        "median": 165609.5,
+        "min": 41583,
+        "max": 251840
+      },
+      "sse_schema_ms": {
+        "median": 71.32650000000001,
+        "min": 17.091,
+        "max": 108.909
+      },
+      "canonical_consumer_ms": {
+        "median": 778.1469999999999,
+        "min": 212.01,
+        "max": 1100.397
+      },
+      "presentation_compile_ms": {
+        "median": 798.9705,
+        "min": 206.982,
+        "max": 1146.612
+      },
+      "client_after_complete_sse_ms": {
+        "median": 1848.7174999999997,
+        "min": 530.795,
+        "max": 2898.7179999999994
+      }
+    }
+  },
+  "commands": [
+    {
+      "number": 1,
+      "behavior": "end_turn",
+      "stage": 0,
+      "input": "admitted_action_handler",
+      "from": [
+        4,
+        5
+      ],
+      "to": [
+        4,
+        5
+      ],
+      "sequence": 2,
+      "ready_ms": 1611.359,
+      "first_movement_ms": null,
+      "first_animation_ms": null,
+      "complete_sse_frame_ms": 17.951,
+      "operation_bytes": 11052,
+      "server_dispatch_ms": 4.331036994699389,
+      "server_exchange_ms": 5.630641,
+      "server_outer_phases": {
+        "project_audiences_ms": 2.29530299839098
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 4.17,
+      "canonical_consumer_ms": 18.293,
+      "presentation_packet_ms": 0.147,
+      "presentation_compile_ms": 11.701,
+      "client_after_complete_sse_ms": null,
+      "frame_ms": {
+        "max": 21.063,
+        "mean": 3.38028125,
+        "p50": 3.139,
+        "p95": 4.516,
+        "p99": 15.156
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.028,
+        "actor_sample": 0.793,
+        "actor_sync": 0.753,
+        "draw_order": 0.186,
+        "hud_draw": 0.099,
+        "hud_process": 13.497,
+        "interaction": 0.093,
+        "mask_sync": 0.086,
+        "media_plan": 12.363,
+        "media_publication": 5.549,
+        "media_upload": 5.226,
+        "modular_shadows": 2.067,
+        "native_2d_atlas": 1.427,
+        "native_2d_lighting": 3.549,
+        "native_2d_projection": 0.084,
+        "player_process": 17.364,
+        "preparation_step": 12.388,
+        "scenery_sync": 0.004,
+        "session_poll": 0.033,
+        "session_timeline": 14.711,
+        "source_lighting": 0.067,
+        "source_lighting_resolve": 0.307,
+        "timeline_advance": 0.531
+      },
+      "sse_framing_cpu_ms": 0.9610000000000001,
+      "requests": [
+        {
+          "operation": "submit_command",
+          "request_id": 26,
+          "enqueued_ms": 0.104,
+          "worker_reply_ms": 10.371
+        },
+        {
+          "operation": "choices",
+          "request_id": 34,
+          "enqueued_ms": 1466.383,
+          "worker_reply_ms": 1599.256
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "behavior": "action.move",
+      "stage": 0,
+      "input": "admitted_action_handler",
+      "from": [
+        3,
+        5
+      ],
+      "to": [
+        7,
+        6
+      ],
+      "sequence": 4,
+      "ready_ms": 2603.811,
+      "first_movement_ms": 619.883,
+      "first_animation_ms": 619.883,
+      "complete_sse_frame_ms": 200.77,
+      "operation_bytes": 52990,
+      "server_dispatch_ms": 165.40228501253296,
+      "server_exchange_ms": 167.450693,
+      "server_outer_phases": {
+        "execute_action_ms": 115.830331997131,
+        "project_audiences_ms": 49.34068200236652
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 19.917,
+      "canonical_consumer_ms": 37.068,
+      "presentation_packet_ms": 0.141,
+      "presentation_compile_ms": 67.529,
+      "client_after_complete_sse_ms": 419.11300000000006,
+      "frame_ms": {
+        "max": 25.542,
+        "mean": 4.37255892255893,
+        "p50": 4.331,
+        "p95": 6.494,
+        "p99": 8.687
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.065,
+        "actor_sample": 1.224,
+        "actor_sync": 0.732,
+        "draw_order": 0.529,
+        "hud_draw": 0.145,
+        "hud_process": 7.841,
+        "interaction": 0.068,
+        "mask_sync": 0.075,
+        "media_plan": 19.031,
+        "media_publication": 2.192,
+        "media_upload": 1.903,
+        "modular_shadows": 2.611,
+        "native_2d_atlas": 1.725,
+        "native_2d_lighting": 3.495,
+        "native_2d_projection": 0.091,
+        "player_process": 24.64,
+        "preparation_step": 19.301,
+        "scenery_sync": 0.231,
+        "session_poll": 0.057,
+        "session_timeline": 20.898,
+        "source_lighting": 0.272,
+        "source_lighting_resolve": 0.277,
+        "timeline_advance": 0.883,
+        "view_retirement": 0.062,
+        "world_prepare_native": 0.057,
+        "world_rows": 0.018,
+        "world_sync": 0.148
+      },
+      "sse_framing_cpu_ms": 1.691,
+      "requests": [
+        {
+          "operation": "preview",
+          "request_id": 37,
+          "enqueued_ms": 0.203,
+          "worker_reply_ms": 12.543
+        },
+        {
+          "operation": "submit_command",
+          "request_id": 38,
+          "enqueued_ms": 19.417,
+          "worker_reply_ms": 28.173
+        },
+        {
+          "operation": "choices",
+          "request_id": 51,
+          "enqueued_ms": 2480.094,
+          "worker_reply_ms": 2589.035
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "behavior": "action.environment.directional_door.open",
+      "stage": 0,
+      "input": "admitted_action_handler",
+      "from": [
+        7,
+        6
+      ],
+      "to": [
+        7,
+        6
+      ],
+      "sequence": 5,
+      "ready_ms": 390.221,
+      "first_movement_ms": null,
+      "first_animation_ms": null,
+      "complete_sse_frame_ms": 115.973,
+      "operation_bytes": 48456,
+      "server_dispatch_ms": 90.23696300573647,
+      "server_exchange_ms": 92.649692,
+      "server_outer_phases": {
+        "execute_action_ms": 69.47386100364383,
+        "project_audiences_ms": 20.522790000541136
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 18.554,
+      "canonical_consumer_ms": 30.123,
+      "presentation_packet_ms": 4.604,
+      "presentation_compile_ms": 18.682,
+      "client_after_complete_sse_ms": null,
+      "frame_ms": {
+        "max": 17.222,
+        "mean": 3.94725773195876,
+        "p50": 3.19,
+        "p95": 7.689,
+        "p99": 16.397
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.053,
+        "actor_sample": 0.854,
+        "actor_sync": 0.712,
+        "draw_order": 0.401,
+        "hud_draw": 0.124,
+        "hud_process": 7.987,
+        "interaction": 0.064,
+        "mask_sync": 0.553,
+        "media_plan": 6.332,
+        "media_publication": 1.909,
+        "media_upload": 1.487,
+        "modular_shadows": 2.098,
+        "native_2d_atlas": 8.26,
+        "native_2d_lighting": 8.845,
+        "native_2d_projection": 0.066,
+        "player_process": 14.992,
+        "preparation_step": 6.488,
+        "scenery_sync": 0.311,
+        "session_poll": 0.037,
+        "session_timeline": 8.724,
+        "source_lighting": 0.362,
+        "source_lighting_resolve": 0.373,
+        "static_order": 0.15,
+        "timeline_advance": 0.897,
+        "view_retirement": 0.061,
+        "wall_candidates": 0.344,
+        "wall_targets": 0.004,
+        "wall_visibility": 1.329,
+        "world_ground": 0.084,
+        "world_objects": 0.308,
+        "world_prepare_native": 2.081,
+        "world_rows": 0.017,
+        "world_sync": 0.93,
+        "world_views": 0.003
+      },
+      "sse_framing_cpu_ms": 1.5879999999999999,
+      "requests": [
+        {
+          "operation": "preview",
+          "request_id": 53,
+          "enqueued_ms": 0.079,
+          "worker_reply_ms": 11.774
+        },
+        {
+          "operation": "submit_command",
+          "request_id": 54,
+          "enqueued_ms": 12.304,
+          "worker_reply_ms": 20.314
+        },
+        {
+          "operation": "choices",
+          "request_id": 57,
+          "enqueued_ms": 246.828,
+          "worker_reply_ms": 375.96
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "behavior": "action.move",
+      "stage": 1,
+      "input": "admitted_action_handler",
+      "from": [
+        7,
+        6
+      ],
+      "to": [
+        9,
+        6
+      ],
+      "sequence": 6,
+      "ready_ms": 1183.519,
+      "first_movement_ms": 252.347,
+      "first_animation_ms": 252.347,
+      "complete_sse_frame_ms": 135.844,
+      "operation_bytes": 34669,
+      "server_dispatch_ms": 110.61298899585381,
+      "server_exchange_ms": 112.245545,
+      "server_outer_phases": {
+        "execute_action_ms": 77.15491999988444,
+        "project_audiences_ms": 33.24460001022089
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 13.52,
+      "canonical_consumer_ms": 34.051,
+      "presentation_packet_ms": 0.781,
+      "presentation_compile_ms": 24.365,
+      "client_after_complete_sse_ms": 116.50300000000001,
+      "frame_ms": {
+        "max": 23.018,
+        "mean": 5.11391304347826,
+        "p50": 5.123,
+        "p95": 6.813,
+        "p99": 14.543
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.053,
+        "actor_sample": 1.111,
+        "actor_sync": 0.739,
+        "draw_order": 0.581,
+        "hud_draw": 0.16,
+        "hud_process": 7.561,
+        "interaction": 0.09,
+        "mask_sync": 0.007,
+        "media_plan": 15.165,
+        "media_publication": 2.092,
+        "media_upload": 1.488,
+        "modular_shadows": 2.175,
+        "native_2d_atlas": 2.085,
+        "native_2d_lighting": 3.235,
+        "native_2d_projection": 0.063,
+        "player_process": 22.218,
+        "preparation_step": 15.342,
+        "scenery_sync": 0.262,
+        "session_poll": 0.041,
+        "session_timeline": 17.875,
+        "source_lighting": 0.305,
+        "source_lighting_resolve": 0.326,
+        "timeline_advance": 0.909,
+        "view_retirement": 0.073,
+        "world_prepare_native": 0.048,
+        "world_rows": 0.02,
+        "world_sync": 0.181
+      },
+      "sse_framing_cpu_ms": 1.164,
+      "requests": [
+        {
+          "operation": "preview",
+          "request_id": 60,
+          "enqueued_ms": 0.212,
+          "worker_reply_ms": 10.972
+        },
+        {
+          "operation": "submit_command",
+          "request_id": 61,
+          "enqueued_ms": 11.628,
+          "worker_reply_ms": 19.273
+        },
+        {
+          "operation": "choices",
+          "request_id": 68,
+          "enqueued_ms": 1073.478,
+          "worker_reply_ms": 1168.718
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "behavior": "action.dash",
+      "stage": 1,
+      "input": "admitted_action_handler",
+      "from": [
+        9,
+        6
+      ],
+      "to": [
+        9,
+        6
+      ],
+      "sequence": 7,
+      "ready_ms": 262.919,
+      "first_movement_ms": null,
+      "first_animation_ms": null,
+      "complete_sse_frame_ms": 35.76,
+      "operation_bytes": 16144,
+      "server_dispatch_ms": 11.109333994681947,
+      "server_exchange_ms": 12.692149,
+      "server_outer_phases": {
+        "execute_action_ms": 8.12362800934352,
+        "project_audiences_ms": 2.827279007760808
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 6.159,
+      "canonical_consumer_ms": 19.26,
+      "presentation_packet_ms": 2.447,
+      "presentation_compile_ms": 23.175,
+      "client_after_complete_sse_ms": null,
+      "frame_ms": {
+        "max": 16.986,
+        "mean": 4.34169491525424,
+        "p50": 3.688,
+        "p95": 8.46,
+        "p99": 14.857
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.053,
+        "actor_sample": 0.775,
+        "actor_sync": 0.689,
+        "draw_order": 0.206,
+        "hud_draw": 0.056,
+        "hud_process": 7.53,
+        "interaction": 0.051,
+        "mask_sync": 0.109,
+        "media_plan": 4.525,
+        "media_publication": 2.086,
+        "media_upload": 1.322,
+        "modular_shadows": 1.526,
+        "native_2d_atlas": 1.368,
+        "native_2d_lighting": 2.952,
+        "native_2d_projection": 0.062,
+        "player_process": 10.337,
+        "preparation_step": 4.549,
+        "scenery_sync": 0.003,
+        "session_poll": 0.036,
+        "session_timeline": 7.179,
+        "source_lighting": 0.069,
+        "source_lighting_resolve": 0.344,
+        "timeline_advance": 0.531
+      },
+      "sse_framing_cpu_ms": 0.635,
+      "requests": [
+        {
+          "operation": "preview",
+          "request_id": 71,
+          "enqueued_ms": 0.08,
+          "worker_reply_ms": 11.92
+        },
+        {
+          "operation": "submit_command",
+          "request_id": 72,
+          "enqueued_ms": 12.419,
+          "worker_reply_ms": 20.185
+        },
+        {
+          "operation": "choices",
+          "request_id": 74,
+          "enqueued_ms": 141.756,
+          "worker_reply_ms": 246.363
+        }
+      ]
+    },
+    {
+      "number": 6,
+      "behavior": "action.move",
+      "stage": 1,
+      "input": "admitted_action_handler",
+      "from": [
+        9,
+        6
+      ],
+      "to": [
+        10,
+        6
+      ],
+      "sequence": 8,
+      "ready_ms": 801.193,
+      "first_movement_ms": 307.027,
+      "first_animation_ms": 307.027,
+      "complete_sse_frame_ms": 203.884,
+      "operation_bytes": 23399,
+      "server_dispatch_ms": 174.0440790017601,
+      "server_exchange_ms": 175.622338,
+      "server_outer_phases": {
+        "execute_action_ms": 155.6833210051991,
+        "project_audiences_ms": 18.15399300539866
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 9.305,
+      "canonical_consumer_ms": 25.475,
+      "presentation_packet_ms": 0.331,
+      "presentation_compile_ms": 17.859,
+      "client_after_complete_sse_ms": 103.143,
+      "frame_ms": {
+        "max": 22.185,
+        "mean": 4.46198314606742,
+        "p50": 4.066,
+        "p95": 5.75,
+        "p99": 14.928
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.075,
+        "actor_sample": 1.097,
+        "actor_sync": 0.7,
+        "draw_order": 0.563,
+        "hud_draw": 0.109,
+        "hud_process": 7.553,
+        "interaction": 0.055,
+        "mask_sync": 0.004,
+        "media_plan": 13.655,
+        "media_publication": 2.235,
+        "media_upload": 1.564,
+        "modular_shadows": 2.006,
+        "native_2d_atlas": 1.958,
+        "native_2d_lighting": 2.628,
+        "native_2d_projection": 0.065,
+        "player_process": 21.023,
+        "preparation_step": 13.812,
+        "scenery_sync": 0.257,
+        "session_poll": 0.035,
+        "session_timeline": 16.227,
+        "source_lighting": 0.299,
+        "source_lighting_resolve": 0.318,
+        "timeline_advance": 1.01,
+        "view_retirement": 0.063,
+        "world_prepare_native": 0.049,
+        "world_rows": 0.017,
+        "world_sync": 0.163
+      },
+      "sse_framing_cpu_ms": 0.898,
+      "requests": [
+        {
+          "operation": "preview",
+          "request_id": 77,
+          "enqueued_ms": 0.211,
+          "worker_reply_ms": 12.689
+        },
+        {
+          "operation": "submit_command",
+          "request_id": 78,
+          "enqueued_ms": 16.882,
+          "worker_reply_ms": 23.757
+        },
+        {
+          "operation": "choices",
+          "request_id": 84,
+          "enqueued_ms": 697.539,
+          "worker_reply_ms": 788.243
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "behavior": "action.move",
+      "stage": 2,
+      "input": "admitted_action_handler",
+      "from": [
+        10,
+        6
+      ],
+      "to": [
+        11,
+        6
+      ],
+      "sequence": 9,
+      "ready_ms": 665.949,
+      "first_movement_ms": 185.092,
+      "first_animation_ms": 185.092,
+      "complete_sse_frame_ms": 83.58,
+      "operation_bytes": 22265,
+      "server_dispatch_ms": 59.952971001621336,
+      "server_exchange_ms": 61.591911,
+      "server_outer_phases": {
+        "execute_action_ms": 41.61301399290096,
+        "project_audiences_ms": 18.13305899850093
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 9.305,
+      "canonical_consumer_ms": 26.139,
+      "presentation_packet_ms": 1.142,
+      "presentation_compile_ms": 18.0,
+      "client_after_complete_sse_ms": 101.51200000000001,
+      "frame_ms": {
+        "max": 21.006,
+        "mean": 4.5381724137931,
+        "p50": 4.101,
+        "p95": 5.356,
+        "p99": 17.289
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.064,
+        "actor_sample": 1.123,
+        "actor_sync": 0.718,
+        "draw_order": 0.658,
+        "hud_draw": 0.062,
+        "hud_process": 7.554,
+        "interaction": 0.065,
+        "mask_sync": 0.101,
+        "media_plan": 12.974,
+        "media_publication": 2.136,
+        "media_upload": 1.321,
+        "modular_shadows": 1.56,
+        "native_2d_atlas": 2.167,
+        "native_2d_lighting": 2.939,
+        "native_2d_projection": 0.06,
+        "player_process": 20.089,
+        "preparation_step": 12.999,
+        "scenery_sync": 0.24,
+        "session_poll": 0.044,
+        "session_timeline": 15.188,
+        "source_lighting": 0.283,
+        "source_lighting_resolve": 0.319,
+        "timeline_advance": 1.008,
+        "view_retirement": 0.064,
+        "world_prepare_native": 0.054,
+        "world_rows": 0.015,
+        "world_sync": 0.15
+      },
+      "sse_framing_cpu_ms": 0.8180000000000001,
+      "requests": [
+        {
+          "operation": "preview",
+          "request_id": 86,
+          "enqueued_ms": 0.174,
+          "worker_reply_ms": 11.401
+        },
+        {
+          "operation": "submit_command",
+          "request_id": 87,
+          "enqueued_ms": 12.693,
+          "worker_reply_ms": 18.71
+        },
+        {
+          "operation": "choices",
+          "request_id": 91,
+          "enqueued_ms": 574.575,
+          "worker_reply_ms": 649.601
+        }
+      ]
+    },
+    {
+      "number": 8,
+      "behavior": "action.environment.directional_door.open",
+      "stage": 2,
+      "input": "admitted_action_handler",
+      "from": [
+        11,
+        6
+      ],
+      "to": [
+        11,
+        6
+      ],
+      "sequence": 10,
+      "ready_ms": 712.415,
+      "first_movement_ms": null,
+      "first_animation_ms": null,
+      "complete_sse_frame_ms": 198.29,
+      "operation_bytes": 110046,
+      "server_dispatch_ms": 168.65811999014113,
+      "server_exchange_ms": 171.357986,
+      "server_outer_phases": {
+        "execute_action_ms": 135.1924019982107,
+        "project_audiences_ms": 33.276942995144054
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 43.471,
+      "canonical_consumer_ms": 42.873,
+      "presentation_packet_ms": 1.036,
+      "presentation_compile_ms": 20.946,
+      "client_after_complete_sse_ms": null,
+      "frame_ms": {
+        "max": 27.991,
+        "mean": 3.45668137254902,
+        "p50": 2.762,
+        "p95": 5.299,
+        "p99": 14.823
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.046,
+        "actor_sample": 0.917,
+        "actor_sync": 2.819,
+        "draw_order": 0.885,
+        "hud_draw": 0.159,
+        "hud_process": 7.993,
+        "interaction": 0.068,
+        "mask_sync": 0.802,
+        "media_plan": 13.49,
+        "media_publication": 3.147,
+        "media_upload": 2.837,
+        "modular_shadows": 1.707,
+        "native_2d_atlas": 15.42,
+        "native_2d_lighting": 16.932,
+        "native_2d_projection": 0.087,
+        "player_process": 26.935,
+        "preparation_step": 13.676,
+        "scenery_sync": 0.658,
+        "session_poll": 0.03,
+        "session_timeline": 15.119,
+        "source_lighting": 0.711,
+        "source_lighting_resolve": 0.491,
+        "static_order": 0.25,
+        "timeline_advance": 0.857,
+        "view_retirement": 0.074,
+        "wall_candidates": 0.557,
+        "wall_targets": 0.005,
+        "wall_visibility": 1.965,
+        "world_ground": 0.084,
+        "world_objects": 0.505,
+        "world_prepare_native": 2.125,
+        "world_rows": 0.027,
+        "world_sync": 1.286,
+        "world_views": 0.003
+      },
+      "sse_framing_cpu_ms": 3.417,
+      "requests": [
+        {
+          "operation": "preview",
+          "request_id": 94,
+          "enqueued_ms": 0.081,
+          "worker_reply_ms": 11.2
+        },
+        {
+          "operation": "submit_command",
+          "request_id": 95,
+          "enqueued_ms": 11.708,
+          "worker_reply_ms": 19.173
+        },
+        {
+          "operation": "choices",
+          "request_id": 100,
+          "enqueued_ms": 593.721,
+          "worker_reply_ms": 698.188
+        }
+      ]
+    },
+    {
+      "number": 9,
+      "behavior": "action.move",
+      "stage": 3,
+      "input": "viewport_click",
+      "from": [
+        11,
+        6
+      ],
+      "to": [
+        13,
+        6
+      ],
+      "sequence": 11,
+      "ready_ms": 1268.051,
+      "first_movement_ms": 336.59,
+      "first_animation_ms": 336.59,
+      "complete_sse_frame_ms": 177.67,
+      "operation_bytes": 65073,
+      "server_dispatch_ms": 150.96104600524995,
+      "server_exchange_ms": 152.890132,
+      "server_outer_phases": {
+        "execute_action_ms": 96.08871699310839,
+        "project_audiences_ms": 54.64653199305758
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 25.3,
+      "canonical_consumer_ms": 45.086,
+      "presentation_packet_ms": 1.395,
+      "presentation_compile_ms": 34.654,
+      "client_after_complete_sse_ms": 158.92,
+      "frame_ms": {
+        "max": 24.764,
+        "mean": 5.61240444444444,
+        "p50": 5.136,
+        "p95": 7.182,
+        "p99": 16.762
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.042,
+        "actor_sample": 1.319,
+        "actor_sync": 0.839,
+        "draw_order": 0.684,
+        "hud_draw": 0.155,
+        "hud_process": 7.86,
+        "interaction": 0.145,
+        "mask_sync": 0.944,
+        "media_plan": 14.012,
+        "media_publication": 1.483,
+        "modular_shadows": 1.693,
+        "native_2d_atlas": 12.253,
+        "native_2d_lighting": 13.245,
+        "native_2d_projection": 0.113,
+        "player_process": 22.316,
+        "preparation_step": 14.204,
+        "scenery_sync": 0.608,
+        "session_poll": 0.036,
+        "session_timeline": 16.061,
+        "source_lighting": 0.68,
+        "source_lighting_resolve": 0.583,
+        "static_order": 0.423,
+        "timeline_advance": 1.189,
+        "view_retirement": 0.099,
+        "wall_candidates": 0.693,
+        "wall_targets": 0.006,
+        "wall_visibility": 2.563,
+        "world_ground": 0.136,
+        "world_objects": 0.388,
+        "world_prepare_native": 2.092,
+        "world_rows": 0.028,
+        "world_sync": 1.484,
+        "world_views": 0.003
+      },
+      "sse_framing_cpu_ms": 2.033,
+      "requests": [
+        {
+          "operation": "preview",
+          "request_id": 103,
+          "enqueued_ms": 0.741,
+          "worker_reply_ms": 12.35
+        },
+        {
+          "operation": "submit_command",
+          "request_id": 104,
+          "enqueued_ms": 12.606,
+          "worker_reply_ms": 19.435
+        },
+        {
+          "operation": "choices",
+          "request_id": 111,
+          "enqueued_ms": 1160.796,
+          "worker_reply_ms": 1253.843
+        }
+      ]
+    },
+    {
+      "number": 10,
+      "behavior": "end_turn",
+      "stage": 4,
+      "input": "admitted_action_handler",
+      "from": [
+        13,
+        6
+      ],
+      "to": [
+        13,
+        6
+      ],
+      "sequence": 12,
+      "ready_ms": 12247.724,
+      "first_movement_ms": 1461.585,
+      "first_animation_ms": 1461.585,
+      "complete_sse_frame_ms": 17.443,
+      "operation_bytes": 11109,
+      "server_dispatch_ms": 4.9946609942708164,
+      "server_exchange_ms": 6.26112,
+      "server_outer_phases": {
+        "project_audiences_ms": 2.693354996154085
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 4.455,
+      "canonical_consumer_ms": 21.192,
+      "presentation_packet_ms": 2.73,
+      "presentation_compile_ms": 13.643,
+      "client_after_complete_sse_ms": 1444.142,
+      "frame_ms": {
+        "max": 38.204,
+        "mean": 5.69124279069768,
+        "p50": 5.287,
+        "p95": 9.408,
+        "p99": 13.865
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.019,
+        "actor_sample": 2.366,
+        "actor_sync": 1.44,
+        "draw_order": 1.966,
+        "hud_draw": 0.276,
+        "hud_process": 7.341,
+        "interaction": 0.187,
+        "mask_sync": 0.23,
+        "media_plan": 21.833,
+        "media_publication": 7.675,
+        "media_upload": 3.777,
+        "modular_shadows": 4.682,
+        "native_2d_atlas": 7.86,
+        "native_2d_lighting": 9.464,
+        "native_2d_projection": 0.295,
+        "player_process": 32.906,
+        "preparation_step": 22.563,
+        "scenery_sync": 1.394,
+        "session_poll": 0.047,
+        "session_timeline": 23.275,
+        "source_lighting": 1.64,
+        "source_lighting_resolve": 1.134,
+        "timeline_advance": 1.679,
+        "view_retirement": 0.356,
+        "world_prepare_native": 0.142,
+        "world_rows": 0.059,
+        "world_sync": 0.339
+      },
+      "sse_framing_cpu_ms": 12.689,
+      "requests": [
+        {
+          "operation": "submit_command",
+          "request_id": 114,
+          "enqueued_ms": 0.046,
+          "worker_reply_ms": 6.837
+        },
+        {
+          "operation": "choices",
+          "request_id": 163,
+          "enqueued_ms": 11930.155,
+          "worker_reply_ms": 12226.212
+        }
+      ]
+    },
+    {
+      "number": 11,
+      "behavior": "action.move",
+      "stage": 4,
+      "input": "admitted_action_handler",
+      "from": [
+        4,
+        5
+      ],
+      "to": [
+        10,
+        6
+      ],
+      "sequence": 21,
+      "ready_ms": 4560.595,
+      "first_movement_ms": 1541.791,
+      "first_animation_ms": 1541.791,
+      "complete_sse_frame_ms": 741.121,
+      "operation_bytes": 136111,
+      "server_dispatch_ms": 693.4285239985911,
+      "server_exchange_ms": 696.879224,
+      "server_outer_phases": {
+        "execute_action_ms": 527.5253580039134,
+        "project_audiences_ms": 165.5757450062083
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 66.551,
+      "canonical_consumer_ms": 112.392,
+      "presentation_packet_ms": 0.156,
+      "presentation_compile_ms": 84.942,
+      "client_after_complete_sse_ms": 800.67,
+      "frame_ms": {
+        "max": 30.75,
+        "mean": 7.93137870855147,
+        "p50": 7.88,
+        "p95": 10.839,
+        "p99": 21.552
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.061,
+        "actor_sample": 1.744,
+        "actor_sync": 1.033,
+        "draw_order": 1.345,
+        "hud_draw": 1.26,
+        "hud_process": 13.261,
+        "interaction": 0.15,
+        "mask_sync": 1.124,
+        "media_plan": 20.144,
+        "media_publication": 4.123,
+        "media_upload": 3.419,
+        "modular_shadows": 3.023,
+        "native_2d_atlas": 13.46,
+        "native_2d_lighting": 15.229,
+        "native_2d_projection": 0.197,
+        "player_process": 26.808,
+        "preparation_step": 20.386,
+        "scenery_sync": 0.813,
+        "session_poll": 0.082,
+        "session_timeline": 22.805,
+        "source_lighting": 0.905,
+        "source_lighting_resolve": 0.631,
+        "static_order": 0.517,
+        "timeline_advance": 1.48,
+        "view_retirement": 0.185,
+        "wall_candidates": 0.915,
+        "wall_targets": 0.012,
+        "wall_visibility": 3.205,
+        "world_ground": 0.006,
+        "world_objects": 0.26,
+        "world_prepare_native": 1.841,
+        "world_rows": 0.022,
+        "world_sync": 1.456,
+        "world_views": 0.008
+      },
+      "sse_framing_cpu_ms": 7.132,
+      "requests": [
+        {
+          "operation": "preview",
+          "request_id": 166,
+          "enqueued_ms": 0.403,
+          "worker_reply_ms": 11.396
+        },
+        {
+          "operation": "submit_command",
+          "request_id": 167,
+          "enqueued_ms": 19.729,
+          "worker_reply_ms": 27.304
+        },
+        {
+          "operation": "choices",
+          "request_id": 190,
+          "enqueued_ms": 4253.076,
+          "worker_reply_ms": 4527.153
+        }
+      ]
+    },
+    {
+      "number": 12,
+      "behavior": "spell.magic_missile",
+      "stage": 4,
+      "input": "admitted_action_handler",
+      "from": [
+        10,
+        6
+      ],
+      "to": [
+        10,
+        6
+      ],
+      "sequence": 22,
+      "ready_ms": 1935.908,
+      "first_movement_ms": null,
+      "first_animation_ms": null,
+      "complete_sse_frame_ms": 286.729,
+      "operation_bytes": 87596,
+      "server_dispatch_ms": 243.6827889905544,
+      "server_exchange_ms": 246.749255,
+      "server_outer_phases": {
+        "execute_action_ms": 57.181476993719116,
+        "project_audiences_ms": 186.21519600856118
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 41.436,
+      "canonical_consumer_ms": 45.667,
+      "presentation_packet_ms": 9.651,
+      "presentation_compile_ms": 26.746,
+      "client_after_complete_sse_ms": null,
+      "frame_ms": {
+        "max": 34.146,
+        "mean": 9.22996172248803,
+        "p50": 8.48,
+        "p95": 12.963,
+        "p99": 25.318
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.071,
+        "actor_sample": 1.732,
+        "actor_sync": 0.958,
+        "draw_order": 1.462,
+        "hud_draw": 0.248,
+        "hud_process": 13.709,
+        "interaction": 0.411,
+        "mask_sync": 0.25,
+        "media_plan": 17.97,
+        "media_publication": 4.542,
+        "media_upload": 4.413,
+        "modular_shadows": 4.25,
+        "native_2d_atlas": 5.318,
+        "native_2d_lighting": 7.723,
+        "native_2d_projection": 0.149,
+        "player_process": 24.927,
+        "preparation_step": 18.23,
+        "scenery_sync": 0.544,
+        "session_poll": 0.043,
+        "session_timeline": 20.379,
+        "source_lighting": 0.632,
+        "source_lighting_resolve": 0.622,
+        "timeline_advance": 1.806,
+        "view_retirement": 0.119,
+        "world_prepare_native": 0.141,
+        "world_rows": 0.025,
+        "world_sync": 0.393
+      },
+      "sse_framing_cpu_ms": 2.8850000000000002,
+      "requests": [
+        {
+          "operation": "preview",
+          "request_id": 193,
+          "enqueued_ms": 0.104,
+          "worker_reply_ms": 11.551
+        },
+        {
+          "operation": "submit_command",
+          "request_id": 194,
+          "enqueued_ms": 23.986,
+          "worker_reply_ms": 30.322
+        },
+        {
+          "operation": "choices",
+          "request_id": 205,
+          "enqueued_ms": 1809.556,
+          "worker_reply_ms": 1905.625
+        }
+      ]
+    },
+    {
+      "number": 13,
+      "behavior": "end_turn",
+      "stage": 4,
+      "input": "admitted_action_handler",
+      "from": [
+        10,
+        6
+      ],
+      "to": [
+        10,
+        6
+      ],
+      "sequence": 23,
+      "ready_ms": 1918.526,
+      "first_movement_ms": null,
+      "first_animation_ms": null,
+      "complete_sse_frame_ms": 21.937,
+      "operation_bytes": 11138,
+      "server_dispatch_ms": 6.0747350071324036,
+      "server_exchange_ms": 7.720243,
+      "server_outer_phases": {
+        "project_audiences_ms": 3.143543013720773
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 4.481,
+      "canonical_consumer_ms": 26.557,
+      "presentation_packet_ms": 1.996,
+      "presentation_compile_ms": 18.725,
+      "client_after_complete_sse_ms": null,
+      "frame_ms": {
+        "max": 26.087,
+        "mean": 6.2812,
+        "p50": 6.031,
+        "p95": 8.297,
+        "p99": 10.78
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.041,
+        "actor_sample": 1.54,
+        "actor_sync": 0.853,
+        "draw_order": 0.213,
+        "hud_draw": 0.156,
+        "hud_process": 12.763,
+        "interaction": 0.167,
+        "mask_sync": 0.029,
+        "media_plan": 3.537,
+        "media_publication": 1.958,
+        "modular_shadows": 1.527,
+        "native_2d_atlas": 3.145,
+        "native_2d_lighting": 4.311,
+        "native_2d_projection": 0.182,
+        "player_process": 11.028,
+        "preparation_step": 3.573,
+        "scenery_sync": 0.009,
+        "session_poll": 0.03,
+        "session_timeline": 5.944,
+        "source_lighting": 0.201,
+        "source_lighting_resolve": 0.674,
+        "timeline_advance": 0.717
+      },
+      "sse_framing_cpu_ms": 1.071,
+      "requests": [
+        {
+          "operation": "submit_command",
+          "request_id": 208,
+          "enqueued_ms": 0.065,
+          "worker_reply_ms": 9.799
+        },
+        {
+          "operation": "choices",
+          "request_id": 216,
+          "enqueued_ms": 1681.978,
+          "worker_reply_ms": 1903.634
+        }
+      ]
+    },
+    {
+      "number": 14,
+      "behavior": "action.attack",
+      "stage": 4,
+      "input": "admitted_action_handler",
+      "from": [
+        13,
+        6
+      ],
+      "to": [
+        13,
+        6
+      ],
+      "sequence": 25,
+      "ready_ms": 2750.217,
+      "first_movement_ms": 420.797,
+      "first_animation_ms": 420.797,
+      "complete_sse_frame_ms": 135.712,
+      "operation_bytes": 39192,
+      "server_dispatch_ms": 107.06017099437304,
+      "server_exchange_ms": 109.328047,
+      "server_outer_phases": {
+        "execute_action_ms": 53.86363800789695,
+        "project_audiences_ms": 52.955068997107446
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 16.106,
+      "canonical_consumer_ms": 37.339,
+      "presentation_packet_ms": 0.27,
+      "presentation_compile_ms": 51.504,
+      "client_after_complete_sse_ms": 285.08500000000004,
+      "frame_ms": {
+        "max": 26.199,
+        "mean": 6.94366075949367,
+        "p50": 6.565,
+        "p95": 10.344,
+        "p99": 19.337
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.05,
+        "actor_sample": 1.444,
+        "actor_sync": 0.879,
+        "draw_order": 0.961,
+        "hud_draw": 0.241,
+        "hud_process": 9.897,
+        "interaction": 0.137,
+        "mask_sync": 0.247,
+        "media_plan": 17.479,
+        "media_publication": 3.695,
+        "media_upload": 3.549,
+        "modular_shadows": 3.231,
+        "native_2d_atlas": 10.752,
+        "native_2d_lighting": 14.031,
+        "native_2d_projection": 0.182,
+        "player_process": 24.044,
+        "preparation_step": 17.507,
+        "scenery_sync": 0.387,
+        "session_poll": 0.061,
+        "session_timeline": 19.532,
+        "source_lighting": 0.444,
+        "source_lighting_resolve": 0.587,
+        "timeline_advance": 1.21,
+        "view_retirement": 0.084,
+        "world_prepare_native": 0.104,
+        "world_rows": 0.027,
+        "world_sync": 0.299
+      },
+      "sse_framing_cpu_ms": 1.294,
+      "requests": [
+        {
+          "operation": "preview",
+          "request_id": 219,
+          "enqueued_ms": 0.095,
+          "worker_reply_ms": 11.72
+        },
+        {
+          "operation": "submit_command",
+          "request_id": 221,
+          "enqueued_ms": 13.488,
+          "worker_reply_ms": 21.336
+        },
+        {
+          "operation": "choices",
+          "request_id": 232,
+          "enqueued_ms": 2322.033,
+          "worker_reply_ms": 2729.209
+        }
+      ]
+    },
+    {
+      "number": 15,
+      "behavior": "action.feature.extra_attack",
+      "stage": 4,
+      "input": "admitted_action_handler",
+      "from": [
+        13,
+        6
+      ],
+      "to": [
+        13,
+        6
+      ],
+      "sequence": 26,
+      "ready_ms": 2492.95,
+      "first_movement_ms": 421.598,
+      "first_animation_ms": 421.598,
+      "complete_sse_frame_ms": 145.068,
+      "operation_bytes": 44478,
+      "server_dispatch_ms": 114.5380380039569,
+      "server_exchange_ms": 116.885778,
+      "server_outer_phases": {
+        "execute_action_ms": 31.179330006125383,
+        "project_audiences_ms": 83.14646499638911
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 20.792,
+      "canonical_consumer_ms": 37.773,
+      "presentation_packet_ms": 0.943,
+      "presentation_compile_ms": 50.784,
+      "client_after_complete_sse_ms": 276.53,
+      "frame_ms": {
+        "max": 29.625,
+        "mean": 7.63400920245399,
+        "p50": 7.224,
+        "p95": 10.281,
+        "p99": 13.585
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.051,
+        "actor_sample": 2.044,
+        "actor_sync": 1.004,
+        "draw_order": 1.147,
+        "hud_draw": 0.292,
+        "hud_process": 10.265,
+        "interaction": 0.325,
+        "mask_sync": 0.016,
+        "media_plan": 19.917,
+        "media_publication": 4.014,
+        "media_upload": 3.672,
+        "modular_shadows": 1.641,
+        "native_2d_atlas": 4.462,
+        "native_2d_lighting": 5.45,
+        "native_2d_projection": 0.205,
+        "player_process": 27.088,
+        "preparation_step": 20.24,
+        "scenery_sync": 0.428,
+        "session_poll": 0.046,
+        "session_timeline": 22.31,
+        "source_lighting": 0.496,
+        "source_lighting_resolve": 0.663,
+        "timeline_advance": 1.001,
+        "view_retirement": 0.088,
+        "world_prepare_native": 0.194,
+        "world_rows": 0.023,
+        "world_sync": 0.299
+      },
+      "sse_framing_cpu_ms": 1.519,
+      "requests": [
+        {
+          "operation": "preview",
+          "request_id": 235,
+          "enqueued_ms": 0.107,
+          "worker_reply_ms": 9.76
+        },
+        {
+          "operation": "submit_command",
+          "request_id": 237,
+          "enqueued_ms": 17.035,
+          "worker_reply_ms": 23.855
+        },
+        {
+          "operation": "choices",
+          "request_id": 249,
+          "enqueued_ms": 2322.855,
+          "worker_reply_ms": 2474.872
+        }
+      ]
+    },
+    {
+      "number": 16,
+      "behavior": "end_turn",
+      "stage": 4,
+      "input": "admitted_action_handler",
+      "from": [
+        13,
+        6
+      ],
+      "to": [
+        13,
+        6
+      ],
+      "sequence": 27,
+      "ready_ms": 4989.045,
+      "first_movement_ms": 2639.939,
+      "first_animation_ms": 2639.939,
+      "complete_sse_frame_ms": 19.832,
+      "operation_bytes": 11069,
+      "server_dispatch_ms": 6.609750998904929,
+      "server_exchange_ms": 7.896049,
+      "server_outer_phases": {
+        "project_audiences_ms": 4.023973990115337
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 4.499,
+      "canonical_consumer_ms": 24.359,
+      "presentation_packet_ms": 0.742,
+      "presentation_compile_ms": 16.698,
+      "client_after_complete_sse_ms": 2620.107,
+      "frame_ms": {
+        "max": 30.199,
+        "mean": 6.20853366583542,
+        "p50": 5.931,
+        "p95": 9.905,
+        "p99": 16.549
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.027,
+        "actor_sample": 1.605,
+        "actor_sync": 1.041,
+        "draw_order": 1.495,
+        "hud_draw": 0.333,
+        "hud_process": 9.266,
+        "interaction": 0.11,
+        "mask_sync": 0.013,
+        "media_plan": 19.217,
+        "media_publication": 6.128,
+        "media_upload": 3.491,
+        "modular_shadows": 3.956,
+        "native_2d_atlas": 9.695,
+        "native_2d_lighting": 13.707,
+        "native_2d_projection": 0.225,
+        "player_process": 26.977,
+        "preparation_step": 19.493,
+        "scenery_sync": 0.605,
+        "session_poll": 0.061,
+        "session_timeline": 22.673,
+        "source_lighting": 0.698,
+        "source_lighting_resolve": 0.721,
+        "timeline_advance": 1.763,
+        "view_retirement": 0.161,
+        "world_prepare_native": 0.146,
+        "world_rows": 0.024,
+        "world_sync": 0.312
+      },
+      "sse_framing_cpu_ms": 5.069,
+      "requests": [
+        {
+          "operation": "submit_command",
+          "request_id": 251,
+          "enqueued_ms": 0.056,
+          "worker_reply_ms": 7.279
+        },
+        {
+          "operation": "choices",
+          "request_id": 272,
+          "enqueued_ms": 4682.378,
+          "worker_reply_ms": 4963.716
+        }
+      ]
+    },
+    {
+      "number": 17,
+      "behavior": "action.move",
+      "stage": 4,
+      "input": "viewport_click",
+      "from": [
+        10,
+        6
+      ],
+      "to": [
+        12,
+        6
+      ],
+      "sequence": 32,
+      "ready_ms": 2010.49,
+      "first_movement_ms": 761.852,
+      "first_animation_ms": 761.852,
+      "complete_sse_frame_ms": 125.462,
+      "operation_bytes": 39644,
+      "server_dispatch_ms": 87.66922799986787,
+      "server_exchange_ms": 89.775114,
+      "server_outer_phases": {
+        "execute_action_ms": 40.826914002536796,
+        "project_audiences_ms": 46.61275299440604
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 18.528,
+      "canonical_consumer_ms": 57.329,
+      "presentation_packet_ms": 0.155,
+      "presentation_compile_ms": 36.891,
+      "client_after_complete_sse_ms": 636.39,
+      "frame_ms": {
+        "max": 28.39,
+        "mean": 8.40171428571428,
+        "p50": 7.992,
+        "p95": 10.657,
+        "p99": 22.763
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.067,
+        "actor_sample": 1.331,
+        "actor_sync": 0.865,
+        "draw_order": 0.869,
+        "hud_draw": 0.178,
+        "hud_process": 13.771,
+        "interaction": 0.13,
+        "mask_sync": 0.205,
+        "media_plan": 16.253,
+        "media_publication": 6.873,
+        "media_upload": 3.852,
+        "modular_shadows": 1.819,
+        "native_2d_atlas": 4.891,
+        "native_2d_lighting": 5.783,
+        "native_2d_projection": 0.143,
+        "player_process": 21.766,
+        "preparation_step": 16.472,
+        "scenery_sync": 0.632,
+        "session_poll": 0.044,
+        "session_timeline": 18.22,
+        "source_lighting": 0.753,
+        "source_lighting_resolve": 0.547,
+        "timeline_advance": 1.273,
+        "view_retirement": 0.138,
+        "wall_candidates": 0.962,
+        "wall_targets": 0.007,
+        "wall_visibility": 1.551,
+        "world_prepare_native": 0.116,
+        "world_rows": 0.024,
+        "world_sync": 0.343
+      },
+      "sse_framing_cpu_ms": 1.894,
+      "requests": [
+        {
+          "operation": "preview",
+          "request_id": 275,
+          "enqueued_ms": 0.99,
+          "worker_reply_ms": 12.411
+        },
+        {
+          "operation": "submit_command",
+          "request_id": 276,
+          "enqueued_ms": 21.577,
+          "worker_reply_ms": 29.302
+        },
+        {
+          "operation": "choices",
+          "request_id": 285,
+          "enqueued_ms": 1596.506,
+          "worker_reply_ms": 1979.752
+        }
+      ]
+    },
+    {
+      "number": 18,
+      "behavior": "end_turn",
+      "stage": 4,
+      "input": "admitted_action_handler",
+      "from": [
+        12,
+        6
+      ],
+      "to": [
+        12,
+        6
+      ],
+      "sequence": 33,
+      "ready_ms": 2046.778,
+      "first_movement_ms": null,
+      "first_animation_ms": null,
+      "complete_sse_frame_ms": 20.335,
+      "operation_bytes": 11068,
+      "server_dispatch_ms": 5.594424990704283,
+      "server_exchange_ms": 7.039895,
+      "server_outer_phases": {
+        "project_audiences_ms": 3.2534569909330457
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 5.077,
+      "canonical_consumer_ms": 25.473,
+      "presentation_packet_ms": 2.922,
+      "presentation_compile_ms": 18.545,
+      "client_after_complete_sse_ms": null,
+      "frame_ms": {
+        "max": 29.889,
+        "mean": 6.31229629629629,
+        "p50": 5.863,
+        "p95": 9.282,
+        "p99": 11.575
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.024,
+        "actor_sample": 2.179,
+        "actor_sync": 0.793,
+        "draw_order": 0.38,
+        "hud_draw": 0.163,
+        "hud_process": 13.01,
+        "interaction": 0.105,
+        "mask_sync": 0.245,
+        "media_plan": 3.895,
+        "media_publication": 4.951,
+        "media_upload": 3.862,
+        "modular_shadows": 2.596,
+        "native_2d_atlas": 3.35,
+        "native_2d_lighting": 5.437,
+        "native_2d_projection": 0.159,
+        "player_process": 14.159,
+        "preparation_step": 3.929,
+        "scenery_sync": 0.02,
+        "session_poll": 0.058,
+        "session_timeline": 8.682,
+        "source_lighting": 0.221,
+        "source_lighting_resolve": 0.733,
+        "timeline_advance": 0.597
+      },
+      "sse_framing_cpu_ms": 1.777,
+      "requests": [
+        {
+          "operation": "submit_command",
+          "request_id": 288,
+          "enqueued_ms": 0.065,
+          "worker_reply_ms": 7.26
+        },
+        {
+          "operation": "choices",
+          "request_id": 297,
+          "enqueued_ms": 1800.18,
+          "worker_reply_ms": 2026.771
+        }
+      ]
+    },
+    {
+      "number": 19,
+      "behavior": "action.dash",
+      "stage": 4,
+      "input": "admitted_action_handler",
+      "from": [
+        13,
+        6
+      ],
+      "to": [
+        13,
+        6
+      ],
+      "sequence": 35,
+      "ready_ms": 607.957,
+      "first_movement_ms": null,
+      "first_animation_ms": null,
+      "complete_sse_frame_ms": 37.783,
+      "operation_bytes": 16157,
+      "server_dispatch_ms": 10.497686991584487,
+      "server_exchange_ms": 12.3228,
+      "server_outer_phases": {
+        "execute_action_ms": 6.034826990799047,
+        "project_audiences_ms": 4.186255013337359
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 6.661,
+      "canonical_consumer_ms": 30.826,
+      "presentation_packet_ms": 0.152,
+      "presentation_compile_ms": 23.297,
+      "client_after_complete_sse_ms": null,
+      "frame_ms": {
+        "max": 24.65,
+        "mean": 7.91656578947368,
+        "p50": 7.343,
+        "p95": 10.318,
+        "p99": 22.155
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.068,
+        "actor_sample": 1.415,
+        "actor_sync": 1.176,
+        "draw_order": 0.363,
+        "hud_draw": 0.196,
+        "hud_process": 11.945,
+        "interaction": 0.111,
+        "mask_sync": 0.245,
+        "media_plan": 3.861,
+        "media_publication": 2.357,
+        "modular_shadows": 2.518,
+        "native_2d_atlas": 3.163,
+        "native_2d_lighting": 5.494,
+        "native_2d_projection": 0.163,
+        "player_process": 14.094,
+        "preparation_step": 3.917,
+        "scenery_sync": 0.013,
+        "session_poll": 0.054,
+        "session_timeline": 7.061,
+        "source_lighting": 0.193,
+        "source_lighting_resolve": 0.774,
+        "timeline_advance": 0.81
+      },
+      "sse_framing_cpu_ms": 0.717,
+      "requests": [
+        {
+          "operation": "preview",
+          "request_id": 300,
+          "enqueued_ms": 0.113,
+          "worker_reply_ms": 11.258
+        },
+        {
+          "operation": "submit_command",
+          "request_id": 302,
+          "enqueued_ms": 14.263,
+          "worker_reply_ms": 22.456
+        },
+        {
+          "operation": "choices",
+          "request_id": 304,
+          "enqueued_ms": 151.654,
+          "worker_reply_ms": 586.505
+        }
+      ]
+    },
+    {
+      "number": 20,
+      "behavior": "action.move",
+      "stage": 4,
+      "input": "admitted_action_handler",
+      "from": [
+        13,
+        6
+      ],
+      "to": [
+        20,
+        6
+      ],
+      "sequence": 36,
+      "ready_ms": 3980.045,
+      "first_movement_ms": 928.637,
+      "first_animation_ms": 928.637,
+      "complete_sse_frame_ms": 602.537,
+      "operation_bytes": 113225,
+      "server_dispatch_ms": 563.9188589993864,
+      "server_exchange_ms": 567.002806,
+      "server_outer_phases": {
+        "execute_action_ms": 383.0077919992618,
+        "project_audiences_ms": 180.5487810052
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 55.702,
+      "canonical_consumer_ms": 106.484,
+      "presentation_packet_ms": 0.364,
+      "presentation_compile_ms": 97.639,
+      "client_after_complete_sse_ms": 326.0999999999999,
+      "frame_ms": {
+        "max": 30.918,
+        "mean": 7.9956921529175,
+        "p50": 7.775,
+        "p95": 10.662,
+        "p99": 16.045
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.058,
+        "actor_sample": 1.651,
+        "actor_sync": 0.935,
+        "draw_order": 1.988,
+        "hud_draw": 0.243,
+        "hud_process": 11.084,
+        "interaction": 0.124,
+        "mask_sync": 0.018,
+        "media_plan": 18.79,
+        "media_publication": 1.815,
+        "modular_shadows": 2.831,
+        "native_2d_atlas": 6.19,
+        "native_2d_lighting": 7.419,
+        "native_2d_projection": 0.158,
+        "player_process": 28.938,
+        "preparation_step": 19.057,
+        "scenery_sync": 0.63,
+        "session_poll": 0.048,
+        "session_timeline": 22.168,
+        "source_lighting": 0.739,
+        "source_lighting_resolve": 0.649,
+        "timeline_advance": 1.487,
+        "view_retirement": 0.153,
+        "world_prepare_native": 0.11,
+        "world_rows": 0.035,
+        "world_sync": 0.392
+      },
+      "sse_framing_cpu_ms": 4.069,
+      "requests": [
+        {
+          "operation": "preview",
+          "request_id": 308,
+          "enqueued_ms": 0.342,
+          "worker_reply_ms": 10.793
+        },
+        {
+          "operation": "submit_command",
+          "request_id": 309,
+          "enqueued_ms": 17.691,
+          "worker_reply_ms": 24.937
+        },
+        {
+          "operation": "choices",
+          "request_id": 331,
+          "enqueued_ms": 3862.562,
+          "worker_reply_ms": 3960.847
+        }
+      ]
+    },
+    {
+      "number": 21,
+      "behavior": "action.environment.directional_door.open",
+      "stage": 4,
+      "input": "admitted_action_handler",
+      "from": [
+        20,
+        6
+      ],
+      "to": [
+        20,
+        6
+      ],
+      "sequence": 37,
+      "ready_ms": 489.81,
+      "first_movement_ms": null,
+      "first_animation_ms": null,
+      "complete_sse_frame_ms": 162.135,
+      "operation_bytes": 40742,
+      "server_dispatch_ms": 134.4195229903562,
+      "server_exchange_ms": 136.320004,
+      "server_outer_phases": {
+        "execute_action_ms": 97.12248700088821,
+        "project_audiences_ms": 37.095973995747045
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 16.222,
+      "canonical_consumer_ms": 41.505,
+      "presentation_packet_ms": 11.485,
+      "presentation_compile_ms": 26.383,
+      "client_after_complete_sse_ms": null,
+      "frame_ms": {
+        "max": 33.791,
+        "mean": 6.11287341772152,
+        "p50": 5.119,
+        "p95": 10.15,
+        "p99": 21.264
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.058,
+        "actor_sample": 1.09,
+        "actor_sync": 0.772,
+        "draw_order": 0.902,
+        "hud_draw": 0.379,
+        "hud_process": 8.289,
+        "interaction": 0.123,
+        "mask_sync": 1.211,
+        "media_plan": 3.064,
+        "media_publication": 1.545,
+        "modular_shadows": 2.027,
+        "native_2d_atlas": 18.486,
+        "native_2d_lighting": 19.08,
+        "native_2d_projection": 0.101,
+        "player_process": 31.245,
+        "preparation_step": 3.121,
+        "scenery_sync": 0.59,
+        "session_poll": 0.038,
+        "session_timeline": 5.021,
+        "source_lighting": 0.667,
+        "source_lighting_resolve": 0.86,
+        "static_order": 0.452,
+        "timeline_advance": 1.868,
+        "view_retirement": 0.113,
+        "wall_candidates": 0.843,
+        "wall_targets": 0.006,
+        "wall_visibility": 2.98,
+        "world_ground": 0.278,
+        "world_objects": 0.61,
+        "world_prepare_native": 2.136,
+        "world_rows": 0.028,
+        "world_sync": 2.729,
+        "world_views": 0.007
+      },
+      "sse_framing_cpu_ms": 1.348,
+      "requests": [
+        {
+          "operation": "preview",
+          "request_id": 334,
+          "enqueued_ms": 0.1,
+          "worker_reply_ms": 10.06
+        },
+        {
+          "operation": "submit_command",
+          "request_id": 335,
+          "enqueued_ms": 14.646,
+          "worker_reply_ms": 21.162
+        },
+        {
+          "operation": "choices",
+          "request_id": 339,
+          "enqueued_ms": 351.382,
+          "worker_reply_ms": 469.464
+        }
+      ]
+    },
+    {
+      "number": 22,
+      "behavior": "action.move",
+      "stage": 5,
+      "input": "admitted_action_handler",
+      "from": [
+        20,
+        6
+      ],
+      "to": [
+        22,
+        6
+      ],
+      "sequence": 38,
+      "ready_ms": 1257.784,
+      "first_movement_ms": 328.941,
+      "first_animation_ms": 328.941,
+      "complete_sse_frame_ms": 178.102,
+      "operation_bytes": 36803,
+      "server_dispatch_ms": 148.93594999739435,
+      "server_exchange_ms": 151.15395,
+      "server_outer_phases": {
+        "execute_action_ms": 98.99666599812917,
+        "project_audiences_ms": 49.698952003382146
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 15.386,
+      "canonical_consumer_ms": 43.838,
+      "presentation_packet_ms": 0.971,
+      "presentation_compile_ms": 34.844,
+      "client_after_complete_sse_ms": 150.83899999999997,
+      "frame_ms": {
+        "max": 29.807,
+        "mean": 7.27212209302326,
+        "p50": 6.951,
+        "p95": 8.777,
+        "p99": 18.434
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.054,
+        "actor_sample": 1.473,
+        "actor_sync": 0.826,
+        "draw_order": 1.262,
+        "hud_draw": 0.143,
+        "hud_process": 8.546,
+        "interaction": 0.094,
+        "mask_sync": 0.01,
+        "media_plan": 18.316,
+        "media_publication": 2.297,
+        "modular_shadows": 2.235,
+        "native_2d_atlas": 4.704,
+        "native_2d_lighting": 5.542,
+        "native_2d_projection": 0.145,
+        "player_process": 27.634,
+        "preparation_step": 18.591,
+        "scenery_sync": 0.522,
+        "session_poll": 0.05,
+        "session_timeline": 21.124,
+        "source_lighting": 0.602,
+        "source_lighting_resolve": 0.523,
+        "timeline_advance": 1.284,
+        "view_retirement": 0.103,
+        "world_prepare_native": 0.121,
+        "world_rows": 0.023,
+        "world_sync": 0.312
+      },
+      "sse_framing_cpu_ms": 1.2590000000000001,
+      "requests": [
+        {
+          "operation": "preview",
+          "request_id": 342,
+          "enqueued_ms": 0.368,
+          "worker_reply_ms": 11.02
+        },
+        {
+          "operation": "submit_command",
+          "request_id": 343,
+          "enqueued_ms": 13.281,
+          "worker_reply_ms": 20.137
+        },
+        {
+          "operation": "choices",
+          "request_id": 350,
+          "enqueued_ms": 1152.145,
+          "worker_reply_ms": 1238.014
+        }
+      ]
+    },
+    {
+      "number": 23,
+      "behavior": "action.move",
+      "stage": 6,
+      "input": "admitted_action_handler",
+      "from": [
+        22,
+        6
+      ],
+      "to": [
+        23,
+        6
+      ],
+      "sequence": 39,
+      "ready_ms": 721.683,
+      "first_movement_ms": 239.146,
+      "first_animation_ms": 239.146,
+      "complete_sse_frame_ms": 113.987,
+      "operation_bytes": 23344,
+      "server_dispatch_ms": 78.98156599549111,
+      "server_exchange_ms": 80.698246,
+      "server_outer_phases": {
+        "execute_action_ms": 52.46703499869909,
+        "project_audiences_ms": 26.28745300171431
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 9.101,
+      "canonical_consumer_ms": 34.076,
+      "presentation_packet_ms": 2.979,
+      "presentation_compile_ms": 26.902,
+      "client_after_complete_sse_ms": 125.15899999999999,
+      "frame_ms": {
+        "max": 24.434,
+        "mean": 7.22184848484848,
+        "p50": 6.814,
+        "p95": 9.911,
+        "p99": 21.443
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.055,
+        "actor_sample": 1.321,
+        "actor_sync": 0.707,
+        "draw_order": 1.416,
+        "hud_draw": 0.159,
+        "hud_process": 7.944,
+        "interaction": 0.104,
+        "mask_sync": 0.246,
+        "media_plan": 15.295,
+        "media_publication": 1.434,
+        "modular_shadows": 2.116,
+        "native_2d_atlas": 5.343,
+        "native_2d_lighting": 7.018,
+        "native_2d_projection": 0.139,
+        "player_process": 22.759,
+        "preparation_step": 15.509,
+        "scenery_sync": 0.484,
+        "session_poll": 0.027,
+        "session_timeline": 17.366,
+        "source_lighting": 0.552,
+        "source_lighting_resolve": 0.497,
+        "timeline_advance": 1.324,
+        "view_retirement": 0.1,
+        "world_prepare_native": 0.108,
+        "world_rows": 0.016,
+        "world_sync": 0.283
+      },
+      "sse_framing_cpu_ms": 0.89,
+      "requests": [
+        {
+          "operation": "preview",
+          "request_id": 353,
+          "enqueued_ms": 0.293,
+          "worker_reply_ms": 13.588
+        },
+        {
+          "operation": "submit_command",
+          "request_id": 354,
+          "enqueued_ms": 23.039,
+          "worker_reply_ms": 30.752
+        },
+        {
+          "operation": "choices",
+          "request_id": 358,
+          "enqueued_ms": 633.662,
+          "worker_reply_ms": 702.724
+        }
+      ]
+    },
+    {
+      "number": 24,
+      "behavior": "action.environment.directional_door.open",
+      "stage": 6,
+      "input": "admitted_action_handler",
+      "from": [
+        23,
+        6
+      ],
+      "to": [
+        23,
+        6
+      ],
+      "sequence": 40,
+      "ready_ms": 1730.294,
+      "first_movement_ms": null,
+      "first_animation_ms": null,
+      "complete_sse_frame_ms": 567.974,
+      "operation_bytes": 549395,
+      "server_dispatch_ms": 503.60926499706693,
+      "server_exchange_ms": 514.082301,
+      "server_outer_phases": {
+        "execute_action_ms": 443.1665620068088,
+        "project_audiences_ms": 60.23892099619843
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 244.817,
+      "canonical_consumer_ms": 164.537,
+      "presentation_packet_ms": 1.578,
+      "presentation_compile_ms": 83.269,
+      "client_after_complete_sse_ms": null,
+      "frame_ms": {
+        "max": 93.097,
+        "mean": 5.6704375,
+        "p50": 4.892,
+        "p95": 7.862,
+        "p99": 15.95
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.043,
+        "actor_sample": 1.156,
+        "actor_sync": 0.713,
+        "draw_order": 1.773,
+        "hud_draw": 0.254,
+        "hud_process": 7.895,
+        "interaction": 0.139,
+        "mask_sync": 2.41,
+        "media_plan": 14.978,
+        "media_publication": 2.878,
+        "media_upload": 2.84,
+        "modular_shadows": 2.242,
+        "native_2d_atlas": 67.616,
+        "native_2d_lighting": 68.507,
+        "native_2d_projection": 0.198,
+        "player_process": 91.464,
+        "preparation_step": 15.179,
+        "scenery_sync": 4.156,
+        "session_poll": 0.047,
+        "session_timeline": 16.788,
+        "source_lighting": 4.339,
+        "source_lighting_resolve": 1.116,
+        "static_order": 0.897,
+        "timeline_advance": 2.174,
+        "view_retirement": 0.273,
+        "wall_candidates": 1.518,
+        "wall_targets": 0.006,
+        "wall_visibility": 5.664,
+        "world_ground": 0.278,
+        "world_objects": 1.926,
+        "world_prepare_native": 2.236,
+        "world_rows": 0.271,
+        "world_sync": 6.078,
+        "world_views": 0.004
+      },
+      "sse_framing_cpu_ms": 16.304,
+      "requests": [
+        {
+          "operation": "preview",
+          "request_id": 360,
+          "enqueued_ms": 0.091,
+          "worker_reply_ms": 11.136
+        },
+        {
+          "operation": "submit_command",
+          "request_id": 362,
+          "enqueued_ms": 11.863,
+          "worker_reply_ms": 19.225
+        },
+        {
+          "operation": "choices",
+          "request_id": 374,
+          "enqueued_ms": 1606.045,
+          "worker_reply_ms": 1706.75
+        }
+      ]
+    },
+    {
+      "number": 25,
+      "behavior": "action.move",
+      "stage": 7,
+      "input": "viewport_click",
+      "from": [
+        23,
+        6
+      ],
+      "to": [
+        25,
+        6
+      ],
+      "sequence": 41,
+      "ready_ms": 2743.157,
+      "first_movement_ms": 1701.138,
+      "first_animation_ms": 1701.138,
+      "complete_sse_frame_ms": 810.113,
+      "operation_bytes": 352788,
+      "server_dispatch_ms": 761.5668170037679,
+      "server_exchange_ms": 767.526475,
+      "server_outer_phases": {
+        "execute_action_ms": 603.9364150055917,
+        "project_audiences_ms": 157.39135300100315
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 152.443,
+      "canonical_consumer_ms": 272.443,
+      "presentation_packet_ms": 8.181,
+      "presentation_compile_ms": 243.508,
+      "client_after_complete_sse_ms": 891.0249999999999,
+      "frame_ms": {
+        "max": 115.621,
+        "mean": 9.7043829787234,
+        "p50": 7.814,
+        "p95": 13.662,
+        "p99": 28.952
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.05,
+        "actor_sample": 1.351,
+        "actor_sync": 0.953,
+        "draw_order": 2.597,
+        "hud_draw": 0.22,
+        "hud_process": 8.226,
+        "interaction": 1.045,
+        "mask_sync": 3.213,
+        "media_plan": 17.892,
+        "media_publication": 2.231,
+        "media_upload": 2.191,
+        "modular_shadows": 2.114,
+        "native_2d_atlas": 79.301,
+        "native_2d_lighting": 80.644,
+        "native_2d_projection": 0.3,
+        "player_process": 113.152,
+        "preparation_step": 18.14,
+        "scenery_sync": 5.001,
+        "session_poll": 0.059,
+        "session_timeline": 20.369,
+        "source_lighting": 5.235,
+        "source_lighting_resolve": 1.892,
+        "static_order": 2.026,
+        "timeline_advance": 3.741,
+        "view_retirement": 0.57,
+        "wall_candidates": 2.668,
+        "wall_targets": 0.007,
+        "wall_visibility": 8.931,
+        "world_ground": 1.272,
+        "world_objects": 2.0,
+        "world_prepare_native": 2.276,
+        "world_rows": 0.255,
+        "world_sync": 7.036,
+        "world_views": 0.006
+      },
+      "sse_framing_cpu_ms": 10.728,
+      "requests": [
+        {
+          "operation": "preview",
+          "request_id": 376,
+          "enqueued_ms": 1.236,
+          "worker_reply_ms": 11.041
+        },
+        {
+          "operation": "submit_command",
+          "request_id": 378,
+          "enqueued_ms": 13.227,
+          "worker_reply_ms": 20.273
+        },
+        {
+          "operation": "choices",
+          "request_id": 395,
+          "enqueued_ms": 2621.582,
+          "worker_reply_ms": 2712.601
+        }
+      ]
+    },
+    {
+      "number": 26,
+      "behavior": "end_turn",
+      "stage": 7,
+      "input": "admitted_action_handler",
+      "from": [
+        25,
+        6
+      ],
+      "to": [
+        25,
+        6
+      ],
+      "sequence": 42,
+      "ready_ms": 1080.528,
+      "first_movement_ms": null,
+      "first_animation_ms": null,
+      "complete_sse_frame_ms": 19.265,
+      "operation_bytes": 11037,
+      "server_dispatch_ms": 6.841588008683175,
+      "server_exchange_ms": 8.295989,
+      "server_outer_phases": {
+        "project_audiences_ms": 4.088981004315428
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 4.269,
+      "canonical_consumer_ms": 62.96,
+      "presentation_packet_ms": 13.164,
+      "presentation_compile_ms": 46.182,
+      "client_after_complete_sse_ms": null,
+      "frame_ms": {
+        "max": 28.745,
+        "mean": 10.6437821782178,
+        "p50": 9.908,
+        "p95": 15.601,
+        "p99": 20.008
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.021,
+        "actor_sample": 1.298,
+        "actor_sync": 0.939,
+        "draw_order": 0.802,
+        "hud_draw": 0.144,
+        "hud_process": 8.593,
+        "interaction": 0.079,
+        "mask_sync": 0.678,
+        "media_plan": 4.507,
+        "media_publication": 2.018,
+        "modular_shadows": 2.763,
+        "native_2d_atlas": 9.22,
+        "native_2d_lighting": 12.229,
+        "native_2d_projection": 0.355,
+        "player_process": 17.922,
+        "preparation_step": 4.615,
+        "scenery_sync": 0.009,
+        "session_poll": 0.087,
+        "session_timeline": 6.733,
+        "source_lighting": 0.405,
+        "source_lighting_resolve": 2.269,
+        "timeline_advance": 0.607
+      },
+      "sse_framing_cpu_ms": 1.522,
+      "requests": [
+        {
+          "operation": "submit_command",
+          "request_id": 398,
+          "enqueued_ms": 0.048,
+          "worker_reply_ms": 6.129
+        },
+        {
+          "operation": "choices",
+          "request_id": 402,
+          "enqueued_ms": 393.835,
+          "worker_reply_ms": 1053.208
+        }
+      ]
+    },
+    {
+      "number": 27,
+      "behavior": "action.move",
+      "stage": 7,
+      "input": "viewport_click",
+      "from": [
+        12,
+        6
+      ],
+      "to": [
+        18,
+        6
+      ],
+      "sequence": 45,
+      "ready_ms": 6518.625,
+      "first_movement_ms": 3389.607,
+      "first_animation_ms": 3389.607,
+      "complete_sse_frame_ms": 1458.552,
+      "operation_bytes": 130083,
+      "server_dispatch_ms": 1419.3592069932492,
+      "server_exchange_ms": 1422.333876,
+      "server_outer_phases": {
+        "execute_action_ms": 962.833480007248,
+        "project_audiences_ms": 456.23555799829774
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 65.317,
+      "canonical_consumer_ms": 553.727,
+      "presentation_packet_ms": 0.131,
+      "presentation_compile_ms": 606.897,
+      "client_after_complete_sse_ms": 1931.055,
+      "frame_ms": {
+        "max": 106.76,
+        "mean": 12.2159962476548,
+        "p50": 11.181,
+        "p95": 16.191,
+        "p99": 36.284
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.052,
+        "actor_sample": 1.292,
+        "actor_sync": 0.959,
+        "draw_order": 3.284,
+        "hud_draw": 0.235,
+        "hud_process": 12.588,
+        "interaction": 0.225,
+        "mask_sync": 2.61,
+        "media_plan": 16.067,
+        "media_publication": 3.95,
+        "media_upload": 3.881,
+        "modular_shadows": 3.307,
+        "native_2d_atlas": 70.845,
+        "native_2d_lighting": 74.384,
+        "native_2d_projection": 0.455,
+        "player_process": 102.877,
+        "preparation_step": 16.096,
+        "scenery_sync": 5.677,
+        "session_poll": 0.054,
+        "session_timeline": 18.094,
+        "source_lighting": 5.962,
+        "source_lighting_resolve": 2.424,
+        "static_order": 1.737,
+        "timeline_advance": 4.723,
+        "view_retirement": 0.627,
+        "wall_candidates": 2.509,
+        "wall_targets": 0.007,
+        "wall_visibility": 8.056,
+        "world_ground": 1.315,
+        "world_objects": 0.877,
+        "world_prepare_native": 2.012,
+        "world_rows": 0.038,
+        "world_sync": 7.221,
+        "world_views": 0.014
+      },
+      "sse_framing_cpu_ms": 4.005,
+      "requests": [
+        {
+          "operation": "preview",
+          "request_id": 406,
+          "enqueued_ms": 1.621,
+          "worker_reply_ms": 12.559
+        },
+        {
+          "operation": "submit_command",
+          "request_id": 408,
+          "enqueued_ms": 21.003,
+          "worker_reply_ms": 27.833
+        },
+        {
+          "operation": "choices",
+          "request_id": 443,
+          "enqueued_ms": 6004.894,
+          "worker_reply_ms": 6492.87
+        }
+      ]
+    },
+    {
+      "number": 28,
+      "behavior": "end_turn",
+      "stage": 7,
+      "input": "admitted_action_handler",
+      "from": [
+        18,
+        6
+      ],
+      "to": [
+        18,
+        6
+      ],
+      "sequence": 46,
+      "ready_ms": 4147.826,
+      "first_movement_ms": null,
+      "first_animation_ms": null,
+      "complete_sse_frame_ms": 18.818,
+      "operation_bytes": 11066,
+      "server_dispatch_ms": 6.943371001398191,
+      "server_exchange_ms": 8.394563,
+      "server_outer_phases": {
+        "project_audiences_ms": 4.624902998330072
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 4.624,
+      "canonical_consumer_ms": 64.06,
+      "presentation_packet_ms": 34.322,
+      "presentation_compile_ms": 47.917,
+      "client_after_complete_sse_ms": null,
+      "frame_ms": {
+        "max": 82.264,
+        "mean": 11.8489885714286,
+        "p50": 10.891,
+        "p95": 15.476,
+        "p99": 34.399
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.032,
+        "actor_sample": 2.192,
+        "actor_sync": 1.828,
+        "draw_order": 4.067,
+        "hud_draw": 0.2,
+        "hud_process": 11.659,
+        "interaction": 0.341,
+        "mask_sync": 0.662,
+        "media_plan": 17.466,
+        "media_publication": 5.868,
+        "media_upload": 3.226,
+        "modular_shadows": 2.406,
+        "native_2d_atlas": 55.631,
+        "native_2d_lighting": 56.751,
+        "native_2d_projection": 0.338,
+        "player_process": 80.133,
+        "preparation_step": 17.734,
+        "scenery_sync": 5.272,
+        "session_poll": 0.067,
+        "session_timeline": 20.002,
+        "source_lighting": 5.553,
+        "source_lighting_resolve": 2.015,
+        "timeline_advance": 4.59,
+        "view_retirement": 0.802,
+        "world_prepare_native": 0.4,
+        "world_rows": 0.026,
+        "world_sync": 0.067
+      },
+      "sse_framing_cpu_ms": 3.0629999999999997,
+      "requests": [
+        {
+          "operation": "submit_command",
+          "request_id": 448,
+          "enqueued_ms": 0.056,
+          "worker_reply_ms": 7.18
+        },
+        {
+          "operation": "choices",
+          "request_id": 464,
+          "enqueued_ms": 3610.69,
+          "worker_reply_ms": 4120.443
+        }
+      ]
+    },
+    {
+      "number": 29,
+      "behavior": "action.move",
+      "stage": 7,
+      "input": "viewport_click",
+      "from": [
+        25,
+        6
+      ],
+      "to": [
+        26,
+        6
+      ],
+      "sequence": 50,
+      "ready_ms": 2190.252,
+      "first_movement_ms": 857.95,
+      "first_animation_ms": 857.95,
+      "complete_sse_frame_ms": 443.384,
+      "operation_bytes": 36378,
+      "server_dispatch_ms": 409.40490999491885,
+      "server_exchange_ms": 412.516971,
+      "server_outer_phases": {
+        "execute_action_ms": 326.388056986616,
+        "project_audiences_ms": 82.72715999919455
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 15.338,
+      "canonical_consumer_ms": 176.125,
+      "presentation_packet_ms": 0.382,
+      "presentation_compile_ms": 155.503,
+      "client_after_complete_sse_ms": 414.56600000000003,
+      "frame_ms": {
+        "max": 100.261,
+        "mean": 12.6482312138728,
+        "p50": 11.234,
+        "p95": 15.817,
+        "p99": 33.231
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.065,
+        "actor_sample": 1.327,
+        "actor_sync": 0.833,
+        "draw_order": 2.365,
+        "hud_draw": 0.4,
+        "hud_process": 9.374,
+        "interaction": 0.143,
+        "mask_sync": 2.906,
+        "media_plan": 17.335,
+        "media_publication": 2.064,
+        "modular_shadows": 2.553,
+        "native_2d_atlas": 64.896,
+        "native_2d_lighting": 66.418,
+        "native_2d_projection": 0.36,
+        "player_process": 96.948,
+        "preparation_step": 17.606,
+        "scenery_sync": 4.583,
+        "session_poll": 0.048,
+        "session_timeline": 20.111,
+        "source_lighting": 4.83,
+        "source_lighting_resolve": 1.636,
+        "static_order": 1.728,
+        "timeline_advance": 3.574,
+        "view_retirement": 0.461,
+        "wall_candidates": 2.254,
+        "wall_targets": 0.008,
+        "wall_visibility": 8.511,
+        "world_ground": 1.279,
+        "world_objects": 0.802,
+        "world_prepare_native": 2.008,
+        "world_rows": 0.037,
+        "world_sync": 6.49,
+        "world_views": 0.007
+      },
+      "sse_framing_cpu_ms": 1.229,
+      "requests": [
+        {
+          "operation": "preview",
+          "request_id": 468,
+          "enqueued_ms": 2.565,
+          "worker_reply_ms": 12.183
+        },
+        {
+          "operation": "submit_command",
+          "request_id": 469,
+          "enqueued_ms": 18.156,
+          "worker_reply_ms": 25.794
+        },
+        {
+          "operation": "choices",
+          "request_id": 481,
+          "enqueued_ms": 1673.04,
+          "worker_reply_ms": 2168.164
+        }
+      ]
+    },
+    {
+      "number": 30,
+      "behavior": "action.move",
+      "stage": 8,
+      "input": "viewport_click",
+      "from": [
+        26,
+        6
+      ],
+      "to": [
+        31,
+        6
+      ],
+      "sequence": 51,
+      "ready_ms": 6212.202,
+      "first_movement_ms": 3631.07,
+      "first_animation_ms": 3631.07,
+      "complete_sse_frame_ms": 2223.1,
+      "operation_bytes": 142103,
+      "server_dispatch_ms": 2184.0721119951922,
+      "server_exchange_ms": 2188.303365,
+      "server_outer_phases": {
+        "execute_action_ms": 1780.9243410010822,
+        "project_audiences_ms": 402.8280530037591
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 62.338,
+      "canonical_consumer_ms": 627.42,
+      "presentation_packet_ms": 4.433,
+      "presentation_compile_ms": 636.995,
+      "client_after_complete_sse_ms": 1407.9700000000003,
+      "frame_ms": {
+        "max": 108.752,
+        "mean": 13.8347951002227,
+        "p50": 12.11,
+        "p95": 17.165,
+        "p99": 34.374
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.06,
+        "actor_sample": 1.742,
+        "actor_sync": 0.911,
+        "draw_order": 3.103,
+        "hud_draw": 0.29,
+        "hud_process": 8.686,
+        "interaction": 0.136,
+        "mask_sync": 2.962,
+        "media_plan": 16.693,
+        "media_publication": 1.926,
+        "modular_shadows": 3.255,
+        "native_2d_atlas": 71.323,
+        "native_2d_lighting": 73.917,
+        "native_2d_projection": 0.508,
+        "player_process": 105.096,
+        "preparation_step": 16.966,
+        "scenery_sync": 4.753,
+        "session_poll": 0.059,
+        "session_timeline": 19.531,
+        "source_lighting": 4.988,
+        "source_lighting_resolve": 2.052,
+        "static_order": 2.269,
+        "timeline_advance": 4.006,
+        "view_retirement": 0.531,
+        "wall_candidates": 2.54,
+        "wall_targets": 0.008,
+        "wall_visibility": 9.474,
+        "world_ground": 2.404,
+        "world_objects": 1.057,
+        "world_prepare_native": 2.042,
+        "world_rows": 0.067,
+        "world_sync": 9.697,
+        "world_views": 0.016
+      },
+      "sse_framing_cpu_ms": 4.444,
+      "requests": [
+        {
+          "operation": "preview",
+          "request_id": 486,
+          "enqueued_ms": 1.744,
+          "worker_reply_ms": 13.8
+        },
+        {
+          "operation": "submit_command",
+          "request_id": 487,
+          "enqueued_ms": 17.215,
+          "worker_reply_ms": 23.274
+        },
+        {
+          "operation": "choices",
+          "request_id": 527,
+          "enqueued_ms": 5808.264,
+          "worker_reply_ms": 6178.21
+        }
+      ]
+    },
+    {
+      "number": 31,
+      "behavior": "action.dash",
+      "stage": 8,
+      "input": "admitted_action_handler",
+      "from": [
+        31,
+        6
+      ],
+      "to": [
+        31,
+        6
+      ],
+      "sequence": 52,
+      "ready_ms": 512.868,
+      "first_movement_ms": null,
+      "first_animation_ms": null,
+      "complete_sse_frame_ms": 48.986,
+      "operation_bytes": 16195,
+      "server_dispatch_ms": 21.768944992800243,
+      "server_exchange_ms": 23.498888,
+      "server_outer_phases": {
+        "execute_action_ms": 16.652247999445535,
+        "project_audiences_ms": 4.924549997667782
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 6.037,
+      "canonical_consumer_ms": 77.699,
+      "presentation_packet_ms": 29.466,
+      "presentation_compile_ms": 48.554,
+      "client_after_complete_sse_ms": null,
+      "frame_ms": {
+        "max": 30.009,
+        "mean": 12.4495609756098,
+        "p50": 10.872,
+        "p95": 19.077,
+        "p99": 22.784
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.056,
+        "actor_sample": 1.228,
+        "actor_sync": 0.781,
+        "draw_order": 0.799,
+        "hud_draw": 0.16,
+        "hud_process": 8.758,
+        "interaction": 0.087,
+        "mask_sync": 0.682,
+        "media_plan": 4.438,
+        "media_publication": 2.171,
+        "modular_shadows": 3.071,
+        "native_2d_atlas": 9.234,
+        "native_2d_lighting": 12.524,
+        "native_2d_projection": 0.349,
+        "player_process": 16.743,
+        "preparation_step": 4.467,
+        "scenery_sync": 0.008,
+        "session_poll": 0.041,
+        "session_timeline": 6.711,
+        "source_lighting": 0.316,
+        "source_lighting_resolve": 1.692,
+        "timeline_advance": 0.619
+      },
+      "sse_framing_cpu_ms": 1.172,
+      "requests": [
+        {
+          "operation": "preview",
+          "request_id": 531,
+          "enqueued_ms": 0.098,
+          "worker_reply_ms": 10.909
+        },
+        {
+          "operation": "submit_command",
+          "request_id": 532,
+          "enqueued_ms": 14.716,
+          "worker_reply_ms": 20.676
+        },
+        {
+          "operation": "choices",
+          "request_id": 535,
+          "enqueued_ms": 263.498,
+          "worker_reply_ms": 482.98
+        }
+      ]
+    },
+    {
+      "number": 32,
+      "behavior": "action.move",
+      "stage": 8,
+      "input": "viewport_click",
+      "from": [
+        31,
+        6
+      ],
+      "to": [
+        37,
+        6
+      ],
+      "sequence": 53,
+      "ready_ms": 7004.673,
+      "first_movement_ms": 4331.803,
+      "first_animation_ms": 4331.803,
+      "complete_sse_frame_ms": 2736.236,
+      "operation_bytes": 170153,
+      "server_dispatch_ms": 2698.2284809928387,
+      "server_exchange_ms": 2701.602,
+      "server_outer_phases": {
+        "execute_action_ms": 2199.844763003057,
+        "project_audiences_ms": 498.0977679952048
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 72.296,
+      "canonical_consumer_ms": 733.592,
+      "presentation_packet_ms": 0.333,
+      "presentation_compile_ms": 709.588,
+      "client_after_complete_sse_ms": 1595.567,
+      "frame_ms": {
+        "max": 91.461,
+        "mean": 11.6948330550918,
+        "p50": 10.809,
+        "p95": 14.083,
+        "p99": 33.018
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.05,
+        "actor_sample": 1.731,
+        "actor_sync": 0.805,
+        "draw_order": 2.306,
+        "hud_draw": 0.318,
+        "hud_process": 9.613,
+        "interaction": 0.144,
+        "mask_sync": 2.597,
+        "media_plan": 17.523,
+        "media_publication": 1.95,
+        "modular_shadows": 2.658,
+        "native_2d_atlas": 60.362,
+        "native_2d_lighting": 61.782,
+        "native_2d_projection": 0.407,
+        "player_process": 88.148,
+        "preparation_step": 17.768,
+        "scenery_sync": 4.375,
+        "session_poll": 0.045,
+        "session_timeline": 20.599,
+        "source_lighting": 4.553,
+        "source_lighting_resolve": 1.655,
+        "static_order": 1.418,
+        "timeline_advance": 3.658,
+        "view_retirement": 0.444,
+        "wall_candidates": 2.141,
+        "wall_targets": 0.006,
+        "wall_visibility": 7.145,
+        "world_ground": 1.29,
+        "world_objects": 0.744,
+        "world_prepare_native": 2.011,
+        "world_rows": 0.044,
+        "world_sync": 6.34,
+        "world_views": 0.007
+      },
+      "sse_framing_cpu_ms": 5.207,
+      "requests": [
+        {
+          "operation": "preview",
+          "request_id": 538,
+          "enqueued_ms": 2.064,
+          "worker_reply_ms": 13.542
+        },
+        {
+          "operation": "submit_command",
+          "request_id": 539,
+          "enqueued_ms": 15.601,
+          "worker_reply_ms": 24.472
+        },
+        {
+          "operation": "choices",
+          "request_id": 585,
+          "enqueued_ms": 6895.869,
+          "worker_reply_ms": 6986.227
+        }
+      ]
+    },
+    {
+      "number": 33,
+      "behavior": "end_turn",
+      "stage": 8,
+      "input": "admitted_action_handler",
+      "from": [
+        37,
+        6
+      ],
+      "to": [
+        37,
+        6
+      ],
+      "sequence": 54,
+      "ready_ms": 977.366,
+      "first_movement_ms": null,
+      "first_animation_ms": null,
+      "complete_sse_frame_ms": 19.173,
+      "operation_bytes": 11075,
+      "server_dispatch_ms": 6.662074010819197,
+      "server_exchange_ms": 7.932195,
+      "server_outer_phases": {
+        "project_audiences_ms": 4.309259005822241
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 4.143,
+      "canonical_consumer_ms": 57.785,
+      "presentation_packet_ms": 31.032,
+      "presentation_compile_ms": 44.692,
+      "client_after_complete_sse_ms": null,
+      "frame_ms": {
+        "max": 26.768,
+        "mean": 10.4188494623656,
+        "p50": 10.144,
+        "p95": 15.177,
+        "p99": 16.672
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.017,
+        "actor_sample": 1.337,
+        "actor_sync": 0.745,
+        "draw_order": 0.76,
+        "hud_draw": 0.203,
+        "hud_process": 7.22,
+        "interaction": 0.119,
+        "mask_sync": 0.647,
+        "media_plan": 3.996,
+        "media_publication": 1.83,
+        "modular_shadows": 2.925,
+        "native_2d_atlas": 8.981,
+        "native_2d_lighting": 12.088,
+        "native_2d_projection": 0.352,
+        "player_process": 15.215,
+        "preparation_step": 4.017,
+        "scenery_sync": 0.01,
+        "session_poll": 0.036,
+        "session_timeline": 6.055,
+        "source_lighting": 0.42,
+        "source_lighting_resolve": 1.614,
+        "timeline_advance": 0.526
+      },
+      "sse_framing_cpu_ms": 1.705,
+      "requests": [
+        {
+          "operation": "submit_command",
+          "request_id": 588,
+          "enqueued_ms": 0.048,
+          "worker_reply_ms": 7.768
+        },
+        {
+          "operation": "choices",
+          "request_id": 591,
+          "enqueued_ms": 369.158,
+          "worker_reply_ms": 946.783
+        }
+      ]
+    },
+    {
+      "number": 34,
+      "behavior": "action.move",
+      "stage": 8,
+      "input": "viewport_click",
+      "from": [
+        18,
+        6
+      ],
+      "to": [
+        24,
+        6
+      ],
+      "sequence": 57,
+      "ready_ms": 8715.742,
+      "first_movement_ms": 3943.026,
+      "first_animation_ms": 3943.026,
+      "complete_sse_frame_ms": 2068.267,
+      "operation_bytes": 161066,
+      "server_dispatch_ms": 2011.931632005144,
+      "server_exchange_ms": 2015.603007,
+      "server_outer_phases": {
+        "execute_action_ms": 1571.309934995952,
+        "project_audiences_ms": 440.3771350043826
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 94.298,
+      "canonical_consumer_ms": 640.27,
+      "presentation_packet_ms": 0.112,
+      "presentation_compile_ms": 619.337,
+      "client_after_complete_sse_ms": 1874.759,
+      "frame_ms": {
+        "max": 71.4,
+        "mean": 8.57928965517241,
+        "p50": 8.003,
+        "p95": 11.966,
+        "p99": 22.753
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.068,
+        "actor_sample": 1.57,
+        "actor_sync": 0.752,
+        "draw_order": 2.227,
+        "hud_draw": 0.368,
+        "hud_process": 12.933,
+        "interaction": 0.132,
+        "mask_sync": 2.724,
+        "media_plan": 20.137,
+        "media_publication": 5.446,
+        "media_upload": 2.637,
+        "modular_shadows": 6.734,
+        "native_2d_atlas": 44.343,
+        "native_2d_lighting": 45.445,
+        "native_2d_projection": 0.302,
+        "player_process": 69.053,
+        "preparation_step": 20.166,
+        "scenery_sync": 4.024,
+        "session_poll": 0.166,
+        "session_timeline": 22.862,
+        "source_lighting": 4.18,
+        "source_lighting_resolve": 1.513,
+        "static_order": 1.686,
+        "timeline_advance": 3.16,
+        "view_retirement": 0.418,
+        "wall_candidates": 2.168,
+        "wall_targets": 0.006,
+        "wall_visibility": 7.963,
+        "world_ground": 0.01,
+        "world_objects": 0.756,
+        "world_prepare_native": 2.006,
+        "world_rows": 0.024,
+        "world_sync": 5.258,
+        "world_views": 0.004
+      },
+      "sse_framing_cpu_ms": 5.324,
+      "requests": [
+        {
+          "operation": "preview",
+          "request_id": 596,
+          "enqueued_ms": 2.978,
+          "worker_reply_ms": 14.033
+        },
+        {
+          "operation": "submit_command",
+          "request_id": 597,
+          "enqueued_ms": 22.884,
+          "worker_reply_ms": 29.845
+        },
+        {
+          "operation": "choices",
+          "request_id": 640,
+          "enqueued_ms": 6518.264,
+          "worker_reply_ms": 8687.345
+        }
+      ]
+    },
+    {
+      "number": 35,
+      "behavior": "end_turn",
+      "stage": 8,
+      "input": "admitted_action_handler",
+      "from": [
+        24,
+        6
+      ],
+      "to": [
+        24,
+        6
+      ],
+      "sequence": 58,
+      "ready_ms": 9653.606,
+      "first_movement_ms": null,
+      "first_animation_ms": null,
+      "complete_sse_frame_ms": 18.882,
+      "operation_bytes": 11105,
+      "server_dispatch_ms": 6.550809994223528,
+      "server_exchange_ms": 7.721142,
+      "server_outer_phases": {
+        "project_audiences_ms": 4.285602000891231
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 4.442,
+      "canonical_consumer_ms": 65.777,
+      "presentation_packet_ms": 32.262,
+      "presentation_compile_ms": 45.481,
+      "client_after_complete_sse_ms": null,
+      "frame_ms": {
+        "max": 32.419,
+        "mean": 7.75313815261045,
+        "p50": 7.314,
+        "p95": 11.101,
+        "p99": 16.764
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.018,
+        "actor_sample": 1.483,
+        "actor_sync": 0.787,
+        "draw_order": 3.1,
+        "hud_draw": 0.177,
+        "hud_process": 11.311,
+        "interaction": 0.076,
+        "mask_sync": 0.661,
+        "media_plan": 16.074,
+        "media_publication": 4.185,
+        "media_upload": 2.582,
+        "modular_shadows": 2.162,
+        "native_2d_atlas": 15.687,
+        "native_2d_lighting": 16.595,
+        "native_2d_projection": 0.359,
+        "player_process": 30.618,
+        "preparation_step": 16.408,
+        "scenery_sync": 4.094,
+        "session_poll": 0.035,
+        "session_timeline": 17.501,
+        "source_lighting": 4.26,
+        "source_lighting_resolve": 1.637,
+        "timeline_advance": 3.816,
+        "view_retirement": 0.499,
+        "world_prepare_native": 0.362,
+        "world_rows": 0.02,
+        "world_sync": 1.752
+      },
+      "sse_framing_cpu_ms": 6.045,
+      "requests": [
+        {
+          "operation": "submit_command",
+          "request_id": 646,
+          "enqueued_ms": 0.053,
+          "worker_reply_ms": 7.296
+        },
+        {
+          "operation": "choices",
+          "request_id": 679,
+          "enqueued_ms": 8501.054,
+          "worker_reply_ms": 9010.599
+        }
+      ]
+    },
+    {
+      "number": 36,
+      "behavior": "action.move",
+      "stage": 8,
+      "input": "viewport_click",
+      "from": [
+        37,
+        6
+      ],
+      "to": [
+        43,
+        6
+      ],
+      "sequence": 63,
+      "ready_ms": 10878.288,
+      "first_movement_ms": 5157.292,
+      "first_animation_ms": 5157.292,
+      "complete_sse_frame_ms": 3132.737,
+      "operation_bytes": 251840,
+      "server_dispatch_ms": 3112.8859559976263,
+      "server_exchange_ms": 3117.198094,
+      "server_outer_phases": {
+        "execute_action_ms": 2237.6316160080023,
+        "project_audiences_ms": 874.9492739880225
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 108.909,
+      "canonical_consumer_ms": 874.177,
+      "presentation_packet_ms": 0.288,
+      "presentation_compile_ms": 903.102,
+      "client_after_complete_sse_ms": 2024.5550000000003,
+      "frame_ms": {
+        "max": 82.034,
+        "mean": 7.51147651933702,
+        "p50": 6.804,
+        "p95": 10.055,
+        "p99": 20.011
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.049,
+        "actor_sample": 1.549,
+        "actor_sync": 0.941,
+        "draw_order": 2.112,
+        "hud_draw": 0.368,
+        "hud_process": 8.332,
+        "interaction": 0.131,
+        "mask_sync": 2.571,
+        "media_plan": 17.17,
+        "media_publication": 2.923,
+        "media_upload": 2.677,
+        "modular_shadows": 2.41,
+        "native_2d_atlas": 53.805,
+        "native_2d_lighting": 55.405,
+        "native_2d_projection": 0.278,
+        "player_process": 79.579,
+        "preparation_step": 17.427,
+        "scenery_sync": 3.774,
+        "session_poll": 0.073,
+        "session_timeline": 19.383,
+        "source_lighting": 3.961,
+        "source_lighting_resolve": 1.463,
+        "static_order": 1.242,
+        "timeline_advance": 3.83,
+        "view_retirement": 0.391,
+        "wall_candidates": 2.049,
+        "wall_targets": 0.006,
+        "wall_visibility": 7.08,
+        "world_ground": 1.192,
+        "world_objects": 0.706,
+        "world_prepare_native": 2.022,
+        "world_rows": 0.036,
+        "world_sync": 5.866,
+        "world_views": 0.007
+      },
+      "sse_framing_cpu_ms": 7.333,
+      "requests": [
+        {
+          "operation": "preview",
+          "request_id": 683,
+          "enqueued_ms": 1.871,
+          "worker_reply_ms": 13.585
+        },
+        {
+          "operation": "submit_command",
+          "request_id": 684,
+          "enqueued_ms": 15.588,
+          "worker_reply_ms": 22.753
+        },
+        {
+          "operation": "choices",
+          "request_id": 745,
+          "enqueued_ms": 9820.578,
+          "worker_reply_ms": 10148.111
+        }
+      ]
+    },
+    {
+      "number": 37,
+      "behavior": "action.dash",
+      "stage": 8,
+      "input": "admitted_action_handler",
+      "from": [
+        43,
+        6
+      ],
+      "to": [
+        43,
+        6
+      ],
+      "sequence": 64,
+      "ready_ms": 463.449,
+      "first_movement_ms": null,
+      "first_animation_ms": null,
+      "complete_sse_frame_ms": 44.677,
+      "operation_bytes": 16193,
+      "server_dispatch_ms": 20.390036996104755,
+      "server_exchange_ms": 21.798125,
+      "server_outer_phases": {
+        "execute_action_ms": 15.412907989230007,
+        "project_audiences_ms": 4.813125997316092
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 5.728,
+      "canonical_consumer_ms": 61.628,
+      "presentation_packet_ms": 36.765,
+      "presentation_compile_ms": 45.397,
+      "client_after_complete_sse_ms": null,
+      "frame_ms": {
+        "max": 24.843,
+        "mean": 6.87102985074626,
+        "p50": 5.972,
+        "p95": 12.075,
+        "p99": 19.621
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.039,
+        "actor_sample": 0.802,
+        "actor_sync": 0.706,
+        "draw_order": 0.755,
+        "hud_draw": 0.076,
+        "hud_process": 7.789,
+        "interaction": 0.137,
+        "mask_sync": 0.651,
+        "media_plan": 3.477,
+        "media_publication": 1.597,
+        "modular_shadows": 2.745,
+        "native_2d_atlas": 8.21,
+        "native_2d_lighting": 11.125,
+        "native_2d_projection": 0.248,
+        "player_process": 13.459,
+        "preparation_step": 3.496,
+        "scenery_sync": 0.004,
+        "session_poll": 0.02,
+        "session_timeline": 5.66,
+        "source_lighting": 0.229,
+        "source_lighting_resolve": 1.489,
+        "timeline_advance": 0.553
+      },
+      "sse_framing_cpu_ms": 0.594,
+      "requests": [
+        {
+          "operation": "preview",
+          "request_id": 749,
+          "enqueued_ms": 0.079,
+          "worker_reply_ms": 10.812
+        },
+        {
+          "operation": "submit_command",
+          "request_id": 750,
+          "enqueued_ms": 11.339,
+          "worker_reply_ms": 19.113
+        },
+        {
+          "operation": "choices",
+          "request_id": 753,
+          "enqueued_ms": 234.68,
+          "worker_reply_ms": 447.256
+        }
+      ]
+    },
+    {
+      "number": 38,
+      "behavior": "action.move",
+      "stage": 8,
+      "input": "viewport_click",
+      "from": [
+        43,
+        6
+      ],
+      "to": [
+        46,
+        6
+      ],
+      "sequence": 65,
+      "ready_ms": 3715.892,
+      "first_movement_ms": 2254.895,
+      "first_animation_ms": 2254.895,
+      "complete_sse_frame_ms": 1275.471,
+      "operation_bytes": 88683,
+      "server_dispatch_ms": 1246.992358006537,
+      "server_exchange_ms": 1249.827728,
+      "server_outer_phases": {
+        "execute_action_ms": 1010.8453430002555,
+        "project_audiences_ms": 235.87308899732307
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 38.696,
+      "canonical_consumer_ms": 434.643,
+      "presentation_packet_ms": 0.371,
+      "presentation_compile_ms": 443.173,
+      "client_after_complete_sse_ms": 979.424,
+      "frame_ms": {
+        "max": 104.421,
+        "mean": 7.78231236897274,
+        "p50": 6.34,
+        "p95": 11.931,
+        "p99": 23.855
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.034,
+        "actor_sample": 1.164,
+        "actor_sync": 0.841,
+        "draw_order": 2.587,
+        "hud_draw": 0.231,
+        "hud_process": 7.694,
+        "interaction": 0.1,
+        "mask_sync": 2.824,
+        "media_plan": 13.883,
+        "media_publication": 1.524,
+        "modular_shadows": 2.201,
+        "native_2d_atlas": 66.981,
+        "native_2d_lighting": 68.332,
+        "native_2d_projection": 0.21,
+        "player_process": 101.792,
+        "preparation_step": 13.908,
+        "scenery_sync": 4.496,
+        "session_poll": 0.038,
+        "session_timeline": 15.651,
+        "source_lighting": 4.692,
+        "source_lighting_resolve": 1.504,
+        "static_order": 1.738,
+        "timeline_advance": 4.172,
+        "view_retirement": 0.432,
+        "wall_candidates": 2.467,
+        "wall_targets": 0.008,
+        "wall_visibility": 8.545,
+        "world_ground": 1.309,
+        "world_objects": 0.838,
+        "world_prepare_native": 2.009,
+        "world_rows": 0.034,
+        "world_sync": 9.284,
+        "world_views": 0.004
+      },
+      "sse_framing_cpu_ms": 2.6390000000000002,
+      "requests": [
+        {
+          "operation": "preview",
+          "request_id": 756,
+          "enqueued_ms": 1.749,
+          "worker_reply_ms": 10.991
+        },
+        {
+          "operation": "submit_command",
+          "request_id": 757,
+          "enqueued_ms": 12.501,
+          "worker_reply_ms": 20.449
+        },
+        {
+          "operation": "choices",
+          "request_id": 783,
+          "enqueued_ms": 3563.854,
+          "worker_reply_ms": 3694.875
+        }
+      ]
+    },
+    {
+      "number": 39,
+      "behavior": "action.move",
+      "stage": 9,
+      "input": "viewport_click",
+      "from": [
+        46,
+        6
+      ],
+      "to": [
+        46,
+        9
+      ],
+      "sequence": 66,
+      "ready_ms": 3933.176,
+      "first_movement_ms": 2492.763,
+      "first_animation_ms": 2492.763,
+      "complete_sse_frame_ms": 1482.512,
+      "operation_bytes": 90320,
+      "server_dispatch_ms": 1438.7552270054584,
+      "server_exchange_ms": 1441.37566,
+      "server_outer_phases": {
+        "execute_action_ms": 1213.7468309956603,
+        "project_audiences_ms": 224.7665270115249
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 38.624,
+      "canonical_consumer_ms": 442.185,
+      "presentation_packet_ms": 16.957,
+      "presentation_compile_ms": 453.699,
+      "client_after_complete_sse_ms": 1010.251,
+      "frame_ms": {
+        "max": 92.148,
+        "mean": 7.5127724665392,
+        "p50": 6.258,
+        "p95": 11.566,
+        "p99": 19.138
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.045,
+        "actor_sample": 1.11,
+        "actor_sync": 0.755,
+        "draw_order": 2.874,
+        "hud_draw": 0.232,
+        "hud_process": 7.611,
+        "interaction": 1.13,
+        "mask_sync": 0.586,
+        "media_plan": 16.174,
+        "media_publication": 2.352,
+        "media_upload": 2.219,
+        "modular_shadows": 6.83,
+        "native_2d_atlas": 65.406,
+        "native_2d_lighting": 66.563,
+        "native_2d_projection": 0.248,
+        "player_process": 90.231,
+        "preparation_step": 16.204,
+        "scenery_sync": 3.842,
+        "session_poll": 0.039,
+        "session_timeline": 18.095,
+        "source_lighting": 3.983,
+        "source_lighting_resolve": 1.593,
+        "static_order": 1.742,
+        "timeline_advance": 3.655,
+        "view_retirement": 0.415,
+        "wall_candidates": 2.468,
+        "wall_targets": 0.006,
+        "wall_visibility": 5.874,
+        "world_ground": 1.226,
+        "world_objects": 0.733,
+        "world_prepare_native": 2.013,
+        "world_rows": 0.032,
+        "world_sync": 7.536,
+        "world_views": 0.004
+      },
+      "sse_framing_cpu_ms": 2.715,
+      "requests": [
+        {
+          "operation": "preview",
+          "request_id": 786,
+          "enqueued_ms": 1.784,
+          "worker_reply_ms": 14.846
+        },
+        {
+          "operation": "submit_command",
+          "request_id": 787,
+          "enqueued_ms": 32.236,
+          "worker_reply_ms": 38.579
+        },
+        {
+          "operation": "choices",
+          "request_id": 815,
+          "enqueued_ms": 3819.313,
+          "worker_reply_ms": 3911.507
+        }
+      ]
+    },
+    {
+      "number": 40,
+      "behavior": "end_turn",
+      "stage": 9,
+      "input": "admitted_action_handler",
+      "from": [
+        46,
+        9
+      ],
+      "to": [
+        46,
+        9
+      ],
+      "sequence": 67,
+      "ready_ms": 2481.112,
+      "first_movement_ms": null,
+      "first_animation_ms": null,
+      "complete_sse_frame_ms": 19.909,
+      "operation_bytes": 11035,
+      "server_dispatch_ms": 7.71037999948021,
+      "server_exchange_ms": 8.890584,
+      "server_outer_phases": {
+        "project_audiences_ms": 4.89675099379383
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 4.386,
+      "canonical_consumer_ms": 67.217,
+      "presentation_packet_ms": 19.155,
+      "presentation_compile_ms": 51.455,
+      "client_after_complete_sse_ms": null,
+      "frame_ms": {
+        "max": 28.44,
+        "mean": 6.08948894348894,
+        "p50": 5.523,
+        "p95": 8.948,
+        "p99": 14.042
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.018,
+        "actor_sample": 1.039,
+        "actor_sync": 0.708,
+        "draw_order": 0.797,
+        "hud_draw": 0.158,
+        "hud_process": 7.546,
+        "interaction": 0.124,
+        "mask_sync": 0.689,
+        "media_plan": 3.763,
+        "media_publication": 2.837,
+        "media_upload": 2.486,
+        "modular_shadows": 2.17,
+        "native_2d_atlas": 9.449,
+        "native_2d_lighting": 11.793,
+        "native_2d_projection": 0.394,
+        "player_process": 16.317,
+        "preparation_step": 3.789,
+        "scenery_sync": 0.005,
+        "session_poll": 0.034,
+        "session_timeline": 5.946,
+        "source_lighting": 0.259,
+        "source_lighting_resolve": 1.609,
+        "timeline_advance": 0.536
+      },
+      "sse_framing_cpu_ms": 1.454,
+      "requests": [
+        {
+          "operation": "submit_command",
+          "request_id": 818,
+          "enqueued_ms": 0.056,
+          "worker_reply_ms": 8.724
+        },
+        {
+          "operation": "choices",
+          "request_id": 822,
+          "enqueued_ms": 386.032,
+          "worker_reply_ms": 2458.527
+        }
+      ]
+    },
+    {
+      "number": 41,
+      "behavior": "action.move",
+      "stage": 9,
+      "input": "viewport_click",
+      "from": [
+        24,
+        6
+      ],
+      "to": [
+        29,
+        9
+      ],
+      "sequence": 70,
+      "ready_ms": 9395.564,
+      "first_movement_ms": 4299.976,
+      "first_animation_ms": 4299.976,
+      "complete_sse_frame_ms": 2150.515,
+      "operation_bytes": 133719,
+      "server_dispatch_ms": 2111.0009160038317,
+      "server_exchange_ms": 2114.104891,
+      "server_outer_phases": {
+        "execute_action_ms": 1762.0247260056203,
+        "project_audiences_ms": 348.7064549990464
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 56.517,
+      "canonical_consumer_ms": 752.46,
+      "presentation_packet_ms": 0.133,
+      "presentation_compile_ms": 786.09,
+      "client_after_complete_sse_ms": 2149.461,
+      "frame_ms": {
+        "max": 85.512,
+        "mean": 7.7841575456053,
+        "p50": 6.854,
+        "p95": 11.974,
+        "p99": 16.367
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.048,
+        "actor_sample": 1.084,
+        "actor_sync": 0.82,
+        "draw_order": 2.487,
+        "hud_draw": 0.487,
+        "hud_process": 11.84,
+        "interaction": 0.233,
+        "mask_sync": 0.596,
+        "media_plan": 14.548,
+        "media_publication": 6.055,
+        "media_upload": 3.05,
+        "modular_shadows": 5.115,
+        "native_2d_atlas": 59.791,
+        "native_2d_lighting": 60.866,
+        "native_2d_projection": 0.299,
+        "player_process": 83.747,
+        "preparation_step": 14.757,
+        "scenery_sync": 4.665,
+        "session_poll": 0.034,
+        "session_timeline": 16.479,
+        "source_lighting": 4.841,
+        "source_lighting_resolve": 1.602,
+        "static_order": 1.367,
+        "timeline_advance": 3.945,
+        "view_retirement": 0.403,
+        "wall_candidates": 2.397,
+        "wall_targets": 0.006,
+        "wall_visibility": 5.083,
+        "world_ground": 1.217,
+        "world_objects": 0.821,
+        "world_prepare_native": 2.009,
+        "world_rows": 0.034,
+        "world_sync": 6.68,
+        "world_views": 0.004
+      },
+      "sse_framing_cpu_ms": 4.473,
+      "requests": [
+        {
+          "operation": "preview",
+          "request_id": 827,
+          "enqueued_ms": 1.834,
+          "worker_reply_ms": 10.872
+        },
+        {
+          "operation": "submit_command",
+          "request_id": 828,
+          "enqueued_ms": 17.304,
+          "worker_reply_ms": 24.593
+        },
+        {
+          "operation": "choices",
+          "request_id": 869,
+          "enqueued_ms": 7002.202,
+          "worker_reply_ms": 9373.141
+        }
+      ]
+    },
+    {
+      "number": 42,
+      "behavior": "end_turn",
+      "stage": 9,
+      "input": "admitted_action_handler",
+      "from": [
+        29,
+        9
+      ],
+      "to": [
+        29,
+        9
+      ],
+      "sequence": 71,
+      "ready_ms": 6617.092,
+      "first_movement_ms": null,
+      "first_animation_ms": null,
+      "complete_sse_frame_ms": 18.343,
+      "operation_bytes": 11065,
+      "server_dispatch_ms": 6.6669539955910295,
+      "server_exchange_ms": 8.073365,
+      "server_outer_phases": {
+        "project_audiences_ms": 4.547655000351369
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 4.229,
+      "canonical_consumer_ms": 67.222,
+      "presentation_packet_ms": 30.223,
+      "presentation_compile_ms": 48.045,
+      "client_after_complete_sse_ms": null,
+      "frame_ms": {
+        "max": 69.865,
+        "mean": 8.04024301336574,
+        "p50": 7.589,
+        "p95": 10.877,
+        "p99": 20.503
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.019,
+        "actor_sample": 1.01,
+        "actor_sync": 1.53,
+        "draw_order": 3.483,
+        "hud_draw": 0.348,
+        "hud_process": 11.194,
+        "interaction": 0.113,
+        "mask_sync": 0.629,
+        "media_plan": 14.504,
+        "media_publication": 4.146,
+        "media_upload": 2.973,
+        "modular_shadows": 3.349,
+        "native_2d_atlas": 49.533,
+        "native_2d_lighting": 50.804,
+        "native_2d_projection": 0.278,
+        "player_process": 68.187,
+        "preparation_step": 14.785,
+        "scenery_sync": 4.079,
+        "session_poll": 0.037,
+        "session_timeline": 16.61,
+        "source_lighting": 4.247,
+        "source_lighting_resolve": 1.586,
+        "timeline_advance": 4.161,
+        "view_retirement": 0.562,
+        "world_prepare_native": 0.342,
+        "world_rows": 0.025,
+        "world_sync": 0.053
+      },
+      "sse_framing_cpu_ms": 3.906,
+      "requests": [
+        {
+          "operation": "submit_command",
+          "request_id": 875,
+          "enqueued_ms": 0.074,
+          "worker_reply_ms": 6.73
+        },
+        {
+          "operation": "choices",
+          "request_id": 898,
+          "enqueued_ms": 5910.982,
+          "worker_reply_ms": 6598.088
+        }
+      ]
+    },
+    {
+      "number": 43,
+      "behavior": "action.move",
+      "stage": 9,
+      "input": "viewport_click",
+      "from": [
+        46,
+        9
+      ],
+      "to": [
+        46,
+        15
+      ],
+      "sequence": 75,
+      "ready_ms": 7330.367,
+      "first_movement_ms": 4372.865,
+      "first_animation_ms": 4372.865,
+      "complete_sse_frame_ms": 2367.029,
+      "operation_bytes": 184947,
+      "server_dispatch_ms": 2309.1379110119306,
+      "server_exchange_ms": 2312.521655,
+      "server_outer_phases": {
+        "execute_action_ms": 1884.127419005381,
+        "project_audiences_ms": 424.721336006769
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 77.58,
+      "canonical_consumer_ms": 916.09,
+      "presentation_packet_ms": 0.286,
+      "presentation_compile_ms": 941.93,
+      "client_after_complete_sse_ms": 2005.8359999999998,
+      "frame_ms": {
+        "max": 99.37,
+        "mean": 8.26201465614431,
+        "p50": 6.799,
+        "p95": 12.253,
+        "p99": 27.684
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.051,
+        "actor_sample": 1.408,
+        "actor_sync": 0.821,
+        "draw_order": 2.526,
+        "hud_draw": 0.296,
+        "hud_process": 7.611,
+        "interaction": 0.121,
+        "mask_sync": 2.886,
+        "media_plan": 14.902,
+        "media_publication": 1.834,
+        "modular_shadows": 2.49,
+        "native_2d_atlas": 65.754,
+        "native_2d_lighting": 67.77,
+        "native_2d_projection": 0.317,
+        "player_process": 96.1,
+        "preparation_step": 14.927,
+        "scenery_sync": 4.494,
+        "session_poll": 0.057,
+        "session_timeline": 16.902,
+        "source_lighting": 4.69,
+        "source_lighting_resolve": 1.624,
+        "static_order": 1.561,
+        "timeline_advance": 4.031,
+        "view_retirement": 0.545,
+        "wall_candidates": 2.267,
+        "wall_targets": 0.007,
+        "wall_visibility": 8.183,
+        "world_ground": 1.548,
+        "world_objects": 0.836,
+        "world_prepare_native": 2.01,
+        "world_rows": 0.066,
+        "world_sync": 7.247,
+        "world_views": 0.008
+      },
+      "sse_framing_cpu_ms": 5.384,
+      "requests": [
+        {
+          "operation": "preview",
+          "request_id": 903,
+          "enqueued_ms": 1.811,
+          "worker_reply_ms": 13.473
+        },
+        {
+          "operation": "submit_command",
+          "request_id": 904,
+          "enqueued_ms": 33.302,
+          "worker_reply_ms": 41.51
+        },
+        {
+          "operation": "choices",
+          "request_id": 950,
+          "enqueued_ms": 6942.268,
+          "worker_reply_ms": 7310.823
+        }
+      ]
+    },
+    {
+      "number": 44,
+      "behavior": "action.dash",
+      "stage": 9,
+      "input": "admitted_action_handler",
+      "from": [
+        46,
+        15
+      ],
+      "to": [
+        46,
+        15
+      ],
+      "sequence": 76,
+      "ready_ms": 510.051,
+      "first_movement_ms": null,
+      "first_animation_ms": null,
+      "complete_sse_frame_ms": 48.436,
+      "operation_bytes": 16193,
+      "server_dispatch_ms": 21.913775999564677,
+      "server_exchange_ms": 23.290866,
+      "server_outer_phases": {
+        "execute_action_ms": 16.81380499212537,
+        "project_audiences_ms": 4.93572698906064
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 5.76,
+      "canonical_consumer_ms": 67.801,
+      "presentation_packet_ms": 38.378,
+      "presentation_compile_ms": 49.437,
+      "client_after_complete_sse_ms": null,
+      "frame_ms": {
+        "max": 28.558,
+        "mean": 8.24479032258064,
+        "p50": 7.157,
+        "p95": 13.136,
+        "p99": 19.58
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.042,
+        "actor_sample": 0.967,
+        "actor_sync": 0.733,
+        "draw_order": 0.799,
+        "hud_draw": 0.157,
+        "hud_process": 7.844,
+        "interaction": 1.076,
+        "mask_sync": 0.69,
+        "media_plan": 3.578,
+        "media_publication": 1.562,
+        "modular_shadows": 2.524,
+        "native_2d_atlas": 9.18,
+        "native_2d_lighting": 11.901,
+        "native_2d_projection": 0.198,
+        "player_process": 14.183,
+        "preparation_step": 3.597,
+        "scenery_sync": 0.009,
+        "session_poll": 0.039,
+        "session_timeline": 5.547,
+        "source_lighting": 0.326,
+        "source_lighting_resolve": 1.554,
+        "timeline_advance": 0.539
+      },
+      "sse_framing_cpu_ms": 0.638,
+      "requests": [
+        {
+          "operation": "preview",
+          "request_id": 954,
+          "enqueued_ms": 0.097,
+          "worker_reply_ms": 12.366
+        },
+        {
+          "operation": "submit_command",
+          "request_id": 955,
+          "enqueued_ms": 14.062,
+          "worker_reply_ms": 22.099
+        },
+        {
+          "operation": "choices",
+          "request_id": 958,
+          "enqueued_ms": 249.34,
+          "worker_reply_ms": 489.055
+        }
+      ]
+    },
+    {
+      "number": 45,
+      "behavior": "action.move",
+      "stage": 9,
+      "input": "viewport_click",
+      "from": [
+        46,
+        15
+      ],
+      "to": [
+        46,
+        20
+      ],
+      "sequence": 77,
+      "ready_ms": 5964.019,
+      "first_movement_ms": 3673.13,
+      "first_animation_ms": 3673.13,
+      "complete_sse_frame_ms": 1911.29,
+      "operation_bytes": 157290,
+      "server_dispatch_ms": 1855.8517569908872,
+      "server_exchange_ms": 1858.951293,
+      "server_outer_phases": {
+        "execute_action_ms": 1498.6391120037297,
+        "project_audiences_ms": 356.9144729990512
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 65.544,
+      "canonical_consumer_ms": 803.834,
+      "presentation_packet_ms": 0.302,
+      "presentation_compile_ms": 811.851,
+      "client_after_complete_sse_ms": 1761.8400000000001,
+      "frame_ms": {
+        "max": 93.661,
+        "mean": 9.0025166163142,
+        "p50": 7.697,
+        "p95": 12.264,
+        "p99": 26.363
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.044,
+        "actor_sample": 1.393,
+        "actor_sync": 0.866,
+        "draw_order": 2.316,
+        "hud_draw": 0.26,
+        "hud_process": 7.774,
+        "interaction": 0.202,
+        "mask_sync": 2.674,
+        "media_plan": 15.51,
+        "media_publication": 1.681,
+        "modular_shadows": 2.592,
+        "native_2d_atlas": 64.876,
+        "native_2d_lighting": 66.109,
+        "native_2d_projection": 0.263,
+        "player_process": 91.651,
+        "preparation_step": 15.757,
+        "scenery_sync": 4.494,
+        "session_poll": 0.035,
+        "session_timeline": 18.389,
+        "source_lighting": 4.68,
+        "source_lighting_resolve": 1.576,
+        "static_order": 1.514,
+        "timeline_advance": 4.525,
+        "view_retirement": 0.447,
+        "wall_candidates": 2.306,
+        "wall_targets": 0.007,
+        "wall_visibility": 7.71,
+        "world_ground": 1.45,
+        "world_objects": 0.768,
+        "world_prepare_native": 2.009,
+        "world_rows": 0.057,
+        "world_sync": 6.834,
+        "world_views": 0.007
+      },
+      "sse_framing_cpu_ms": 4.658,
+      "requests": [
+        {
+          "operation": "preview",
+          "request_id": 961,
+          "enqueued_ms": 1.668,
+          "worker_reply_ms": 13.034
+        },
+        {
+          "operation": "submit_command",
+          "request_id": 962,
+          "enqueued_ms": 22.791,
+          "worker_reply_ms": 31.065
+        },
+        {
+          "operation": "choices",
+          "request_id": 997,
+          "enqueued_ms": 5835.68,
+          "worker_reply_ms": 5938.281
+        }
+      ]
+    },
+    {
+      "number": 46,
+      "behavior": "action.move",
+      "stage": 10,
+      "input": "viewport_click",
+      "from": [
+        46,
+        20
+      ],
+      "to": [
+        47,
+        20
+      ],
+      "sequence": 78,
+      "ready_ms": 1797.75,
+      "first_movement_ms": 1189.599,
+      "first_animation_ms": 1189.599,
+      "complete_sse_frame_ms": 658.804,
+      "operation_bytes": 41583,
+      "server_dispatch_ms": 627.5955560122384,
+      "server_exchange_ms": 629.577153,
+      "server_outer_phases": {
+        "execute_action_ms": 548.2151909964159,
+        "project_audiences_ms": 79.16167798975948
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 17.091,
+      "canonical_consumer_ms": 212.01,
+      "presentation_packet_ms": 31.294,
+      "presentation_compile_ms": 206.982,
+      "client_after_complete_sse_ms": 530.795,
+      "frame_ms": {
+        "max": 98.765,
+        "mean": 9.60099465240642,
+        "p50": 8.522,
+        "p95": 12.859,
+        "p99": 27.85
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.042,
+        "actor_sample": 1.204,
+        "actor_sync": 0.781,
+        "draw_order": 2.261,
+        "hud_draw": 0.198,
+        "hud_process": 7.727,
+        "interaction": 1.053,
+        "mask_sync": 2.699,
+        "media_plan": 13.827,
+        "media_publication": 1.611,
+        "modular_shadows": 2.409,
+        "native_2d_atlas": 65.364,
+        "native_2d_lighting": 66.58,
+        "native_2d_projection": 0.249,
+        "player_process": 96.33,
+        "preparation_step": 14.039,
+        "scenery_sync": 4.074,
+        "session_poll": 0.064,
+        "session_timeline": 16.084,
+        "source_lighting": 4.271,
+        "source_lighting_resolve": 1.477,
+        "static_order": 1.511,
+        "timeline_advance": 4.319,
+        "view_retirement": 0.367,
+        "wall_candidates": 2.228,
+        "wall_targets": 0.005,
+        "wall_visibility": 7.941,
+        "world_ground": 1.349,
+        "world_objects": 0.774,
+        "world_prepare_native": 2.006,
+        "world_rows": 0.031,
+        "world_sync": 6.735,
+        "world_views": 0.005
+      },
+      "sse_framing_cpu_ms": 1.561,
+      "requests": [
+        {
+          "operation": "preview",
+          "request_id": 1000,
+          "enqueued_ms": 2.075,
+          "worker_reply_ms": 14.097
+        },
+        {
+          "operation": "submit_command",
+          "request_id": 1001,
+          "enqueued_ms": 14.591,
+          "worker_reply_ms": 22.207
+        },
+        {
+          "operation": "choices",
+          "request_id": 1014,
+          "enqueued_ms": 1679.132,
+          "worker_reply_ms": 1775.369
+        }
+      ]
+    },
+    {
+      "number": 47,
+      "behavior": "end_turn",
+      "stage": 10,
+      "input": "admitted_action_handler",
+      "from": [
+        47,
+        20
+      ],
+      "to": [
+        47,
+        20
+      ],
+      "sequence": 79,
+      "ready_ms": 3018.802,
+      "first_movement_ms": null,
+      "first_animation_ms": null,
+      "complete_sse_frame_ms": 19.321,
+      "operation_bytes": 11074,
+      "server_dispatch_ms": 6.918004000908695,
+      "server_exchange_ms": 8.176579,
+      "server_outer_phases": {
+        "project_audiences_ms": 4.522433009697124
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 4.203,
+      "canonical_consumer_ms": 67.917,
+      "presentation_packet_ms": 5.124,
+      "presentation_compile_ms": 51.447,
+      "client_after_complete_sse_ms": null,
+      "frame_ms": {
+        "max": 26.183,
+        "mean": 7.58851133501259,
+        "p50": 7.233,
+        "p95": 10.519,
+        "p99": 14.921
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.018,
+        "actor_sample": 1.256,
+        "actor_sync": 0.75,
+        "draw_order": 0.839,
+        "hud_draw": 0.271,
+        "hud_process": 7.353,
+        "interaction": 0.156,
+        "mask_sync": 0.722,
+        "media_plan": 4.1,
+        "media_publication": 1.825,
+        "modular_shadows": 2.731,
+        "native_2d_atlas": 9.363,
+        "native_2d_lighting": 12.276,
+        "native_2d_projection": 0.279,
+        "player_process": 15.644,
+        "preparation_step": 4.121,
+        "scenery_sync": 0.006,
+        "session_poll": 0.036,
+        "session_timeline": 6.103,
+        "source_lighting": 0.277,
+        "source_lighting_resolve": 1.675,
+        "timeline_advance": 0.55
+      },
+      "sse_framing_cpu_ms": 1.426,
+      "requests": [
+        {
+          "operation": "submit_command",
+          "request_id": 1017,
+          "enqueued_ms": 0.088,
+          "worker_reply_ms": 8.242
+        },
+        {
+          "operation": "choices",
+          "request_id": 1021,
+          "enqueued_ms": 397.407,
+          "worker_reply_ms": 2995.494
+        }
+      ]
+    },
+    {
+      "number": 48,
+      "behavior": "action.move",
+      "stage": 10,
+      "input": "viewport_click",
+      "from": [
+        29,
+        9
+      ],
+      "to": [
+        34,
+        15
+      ],
+      "sequence": 82,
+      "ready_ms": 12190.944,
+      "first_movement_ms": 5580.699,
+      "first_animation_ms": 5580.699,
+      "complete_sse_frame_ms": 2681.981,
+      "operation_bytes": 187443,
+      "server_dispatch_ms": 2636.7772959929425,
+      "server_exchange_ms": 2640.853312,
+      "server_outer_phases": {
+        "execute_action_ms": 2174.6104129997548,
+        "project_audiences_ms": 461.91040200938005
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 80.573,
+      "canonical_consumer_ms": 1070.885,
+      "presentation_packet_ms": 0.178,
+      "presentation_compile_ms": 1115.105,
+      "client_after_complete_sse_ms": 2898.7179999999994,
+      "frame_ms": {
+        "max": 98.325,
+        "mean": 8.98008327192337,
+        "p50": 8.42,
+        "p95": 11.735,
+        "p99": 20.986
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.042,
+        "actor_sample": 1.341,
+        "actor_sync": 0.804,
+        "draw_order": 2.467,
+        "hud_draw": 0.376,
+        "hud_process": 11.316,
+        "interaction": 0.137,
+        "mask_sync": 0.601,
+        "media_plan": 13.854,
+        "media_publication": 3.247,
+        "media_upload": 2.883,
+        "modular_shadows": 6.263,
+        "native_2d_atlas": 66.197,
+        "native_2d_lighting": 67.366,
+        "native_2d_projection": 0.313,
+        "player_process": 95.893,
+        "preparation_step": 13.876,
+        "scenery_sync": 4.311,
+        "session_poll": 0.09,
+        "session_timeline": 15.581,
+        "source_lighting": 4.5,
+        "source_lighting_resolve": 1.731,
+        "static_order": 1.536,
+        "timeline_advance": 4.653,
+        "view_retirement": 0.506,
+        "wall_candidates": 2.402,
+        "wall_targets": 0.006,
+        "wall_visibility": 5.526,
+        "world_ground": 1.568,
+        "world_objects": 0.786,
+        "world_prepare_native": 2.011,
+        "world_rows": 0.112,
+        "world_sync": 7.105,
+        "world_views": 0.005
+      },
+      "sse_framing_cpu_ms": 6.071,
+      "requests": [
+        {
+          "operation": "preview",
+          "request_id": 1026,
+          "enqueued_ms": 1.927,
+          "worker_reply_ms": 13.1
+        },
+        {
+          "operation": "submit_command",
+          "request_id": 1027,
+          "enqueued_ms": 18.307,
+          "worker_reply_ms": 25.097
+        },
+        {
+          "operation": "choices",
+          "request_id": 1078,
+          "enqueued_ms": 9006.086,
+          "worker_reply_ms": 12111.507
+        }
+      ]
+    },
+    {
+      "number": 49,
+      "behavior": "end_turn",
+      "stage": 10,
+      "input": "admitted_action_handler",
+      "from": [
+        34,
+        15
+      ],
+      "to": [
+        34,
+        15
+      ],
+      "sequence": 83,
+      "ready_ms": 7263.385,
+      "first_movement_ms": null,
+      "first_animation_ms": null,
+      "complete_sse_frame_ms": 20.342,
+      "operation_bytes": 11104,
+      "server_dispatch_ms": 7.241863000672311,
+      "server_exchange_ms": 8.392725,
+      "server_outer_phases": {
+        "project_audiences_ms": 4.852065991144627
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 4.324,
+      "canonical_consumer_ms": 73.375,
+      "presentation_packet_ms": 40.682,
+      "presentation_compile_ms": 51.122,
+      "client_after_complete_sse_ms": null,
+      "frame_ms": {
+        "max": 36.333,
+        "mean": 9.24205470737913,
+        "p50": 8.888,
+        "p95": 12.849,
+        "p99": 28.659
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.018,
+        "actor_sample": 1.292,
+        "actor_sync": 1.031,
+        "draw_order": 3.447,
+        "hud_draw": 0.183,
+        "hud_process": 11.042,
+        "interaction": 0.142,
+        "mask_sync": 0.632,
+        "media_plan": 15.336,
+        "media_publication": 4.627,
+        "media_upload": 2.642,
+        "modular_shadows": 2.648,
+        "native_2d_atlas": 18.309,
+        "native_2d_lighting": 19.721,
+        "native_2d_projection": 0.287,
+        "player_process": 34.389,
+        "preparation_step": 15.706,
+        "scenery_sync": 4.709,
+        "session_poll": 0.035,
+        "session_timeline": 16.897,
+        "source_lighting": 4.889,
+        "source_lighting_resolve": 1.838,
+        "timeline_advance": 3.973,
+        "view_retirement": 0.515,
+        "world_prepare_native": 0.393,
+        "world_rows": 0.029,
+        "world_sync": 0.056
+      },
+      "sse_framing_cpu_ms": 3.8569999999999998,
+      "requests": [
+        {
+          "operation": "submit_command",
+          "request_id": 1083,
+          "enqueued_ms": 0.057,
+          "worker_reply_ms": 7.627
+        },
+        {
+          "operation": "choices",
+          "request_id": 1108,
+          "enqueued_ms": 6715.279,
+          "worker_reply_ms": 7240.781
+        }
+      ]
+    },
+    {
+      "number": 50,
+      "behavior": "action.move",
+      "stage": 10,
+      "input": "viewport_click",
+      "from": [
+        47,
+        20
+      ],
+      "to": [
+        53,
+        20
+      ],
+      "sequence": 87,
+      "ready_ms": 7395.236,
+      "first_movement_ms": 4409.345,
+      "first_animation_ms": 4409.345,
+      "complete_sse_frame_ms": 2363.515,
+      "operation_bytes": 185632,
+      "server_dispatch_ms": 2324.3694870034233,
+      "server_exchange_ms": 2328.270936,
+      "server_outer_phases": {
+        "execute_action_ms": 1866.795551002724,
+        "project_audiences_ms": 457.2641660051886
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 77.712,
+      "canonical_consumer_ms": 929.118,
+      "presentation_packet_ms": 0.336,
+      "presentation_compile_ms": 963.31,
+      "client_after_complete_sse_ms": 2045.8300000000004,
+      "frame_ms": {
+        "max": 100.816,
+        "mean": 9.4073320610687,
+        "p50": 8.213,
+        "p95": 12.616,
+        "p99": 30.131
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.049,
+        "actor_sample": 1.494,
+        "actor_sync": 0.832,
+        "draw_order": 2.787,
+        "hud_draw": 0.267,
+        "hud_process": 8.256,
+        "interaction": 0.498,
+        "mask_sync": 2.744,
+        "media_plan": 16.331,
+        "media_publication": 1.64,
+        "modular_shadows": 3.274,
+        "native_2d_atlas": 69.55,
+        "native_2d_lighting": 71.32,
+        "native_2d_projection": 0.322,
+        "player_process": 98.639,
+        "preparation_step": 16.635,
+        "scenery_sync": 4.796,
+        "session_poll": 0.049,
+        "session_timeline": 19.323,
+        "source_lighting": 4.99,
+        "source_lighting_resolve": 1.502,
+        "static_order": 1.56,
+        "timeline_advance": 4.3,
+        "view_retirement": 0.613,
+        "wall_candidates": 2.499,
+        "wall_targets": 0.007,
+        "wall_visibility": 7.978,
+        "world_ground": 1.552,
+        "world_objects": 0.822,
+        "world_prepare_native": 2.01,
+        "world_rows": 0.043,
+        "world_sync": 7.168,
+        "world_views": 0.007
+      },
+      "sse_framing_cpu_ms": 5.603000000000001,
+      "requests": [
+        {
+          "operation": "preview",
+          "request_id": 1113,
+          "enqueued_ms": 1.917,
+          "worker_reply_ms": 12.388
+        },
+        {
+          "operation": "submit_command",
+          "request_id": 1114,
+          "enqueued_ms": 13.976,
+          "worker_reply_ms": 20.409
+        },
+        {
+          "operation": "choices",
+          "request_id": 1160,
+          "enqueued_ms": 6990.119,
+          "worker_reply_ms": 7374.632
+        }
+      ]
+    },
+    {
+      "number": 51,
+      "behavior": "action.dash",
+      "stage": 10,
+      "input": "admitted_action_handler",
+      "from": [
+        53,
+        20
+      ],
+      "to": [
+        53,
+        20
+      ],
+      "sequence": 88,
+      "ready_ms": 525.974,
+      "first_movement_ms": null,
+      "first_animation_ms": null,
+      "complete_sse_frame_ms": 48.172,
+      "operation_bytes": 16193,
+      "server_dispatch_ms": 22.617826994974166,
+      "server_exchange_ms": 23.913231,
+      "server_outer_phases": {
+        "execute_action_ms": 17.344261999824084,
+        "project_audiences_ms": 5.085327997221611
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 5.734,
+      "canonical_consumer_ms": 72.392,
+      "presentation_packet_ms": 40.768,
+      "presentation_compile_ms": 52.607,
+      "client_after_complete_sse_ms": null,
+      "frame_ms": {
+        "max": 27.157,
+        "mean": 7.80528358208955,
+        "p50": 6.993,
+        "p95": 12.521,
+        "p99": 19.901
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.04,
+        "actor_sample": 0.835,
+        "actor_sync": 0.696,
+        "draw_order": 0.751,
+        "hud_draw": 0.066,
+        "hud_process": 7.699,
+        "interaction": 0.058,
+        "mask_sync": 0.645,
+        "media_plan": 3.484,
+        "media_publication": 1.653,
+        "modular_shadows": 2.488,
+        "native_2d_atlas": 9.57,
+        "native_2d_lighting": 12.217,
+        "native_2d_projection": 0.206,
+        "player_process": 14.337,
+        "preparation_step": 3.502,
+        "scenery_sync": 0.004,
+        "session_poll": 0.03,
+        "session_timeline": 5.455,
+        "source_lighting": 0.2,
+        "source_lighting_resolve": 1.483,
+        "timeline_advance": 0.562
+      },
+      "sse_framing_cpu_ms": 0.6960000000000001,
+      "requests": [
+        {
+          "operation": "preview",
+          "request_id": 1164,
+          "enqueued_ms": 0.104,
+          "worker_reply_ms": 11.433
+        },
+        {
+          "operation": "submit_command",
+          "request_id": 1165,
+          "enqueued_ms": 12.498,
+          "worker_reply_ms": 18.387
+        },
+        {
+          "operation": "choices",
+          "request_id": 1168,
+          "enqueued_ms": 259.174,
+          "worker_reply_ms": 509.414
+        }
+      ]
+    },
+    {
+      "number": 52,
+      "behavior": "action.move",
+      "stage": 10,
+      "input": "viewport_click",
+      "from": [
+        53,
+        20
+      ],
+      "to": [
+        59,
+        20
+      ],
+      "sequence": 89,
+      "ready_ms": 7116.525,
+      "first_movement_ms": 4440.221,
+      "first_animation_ms": 4440.221,
+      "complete_sse_frame_ms": 2617.545,
+      "operation_bytes": 203002,
+      "server_dispatch_ms": 2569.3057129974477,
+      "server_exchange_ms": 2573.075723,
+      "server_outer_phases": {
+        "execute_action_ms": 2097.658680009772,
+        "project_audiences_ms": 471.3032549916534
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 87.012,
+      "canonical_consumer_ms": 825.833,
+      "presentation_packet_ms": 0.293,
+      "presentation_compile_ms": 831.074,
+      "client_after_complete_sse_ms": 1822.6759999999995,
+      "frame_ms": {
+        "max": 103.556,
+        "mean": 9.69187193460491,
+        "p50": 8.824,
+        "p95": 12.425,
+        "p99": 24.232
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.042,
+        "actor_sample": 1.297,
+        "actor_sync": 0.776,
+        "draw_order": 2.673,
+        "hud_draw": 0.229,
+        "hud_process": 7.066,
+        "interaction": 0.949,
+        "mask_sync": 2.716,
+        "media_plan": 14.166,
+        "media_publication": 1.613,
+        "modular_shadows": 2.144,
+        "native_2d_atlas": 72.716,
+        "native_2d_lighting": 74.013,
+        "native_2d_projection": 0.281,
+        "player_process": 101.042,
+        "preparation_step": 14.363,
+        "scenery_sync": 4.557,
+        "session_poll": 0.05,
+        "session_timeline": 16.833,
+        "source_lighting": 4.736,
+        "source_lighting_resolve": 1.561,
+        "static_order": 1.551,
+        "timeline_advance": 4.544,
+        "view_retirement": 0.431,
+        "wall_candidates": 2.329,
+        "wall_targets": 0.006,
+        "wall_visibility": 8.14,
+        "world_ground": 1.525,
+        "world_objects": 0.766,
+        "world_prepare_native": 2.018,
+        "world_rows": 0.059,
+        "world_sync": 7.133,
+        "world_views": 0.004
+      },
+      "sse_framing_cpu_ms": 6.388000000000001,
+      "requests": [
+        {
+          "operation": "preview",
+          "request_id": 1171,
+          "enqueued_ms": 1.871,
+          "worker_reply_ms": 13.662
+        },
+        {
+          "operation": "submit_command",
+          "request_id": 1172,
+          "enqueued_ms": 22.785,
+          "worker_reply_ms": 29.215
+        },
+        {
+          "operation": "choices",
+          "request_id": 1222,
+          "enqueued_ms": 7002.555,
+          "worker_reply_ms": 7095.459
+        }
+      ]
+    },
+    {
+      "number": 53,
+      "behavior": "end_turn",
+      "stage": 10,
+      "input": "admitted_action_handler",
+      "from": [
+        59,
+        20
+      ],
+      "to": [
+        59,
+        20
+      ],
+      "sequence": 90,
+      "ready_ms": 3573.296,
+      "first_movement_ms": null,
+      "first_animation_ms": null,
+      "complete_sse_frame_ms": 19.937,
+      "operation_bytes": 11074,
+      "server_dispatch_ms": 7.245428001624532,
+      "server_exchange_ms": 8.557602,
+      "server_outer_phases": {
+        "project_audiences_ms": 4.77266799134668
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 4.21,
+      "canonical_consumer_ms": 70.645,
+      "presentation_packet_ms": 42.953,
+      "presentation_compile_ms": 56.756,
+      "client_after_complete_sse_ms": null,
+      "frame_ms": {
+        "max": 27.981,
+        "mean": 7.82340789473684,
+        "p50": 7.424,
+        "p95": 10.732,
+        "p99": 15.917
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.019,
+        "actor_sample": 1.253,
+        "actor_sync": 0.786,
+        "draw_order": 0.8,
+        "hud_draw": 0.226,
+        "hud_process": 7.588,
+        "interaction": 1.218,
+        "mask_sync": 0.683,
+        "media_plan": 4.004,
+        "media_publication": 1.977,
+        "modular_shadows": 2.675,
+        "native_2d_atlas": 9.97,
+        "native_2d_lighting": 12.845,
+        "native_2d_projection": 0.278,
+        "player_process": 16.396,
+        "preparation_step": 4.061,
+        "scenery_sync": 0.015,
+        "session_poll": 0.05,
+        "session_timeline": 6.338,
+        "source_lighting": 0.278,
+        "source_lighting_resolve": 1.798,
+        "timeline_advance": 0.575
+      },
+      "sse_framing_cpu_ms": 1.431,
+      "requests": [
+        {
+          "operation": "submit_command",
+          "request_id": 1225,
+          "enqueued_ms": 0.07,
+          "worker_reply_ms": 8.454
+        },
+        {
+          "operation": "choices",
+          "request_id": 1228,
+          "enqueued_ms": 422.074,
+          "worker_reply_ms": 3546.634
+        }
+      ]
+    },
+    {
+      "number": 54,
+      "behavior": "action.move",
+      "stage": 10,
+      "input": "viewport_click",
+      "from": [
+        34,
+        15
+      ],
+      "to": [
+        40,
+        20
+      ],
+      "sequence": 93,
+      "ready_ms": 12251.736,
+      "first_movement_ms": 5342.07,
+      "first_animation_ms": 5342.07,
+      "complete_sse_frame_ms": 2448.967,
+      "operation_bytes": 208836,
+      "server_dispatch_ms": 2402.7965160057647,
+      "server_exchange_ms": 2406.731183,
+      "server_outer_phases": {
+        "execute_action_ms": 1949.7307510027895,
+        "project_audiences_ms": 452.8006589971483
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 87.352,
+      "canonical_consumer_ms": 1100.397,
+      "presentation_packet_ms": 0.128,
+      "presentation_compile_ms": 1146.612,
+      "client_after_complete_sse_ms": 2893.1029999999996,
+      "frame_ms": {
+        "max": 108.3,
+        "mean": 8.98497872340426,
+        "p50": 8.27,
+        "p95": 13.174,
+        "p99": 22.263
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.079,
+        "actor_sample": 1.279,
+        "actor_sync": 0.789,
+        "draw_order": 2.842,
+        "hud_draw": 0.634,
+        "hud_process": 11.432,
+        "interaction": 0.188,
+        "mask_sync": 2.688,
+        "media_plan": 14.9,
+        "media_publication": 4.732,
+        "media_upload": 3.676,
+        "modular_shadows": 6.14,
+        "native_2d_atlas": 76.998,
+        "native_2d_lighting": 79.531,
+        "native_2d_projection": 0.268,
+        "player_process": 105.152,
+        "preparation_step": 15.135,
+        "scenery_sync": 4.672,
+        "session_poll": 0.052,
+        "session_timeline": 16.872,
+        "source_lighting": 4.868,
+        "source_lighting_resolve": 1.661,
+        "static_order": 1.82,
+        "timeline_advance": 4.511,
+        "view_retirement": 0.455,
+        "wall_candidates": 2.599,
+        "wall_targets": 0.006,
+        "wall_visibility": 7.853,
+        "world_ground": 1.633,
+        "world_objects": 0.846,
+        "world_prepare_native": 2.012,
+        "world_rows": 0.047,
+        "world_sync": 7.651,
+        "world_views": 0.008
+      },
+      "sse_framing_cpu_ms": 6.165,
+      "requests": [
+        {
+          "operation": "preview",
+          "request_id": 1235,
+          "enqueued_ms": 2.088,
+          "worker_reply_ms": 13.699
+        },
+        {
+          "operation": "submit_command",
+          "request_id": 1236,
+          "enqueued_ms": 18.294,
+          "worker_reply_ms": 25.298
+        },
+        {
+          "operation": "choices",
+          "request_id": 1288,
+          "enqueued_ms": 8800.534,
+          "worker_reply_ms": 12172.809
+        }
+      ]
+    },
+    {
+      "number": 55,
+      "behavior": "end_turn",
+      "stage": 10,
+      "input": "admitted_action_handler",
+      "from": [
+        40,
+        20
+      ],
+      "to": [
+        41,
+        21
+      ],
+      "sequence": 94,
+      "ready_ms": 6940.14,
+      "first_movement_ms": null,
+      "first_animation_ms": null,
+      "complete_sse_frame_ms": 19.913,
+      "operation_bytes": 11104,
+      "server_dispatch_ms": 6.887030001962557,
+      "server_exchange_ms": 8.04296,
+      "server_outer_phases": {
+        "project_audiences_ms": 4.632689000573009
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 4.234,
+      "canonical_consumer_ms": 77.163,
+      "presentation_packet_ms": 41.654,
+      "presentation_compile_ms": 52.481,
+      "client_after_complete_sse_ms": null,
+      "frame_ms": {
+        "max": 82.438,
+        "mean": 8.35041636582431,
+        "p50": 7.844,
+        "p95": 11.467,
+        "p99": 27.419
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.023,
+        "actor_sample": 1.063,
+        "actor_sync": 0.871,
+        "draw_order": 3.393,
+        "hud_draw": 0.277,
+        "hud_process": 11.049,
+        "interaction": 0.156,
+        "mask_sync": 0.689,
+        "media_plan": 15.346,
+        "media_publication": 2.966,
+        "media_upload": 2.657,
+        "modular_shadows": 2.842,
+        "native_2d_atlas": 54.12,
+        "native_2d_lighting": 56.314,
+        "native_2d_projection": 0.282,
+        "player_process": 80.577,
+        "preparation_step": 16.558,
+        "scenery_sync": 4.499,
+        "session_poll": 0.043,
+        "session_timeline": 17.326,
+        "source_lighting": 4.652,
+        "source_lighting_resolve": 1.619,
+        "static_order": 1.627,
+        "timeline_advance": 3.85,
+        "view_retirement": 0.509,
+        "wall_candidates": 2.359,
+        "wall_targets": 0.006,
+        "wall_visibility": 5.714,
+        "world_ground": 0.009,
+        "world_objects": 0.889,
+        "world_prepare_native": 2.009,
+        "world_rows": 0.03,
+        "world_sync": 6.365,
+        "world_views": 0.004
+      },
+      "sse_framing_cpu_ms": 5.47,
+      "requests": [
+        {
+          "operation": "submit_command",
+          "request_id": 1293,
+          "enqueued_ms": 0.054,
+          "worker_reply_ms": 8.325
+        },
+        {
+          "operation": "choices",
+          "request_id": 1314,
+          "enqueued_ms": 6369.943,
+          "worker_reply_ms": 6921.76
+        }
+      ]
+    },
+    {
+      "number": 56,
+      "behavior": "action.move",
+      "stage": 10,
+      "input": "viewport_click",
+      "from": [
+        59,
+        20
+      ],
+      "to": [
+        65,
+        20
+      ],
+      "sequence": 99,
+      "ready_ms": 7217.323,
+      "first_movement_ms": 4235.591,
+      "first_animation_ms": 4235.591,
+      "complete_sse_frame_ms": 2304.283,
+      "operation_bytes": 172752,
+      "server_dispatch_ms": 2256.815832006396,
+      "server_exchange_ms": 2260.239981,
+      "server_outer_phases": {
+        "execute_action_ms": 1808.5790380137041,
+        "project_audiences_ms": 447.92834400141146
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 70.357,
+      "canonical_consumer_ms": 901.33,
+      "presentation_packet_ms": 0.298,
+      "presentation_compile_ms": 883.365,
+      "client_after_complete_sse_ms": 1931.3080000000004,
+      "frame_ms": {
+        "max": 105.765,
+        "mean": 10.0098932038835,
+        "p50": 8.985,
+        "p95": 12.739,
+        "p99": 29.452
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.049,
+        "actor_sample": 1.437,
+        "actor_sync": 0.802,
+        "draw_order": 2.724,
+        "hud_draw": 0.218,
+        "hud_process": 8.251,
+        "interaction": 0.955,
+        "mask_sync": 2.804,
+        "media_plan": 14.833,
+        "media_publication": 2.08,
+        "modular_shadows": 2.682,
+        "native_2d_atlas": 72.256,
+        "native_2d_lighting": 73.576,
+        "native_2d_projection": 0.297,
+        "player_process": 103.729,
+        "preparation_step": 15.043,
+        "scenery_sync": 4.222,
+        "session_poll": 0.053,
+        "session_timeline": 18.016,
+        "source_lighting": 4.404,
+        "source_lighting_resolve": 1.575,
+        "static_order": 1.725,
+        "timeline_advance": 4.499,
+        "view_retirement": 0.447,
+        "wall_candidates": 2.444,
+        "wall_targets": 0.007,
+        "wall_visibility": 8.565,
+        "world_ground": 1.552,
+        "world_objects": 0.984,
+        "world_prepare_native": 2.017,
+        "world_rows": 0.045,
+        "world_sync": 7.673,
+        "world_views": 0.008
+      },
+      "sse_framing_cpu_ms": 5.162999999999999,
+      "requests": [
+        {
+          "operation": "preview",
+          "request_id": 1319,
+          "enqueued_ms": 2.122,
+          "worker_reply_ms": 14.162
+        },
+        {
+          "operation": "submit_command",
+          "request_id": 1320,
+          "enqueued_ms": 15.171,
+          "worker_reply_ms": 21.113
+        },
+        {
+          "operation": "choices",
+          "request_id": 1364,
+          "enqueued_ms": 6800.564,
+          "worker_reply_ms": 7200.705
+        }
+      ]
+    },
+    {
+      "number": 57,
+      "behavior": "action.dash",
+      "stage": 10,
+      "input": "admitted_action_handler",
+      "from": [
+        65,
+        20
+      ],
+      "to": [
+        65,
+        20
+      ],
+      "sequence": 100,
+      "ready_ms": 520.579,
+      "first_movement_ms": null,
+      "first_animation_ms": null,
+      "complete_sse_frame_ms": 43.583,
+      "operation_bytes": 16194,
+      "server_dispatch_ms": 22.22381100000348,
+      "server_exchange_ms": 23.447901,
+      "server_outer_phases": {
+        "execute_action_ms": 16.86179099488072,
+        "project_audiences_ms": 5.194109995500185
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 5.648,
+      "canonical_consumer_ms": 71.577,
+      "presentation_packet_ms": 39.519,
+      "presentation_compile_ms": 51.671,
+      "client_after_complete_sse_ms": null,
+      "frame_ms": {
+        "max": 31.03,
+        "mean": 7.75371641791045,
+        "p50": 6.829,
+        "p95": 10.448,
+        "p99": 20.453
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.04,
+        "actor_sample": 0.872,
+        "actor_sync": 0.75,
+        "draw_order": 2.084,
+        "hud_draw": 0.067,
+        "hud_process": 8.06,
+        "interaction": 0.06,
+        "mask_sync": 0.627,
+        "media_plan": 3.545,
+        "media_publication": 1.739,
+        "modular_shadows": 5.555,
+        "native_2d_atlas": 9.561,
+        "native_2d_lighting": 15.271,
+        "native_2d_projection": 0.215,
+        "player_process": 18.705,
+        "preparation_step": 3.565,
+        "scenery_sync": 0.004,
+        "session_poll": 0.026,
+        "session_timeline": 5.829,
+        "source_lighting": 0.222,
+        "source_lighting_resolve": 1.657,
+        "timeline_advance": 0.589
+      },
+      "sse_framing_cpu_ms": 0.648,
+      "requests": [
+        {
+          "operation": "preview",
+          "request_id": 1368,
+          "enqueued_ms": 0.108,
+          "worker_reply_ms": 11.081
+        },
+        {
+          "operation": "submit_command",
+          "request_id": 1369,
+          "enqueued_ms": 11.979,
+          "worker_reply_ms": 18.571
+        },
+        {
+          "operation": "choices",
+          "request_id": 1372,
+          "enqueued_ms": 259.371,
+          "worker_reply_ms": 504.836
+        }
+      ]
+    },
+    {
+      "number": 58,
+      "behavior": "action.move",
+      "stage": 10,
+      "input": "viewport_click",
+      "from": [
+        65,
+        20
+      ],
+      "to": [
+        68,
+        20
+      ],
+      "sequence": 101,
+      "ready_ms": 3797.422,
+      "first_movement_ms": 2356.902,
+      "first_animation_ms": 2356.902,
+      "complete_sse_frame_ms": 1371.613,
+      "operation_bytes": 80062,
+      "server_dispatch_ms": 1343.4526110067964,
+      "server_exchange_ms": 1345.609015,
+      "server_outer_phases": {
+        "execute_action_ms": 1122.2899480053457,
+        "project_audiences_ms": 220.88414899189956
+      },
+      "server_cpu_profiled": false,
+      "server_nested_hooks": true,
+      "sse_schema_ms": 31.582,
+      "canonical_consumer_ms": 451.19,
+      "presentation_packet_ms": 0.296,
+      "presentation_compile_ms": 443.67,
+      "client_after_complete_sse_ms": 985.289,
+      "frame_ms": {
+        "max": 45.737,
+        "mean": 8.489774049217,
+        "p50": 7.829,
+        "p95": 11.547,
+        "p99": 21.967
+      },
+      "client_phase_peaks_ms": {
+        "action_responses": 0.038,
+        "actor_sample": 1.185,
+        "actor_sync": 0.786,
+        "draw_order": 2.42,
+        "hud_draw": 0.184,
+        "hud_process": 8.088,
+        "interaction": 0.069,
+        "mask_sync": 3.033,
+        "media_plan": 14.765,
+        "media_publication": 1.737,
+        "modular_shadows": 1.671,
+        "native_2d_atlas": 16.874,
+        "native_2d_lighting": 18.543,
+        "native_2d_projection": 0.22,
+        "player_process": 43.359,
+        "preparation_step": 14.793,
+        "scenery_sync": 4.429,
+        "session_poll": 0.032,
+        "session_timeline": 16.685,
+        "source_lighting": 4.604,
+        "source_lighting_resolve": 1.602,
+        "static_order": 1.709,
+        "timeline_advance": 4.107,
+        "view_retirement": 0.512,
+        "wall_candidates": 2.463,
+        "wall_targets": 0.006,
+        "wall_visibility": 8.943,
+        "world_prepare_native": 0.382,
+        "world_rows": 0.029,
+        "world_sync": 2.745
+      },
+      "sse_framing_cpu_ms": 2.4290000000000003,
+      "requests": [
+        {
+          "operation": "preview",
+          "request_id": 1375,
+          "enqueued_ms": 2.201,
+          "worker_reply_ms": 13.267
+        },
+        {
+          "operation": "submit_command",
+          "request_id": 1377,
+          "enqueued_ms": 13.5,
+          "worker_reply_ms": 21.6
+        },
+        {
+          "operation": "choices",
+          "request_id": 1399,
+          "enqueued_ms": 3639.935,
+          "worker_reply_ms": 3777.284
+        }
+      ]
+    }
+  ],
+  "notes": [
+    "Actual production player actions. Input records distinguish native viewport clicks from action handlers.",
+    "Client timestamps use one Godot monotonic clock. Complete SSE frame is a client availability observation, not a server send timestamp.",
+    "Server exchange includes worker/IPC/record staging; dispatch is inside the actual worker. No subtraction of unsynchronized Windows/WSL clocks.",
+    "Client post-packet stages may overlap. Nested engine phases overlap and must not be added together.",
+    "CPU-profiled commands are excluded from latency aggregates. Nested phase hooks, when enabled, are diagnostic overhead.",
+    "First movement is an observed changed actor position at frame_post_draw. Ready includes intended animation and following choices.",
+    "The existing user preview remains open. These are process-attributed measurements, not an isolated GPU benchmark."
+  ]
+}

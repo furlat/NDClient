@@ -1064,3 +1064,43 @@ cover this startup boundary; retain the original failed-run evidence. Selection
 releases its temporary listeners, so it cannot guarantee against a different
 process taking the port before the real backend binds. map_audit owns the narrow
 launcher fix; scope_review checks plan adherence and unnecessary abstraction.
+
+## Accumulated light ceiling
+
+User direction: restore a limit on overlapping lights without the previous colour
+damage. This turn is light-cap only; door clicking and other repairs are excluded.
+The boundary is the final native player framebuffer and Escape settings. Native
+point/directional lights, authored normals, source colour/tint, masks, alpha,
+placement and playback remain their existing owners. Limit the combined RGB
+illumination with one scalar ceiling so coloured-light ratios survive; do not
+clamp the final image to the source RGB or clip channels separately. Preserve
+below-ceiling pixels and allow a settings toggle for an immediate comparison.
+
+render_audit owns the native receiving/output change; map_audit owns independent
+old-path and overlap pixel comparisons; root owns the setting and final scene
+verification. scope_review tracks plan adherence and anti-slop/anti-OOP review.
+Test actual source fixtures under zero/one/many lights, mixed colours, original
+alpha/wall opacity, normals display, height response and unlit exemptions. Compare
+the actual room with both carried torches off and with all four lights on; do not
+infer colour fidelity from numerical shader tests alone. No new light loop,
+additional full-world atlas or texture resampling is authorized by this plan.
+
+## Live Gallery response profile and client efficiency
+
+User observes a large response delay after entering the Gallery. Measure actual
+client-issued movement from click through preview, submission, backend execution,
+delivery/admission, preparation, first displayed movement and next-ready input.
+Separate intentional animation time from latency and frame stalls; do not assume
+retained map memory is the cause. Preserve the approved graphics and source cache.
+First produce a reproducible, correlated profile. Then create the user-requested
+separate server task with that evidence; server fixes belong there. Client fixes
+remain here and must be measured with live actions before and after, with exact
+receipts, canonical state and event ordering checks. No gameplay/rule changes.
+
+Root owns the real route, optional measurement host/worker and final analysis;
+scope_review owns bounded optional transport/preparation timing and review.
+Native graphics checks and live frame profiles run separately. Diagnostic worker
+CPU profiles identify call owners but their overhead must never be presented as
+unprofiled latency. Keep credentials/raw encounters private and commit concise
+aggregates plus reproducible tooling. Anti-slop/anti-OOP review continues on both
+the measurement boundary and any subsequent client fix.

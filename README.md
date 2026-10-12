@@ -95,11 +95,15 @@ SubViewport; unshaded 3D materials consume those straight-RGBA results. A gray
 CanvasModulate at 0.18 provides readability. The painted world has no 3D receiving
 lights and no custom diffuse-light loop.
 
-Native Canvas owns tint, style and accumulated lighting. The former per-channel
-albedo clamp was removed because it changed the reference demo's colours.
-Overlapping lights can still saturate the native LDR output; **Light strength**
-reduces their energy globally without a colour clamp. Source and normal samples
-retain nearest filtering.
+Native Canvas owns accumulated lighting. **Limit overlapping lights** in Escape
+settings caps its HDR illumination with one scalar before applying original
+source colour/tint/style, preserving coloured-light ratios. It reuses the existing
+atlas, native lights and nearest source/normal samples. Disabling it restores the
+original LDR path; **Light strength** independently changes global energy.
+Normals, emissive fire and source shadows bypass the ceiling. Native HDR alpha
+can differ from former LDR storage by one byte with unchanged coverage; the
+independent fixture verifies exact native-HDR alpha, and all four actual-room
+views verify exact toggle-off restoration and Normals output.
 
 Disclosed, active items supply their original very-bright, bright and dim radii.
 Their outer radius sets the native 2D cookie diameter. The recovered light cookie
@@ -1006,6 +1010,23 @@ res://tests/live_gallery_checks.gd`. It issues actual discoveries, previews and
 commands through the production player, records post-draw native source frames,
 and separates request/preparation waits from frame times. Its private command
 trace and canonical journal live alongside the launcher's run output.
+
+Add `--profile-pipeline` for correlated transport, admission, canonical reduction,
+presentation preparation and server dispatch timings. Optional
+`--profile-cpu-commands 36,50` profiles only those backend commands; exclude their
+latencies from ordinary aggregates. `--profile-action-phases` enables nested
+engine timers for diagnosis. Summarize a run with
+`python tools/analyze_live_pipeline.py <run-directory> --output <report.json>`.
+SDK transport tracing defaults off, is bounded and excludes payloads/credentials.
+
+The subsequent 58-command diagnostic run passed 410 checks with no lost trace
+records. In-Gallery movement median startup was 4,268 ms, worker dispatch 2,220 ms,
+and client delay after the complete SSE record 1,849 ms. Canonical reduction and
+presentation compilation were major client costs; server light publication and
+audience projection were major server costs. Nested timers overlap. This run had
+nested timing hooks and an earlier per-frame trace drain; it is diagnostic, not
+an uninstrumented benchmark. The current harness drains every 250 ms and engine
+phase hooks default off. See `generated/live_pipeline_diagnostic.json`.
 
 Use **Grid · G** beside **Log / Events**, or press **G**, to toggle the grid.
 

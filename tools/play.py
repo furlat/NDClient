@@ -144,7 +144,10 @@ async def run(args: argparse.Namespace) -> Path:
     print(("Lantern Gallery" if args.scenario == "crypt_gallery" else "Lantern Crypt") + " · Expedition", flush=True)
     print("Run files: " + str(output), flush=True)
     with (output / "server.log").open("wb") as server_log, (output / "godot.log").open("wb") as godot_log:
-        host = await asyncio.create_subprocess_exec(sys.executable, "-m", "devtools.player_server_acceptance.test_host",
+        host_entry = [str(project / "tools/profile_host.py"), "--cpu-commands", args.profile_cpu_commands] if args.profile_pipeline else ["-m", "devtools.player_server_acceptance.test_host"]
+        if args.profile_pipeline and args.profile_action_phases:
+            host_entry.append("--action-phases")
+        host = await asyncio.create_subprocess_exec(sys.executable, *host_entry,
             "--config", str(server_config), "--stop", str(stop), "--result", str(output / "host-result.json"),
             "--host", "0.0.0.0", "--port", str(port), cwd=args.engine, env=environment,
             start_new_session=True, stdout=server_log, stderr=server_log)
@@ -208,6 +211,9 @@ def main() -> None:
     parser.add_argument("--quit-after", type=int, default=0, metavar="FRAMES", help="Close after a bounded number of Godot frames")
     parser.add_argument("--test-script", choices=("res://tests/player_startup_checks.gd", "res://tests/live_gallery_checks.gd", "res://tests/player_wait_checks.gd", "res://tests/player_live_checks.gd", "res://tests/player_interaction_checks.gd", "res://tests/lighting_live_checks.gd", "res://tests/chest_live_checks.gd"), help="Run a bounded production-scene acceptance test")
     parser.add_argument("--test-command-delay-ms", type=int, default=0, help="Acceptance only: hold the first real command before forwarding it")
+    parser.add_argument("--profile-pipeline", action="store_true", help="Record worker execution and host exchange timings during real live commands")
+    parser.add_argument("--profile-cpu-commands", default="", help="Optional comma-separated command numbers for cProfile; adds overhead to those commands")
+    parser.add_argument("--profile-action-phases", action="store_true", help="Optional nested engine phase hooks; adds diagnostic overhead")
     args = parser.parse_args()
     if args.test_command_delay_ms and (not args.test_script or not 1 <= args.test_command_delay_ms <= 10000):
         parser.error("Command delay is limited to 1–10000 ms and requires a test script")

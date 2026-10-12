@@ -189,6 +189,7 @@ func _prepare_loop() -> void:
             continue
         var root_name = "InitializationResponse" if next==0 else "PlayerOperation"
         var started = Time.get_ticks_usec()
+        var packet_started = started
         var result = {"ok":true,"value":null}
         var packet: Dictionary = handoff.get("packet",{})
         if handoff.is_empty():
@@ -233,6 +234,7 @@ func _prepare_loop() -> void:
                     "cursor":packet.cursor.duplicate(true),"command_number":packet.command_number,
                     "skipped":result.value.get("skipped",[])}
         if _stopping(): break
+        transport.profile_preparation(next,packet_started,started,Time.get_ticks_usec(),result.ok,handoff.is_empty() or handoff.get("from_disk",false))
         mutex.lock()
         preparation_metrics.active = false
         preparation_metrics.packet_prepare_ms += decode_ms
