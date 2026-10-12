@@ -1028,6 +1028,20 @@ nested timing hooks and an earlier per-frame trace drain; it is diagnostic, not
 an uninstrumented benchmark. The current harness drains every 250 ms and engine
 phase hooks default off. See `generated/live_pipeline_diagnostic.json`.
 
+The coordinate-union bottleneck now uses native integer x/y sorting, preserving
+the full wire range, exact numeric order and last-input point references. No
+rendering, reducer transaction ownership or animation scheduling changed. In a
+fresh paired live route, median in-Gallery reduction fell from 761 to 261 ms,
+compilation from 779 to 253 ms, and complete-packet-to-prepared time from 1,601 to
+600 ms. Both runs passed 410 checks over 58 real commands, including 16 Gallery
+viewport clicks, reaching the same 1,761 tiles/360 objects and 122 causal groups.
+The full 101-operation presentation suite and event hierarchy/log suite also pass.
+The server was being edited separately; seven moves differ in world-update tile
+row counts, so server changes are not credited to this patch. The isolated
+same-packet candidate comparison proves exact reducer/compiler parity. Remaining
+native lighting/atlas frame spikes still reach about 115 ms. Timings and limits:
+`generated/client_sorting_live_comparison.json`.
+
 Use **Grid · G** beside **Log / Events**, or press **G**, to toggle the grid.
 
 The visual regression comparison also uses the user's newer recorded prefix9:

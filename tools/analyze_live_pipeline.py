@@ -1,5 +1,6 @@
 """Correlate real client command/frame timestamps with owned backend timings."""
 import argparse
+from collections import Counter
 import json
 from pathlib import Path
 from statistics import median
@@ -11,6 +12,19 @@ def read_json(path):
 
 def duration(row):
     return (row['time_us']-row['started_us'])/1000 if row else None
+
+
+def packet_shape(directory, sequence):
+    packet = read_json(directory/'journal'/('%016d.json' % sequence))
+    lineages = packet['lineages']
+    events = [event for lineage in lineages for event in lineage['events']]
+    updates = [update for lineage in lineages for update in lineage['world_updates']]
+    return {'lineages': len(lineages), 'events': len(events),
+        'facts': dict(sorted(Counter(event['fact']['kind'] for event in events if event['fact'] is not None).items())),
+        'versions': sum(len(lineage['version_rows']) for lineage in lineages),
+        'observations': sum(len(lineage['observations']) for lineage in lineages),
+        'world_tiles': sum(len(update['tiles']) for update in updates),
+        'world_objects': sum(len(update['objects']) for update in updates)}
 
 
 def summarize(directory):
@@ -36,12 +50,15 @@ def summarize(directory):
         exchange = exchange_by_command[number]
         first = command['first_movement_ms']
         packet_ms = (packet['time_us']-start)/1000 if packet else None
+        first_group = next((phase['ms'] for phase in command['phases'] if phase['state']['group']), None)
         row = {'number':number, 'behavior':command['behavior'], 'stage':command['stage'],
             'input':command['input'], 'from':command['from'], 'to':command['to'],
             'sequence':sequence, 'ready_ms':command['elapsed_ms'],
             'first_movement_ms':first, 'first_animation_ms':command['first_animation_ms'],
+            'first_group_ms':first_group,
             'complete_sse_frame_ms':packet_ms,
             'operation_bytes':decode['bytes'] if decode else None,
+            'packet_shape':packet_shape(directory, sequence),
             'server_dispatch_ms':command_worker['dispatch_ms'],
             'server_exchange_ms':exchange['exchange_ms'],
             'server_outer_phases':command_worker['outer_phases'],
@@ -50,6 +67,7 @@ def summarize(directory):
             'sse_schema_ms':duration(decode), 'canonical_consumer_ms':duration(consumer),
             'presentation_packet_ms':(prepare['compile_started_us']-prepare['packet_started_us'])/1000 if prepare else None,
             'presentation_compile_ms':(prepare['time_us']-prepare['compile_started_us'])/1000 if prepare else None,
+            'client_to_prepared_ms':(prepare['time_us']-packet['time_us'])/1000 if prepare and packet else None,
             'client_after_complete_sse_ms':first-packet_ms if first is not None and packet_ms is not None else None,
             'frame_ms':command['frame_ms'], 'client_phase_peaks_ms':command['phase_peaks'],
             'sse_framing_cpu_ms':sum(duration(item) for item in events if item['stage']=='sse_framing')}
@@ -62,7 +80,7 @@ def summarize(directory):
         row['requests']=request_stages
         rows.append(row)
     metrics = ['first_movement_ms','server_dispatch_ms','server_exchange_ms','operation_bytes',
-        'sse_schema_ms','canonical_consumer_ms','presentation_compile_ms','client_after_complete_sse_ms']
+        'sse_schema_ms','canonical_consumer_ms','presentation_compile_ms','client_to_prepared_ms','client_after_complete_sse_ms']
     sections = {}
     for label, lower, upper in [('before_gallery',0,6),('gallery_entry',7,7),('inside_gallery',8,10)]:
         selected = [row for row in rows if row['behavior']=='action.move' and lower<=row['stage']<=upper and not row['server_cpu_profiled']]
@@ -70,7 +88,9 @@ def summarize(directory):
         for metric in metrics:
             values = [row[metric] for row in selected if row[metric] is not None]
             if values:sections[label][metric]={'median':median(values),'min':min(values),'max':max(values)}
-    return {'run':str(directory.resolve()), 'dropped_client_trace_records':trace['dropped'],
+    context = directory/'source-context.json'
+    return {'run':str(directory.resolve()), 'source_context':read_json(context) if context.exists() else None,
+        'dropped_client_trace_records':trace['dropped'],
         'sections':sections, 'commands':rows,
         'notes':[
             'Actual production player actions. Input records distinguish native viewport clicks from action handlers.',
@@ -79,6 +99,7 @@ def summarize(directory):
             'Client post-packet stages may overlap. Nested engine phases overlap and must not be added together.',
             'CPU-profiled commands are excluded from latency aggregates. Nested phase hooks, when enabled, are diagnostic overhead.',
             'First movement is an observed changed actor position at frame_post_draw. Ready includes intended animation and following choices.',
+            'Post-packet first-movement time may include required reactions before entry. Client-to-prepared isolates arrival through compilation, before timeline playback.',
             'The existing user preview remains open. These are process-attributed measurements, not an isolated GPU benchmark.'
         ]}
 

@@ -1104,3 +1104,17 @@ CPU profiles identify call owners but their overhead must never be presented as
 unprofiled latency. Keep credentials/raw encounters private and commit concise
 aggregates plus reproducible tooling. Anti-slop/anti-OOP review continues on both
 the measurement boundary and any subsequent client fix.
+
+The next client change is confined to `Audience.points_union`: native sorting of
+integer x/y keys replaces repeated recursive script comparisons. Preserve exact
+lexicographic coordinate order, deduplication/last-input reference semantics,
+53-bit wire coordinates, and input immutability. Do not change reducer ownership,
+event scheduling, disclosure, renderer, lighting, textures or animation timing.
+The boundary is the complete reduced state and compiled event hierarchy from
+actual admitted packets, followed by the live Gallery input-to-movement path.
+Root implements the helper and native live run; scope_review owns plan adherence,
+anti-slop/anti-OOP and independent correctness review. Validate the helper against
+an independent coordinate oracle, existing Python reducer parity cases, causal
+presentation checks and full live canonical/receipt checks. Measure before/after
+client phases separately from server time; the user-owned server task may change
+backend code concurrently, so any server improvement cannot be credited here.

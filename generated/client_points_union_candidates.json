@@ -1,0 +1,151 @@
+{
+  "cases": [
+    {
+      "known_tiles": 1360,
+      "sequence": 53,
+      "timings": {
+        "a": [
+          {
+            "compiler_us": 396056,
+            "reducer_us": 288478
+          },
+          {
+            "compiler_us": 410151,
+            "reducer_us": 353337
+          },
+          {
+            "compiler_us": 334200,
+            "reducer_us": 275364
+          }
+        ],
+        "b": [
+          {
+            "compiler_us": 273354,
+            "reducer_us": 220029
+          },
+          {
+            "compiler_us": 245241,
+            "reducer_us": 145581
+          },
+          {
+            "compiler_us": 174584,
+            "reducer_us": 136347
+          }
+        ],
+        "original": [
+          {
+            "compiler_us": 624808,
+            "reducer_us": 593630
+          },
+          {
+            "compiler_us": 686668,
+            "reducer_us": 656165
+          },
+          {
+            "compiler_us": 676884,
+            "reducer_us": 584141
+          }
+        ]
+      }
+    },
+    {
+      "known_tiles": 1391,
+      "sequence": 63,
+      "timings": {
+        "a": [
+          {
+            "compiler_us": 525635,
+            "reducer_us": 341074
+          },
+          {
+            "compiler_us": 470271,
+            "reducer_us": 459653
+          },
+          {
+            "compiler_us": 468768,
+            "reducer_us": 359791
+          }
+        ],
+        "b": [
+          {
+            "compiler_us": 358096,
+            "reducer_us": 250645
+          },
+          {
+            "compiler_us": 274204,
+            "reducer_us": 235133
+          },
+          {
+            "compiler_us": 216703,
+            "reducer_us": 166552
+          }
+        ],
+        "original": [
+          {
+            "compiler_us": 777902,
+            "reducer_us": 718006
+          },
+          {
+            "compiler_us": 784049,
+            "reducer_us": 774297
+          },
+          {
+            "compiler_us": 875390,
+            "reducer_us": 737677
+          }
+        ]
+      }
+    },
+    {
+      "known_tiles": 1641,
+      "sequence": 87,
+      "timings": {
+        "a": [
+          {
+            "compiler_us": 452312,
+            "reducer_us": 411970
+          },
+          {
+            "compiler_us": 416891,
+            "reducer_us": 388483
+          },
+          {
+            "compiler_us": 438831,
+            "reducer_us": 386071
+          }
+        ],
+        "b": [
+          {
+            "compiler_us": 349336,
+            "reducer_us": 210133
+          },
+          {
+            "compiler_us": 283735,
+            "reducer_us": 196123
+          },
+          {
+            "compiler_us": 233707,
+            "reducer_us": 184995
+          }
+        ],
+        "original": [
+          {
+            "compiler_us": 812330,
+            "reducer_us": 785084
+          },
+          {
+            "compiler_us": 843920,
+            "reducer_us": 764293
+          },
+          {
+            "compiler_us": 831591,
+            "reducer_us": 755717
+          }
+        ]
+      }
+    }
+  ],
+  "checks": 198,
+  "failures": [],
+  "scope": "Ignored candidate copies only. A uses direct exact x/y comparator; B sorts native integer x-column/y-row keys. Three rotated-order native CPU repetitions on actual recorded seq53/63/87; complete reducer and compiler parity, arbitrary-input/duplicate/negative/53-bit coordinate contract. Not a live performance result."
+}

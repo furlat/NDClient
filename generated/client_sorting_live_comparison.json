@@ -1,0 +1,226 @@
+{
+  "scope": "Client integer-coordinate union optimization; actual fresh native Windows Forward+/Vulkan Gallery command runs, same graphics (light cap off in both profiling fixtures).",
+  "runtime_change": "sdk/audience.gd points_union only; native integer x/y sorting replaces recursive script comparisons. No renderer, animation scheduling, reducer ownership or backend changes in this client patch.",
+  "before_report": "generated/live_sorting_before.json",
+  "after_report": "generated/live_sorting_after.json",
+  "inside_gallery_median_ms": {
+    "canonical_consumer_ms": {
+      "before": 761.264,
+      "after": 261.214,
+      "reduction_percent": 65.6868051030917
+    },
+    "presentation_compile_ms": {
+      "before": 778.8965,
+      "after": 253.2725,
+      "reduction_percent": 67.4831636809255
+    },
+    "client_to_prepared_ms": {
+      "before": 1601.0705,
+      "after": 600.412,
+      "reduction_percent": 62.49934028514047
+    },
+    "client_after_complete_sse_ms": {
+      "before": 1800.5520000000001,
+      "after": 729.8129999999999,
+      "reduction_percent": 59.46726337256576
+    },
+    "first_movement_ms": {
+      "before": 2785.214,
+      "after": 1598.2835,
+      "reduction_percent": 42.615414829883804
+    },
+    "server_dispatch_ms": {
+      "before": 739.5275004964788,
+      "after": 796.352734498214,
+      "reduction_percent": -7.683992003486795
+    }
+  },
+  "paired_gallery_moves": [
+    {
+      "command": 30,
+      "same_action_and_route": true,
+      "packet_shape_differences": {
+        "world_tiles": [
+          155,
+          152
+        ]
+      }
+    },
+    {
+      "command": 32,
+      "same_action_and_route": true,
+      "packet_shape_differences": {
+        "world_tiles": [
+          196,
+          182
+        ]
+      }
+    },
+    {
+      "command": 34,
+      "same_action_and_route": true,
+      "packet_shape_differences": {
+        "world_tiles": [
+          66,
+          70
+        ]
+      }
+    },
+    {
+      "command": 36,
+      "same_action_and_route": true,
+      "packet_shape_differences": {
+        "world_tiles": [
+          227,
+          223
+        ]
+      }
+    },
+    {
+      "command": 38,
+      "same_action_and_route": true,
+      "packet_shape_differences": {
+        "world_tiles": [
+          94,
+          93
+        ]
+      }
+    },
+    {
+      "command": 39,
+      "same_action_and_route": true,
+      "packet_shape_differences": {}
+    },
+    {
+      "command": 41,
+      "same_action_and_route": true,
+      "packet_shape_differences": {
+        "world_tiles": [
+          161,
+          154
+        ]
+      }
+    },
+    {
+      "command": 43,
+      "same_action_and_route": true,
+      "packet_shape_differences": {
+        "world_tiles": [
+          241,
+          240
+        ]
+      }
+    },
+    {
+      "command": 45,
+      "same_action_and_route": true,
+      "packet_shape_differences": {}
+    },
+    {
+      "command": 46,
+      "same_action_and_route": true,
+      "packet_shape_differences": {}
+    },
+    {
+      "command": 48,
+      "same_action_and_route": true,
+      "packet_shape_differences": {}
+    },
+    {
+      "command": 50,
+      "same_action_and_route": true,
+      "packet_shape_differences": {}
+    },
+    {
+      "command": 52,
+      "same_action_and_route": true,
+      "packet_shape_differences": {}
+    },
+    {
+      "command": 54,
+      "same_action_and_route": true,
+      "packet_shape_differences": {}
+    },
+    {
+      "command": 56,
+      "same_action_and_route": true,
+      "packet_shape_differences": {}
+    },
+    {
+      "command": 58,
+      "same_action_and_route": true,
+      "packet_shape_differences": {}
+    }
+  ],
+  "validation": {
+    "live": {
+      "before": {
+        "checks": 410,
+        "failures": [],
+        "commands": 58,
+        "viewport_gallery_moves": 16,
+        "trace_records_lost": 0,
+        "tiles": 1761,
+        "objects": 360,
+        "final_sequence": 101,
+        "completed_groups": 122
+      },
+      "after": {
+        "checks": 410,
+        "failures": [],
+        "commands": 58,
+        "viewport_gallery_moves": 16,
+        "trace_records_lost": 0,
+        "tiles": 1761,
+        "objects": 360,
+        "final_sequence": 101,
+        "completed_groups": 122
+      }
+    },
+    "coordinate_and_late_rejection_checks": 179,
+    "python_reducer_parity_cases": 125,
+    "full_presentation_checks": 7967,
+    "full_presentation_operations": 101,
+    "event_trace_checks": 3458,
+    "failures": 0
+  },
+  "frames": {
+    "before": {
+      "frame_ms": {
+        "max": 108.442,
+        "mean": 4.94614261893083,
+        "p50": 4.005,
+        "p95": 11.308,
+        "p99": 18.718
+      },
+      "frames_over_100ms": 6,
+      "frames_over_33ms": 137,
+      "samples": 40780,
+      "evicted": 0,
+      "atlas_publication_max_ms": 77.198,
+      "lighting_max_ms": 78.367
+    },
+    "after": {
+      "frame_ms": {
+        "max": 114.799,
+        "mean": 4.52371989272913,
+        "p50": 3.615,
+        "p95": 11.012,
+        "p99": 18.611
+      },
+      "frames_over_100ms": 8,
+      "frames_over_33ms": 137,
+      "samples": 39899,
+      "evicted": 0,
+      "atlas_publication_max_ms": 75.503,
+      "lighting_max_ms": 81.535
+    }
+  },
+  "limits": [
+    "Server task modified the backend concurrently; no server improvement is attributed to this patch. Seven Gallery moves have changed world-update tile-row counts; action route, fact counts, observations and event/version counts match.",
+    "The separate actual-packet candidate benchmark (generated/client_points_union_candidates.json) isolates the sorting change with exact full reducer/compiler equality and198 checks.",
+    "Client-to-prepared measures complete SSE availability through canonical admission and presentation compilation. First movement can additionally wait for required reactions and world presentation.",
+    "Both runs use the same optional bounded trace and250ms drain, with nested engine timing hooks and cProfile off. Existing user preview stays open; these are not isolated GPU benchmarks.",
+    "Frame tail remains: after run has a114.799ms maximum and native lighting/atlas publication spikes. This change removes the sorting bottleneck, not every renderer stall."
+  ]
+}

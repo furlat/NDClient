@@ -32,11 +32,22 @@ static func compare(a: Variant, b: Variant) -> int:
     return -1 if a < b else 1
 
 static func points_union(first: Array, second: Array) -> Array:
-    var points = {}
-    for point in first: points[point_key(point)] = point
-    for point in second: points[point_key(point)] = point
-    var result: Array = points.values()
-    result.sort_custom(func(a, b): return compare(a, b) < 0)
+    # Admitted points contain two integers. Sort numeric axes natively instead
+    # of calling the recursive Variant comparator for every pair of points.
+    # Keep full wire precision and the last input point at each coordinate.
+    var columns = {}
+    for collection in [first, second]:
+        for point in collection:
+            if not columns.has(point[0]): columns[point[0]] = {}
+            columns[point[0]][point[1]] = point
+    var xs: Array = columns.keys()
+    xs.sort()
+    var result: Array = []
+    for x in xs:
+        var column: Dictionary = columns[x]
+        var ys: Array = column.keys()
+        ys.sort()
+        for y in ys: result.append(column[y])
     return result
 
 static func modes_signature(modes: Array) -> String:
