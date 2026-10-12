@@ -181,7 +181,7 @@ func _run() -> void:
     for argument in OS.get_cmdline_user_args():
         if argument.begins_with("--reference-atlas="):
             evidence.atlas_reference=argument.trim_prefix("--reference-atlas=")
-            scene.native_light_atlas=load(evidence.atlas_reference).new()
+            scene.native_light_atlas=preload("res://tests/atlas_reference.gd").instantiate(evidence.atlas_reference)
     scene.session.transport.set_profiling(true)
     root.add_child(scene)
     # Default to approved capped lighting; an explicit diagnostic run can

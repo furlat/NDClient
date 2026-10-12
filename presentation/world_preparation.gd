@@ -46,12 +46,13 @@ func configure(owner: Node, candidate: Dictionary, first: bool = false) -> void:
     for key in host.ground_groups:
         var group: Dictionary = host.ground_groups[key]
         var entry: Dictionary = group.entries[0]
-        ground_before[key] = {"rows":group.rows,"packets":entry.ground_packets,"receiver_bounds":entry.ground_receiver_bounds,"capacity":entry.node.multimesh.instance_count}
+        ground_before[key] = {"rows":group.rows,"packets":entry.ground_packets,"receiver_bounds":entry.ground_receiver_bounds,"capacity":entry.node.multimesh.instance_count,"ground_version":entry.get("ground_version",0)}
     # Copy only the cache directory here. Raw authoring values are immutable.
     # The worker forks every mutable retained index before touching it.
     var input = {"state":candidate.presentation_state,"changes":candidate.changes,
         "cache":catalog_cache.duplicate(),"retained":host.world_row_cache,
-        "ground":ground_before,"quarter":quarter,"basis":camera.basis,"background":host.ground_is_background}
+        "ground":ground_before,"quarter":quarter,"basis":camera.basis,"background":host.ground_is_background,
+        "visibility":host.scenery_visibility}
     task = WorkerThreadPool.add_task(_derive.bind(input),false,"Prepare displayed world")
 
 func _derive(input: Dictionary) -> void:
@@ -64,6 +65,13 @@ func _derive(input: Dictionary) -> void:
     var derived = WorldRows.update_rows(input.state,input.cache,retained,input.changes)
     var cells = {}
     var visibility = WorldRows.current_ids(input.state,retained.boundaries,cells)
+    # The live owner replaces this set rather than mutating it. Its identity
+    # lets admission reject this delta if sight was refreshed while preparing.
+    var visibility_changes = {}
+    for id in visibility:
+        if not input.visibility.has(id): visibility_changes[id] = true
+    for id in input.visibility:
+        if not visibility.has(id): visibility_changes[id] = false
     var ground = {}; var wanted = {}; var packets = {}
     var background: bool = retained.negative.is_empty()
     for row in derived.visual_rows:
@@ -84,7 +92,8 @@ func _derive(input: Dictionary) -> void:
     if input.changes.full or not input.changes.tiles.is_empty() or not input.changes.objects.is_empty():
         geometry = WallReveal.prepare_geometry(input.state.tiles,derived.visual_rows,input.quarter)
     result = {"complete":true,"geometry":geometry,"derived":derived,"retained":retained,"wanted":wanted,"ground":ground,"packets":packets,
-        "background":background,"needs_order":retained.changed or input.background!=background,"visibility":visibility,"visible_cells":cells,"worker_ms":(Time.get_ticks_usec()-started)/1000.0}
+        "background":background,"needs_order":retained.changed or input.background!=background,"visibility":visibility,"visible_cells":cells,
+        "visibility_base":input.visibility,"visibility_changes":visibility_changes,"worker_ms":(Time.get_ticks_usec()-started)/1000.0}
 
 func step(budget_usec: int = 2000) -> void:
     if prepared or not media_issue.is_empty() or frame==Engine.get_process_frames(): return
@@ -172,6 +181,10 @@ func publish_order() -> void:
         entry.order_id = entry.id; entry.order_quarter = quarter; entry.order_background = result.background
         complete.append(entry); nodes[record.node_id] = true
     host.static_complete_order = complete; host.static_sort_nodes = nodes
+    # This proof belongs to the final adopted membership, and is consumed by
+    # the next sort only. Later direct/manual updates still use discovery.
+    host.prepared_static_order = {"entries":host.static_entries,"order":complete,
+        "quarter":quarter,"background":result.background,"generation":host.world_generation,"epoch":epoch}
 
 func worker_finished() -> bool:
     return task<0 or WorkerThreadPool.is_task_completed(task)

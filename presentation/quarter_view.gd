@@ -129,9 +129,14 @@ func style_is_current() -> bool:
     return true
 
 func step(budget_usec: int = 3000) -> void:
+    if is_prepared: return
     var started = Time.get_ticks_usec()
     if not style_is_current() and phase not in ["rows","ground","tiles"]: begin_style()
-    while not is_prepared and Time.get_ticks_usec()-started < budget_usec:
+    # A large visibility guard can consume the whole slice. Still advance one
+    # existing unit, or an otherwise valid target could starve indefinitely.
+    var advanced = false
+    while not is_prepared and (not advanced or Time.get_ticks_usec()-started < budget_usec):
+        advanced = true
         match phase:
             "rows":
                 if cursor == rows.size():

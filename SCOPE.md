@@ -1169,3 +1169,21 @@ illumination equation, quantization and source sampling remain exact. Reduce
 repeated source/style work at its owner rather than approximating the lighting.
 Measure the same live route after the change, with separate movement, reveal,
 hold and server-wait cohorts. Keep all source artwork and raw encounters ignored.
+
+The first sparse-atlas live run reduced publication rebuilding but exposed
+remaining duplicate work at the same admission boundary. Reuse the worker's
+exact visibility result and its static ordering proof; retain the exhaustive
+fallback for fixtures, resets and mismatched generations. render_audit owns
+these producer/publication changes in Play and WorldPreparation. Root removes
+unchanged-owner material polling inside the cap loop, preserving independent
+highlight, animation, output replacement, camera and water-clock invalidations.
+scope_review continues plan/correctness review. Repeat exact reference images
+and the same live route; do not present the initial cap synchronization regression
+as a performance improvement.
+
+Cap-enabled disclosure validation exposed a large-map rotation timeout. The
+quarter builder can spend its entire slice validating style before executing
+any preparation work. Preserve style validation and guarantee at least one
+bounded builder unit per call, including a zero-budget progress check; prepared
+jobs must remain unchanged. render_audit owns this narrow starvation fix. Root
+records timeout gate diagnostics and repeats the capped disclosure/view matrix.

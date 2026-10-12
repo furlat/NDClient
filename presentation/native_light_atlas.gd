@@ -1,5 +1,6 @@
 extends RefCounted
 const GroundReceiving = preload("res://presentation/ground_receiving.gd")
+const Delta = preload("res://presentation/native_light_delta.gd")
 # Native Canvas lights receive into isolated straight-RGBA cells. Original 3D
 # quads, source materials, painter order and picking remain their original owners.
 const CappedEnvironment = preload("res://presentation/canvas_capped_environment.gdshader")
@@ -51,6 +52,13 @@ var projection_dirty: Array = []
 var entry_specs: Dictionary = {}
 var published_supports: Dictionary = {}
 var shelf_cursor := Vector3i(1,1,0)
+var delta_ready := false
+var delta_serial := -1
+var receiver_index: Dictionary = {}
+var support_owners: Dictionary = {}
+var source_groups: Dictionary = {}
+var material_dirty: Dictionary = {}
+var next_source_order := 0
 
 func attach(parent: Node3D) -> void:
     owner = parent
@@ -85,6 +93,7 @@ func set_light_cap(value: float) -> void:
         ambient.color=Color(0.18,0.18,0.18,1.0).linear_to_srgb() if _uses_hdr() else Color(0.18,0.18,0.18,1.0)
     for group in groups.values(): group.version=-1
     membership.clear(); admission_stamp.clear(); output_stamp.clear()
+    delta_ready=false
     revision+=1
 
 var normals_visible = false
@@ -101,6 +110,7 @@ func set_normals_visible(value: bool) -> void:
         ambient.color=Color(0.18,0.18,0.18,1.0).linear_to_srgb() if _uses_hdr() else Color(0.18,0.18,0.18,1.0)
     for group in groups.values(): group.version=-1
     membership.clear(); admission_stamp.clear(); output_stamp.clear()
+    delta_ready=false
 
 func _normal_shader(source: Shader) -> Shader:
     if not normal_shaders.has(source):
@@ -298,8 +308,9 @@ func _copy_output_source(entry: Dictionary) -> void:
     if not entry.has("received_material"): return
     var output: ShaderMaterial=entry.received_material
     var source: ShaderMaterial=entry.material
-    var signature=[source,source.shader,entry.get("source_version",0),output,output.shader]
-    if entry.get("received_source_key",[])==signature: return
+    var version: int=entry.get("source_version",0)
+    var previous: Dictionary=entry.received_source_key if entry.has("received_source_key") else {}
+    if not previous.is_empty() and previous.source==source and previous.shader==source.shader and previous.version==version and previous.output==output and previous.output_shader==output.shader: return
     var key=[source.shader.get_instance_id(),output.shader.get_instance_id()]
     if not parameter_names.has(key):
         var accepted={}
@@ -312,7 +323,7 @@ func _copy_output_source(entry: Dictionary) -> void:
     output.set_shader_parameter("use_instance_visibility",entry.has("batch_rows"))
     var mesh: QuadMesh=entry.node.multimesh.mesh if entry.has("batch_rows") else entry.node.mesh
     output.set_shader_parameter("source_quad_size",mesh.size)
-    entry.received_source_key=signature
+    entry.received_source_key={"source":source,"shader":source.shader,"version":version,"output":output,"output_shader":output.shader}
     entry.erase("received_style")
 
 func _copy_parameters(group: Dictionary) -> void:
@@ -354,6 +365,11 @@ func _group(entry: Dictionary, crop: Dictionary, visibility: float, receiver_id:
         group.material.shader=shader; group.crop=crop; group.version=-1
     group.entry=entry
     group.water=info.water
+    var source_id: int=entry.node.get_instance_id()
+    group.source_id=source_id
+    if not source_groups.has(source_id): source_groups[source_id]={}
+    source_groups[source_id][id]=group
+    if group.version<0: material_dirty[source_id]=true
     return group
 
 func _make_receiver(spec: Dictionary, group: Dictionary, index: int) -> Dictionary:
@@ -377,6 +393,7 @@ func _publish_addresses(floor_receivers: Dictionary, changed_outputs: Array) -> 
         output.set_shader_parameter("source_crop",receiver.crop.uv)
         output.set_shader_parameter("atlas_region",Vector4(origin.x,origin.y,size.x,size.y))
     var rewritten=0
+    var packet_reads=0; var packet_reads_skipped=0
     for floor in floor_receivers.values():
         var entry: Dictionary=floor.entry
         var output: ShaderMaterial=entry.received_material
@@ -385,22 +402,38 @@ func _publish_addresses(floor_receivers: Dictionary, changed_outputs: Array) -> 
         var buffer: PackedFloat32Array=entry.ground_buffer
         var buffer_changed=false
         var snapshots: Dictionary=entry_specs[entry.node.get_instance_id()].packets
+        var repair_indices: bool=floor.get("repair_indices",false)
+        # GroundData.prepare appends exactly the same data into its row packet
+        # and aggregate buffer. This certifies equality, not freshness: compare
+        # against the atlas address before skipping the duplicate packet read.
+        var coherent: bool=floor.get("coherent_addresses",false)
         for receiver in floor.receivers:
+            if repair_indices:
+                receiver.index=entry.ground_indices[receiver.row_id]
             var pixel: Vector2i=receiver.position
             var x=pixel.x%1024; var y=pixel.y%1024; var high=(pixel.x/1024)+8*(pixel.y/1024)
             var offset: int=receiver.index*20
-            if buffer[offset+17]!=x or buffer[offset+18]!=y or buffer[offset+19]!=high:
+            var changed: bool=buffer[offset+17]!=x or buffer[offset+18]!=y or buffer[offset+19]!=high
+            if changed:
                 buffer[offset+17]=x; buffer[offset+18]=y; buffer[offset+19]=high
                 buffer_changed=true; rewritten+=1
-            var packet: Dictionary=entry.ground_packets[entry.batch_rows[receiver.index].id]
+            elif coherent:
+                packet_reads_skipped+=1
+                continue
+            var row_id: String=receiver.row_id if repair_indices else entry.batch_rows[receiver.index].id
+            var packet: Dictionary=entry.ground_packets[row_id]
             var data: PackedFloat32Array=packet.data
-            if data[17]!=x or data[18]!=y or data[19]!=high:
+            packet_reads+=1
+            if coherent or data[17]!=x or data[18]!=y or data[19]!=high:
                 data[17]=x; data[18]=y; data[19]=high; packet.data=data
-                snapshots[entry.batch_rows[receiver.index].id].data=data.duplicate()
+                if not snapshots.has(row_id): snapshots[row_id]={}
+                snapshots[row_id].data=data.duplicate()
         if buffer_changed:
             entry.ground_buffer=buffer; entry.node.multimesh.buffer=buffer
     last_reconcile_phases.address_rows_rewritten=rewritten
     last_reconcile_phases.address_batches=floor_receivers.size()
+    last_reconcile_phases.address_packet_reads=packet_reads
+    last_reconcile_phases.address_packet_reads_skipped=packet_reads_skipped
 
 
 func _reconcile(world: Node) -> bool:
@@ -616,7 +649,12 @@ func _style(receiver: Dictionary) -> void:
     var entry: Dictionary = receiver.entry
     var visibility: float = entry.scenery_values[receiver.index] if receiver.index>=0 else float(entry.get("scenery_value",1.0))
     if visibility==receiver.visibility: return
+    var previous: Dictionary=receiver.group
     receiver.group=_group(entry,receiver.crop,visibility,receiver.id,{},receiver.get("join_mask",0))
+    if delta_ready and not is_same(previous,receiver.group):
+        if not receiver.group.has("users"): receiver.group.users=0
+        receiver.group.users+=1
+        Delta.drop_group(self,previous)
     receiver.node.material=receiver.group.material
     receiver.rank=receiver.group.rank%1024
     receiver.node.z_index=receiver.rank
@@ -624,7 +662,7 @@ func _style(receiver: Dictionary) -> void:
     if receiver.water:
         receiver.group.material.set_shader_parameter("receiver_world_origin",receiver.get("world_origin",Vector3.ZERO))
 
-func sync(world: Node, published: Array = [], styles: Array = []) -> void:
+func sync(world: Node, published: Array = [], styles: Array = [], changes: Dictionary = {}) -> void:
     var started = Time.get_ticks_usec()
     projection_dirty=[]
     last_reconcile_phases={}
@@ -641,7 +679,18 @@ func sync(world: Node, published: Array = [], styles: Array = []) -> void:
     var reconcile: bool = published.is_empty() or published!=admission_stamp or moving!=dynamic_members or world.entries.size()!=known_entry_count or screen_size.x>viewport.size.x or screen_size.y>viewport.size.y
     var phase = Time.get_ticks_usec()
     if reconcile:
-        if not _reconcile(world):
+        var applied: bool=not changes.is_empty() and Delta.reconcile(self,world,changes)
+        if not applied:
+            # Sparse caches need not reconstruct full ordered candidate arrays.
+            # Full admission/mode/packing fallback derives them from sources.
+            var previous_specs=entry_specs
+            var previous_membership=membership
+            entry_specs={}; membership=[]; delta_ready=false
+            applied=_reconcile(world)
+            if applied: Delta.rebuild(self,int(changes.get("serial",-1)))
+            else:
+                entry_specs=previous_specs; membership=previous_membership
+        if not applied:
             for issue in errors:
                 if issue not in world.presentation_errors: world.presentation_errors.append(issue)
             last_sync_ms=(Time.get_ticks_usec()-started)/1000.0
@@ -669,31 +718,55 @@ func sync(world: Node, published: Array = [], styles: Array = []) -> void:
     for receiver in dynamic_receivers: _style(receiver)
     last_reconcile_phases.style_ms=(Time.get_ticks_usec()-phase)/1000.0
     phase=Time.get_ticks_usec()
-    # Source updates are few material groups, never one native call per tile.
-    # Highlight remains independently polled because hover/Alt owns that value.
-    for group in groups.values():
-        var entry: Dictionary = group.entry
-        var copied: bool = group.version!=entry.get("source_version",0) or group.source_shader!=entry.material.shader
-        if copied: _copy_parameters(group)
-        var highlighted = entry.material.get_shader_parameter("highlighted")
-        if group.capped and entry.has("received_material"):
+    # One owner pass per source. Floor visibility/join-mask variants share the
+    # source and output, so they must not each poll/copy the capped output.
+    var material_sources_updated=0
+    var material_sources_unchanged=0
+    for id in source_groups:
+        if not entry_specs.has(id) or source_groups[id].is_empty(): continue
+        var source: Dictionary=entry_specs[id]
+        var entry: Dictionary=source.entry
+        var material: ShaderMaterial=entry.material
+        var version: int=entry.get("source_version",0)
+        var highlighted=material.get_shader_parameter("highlighted")
+        var seconds=material.get_shader_parameter("displayed_time_seconds") if source.info.water else null
+        var visibility: float=entry.get("scenery_value",1.0)
+        # Source versions own animation/tint changes; highlight and water time
+        # have independent owners. A new visibility/join variant still needs its
+        # first copy even if the source itself has not changed. Admission owns
+        # material/output replacement and gives that source a fresh sync record;
+        # unstamped callers use the complete planner. Avoid native resource
+        # identity/shader queries for every unchanged source on every frame.
+        if (not camera_changed and not basis_changed and not material_dirty.has(id) and source.get("synced",false)
+            and source.sync_version==version and source.sync_highlighted==highlighted
+            and source.sync_seconds==seconds and source.sync_visibility==visibility):
+            material_sources_unchanged+=1
+            continue
+        material_sources_updated+=1
+        for group in source_groups[id].values():
+            var copied: bool=group.version!=version or group.source_shader!=material.shader
+            if copied: _copy_parameters(group)
+            if highlighted!=group.highlighted:
+                group.material.set_shader_parameter("highlighted",highlighted); group.highlighted=highlighted
+            if basis_changed or copied: group.material.set_shader_parameter("world_to_canvas",basis)
+            if camera_changed or copied: group.material.set_shader_parameter("actual_scene_viewport_size",screen_size)
+            if group.water and group.seconds!=seconds:
+                group.material.set_shader_parameter("displayed_time_seconds",seconds); group.seconds=seconds
+        var output: ShaderMaterial=entry.get("received_material") if source.info.capped else null
+        if output!=null:
             _copy_output_source(entry)
-            var output: ShaderMaterial=entry.received_material
-            var style=[output,float(entry.get("scenery_value",1.0)),highlighted,entry.material.get_shader_parameter("displayed_time_seconds") if group.water else null]
-            if entry.get("received_style",[])!=style:
-                output.set_shader_parameter("current_visibility",style[1])
+            var style: Dictionary=entry.received_style if entry.has("received_style") else {}
+            if style.is_empty() or style.output!=output or style.visibility!=visibility or style.highlighted!=highlighted or style.seconds!=seconds:
+                output.set_shader_parameter("current_visibility",visibility)
                 output.set_shader_parameter("highlighted",highlighted)
-                if group.water: output.set_shader_parameter("displayed_time_seconds",style[3])
-                entry.received_style=style
-        if highlighted!=group.highlighted:
-            group.material.set_shader_parameter("highlighted",highlighted); group.highlighted=highlighted
-        if basis_changed or copied: group.material.set_shader_parameter("world_to_canvas",basis)
-        if camera_changed or copied: group.material.set_shader_parameter("actual_scene_viewport_size",screen_size)
-        if group.water:
-            var seconds = entry.material.get_shader_parameter("displayed_time_seconds")
-            if group.seconds!=seconds:
-                group.material.set_shader_parameter("displayed_time_seconds",seconds)
-                group.seconds=seconds
+                if source.info.water: output.set_shader_parameter("displayed_time_seconds",seconds)
+                entry.received_style={"output":output,"visibility":visibility,"highlighted":highlighted,"seconds":seconds}
+        source.synced=true
+        source.sync_version=version; source.sync_highlighted=highlighted; source.sync_seconds=seconds
+        source.sync_visibility=visibility
+    material_dirty.clear()
+    last_reconcile_phases.material_sources_updated=material_sources_updated
+    last_reconcile_phases.material_sources_unchanged=material_sources_unchanged
     last_reconcile_phases.material_sync_ms=(Time.get_ticks_usec()-phase)/1000.0
     phase=Time.get_ticks_usec()
     var screen=Rect2(Vector2.ZERO,screen_size)
@@ -745,6 +818,7 @@ func close() -> void:
             entry.ground_buffer=buffer; entry.node.multimesh.buffer=buffer
     receivers.clear(); static_receivers.clear(); dynamic_receivers.clear(); groups.clear(); membership.clear(); layout_members.clear(); crop_cache.clear()
     entry_specs.clear(); published_supports.clear(); shelf_cursor=Vector3i(1,1,0)
+    receiver_index.clear(); support_owners.clear(); source_groups.clear(); material_dirty.clear(); delta_ready=false; delta_serial=-1
     admission_stamp.clear(); visibility_stamp.clear(); dynamic_members.clear(); output_stamp.clear(); transport_stamp.clear(); canvas_key.clear(); known_entry_count=-1
     if is_instance_valid(viewport): viewport.queue_free()
     viewport=null

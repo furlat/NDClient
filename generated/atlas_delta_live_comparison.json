@@ -1,0 +1,258 @@
+{
+  "scope": "Admitted atlas deltas, retained source synchronization for the approved light cap, and prepared visibility/order reuse.",
+  "initial_atlas": "581ec3a",
+  "prior_checkpoint": "1898f2e",
+  "backend_commit": "dbbc125aa02da3a8d8cf2b36688ecf1cbe93b877",
+  "backend": "Same unchanged isolated backend used for all measured runs; shared backend code was not changed.",
+  "renderer": "forward_plus",
+  "gpu": "NVIDIA GeForce RTX 5090",
+  "resolution": [
+    1440.0,
+    900.0
+  ],
+  "same_route": true,
+  "route_equality_fields": [
+    "number",
+    "behavior",
+    "stage",
+    "input",
+    "from",
+    "to"
+  ],
+  "commands": 58,
+  "native_gallery_moves": 16,
+  "disclosed_tiles": 1761,
+  "disclosed_objects": 360,
+  "results": {
+    "initial": {
+      "run": "20261012T221806.972809Z",
+      "checks": 411,
+      "failures": [],
+      "moving_frame_ms": {
+        "count": 2853,
+        "mean": 13.17778548895899,
+        "p50": 10.654,
+        "p95": 20.167,
+        "p99": 89.226,
+        "max": 114.442
+      },
+      "moving_by_zoom": {
+        "16.0": {
+          "count": 2241,
+          "mean": 12.965981258366801,
+          "p50": 10.702,
+          "p95": 19.4,
+          "p99": 87.568,
+          "max": 114.337
+        },
+        "28.0": {
+          "count": 612,
+          "mean": 13.95336274509804,
+          "p50": 10.557,
+          "p95": 21.213,
+          "p99": 91.488,
+          "max": 114.442
+        }
+      },
+      "reveal_frame_ms": {
+        "count": 71,
+        "mean": 91.83940845070423,
+        "p50": 90.628,
+        "p95": 110.308,
+        "p99": 114.442,
+        "max": 133.401
+      },
+      "reveal_atlas_cpu_ms": {
+        "count": 71,
+        "mean": 61.919338028169015,
+        "p50": 62.009,
+        "p95": 75.0,
+        "p99": 80.018,
+        "max": 87.908
+      },
+      "reveal_atlas_reconcile_cpu_ms": {
+        "count": 71,
+        "mean": 52.043661971830986,
+        "p50": 52.084,
+        "p95": 63.403,
+        "p99": 67.597,
+        "max": 71.942
+      },
+      "moving_atlas_material_sync_cpu_ms": null,
+      "reveal_scenery_cpu_ms": {
+        "count": 71,
+        "mean": 4.0989154929577465,
+        "p50": 3.997,
+        "p95": 4.694,
+        "p99": 5.137,
+        "max": 6.792
+      },
+      "presentation_hold_total_ms": 3688.734
+    },
+    "checkpoint": {
+      "run": "20261012T223512.893645Z",
+      "checks": 411,
+      "failures": [],
+      "moving_frame_ms": {
+        "count": 4782,
+        "mean": 7.826193015474697,
+        "p50": 6.391,
+        "p95": 11.881,
+        "p99": 63.517,
+        "max": 94.261
+      },
+      "moving_by_zoom": {
+        "16.0": {
+          "count": 3797,
+          "mean": 7.622123781933105,
+          "p50": 6.197,
+          "p95": 11.582,
+          "p99": 62.207,
+          "max": 94.261
+        },
+        "28.0": {
+          "count": 985,
+          "mean": 8.612843654822335,
+          "p50": 7.208,
+          "p95": 12.517,
+          "p99": 67.63,
+          "max": 76.466
+        }
+      },
+      "reveal_frame_ms": {
+        "count": 71,
+        "mean": 72.40552112676058,
+        "p50": 71.354,
+        "p95": 87.367,
+        "p99": 88.707,
+        "max": 94.261
+      },
+      "reveal_atlas_cpu_ms": {
+        "count": 71,
+        "mean": 44.61176056338028,
+        "p50": 44.319,
+        "p95": 53.926,
+        "p99": 55.427,
+        "max": 58.297
+      },
+      "reveal_atlas_reconcile_cpu_ms": {
+        "count": 71,
+        "mean": 37.47484507042253,
+        "p50": 37.213,
+        "p95": 45.04,
+        "p99": 46.681,
+        "max": 48.763
+      },
+      "moving_atlas_material_sync_cpu_ms": {
+        "count": 4782,
+        "mean": 1.748038477624425,
+        "p50": 1.548,
+        "p95": 2.979,
+        "p99": 3.525,
+        "max": 5.224
+      },
+      "reveal_scenery_cpu_ms": {
+        "count": 71,
+        "mean": 3.9650281690140843,
+        "p50": 3.923,
+        "p95": 4.641,
+        "p99": 4.897,
+        "max": 4.92
+      },
+      "presentation_hold_total_ms": 2573.931
+    },
+    "current": {
+      "run": "20261012T233808.932550Z",
+      "checks": 411,
+      "failures": [],
+      "moving_frame_ms": {
+        "count": 5154,
+        "mean": 7.2748769887466045,
+        "p50": 6.262,
+        "p95": 11.95,
+        "p99": 29.385,
+        "max": 56.523
+      },
+      "moving_by_zoom": {
+        "16.0": {
+          "count": 4124,
+          "mean": 7.025912463627546,
+          "p50": 6.133,
+          "p95": 11.46,
+          "p99": 29.007,
+          "max": 56.523
+        },
+        "28.0": {
+          "count": 1030,
+          "mean": 8.271701941747573,
+          "p50": 7.139,
+          "p95": 13.153,
+          "p99": 28.99,
+          "max": 47.517
+        }
+      },
+      "reveal_frame_ms": {
+        "count": 71,
+        "mean": 34.44680281690141,
+        "p50": 33.032,
+        "p95": 42.224,
+        "p99": 47.517,
+        "max": 56.523
+      },
+      "reveal_atlas_cpu_ms": {
+        "count": 71,
+        "mean": 10.423591549295775,
+        "p50": 10.183,
+        "p95": 12.22,
+        "p99": 15.624,
+        "max": 17.789
+      },
+      "reveal_atlas_reconcile_cpu_ms": {
+        "count": 71,
+        "mean": 2.9781408450704228,
+        "p50": 3.076,
+        "p95": 3.88,
+        "p99": 4.487,
+        "max": 5.163
+      },
+      "moving_atlas_material_sync_cpu_ms": {
+        "count": 5154,
+        "mean": 1.4763081102056654,
+        "p50": 1.266,
+        "p95": 2.806,
+        "p99": 3.318,
+        "max": 4.865
+      },
+      "reveal_scenery_cpu_ms": {
+        "count": 71,
+        "mean": 0.27692957746478875,
+        "p50": 0.269,
+        "p95": 0.342,
+        "p99": 0.426,
+        "max": 0.484
+      },
+      "presentation_hold_total_ms": 2631.252
+    }
+  },
+  "graphics": {
+    "reference": "581ec3a atlas implementation with only unused optional fourth sync argument added by test adapter",
+    "lighting_equation_and_source_sampling": "unchanged",
+    "cap_on_exact_rgba_captures": 27,
+    "cap_off_exact_rgba_captures": 27,
+    "receipt_and_clock_comparison": "exact",
+    "native_lifecycle_checks": 149,
+    "native_light_cap_checks": 270,
+    "prepared_admission_checks": 28,
+    "quarter_progress_checks": 9
+  },
+  "limitations": [
+    "Single serialized live run per frozen configuration; normal runtime variation remains.",
+    "Reveal frames remain above a 16.7 ms budget: current p50 33.032 ms, p95 42.224 ms, maximum 56.523 ms. Full-frame stalls are reduced, not eliminated.",
+    "Active motion is measured separately from media/world holds, pauses and stationary command/server waits; holds did not improve over the immediate checkpoint.",
+    "Current zoom-28 moving p95 is 13.153 ms versus checkpoint 12.517 ms; median improves from 7.208 to 7.139 ms. Do not claim improvement at every percentile.",
+    "Cap-enabled steady owner CPU improves; cap-disabled idle controls retain overhead from new owner bookkeeping. This change targets the approved capped path.",
+    "CPU phases are inclusive. The slowest current reveal contains 17.789 ms atlas, 10.819 ms world sync, and 10.459 ms wall visibility; do not sum nested subphases.",
+    "Zero-budget quarter preparation now makes progress; it does not guarantee a strict per-call frame budget or prove the cause of the earlier intermittent rotation timeout.",
+    "Raw encounter traces, per-frame timings and screenshots remain private."
+  ]
+}

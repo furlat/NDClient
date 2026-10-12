@@ -338,6 +338,9 @@ func _ground_finish(job: Dictionary) -> void:
 
 func _ground_update(entry: Dictionary, rows: Array) -> void:
     entry.ground_version = entry.get("ground_version",0)+1
+    # Direct/manual updates have no prepared geometry receipt. Never carry a
+    # receipt from an older worker publication into the exact fallback path.
+    entry.erase("geometry_changes")
     var packets: Dictionary = entry.ground_packets
     _ground_sort(rows,packets)
     var retained = {}; var indices = {}; var buffer = PackedFloat32Array(); var bounds = AABB(); var values: Array = []
@@ -365,6 +368,11 @@ func _ground_update(entry: Dictionary, rows: Array) -> void:
 
 func _ground_publish(entry: Dictionary, packet: Dictionary) -> void:
     entry.ground_version = entry.get("ground_version",0)+1
+    var changes: Dictionary = packet.get("geometry_changes",{})
+    if changes.is_empty(): entry.erase("geometry_changes")
+    else:
+        entry.geometry_changes = {"base_version":changes.base_version,"version":entry.ground_version,
+            "changed":changes.changed,"removed":changes.removed}
     var multi: MultiMesh = entry.node.multimesh
     var rows: Array = packet.rows
     if multi.instance_count<rows.size(): multi.instance_count = ceili(rows.size()/256.0)*256
@@ -372,6 +380,9 @@ func _ground_publish(entry: Dictionary, packet: Dictionary) -> void:
     multi.visible_instance_count = rows.size()
     entry.batch_rows = rows; entry.ground_packets = packet.packets; entry.ground_indices = packet.indices
     entry.ground_buffer = packet.buffer; entry.scenery_values = packet.values
+    # Only this prepared publication certifies row packet/buffer address equality.
+    # It never claims those copied addresses match the atlas's current layout.
+    entry.prepared_address_version = entry.ground_version
     entry.placement = rows[0]; entry.id = rows[0].id+":0:terrain"
     update_bounds(entry)
 

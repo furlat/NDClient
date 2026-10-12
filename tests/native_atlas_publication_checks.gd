@@ -5,6 +5,8 @@ var publication_captures:Array=[]
 var output_directory:String
 var run_label:String
 var reveal_indices:Array=[1,2,3]
+var cap_during_reveals=false
+var rotation_failures:Array=[]
 
 func argument(name:String,fallback:String="")->String:
     var args=OS.get_cmdline_user_args()
@@ -87,15 +89,16 @@ func run()->void:
         for value in requested.split(","):
             if value.is_valid_int() and int(value)>0 and int(value) not in reveal_indices:reveal_indices.append(int(value))
         reveal_indices.sort()
-    output_directory="res://.captures/atlas-publication/"+run_label
+    cap_during_reveals=argument("--reveal-cap")=="on"
+    output_directory="res://.captures/atlas-publication"+("-cap" if cap_during_reveals else "")+"/"+run_label
     DirAccess.make_dir_recursive_absolute(output_directory)
     ProjectSettings.set_setting("source_data/encounter_cache_mib",0)
     var scene=Player.instantiate();scene.timeline.paused=true
     if not reference.is_empty():
-        var script=load(reference)
-        if script==null:
+        var selected=preload("res://tests/atlas_reference.gd").instantiate(reference)
+        if selected==null:
             check(false,"Reference atlas script loads: "+reference);scene.free();finish_report();return
-        scene.native_light_atlas=script.new()
+        scene.native_light_atlas=selected
     root.add_child(scene)
     # _ready reads local settings, so override only this scene immediately after
     # attachment. The two separate runs use these same deterministic controls.
@@ -105,7 +108,7 @@ func run()->void:
     scene.source_depth=true;scene.source_normals=true
     scene.grid_visible=false;scene.hud.hide();scene.camera.size=8.137
     scene.initial_focus=true;scene.camera_focus=Vector3(4,0,5);scene.position_camera()
-    apply_mode(scene,"solid",false,false)
+    apply_mode(scene,"solid",cap_during_reveals,false)
     var deadline=Time.get_ticks_msec()+600000
     while (not scene.session.recording_ready or not scene._media_ready({}) or scene.world_revision<0) and scene.session.issue.is_empty() and scene.media_issue.is_empty() and Time.get_ticks_msec()<deadline:
         await process_frame
@@ -149,6 +152,16 @@ func run()->void:
         var rotation_deadline=Time.get_ticks_msec()+60000
         while scene.rotation_pending() and Time.get_ticks_msec()<rotation_deadline:await scene.presentation_updated
         check(not scene.rotation_pending() and scene.quarter==quarter,"Final requested quarter publishes "+str(quarter))
+        if scene.rotation_pending() or scene.quarter!=quarter:
+            var pending=scene.pending_view
+            var diagnostic={"requested":quarter,"actual":scene.quarter,"retiring_nodes":scene.retiring_node_count,
+                "media_ready":scene._environment_media_ready(),"media_issue":scene.media_issue,
+                "world_preparing":scene.pending_world!=null,"world_revision":scene.world_revision,
+                "phase":pending.phase if pending!=null else "none","cursor":pending.cursor if pending!=null else -1,
+                "prepared":pending.is_prepared if pending!=null else false,
+                "style_current":pending.style_is_current() if pending!=null else false,
+                "projection_current":pending.projection_is_current() if pending!=null else false}
+            rotation_failures.append(diagnostic);print("ROTATION_TIMEOUT ",JSON.stringify(diagnostic))
         for mode in ["solid","translucent","hidden"]:
             apply_mode(scene,mode,false,false)
             await refresh_capture(scene,"final-q%d-%s-off"%[quarter,mode])
@@ -170,6 +183,7 @@ func run()->void:
 func finish_report()->void:
     var report={"run":run_label,"checks":checks,"failures":failures,"recording":argument("--recording"),
         "reference_atlas":argument("--reference-atlas"),"selected_reveals":reveal_indices,"captures":publication_captures,
+        "rotation_failures":rotation_failures,
         "renderer":RenderingServer.get_current_rendering_method(),"driver":RenderingServer.get_current_rendering_driver_name(),
         "scope":"Same immutable recording and1000ms manual timeline requests, paused between requests; no empty-queue clock advances. Selected first-disclosure native frames and24 final captures: four quarters, three wall modes, cap/Normals beauty roundtrip. Fixed source profile/strength and static fire. Cross-run exact pixels and matching clock/source receipts must be compared externally; this report alone does not assert reference/current equality. No timing claim."}
     FileAccess.open(output_directory+"/report.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))

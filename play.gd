@@ -29,6 +29,8 @@ var world_prepare_epoch = -1
 var world_prepared_count = 0
 var world_prepare_worker_ms = 0.0
 var world_generation = 0
+var native_light_changes: Dictionary = {}
+var native_light_change_serial = 0
 var world_visual_rows: Array = []
 var world_row_cache: Dictionary = {}
 var world_changes: Dictionary = {}
@@ -38,6 +40,7 @@ var scenery_wall_sources: Dictionary = {}
 var scenery_batches: Array = []
 var scenery_consumers: Dictionary = {}
 var scenery_visible_cells: Dictionary = {}
+var prepared_scenery: Dictionary = {}
 var wall_sources: Array = []
 var wall_entries: Array = []
 var scenery_index_dirty := true
@@ -72,6 +75,7 @@ var static_complete_order: Array = []
 var static_sort_nodes: Dictionary = {}
 var static_order_dirty = true
 var static_order_count = -1
+var prepared_static_order: Dictionary = {}
 var initial_focus = false
 var selected_mode = "action.move"
 var action_request = -1
@@ -361,7 +365,8 @@ func _prepare_initial_world() -> void:
         world_revision = -1
     if world_revision>=0 or pending_world!=null or not _environment_sources_ready(): return
     var candidate = {"key":["initial",timeline.initialization_revision],"state":timeline.state,
-        "presentation_state":timeline.presentation_state(),"changes":{"full":true,"tiles":{},"objects":{},"senses":true}}
+        "presentation_state":timeline.presentation_state(),"world_revision":timeline.world_revision,
+        "changes":{"full":true,"tiles":{},"objects":{},"senses":true}}
     pending_world = WorldPreparation.new(); add_child(pending_world)
     pending_world.configure(self,candidate,true)
 
@@ -427,7 +432,17 @@ func _finish_world_preparation() -> void:
     pending_world.native_groups = {}; pending_world.native_ground = {}
     _discard_world_preparation()
 
+func _publish_native_light_changes(upserts: Array, removed: Array, full: bool = false) -> void:
+    if not full and upserts.is_empty() and removed.is_empty(): return
+    var base = native_light_change_serial
+    native_light_change_serial += 1
+    # Only the latest completed admission is retained. If more than one is
+    # published before atlas sync, the missed base forces its complete planner.
+    native_light_changes = {"base":base,"serial":native_light_change_serial,
+        "full":full,"upserts":upserts,"removed":removed}
+
 func _sync_world() -> void:
+    prepared_scenery = {}; prepared_static_order = {}
     var prepared: Dictionary = pending_world.result if pending_world!=null and pending_world.epoch==timeline.initialization_revision and pending_world.prepared and (pending_world.admitted or pending_world.initial) else {}
     # Explicit renderer fixtures may replace a state while preparation is pending.
     if prepared.is_empty() and pending_world!=null: _discard_world_preparation()
@@ -458,6 +473,13 @@ func _sync_world() -> void:
     if not prepared.get("geometry",{}).is_empty():
         prepared.geometry.generation = world_generation
         wall_geometry_views[quarter] = prepared.geometry
+    if not prepared.is_empty() and pending_world.quarter==quarter and pending_world.boundary.get("world_revision",-1)==timeline.world_revision:
+        # The existing world gate has now admitted this exact epoch/boundary.
+        # Merely finishing the private worker never publishes sight early.
+        prepared_scenery = {"visibility":prepared.visibility,"visible_cells":prepared.visible_cells,
+            "base":prepared.visibility_base,"changes":prepared.visibility_changes,
+            "revision":timeline.world_revision,"generation":world_generation,
+            "quarter":quarter,"epoch":timeline.initialization_revision}
     if not changed and not rotated:
         _finish_world_preparation()
         return
@@ -488,6 +510,7 @@ func _sync_world() -> void:
                 ground[row.material].append(row)
             else: wanted[row.id] = row
     var removed = {}
+    var light_upserts: Array = []
     var entries_changed = rotated
     var walls_changed = rotated
     phase = Time.get_ticks_usec()
@@ -530,6 +553,7 @@ func _sync_world() -> void:
                 _environment_row(row.duplicate(true))
                 fresh_groups[id] = {"row":row,"entries":static_entries.slice(first)}
             _scenery_add(fresh_groups[id].entries)
+            light_upserts.append_array(fresh_groups[id].entries)
             entries_changed = true
             if row.kind in ["wall","cliff"]: walls_changed = true
         retained.append_array(fresh_groups[id].entries)
@@ -543,6 +567,7 @@ func _sync_world() -> void:
                 var prior: Dictionary = old.entries[0].placement
                 if not prepared.is_empty() and prepared.packets.has(key): _ground_publish(old.entries[0],prepared.packets[key])
                 else: _ground_update(old.entries[0],rows.duplicate())
+                light_upserts.append(old.entries[0])
                 if prior!=old.entries[0].placement: entries_changed = true
                 old.rows = rows
             fresh_ground[key] = old
@@ -556,6 +581,7 @@ func _sync_world() -> void:
                 _ground_batch(rows.duplicate())
                 fresh_ground[key] = {"rows":rows,"entries":static_entries.slice(first)}
             _scenery_add(fresh_ground[key].entries)
+            light_upserts.append_array(fresh_ground[key].entries)
             entries_changed = true
             for row in rows: scenery_new_consumers[row.id] = true
         retained.append_array(fresh_ground[key].entries)
@@ -578,6 +604,7 @@ func _sync_world() -> void:
     static_order_dirty = static_order_dirty or entries_changed
     wall_visibility_revision = -1
     wall_mask_dirty = wall_mask_dirty or walls_changed
+    _publish_native_light_changes(light_upserts,removed.keys(),rotated or world_changes.get("full",false))
     _finish_world_preparation()
 
 func _clear_static_view_cache() -> void:
@@ -672,6 +699,7 @@ func _activate_static_view(view_quarter: int) -> void:
     scenery_quarter = view_quarter; scenery_world_revision = world_revision; scenery_revision = timeline.world_revision
     water_entries = static_entries.filter(func(entry):return entry.material.shader==WATER_SHADER)
     water_display_seconds = -1.0
+    _publish_native_light_changes([],[],true)
 
 func _sample_fixtures() -> void:
     fixture_energy.clear()
@@ -735,18 +763,28 @@ func _sync_scenery(force: bool = false, refresh_sight: bool = false) -> void:
         for group in ground_groups.values():
             for row in group.rows: scenery_new_consumers[row.id] = true
         scenery_index_count = static_entries.size(); scenery_index_dirty = false
-    if rebuild or refresh_sight or scenery_revision!=timeline.world_revision or scenery_generation!=world_generation or not scenery_new_consumers.is_empty():
-        var state: Dictionary = timeline.presentation_state()
-        var boundaries: Dictionary = WorldRows.boundary_index(state) if force or world_row_cache.is_empty() else world_row_cache.boundaries
-        var current = WorldRows.current_ids(state,boundaries,scenery_visible_cells)
-        var changed = {}
-        for id in current:
-            if not scenery_visibility.has(id): changed[id] = true
-        for id in scenery_visibility:
-            if not current.has(id): changed[id] = false
+    if rebuild or refresh_sight or scenery_revision!=timeline.world_revision or scenery_generation!=world_generation or not scenery_new_consumers.is_empty() or not prepared_scenery.is_empty():
+        var reuse: bool = not force and not refresh_sight and not prepared_scenery.is_empty() and prepared_scenery.epoch==timeline.initialization_revision and prepared_scenery.revision==timeline.world_revision and prepared_scenery.generation==world_generation and prepared_scenery.quarter==world_quarter and is_same(prepared_scenery.base,scenery_visibility)
+        var current: Dictionary
+        var changed: Dictionary
+        if reuse:
+            current = prepared_scenery.visibility
+            scenery_visible_cells = prepared_scenery.visible_cells
+            changed = prepared_scenery.changes.duplicate()
+        else:
+            var state: Dictionary = timeline.presentation_state()
+            var boundaries: Dictionary = WorldRows.boundary_index(state) if force or world_row_cache.is_empty() else world_row_cache.boundaries
+            current = WorldRows.current_ids(state,boundaries,scenery_visible_cells)
+            changed = {}
+            for id in current:
+                if not scenery_visibility.has(id): changed[id] = true
+            for id in scenery_visibility:
+                if not current.has(id): changed[id] = false
+        prepared_scenery = {}
+        var sight_changed: bool = not changed.is_empty()
         for id in scenery_new_consumers: changed[id] = current.has(id)
         scenery_new_consumers = {}
-        if current != scenery_visibility: wall_visibility_revision = -1
+        if sight_changed: wall_visibility_revision = -1
         scenery_visibility = current
         var batches = {}
         for id in changed:
@@ -1128,7 +1166,7 @@ func _sync_native_lighting() -> void:
     phase = Time.get_ticks_usec()
     native_light_atlas.sync(self,
         [world_generation,world_revision,quarter,wall_mode,scenery_revision,source_depth,source_normals],
-        [world_generation,quarter,scenery_revision,wall_mode])
+        [world_generation,quarter,scenery_revision,wall_mode],native_light_changes)
     FrameProfile.end_phase(profile,"native_2d_atlas",phase)
     phase = Time.get_ticks_usec()
     # Remove stale handles before the helper retires hidden actors. Source
@@ -1149,18 +1187,22 @@ func _sync_native_lighting() -> void:
 func _sort_draws() -> void:
     # Source geometry establishes one total order. Changing which wall variants
     # are visible selects a subsequence; it does not change those ordering keys.
+    var proof: Dictionary = prepared_static_order
+    prepared_static_order = {}
     if static_order_dirty or static_order_count != static_entries.size():
         var ordering_started = Time.get_ticks_usec()
         var changed = static_complete_order.size()!=static_entries.size()
-        for entry in static_entries:
-            if not static_sort_nodes.has(entry.node.get_instance_id()): changed = true
-            if not is_same(entry.get("order_placement"),entry.placement) or entry.get("order_quarter",-1)!=quarter or entry.get("order_background")!=ground_is_background or entry.get("order_id")!=entry.id:
-                entry.order_key = Order.key(entry.placement,entry.role,entry.layer,quarter,ground_is_background)
-                entry.order_placement = entry.placement
-                entry.order_quarter = quarter
-                entry.order_background = ground_is_background
-                entry.order_id = entry.id
-                changed = true
+        var trusted: bool = not proof.is_empty() and proof.epoch==timeline.initialization_revision and proof.generation==world_generation and proof.quarter==quarter and proof.background==ground_is_background and is_same(proof.entries,static_entries) and is_same(proof.order,static_complete_order)
+        if not trusted:
+            for entry in static_entries:
+                if not static_sort_nodes.has(entry.node.get_instance_id()): changed = true
+                if not is_same(entry.get("order_placement"),entry.placement) or entry.get("order_quarter",-1)!=quarter or entry.get("order_background")!=ground_is_background or entry.get("order_id")!=entry.id:
+                    entry.order_key = Order.key(entry.placement,entry.role,entry.layer,quarter,ground_is_background)
+                    entry.order_placement = entry.placement
+                    entry.order_quarter = quarter
+                    entry.order_background = ground_is_background
+                    entry.order_id = entry.id
+                    changed = true
         if changed:
             static_complete_order = static_entries.duplicate()
             static_complete_order.sort_custom(_entry_before)

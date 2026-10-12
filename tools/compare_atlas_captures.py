@@ -3,6 +3,8 @@
 Generate the reference script with git show 581ec3a:presentation/native_light_atlas.gd
 in .runtime/atlas-baseline.gd, then run the fixture with/without --reference-atlas
 against the same private journal. Run this tool in the engine's Pillow environment.
+For cap-enabled first disclosures, run both fixtures with --reveal-cap=on and
+compare with --cap-reveals. This keeps both independent capture matrices.
 """
 import argparse
 import json
@@ -15,8 +17,9 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[1])
     parser.add_argument("--baseline", default="581ec3a (atlas only)")
+    parser.add_argument("--cap-reveals", action="store_true", help="Compare the pair recorded with --reveal-cap=on")
     args = parser.parse_args()
-    folder = args.root / ".captures/atlas-publication"
+    folder = args.root / (".captures/atlas-publication-cap" if args.cap_reveals else ".captures/atlas-publication")
     reference = json.loads((folder / "reference/report.json").read_text())
     current = json.loads((folder / "current/report.json").read_text())
     originals = {row["label"]: row for row in reference["captures"]}
@@ -38,7 +41,8 @@ def main():
               "checks_per_run": [reference["checks"], current["checks"]],
               "run_failures": [reference["failures"], current["failures"]],
               "notes": "Exact source/clock/publication receipts and final RGBA from the same immutable live journal. First disclosure frames and four views with wall/cap/Normals transitions. No pixel tolerance."}
-    (args.root / "generated/atlas_pixel_comparison.json").write_text(json.dumps(report, indent=2) + "\n")
+    report_path = "generated/atlas_cap_pixel_comparison.json" if args.cap_reveals else "generated/atlas_pixel_comparison.json"
+    (args.root / report_path).write_text(json.dumps(report, indent=2) + "\n")
     passed = labels_match and not any(report["run_failures"]) and all(not r["mismatched_receipt_fields"] and r["maximum_byte_error"] == 0 for r in results)
     print(json.dumps({"passed": passed, "captures": len(results)}))
     raise SystemExit(0 if passed else 1)
