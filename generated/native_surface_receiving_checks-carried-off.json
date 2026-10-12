@@ -1,0 +1,115 @@
+{
+  "cases": [
+    {
+      "difference": {
+        "alpha": 0,
+        "changed": 2832,
+        "maximum": 232
+      },
+      "joined": 49,
+      "props": 4,
+      "quarter": 0,
+      "unjoined": 0
+    },
+    {
+      "difference": {
+        "alpha": 0,
+        "changed": 3882,
+        "maximum": 216
+      },
+      "joined": 49,
+      "props": 4,
+      "quarter": 1,
+      "unjoined": 0
+    },
+    {
+      "difference": {
+        "alpha": 0,
+        "changed": 3325,
+        "maximum": 213
+      },
+      "joined": 49,
+      "props": 4,
+      "quarter": 2,
+      "unjoined": 0
+    },
+    {
+      "difference": {
+        "alpha": 0,
+        "changed": 3264,
+        "maximum": 234
+      },
+      "joined": 49,
+      "props": 4,
+      "quarter": 3,
+      "unjoined": 0
+    }
+  ],
+  "checks": 35,
+  "driver": "vulkan",
+  "failures": [],
+  "lighting": {
+    "actors": [
+      {
+        "id": "ea489443-e110-4f27-b8d0-37d6b6310ad9",
+        "name": "Shield Fighter",
+        "position": [
+          3,
+          5
+        ],
+        "torches": [
+          {
+            "id": "8688915d-aec3-4a04-ac61-66bdd164b954",
+            "is_lit": false,
+            "name": "Torch"
+          }
+        ]
+      },
+      {
+        "id": "4b4090e8-3c0d-4e72-b925-b35ea769539e",
+        "name": "Draconic Sorcerer",
+        "position": [
+          4,
+          5
+        ],
+        "torches": [
+          {
+            "id": "8b3e08da-2aee-401c-8118-840bc8c9571c",
+            "is_lit": false,
+            "name": "Torch"
+          }
+        ]
+      }
+    ],
+    "light_strength": 1.0,
+    "resolved_sources": [
+      {
+        "actor_id": "",
+        "enabled": true,
+        "id": "88985999-fdfa-410f-a415-8e77ec670e5e",
+        "name": "Wall Torch",
+        "position": [
+          2.0,
+          0.816496610641479,
+          3.0
+        ]
+      },
+      {
+        "actor_id": "",
+        "enabled": true,
+        "id": "c66b835b-e7a6-4ac3-b9ed-9e0126001382",
+        "name": "Wall Torch",
+        "position": [
+          6.0,
+          0.816496610641479,
+          3.0
+        ]
+      }
+    ],
+    "sequence": 9,
+    "source_override": false,
+    "wall_mode": "hidden"
+  },
+  "renderer": "forward_plus",
+  "scope": "Final3D finite recorded scene in four quarters. Before uses original single-ray prop normals and independently exposed floor skirts; after uses source pixel-integrated Cycles normals and published-topology interior joins. Alpha/state unchanged. Pixel differences are recorded, not a subjective-quality assertion."
+}

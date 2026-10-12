@@ -23,10 +23,39 @@ def windows_path(path: Path) -> str:
     return subprocess.check_output(["wslpath", "-w", str(path.resolve())], text=True).strip()
 
 
-def available_port() -> int:
-    with socket.socket() as probe:
-        probe.bind(("127.0.0.1", 0))
-        return probe.getsockname()[1]
+def available_port(excluded: tuple[int, ...] = ()) -> int:
+    # Godot runs on Windows while its backend runs in WSL. A WSL-only port0
+    # allocation can land in Windows' excluded TCP ranges, preventing localhost
+    # forwarding. Let the actual Windows socket stack choose first; no exclusion
+    # table or machine-specific port range is duplicated here.
+    script = (
+        "$ErrorActionPreference = 'Stop'; "
+        "$listener = [System.Net.Sockets.TcpListener]::new([System.Net.IPAddress]::Loopback, 0); "
+        "$listener.ExclusiveAddressUse = $true; "
+        "try { $listener.Start(1); $listener.LocalEndpoint.Port } "
+        "finally { $listener.Stop() }"
+    )
+    for _ in range(10):
+        try:
+            output = subprocess.check_output(
+                ["powershell.exe", "-NoProfile", "-NonInteractive", "-Command", script],
+                text=True, stderr=subprocess.PIPE, timeout=10)
+            port = int(output.strip())
+        except (subprocess.SubprocessError, ValueError) as error:
+            raise RuntimeError("Native Windows loopback port allocation failed") from error
+        if not 1 <= port <= 65535:
+            raise RuntimeError("Native Windows loopback allocation returned an invalid port")
+        if port in excluded:
+            continue
+        try:
+            with socket.socket() as probe:
+                # Match the backend/proxy's real bind address, including conflicts
+                # from other WSL interfaces, then release before its normal start.
+                probe.bind(("0.0.0.0", port))
+            return port
+        except OSError:
+            continue
+    raise RuntimeError("No port was available to both native Windows and WSL after 10 attempts")
 
 
 def private_json(path: Path, value: dict) -> None:
@@ -100,7 +129,7 @@ async def run(args: argparse.Namespace) -> Path:
     server_config = output / "server.json"
     private_json(server_config, settings.model_dump(mode="json"))
     port = args.port or available_port()
-    proxy = await start_delayed_backend(port,args.test_command_delay_ms) if args.test_command_delay_ms else None
+    proxy = await start_delayed_backend(port,args.test_command_delay_ms,available_port((port,))) if args.test_command_delay_ms else None
     client_port = proxy["port"] if proxy else port
     client_config = output / "client.json"
     seat = settings.credentials[0]
@@ -173,7 +202,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--engine", type=Path, default=project.parent / "dnd_engine")
     parser.add_argument("--godot", type=Path, default=project.parent / "Tools/Godot-4.7.2/Godot_v4.7.2-stable_win64_console.exe")
-    parser.add_argument("--port", type=int, default=0, help="Backend port; default selects an available local port")
+    parser.add_argument("--port", type=int, default=0, help="Backend port; default checks native Windows and WSL availability")
     parser.add_argument("--scenario", choices=("crypt", "crypt_gallery"), default="crypt_gallery", help="Backend encounter; crypt retains the original small baseline")
     parser.add_argument("--headless", action="store_true", help="Headless Godot for launch validation")
     parser.add_argument("--quit-after", type=int, default=0, metavar="FRAMES", help="Close after a bounded number of Godot frames")

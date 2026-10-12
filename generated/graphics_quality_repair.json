@@ -65,8 +65,8 @@
     "Independent full-world floor singles comparison proves address/paintertransport; it shares the native receiving atlas and does not independently certify every asset normal or everylight.",
     "Original8bit torch glow contains concentric quantization bands; the padding fix removes the rectangle, not those authored bands.",
     "Floor normal correction is for cardinal inferred skirt faces with actual published neighbour support, not arbitrary recovered geometry.",
-    "Fresh native scene readiness measured6.342seconds, excludes engine launch/import and does not control OS file-cache warmth. One separate random-port startup hit an HTTP timeout; known-port retry passed, root cause remains unconfirmed.",
-    "A current-code real live Gallery profile is still required after the latest reply/HUD retirement and upcoming sparse atlas optimization. Earlier Forward+58-command run passed368checks but retained up to116.052ms command frame spikes."
+    "Sparse publication still traverses retained receivers/supports; worst livecommand frame96.888ms, with64.08ms nativeatlas work. Optimization is improved but not complete.",
+    "Scene readiness measured5.345s in final live route, excluding engine launch/import and uncontrolled OS cache warmth. One earlier30s timeout used Windows-reserved port53359; nativeWindows/WSL portselection now passes7 focused tests, while final game and interactive preview use explicit known-free ports."
   ],
   "captures": [
     ".captures/assembled-demo/Wizard-3.0-lit-final.png",
@@ -76,7 +76,8 @@
     ".captures/surface-receiving/q1-before.png",
     ".captures/surface-receiving/q1-after.png",
     ".captures/surface-receiving/q1-normals.png",
-    ".captures/torch-padding/frame06-after.png"
+    ".captures/torch-padding/frame06-after.png",
+    ".captures/surface-receiving-carried-off/q2-after.png"
   ],
   "source_references": [
     "https://github.com/godotengine/godot/blob/4.7.2-stable/drivers/gles3/shaders/scene.glsl",
@@ -146,6 +147,67 @@
       "checks": 5,
       "failures": [],
       "report": "player_startup_checks.json"
+    },
+    "native_surface_receiving_checks-carried-off": {
+      "checks": 35,
+      "failures": [],
+      "report": "native_surface_receiving_checks-carried-off.json"
+    },
+    "native_atlas_lifecycle_checks": {
+      "checks": 54,
+      "failures": [],
+      "report": "native_atlas_lifecycle_checks.json"
+    },
+    "native_floor_address_sparse": {
+      "checks": 17,
+      "failures": [],
+      "report": "native_floor_address_sparse.json"
+    },
+    "live_gallery": {
+      "checks": 367,
+      "failures": [],
+      "commands": 58,
+      "disclosed_tiles": 1761,
+      "disclosed_objects": 360,
+      "completed_groups": 122,
+      "sequence": 101,
+      "presentation_errors": []
     }
+  },
+  "carried_lights_off_comparison": {
+    "original_run": ".runtime/player-runs/20261012T201952.542638Z",
+    "sequence": 9,
+    "source_override": false,
+    "fighter_position": [
+      3,
+      5
+    ],
+    "sorcerer_position": [
+      4,
+      5
+    ],
+    "carried_lights_enabled": 0,
+    "wall_lights_enabled": 2,
+    "wall_mode": "hidden",
+    "views": 4,
+    "zoom": 8.137,
+    "resolution": [
+      1280,
+      800
+    ],
+    "note": "Matches recorded lighting and both heroes in original room, not exact screenshot zoom/crop. Earlier71-packet comparison came from a different run with carried torches on."
+  },
+  "live_profile": "live_gallery_repair_profiles.json",
+  "launcher_port_fix": {
+    "failed_port": 53359,
+    "observed_windows_exclusion": [
+      53305,
+      53404
+    ],
+    "default_selection": "Native exclusive Windows ephemeral allocation, then exactWSLbindvalidation;boundedretry",
+    "focused_checks": 7,
+    "failures": 0,
+    "log": ".runtime/launcher-port-checks.log",
+    "end_to_end_default_port_after_fix": "Not rerun while user plays; native actualallocation/rebind plusWSL/proxy lifecycle verified."
   }
 }

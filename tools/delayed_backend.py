@@ -6,7 +6,7 @@ hiding a later command inside a reused HTTP connection. No packet fabrication.
 import asyncio
 
 
-async def start_delayed_backend(backend_port: int, delay_ms: int) -> dict:
+async def start_delayed_backend(backend_port: int, delay_ms: int, listen_port: int = 0) -> dict:
     tasks: set[asyncio.Task] = set()
     state = {"delayed_commands": 0, "requests": 0, "errors": []}
 
@@ -47,7 +47,7 @@ async def start_delayed_backend(backend_port: int, delay_ms: int) -> dict:
             writer.close()
             tasks.discard(task)
 
-    server = await asyncio.start_server(forward, "0.0.0.0", 0)
+    server = await asyncio.start_server(forward, "0.0.0.0", listen_port)
     return {"server": server, "tasks": tasks, "state": state, "port": server.sockets[0].getsockname()[1]}
 
 

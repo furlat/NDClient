@@ -1009,6 +1009,32 @@ trace and canonical journal live alongside the launcher's run output.
 
 Use **Grid · G** beside **Log / Events**, or press **G**, to toggle the grid.
 
+The visual regression comparison also uses the user's newer recorded prefix9:
+both carried torches are extinguished, two wall torches remain active, and
+foreground walls are Hidden. All four views preserve that source state. This
+distinguishes the screenshot context from the older71-packet recording, whose
+terminal state has both carried torches lit. See
+`generated/native_surface_receiving_checks-carried-off.json` and
+`generated/graphics_quality_repair.json` for the native evidence and limits.
+
+The final Forward+ live route issues 58 real commands, reaches 1,761 tiles and
+360 objects, and drains all 122 groups with canonical agreement: 367 checks pass.
+Scene readiness takes 5.345 seconds in this run. Main-thread action-response
+work falls from 47.53 ms to 0.087 ms at its measured maximum. Retained frame
+p95 is 6.878 ms and p99 is 11.247 ms; the worst command frame is still 96.888 ms,
+including 64.08 ms of lighting-atlas publication. Sparse cells preserve existing
+atlas addresses, but remaining full receiver/support traversal still causes
+spikes. This is not an all-stutters-fixed claim. The measured route completed
+before reopening the user preview. Full comparison and sampling limits are in
+`generated/live_gallery_repair_profiles.json`.
+
+The launcher selects its default port through native Windows socket allocation
+and verifies the same port in WSL. A WSL-only ephemeral choice previously selected
+53359, inside a Windows excluded TCP range, and the native player timed out.
+The delayed test proxy uses the same admission path; an explicit `--port` remains
+the caller's choice. Selection releases its temporary sockets and does not alter
+Windows reservations or existing listeners.
+
 Repository migration, 12 October 2026: the active Windows client is
 `C:/Users/tommaso/Documents/Dev/NDClientGodot`, with the historical NDClient Git
 repository and remote preserved. Its `authoring/` is now the tracked runtime copy.

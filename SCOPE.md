@@ -1040,3 +1040,27 @@ change light energy/position and require invariant diagnostic pixels, then switc
 off and require beauty restoration. No normal/artwork rewrite is performed by
 this view. Four-view original-versus-corrected receiving captures and original
 Cycles sample provenance remain separate from that diagnostic.
+
+
+Sparse native atlas publication follow-up (after graphics checkpoint d455017):
+retain unchanged per-entry source/spec records and append newly admitted cells
+without moving existing atlas rectangles. Keep the original compact full-pack
+planner as transactional overflow fallback; do not publish partial layouts.
+A same-ID replaced ground buffer must restore both packed and retained-packet
+addresses. Preserve source/crop/quarter/Normals and current-memory invalidation,
+including floor-neighbour join masks. Validate mathematical lifecycle/overflow
+fixtures and actual recorded-world floor addresses before the root's final live
+Gallery profile. No source-art, lighting, state, ordering or controller changes.
+map_audit owns this bounded adapter work; scope_review tracks plan adherence,
+anti-slop and anti-OOP; render_audit's graphics corrections remain the baseline.
+
+Windows-compatible launcher port selection (observed failed run 20261012T203300.636099Z):
+select ephemeral ports through the native Windows socket stack, then verify the
+same port is bindable at the actual WSL backend address, with bounded retries.
+The delayed-test proxy is also Windows-exposed and must use the same selection.
+Do not hardcode excluded ranges, change networking configuration or affect other
+listeners. Focused socket lifecycle tests and a native allocation/rebind probe
+cover this startup boundary; retain the original failed-run evidence. Selection
+releases its temporary listeners, so it cannot guarantee against a different
+process taking the port before the real backend binds. map_audit owns the narrow
+launcher fix; scope_review checks plan adherence and unnecessary abstraction.
