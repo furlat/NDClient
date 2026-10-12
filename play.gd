@@ -335,7 +335,11 @@ func _process(delta: float) -> void:
         reported_session_issue = str(session.issue)
         push_error("PLAYER_CONNECTION_FAILED: " + session.issue.message)
     FrameProfile.end_phase(profile,"player_process",started)
-    FrameProfile.frame(profile,get_viewport(),{"scene":"live_player","zoom":camera.size,"quarter":quarter,
+    var active_motion=false
+    for sample in displayed_samples.values():
+        if sample.get("from_position")!=null and sample.get("to_position")!=null and sample.get("position")!=sample.to_position:
+            active_motion=true; break
+    FrameProfile.frame(profile,get_viewport(),{"active_motion":active_motion,"motion_held":timeline.waiting_for_media or timeline.waiting_for_world or timeline.paused,"light_cap_enabled":light_cap_enabled,"scene":"live_player","zoom":camera.size,"quarter":quarter,
         "native_2d_repack_count":native_light_atlas.repack_count,"native_2d_receivers":native_light_atlas.live_receivers,"native_2d_atlas_pixels":native_light_atlas.packed_pixels,"generated_shadows":generated_shadows.diagnostics(),
         "native_2d_reconcile_ms":native_light_atlas.last_reconcile_ms,"native_2d_projection_ms":native_light_atlas.last_projection_ms,"native_2d_pack_ms":native_light_atlas.last_pack_ms,
         "native_2d_reconcile_phases":native_light_atlas.last_reconcile_phases,

@@ -15,6 +15,49 @@ var Reference: Shader
 var checks:=0
 var failures:Array=[]
 var pixels:Dictionary={}
+var world_generation:=0
+var world_revision:=0
+var scenery_revision:=0
+# Same published-world/style stamp fields used by Play. Source animation and
+# highlight updates deliberately do not advance these scene revisions.
+func sync_scene(atlas:RefCounted,world:World,changed:bool=false,restyle:bool=false)->void:
+    if changed:world_generation+=1
+    if changed or restyle:world_revision+=1
+    if restyle:scenery_revision+=1
+    atlas.sync(world,[world_generation,world_revision,0,"solid",scenery_revision,true,true],
+        [world_generation,0,scenery_revision,"solid"])
+    atlas.sync_output(world,[world_generation,0,scenery_revision,"solid",atlas.revision])
+func check_transport(atlas:RefCounted,entry:Dictionary,label:String)->void:
+    var output:ShaderMaterial=entry.received_material
+    var matches=output.get_shader_parameter("received")==atlas.viewport.get_texture()
+    matches=matches and output.get_shader_parameter("use_instance_atlas")==true
+    matches=matches and entry.node.material_override==output
+    var native:PackedFloat32Array=entry.node.multimesh.buffer
+    for receiver in atlas.receivers:
+        if not is_same(receiver.entry,entry) or receiver.index<0:continue
+        matches=matches and output.get_shader_parameter("source_crop")==receiver.crop.uv
+        matches=matches and output.get_shader_parameter("atlas_cell_size")==Vector2(receiver.crop.pixels.size)/Vector2(atlas.viewport.size)
+        var offset:int=receiver.index*20
+        var packet:PackedFloat32Array=entry.ground_packets[entry.batch_rows[receiver.index].id].data
+        var pixel:Vector2i=receiver.position
+        var expected=Vector3(pixel.x%1024,pixel.y%1024,pixel.x/1024+8*(pixel.y/1024))
+        matches=matches and Vector3(native[offset+17],native[offset+18],native[offset+19])==expected
+        matches=matches and Vector3(packet[17],packet[18],packet[19])==expected
+    if atlas.light_cap>0.0 and not atlas.normals_visible:
+        matches=matches and output.get_shader_parameter("use_instance_visibility")==true
+    check(matches,label+" restores output texture/crop/cell and every native/retained packet address")
+func set_visibility(entry:Dictionary,values:Array)->void:
+    entry.scenery_values=values
+    for index in values.size():
+        entry.ground_buffer[index*20+16]=values[index]
+        entry.ground_packets[entry.batch_rows[index].id].data[16]=values[index]
+    entry.node.multimesh.buffer=entry.ground_buffer
+func reverse_floor(entry:Dictionary)->void:
+    entry.batch_rows.reverse();entry.scenery_values.reverse()
+    entry.placement=entry.batch_rows[0]
+    var buffer=PackedFloat32Array()
+    for row in entry.batch_rows:buffer.append_array(entry.ground_packets[row.id].data)
+    entry.ground_buffer=buffer;entry.node.multimesh.buffer=buffer;entry.ground_version+=1
 func check(ok:bool,label:String)->void:
     checks+=1
     if not ok:failures.append(label);print("ATLAS_LIFECYCLE_FAIL ",label)
@@ -59,7 +102,10 @@ func pixel_oracle(atlas:RefCounted,world:World,source:Image,label:String)->void:
         var material=ShaderMaterial.new();material.shader=Reference
         material.set_shader_parameter("visible_source",entry.scenery_values[receiver.index] if receiver.index>=0 else entry.get("scenery_value",1.0));sprite.material=material
         reference.add_child(sprite)
-    var packed=await capture(atlas.viewport);var original=await capture(reference)
+    # Both targets are sampled at the FIRST completed draw after publication;
+    # there is no extra atlas sync or settled-frame retry to hide stale cells.
+    await process_frame;await RenderingServer.frame_post_draw
+    var packed=atlas.viewport.get_texture().get_image();var original=reference.get_texture().get_image()
     packed.save_png("res://.captures/atlas-lifecycle/"+label+"-atlas.png");original.save_png("res://.captures/atlas-lifecycle/"+label+"-reference.png")
     for receiver in atlas.receivers:
         var errors=0;var alpha_errors=0;var maximum=0;var compared=0
@@ -88,7 +134,7 @@ func run()->void:
         for x in range(6,58):source.set_pixel(x,y,Color8(74+x,81+y,153,[1,63,194,255][(x-6)/13]))
     world.source_images.fixture=source
     var entry=floor_entry(world,source);world.entries=[entry]
-    var atlas=Atlas.new();atlas.attach(world);atlas.sync(world)
+    var atlas=Atlas.new();atlas.attach(world);sync_scene(atlas,world,true)
     check(atlas.errors.is_empty(),"Prepared original source accepted")
     check(atlas.receivers.size()==2 and atlas.groups.size()==2,"Mixed current and remembered floor instances use two shared native source materials")
     check(atlas.receivers[0].crop.pixels==Rect2i(6,12,52,32),"Crop preserves every nonzero source alpha including 1/255")
@@ -97,41 +143,48 @@ func run()->void:
     check(entry.material==entry.node.material_override or entry.node.material_override==entry.received_material,"Received override keeps original source material owned by entry")
     check(entry.node.material_override==entry.received_material and entry.received_material!=entry.material,"Only output override changes; source material remains distinct")
     check(atlas.receivers[0].node.material.get_shader_parameter("receiver_visibility")==1.0 and atlas.receivers[1].node.material.get_shader_parameter("receiver_visibility")==0.0,"Mixed current and remembered instances remain distinct")
-    var repacks=atlas.repack_count;world.actor_revision+=20;atlas.sync(world)
+    var repacks=atlas.repack_count;world.actor_revision+=20;sync_scene(atlas,world)
     check(atlas.repack_count==repacks,"Actor revisions cannot repack unchanged receiver membership")
     check(atlas.last_reconcile_phases.get("projected_receivers",0)==0,"Unchanged receiver admission does not reproject the whole static map")
     var unchanged_transform=atlas.receivers[1].node.transform
     entry.ground_packets["0"].data[3]+=.25;entry.ground_buffer[3]+=.25;entry.ground_version+=1
-    atlas.sync(world)
+    entry.node.multimesh.buffer=entry.ground_buffer;sync_scene(atlas,world,true)
     check(atlas.last_reconcile_phases.projected_receivers==1 and atlas.receivers[1].node.transform==unchanged_transform,"Exact changed floor transform projects only its receiver, even with unchanged row IDs")
-    entry.ground_packets["0"].data[3]-=.25;entry.ground_buffer[3]-=.25;entry.ground_version+=1;atlas.sync(world)
+    entry.ground_packets["0"].data[3]-=.25;entry.ground_buffer[3]-=.25;entry.ground_version+=1;entry.node.multimesh.buffer=entry.ground_buffer;sync_scene(atlas,world,true)
     check(atlas.last_reconcile_phases.projected_receivers==1,"Restored native floor transform is detected independently of source colour")
     var before=entry.ground_buffer.duplicate()
     for i in 2:
         entry.ground_buffer[i*20+17]=0;entry.ground_buffer[i*20+18]=0
         entry.ground_packets[str(i)].data[17]=0;entry.ground_packets[str(i)].data[18]=0
-    entry.ground_version+=1;atlas.sync(world)
+    entry.ground_version+=1;entry.node.multimesh.buffer=entry.ground_buffer;sync_scene(atlas,world,true)
     check(entry.ground_buffer==before,"Same-membership floor publication restores every native atlas address")
     check(atlas.repack_count==repacks,"Replacing floor packet does not repack stable source cells")
     check(atlas.last_reconcile_phases.projected_receivers==0,"Same transform floor buffer publication restores addresses without reprojection")
-    entry.material.set_shader_parameter("highlighted",true);atlas.sync(world)
+    entry.material.set_shader_parameter("highlighted",true);sync_scene(atlas,world)
     check(atlas.groups.values().all(func(g):return g.material.get_shader_parameter("highlighted")==true),"Independent highlight updates receiving without source-version change")
-    entry.material.set_shader_parameter("highlighted",false);atlas.sync(world)
-    entry.material.set_shader_parameter("source_tint",Color(.5,.75,1,1));entry.source_version+=1;atlas.sync(world)
+    entry.material.set_shader_parameter("highlighted",false);sync_scene(atlas,world)
+    entry.material.set_shader_parameter("source_tint",Color(.5,.75,1,1));entry.source_version+=1;sync_scene(atlas,world)
     check(atlas.groups.values().all(func(g):return g.material.get_shader_parameter("source_tint")==Color(.5,.75,1,1)),"Versioned source tint updates receiving")
-    entry.material.set_shader_parameter("source_tint",Color.WHITE);entry.source_version+=1;atlas.sync(world)
+    entry.material.set_shader_parameter("source_tint",Color.WHITE);entry.source_version+=1;sync_scene(atlas,world)
     check(entry.ground_packets["0"].data[17]==before[17],"Retained packet stores addresses for later visibility-only uploads")
-    entry.material.set_shader_parameter("current_visibility",0.0);entry.source_version+=1;atlas.sync(world)
+    entry.material.set_shader_parameter("current_visibility",0.0);entry.source_version+=1;sync_scene(atlas,world)
     check(atlas.receivers[0].node.material.get_shader_parameter("receiver_visibility")==1.0,"Parameter recopy cannot overwrite per-instance current visibility")
     await pixel_oracle(atlas,world,source,"initial")
+    # Sight-only after-values keep the same source material, row IDs and native
+    # floor packets. The style stamp must still update the receiving result.
+    set_visibility(entry,[0.0,1.0])
+    sync_scene(atlas,world,false,true)
+    check(atlas.receivers[0].visibility==0.0 and atlas.receivers[1].visibility==1.0,"Style-only publication updates retained current/memory receivers")
+    await pixel_oracle(atlas,world,source,"style-only")
+    set_visibility(entry,[1.0,0.0]);sync_scene(atlas,world,false,true)
     # Explicit native source mutations, not invented gameplay: these exercise
     # sparse publication independently of current packet delivery mechanics.
-    # An existing later nonfloor source makes insertion before it non-vacuous:
+    # An existing later unbatched source makes insertion before it non-vacuous:
     # full repacking would relocate it when the floor batch grows.
     var marker=MeshInstance3D.new();marker.mesh=QuadMesh.new();marker.mesh.size=Vector2(2,2);marker.position=Vector3(0,2.1,0);world.add_child(marker)
     var marker_material:ShaderMaterial=entry.material.duplicate();marker.material_override=marker_material
-    var marker_entry={"node":marker,"material":marker_material,"cell":Vector2(64,64),"record":entry.record,"role":"body","placement":{"id":"marker","kind":"object","position":[0,2],"base_height_steps":0},"scenery_value":1.0,"source_version":1}
-    world.entries.append(marker_entry);atlas.sync(world)
+    var marker_entry={"node":marker,"material":marker_material,"cell":Vector2(64,64),"record":entry.record,"role":"terrain","placement":{"id":"marker","kind":"terrain","material":"stone","position":[0,2],"base_height_steps":1},"scenery_value":1.0,"source_version":1}
+    world.entries.append(marker_entry);sync_scene(atlas,world,true)
     var retained_positions={}
     for receiver in atlas.receivers:retained_positions[receiver.id]=receiver.position
     var extra_data=PackedFloat32Array([1,0,0,3.3,0,1,0,0,0,0,1,0,1,1,1,1,1,0,0,0])
@@ -139,48 +192,93 @@ func run()->void:
     entry.ground_packets.extra={"data":extra_data};entry.scenery_values.append(1.0)
     entry.ground_buffer.append_array(extra_data);entry.node.multimesh.instance_count=3
     entry.node.multimesh.buffer=entry.ground_buffer;entry.node.multimesh.visible_instance_count=3
-    entry.ground_version+=1;atlas.sync(world)
+    entry.ground_version+=1;entry.node.multimesh.buffer=entry.ground_buffer;sync_scene(atlas,world,true)
     check(atlas.receivers.size()==4,"Adding one disclosed source cell creates exactly one receiver")
     var stable=true
     for receiver in atlas.receivers:
         if retained_positions.has(receiver.id) and receiver.position!=retained_positions[receiver.id]:stable=false
-    check(stable,"Sparse floor insertion preserves preceding floor and later nonfloor native atlas addresses")
+    check(stable,"Sparse floor insertion preserves preceding floor and later unbatched native atlas addresses")
     pixels.append_kept_positions=stable
     check(atlas.receivers[0].group.join_mask==1 and atlas.receivers[1].group.join_mask==5 and atlas.receivers[2].group.join_mask==4,"New ground neighbour changes both affected original join masks")
+    check_transport(atlas,entry,"Sparse addition")
     await pixel_oracle(atlas,world,source,"addition")
     entry.batch_rows.pop_back();entry.ground_packets.erase("extra");entry.scenery_values.pop_back()
     entry.ground_buffer.resize(40);entry.node.multimesh.instance_count=2;entry.node.multimesh.buffer=entry.ground_buffer;entry.node.multimesh.visible_instance_count=2
-    entry.ground_version+=1;atlas.sync(world)
+    entry.ground_version+=1;entry.node.multimesh.buffer=entry.ground_buffer;sync_scene(atlas,world,true)
     check(atlas.receivers.size()==3 and atlas.receivers[1].group.join_mask==4,"Removing source cell retires it and restores exposed neighbour")
+    check_transport(atlas,entry,"Sparse removal")
     await pixel_oracle(atlas,world,source,"removal")
-    world.entries.pop_back();marker.queue_free();atlas.sync(world)
+    # Named individual-terrain fixture: the same receiver becomes the disclosed
+    # neighbour of the retained batch, then changes elevation without changing ID.
+    marker_entry.placement={"id":"marker","kind":"terrain","material":"stone","position":[2,0],"base_height_steps":1}
+    marker.position.y+=.25
+    sync_scene(atlas,world,true)
+    check(atlas.receivers[1].group.join_mask==5 and atlas.receivers[2].group.join_mask==0,"Higher individual support covers adjacent lower floor but keeps its own exposed return")
+    await pixel_oracle(atlas,world,source,"higher-neighbour")
+    marker_entry.placement=marker_entry.placement.duplicate();marker_entry.placement.base_height_steps=-1
+    marker.position.y-=.5;sync_scene(atlas,world,true)
+    check(atlas.receivers[1].group.join_mask==4 and atlas.receivers[2].group.join_mask==4,"Same-ID lower support exposes retained neighbour and uses its current height")
+    await pixel_oracle(atlas,world,source,"lower-neighbour")
+    world.entries.pop_back();marker.queue_free();sync_scene(atlas,world,true)
     var refill=entry.ground_buffer.duplicate()
     entry.ground_buffer.fill(0)
     entry.ground_buffer=refill
     for i in 2:
         for channel in [17,18,19]:
             entry.ground_buffer[i*20+channel]=0;entry.ground_packets[str(i)].data[channel]=0
-    entry.ground_version+=1;atlas.sync(world)
+    entry.ground_version+=1;entry.node.multimesh.buffer=entry.ground_buffer;sync_scene(atlas,world,true)
     check(entry.ground_buffer==refill,"Same-ID refill restores exact native addresses after sparse add/remove")
+    check_transport(atlas,entry,"Same-ID refill")
     await pixel_oracle(atlas,world,source,"refill")
-    var replaced=entry.duplicate();replaced.scenery_values=[0.0,1.0];replaced.source_version+=1
-    world.entries[0]=replaced;entry=replaced;atlas.sync(world)
+    var original_positions={}
+    for receiver in atlas.receivers:original_positions[entry.batch_rows[receiver.index].id]=receiver.position
+    reverse_floor(entry);sync_scene(atlas,world,true)
+    var reordered=true
+    for receiver in atlas.receivers:
+        reordered=reordered and receiver.position==original_positions[entry.batch_rows[receiver.index].id]
+    check(reordered and entry.placement.id=="1","Floor reorder updates representative/index while retaining each tile's atlas cell")
+    check_transport(atlas,entry,"Same-ID reorder")
+    await pixel_oracle(atlas,world,source,"reorder")
+    reverse_floor(entry);sync_scene(atlas,world,true)
+    check_transport(atlas,entry,"Restored floor order")
+    var replaced=entry.duplicate();replaced.source_version+=1
+    world.entries[0]=replaced;entry=replaced;set_visibility(entry,[0.0,1.0]);sync_scene(atlas,world,true,true)
     check(atlas.receivers.all(func(r):return is_same(r.entry,replaced)),"Replacement entry wrapper adopts current source/scenery owner around retained native node")
     check(atlas.receivers[0].visibility==0.0 and atlas.receivers[1].visibility==1.0,"Replacement owner uses its exact current-memory values")
-    entry.erase("received_material");atlas.sync(world)
+    entry.erase("received_material");sync_scene(atlas,world,true)
     check(entry.received_material.get_shader_parameter("atlas_cell_size")==Vector2(52,32)/Vector2(atlas.viewport.size),"Recreated floor output restores current cell normalization without membership changes")
+    check_transport(atlas,entry,"Recreated LDR floor output")
     await pixel_oracle(atlas,world,source,"replacement")
+    var old_output:ShaderMaterial=entry.received_material
+    var original_ldr=await capture(view)
+    atlas.set_light_cap(1.0);sync_scene(atlas,world)
+    check(atlas.viewport.use_hdr_2d and entry.received_material.get_shader_parameter("light_cap")==1.0,"Cap enables HDR receiving on retained floor sources")
+    check_transport(atlas,entry,"Cap output")
+    entry.erase("received_material");sync_scene(atlas,world,true)
+    check(entry.received_material!=old_output,"Material recreation installs a distinct output while source membership stays unchanged")
+    check_transport(atlas,entry,"Recreated capped floor output")
+    atlas.set_normals_visible(true);sync_scene(atlas,world)
+    check(not atlas.viewport.use_hdr_2d,"Normals keeps native LDR while cap preference remains enabled")
+    check_transport(atlas,entry,"Normals output")
+    var normals=await capture(view)
+    atlas.set_light_cap(0.0);sync_scene(atlas,world)
+    check(normals.get_data()==(await capture(view)).get_data(),"Normals framebuffer is byte-exact when cap preference toggles")
+    atlas.set_light_cap(1.0);atlas.set_normals_visible(false);sync_scene(atlas,world)
+    check(atlas.viewport.use_hdr_2d,"Leaving Normals restores capped HDR receiving")
+    check_transport(atlas,entry,"Restored capped output")
+    atlas.set_light_cap(0.0);sync_scene(atlas,world)
+    check(not atlas.viewport.use_hdr_2d and original_ldr.get_data()==(await capture(view)).get_data(),"Cap/Normals roundtrip restores original final LDR framebuffer byte-exactly")
+    check_transport(atlas,entry,"Restored LDR output")
+    await pixel_oracle(atlas,world,source,"cap-restoration")
     before=entry.ground_buffer.duplicate();repacks=atlas.repack_count
-    var published=[1,0,"solid",0,true,true]
-    var styles=[1,0,0,"solid"]
-    atlas.sync(world,published,styles)
+    sync_scene(atlas,world)
     var fast_pack=atlas.repack_count
-    for i in 10:atlas.sync(world,published,styles)
+    for i in 10:sync_scene(atlas,world)
     check(atlas.repack_count==fast_pack,"Idle published scene retains exact atlas layout")
     var projection_errors=0
     for settings in [Vector3(0.125,0.25,7.5),Vector3(-0.75,0.375,6.25),Vector3(0.0,0.0,12.5)]:
         camera.position=Vector3(settings.x,settings.y,10);camera.size=settings.z
-        atlas.sync(world,published,styles)
+        sync_scene(atlas,world)
         for receiver in atlas.receivers:
             for point in [Vector2(.5,.5),Vector2(25.5,15.5),Vector2(51.5,31.5)]:
                 var full=point+Vector2(receiver.crop.pixels.position)
@@ -192,19 +290,19 @@ func run()->void:
     # A shadow presentation handle is not a source receiver and has no cell.
     var shadow=MeshInstance3D.new();shadow.mesh=QuadMesh.new();world.add_child(shadow)
     world.actor_entries=[{"node":shadow,"generated_shadow":true}]
-    atlas.sync(world,published,styles)
+    sync_scene(atlas,world)
     check(atlas.errors.is_empty(),"Generated-shadow handle does not enter source receiver admission")
     shadow.queue_free();world.actor_entries=[]
     var old_rects=atlas.receivers.map(func(r):return [r.id,r.position])
     var old_view_size=atlas.viewport.size
     var large=MeshInstance3D.new();large.mesh=QuadMesh.new();var material=ShaderMaterial.new();material.shader=ActorSource;large.material_override=material;world.add_child(large)
     var extra={"node":large,"material":material,"cell":Vector2(9000,128),"placement":{"kind":"actor"},"role":"body","source_version":0}
-    world.entries.append(extra);atlas.sync(world)
+    world.entries.append(extra);sync_scene(atlas,world,true)
     check(not atlas.errors.is_empty(),"Oversized allocation fails explicitly")
     check(atlas.receivers.map(func(r):return [r.id,r.position])==old_rects and atlas.viewport.size==old_view_size and atlas.repack_count==repacks,"Rejected pack leaves prior atlas layout and viewport unchanged")
     check(large.material_override==material and entry.ground_buffer==before,"Rejected pack does not publish partial source overrides or addresses")
     world.entries.pop_back();large.queue_free();atlas.errors.clear();world.presentation_errors.clear()
-    view.size=Vector2i(320,1200);camera.position=Vector3(0,0,10);camera.size=37.5;atlas.sync(world)
+    view.size=Vector2i(320,1200);camera.position=Vector3(0,0,10);camera.size=37.5;sync_scene(atlas,world,true)
     check(atlas.viewport.size.y>=1200,"Window growth enlarges native receiving culling coverage")
     check(atlas.errors.is_empty(),"Viewport growth has a valid transactional layout")
     await pixel_oracle(atlas,world,source,"resize")
@@ -213,6 +311,6 @@ func run()->void:
     check(entry.ground_buffer[17]==0.0 and entry.ground_buffer[18]==0.0,"Closing clears owned atlas addresses while preserving source instance data")
     check(atlas.receivers.is_empty() and atlas.groups.is_empty() and atlas.viewport==null,"Closing releases receiver and shared material ownership")
     await process_frame
-    var report={"renderer":RenderingServer.get_current_rendering_method(),"checks":checks,"failures":failures,"pixels":pixels,"scope":"Mathematical source fixture; original alpha bytes1/63/194/255; native cropped vs independent full-source receiver; lifecycle/transaction/viewport/packet publication. No gameplay expectation fabricated."}
+    var report={"renderer":RenderingServer.get_current_rendering_method(),"checks":checks,"failures":failures,"pixels":pixels,"scope":"Mathematical source fixture; original alpha bytes1/63/194/255; native cropped vs independent full-source receiver; production-shaped admission/style stamps; first-publication pixels; support elevation/neighbour changes; same-ID packet refill/reorder and output recreation; cap/Normals binding restoration; lifecycle/transaction/viewport. Independent LDR source pixel oracle unchanged. No gameplay expectation fabricated."}
     var f=FileAccess.open("res://generated/native_atlas_lifecycle_checks.json",FileAccess.WRITE);f.store_string(JSON.stringify(report,"  "));f.close()
     print("ATLAS_LIFECYCLE ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)

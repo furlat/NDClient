@@ -177,13 +177,19 @@ func _run() -> void:
     root.unfocusable=true;root.position=Vector2i(-16000,-16000)
     DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
     scene=Player.instantiate();scene.profile.recording=true
+    evidence.atlas_reference=""
+    for argument in OS.get_cmdline_user_args():
+        if argument.begins_with("--reference-atlas="):
+            evidence.atlas_reference=argument.trim_prefix("--reference-atlas=")
+            scene.native_light_atlas=load(evidence.atlas_reference).new()
     scene.session.transport.set_profiling(true)
     root.add_child(scene)
-    # Match the user's current approved graphics while diagnosing response
-    # latency. Cap-on pixel acceptance is measured in a separate native lane.
-    scene.light_cap_enabled=false
-    scene.native_light_atlas.set_light_cap(0.0)
-    evidence.light_cap_enabled=false
+    # Default to approved capped lighting; an explicit diagnostic run can
+    # compare the same real movement/reveal route with the cap disabled.
+    var profile_cap := not OS.get_cmdline_user_args().has("--profile-light-cap=off")
+    scene.light_cap_enabled=profile_cap
+    scene.native_light_atlas.set_light_cap(1.0 if profile_cap else 0.0)
+    evidence.light_cap_enabled=profile_cap
     if not await until(ready,"Live Gallery initial choices",120000):await finish();return
     evidence.ready_frame=Engine.get_process_frames()
     evidence.ready_elapsed_ms=Time.get_ticks_msec()-started
@@ -206,6 +212,7 @@ func _run() -> void:
     scene.grid_visible=false
     while stage<ROUTE.size() and command_trace.size()<180 and healthy():
         if not await until(ready,"Next client command is offered"):break
+        if stage>=8: scene.camera.size=28.0 if stage==9 else 16.0
         var goal: Array=ROUTE[stage]
         if not goal[1] is String and scene.timeline.state.actors[leader].last_visual_position==goal[1]:
             print("LIVE_MILESTONE ",goal[0]," tiles=",scene.timeline.state.tiles.size());stage+=1;continue
@@ -220,6 +227,20 @@ func _run() -> void:
     evidence.command_trace=scene.game_config.test_result.get_base_dir().path_join("live-command-trace.json")
     evidence.disclosed_tiles=scene.timeline.state.tiles.size()
     evidence.disclosed_objects=scene.timeline.state.objects.size()
+    # Same disclosed live scene with no pending command: retain a steady-frame
+    # control alongside real movement/reveal measurements, at the same zooms.
+    var idle_sequence=scene.timeline.sequence
+    for cap in [false,true]:
+        scene.light_cap_enabled=cap
+        scene.native_light_atlas.set_light_cap(1.0 if cap else 0.0)
+        for zoom in [8.137,16.0,28.0]:
+            scene.profile.label="idle_settle"
+            scene.camera.size=zoom
+            for frame in 30: await scene.presentation_updated
+            scene.profile.label="gallery_idle_cap_%s_zoom_%s" % [cap,zoom]
+            var idle_until=Time.get_ticks_msec()+3000
+            while Time.get_ticks_msec()<idle_until: await scene.presentation_updated
+    check(scene.timeline.sequence==idle_sequence and scene.timeline.state==scene.session.journal.state,"Idle zoom/cap profiles preserve canonical displayed state")
     scene.set_process(false)
     scene.session.close()
     collect_pipeline(true)

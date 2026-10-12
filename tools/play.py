@@ -164,6 +164,10 @@ async def run(args: argparse.Namespace) -> Path:
                 native_args.extend(["--quit-after", str(args.quit_after)])
             native_args.extend(["--script", args.test_script] if args.test_script else ["res://play.tscn"])
             native_args.extend(["--", "--config", windows_path(client_config)])
+            if args.test_atlas_reference:
+                native_args.append("--reference-atlas=" + args.test_atlas_reference)
+            if args.test_light_cap is not None:
+                native_args.append("--profile-light-cap=" + args.test_light_cap)
             client = await asyncio.create_subprocess_exec(*native_args, stdout=godot_log, stderr=godot_log)
             print("Godot opened; waiting for initialization and current player choices…", flush=True)
             player_ready = False
@@ -211,10 +215,16 @@ def main() -> None:
     parser.add_argument("--quit-after", type=int, default=0, metavar="FRAMES", help="Close after a bounded number of Godot frames")
     parser.add_argument("--test-script", choices=("res://tests/player_startup_checks.gd", "res://tests/live_gallery_checks.gd", "res://tests/player_wait_checks.gd", "res://tests/player_live_checks.gd", "res://tests/player_interaction_checks.gd", "res://tests/lighting_live_checks.gd", "res://tests/chest_live_checks.gd"), help="Run a bounded production-scene acceptance test")
     parser.add_argument("--test-command-delay-ms", type=int, default=0, help="Acceptance only: hold the first real command before forwarding it")
+    parser.add_argument("--test-atlas-reference", default="", help="Gallery profiling only: load a frozen reference atlas script instead of the current atlas")
+    parser.add_argument("--test-light-cap", choices=("on", "off"), help="Gallery profiling only: compare live movement with or without the light cap")
     parser.add_argument("--profile-pipeline", action="store_true", help="Record worker execution and host exchange timings during real live commands")
     parser.add_argument("--profile-cpu-commands", default="", help="Optional comma-separated command numbers for cProfile; adds overhead to those commands")
     parser.add_argument("--profile-action-phases", action="store_true", help="Optional nested engine phase hooks; adds diagnostic overhead")
     args = parser.parse_args()
+    if args.test_atlas_reference and args.test_script != "res://tests/live_gallery_checks.gd":
+        parser.error("Reference atlas requires the live Gallery acceptance script")
+    if args.test_light_cap is not None and args.test_script != "res://tests/live_gallery_checks.gd":
+        parser.error("Light-cap profiling requires the live Gallery acceptance script")
     if args.test_command_delay_ms and (not args.test_script or not 1 <= args.test_command_delay_ms <= 10000):
         parser.error("Command delay is limited to 1–10000 ms and requires a test script")
     if not 0 <= args.port <= 65535 or args.quit_after < 0:

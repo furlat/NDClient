@@ -42,6 +42,7 @@ var admission_stamp: Array = []
 var visibility_stamp: Array = []
 var dynamic_members: Array = []
 var output_stamp: Array = []
+var transport_stamp: Array = []
 var known_entry_count := -1
 var last_reconcile_ms := 0.0
 var last_projection_ms := 0.0
@@ -112,7 +113,7 @@ func _normal_shader(source: Shader) -> Shader:
 
 func _entry_info(entry: Dictionary) -> Dictionary:
     var source: Shader = entry.material.shader
-    var previous: Dictionary = entry.get("atlas_source_info",{})
+    var previous: Dictionary = entry.atlas_source_info if entry.has("atlas_source_info") else {}
     if not previous.is_empty() and previous.source==source and previous.role==entry.role and previous.kind==entry.placement.kind and previous.get("normals_visible",false)==normals_visible and previous.get("light_cap",0.0)==light_cap: return previous
     var path: String = source.resource_path
     var modular: bool = path.ends_with("modular.gdshader")
@@ -215,7 +216,8 @@ func _layout_additions(specs: Array, members: Dictionary, minimum: Vector2i) -> 
     while size_y<needed: size_y=mini(MAX_SIZE,size_y*2)
     return {"ok":true,"size":Vector2i(MAX_SIZE,size_y),"positions":positions,"pixels":pixels,"cursor":Vector3i(x,y,height),"full":false}
 
-func _candidate_specs(entries: Array, information: Dictionary, geometry: Dictionary, world: Node) -> Dictionary:
+func _candidate_specs(entries: Array, information: Dictionary, geometry: Dictionary, signatures: Dictionary, world: Node) -> Dictionary:
+    var phase=Time.get_ticks_usec()
     var supports=GroundReceiving.heights(entries)
     var dirty_cells={}
     for cell in published_supports:
@@ -226,13 +228,15 @@ func _candidate_specs(entries: Array, information: Dictionary, geometry: Diction
     for cell in dirty_cells:
         affected[cell]=true
         for direction in GroundReceiving.DIRECTIONS: affected[cell+direction]=true
+    last_reconcile_phases.supports_ms=(Time.get_ticks_usec()-phase)/1000.0
+    phase=Time.get_ticks_usec()
     var specs: Array=[]; var members={}; var caches={}; var indices={}; var reused=0
+    var slices=0; var masks=0; var packets_reused=0
     for entry in entries:
         var source_id: int=entry.node.get_instance_id()
         var info: Dictionary=information[source_id]
-        var record: Dictionary=entry.get("record",{})
-        var signature=[entry.cell,record.get("path",""),record.get("rect",[]),info.shader,entry.material.get_instance_id(),geometry.get(source_id,[])]
-        var previous: Dictionary=entry_specs.get(source_id,{})
+        var signature: Array=signatures[source_id]
+        var previous: Dictionary=entry_specs[source_id] if entry_specs.has(source_id) else {}
         var same: bool=not previous.is_empty() and is_same(previous.entry,entry) and previous.signature==signature
         var topology_changed=false
         if same and not affected.is_empty():
@@ -246,33 +250,52 @@ func _candidate_specs(entries: Array, information: Dictionary, geometry: Diction
             if crop.is_empty(): return {"ok":false}
             var batched: bool=entry.has("batch_rows")
             var rows: Array=entry.batch_rows if batched else [entry.placement]
-            candidate={"entry":entry,"signature":signature,"ground_version":entry.get("ground_version",0),"crop":crop,"specs":[],"by_row":{},"indices":{},"cells":{}}
+            candidate={"entry":entry,"signature":signature,"ground_version":entry.get("ground_version",0),"crop":crop,"specs":[],"by_row":{},"indices":{},"cells":{},"packets":{}}
+            var previous_rows: Dictionary=previous.get("by_row",{}) if same else {}
+            var previous_packets: Dictionary=previous.get("packets",{}) if same else {}
             for index in rows.size():
                 var row: Dictionary=rows[index]
                 var row_id: String=str(row.id) if batched else "source"
-                var old: Dictionary=previous.get("by_row",{}).get(row_id,{}) if same else {}
-                var source_geometry: Array=[]
-                if not info.dynamic:
-                    var transform: PackedFloat32Array=entry.ground_packets[row_id].data.slice(0,12) if batched else PackedFloat32Array()
-                    source_geometry=[geometry.get(source_id,[]),crop.uv,transform]
+                var old: Dictionary=previous_rows[row_id] if previous_rows.has(row_id) else {}
                 var eligible=GroundReceiving.eligible(row)
                 var cell=Vector2(row.position[0],row.position[1]) if eligible else Vector2.ZERO
                 if eligible: candidate.cells[cell]=true
-                var join_mask: int=GroundReceiving.mask(row,supports)
+                var packet: Dictionary=previous_packets[row_id] if previous_packets.has(row_id) else {}
+                var support=Vector3(cell.x,cell.y,float(row.get("base_height_steps",0.0)))
+                var unchanged: bool=batched and not old.is_empty() and not packet.is_empty() and packet.data==entry.ground_packets[row_id].data and packet.eligible==eligible and packet.support==support
                 var spec: Dictionary
-                if not old.is_empty() and old.source_geometry==source_geometry and old.join_mask==join_mask:
-                    spec=old; reused+=1
+                if unchanged and not affected.has(cell):
+                    # Native packed-array equality checks ALL transform bytes,
+                    # including direct packet edits, before reusing a row. The
+                    # snapshot is separate from the mutable published packet.
+                    spec=old; reused+=1; packets_reused+=1
                 else:
-                    spec={"join_mask":join_mask,"id":str(source_id)+":"+row_id,"entry":entry,"crop":crop,"source_geometry":source_geometry,"source_id":source_id,"info":info,"material_id":entry.material.get_instance_id()}
+                    var source_geometry: Array=[]
+                    if not info.dynamic:
+                        var transform: PackedFloat32Array=entry.ground_packets[row_id].data.slice(0,12) if batched else PackedFloat32Array()
+                        if batched: slices+=1
+                        source_geometry=[geometry.get(source_id,[]),crop.uv,transform]
+                    var join_mask: int=GroundReceiving.mask(row,supports)
+                    masks+=1
+                    if not old.is_empty() and old.source_geometry==source_geometry and old.join_mask==join_mask:
+                        spec=old; reused+=1
+                    else:
+                        spec={"join_mask":join_mask,"id":str(source_id)+":"+row_id,"entry":entry,"crop":crop,"source_geometry":source_geometry,"source_id":source_id,"info":info,"material_id":entry.material.get_instance_id()}
+                if batched:
+                    candidate.packets[row_id]=packet if unchanged else {"data":entry.ground_packets[row_id].data.duplicate(),"eligible":eligible,"support":support}
                 candidate.specs.append(spec); candidate.by_row[row_id]=spec
                 candidate.indices[spec.id]=index if batched else -1
         caches[source_id]=candidate
         specs.append_array(candidate.specs); indices.merge(candidate.indices)
         for spec in candidate.specs: members[spec.id]=spec.crop
+    last_reconcile_phases.candidates_ms=(Time.get_ticks_usec()-phase)/1000.0
+    last_reconcile_phases.transform_slices=slices
+    last_reconcile_phases.join_masks_evaluated=masks
+    last_reconcile_phases.floor_packets_reused=packets_reused
     return {"ok":true,"specs":specs,"members":members,"entries":caches,"indices":indices,"supports":supports,"reused":reused}
 
 func _copy_output_source(entry: Dictionary) -> void:
-    if not entry.has("received_material") or not _entry_info(entry).capped: return
+    if not entry.has("received_material"): return
     var output: ShaderMaterial=entry.received_material
     var source: ShaderMaterial=entry.material
     var signature=[source,source.shader,entry.get("source_version",0),output,output.shader]
@@ -290,6 +313,7 @@ func _copy_output_source(entry: Dictionary) -> void:
     var mesh: QuadMesh=entry.node.multimesh.mesh if entry.has("batch_rows") else entry.node.mesh
     output.set_shader_parameter("source_quad_size",mesh.size)
     entry.received_source_key=signature
+    entry.erase("received_style")
 
 func _copy_parameters(group: Dictionary) -> void:
     var source: ShaderMaterial = group.entry.material
@@ -307,7 +331,9 @@ func _copy_parameters(group: Dictionary) -> void:
     group.material.set_shader_parameter("atlas_cell_size",Vector2(group.crop.pixels.size))
     group.material.set_shader_parameter("receiver_visibility",group.visibility)
     group.material.set_shader_parameter("ground_join_mask",group.get("join_mask",0))
-    group.material.set_shader_parameter("store_irradiance",_entry_info(group.entry).capped)
+    group.capped=_entry_info(group.entry).capped
+    group.material.set_shader_parameter("store_irradiance",group.capped)
+    group.seconds=null
     group.version = group.entry.get("source_version",0)
     group.source_shader = source.shader
     group.highlighted = null
@@ -358,6 +384,7 @@ func _publish_addresses(floor_receivers: Dictionary, changed_outputs: Array) -> 
         output.set_shader_parameter("atlas_cell_size",Vector2(floor.receivers[0].crop.pixels.size)/target)
         var buffer: PackedFloat32Array=entry.ground_buffer
         var buffer_changed=false
+        var snapshots: Dictionary=entry_specs[entry.node.get_instance_id()].packets
         for receiver in floor.receivers:
             var pixel: Vector2i=receiver.position
             var x=pixel.x%1024; var y=pixel.y%1024; var high=(pixel.x/1024)+8*(pixel.y/1024)
@@ -369,6 +396,7 @@ func _publish_addresses(floor_receivers: Dictionary, changed_outputs: Array) -> 
             var data: PackedFloat32Array=packet.data
             if data[17]!=x or data[18]!=y or data[19]!=high:
                 data[17]=x; data[18]=y; data[19]=high; packet.data=data
+                snapshots[entry.batch_rows[receiver.index].id].data=data.duplicate()
         if buffer_changed:
             entry.ground_buffer=buffer; entry.node.multimesh.buffer=buffer
     last_reconcile_phases.address_rows_rewritten=rewritten
@@ -382,25 +410,30 @@ func _reconcile(world: Node) -> bool:
     var entries: Array = []
     var geometry: Dictionary = {}
     var information: Dictionary = {}
+    var signatures: Dictionary = {}
     var entry_changed=false
     for entry in world.entries:
         if not is_instance_valid(entry.node) or entry.node.is_queued_for_deletion() or not entry.has("cell"): continue
         entries.append(entry)
         var info=_entry_info(entry)
-        var source = [] if info.dynamic else [entry.get("record",{}).get("path",""),entry.get("record",{}).get("rect",[]),info.shader]
         var id: int = entry.node.get_instance_id()
         information[id]=info
-        if entry_specs.has(id) and (not is_same(entry_specs[id].entry,entry) or not entry.has("received_material")): entry_changed=true
+        if entry_specs.has(id) and (not is_same(entry_specs[id].entry,entry) or not entry.has("received_material") or entry_specs[id].get("output")!=entry.get("received_material")): entry_changed=true
         if not info.dynamic:
             var mesh: QuadMesh = entry.node.multimesh.mesh if entry.has("batch_rows") else entry.node.mesh
             geometry[id]=[entry.node.global_transform,mesh.size,mesh.center_offset]
-        key.append([id,entry.cell,entry.get("ground_version",0),source,geometry.get(id,[])])
+        # Animated sources retain a full cell; frame rectangles are copied by
+        # source_version in sync(), not a change to receiver membership.
+        var record: Dictionary={} if info.dynamic else entry.get("record",{})
+        var signature=[entry.cell,record.get("path",""),record.get("rect",[]),info.shader,entry.material.get_instance_id(),geometry.get(id,[])]
+        signatures[id]=signature
+        key.append([id,entry.get("ground_version",0),signature])
     last_reconcile_phases.members_ms=(Time.get_ticks_usec()-phase)/1000.0
     var screen_size = Vector2i(world.get_viewport().get_visible_rect().size)
     var resize_needed: bool = screen_size.x>viewport.size.x or screen_size.y>viewport.size.y
     if key==membership and not resize_needed and not entry_changed: return true
     phase=Time.get_ticks_usec()
-    var candidate=_candidate_specs(entries,information,geometry,world)
+    var candidate=_candidate_specs(entries,information,geometry,signatures,world)
     if not candidate.ok: return false
     var specs: Array=candidate.specs
     var next_members: Dictionary=candidate.members
@@ -420,7 +453,7 @@ func _reconcile(world: Node) -> bool:
     var address_floors={}; var changed_outputs: Array=[]
     var dirty_floors={}
     for id in candidate.entries:
-        if dimensions_changed or not entry_specs.has(id) or not is_same(entry_specs[id].entry,candidate.entries[id].entry) or not candidate.entries[id].entry.has("received_material") or candidate.entries[id].entry.received_material.shader!=information[id].output or entry_specs[id].ground_version!=candidate.entries[id].ground_version: dirty_floors[id]=true
+        if dimensions_changed or not entry_specs.has(id) or not is_same(entry_specs[id].entry,candidate.entries[id].entry) or not candidate.entries[id].entry.has("received_material") or entry_specs[id].get("output")!=candidate.entries[id].entry.get("received_material") or candidate.entries[id].entry.received_material.shader!=information[id].output or entry_specs[id].ground_version!=candidate.entries[id].ground_version: dirty_floors[id]=true
     var kept = {}; var next: Array = []; var used_groups = {}; var reusable: Array = []
     var entry_groups: Dictionary = {}
     for receiver in receivers:
@@ -429,8 +462,19 @@ func _reconcile(world: Node) -> bool:
     var binding_reused := 0
     for spec in specs:
         var index: int=indices[spec.id]
-        var receiver: Dictionary = kept.get(spec.id,{})
-        var retained: bool = not receiver.is_empty() and (is_same(receiver.get("spec",{}),spec) or (is_same(receiver.entry,spec.entry) and receiver.crop==spec.crop and receiver.get("source_material",0)==spec.material_id and receiver.get("receiving_shader")==spec.info.shader and receiver.get("join_mask",0)==spec.join_mask))
+        var receiver: Dictionary = kept[spec.id] if kept.has(spec.id) else {}
+        var relocated: bool=repack and plan.positions.has(spec.id)
+        if not receiver.is_empty() and (receiver.has("spec") and is_same(receiver.spec,spec)) and not relocated:
+            kept.erase(spec.id); receiver.index=index
+            used_groups[receiver.group.id]=true
+            if dirty_floors.has(spec.source_id):
+                if index>=0:
+                    if not address_floors.has(spec.source_id): address_floors[spec.source_id]={"entry":spec.entry,"receivers":[]}
+                    address_floors[spec.source_id].receivers.append(receiver)
+                else: changed_outputs.append(receiver)
+            next.append(receiver); binding_reused+=1
+            continue
+        var retained: bool = not receiver.is_empty() and ((receiver.has("spec") and is_same(receiver.spec,spec)) or (is_same(receiver.entry,spec.entry) and receiver.crop==spec.crop and receiver.get("source_material",0)==spec.material_id and receiver.get("receiving_shader")==spec.info.shader and receiver.get("join_mask",0)==spec.join_mask))
         if retained:
             # A prepared floor can change row indices or a few transforms while
             # retaining its original native source/material. No rebind is needed
@@ -464,7 +508,6 @@ func _reconcile(world: Node) -> bool:
             receiver.projection=[]
             if not receiver.dynamic: projection_dirty.append(receiver)
         receiver.source_geometry=spec.source_geometry
-        var relocated: bool=repack and plan.positions.has(spec.id)
         if relocated:
             var next_position: Vector2i = plan.positions[spec.id]
             var region=Rect2(Vector2(next_position),Vector2(receiver.crop.pixels.size))
@@ -474,9 +517,10 @@ func _reconcile(world: Node) -> bool:
         receiver.spec=spec
         if index>=0:
             if relocated: dirty_floors[spec.source_id]=true
-            if not address_floors.has(spec.source_id): address_floors[spec.source_id]={"entry":spec.entry,"receivers":[]}
-            address_floors[spec.source_id].receivers.append(receiver)
-        elif relocated or dimensions_changed or not spec.entry.has("received_material") or spec.entry.received_material.shader!=_output_shader(spec.entry):
+            if dirty_floors.has(spec.source_id):
+                if not address_floors.has(spec.source_id): address_floors[spec.source_id]={"entry":spec.entry,"receivers":[]}
+                address_floors[spec.source_id].receivers.append(receiver)
+        elif relocated or dirty_floors.has(spec.source_id):
             changed_outputs.append(receiver)
         next.append(receiver)
     # All dimensions were validated before any published state changed.
@@ -499,26 +543,37 @@ func _reconcile(world: Node) -> bool:
     last_reconcile_phases.receivers_ms=(Time.get_ticks_usec()-phase)/1000.0
     last_reconcile_phases.bindings_reused=binding_reused
     phase=Time.get_ticks_usec()
-    for entry in entries:
+    var transport=[viewport.get_texture(),_uses_hdr(),light_cap]
+    var transport_changed: bool=transport!=transport_stamp
+    var output_updates=0
+    for id in candidate.entries:
+        if not transport_changed and not dirty_floors.has(id): continue
+        var entry: Dictionary=candidate.entries[id].entry
+        var output_shader: Shader=information[id].output
+        output_updates+=1
         var new_output: bool = not entry.has("received_material")
         if new_output:
-            var output = ShaderMaterial.new(); output.shader=_output_shader(entry)
+            var output = ShaderMaterial.new(); output.shader=output_shader
             entry.received_material=output
-        var output_shader: Shader=_output_shader(entry)
         if entry.received_material.shader!=output_shader:
             entry.received_material.shader=output_shader
             entry.erase("received_source_key")
-        entry.received_material.set_shader_parameter("received",viewport.get_texture())
+        entry.received_material.set_shader_parameter("received",transport[0])
         entry.received_material.set_shader_parameter("use_instance_atlas",entry.has("batch_rows"))
-        entry.received_material.set_shader_parameter("received_is_encoded_hdr",_uses_hdr())
+        entry.received_material.set_shader_parameter("received_is_encoded_hdr",transport[1])
         entry.received_material.set_shader_parameter("light_cap",light_cap)
-        _copy_output_source(entry)
         if entry.node.material_override!=entry.received_material: entry.node.material_override=entry.received_material
+        entry_specs[entry.node.get_instance_id()].output=entry.received_material
+    transport_stamp=transport
+    last_reconcile_phases.output_bindings=output_updates
+    last_reconcile_phases.output_bind_ms=(Time.get_ticks_usec()-phase)/1000.0
+    var address_started=Time.get_ticks_usec()
     # A prepared floor publication can replace its packed buffer while retaining
     # exactly the same tile IDs. Restore addresses even when no repack occurred.
     for id in address_floors.keys():
         if not dirty_floors.has(id): address_floors.erase(id)
     _publish_addresses(address_floors,changed_outputs)
+    last_reconcile_phases.floor_address_ms=(Time.get_ticks_usec()-address_started)/1000.0
     last_reconcile_phases.addresses_ms=(Time.get_ticks_usec()-phase)/1000.0
     last_reconcile_phases.projected_receivers=projection_dirty.size()
     return true
@@ -606,31 +661,40 @@ func sync(world: Node, published: Array = [], styles: Array = []) -> void:
         var zero = camera.unproject_position(Vector3.ZERO)
         plane_to_screen=Transform2D(camera.unproject_position(camera.global_basis.x)-zero,camera.unproject_position(-camera.global_basis.y)-zero,zero)
         projection_root.transform=plane_to_screen
+    phase=Time.get_ticks_usec()
     var restyle: bool = reconcile or styles.is_empty() or styles!=visibility_stamp
     if restyle:
         for receiver in static_receivers: _style(receiver)
         visibility_stamp=styles.duplicate()
     for receiver in dynamic_receivers: _style(receiver)
+    last_reconcile_phases.style_ms=(Time.get_ticks_usec()-phase)/1000.0
+    phase=Time.get_ticks_usec()
     # Source updates are few material groups, never one native call per tile.
     # Highlight remains independently polled because hover/Alt owns that value.
     for group in groups.values():
         var entry: Dictionary = group.entry
         var copied: bool = group.version!=entry.get("source_version",0) or group.source_shader!=entry.material.shader
         if copied: _copy_parameters(group)
-        _copy_output_source(entry)
-        if entry.has("received_material") and _entry_info(entry).capped:
-            var output: ShaderMaterial=entry.received_material
-            output.set_shader_parameter("current_visibility",float(entry.get("scenery_value",1.0)))
-            output.set_shader_parameter("highlighted",entry.material.get_shader_parameter("highlighted"))
-            if group.water: output.set_shader_parameter("displayed_time_seconds",entry.material.get_shader_parameter("displayed_time_seconds"))
         var highlighted = entry.material.get_shader_parameter("highlighted")
+        if group.capped and entry.has("received_material"):
+            _copy_output_source(entry)
+            var output: ShaderMaterial=entry.received_material
+            var style=[output,float(entry.get("scenery_value",1.0)),highlighted,entry.material.get_shader_parameter("displayed_time_seconds") if group.water else null]
+            if entry.get("received_style",[])!=style:
+                output.set_shader_parameter("current_visibility",style[1])
+                output.set_shader_parameter("highlighted",highlighted)
+                if group.water: output.set_shader_parameter("displayed_time_seconds",style[3])
+                entry.received_style=style
         if highlighted!=group.highlighted:
             group.material.set_shader_parameter("highlighted",highlighted); group.highlighted=highlighted
         if basis_changed or copied: group.material.set_shader_parameter("world_to_canvas",basis)
         if camera_changed or copied: group.material.set_shader_parameter("actual_scene_viewport_size",screen_size)
         if group.water:
             var seconds = entry.material.get_shader_parameter("displayed_time_seconds")
-            group.material.set_shader_parameter("displayed_time_seconds",seconds)
+            if group.seconds!=seconds:
+                group.material.set_shader_parameter("displayed_time_seconds",seconds)
+                group.seconds=seconds
+    last_reconcile_phases.material_sync_ms=(Time.get_ticks_usec()-phase)/1000.0
     phase=Time.get_ticks_usec()
     var screen=Rect2(Vector2.ZERO,screen_size)
     if basis_changed:
@@ -681,6 +745,6 @@ func close() -> void:
             entry.ground_buffer=buffer; entry.node.multimesh.buffer=buffer
     receivers.clear(); static_receivers.clear(); dynamic_receivers.clear(); groups.clear(); membership.clear(); layout_members.clear(); crop_cache.clear()
     entry_specs.clear(); published_supports.clear(); shelf_cursor=Vector3i(1,1,0)
-    admission_stamp.clear(); visibility_stamp.clear(); dynamic_members.clear(); output_stamp.clear(); canvas_key.clear(); known_entry_count=-1
+    admission_stamp.clear(); visibility_stamp.clear(); dynamic_members.clear(); output_stamp.clear(); transport_stamp.clear(); canvas_key.clear(); known_entry_count=-1
     if is_instance_valid(viewport): viewport.queue_free()
     viewport=null

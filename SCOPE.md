@@ -1118,3 +1118,54 @@ an independent coordinate oracle, existing Python reducer parity cases, causal
 presentation checks and full live canonical/receipt checks. Measure before/after
 client phases separately from server time; the user-owned server task may change
 backend code concurrently, so any server improvement cannot be credited here.
+
+## Lighting atlas publication spikes
+
+User requests a restarted preview from the committed sorting fix, then removal
+of the measured lighting-atlas spikes without changing approved graphics.
+Checkpoint is 581ec3a. First attribute the existing native atlas CPU time into
+bounded subphases during real client-issued movement; optimize the measured
+owner, not shader appearance. Preserve source pixels, normals, light parameters,
+cap/Normals modes, alpha, shadows, geometry, painter order, sparse cell addresses,
+and exact displayed-event boundaries. Reuse or prepare work only when those
+inputs permit it; never show a partial or stale atlas as a performance shortcut.
+Root owns diagnostics and serialized live profiling. render_audit reviews CPU
+owners; map_audit reviews independent address/pixel/lifecycle acceptance;
+scope_review tracks plan adherence and anti-slop/anti-OOP. Validate actual newly
+revealed world updates, reused/replaced floor buffers, camera/view changes and
+mode switches, then repeat the same live Gallery route. Keep raw frame traces
+private and commit concise timings/limits. Server implementation remains in the
+user-owned server task. Commit the resulting client optimization separately.
+
+User also reports low FPS specifically during movement/reveal at wider zoom.
+Extend the real Gallery route to measure zoom16/28 with the approved cap enabled;
+retain idle zoom/cap controls to distinguish update stalls from steady rendering.
+
+Keep active movement, media/world holds, publication frames and command/network
+waits as separate cohorts. During final validation the shared backend failed
+initialization in world_facts._index_object (KeyError(2,3)); run both reference
+and optimized clients against an isolated, unchanged dbbc125aa02 backend so
+server work cannot change the comparison. Do not modify the user's server tree.
+
+User asks whether the light cap causes the movement problem. Compare the same
+live route with cap on/off against the pinned backend, beyond the existing idle
+controls. This is a diagnostic test option only; retain the approved cap in the
+interactive preview and do not change rendering equations or product defaults.
+
+The user requests fixing the remaining reveal frames and a smarter capped-light
+path. Replace full-map atlas rediscovery with the exact static changes already
+known at successful world admission: native source additions/removals and the
+prepared floor's changed row IDs. Retain stable receiver/address indices and
+update affected supports plus their neighbours. Reject missed publication
+generations and use the complete planner for initial scenes, camera variants,
+mode changes and packing fallback. Validate all dimensions before changing the
+visible atlas; no speculative scene publication or altered event timing.
+
+Root owns atlas delta application and capped output synchronization; render_audit
+owns prepared numeric row changes and their handoff at existing world admission;
+map_audit owns independent delta/first-frame pixel and lifecycle acceptance;
+scope_review tracks plan adherence and anti-slop/anti-OOP. The cap's approved
+illumination equation, quantization and source sampling remain exact. Reduce
+repeated source/style work at its owner rather than approximating the lighting.
+Measure the same live route after the change, with separate movement, reveal,
+hold and server-wait cohorts. Keep all source artwork and raw encounters ignored.
