@@ -14,7 +14,7 @@ var _running = false
 var _serial = 0
 var _diagnostics: Dictionary = {}
 var _timings = {"completed_requests":0,"request_wall_ms":0.0,"maximum_request_wall_ms":0.0,
-    "admission_ms":0.0,"consumer_ms":0.0}
+    "admission_ms":0.0,"consumer_ms":0.0,"response_normalization_ms":0.0}
 var _consumer: Callable
 var _options: Dictionary
 var _origin: Dictionary
@@ -138,7 +138,10 @@ func _stopping() -> bool:
     return result
 
 func _emit(value: Dictionary) -> void:
-    _mutex.lock(); _outgoing.append(value.duplicate(true)); _mutex.unlock()
+    # Payloads can contain thousands of legal targets. Copy on the worker
+    # before taking the mailbox lock; draining must never wait for that copy.
+    var publication = value.duplicate(true)
+    _mutex.lock(); _outgoing.append(publication); _mutex.unlock()
 
 func _reply(command: Dictionary, result: Dictionary) -> void:
     _emit({"kind":"response","request_id":command.id,"operation":command.operation,"result":result})
@@ -498,6 +501,12 @@ func _finish_job(job: Dictionary, result: Dictionary) -> void:
             _emit({"kind":"connected" if result.ok else "failure","result":result})
         "endpoint":
             if result.ok: result = _check_reply(job.command,result.value)
+            if result.ok and job.command.operation in ["choices","preview","submit_command","receipt"]:
+                # Keep the exact admitted value available to SDK callers, with
+                # a separate defaulted presentation copy prepared off-thread.
+                var normalization_started = Time.get_ticks_usec()
+                result.normalized = _protocol.normalize(job.root,result.value)
+                _timings.response_normalization_ms += (Time.get_ticks_usec()-normalization_started)/1000.0
             _reply(job.command,result)
         "initialization":
             if result.ok:

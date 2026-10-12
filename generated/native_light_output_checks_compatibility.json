@@ -1,0 +1,164 @@
+{
+  "cases": [
+    {
+      "alpha_mismatches": 0,
+      "id": "Chest14-r0-reference",
+      "lights": 0,
+      "max_above_source_rgb_bytes": 0,
+      "native_max_above_source_rgb_bytes": 0,
+      "spatial_vs_direct_canvas": {
+        "alpha_mismatches": 0,
+        "changed_pixels": 0,
+        "maximum_byte_error": 0
+      }
+    },
+    {
+      "alpha_mismatches": 0,
+      "id": "Chest14-r0-reference",
+      "lights": 1,
+      "max_above_source_rgb_bytes": 111,
+      "native_max_above_source_rgb_bytes": 111,
+      "spatial_vs_direct_canvas": {
+        "alpha_mismatches": 0,
+        "changed_pixels": 0,
+        "maximum_byte_error": 0
+      }
+    },
+    {
+      "alpha_mismatches": 0,
+      "id": "Chest14-r0-reference",
+      "lights": 2,
+      "max_above_source_rgb_bytes": 135,
+      "native_max_above_source_rgb_bytes": 135,
+      "spatial_vs_direct_canvas": {
+        "alpha_mismatches": 0,
+        "changed_pixels": 0,
+        "maximum_byte_error": 0
+      }
+    },
+    {
+      "alpha_mismatches": 0,
+      "id": "Chest14-r0-reference",
+      "lights": 8,
+      "max_above_source_rgb_bytes": 149,
+      "native_max_above_source_rgb_bytes": 149,
+      "spatial_vs_direct_canvas": {
+        "alpha_mismatches": 0,
+        "changed_pixels": 0,
+        "maximum_byte_error": 0
+      }
+    },
+    {
+      "alpha_mismatches": 0,
+      "id": "corner-q1-remembered",
+      "lights": 0,
+      "max_above_source_rgb_bytes": 0,
+      "native_max_above_source_rgb_bytes": 0,
+      "spatial_vs_direct_canvas": {
+        "alpha_mismatches": 0,
+        "changed_pixels": 0,
+        "maximum_byte_error": 0
+      }
+    },
+    {
+      "alpha_mismatches": 0,
+      "id": "corner-q1-remembered",
+      "lights": 1,
+      "max_above_source_rgb_bytes": 83,
+      "native_max_above_source_rgb_bytes": 83,
+      "spatial_vs_direct_canvas": {
+        "alpha_mismatches": 0,
+        "changed_pixels": 0,
+        "maximum_byte_error": 0
+      }
+    },
+    {
+      "alpha_mismatches": 0,
+      "id": "corner-q1-remembered",
+      "lights": 2,
+      "max_above_source_rgb_bytes": 164,
+      "native_max_above_source_rgb_bytes": 164,
+      "spatial_vs_direct_canvas": {
+        "alpha_mismatches": 0,
+        "changed_pixels": 0,
+        "maximum_byte_error": 0
+      }
+    },
+    {
+      "alpha_mismatches": 0,
+      "id": "corner-q1-remembered",
+      "lights": 8,
+      "max_above_source_rgb_bytes": 183,
+      "native_max_above_source_rgb_bytes": 183,
+      "spatial_vs_direct_canvas": {
+        "alpha_mismatches": 0,
+        "changed_pixels": 0,
+        "maximum_byte_error": 0
+      }
+    },
+    {
+      "alpha_mismatches": 0,
+      "id": "water-authored",
+      "lights": 0,
+      "max_above_source_rgb_bytes": 0,
+      "native_max_above_source_rgb_bytes": 0,
+      "spatial_vs_direct_canvas": {
+        "alpha_mismatches": 0,
+        "changed_pixels": 0,
+        "maximum_byte_error": 0
+      }
+    },
+    {
+      "alpha_mismatches": 0,
+      "id": "water-authored",
+      "lights": 1,
+      "max_above_source_rgb_bytes": 52,
+      "native_max_above_source_rgb_bytes": 52,
+      "spatial_vs_direct_canvas": {
+        "alpha_mismatches": 0,
+        "changed_pixels": 0,
+        "maximum_byte_error": 0
+      }
+    },
+    {
+      "alpha_mismatches": 0,
+      "id": "water-authored",
+      "lights": 2,
+      "max_above_source_rgb_bytes": 132,
+      "native_max_above_source_rgb_bytes": 132,
+      "spatial_vs_direct_canvas": {
+        "alpha_mismatches": 0,
+        "changed_pixels": 0,
+        "maximum_byte_error": 0
+      }
+    },
+    {
+      "alpha_mismatches": 0,
+      "id": "water-authored",
+      "lights": 8,
+      "max_above_source_rgb_bytes": 196,
+      "native_max_above_source_rgb_bytes": 196,
+      "spatial_vs_direct_canvas": {
+        "alpha_mismatches": 0,
+        "changed_pixels": 0,
+        "maximum_byte_error": 0
+      }
+    },
+    {
+      "comparison": {
+        "alpha_mismatches": 0,
+        "changed_pixels": 357,
+        "maximum_byte_error": 13
+      },
+      "id": "height20-vs56",
+      "zoom2": {
+        "alpha_mismatches": 0,
+        "changed_pixels": 0,
+        "maximum_byte_error": 0
+      }
+    }
+  ],
+  "checks": 37,
+  "failures": [],
+  "scope": "Native PointLight2D zero/one/two/eight overlap on actual modular/wall/water. Final3D output matches an independently composed directCanvas sample of the native light atlas byte exactly, including alpha; no source-albedo clamp. Native20/56 height response, zoom scaling and unchanged physical source projection. Overlapping native lights may saturate just as in the supplied demo."
+}

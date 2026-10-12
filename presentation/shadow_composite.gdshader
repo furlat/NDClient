@@ -1,6 +1,8 @@
 shader_type spatial;
 render_mode unshaded, blend_mix, cull_disabled, depth_draw_never, depth_test_disabled, fog_disabled;
-uniform sampler2D visibility_map : filter_nearest, repeat_disable;
+// Forward+ encodes the helper viewport; native sampling restores its scalar.
+// Compatibility already stores the numeric value and ignores this colour hint.
+uniform sampler2D visibility_map : source_color, filter_nearest, repeat_disable;
 uniform sampler2D cookie_atlas : filter_linear, repeat_disable;
 uniform sampler2D source_data : filter_nearest, repeat_disable;
 uniform int source_count=0;

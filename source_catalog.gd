@@ -12,6 +12,7 @@ const ORIGINAL_CHEST_RESTS = {
 }
 
 static func media_path(path: String) -> String:
+    if path.begins_with("res://"): return ProjectSettings.globalize_path(path)
     if path.begins_with("C:/"): return path
     var root: String = ProjectSettings.get_setting("source_data/media_root")
     var absolute = root.path_join(path.trim_prefix("/media/"))
@@ -208,7 +209,28 @@ static func imported_record(row: Dictionary, quarter: int, cache: Dictionary, ph
         cache[key] = result
     return cache[key]
 
+static func receiving_normal(record: Dictionary, cache: Dictionary) -> Dictionary:
+    if not record.has("normal"): return record
+    # Small receiving-only derivation from retained source render passes. It is
+    # never a replacement for the source depth, support, color or registration.
+    var key = "__pixel_integrated_receiving_normals"
+    if not cache.has(key):
+        cache[key] = JSON.parse_string(FileAccess.get_file_as_string("res://generated/environment_receiving_normals.json")).normals
+    var original_path: String = record.normal.region.path
+    if not cache[key].has(original_path): return record
+    var selected: Dictionary = cache[key][original_path]
+    var result = record.duplicate()
+    result.normal = record.normal.duplicate()
+    result.normal.region = record.normal.region.duplicate()
+    result.normal.region.path = selected.path
+    result.normal.receiving_qualification = selected.qualification
+    result.normal.original_path = original_path
+    return result
+
 static func environment(row: Dictionary, quarter: int, cache: Dictionary, phase: int = 0, time: float = 0.0) -> Dictionary:
+    return receiving_normal(_environment_source(row,quarter,cache,phase,time),cache)
+
+static func _environment_source(row: Dictionary, quarter: int, cache: Dictionary, phase: int = 0, time: float = 0.0) -> Dictionary:
     if row.has("source_sprite"): return imported_record(row,quarter,cache,phase,time)
     var world = read_file("world.json", cache)
     var direction: String = row.get("orientation", "east")

@@ -429,6 +429,7 @@ func _add_fixture_flame(row: Dictionary) -> void:
         var energy: Array = []
         var heights: Array = []
         var total = 0.0
+        var height_total = 0.0
         for frame in authored.frames:
             var path: String = assets.resources[frame].path
             if not source_images.has(path) or not fixture_frame_energy.has(path) or not fixture_frame_centroids.has(path):
@@ -441,6 +442,7 @@ func _add_fixture_flame(row: Dictionary) -> void:
             energy.append(amount); total += amount
             var resource: Dictionary = assets.resources[frame]
             heights.append((float(resource.pivot[1])-fixture_frame_centroids[path].y)*float(resource.scale)/64.0)
+            height_total += heights.back()
         var mean = total/maxi(1,energy.size())
         for i in range(energy.size()):
             energy[i] = clampf(energy[i]/maxf(mean,0.0000001),0.85,1.15)
@@ -451,7 +453,7 @@ func _add_fixture_flame(row: Dictionary) -> void:
         assert(result == OK,"Cannot prepare authored fixture animation: "+name)
         var duration: float = authored.frames.size()/float(authored.fps)
         var clock_node = Graphs.make(fixture_clock_owner if fixture_clock_owner!=null else self,{"Idle":Graphs.animation("Idle",duration,true)},"Idle",[])
-        fixture_clips[name] = {"authored":authored,"frames":sheets,"clock":clock_node,"index":0,"energy":energy,"heights":heights}
+        fixture_clips[name] = {"authored":authored,"frames":sheets,"clock":clock_node,"index":0,"energy":energy,"heights":heights,"mean_height":height_total/maxi(1,heights.size())}
     var clip: Dictionary = fixture_clips[name]
     var record: Dictionary = assets.resources[clip.authored.frames[0]]
     add_entry(row,"body",100,FIXTURE_FLAME_SHADER,1)
@@ -461,5 +463,8 @@ func _add_fixture_flame(row: Dictionary) -> void:
     entry.node.position = Placement.contact(row)
     set_quad(entry,v2(record.native_size),v2(record.pivot),record.scale)
     entry.material.set_shader_parameter("frames",clip.frames)
+    # All 16 original torch frames have border alpha0/1. Keep other effects
+    # untouched and retain positive glow above that one-byte padding pedestal.
+    entry.material.set_shader_parameter("alpha_pedestal",1.0/255.0 if name=="torch.flame" else 0.0)
     static_entries.append(entry)
     fixture_entries.append(entry)

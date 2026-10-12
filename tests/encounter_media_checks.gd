@@ -23,7 +23,7 @@ func accounting(data: Dictionary, label: String) -> void:
             sheets += 1; cpu += int(row.cpu_bytes); gpu += int(row.gpu_bytes)
             if data.wanted.has(path) or data.preload_selected.has(path): pinned += int(row.bytes)
         var requests: Array = data.pending.duplicate()
-        if not data.inflight.is_empty(): requests.append({"path":data.inflight})
+        requests.append_array(data.decode_jobs)
         for request in requests:
             var environment: bool = data.environment.has(request.path) or data.encounter.get("environment",{}).has(request.path)
             if environment==category: pending += 1
@@ -163,11 +163,11 @@ func run() -> void:
     var textures = {colour:ImageTexture.create_from_image(original.image)}
     Media.published(data,original)
     accounting(data,"First colour publication")
-    check(Media.ready(data,{colour:true}) and not Media.boot_ready(data),"Mandatory rendering may be ready while selected boot companion still awaits upload")
+    check(Media.ready(data,{colour:true}) and Media.boot_ready(data) and not Media.ready(data,{companion:true}),"Required colour starts play while optional companion remains background work")
     var geometry = await load_one(data)
     check(geometry.has("image") and geometry.path==companion,"Worker decodes exact optional companion")
     if not geometry.has("image"): Media.close(data); quit(1); return
-    check(not Media.boot_ready(data),"Decoded but unpublished image is not startup-ready")
+    check(Media.boot_ready(data) and not Media.ready(data,{companion:true}),"Decoded but unpublished optional image does not block startup or count as render-ready")
     textures[companion] = ImageTexture.create_from_image(geometry.image)
     Media.published(data,geometry)
     check(Media.release_cold_images(data)==[companion] and Media.boot_ready(data),"Original uploaded texture completes warmup; companion CPU copy releases while original colour remains")
@@ -181,6 +181,14 @@ func run() -> void:
     check(data.selection_jobs==selections_before,"Changing exact actions inside the selected family does not reselect the full encounter cache")
     accounting(data,"Action revisit")
     check(original.image.get_data()==original_pixels and data.resident[colour].cpu_bytes==original_pixels.size(),"Retained source colour and original alpha remain byte-identical for picking")
+    var outside_family = Media.create()
+    Media.adopt_encounter(outside_family,subset(encounter,[companion]),1)
+    Media.demand(outside_family,{colour:Catalog.media_path(colour)}, {}, {}, {},{colour:true})
+    check(not Media.boot_ready(outside_family) and Media.preload_progress(outside_family).startup_required==1
+        and Media.preload_progress(outside_family).startup_ready==0,"Exact required source outside optional family still blocks startup until published")
+    Media.published(outside_family,original)
+    check(Media.boot_ready(outside_family) and not Media.ready(outside_family,{companion:true}),"Non-family mandatory publication starts play without optional family upload")
+    Media.close(outside_family)
     var expanded = subset(encounter,[colour,companion,later])
     data.budget_bytes += expanded.estimates[later].bytes
     Media.adopt_encounter(data,expanded,7)
@@ -205,7 +213,7 @@ func run() -> void:
     Media.demand(held,{colour:Catalog.media_path(colour)}, {}, {}, {},{colour:true})
     var boot: Dictionary = held.boot_paths.duplicate()
     Media.published(held,original)
-    check(not Media.boot_ready(held),"Mid-boot initial selection still waits for its companion")
+    check(Media.boot_ready(held),"Initial mandatory source completes startup without its optional companion")
     held.budget_bytes += expanded.estimates[later].bytes
     Media.adopt_encounter(held,expanded,9)
     Media.demand(held,{colour:Catalog.media_path(colour)}, {}, {}, {},{colour:true})
@@ -264,7 +272,7 @@ func run() -> void:
     var missing_path = "res://tests/no-such-optional-source.png"
     Media.adopt_encounter(failure,{"revision":1,"paths":{missing_path:missing_path},"estimates":{missing_path:{"bytes":4}},"errors":[]},1)
     Media.demand(failure,{})
-    check(not Media.boot_ready(failure),"Missing optional source is pending until its actual preparation result")
+    check(Media.boot_ready(failure) and not Media.ready(failure,{missing_path:true}),"Missing optional source does not prevent startup and remains unavailable")
     var failed = await load_one(failure)
     check(failed.has("error") and Media.boot_ready(failure) and Media.preload_progress(failure).failed.has(missing_path) and not Media.ready(failure,{missing_path:true}),
         "Optional preparation failure completes startup wait, remains reported, and never becomes render-ready")

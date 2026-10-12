@@ -1,0 +1,53 @@
+{
+  "cases": [
+    {
+      "difference": {
+        "alpha": 0,
+        "changed": 1863,
+        "maximum": 230
+      },
+      "joined": 1362,
+      "props": 42,
+      "quarter": 0,
+      "unjoined": 1
+    },
+    {
+      "difference": {
+        "alpha": 0,
+        "changed": 3642,
+        "maximum": 183
+      },
+      "joined": 1362,
+      "props": 42,
+      "quarter": 1,
+      "unjoined": 1
+    },
+    {
+      "difference": {
+        "alpha": 0,
+        "changed": 418,
+        "maximum": 232
+      },
+      "joined": 1362,
+      "props": 42,
+      "quarter": 2,
+      "unjoined": 1
+    },
+    {
+      "difference": {
+        "alpha": 0,
+        "changed": 318,
+        "maximum": 235
+      },
+      "joined": 1362,
+      "props": 42,
+      "quarter": 3,
+      "unjoined": 1
+    }
+  ],
+  "checks": 32,
+  "driver": "vulkan",
+  "failures": [],
+  "renderer": "forward_plus",
+  "scope": "Final3D actual71-packet scene in four quarters. Before uses original single-ray prop normals and independently exposed floor skirts; after uses source pixel-integrated Cycles normals and published-topology interior joins. Alpha/state unchanged. Pixel differences are recorded, not a subjective-quality assertion."
+}

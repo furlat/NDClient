@@ -3,6 +3,7 @@ extends Node3D
 const FrameProfile = preload("res://frame_profile.gd")
 var profile = FrameProfile.create()
 var timeline = preload("res://presentation/timeline.gd").new()
+var session = preload("res://presentation/session.gd").new()
 var loot_object_uuid = ""
 func close_storage() -> void: loot_object_uuid = ""
 var available_actions: Dictionary = {}
@@ -13,6 +14,8 @@ var notice_text = ""
 var command_busy = false
 var camera: Camera3D
 var grid_visible = false
+var normals_visible = false
+func set_normals_visible(enabled: bool) -> void: normals_visible = enabled
 var wall_mode = "solid"
 var visual_actors = {}
 var allow_commands = true

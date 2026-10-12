@@ -9,6 +9,11 @@ Python environment; private credentials, logs and SDK recordings stay under
 `.runtime/player-runs/<timestamp>/`. The launcher reports readiness only after
 initialization, acknowledgement and current command choices are available.
 
+The Windows project uses **Forward+ with Vulkan**, validated on the RTX 5090.
+Opening the project directly selects the same player scene; use the launcher to
+provide its backend connection. The 3D world still receives its painted lighting
+from native Godot 2D lights and authored normal maps.
+
 ## Live player controls
 
 - **Click** ground to move or a disclosed object to use its native default
@@ -28,6 +33,8 @@ initialization, acknowledgement and current command choices are available.
   otherwise it opens Settings. Character light smoothness offers Original,
   Gentle and Reference (the handoff default), saved locally. The modal owns
   keyboard/mouse input while the displayed timeline and SDK intake continue.
+  **Light strength** scales native emitted light from 0–150%, without changing
+  source colours or the ambient floor; **Fire light flicker** defaults off.
   Legal self actions execute once from their icon. **Space** ends the turn.
 - **I** opens equipment and the searchable carried inventory. Hover an item or
   slot to see native compatibility; equip, unequip, use and drop preserve the
@@ -52,7 +59,8 @@ initialization, acknowledgement and current command choices are available.
   history; the full subjective source remains in its SDK recording.
 - **Q/E** rotate through four views; **wheel** zooms; **middle-drag** pans;
   **F** follows the current actor. **G** toggles the grid and the cursor
-  reports its cell and support height.
+  reports its cell and support height. The **Normals** button beside **Grid · G**
+  displays the receiving normals without illumination for inspection.
 - **Alt** shows labels for admitted interactables. **Z** cycles **Solid →
   Translucent → Hidden → Solid**; the FPS line shows the mode. Only foreground
   wall members whose finite boundaries cover currently visible support tiles
@@ -87,20 +95,19 @@ SubViewport; unshaded 3D materials consume those straight-RGBA results. A gray
 CanvasModulate at 0.18 provides readability. The painted world has no 3D receiving
 lights and no custom diffuse-light loop.
 
-Accumulated illumination is capped at a gain of one: the existing final 3D
-output bounds each lit channel by its original tinted/styled source colour.
-This prevents overlapping lights from whitening the artwork while leaving dim
-light unchanged. Canvas and output use the same colour functions, including
-memory, highlighting and the original water graph; alpha remains atlas-owned.
-Emissive flame and unlit source-shadow artwork bypass this cap. There is no
-second atlas or additional rendering pass.
+Native Canvas owns tint, style and accumulated lighting. The former per-channel
+albedo clamp was removed because it changed the reference demo's colours.
+Overlapping lights can still saturate the native LDR output; **Light strength**
+reduces their energy globally without a colour clamp. Source and normal samples
+retain nearest filtering.
 
 Disclosed, active items supply their original very-bright, bright and dim radii.
 Their outer radius sets the native 2D cookie diameter. The recovered light cookie
 and warm Torch/Wall Torch colour come from NDCharacterLight; other semantic item
 IDs remain white. Carried sources follow displayed support/jump positions, and
-ignite/extinguish follows displayed commits. The normal-light height is 20 source
-pixels at the current zoom, separate from world elevation. Directional sources
+ignite/extinguish follows displayed commits. The normal-light height is 56 source
+pixels at the current zoom, matching the liked demo fixture and remaining separate
+from world elevation. The earlier recovered template used 20. Directional sources
 come from world.json (currently empty). The native 2D directional behind-plane
 limitation is reported explicitly rather than silently flipping its direction.
 
@@ -126,9 +133,12 @@ attachment. Registered torch fixtures use the original flame's brightness-weight
 vertical centroid and pivot/scale, prepared once with their source images. Other
 unregistered item emitters retain the one-step optical fallback.
 The original torch.flame supplies 16 frames at 10 FPS with its original pivot and
-scale. Its AnimationPlayer/AnimationTree clock drives brightness fluctuation
-bounded to ±15% and the original flame centroid. Pausing displayed time pauses
-both. No second emitter is added for the flame sprite. Environment normals retain
+scale. **Escape → Settings → Fire light flicker** defaults off for debugging:
+fire brightness and optical height use the authored cycle average while flame
+artwork and carried-light movement continue. When enabled, its animation clock
+drives brightness fluctuation bounded to ±15% and the original flame centroid.
+Shadow source ranking always uses the cycle average to prevent idle switching.
+No second emitter is added for the flame sprite. Environment normals retain
 their authored octahedral encoding and source-to-world transforms; native Canvas
 lighting runs before final wall opacity and the existing wall-join coverage mask.
 This does not model light transmission through stone or add wall shadows.
@@ -261,10 +271,11 @@ outfit/action and one queued group. The same worker also warms every authored
 clip for outfits and equipment sets in displayed state and the bounded,
 already-received operation window. This includes upcoming disclosed actor
 families before movement arrives; prefetch does not publish actors, tiles or
-outcomes. It does not load the unrelated asset catalog. Original PNGs decode
-serially off-thread; the scene uploads at most one prepared texture per frame.
-Startup waits for its frozen selected preload set. Later family warmup runs in
-the background, while each actual group waits only for its exact required
+outcomes. It does not load the unrelated asset catalog. Original PNGs decode on
+four bounded workers; the scene publishes them in demand order and uploads at
+most one prepared texture per frame. Startup waits only for its exact required
+sources. Optional family warmup runs in the background, while each actual group
+waits only for its exact required
 sources. Loading does not advance the display clock or become a catch-up jump;
 SDK intake/acknowledgment remains independent. Optional unavailable sources are
 reported; missing required sources stop their own presentation boundary.
@@ -277,6 +288,14 @@ and upcoming sources take priority and remain pinned even above that budget;
 optional family preload fills the remaining capacity. Exact source paths are
 deduplicated. The original two-party Crypt census has 1,626 unique current-family
 and environment sources, with a conservative 13.87 GiB combined estimate.
+
+A native Forward+/Vulkan startup reached playable choices in **6.342 seconds**,
+versus **24.555 seconds** in the preceding full-family-gated run. At readiness,
+all 200 mandatory sources were uploaded; 1,677 optional sources remained queued.
+The combined CPU/GPU estimate was 2.73 GB then, growing progressively within the
+same cache budget. This measures scene initialization through input readiness,
+excludes engine launch/import, and does not control operating-system file-cache
+warmth. See `generated/player_startup_checks.json`.
 
 Original colour images retain their unchanged CPU alpha for picking until the
 whole source is evicted. Modular normal/depth/support/validity companions
@@ -958,7 +977,7 @@ selection, actor/static-order merging, masks and current/remembered styling stil
 publish there; neither
 the slice target nor asynchronous preparation guarantees a maximum frame time.
 The cache and profiles report preparation separately from initial asset loading.
-Local unconfirmed command prediction is a separate presentation feature; this
+Local unconfirmed command prediction was later removed; this
 path uses only already received server outcomes.
 
 Preparation-pass acceptance and raw timings are indexed in
@@ -974,57 +993,21 @@ native-direct captures still differ by one byte at one pixel; their fixed-direct
 controls and order/picking/state/lifecycle checks pass. See the linked index for
 exact lanes, receipts and limitations.
 
-## Local presentation prediction
+## Authoritative action playback
 
-The live player starts a bounded visual prefix when it submits a server-previewed
-selection. Walking and jumping reuse the admitted route and the same authored
-track constructors/sampler as confirmed playback. Attack wind-ups are allowed
-only where all possible authored outcome variants agree on the body. For example,
-the dagger's critical-overhead variant prevents an early body prediction; its
-confirmed attack still plays normally. Connectors, weapon-set changes and other
-families currently use confirmed presentation.
+Local prediction and reconciliation were removed at the user's request after
+accepted actions visibly restarted. Commands now play only from the authoritative
+event timeline. Asynchronous media/world preparation, native animation, causal
+ordering and command receipt handling remain. The older `prediction_*.json`
+reports are historical measurements, not validation of the current runtime.
 
-`presentation/prediction_recipes.gd` is the adapter from choices and authoring to
-passive prefixes. `presentation/prediction.gd` owns a single command's visual
-lifetime, scoped by game, epoch, audience and native command number. It has no
-reducer/network/world ownership. `presentation/tracks.gd` supplies the shared
-body, source-key and movement sampling; native AnimationTree/AnimationPlayer
-remain the actual animation hosts. Adding a body-animation family means supplying
-an explicit prefix through the adapter. Future effect channels can use this same
-command lifetime once their authored samplers exist; VFX are not implemented here.
+The live Gallery regression uses `tools/play.py --test-script
+res://tests/live_gallery_checks.gd`. It issues actual discoveries, previews and
+commands through the production player, records post-draw native source frames,
+and separates request/preparation waits from frame times. Its private command
+trace and canonical journal live alongside the launcher's run output.
 
-Unconfirmed progress stops at 120 ms or earlier, before the first edge/contact.
-Known first-edge opportunity attacks and unavailable media/support suppress it.
-A matching admitted track keeps the sampled opening pose until canonical time
-catches up. Changed source programs or prior reactions take over immediately;
-rejection reverses the short visual prefix over 80 ms. Pending, lost or unknown
-receipts keep input unresolved and never resend a command. Camera rotation uses
-the same source sample. Prediction never changes visibility, HP, resources,
-combat-log order or event hierarchy, and never supplies authoritative green
-render evidence. Profile JSON includes a `prediction` CPU phase and lifecycle
-counters. This is bounded visual prediction, not speculative gameplay rollback.
-
-The native delayed-command check is `tests/prediction_live_checks.gd`, launched
-through `tools/play.py --scenario crypt --test-script
-res://tests/prediction_live_checks.gd --test-command-delay-ms 2000` in the documented
-engine Python environment. It exercises real preview/command/SSE, original media,
-AnimationTree continuity, camera rotation during delay, walking/jumping and cold
-journal agreement. `tests/prediction_recording_checks.gd` covers source hierarchy,
-late lethal interruption, rejection/ambiguous receipt and preparation holds;
-`tests/presentation_identity_checks.gd` covers exact own/null command metadata.
-
-Current prediction/media-selection acceptance is indexed in
-[prediction_validation.json](generated/prediction_validation.json) and
-[prediction_profiles.json](generated/prediction_profiles.json). The actual delayed
-command lane passes 32 checks, including camera rotation while waiting. The full
-Gallery again reaches all 122 groups, 1,761 tiles and 360 objects with canonical agreement.
-Media-planning maximum CPU sample falls 29.112 → 11.553 ms; the isolated family-growth
-probe falls 16.188 → 4.548 ms median. Whole traversal retains 16 intervals above 33.333 ms
-(previously 20), with 46.233 ms maximum (previously 45.139). Post-preload p95 is 4.475 ms
-(previously 3.816), so overall timing is mixed. Idle prediction p95 is 0.019 ms across
-the profile. Wall/world/scenery/HUD publication and native view retirement remain
-open costs; this does not claim all spikes are resolved.
-
+Use **Grid · G** beside **Log / Events**, or press **G**, to toggle the grid.
 
 Repository migration, 12 October 2026: the active Windows client is
 `C:/Users/tommaso/Documents/Dev/NDClientGodot`, with the historical NDClient Git
@@ -1038,13 +1021,13 @@ ZIP backups were CRC-verified before importing Git; see local
 ## Native 2D migration validation
 
 [Validation index](generated/native_2d_validation.json) and
-[profile comparison](generated/native_2d_profiles.json) record the current player
-path. Native checks cover actual Crypt actors, all four camera quarters, the three
+[profile comparison](generated/native_2d_profiles.json) record the earlier
+Compatibility migration baseline. Native checks cover actual Crypt actors, all four camera quarters, the three
 normal profiles, wall modes, source alpha/picking, settings and generated-shadow
 lifetime. Separate original-source comparisons retain their measured one-byte
-lit-corner interpolation differences; illumination-cap checks preserve alpha and
-dim pixels, bound eight overlapping lights, and verify normal-light height and
-zoom response. The shadow probe covers dominant selection and five-source fill.
+lit-corner sampling differences. The former per-channel illumination cap was
+removed after final-frame comparison exposed a colour regression; its historical
+checks do not validate the current renderer. The shadow probe covers dominant selection and five-source fill.
 
 The final full Gallery replay completes all 122 groups at sequence 101 with
 canonical agreement, 1,761 tiles, 360 objects, a drained queue and no presentation
@@ -1063,7 +1046,7 @@ The separate lighting demo remained running during these comparisons.
 Run the native lanes with the Windows Godot executable and this project path:
 `--script res://tests/native_2d_integration_checks.gd -- --recording <Crypt journal>`,
 `--script res://tests/native_2d_source_checks.gd`, and
-`--script res://tests/native_illumination_cap_checks.gd`.
+`--script res://tests/native_light_output_checks.gd`.
 The full map lane is `--script res://tests/scale_profile.gd -- --recording
 <Gallery journal> --profile-label <label> --background-check
 --exercise-cache-invalidation`. Private recordings, captures and raw profiles
@@ -1079,7 +1062,7 @@ timing or assignments. `tools/register_creature_geometry.py` checks the delivere
 catalogs against this repository's tracked authoring and writes
 `generated/creature_geometry.json`; artwork stays external and unchanged.
 
-Creatures use the same native 2D receiving light, total-illumination cap and
+Creatures use the same native 2D receiving light and
 Escape → Settings → normal smoothness selection as modular characters. Each
 packet retains its own depth range, optical origin, native cell size and support
 masks. Generated shadows use the original painted ground contact and cached
@@ -1125,3 +1108,15 @@ difference is not isolated creature-feature cost. The final wide view has one
 additional caster (19 components/622,592 prepass triangles versus 18/589,824).
 Publication spikes remain unresolved; neither this intake nor its passing tests
 claim to complete renderer optimization.
+
+The small environment receiving-normal cache can be regenerated from the original
+retained Cycles sample passes with the current project-owned authoring:
+
+```sh
+python tools/prepare_receiving_normals.py --banks prop.interior-writing-desk.intact prop.bed.intact prop.interior-bookshelf.intact prop.interior-ingredient-shelves.intact prop.interior-preparation-counter.intact prop.interior-storage-shelving.intact prop.table.intact
+```
+
+The manifest records each original pass and registration. These are receiving-only
+pixel-integrated normals; original color, alpha, depth and support are unchanged.
+The generated PNGs are disposable, ignored cache files. Connected floor interior
+sides instead use published adjacent tile support; exposed skirts remain authored.

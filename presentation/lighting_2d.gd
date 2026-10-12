@@ -4,7 +4,7 @@ extends RefCounted
 const ExistingLighting = preload("res://presentation/lighting.gd")
 const Placement = preload("res://placement.gd")
 const OPTICAL_ENERGY = ExistingLighting.OPTICAL_ENERGY
-const NORMAL_HEIGHT_SOURCE_PIXELS := 20.0
+const NORMAL_HEIGHT_SOURCE_PIXELS := 56.0
 const TORCH_COLOUR := Color(0.809372,0.429306,0.269121,1.0)
 const TORCH_ITEM_IDS = ["equipment.portable_torch","environment.wall_torch"]
 const DEFAULT_COOKIE = "C:/Users/tommaso/Documents/Dev/NDCharacterLight/.reference-template/scenes/vfx/textures/T_basic1_vfx.PNG"
@@ -14,6 +14,8 @@ var issues: Array = []
 var nodes: Dictionary = {} # First page, keyed by original item UUID.
 var directional_nodes: Dictionary = {}
 var sampled: Dictionary = {}
+var fire_light_flicker := false
+var light_strength := 1.0
 var cookie: Texture2D
 var carried_optical_lift_steps: float = ExistingLighting.CARRIED_OPTICAL_LIFT_STEPS
 var _resolver = ExistingLighting.new() # Never attach: world position calculation only.
@@ -127,7 +129,7 @@ func _sync_page(page: Dictionary) -> void:
             page.directionals[source.id]=node
         var node: DirectionalLight2D=page.directionals[source.id]
         node.color=source.colour
-        node.energy=source.energy
+        node.energy=source.energy*light_strength
 
 func _sync_pages() -> void:
     for page in _pages: _sync_page(page)
@@ -154,11 +156,24 @@ func sync(state: Dictionary) -> void:
     sample({})
     _update_issues()
 
-func sample(actor_rows: Dictionary, source_energy: Dictionary = {}, fixture_heights: Dictionary = {}) -> void:
+func sample(actor_rows: Dictionary, source_energy: Dictionary = {}, fixture_heights: Dictionary = {}, fixture_shadow_heights: Dictionary = {}) -> void:
     _resolver.carried_optical_lift_steps=carried_optical_lift_steps
     _resolver.sampled.clear()
-    _resolver.sample(actor_rows,source_energy,fixture_heights)
+    _resolver.sample(actor_rows,source_energy if fire_light_flicker else {},fixture_heights if fire_light_flicker else fixture_shadow_heights)
     sampled=_resolver.sampled
+    # The casting-source choice uses the complete authored cycle's mean, not
+    # whichever flame frame is brightest today. The optional flicker setting only
+    # affects fixture energy/optical height; actor contacts remain live.
+    for source in sources:
+        var value: Dictionary=sampled[source.item_uuid]
+        var position: Vector3=value.position
+        var energy: float=value.energy
+        if source.actor_uuid.is_empty() and fixture_shadow_heights.has(source.item_uuid):
+            position.y=(source.base_height_steps+fixture_shadow_heights[source.item_uuid])*Placement.HEIGHT_UNIT
+            energy=OPTICAL_ENERGY # Fixture cycle luminance is normalized to mean1.
+        value.energy*=light_strength
+        value.shadow_rank_position=position
+        value.shadow_rank_energy=energy*light_strength
     # No view transform is inferred here: project() runs with the published camera.
 
 func set_directionals(policy: Dictionary) -> void:
@@ -201,6 +216,8 @@ func project(camera: Camera3D, source_scale: float = 2.0) -> void:
         var span: Vector2=Vector2(cookie.get_size())*texture_scale if cookie!=null else Vector2.ZERO
         _canvas_sources.append({"id":source.item_uuid,"screen_position":position,"span":span,
             "height":height,"energy":value.energy,"color":colour,"texture":cookie,"enabled":active,
+            "shadow_rank_position":camera.unproject_position(value.get("shadow_rank_position",value.position)),
+            "shadow_rank_energy":value.get("shadow_rank_energy",value.energy),
             "world_position":value.position,"base_height_steps":source.base_height_steps,"actor_uuid":source.actor_uuid,
             "outer":source.outer,"very_bright_radius_feet":source.very_bright_radius_feet,
             "bright_radius_feet":source.bright_radius_feet,"dim_radius_feet":source.dim_radius_feet})
@@ -226,7 +243,8 @@ func project(camera: Camera3D, source_scale: float = 2.0) -> void:
             var node: DirectionalLight2D=page.directionals[source.id]
             node.rotation=atan2(planar.x,-planar.y) if not planar.is_zero_approx() else 0.0
             node.height=native_height
-            node.enabled=active
+            node.energy=source.energy*light_strength
+            node.enabled=active and light_strength>0
     _update_issues()
 
 func _disable_pages() -> void:

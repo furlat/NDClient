@@ -49,5 +49,9 @@ void fragment() {
         }
     }
     NORMAL = atlas_canvas_normal(vec3(n.x,-n.y,n.z));
+#ifdef SHOW_SOURCE_NORMALS
+    COLOR = vec4(vec3(n.x,-n.y,n.z)*0.5+0.5,colour.a);
+#else
     COLOR = colour;
+#endif
 }

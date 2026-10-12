@@ -1,0 +1,151 @@
+{
+  "fixes": [
+    {
+      "problem": "Compatibility MultiMesh custom data is half precision; normalized large-atlas addresses chose neighboring texels",
+      "change": "Encode atlas pixel x/y as exact 10-bit low parts and packed3+3-bit banks; leave sight channel untouched",
+      "proof": "native_demo_parity_forward_plus.json / native_floor_address_forward_plus.json"
+    },
+    {
+      "problem": "Final per-channel source-albedo cap muted native warm light and introduced a second texture sampling grid",
+      "change": "Remove cap and redundant family output shaders; native Canvas owns source tint/style/light accumulation",
+      "proof": "native_demo_parity_before_colour_fix.json / native_assembled_demo_forward_plus.json"
+    },
+    {
+      "problem": "Compatibility unshaded approximate sRGB round-trip crushes encoded values1..7 to0",
+      "change": "OUTPUT_IS_SRGB-only inverse of Godot4.7.2 documented cubic; black remainszero; Forward+ bypasses compensation",
+      "proof": "native_colour_transfer_before.json / native_colour_transfer_checks_compatibility.json"
+    },
+    {
+      "problem": "Production height20 matched recovered template but not the liked fixed demo fixture",
+      "change": "Production native normal-light height56 sourcepixels; preserve actualworldlightprojection/radii",
+      "proof": "native_assembled_demo_forward_plus.json"
+    },
+    {
+      "problem": "Source prop normals are centre-ray samples while the original colour render integrates subpixel plank edges",
+      "change": "Use original pixel-integrated Cycles normals for seven currently used prop banks (28poses); preserve depth, alpha and registration",
+      "proof": "environment_receiving_normals.json / native_surface_receiving_checks.json"
+    },
+    {
+      "problem": "Inferred tile proxy skirt normals create directional bright specks at interior joined floors",
+      "change": "Published same/higher neighbour supports qualify only buried cardinal side normals for top-plane receiving; exposed/lower edges remain unchanged",
+      "proof": "native_ground_receiving_checks.json / native_surface_receiving_checks.json"
+    },
+    {
+      "problem": "Torch RGBA contains a one-byte alpha pedestal across otherwise empty image padding",
+      "change": "Torch-only continuous alpha remap removes that pedestal; every alpha>1 glow sample survives",
+      "proof": "torch_padding_checks.json"
+    },
+    {
+      "problem": "Forward+ shadow helper scalar was read as encoded colour and Omni slot capacity did not permit consecutive allocation",
+      "change": "Decode helper viewport colour at the receiving sampler and allocate valid native Omni shadow slots; preserve stable source ranking",
+      "proof": "shadow_scalar_checks.json / shadow_idle_forward_checks.json"
+    }
+  ],
+  "forward_plus": {
+    "driver": "Vulkan",
+    "gpu": "NVIDIA RTX5090",
+    "assembled_checks": 40,
+    "assembled_failures": 0,
+    "raw_composite_max_rgb_byte_error": 0,
+    "alpha_mismatches": 0,
+    "lit_composite_max_rgb_byte_error": 2,
+    "far_address_checks": 17,
+    "far_address_failures": 0,
+    "actual_world_checks": 17,
+    "actual_world_failures": 0,
+    "actual_world_sequence": 71,
+    "actual_world_floor_instances": 1363,
+    "actual_world_framebuffer_comparisons": 12,
+    "actual_world_max_rgb_byte_error": 0
+  },
+  "limits": [
+    "One native lighting sample per original source pixel differs up to2RGBbytes from direct native Canvas lighting at display resolution for the tested fixed comparison.",
+    "Forward+ spatial alpha blends in linear space; the supplied non-HDRCanvas demo blends encodedRGB. The exhaustive256RGBx256alpha diagnostic differs up to73RGBbytes for partialalpha despite exactopaqueRGB/alpha. This difference is recorded, not treated as full framebuffer parity.",
+    "Native LDR additive light overlap can saturate like the demo. No additional exposure policy or color cap remains.",
+    "Independent full-world floor singles comparison proves address/paintertransport; it shares the native receiving atlas and does not independently certify every asset normal or everylight.",
+    "Original8bit torch glow contains concentric quantization bands; the padding fix removes the rectangle, not those authored bands.",
+    "Floor normal correction is for cardinal inferred skirt faces with actual published neighbour support, not arbitrary recovered geometry.",
+    "Fresh native scene readiness measured6.342seconds, excludes engine launch/import and does not control OS file-cache warmth. One separate random-port startup hit an HTTP timeout; known-port retry passed, root cause remains unconfirmed.",
+    "A current-code real live Gallery profile is still required after the latest reply/HUD retirement and upcoming sparse atlas optimization. Earlier Forward+58-command run passed368checks but retained up to116.052ms command frame spikes."
+  ],
+  "captures": [
+    ".captures/assembled-demo/Wizard-3.0-lit-final.png",
+    ".captures/assembled-demo/Wizard-3.0-lit-demo.png",
+    ".captures/floor-address/q0-zoom8.137-actual.png",
+    ".captures/floor-address/q1-zoom4.73-actual.png",
+    ".captures/surface-receiving/q1-before.png",
+    ".captures/surface-receiving/q1-after.png",
+    ".captures/surface-receiving/q1-normals.png",
+    ".captures/torch-padding/frame06-after.png"
+  ],
+  "source_references": [
+    "https://github.com/godotengine/godot/blob/4.7.2-stable/drivers/gles3/shaders/scene.glsl",
+    "https://github.com/godotengine/godot/blob/4.7.2-stable/drivers/gles3/shaders/tonemap_inc.glsl"
+  ],
+  "alpha_review": {
+    "conclusion": "Native Forward+ straight-alpha linear blending is correct; no double premultiplication or dark-fringe defect was found.",
+    "atlas": "blend_disabled retains straightRGBA",
+    "output": "default blend_mix; source_color decode; RGB unchanged; ALPHA=source alpha*wall opacity",
+    "independent_calculation": {
+      "source_encoded_byte": 252,
+      "alpha_byte": 58,
+      "linear_composite_byte": 130,
+      "encoded_composite_byte": 57,
+      "difference": 73
+    },
+    "recommendation": "Keep native Forward+ blending. Treat non-HDRCanvas partial-alpha byte differences as renderer semantics, not missing transfer compensation. Existing comparison diagnostic remains recorded."
+  },
+  "controls": {
+    "normals": "Normals button beside Grid; camera-space receiving vectors, unlit, no flame/source/generated shadows; off restores receiving",
+    "light_strength": "Escape settings0\u2013150%, persisted, native energy scale without RGB clamp",
+    "grid": "G or Grid button",
+    "fire_flicker": "Escape settings; off by default, moving carried lights remain live"
+  },
+  "current_acceptance": {
+    "native_surface_receiving_checks": {
+      "checks": 32,
+      "failures": [],
+      "report": "native_surface_receiving_checks.json"
+    },
+    "native_ground_receiving_checks": {
+      "checks": 16,
+      "failures": [],
+      "report": "native_ground_receiving_checks.json"
+    },
+    "torch_padding_checks": {
+      "checks": 163,
+      "failures": [],
+      "report": "torch_padding_checks.json"
+    },
+    "shadow_scalar_checks": {
+      "checks": 19,
+      "failures": [],
+      "report": "shadow_scalar_checks.json"
+    },
+    "shadow_idle_forward_checks": {
+      "checks": 92,
+      "failures": [],
+      "report": "shadow_idle_forward_checks.json"
+    },
+    "media_role_race_checks": {
+      "checks": 52,
+      "failures": [],
+      "report": "media_role_race_checks.json"
+    },
+    "session_record_retirement_checks": {
+      "checks": 22,
+      "failures": [],
+      "report": "session_record_retirement_checks.json"
+    },
+    "native_colour_transfer_checks": {
+      "checks": 5,
+      "failures": [],
+      "report": "native_colour_transfer_checks.json"
+    },
+    "player_startup_checks": {
+      "checks": 5,
+      "failures": [],
+      "report": "player_startup_checks.json"
+    }
+  }
+}

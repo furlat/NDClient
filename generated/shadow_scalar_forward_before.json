@@ -1,0 +1,61 @@
+{
+  "checks": 19,
+  "failures": [
+    "Numeric visibility survives helper texture sampling at0.125",
+    "Native linear source-over uses exact fractional visibility at0.125",
+    "Numeric visibility survives helper texture sampling at0.25",
+    "Native linear source-over uses exact fractional visibility at0.25",
+    "Numeric visibility survives helper texture sampling at0.5",
+    "Native linear source-over uses exact fractional visibility at0.5",
+    "Numeric visibility survives helper texture sampling at0.75",
+    "Native linear source-over uses exact fractional visibility at0.75",
+    "Production composite preserves fractional edge scalar values",
+    "Native depth caster creates actual blocked samples",
+    "Native shadow filtering supplies fractional edge visibility"
+  ],
+  "fractional_edge_max_error": 0.176451146602631,
+  "fractional_edge_samples": 24,
+  "native_blocked_samples": 0,
+  "native_edge_max_error": 0.0,
+  "native_fractional_samples": 0,
+  "renderer": "forward_plus",
+  "samples": [
+    {
+      "composite_actual": 0.439215689897537,
+      "composite_expected_srgb": 0.437629789113998,
+      "input": 0.0,
+      "sampled_linear": 0.0
+    },
+    {
+      "composite_actual": 0.725490212440491,
+      "composite_expected_srgb": 0.552304208278656,
+      "input": 0.125,
+      "sampled_linear": 0.38642942905426
+    },
+    {
+      "composite_actual": 0.803921580314636,
+      "composite_expected_srgb": 0.642628133296967,
+      "input": 0.25,
+      "sampled_linear": 0.539479494094849
+    },
+    {
+      "composite_actual": 0.894117653369904,
+      "composite_expected_srgb": 0.786013782024384,
+      "input": 0.5,
+      "sampled_linear": 0.737910449504852
+    },
+    {
+      "composite_actual": 0.95686274766922,
+      "composite_expected_srgb": 0.901405334472656,
+      "input": 0.75,
+      "sampled_linear": 0.879622459411621
+    },
+    {
+      "composite_actual": 1.0,
+      "composite_expected_srgb": 1.0,
+      "input": 1.0,
+      "sampled_linear": 1.0
+    }
+  ],
+  "scope": "Known scalar inputs through actual custom-light output and production viewport sampler/composite; fractional edge ramp and native box-caster edges are labeled optical fixtures, not authored gameplay geometry."
+}

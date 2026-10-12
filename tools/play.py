@@ -177,7 +177,7 @@ def main() -> None:
     parser.add_argument("--scenario", choices=("crypt", "crypt_gallery"), default="crypt_gallery", help="Backend encounter; crypt retains the original small baseline")
     parser.add_argument("--headless", action="store_true", help="Headless Godot for launch validation")
     parser.add_argument("--quit-after", type=int, default=0, metavar="FRAMES", help="Close after a bounded number of Godot frames")
-    parser.add_argument("--test-script", choices=("res://tests/prediction_live_checks.gd", "res://tests/player_wait_checks.gd", "res://tests/player_live_checks.gd", "res://tests/player_interaction_checks.gd", "res://tests/lighting_live_checks.gd", "res://tests/chest_live_checks.gd"), help="Run a bounded production-scene acceptance test")
+    parser.add_argument("--test-script", choices=("res://tests/player_startup_checks.gd", "res://tests/live_gallery_checks.gd", "res://tests/player_wait_checks.gd", "res://tests/player_live_checks.gd", "res://tests/player_interaction_checks.gd", "res://tests/lighting_live_checks.gd", "res://tests/chest_live_checks.gd"), help="Run a bounded production-scene acceptance test")
     parser.add_argument("--test-command-delay-ms", type=int, default=0, help="Acceptance only: hold the first real command before forwarding it")
     args = parser.parse_args()
     if args.test_command_delay_ms and (not args.test_script or not 1 <= args.test_command_delay_ms <= 10000):

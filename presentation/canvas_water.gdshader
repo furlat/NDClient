@@ -30,5 +30,9 @@ void fragment() {
     vec4 colour = water_source_colour(UV, instance_shift, atlas_receiving_pixel / actual_scene_viewport_size, scenery_visibility);
     if (colour.a <= 0.0) { discard; }
     NORMAL = atlas_canvas_normal(normalize(world_to_canvas * vec3(0.0,1.0,0.0)));
+#ifdef SHOW_SOURCE_NORMALS
+    COLOR = vec4(normalize(world_to_canvas*vec3(0.0,1.0,0.0))*0.5+0.5,colour.a);
+#else
     COLOR = colour;
+#endif
 }

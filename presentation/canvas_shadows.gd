@@ -65,10 +65,8 @@ func sync(visual_actors: Array, camera: Camera3D, canvas_sources: Array) -> Arra
         # At close range use one sample per source pixel. At distance never
         # allocate a target larger than its actual displayed footprint.
         var sample_scale := maxf(zoom,1.0)
-        var first := (rect.position/sample_scale).floor()*sample_scale
-        var last := (rect.end/sample_scale).ceil()*sample_scale
-        rect=Rect2(first,last-first)
-        var size := Vector2i((rect.size/sample_scale).ceil()).max(Vector2i(2,2))
+        rect=_sampling_rect(rect,sample_scale)
+        var size := Vector2i((rect.size/sample_scale).round())
         var id: String=row.id
         retained[id]=true
         if not actors.has(id): actors[id]=_create(id)
@@ -92,6 +90,14 @@ func sync(visual_actors: Array, camera: Camera3D, canvas_sources: Array) -> Arra
     _last_cpu_ms=float(Time.get_ticks_usec()-started)/1000.0
     return result
 
+static func _sampling_rect(rect: Rect2, sample_scale: float) -> Rect2:
+    var first := (rect.position/sample_scale).floor()*sample_scale
+    var last := (rect.end/sample_scale).ceil()*sample_scale
+    # Godot render targets require at least2 samples per axis. Expand the shared
+    # screen footprint too, so helper camera and output quad use the same aspect.
+    last=last.max(first+Vector2.ONE*2.0*sample_scale)
+    return Rect2(first,last-first)
+
 func _prepare_sources(input: Array) -> bool:
     var sources: Array=[]
     var key: Array=[]
@@ -106,8 +112,10 @@ func _prepare_sources(input: Array) -> bool:
         if strength<=0: continue
         var row: Dictionary=source.duplicate()
         row.strength=strength
+        row.shadow_rank_position=source.get("shadow_rank_position",source.screen_position)
+        row.shadow_rank_strength=float(source.get("shadow_rank_energy",source.energy))*(0.2126*colour.r+0.7152*colour.g+0.0722*colour.b)
         sources.append(row)
-        key.append([row.id,row.screen_position,row.span,row.height,row.texture.get_rid(),row.energy,row.color])
+        key.append([row.id,row.screen_position,row.span,row.height,row.texture.get_rid(),row.energy,row.color,row.shadow_rank_position,row.shadow_rank_strength])
     if key==_source_key: return true
     if not _prepare_cookies(sources): return false
     # This is a small numeric parameter upload (3 RGBA float texels/source),
@@ -178,8 +186,8 @@ func _dominant(foot: Vector2) -> int:
     var strongest := 0.0
     for i in _sources.size():
         var source: Dictionary=_sources[i]
-        var uv: Vector2=(foot-source.screen_position)/source.span+Vector2.ONE*0.5
-        var score: float=source.strength*_cookie_at(_cookie_images[source.texture.get_rid()],uv)
+        var uv: Vector2=(foot-source.shadow_rank_position)/source.span+Vector2.ONE*0.5
+        var score: float=source.shadow_rank_strength*_cookie_at(_cookie_images[source.texture.get_rid()],uv)
         # Strict comparison preserves exact input order for equal scores.
         if score>strongest: strongest=score; selected=i
     return selected
@@ -268,7 +276,9 @@ func _create(id: String) -> Dictionary:
     viewport.positional_shadow_atlas_size=shadow_atlas_size
     viewport.render_target_update_mode=SubViewport.UPDATE_DISABLED
     viewport.render_target_clear_mode=SubViewport.CLEAR_MODE_ALWAYS
-    for quadrant in range(4): viewport.set_positional_shadow_atlas_quadrant_subdiv(quadrant,Viewport.SHADOW_ATLAS_QUADRANT_SUBDIV_1)
+    # RD Omni shadows need two adjacent atlas slots; a one-slot quadrant can
+    # never allocate the pair and silently produces an entirely unshadowed map.
+    for quadrant in range(4): viewport.set_positional_shadow_atlas_quadrant_subdiv(quadrant,Viewport.SHADOW_ATLAS_QUADRANT_SUBDIV_4)
     _parent.add_child(viewport)
     RenderingServer.viewport_set_measure_render_time(viewport.get_viewport_rid(),true)
     var root := Node3D.new()

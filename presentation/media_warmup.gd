@@ -7,10 +7,11 @@ const EnvironmentMedia = preload("res://presentation/environment_media.gd")
 const EncounterMedia = preload("res://presentation/encounter_media.gd")
 const BUDGET_BYTES = 16 * 1024 * 1024 * 1024
 const EVICTIONS_PER_FRAME = 2
+const DECODE_WORKERS = 4
 
 static func create() -> Dictionary:
     return {"pending":[],"queued":{},"wanted":{},"environment":{},"fixtures":{},"failed":{},"resident":{},
-        "task":-1,"inflight":"","result":{},"decoded":0,"evicted":0,
+        "decode_jobs":[],"decoded":0,"evicted":0,
         "plan_task":-1,"plan_pending":{},"plan_result":{},"plan_cache":{},
         "gpu_only":{},"cpu_required":{},"metadata_ms":0.0,"decode_ms":0.0,"metadata_jobs":0,
         "budget_bytes":maxi(0,int(ProjectSettings.get_setting("source_data/encounter_cache_mib",16384)))*1024*1024,
@@ -165,6 +166,8 @@ static func _changed_roles(previous: Dictionary, current: Dictionary) -> Diction
 
 static func _selection_delta(data: Dictionary, previous: Dictionary, role_changes: Dictionary, new_boot: bool) -> Dictionary:
     var refresh: Dictionary = role_changes.duplicate()
+    if new_boot:
+        for path in data.boot_paths: refresh[path] = true
     for path in previous:
         if data.preload_selected.has(path): continue
         data.selected_ready.erase(path); data.selected_failed.erase(path)
@@ -262,7 +265,10 @@ static func demand(data: Dictionary, paths: Dictionary, environment: Dictionary 
         var new_boot: bool = not data.encounter.is_empty() and not data.boot_started
         if new_boot:
             data.boot_started = true
-            data.boot_paths = selected.duplicate()
+            # Startup waits only for exact displayed/already-received demand.
+            # Optional animations and normal treatments warm within the budget
+            # after this boundary and never delay initial interaction.
+            data.boot_paths = paths.duplicate()
         var roles = _family_roles(data.encounter)
         var changed = _changed_roles(data.selection_roles,roles)
         # Queue classifications were counted before accepted family roles moved.
@@ -342,15 +348,14 @@ static func _decode(request: Dictionary, result: Dictionary) -> void:
 
 static func poll(data: Dictionary) -> Dictionary:
     var completed: Dictionary = {}
-    if data.task >= 0:
-        if not WorkerThreadPool.is_task_completed(data.task): return completed
-        WorkerThreadPool.wait_for_task_completion(data.task)
-        completed = data.result
-        _pending_delta(data,data.inflight,-1)
-        data.queued.erase(data.inflight)
-        data.task = -1
-        data.inflight = ""
-        data.result = {}
+    # Independent Images decode concurrently. Publication keeps demand order and
+    # one texture per scene poll; worker completion never mutates the scene/cache.
+    if not data.decode_jobs.is_empty() and WorkerThreadPool.is_task_completed(data.decode_jobs[0].task):
+        var job: Dictionary = data.decode_jobs.pop_front()
+        WorkerThreadPool.wait_for_task_completion(job.task)
+        completed = job.result
+        _pending_delta(data,job.path,-1)
+        data.queued.erase(job.path)
         data.decoded += 1
         data.decode_ms += completed.get("elapsed_ms",0.0)
         if not completed.has("image") and not completed.has("error"):
@@ -359,10 +364,11 @@ static func poll(data: Dictionary) -> Dictionary:
         elif completed.has("error"):
             data.failed[completed.path] = completed.error
             _refresh_path(data,completed.path)
-    if not data.pending.is_empty():
+    while not data.pending.is_empty() and data.decode_jobs.size()<DECODE_WORKERS:
         var request: Dictionary = data.pending.pop_front()
-        data.inflight = request.path
-        data.task = WorkerThreadPool.add_task(_decode.bind(request,data.result),false,"Character PNG preparation")
+        var result: Dictionary = {}
+        var task = WorkerThreadPool.add_task(_decode.bind(request,result),false,"Authored PNG preparation")
+        data.decode_jobs.append({"task":task,"path":request.path,"result":result})
     return completed
 
 static func published(data: Dictionary, loaded: Dictionary) -> void:
@@ -448,7 +454,7 @@ static func _residency_stats(data: Dictionary) -> Dictionary:
     var stats = {}
     for category in [false,true]:
         stats[category] = {"pending":0,"resident_sheets":0,"estimated_bytes":0,"pinned_bytes":0,"cpu_bytes":0,"gpu_estimated_bytes":0}
-    if not data.inflight.is_empty(): stats[_environment(data,data.inflight)].pending += 1
+    for job in data.decode_jobs: stats[_environment(data,job.path)].pending += 1
     for request in data.pending:
         stats[_environment(data,request.path)].pending += 1
     for path in data.resident:
@@ -470,6 +476,7 @@ static func diagnostics(data: Dictionary, environment: bool = false) -> Dictiona
     result.merge({"combined_estimated_bytes":total,"pinned_over_budget_bytes":maxi(0,pinned-int(data.budget_bytes)),
         "eviction_pending_bytes":maxi(0,total-maxi(pinned,int(data.budget_bytes))),
         "metadata_ms":data.metadata_ms,"metadata_jobs":data.metadata_jobs,"decode_ms":data.decode_ms,
+        "decode_jobs":data.decode_jobs.size(),"decode_worker_limit":DECODE_WORKERS,
         "budget_bytes":data.budget_bytes,"selection_jobs":data.selection_jobs,"selection_refreshed":data.selection_refreshed,"decoded":data.decoded,"evicted":data.evicted,"failed":data.failed.duplicate(),
         "accounting":"Decoded CPU bytes plus conservative RGBA8 GPU estimate; not measured VRAM/RSS; combined environment and character budget."})
     return result
@@ -482,6 +489,7 @@ static func boot_ready(data: Dictionary) -> bool:
 
 static func preload_progress(data: Dictionary) -> Dictionary:
     return {"selected":data.preload_selected.size(),"ready":data.selected_ready.size(),"failed":data.selected_failed.duplicate(),
+        "startup_required":data.boot_paths.size(),"startup_ready":data.boot_paths.size()-data.boot_waiting.size(),
         "skipped":data.preload_skipped,"selected_estimated_bytes":data.preload_estimated_bytes,
         "required_estimated_bytes":data.required_estimated_bytes,"required_unknown_estimates":data.unknown_required,
         "budget_bytes":data.budget_bytes,"errors":data.encounter.get("errors",[]),
@@ -591,9 +599,7 @@ static func close(data: Dictionary) -> void:
     if data.plan_task >= 0:
         WorkerThreadPool.wait_for_task_completion(data.plan_task)
         data.plan_task = -1
-    if data.task >= 0:
-        WorkerThreadPool.wait_for_task_completion(data.task)
-        data.task = -1
+    for job in data.decode_jobs: WorkerThreadPool.wait_for_task_completion(job.task)
+    data.decode_jobs.clear()
     data.pending.clear()
     data.queued.clear()
-    data.result.clear()

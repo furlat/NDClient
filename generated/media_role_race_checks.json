@@ -1,6 +1,27 @@
 {
-  "checks": 10,
+  "checks": 52,
   "failures": [],
-  "scope": "Actual worker dispatch→role promotion→publication race using original authored fixture PNG; no GPU allocation required.",
+  "parallel": {
+    "close_ms": 0,
+    "observed_peak": 4,
+    "publication_order": [
+      "/media/environment/terrain/ground-d1-e.png",
+      "/media/environment/terrain/geometry/terrain.stone.e/ground-d1-e-geometry.png",
+      "/media/environment/terrain/ground-d1-s.png",
+      "/media/environment/terrain/geometry/terrain.stone.s/ground-d1-s-geometry.png",
+      "/media/environment/terrain/ground-d1-w.png",
+      "/media/environment/terrain/geometry/terrain.stone.w/ground-d1-w-geometry.png"
+    ],
+    "sources": [
+      "/media/environment/terrain/ground-d1-e.png",
+      "/media/environment/terrain/geometry/terrain.stone.e/ground-d1-e-geometry.png",
+      "/media/environment/terrain/ground-d1-s.png",
+      "/media/environment/terrain/geometry/terrain.stone.s/ground-d1-s-geometry.png",
+      "/media/environment/terrain/ground-d1-w.png",
+      "/media/environment/terrain/geometry/terrain.stone.w/ground-d1-w-geometry.png"
+    ],
+    "worker_limit": 4
+  },
+  "scope": "Actual PNG worker dispatch, role promotion, bounded parallel publication order, original bytes and close; caller publication acknowledgements require no GPU allocation.",
   "source": "/media/environment/lighting/torch/flame/f52dea0b72342b246a1216e289dc5168.png"
 }

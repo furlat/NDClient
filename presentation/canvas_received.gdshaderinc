@@ -8,24 +8,25 @@ uniform bool wall_mask_enabled = false;
 uniform int wall_mask_id = 0;
 uniform sampler2D wall_mask_texture : filter_nearest, repeat_disable;
 varying vec2 atlas_origin;
-uniform float current_visibility = 1.0;
-uniform bool use_instance_visibility = false;
-varying float source_visibility;
-#ifdef SOURCE_WATER
-varying vec2 source_water_shift;
-#endif
 void vertex() {
-    atlas_origin = use_instance_atlas ? INSTANCE_CUSTOM.gb : atlas_region.xy;
-    source_visibility = use_instance_visibility ? INSTANCE_CUSTOM.r : current_visibility;
-#ifdef SOURCE_WATER
-    source_water_shift = water_source_shift(MODEL_MATRIX[3].xyz);
-#endif
+    vec2 pixel = INSTANCE_CUSTOM.gb + vec2(mod(INSTANCE_CUSTOM.a,8.0),floor(INSTANCE_CUSTOM.a/8.0))*1024.0;
+    atlas_origin = use_instance_atlas ? pixel/vec2(textureSize(received,0)) : atlas_region.xy;
 }
-vec3 source_cap_space(vec3 encoded_colour) {
-    if (!OUTPUT_IS_SRGB) {
-        return mix(encoded_colour/12.92, pow((encoded_colour+0.055)/1.055,vec3(2.4)),step(vec3(0.04045),encoded_colour));
+// Godot4.7.2 Compatibility scene.glsl converts even unshaded ALBEDO with
+// tonemap_inc.glsl's approximate cubic, then its power-based sRGB encode.
+// Invert that engine transfer, not the native Canvas lighting: otherwise source
+// codes1..7 become0. Four Newton steps invert the monotone cubic across RGBA8.
+// https://github.com/godotengine/godot/blob/4.7.2-stable/drivers/gles3/shaders/tonemap_inc.glsl
+vec3 canvas_encoded_for_spatial(vec3 encoded) {
+    vec3 target = pow((encoded + vec3(0.055)) / 1.055, vec3(2.4));
+    vec3 value = min(encoded + vec3(0.03), vec3(1.0));
+    for (int i = 0; i < 4; i++) {
+        vec3 cubic = value * (value * (value * 0.305306011 + 0.682171111) + 0.012522878);
+        vec3 derivative = value * (value * 0.915918033 + 1.364342222) + 0.012522878;
+        value -= (cubic - target) / derivative;
     }
-    return encoded_colour;
+    // Preserve true zero without adding a new ambient floor.
+    return mix(value, vec3(0.0), equal(encoded, vec3(0.0)));
 }
 void fragment() {
     vec2 size = use_instance_atlas ? atlas_cell_size : atlas_region.zw;
@@ -49,20 +50,8 @@ void fragment() {
             if(covered) discard;
         }
     }
-    // Native Canvas has already accumulated all sources. For nonnegative
-    // authored C<=1, min(saturate(C*L),C) == C*min(L,1). This caps total gain,
-    // preserving dim light and source colour without another lighting pass.
-#ifdef SOURCE_ENVIRONMENT
-    vec3 bound = environment_source_colour(environment_source_sample(UV),source_visibility).rgb;
-    colour.rgb = min(colour.rgb,source_cap_space(bound));
-#endif
-#ifdef SOURCE_MODULAR
-    colour.rgb = min(colour.rgb,source_cap_space(modular_source_colour(UV).rgb));
-#endif
-#ifdef SOURCE_WATER
-    vec3 bound = water_source_colour(UV,source_water_shift,SCREEN_UV,source_visibility).rgb;
-    colour.rgb = min(colour.rgb,source_cap_space(bound));
-#endif
-    ALBEDO=colour.rgb;
+    // Native Canvas owns source tint, style, normals and light accumulation.
+    // Preserve its bounded framebuffer result, like the supplied demo.
+    ALBEDO=OUTPUT_IS_SRGB ? canvas_encoded_for_spatial(colour.rgb) : colour.rgb;
     ALPHA=colour.a*wall_opacity;
 }

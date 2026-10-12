@@ -4,6 +4,10 @@ const Settings = preload("res://presentation/render_settings.gd")
 var hud: Control
 var card = PanelContainer.new()
 var profiles = OptionButton.new()
+var fire_flicker = CheckBox.new()
+var strength = HSlider.new()
+var strength_value = Label.new()
+var strength_save = Timer.new()
 var description = Label.new()
 var resume_button = Button.new()
 var close_button = Button.new()
@@ -65,6 +69,31 @@ func _ready() -> void:
     description.custom_minimum_size.y = 42
     description.add_theme_color_override("font_color",Color("b8c4c7"))
     field.add_child(description)
+    fire_flicker.text = "Fire light flicker"
+    fire_flicker.tooltip_text = "Animate fire brightness and emission height. Off keeps the authored average; flame artwork and character movement continue."
+    fire_flicker.toggled.connect(_select_fire_flicker)
+    stack.add_child(fire_flicker)
+    var lighting = VBoxContainer.new()
+    lighting.add_theme_constant_override("separation",4)
+    stack.add_child(lighting)
+    var strength_header = HBoxContainer.new()
+    lighting.add_child(strength_header)
+    var strength_label = Label.new()
+    strength_label.text = "Light strength"
+    strength_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+    strength_header.add_child(strength_label)
+    strength_header.add_child(strength_value)
+    strength.min_value = 0
+    strength.max_value = Settings.MAX_LIGHT_STRENGTH
+    strength.step = .01
+    strength.custom_minimum_size.y = 28
+    strength.tooltip_text = "Adjust scene light brightness."
+    strength.value_changed.connect(_select_strength)
+    lighting.add_child(strength)
+    strength_save.one_shot = true
+    strength_save.wait_time = .2
+    strength_save.timeout.connect(_save_strength)
+    add_child(strength_save)
     var note = Label.new()
     note.text = "The game continues while settings are open."
     note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -75,6 +104,7 @@ func _ready() -> void:
     resume_button.custom_minimum_size.y = 38
     resume_button.pressed.connect(hud.close_settings)
     stack.add_child(resume_button)
+    card.minimum_size_changed.connect(func(): _layout.call_deferred())
     resized.connect(_layout)
     _layout()
 
@@ -85,6 +115,9 @@ func _layout() -> void:
     card.position = (size-card.size)*0.5
 
 func refresh() -> void:
+    strength.set_value_no_signal(hud.world.light_strength)
+    strength_value.text = "%d%%" % roundi(hud.world.light_strength*100)
+    fire_flicker.set_pressed_no_signal(hud.world.fire_light_flicker)
     var profile: String = hud.world.character_light_profile
     for index in range(profiles.item_count):
         if profiles.get_item_metadata(index)==profile: profiles.select(index);break
@@ -100,6 +133,7 @@ func show_panel() -> void:
     profiles.grab_focus()
 
 func hide_panel() -> void:
+    if not strength_save.is_stopped(): _save_strength()
     profiles.get_popup().hide()
     var focus = get_viewport().gui_get_focus_owner()
     if focus != null and is_ancestor_of(focus): focus.release_focus()
@@ -117,6 +151,18 @@ func _select_profile(index: int) -> void:
     if profile != hud.world.character_light_profile:
         hud.world.set_character_light_profile(profile)
     refresh()
+
+func _select_fire_flicker(enabled: bool) -> void:
+    hud.world.set_fire_light_flicker(enabled)
+
+func _select_strength(value: float) -> void:
+    hud.world.set_light_strength(value,false)
+    strength_value.text = "%d%%" % roundi(value*100)
+    strength_save.start() # Native response is immediate; avoid disk writes per drag sample.
+
+func _save_strength() -> void:
+    strength_save.stop()
+    hud.world.set_light_strength(strength.value)
 
 func _gui_input(event: InputEvent) -> void:
     if event is InputEventMouse: accept_event()

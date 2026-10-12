@@ -127,7 +127,12 @@ func _run() -> void:
     check((await _request("health")).ok,"Health endpoint")
     check((await _request("status")).ok,"Status endpoint")
     check((await _request("content",{"revision":"r"})).ok,"Content endpoint")
-    check((await _request("choices",{"actor_uuid":Peer.UUID,"state_revision":"r","force_attack":false,"correlation_id":Peer.UUID})).ok,"Choices endpoint succeeds")
+    var offered = await _request("choices",{"actor_uuid":Peer.UUID,"state_revision":"r","force_attack":false,"correlation_id":Peer.UUID})
+    check(offered.ok,"Choices endpoint succeeds")
+    if offered.ok:
+        check(not offered.value.has("kind") and offered.normalized.kind=="choices","Worker supplies presentation defaults without changing the admitted choices")
+        offered.normalized.choices.entity_uuid="consumer edit"
+        check(offered.value.choices.entity_uuid==Peer.UUID,"Presentation defaults do not alias the admitted response")
     check((await _request("preview",{"actor_uuid":Peer.UUID,"state_revision":"r","discovery_generation":1,"correlation_id":Peer.UUID,"selection":{"action_index":0,"target_indices":[1,2]}})).ok,"Preview preserves selection and defaults")
     check(not (await _request("receipt",{"number":0})).ok,"Invalid receipt rejected")
     check((await _request("follow")).ok,"Follower scheduled")

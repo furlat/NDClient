@@ -21,6 +21,7 @@ func run() -> void:
     var state = JSONReader.new().parse(FileAccess.get_file_as_string(directory.path_join("state.json"))).value
     var discovery = JSONReader.new().parse(FileAccess.get_file_as_string(directory.path_join("discovery.json"))).value
     var original = state.duplicate(true)
+    var original_discovery: Dictionary = discovery.duplicate(true)
     var identifiers_match = true
     var seen_content = {}
     for descriptor in state.content:
@@ -106,6 +107,7 @@ func run() -> void:
     if "--screenshot" in OS.get_cmdline_user_args():
         await RenderingServer.frame_post_draw
         root.get_texture().get_image().save_png("C:/Users/tommaso/Documents/Dev/NDClientGodot/.runtime/ui/ui-recorded-720.png")
+    check(discovery==original_discovery,"Recorded discovery and all native target rows remain unchanged through HUD use")
     root.remove_child(hud); hud.free(); root.remove_child(world); world.free()
     await process_frame
     var report = {"kind":"recorded_live_ui_projection","capture":directory,"checks":checks,"failures":failures,"icons":icons,"inventory_open_cpu_ms":inventory_open_ms,"bar_layouts":bar_layouts,"ok":failures.is_empty()}

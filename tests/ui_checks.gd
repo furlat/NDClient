@@ -49,9 +49,22 @@ func run() -> void:
     var item = fixture_row("action.item.use",70,actor_id); item.source_item_uuid = carried.item_uuid; item.action_category = "ability"; rows.append(item)
     var class_row = fixture_row("action.class.fighter.second_wind",80,actor_id); class_row.provided_by_id = "class_feature.fighter.second_wind"; rows.append(class_row)
     world.available_actions = {"discovery_generation":"ui-boundary-a","entity_uuid":actor_id,"self_actions":rows}
+    var original_discovery: Dictionary = world.available_actions.duplicate(true)
     hud = HUD.new(); hud.world = world; root.add_child(hud)
     await process_frame
     await process_frame
+    check(not world.normals_visible and not hud.normals_button.button_pressed,"Normals preview starts off")
+    check(hud.normals_button.get_global_rect().position.x>hud.grid_button.get_global_rect().end.x,"Normals control is beside Grid without overlapping it")
+    var normal_point: Vector2 = hud.normals_button.get_global_rect().get_center()
+    check(hud.pointer_over_controls(normal_point),"Normals button owns its world pointer boundary")
+    click(normal_point);await process_frame
+    check(world.normals_visible and hud.normals_button.button_pressed,"Native Normals click enables the scene preview")
+    check(world.issued.is_empty() and root.gui_get_focus_owner()==null,"Normals click neither submits an action nor captures keyboard focus")
+    world.set_normals_visible(false);await process_frame;await process_frame
+    check(not hud.normals_button.button_pressed,"Button follows a scene-side normal preview change")
+    click(normal_point);await process_frame
+    click(normal_point);await process_frame
+    check(not world.normals_visible and world.issued.is_empty(),"Second native click restores ordinary rendering without a game command")
     check(hud.groups.Base.size()==36,"both explicit weapon slots and base rows remain separate")
     check(hud.groups.Spells.size()==1 and hud.groups.Spells[0].rows.size()==3,"actual native variants remain one family")
     check(hud.groups.Items.size()==1 and hud.groups.Class.size()==1,"four groups use native sources")
@@ -84,11 +97,15 @@ func run() -> void:
     key(KEY_1)
     check(world.issued.size()==2 and world.issued[-1].discovery_index==new_index,"paging never executes former shortcut")
     check(hud.pages.Spells==0 and hud.pages.Items==0,"paging does not change other groups")
+    var prior_discovery: Dictionary = world.available_actions
+    world.available_actions = prior_discovery.duplicate()
     world.available_actions.discovery_generation = "ui-boundary-b"
+    check(hud.painted_discovery.discovery_generation=="ui-boundary-a","New admitted generation never mutates the still-painted discovery")
     var before: int = world.issued.size()
     key(KEY_1)
     check(world.issued.size()==before,"stale generation rejected before next redraw")
-    world.available_actions.discovery_generation = "ui-boundary-a"
+    world.available_actions = prior_discovery
+    check(world.available_actions==original_discovery,"Grouping, paging and stale input preserve the admitted discovery exactly")
     world.allow_commands = false
     key(KEY_1)
     check(world.issued.size()==before,"catchup boundary rejects spending")
@@ -159,3 +176,10 @@ func fixture_row(behavior: String, index: int, actor: String) -> Dictionary:
 func key(code: Key, shift: bool = false) -> void:
     var event = InputEventKey.new(); event.keycode = code; event.pressed = true; event.shift_pressed = shift
     hud._input(event)
+func click(point: Vector2) -> void:
+    var motion = InputEventMouseMotion.new(); motion.position = point; root.push_input(motion)
+    for pressed in [true,false]:
+        var event = InputEventMouseButton.new()
+        event.position = point; event.global_position = point
+        event.button_index = MOUSE_BUTTON_LEFT; event.pressed = pressed
+        root.push_input(event)

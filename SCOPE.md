@@ -965,3 +965,78 @@ this delivery. The later full-library export is not treated as finished merely
 because source-generation scripts exist. Measured steady p95 is 14.11–17.64 ms,
 with a 240.641 ms traversal maximum amid concurrent asset production; earlier
 publication/cold-view costs remain open. No new gameplay assignments or art edits.
+
+## Live action and rendering regression repair
+
+User reports agreeing predictions restart, client-issued actions stall, source
+quality/colours differ from the tested light demo, and black dotted floor seams.
+Reproduce through the production player's live command handlers and native frames,
+not just replay. Preserve exact source artwork, event order and backend authority.
+
+Root owns live Gallery command profiling and integration; map_audit owns prediction
+continuity; render_audit owns direct-demo versus final-render pixel comparisons and
+the demonstrated rendering fixes. scope_review tracks adherence, anti-slop and
+anti-OOP. Keep the existing 3D world/native2D lighting design and the user's light
+cap intent; do not invent another lighting model. Validate actual animation frames
+across agreeing handoffs, rejection/reactions, fast/normal movement, jumps and live
+world updates. Measure preview/command/preparation/readiness waits separately from
+frame stalls. Compare final framebuffer colours and alpha at fractional zoom,
+including floor edges; prior tests that omit final transfer are insufficient.
+
+Latest explicit steering supersedes prediction repair: remove speculative
+prediction/reconciliation entirely and retain authoritative playback. Add a visible
+Grid · G control alongside the existing G hotkey. Graphics is the primary repair.
+The source-albedo RGB clamp was an implementation choice, not a user requirement;
+remove that colour-changing pass to match the tested native2D demo. Native bounded
+framebuffer accumulation remains; do not claim a new overlap-exposure policy.
+
+Actual client-issued command profiling exposed a541ms scene-thread stall while
+processing action replies. Prepare the separate defaulted Choices/Preview/Receipt
+copy on the existing SDK worker, preserving the exact admitted value; copy worker
+mailbox payloads before locking. Add phase timings and repeat the real Gallery
+route with exact receipts/canonical state. This addresses the user's live-action
+stall report without restoring prediction or changing backend rules.
+
+User additionally reports shadow source swapping during idle and authorizes
+static fire light for debugging. Use authored cycle-average brightness/height
+for fire-light source ranking, and expose Fire light flicker in Escape settings
+with default off. Character/carried-light movement stays live. When flicker is
+on, receiving intensity still animates while caster choice stays stable across
+that flame cycle; movement/extinction must still rerank immediately.
+
+User rejects retaining the prototype Compatibility renderer. The production
+Windows target is now Forward+; validate exact assembled reference lighting,
+actual floor addresses, generated shadows and full live commands on Forward+.
+Keep the 3D world and native2D receiving design. Renderer comparison claims
+must name the driver/backend and do not transfer old OpenGL metrics implicitly.
+Godot4.7 documents Vulkan as the recommended RenderingDevice driver for most
+projects; the Windows project pins Vulkan for this validation on the RTX5090.
+
+Further live feedback identifies bright floor/table specks and faint rectangular
+torch padding. Compare original source bytes, exact registrations and native
+framebuffers before correcting receiving normals/composition. Keep original
+artwork, depth, support, placement and event state. Source-backed props can use
+their preserved pixel-integrated Cycles normal pass for receiving, with explicit
+provenance; inferred floor proxies must not be described as such original data.
+Interior floor joins use published grid adjacency/elevation while exposed edges
+retain their authored skirt normals. Add a persistent Light strength setting for
+native point/directional energy without reintroducing the colour-changing clamp.
+
+The user clarifies that VRAM should remain well used: retain the generous bounded
+cache, but do not make every restart wait for optional whole-family preload.
+Initial exact visible/already-received sources gate play; optional animation and
+profile families warm progressively. Decode independent PNG Images on four bounded
+workers, preserve demand-order publication and main-thread texture uploads, and
+test readiness, source bytes, role changes and close. Measure a fresh real startup.
+Large live replies and old immutable HUD/discovery records retire on the existing
+preparation worker, separately counted from event groups; retain exact receipt,
+scope, generation and canonical reduction checks.
+
+The requested Normals button displays the actual camera-space receiving vectors
+as unlit diagnostic RGB while preserving receiving-source alpha, placement and
+subjective visibility. Source/generated shadow and emissive flame overlays are
+omitted because they have no receiving normal. Default is off; native checks
+change light energy/position and require invariant diagnostic pixels, then switch
+off and require beauty restoration. No normal/artwork rewrite is performed by
+this view. Four-view original-versus-corrected receiving captures and original
+Cycles sample provenance remain separate from that diagnostic.

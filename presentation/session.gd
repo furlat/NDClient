@@ -45,9 +45,12 @@ var available_sequence = -1
 var admitted_pending: Dictionary = {}
 var retired_staged: Array = []
 var retired_ready: Array = []
+var retired_records_staged: Array = []
+var retired_records_ready: Array = []
 var preparation_metrics = {"compiled_operations":0,"packet_prepare_ms":0.0,"compile_ms":0.0,"journal_ms":0.0,
     "disk_reloads":0,"handoff_hits":0,"active":false,"held_for_display":false,
-    "retired_groups":0,"retirement_ms":0.0,"retirement_peak_groups":0}
+    "retired_groups":0,"retirement_ms":0.0,"retirement_peak_groups":0,
+    "retired_records":0,"record_retirement_ms":0.0,"retirement_peak_records":0}
 
 func retire_group(group: Dictionary) -> void:
     # Passive compiler data only. Publish next poll, after the prior timeline
@@ -60,11 +63,24 @@ func retire_group(group: Dictionary) -> void:
     preparation_metrics.retirement_peak_groups = maxi(preparation_metrics.retirement_peak_groups,retired_staged.size()+retired_ready.size())
     mutex.unlock()
 
+func retire_record(record: Dictionary) -> void:
+    # Passive response/discovery references only. Never clear the caller's data
+    # or start another worker; next poll publishes after scene/HUD locals expire.
+    mutex.lock()
+    if cancelled or prepare_thread == null or not prepare_thread.is_started():
+        mutex.unlock()
+        return
+    retired_records_staged.append(record)
+    preparation_metrics.retirement_peak_records = maxi(preparation_metrics.retirement_peak_records,retired_records_staged.size()+retired_records_ready.size())
+    mutex.unlock()
+
 func _publish_retired() -> void:
     mutex.lock()
-    var changed = not retired_staged.is_empty()
+    var changed = not retired_staged.is_empty() or not retired_records_staged.is_empty()
     retired_ready.append_array(retired_staged)
     retired_staged = []
+    retired_records_ready.append_array(retired_records_staged)
+    retired_records_staged = []
     mutex.unlock()
     if changed: wake.post()
 
@@ -72,15 +88,23 @@ func _release_retired() -> void:
     mutex.lock()
     var released = retired_ready
     retired_ready = []
+    var records = retired_records_ready
+    retired_records_ready = []
     mutex.unlock()
     var count = released.size()
-    if count==0: return
+    var record_count = records.size()
+    if count==0 and record_count==0: return
     var started = Time.get_ticks_usec()
     released.clear()
     var elapsed = (Time.get_ticks_usec()-started)/1000.0
+    started = Time.get_ticks_usec()
+    records.clear()
+    var record_elapsed = (Time.get_ticks_usec()-started)/1000.0
     mutex.lock()
     preparation_metrics.retired_groups += count
     preparation_metrics.retirement_ms += elapsed
+    preparation_metrics.retired_records += record_count
+    preparation_metrics.record_retirement_ms += record_elapsed
     mutex.unlock()
 
 func _ensure_preparer() -> Dictionary:
@@ -102,6 +126,7 @@ func diagnostics() -> Dictionary:
     result.merge({"displayed_sequence":displayed_sequence,"available_sequence":available_sequence,
         "prepared_sequence":prepared_sequence,"prepared_messages":prepared.size(),"admitted_handoff":admitted_pending.size(),
         "retirement_pending_groups":retired_staged.size()+retired_ready.size(),
+        "retirement_pending_records":retired_records_staged.size()+retired_records_ready.size(),
         "lookahead_operations":LOOKAHEAD_OPERATIONS,"backlog_operations":maxi(0,available_sequence-prepared_sequence),
         "waiting_for_preparation":available_sequence>prepared_sequence and prepared_sequence<=displayed_sequence,
         "preparation_wait_ms":preparation_wait_ms})
@@ -333,6 +358,8 @@ func close() -> void:
     mutex.lock()
     retired_ready.append_array(retired_staged)
     retired_staged = []
+    retired_records_ready.append_array(retired_records_staged)
+    retired_records_staged = []
     cancelled = true
     mutex.unlock()
     wake.post()

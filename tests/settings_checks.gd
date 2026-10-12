@@ -12,15 +12,22 @@ var hits=0
 var config_path="user://settings-checks-%s.cfg" % Time.get_ticks_usec()
 class SettingsWorld extends FixtureWorld:
     var character_light_profile=Settings.DEFAULT_PROFILE
+    var fire_light_flicker=Settings.DEFAULT_FIRE_LIGHT_FLICKER
+    var light_strength=Settings.DEFAULT_LIGHT_STRENGTH
     var settings_path=""
     var accepted=[]
     var media_issue=""
-    var session={"issue":{}}
     var owner_hud:Control
     var unhandled=[]
     func set_character_light_profile(profile:String)->void:
         if Settings.write(profile,settings_path)!=OK:return
         character_light_profile=profile;accepted.append(profile)
+    func set_fire_light_flicker(enabled:bool)->void:
+        if Settings.write_fire_light_flicker(enabled,settings_path)!=OK:return
+        fire_light_flicker=enabled
+    func set_light_strength(value:float,persist:bool=true)->void:
+        light_strength=value
+        if persist:Settings.write_light_strength(value,settings_path)
     func close_storage()->void:
         loot_object_uuid=""
         if owner_hud!=null:owner_hud.loot_panel.hide()
@@ -48,7 +55,7 @@ func run()->void:
     root.size=Vector2i(1280,720)
     root.gui_embed_subwindows=true
     check(Settings.PROFILES.keys()==["original","gentle","reference"],"Only three delivered normal profiles are offered")
-    check(Settings.read(config_path)=={"profile":"reference","error":OK} and not FileAccess.file_exists(config_path),"Missing setting uses current demo Reference default without writing a file")
+    check(Settings.read(config_path)=={"profile":"reference","fire_light_flicker":false,"light_strength":1.0,"error":OK} and not FileAccess.file_exists(config_path),"Missing setting uses current demo Reference default without writing a file")
     check(Settings.write("gentle",config_path)==OK and Settings.read(config_path).profile=="gentle","ConfigFile round trip preserves a selected profile")
     check(Settings.write("unregistered-profile",config_path)==ERR_INVALID_PARAMETER and Settings.read(config_path).profile=="gentle","Unknown profile cannot overwrite saved selection")
     var saved=ConfigFile.new();saved.load(config_path);saved.set_value("unrelated","keep",73);saved.save(config_path)
@@ -80,7 +87,23 @@ func run()->void:
     key(KEY_ESCAPE);await process_frame;await process_frame
     check(hud.settings_open() and hud.settings_panel.visible,"Escape opens the native settings menu")
     check(hud.settings_panel.profiles.get_item_metadata(hud.settings_panel.profiles.selected)=="reference","Menu reflects renderer's accepted profile")
+    check(not hud.settings_panel.fire_flicker.button_pressed,"Fire light flicker defaults off")
+    await process_frame;await process_frame
+    click(hud.settings_panel.fire_flicker.get_global_rect().get_center());await process_frame
+    check(world.fire_light_flicker and Settings.read(config_path).fire_light_flicker,"Checkbox enables and persists fire light flicker")
+    await process_frame;await process_frame
+    click(hud.settings_panel.fire_flicker.get_global_rect().get_center());await process_frame
+    check(not world.fire_light_flicker and not Settings.read(config_path).fire_light_flicker,"Checkbox restores static fire lighting without affecting the profile")
+    check(hud.settings_panel.strength.value==1.0 and hud.settings_panel.strength.max_value==1.5,"Light strength defaults to100% with a150% maximum")
+    hud.settings_panel.strength.grab_focus();key(KEY_LEFT);await process_frame
+    check(is_equal_approx(world.light_strength,.99),"Native slider keyboard input changes light strength immediately")
+    await create_timer(.25).timeout
+    check(is_equal_approx(Settings.read(config_path).light_strength,.99),"Settled slider value is persisted without changing normal/flicker settings")
+    check(Settings.read(config_path).profile=="reference" and not Settings.read(config_path).fire_light_flicker,"Light strength preserves independent rendering preferences")
     check(hud.owns_keyboard_focus() and hud.pointer_over_controls(Vector2(5,360)),"Modal owns keyboard and complete viewport pointer boundary")
+    var normals_before: bool = world.normals_visible
+    click(hud.normals_button.get_global_rect().get_center());await process_frame
+    check(world.normals_visible==normals_before and hud.settings_open(),"Modal intercepts clicks at Normals without changing the preview behind it")
     check(hud.settings_panel.card.get_global_rect().has_point(root.size*0.5),"Settings card stays centered over visible game")
     var at=world.timeline.display_ms
     await process_frame;await process_frame

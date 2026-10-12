@@ -36,6 +36,8 @@ var bar = HBoxContainer.new()
 var end_button: Button
 var inventory_button: Button
 var history_button = Button.new()
+var grid_button = Button.new()
+var normals_button = Button.new()
 var loot_panel = StoragePanel.new()
 var history_panel = HistoryPanel.new()
 var settings_panel = SettingsPanel.new()
@@ -123,6 +125,20 @@ func _ready() -> void:
     history_button.focus_mode = Control.FOCUS_NONE
     history_button.pressed.connect(toggle_history)
     add_child(history_button)
+    grid_button.text = "Grid · G"
+    grid_button.tooltip_text = "Show or hide the isometric grid · G"
+    grid_button.toggle_mode = true
+    grid_button.focus_mode = Control.FOCUS_NONE
+    grid_button.set_pressed_no_signal(world.grid_visible)
+    grid_button.toggled.connect(func(enabled: bool): world.grid_visible = enabled)
+    add_child(grid_button)
+    normals_button.text = "Normals"
+    normals_button.tooltip_text = "Preview the receiving surface normals"
+    normals_button.toggle_mode = true
+    normals_button.focus_mode = Control.FOCUS_NONE
+    normals_button.set_pressed_no_signal(world.normals_visible)
+    normals_button.toggled.connect(world.set_normals_visible)
+    add_child(normals_button)
     popup.visible = false
     popup.mouse_filter = Control.MOUSE_FILTER_STOP
     popup.mouse_force_pass_scroll_events = false
@@ -197,6 +213,8 @@ func _layout() -> void:
     metrics.size = Vector2(230,40)
     inventory_button.position = Vector2(20,viewport_size.y-74)
     history_button.position = Vector2(84,viewport_size.y-60)
+    grid_button.position = history_button.position+Vector2(history_button.get_combined_minimum_size().x+8,0)
+    normals_button.position = grid_button.position+Vector2(grid_button.get_combined_minimum_size().x+8,0)
     end_button.position = Vector2(viewport_size.x-74,viewport_size.y-74)
     confirm_button.position = Vector2(viewport_size.x/2-94,viewport_size.y-188)
     cancel_button.position = Vector2(viewport_size.x/2+6,viewport_size.y-188)
@@ -235,13 +253,17 @@ func _process(delta: float) -> void:
         changed = true
         bar_changed = true
         painted_actor = id
+        world.session.retire_record(painted_discovery)
         painted_discovery = {}
         pages = {"Base":0,"Class":0,"Spells":0,"Items":0}
         selected_item = ""
         selected_slot = ""
         _close_popup()
     if ready and world.available_actions.get("entity_uuid") == id and (generation != last_discovery or painted_discovery.is_empty()):
-        painted_discovery = world.available_actions.duplicate(true)
+        world.session.retire_record(painted_discovery)
+        # Admitted discoveries are immutable and replaced as a whole. Keep the
+        # displayed generation without copying every movement/attack target.
+        painted_discovery = world.available_actions
         last_discovery = generation
         changed = true
         bar_changed = true
@@ -264,6 +286,10 @@ func _process(delta: float) -> void:
     metrics.text += " · Walls: %s [Z]" % world.wall_mode
     var cursor = world.pick_cell(get_viewport().get_mouse_position())
     if not cursor.is_empty(): metrics.text += "\n%d, %d · Z %s" % [cursor.position[0],cursor.position[1],cursor.height]
+    if grid_button.button_pressed != world.grid_visible:
+        grid_button.set_pressed_no_signal(world.grid_visible)
+    if normals_button.button_pressed != world.normals_visible:
+        normals_button.set_pressed_no_signal(world.normals_visible)
     end_button.disabled = not ready
     confirm_button.visible = not world.selected_action.is_empty() and world.selected_action.get("target_type") != "self"
     cancel_button.visible = confirm_button.visible
@@ -838,7 +864,7 @@ func pointer_over_controls(point: Vector2 = Vector2.INF) -> bool:
     if loot_panel.visible and loot_panel.get_global_rect().has_point(point): return true
     if history_panel.visible and history_panel.get_global_rect().has_point(point): return true
     if popup.visible and popup_bridge.has_point(point): return true
-    for control in [bar,inventory_button,history_button,end_button,confirm_button,cancel_button]:
+    for control in [bar,inventory_button,history_button,grid_button,normals_button,end_button,confirm_button,cancel_button]:
         if control.visible and control.get_global_rect().has_point(point): return true
     for control in world_label_buttons.values():
         if control.get_global_rect().has_point(point): return true

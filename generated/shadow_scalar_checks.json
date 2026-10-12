@@ -1,0 +1,49 @@
+{
+  "checks": 19,
+  "failures": [],
+  "fractional_edge_max_error": 0.003803551197052,
+  "fractional_edge_samples": 24,
+  "native_blocked_samples": 140,
+  "native_edge_max_error": 0.00168126821517944,
+  "native_fractional_samples": 10,
+  "renderer": "forward_plus",
+  "samples": [
+    {
+      "composite_actual": 0.439215689897537,
+      "composite_expected_srgb": 0.437629789113998,
+      "input": 0.0,
+      "sampled_linear": 0.0
+    },
+    {
+      "composite_actual": 0.552941203117371,
+      "composite_expected_srgb": 0.552304208278656,
+      "input": 0.125,
+      "sampled_linear": 0.124771818518639
+    },
+    {
+      "composite_actual": 0.643137276172638,
+      "composite_expected_srgb": 0.642628133296967,
+      "input": 0.25,
+      "sampled_linear": 0.250158280134201
+    },
+    {
+      "composite_actual": 0.788235306739807,
+      "composite_expected_srgb": 0.786013782024384,
+      "input": 0.5,
+      "sampled_linear": 0.502886474132538
+    },
+    {
+      "composite_actual": 0.901960790157318,
+      "composite_expected_srgb": 0.901405334472656,
+      "input": 0.75,
+      "sampled_linear": 0.752942204475403
+    },
+    {
+      "composite_actual": 1.0,
+      "composite_expected_srgb": 1.0,
+      "input": 1.0,
+      "sampled_linear": 1.0
+    }
+  ],
+  "scope": "Known scalar inputs through actual custom-light output and production viewport sampler/composite; fractional edge ramp and native box-caster edges are labeled optical fixtures, not authored gameplay geometry."
+}

@@ -43,10 +43,11 @@ func run() -> void:
     player.action_request = 42
     player.command_busy = true
     player.pending_request = {"kind":"receipt","number":1}
-    player.session.responses[42] = {"ok":true,"value":response}
+    player.session.responses[42] = {"ok":true,"value":response,
+        "normalized":player.session.protocol.normalize("ReceiptResponse",response)}
     player._poll_actions()
     check(not player.command_busy and player.await_command_cursor==1,"Committed receipt releases request hold and awaits its actual display cursor")
-    check(not response.has("kind") and not receipt.has("kind"),"Scene normalization never mutates SDK response")
+    check(not response.has("kind") and not receipt.has("kind"),"Defaulted presentation copy never mutates SDK response")
     player.context_menu.free(); player.free(); session.close()
     DirAccess.remove_absolute(directory.path_join("0000000000000000.json"))
     DirAccess.remove_absolute(directory)

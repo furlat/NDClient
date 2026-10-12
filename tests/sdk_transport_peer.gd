@@ -154,5 +154,5 @@ func _serve(connection: Dictionary, path: String, body: Variant) -> void:
         var value = scope(); value.merge({"kind":"preview","state_revision":"r","request":echoed,"preview":{"can_confirm":true}})
         _response(connection,value)
     elif path.ends_with("/choices"):
-        var value = scope(); value.merge({"kind":"choices","state_revision":"r","force_attack":false,"correlation_id":body.correlation_id,"choices":{"entity_uuid":"00000000-0000-4000-8000-000000000002" if mode=="bad_choices" else UUID}})
+        var value = scope(); value.merge({"state_revision":"r","force_attack":false,"correlation_id":body.correlation_id,"choices":{"entity_uuid":"00000000-0000-4000-8000-000000000002" if mode=="bad_choices" else UUID}})
         _response(connection,value)

@@ -50,6 +50,10 @@ uniform mat4 local_to_world;
 uniform mat3 local_normal_to_world;
 uniform bool use_source_depth = true;
 uniform bool use_source_normals = true;
+// Published terrain neighbours, in world +X,+Z,-X,-Z order. A skirt facing an
+// equal/higher connected tile is an interior interface, not an exposed return.
+// Keep its original alpha/depth; receive with the existing horizontal top plane.
+uniform int ground_join_mask = 0;
 
 // Rows are world right, screen-down, toward-camera. atlas_canvas_normal
 // cancels native MODEL_MATRIX rotation after source-to-Canvas conversion.
@@ -115,7 +119,8 @@ void fragment() {
     vec4 packed = vec4(0.0);
     if (has_geometry && in_packet) { packed = texelFetch(geometry_texture, ivec2(geometry_rect.xy + gp), 0); }
     float code = round(packed.r * 255.0) * 256.0 + round(packed.g * 255.0);
-    NORMAL = atlas_canvas_normal(vec3(0.0, 0.0, 1.0));
+    vec3 receiving_normal = vec3(0.0,0.0,1.0);
+    NORMAL = atlas_canvas_normal(receiving_normal);
     if (has_geometry && in_packet && code > 0.0) {
         // Nonzero registered depth qualifies the source surface. Native canvas
         // LIGHT_VERTEX.z is screen-normal height, not world elevation or raw ray
@@ -127,10 +132,19 @@ void fragment() {
             if (normal_in_packet) {
                 vec2 encoded = texelFetch(normal_texture, ivec2(normal_rect.xy + np), 0).ba;
                 vec3 world_normal = normalize(local_normal_to_world * normal_to_local * oct_decode(encoded));
-                NORMAL = atlas_canvas_normal(normalize(world_to_canvas * world_normal));
+                if (ground_join_mask != 0 && abs(world_normal.y) < 0.01 && max(abs(world_normal.x),abs(world_normal.z)) > 0.99) {
+                    int side = abs(world_normal.x) > abs(world_normal.z) ? (world_normal.x > 0.0 ? 1 : 4) : (world_normal.z > 0.0 ? 2 : 8);
+                    if ((ground_join_mask & side) != 0) { world_normal = vec3(0.0,1.0,0.0); }
+                }
+                receiving_normal = normalize(world_to_canvas * world_normal);
+                NORMAL = atlas_canvas_normal(receiving_normal);
             }
         }
     }
     colour = environment_source_colour(colour, scenery_visibility);
+#ifdef SHOW_SOURCE_NORMALS
+    COLOR = vec4(receiving_normal*0.5+0.5,colour.a);
+#else
     COLOR = colour;
+#endif
 }
