@@ -149,7 +149,8 @@ contribute fill through their original cookies. A black source-over output prese
 existing terrain colour. Helpers stop rendering when their inputs are unchanged.
 These dense casters require measured gameplay profiling; directional shadow fill
 is not implemented (the current source list contains no directional lights).
-Nonmodular creature shadows retain their existing authored source layer.
+Delivered creatures use the same generated-shadow path at their native cell size
+and authored optical ground. Uncovered creature rigs retain their authored shadows.
 
 The atlas shares native materials across identical floor-source instances and
 stores only nonzero-alpha bounds for static colour receivers. Animated sources
@@ -1068,3 +1069,59 @@ The full map lane is `--script res://tests/scale_profile.gd -- --recording
 --exercise-cache-invalidation`. Private recordings, captures and raw profiles
 remain ignored. Original input paths and the external shadow/capacity probes are
 listed in the validation index.
+
+## Creature lighting delivery
+
+The completed creature delivery supplies 1,438 native action sheets for 81
+appearances. Of these, 420 sources/429 aliases belong to the 42 existing gameplay
+rigs. The remaining library actions are indexed without adding gameplay clips,
+timing or assignments. `tools/register_creature_geometry.py` checks the delivered
+catalogs against this repository's tracked authoring and writes
+`generated/creature_geometry.json`; artwork stays external and unchanged.
+
+Creatures use the same native 2D receiving light, total-illumination cap and
+Escape → Settings → normal smoothness selection as modular characters. Each
+packet retains its own depth range, optical origin, native cell size and support
+masks. Generated shadows use the original painted ground contact and cached
+64/84/96/128-pixel caster meshes. Unsupported source pixels stay visible under
+flat receiving light and do not acquire invented casting geometry.
+
+Animals draw the delivery's exact original visible-body RGBA partition instead
+of the combined body/shadow image. Rendering, source-alpha picking and media
+readiness all consume that same image. Covered creature rigs omit the separate
+baked Shadow layer, preventing doubled shadows. This preserves each authored
+partition rule, including its exceptional actions; it does not recover hidden
+body pixels or rescale the smaller animals.
+
+Coverage remains qualified: Stag Die repeats one view in all facing rows and
+has only 30.755% geometry support. The six current SkeletonArcher05 clips are
+outside these two completed packages and retain their prior rendering path.
+The larger 259-appearance/4,381-sheet factory census is not evidence that those
+additional geometry packets have finished delivery.
+
+Validation commands with the Windows Godot executable and this project path:
+`--headless --script res://tests/creature_geometry_checks.gd`,
+`--script res://tests/creature_source_checks.gd`,
+`--script res://tests/creature_shadow_checks.gd`, and
+`--script res://tests/creature_scene_checks.gd -- --recording <Crypt journal>`.
+The Python intake lane is `python -m pytest tests/test_creature_geometry_intake.py`.
+Native reports are under `generated/creature_*checks.json`; the source comparisons
+use independent decoded normals and real Godot lights, while the scene replay
+checks first disclosures, preloaded companions and canonical terminal equality.
+
+This intake passes 6,180 source-selection checks, 213 native source comparisons,
+118 native shadow checks, 10 Python intake cases and the 52-check actual Crypt
+replay (75 causal groups, two revealed goblin families). Existing modular/profile
+and presentation checks also pass. `generated/creature_validation.json` collects
+the evidence; this is finite validation, not certification of every source frame.
+
+The repeated Gallery route drains all 122 groups canonically at sequence 101,
+with 1,761 tiles/360 objects. `generated/creature_profiles.json` retains the prior
+and current measurements. Current steady p95 is 14.11–17.64 ms; post-preload
+traversal p95 is 27.322 ms and maximum 240.641 ms, with 258 intervals over
+33.333 ms. Preload takes 29.3 seconds. These numbers are slower than the preceding
+run; asset production was active and unchanged CPU phases also slowed, so the
+difference is not isolated creature-feature cost. The final wide view has one
+additional caster (19 components/622,592 prepass triangles versus 18/589,824).
+Publication spikes remain unresolved; neither this intake nor its passing tests
+claim to complete renderer optimization.

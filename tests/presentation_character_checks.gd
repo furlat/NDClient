@@ -77,7 +77,7 @@ func run() -> void:
     check(selected.weapon.category == "Melee2" and selected.weapon.tint == 13412932, "Exact mainhand variant")
     check(selected.offhand.category == "Offhand2" and selected.offhand.tint == 14202888, "Exact offhand variant override beats base equipment")
     check(selected.chest.tint == 4491332 and selected.legs.tint == 6040078, "Multi-layer apparel variant")
-    check(selected.shadow.alpha == 0.5, "Authored modular shadow alpha")
+    check(not selected.has("shadow"), "Modular body selection omits baked shadow for generated geometry shadow")
     a.visual_loadout.active_weapon_set = "ranged"
     result = Characters.resolve(a, state, cache)
     check(result.ok and slots(result.value).weapon.category == "Ranged1" and not slots(result.value).has("offhand"), "Active weapon set filters equipped weapons")
@@ -104,13 +104,13 @@ func run() -> void:
         check(layer.slot not in Characters.EFFECT_SLOTS and layer.paths.has("Attack1"), "Concrete authored body/equipment sheet " + layer.slot)
     # Mutating draw data cannot alter canonical state or the shared authoring.
     concrete[0].alpha = 0.01
-    check(row.equipment_layers[0].alpha == 0.5 and actor() == a, "Presentation data is copied")
+    check(row.equipment_layers[0].alpha == 1.0 and actor() == a, "Presentation data is copied")
     a.creature_content_ref = "content.neurodragon:creature:creature.goblin@1"
     result = Characters.resolve(a, state, cache)
     check(result.ok and result.value.rig == "smallscale.goblin01", "Exact fixed creature rig overrides absent body binding")
     var fixed = Characters.layers(result.value, rigs[result.value.rig], cache)
-    check(fixed.size() == 2 and fixed[0].slot == "shadow" and fixed[1].slot == "body", "Fixed rig excludes authored clip effects")
-    check("/Bodies/" in fixed[1].paths.Attack1, "Fixed body uses original clean body sheet instead of combined effects")
+    check(fixed.size() == 1 and fixed[0].slot == "body", "Delivered fixed rig excludes baked shadow and inactive authored clip effects")
+    check("/Bodies/" in fixed[0].paths.Attack1, "Fixed body uses original clean body sheet instead of combined effects")
     a.creature_content_ref = "content.neurodragon:creature:creature.skeleton_archer@1"
     result = Characters.resolve(a, state, cache)
     check(result.ok and slots(result.value).body.category == "SkeletonArcher05", "Fixed skeleton archer stays its own asset")

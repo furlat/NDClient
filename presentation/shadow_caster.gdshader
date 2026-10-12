@@ -8,6 +8,7 @@ uniform vec4 frame_uv;
 uniform vec2 component_depth_range;
 uniform float component_units;
 uniform vec2 component_reconstruction_origin;
+uniform vec2 component_cell_size = vec2(128.0);
 uniform float component_elevation;
 uniform mat3 display_basis;
 uniform vec2 sprite_pivot;
@@ -16,7 +17,7 @@ uniform float height_scale = 0.5;
 uniform float horizontal_scale = 1.0;
 
 vec2 map_uv(vec2 pixel) {
-    return frame_uv.xy + (clamp(pixel, vec2(0.0), vec2(127.0)) + 0.5) / 128.0 * frame_uv.zw;
+    return frame_uv.xy + (clamp(pixel, vec2(0.0), component_cell_size-1.0) + 0.5) / component_cell_size * frame_uv.zw;
 }
 vec2 depth_sample(vec2 pixel) {
     vec2 uv = map_uv(pixel);
@@ -28,7 +29,7 @@ vec2 depth_sample(vec2 pixel) {
     return vec2(d * valid, valid);
 }
 void vertex() {
-    vec2 pixel = UV * 128.0;
+    vec2 pixel = UV * component_cell_size;
     // Interpolate only supported adjacent texels at each cell corner, so
     // transparent/background depth never pulls an edge into a spike.
     vec2 sum = depth_sample(pixel-vec2(1.0,1.0)) + depth_sample(pixel-vec2(0.0,1.0))
@@ -46,7 +47,7 @@ void vertex() {
     VERTEX = painted + display_basis[2] * ((height-painted.y) / display_basis[2].y);
 }
 void fragment() {
-    vec2 uv = map_uv(floor(UV*128.0));
+    vec2 uv = map_uv(floor(UV*component_cell_size));
     if (texture(sheet,uv).a <= 0.5 || texture(component_support,uv).r <= 0.5
         || texture(component_depth,uv).a <= 0.5) { discard; }
     ALBEDO = vec3(0.0);

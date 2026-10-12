@@ -925,3 +925,43 @@ blocker. Performance is explicitly incomplete: steady final Gallery p95 is
 2D implementation but slower than the prior 3D receiving path. Those spikes,
 cold view preparation, finite atlas capacity and directional shadow fill remain
 documented limits, not completed optimization claims. No VFX/Studio work was added.
+
+## Delivered creature lighting companions
+
+User supplied NDCharacterLight/CREATURE_DEMO.md on 12 October. Extend the existing
+character receiving/shadow path to the delivered goblin/orc/demon/imp and summoned
+animal packets. Keep original authoring identities, cells, pivots, facings, tints,
+animation clocks, source alpha and subjective preparation/publication unchanged.
+The delivery contains 81 appearances/1,438 sheets, not the complete 259-appearance
+library. Library-only actions receive no new gameplay assignment or timing.
+
+1. Index the delivered companions against existing source media. Preserve each
+   packet's depth affine, optical origin, native cell size and coverage warnings.
+2. Reuse asynchronous media demand and Original/Gentle/Reference settings for
+   creature normals. Unsupported pixels remain visible with flat receiving light.
+3. Use delivered native depth/support for generated creature shadows, preserving
+   painted contact and omitting baked shadows only for supported source families.
+   Smaller animal cells stay native; no new physical geometry or gameplay state.
+4. Verify registered source closure and native pixels across creature families,
+   cell sizes, animation/facing/profile changes and partial support; replay the
+   existing large map canonically and report measured costs without claiming the
+   preceding publication spikes fixed.
+
+Boundary: existing authored actor/source selection through preparation and native
+rendered output. Inputs are delivered packets and current registrations/recordings;
+expected output is unchanged artwork/placement/clocks with native normal response
+and generated supported shadows. Root owns runtime integration; map_audit owns
+intake, render_audit owns native-size shadow support, and scope_review tracks plan
+adherence plus anti-slop/anti-OOP review. No artwork edits, new assignments or demo
+changes; GPU checks serialize.
+
+Completed against the two finished source catalogs. All 42 currently registered
+covered rigs resolve through original aliases and asynchronous source demand;
+animal visible-body partitions and native shadow cells are connected. Source,
+shadow, original modular and actual Crypt replay checks pass. The full Gallery
+drains all 122 groups canonically. Evidence is in `generated/creature_validation.json`
+and `generated/creature_profiles.json`. Six SkeletonArcher05 clips remain outside
+this delivery. The later full-library export is not treated as finished merely
+because source-generation scripts exist. Measured steady p95 is 14.11–17.64 ms,
+with a 240.641 ms traversal maximum amid concurrent asset production; earlier
+publication/cold-view costs remain open. No new gameplay assignments or art edits.

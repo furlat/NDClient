@@ -1,0 +1,88 @@
+{
+  "status": "Implemented and verified within recorded cases; existing performance limitations remain.",
+  "delivery": {
+    "appearances": 81,
+    "source_sheets": 1438,
+    "currently_registered_rigs": 42,
+    "registered_aliases": 429,
+    "source_catalogues": [
+      "delivery/catalog.json",
+      "animals/delivery/catalog.json"
+    ],
+    "factory_root": "C:/Users/tommaso/Documents/assets/fantasy-unified-catalog/authored-creature-geometry-2026-10-12",
+    "intake": "generated/creature_geometry_intake.json"
+  },
+  "checks": [
+    {
+      "report": "generated/creature_geometry_checks.json",
+      "checks": 6180,
+      "failures": 0
+    },
+    {
+      "report": "generated/creature_source_checks.json",
+      "checks": 213,
+      "failures": 0
+    },
+    {
+      "report": "generated/creature_shadow_checks.json",
+      "checks": 118,
+      "failures": 0
+    },
+    {
+      "report": "generated/creature_scene_checks.json",
+      "checks": 52,
+      "failures": 0
+    },
+    {
+      "report": "generated/normal_profile_checks.json",
+      "checks": 30,
+      "failures": 0
+    },
+    {
+      "report": "generated/character_geometry_cases.json",
+      "checks": 185,
+      "failures": 0
+    }
+  ],
+  "additional_checks": {
+    "python_intake": {
+      "command": "python -m pytest tests/test_creature_geometry_intake.py",
+      "passed": 10,
+      "failed": 0
+    },
+    "presentation_character_regression": {
+      "script": "tests/presentation_character_checks.gd",
+      "checks": 55,
+      "failures": 0
+    }
+  },
+  "behavior": [
+    "Same 3D scene and native 2D receiving light with existing total-illumination cap.",
+    "Current Original/Gentle/Reference settings select preloaded source-matched creature normals.",
+    "Original native cells, pivots, source frames, gameplay clocks and packet-specific depth ranges retained.",
+    "Animal colour, picking and media demand consume the exact original visible-body partition; covered rigs omit baked shadows.",
+    "Only supported original depth/alpha casts generated shadows; unsupported colour retains flat receiving light."
+  ],
+  "limits": [
+    "These completed packages cover81 appearances, not the259 appearance/4381 source wider inventory.",
+    "No new gameplay aliases, inspection timings or placements are created for library-only sources.",
+    "Six current SkeletonArcher05 aliases are not delivered here and retain their prior rendering.",
+    "Stag Die repeats the same facing artwork and has30.755% support; missing geometry remains explicit.",
+    "Previous world-publication spikes and directional shadow fill are not addressed by this asset integration."
+  ],
+  "artwork_changes": 0,
+  "review": "Same-root plan adherence, anti-slop and anti-OOP review found no blocking issue.",
+  "profile": "generated/creature_profiles.json",
+  "gallery_receipt": "122groups,sequence101,canonical_match=true,drained=true,1761tiles,360objects,cached_world_invalidation=true,errors=[]",
+  "performance": {
+    "steady_p95_ms": [
+      14.114,
+      17.644
+    ],
+    "post_preload_p95_ms": 27.322,
+    "traversal_max_ms": 240.641,
+    "post_preload_intervals_over_33_333_ms": 258,
+    "startup_preload_ms": 29267.011,
+    "limitation": "Concurrent asset generation and differing async gaps; not isolated marginal creature cost. Publication stalls remain open."
+  }
+}

@@ -13,7 +13,7 @@ var shadow_atlas_size := 2048
 var issues: Array = []
 var actors: Dictionary = {}
 var _parent: Node3D
-var _mesh: QuadMesh
+var _meshes: Dictionary = {}
 var _sources: Array = []
 var _source_key: Array = []
 var _cookie_key: Array = []
@@ -27,9 +27,6 @@ var _last_cpu_ms := 0.0
 func attach(parent: Node3D) -> void:
     close()
     _parent=parent
-    _mesh=QuadMesh.new()
-    _mesh.subdivide_width=127
-    _mesh.subdivide_depth=127
     RenderingServer.frame_post_draw.connect(_after_draw)
 
 ## visual_actors are the existing displayed records: {row, entries, valid}.
@@ -55,7 +52,7 @@ func sync(visual_actors: Array, camera: Camera3D, canvas_sources: Array) -> Arra
         var units: float=snapshots[0].component_units
         var zoom: float=units*pixels_per_world
         if zoom<=0.00001: continue
-        var ground: float=float(actor.get("optical_ground_pixels",19.0))*units
+        var ground: float=snapshots[0].ground_pixels*units
         var selection := _dominant(camera.unproject_position(origin))
         if selection<0: continue
         var projection := _projection(camera,origin,ground,units,zoom,_sources[selection])
@@ -219,7 +216,9 @@ static func _snapshots(entries: Array,camera: Camera3D) -> Array:
     for entry in entries:
         if entry.role=="shadow" or not entry.node.visible or not entry.material.get_shader_parameter("has_component_geometry"): continue
         var snapshot: Dictionary={"id":entry.id,"pivot":entry.pivot,"position":entry.node.global_position,
-            "scale_x":entry.placement.get("scale_x",1.0),"basis":camera.global_basis}
+            "scale_x":entry.placement.get("scale_x",1.0),"basis":camera.global_basis,
+            "component_cell_size":Vector2(entry.get("geometry_cell_size",Vector2(128,128))),
+            "ground_pixels":float(entry.get("geometry_ground_pixels",19.0))}
         var complete := true
         for parameter in CASTER_PARAMETERS:
             snapshot[parameter]=entry.material.get_shader_parameter(parameter)
@@ -239,8 +238,8 @@ static func _bounds(snapshots: Array,origin: Vector3,ground: float,light: Vector
     var first := true
     var rect := Rect2()
     for snapshot in snapshots:
-        for x in [0.0,128.0]:
-            for y in [0.0,128.0]:
+        for x in [0.0,snapshot.component_cell_size.x]:
+            for y in [0.0,snapshot.component_cell_size.y]:
                 for depth in [snapshot.component_depth_range.x,snapshot.component_depth_range.y]:
                     var point: Vector3=_caster_point(snapshot,x,y,depth,ground)+snapshot.position-origin
                     if point.y>=light.y-0.0001: return {"unbounded":true,"rect":rect}
@@ -249,6 +248,16 @@ static func _bounds(snapshots: Array,origin: Vector3,ground: float,light: Vector
                     if first: rect=Rect2(projected,Vector2.ZERO); first=false
                     else: rect=rect.expand(projected)
     return {"unbounded":false,"rect":rect}
+
+func _caster_mesh(cell: Vector2) -> QuadMesh:
+    # One vertex grid per delivered native cell. No sprite resizing or padding.
+    var size := Vector2i(cell)
+    if not _meshes.has(size):
+        var mesh := QuadMesh.new()
+        mesh.subdivide_width=size.x-1
+        mesh.subdivide_depth=size.y-1
+        _meshes[size]=mesh
+    return _meshes[size]
 
 func _create(id: String) -> Dictionary:
     var viewport := SubViewport.new()
@@ -309,22 +318,23 @@ func _update(state: Dictionary,snapshots: Array,camera: Camera3D,origin: Vector3
         wanted[snapshot.id]=true
         if not state.casters.has(snapshot.id):
             var node := MeshInstance3D.new()
-            node.mesh=_mesh
             node.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY
             node.material_override=ShaderMaterial.new()
             node.material_override.shader=CASTER
             state.root.add_child(node)
             state.casters[snapshot.id]=node
         var caster: MeshInstance3D=state.casters[snapshot.id]
+        caster.mesh=_caster_mesh(snapshot.component_cell_size)
         caster.position=snapshot.position-origin
         for parameter in CASTER_PARAMETERS: caster.material_override.set_shader_parameter(parameter,snapshot[parameter])
+        caster.material_override.set_shader_parameter("component_cell_size",snapshot.component_cell_size)
         caster.material_override.set_shader_parameter("display_basis",camera.global_basis)
         caster.material_override.set_shader_parameter("sprite_pivot",snapshot.pivot)
         caster.material_override.set_shader_parameter("horizontal_scale",snapshot.scale_x)
         caster.material_override.set_shader_parameter("ground_height",ground)
         var aabb := AABB(_caster_point(snapshot,0,0,snapshot.component_depth_range.x,ground),Vector3.ZERO)
-        for x in [0.0,128.0]:
-            for y in [0.0,128.0]:
+        for x in [0.0,snapshot.component_cell_size.x]:
+            for y in [0.0,snapshot.component_cell_size.y]:
                 for d in [snapshot.component_depth_range.x,snapshot.component_depth_range.y]: aabb=aabb.expand(_caster_point(snapshot,x,y,d,ground))
         caster.custom_aabb=aabb.grow(0.001)
         RenderingServer.instance_set_custom_aabb(caster.get_instance(),caster.custom_aabb)
@@ -377,6 +387,7 @@ func _clear_actors() -> void:
 func diagnostics() -> Dictionary:
     var casters := 0
     var pixels := 0
+    var triangles := 0
     var wide_bounds := 0
     var selected := {}
     var last_gpu_ms := 0.0
@@ -385,17 +396,19 @@ func diagnostics() -> Dictionary:
         last_gpu_ms+=RenderingServer.viewport_get_measured_render_time_gpu(state.viewport.get_viewport_rid())
         last_cpu_ms+=RenderingServer.viewport_get_measured_render_time_cpu(state.viewport.get_viewport_rid())
         casters+=state.casters.size()
+        for caster in state.casters.values():
+            triangles+=2*(caster.mesh.subdivide_width+1)*(caster.mesh.subdivide_depth+1)
         pixels+=state.viewport.size.x*state.viewport.size.y
         if state.unbounded: wide_bounds+=1
         selected[state.entry.placement.id]=state.source_id
-    return {"actors":actors.size(),"casters":casters,"caster_triangles_before_native_shadow_passes":casters*32768,
+    return {"actors":actors.size(),"casters":casters,"caster_triangles_before_native_shadow_passes":triangles,
         "target_pixels":pixels,"last_render_gpu_ms":last_gpu_ms,"last_render_cpu_ms":last_cpu_ms,"sources":_sources.size(),"updates":_updates,"wide_depth_bounds":wide_bounds,"sync_cpu_ms":_last_cpu_ms,"selected_sources":selected}
 
 func close() -> void:
     if RenderingServer.frame_post_draw.is_connected(_after_draw): RenderingServer.frame_post_draw.disconnect(_after_draw)
     _clear_actors()
     _parent=null
-    _mesh=null
+    _meshes.clear()
     _sources.clear()
     _source_key.clear()
     _cookie_key.clear()

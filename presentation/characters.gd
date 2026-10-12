@@ -53,10 +53,12 @@ static func _layer(category: String, tint: int = 0xFFFFFF, alpha: float = 1.0) -
 static func _select_layers(actor: Dictionary, rig: Dictionary, modular: bool, cache: Dictionary) -> Dictionary:
     var selected: Dictionary = {}
     if not modular:
+        var generated_shadow = _generated_creature_shadow(actor,rig,cache)
         var transient: Dictionary = {}
         for clip in rig.clips.values():
             for layer in clip.get("layers", []): transient[layer.slot] = true
         for slot in rig.slot_order:
+            if slot=="shadow" and generated_shadow: continue
             if slot in EFFECT_SLOTS or transient.has(slot): continue
             var categories: Array = rig.slot_categories[slot]
             if categories.size() != 1: return _error("Fixed rig slot requires one authored category: " + slot)
@@ -115,10 +117,30 @@ static func _equipment(item: Dictionary, slot: String, visuals: Dictionary, appe
         if variant.visual_variant_id == item.visual_variant_id: return {"ok":true, "value":variant.equipment_layers}
     return _error("No authored item variant " + item.visual_item_name + "/" + str(item.visual_variant_id) + "/" + slot)
 
-static func _sheet_path(slot: String, sheet: String, resources: Dictionary, components: Dictionary) -> String:
+static func _generated_creature_shadow(actor: Dictionary, rig: Dictionary, cache: Dictionary) -> bool:
+    if not cache.has("__creature_shadow_rigs"): cache.__creature_shadow_rigs = {}
+    var id = rig_id(actor,cache)
+    if cache.__creature_shadow_rigs.has(id): return cache.__creature_shadow_rigs[id]
+    var index: Dictionary = _read("catalog-index.json",cache)
+    var resources: Dictionary = _read(index.resources,cache)
+    var components: Dictionary = _read(index.sheet_components,cache)
+    var categories: Array = rig.slot_categories.get("body",[])
+    var covered = not categories.is_empty()
+    for clip in rig.clips.values():
+        for category in categories:
+            if not clip.sheets.has(category): continue
+            var path = _sheet_path("body",clip.sheets[category],resources,components,cache)
+            var source = CharacterGeometry.record(path,"body",cache)
+            if source.is_empty() or source.get("optical_ground_pixels")==null: covered = false
+    cache.__creature_shadow_rigs[id] = covered
+    return covered
+
+static func _sheet_path(slot: String, sheet: String, resources: Dictionary, components: Dictionary, cache: Dictionary) -> String:
     var path: String = resources[sheet]
     # Fixed-creature combined sheets can contain effects and a second shadow.
-    if slot == "body": return components.get(path, {}).get("source_layers", {}).get("body", path)
+    if slot == "body":
+        path = components.get(path, {}).get("source_layers", {}).get("body", path)
+        return CharacterGeometry.display_path(path,slot,cache)
     return path
 
 static func layers(row: Dictionary, rig: Dictionary, cache: Dictionary) -> Array:
@@ -131,7 +153,7 @@ static func layers(row: Dictionary, rig: Dictionary, cache: Dictionary) -> Array
         for clip in rig.clips:
             var sheet: String = rig.clips[clip].sheets.get(layer.category, "")
             if sheet.is_empty(): continue
-            layer.paths[clip] = _sheet_path(layer.slot,sheet,resources,components)
+            layer.paths[clip] = _sheet_path(layer.slot,sheet,resources,components,cache)
     return result
 
 static func sheet_paths(actor: Dictionary, clips: Array, cache: Dictionary) -> Dictionary:
@@ -154,7 +176,7 @@ static func sheet_paths(actor: Dictionary, clips: Array, cache: Dictionary) -> D
         for layer in selected.value:
             var sheet: String = rig.clips[clip].sheets.get(layer.category, "")
             if not sheet.is_empty():
-                var path = _sheet_path(layer.slot,sheet,resources,components)
+                var path = _sheet_path(layer.slot,sheet,resources,components,cache)
                 paths[path] = true
                 colour_paths[path] = true
                 var companions = CharacterGeometry.source_paths(path,layer.slot,cache)
