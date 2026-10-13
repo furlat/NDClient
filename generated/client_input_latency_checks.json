@@ -1,8 +1,8 @@
 {
-  "scope": "Native Windows Forward+ live command latency repair; one before/after route, not a claim of complete latency or animation coverage.",
-  "client_revision": "cedf34f",
+  "scope": "Native Windows Forward+ live command latency across initial, snapshot and single-fold passes. Fresh encounters on the same route; remaining latency is explicit.",
+  "client_revision": "ca325d7",
   "native_before": "20261013T081037.391879Z",
-  "native_after": "20261013T085650.328082Z",
+  "native_after": "20261013T094752.111137Z",
   "validation": {
     "native_checks": 411,
     "native_failures": [],
@@ -14,7 +14,7 @@
     "accepted_normalization_cases": 2420,
     "archived_normalization_records": 104,
     "sdk_protocol_checks": 53,
-    "sdk_journal_checks": 21,
+    "sdk_journal_checks": 30,
     "sdk_oracle_cases": [
       125,
       258,
@@ -22,7 +22,14 @@
       391
     ],
     "sdk_snapshot_checks": 339,
-    "compiler_snapshot_checks": 550
+    "compiler_snapshot_checks": 569,
+    "compiler_recording_parity_checks": 606,
+    "compiler_recording_operations": 118,
+    "cell_checks": 37,
+    "session_execution_checks": 33,
+    "transport_checks": 351,
+    "dropped_pipeline_records": 0,
+    "protocol_note": "Protocol parser/schema code unchanged in this pass; protocol-specific admission/normalization totals above are prior acceptance, not a new rerun."
   },
   "command_50": {
     "before": {
@@ -70,6 +77,50 @@
       "prepared_to_first_sample_ms": 56.99599999999998
     },
     "after": {
+      "number": 50,
+      "input": "viewport_click",
+      "from": [
+        47,
+        20
+      ],
+      "to": [
+        53,
+        20
+      ],
+      "sequence": 87,
+      "operation_bytes": 185632,
+      "packet_shape": {
+        "lineages": 1,
+        "events": 31,
+        "facts": {
+          "movement": 1,
+          "sensory": 12,
+          "spatial": 12,
+          "step": 6
+        },
+        "versions": 76,
+        "observations": 0,
+        "world_tiles": 251,
+        "world_objects": 5
+      },
+      "first_movement_ms": 378.315,
+      "complete_sse_frame_ms": 120.665,
+      "server_dispatch_ms": 62.39537100191228,
+      "sse_schema_ms": 74.008,
+      "canonical_consumer_ms": 107.313,
+      "presentation_compile_ms": 15.719,
+      "client_to_prepared_ms": 197.389,
+      "client_after_complete_sse_ms": 257.65,
+      "frame_ms": {
+        "max": 29.549,
+        "mean": 3.994963099631,
+        "p50": 3.812,
+        "p95": 5.476,
+        "p99": 11.473
+      },
+      "prepared_to_first_sample_ms": 60.26099999999997
+    },
+    "intermediate": {
       "number": 50,
       "input": "viewport_click",
       "from": [
@@ -168,6 +219,55 @@
       "moves": 16,
       "viewport_clicks": 16,
       "first_movement_ms": {
+        "median": 354.3745,
+        "min": 190.208,
+        "max": 631.142
+      },
+      "server_dispatch_ms": {
+        "median": 57.173633998900186,
+        "min": 15.78962900384795,
+        "max": 242.10050300462171
+      },
+      "server_exchange_ms": {
+        "median": 60.1498915,
+        "min": 17.39439,
+        "max": 246.110947
+      },
+      "operation_bytes": {
+        "median": 164843.0,
+        "min": 41583,
+        "max": 251840
+      },
+      "sse_schema_ms": {
+        "median": 66.64949999999999,
+        "min": 16.276,
+        "max": 108.499
+      },
+      "canonical_consumer_ms": {
+        "median": 91.863,
+        "min": 47.325,
+        "max": 112.249
+      },
+      "presentation_compile_ms": {
+        "median": 15.242,
+        "min": 10.163,
+        "max": 39.193
+      },
+      "client_to_prepared_ms": {
+        "median": 185.264,
+        "min": 83.099,
+        "max": 256.965
+      },
+      "client_after_complete_sse_ms": {
+        "median": 255.841,
+        "min": 126.738,
+        "max": 525.023
+      }
+    },
+    "intermediate": {
+      "moves": 16,
+      "viewport_clicks": 16,
+      "first_movement_ms": {
         "median": 483.6405,
         "min": 223.033,
         "max": 757.793
@@ -215,16 +315,29 @@
     }
   },
   "qualifications": [
-    "Same client-issued route and packet shapes; fresh encounters, not identical timing conditions. Server timing varied and remains separately attributed.",
+    "Same client-issued route and event/after-value counts in the representative command; fresh encounters, not identical bytes or timing conditions. Server timings remain separately attributed.",
     "Single native GPU process; no CPU profiler or nested backend phase hooks during live runs. Coarse pipeline trace had zero dropped records.",
     "Compiler and journal semantic correctness, cold replay and final displayed state passed. Screenshot inspected; no pixel-identical framebuffer claim.",
-    "No approved shader, light, rendering parameter, event schedule or authored animation duration changes."
+    "No approved shader, light, rendering parameter, event schedule or authored animation duration changes.",
+    "Single-fold run uses compatible committed server e4d3a879281 in the existing isolated worktree. Unfinished protocol changes in the primary server checkout are excluded and untouched."
   ],
   "remaining": [
-    "Roughly486ms click-to-first-motion remains in the representative six-cell command; this is improved, not solved.",
-    "Canonical reduction and compiler still independently fold the same events. A bounded passive intermediate-record handoff is proposed, not implemented.",
-    "Strict parsing/schema admission costs75ms for185290bytes in GDScript. No parser/validation weakening was made.",
-    "Prepared-to-first-sample is53ms combined handoff/media/world readiness; its split is not established by this trace."
+    "Representative six-cell movement:378.315ms click-to-first-motion, including120.665ms until a complete SSE record. Improved, not solved.",
+    "After complete SSE:74.008ms strict wire admission,107.313ms canonical journal reduction including passive capture,15.719ms authored compilation; packet-to-prepared197.389ms.",
+    "Prepared-to-first-sample remains60.261ms combined handoff/media/world readiness; this trace does not split that interval.",
+    "The compiler no longer performs a second live semantic fold. Further wins are now in admission and the remaining canonical normalization/copies/cell composition, plus readiness.",
+    "Server field-delta schema work is not integrated by this client-only change. The current client still requires its shipped compatible protocol identity."
   ],
-  "followup": "User requests a first-principles architecture review before further patches. Production changes held; read-only reviews confirm duplicate live fold and whole-group resource readiness."
+  "followup": "Single-fold reuse and local cell indexes implemented, regression checked and live profiled. Approved shaders, lighting, artwork and animation schedules unchanged.",
+  "native_intermediate": "20261013T085650.328082Z",
+  "source_context": {
+    "client_commit": "ca325d7",
+    "server_commit": "e4d3a879281",
+    "server_checkout": "/home/tommaso/.codex/worktrees/client-atlas-profile/dnd_engine",
+    "server_state": "Clean compatible committed checkout. Primary checkout contains unfinished protocol changes and was not modified.",
+    "renderer": "Native Windows Godot4.7.2 Forward+",
+    "isolation": "Previous owned preview stopped; no other native Godot process present before this launch; all headless tests completed.",
+    "profiling": "Pipeline timestamps only; no CPU profiler or nested engine phase hooks.",
+    "invocation": "tools/play.py --engine /home/tommaso/.codex/worktrees/client-atlas-profile/dnd_engine --profile-pipeline --test-script res://tests/live_gallery_checks.gd"
+  }
 }

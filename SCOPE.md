@@ -1226,7 +1226,7 @@ Split the occasional media_plan timing into request/set construction/demand/prun
 subphases before considering any media-cache change; preserve actual demand,
 readiness, budget and preload behavior.
 
-Live run20261013T001351.039284Z timed out at command12 before the Gallery:
+Live run 20261013T001351.039284Z timed out at command12 before the Gallery:
 submit returned a transport failure before any backend dispatch, then the receipt
 was unknown. Preserve this failed run; do not report its partial route as success.
 Root adds payload-free failure context to the live diagnostic; render_audit
@@ -1248,7 +1248,7 @@ reply fixture proving no automatic duplicate mutation. Existing receipt recovery
 is unchanged. render_audit owns the SDK repair/fixtures; root repeats the same
 live route and retains the failed-run evidence separately from performance data.
 
-Live run20261013T002539.222698Z completes411 checks,58 commands and16 Gallery
+Live run 20261013T002539.222698Z completes411 checks,58 commands and16 Gallery
 clicks. The unchanged-demand guard reports126 no-ops overall but does not resolve
 Gallery's32 changing-demand calls (13.753ms median,21.059ms maximum). Do not claim
 that owner fixed. Add exclusive subphase timing to the same real demand call
@@ -1259,7 +1259,7 @@ root owns the live profiling hook and serialized route; scope_review continues.
 New normal assets remain deferred. The renderer's exact54 reference captures and
 improved18.044ms reveal median are preserved; no shader or source changes.
 
-The demand attribution run20261013T003348.323972Z passes411 checks and isolates
+The demand attribution run 20261013T003348.323972Z passes411 checks and isolates
 32 Gallery calls:14.161ms median total,4.885ms selection,3.464ms resident refresh,
 1.824ms guard,1.424ms estimates and1.342ms selection readiness refresh. map_audit
 may reject changed exact demand before family equality, use accepted worker byte
@@ -1282,7 +1282,7 @@ the measured client optimization work is complete; do not mix asset changes into
 performance or approved-framebuffer comparisons. The handoff remains unread so far.
 
 Accepted renderer checkpoint4523612:54 reference images and source/clock receipts
-match exactly; live run20261013T005149.264490Z passes411 checks/58 commands and16
+match exactly; live run 20261013T005149.264490Z passes411 checks/58 commands and16
 Gallery viewport moves. Baseline686d1da versus final reveal median33.032→16.155ms,
 maximum56.523→22.222ms; moving p95 is11.950→7.054ms. Demand median is7.761ms,
 from14.161ms in the diagnostic run. Actual click response remains2.841s median,
@@ -1436,9 +1436,9 @@ still required before reporting a measured input-response improvement.
 Native Windows Forward+ acceptance of cedf34f completed on the same 58-command
 Gallery route: 411 checks pass, 11 stages and 1,761 tiles/360 objects, exact final
 displayed/canonical state and cold replay. Single GPU process, zero dropped trace
-records, no CPU profiler. Six-cell command50 first motion falls895.981→486.039ms;
+records, no CPU profiler. Six-cell command 50 first motion falls895.981→486.039ms;
 after complete packet786.535→392.050ms. Canonical consumption327.870→130.062ms,
-compiler325.702→133.579ms; packet admission remains75ms. Across16Gallery moves,
+compiler325.702→133.579ms; packet admission remains75ms. Across 16Gallery moves,
 median first motion836.342→483.641ms. Server timing varied66.2→57.5ms for this
 command and is attributed separately. These are one before/after route, not a
 claim of solved responsiveness. Compact evidence: generated/client_input_latency_checks.json.
@@ -1501,3 +1501,19 @@ isolate cell bookkeeping: recorded reduction median 100.175→76.053 ms (plain
 pending. The mutable server checkout is now developing a different wire schema;
 use the existing clean client-atlas-profile worktree at compatible committed
 e4d3a879281 for client-only live acceptance, without modifying server work.
+
+Native acceptance of ca325d7 completed in run 20261013T094752.111137Z: all 411
+checks pass across 58 live client commands, 11 stages, 1,761 tiles and 360 objects.
+No logged errors/warnings or dropped pipeline records; prior preview/headless
+checks were stopped before the sole Forward+ renderer started. Complete canonical
+and cold-replay checks pass; final rendered screenshot inspected. Across 16 Gallery
+viewport moves, median first motion 483.641→354.375ms, post-packet client delay
+388.760→255.841ms, and authored compilation 118.858→15.242ms. Representative
+six-cell command 50: first motion 486.039→378.315ms, post-packet 392.050→257.650ms,
+compilation 133.579→15.719ms, canonical consumption 130.062→107.313ms. That
+canonical interval now includes passive capture; this is not shifting a hidden
+second fold into another reported phase. Server execution 57.520→62.395ms and
+arrival 93.989→120.665ms varied separately. Remaining admission 74.008ms and
+prepared-to-sample 60.261ms are explicit. No claim of completely solved latency;
+no new server wire fields or approved graphical behavior changed. Evidence is
+in generated/client_input_latency_checks.json and generated/client_single_fold_checks.json.
