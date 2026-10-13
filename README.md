@@ -297,8 +297,11 @@ clip for outfits and equipment sets in displayed state and the bounded,
 already-received operation window. This includes upcoming disclosed actor
 families before movement arrives; prefetch does not publish actors, tiles or
 outcomes. It does not load the unrelated asset catalog. Original PNGs decode on
-four bounded workers; the scene publishes them in demand order and uploads at
-most one prepared texture per frame. Startup waits only for its exact required
+four bounded workers; the scene publishes completed required images first,
+without blocking behind an unfinished image. Required uploads use a 2 ms slice
+and at most eight publications per frame; one upload may exceed that slice.
+At most one optional image publishes per frame, also freeing its decode slot
+while required jobs finish. Startup waits only for its exact required
 sources. Optional family warmup runs in the background, while each actual group
 waits only for its exact required
 sources. Loading does not advance the display clock or become a catch-up jump;

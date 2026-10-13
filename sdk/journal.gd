@@ -6,6 +6,9 @@ var protocol := Protocol.new()
 var directory := ""
 var state: Dictionary = {}
 var cursor: Dictionary = {}
+# Optional payload-free timing for the transport owner; no work history retained.
+var profile_enabled := false
+var last_profile: Dictionary = {}
 
 func open(path: String, historical_recording: bool = false, replay_existing: bool = true) -> Dictionary:
 	if not directory.is_empty(): return _failure("Journal already opened")
@@ -39,6 +42,7 @@ func consume(packet: Dictionary, raw: PackedByteArray) -> Dictionary:
 	return _consume_admitted(admitted.value, raw)
 
 func _consume_admitted(packet: Dictionary, raw: PackedByteArray, record_transitions: bool = false) -> Dictionary:
+	last_profile = {"sequence":int(packet.get("cursor",{}).get("sequence",-1)), "phase_ms":{}, "reducer_ms":{}} if profile_enabled else {}
 	# Internal transport/replay boundary: the caller owns these exact admitted
 	# bytes. Public consume() above always decodes and compares independently.
 	if directory.is_empty(): return _failure("Journal is not open")
@@ -52,11 +56,18 @@ func _consume_admitted(packet: Dictionary, raw: PackedByteArray, record_transiti
 			if FileAccess.get_file_as_bytes(_file(next.sequence)) != raw: return _failure("Conflicting duplicate journal record")
 			return {"ok": true, "value": cursor.duplicate(true)}
 	if int(next.sequence) != (0 if cursor.is_empty() else int(cursor.sequence) + 1): return _failure("Journal sequence gap")
+	var started: int = Time.get_ticks_usec() if profile_enabled else 0
 	var saved := _stage(int(next.sequence), raw)
+	if profile_enabled: _profile_elapsed("stage", started)
 	if not saved.ok: return saved
+	started = Time.get_ticks_usec() if profile_enabled else 0
 	var normalized: Dictionary = protocol._normalize_admitted("InitializationResponse" if next.sequence == 0 else "PlayerOperation", packet)
+	if profile_enabled: _profile_elapsed("normalize", started)
+	started = Time.get_ticks_usec() if profile_enabled else 0
 	var reduced := _reduced_state(normalized, record_transitions)
+	if profile_enabled: _profile_elapsed("reduce", started)
 	if not reduced.ok: return reduced
+	started = Time.get_ticks_usec() if profile_enabled else 0
 	var target := _file(int(next.sequence))
 	if not FileAccess.file_exists(target):
 		var code := DirAccess.rename_absolute(target + ".tmp", target)
@@ -66,6 +77,7 @@ func _consume_admitted(packet: Dictionary, raw: PackedByteArray, record_transiti
 	var accepted := {"ok": true, "value": cursor.duplicate(true), "normalized": normalized}
 	# Derived records cross the worker boundary only after durable publication.
 	if reduced.has("transitions"): accepted.transitions = reduced.transitions
+	if profile_enabled: _profile_elapsed("commit", started)
 	return accepted
 
 func replay(through_sequence: int = -1) -> Dictionary:
@@ -105,7 +117,7 @@ func _reduced_state(packet: Dictionary, record_transitions: bool = false) -> Dic
 	if packet.cursor.sequence == 0:
 		result = Reducer.reduce_initialization(packet.initialization, packet.content_additions)
 	else:
-		result = Reducer._reduce_operation_recorded(state, packet) if record_transitions else Reducer.reduce_operation(state, packet)
+		result = Reducer._reduce_operation_retained(state, packet, record_transitions, last_profile.reducer_ms if profile_enabled else null)
 	return result
 
 func _file(sequence: int) -> String:
@@ -127,3 +139,6 @@ func _stage(sequence: int, raw: PackedByteArray) -> Dictionary:
 
 static func _failure(message: String) -> Dictionary:
 	return {"ok": false, "error": {"kind": "journal", "message": message, "retryable": false}}
+
+func _profile_elapsed(phase: String, started: int) -> void:
+	last_profile.phase_ms[phase] = (Time.get_ticks_usec() - started) / 1000.0

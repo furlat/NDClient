@@ -1,6 +1,18 @@
 {
   "cases": [
     {
+      "checks": 138,
+      "counts": {
+        "events": 4,
+        "observations": 3,
+        "perception_snapshots": 2,
+        "senses_snapshots": 3,
+        "world_updates": 1
+      },
+      "failures": 0,
+      "sequence": 10
+    },
+    {
       "checks": 435,
       "counts": {
         "events": 31,
@@ -10,27 +22,27 @@
         "world_updates": 6
       },
       "failures": 0,
-      "sequence": 85
+      "sequence": 87
     }
   ],
-  "checks": 435,
+  "checks": 573,
   "counts": {
-    "events": 31,
-    "observations": 0,
-    "perception_snapshots": 12,
-    "senses_snapshots": 24,
-    "world_updates": 6
+    "events": 35,
+    "observations": 3,
+    "perception_snapshots": 14,
+    "senses_snapshots": 27,
+    "world_updates": 7
   },
   "failures": [],
   "invocation": {
     "arguments": [
-      "--recording=C:/Users/tommaso/Documents/Dev/dnd_engine/.runtime/server-latency/checkpoint32-plain/journal",
-      "--sequence=85"
+      "--recording=res://.runtime/player-runs/20261013T143729.491797Z/journal"
     ],
     "recording_requirement": "External recorded journal; not a checked-in fixture. Default operations: 10 and 87.",
     "script": "res://tests/compiler_snapshot_checks.gd",
     "sequences": [
-      85
+      10,
+      87
     ]
   },
   "scope": "Headless actual-recording event snapshots, independent SDK event folds, two exact displayed replays, public/captured/compatibility parity, repeated record scheduling and caller sensory/world/actor-input isolation. No rendered-pixel or timing claim."

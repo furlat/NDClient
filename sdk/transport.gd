@@ -98,6 +98,9 @@ func set_profiling(enabled: bool) -> Dictionary:
     _profile_head = 0; _profile_count = 0; _profile_total = 0; _profile_dropped = 0
     return success()
 
+func profiling_enabled() -> bool:
+    return _profile_enabled
+
 func _profile_record(record: Dictionary) -> void:
     if not _profile_enabled: return
     _profile_mutex.lock()
@@ -533,7 +536,8 @@ func _consume(packet: Dictionary, raw: PackedByteArray) -> Dictionary:
     _timings.consumer_ms += (Time.get_ticks_usec()-started)/1000.0
     if _profile_enabled:
         _profile_record({"stage":"canonical_consumer","time_us":Time.get_ticks_usec(),"started_us":started,
-            "sequence":int(packet.cursor.sequence),"bytes":raw.size(),"ok":result is Dictionary and result.get("ok",false)})
+            "sequence":int(packet.cursor.sequence),"bytes":raw.size(),"ok":result is Dictionary and result.get("ok",false),
+            "phases":result.get("profile_phases",{}) if result is Dictionary else {}})
     if _stopping(): return failure("cancelled","SDK cancelled")
     if not (result is Dictionary) or not result.has("ok"):
         return failure("protocol","Consumer must return a result")
@@ -589,11 +593,11 @@ func _event(record: Dictionary) -> void:
     var roots = {"ready":"StreamReady","status":"StreamStatus","operation":"PlayerOperation","error":"ApiError"}
     if not roots.has(record.event): _fail_follow(failure("protocol","Unknown SSE event")); return
     var admission_started = Time.get_ticks_usec()
-    var decoded: Dictionary = _protocol.decode(roots[record.event],record.raw)
+    var decoded: Dictionary = _protocol._decode_framed_event(roots[record.event],record.raw,_profile_enabled)
     _timings.admission_ms += (Time.get_ticks_usec()-admission_started)/1000.0
     if _profile_enabled:
         _profile_job(_stream,"sse_admission",{"started_us":admission_started,"frame_id":record.get("profile_frame_id",0),
-            "event":record.event,"bytes":record.raw.size(),"ok":decoded.ok,
+            "event":record.event,"bytes":record.raw.size(),"ok":decoded.ok,"phases_ms":decoded.get("phases_ms",{}),
             "sequence":int(decoded.value.cursor.sequence) if decoded.ok and record.event=="operation" else -1})
     if not decoded.ok: _fail_follow(decoded); return
     var packet: Dictionary = decoded.value

@@ -1,0 +1,328 @@
+{
+  "boundary": "Already-admitted schema8 operation to durable canonical publication and immutable per-event captures",
+  "recording": "res://.runtime/player-runs/20261013T143729.491797Z/journal",
+  "sequence": 87,
+  "changes": [
+    "Journal-only retained transaction copies mutable state containers; public reducer results remain deeply detached.",
+    "Actor snapshots protect actor/loadout/item shells while sharing installed immutable metadata.",
+    "Small sensory cell updates preserve sorted full-precision arrays with binary insertion/removal; initial/large sets use exhaustive reconstruction.",
+    "Composed object contacts recompute affected winners only, including shared entity/object cursor identities; exact first-observer dictionary order is retained."
+  ],
+  "profile_api": {
+    "enabled": "Journal.profile_enabled",
+    "last_only": "Journal.last_profile",
+    "fields": [
+      "sequence",
+      "phase_ms.stage",
+      "phase_ms.normalize",
+      "phase_ms.reduce",
+      "phase_ms.commit",
+      "reducer_ms"
+    ]
+  },
+  "focused_checks": {
+    "retained_transactions": 160,
+    "cells": 37,
+    "journal": 30,
+    "failures": 0
+  },
+  "diagnostic_batches": {
+    "first_paired": {
+      "before": {
+        "total_ms": {
+          "median": 83.226,
+          "min": 79.06,
+          "max": 84.75
+        },
+        "phase_ms.commit": {
+          "median": 0.156,
+          "min": 0.144,
+          "max": 0.16
+        },
+        "phase_ms.normalize": {
+          "median": 9.993,
+          "min": 8.583,
+          "max": 10.182
+        },
+        "phase_ms.reduce": {
+          "median": 72.171,
+          "min": 69.749,
+          "max": 73.915
+        },
+        "phase_ms.stage": {
+          "median": 0.55,
+          "min": 0.52,
+          "max": 0.588
+        },
+        "reducer_ms.actor_inputs": {
+          "median": 3.109,
+          "min": 3.066,
+          "max": 3.251
+        },
+        "reducer_ms.captures": {
+          "median": 3.865,
+          "min": 3.669,
+          "max": 4.023
+        },
+        "reducer_ms.copy": {
+          "median": 21.715,
+          "min": 21.423,
+          "max": 22.144
+        },
+        "reducer_ms.facts": {
+          "median": 41.397,
+          "min": 38.876,
+          "max": 42.736
+        },
+        "reducer_ms.finalize": {
+          "median": 0.09,
+          "min": 0.087,
+          "max": 0.091
+        },
+        "reducer_ms.world": {
+          "median": 1.776,
+          "min": 1.634,
+          "max": 1.842
+        }
+      },
+      "after": {
+        "total_ms": {
+          "median": 48.592,
+          "min": 48.286,
+          "max": 50.654
+        },
+        "phase_ms.commit": {
+          "median": 0.154,
+          "min": 0.14,
+          "max": 0.16
+        },
+        "phase_ms.normalize": {
+          "median": 10.069,
+          "min": 9.982,
+          "max": 10.103
+        },
+        "phase_ms.reduce": {
+          "median": 37.605,
+          "min": 37.439,
+          "max": 39.833
+        },
+        "phase_ms.stage": {
+          "median": 0.559,
+          "min": 0.494,
+          "max": 0.593
+        },
+        "reducer_ms.actor_inputs": {
+          "median": 2.343,
+          "min": 2.229,
+          "max": 2.491
+        },
+        "reducer_ms.captures": {
+          "median": 3.353,
+          "min": 3.282,
+          "max": 3.686
+        },
+        "reducer_ms.copy": {
+          "median": 0.906,
+          "min": 0.865,
+          "max": 0.939
+        },
+        "reducer_ms.fact_movement": {
+          "median": 0.004,
+          "min": 0.003,
+          "max": 0.004
+        },
+        "reducer_ms.fact_sensory": {
+          "median": 28.688,
+          "min": 28.348,
+          "max": 30.627
+        },
+        "reducer_ms.fact_spatial": {
+          "median": 0.15,
+          "min": 0.139,
+          "max": 0.203
+        },
+        "reducer_ms.fact_step": {
+          "median": 0.025,
+          "min": 0.023,
+          "max": 0.026
+        },
+        "reducer_ms.facts": {
+          "median": 28.841,
+          "min": 28.547,
+          "max": 30.812
+        },
+        "reducer_ms.finalize": {
+          "median": 0.091,
+          "min": 0.083,
+          "max": 0.097
+        },
+        "reducer_ms.world": {
+          "median": 1.62,
+          "min": 1.487,
+          "max": 1.692
+        }
+      },
+      "all_state_and_transition_values_exact": true
+    },
+    "final_paired": {
+      "before": {
+        "total_ms": {
+          "median": 92.059,
+          "min": 83.624,
+          "max": 123.28
+        },
+        "phase_ms.commit": {
+          "median": 0.156,
+          "min": 0.137,
+          "max": 0.206
+        },
+        "phase_ms.normalize": {
+          "median": 10.043,
+          "min": 8.91,
+          "max": 10.77
+        },
+        "phase_ms.reduce": {
+          "median": 81.231,
+          "min": 72.563,
+          "max": 113.687
+        },
+        "phase_ms.stage": {
+          "median": 0.549,
+          "min": 0.449,
+          "max": 0.606
+        },
+        "reducer_ms.actor_inputs": {
+          "median": 3.494,
+          "min": 3.197,
+          "max": 4.614
+        },
+        "reducer_ms.captures": {
+          "median": 4.799,
+          "min": 3.886,
+          "max": 7.481
+        },
+        "reducer_ms.copy": {
+          "median": 22.497,
+          "min": 22.124,
+          "max": 24.063
+        },
+        "reducer_ms.facts": {
+          "median": 48.225,
+          "min": 40.701,
+          "max": 73.375
+        },
+        "reducer_ms.finalize": {
+          "median": 0.094,
+          "min": 0.087,
+          "max": 0.13
+        },
+        "reducer_ms.world": {
+          "median": 2.024,
+          "min": 1.724,
+          "max": 2.548
+        }
+      },
+      "after": {
+        "total_ms": {
+          "median": 51.408,
+          "min": 47.922,
+          "max": 60.027
+        },
+        "phase_ms.commit": {
+          "median": 0.157,
+          "min": 0.13,
+          "max": 0.179
+        },
+        "phase_ms.normalize": {
+          "median": 10.701,
+          "min": 9.97,
+          "max": 10.732
+        },
+        "phase_ms.reduce": {
+          "median": 39.661,
+          "min": 36.855,
+          "max": 48.401
+        },
+        "phase_ms.stage": {
+          "median": 0.624,
+          "min": 0.595,
+          "max": 0.696
+        },
+        "reducer_ms.actor_inputs": {
+          "median": 2.53,
+          "min": 2.359,
+          "max": 2.851
+        },
+        "reducer_ms.captures": {
+          "median": 3.307,
+          "min": 3.163,
+          "max": 4.491
+        },
+        "reducer_ms.copy": {
+          "median": 0.97,
+          "min": 0.854,
+          "max": 1.44
+        },
+        "reducer_ms.fact_movement": {
+          "median": 0.003,
+          "min": 0.003,
+          "max": 0.004
+        },
+        "reducer_ms.fact_sensory": {
+          "median": 30.226,
+          "min": 28.034,
+          "max": 37.084
+        },
+        "reducer_ms.fact_spatial": {
+          "median": 0.146,
+          "min": 0.138,
+          "max": 0.178
+        },
+        "reducer_ms.fact_step": {
+          "median": 0.026,
+          "min": 0.025,
+          "max": 0.038
+        },
+        "reducer_ms.facts": {
+          "median": 30.376,
+          "min": 28.176,
+          "max": 37.265
+        },
+        "reducer_ms.finalize": {
+          "median": 0.096,
+          "min": 0.086,
+          "max": 0.114
+        },
+        "reducer_ms.world": {
+          "median": 1.816,
+          "min": 1.551,
+          "max": 2.132
+        }
+      },
+      "all_state_and_transition_values_exact": true
+    }
+  },
+  "limitations": [
+    "Headless diagnostic, not final viewport click-to-motion performance. First batch ran while the user preview was open. Final batch has visible timing variance; no strict latency promise.",
+    "Journal staging reads the identical already-persisted file in this diagnostic; this is not a measurement of fresh write/flush durability.",
+    "Public standalone reduce_operation deliberately retains its deep-copy cost; only the owned canonical journal transaction shares private immutable record leaves.",
+    "Broader SDK/replay/compiler and actual viewport route validation is performed separately by the parent integration lane."
+  ],
+  "raw_evidence": [
+    ".runtime/canonical-owned/baseline.json",
+    ".runtime/canonical-owned/paired.log",
+    ".runtime/canonical-owned/paired.json",
+    ".runtime/canonical-owned/audience-attribution.json"
+  ],
+  "fixture_files": [
+    ".runtime/canonical-owned/state86.bin",
+    ".runtime/canonical-owned/packet87.bin",
+    ".runtime/canonical-owned/result87.bin"
+  ],
+  "commands": [
+    "Godot --headless --path <project> --script res://tests/sdk_retained_transaction_checks.gd -- --cases=<Python reducer oracle JSON>",
+    "Godot --headless --path <project> --script res://tests/sdk_cell_checks.gd -- --cases=<Python reducer oracle JSON>",
+    "Godot --headless --path <project> --script res://tests/sdk_journal_checks.gd",
+    "Godot --headless --path <project> --script res://.runtime/canonical-owned/compare.gd (requires the captured local fixtures and preserved baseline scripts)"
+  ]
+}

@@ -146,6 +146,7 @@ static func uuid() -> String:
     return "%s-%s-%s-%s-%s" % [value.substr(0,8),value.substr(8,4),value.substr(12,4),value.substr(16,4),value.substr(20,12)]
 
 func start(config: Dictionary) -> Dictionary:
+    journal.profile_enabled = transport.profiling_enabled()
     var opened = journal.open(config.get("journal", "user://sessions/" + uuid()),false,false)
     if not opened.ok: return opened
     start_ms = Time.get_ticks_msec()
@@ -177,7 +178,9 @@ func _consume(packet: Dictionary, raw: PackedByteArray) -> Dictionary:
     var worker = _ensure_preparer()
     if not worker.ok: return worker
     wake.post()
-    return {"ok":true,"value":null}
+    var reply = {"ok":true,"value":null}
+    if journal.profile_enabled: reply.profile_phases = journal.last_profile
+    return reply
 
 func _prepare_loop() -> void:
     while not _stopping():

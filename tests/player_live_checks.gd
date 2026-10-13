@@ -117,7 +117,7 @@ func movement(behavior: String, required: bool) -> bool:
         scene.select_behavior(behavior)
         if not await until(func():return ready() and not scene.selected_action.is_empty() and not scene.selection_preview.is_empty(),"Native action selection admits target preview"): return false
         scene.choose_target(target)
-    check(scene.command_busy and scene.pending_request.kind == "preview", "Scene action starts native preview: " + behavior)
+    check(scene.command_busy and scene.pending_request.kind == ("command" if behavior=="action.move" else "preview"), "Scene submits complete movement or previews compound action: " + behavior)
     var samples: Array = []
     var deadline = Time.get_ticks_msec()+60000
     while healthy() and Time.get_ticks_msec() < deadline:

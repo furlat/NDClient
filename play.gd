@@ -1042,6 +1042,17 @@ func _environment_sources_ready() -> bool:
 
 func _adopt_media_plan(completed: Dictionary) -> void:
     if completed.is_empty() or completed.key[0] != timeline.initialization_revision: return
+    if completed.get("stage","")=="optional":
+        # Optional families may finish after the requested group/window changed.
+        # They never replace required plans or re-open their readiness boundary.
+        if completed.key != media_requested_key: return
+        if completed.has("error"):
+            if completed.error not in presentation_errors: presentation_errors.append(completed.error)
+            return
+        catalog_cache.merge(completed.get("source_files",{}),false)
+        MediaWarmup.adopt_encounter(media_warmup,completed.value.encounter,timeline.initialization_revision)
+        media_plan_key = []
+        return
     # Worker-published raw authoring is immutable; avoid synchronous JSON loads
     # when this exact prepared outfit/world first binds on the scene thread.
     catalog_cache.merge(completed.get("source_files",{}),false)
@@ -1059,7 +1070,8 @@ func _adopt_media_plan(completed: Dictionary) -> void:
         return
     media_metadata_ms = completed.elapsed_ms
     var value: Dictionary = completed.value
-    MediaWarmup.adopt_encounter(media_warmup,value.encounter,timeline.initialization_revision)
+    MediaWarmup.adopt_required(media_warmup,timeline.initialization_revision)
+    if value.has("encounter"): MediaWarmup.adopt_encounter(media_warmup,value.encounter,timeline.initialization_revision)
     var ids: Array = completed.key[1]
     var first_fixtures = {}
     var next_fixtures = {}
@@ -1113,22 +1125,34 @@ func _prune_character_media() -> void:
 
 func _warm_media() -> void:
     _adopt_media_plan(MediaWarmup.poll_plan(media_warmup))
-    var loaded = MediaWarmup.poll(media_warmup)
-    if loaded.is_empty(): return
-    if loaded.has("error"):
-        var message: String = loaded.error
-        if not message in presentation_errors: presentation_errors.append(message)
-        if media_plan.required.has(loaded.path) or media_environment_required.has(loaded.path): media_issue = message
-        return
-    var started = Time.get_ticks_usec()
-    source_images[loaded.path] = loaded.image
-    if loaded.has("energy"): fixture_frame_energy[loaded.path] = loaded.energy
-    if loaded.has("emission_centroid"): fixture_frame_centroids[loaded.path] = loaded.emission_centroid
-    if not textures.has(loaded.path): textures[loaded.path] = ImageTexture.create_from_image(loaded.image)
-    texture_last_use[loaded.path] = Time.get_ticks_msec()
-    MediaWarmup.published(media_warmup,loaded)
-    _prune_character_media()
-    FrameProfile.end_phase(profile,"media_upload",started)
+    var tick = Time.get_ticks_usec()
+    var count = 0
+    var required = 0
+    # At least one complete image may publish even if it alone exceeds budget.
+    # Continue cheap required uploads in this frame; optional warming gets at
+    # most one publication and never consumes a required backlog's turn.
+    while count < MediaWarmup.PUBLICATIONS_PER_FRAME:
+        if count>0 and Time.get_ticks_usec()-tick>=MediaWarmup.PUBLICATION_BUDGET_USEC: break
+        var loaded = MediaWarmup.poll(media_warmup,count>0)
+        if loaded.is_empty(): break
+        count += 1
+        if media_warmup.wanted.has(loaded.path): required += 1
+        if loaded.has("error"):
+            var message: String = loaded.error
+            if not message in presentation_errors: presentation_errors.append(message)
+            if media_plan.required.has(loaded.path) or media_environment_required.has(loaded.path): media_issue = message
+            continue
+        var started = Time.get_ticks_usec()
+        source_images[loaded.path] = loaded.image
+        if loaded.has("energy"): fixture_frame_energy[loaded.path] = loaded.energy
+        if loaded.has("emission_centroid"): fixture_frame_centroids[loaded.path] = loaded.emission_centroid
+        if not textures.has(loaded.path): textures[loaded.path] = ImageTexture.create_from_image(loaded.image)
+        texture_last_use[loaded.path] = Time.get_ticks_msec()
+        MediaWarmup.published(media_warmup,loaded)
+        _prune_character_media()
+        FrameProfile.end_phase(profile,"media_upload",started)
+    media_warmup.publication = {"count":count,"required":required,"optional":count-required,
+        "elapsed_ms":(Time.get_ticks_usec()-tick)/1000.0,"budget_ms":MediaWarmup.PUBLICATION_BUDGET_USEC/1000.0}
 
 func _sample_actors() -> void:
     var rendered_state = timeline.presentation_state()
@@ -1565,11 +1589,24 @@ func _request_selection(auto_confirm: bool) -> void:
         "discovery_generation":available_actions.discovery_generation,"correlation_id":Session.uuid(),"selection":preview_selection})
 
 func _execute_admitted(value: Dictionary, keep_approach: bool = false) -> void:
+    if not command_ready() or not Interaction.owns_action(available_actions,value.action): return
     cancel_selection(not keep_approach)
     selected_action = value.action
     selected_mode = selected_action.behavior_id
     target_selection = value.selection.duplicate(true)
+    if _submit_ready_move(): return
     _request_selection(true)
+
+func _submit_ready_move() -> bool:
+    # Choices already admits this complete native destination/path selection.
+    # Preview is optional on the protocol; hover can still show its route while
+    # a click submits directly. Compound and extra-position actions keep Preview.
+    if not command_ready() or not Interaction.owns_action(available_actions,selected_action): return false
+    if selected_action.behavior_id != "action.move" or not selected_action.can_afford: return false
+    if selected_action.target_type not in ["position","position_path"] or selected_action.get("position_selection") != null: return false
+    if target_selection.target_indices.size() != 1 or not target_selection.extra_target_positions.is_empty(): return false
+    _submit({"kind":"execute_selection","discovery_generation":available_actions.discovery_generation,"selection":target_selection.duplicate(true)})
+    return true
 
 func confirm_selection() -> void:
     if not command_ready() or selected_action.is_empty() or not selection_preview.get("can_confirm",false): return
@@ -1693,6 +1730,7 @@ func choose_target(position: Array, actor_id: String = "") -> void:
         target_selection.target_indices.append(candidate.index)
         var position_spec: Variant = selected_action.get("position_selection")
         var explicit = selected_action.target_type == "multi_entity" or (position_spec != null and position_spec.kind in ["path","entity_destination"])
+        if not explicit and _submit_ready_move(): return
         _request_selection(not explicit)
         return
     var selected: Dictionary = {}

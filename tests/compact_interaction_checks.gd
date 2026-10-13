@@ -39,7 +39,7 @@ func _initialize() -> void: run.call_deferred()
 func run() -> void:
     var attack = row("action.attack","entity",0)
     attack.performs_attack=true; attack.weapon_slot="MELEE_MAIN"
-    var move = row("action.move","position",1,1)
+    var move = row("action.move","position_path",1,1)
     move.variant_facets=[{"key":"movement","value":"walking"}]
     var opened = row("action.open","object",2,2)
     opened.interaction_affordance={"surface":"world"}
@@ -79,7 +79,7 @@ func run() -> void:
     check(player.requests[-1].auto,"Existing self confirm behavior is preserved")
     player.cancel_selection(); player.requests.clear()
     player.choose_target([4,5])
-    check(player.requests.size()==1 and player.requests[0].selection.target_indices==[23],"Unselected movement click uses compact choices")
+    check(player.requests.is_empty() and player.submitted[-1].selection.target_indices==[23],"Unselected movement submits its admitted destination without a Preview roundtrip")
     player.cancel_selection(); player.requests.clear()
     player.choose_target([2,3],"goblin")
     check(player.requests.size()==1 and player.requests[0].selection==Interaction.selection(attack,[7]),"Unselected attack keeps discovery index zero and target index seven")
@@ -181,11 +181,19 @@ func native_number_cases(player: ClickPlayer, choices: Dictionary) -> void:
     check(not approach.is_empty() and approach.selection.target_indices[0]==23,"Approach accepts numeric-equal contacts without changing hazard/cost selection")
     player.cancel_selection();player.requests.clear();player.available_actions=native
     player.choose_target([4,5])
-    check(player.requests.size()==1 and player.requests[0].selection.target_indices[0]==23,"Integer movement click starts the offered native JSON action")
+    check(player.requests.is_empty() and player.submitted[-1].selection.target_indices[0]==23 and player.submitted[-1].discovery_generation==native.discovery_generation,"Integer movement click directly submits the exact native index and generation")
     player.cancel_selection();player.requests.clear()
     player.select_action(native_move);player.requests.clear();player.choose_target([4,5])
-    check(player.requests.size()==1 and player.requests[0].selection.target_indices[0]==23,"Selected movement also accepts integer clicks into float domains")
+    check(player.requests.is_empty() and player.submitted[-1].selection.target_indices[0]==23,"Selected movement also directly submits integer clicks into float domains")
     check(native==snapshot and typeof(native.positions[1][0])==TYPE_FLOAT,"Coordinate selection does not normalize or mutate the admitted response")
+    var submitted: int = player.submitted.size()
+    player._execute_admitted({"action":native_move,"selection":Interaction.selection(native_move,[target.index],false)})
+    check(player.submitted.size()==submitted+1 and not player.submitted[-1].selection.prefer_safe,"Direct movement preserves explicit hazardous-route preference")
+    submitted=player.submitted.size()
+    player._execute_admitted({"action":native_move.duplicate(true),"selection":Interaction.selection(native_move,[target.index])})
+    check(player.submitted.size()==submitted,"A formerly borrowed or copied row cannot bypass current discovery ownership")
+    player._execute_admitted({"action":native_move,"selection":{"action_index":native_move.discovery_index,"target_indices":[target.index],"extra_target_positions":[[8,9]],"prefer_safe":true}})
+    check(player.submitted.size()==submitted and player.requests.size()==1,"Additional position selection retains Preview instead of assuming completeness")
 
     var compound: Dictionary = JSON.parse_string(JSON.stringify({"entity_uuid":"hero","discovery_generation":0,
         "entity_actions":[row("spell.fixture_path","multi_entity",0)],"positions":[[2,3]],

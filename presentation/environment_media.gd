@@ -53,7 +53,7 @@ static func _cell(object: Dictionary) -> String:
 static func _index(cache: Dictionary) -> Dictionary:
     if not cache.has("__environment_demand_index"):
         cache.__environment_demand_index = {"tiles":{},"objects":{},"visual":{},"cells":{},"tile_paths":{},"cell_paths":{},
-            "contacts":{},"changed_row_builds":0,"plans":0}
+            "contacts":{},"tile_materials":{},"changed_row_builds":0,"plans":0}
     return cache.__environment_demand_index
 
 static func _update(index: Dictionary, tiles: Dictionary, objects: Dictionary, removed: Array,
@@ -62,8 +62,14 @@ static func _update(index: Dictionary, tiles: Dictionary, objects: Dictionary, r
     var contacts: Dictionary = senses.get("objects",{}) if senses != null else {}
     var cells = {}
     for key in tiles:
-        if index.tiles.get(key)==tiles[key]: continue
-        index.tiles[key] = tiles[key]
+        var tile: Dictionary = tiles[key]
+        var material: String = tile.surface.base_material
+        index.tiles[key] = tile
+        # WorldRows terrain rows have fixed orientation/boundaries; row_paths
+        # selects their sheets only by base material. Contact/elevation/light
+        # still reach the world renderer, but cannot change this source closure.
+        if index.tile_materials.get(key)==material: continue
+        index.tile_materials[key] = material
         var paths = {}
         _collect({"tiles":{key:tiles[key]},"objects":{},"senses":senses},paths,cache)
         index.tile_paths[key] = paths
@@ -114,23 +120,32 @@ static func plan(state: Dictionary, groups: Array, cache: Dictionary) -> Diction
     var required = {}
     var upcoming = {}
     if state.is_empty(): return {"required":required,"upcoming":upcoming,"fixtures":{},"disclosed":{}}
+    var phase_started = Time.get_ticks_usec()
+    var phases = {"initial_update":0.0,"all_paths":0.0,"commit_updates":0.0}
     var index = _index(cache)
     index.plans += 1
     # Index only the last requested map, never historical worlds. Full table
     # comparison happens once per plan; expensive row/join conversion happens
     # only for changed records and their original shared wall cell.
     for key in index.tiles.keys():
-        if not state.tiles.has(key): index.tiles.erase(key); index.tile_paths.erase(key)
+        if not state.tiles.has(key): index.tiles.erase(key); index.tile_paths.erase(key); index.tile_materials.erase(key)
     var removed: Array = []
     for id in index.objects:
         if not state.objects.has(id): removed.append(id)
     var senses: Variant = state.senses
     _update(index,state.tiles,state.objects,removed,senses,cache)
+    phases.initial_update = (Time.get_ticks_usec()-phase_started)/1000.0
+    phase_started = Time.get_ticks_usec()
     required = _all_paths(index)
+    phases.all_paths += (Time.get_ticks_usec()-phase_started)/1000.0
     var disclosed: Dictionary = required.duplicate()
     for group_index in range(groups.size()):
         var paths: Dictionary = required if group_index==0 else upcoming
-        if group_index>0: paths.merge(_all_paths(index))
+        if group_index>0:
+            phase_started = Time.get_ticks_usec()
+            paths.merge(_all_paths(index))
+            phases.all_paths += (Time.get_ticks_usec()-phase_started)/1000.0
+        phase_started = Time.get_ticks_usec()
         var group: Dictionary = groups[group_index]
         for key in group.get("staged_tiles",{}):
             if not index.tiles.has(key):
@@ -142,9 +157,10 @@ static func plan(state: Dictionary, groups: Array, cache: Dictionary) -> Diction
             # Existing paths were included at group entry. Add only changed
             # closures, preserving the exhaustive within-group union.
             paths.merge(_update(index,delta.get("tiles",{}),delta.get("objects",{}),delta.get("objects_removed",[]),senses,cache))
+        phases.commit_updates += (Time.get_ticks_usec()-phase_started)/1000.0
     var fixtures = {}
     for paths in [required,upcoming]:
         for path in paths:
             if cache.get("__live_fixture_frames",{}).has(path): fixtures[path] = true
     return {"required":required,"upcoming":upcoming,"fixtures":fixtures,"disclosed":disclosed,
-        "diagnostics":{"plans":index.plans,"changed_row_builds":index.changed_row_builds}}
+        "diagnostics":{"plans":index.plans,"changed_row_builds":index.changed_row_builds,"phases":phases}}

@@ -42,10 +42,11 @@ func parallel_sources(environment: Dictionary) -> void:
         "Six real PNG requests dispatch exactly four owned workers before any publication")
     var published = []
     var peak = int(Media.diagnostics(data).decode_jobs)
-    for expected in wanted:
+    for _index in wanted.size():
         var result = await loaded(data)
         peak = maxi(peak,int(Media.diagnostics(data).decode_jobs))
-        check(result.has("image") and result.get("path")==expected,"Concurrent completion is published in original demand order: "+expected)
+        var expected: String = result.get("path","")
+        check(result.has("image") and wanted.has(expected) and expected not in published,"Concurrent completion publishes one requested original: "+expected)
         if not result.has("image"): Media.close(data); return
         var reference: Image = original[expected]
         check(result.image.get_size()==reference.get_size() and result.image.get_format()==reference.get_format()
@@ -55,7 +56,7 @@ func parallel_sources(environment: Dictionary) -> void:
         check(Media.ready(data,{expected:true}),"Caller publication makes only its completed source ready: "+expected)
         published.append(result.path)
         check(int(Media.diagnostics(data).decode_jobs)<=4,"Concurrent worker count remains bounded through refill")
-    check(published==wanted.keys() and data.decoded==6 and data.pending.is_empty() and data.decode_jobs.is_empty()
+    check(published.size()==wanted.size() and published.all(func(path):return wanted.has(path)) and data.decoded==6 and data.pending.is_empty() and data.decode_jobs.is_empty()
         and Media.ready(data,wanted),"Every original request publishes once with complete final readiness")
     Media.close(data)
     var closing = Media.create()
@@ -68,6 +69,66 @@ func parallel_sources(environment: Dictionary) -> void:
         and Media.poll(closing).is_empty() and not Media.ready(closing,wanted),"Close joins every owned worker and never publishes unfinished sources")
     parallel_evidence = {"sources":wanted.keys(),"publication_order":published,"worker_limit":4,
         "observed_peak":peak,"close_ms":Time.get_ticks_msec()-started}
+
+func held_decode(request: Dictionary, result: Dictionary, release: Semaphore) -> void:
+    release.wait()
+    Media._decode(request,result)
+
+func completed_later(environment: Dictionary, optional_slots: bool) -> void:
+    # Hold one genuine PNG worker, rather than relying on scheduler timing or
+    # image size. The other three complete before any publication is attempted.
+    var paths: Array = environment.required.keys().slice(0,6)
+    var all_paths = {}; var wanted = {}
+    for i in paths.size():
+        all_paths[paths[i]] = Catalog.media_path(paths[i])
+        if not optional_slots or i in [0,4,5]: wanted[paths[i]] = all_paths[paths[i]]
+    var data = Media.create()
+    Media.adopt_encounter(data,{"revision":1,"paths":all_paths,"environment":all_paths,
+        "estimates":Encounter.estimates(all_paths,all_paths,{},{}),"errors":[]},1)
+    Media.demand(data,wanted,all_paths)
+    var requests = {}
+    for request in data.pending: requests[request.path] = request
+    data.pending.clear()
+    for i in [4,5]: data.pending.append(requests[paths[i]])
+    var release = Semaphore.new()
+    for i in range(4):
+        var result = {}
+        var request: Dictionary = requests[paths[i]]
+        var work = held_decode.bind(request,result,release) if i==0 else Media._decode.bind(request,result)
+        var task = WorkerThreadPool.add_task(work)
+        data.decode_jobs.append({"task":task,"path":paths[i],"result":result})
+    var deadline = Time.get_ticks_msec()+10000
+    while data.decode_jobs.slice(1).any(func(job):return not WorkerThreadPool.is_task_completed(job.task)) and Time.get_ticks_msec()<deadline:
+        await process_frame
+    var prefix = "Completed optional slots" if optional_slots else "Slow first required"
+    check(not WorkerThreadPool.is_task_completed(data.decode_jobs[0].task),prefix+": first worker remains deliberately held")
+    if optional_slots:
+        check(Media.poll(data,true).is_empty(),prefix+": required-only publication respects optional frame allowance")
+    var next = Media.poll(data)
+    check(next.get("path")==paths[1] and next.has("image"),prefix+": ready later worker publishes without the held first worker")
+    if next.has("image"): Media.published(data,next)
+    check(data.decode_jobs.size()==4 and data.decode_jobs.any(func(job):return job.path==paths[4]),prefix+": freed slot immediately admits queued required work")
+    check(not Media.ready(data,wanted) and not Media.boot_ready(data),prefix+": missing required image still holds exact readiness and boot")
+    if optional_slots:
+        deadline=Time.get_ticks_msec()+10000
+        while data.decode_jobs.any(func(job):return job.path==paths[4] and not WorkerThreadPool.is_task_completed(job.task)) and Time.get_ticks_msec()<deadline:
+            await process_frame
+        var required = Media.poll(data,true)
+        check(required.get("path")==paths[4] and required.has("image"),prefix+": newly ready required result precedes completed optional results")
+        if required.has("image"): Media.published(data,required)
+    release.post()
+    var published = {}
+    if next.has("image"): published[next.path]=true
+    while not data.decode_jobs.is_empty() or not data.pending.is_empty():
+        var result = await loaded(data)
+        if result.is_empty(): check(false,prefix+": remaining original workers complete"); break
+        check(not published.has(result.path),prefix+": no repeated source publication")
+        published[result.path]=true
+        if result.has("image"):
+            check(result.image.get_data()==Image.load_from_file(all_paths[result.path]).get_data(),prefix+": original image bytes preserved")
+            Media.published(data,result)
+    check(Media.ready(data,wanted) and Media.boot_ready(data) and data.decoded==6,prefix+": final required gate completes after all originals publish once")
+    Media.close(data)
 
 func run() -> void:
     var parsed = Protocol.parse_json(FileAccess.get_file_as_bytes("res://.runtime/player-runs/20261011T223103.996259Z/state.json"))
@@ -114,7 +175,9 @@ func run() -> void:
             "Two worker requests retain one original source residency and truthful queue accounting")
     Media.close(data)
     await parallel_sources(environment)
+    await completed_later(environment,false)
+    await completed_later(environment,true)
     var report = {"checks":checks,"failures":failures,"source":path,"parallel":parallel_evidence,
-        "scope":"Actual PNG worker dispatch, role promotion, bounded parallel publication order, original bytes and close; caller publication acknowledgements require no GPU allocation."}
+        "scope":"Actual PNG worker dispatch, role promotion, bounded completion-driven publication, original bytes and close; caller publication acknowledgements require no GPU allocation."}
     FileAccess.open("res://generated/media_role_race_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print(JSON.stringify(report)); quit(0 if failures.is_empty() else 1)

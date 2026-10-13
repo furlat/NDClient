@@ -106,6 +106,18 @@ func _parser_checks() -> void:
     check(not parser.feed("a".repeat(1041).to_utf8_buffer()).ok,"Unfinished record capped")
     parser = SSE.new()
     check(parser.feed((char(0xfeff)+"data: {}\n\n").to_utf8_buffer()).value.size()==1,"Initial UTF-8 BOM accepted")
+    var protocol = Protocol.new()
+    var identity_raw = JSON.stringify(protocol.identity).to_utf8_buffer()
+    var nul_raw = identity_raw.duplicate();nul_raw.append(0)
+    for raw in [identity_raw,identity_raw.slice(0,identity_raw.size()-1),nul_raw]:
+        parser=SSE.new(protocol)
+        var framed="data: ".to_utf8_buffer();framed.append_array(raw);framed.append_array("\n\n".to_utf8_buffer())
+        var record=parser.feed(framed)
+        check(record.ok and record.value.size()==1,"SSE retains exact complete payload before JSON admission")
+        if not record.ok or record.value.size()!=1:continue
+        var public_result=protocol.decode("ProtocolIdentity",raw)
+        var streamed=protocol._decode_framed_event("ProtocolIdentity",record.value[0].raw)
+        check(streamed.ok==public_result.ok and (not streamed.ok or Protocol._equal(streamed.value,public_result.value)),"Stream admission preserves strict values and rejects malformed JSON/NUL")
     check(not Transport.parse_origin("https://user:pass@host").ok,"Credential URL rejected")
     check(not Transport.parse_origin("https://host/?x=1").ok,"Query URL rejected")
     check(Transport.parse_origin("https://[::1]:443/base/").value == {"host":"::1","port":443,"tls":true,"prefix":"/base"},"IPv6 and deployment prefix")

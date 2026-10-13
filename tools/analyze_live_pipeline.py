@@ -73,9 +73,12 @@ def summarize(directory):
             'server_cpu_profiled':command_worker['cpu_profiled'],
             'server_nested_hooks':command_worker.get('action_phase_hooks', True),
             'sse_schema_ms':duration(decode), 'canonical_consumer_ms':duration(consumer),
+            'sse_admission_phases_ms':decode.get('phases_ms',{}) if decode else {},
+            'canonical_phases':consumer.get('phases',{}) if consumer else {},
             'presentation_packet_ms':(prepare['compile_started_us']-prepare['packet_started_us'])/1000 if prepare else None,
             'presentation_compile_ms':(prepare['time_us']-prepare['compile_started_us'])/1000 if prepare else None,
             'client_to_prepared_ms':(prepare['time_us']-packet['time_us'])/1000 if prepare and packet else None,
+            'prepared_to_first_movement_ms':first-(prepare['time_us']-start)/1000 if first is not None and prepare else None,
             'client_after_complete_sse_ms':first-packet_ms if first is not None and packet_ms is not None else None,
             'frame_ms':command['frame_ms'], 'client_phase_peaks_ms':command['phase_peaks'],
             'sse_framing_cpu_ms':sum(duration(item) for item in events if item['stage']=='sse_framing')}

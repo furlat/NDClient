@@ -40,5 +40,14 @@ func _init() -> void:
 	var upper := cursor.duplicate(true)
 	upper.game_epoch = "ABCDEFAB-ABCD-ABCD-ABCD-ABCDEFABCDEF"
 	check(p.normalize("PlayerCursor", upper).game_epoch == upper.game_epoch.to_lower(), "UUID canonicalization only in reducer copy")
+	# Union admission must still honor constraints on the containing schema.
+	p.schema["$defs"].GuardedObject = {"anyOf":[{"type":"object"}],"required":["mode"],"properties":{"mode":{"const":"ok"}},"additionalProperties":false}
+	check(p.validate("GuardedObject",{"mode":"ok"}).ok,"Union object retains valid constrained value")
+	for value in [{},{"mode":"bad"},{"mode":"ok","extra":true}]:
+		check(not p.validate("GuardedObject",value).ok,"Union sibling object constraints survive: "+str(value))
+	p.schema["$defs"].GuardedArray = {"anyOf":[{"type":"array"}],"minItems":2,"uniqueItems":true,"items":{"type":"integer"}}
+	check(p.validate("GuardedArray",[1,2]).ok,"Union array retains valid constrained value")
+	for value in [[1],[1,1],[1,"x"]]:
+		check(not p.validate("GuardedArray",value).ok,"Union sibling array constraints survive: "+str(value))
 	print(JSON.stringify({"checks":count, "failures":failures}))
 	quit(0 if failures.is_empty() else 1)

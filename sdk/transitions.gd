@@ -15,13 +15,24 @@ static func snapshot_senses(senses: Variant) -> Variant:
     result.entities = senses.entities.duplicate()
     return result
 
+static func snapshot_actor(actor: Dictionary) -> Dictionary:
+    # An installed actor owns its immutable appearance/condition/layer/item
+    # metadata. Facts replace those leaves; only these shells are edited later.
+    var result: Dictionary = actor.duplicate()
+    result.visual_loadout = actor.visual_loadout.duplicate()
+    if actor.controlled_items != null:
+        var items: Array = []
+        for item in actor.controlled_items: items.append(item.duplicate())
+        result.controlled_items = items
+    return result
+
 static func actor_inputs(target: Dictionary, node: Dictionary) -> Dictionary:
     var result = {}
     if node.fact != null:
         for field in ["entity_uuid", "source_entity_uuid", "target_entity_uuid", "observer_uuid"]:
             var identity: Variant = node.fact.get(field)
-            if identity != null and target.actors.has(identity):
-                result[identity] = target.actors[identity].duplicate(true)
+            if identity != null and target.actors.has(identity) and not result.has(identity):
+                result[identity] = snapshot_actor(target.actors[identity])
     return result
 
 static func capture_delta(target: Dictionary, node: Dictionary, observations: Array, update: Variant) -> Dictionary:
@@ -44,7 +55,7 @@ static func capture_delta(target: Dictionary, node: Dictionary, observations: Ar
         if fact.kind == "spatial" and fact.entity_uuid != null and target.spatial_commit_cursors.has(fact.entity_uuid):
             delta.spatial_commit_cursors[fact.entity_uuid] = target.spatial_commit_cursors[fact.entity_uuid]
     for identity in actors:
-        if target.actors.has(identity): delta.actors[identity] = target.actors[identity].duplicate(true)
+        if target.actors.has(identity): delta.actors[identity] = snapshot_actor(target.actors[identity])
     for observation in observations:
         if observation.contact != null:
             delta.set.senses = snapshot_senses(target.senses)

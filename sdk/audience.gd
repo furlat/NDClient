@@ -202,6 +202,38 @@ static func _contacts_retained(perception: Dictionary, objects: bool) -> Diction
                 selected[identity] = contact
     return selected
 
+# Only sensory updates change object contacts in a composed view. Re-evaluate
+# changed identities across observers, retaining the original full-walk key order.
+# Entity contacts remain exhaustive because spatial/observation facts edit them.
+static func _object_contacts_after(perception: Dictionary, previous: Dictionary, event: Dictionary) -> Dictionary:
+    var changed: Dictionary = event.object_contacts_changed.duplicate()
+    for identity in event.object_contacts_removed: changed[identity] = true
+    # Entity and object observations share the observer/identity cursor table.
+    # An overlapping identity can therefore change an object's winner too.
+    for identity in event.entity_contacts_changed:
+        if previous.has(identity): changed[identity] = true
+    if changed.is_empty(): return previous
+    var selected: Dictionary = previous.duplicate()
+    for identity in changed:
+        var winner: Variant = null
+        var best_visual = -1
+        var best_cursor = -1
+        var best_observer = ""
+        for observer in perception.members:
+            var contact: Variant = perception.members[observer].objects.get(identity)
+            if contact == null: continue
+            var visual = 1 if contact.visual else 0
+            var cursor: int = perception.contact_cursors.get(observer + "," + identity, -1)
+            if winner == null or visual > best_visual or (visual == best_visual and (cursor > best_cursor or (cursor == best_cursor and observer < best_observer))):
+                winner = contact; best_visual = visual; best_cursor = cursor; best_observer = observer
+        if winner == null: selected.erase(identity)
+        else: selected[identity] = winner
+    var result = {}
+    for observer in perception.members:
+        for identity in perception.members[observer].objects:
+            if not result.has(identity): result[identity] = selected[identity]
+    return result
+
 static func join_effect(first: Dictionary, second: Dictionary) -> Variant:
     if first.owner_revision == null or first.owner_revision != second.owner_revision: return null
     var left: Dictionary = first.duplicate(true)
@@ -360,7 +392,7 @@ static func _view_after(perception: Dictionary, observer: String, previous: Vari
     result.paths_dirty = false
     for member in perception.members.values(): result.paths_dirty = result.paths_dirty or member.paths_dirty
     result.entities = _contacts_retained(perception, false)
-    result.objects = _contacts_retained(perception, true)
+    result.objects = _object_contacts_after(perception, previous.objects, event)
     result.spatial_effects = effects(perception)
     composed.source = result
     return result
@@ -386,20 +418,42 @@ static func _cell_index(points: Array) -> Dictionary:
 static func _has_cell(indexed: Dictionary, point: Array) -> bool:
     return indexed.columns.has(point[0]) and indexed.columns[point[0]].has(point[1])
 
+static func _cell_lower_bound(points: Array, point: Array) -> int:
+    var first = 0
+    var last = points.size()
+    while first < last:
+        var middle: int = (first + last) >> 1
+        var candidate: Array = points[middle]
+        if candidate[0] < point[0] or (candidate[0] == point[0] and candidate[1] < point[1]):
+            first = middle + 1
+        else:
+            last = middle
+    return first
+
 static func _update_cells(indexed: Dictionary, added: Array, removed: Array) -> Array:
     var changed = false
     var columns: Dictionary = indexed.columns
+    var ordered: Array = indexed.ordered
+    var incremental: bool = (added.size() + removed.size()) * 8 < ordered.size()
     for point in removed:
         if not _has_cell(indexed,point): continue
+        if incremental:
+            if not changed: ordered = ordered.duplicate()
+            ordered.remove_at(_cell_lower_bound(ordered,point))
+        changed = true
         columns[point[0]].erase(point[1])
         if columns[point[0]].is_empty(): columns.erase(point[0])
-        changed = true
     for point in added:
         if _has_cell(indexed,point): continue
-        if not columns.has(point[0]): columns[point[0]] = {}
-        columns[point[0]][point[1]] = point.duplicate()
+        if incremental and not changed: ordered = ordered.duplicate()
         changed = true
-    if changed: indexed.ordered = _ordered_cells(columns)
+        if not columns.has(point[0]): columns[point[0]] = {}
+        var owned: Array = point.duplicate()
+        columns[point[0]][point[1]] = owned
+        if incremental: ordered.insert(_cell_lower_bound(ordered,owned),owned)
+    # Published arrays stay immutable. Small deltas use native array moves and
+    # exact integer comparisons instead of rebuilding/sorting every known cell.
+    if changed: indexed.ordered = ordered if incremental else _ordered_cells(columns)
     return indexed.ordered
 
 static func _ordered_cells(columns: Dictionary) -> Array:

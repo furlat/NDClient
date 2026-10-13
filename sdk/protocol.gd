@@ -76,6 +76,20 @@ func decode(root_name: String, raw: PackedByteArray) -> Dictionary:
 	# The strict parser already establishes finite JSON-only values and depth.
 	return _validate_schema(root_name, parsed.value)
 
+func _decode_framed_event(root_name: String, raw: PackedByteArray, profile: bool = false) -> Dictionary:
+	# Internal SSE handoff: framing already validates each complete UTF-8 line.
+	# Joining those lines with LF preserves validity. Keep the same strict JSON,
+	# size, NUL and schema admission without scanning every UTF-8 byte twice.
+	if raw.size() > MAX_BYTES: return failure("JSON exceeds 64 MiB")
+	if raw.has(0): return failure("Godot strings cannot represent NUL characters")
+	var started := Time.get_ticks_usec() if profile else 0
+	var parsed := StrictJSON.new().parse(raw.get_string_from_utf8().trim_prefix(char(0xfeff)))
+	if not parsed.ok: return parsed
+	var admitted_at := Time.get_ticks_usec() if profile else 0
+	var result := _validate_schema(root_name, parsed.value)
+	if profile: result.phases_ms = {"strict_json":(admitted_at-started)/1000.0,"schema":(Time.get_ticks_usec()-admitted_at)/1000.0}
+	return result
+
 func decode_server_choices(raw: PackedByteArray) -> Dictionary:
 	# Explicit live-query trust boundary. The connected, identity-checked server
 	# owns the nested action data. Public decode and all journal/events stay strict.
@@ -229,8 +243,10 @@ func _check(original: Variant, value: Variant, path: String, depth: int) -> Stri
 	if value is Array:
 		if value.size() < spec.get("minItems", 0) or value.size() > spec.get("maxItems", 9223372036854775807): return path + " has invalid item count"
 		var prefix: Array = spec.get("prefixItems", [])
+		var items: Variant = spec.get("items", true)
+		if prefix.is_empty() and items is bool and items and not spec.get("uniqueItems", false): return ""
 		for i in value.size():
-			var rule: Variant = prefix[i] if i < prefix.size() else spec.get("items", true)
+			var rule: Variant = prefix[i] if i < prefix.size() else items
 			var issue := _check(rule, value[i], "", depth + 1)
 			if not issue.is_empty(): return path + "/" + str(i) + issue
 			if spec.get("uniqueItems", false):
@@ -240,13 +256,17 @@ func _check(original: Variant, value: Variant, path: String, depth: int) -> Stri
 		for key in spec.get("required", []):
 			if not value.has(key): return path + " missing " + key
 		var props: Dictionary = spec.get("properties", {})
+		var additional: Variant = spec.get("additionalProperties", true)
+		# A union wrapper often adds no child rules. Its selected branch was
+		# checked above; unconstrained children need no second recursive visit.
+		if props.is_empty() and additional is bool and additional and not spec.has("propertyNames"): return ""
 		for raw_key in value:
 			if typeof(raw_key) not in [TYPE_STRING, TYPE_STRING_NAME]: return path + " has non-string key"
 			var key := str(raw_key)
 			if spec.has("propertyNames"):
 				var key_issue := _check(spec.propertyNames, key, "", depth + 1)
 				if not key_issue.is_empty(): return path + "/<key>" + key_issue
-			var issue := _check(props.get(key, spec.get("additionalProperties", true)), value[raw_key], "", depth + 1)
+			var issue := _check(props.get(key, additional), value[raw_key], "", depth + 1)
 			if not issue.is_empty(): return path + "/" + key + issue
 	return ""
 

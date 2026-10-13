@@ -1710,3 +1710,69 @@ Priorities are full actor/state copy amplification, warm metadata gating and
 cold required-media publication; admission traversal and the optional Preview
 roundtrip are smaller candidates. These are diagnosis results, not implemented
 performance improvements. The live preview remains open for user feedback.
+
+
+## Live movement latency optimization — 13 October 2026
+
+Requested behavior: reduce the measured 318 ms Gallery click-to-motion delay.
+Boundary/input: actual viewport movement commands against the current schema 8
+server, plus the same recorded operations at the SDK/presentation boundary.
+Expected output: identical authoritative state, event ordering, authored visuals
+and resource readiness with lower client work and earlier first motion.
+
+1. Split existing canonical/media timing where needed. Reduce full actor/state
+   copy amplification inside owned transactions while retaining detached public
+   reducer results, event-time snapshots and rejected-operation atomicity.
+2. Remove redundant warm metadata work from required readiness; prepare upcoming
+   resources ahead and publish ready required textures within a measured frame
+   budget, retaining asset choices and required-resource gates.
+3. Remove measured redundant event-admission traversal. Complete single-target
+   movement may submit its admitted native selection without an unused Preview;
+   retain Preview for compound/extra-position interaction and hover guidance.
+4. Validate retained-input/event snapshots, rejection/replay equivalence, native
+   input/resource tests, then repeat the same real Gallery route. Inspect exact
+   click/packet/prepared/first-motion timings and frame tails; fix material
+   regressions, commit and reopen the user preview. No backend, shader, artwork,
+   prediction or event-order change is part of this task.
+
+render_audit owns canonical reducer/captures/journal and their checks. map_audit
+owns media planning/publication and their checks. Root owns transport/admission,
+input submission, integration and serialized native profiling. scope_review is
+plan-adherence, anti-slop and anti-OOP reviewer, with particular attention to
+snapshot aliasing and required-resource readiness. Agents remain in this task;
+no other chat communication. Artwork stays ignored. Native timing runs are serial.
+
+Completed movement optimization: private journal transactions share immutable
+installed records and copy mutable containers; public reducers remain detached.
+Actor snapshots protect mutable loadout/item shells. Sparse sensory cell updates
+and affected object-contact winners retain exact event-time values and ordering.
+SSE avoids duplicate UTF-8/unconstrained-child traversal while retaining strict
+JSON/schema admission. Complete admitted movement submits without an unused
+Preview; compound targeting retains it.
+
+Required media metadata now publishes before optional family estimates. Completed
+required images take priority within a 2 ms / eight-publication frame slice;
+individual uploads may exceed that slice. Native profiling caught an initial
+queue regression: a slow required decode held completed optional jobs in three
+worker slots. Completion-driven collection/refill fixes it; held-worker tests
+preserve the exact required-resource gate. Optional uploads remain one per frame.
+
+Final native Windows Forward+ Gallery run 20261013T152452.610938Z passed 644 checks
+over 58 actual commands, including 16 Gallery viewport movement clicks. Median
+click-to-motion fell from 317.728 to 220.508 ms (30.6%); all 29 moves improved and
+became input-ready on their playback-completion frame. No early choices were
+published, and all 58 commands stayed ready afterward. The route and packet-shape
+counts match the baseline; wire UUIDs differ. Canonical consumer median fell from
+90.850 to 50.266 ms. The first cold move improved from 386.662 to 311.969 ms.
+
+The SDK lane passes 12,326 checks; public ownership snapshots pass 339 checks,
+compiler/event snapshots 573, compact interaction 69, and focused authored-media
+source/role/queue fixtures pass. The three same-task reviewers found no remaining
+correctness blocker. No backend, shader, artwork, cache-cap or prediction changes.
+
+This is a response-latency improvement, not a claim that all rendering stalls are
+fixed: the large reveal still has a 112.396 ms command-window frame, and cold
+character sheets can require uploads at the 16 GiB combined cache limit.
+Evidence: generated/movement_latency_optimization.json and
+generated/movement_latency_live_pipeline.json, with paired identical-operation
+diagnostics in generated/canonical_owned_optimization.json.

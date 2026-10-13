@@ -164,6 +164,11 @@ API. They are retained only within the existing two-operation preparation window
 Overflow and cold replay reconstruct them from the original journal bytes.
 Cell lookups are local to each fold; published visible/seen arrays remain sorted,
 with full integer coordinates and independent event-time versions.
+The journal copies only containers that the next transaction can mutate, sharing
+immutable installed records with its earlier states. Public reducer functions
+still return fully detached values. Actor event snapshots own mutable loadout
+and item shells; later facts replace immutable leaves. The retained-transaction
+checks exercise later nested mutations and failures after successful fact folds.
 
 Schema 7 world updates install complete `tiles` before applying ordered
 `tile_changes` to known positions at that same event. Each patch creates a new

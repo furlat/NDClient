@@ -21,6 +21,19 @@ static func copy_target(target: Dictionary) -> Dictionary:
     # Received dictionaries are mutable in Godot; detach before every transaction.
     return target.duplicate(true)
 
+static func _retained_target(target: Dictionary) -> Dictionary:
+    # Journal-only transaction: previous published states/captures are read-only.
+    # Every container edited by the fold is private; installed record leaves are
+    # immutable or copied at insertion. Public reducer calls still deep-detach.
+    var result: Dictionary = target.duplicate()
+    for key in ["actors", "tiles", "objects", "spatial_commit_cursors"]:
+        result[key] = target[key].duplicate()
+    for identity in result.actors:
+        result.actors[identity] = Transitions.snapshot_actor(result.actors[identity])
+    result.senses = Transitions.snapshot_senses(target.senses)
+    result.combat_log_appends = target.combat_log_appends.duplicate()
+    return result
+
 static func _ordered_rows(rows: Array, cursors: Dictionary, identity_field: String) -> Array:
     # Python's sort is stable; Godot's is not. Equal cursors retain wire order.
     var order: Array = range(rows.size())
@@ -220,9 +233,9 @@ static func _apply_committed_player_fact_owned(target: Dictionary, fact: Diction
 static func reduce_nodes(target: Dictionary, nodes: Array, versions: Array, observations: Array, updates: Array) -> Dictionary:
     return _reduce_nodes_owned(copy_target(target), nodes, versions, observations, updates)
 
-# Only a detached transaction enters this fold. Intermediate failures discard
-# that candidate without touching a previously published state.
-static func _reduce_nodes_owned(result: Dictionary, nodes: Array, versions: Array, observations: Array, updates: Array, recorded: Variant = null) -> Dictionary:
+# Only a private transaction enters this fold. Intermediate failures discard
+# its mutable containers without touching a previously published state.
+static func _reduce_nodes_owned(result: Dictionary, nodes: Array, versions: Array, observations: Array, updates: Array, recorded: Variant = null, profile: Variant = null) -> Dictionary:
     # First compose arbitrary public inputs before reusing the transaction-local
     # cell indexes. Records remain private until the whole operation succeeds.
     var composed_senses = false
@@ -242,23 +255,33 @@ static func _reduce_nodes_owned(result: Dictionary, nodes: Array, versions: Arra
             _observe(result, pending[next])
             if recorded != null: admitted.append(pending[next])
             next += 1
+        var started: int = Time.get_ticks_usec() if profile != null else 0
         var inputs: Dictionary = Transitions.actor_inputs(result,node) if recorded != null else {}
+        if profile != null: _profile_elapsed(profile, "actor_inputs", started)
+        started = Time.get_ticks_usec() if profile != null else 0
         var update: Variant = world_updates.get(node.uuid)
         if update != null:
             var updated = apply_world_update(result, update)
             if not updated.ok: return updated
+        if profile != null: _profile_elapsed(profile, "world", started)
+        started = Time.get_ticks_usec() if profile != null else 0
         if not node.canceled and node.fact != null:
             var folded = _apply_committed_player_fact_owned(result, node.fact, int(indexes[node.uuid]), indexes, composed_senses, cells)
             if not folded.ok: return folded
             if node.fact.kind == "sensory": composed_senses = true
+        if profile != null:
+            _profile_elapsed(profile, "facts", started)
+            if not node.canceled and node.fact != null: _profile_elapsed(profile, "fact_" + str(node.fact.kind), started)
+        started = Time.get_ticks_usec() if profile != null else 0
         if recorded != null:
             recorded.events.append({"event_uuid":node.uuid, "source_index":indexes[node.uuid],
                 "actor_inputs":inputs, "delta":Transitions.capture_delta(result,node,admitted,update)})
+        if profile != null: _profile_elapsed(profile, "captures", started)
     while next < pending.size():
         var observation: Dictionary = pending[next]
         _observe(result, observation)
         if recorded != null:
-            recorded.trailing.actors[observation.actor.uuid] = result.actors[observation.actor.uuid].duplicate(true)
+            recorded.trailing.actors[observation.actor.uuid] = Transitions.snapshot_actor(result.actors[observation.actor.uuid])
             if observation.contact != null: recorded.trailing.set.senses = Transitions.snapshot_senses(result.senses)
         next += 1
     return success(result)
@@ -287,12 +310,12 @@ static func reduce_initialization(initialization: Dictionary, content_additions:
 static func reduce_lineage(target: Dictionary, lineage: Dictionary) -> Dictionary:
     return _reduce_lineage_owned(copy_target(target), lineage)
 
-static func _reduce_lineage_owned(target: Dictionary, lineage: Dictionary, recorded: Variant = null) -> Dictionary:
+static func _reduce_lineage_owned(target: Dictionary, lineage: Dictionary, recorded: Variant = null, profile: Variant = null) -> Dictionary:
     var audience = _lineage_audience(target, lineage)
     if not audience.ok: return audience
     if lineage.end_cursor <= target.reducer_cursor:
         return failure("player lineage precedes this reduction position")
-    var folded = _reduce_nodes_owned(target, lineage.events, lineage.version_rows, lineage.observations, lineage.world_updates, recorded)
+    var folded = _reduce_nodes_owned(target, lineage.events, lineage.version_rows, lineage.observations, lineage.world_updates, recorded, profile)
     if not folded.ok: return folded
     var result: Dictionary = folded.value
     result.reducer_cursor = lineage.end_cursor
@@ -311,16 +334,23 @@ static func reduce_operation(target: Dictionary, update: Dictionary) -> Dictiona
 
 # Internal bounded handoff: callers retain these owned, read-only event records
 # only after successful reduction (and journal commit when consuming live bytes).
-static func _reduce_operation_recorded(target: Dictionary, update: Dictionary) -> Dictionary:
-    return _reduce_operation(target, update, true)
+static func _reduce_operation_recorded(target: Dictionary, update: Dictionary, profile: Variant = null) -> Dictionary:
+    return _reduce_operation(target, update, true, profile)
 
-static func _reduce_operation(target: Dictionary, update: Dictionary, record_events: bool) -> Dictionary:
+# Only Journal uses retained canonical inputs. Callers that may mutate arbitrary
+# public results use the detached entrypoints above.
+static func _reduce_operation_retained(target: Dictionary, update: Dictionary, record_events: bool = false, profile: Variant = null) -> Dictionary:
+    return _reduce_operation(target, update, record_events, profile, true)
+
+static func _reduce_operation(target: Dictionary, update: Dictionary, record_events: bool, profile: Variant = null, retained: bool = false) -> Dictionary:
     var records = {"lineages":[]} if record_events else {}
     var audience = Audience.resolve(target.observer_uuid, target.audience)
     if not audience.ok: return audience
     if update.audience != audience.value:
         return failure("An operation cannot change its authorized audience")
-    var result = copy_target(target)
+    var started: int = Time.get_ticks_usec() if profile != null else 0
+    var result = _retained_target(target) if retained else copy_target(target)
+    if profile != null: _profile_elapsed(profile, "copy", started)
     if not update.content_additions.is_empty():
         var content = {}
         for row in result.content: content[content_key(row)] = row
@@ -337,10 +367,11 @@ static func _reduce_operation(target: Dictionary, update: Dictionary, record_eve
             return failure("Operation occurrence sequence has a gap")
         var recorded: Variant = {"lineage_uuid":lineage.lineage_uuid, "start_cursor":lineage.start_cursor,
             "end_cursor":lineage.end_cursor, "events":[], "trailing":Transitions.empty_delta()} if record_events else null
-        var folded = _reduce_lineage_owned(result, lineage, recorded)
+        var folded = _reduce_lineage_owned(result, lineage, recorded, profile)
         if not folded.ok: return folded
         result = folded.value
         if record_events: records.lineages.append(recorded)
+    started = Time.get_ticks_usec() if profile != null else 0
     var hud: Variant = update.hud
     if hud != null:
         if hud.generation != result.generation or hud.observer_uuid != result.observer_uuid or hud.revision > result.reducer_cursor or (result.hud_snapshot != null and hud.revision < result.hud_snapshot.revision):
@@ -352,6 +383,7 @@ static func _reduce_operation(target: Dictionary, update: Dictionary, record_eve
         if row.generation != result.generation or row.observer_uuid != result.observer_uuid or row.operation_end_cursor > result.reducer_cursor or row.encounter_log_index != first + i:
             return failure("Standalone log append is out of order or belongs to another audience")
     result.combat_log_appends.append_array(update.combat_log_appends.duplicate(true))
+    if profile != null: _profile_elapsed(profile, "finalize", started)
     var accepted = success(result)
     if record_events: accepted.transitions = records
     return accepted
@@ -437,3 +469,6 @@ static func index_player_lineage(lineage: Dictionary) -> Dictionary:
             if not result.results.has(key): result.results[key] = []
             result.results[key].append(node)
     return success(result)
+
+static func _profile_elapsed(profile: Dictionary, phase: String, started: int) -> void:
+    profile[phase] = float(profile.get(phase, 0.0)) + (Time.get_ticks_usec() - started) / 1000.0

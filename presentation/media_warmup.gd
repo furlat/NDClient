@@ -8,11 +8,14 @@ const EncounterMedia = preload("res://presentation/encounter_media.gd")
 const BUDGET_BYTES = 16 * 1024 * 1024 * 1024
 const EVICTIONS_PER_FRAME = 2
 const DECODE_WORKERS = 4
+const PUBLICATION_BUDGET_USEC = 2000
+const PUBLICATIONS_PER_FRAME = 8
 
 static func create() -> Dictionary:
     return {"pending":[],"queued":{},"wanted":{},"environment":{},"fixtures":{},"failed":{},"resident":{},
         "decode_jobs":[],"decoded":0,"evicted":0,
-        "plan_task":-1,"plan_pending":{},"plan_result":{},"plan_cache":{},
+        "plan_task":-1,"plan_pending":{},"optional_pending":{},"plan_result":{},"plan_cache":{},
+        "required_plan":false,"metadata_phases":{},"publication":{},
         "gpu_only":{},"cpu_required":{},"metadata_ms":0.0,"decode_ms":0.0,"metadata_jobs":0,
         "budget_bytes":maxi(0,int(ProjectSettings.get_setting("source_data/encounter_cache_mib",16384)))*1024*1024,
         "encounter":{},"encounter_epoch":-1,"preload_selected":{},"preload_skipped":0,"preload_estimated_bytes":0,
@@ -35,29 +38,64 @@ static func request_plan(data: Dictionary, key: Array, state: Dictionary, groups
     _start_plan(data)
 
 static func _start_plan(data: Dictionary) -> void:
-    if data.plan_task >= 0 or data.plan_pending.is_empty(): return
-    var request: Dictionary = data.plan_pending
-    data.plan_pending = {}
+    if data.plan_task >= 0: return
+    var request: Dictionary
+    var optional = false
+    if not data.plan_pending.is_empty():
+        request = data.plan_pending
+        data.plan_pending = {}; data.optional_pending = {}
+    elif not data.optional_pending.is_empty():
+        request = data.optional_pending
+        data.optional_pending = {}; optional = true
+    else: return
     data.plan_result = {}
-    data.plan_task = WorkerThreadPool.add_task(_plan_sources.bind(request,data.plan_result,data.plan_cache),false,"Authored media demand")
+    var work = _plan_optional.bind(request,data.plan_result,data.plan_cache) if optional else _plan_sources.bind(request,data.plan_result,data.plan_cache)
+    data.plan_task = WorkerThreadPool.add_task(work,false,"Optional authored families" if optional else "Required authored media")
+
+static func _source_files(cache: Dictionary) -> Dictionary:
+    var files = {}
+    for path in cache:
+        if path is String and path.ends_with(".json") and not path.begins_with("__"):
+            files[path] = cache[path]
+    return files
 
 static func _plan_sources(request: Dictionary, result: Dictionary, cache: Dictionary) -> void:
     var started = Time.get_ticks_usec()
     result.key = request.key
+    result.stage = "required"
     result.value = plan(request.state,request.groups,cache)
+    var characters_done = Time.get_ticks_usec()
     var environment = EnvironmentMedia.plan(request.state,request.groups,cache)
+    var environment_done = Time.get_ticks_usec()
     result.value.environment_required = environment.required
     result.value.environment_upcoming = environment.upcoming
     result.value.fixtures = environment.fixtures
-    var known_environment: Dictionary = environment.required.duplicate()
-    known_environment.merge(environment.upcoming)
-    var encounter = EncounterMedia.plan(request.state,known_environment,environment.fixtures,cache,request.groups).duplicate()
+    # The single metadata owner schedules optional families only after this
+    # exact required packet has crossed the completed-task publication boundary.
+    result.optional_request = {"key":request.key,"state":request.state,"groups":request.groups,"required":result.value}
+    result.source_files = _source_files(cache)
+    result.phases = {"characters":(characters_done-started)/1000.0,
+        "environment":(environment_done-characters_done)/1000.0,"source_files":(Time.get_ticks_usec()-environment_done)/1000.0}
+    for phase in environment.get("diagnostics",{}).get("phases",{}):
+        result.phases["environment_"+phase] = environment.diagnostics.phases[phase]
+    result.elapsed_ms = (Time.get_ticks_usec()-started)/1000.0
+    result.complete = true
+
+static func _plan_optional(request: Dictionary, result: Dictionary, cache: Dictionary) -> void:
+    var started = Time.get_ticks_usec()
+    result.key = request.key
+    result.stage = "optional"
+    var required: Dictionary = request.required
+    var environment: Dictionary = required.environment_required.duplicate()
+    environment.merge(required.environment_upcoming)
+    var encounter = EncounterMedia.plan(request.state,environment,required.fixtures,cache,request.groups).duplicate()
+    var families_done = Time.get_ticks_usec()
     var estimates: Dictionary = encounter.paths.duplicate()
     var cpu_required: Dictionary = encounter.cpu_required.duplicate()
     var gpu_only: Dictionary = encounter.gpu_only.duplicate()
-    for paths in [result.value.required,result.value.upcoming,environment.required,environment.upcoming]: estimates.merge(paths)
-    cpu_required.merge(result.value.cpu_required); cpu_required.merge(environment.required); cpu_required.merge(environment.upcoming)
-    gpu_only.merge(result.value.gpu_only)
+    for paths in [required.required,required.upcoming,required.environment_required,required.environment_upcoming]: estimates.merge(paths)
+    cpu_required.merge(required.cpu_required); cpu_required.merge(environment)
+    gpu_only.merge(required.gpu_only)
     encounter.estimates = EncounterMedia.estimates(estimates,cpu_required,gpu_only,cache)
     encounter.estimate_bytes = EncounterMedia.estimate_bytes(encounter.estimates)
     encounter.estimate_summary = EncounterMedia.estimate_summary(encounter)
@@ -65,13 +103,11 @@ static func _plan_sources(request: Dictionary, result: Dictionary, cache: Dictio
         if encounter.estimates[path].has("error"):
             encounter.errors = encounter.errors.duplicate()
             encounter.errors.append(encounter.estimates[path].error)
-    result.value.encounter = encounter
-    # Only original parsed files cross owners. Derived selector closures and
-    # mutable last-map indexes remain on this worker. Raw authoring is read-only.
-    result.source_files = {}
-    for path in cache:
-        if path is String and path.ends_with(".json") and not path.begins_with("__"):
-            result.source_files[path] = cache[path]
+    var estimates_done = Time.get_ticks_usec()
+    result.value = {"encounter":encounter}
+    result.source_files = _source_files(cache)
+    result.phases = {"families":(families_done-started)/1000.0,"estimates":(estimates_done-families_done)/1000.0,
+        "source_files":(Time.get_ticks_usec()-estimates_done)/1000.0}
     result.elapsed_ms = (Time.get_ticks_usec()-started)/1000.0
     result.complete = true
 
@@ -81,8 +117,12 @@ static func poll_plan(data: Dictionary) -> Dictionary:
     var completed: Dictionary = data.plan_result
     if not completed.get("complete",false):
         completed.error = "Authored media metadata preparation did not complete; inspect the source error log."
+    if completed.has("optional_request"):
+        if data.plan_pending.is_empty(): data.optional_pending = completed.optional_request
+        completed.erase("optional_request")
     data.metadata_ms += completed.get("elapsed_ms",0.0)
     data.metadata_jobs += 1
+    data.metadata_phases[completed.get("stage","required")] = completed.get("phases",{})
     data.plan_result = {}
     data.plan_task = -1
     _start_plan(data)
@@ -97,12 +137,21 @@ static func enqueue(data: Dictionary, path: String, absolute: String) -> void:
     data.pending.append({"path":path,"absolute":absolute,"fixture":_fixture(data,path)})
     _pending_delta(data,path,1)
 
+static func _adopt_epoch(data: Dictionary, epoch: int) -> void:
+    if data.encounter_epoch == epoch: return
+    data.encounter_epoch = epoch
+    data.encounter = {}; data.required_plan = false
+    data.boot_paths = {}; data.boot_waiting = {}; data.boot_started = false; data.boot_complete = false
+    data.selection_revision = -2
+
+static func adopt_required(data: Dictionary, epoch: int) -> void:
+    # Exact readiness and its startup pins do not depend on optional estimates.
+    _adopt_epoch(data,epoch)
+    data.required_plan = true
+
 static func adopt_encounter(data: Dictionary, encounter: Dictionary, epoch: int) -> void:
     # Called only for an accepted scene epoch, never on worker completion alone.
-    if data.encounter_epoch != epoch:
-        data.encounter_epoch = epoch
-        data.boot_paths = {}; data.boot_waiting = {}; data.boot_started = false; data.boot_complete = false
-        data.selection_revision = -2
+    _adopt_epoch(data,epoch)
     data.encounter = encounter
 
 static func _environment(data: Dictionary, path: String) -> bool:
@@ -321,7 +370,7 @@ static func demand(data: Dictionary, paths: Dictionary, environment: Dictionary 
         data.preload_selected = selected
         data.preload_skipped = skipped
         data.preload_estimated_bytes = preload_bytes
-        var new_boot: bool = not data.encounter.is_empty() and not data.boot_started
+        var new_boot: bool = (data.required_plan or not data.encounter.is_empty()) and not data.boot_started
         if new_boot:
             data.boot_started = true
             # Startup waits only for exact displayed/already-received demand.
@@ -446,12 +495,22 @@ static func _decode(request: Dictionary, result: Dictionary) -> void:
 
     result.elapsed_ms = (Time.get_ticks_usec()-started)/1000.0
 
-static func poll(data: Dictionary) -> Dictionary:
+static func poll(data: Dictionary, required_only: bool = false) -> Dictionary:
     var completed: Dictionary = {}
-    # Independent Images decode concurrently. Publication keeps demand order and
-    # one texture per scene poll; worker completion never mutates the scene/cache.
-    if not data.decode_jobs.is_empty() and WorkerThreadPool.is_task_completed(data.decode_jobs[0].task):
-        var job: Dictionary = data.decode_jobs.pop_front()
+    # Completion order is independent of event playback: the exact required
+    # set remains the readiness gate. Reclaim a completed optional job when no
+    # required result is ready, so it cannot occupy a decode slot indefinitely.
+    var next = -1
+    var optional = -1
+    for i in data.decode_jobs.size():
+        var job: Dictionary = data.decode_jobs[i]
+        if not WorkerThreadPool.is_task_completed(job.task): continue
+        if data.wanted.has(job.path): next = i; break
+        if optional<0: optional = i
+    if next<0 and not required_only: next = optional
+    if next>=0:
+        var job: Dictionary = data.decode_jobs[next]
+        data.decode_jobs.remove_at(next)
         WorkerThreadPool.wait_for_task_completion(job.task)
         completed = job.result
         _pending_delta(data,job.path,-1)
@@ -579,7 +638,7 @@ static func diagnostics(data: Dictionary, environment: bool = false) -> Dictiona
     var pinned: int = stats[false].pinned_bytes+stats[true].pinned_bytes
     result.merge({"combined_estimated_bytes":total,"pinned_over_budget_bytes":maxi(0,pinned-int(data.budget_bytes)),
         "eviction_pending_bytes":maxi(0,total-maxi(pinned,int(data.budget_bytes))),
-        "metadata_ms":data.metadata_ms,"metadata_jobs":data.metadata_jobs,"decode_ms":data.decode_ms,
+        "metadata_ms":data.metadata_ms,"metadata_jobs":data.metadata_jobs,"metadata_phases":data.metadata_phases.duplicate(),"publication":data.publication.duplicate(),"decode_ms":data.decode_ms,
         "decode_jobs":data.decode_jobs.size(),"decode_worker_limit":DECODE_WORKERS,
         "budget_bytes":data.budget_bytes,"demand_runs":data.demand_runs,"demand_noops":data.demand_noops,"demand_phases":data.demand_phases.duplicate(),"demand_counts":data.demand_counts.duplicate(),"selection_jobs":data.selection_jobs,"selection_refreshed":data.selection_refreshed,"decoded":data.decoded,"evicted":data.evicted,"failed":data.failed.duplicate(),
         "accounting":"Decoded CPU bytes plus conservative RGBA8 GPU estimate; not measured VRAM/RSS; combined environment and character budget."})
@@ -701,6 +760,7 @@ static func plan(state: Dictionary, groups: Array, cache: Dictionary) -> Diction
 
 static func close(data: Dictionary) -> void:
     data.demand_snapshot = {}
+    data.plan_pending = {}; data.optional_pending = {}
     if data.plan_task >= 0:
         WorkerThreadPool.wait_for_task_completion(data.plan_task)
         data.plan_task = -1
