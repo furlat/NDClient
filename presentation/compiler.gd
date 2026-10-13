@@ -8,6 +8,15 @@ const EventTrace = preload("res://presentation/event_trace.gd")
 static func empty_delta() -> Dictionary:
     return {"set":{},"actors":{},"tiles":{},"objects":{},"objects_removed":[],"spatial_commit_cursors":{}}
 
+static func _snapshot_senses(senses: Variant) -> Variant:
+    if senses == null: return null
+    # The compiler owns a detached target. Sensory folds replace the whole
+    # view; spatial facts/observations only replace shell fields or entity-map
+    # entries. Preserve those mutable containers, sharing their private leaves.
+    var result: Dictionary = senses.duplicate()
+    result.entities = senses.entities.duplicate()
+    return result
+
 static func apply_delta(target: Dictionary, delta: Dictionary) -> void:
     for key in delta.get("set", {}): target[key] = delta.set[key]
     # Each operation publishes only its new log rows. Replaying another
@@ -178,8 +187,10 @@ static func _capture_delta(target: Dictionary, node: Dictionary, observations: A
             if fact.get(field) != null: actors[fact[field]] = true
         if fact.kind == "sensory":
             for identity in fact.entity_contacts_changed: actors[identity] = true
-            delta.set.perception = target.perception.duplicate(true)
-        if fact.kind in ["sensory","spatial"]: delta.set.senses = target.senses.duplicate(true) if target.senses != null else null
+            # Audience folds return a new perception snapshot without changing
+            # its predecessor. This private event-time record is already owned.
+            delta.set.perception = target.perception
+        if fact.kind in ["sensory","spatial"]: delta.set.senses = _snapshot_senses(target.senses)
         if fact.kind == "turn":
             delta.set.current_actor_uuid = target.current_actor_uuid
             delta.set.round_number = target.round_number
@@ -189,7 +200,7 @@ static func _capture_delta(target: Dictionary, node: Dictionary, observations: A
         if target.actors.has(identity): delta.actors[identity] = target.actors[identity].duplicate(true)
     for observation in observations:
         if observation.contact != null:
-            delta.set.senses = target.senses.duplicate(true) if target.senses != null else null
+            delta.set.senses = _snapshot_senses(target.senses)
     if update != null:
         for tile in update.tiles: delta.tiles[Reducer.Audience.point_key(tile.position)] = tile.duplicate(true)
         for object in update.objects: delta.objects[object.item.item_uuid] = object.duplicate(true)
@@ -234,6 +245,7 @@ static func compile_admitted(before: Dictionary, packet: Dictionary, cache: Dict
         var updates = {}
         for update in lineage.world_updates: updates[update.event_uuid] = update
         var next = 0
+        var composed_senses = false
         for node in lineage.events:
             var admitted: Array = []
             while next < pending.size() and cursors[pending[next].event_uuid] <= cursors[node.uuid]:
@@ -247,8 +259,9 @@ static func compile_admitted(before: Dictionary, packet: Dictionary, cache: Dict
             var update: Variant = updates.get(node.uuid)
             if update != null: Reducer.apply_world_update(target,update)
             if not node.canceled and node.fact != null:
-                var folded = Reducer.apply_committed_player_fact(target,node.fact,cursors[node.uuid],cursors)
+                var folded = Reducer._apply_committed_player_fact_owned(target,node.fact,cursors[node.uuid],cursors,composed_senses)
                 if not folded.ok: return folded
+                if node.fact.kind == "sensory": composed_senses = true
             group.commits.append({"at_ms":0.0,"source_index":cursors[node.uuid],"event_uuid":node.uuid,
                 "delta":_capture_delta(target,node,admitted,update)})
         var trailing = empty_delta()
@@ -256,7 +269,7 @@ static func compile_admitted(before: Dictionary, packet: Dictionary, cache: Dict
             var observation: Dictionary = pending[next]
             Reducer._observe(target,observation)
             trailing.actors[observation.actor.uuid] = target.actors[observation.actor.uuid].duplicate(true)
-            if observation.contact != null: trailing.set.senses = target.senses.duplicate(true) if target.senses != null else null
+            if observation.contact != null: trailing.set.senses = _snapshot_senses(target.senses)
             next += 1
         target.reducer_cursor = lineage.end_cursor
         trailing.set.reducer_cursor = lineage.end_cursor

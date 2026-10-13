@@ -54,7 +54,7 @@ func _consume_admitted(packet: Dictionary, raw: PackedByteArray) -> Dictionary:
 	if int(next.sequence) != (0 if cursor.is_empty() else int(cursor.sequence) + 1): return _failure("Journal sequence gap")
 	var saved := _stage(int(next.sequence), raw)
 	if not saved.ok: return saved
-	var normalized: Dictionary = protocol.normalize("InitializationResponse" if next.sequence == 0 else "PlayerOperation", packet)
+	var normalized: Dictionary = protocol._normalize_admitted("InitializationResponse" if next.sequence == 0 else "PlayerOperation", packet)
 	var reduced := _reduced_state(normalized)
 	if not reduced.ok: return reduced
 	var target := _file(int(next.sequence))

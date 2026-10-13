@@ -18,6 +18,14 @@ func same_json(left: Variant, right: Variant) -> bool:
 		return true
 	return left == right
 
+func mutate_collections(value: Variant) -> void:
+	if value is Dictionary:
+		for child in value.values(): mutate_collections(child)
+		value["normalization_mutation_probe"] = true
+	elif value is Array:
+		for child in value: mutate_collections(child)
+		value.append(null)
+
 func _init() -> void:
 	var args := OS.get_cmdline_user_args()
 	var path := args[0] if not args.is_empty() else "res://generated/sdk_protocol_parity.jsonl"
@@ -31,6 +39,7 @@ func _init() -> void:
 	var failures: Array = []
 	var native_rejections: Array = []
 	var count := 0
+	var normalized_count := 0
 	if manifest.schema_digest != protocol.identity.schema_digest:
 		failures.append({"label": "oracle schema identity", "expected": manifest.schema_digest, "actual": protocol.identity.schema_digest})
 	while not file.eof_reached():
@@ -45,8 +54,18 @@ func _init() -> void:
 			failures.append({"label": row.label, "expected_ok": row.expected_ok, "actual": outcome})
 		elif outcome.ok and row.has("expected_value") and not same_json(outcome.value, row.expected_value):
 			failures.append({"label": row.label, "issue": "admission changed decoded values", "expected": row.expected_value, "actual": outcome.value})
+		if outcome.ok:
+			var before: Variant = outcome.value.duplicate(true) if outcome.value is Array or outcome.value is Dictionary else outcome.value
+			var expected: Variant = protocol.normalize(row.root, outcome.value)
+			var normalized: Variant = protocol._normalize_admitted(row.root, outcome.value)
+			normalized_count += 1
+			if not same_json(expected, normalized):
+				failures.append({"label": row.label, "issue": "admitted normalization changed defaults or canonical values"})
+			mutate_collections(normalized)
+			if not same_json(before, outcome.value):
+				failures.append({"label": row.label, "issue": "normalization or edits to its result mutated admitted input"})
 		if row.has("native_rejection"):
 			native_rejections.append({"label": row.label, "python_ok": row.python_ok, "godot_ok": outcome.ok, "reason": row.native_rejection})
 	if count != int(manifest.cases): failures.append({"label": "case count", "expected": manifest.cases, "actual": count})
-	print(JSON.stringify({"checks": count, "failures": failures, "native_rejections": native_rejections, "oracle": manifest.oracle}))
+	print(JSON.stringify({"checks": count, "normalized_cases": normalized_count, "failures": failures, "native_rejections": native_rejections, "oracle": manifest.oracle}))
 	quit(0 if failures.is_empty() else 1)

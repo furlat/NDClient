@@ -1390,3 +1390,45 @@ About 786.5 ms occurs after complete event availability. Both large stages run o
 workers but sequentially gate playback. No production optimization is claimed:
 finer reducer/normalization/I/O/copy costs are not separately measured yet.
 The existing pipeline analyzer and compact refresh report preserve this evidence.
+
+## Client input latency repair — 13 October 2026
+
+The user calls out that these measured client costs remain unfixed. Continue the
+authorized client optimization on this critical path before claiming completion.
+Requested behavior: a live move starts promptly after its actual server event.
+Boundary/input: production Godot click → preview/command → admitted current SDK
+operation → first authored sample. Expected output: identical canonical state,
+ordered intermediate commits, source samples and approved graphics with less
+client admission/compilation delay. Backend and rendering appearance stay fixed.
+
+1. Attribute actual sequence 87 CPU work within admission/reduction/compilation.
+2. Remove measured redundant traversals/copies, preserving transactional failure,
+   retained snapshots and ownership across worker threads. No speculative action
+   prediction, weakened admission, per-spell paths or final-state shortcuts.
+3. Run focused old-snapshot/late-failure/intermediate-event checks and existing
+   SDK/compiler validation, then repeat the same native live Gallery route.
+4. Compare actual click/packet/first-sample clocks, including map-scale cohorts;
+   retain outliers and distinguish cold replay from live latency evidence.
+
+Root owns SDK changes; render_audit owns compiler measurement and any bounded
+compiler repair. map_audit independently audits ownership, while scope_review
+tracks adherence and anti-slop/anti-OOP correctness. Temporary diagnostic copies
+stay ignored; production instrumentation is not added as part of the repair.
+
+Measured repair implementation removes duplicate whole-transaction clones,
+retains immutable internal observer/perception leaves, and updates only affected
+composed visibility/light/hazard cells after the first full sensory composition
+inside each owned fold. Public pure SDK calls still detach their results; initial
+observer resets recompose fully. Compiler event snapshots retain private immutable
+perception versions and isolate the senses shell/entity map. Journal normalization
+skips repeated checks only for unambiguous unions after strict schema admission;
+public normalization and inserted-default handling retain ordinary validation.
+No backend, shader, light parameter, event ordering or animation-duration edits.
+
+Focused validation currently passes 339 SDK ownership/composition checks and
+550 compiler snapshot checks, plus 7,781 protocol decisions (2,420 accepted
+normalization/value-isolation comparisons) and 104 actual records across both
+archived schemas. Regression recordings are explicit command arguments; raw
+recordings and diagnostic prototypes remain ignored. Independent plan/anti-slop/
+anti-OOP review found no source-level blocker. Live native latency acceptance is
+still required before reporting a measured input-response improvement.

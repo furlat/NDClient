@@ -1,0 +1,49 @@
+{
+  "cases": [
+    {
+      "checks": 129,
+      "counts": {
+        "events": 4,
+        "observations": 3,
+        "perception_snapshots": 2,
+        "senses_snapshots": 3,
+        "world_updates": 1
+      },
+      "failures": 0,
+      "sequence": 10
+    },
+    {
+      "checks": 421,
+      "counts": {
+        "events": 31,
+        "observations": 0,
+        "perception_snapshots": 12,
+        "senses_snapshots": 24,
+        "world_updates": 6
+      },
+      "failures": 0,
+      "sequence": 87
+    }
+  ],
+  "checks": 550,
+  "counts": {
+    "events": 35,
+    "observations": 3,
+    "perception_snapshots": 14,
+    "senses_snapshots": 27,
+    "world_updates": 7
+  },
+  "failures": [],
+  "invocation": {
+    "arguments": [
+      "--recording=res://.runtime/player-runs/20261013T081037.391879Z/journal"
+    ],
+    "recording_requirement": "External recorded journal; not a checked-in fixture. Default operations: 10 and 87.",
+    "script": "res://tests/compiler_snapshot_checks.gd",
+    "sequences": [
+      10,
+      87
+    ]
+  },
+  "scope": "Headless actual-recording event snapshots, independent SDK event folds, two exact displayed replays, public/admitted parity and caller sensory/world-input isolation. No rendered-pixel or timing claim."
+}

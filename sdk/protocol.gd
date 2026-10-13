@@ -205,19 +205,33 @@ func _check(original: Variant, value: Variant, path: String, depth: int) -> Stri
 			if not issue.is_empty(): return issue
 	return ""
 
-func _normalize(original: Variant, value: Variant) -> Variant:
+# Internal journal boundary: only values already accepted by validate/decode.
+# Public normalize retains its ordinary branch validation.
+func _normalize_admitted(root_name: String, value: Variant) -> Variant:
+	return _normalize(schema["$defs"][root_name], value, true)
+
+func _normalize(original: Variant, value: Variant, admitted: bool = false) -> Variant:
 	if original is bool: return value.duplicate(true) if value is Array or value is Dictionary else value
 	var spec := _ref(original)
 	if spec.has("anyOf") or spec.has("oneOf"):
-		for branch in _branches(spec, value):
-			if _check(branch, value, "$", 0).is_empty(): return _normalize(branch, value)
+		var branches := _branches(spec, value)
+		if admitted:
+			if branches.size() == 1:
+				return _normalize(branches[0], value, true)
+			# Admission has already selected a valid nullable branch.
+			if branches.size() == 2:
+				for i in 2:
+					if branches[i] is Dictionary and _ref(branches[i]).get("type") == "null":
+						return null if value == null else _normalize(branches[1 - i], value, true)
+		for branch in branches:
+			if _check(branch, value, "$", 0).is_empty(): return _normalize(branch, value, admitted)
 	if value is Dictionary:
 		var result: Dictionary = {}
 		var props: Dictionary = spec.get("properties", {})
 		for raw_key in value:
 			var key := str(raw_key)
 			var normalized_key: String = key.to_lower() if spec.get("propertyNames", {}).get("format") == "uuid" else key
-			result[normalized_key] = _normalize(props.get(key, spec.get("additionalProperties", true)), value[raw_key])
+			result[normalized_key] = _normalize(props.get(key, spec.get("additionalProperties", true)), value[raw_key], admitted)
 		for key in props:
 			if not result.has(key) and props[key].has("default"): result[key] = _normalize(props[key], props[key].default)
 		# dnd/core/item_types.py serializes this field only when nonempty.
@@ -228,7 +242,7 @@ func _normalize(original: Variant, value: Variant) -> Variant:
 	if value is Array:
 		var result: Array = []
 		var prefix: Array = spec.get("prefixItems", [])
-		for i in value.size(): result.append(_normalize(prefix[i] if i < prefix.size() else spec.get("items", true), value[i]))
+		for i in value.size(): result.append(_normalize(prefix[i] if i < prefix.size() else spec.get("items", true), value[i], admitted))
 		return result
 	if value is String and spec.get("format") == "uuid": return value.to_lower()
 	return int(value) if spec.get("type") == "integer" else value
