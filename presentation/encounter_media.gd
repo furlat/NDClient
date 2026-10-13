@@ -104,6 +104,14 @@ static func estimates(paths: Dictionary, cpu_required: Dictionary, gpu_only: Dic
     cache.__encounter_headers = retained
     return result
 
+static func estimate_bytes(estimates: Dictionary) -> Dictionary:
+    # Prepared with accepted header metadata; no scene-thread nested lookups for
+    # the capped greedy walk. Missing headers retain resident/unknown fallback.
+    var result = {}
+    for path in estimates:
+        if estimates[path].has("bytes"): result[path] = int(estimates[path].bytes)
+    return result
+
 static func estimate_summary(encounter: Dictionary) -> Dictionary:
     # Runs with metadata/header preparation, before the scene adopts a family.
     var bytes = 0

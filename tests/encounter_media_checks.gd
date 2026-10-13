@@ -1,4 +1,5 @@
 extends SceneTree
+const Reference = preload("res://tests/media_demand_reference.gd")
 const Media = preload("res://presentation/media_warmup.gd")
 const Encounter = preload("res://presentation/encounter_media.gd")
 const EnvironmentMedia = preload("res://presentation/environment_media.gd")
@@ -81,6 +82,57 @@ func compare_selection(full: Dictionary, colour: String, companion: String, late
         check(fast.pending.slice(0,scenario.required.size()).map(func(row):return row.path)==scenario.required.keys(),
             scenario.label+": mandatory request retains first priority")
     Media.close(fast); Media.close(exhaustive)
+
+func compare_authored_demand(full: Dictionary, state: Dictionary, environment: Dictionary, cache: Dictionary) -> void:
+    var fast = Media.create()
+    var original = Media.create()
+    var accepted = full.duplicate()
+    accepted.estimate_bytes = Encounter.estimate_bytes(accepted.estimates)
+    accepted.estimate_summary = Encounter.estimate_summary(accepted)
+    for data in [fast,original]: Media.adopt_encounter(data,accepted,1)
+    # Real registered clip paths and byte headers; residency acknowledgements
+    # below are typed uploaded-cache fixtures, not claimed native allocations.
+    for clip in ["Idle","Run","Attack1","Idle","Run"]:
+        var paths: Dictionary = environment.required.duplicate()
+        var cpu = environment.required.duplicate()
+        var gpu = {}
+        for actor in state.actors.values():
+            var sources = Characters.sheet_paths(actor,[clip],cache)
+            check(sources.ok,"Authored differential clip resolves: "+clip)
+            if not sources.ok: continue
+            paths.merge(sources.value); cpu.merge(sources.cpu_required); gpu.merge(sources.gpu_only)
+        var absolute = {}
+        for path in paths: absolute[path] = Catalog.media_path(path)
+        original.demand_snapshot = {}
+        Media.demand(fast,absolute,environment.required,environment.fixtures,gpu,cpu)
+        Reference.demand(original,absolute,environment.required,environment.fixtures,gpu,cpu)
+        check(fast.preload_selected==original.preload_selected and fast.preload_selected.keys()==original.preload_selected.keys()
+            and fast.pending==original.pending and fast.boot_paths==original.boot_paths
+            and fast.preload_estimated_bytes==original.preload_estimated_bytes and fast.required_estimated_bytes==original.required_estimated_bytes
+            and fast.preload_skipped==original.preload_skipped and fast.unknown_required==original.unknown_required,
+            "Actual "+clip+": capped greedy selection/order/queue/boot/bytes match frozen 927a55b")
+        check(fast.ready_paths==original.ready_paths and fast.selected_ready==original.selected_ready
+            and fast.selected_failed==original.selected_failed and fast.boot_waiting==original.boot_waiting,
+            "Actual "+clip+": incremental readiness/error/boot state matches frozen owner")
+        for category in [false,true]:
+            var actual = Media.diagnostics(fast,category)
+            var expected = Media.diagnostics(original,category)
+            for field in ["pending","resident_sheets","estimated_bytes","pinned_bytes","cpu_bytes","gpu_estimated_bytes"]:
+                check(actual[field]==expected[field],"Actual "+clip+": exact residency accounting "+str(category)+"/"+field)
+        for data in [fast,original]:
+            var pending: Array = data.pending
+            data.pending = []; data.queued.clear(); data.stats = {}
+            for request in pending:
+                var size: Dictionary = full.estimates[request.path]
+                var loaded = {"path":request.path,"cpu_bytes":size.cpu_bytes,"gpu_bytes":size.gpu_bytes}
+                if request.fixture: loaded.merge({"energy":.1,"emission_centroid":Vector2(32,40)})
+                Media.published(data,loaded)
+            Media.release_cold_images(data)
+            Media.boot_ready(data)
+            Media.prune(data)
+        check(fast.ready_paths==original.ready_paths and fast.resident.keys()==original.resident.keys(),
+            "Actual "+clip+": publication, CPU release and pruning preserve original eligibility")
+    Media.close(fast); Media.close(original)
 
 func run() -> void:
     var parsed = Protocol.parse_json(FileAccess.get_file_as_bytes("res://.runtime/player-runs/20261011T223103.996259Z/state.json"))
@@ -268,6 +320,7 @@ func run() -> void:
     accounting(roles,"Family source readdition")
     Media.close(roles)
     compare_selection(encounter,colour,companion,later)
+    compare_authored_demand(encounter,state,environment,cache)
     var failure = Media.create()
     var missing_path = "res://tests/no-such-optional-source.png"
     Media.adopt_encounter(failure,{"revision":1,"paths":{missing_path:missing_path},"estimates":{missing_path:{"bytes":4}},"errors":[]},1)

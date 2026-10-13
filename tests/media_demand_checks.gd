@@ -1,7 +1,8 @@
 extends SceneTree
 # Passive queue/selection fixtures compare the shortcut with the original full
-# demand body (reference cache invalidated before each call), without PNG/GPU work.
+# demand body frozen at 927a55b, without PNG/GPU work.
 const Media = preload("res://presentation/media_warmup.gd")
+const Reference = preload("res://tests/media_demand_reference.gd")
 const Encounter = preload("res://presentation/encounter_media.gd")
 var checks = 0
 var failures: Array = []
@@ -18,6 +19,7 @@ func family() -> Dictionary:
     var result = {"revision":1,"paths":{"a":"/test/a.png","b":"/test/b.png","c":"/test/c.png"},
         "environment":{},"fixtures":{},"gpu_only":{},"cpu_required":{},"errors":[],
         "estimates":{"a":{"bytes":16},"b":{"bytes":16},"c":{"bytes":16}}}
+    result.estimate_bytes = Encounter.estimate_bytes(result.estimates)
     result.estimate_summary = Encounter.estimate_summary(result)
     return result
 
@@ -46,7 +48,7 @@ func demand(label: String, paths: Dictionary, roles: Array = [{},{},{},{}], noop
     # prior publication/selection state and request ordering in both instances.
     reference.demand_snapshot = {}
     Media.demand(fast,paths,roles[0],roles[1],roles[2],roles[3])
-    Media.demand(reference,paths,roles[0],roles[1],roles[2],roles[3])
+    Reference.demand(reference,paths,roles[0],roles[1],roles[2],roles[3])
     check(observable(fast)==observable(reference),label+": queue, pins, estimates, readiness, errors and boot equal full demand")
     check((fast.demand_noops>count)==noop,label+": expected strict no-op eligibility")
     var phases: Dictionary = fast.demand_phases
@@ -137,6 +139,7 @@ func run() -> void:
     demand("Equal immutable estimate owners",{"a":"/test/a.png"},[{},{},{},{}],true)
     var redistributed = equal_plan.duplicate(true)
     redistributed.estimates.a.bytes = 20; redistributed.estimates.b.bytes = 12
+    redistributed.estimate_bytes = Encounter.estimate_bytes(redistributed.estimates)
     redistributed.estimate_summary = Encounter.estimate_summary(redistributed)
     for data in [fast,reference]: Media.adopt_encounter(data,redistributed,1)
     demand("Estimate redistribution with same total/revision",{"a":"/test/a.png"})
@@ -146,12 +149,22 @@ func run() -> void:
     for data in [fast,reference]: Media.adopt_encounter(data,promoted,1)
     demand("Family-only optional role promotion",{"a":"/test/a.png"})
     check(fast.pending.filter(func(row):return row.path=="c")[0].fixture,"Changed optional family role updates queued preprocessing")
+    publish("c")
+    demand("Family fixture still requires emission preprocessing",{"a":"/test/a.png"})
+    check(not Media.ready(fast,{"c":true}),"Nonmandatory family fixture upgrade holds source readiness")
+    var demoted = redistributed.duplicate(true)
+    demoted.revision = promoted.revision+1
+    for data in [fast,reference]: Media.adopt_encounter(data,demoted,1)
+    demand("Family-only optional role removal",{"a":"/test/a.png"})
+    check(Media.ready(fast,{"c":true}) and not fast.resident.c.environment,
+        "Departing family fixture/environment roles restore readiness and source category")
     for data in [fast,reference]: Media.adopt_encounter(data,promoted,2)
     demand("New initialization epoch",{"a":"/test/a.png"})
     check(fast.boot_paths.keys()==["a"] and not fast.boot_complete,"New epoch retains its own exact startup gate")
 
     var unknown = family()
     unknown.estimates.a = {"error":"Typed missing header"}
+    unknown.estimate_bytes = Encounter.estimate_bytes(unknown.estimates)
     unknown.estimate_summary = Encounter.estimate_summary(unknown)
     reset(unknown)
     demand("Unknown source estimate",{"a":"/test/a.png"})
@@ -159,6 +172,19 @@ func run() -> void:
     publish("a")
     demand("Resident fallback estimate changes",{"a":"/test/a.png"})
     check(fast.required_estimated_bytes==16 and fast.unknown_required==0,"Publication updates required fallback estimate")
+
+    reset(plan)
+    demand("Nonmandatory exact role baseline",{"a":"/test/a.png"},[{"b":true},{"b":true},{},{}])
+    publish("b")
+    demand("Nonmandatory exact fixture requires metrics",{"a":"/test/a.png"},[{"b":true},{"b":true},{},{}])
+    check(not Media.ready(fast,{"b":true}),"Exact role beyond wanted affects its selected source")
+    demand("Departing exact roles beyond wanted",{"a":"/test/a.png"})
+    check(not Media.ready(fast,{"b":true}) and fast.resident.b.environment,
+        "Manual roles outside prior/current mandatory and selection-change domain retain original untouched residency")
+    demand("Former mandatory role baseline",{"a":"/test/a.png","b":"/test/b.png"},[{"b":true},{"b":true},{},{}])
+    demand("Departing prior mandatory roles",{"a":"/test/a.png"})
+    check(Media.ready(fast,{"b":true}) and not fast.resident.b.environment,
+        "A departing prior mandatory source still receives its role/category refresh")
 
     reset(plan)
     var gpu_roles = [{},{},{"a":true},{}]
@@ -169,8 +195,21 @@ func run() -> void:
     check(Media.ready(fast,{"a":true}),"GPU-only readiness survives CPU release")
     demand("CPU role upgrade reloads source",{"a":"/test/a.png"},[{},{},{},{"a":true}])
     check(not Media.ready(fast,{"a":true}) and fast.pending[0].path=="a","Required original CPU pixels are recovered")
+    var missing = "res://tests/no-such-demand-fixture.png"
+    var failed_family = {"revision":1,"paths":{missing:missing},"estimates":{missing:{"bytes":8}},
+        "estimate_bytes":{missing:8},"estimate_summary":{"bytes":8,"unknown":0},"errors":[]}
+    reset(failed_family)
+    demand("Failed source baseline",{missing:missing})
+    for data in [fast,reference]:
+        var deadline = Time.get_ticks_msec()+10000
+        while not data.failed.has(missing) and Time.get_ticks_msec()<deadline:
+            Media.poll(data)
+            await process_frame
+    demand("Actual failed decode retains error on no-op",{missing:missing},[{},{},{},{}],true)
+    check(not Media.ready(fast,{missing:true}) and fast.selected_failed.has(missing) and fast.pending.is_empty(),
+        "Worker failure remains explicit without duplicate retry or false readiness")
     Media.close(fast); Media.close(reference)
     var report = {"checks":checks,"failures":failures,
-        "scope":"Passive typed queue/residency acknowledgements versus the original exhaustive demand body; exact ordered paths/roles, budgets, accepted estimates, epoch, boot and CPU recovery. Actual PNG in-flight promotion is covered by media_role_race_checks."}
+        "scope":"Passive typed queue/residency acknowledgements versus the independent frozen 927a55b demand body; exact ordered paths/roles, budgets, accepted estimates, epoch, boot and CPU recovery. Actual PNG in-flight promotion is covered by media_role_race_checks."}
     FileAccess.open("res://generated/media_demand_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print(JSON.stringify(report)); quit(0 if failures.is_empty() else 1)

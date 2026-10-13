@@ -20,7 +20,7 @@ static func create() -> Dictionary:
         "prune_frame":-1,"pruned_this_frame":0,"stats":{},"cpu_release":{},
         "selection_revision":-1,"selection_budget":-1,"selection_required":{},"selection_extra":{},"selection_jobs":0,
         "ready_paths":{},"boot_waiting":{},"selected_ready":{},"selected_failed":{},
-        "selection_roles":{},"selection_summary":{},"selection_refreshed":0,
+        "selection_roles":{},"demand_roles":{},"selection_summary":{},"selection_refreshed":0,
         "demand_snapshot":{},"demand_runs":0,"demand_noops":0,"demand_phases":{},"demand_counts":{}}
 
 static func request_plan(data: Dictionary, key: Array, state: Dictionary, groups: Array) -> void:
@@ -59,6 +59,7 @@ static func _plan_sources(request: Dictionary, result: Dictionary, cache: Dictio
     cpu_required.merge(result.value.cpu_required); cpu_required.merge(environment.required); cpu_required.merge(environment.upcoming)
     gpu_only.merge(result.value.gpu_only)
     encounter.estimates = EncounterMedia.estimates(estimates,cpu_required,gpu_only,cache)
+    encounter.estimate_bytes = EncounterMedia.estimate_bytes(encounter.estimates)
     encounter.estimate_summary = EncounterMedia.estimate_summary(encounter)
     for path in encounter.paths:
         if encounter.estimates[path].has("error"):
@@ -161,22 +162,26 @@ static func _changed_roles(previous: Dictionary, current: Dictionary) -> Diction
         var old: Dictionary = previous.get(role,{})
         var new: Dictionary = current[role]
         # Accepted family role owners are immutable and reused by the worker.
-        if is_same(old,new): continue
+        if is_same(old,new) or old==new: continue
         for path in old:
             if not new.has(path): changed[path] = true
         for path in new:
             if not old.has(path): changed[path] = true
     return changed
 
-static func _selection_delta(data: Dictionary, previous: Dictionary, role_changes: Dictionary, new_boot: bool) -> Dictionary:
+static func _selection_delta(data: Dictionary, previous: Dictionary, role_changes: Dictionary, new_boot: bool, membership_changes: Dictionary) -> Dictionary:
     var refresh: Dictionary = role_changes.duplicate()
     if new_boot:
         for path in data.boot_paths: refresh[path] = true
     for path in previous:
         if data.preload_selected.has(path): continue
         data.selected_ready.erase(path); data.selected_failed.erase(path)
+        membership_changes[path] = true
     for path in data.preload_selected:
-        if new_boot or not previous.has(path): refresh[path] = true
+        if not previous.has(path):
+            membership_changes[path] = true
+            refresh[path] = true
+        elif new_boot: refresh[path] = true
     for path in refresh:
         _refresh_path(data,path)
         data.selection_refreshed += 1
@@ -195,6 +200,9 @@ static func _refresh_resident_role(data: Dictionary, path: String) -> void:
 static func _same_demand(data: Dictionary, paths: Dictionary, roles: Array) -> bool:
     var prior: Dictionary = data.demand_snapshot
     if prior.is_empty(): return false
+    # Most changed groups differ here. Reject their small exact demand before
+    # comparing the much larger accepted family estimate map.
+    if prior.paths!=paths or prior.order!=paths.keys() or prior.roles!=roles: return false
     var family: Dictionary = data.encounter
     var accepted: Dictionary = prior.encounter
     if prior.epoch!=data.encounter_epoch or prior.budget!=data.budget_bytes \
@@ -202,9 +210,6 @@ static func _same_demand(data: Dictionary, paths: Dictionary, roles: Array) -> b
         or accepted.get("revision",-1)!=family.get("revision",-1) \
         or accepted.get("estimate_summary",{})!=family.get("estimate_summary",{}) \
         or accepted.get("estimates",{})!=family.get("estimates",{}): return false
-    # Exact maps belong to callers, so keep a flat snapshot and compare values,
-    # not identity. Dictionary equality alone does not preserve request priority.
-    if prior.paths!=paths or prior.order!=paths.keys() or prior.roles!=roles: return false
     for role in ["environment","fixtures","gpu_only","cpu_required"]:
         if accepted.get(role,{})!=family.get(role,{}): return false
     return accepted.get("paths",{})==family.get("paths",{})
@@ -216,7 +221,7 @@ static func demand(data: Dictionary, paths: Dictionary, environment: Dictionary 
         "resident_refresh":0.0,"queue":0.0,"snapshot":0.0,"total":0.0}
     data.demand_phases = phases
     data.demand_counts = {"required":paths.size(),"known":data.encounter.get("paths",{}).size(),
-        "pending_before":data.pending.size(),"affected":0,"role_changes":0,"selection_changed":false,"noop":false}
+        "pending_before":data.pending.size(),"affected":0,"resident_refreshed":0,"role_changes":0,"selection_changed":false,"noop":false}
     var exact_roles = [environment,fixtures,gpu_only,cpu_required]
     var unchanged = _same_demand(data,paths,exact_roles)
     phases.guard = (Time.get_ticks_usec()-started)/1000.0
@@ -251,9 +256,11 @@ static func demand(data: Dictionary, paths: Dictionary, environment: Dictionary 
     var extra = {}
     var known: Dictionary = data.encounter.get("paths",{})
     var exact_estimates = true
+    var bytes_by_path: Dictionary = data.encounter.get("estimate_bytes",{})
+    var estimates: Dictionary = data.encounter.get("estimates",{})
     for path in paths:
-        if not data.encounter.get("estimates",{}).get(path,{}).has("bytes"): exact_estimates = false
-        var size = _estimate(data,path)
+        if not bytes_by_path.has(path) and not estimates.get(path,{}).has("bytes"): exact_estimates = false
+        var size: int = bytes_by_path[path] if bytes_by_path.has(path) else _estimate(data,path)
         if size < 0: unknown += 1
         else: used += size
         if not known.has(path): extra[path] = size
@@ -267,6 +274,7 @@ static func demand(data: Dictionary, paths: Dictionary, environment: Dictionary 
         or data.selection_extra!=extra or data.selection_summary!=summary or (data.preload_skipped>0 and data.selection_required!=paths)
     data.demand_counts.selection_changed = selection_changed
     var refresh = {}
+    var membership_changes = {}
     if selection_changed:
         data.selection_jobs += 1
         data.selection_revision = revision; data.selection_budget = data.budget_bytes
@@ -281,7 +289,7 @@ static func demand(data: Dictionary, paths: Dictionary, environment: Dictionary 
             for path in data.boot_paths:
                 if not known.has(path):
                     boot_extra[path] = data.boot_paths[path]
-                    if not paths.has(path): extra_bytes += maxi(0,_estimate(data,path))
+                    if not paths.has(path): extra_bytes += maxi(0,int(bytes_by_path[path]) if bytes_by_path.has(path) else _estimate(data,path))
         # A worker-computed total avoids re-estimating the whole resident family
         # on ordinary growth. Exact priority/frozen boot selection still uses
         # the original bounded algorithm when the entire family cannot fit.
@@ -291,20 +299,25 @@ static func demand(data: Dictionary, paths: Dictionary, environment: Dictionary 
             if not boot_extra.is_empty():
                 selected = known.duplicate()
                 selected.merge(boot_extra)
-                for path in boot_extra: preload_bytes += maxi(0,_estimate(data,path))
+                for path in boot_extra: preload_bytes += maxi(0,int(bytes_by_path[path]) if bytes_by_path.has(path) else _estimate(data,path))
         else:
             if data.boot_started and not data.boot_complete:
                 for path in data.boot_paths:
                     selected[path] = data.boot_paths[path]
-                    if not paths.has(path): used += maxi(0,_estimate(data,path))
+                    var size: int = bytes_by_path[path] if bytes_by_path.has(path) else _estimate(data,path)
+                    preload_bytes += maxi(0,size)
+                    if not paths.has(path): used += maxi(0,size)
             for path in known:
                 if selected.has(path): continue
-                var size = _estimate(data,path)
-                if paths.has(path): selected[path] = known[path]; continue
+                var size: int = bytes_by_path[path] if bytes_by_path.has(path) else _estimate(data,path)
+                if paths.has(path):
+                    selected[path] = known[path]
+                    preload_bytes += maxi(0,size)
+                    continue
                 if unknown>0 or size<0 or used+size>int(data.budget_bytes): skipped += 1; continue
                 selected[path] = known[path]
                 used += size
-            for path in selected: preload_bytes += maxi(0,_estimate(data,path))
+                preload_bytes += size
         data.preload_selected = selected
         data.preload_skipped = skipped
         data.preload_estimated_bytes = preload_bytes
@@ -326,17 +339,17 @@ static func demand(data: Dictionary, paths: Dictionary, environment: Dictionary 
             if data.queued.has(path): _invalidate(data); break
         data.selection_roles = roles
         var refresh_started = Time.get_ticks_usec()
-        refresh = _selection_delta(data,previous_selected,changed,new_boot)
+        refresh = _selection_delta(data,previous_selected,changed,new_boot,membership_changes)
         phases.selection_refresh = (Time.get_ticks_usec()-refresh_started)/1000.0
     phases.selection = (Time.get_ticks_usec()-phase_started)/1000.0-phases.role_diff-phases.selection_refresh
     phase_started = Time.get_ticks_usec()
-    var affected: Dictionary = previous_paths.duplicate()
-    affected.merge(paths)
-    if selection_changed:
-        for path in previous_selected:
-            if not data.preload_selected.has(path): affected[path] = true
-        for path in data.preload_selected:
-            if not previous_selected.has(path): affected[path] = true
+    # Reuse selection membership differences; mandatory-only transfers can
+    # alter pins without changing any source's residency role or readiness.
+    var affected: Dictionary = membership_changes
+    for path in previous_paths:
+        if not paths.has(path): affected[path] = true
+    for path in paths:
+        if not previous_paths.has(path): affected[path] = true
     # Membership changes affect pin accounting, not every resident texture.
     if not data.stats.is_empty():
         for path in affected:
@@ -346,9 +359,24 @@ static func demand(data: Dictionary, paths: Dictionary, environment: Dictionary 
             if prior_pin!=current_pin:
                 var resident: Dictionary = data.resident[path]
                 data.stats[resident.environment].pinned_bytes += (int(current_pin)-int(prior_pin))*int(resident.bytes)
-    affected.merge(refresh)
+    var roles_now = {"environment":environment,"fixtures":fixtures,"gpu_only":gpu_only,"cpu_required":cpu_required}
+    var exact_changed = _changed_roles(data.demand_roles,roles_now)
+    var resident_refresh: Dictionary = refresh.duplicate()
+    for path in exact_changed:
+        # Match the original affected domain even for manual role maps that
+        # mention an unchanged optional source outside both exact demands.
+        if previous_paths.has(path) or paths.has(path) or membership_changes.has(path): resident_refresh[path] = true
+    for path in paths:
+        if not previous_paths.has(path): resident_refresh[path] = true
+    if not data.encounter.has("estimate_bytes"):
+        # Legacy/manual metadata has no prepared-byte owner. Keep its original
+        # exhaustive refresh domain and residency fallback behavior.
+        resident_refresh.merge(previous_paths)
+        resident_refresh.merge(paths)
+        resident_refresh.merge(membership_changes)
     data.demand_counts.affected = affected.size()
-    for path in affected: _refresh_resident_role(data,path)
+    data.demand_counts.resident_refreshed = resident_refresh.size()
+    for path in resident_refresh: _refresh_resident_role(data,path)
     phases.resident_refresh = (Time.get_ticks_usec()-phase_started)/1000.0
     phase_started = Time.get_ticks_usec()
     # Promote mandatory sources ahead of unfinished background warmup. Once
@@ -367,9 +395,13 @@ static func demand(data: Dictionary, paths: Dictionary, environment: Dictionary 
     phase_started = Time.get_ticks_usec()
     # Without header estimates, residency progress can change the budget input.
     # Keep that uncommon path exhaustive instead of tracking another generation.
+    var copied_roles: Array = []
+    data.demand_roles = {}
+    for role in roles_now:
+        var copied: Dictionary = roles_now[role].duplicate()
+        data.demand_roles[role] = copied
+        copied_roles.append(copied)
     if exact_estimates and not summary.is_empty() and summary.unknown==0:
-        var copied_roles: Array = []
-        for role in exact_roles: copied_roles.append(role.duplicate())
         data.demand_snapshot = {"paths":paths.duplicate(),"order":paths.keys(),"roles":copied_roles,
             "encounter":data.encounter,"epoch":data.encounter_epoch,"budget":data.budget_bytes,
             "boot":[data.boot_started,data.boot_complete]}
