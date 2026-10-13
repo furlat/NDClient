@@ -1187,3 +1187,63 @@ any preparation work. Preserve style validation and guarantee at least one
 bounded builder unit per call, including a zero-budget progress check; prepared
 jobs must remain unchanged. render_audit owns this narrow starvation fix. Root
 records timeout gate diagnostics and repeats the capped disclosure/view matrix.
+
+User defers the new environment-normal handoff until known client optimizations
+are addressed. Continue from 686d1da's measured reveal tails before adopting
+`environment-normal-quality-2026-10-12/HANDOFF.txt`. Keep existing pixels as the
+comparison baseline. Prepare final static membership at the existing hidden
+world boundary instead of rebuilding it during publication; apply atlas style
+and culling changes only to affected receivers when producer evidence permits;
+remove redundant wall coverage/selection work with exact invalidation and full
+fallbacks. No backend, event-clock, lighting-equation or source-art changes.
+render_audit owns prepared world membership and its publication; map_audit owns
+atlas style/culling; root owns wall visibility/mask work and serialized native
+validation/live profiling. scope_review tracks plan adherence, anti-slop and
+anti-OOP. Validate new/retired/replaced sources, sight-only changes, camera and
+wall modes, first-reveal pixels and the same real Gallery route. Track remaining
+costs honestly; do not claim all possible optimization is exhausted. Only after
+the identified avoidable work is addressed should the supplied normal handoff
+be inspected and adopted under the artwork policy as a separately tested change.
+
+The 20261013T000130.189147Z live run passes 411 checks and reduces median
+reveal frames to21.315ms, but still spends1.930ms repairing all floor addresses.
+Reuse the existing atlas instance/repack_count and exact admitted base-floor
+receipt to preserve unchanged prepared addresses; repair changed/new rows only
+when that proof matches. Resolve reordered row indices from their stable IDs.
+All manual/full/repack/mismatched paths retain exhaustive address repair; native
+buffer upload remains. map_audit owns the bounded receipt and lifecycle checks.
+render_audit replaces the static/dynamic draw merge with strict binary lower
+bounds and native range copies, preserving exact tie rules and all rank/position
+polling. Compare against the old linear merge, including tied/hidden/empty inputs.
+Root repeats native first-frame/pixel checks and the same live route; scope_review
+continues plan adherence, anti-slop and anti-OOP review. These changes must improve
+measured work without shifting delay into holds or changing approved graphics.
+
+Root also removes the resolver's duplicate object/item traversal used only to
+recover source item IDs: keep that ID on the already selected local light record.
+Existing native source/colour checks and full-scene captures must remain exact.
+Split the occasional media_plan timing into request/set construction/demand/prune
+subphases before considering any media-cache change; preserve actual demand,
+readiness, budget and preload behavior.
+
+Live run20261013T001351.039284Z timed out at command12 before the Gallery:
+submit returned a transport failure before any backend dispatch, then the receipt
+was unknown. Preserve this failed run; do not report its partial route as success.
+Root adds payload-free failure context to the live diagnostic; render_audit
+investigates the existing HTTP-client reuse path and command safety boundary.
+Any repair must preserve command numbering/receipt recovery and never silently
+resubmit a potentially sent mutation. Server sources remain read-only.
+The same run attributes the occasional preparation frame to MediaWarmup.demand
+(p5011.797ms/max17.12ms): map_audit may skip exact unchanged accepted demand and
+identical immutable family role owners, preserving budget, selection, boot and
+in-flight fixture-role changes. Compare readiness/selection with full evaluation,
+then repeat the full native live route. scope_review tracks this measured extension.
+
+The failed trace has zero dropped records and no request_sent for the numbered
+command: the connection failed before request_raw was invoked. Replace an expired
+pooled connected socket once only while still in that pre-send phase; preserve
+the original deadline. Never replay after any request_raw attempt, including an
+error return. Add a real local keepalive-expiry fixture and a received-POST/lost-
+reply fixture proving no automatic duplicate mutation. Existing receipt recovery
+is unchanged. render_audit owns the SDK repair/fixtures; root repeats the same
+live route and retains the failed-run evidence separately from performance data.

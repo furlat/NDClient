@@ -341,6 +341,7 @@ func _ground_update(entry: Dictionary, rows: Array) -> void:
     # Direct/manual updates have no prepared geometry receipt. Never carry a
     # receipt from an older worker publication into the exact fallback path.
     entry.erase("geometry_changes")
+    entry.erase("prepared_address_token")
     var packets: Dictionary = entry.ground_packets
     _ground_sort(rows,packets)
     var retained = {}; var indices = {}; var buffer = PackedFloat32Array(); var bounds = AABB(); var values: Array = []
@@ -383,6 +384,7 @@ func _ground_publish(entry: Dictionary, packet: Dictionary) -> void:
     # Only this prepared publication certifies row packet/buffer address equality.
     # It never claims those copied addresses match the atlas's current layout.
     entry.prepared_address_version = entry.ground_version
+    entry.prepared_address_token = packet.get("address_token",[])
     entry.placement = rows[0]; entry.id = rows[0].id+":0:terrain"
     update_bounds(entry)
 

@@ -44,4 +44,4 @@ static func prepare(rows: Array, previous: Dictionary, quarter: int, basis: Basi
     for id in previous.packets:
         if not retained.has(id): removed.append(id)
     var geometry_changes = {"base_version":previous.get("ground_version",-1),"changed":changed,"removed":removed}
-    return {"rows":rows,"packets":retained,"indices":indices,"buffer":buffer,"bounds":bounds,"values":values,"geometry_changes":geometry_changes}
+    return {"rows":rows,"packets":retained,"indices":indices,"buffer":buffer,"bounds":bounds,"values":values,"geometry_changes":geometry_changes,"address_token":previous.get("address_token",[])}

@@ -49,6 +49,12 @@ var last_reconcile_ms := 0.0
 var last_projection_ms := 0.0
 var last_reconcile_phases: Dictionary = {}
 var projection_dirty: Array = []
+# Display-owner notifications, accumulated until a successful atlas sync. They
+# carry identities only; final admitted values are read after buffer publication.
+var style_dirty: Dictionary = {}
+var visibility_dirty: Dictionary = {}
+var cull_dirty: Dictionary = {}
+var receivers_tracked := false
 var entry_specs: Dictionary = {}
 var published_supports: Dictionary = {}
 var shelf_cursor := Vector3i(1,1,0)
@@ -384,6 +390,15 @@ func _make_receiver(spec: Dictionary, group: Dictionary, index: int) -> Dictiona
     return {"id":spec.id,"entry":spec.entry,"index":index,"node":node,"group":group,
         "crop":spec.crop,"position":Vector2i.ZERO,"projection":[],"visibility":-1.0,"bounds":Rect2()}
 
+func floor_address_token(entry: Dictionary) -> Array:
+    # Capture on the scene thread only after this exact floor version has been
+    # addressed. Worker copies may retain old addresses, never native resources.
+    if not delta_ready or not entry.has("batch_rows"): return []
+    var id: int=entry.node.get_instance_id()
+    var source: Dictionary=entry_specs.get(id,{})
+    if source.is_empty() or not is_same(source.entry,entry) or source.ground_version!=entry.get("ground_version",0): return []
+    return [get_instance_id(),repack_count,id,source.ground_version]
+
 func _publish_addresses(floor_receivers: Dictionary, changed_outputs: Array) -> void:
     var target=Vector2(viewport.size)
     for receiver in changed_outputs:
@@ -393,12 +408,14 @@ func _publish_addresses(floor_receivers: Dictionary, changed_outputs: Array) -> 
         output.set_shader_parameter("source_crop",receiver.crop.uv)
         output.set_shader_parameter("atlas_region",Vector4(origin.x,origin.y,size.x,size.y))
     var rewritten=0
-    var packet_reads=0; var packet_reads_skipped=0
+    var packet_reads=0; var packet_reads_skipped=0; var rows_checked=0; var rows_preserved=0
     for floor in floor_receivers.values():
         var entry: Dictionary=floor.entry
         var output: ShaderMaterial=entry.received_material
-        output.set_shader_parameter("source_crop",floor.receivers[0].crop.uv)
-        output.set_shader_parameter("atlas_cell_size",Vector2(floor.receivers[0].crop.pixels.size)/target)
+        var crop: Dictionary=floor.crop if floor.has("crop") else floor.receivers[0].crop
+        output.set_shader_parameter("source_crop",crop.uv)
+        output.set_shader_parameter("atlas_cell_size",Vector2(crop.pixels.size)/target)
+        rows_preserved+=int(floor.get("preserved_rows",0))
         var buffer: PackedFloat32Array=entry.ground_buffer
         var buffer_changed=false
         var snapshots: Dictionary=entry_specs[entry.node.get_instance_id()].packets
@@ -408,6 +425,7 @@ func _publish_addresses(floor_receivers: Dictionary, changed_outputs: Array) -> 
         # against the atlas address before skipping the duplicate packet read.
         var coherent: bool=floor.get("coherent_addresses",false)
         for receiver in floor.receivers:
+            rows_checked+=1
             if repair_indices:
                 receiver.index=entry.ground_indices[receiver.row_id]
             var pixel: Vector2i=receiver.position
@@ -430,6 +448,8 @@ func _publish_addresses(floor_receivers: Dictionary, changed_outputs: Array) -> 
                 snapshots[row_id].data=data.duplicate()
         if buffer_changed:
             entry.ground_buffer=buffer; entry.node.multimesh.buffer=buffer
+    last_reconcile_phases.address_rows_checked=rows_checked
+    last_reconcile_phases.address_rows_preserved=rows_preserved
     last_reconcile_phases.address_rows_rewritten=rewritten
     last_reconcile_phases.address_batches=floor_receivers.size()
     last_reconcile_phases.address_packet_reads=packet_reads
@@ -617,6 +637,7 @@ func _plane(point: Vector3) -> Vector2:
 
 func _project(receiver: Dictionary, force: bool) -> void:
     var entry: Dictionary = receiver.entry
+    if receiver.index>=0: receiver.index=entry.ground_indices[receiver.row_id]
     var mesh: QuadMesh = entry.node.multimesh.mesh if receiver.index>=0 else entry.node.mesh
     var identity: Array = [entry.get("ground_version",0),entry.node.global_transform,mesh.size,mesh.center_offset] if receiver.index>=0 else [entry.node.global_transform,mesh.size,mesh.center_offset]
     if not force and identity==receiver.projection: return
@@ -640,13 +661,23 @@ func _project(receiver: Dictionary, force: bool) -> void:
     receiver.world_origin=transform.origin
     receiver.bounds=Rect2(origin,Vector2.ZERO).expand(origin+axis_x).expand(origin+axis_y).expand(origin+axis_x+axis_y)
 
+func style_changed(entry: Dictionary, row_id: String = "source") -> void:
+    var source_id: int=entry.node.get_instance_id()
+    style_dirty[str(source_id)+":"+row_id]=true
+    material_dirty[source_id]=true
+
+func visibility_changed(entry: Dictionary) -> void:
+    visibility_dirty[entry.node.get_instance_id()]=true
+
 func _visibility(receiver: Dictionary, screen: Rect2) -> bool:
     var shown: bool = receiver.entry.node.is_visible_in_tree() and (plane_to_screen*receiver.bounds).intersects(screen)
     if receiver.node.visible!=shown: receiver.node.visible=shown
+    receiver.view_visible=shown
     return shown
 
 func _style(receiver: Dictionary) -> void:
     var entry: Dictionary = receiver.entry
+    if receiver.index>=0: receiver.index=entry.ground_indices[receiver.row_id]
     var visibility: float = entry.scenery_values[receiver.index] if receiver.index>=0 else float(entry.get("scenery_value",1.0))
     if visibility==receiver.visibility: return
     var previous: Dictionary=receiver.group
@@ -662,7 +693,7 @@ func _style(receiver: Dictionary) -> void:
     if receiver.water:
         receiver.group.material.set_shader_parameter("receiver_world_origin",receiver.get("world_origin",Vector3.ZERO))
 
-func sync(world: Node, published: Array = [], styles: Array = [], changes: Dictionary = {}) -> void:
+func sync(world: Node, published: Array = [], styles: Array = [], changes: Dictionary = {}, tracked_receivers: bool = false) -> void:
     var started = Time.get_ticks_usec()
     projection_dirty=[]
     last_reconcile_phases={}
@@ -678,6 +709,7 @@ func sync(world: Node, published: Array = [], styles: Array = [], changes: Dicti
             if entry.has("cell") and is_instance_valid(entry.node) and not entry.node.is_queued_for_deletion(): moving.append([entry.node.get_instance_id(),entry.cell])
     var reconcile: bool = published.is_empty() or published!=admission_stamp or moving!=dynamic_members or world.entries.size()!=known_entry_count or screen_size.x>viewport.size.x or screen_size.y>viewport.size.y
     var phase = Time.get_ticks_usec()
+    var full_reconcile=false
     if reconcile:
         var applied: bool=not changes.is_empty() and Delta.reconcile(self,world,changes)
         if not applied:
@@ -687,7 +719,9 @@ func sync(world: Node, published: Array = [], styles: Array = [], changes: Dicti
             var previous_membership=membership
             entry_specs={}; membership=[]; delta_ready=false
             applied=_reconcile(world)
-            if applied: Delta.rebuild(self,int(changes.get("serial",-1)))
+            if applied:
+                Delta.rebuild(self,int(changes.get("serial",-1)))
+                full_reconcile=true
             else:
                 entry_specs=previous_specs; membership=previous_membership
         if not applied:
@@ -712,17 +746,39 @@ func sync(world: Node, published: Array = [], styles: Array = [], changes: Dicti
         projection_root.transform=plane_to_screen
     phase=Time.get_ticks_usec()
     var restyle: bool = reconcile or styles.is_empty() or styles!=visibility_stamp
-    if restyle:
-        for receiver in static_receivers: _style(receiver)
+    # The producer stamp is [world generation, quarter, sight revision, wall
+    # mode]. Modes/views keep the complete path; a sight-only revision can use
+    # exact per-row notifications even when geometry did not change.
+    var mode_changed: bool=styles.size()<4 or visibility_stamp.size()<4
+    if not mode_changed: mode_changed=styles[1]!=visibility_stamp[1] or styles[3]!=visibility_stamp[3]
+    var full_receivers: bool=not tracked_receivers or not receivers_tracked or full_reconcile or mode_changed
+    var style_checks=0
+    if restyle or not style_dirty.is_empty():
+        if full_receivers:
+            for receiver in static_receivers:
+                _style(receiver); style_checks+=1
+        else:
+            for id in style_dirty:
+                if not receiver_index.has(id): continue
+                var receiver: Dictionary=receiver_index[id]
+                if receiver.dynamic: continue
+                _style(receiver); style_checks+=1
         visibility_stamp=styles.duplicate()
     for receiver in dynamic_receivers: _style(receiver)
+    last_reconcile_phases.style_receivers_checked=style_checks
     last_reconcile_phases.style_ms=(Time.get_ticks_usec()-phase)/1000.0
     phase=Time.get_ticks_usec()
-    # One owner pass per source. Floor visibility/join-mask variants share the
-    # source and output, so they must not each poll/copy the capped output.
+    # Tracked static owners notify exact source changes. Dynamic actor/flame
+    # clocks still poll each frame; legacy callers and camera/mode changes keep
+    # the complete source path. New groups and admitted patches mark themselves.
+    var material_sources: Dictionary=material_dirty.duplicate()
+    if full_receivers or camera_changed or basis_changed:
+        for id in source_groups: material_sources[id]=true
+    else:
+        for receiver in dynamic_receivers: material_sources[receiver.spec.source_id]=true
     var material_sources_updated=0
     var material_sources_unchanged=0
-    for id in source_groups:
+    for id in material_sources:
         if not entry_specs.has(id) or source_groups[id].is_empty(): continue
         var source: Dictionary=entry_specs[id]
         var entry: Dictionary=source.entry
@@ -765,6 +821,7 @@ func sync(world: Node, published: Array = [], styles: Array = [], changes: Dicti
         source.sync_version=version; source.sync_highlighted=highlighted; source.sync_seconds=seconds
         source.sync_visibility=visibility
     material_dirty.clear()
+    last_reconcile_phases.material_sources_checked=material_sources_updated+material_sources_unchanged
     last_reconcile_phases.material_sources_updated=material_sources_updated
     last_reconcile_phases.material_sources_unchanged=material_sources_unchanged
     last_reconcile_phases.material_sync_ms=(Time.get_ticks_usec()-phase)/1000.0
@@ -774,15 +831,33 @@ func sync(world: Node, published: Array = [], styles: Array = [], changes: Dicti
         for receiver in static_receivers: _project(receiver,true)
     else:
         for receiver in projection_dirty: _project(receiver,true)
-    if reconcile or camera_changed or restyle:
+    var cull_checks=0
+    if camera_changed or (full_receivers and (reconcile or restyle or not visibility_dirty.is_empty())):
         static_live_receivers=0
         for receiver in static_receivers:
             if _visibility(receiver,screen): static_live_receivers+=1
+            cull_checks+=1
+    else:
+        for receiver in projection_dirty: cull_dirty[receiver.id]=true
+        for source_id in visibility_dirty:
+            if not entry_specs.has(source_id): continue
+            for receiver in entry_specs[source_id].receivers.values(): cull_dirty[receiver.id]=true
+        for id in cull_dirty:
+            if not receiver_index.has(id): continue
+            var receiver: Dictionary=receiver_index[id]
+            if receiver.dynamic: continue
+            var was_visible: bool=receiver.get("view_visible",false)
+            var shown: bool=_visibility(receiver,screen)
+            static_live_receivers+=int(shown)-int(was_visible)
+            cull_checks+=1
     live_receivers=static_live_receivers
     for receiver in dynamic_receivers:
         _project(receiver,basis_changed)
         if _visibility(receiver,screen): live_receivers+=1
+    last_reconcile_phases.cull_receivers_checked=cull_checks
     last_projection_ms=(Time.get_ticks_usec()-phase)/1000.0
+    style_dirty.clear(); visibility_dirty.clear(); cull_dirty.clear()
+    receivers_tracked=tracked_receivers
     last_sync_ms=(Time.get_ticks_usec()-started)/1000.0
 
 func sync_output(world: Node, published: Array = []) -> void:
@@ -819,6 +894,8 @@ func close() -> void:
     receivers.clear(); static_receivers.clear(); dynamic_receivers.clear(); groups.clear(); membership.clear(); layout_members.clear(); crop_cache.clear()
     entry_specs.clear(); published_supports.clear(); shelf_cursor=Vector3i(1,1,0)
     receiver_index.clear(); support_owners.clear(); source_groups.clear(); material_dirty.clear(); delta_ready=false; delta_serial=-1
+    style_dirty.clear(); visibility_dirty.clear(); cull_dirty.clear(); receivers_tracked=false
+    static_live_receivers=0; live_receivers=0
     admission_stamp.clear(); visibility_stamp.clear(); dynamic_members.clear(); output_stamp.clear(); transport_stamp.clear(); canvas_key.clear(); known_entry_count=-1
     if is_instance_valid(viewport): viewport.queue_free()
     viewport=null

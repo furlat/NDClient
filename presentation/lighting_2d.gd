@@ -141,17 +141,8 @@ func sync(state: Dictionary) -> void:
     _resolver.sources=sources
     _resolver.issues=resolved.issues
     _source_colours.clear()
-    var disclosed_items = {}
-    for object in state.get("objects",{}).values():
-        disclosed_items[object.item.item_uuid]=object.item
-    var controlled: Array=state.get("audience",{}).get("controlled",[])
-    for id in state.get("actors",{}):
-        var actor: Dictionary=state.actors[id]
-        var items: Array=actor.get("controlled_items",[]) if id in controlled and actor.get("controlled_items")!=null else actor.get("visual_loadout",{}).get("layers",[])
-        for item in items: disclosed_items[item.item_uuid]=item
     for source in sources:
-        var item: Dictionary=disclosed_items.get(source.item_uuid,{})
-        _source_colours[source.item_uuid]=TORCH_COLOUR if item.get("item_id","") in TORCH_ITEM_IDS else Color.WHITE
+        _source_colours[source.item_uuid]=TORCH_COLOUR if source.item_id in TORCH_ITEM_IDS else Color.WHITE
     _sync_pages()
     sample({})
     _update_issues()

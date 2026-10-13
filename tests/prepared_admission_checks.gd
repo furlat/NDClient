@@ -49,7 +49,9 @@ func publish_order(scene: Node) -> void:
     var prepared = Preparation.new()
     prepared.host=scene; prepared.epoch=scene.timeline.initialization_revision; prepared.quarter=scene.quarter
     prepared.result={"needs_order":true,"background":scene.ground_is_background,"worker_ms":0.0}
-    prepared._collect_order(scene.static_entries); prepared._sort_order(); prepared.publish_order()
+    prepared._collect_order(scene.static_entries); prepared._sort_order()
+    for index in prepared.sorted_indices: prepared._prepare_order_record(index)
+    prepared.publish_order()
     prepared.free()
 func run() -> void:
     var scene = Probe.new(); root.add_child(scene)

@@ -85,6 +85,7 @@ static func drop_group(atlas, group: Dictionary) -> void:
     if atlas.source_groups.has(group.source_id): atlas.source_groups[group.source_id].erase(group.id)
 
 static func _remove(atlas, receiver: Dictionary) -> void:
+    if not receiver.dynamic and receiver.get("view_visible",false): atlas.static_live_receivers-=1
     _remove_list(atlas.receivers,receiver.list_index,"list_index")
     _remove_list(atlas.dynamic_receivers if receiver.dynamic else atlas.static_receivers,receiver.partition_index,"partition_index")
     atlas.receiver_index.erase(receiver.id)
@@ -125,6 +126,7 @@ static func _bind(atlas, spec: Dictionary, position: Vector2i) -> Dictionary:
     if receiver.get("rank",-1)!=rank: receiver.node.z_index=rank; receiver.rank=rank
     var source: Dictionary=atlas.entry_specs[spec.source_id]
     source.receivers[spec.row_id]=receiver; source.by_row[spec.row_id]=spec
+    if not receiver.dynamic: atlas.cull_dirty[receiver.id]=true
     return receiver
 
 static func reconcile(atlas, world, changes: Dictionary) -> bool:
@@ -155,7 +157,7 @@ static func reconcile(atlas, world, changes: Dictionary) -> bool:
         atlas.delta_serial=serial
         atlas.last_reconcile_phases.delta_sources=0
         return true
-    var source_patches={}; var removed={}; var specs={}; var floor_ids={}
+    var source_patches={}; var removed={}; var specs={}; var floor_ids={}; var address_changes={}
     var next_order: int=atlas.next_source_order
     for id in removed_sources:
         if not atlas.entry_specs.has(id): continue
@@ -180,6 +182,12 @@ static func reconcile(atlas, world, changes: Dictionary) -> bool:
             if before.ground_version!=source.ground_version:
                 var geometry: Dictionary=entry.get("geometry_changes",{})
                 if geometry.get("base_version",-1)!=before.ground_version or geometry.get("version",-1)!=source.ground_version: return false
+                # Retained cells never move in the sparse planner. The existing
+                # repack counter invalidates worker copies if a complete planner
+                # could have moved them while preparation was pending.
+                var expected=[atlas.get_instance_id(),atlas.repack_count,id,before.ground_version]
+                if entry.get("prepared_address_version",-1)==source.ground_version and entry.get("prepared_address_token",[])==expected:
+                    address_changes[id]=geometry.changed
                 for row_id in geometry.removed:
                     if before.receivers.has(str(row_id)):
                         var receiver: Dictionary=before.receivers[str(row_id)]; removed[receiver.id]=receiver
@@ -255,7 +263,9 @@ static func reconcile(atlas, world, changes: Dictionary) -> bool:
         _remove(atlas,receiver)
     for id in removed_sources:
         atlas.entry_specs.erase(id); atlas.source_groups.erase(id)
-    for id in source_patches: atlas.entry_specs[id]=source_patches[id]
+    for id in source_patches:
+        atlas.entry_specs[id]=source_patches[id]
+        atlas.material_dirty[id]=true
     for cell in owners:
         if owners[cell].is_empty(): atlas.support_owners.erase(cell)
         else: atlas.support_owners[cell]=owners[cell]
@@ -283,7 +293,12 @@ static func reconcile(atlas, world, changes: Dictionary) -> bool:
         output.set_shader_parameter("light_cap",atlas.light_cap)
         entry.node.material_override=output; source.output=output
         if floor_ids.has(id):
-            floors[id]={"entry":entry,"receivers":source.receivers.values(),"repair_indices":true,
+            var repairs: Array=[]
+            if address_changes.has(id):
+                for row_id in address_changes[id]: repairs.append(source.receivers[str(row_id)])
+            else: repairs=source.receivers.values()
+            floors[id]={"entry":entry,"receivers":repairs,"crop":source.crop,"repair_indices":true,
+                "preserved_rows":source.receivers.size()-repairs.size(),
                 "coherent_addresses":entry.get("prepared_address_version",-1)==entry.get("ground_version",0)}
         else: outputs.append_array(source.receivers.values())
     atlas._publish_addresses(floors,outputs)

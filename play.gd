@@ -305,7 +305,7 @@ func _process(delta: float) -> void:
             var senses: Variant = timeline.state.get("senses")
             var visible_cells: Array = senses.get("visible",[]) if senses != null else []
             if wall_visibility_revision < 0 or visible_cells != wall_visible_cells:
-                update_wall_visibility(false)
+                update_wall_visibility(false,false)
             wall_visibility_revision = timeline.revision
         _prepare_rotation()
         phase = Time.get_ticks_usec()
@@ -443,11 +443,14 @@ func _publish_native_light_changes(upserts: Array, removed: Array, full: bool = 
 
 func _sync_world() -> void:
     prepared_scenery = {}; prepared_static_order = {}
-    var prepared: Dictionary = pending_world.result if pending_world!=null and pending_world.epoch==timeline.initialization_revision and pending_world.prepared and (pending_world.admitted or pending_world.initial) else {}
+    var prepared: Dictionary = pending_world.result if pending_world!=null and pending_world.epoch==timeline.initialization_revision and pending_world.prepared and (pending_world.admitted or pending_world.initial) and pending_world.can_publish_membership() else {}
     # Explicit renderer fixtures may replace a state while preparation is pending.
     if prepared.is_empty() and pending_world!=null: _discard_world_preparation()
     var phase = Time.get_ticks_usec()
     world_changes = timeline.take_world_changes(world_revision)
+    if not prepared.is_empty() and world_changes.get("full",false) and not pending_world.initial:
+        # Manual/full replacement has no sparse ownership proof.
+        prepared = {}; _discard_world_preparation()
     world_revision = timeline.world_revision
     var supports: Dictionary = timeline.staged_tiles()
     for key in supports:
@@ -513,85 +516,108 @@ func _sync_world() -> void:
     var light_upserts: Array = []
     var entries_changed = rotated
     var walls_changed = rotated
-    phase = Time.get_ticks_usec()
-    for id in world_groups:
-        var group: Dictionary = world_groups[id]
-        if not rotated and wanted.has(id) and wanted[id] == group.row: continue
-        if group.row.kind in ["wall","cliff"]: walls_changed = true
-        entries_changed = true
-        _scenery_remove(group.entries)
-        for entry in group.entries:
-            removed[entry.node.get_instance_id()] = true
-            entry.node.queue_free()
-    FrameProfile.end_phase(profile,"world_objects",phase)
-    phase = Time.get_ticks_usec()
-    for key in ground_groups:
-        var group: Dictionary = ground_groups[key]
-        if not rotated and ground.has(key): continue
-        entries_changed = true
-        _scenery_remove(group.entries)
-        for entry in group.entries:
-            removed[entry.node.get_instance_id()] = true
-            entry.node.queue_free()
-    FrameProfile.end_phase(profile,"world_ground",phase)
-    var fresh_groups = {}
-    var fresh_ground = {}
-    var retained: Array = []
-    phase = Time.get_ticks_usec()
-    for id in wanted:
-        var row: Dictionary = wanted[id]
-        var old: Dictionary = world_groups.get(id,{})
-        if not rotated and not old.is_empty() and old.row == row:
-            fresh_groups[id] = old
-        else:
-            if not prepared.is_empty() and pending_world.native_groups.has(id):
-                fresh_groups[id] = pending_world.native_groups[id]
-                for entry in fresh_groups[id].entries: entry.node.reparent(sprite_parent,false)
-                entries.append_array(fresh_groups[id].entries)
-            else:
-                var first = static_entries.size()
-                _environment_row(row.duplicate(true))
-                fresh_groups[id] = {"row":row,"entries":static_entries.slice(first)}
-            _scenery_add(fresh_groups[id].entries)
-            light_upserts.append_array(fresh_groups[id].entries)
+    if not prepared.is_empty() and not rotated:
+        var membership: Dictionary = pending_world.membership
+        removed = membership.removed; light_upserts = membership.upserts
+        entries_changed = membership.entries_changed; walls_changed = membership.walls_changed
+        phase = Time.get_ticks_usec()
+        for group in membership.retired_groups:
+            _scenery_remove(group.entries)
+            for entry in group.entries: entry.node.queue_free()
+        # Preserve the combined entries' historical insertion order. Rebuilding
+        # it static-first would change native atlas reservation order.
+        for group in membership.new_groups:
+            for entry in group.entries: entry.node.reparent(sprite_parent,false)
+            entries.append_array(group.entries)
+            _scenery_add(group.entries)
+        FrameProfile.end_phase(profile,"world_objects",phase)
+        phase = Time.get_ticks_usec()
+        for update in membership.ground_updates: _ground_publish(update.entry,update.packet)
+        FrameProfile.end_phase(profile,"world_ground",phase)
+        if not removed.is_empty():
+            entries = entries.filter(func(entry):return not removed.has(entry.node.get_instance_id()))
+        static_entries = membership.entries; fixture_entries = membership.fixtures
+        world_groups = membership.groups; ground_groups = membership.ground
+    else:
+        phase = Time.get_ticks_usec()
+        for id in world_groups:
+            var group: Dictionary = world_groups[id]
+            if not rotated and wanted.has(id) and wanted[id] == group.row: continue
+            if group.row.kind in ["wall","cliff"]: walls_changed = true
             entries_changed = true
-            if row.kind in ["wall","cliff"]: walls_changed = true
-        retained.append_array(fresh_groups[id].entries)
-    FrameProfile.end_phase(profile,"world_objects",phase)
-    phase = Time.get_ticks_usec()
-    for key in ground:
-        var rows: Array = ground[key]
-        var old: Dictionary = ground_groups.get(key,{})
-        if not rotated and not old.is_empty():
-            if old.rows != rows:
-                var prior: Dictionary = old.entries[0].placement
-                if not prepared.is_empty() and prepared.packets.has(key): _ground_publish(old.entries[0],prepared.packets[key])
-                else: _ground_update(old.entries[0],rows.duplicate())
-                light_upserts.append(old.entries[0])
-                if prior!=old.entries[0].placement: entries_changed = true
-                old.rows = rows
-            fresh_ground[key] = old
-        else:
-            if not prepared.is_empty() and pending_world.native_ground.has(key):
-                fresh_ground[key] = pending_world.native_ground[key]
-                for entry in fresh_ground[key].entries: entry.node.reparent(sprite_parent,false)
-                entries.append_array(fresh_ground[key].entries)
-            else:
-                var first = static_entries.size()
-                _ground_batch(rows.duplicate())
-                fresh_ground[key] = {"rows":rows,"entries":static_entries.slice(first)}
-            _scenery_add(fresh_ground[key].entries)
-            light_upserts.append_array(fresh_ground[key].entries)
+            _scenery_remove(group.entries)
+            for entry in group.entries:
+                removed[entry.node.get_instance_id()] = true
+                entry.node.queue_free()
+        FrameProfile.end_phase(profile,"world_objects",phase)
+        phase = Time.get_ticks_usec()
+        for key in ground_groups:
+            var group: Dictionary = ground_groups[key]
+            if not rotated and ground.has(key): continue
             entries_changed = true
-            for row in rows: scenery_new_consumers[row.id] = true
-        retained.append_array(fresh_ground[key].entries)
-    FrameProfile.end_phase(profile,"world_ground",phase)
-    if not removed.is_empty():
-        entries = entries.filter(func(entry):return not removed.has(entry.node.get_instance_id()))
-    static_entries = retained
-    fixture_entries = static_entries.filter(func(entry):return entry.material.shader == FIXTURE_FLAME_SHADER)
-    world_groups = fresh_groups
-    ground_groups = fresh_ground
+            _scenery_remove(group.entries)
+            for entry in group.entries:
+                removed[entry.node.get_instance_id()] = true
+                entry.node.queue_free()
+        FrameProfile.end_phase(profile,"world_ground",phase)
+        var fresh_groups = {}
+        var fresh_ground = {}
+        var retained: Array = []
+        phase = Time.get_ticks_usec()
+        for id in wanted:
+            var row: Dictionary = wanted[id]
+            var old: Dictionary = world_groups.get(id,{})
+            if not rotated and not old.is_empty() and old.row == row:
+                fresh_groups[id] = old
+            else:
+                if not prepared.is_empty() and pending_world.native_groups.has(id):
+                    fresh_groups[id] = pending_world.native_groups[id]
+                    for entry in fresh_groups[id].entries: entry.node.reparent(sprite_parent,false)
+                    entries.append_array(fresh_groups[id].entries)
+                else:
+                    var first = static_entries.size()
+                    _environment_row(row.duplicate(true))
+                    fresh_groups[id] = {"row":row,"entries":static_entries.slice(first)}
+                _scenery_add(fresh_groups[id].entries)
+                light_upserts.append_array(fresh_groups[id].entries)
+                entries_changed = true
+                if row.kind in ["wall","cliff"]: walls_changed = true
+            retained.append_array(fresh_groups[id].entries)
+        FrameProfile.end_phase(profile,"world_objects",phase)
+        phase = Time.get_ticks_usec()
+        for key in ground:
+            var rows: Array = ground[key]
+            var old: Dictionary = ground_groups.get(key,{})
+            if not rotated and not old.is_empty():
+                if old.rows != rows:
+                    var prior: Dictionary = old.entries[0].placement
+                    if not prepared.is_empty() and prepared.packets.has(key): _ground_publish(old.entries[0],prepared.packets[key])
+                    else: _ground_update(old.entries[0],rows.duplicate())
+                    light_upserts.append(old.entries[0])
+                    if prior!=old.entries[0].placement: entries_changed = true
+                    old.rows = rows
+                fresh_ground[key] = old
+            else:
+                if not prepared.is_empty() and pending_world.native_ground.has(key):
+                    fresh_ground[key] = pending_world.native_ground[key]
+                    for entry in fresh_ground[key].entries: entry.node.reparent(sprite_parent,false)
+                    entries.append_array(fresh_ground[key].entries)
+                else:
+                    var first = static_entries.size()
+                    _ground_batch(rows.duplicate())
+                    fresh_ground[key] = {"rows":rows,"entries":static_entries.slice(first)}
+                _scenery_add(fresh_ground[key].entries)
+                light_upserts.append_array(fresh_ground[key].entries)
+                entries_changed = true
+                for row in rows: scenery_new_consumers[row.id] = true
+            retained.append_array(fresh_ground[key].entries)
+        FrameProfile.end_phase(profile,"world_ground",phase)
+        if not removed.is_empty():
+            entries = entries.filter(func(entry):return not removed.has(entry.node.get_instance_id()))
+        static_entries = retained
+        fixture_entries = static_entries.filter(func(entry):return entry.material.shader == FIXTURE_FLAME_SHADER)
+        world_groups = fresh_groups
+        ground_groups = fresh_ground
     if not prepared.is_empty(): pending_world.publish_order()
     # New floor instances start remembered; current grants are applied through
     # their direct packed index without rebuilding one consumer per known tile.
@@ -791,6 +817,7 @@ func _sync_scenery(force: bool = false, refresh_sight: bool = false) -> void:
             var value = 1.0 if changed[id] else 0.0
             for entry in scenery_batches:
                 var index: int = entry.ground_indices.get(id,-1)
+                if index>=0: native_light_atlas.style_changed(entry,str(id))
                 if index>=0 and entry.scenery_values[index]!=value:
                     _ground_visibility(entry,index,value)
                     var key: int = entry.node.get_instance_id()
@@ -799,6 +826,7 @@ func _sync_scenery(force: bool = false, refresh_sight: bool = false) -> void:
             for consumer in scenery_consumers.get(id,[]):
                 if consumer.index>=0: continue # Older prepared snapshots may retain floor lookups.
                 var entry: Dictionary = consumer.entry
+                native_light_atlas.style_changed(entry)
                 if entry.get("scenery_value",-1.0) != value:
                     entry.material.set_shader_parameter("current_visibility",value)
                     entry.scenery_value = value
@@ -809,7 +837,9 @@ func _sync_scenery(force: bool = false, refresh_sight: bool = false) -> void:
         scenery_quarter = world_quarter
     var seconds: float = timeline.display_ms / 1000.0
     if water_display_seconds != seconds:
-        for entry in water_entries: entry.material.set_shader_parameter("displayed_time_seconds",seconds)
+        for entry in water_entries:
+            entry.material.set_shader_parameter("displayed_time_seconds",seconds)
+            native_light_atlas.style_changed(entry)
         water_display_seconds = seconds
 
 func _light_entry(entry: Dictionary) -> void:
@@ -927,12 +957,15 @@ func _prepare_media(first: Dictionary = {}) -> void:
     var upcoming: Dictionary = media_group_plans.get(ids[1],{}) if ids.size()>1 else {}
     var needs_plan = ready.is_empty() or (ids.size()>1 and upcoming.is_empty())
     if needs_plan and media_requested_key != key:
+        var request_started = Time.get_ticks_usec()
         media_requested_key = key
         MediaWarmup.request_plan(media_warmup,key,timeline.state,groups)
+        FrameProfile.end_phase(profile,"media_plan_request",request_started)
     media_metadata_ready = not ready.is_empty()
     if not media_metadata_ready:
         FrameProfile.end_phase(profile,"media_plan",started)
         return
+    var sets_started = Time.get_ticks_usec()
     media_plan = {"required":ready.character,"upcoming":upcoming.get("character",{}),
         "errors":ready.errors,"upcoming_errors":upcoming.get("errors",[])}
     media_environment_required = ready.environment
@@ -947,7 +980,10 @@ func _prepare_media(first: Dictionary = {}) -> void:
     var wanted = {}
     for paths in [media_plan.required,media_environment_required,media_plan.upcoming,upcoming.get("environment",{})]:
         for path in paths: wanted[path] = Catalog.media_path(path)
+    FrameProfile.end_phase(profile,"media_plan_sets",sets_started)
+    var demand_started = Time.get_ticks_usec()
     MediaWarmup.demand(media_warmup,wanted,environment,fixtures,gpu_only,cpu_required)
+    FrameProfile.end_phase(profile,"media_plan_demand",demand_started)
     media_issue = ""
     for message in media_plan.errors+media_plan.upcoming_errors:
         if not message in presentation_errors: presentation_errors.append(message)
@@ -956,7 +992,9 @@ func _prepare_media(first: Dictionary = {}) -> void:
     required.merge(media_environment_required)
     for path in required:
         if media_warmup.failed.has(path): media_issue = media_warmup.failed[path]
+    var prune_started = Time.get_ticks_usec()
     _prune_character_media()
+    FrameProfile.end_phase(profile,"media_plan_prune",prune_started)
     FrameProfile.end_phase(profile,"media_plan",started)
 
 func _media_ready(group: Dictionary) -> bool:
@@ -1166,7 +1204,7 @@ func _sync_native_lighting() -> void:
     phase = Time.get_ticks_usec()
     native_light_atlas.sync(self,
         [world_generation,world_revision,quarter,wall_mode,scenery_revision,source_depth,source_normals],
-        [world_generation,quarter,scenery_revision,wall_mode],native_light_changes)
+        [world_generation,quarter,scenery_revision,wall_mode],native_light_changes,true)
     FrameProfile.end_phase(profile,"native_2d_atlas",phase)
     phase = Time.get_ticks_usec()
     # Remove stale handles before the helper retires hidden actors. Source
@@ -1229,14 +1267,7 @@ func _sort_draws() -> void:
     if draw_order_dirty:
         var moving = actor_entries.filter(func(entry):return entry.node.visible)
         moving.sort_custom(_entry_before)
-        draw_order = []
-        var fixed_index = 0
-        for actor in moving:
-            while fixed_index < static_order.size() and _entry_before(static_order[fixed_index],actor):
-                draw_order.append(static_order[fixed_index]); fixed_index += 1
-            draw_order.append(actor)
-        while fixed_index < static_order.size():
-            draw_order.append(static_order[fixed_index]); fixed_index += 1
+        draw_order = _merge_draw_order(moving)
         for i in range(draw_order.size()): _apply_draw_rank(draw_order[i],i,forward)
         draw_order_dirty = false
     else:
@@ -1244,6 +1275,25 @@ func _sort_draws() -> void:
         for entry in actor_entries:
             if entry.node.visible: _apply_draw_rank(entry,entry.draw_rank,forward)
     _sync_wall_mask()
+
+func _merge_draw_order(moving: Array) -> Array:
+    var merged: Array = []
+    var fixed_index = 0
+    for actor in moving:
+        var low = fixed_index
+        var high = static_order.size()
+        while low < high:
+            var middle: int = (low+high)/2
+            if _entry_before(static_order[middle],actor): low = middle+1
+            else: high = middle
+        # This is a lower bound using the complete key + ID comparison. Exact
+        # actor/static ties keep the old actor-first order. Native shallow range
+        # copies preserve the static subsequence without per-entry script work.
+        if low > fixed_index: merged.append_array(static_order.slice(fixed_index,low))
+        merged.append(actor)
+        fixed_index = low
+    if fixed_index < static_order.size(): merged.append_array(static_order.slice(fixed_index))
+    return merged
 
 func _entry_before(a: Dictionary, b: Dictionary) -> bool:
     return Order.less(a.order_key,b.order_key) if a.order_key != b.order_key else a.id < b.id
@@ -1261,6 +1311,12 @@ func _apply_draw_rank(entry: Dictionary, rank: int, forward: Vector3) -> void:
 
 func _sync_wall_mask() -> void:
     var started = Time.get_ticks_usec()
+    # Coverage is sampled only in translucent mode. Retain pending membership
+    # and camera changes until the first frame that actually needs this mask.
+    if wall_mode != "translucent":
+        if wall_mask_viewport != null: wall_mask_viewport.render_target_update_mode = SubViewport.UPDATE_DISABLED
+        FrameProfile.end_phase(profile,"mask_sync",started)
+        return
     if wall_mask_viewport == null:
         wall_mask_viewport = SubViewport.new()
         wall_mask_viewport.size = Vector2i(get_viewport().get_visible_rect().size)
@@ -1269,6 +1325,7 @@ func _sync_wall_mask() -> void:
         wall_mask_viewport.render_target_update_mode = SubViewport.UPDATE_DISABLED
         add_child(wall_mask_viewport)
         RenderingServer.viewport_set_measure_render_time(wall_mask_viewport.get_viewport_rid(),true)
+        wall_mask_dirty = true
     var rebuilt = wall_mask_dirty
     if rebuilt:
         wall_mask_sources.clear()
@@ -1289,9 +1346,15 @@ func _sync_wall_mask() -> void:
             else:
                 node = wall_mask_nodes[index-1]
                 material = node.material
-            for parameter in ["colour_texture","colour_size","colour_rect","use_selection","invert_selection","selection_kind",
-                    "rgba_min","rgba_max","selection_mask","selection_rect","selection_scale","selection_offset","selection_values"]:
-                material.set_shader_parameter(parameter,entry.material.get_shader_parameter(parameter))
+            # This receiver can be assigned a different source after wall
+            # selection/reordering. Cache at the receiving material, never only
+            # on the source entry that previously occupied this draw index.
+            var source_key = [entry.node.get_instance_id(),entry.material.get_instance_id(),entry.get("source_version",0)]
+            if material.get_meta("coverage_source",[]) != source_key:
+                for parameter in ["colour_texture","colour_size","colour_rect","use_selection","invert_selection","selection_kind",
+                        "rgba_min","rgba_max","selection_mask","selection_rect","selection_scale","selection_offset","selection_values"]:
+                    material.set_shader_parameter(parameter,entry.material.get_shader_parameter(parameter))
+                material.set_meta("coverage_source",source_key)
             material.set_shader_parameter("wall_mask_id",index)
             wall_mask_sources.append(entry)
             entry.material.set_shader_parameter("wall_mask_id",index)
@@ -1817,11 +1880,11 @@ func _pick_wall_member(entry: Dictionary, relative: Vector2) -> Dictionary:
         if _environment_contains(pick.record,point,1): return _identity_hit(pick.row.id)
     return {}
 
-func update_wall_visibility(refresh_sight: bool = true) -> void:
+func update_wall_visibility(refresh_sight: bool = true, finish_draw_order: bool = true) -> void:
     _sync_scenery(false,refresh_sight)
     var started = Time.get_ticks_usec()
     var senses: Variant = timeline.state.get("senses")
-    var geometry = _wall_geometry()
+    var geometry = _wall_geometry() if wall_mode != "solid" else {}
     var visible: Dictionary = scenery_visible_cells
     geometry.visible = visible
     FrameProfile.end_phase(profile,"wall_targets",started)
@@ -1831,12 +1894,13 @@ func update_wall_visibility(refresh_sight: bool = true) -> void:
     wall_support_candidates = 0
     wall_max_member_candidates = 0
     for source in wall_sources:
-        for member in source.get("wall_members",[source]):
-            var targets = _wall_member_targets(member,geometry)
-            wall_support_candidates += targets.size()
-            wall_max_member_candidates = maxi(wall_max_member_candidates,targets.size())
-            if wall_mode!="solid" and targets.any(func(target):return visible.has(target.cell)):
-                faded[member.id] = true
+        if wall_mode != "solid":
+            for member in source.get("wall_members",[source]):
+                var targets = _wall_member_targets(member,geometry)
+                wall_support_candidates += targets.size()
+                wall_max_member_candidates = maxi(wall_max_member_candidates,targets.size())
+                if targets.any(func(target):return visible.has(target.cell)):
+                    faded[member.id] = true
         choices[source.id] = WallReveal.variants(source,faded,wall_mode,scenery_visibility)
     faded_walls = faded.keys()
     for entry in wall_entries:
@@ -1845,6 +1909,7 @@ func update_wall_visibility(refresh_sight: bool = true) -> void:
         var shown: bool = alpha>0.0 and entry.wall_source_visible
         if entry.node.visible != shown:
             entry.node.visible = shown
+            native_light_atlas.visibility_changed(entry)
             static_order_dirty = true
             draw_order_dirty = true
             wall_mask_dirty = true
@@ -1858,7 +1923,9 @@ func update_wall_visibility(refresh_sight: bool = true) -> void:
     FrameProfile.end_phase(profile,"wall_candidates",candidates_started)
     wall_visibility_revision = timeline.revision
     wall_visible_cells = senses.get("visible",[]).duplicate(true) if senses != null else []
-    _sort_draws()
+    # Production finalizes painter order once, after sampling native shadows.
+    # Direct input/inspection callers retain immediate order and mask updates.
+    if finish_draw_order: _sort_draws()
     FrameProfile.end_phase(profile,"wall_visibility",started)
 
 func _queue_wall_geometry_changes(changes: Dictionary) -> void:

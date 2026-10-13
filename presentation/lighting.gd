@@ -77,7 +77,7 @@ static func _source(item: Dictionary, anchor: String, position: Vector3, output:
     var very := float(item.very_bright_radius_feet) / 5.0
     var bright := maxf(floor(float(item.bright_radius_feet) / 5.0), 1.0)
     var outer := maxf(floor(float(item.bright_radius_feet + item.dim_radius_feet) / 5.0), 1.0)
-    output.append({"item_uuid":item.item_uuid,"actor_uuid":anchor,"position":position,"base_height_steps":base_height,
+    output.append({"item_uuid":item.item_uuid,"item_id":item.get("item_id",""),"actor_uuid":anchor,"position":position,"base_height_steps":base_height,
         "very_bright_radius_feet":item.very_bright_radius_feet,"bright_radius_feet":item.bright_radius_feet,
         "dim_radius_feet":item.dim_radius_feet,"very":very,"bright":bright,"outer":outer})
 

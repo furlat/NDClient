@@ -164,10 +164,11 @@ func step(budget_usec: int = 3000) -> void:
             "walls":
                 if cursor == sources.size(): phase = "style"; cursor = 0; batch_cursor = 0; order = []; picks = []; continue
                 var source: Dictionary = sources[cursor]; cursor += 1
-                for member in source.get("wall_members",[source]):
-                    var targets = WallReveal.targets(member,geometry,quarter)
-                    support_candidates += targets.size(); max_member_candidates = maxi(max_member_candidates,targets.size())
-                    if wall_mode!="solid" and targets.any(func(target):return visible_cells.has(target.cell)): faded[member.id] = true
+                if wall_mode != "solid":
+                    for member in source.get("wall_members",[source]):
+                        var targets = WallReveal.targets(member,geometry,quarter)
+                        support_candidates += targets.size(); max_member_candidates = maxi(max_member_candidates,targets.size())
+                        if targets.any(func(target):return visible_cells.has(target.cell)): faded[member.id] = true
                 choices[source.id] = WallReveal.variants(source,faded,wall_mode,current_visibility)
             "style":
                 if cursor == static_entries.size():
@@ -206,6 +207,8 @@ func step(budget_usec: int = 3000) -> void:
                 if entry.node.visible: order.append(entry)
                 cursor += 1
             "mask":
+                if wall_mode != "translucent":
+                    phase = "mask_position"; cursor = 0; completed_style = style_key.duplicate(true); continue
                 if mask_viewport == null:
                     mask_viewport = SubViewport.new(); mask_viewport.disable_3d = true; mask_viewport.transparent_bg = true
                     mask_viewport.render_target_update_mode = SubViewport.UPDATE_DISABLED; add_child(mask_viewport)
@@ -213,6 +216,9 @@ func step(budget_usec: int = 3000) -> void:
                 if cursor == 0: mask_sources = []
                 if cursor == order.size():
                     while mask_nodes.size()>mask_cursor: mask_nodes.pop_back().queue_free()
+                    # A stable camera can still have a different joined/member
+                    # source at each coverage index after a style change.
+                    mask_view = []
                     phase = "mask_position"; cursor = 0; completed_style = style_key.duplicate(true); continue
                 var entry: Dictionary = order[cursor]; cursor += 1
                 if entry.placement.kind not in ["wall","cliff"] or entry.role=="shadow": continue
@@ -222,8 +228,11 @@ func step(budget_usec: int = 3000) -> void:
                     rect.mouse_filter = Control.MOUSE_FILTER_IGNORE; mask_viewport.add_child(rect); mask_nodes.append(rect)
                 else: rect = mask_nodes[mask_cursor]
                 mask_cursor += 1
-                for parameter in ["colour_texture","colour_size","colour_rect","use_selection","invert_selection","selection_kind","rgba_min","rgba_max","selection_mask","selection_rect","selection_scale","selection_offset","selection_values"]:
-                    rect.material.set_shader_parameter(parameter,entry.material.get_shader_parameter(parameter))
+                var source_key = [entry.node.get_instance_id(),entry.material.get_instance_id(),entry.get("source_version",0)]
+                if rect.material.get_meta("coverage_source",[]) != source_key:
+                    for parameter in ["colour_texture","colour_size","colour_rect","use_selection","invert_selection","selection_kind","rgba_min","rgba_max","selection_mask","selection_rect","selection_scale","selection_offset","selection_values"]:
+                        rect.material.set_shader_parameter(parameter,entry.material.get_shader_parameter(parameter))
+                    rect.material.set_meta("coverage_source",source_key)
                 rect.material.set_shader_parameter("wall_mask_id",mask_cursor)
                 entry.material.set_shader_parameter("wall_mask_id",mask_cursor)
                 entry.material.set_shader_parameter("wall_mask_texture",mask_viewport.get_texture())
@@ -235,6 +244,7 @@ func step(budget_usec: int = 3000) -> void:
                     projection_key = [host.camera_focus,host.camera.size,host.get_viewport().get_visible_rect().size]
                     set_target_camera()
                     view = [camera.global_transform,camera.size,host.get_viewport().get_visible_rect().size]
+                    if wall_mode != "translucent": phase = "finish"; continue
                     if view == mask_view: phase = "finish"; continue
                     mask_view = view; mask_viewport.size = Vector2i(view[2])
                 if cursor == mask_nodes.size(): phase = "finish"; continue
@@ -245,7 +255,8 @@ func step(budget_usec: int = 3000) -> void:
                 mask_nodes[cursor].position = start; mask_nodes[cursor].size = end-start
                 cursor += 1
             "finish":
-                mask_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS if wall_mode=="translucent" else SubViewport.UPDATE_DISABLED
+                if mask_viewport != null:
+                    mask_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS if wall_mode=="translucent" else SubViewport.UPDATE_DISABLED
                 fixture_entries = static_entries.filter(func(entry):return entry.material.shader == FIXTURE_FLAME_SHADER)
                 is_prepared = true
     slice_max_ms = maxf(slice_max_ms,(Time.get_ticks_usec()-started)/1000.0)
