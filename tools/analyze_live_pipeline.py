@@ -100,7 +100,7 @@ def summarize(directory):
             'CPU-profiled commands are excluded from latency aggregates. Nested phase hooks, when enabled, are diagnostic overhead.',
             'First movement is an observed changed actor position at frame_post_draw. Ready includes intended animation and following choices.',
             'Post-packet first-movement time may include required reactions before entry. Client-to-prepared isolates arrival through compilation, before timeline playback.',
-            'The existing user preview remains open. These are process-attributed measurements, not an isolated GPU benchmark.'
+            'These are process-attributed measurements. The trace alone does not establish GPU isolation; record whether other previews or native tests were running.'
         ]}
 
 

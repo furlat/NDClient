@@ -161,6 +161,9 @@ func issue(selected: Dictionary) -> bool:
     record.to=scene.timeline.state.actors[actor].last_visual_position.duplicate()
     command_trace.append(record)
     var completed: bool=ready() and scene.timeline.sequence>sequence and scene.session.status.next_command_number>number
+    if not completed:
+        record.failure_context={"notice":scene.notice_text,"pending_kind":scene.pending_request.get("kind",""),
+            "command_number":scene.pending_request.get("number",-1),"phase":phase_value()}
     check(completed,"Client command finishes: %s %d" % [label,number])
     check(scene.timeline.state==scene.session.journal.state,"Client command reaches canonical state: %d" % number)
     scene.profile.label="receipt_validation_%d" % number

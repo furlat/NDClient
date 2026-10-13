@@ -255,30 +255,55 @@ func _headers(has_body: bool = false) -> PackedStringArray:
 
 func _new_job(method: int, path: String, root_name: String, body: Variant,
         purpose: String, command: Dictionary = {}) -> Dictionary:
-    var client: HTTPClient = HTTPClient.new() if _idle_clients.is_empty() else _idle_clients.pop_back()
+    var pooled = not _idle_clients.is_empty()
+    var client: HTTPClient = _idle_clients.pop_back() if pooled else HTTPClient.new()
     var job = {"client":client,"method":method,"path":_origin.prefix+path,"root":root_name,
         "body":body,"purpose":purpose,"command":command,"raw":PackedByteArray(),
         "started":Time.get_ticks_msec(),"last_byte":Time.get_ticks_msec(),"phase":"connect",
-        "headers":{},"code":0,"sent":false}
+        "headers":{},"code":0,"sent":false,"request_attempted":false,
+        "reused_connected":pooled and client.get_status()==HTTPClient.STATUS_CONNECTED,
+        "connection_replaced":false,"transport_reason":"","native_error":OK,"native_state":client.get_status()}
     if _profile_enabled:
         _profile_job_serial += 1
         job.profile_id = _profile_job_serial
-        _profile_job(job,"http_created")
+        _profile_job(job,"http_created",{"reused_connected":job.reused_connected})
     client.blocking_mode_enabled = false
     client.read_chunk_size = 65536
     if client.get_status() != HTTPClient.STATUS_CONNECTED:
         client.close()
         var connected = client.connect_to_host(_origin.host,_origin.port,TLSOptions.client() if _origin.tls else null)
-        if connected != OK: job.immediate = failure("transport","HTTP connection could not start",true)
+        if connected != OK:
+            job.transport_reason = "connect_start_failed"; job.native_error = connected; job.native_state = client.get_status()
+            job.immediate = failure("transport","HTTP connection could not start",true)
     return job
+
+func _replace_unsent_connection(job: Dictionary) -> bool:
+    # A pooled socket can still report CONNECTED until its first poll observes
+    # the server's idle close. No request has reached request_raw on this path.
+    # Replace that socket once; never replay a possibly partially sent request.
+    if not job.reused_connected or job.connection_replaced or job.request_attempted or job.phase!="connect": return false
+    job.client.close()
+    var client = HTTPClient.new()
+    client.blocking_mode_enabled = false; client.read_chunk_size = 65536
+    job.client = client; job.connection_replaced = true
+    var connected = client.connect_to_host(_origin.host,_origin.port,TLSOptions.client() if _origin.tls else null)
+    if connected != OK:
+        job.transport_reason = "replacement_connect_failed"; job.native_error = connected; job.native_state = client.get_status()
+        job.immediate = failure("transport","HTTP replacement connection could not start",true)
+    # The original job/deadline and command identity remain unchanged.
+    _profile_job(job,"connection_replaced",{"reason":job.transport_reason,"native_error":job.native_error,"native_state":job.native_state})
+    return true
 
 func _request_job(job: Dictionary) -> Dictionary:
     var client: HTTPClient = job.client
     var encoded = PackedByteArray() if job.body == null else JSON.stringify(job.body,"",true,true).to_utf8_buffer()
     var send_started = Time.get_ticks_usec() if _profile_enabled else 0
+    job.request_attempted = true
     var result = client.request_raw(job.method,job.path,_headers(job.body != null),encoded)
-    if _profile_enabled: _profile_job(job,"request_sent",{"started_us":send_started,"request_bytes":encoded.size(),"ok":result==OK})
-    if result != OK: return failure("transport","HTTP request could not start",true)
+    if _profile_enabled: _profile_job(job,"request_sent",{"started_us":send_started,"request_bytes":encoded.size(),"ok":result==OK,"native_error":result})
+    if result != OK:
+        job.transport_reason = "request_start_failed"; job.native_error = result; job.native_state = client.get_status()
+        return failure("transport","HTTP request could not start",true)
     job.phase = "headers"; job.sent = true
     return success()
 
@@ -286,6 +311,7 @@ func _http_tick(job: Dictionary, streaming: bool = false) -> Dictionary:
     if job.has("immediate"): return job.immediate
     var now = Time.get_ticks_msec()
     if (not streaming or job.phase != "stream") and now-job.started > float(_options.request_timeout)*1000:
+        job.transport_reason = "timeout"
         return failure("transport","HTTP request timed out",true)
     var client: HTTPClient = job.client
     # Reading the final body chunk can already transition to DISCONNECTED
@@ -297,12 +323,17 @@ func _http_tick(job: Dictionary, streaming: bool = false) -> Dictionary:
     state = client.get_status()
     if polled != OK or state in [HTTPClient.STATUS_CANT_CONNECT,HTTPClient.STATUS_CANT_RESOLVE,
             HTTPClient.STATUS_CONNECTION_ERROR,HTTPClient.STATUS_TLS_HANDSHAKE_ERROR]:
+        job.transport_reason = "connection_poll_failed"; job.native_error = polled; job.native_state = state
+        if _replace_unsent_connection(job): return {"pending":true}
         return failure("transport","HTTP connection failed",true)
     if job.phase == "connect":
         if state == HTTPClient.STATUS_CONNECTED:
             var sent = _request_job(job)
             if not sent.ok: return sent
-        elif state == HTTPClient.STATUS_DISCONNECTED: return failure("transport","HTTP connection closed",true)
+        elif state == HTTPClient.STATUS_DISCONNECTED:
+            job.transport_reason = "closed_before_send"; job.native_state = state
+            if _replace_unsent_connection(job): return {"pending":true}
+            return failure("transport","HTTP connection closed",true)
         return {"pending":true}
     if job.phase == "headers":
         if client.has_response():
@@ -322,7 +353,9 @@ func _http_tick(job: Dictionary, streaming: bool = false) -> Dictionary:
                     return failure("protocol","Expected event stream")
                 job.phase = "stream"
             else: job.phase = "body"
-        elif state == HTTPClient.STATUS_DISCONNECTED: return failure("transport","HTTP closed before response",true)
+        elif state == HTTPClient.STATUS_DISCONNECTED:
+            job.transport_reason = "closed_before_response"; job.native_state = state
+            return failure("transport","HTTP closed before response",true)
         else: return {"pending":true}
     if job.phase == "stream":
         if state == HTTPClient.STATUS_BODY:
@@ -348,6 +381,7 @@ func _http_tick(job: Dictionary, streaming: bool = false) -> Dictionary:
             state = client.get_status()
         if state in [HTTPClient.STATUS_CONNECTED,HTTPClient.STATUS_DISCONNECTED]:
             if client.get_response_body_length() >= 0 and job.raw.size() != client.get_response_body_length():
+                job.transport_reason = "truncated_response"; job.native_state = state
                 return failure("transport","Truncated HTTP response",true)
             if _profile_enabled: _profile_job(job,"body_complete",{"bytes":job.raw.size(),"status":job.code})
             if job.code < 200 or job.code >= 300: return _api_error(job)
@@ -629,7 +663,12 @@ func _finish_job(job: Dictionary, result: Dictionary) -> void:
                 _follower.phase = "stream"
                 if not _stream.is_empty(): _stream.last_byte = Time.get_ticks_msec()
                 _maybe_complete()
-    if _profile_enabled: _profile_job(job,"http_end",{"ok":result.ok,"status":job.code,"bytes":job.raw.size()})
+    if _profile_enabled:
+        _profile_job(job,"http_end",{"ok":result.ok,"status":job.code,"bytes":job.raw.size(),
+            "phase":job.phase,"sent":job.sent,"request_attempted":job.request_attempted,
+            "reused_connected":job.reused_connected,"connection_replaced":job.connection_replaced,
+            "transport_reason":job.transport_reason,"native_error":job.native_error,"native_state":job.native_state,
+            "failure_kind":"" if result.ok else result.error.kind})
 
 func _accept(command: Dictionary) -> void:
     match command.operation:

@@ -1,0 +1,217 @@
+{
+  "checks": 28,
+  "evidence": [
+    {
+      "case": "idle_expiry",
+      "command_posts": 1,
+      "connections": 2,
+      "events": [
+        {
+          "operation": "submit_command",
+          "request_id": 2,
+          "stage": "request_enqueued",
+          "started_us": 315622,
+          "time_us": 315632
+        },
+        {
+          "http_id": 3,
+          "operation": "submit_command",
+          "purpose": "endpoint",
+          "request_id": 2,
+          "reused_connected": true,
+          "schema": "ReceiptResponse",
+          "stage": "http_created",
+          "time_us": 316937
+        },
+        {
+          "http_id": 3,
+          "native_error": 27,
+          "native_state": 8,
+          "operation": "submit_command",
+          "purpose": "endpoint",
+          "reason": "connection_poll_failed",
+          "request_id": 2,
+          "schema": "ReceiptResponse",
+          "stage": "connection_replaced",
+          "time_us": 317401
+        },
+        {
+          "http_id": 3,
+          "native_error": 0,
+          "ok": true,
+          "operation": "submit_command",
+          "purpose": "endpoint",
+          "request_bytes": 123,
+          "request_id": 2,
+          "schema": "ReceiptResponse",
+          "stage": "request_sent",
+          "started_us": 318814,
+          "time_us": 318857
+        },
+        {
+          "declared_bytes": 337,
+          "http_id": 3,
+          "operation": "submit_command",
+          "purpose": "endpoint",
+          "request_id": 2,
+          "schema": "ReceiptResponse",
+          "stage": "response_headers",
+          "status": 200,
+          "time_us": 322847
+        },
+        {
+          "bytes": 337,
+          "http_id": 3,
+          "operation": "submit_command",
+          "purpose": "endpoint",
+          "request_id": 2,
+          "schema": "ReceiptResponse",
+          "stage": "body_complete",
+          "status": 200,
+          "time_us": 324817
+        },
+        {
+          "bytes": 337,
+          "http_id": 3,
+          "ok": true,
+          "operation": "submit_command",
+          "purpose": "endpoint",
+          "request_id": 2,
+          "schema": "ReceiptResponse",
+          "stage": "http_admission",
+          "started_us": 324827,
+          "time_us": 325154
+        },
+        {
+          "http_id": 3,
+          "ok": true,
+          "operation": "submit_command",
+          "purpose": "endpoint",
+          "request_id": 2,
+          "schema": "ReceiptResponse",
+          "stage": "reply_check",
+          "started_us": 325172,
+          "time_us": 325298
+        },
+        {
+          "http_id": 3,
+          "operation": "submit_command",
+          "purpose": "endpoint",
+          "request_id": 2,
+          "schema": "ReceiptResponse",
+          "stage": "response_normalization",
+          "started_us": 325304,
+          "time_us": 325400
+        },
+        {
+          "ok": true,
+          "operation": "submit_command",
+          "request_id": 2,
+          "stage": "response_published",
+          "started_us": 325405,
+          "time_us": 325418
+        },
+        {
+          "bytes": 337,
+          "connection_replaced": true,
+          "failure_kind": "",
+          "http_id": 3,
+          "native_error": 27,
+          "native_state": 8,
+          "ok": true,
+          "operation": "submit_command",
+          "phase": "body",
+          "purpose": "endpoint",
+          "request_attempted": true,
+          "request_id": 2,
+          "reused_connected": true,
+          "schema": "ReceiptResponse",
+          "sent": true,
+          "stage": "http_end",
+          "status": 200,
+          "time_us": 325428,
+          "transport_reason": "connection_poll_failed"
+        }
+      ]
+    },
+    {
+      "case": "reply_loss",
+      "command_posts": 1,
+      "connections": 2,
+      "events": [
+        {
+          "operation": "submit_command",
+          "request_id": 2,
+          "stage": "request_enqueued",
+          "started_us": 439831,
+          "time_us": 439836
+        },
+        {
+          "http_id": 3,
+          "operation": "submit_command",
+          "purpose": "endpoint",
+          "request_id": 2,
+          "reused_connected": true,
+          "schema": "ReceiptResponse",
+          "stage": "http_created",
+          "time_us": 439964
+        },
+        {
+          "http_id": 3,
+          "native_error": 0,
+          "ok": true,
+          "operation": "submit_command",
+          "purpose": "endpoint",
+          "request_bytes": 123,
+          "request_id": 2,
+          "schema": "ReceiptResponse",
+          "stage": "request_sent",
+          "started_us": 439991,
+          "time_us": 440023
+        },
+        {
+          "http_id": 3,
+          "ok": false,
+          "operation": "submit_command",
+          "purpose": "endpoint",
+          "request_id": 2,
+          "schema": "ReceiptResponse",
+          "stage": "reply_check",
+          "started_us": 447944,
+          "time_us": 447946
+        },
+        {
+          "ok": false,
+          "operation": "submit_command",
+          "request_id": 2,
+          "stage": "response_published",
+          "started_us": 447952,
+          "time_us": 447956
+        },
+        {
+          "bytes": 0,
+          "connection_replaced": false,
+          "failure_kind": "transport",
+          "http_id": 3,
+          "native_error": 27,
+          "native_state": 8,
+          "ok": false,
+          "operation": "submit_command",
+          "phase": "headers",
+          "purpose": "endpoint",
+          "request_attempted": true,
+          "request_id": 2,
+          "reused_connected": true,
+          "schema": "ReceiptResponse",
+          "sent": true,
+          "stage": "http_end",
+          "status": 0,
+          "time_us": 447962,
+          "transport_reason": "connection_poll_failed"
+        }
+      ]
+    }
+  ],
+  "failures": [],
+  "scope": "Native local TCP: hidden keep-alive expiry before request_raw replaces once and POST arrives once; received POST with dropped reply never resends, explicit receipt recovery retained. No backend or GPU."
+}
