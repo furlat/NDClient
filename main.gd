@@ -415,6 +415,7 @@ func update_camera(refresh_materials: bool = true, incremental: bool = false) ->
             for entry in entries:initialize_entry(entry)
             update_actor_frames()
             GridRenderer.camera_changed(self)
+            update_highlight()
         view_pending=false;pending_rows=0
         view_update_ms=(Time.get_ticks_usec()-started)/1000.0
         FrameProfile.end_phase(profile,"camera_update",started)
@@ -436,6 +437,7 @@ func update_camera(refresh_materials: bool = true, incremental: bool = false) ->
     var changed = activate_visible(incremental)
     if changed and exploration_mode:
         batches_dirty = true
+    var sources_refreshed = false
     if exploration_mode:
         var refresh_started = Time.get_ticks_usec()
         while refresh_cursor<refresh_queue.size():
@@ -443,6 +445,7 @@ func update_camera(refresh_materials: bool = true, incremental: bool = false) ->
             refresh_cursor+=1
             if entry.get("retired",false):continue
             initialize_entry(entry)
+            sources_refreshed = true
             entry.pending_activation=entry.node.visible
             entry.node.visible=false
             if Time.get_ticks_usec()-refresh_started>4000:break
@@ -451,6 +454,8 @@ func update_camera(refresh_materials: bool = true, incremental: bool = false) ->
     # Pan and zoom do not change source-space bounds, lighting transforms or
     # sprite samples. Only new/retired membership needs a new composition.
     update_actor_frames()
+    if refresh_materials or changed or sources_refreshed:
+        update_highlight()
     if refresh_materials or changed:
         composition_cache.clear()
         texture_gc_dirty = true

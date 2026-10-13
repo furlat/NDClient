@@ -210,7 +210,9 @@ func set_environment(entry: Dictionary, rotation: Basis) -> void:
     if shadow_pass and shadow_selection.is_empty(): entry.node.visible = false
     entry.floor_group = record.get("flat_ground", false)
     mat.set_shader_parameter("source_unlit", shadow_pass)
-    mat.set_shader_parameter("highlighted", Input.is_physical_key_pressed(KEY_ALT) and Catalog.break_duration(row,catalog_cache) > 0 and not destruction.has(row.id) and entry.source_role != 2)
+    # Private preparation can outlive a key press. Interaction belongs to the
+    # scene owner (the workshop updates Alt highlighting explicitly).
+    mat.set_shader_parameter("highlighted", false)
     if record.has("hit_mask"): texture(record.hit_mask.path)
     mat.set_shader_parameter("use_selection", not shadow_selection.is_empty())
     mat.set_shader_parameter("invert_selection", not shadow_pass)
