@@ -1432,3 +1432,26 @@ archived schemas. Regression recordings are explicit command arguments; raw
 recordings and diagnostic prototypes remain ignored. Independent plan/anti-slop/
 anti-OOP review found no source-level blocker. Live native latency acceptance is
 still required before reporting a measured input-response improvement.
+
+Native Windows Forward+ acceptance of cedf34f completed on the same 58-command
+Gallery route: 411 checks pass, 11 stages and 1,761 tiles/360 objects, exact final
+displayed/canonical state and cold replay. Single GPU process, zero dropped trace
+records, no CPU profiler. Six-cell command50 first motion falls895.981→486.039ms;
+after complete packet786.535→392.050ms. Canonical consumption327.870→130.062ms,
+compiler325.702→133.579ms; packet admission remains75ms. Across16Gallery moves,
+median first motion836.342→483.641ms. Server timing varied66.2→57.5ms for this
+command and is attributed separately. These are one before/after route, not a
+claim of solved responsiveness. Compact evidence: generated/client_input_latency_checks.json.
+Existing regression batch additionally passes1,233Python-oracle reducer cases,
+53protocol focused checks and21journal checks. Approved graphics were not edited.
+
+The user then requested stepping back to rethink the process from first principles.
+Further production patches are held. Read-only reviews identify the unconditional
+second live semantic fold, full retained-collection maintenance for sparse updates,
+interpreted wire admission, transport-thread consumption, and whole-group media
+readiness as the relevant architecture/measurement questions. Proposed single-fold
+reuse is restricted to the existing bounded live handoff; cold/overflow/seek replay
+still reconstructs from raw history. Passive records must publish only after full
+semantic validation and durable commit, preserve pre-fact actors and ordered
+intermediate after-values, and keep authored timing/resources outside the SDK.
+This proposed restructuring is not implemented or performance-certified.

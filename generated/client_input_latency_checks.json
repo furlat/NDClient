@@ -1,0 +1,230 @@
+{
+  "scope": "Native Windows Forward+ live command latency repair; one before/after route, not a claim of complete latency or animation coverage.",
+  "client_revision": "cedf34f",
+  "native_before": "20261013T081037.391879Z",
+  "native_after": "20261013T085650.328082Z",
+  "validation": {
+    "native_checks": 411,
+    "native_failures": [],
+    "live_commands": 58,
+    "route_stages": 11,
+    "disclosed_tiles": 1761,
+    "disclosed_objects": 360,
+    "protocol_checks": 7781,
+    "accepted_normalization_cases": 2420,
+    "archived_normalization_records": 104,
+    "sdk_protocol_checks": 53,
+    "sdk_journal_checks": 21,
+    "sdk_oracle_cases": [
+      125,
+      258,
+      459,
+      391
+    ],
+    "sdk_snapshot_checks": 339,
+    "compiler_snapshot_checks": 550
+  },
+  "command_50": {
+    "before": {
+      "number": 50,
+      "input": "viewport_click",
+      "from": [
+        47,
+        20
+      ],
+      "to": [
+        53,
+        20
+      ],
+      "sequence": 87,
+      "operation_bytes": 185290,
+      "packet_shape": {
+        "lineages": 1,
+        "events": 31,
+        "facts": {
+          "movement": 1,
+          "sensory": 12,
+          "spatial": 12,
+          "step": 6
+        },
+        "versions": 76,
+        "observations": 0,
+        "world_tiles": 251,
+        "world_objects": 5
+      },
+      "first_movement_ms": 895.981,
+      "complete_sse_frame_ms": 109.446,
+      "server_dispatch_ms": 66.21160999929998,
+      "sse_schema_ms": 75.613,
+      "canonical_consumer_ms": 327.87,
+      "presentation_compile_ms": 325.702,
+      "client_to_prepared_ms": 729.539,
+      "client_after_complete_sse_ms": 786.535,
+      "frame_ms": {
+        "max": 32.611,
+        "mean": 4.08300538213132,
+        "p50": 3.889,
+        "p95": 5.921,
+        "p99": 11.915
+      },
+      "prepared_to_first_sample_ms": 56.99599999999998
+    },
+    "after": {
+      "number": 50,
+      "input": "viewport_click",
+      "from": [
+        47,
+        20
+      ],
+      "to": [
+        53,
+        20
+      ],
+      "sequence": 87,
+      "operation_bytes": 185290,
+      "packet_shape": {
+        "lineages": 1,
+        "events": 31,
+        "facts": {
+          "movement": 1,
+          "sensory": 12,
+          "spatial": 12,
+          "step": 6
+        },
+        "versions": 76,
+        "observations": 0,
+        "world_tiles": 251,
+        "world_objects": 5
+      },
+      "first_movement_ms": 486.039,
+      "complete_sse_frame_ms": 93.989,
+      "server_dispatch_ms": 57.51996299659368,
+      "sse_schema_ms": 75.314,
+      "canonical_consumer_ms": 130.062,
+      "presentation_compile_ms": 133.579,
+      "client_to_prepared_ms": 339.33,
+      "client_after_complete_sse_ms": 392.04999999999995,
+      "frame_ms": {
+        "max": 28.709,
+        "mean": 4.11070343137255,
+        "p50": 3.884,
+        "p95": 6.099,
+        "p99": 12.236
+      },
+      "prepared_to_first_sample_ms": 52.71999999999997
+    }
+  },
+  "gallery_movement": {
+    "before": {
+      "moves": 16,
+      "viewport_clicks": 16,
+      "first_movement_ms": {
+        "median": 836.3415,
+        "min": 349.979,
+        "max": 1197.829
+      },
+      "server_dispatch_ms": {
+        "median": 59.59677950158948,
+        "min": 15.149650993407704,
+        "max": 238.8274880067911
+      },
+      "server_exchange_ms": {
+        "median": 62.8459235,
+        "min": 16.699723,
+        "max": 242.51804
+      },
+      "operation_bytes": {
+        "median": 162776.5,
+        "min": 41469,
+        "max": 249600
+      },
+      "sse_schema_ms": {
+        "median": 66.8015,
+        "min": 16.239,
+        "max": 108.687
+      },
+      "canonical_consumer_ms": {
+        "median": 273.1365,
+        "min": 101.667,
+        "max": 356.071
+      },
+      "presentation_compile_ms": {
+        "median": 270.3965,
+        "min": 98.458,
+        "max": 342.365
+      },
+      "client_to_prepared_ms": {
+        "median": 610.957,
+        "min": 246.207,
+        "max": 787.353
+      },
+      "client_after_complete_sse_ms": {
+        "median": 735.722,
+        "min": 288.476,
+        "max": 1081.95
+      }
+    },
+    "after": {
+      "moves": 16,
+      "viewport_clicks": 16,
+      "first_movement_ms": {
+        "median": 483.6405,
+        "min": 223.033,
+        "max": 757.793
+      },
+      "server_dispatch_ms": {
+        "median": 58.39754249609541,
+        "min": 15.233874000841752,
+        "max": 253.3075870014727
+      },
+      "server_exchange_ms": {
+        "median": 61.504622499999996,
+        "min": 16.792556,
+        "max": 257.376739
+      },
+      "operation_bytes": {
+        "median": 162776.5,
+        "min": 41469,
+        "max": 249600
+      },
+      "sse_schema_ms": {
+        "median": 66.517,
+        "min": 16.485,
+        "max": 108.175
+      },
+      "canonical_consumer_ms": {
+        "median": 105.5695,
+        "min": 46.514,
+        "max": 133.054
+      },
+      "presentation_compile_ms": {
+        "median": 118.858,
+        "min": 65.467,
+        "max": 146.232
+      },
+      "client_to_prepared_ms": {
+        "median": 311.689,
+        "min": 138.594,
+        "max": 377.566
+      },
+      "client_after_complete_sse_ms": {
+        "median": 388.7595,
+        "min": 181.153,
+        "max": 636.1320000000001
+      }
+    }
+  },
+  "qualifications": [
+    "Same client-issued route and packet shapes; fresh encounters, not identical timing conditions. Server timing varied and remains separately attributed.",
+    "Single native GPU process; no CPU profiler or nested backend phase hooks during live runs. Coarse pipeline trace had zero dropped records.",
+    "Compiler and journal semantic correctness, cold replay and final displayed state passed. Screenshot inspected; no pixel-identical framebuffer claim.",
+    "No approved shader, light, rendering parameter, event schedule or authored animation duration changes."
+  ],
+  "remaining": [
+    "Roughly486ms click-to-first-motion remains in the representative six-cell command; this is improved, not solved.",
+    "Canonical reduction and compiler still independently fold the same events. A bounded passive intermediate-record handoff is proposed, not implemented.",
+    "Strict parsing/schema admission costs75ms for185290bytes in GDScript. No parser/validation weakening was made.",
+    "Prepared-to-first-sample is53ms combined handoff/media/world readiness; its split is not established by this trace."
+  ],
+  "followup": "User requests a first-principles architecture review before further patches. Production changes held; read-only reviews confirm duplicate live fold and whole-group resource readiness."
+}
