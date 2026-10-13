@@ -42,6 +42,18 @@ logs are retained in ignored `.runtime/studio-audit/`; the compact results are i
 `generated/studio_diagnostic_probes.json`. The diagnostic body-witness probe is
 distinct from a native rendering test.
 
+The user's subsequent latest-server request was also validated with native
+Forward+ playback: 58 real client commands reach the far Gallery and pass
+411 checks, including canonical state and cold replay. See
+[`generated/latest_server_refresh_checks.json`](../generated/latest_server_refresh_checks.json).
+This does not close the animation gaps above. Command 50 takes 66.2 ms in worker
+execution but 896.0 ms from click to first animation. These are distinct clocks;
+the remaining request/discovery/transport/presentation delay still needs
+attribution. This single run is not a controlled before/after speedup comparison.
+The report also retains the two unsuitable headless UI attempts rather than
+counting them as passing. A fresh ordinary preview now uses the latest shared
+server checkout and the Alt repair.
+
 ## What the existing sources require
 
 The surviving consolidated [NDClient master plan §8](post_mortem/NDCLIENT_IMPLEMENTATION_PLAN_COMPLETE_2026-10-11_v3.md#8-studio-read-only-inspection-of-the-production-runtime)

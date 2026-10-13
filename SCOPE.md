@@ -1370,3 +1370,14 @@ Preserve the engine's uncommitted work. Validate real client-issued actions with
 the updated server before launching the fresh native preview. The server plan's
 roughly twelvefold path-query improvement is not a claim of equivalent whole-
 command or client-frame speedup.
+
+Latest-server refresh completed: the native Forward+ Gallery route passes 411
+checks over 58 client-issued commands, reaches all 11 stages with 1,761 disclosed
+tiles and 360 objects, and cold-replays its canonical state. Two earlier headless
+UI-harness attempts were unsuitable and remain explicitly excluded in
+`generated/latest_server_refresh_checks.json`; they are not counted as passing.
+The six-cell command 50 measured 66.2 ms worker dispatch, 69.3 ms host/worker
+exchange and 896.0 ms click-to-first-animation. This is one profiled live sample,
+not a before/after speedup claim; the remaining end-to-end delay is still open.
+Fresh unprofiled native preview `20261013T081427.535789Z` reports PLAYER_READY
+against the updated shared checkout and includes the Alt repair.

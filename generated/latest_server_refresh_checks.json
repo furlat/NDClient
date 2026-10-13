@@ -1,0 +1,52 @@
+{
+  "scope": "Latest shared local server checkout acceptance through native Forward+ Godot, not a controlled speedup comparison or exhaustive animation coverage.",
+  "client_revision": "1a47002",
+  "server_checkout": "/mnt/c/Users/tommaso/Documents/Dev/dnd_engine",
+  "server_base_commit": "dbbc125aa02",
+  "server_worktree": "Existing uncommitted server optimization changes preserved; no pull, reset or backend edits.",
+  "latest_relevant_source_mtimes": {
+    "dnd/core/gridmap.py": "2026-10-13T09:32:47.601974+02:00",
+    "dnd/entity.py": "2026-10-13T09:43:51.937870+02:00"
+  },
+  "native_run": "20261013T081037.391879Z",
+  "renderer": "Forward+",
+  "gpu": "NVIDIA GeForce RTX 5090",
+  "checks": 411,
+  "failures": [],
+  "elapsed_ms": 200119,
+  "live_commands": 58,
+  "route_stages": 11,
+  "disclosed_tiles": 1761,
+  "disclosed_objects": 360,
+  "command_50": {
+    "behavior": "action.move",
+    "from": [
+      47,
+      20
+    ],
+    "to": [
+      53,
+      20
+    ],
+    "input": "viewport_click",
+    "worker_dispatch_ms": 66.21160999929998,
+    "host_worker_exchange_ms": 69.328816,
+    "click_to_published_packet_ms": 517.911,
+    "click_to_first_animation_ms": 895.981,
+    "click_to_completed_presentation_ms": 3798.251,
+    "timing_note": "One real command; distinct clocks. Remaining click latency is not assigned to the client alone without request/discovery/transport attribution. Optional coarse profiling was enabled; no CPU profiler or nested action hooks."
+  },
+  "excluded_attempts": [
+    {
+      "run": "20261013T080709.292418Z",
+      "result": "Failed generic headless UI smoke before commands; no ray-pickable target selected although SDK offered 43 affordable move targets. Not a server legal-movement failure or a passing action test."
+    },
+    {
+      "run": "20261013T080822.943638Z",
+      "result": "Interrupted headless Gallery harness: grid click check failed and native frame_post_draw wait cannot complete headlessly. Harness invocation error, excluded from performance or rendered acceptance."
+    }
+  ],
+  "preview_run": "20261013T081427.535789Z",
+  "preview": "Fresh ordinary unprofiled launch from current shared checkout; native log reports PLAYER_READY. Includes Alt material fix. Closing it ends this fresh encounter.",
+  "recordings_and_captures": "Retained in ignored .runtime; no credentials or raw packets in this report."
+}
