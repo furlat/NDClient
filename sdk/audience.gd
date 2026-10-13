@@ -397,6 +397,27 @@ static func _view_after(perception: Dictionary, observer: String, previous: Vari
     composed.source = result
     return result
 
+# Journal's last committed indexes are immutable. A candidate owns index shells
+# and outer maps; only x-columns actually changed by its events are copied.
+static func _fork_cells(previous: Dictionary) -> Dictionary:
+    var result = {"members":{}, "composed":previous.get("composed",false)}
+    for observer in previous.get("members",{}):
+        result.members[observer] = _fork_indexed_senses(previous.members[observer])
+    if previous.has("view"): result.view = _fork_indexed_senses(previous.view)
+    return result
+
+static func _fork_indexed_senses(previous: Dictionary) -> Dictionary:
+    return {"source":previous.source, "visible":_fork_cell_index(previous.visible),
+        "seen":_fork_cell_index(previous.seen)}
+
+static func _fork_cell_index(previous: Dictionary) -> Dictionary:
+    return {"columns":previous.columns.duplicate(), "ordered":previous.ordered, "private_columns":{}}
+
+static func _own_column(indexed: Dictionary, x: int) -> void:
+    if not indexed.has("private_columns") or indexed.private_columns.has(x): return
+    if indexed.columns.has(x): indexed.columns[x] = indexed.columns[x].duplicate()
+    indexed.private_columns[x] = true
+
 static func _member_cells(senses: Dictionary, observer: String, cells: Dictionary) -> Dictionary:
     if not cells.has("members"): cells.members = {}
     var indexed: Dictionary = cells.members.get(observer,{})
@@ -441,12 +462,14 @@ static func _update_cells(indexed: Dictionary, added: Array, removed: Array) -> 
             if not changed: ordered = ordered.duplicate()
             ordered.remove_at(_cell_lower_bound(ordered,point))
         changed = true
+        _own_column(indexed,point[0])
         columns[point[0]].erase(point[1])
         if columns[point[0]].is_empty(): columns.erase(point[0])
     for point in added:
         if _has_cell(indexed,point): continue
         if incremental and not changed: ordered = ordered.duplicate()
         changed = true
+        _own_column(indexed,point[0])
         if not columns.has(point[0]): columns[point[0]] = {}
         var owned: Array = point.duplicate()
         columns[point[0]][point[1]] = owned

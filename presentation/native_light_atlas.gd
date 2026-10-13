@@ -52,6 +52,7 @@ var known_entry_count := -1
 var last_reconcile_ms := 0.0
 var last_projection_ms := 0.0
 var last_reconcile_phases: Dictionary = {}
+var last_delta_fallback := ""
 var projection_dirty: Array = []
 # Display-owner notifications, accumulated until a successful atlas sync. They
 # carry identities only; final admitted values are read after buffer publication.
@@ -460,6 +461,25 @@ func _publish_addresses(floor_receivers: Dictionary, changed_outputs: Array) -> 
     last_reconcile_phases.address_packet_reads_skipped=packet_reads_skipped
 
 
+func _refresh_normalized_addresses() -> void:
+    # Append growth preserves all integer pixel addresses and source geometry.
+    # The output's normalized region/cell size is the only retained binding
+    # dependent on viewport height; do not reread/reupload unchanged floor data.
+    var target=Vector2(viewport.size)
+    var updated=0
+    for source in entry_specs.values():
+        var entry: Dictionary=source.entry
+        var output: ShaderMaterial=entry.received_material
+        if entry.has("batch_rows"):
+            output.set_shader_parameter("atlas_cell_size",Vector2(source.crop.pixels.size)/target)
+        else:
+            var receiver: Dictionary=source.receivers["source"]
+            var origin=Vector2(receiver.position)/target
+            var size=Vector2(receiver.crop.pixels.size)/target
+            output.set_shader_parameter("atlas_region",Vector4(origin.x,origin.y,size.x,size.y))
+        updated+=1
+    last_reconcile_phases.resize_output_regions=updated
+
 func _reconcile(world: Node) -> bool:
     var phase = Time.get_ticks_usec()
     last_reconcile_phases={}
@@ -707,6 +727,7 @@ func sync(world: Node, published: Array = [], styles: Array = [], changes: Dicti
     var started = Time.get_ticks_usec()
     projection_dirty=[]
     last_reconcile_phases={}
+    last_delta_fallback=""
     last_pack_ms=0.0
     var screen_size = world.get_viewport().get_visible_rect().size
     # Published scene stamps are not received SDK revisions: queued preparation
@@ -735,6 +756,7 @@ func sync(world: Node, published: Array = [], styles: Array = [], changes: Dicti
                 output_full=true
             else:
                 entry_specs=previous_specs; membership=previous_membership
+        if not last_delta_fallback.is_empty(): last_reconcile_phases.delta_fallback=last_delta_fallback
         if not applied:
             output_admission_failed=true
             for issue in errors:

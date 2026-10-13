@@ -76,7 +76,8 @@ def summarize(directory):
             'sse_admission_phases_ms':decode.get('phases_ms',{}) if decode else {},
             'canonical_phases':consumer.get('phases',{}) if consumer else {},
             'presentation_packet_ms':(prepare['compile_started_us']-prepare['packet_started_us'])/1000 if prepare else None,
-            'presentation_compile_ms':(prepare['time_us']-prepare['compile_started_us'])/1000 if prepare else None,
+            'presentation_compile_ms':(prepare.get('compile_ended_us',prepare['time_us'])-prepare['compile_started_us'])/1000 if prepare else None,
+            'presentation_required_media_ms':prepare.get('required_media_ms',0) if prepare else None,
             'client_to_prepared_ms':(prepare['time_us']-packet['time_us'])/1000 if prepare and packet else None,
             'prepared_to_first_movement_ms':first-(prepare['time_us']-start)/1000 if first is not None and prepare else None,
             'client_after_complete_sse_ms':first-packet_ms if first is not None and packet_ms is not None else None,
@@ -91,7 +92,7 @@ def summarize(directory):
         row['requests']=request_stages
         rows.append(row)
     metrics = ['first_movement_ms','server_dispatch_ms','server_exchange_ms','operation_bytes',
-        'sse_schema_ms','canonical_consumer_ms','presentation_compile_ms','client_to_prepared_ms','client_after_complete_sse_ms',
+        'sse_schema_ms','canonical_consumer_ms','presentation_compile_ms','presentation_required_media_ms','client_to_prepared_ms','client_after_complete_sse_ms',
         'end_to_ready_ms','post_ready_frame_peak_ms','post_ready_hud_peak_ms','post_ready_bar_build_peak_ms']
     sections = {}
     for label, lower, upper in [('before_gallery',0,6),('gallery_entry',7,7),('inside_gallery',8,10)]:
@@ -112,7 +113,7 @@ def summarize(directory):
             'CPU-profiled commands are excluded from latency aggregates. Nested phase hooks, when enabled, are diagnostic overhead.',
             'First movement is an observed changed actor position at frame_post_draw. Ready includes intended animation and following choices.',
             'Post-ready samples precede canonical-state test comparisons. input_ready_after_samples distinguishes first readiness from sustained input readiness; older runs lack this field.',
-            'Post-packet first-movement time may include required reactions before entry. Client-to-prepared isolates arrival through compilation, before timeline playback.',
+            'Post-packet first-movement time may include required reactions before entry. Client-to-prepared covers admission, reduction, compilation and required media metadata, before timeline playback.',
             'These are process-attributed measurements. The trace alone does not establish GPU isolation; record whether other previews or native tests were running.'
         ]}
 

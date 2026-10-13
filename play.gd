@@ -144,6 +144,7 @@ var media_initial_ready = false
 var media_metadata_ready = false
 var media_metadata_ms = 0.0
 var media_group_plans: Dictionary = {}
+var media_received_owners: Dictionary = {}
 var media_empty_key: Array = []
 var media_empty_plan: Dictionary = {}
 var media_terminal_plan: Dictionary = {}
@@ -259,6 +260,7 @@ func _process(delta: float) -> void:
     subphase = Time.get_ticks_usec()
     for message in session.take_prepared():
         timeline.accept(message)
+        _adopt_received_media(message)
     _prepare_media()
     _prepare_initial_world()
     _prepare_future_world()
@@ -939,6 +941,43 @@ func _retire_actor(id: String) -> void:
     visual_actors.erase(id)
     draw_order_dirty = true
 
+func _reset_media_epoch() -> void:
+    if media_plan_epoch == timeline.initialization_revision: return
+    media_plan_epoch = timeline.initialization_revision
+    media_group_plans.clear()
+    media_received_owners.clear()
+    media_empty_key = []
+    media_empty_plan = {}
+    media_terminal_plan = {}
+
+func _media_group_owner(id: String) -> Dictionary:
+    if timeline.current.get("id","") == id: return timeline.current
+    for group in timeline.queue:
+        if group.id == id: return group
+    return {}
+
+func _adopt_received_media(message: Dictionary) -> void:
+    _reset_media_epoch()
+    var received: Dictionary = message.get("media",{})
+    if received.is_empty() or timeline.state.is_empty(): return
+    if received.generation != timeline.state.generation or received.observer_uuid != timeline.state.observer_uuid: return
+    var ids: Array = []
+    for group in received.groups:
+        if not is_same(_media_group_owner(group.id),group): return
+        var belongs = false
+        for supplied in message.groups:
+            if is_same(supplied,group): belongs = true; break
+        if not belongs: return
+        ids.append(group.id)
+    if ids.is_empty(): return
+    var key: Array = [timeline.initialization_revision,ids,0]
+    media_requested_key = key
+    var completed = MediaWarmup.receive_handoff(media_warmup,received,key)
+    _adopt_media_plan(completed)
+    for group in received.groups: media_received_owners[group.id] = group
+    # Pins/readiness are still selected by _prepare_media's displayed window.
+    media_plan_key = []
+
 func _prepare_media(first: Dictionary = {}) -> void:
     if timeline.state.is_empty(): return
     var groups: Array = []
@@ -954,12 +993,7 @@ func _prepare_media(first: Dictionary = {}) -> void:
     if key == media_plan_key: return
     var started = Time.get_ticks_usec()
     media_plan_key = key
-    if media_plan_epoch != timeline.initialization_revision:
-        media_plan_epoch = timeline.initialization_revision
-        media_group_plans.clear()
-        media_empty_key = []
-        media_empty_plan = {}
-        media_terminal_plan = {}
+    _reset_media_epoch()
     if ids.is_empty() and not media_terminal_plan.is_empty():
         # A successfully prepared group includes every terminal resting outfit
         # and world source. Reuse it only at that group's exact admitted end;
@@ -972,6 +1006,9 @@ func _prepare_media(first: Dictionary = {}) -> void:
             media_empty_plan = terminal.plan
         media_terminal_plan = {}
     for id in media_group_plans.keys():
+        var received: Dictionary = media_received_owners.get(id,{})
+        if not received.is_empty() and is_same(_media_group_owner(id),received): continue
+        media_received_owners.erase(id)
         if id not in ids: media_group_plans.erase(id)
     var ready: Dictionary = media_empty_plan if ids.is_empty() and media_empty_key==key else media_group_plans.get(ids[0],{}) if not ids.is_empty() else {}
     var upcoming: Dictionary = media_group_plans.get(ids[1],{}) if ids.size()>1 else {}

@@ -1776,3 +1776,87 @@ character sheets can require uploads at the 16 GiB combined cache limit.
 Evidence: generated/movement_latency_optimization.json and
 generated/movement_latency_live_pipeline.json, with paired identical-operation
 diagnostics in generated/canonical_owned_optimization.json.
+
+## Movement intake ownership follow-on — 13 October 2026
+
+The user rejects the remaining 221 ms median as excessive. Measure the same
+native live commands and replace repeated work at its ownership boundary.
+Expected behavior remains identical ordered event-time state and approved
+graphics, with no speculative motion or partially accepted operation published.
+
+1. The live player may explicitly trust typed bodies from the protocol-checked
+   current server: retain exact JSON number parsing, bounded envelope/identity,
+   cursor/scope/SSE correlation and transactional semantic reduction, but skip
+   recursive body-schema interpretation and normalization of already canonical
+   server output. Public arbitrary-input SDK calls and offline replay stay strict.
+   This supersedes exhaustive live body admission in the earlier plan; it does
+   not add trust to public SDK defaults or accept different protocol identities.
+2. Retain sensory derivation indexes with their exact committed source state.
+   Fork mutable indexes for a candidate, publish only after semantic success and
+   journal commit, and fall back when the source differs. Avoid rebuilding the
+   unchanged map for each operation. Preserve all immutable event-time captures.
+3. Inspect resource-only preparation overlap using existing authored selectors;
+   change it only if evidence demonstrates an avoidable critical-path gate.
+   The recorded warm move has a 34 ms prepared-to-motion tail; source planning
+   still waits for a main-thread roundtrip. Prepare the first two compiled groups'
+   exact required metadata on the existing preparer from their operation-before
+   state, then adopt by actual group identity. Keep optional work on its existing
+   worker, startup/later-group fallback, bounded handoff and current demand pins.
+   No alternate event interpreter, unbounded cache, speculative animation, native
+   addon, backend, shader or artwork change is part of this follow-on.
+4. Test strict/trusted parity on actual server records, envelope and late semantic
+   rejection, committed-context reuse and failed-candidate isolation, frozen
+   snapshots and cold replay. Profile actual Windows Gallery clicks serially,
+   report remaining latency and frame stalls honestly, then commit and reopen.
+
+map_audit owns protocol/transport admission; render_audit owns audience/reducer
+context; root owns journal/session integration and native profiling. scope_review
+tracks plan adherence and anti-slop/anti-OOP correctness. All agents share this
+task only. Copy/traversal counts are not substituted for measured time savings.
+
+The live follow-on exposed avoidable cold waits: the optional 16 GiB selection
+retains all poses of the first actor but excludes 49 of 56 sorcerer movement
+sources again after returning to idle. Both actors' authored rest/movement
+closures fit in 3.984 GiB. Prioritize these closures for every admitted outfit
+before exhaustive animation families, in both selection and background enqueue
+order. Reuse the existing authoring/source selectors and complete companion
+sets; retain current/upcoming mandatory priority, roles and budget. Closure cache
+invalidation must respect meaningful path order. Validate exact source-set parity,
+move-to-idle retention for both actors, required-action preemption and bounded
+selection before repeating native live clicks. No cache-cap or graphics change.
+
+The same live reveal has a 90.234 ms atlas phase: the sparse append path falls
+back to full admission on atlas-height growth, reconstructing existing floor
+transforms, join masks and bindings. Extend that existing append path to the
+same bounded height doubling as the full planner. Validate dimensions before
+publication; retain pixel reservations and source order, refreshing normalized
+output coordinates on growth. Preserve exact image/packing behavior and fallback
+for other unsupported changes. Add growth parity and rejected-growth atomicity
+checks and record fallback causes before the next native live route. render_audit
+owns this narrow renderer change; scope_review checks adherence and correctness.
+
+Completed and reviewed. Exact same-recording intake (sequence 87, three paired
+passes) fell from 77.844 to 46.759 ms with exact canonical state and event captures;
+all 306 operation comparisons passed. SDK checks pass 12,326; explicit trusted
+producer checks 450; sensory context/journal checks 72/31. Media priority and
+regression checks pass 507. Native atlas growth checks pass 66 and lifecycle 220,
+including exact first resized frame pixels in LDR, capped lighting and Normals.
+
+Final native Windows Forward+ run 20261013T174818.991155Z passed 644 checks over
+58 real commands and 29 moves, including 16 Gallery viewport movement clicks.
+Gallery click-to-motion median fell from 220.508 to 174.5465 ms; first cold move
+311.969 to 91.706 ms; first sorcerer Gallery move 413.379 to 202.739 ms. Every move
+became input-ready on its playback-completion frame and all commands stayed ready.
+Compared with the intake-only run, priority loading reduced decoded sources from
+3023 to 2202 and evictions from 978 to 159 at the same combined cache estimate.
+The final two runs have identical packet-shape counts. Baseline-to-intake runs
+differ in 11 tile-change counts, so the paired identical-byte test is the intake
+isolation evidence. The backend was not edited and remains clean at 792ec024.
+
+Known remaining costs: exact parsing/envelope and canonical consumption still
+take about 51 ms for typical Gallery moves; server execution median is 58.681 ms.
+Gallery entry movement's worst frame improved 112.396 to 60.920 ms, but opening
+its door still reveals new receivers in a 79.744 ms frame. Debug lighting/Normals
+mode resets also retain full atlas admission. This is not a claim of zero stalls
+or completed renderer optimization. Evidence: generated/movement_intake_optimization.json
+and generated/movement_intake_final_live_pipeline.json.

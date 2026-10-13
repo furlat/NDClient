@@ -87,6 +87,9 @@ func compare_authored_demand(full: Dictionary, state: Dictionary, environment: D
     var fast = Media.create()
     var original = Media.create()
     var accepted = full.duplicate()
+    # Keep the frozen original demand comparison on its legacy queue policy.
+    # Authored priority enqueue/retention is covered by preload_priority_checks.
+    accepted.erase("priority")
     accepted.estimate_bytes = Encounter.estimate_bytes(accepted.estimates)
     accepted.estimate_summary = Encounter.estimate_summary(accepted)
     for data in [fast,original]: Media.adopt_encounter(data,accepted,1)

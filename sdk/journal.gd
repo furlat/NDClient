@@ -6,6 +6,9 @@ var protocol := Protocol.new()
 var directory := ""
 var state: Dictionary = {}
 var cursor: Dictionary = {}
+# Derived sensory indexes belong to this exact committed state. Candidate
+# reductions fork them; failed folds/writes never publish their replacements.
+var _sensory_context: Dictionary = {}
 # Optional payload-free timing for the transport owner; no work history retained.
 var profile_enabled := false
 var last_profile: Dictionary = {}
@@ -41,7 +44,7 @@ func consume(packet: Dictionary, raw: PackedByteArray) -> Dictionary:
 	if not Protocol._equal(admitted.value, packet): return _failure("Packet differs from journal bytes")
 	return _consume_admitted(admitted.value, raw)
 
-func _consume_admitted(packet: Dictionary, raw: PackedByteArray, record_transitions: bool = false) -> Dictionary:
+func _consume_admitted(packet: Dictionary, raw: PackedByteArray, record_transitions: bool = false, canonical_server_operation: bool = false) -> Dictionary:
 	last_profile = {"sequence":int(packet.get("cursor",{}).get("sequence",-1)), "phase_ms":{}, "reducer_ms":{}} if profile_enabled else {}
 	# Internal transport/replay boundary: the caller owns these exact admitted
 	# bytes. Public consume() above always decodes and compares independently.
@@ -61,7 +64,7 @@ func _consume_admitted(packet: Dictionary, raw: PackedByteArray, record_transiti
 	if profile_enabled: _profile_elapsed("stage", started)
 	if not saved.ok: return saved
 	started = Time.get_ticks_usec() if profile_enabled else 0
-	var normalized: Dictionary = protocol._normalize_admitted("InitializationResponse" if next.sequence == 0 else "PlayerOperation", packet)
+	var normalized: Dictionary = packet if canonical_server_operation and next.sequence > 0 else protocol._normalize_admitted("InitializationResponse" if next.sequence == 0 else "PlayerOperation", packet)
 	if profile_enabled: _profile_elapsed("normalize", started)
 	started = Time.get_ticks_usec() if profile_enabled else 0
 	var reduced := _reduced_state(normalized, record_transitions)
@@ -73,6 +76,7 @@ func _consume_admitted(packet: Dictionary, raw: PackedByteArray, record_transiti
 		var code := DirAccess.rename_absolute(target + ".tmp", target)
 		if code != OK: return _failure("Cannot commit journal: " + error_string(code))
 	state = reduced.value
+	_sensory_context = reduced.get("sensory_context",{})
 	cursor = packet.cursor.duplicate(true)
 	var accepted := {"ok": true, "value": cursor.duplicate(true), "normalized": normalized}
 	# Derived records cross the worker boundary only after durable publication.
@@ -84,8 +88,10 @@ func replay(through_sequence: int = -1) -> Dictionary:
 	# Replay is transactional: leave the prior snapshot intact on any bad record.
 	var prior_state := state
 	var prior_cursor := cursor
+	var prior_context := _sensory_context
 	state = {}
 	cursor = {}
+	_sensory_context = {}
 	var files: Array[String] = []
 	var expression := RegEx.new()
 	expression.compile("^[0-9]{16}\\.json$")
@@ -102,10 +108,12 @@ func replay(through_sequence: int = -1) -> Dictionary:
 		if not result.ok:
 			state = prior_state
 			cursor = prior_cursor
+			_sensory_context = prior_context
 			return result
 	if through_sequence >= 0 and (cursor.is_empty() or cursor.sequence != through_sequence):
 		state = prior_state
 		cursor = prior_cursor
+		_sensory_context = prior_context
 		return _failure("Requested journal cursor is unavailable")
 	return {"ok": true, "value": cursor.duplicate(true)}
 
@@ -117,7 +125,7 @@ func _reduced_state(packet: Dictionary, record_transitions: bool = false) -> Dic
 	if packet.cursor.sequence == 0:
 		result = Reducer.reduce_initialization(packet.initialization, packet.content_additions)
 	else:
-		result = Reducer._reduce_operation_retained(state, packet, record_transitions, last_profile.reducer_ms if profile_enabled else null)
+		result = Reducer._reduce_operation_retained(state, packet, record_transitions, last_profile.reducer_ms if profile_enabled else null, _sensory_context)
 	return result
 
 func _file(sequence: int) -> String:

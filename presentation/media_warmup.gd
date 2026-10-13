@@ -26,7 +26,7 @@ static func create() -> Dictionary:
         "selection_roles":{},"demand_roles":{},"selection_summary":{},"selection_refreshed":0,
         "demand_snapshot":{},"demand_runs":0,"demand_noops":0,"demand_phases":{},"demand_counts":{}}
 
-static func request_plan(data: Dictionary, key: Array, state: Dictionary, groups: Array) -> void:
+static func _snapshot(state: Dictionary) -> Dictionary:
     # Dictionary membership can change on the scene thread. The after-value
     # records themselves are immutable, so copy only these small map indexes.
     var snapshot = {}
@@ -34,8 +34,42 @@ static func request_plan(data: Dictionary, key: Array, state: Dictionary, groups
         for field in ["actors","tiles","objects"]: snapshot[field] = state[field].duplicate()
         snapshot.senses = state.senses
         snapshot.audience = state.audience
-    data.plan_pending = {"key":key.duplicate(true),"state":snapshot,"groups":groups.duplicate()}
+    return snapshot
+
+static func request_plan(data: Dictionary, key: Array, state: Dictionary, groups: Array) -> void:
+    data.plan_pending = {"key":key.duplicate(true),"state":_snapshot(state),"groups":groups.duplicate()}
+    # A new required request supersedes older optional intent at admission, not
+    # later dispatch: a handoff arriving in between is newer and must survive.
+    data.optional_pending = {}
     _start_plan(data)
+
+static func prepare_handoff(state: Dictionary, groups: Array, cache: Dictionary) -> Dictionary:
+    # Called by the existing session preparer, before publishing these groups.
+    # This cache belongs exclusively to that worker; no scene residency changes.
+    if groups.is_empty(): return {}
+    var selected: Array = groups.slice(0,mini(2,groups.size()))
+    var result = {}
+    _plan_sources({"key":[],"state":_snapshot(state),"groups":selected},result,cache)
+    result.generation = state.generation
+    result.observer_uuid = state.observer_uuid
+    result.groups = selected
+    return result
+
+static func receive_handoff(data: Dictionary, completed: Dictionary, key: Array) -> Dictionary:
+    # The scene has checked accepted group ownership and supplies its local epoch.
+    # Raw source files are immutable; only the optional worker merges its cache.
+    var result: Dictionary = completed.duplicate()
+    result.key = key
+    var optional: Dictionary = completed.optional_request.duplicate()
+    optional.key = key
+    optional.source_files = completed.source_files
+    data.optional_pending = optional
+    data.metadata_ms += completed.elapsed_ms
+    data.metadata_jobs += 1
+    data.metadata_phases.required = completed.phases
+    result.erase("optional_request")
+    _start_plan(data)
+    return result
 
 static func _start_plan(data: Dictionary) -> void:
     if data.plan_task >= 0: return
@@ -43,7 +77,7 @@ static func _start_plan(data: Dictionary) -> void:
     var optional = false
     if not data.plan_pending.is_empty():
         request = data.plan_pending
-        data.plan_pending = {}; data.optional_pending = {}
+        data.plan_pending = {}
     elif not data.optional_pending.is_empty():
         request = data.optional_pending
         data.optional_pending = {}; optional = true
@@ -83,6 +117,7 @@ static func _plan_sources(request: Dictionary, result: Dictionary, cache: Dictio
 
 static func _plan_optional(request: Dictionary, result: Dictionary, cache: Dictionary) -> void:
     var started = Time.get_ticks_usec()
+    cache.merge(request.get("source_files",{}),false)
     result.key = request.key
     result.stage = "optional"
     var required: Dictionary = request.required
@@ -118,7 +153,8 @@ static func poll_plan(data: Dictionary) -> Dictionary:
     if not completed.get("complete",false):
         completed.error = "Authored media metadata preparation did not complete; inspect the source error log."
     if completed.has("optional_request"):
-        if data.plan_pending.is_empty(): data.optional_pending = completed.optional_request
+        if data.plan_pending.is_empty() and data.optional_pending.is_empty():
+            data.optional_pending = completed.optional_request
         completed.erase("optional_request")
     data.metadata_ms += completed.get("elapsed_ms",0.0)
     data.metadata_jobs += 1
@@ -436,6 +472,10 @@ static func demand(data: Dictionary, paths: Dictionary, environment: Dictionary 
         data.queued.erase(request.path)
     data.pending = []
     for path in paths: enqueue(data,path,paths[path])
+    # Role refresh order and an older optional backlog must not move an admitted
+    # outfit's authored rest/movement sources behind exhaustive pose families.
+    for path in data.encounter.get("priority",{}):
+        if data.preload_selected.has(path) and not paths.has(path): enqueue(data,path,data.preload_selected[path])
     for request in pending:
         if data.preload_selected.has(request.path) and not paths.has(request.path): enqueue(data,request.path,request.absolute)
     for path in refresh:

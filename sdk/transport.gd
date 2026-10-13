@@ -72,17 +72,21 @@ func start(base_url: String, credential: String, consumer: Callable = Callable()
     if credential.is_empty() or "\r" in credential or "\n" in credential:
         return failure("protocol","Invalid bearer credential")
     _origin = parsed.value; _credential = credential; _consumer = consumer
-    _options = {"request_timeout":30.0,"stream_idle_timeout":45.0,"reconnect_timeout":60.0,"max_requests":8,"trusted_choices":false}
+    _options = {"request_timeout":30.0,"stream_idle_timeout":45.0,"reconnect_timeout":60.0,"max_requests":8,"trusted_choices":false,"trusted_operations":false}
     for key in options:
         if not _options.has(key): return failure("protocol","Unknown transport option: "+str(key))
-        if key=="trusted_choices":
-            if typeof(options[key])!=TYPE_BOOL: return failure("protocol","trusted_choices must be boolean")
+        if key in ["trusted_choices","trusted_operations"]:
+            if typeof(options[key])!=TYPE_BOOL: return failure("protocol",str(key)+" must be boolean")
             continue
         if typeof(options[key]) not in [TYPE_INT,TYPE_FLOAT] or not is_finite(float(options[key])) or float(options[key]) <= 0:
             return failure("protocol","Transport options must be finite and positive")
     if options.has("max_requests") and (int(options.max_requests) != options.max_requests or options.max_requests > 64):
         return failure("protocol","max_requests must be an integer from 1 to 64")
     _options.merge(options,true)
+    # The player/launcher opts in for its current local typed producer. A public
+    # SDK client, arbitrary remote server, or recording never acquires this trust.
+    if _options.trusted_operations and not _origin.host in ["127.0.0.1","::1","localhost"]:
+        return failure("protocol","Trusted operations require the explicitly selected loopback server")
     _mutex.lock(); _running = true; _cancelled = false; _mutex.unlock()
     var error = _thread.start(_run)
     if error != OK:
@@ -141,10 +145,11 @@ func _profile_job(job: Dictionary, stage: String, extra: Dictionary = {}) -> voi
     record.merge(extra,true)
     _profile_record(record)
 
-func profile_preparation(sequence: int, packet_started_us: int, compile_started_us: int, end_us: int, ok: bool, from_disk: bool) -> void:
+func profile_preparation(sequence: int, packet_started_us: int, compile_started_us: int, end_us: int, ok: bool, from_disk: bool, compile_ended_us: int = -1, required_media_ms: float = 0.0) -> void:
     if not _profile_enabled: return
     _profile_record({"stage":"presentation_prepare","time_us":end_us,"sequence":sequence,
         "packet_started_us":packet_started_us,"compile_started_us":compile_started_us,"end_us":end_us,
+        "compile_ended_us":end_us if compile_ended_us<0 else compile_ended_us,"required_media_ms":required_media_ms,
         "ok":ok,"from_disk":from_disk})
 
 func request(operation: String, arguments: Dictionary = {}) -> int:
@@ -528,11 +533,13 @@ func _queue_ack(purpose: String) -> void:
     _jobs.append(_new_job(HTTPClient.METHOD_POST,_route("ack"),"AckResponse",body,purpose))
     _follower.phase = "ack"
 
-func _consume(packet: Dictionary, raw: PackedByteArray) -> Dictionary:
+func _consume(packet: Dictionary, raw: PackedByteArray, trusted_operation: bool = false) -> Dictionary:
     if _stopping(): return failure("cancelled","SDK cancelled")
     if not _consumer.is_valid(): return failure("protocol","A passive consumer is required before following")
     var started = Time.get_ticks_usec()
-    var result: Variant = _consumer.call(packet,raw)
+    # Preserve the public two-argument consumer. Only the opted player consumer
+    # receives the canonical-operation flag; initialization is always strict.
+    var result: Variant = _consumer.call(packet,raw,true) if trusted_operation else _consumer.call(packet,raw)
     _timings.consumer_ms += (Time.get_ticks_usec()-started)/1000.0
     if _profile_enabled:
         _profile_record({"stage":"canonical_consumer","time_us":Time.get_ticks_usec(),"started_us":started,
@@ -592,8 +599,11 @@ func _maybe_complete() -> void:
 func _event(record: Dictionary) -> void:
     var roots = {"ready":"StreamReady","status":"StreamStatus","operation":"PlayerOperation","error":"ApiError"}
     if not roots.has(record.event): _fail_follow(failure("protocol","Unknown SSE event")); return
+    var trusted_operation: bool = _options.trusted_operations and record.event=="operation"
+    if trusted_operation and (_bootstrap.is_empty() or not _stream.get("identity_ready",false)):
+        _fail_follow(failure("protocol","Trusted operation arrived before the checked stream identity")); return
     var admission_started = Time.get_ticks_usec()
-    var decoded: Dictionary = _protocol._decode_framed_event(roots[record.event],record.raw,_profile_enabled)
+    var decoded: Dictionary = _protocol._decode_framed_event(roots[record.event],record.raw,_profile_enabled,trusted_operation)
     _timings.admission_ms += (Time.get_ticks_usec()-admission_started)/1000.0
     if _profile_enabled:
         _profile_job(_stream,"sse_admission",{"started_us":admission_started,"frame_id":record.get("profile_frame_id",0),
@@ -613,6 +623,7 @@ func _event(record: Dictionary) -> void:
             if checked.ok: checked = _scope(packet.head)
             if checked.ok and packet.after.sequence != _follower.consumed.sequence: checked = failure("protocol","Resume cursor mismatch")
         if not checked.ok: _fail_follow(checked); return
+        if record.event == "ready": _stream.identity_ready = true
         _follower.status = packet.status
         _emit({"kind":"status","value":packet.status})
     else:
@@ -624,7 +635,7 @@ func _event(record: Dictionary) -> void:
         if sequence <= int(_follower.consumed.sequence): return
         if sequence != int(_follower.consumed.sequence)+1:
             _fail_follow(failure("protocol","Non-contiguous operation")); return
-        checked = _consume(packet,record.raw)
+        checked = _consume(packet,record.raw,trusted_operation)
         if not checked.ok: _fail_follow(checked); return
         _queue_ack("operation_ack")
     _follower.retry_since = -1; _follower.attempt = 0

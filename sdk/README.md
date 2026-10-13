@@ -80,13 +80,31 @@ keeps the ordinary scope/revision/correlation checks. Unrelated nested action
 metadata remains trusted server output. Admitted choices and previews are handed
 off once as sparse read-only tables: no defaulted copy, tree expansion or second
 deep copy is made. This is deliberately different from untrusted imports:
-public `decode`/`validate`, canonical events and all journal/replay admission remain
-strict. Native query parsing follows Godot's floating-point conversion and JSON
+public `decode`/`validate` and public journal/replay admission remain strict.
+Native query parsing follows Godot's floating-point conversion and JSON
 syntax tolerance; it does not promise bit-exact decoding of arbitrary decimal
 tokens. It never changes the recorded event codec.
 Native query numbers are floats in Godot. UI/world consumers compare coordinate
 and ContentRef scalar values, not whole Array/Dictionary identity; this preserves
 integer world picks and exact content versions without rewriting shared domains.
+
+`trusted_operations` is a separate boolean option, defaulting to `false`. The
+player launcher enables it only for the current typed server it owns on loopback;
+Session configuration leaves it off unless explicitly supplied. Transport rejects
+remote hosts for this option and requires the shipped protocol identity in both
+bootstrap and the stream's ready record before accepting trusted operations.
+Schema identity alone is not a guarantee of canonical bodies: this option trusts
+this producer's `model_dump_json()` output, including defaults and UUID casing.
+
+Trusted operations retain the exact JSON parser, integer token types, binary64
+decimal rounding, UTF-8/NUL/size limits, bounded envelope checks and all
+identity/scope/cursor/SSE sequence checks. Only recursive typed-body schema
+validation and the redundant canonical normalization copy are skipped.
+Initialization, status and errors remain strict. Transactional semantic reduction
+must still succeed before state publication and ACK; malformed arbitrary nested
+bodies are outside this explicit producer-trust guarantee. Public SDK decoding,
+public `journal.consume`, archived recordings, cold replay and preparation's
+overflow disk reads retain strict admission and normalization.
 
 Choices are fetched for the latest consumed and acknowledged human-input boundary
 while presentation plays. One result stays private until playback reaches its
@@ -111,7 +129,13 @@ Deferred AoE choices are different from a computed-empty Preview. The current
 player requests the selected Preview for exact subjective geometry; this intake
 does not introduce a second local gameplay or AoE propagation implementation.
 
-The consumer receives `(packet, raw_bytes)` and must return a result. It runs
+The default consumer receives `(packet, raw_bytes)` and must return a result.
+When `trusted_operations` is enabled, its callback must also accept an optional
+third argument, `canonical_server_operation: bool = false`. Transport passes
+`true` only for the checked live operation path; initialization still uses two
+arguments. The player forwards this private ownership flag to its journal; an
+ordinary two-argument consumer and public journal calls retain strict behavior.
+The consumer runs
 before consumed-cursor advancement and ACK. It must retain ownership of its data
 on the worker; queue detached presentation values for the main thread. Do not
 read `journal.state` concurrently from the main thread. `snapshot()` gives a
@@ -210,6 +234,20 @@ export PYTHONPATH=/mnt/c/Users/tommaso/Documents/Dev/dnd_engine:/mnt/c/Users/tom
 /home/tommaso/.cache/dnd-engine/venv/bin/python tools/protocol_oracle.py
 /home/tommaso/.cache/dnd-engine/venv/bin/python tools/reducer_oracle.py
 ```
+
+To include current-server operation trust/parity and real loopback SSE checks,
+pass an explicit current journal; recordings are not tracked test dependencies:
+
+```bash
+python3 tools/check_sdk.py --trusted-operations-recording /path/to/current/journal
+```
+
+The focused script can also run directly with
+`--script res://tests/trusted_operations_checks.gd -- --recording=<journal>`.
+Its [report](../generated/trusted_operations_checks.json) records the exact input
+and command. The latest focused run passes 450 checks across 101 operation
+records and bounded-admission/loopback fault cases; it is correctness evidence,
+not a live performance measurement.
 
 The slower real-service lane starts and cleans up its own host and native worker:
 

@@ -10,6 +10,8 @@ var identity: Dictionary
 var setup_error := ""
 var _patterns: Dictionary = {}
 var _server_choices_envelope: Dictionary = {}
+var _server_operation_envelope: Dictionary = {}
+var _current_server_contract := false
 
 func _init(schema_path: String = "res://sdk/player-api-v1.schema.json", identity_path: String = "res://sdk/protocol-identity.json") -> void:
 	var schema_result := StrictJSON.new().parse(FileAccess.get_file_as_string(schema_path))
@@ -23,6 +25,7 @@ func _init(schema_path: String = "res://sdk/player-api-v1.schema.json", identity
 	schema = schema_result.value
 	identity = identity_result.value
 	setup_error = _vocabulary(schema)
+	_current_server_contract = schema_path == "res://sdk/player-api-v1.schema.json" and identity_path == "res://sdk/protocol-identity.json"
 
 static func failure(message: String) -> Dictionary:
 	return {"ok": false, "error": {"kind": "protocol", "message": message, "retryable": false}}
@@ -76,23 +79,48 @@ func decode(root_name: String, raw: PackedByteArray) -> Dictionary:
 	# The strict parser already establishes finite JSON-only values and depth.
 	return _validate_schema(root_name, parsed.value)
 
-func _decode_framed_event(root_name: String, raw: PackedByteArray, profile: bool = false) -> Dictionary:
+func _decode_framed_event(root_name: String, raw: PackedByteArray, profile: bool = false, trusted_operation: bool = false) -> Dictionary:
 	# Internal SSE handoff: framing already validates each complete UTF-8 line.
 	# Joining those lines with LF preserves validity. Keep the same strict JSON,
-	# size, NUL and schema admission without scanning every UTF-8 byte twice.
+	# size and NUL admission without scanning every UTF-8 byte twice. Body schema
+	# admission changes only for the explicit current-producer operation option.
 	if raw.size() > MAX_BYTES: return failure("JSON exceeds 64 MiB")
 	if raw.has(0): return failure("Godot strings cannot represent NUL characters")
 	var started := Time.get_ticks_usec() if profile else 0
 	var parsed := StrictJSON.new().parse(raw.get_string_from_utf8().trim_prefix(char(0xfeff)))
 	if not parsed.ok: return parsed
 	var admitted_at := Time.get_ticks_usec() if profile else 0
-	var result := _validate_schema(root_name, parsed.value)
+	var result := _validate_server_operation(parsed.value) if trusted_operation and root_name == "PlayerOperation" else _validate_schema(root_name, parsed.value)
 	if profile: result.phases_ms = {"strict_json":(admitted_at-started)/1000.0,"schema":(Time.get_ticks_usec()-admitted_at)/1000.0}
 	return result
 
+func _validate_server_operation(value: Variant) -> Dictionary:
+	# Only the explicitly selected current server's canonical model_dump_json
+	# output has this guarantee. A merely schema-conforming public/offline value
+	# can omit defaults or use uppercase UUIDs and must retain ordinary admission.
+	if not setup_error.is_empty(): return failure(setup_error)
+	if not _current_server_contract: return failure("Trusted operations require the current shipped server contract")
+	if _server_operation_envelope.is_empty():
+		_server_operation_envelope = schema["$defs"].PlayerOperation.duplicate(true)
+		# These five typed bodies are owned by the current producer. Retain their
+		# outer shapes, without interpreting or cloning each nested after-value.
+		_server_operation_envelope.properties.audience = {"type":"object"}
+		for field in ["lineages", "combat_log_appends", "content_additions"]:
+			_server_operation_envelope.properties[field] = {"type":"array"}
+		_server_operation_envelope.properties.hud = {"anyOf":[{"type":"object"},{"type":"null"}]}
+		# Canonical server serialization supplies even the defaulted discriminator.
+		_server_operation_envelope.required = _server_operation_envelope.properties.keys()
+	var issue := _check(_server_operation_envelope, value, "$", 0)
+	if not issue.is_empty(): return failure("Server operation: " + issue)
+	if value.cursor.sequence < 1: return failure("Operation sequence must be positive")
+	var checked := check_identity(value.protocol)
+	if not checked.ok: return checked
+	return {"ok":true,"value":value}
+
 func decode_server_choices(raw: PackedByteArray) -> Dictionary:
 	# Explicit live-query trust boundary. The connected, identity-checked server
-	# owns the nested action data. Public decode and all journal/events stay strict.
+	# owns the nested action data. Public decode stays strict; event admission has
+	# its own independent current-producer option and always uses exact numbers.
 	if not setup_error.is_empty(): return failure(setup_error)
 	if raw.size() > MAX_BYTES: return failure("JSON exceeds 64 MiB")
 	var text_value := utf8(raw)

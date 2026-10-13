@@ -7,6 +7,7 @@ const Journal = preload("res://sdk/journal.gd")
 const Protocol = preload("res://sdk/protocol.gd")
 const Reducer = preload("res://sdk/reducer.gd")
 const Compiler = preload("res://presentation/compiler.gd")
+const MediaWarmup = preload("res://presentation/media_warmup.gd")
 var transport = Transport.new()
 var journal = Journal.new()
 var protocol = Protocol.new()
@@ -47,7 +48,7 @@ var retired_staged: Array = []
 var retired_ready: Array = []
 var retired_records_staged: Array = []
 var retired_records_ready: Array = []
-var preparation_metrics = {"compiled_operations":0,"packet_prepare_ms":0.0,"compile_ms":0.0,"journal_ms":0.0,
+var preparation_metrics = {"compiled_operations":0,"packet_prepare_ms":0.0,"compile_ms":0.0,"required_media_ms":0.0,"journal_ms":0.0,
     "disk_reloads":0,"handoff_hits":0,"recorded_handoff_hits":0,"active":false,"held_for_display":false,
     "retired_groups":0,"retirement_ms":0.0,"retirement_peak_groups":0,
     "retired_records":0,"record_retirement_ms":0.0,"retirement_peak_records":0}
@@ -150,17 +151,18 @@ func start(config: Dictionary) -> Dictionary:
     var opened = journal.open(config.get("journal", "user://sessions/" + uuid()),false,false)
     if not opened.ok: return opened
     start_ms = Time.get_ticks_msec()
-    return transport.start(config.url, config.token, _consume, {"trusted_choices":true})
+    return transport.start(config.url, config.token, _consume, {"trusted_choices":true,
+        "trusted_operations":config.get("trusted_operations",false)})
 
-func _consume(packet: Dictionary, raw: PackedByteArray) -> Dictionary:
-    # Only Transport calls this internal hook after strict admission. Public
-    # offline tools keep Journal.consume's independent byte/schema boundary.
+func _consume(packet: Dictionary, raw: PackedByteArray, canonical_server_operation: bool = false) -> Dictionary:
+    # Transport supplies the canonical tag only on the explicitly trusted live
+    # operation path. Offline tools retain independent strict byte/schema checks.
     var started = Time.get_ticks_usec()
     var sequence = int(packet.cursor.sequence)
     mutex.lock()
     var record_transitions = sequence>0 and sequence>prepared_sequence and sequence<=displayed_sequence+LOOKAHEAD_OPERATIONS and admitted_pending.size()<LOOKAHEAD_OPERATIONS+1
     mutex.unlock()
-    var accepted = journal._consume_admitted(packet,raw,record_transitions)
+    var accepted = journal._consume_admitted(packet,raw,record_transitions,canonical_server_operation)
     if not accepted.ok: return accepted
     var normalized: Dictionary = accepted.get("normalized",{})
     mutex.lock()
@@ -226,6 +228,7 @@ func _prepare_loop() -> void:
         if _stopping(): break
         var message: Dictionary = {}
         var used_records = false
+        var before: Dictionary = preparation_state
         started = Time.get_ticks_usec()
         if result.ok and next==0:
             var initial_state: Dictionary = handoff.get("final_state",{})
@@ -248,12 +251,18 @@ func _prepare_loop() -> void:
                 message = {"kind":"operation","groups":result.value.groups,"sequence":next,
                     "cursor":packet.cursor.duplicate(true),"command_number":packet.command_number,
                     "skipped":result.value.get("skipped",[])}
+        var compiled_at = Time.get_ticks_usec()
+        var media_ms = 0.0
+        if result.ok and next>0 and not _stopping():
+            message.media = MediaWarmup.prepare_handoff(before,result.value.groups,authoring_cache)
+            media_ms = (Time.get_ticks_usec()-compiled_at)/1000.0
         if _stopping(): break
-        transport.profile_preparation(next,packet_started,started,Time.get_ticks_usec(),result.ok,handoff.is_empty() or handoff.get("from_disk",false))
+        transport.profile_preparation(next,packet_started,started,Time.get_ticks_usec(),result.ok,handoff.is_empty() or handoff.get("from_disk",false),compiled_at,media_ms)
         mutex.lock()
         preparation_metrics.active = false
         preparation_metrics.packet_prepare_ms += decode_ms
-        preparation_metrics.compile_ms += (Time.get_ticks_usec()-started)/1000.0
+        preparation_metrics.compile_ms += (compiled_at-started)/1000.0
+        preparation_metrics.required_media_ms += media_ms
         preparation_metrics["disk_reloads" if handoff.is_empty() or handoff.get("from_disk",false) else "handoff_hits"] += 1
         if not result.ok:
             replay_error = result.error

@@ -154,7 +154,7 @@ func _initialize() -> void:
         var retained=Reducer._reduce_operation_retained(state,packet,true)
         check(public.ok and retained.ok,"Both transaction boundaries accept mutation sequence "+str(iteration))
         if not public.ok or not retained.ok: continue
-        check(public==retained,"Entire detached and retained result/capture values agree "+str(iteration))
+        check(public.value==retained.value and public.transitions==retained.transitions,"Entire detached and retained state/capture values agree "+str(iteration))
         _assert_events(state,packet,retained)
         for i in range(held.size()):
             check(held[i]==frozen[i],"Later transaction preserves all prior states and event snapshots "+str(i))

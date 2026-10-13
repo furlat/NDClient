@@ -5,7 +5,7 @@ const Characters = preload("res://presentation/characters.gd")
 const Catalog = preload("res://source_catalog.gd")
 
 static func _outfit(actor: Dictionary) -> Array:
-    return [actor.get("creature_content_ref"),actor.get("appearance"),actor.get("visual_loadout")]
+    return [actor.get("creature_content_ref"),actor.get("appearance"),actor.get("visual_loadout"),actor.get("life_state")]
 
 static func _include(actors: Dictionary, actor: Dictionary) -> void:
     if actor.get("last_visual_position") == null: return
@@ -16,10 +16,31 @@ static func _include(actors: Dictionary, actor: Dictionary) -> void:
         if _outfit(prior)==signature: return
     actors[id].append(actor)
 
+static func _priority_paths(actor: Dictionary, rig: Dictionary, index: Dictionary, cache: Dictionary) -> Dictionary:
+    # These are authored resting/movement sources for this actual outfit, not
+    # predicted actions or a second interpretation of movement events.
+    var clips = {}
+    var rest = Characters.rest_sample(actor,rig,cache)
+    if rest.ok: clips[rest.value.clip] = true
+    var movement: Dictionary = Characters._read(index.movement_context,cache)
+    for field in ["walkClip","jumpClip"]:
+        if movement.has(field): clips[movement[field]] = true
+    var flight: Dictionary = movement.get("flight",{}).get("body",{}).get("actor",{})
+    if flight.get("enabled",false): clips[flight.clip] = true
+    for connector in movement.get("connectorProfiles",{}).values():
+        if connector.has("bodyClip"): clips[connector.bodyClip] = true
+    for context in rig.get("body_contexts",[]):
+        var body: Dictionary = context.get("body",{}).get("actor",{})
+        if context.role=="movement" and body.get("enabled",false): clips[body.clip] = true
+    var available: Array = clips.keys().filter(func(clip):return rig.clips.has(clip))
+    var source = Characters.sheet_paths(actor,available,cache)
+    return source.value if source.ok else {}
+
 static func plan(state: Dictionary, environment: Dictionary, fixtures: Dictionary, cache: Dictionary, groups: Array = []) -> Dictionary:
     var paths = environment.duplicate()
     var cpu_required = environment.duplicate()
     var gpu_only = {}
+    var priority = {}
     var errors: Array = []
     var actors = {}
     var previous: Dictionary = cache.get("__encounter_outfits",{})
@@ -48,11 +69,12 @@ static func plan(state: Dictionary, environment: Dictionary, fixtures: Dictionar
                 for prior in previous.get(id,[]):
                     if prior.signature==signature: packet = prior; break
                 if packet.is_empty():
-                    packet = {"signature":signature,"paths":{},"cpu_required":{},"gpu_only":{},"errors":[]}
+                    packet = {"signature":signature,"paths":{},"priority":{},"cpu_required":{},"gpu_only":{},"errors":[]}
                     var rig: String = Characters.rig_id(actor,cache)
                     if not rigs.has(rig):
                         packet.errors.append("No authored rig for admitted actor " + str(id))
                     else:
+                        packet.priority = _priority_paths(actor,rigs[rig],index,cache)
                         var variants: Array = [actor]
                         if actor.get("visual_loadout") != null:
                             for weapon_set in ["melee","ranged"]:
@@ -69,18 +91,26 @@ static func plan(state: Dictionary, environment: Dictionary, fixtures: Dictionar
                             packet.cpu_required.merge(resolved.cpu_required)
                             packet.gpu_only.merge(resolved.gpu_only)
                 actors[id].append(packet)
+                priority.merge(packet.priority)
                 paths.merge(packet.paths)
                 cpu_required.merge(packet.cpu_required)
                 gpu_only.merge(packet.gpu_only)
                 errors.append_array(packet.errors)
     cache.__encounter_outfits = actors
     for path in cpu_required: gpu_only.erase(path)
+    # Every witnessed active outfit gets its rest/movement closure before any
+    # actor's exhaustive poses and alternate equipment variants consume budget.
+    var ordered: Dictionary = priority.duplicate()
+    ordered.merge(paths)
+    paths = ordered
     var retained: Dictionary = cache.get("__encounter_closure",{})
-    if not retained.is_empty() and retained.paths.size()==paths.size() and paths.keys().all(func(path):return retained.paths.has(path)) and retained.cpu_required==cpu_required and retained.gpu_only==gpu_only and retained.environment==environment and retained.fixtures==fixtures and retained.errors==errors:
+    if not retained.is_empty() and retained.paths.keys()==paths.keys() and retained.get("priority",{}).keys()==priority.keys() and retained.cpu_required==cpu_required and retained.gpu_only==gpu_only and retained.environment==environment and retained.fixtures==fixtures and retained.errors==errors:
         return retained
     var absolute = {}
     for path in paths: absolute[path] = Catalog.media_path(path)
-    var result = {"revision":int(retained.get("revision",0))+1,"paths":absolute,"environment":environment,"fixtures":fixtures,
+    var priority_absolute = {}
+    for path in priority: priority_absolute[path] = absolute[path]
+    var result = {"revision":int(retained.get("revision",0))+1,"paths":absolute,"priority":priority_absolute,"environment":environment,"fixtures":fixtures,
         "cpu_required":cpu_required,"gpu_only":gpu_only,"errors":errors}
     cache.__encounter_closure = result
     return result

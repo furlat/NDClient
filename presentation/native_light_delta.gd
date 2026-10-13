@@ -129,13 +129,17 @@ static func _bind(atlas, spec: Dictionary, position: Vector2i) -> Dictionary:
     if not receiver.dynamic: atlas.cull_dirty[receiver.id]=true
     return receiver
 
+static func _fallback(atlas, reason: String) -> bool:
+    atlas.last_delta_fallback=reason
+    return false
+
 static func reconcile(atlas, world, changes: Dictionary) -> bool:
-    if not atlas.delta_ready or atlas.delta_serial<0: return false
+    if not atlas.delta_ready or atlas.delta_serial<0: return _fallback(atlas,"no_committed_delta")
     var serial: int=int(changes.serial)
     var new_world: bool=serial!=atlas.delta_serial
-    if new_world and (int(changes.base)!=atlas.delta_serial or bool(changes.full)): return false
+    if new_world and (int(changes.base)!=atlas.delta_serial or bool(changes.full)): return _fallback(atlas,"full_or_missed_receipt")
     var screen=Vector2i(world.get_viewport().get_visible_rect().size)
-    if screen.x>atlas.viewport.size.x or screen.y>atlas.viewport.size.y: return false
+    if screen.x>atlas.viewport.size.x or screen.y>atlas.viewport.size.y: return _fallback(atlas,"screen_resize")
     var started=Time.get_ticks_usec()
     var upserts={}; var removed_sources={}
     if new_world:
@@ -166,7 +170,7 @@ static func reconcile(atlas, world, changes: Dictionary) -> bool:
         var entry: Dictionary=upserts[id]
         if not is_instance_valid(entry.node) or entry.node.is_queued_for_deletion() or not entry.has("cell"): continue
         var source=_source(atlas,entry,world)
-        if source.crop.is_empty(): return false
+        if source.crop.is_empty(): return _fallback(atlas,"missing_crop")
         var before: Dictionary=atlas.entry_specs.get(id,{})
         if before.is_empty(): source.order=next_order; next_order+=1
         else: source.order=before.order
@@ -181,7 +185,7 @@ static func reconcile(atlas, world, changes: Dictionary) -> bool:
         elif entry.has("batch_rows"):
             if before.ground_version!=source.ground_version:
                 var geometry: Dictionary=entry.get("geometry_changes",{})
-                if geometry.get("base_version",-1)!=before.ground_version or geometry.get("version",-1)!=source.ground_version: return false
+                if geometry.get("base_version",-1)!=before.ground_version or geometry.get("version",-1)!=source.ground_version: return _fallback(atlas,"ground_version")
                 # Retained cells never move in the sparse planner. The existing
                 # repack counter invalidates worker copies if a complete planner
                 # could have moved them while preparation was pending.
@@ -230,8 +234,9 @@ static func reconcile(atlas, world, changes: Dictionary) -> bool:
     atlas.last_reconcile_phases.delta_sources=source_patches.size()
     atlas.last_reconcile_phases.delta_specs=specs.size()
     atlas.last_reconcile_phases.delta_support_cells=affected.size()
-    # Reserve only added cells. A resize or changed crop falls back to the full
-    # transactional planner, which handles all normalized output addresses.
+    # Reserve only added cells in the original append order. Height growth does
+    # not move existing pixel addresses; only normalized output regions change.
+    # Changed crops/overflow still use the complete transactional planner.
     var cursor: Vector3i=atlas.shelf_cursor
     var positions={}
     # Keep the same reservation order as the complete world-entry/floor-row
@@ -246,17 +251,26 @@ static func reconcile(atlas, world, changes: Dictionary) -> bool:
     for spec in reservations:
         if atlas.receiver_index.has(spec.id):
             var old: Dictionary=atlas.receiver_index[spec.id]
-            if old.crop!=spec.crop: return false
+            if old.crop!=spec.crop: return _fallback(atlas,"changed_crop")
             positions[spec.id]=old.position
             continue
         var size: Vector2i=spec.crop.pixels.size
-        if size.x+2>atlas.MAX_SIZE or size.y+2>atlas.MAX_SIZE: return false
+        if size.x+2>atlas.MAX_SIZE or size.y+2>atlas.MAX_SIZE: return _fallback(atlas,"oversized_cell")
         if cursor.x+size.x+1>atlas.MAX_SIZE: cursor.x=1; cursor.y+=cursor.z+2; cursor.z=0
-        if cursor.y+size.y+1>atlas.viewport.size.y: return false
+        if cursor.y+size.y+1>atlas.MAX_SIZE: return _fallback(atlas,"append_overflow")
         positions[spec.id]=Vector2i(cursor.x,cursor.y)
         cursor.x+=size.x+2; cursor.z=maxi(cursor.z,size.y)
-    # Commit only after all reservations and source receipts have been checked.
+    var needed: int=maxi(cursor.y+cursor.z+1,atlas.viewport.size.y)
+    if needed>atlas.MAX_SIZE: return _fallback(atlas,"append_overflow")
+    var next_height: int=atlas.viewport.size.y
+    while next_height<needed: next_height=mini(atlas.MAX_SIZE,next_height*2)
+    var growing: bool=next_height!=atlas.viewport.size.y
+    # Commit only after every reservation and the same full-planner dimensions
+    # have been validated. A rejected candidate cannot resize the live viewport.
     var phase=Time.get_ticks_usec()
+    if growing:
+        atlas.viewport.size=Vector2i(atlas.MAX_SIZE,next_height)
+        atlas.repack_count+=1
     for receiver in removed.values():
         atlas.packed_pixels-=receiver.crop.pixels.size.x*receiver.crop.pixels.size.y
         atlas.layout_members.erase(receiver.id)
@@ -303,7 +317,9 @@ static func reconcile(atlas, world, changes: Dictionary) -> bool:
                 "coherent_addresses":entry.get("prepared_address_version",-1)==entry.get("ground_version",0)}
         else: outputs.append_array(source.receivers.values())
     atlas._publish_addresses(floors,outputs)
+    if growing: atlas._refresh_normalized_addresses()
     atlas.last_reconcile_phases.addresses_ms=(Time.get_ticks_usec()-phase)/1000.0
-    atlas.last_reconcile_phases.layout_mode="delta"
+    atlas.last_reconcile_phases.layout_mode="delta_growth" if growing else "delta"
+    if growing: atlas.last_reconcile_phases.grown_height=next_height
     atlas.revision+=1
     return true

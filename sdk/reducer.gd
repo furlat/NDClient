@@ -235,11 +235,10 @@ static func reduce_nodes(target: Dictionary, nodes: Array, versions: Array, obse
 
 # Only a private transaction enters this fold. Intermediate failures discard
 # its mutable containers without touching a previously published state.
-static func _reduce_nodes_owned(result: Dictionary, nodes: Array, versions: Array, observations: Array, updates: Array, recorded: Variant = null, profile: Variant = null) -> Dictionary:
-    # First compose arbitrary public inputs before reusing the transaction-local
-    # cell indexes. Records remain private until the whole operation succeeds.
-    var composed_senses = false
-    var cells = {}
+static func _reduce_nodes_owned(result: Dictionary, nodes: Array, versions: Array, observations: Array, updates: Array, recorded: Variant = null, profile: Variant = null, cells: Dictionary = {}) -> Dictionary:
+    # Arbitrary public inputs first compose exhaustively. Only a context bound
+    # to this exact committed state can carry that proof across operations.
+    var composed_senses: bool = cells.get("composed",false)
     var indexes = {}
     for row in versions: indexes[row.event_uuid] = row.source_index
     for observation in observations:
@@ -268,7 +267,9 @@ static func _reduce_nodes_owned(result: Dictionary, nodes: Array, versions: Arra
         if not node.canceled and node.fact != null:
             var folded = _apply_committed_player_fact_owned(result, node.fact, int(indexes[node.uuid]), indexes, composed_senses, cells)
             if not folded.ok: return folded
-            if node.fact.kind == "sensory": composed_senses = true
+            if node.fact.kind == "sensory":
+                composed_senses = true
+                cells.composed = true
         if profile != null:
             _profile_elapsed(profile, "facts", started)
             if not node.canceled and node.fact != null: _profile_elapsed(profile, "fact_" + str(node.fact.kind), started)
@@ -310,12 +311,12 @@ static func reduce_initialization(initialization: Dictionary, content_additions:
 static func reduce_lineage(target: Dictionary, lineage: Dictionary) -> Dictionary:
     return _reduce_lineage_owned(copy_target(target), lineage)
 
-static func _reduce_lineage_owned(target: Dictionary, lineage: Dictionary, recorded: Variant = null, profile: Variant = null) -> Dictionary:
+static func _reduce_lineage_owned(target: Dictionary, lineage: Dictionary, recorded: Variant = null, profile: Variant = null, cells: Dictionary = {}) -> Dictionary:
     var audience = _lineage_audience(target, lineage)
     if not audience.ok: return audience
     if lineage.end_cursor <= target.reducer_cursor:
         return failure("player lineage precedes this reduction position")
-    var folded = _reduce_nodes_owned(target, lineage.events, lineage.version_rows, lineage.observations, lineage.world_updates, recorded, profile)
+    var folded = _reduce_nodes_owned(target, lineage.events, lineage.version_rows, lineage.observations, lineage.world_updates, recorded, profile, cells)
     if not folded.ok: return folded
     var result: Dictionary = folded.value
     result.reducer_cursor = lineage.end_cursor
@@ -339,10 +340,10 @@ static func _reduce_operation_recorded(target: Dictionary, update: Dictionary, p
 
 # Only Journal uses retained canonical inputs. Callers that may mutate arbitrary
 # public results use the detached entrypoints above.
-static func _reduce_operation_retained(target: Dictionary, update: Dictionary, record_events: bool = false, profile: Variant = null) -> Dictionary:
-    return _reduce_operation(target, update, record_events, profile, true)
+static func _reduce_operation_retained(target: Dictionary, update: Dictionary, record_events: bool = false, profile: Variant = null, sensory_context: Dictionary = {}) -> Dictionary:
+    return _reduce_operation(target, update, record_events, profile, true, sensory_context)
 
-static func _reduce_operation(target: Dictionary, update: Dictionary, record_events: bool, profile: Variant = null, retained: bool = false) -> Dictionary:
+static func _reduce_operation(target: Dictionary, update: Dictionary, record_events: bool, profile: Variant = null, retained: bool = false, sensory_context: Dictionary = {}) -> Dictionary:
     var records = {"lineages":[]} if record_events else {}
     var audience = Audience.resolve(target.observer_uuid, target.audience)
     if not audience.ok: return audience
@@ -350,6 +351,13 @@ static func _reduce_operation(target: Dictionary, update: Dictionary, record_eve
         return failure("An operation cannot change its authorized audience")
     var started: int = Time.get_ticks_usec() if profile != null else 0
     var result = _retained_target(target) if retained else copy_target(target)
+    var cells = {}
+    if retained and is_same(sensory_context.get("state"),target) and is_same(sensory_context.get("perception"),target.perception) and is_same(sensory_context.get("senses"),target.senses):
+        cells = Audience._fork_cells(sensory_context.get("cells",{}))
+        # _retained_target copied the mutable senses shell, retaining its cell
+        # arrays. Rebind only after the committed source ownership proof above.
+        if cells.has("view") and is_same(cells.view.source,target.senses):
+            cells.view.source = result.senses
     if profile != null: _profile_elapsed(profile, "copy", started)
     if not update.content_additions.is_empty():
         var content = {}
@@ -367,7 +375,7 @@ static func _reduce_operation(target: Dictionary, update: Dictionary, record_eve
             return failure("Operation occurrence sequence has a gap")
         var recorded: Variant = {"lineage_uuid":lineage.lineage_uuid, "start_cursor":lineage.start_cursor,
             "end_cursor":lineage.end_cursor, "events":[], "trailing":Transitions.empty_delta()} if record_events else null
-        var folded = _reduce_lineage_owned(result, lineage, recorded, profile)
+        var folded = _reduce_lineage_owned(result, lineage, recorded, profile, cells if retained else {})
         if not folded.ok: return folded
         result = folded.value
         if record_events: records.lineages.append(recorded)
@@ -383,9 +391,17 @@ static func _reduce_operation(target: Dictionary, update: Dictionary, record_eve
         if row.generation != result.generation or row.observer_uuid != result.observer_uuid or row.operation_end_cursor > result.reducer_cursor or row.encounter_log_index != first + i:
             return failure("Standalone log append is out of order or belongs to another audience")
     result.combat_log_appends.append_array(update.combat_log_appends.duplicate(true))
-    if profile != null: _profile_elapsed(profile, "finalize", started)
     var accepted = success(result)
     if record_events: accepted.transitions = records
+    if retained:
+        # A first sensory event or observer reset takes the exhaustive view path.
+        # Retain its final indexes now so the next accepted operation starts warm.
+        if cells.get("composed",false) and result.senses != null:
+            if not cells.has("view") or not is_same(cells.view.source,result.senses):
+                cells.view = Audience._indexed_senses(result.senses)
+        accepted.sensory_context = {"state":result, "perception":result.perception,
+            "senses":result.senses, "cells":cells}
+    if profile != null: _profile_elapsed(profile, "finalize", started)
     return accepted
 
 static func state_before_event(before: Dictionary, lineage: Dictionary, event: Dictionary) -> Dictionary:

@@ -12,6 +12,7 @@ def main():
     project = Path(__file__).resolve().parents[1]
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--godot", type=Path, default=project.parent / "Tools/Godot-4.7.2/Godot_v4.7.2-stable_win64_console.exe")
+    parser.add_argument("--trusted-operations-recording", help="Explicit current-server journal for the optional exact operation/loopback trust checks")
     args = parser.parse_args()
     native_project = subprocess.check_output(["wslpath", "-w", str(project)], text=True).strip()
     logs = project / ".runtime/sdk-checks"
@@ -19,10 +20,16 @@ def main():
     results = []
     names = ["sdk_protocol_checks", "sdk_protocol_parity", "sdk_choices_checks", "sdk_reducer_checks", "sdk_retained_transaction_checks", "sdk_journal_checks", "sdk_transport_checks"]
     if (project / "tests/sdk_decimal_checks.gd").exists(): names.insert(0, "sdk_decimal_checks")
+    if args.trusted_operations_recording: names.append("trusted_operations_checks")
     for name in names:
         started = time.monotonic()
         marker = "sdk-check-" + uuid4().hex
         inputs = ["res://generated/sdk_protocol_parity.jsonl"] if name == "sdk_protocol_parity" else []
+        if name == "trusted_operations_checks":
+            recording = args.trusted_operations_recording
+            if not recording.startswith(("res://", "user://")):
+                recording = subprocess.check_output(["wslpath", "-w", str(Path(recording).resolve())], text=True).strip()
+            inputs = ["--recording=" + recording]
         try:
             process = subprocess.run([str(args.godot), "--headless", "--path", native_project,
                 "--script", f"res://tests/{name}.gd", "--", *inputs, "--runner-id", marker],
@@ -48,6 +55,7 @@ def main():
         passed = False
         for line in output.splitlines():
             line = line.removeprefix("SDK_RETAINED_TRANSACTION_CHECKS ")
+            line = line.removeprefix("TRUSTED_OPERATIONS_CHECKS ")
             if line.startswith("{"):
                 value = json.loads(line)
                 if "checks" in value and "failures" in value:

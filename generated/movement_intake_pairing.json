@@ -1,0 +1,1866 @@
+{
+  "recording": "res://.runtime/player-runs/20261013T152452.610938Z/journal",
+  "boundary": "Exact SSE bytes through ordered event captures; same packets, no scene, no network, no journal I/O",
+  "failures": [],
+  "before_commit": "896910f",
+  "paired_comparisons": 306,
+  "all_canonical_and_event_snapshots_exact": true,
+  "notes": [
+    "Three complete alternating passes through the same 102 journal records, with persistent context from prior accepted operations.",
+    "No network, renderer or journal I/O in this paired diagnostic; live timing is separate.",
+    "Exact numbers, canonical state and every captured transition compared after each timed pair."
+  ],
+  "sequence_medians": [
+    {
+      "sequence": 0,
+      "bytes": 525348,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 167.59,
+        "admission_ms": 124.665,
+        "normalize_ms": 33.348,
+        "reduce_ms": 8.793
+      },
+      "after": {
+        "intake_ms": 170.006,
+        "admission_ms": 124.74,
+        "normalize_ms": 34.921,
+        "reduce_ms": 8.926
+      }
+    },
+    {
+      "sequence": 1,
+      "bytes": 11157,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 4.194,
+        "admission_ms": 3.126,
+        "normalize_ms": 0.744,
+        "reduce_ms": 0.324
+      },
+      "after": {
+        "intake_ms": 2.1,
+        "admission_ms": 1.797,
+        "normalize_ms": 0.0,
+        "reduce_ms": 0.303
+      }
+    },
+    {
+      "sequence": 2,
+      "bytes": 11052,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 4.076,
+        "admission_ms": 3.02,
+        "normalize_ms": 0.755,
+        "reduce_ms": 0.265
+      },
+      "after": {
+        "intake_ms": 2.059,
+        "admission_ms": 1.766,
+        "normalize_ms": 0.0,
+        "reduce_ms": 0.265
+      }
+    },
+    {
+      "sequence": 3,
+      "bytes": 11127,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 4.054,
+        "admission_ms": 2.988,
+        "normalize_ms": 0.729,
+        "reduce_ms": 0.357
+      },
+      "after": {
+        "intake_ms": 2.191,
+        "admission_ms": 1.817,
+        "normalize_ms": 0.0,
+        "reduce_ms": 0.392
+      }
+    },
+    {
+      "sequence": 4,
+      "bytes": 47938,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 20.186,
+        "admission_ms": 12.559,
+        "normalize_ms": 3.268,
+        "reduce_ms": 4.811
+      },
+      "after": {
+        "intake_ms": 12.41,
+        "admission_ms": 7.203,
+        "normalize_ms": 0.0,
+        "reduce_ms": 5.268
+      }
+    },
+    {
+      "sequence": 5,
+      "bytes": 48361,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 19.169,
+        "admission_ms": 13.839,
+        "normalize_ms": 3.411,
+        "reduce_ms": 1.532
+      },
+      "after": {
+        "intake_ms": 8.684,
+        "admission_ms": 7.457,
+        "normalize_ms": 0.0,
+        "reduce_ms": 1.196
+      }
+    },
+    {
+      "sequence": 6,
+      "bytes": 31411,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 13.313,
+        "admission_ms": 8.598,
+        "normalize_ms": 2.156,
+        "reduce_ms": 2.538
+      },
+      "after": {
+        "intake_ms": 7.073,
+        "admission_ms": 4.82,
+        "normalize_ms": 0.001,
+        "reduce_ms": 2.199
+      }
+    },
+    {
+      "sequence": 7,
+      "bytes": 16144,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 5.53,
+        "admission_ms": 4.084,
+        "normalize_ms": 1.043,
+        "reduce_ms": 0.435
+      },
+      "after": {
+        "intake_ms": 2.879,
+        "admission_ms": 2.339,
+        "normalize_ms": 0.0,
+        "reduce_ms": 0.497
+      }
+    },
+    {
+      "sequence": 8,
+      "bytes": 21953,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 9.027,
+        "admission_ms": 5.998,
+        "normalize_ms": 1.517,
+        "reduce_ms": 1.548
+      },
+      "after": {
+        "intake_ms": 5.084,
+        "admission_ms": 3.412,
+        "normalize_ms": 0.0,
+        "reduce_ms": 1.239
+      }
+    },
+    {
+      "sequence": 9,
+      "bytes": 21551,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 8.603,
+        "admission_ms": 5.629,
+        "normalize_ms": 1.469,
+        "reduce_ms": 1.505
+      },
+      "after": {
+        "intake_ms": 4.475,
+        "admission_ms": 3.295,
+        "normalize_ms": 0.001,
+        "reduce_ms": 1.17
+      }
+    },
+    {
+      "sequence": 10,
+      "bytes": 109951,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 42.931,
+        "admission_ms": 32.117,
+        "normalize_ms": 7.893,
+        "reduce_ms": 3.054
+      },
+      "after": {
+        "intake_ms": 20.846,
+        "admission_ms": 18.257,
+        "normalize_ms": 0.0,
+        "reduce_ms": 2.354
+      }
+    },
+    {
+      "sequence": 11,
+      "bytes": 56210,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 23.783,
+        "admission_ms": 16.067,
+        "normalize_ms": 4.127,
+        "reduce_ms": 3.536
+      },
+      "after": {
+        "intake_ms": 12.698,
+        "admission_ms": 9.209,
+        "normalize_ms": 0.0,
+        "reduce_ms": 3.421
+      }
+    },
+    {
+      "sequence": 12,
+      "bytes": 11109,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 4.27,
+        "admission_ms": 3.127,
+        "normalize_ms": 0.726,
+        "reduce_ms": 0.417
+      },
+      "after": {
+        "intake_ms": 2.261,
+        "admission_ms": 1.796,
+        "normalize_ms": 0.0,
+        "reduce_ms": 0.487
+      }
+    },
+    {
+      "sequence": 13,
+      "bytes": 51059,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 19.923,
+        "admission_ms": 15.801,
+        "normalize_ms": 3.33,
+        "reduce_ms": 0.88
+      },
+      "after": {
+        "intake_ms": 10.945,
+        "admission_ms": 9.812,
+        "normalize_ms": 0.0,
+        "reduce_ms": 0.901
+      }
+    },
+    {
+      "sequence": 14,
+      "bytes": 59835,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 21.878,
+        "admission_ms": 15.094,
+        "normalize_ms": 3.885,
+        "reduce_ms": 2.811
+      },
+      "after": {
+        "intake_ms": 10.757,
+        "admission_ms": 8.697,
+        "normalize_ms": 0.0,
+        "reduce_ms": 2.05
+      }
+    },
+    {
+      "sequence": 15,
+      "bytes": 15391,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 5.377,
+        "admission_ms": 4.015,
+        "normalize_ms": 0.994,
+        "reduce_ms": 0.382
+      },
+      "after": {
+        "intake_ms": 2.71,
+        "admission_ms": 2.325,
+        "normalize_ms": 0.0,
+        "reduce_ms": 0.384
+      }
+    },
+    {
+      "sequence": 16,
+      "bytes": 43840,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 15.973,
+        "admission_ms": 11.154,
+        "normalize_ms": 2.877,
+        "reduce_ms": 1.953
+      },
+      "after": {
+        "intake_ms": 7.429,
+        "admission_ms": 6.282,
+        "normalize_ms": 0.0,
+        "reduce_ms": 1.168
+      }
+    },
+    {
+      "sequence": 17,
+      "bytes": 56090,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 22.975,
+        "admission_ms": 18.499,
+        "normalize_ms": 3.531,
+        "reduce_ms": 0.874
+      },
+      "after": {
+        "intake_ms": 12.783,
+        "admission_ms": 11.851,
+        "normalize_ms": 0.0,
+        "reduce_ms": 0.84
+      }
+    },
+    {
+      "sequence": 18,
+      "bytes": 80510,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 33.204,
+        "admission_ms": 25.147,
+        "normalize_ms": 5.355,
+        "reduce_ms": 2.625
+      },
+      "after": {
+        "intake_ms": 17.321,
+        "admission_ms": 15.358,
+        "normalize_ms": 0.0,
+        "reduce_ms": 1.691
+      }
+    },
+    {
+      "sequence": 19,
+      "bytes": 28130,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 10.775,
+        "admission_ms": 7.324,
+        "normalize_ms": 1.851,
+        "reduce_ms": 1.581
+      },
+      "after": {
+        "intake_ms": 4.952,
+        "admission_ms": 4.096,
+        "normalize_ms": 0.0,
+        "reduce_ms": 0.798
+      }
+    },
+    {
+      "sequence": 20,
+      "bytes": 11243,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 4.021,
+        "admission_ms": 3.018,
+        "normalize_ms": 0.728,
+        "reduce_ms": 0.28
+      },
+      "after": {
+        "intake_ms": 2.103,
+        "admission_ms": 1.789,
+        "normalize_ms": 0.0,
+        "reduce_ms": 0.32
+      }
+    },
+    {
+      "sequence": 21,
+      "bytes": 120223,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 52.097,
+        "admission_ms": 33.455,
+        "normalize_ms": 8.859,
+        "reduce_ms": 9.695
+      },
+      "after": {
+        "intake_ms": 27.156,
+        "admission_ms": 18.909,
+        "normalize_ms": 0.0,
+        "reduce_ms": 8.837
+      }
+    },
+    {
+      "sequence": 22,
+      "bytes": 80887,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 32.56,
+        "admission_ms": 25.702,
+        "normalize_ms": 5.19,
+        "reduce_ms": 1.329
+      },
+      "after": {
+        "intake_ms": 17.933,
+        "admission_ms": 16.442,
+        "normalize_ms": 0.0,
+        "reduce_ms": 1.411
+      }
+    },
+    {
+      "sequence": 23,
+      "bytes": 11138,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 4.098,
+        "admission_ms": 3.07,
+        "normalize_ms": 0.73,
+        "reduce_ms": 0.293
+      },
+      "after": {
+        "intake_ms": 2.103,
+        "admission_ms": 1.78,
+        "normalize_ms": 0.0,
+        "reduce_ms": 0.323
+      }
+    },
+    {
+      "sequence": 24,
+      "bytes": 15009,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 5.355,
+        "admission_ms": 3.926,
+        "normalize_ms": 1.002,
+        "reduce_ms": 0.414
+      },
+      "after": {
+        "intake_ms": 2.659,
+        "admission_ms": 2.224,
+        "normalize_ms": 0.0,
+        "reduce_ms": 0.434
+      }
+    },
+    {
+      "sequence": 25,
+      "bytes": 37510,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 16.964,
+        "admission_ms": 12.041,
+        "normalize_ms": 2.485,
+        "reduce_ms": 1.674
+      },
+      "after": {
+        "intake_ms": 8.504,
+        "admission_ms": 7.258,
+        "normalize_ms": 0.001,
+        "reduce_ms": 1.408
+      }
+    },
+    {
+      "sequence": 26,
+      "bytes": 40485,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 16.284,
+        "admission_ms": 12.719,
+        "normalize_ms": 2.661,
+        "reduce_ms": 0.76
+      },
+      "after": {
+        "intake_ms": 8.803,
+        "admission_ms": 8.04,
+        "normalize_ms": 0.0,
+        "reduce_ms": 0.72
+      }
+    },
+    {
+      "sequence": 27,
+      "bytes": 11069,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 4.132,
+        "admission_ms": 3.033,
+        "normalize_ms": 0.736,
+        "reduce_ms": 0.306
+      },
+      "after": {
+        "intake_ms": 2.092,
+        "admission_ms": 1.774,
+        "normalize_ms": 0.0,
+        "reduce_ms": 0.318
+      }
+    },
+    {
+      "sequence": 28,
+      "bytes": 15413,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 5.271,
+        "admission_ms": 3.949,
+        "normalize_ms": 0.982,
+        "reduce_ms": 0.364
+      },
+      "after": {
+        "intake_ms": 2.716,
+        "admission_ms": 2.322,
+        "normalize_ms": 0.0,
+        "reduce_ms": 0.378
+      }
+    },
+    {
+      "sequence": 29,
+      "bytes": 15343,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 5.268,
+        "admission_ms": 3.96,
+        "normalize_ms": 0.996,
+        "reduce_ms": 0.332
+      },
+      "after": {
+        "intake_ms": 2.68,
+        "admission_ms": 2.345,
+        "normalize_ms": 0.0,
+        "reduce_ms": 0.327
+      }
+    },
+    {
+      "sequence": 30,
+      "bytes": 67202,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 25.785,
+        "admission_ms": 18.735,
+        "normalize_ms": 4.237,
+        "reduce_ms": 2.621
+      },
+      "after": {
+        "intake_ms": 13.326,
+        "admission_ms": 11.155,
+        "normalize_ms": 0.0,
+        "reduce_ms": 1.778
+      }
+    },
+    {
+      "sequence": 31,
+      "bytes": 11172,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 4.188,
+        "admission_ms": 2.992,
+        "normalize_ms": 0.774,
+        "reduce_ms": 0.326
+      },
+      "after": {
+        "intake_ms": 2.169,
+        "admission_ms": 1.778,
+        "normalize_ms": 0.0,
+        "reduce_ms": 0.401
+      }
+    },
+    {
+      "sequence": 32,
+      "bytes": 34919,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 16.414,
+        "admission_ms": 10.503,
+        "normalize_ms": 2.546,
+        "reduce_ms": 3.354
+      },
+      "after": {
+        "intake_ms": 8.851,
+        "admission_ms": 6.186,
+        "normalize_ms": 0.0,
+        "reduce_ms": 2.665
+      }
+    },
+    {
+      "sequence": 33,
+      "bytes": 11068,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 4.072,
+        "admission_ms": 3.025,
+        "normalize_ms": 0.721,
+        "reduce_ms": 0.32
+      },
+      "after": {
+        "intake_ms": 2.119,
+        "admission_ms": 1.762,
+        "normalize_ms": 0.0,
+        "reduce_ms": 0.356
+      }
+    },
+    {
+      "sequence": 34,
+      "bytes": 11142,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 4.069,
+        "admission_ms": 2.956,
+        "normalize_ms": 0.761,
+        "reduce_ms": 0.341
+      },
+      "after": {
+        "intake_ms": 2.116,
+        "admission_ms": 1.774,
+        "normalize_ms": 0.0,
+        "reduce_ms": 0.326
+      }
+    },
+    {
+      "sequence": 35,
+      "bytes": 16157,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 5.476,
+        "admission_ms": 4.004,
+        "normalize_ms": 1.032,
+        "reduce_ms": 0.44
+      },
+      "after": {
+        "intake_ms": 2.799,
+        "admission_ms": 2.338,
+        "normalize_ms": 0.0,
+        "reduce_ms": 0.439
+      }
+    },
+    {
+      "sequence": 36,
+      "bytes": 78603,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 37.706,
+        "admission_ms": 21.324,
+        "normalize_ms": 5.489,
+        "reduce_ms": 11.019
+      },
+      "after": {
+        "intake_ms": 21.561,
+        "admission_ms": 12.359,
+        "normalize_ms": 0.0,
+        "reduce_ms": 9.202
+      }
+    },
+    {
+      "sequence": 37,
+      "bytes": 40647,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 15.668,
+        "admission_ms": 10.959,
+        "normalize_ms": 2.813,
+        "reduce_ms": 1.929
+      },
+      "after": {
+        "intake_ms": 7.453,
+        "admission_ms": 6.173,
+        "normalize_ms": 0.0,
+        "reduce_ms": 1.173
+      }
+    },
+    {
+      "sequence": 38,
+      "bytes": 32081,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 14.201,
+        "admission_ms": 8.874,
+        "normalize_ms": 2.242,
+        "reduce_ms": 3.098
+      },
+      "after": {
+        "intake_ms": 7.66,
+        "admission_ms": 5.12,
+        "normalize_ms": 0.0,
+        "reduce_ms": 2.446
+      }
+    },
+    {
+      "sequence": 39,
+      "bytes": 21898,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 9.508,
+        "admission_ms": 6.018,
+        "normalize_ms": 1.495,
+        "reduce_ms": 1.923
+      },
+      "after": {
+        "intake_ms": 4.957,
+        "admission_ms": 3.397,
+        "normalize_ms": 0.0,
+        "reduce_ms": 1.602
+      }
+    },
+    {
+      "sequence": 40,
+      "bytes": 549300,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 241.5,
+        "admission_ms": 183.612,
+        "normalize_ms": 42.486,
+        "reduce_ms": 15.402
+      },
+      "after": {
+        "intake_ms": 127.703,
+        "admission_ms": 109.876,
+        "normalize_ms": 0.001,
+        "reduce_ms": 17.537
+      }
+    },
+    {
+      "sequence": 41,
+      "bytes": 342244,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 153.508,
+        "admission_ms": 110.143,
+        "normalize_ms": 25.591,
+        "reduce_ms": 17.451
+      },
+      "after": {
+        "intake_ms": 79.505,
+        "admission_ms": 65.427,
+        "normalize_ms": 0.001,
+        "reduce_ms": 14.077
+      }
+    },
+    {
+      "sequence": 42,
+      "bytes": 11037,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 4.366,
+        "admission_ms": 3.104,
+        "normalize_ms": 0.726,
+        "reduce_ms": 0.517
+      },
+      "after": {
+        "intake_ms": 2.319,
+        "admission_ms": 1.788,
+        "normalize_ms": 0.001,
+        "reduce_ms": 0.519
+      }
+    },
+    {
+      "sequence": 43,
+      "bytes": 11435,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 4.369,
+        "admission_ms": 3.201,
+        "normalize_ms": 0.77,
+        "reduce_ms": 0.398
+      },
+      "after": {
+        "intake_ms": 2.304,
+        "admission_ms": 1.886,
+        "normalize_ms": 0.0,
+        "reduce_ms": 0.448
+      }
+    },
+    {
+      "sequence": 44,
+      "bytes": 11171,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 4.165,
+        "admission_ms": 2.997,
+        "normalize_ms": 0.722,
+        "reduce_ms": 0.447
+      },
+      "after": {
+        "intake_ms": 2.285,
+        "admission_ms": 1.751,
+        "normalize_ms": 0.001,
+        "reduce_ms": 0.507
+      }
+    },
+    {
+      "sequence": 45,
+      "bytes": 76262,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 48.868,
+        "admission_ms": 23.256,
+        "normalize_ms": 5.873,
+        "reduce_ms": 19.731
+      },
+      "after": {
+        "intake_ms": 29.58,
+        "admission_ms": 13.536,
+        "normalize_ms": 0.0,
+        "reduce_ms": 16.044
+      }
+    },
+    {
+      "sequence": 46,
+      "bytes": 11066,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 4.673,
+        "admission_ms": 3.166,
+        "normalize_ms": 0.769,
+        "reduce_ms": 0.731
+      },
+      "after": {
+        "intake_ms": 2.501,
+        "admission_ms": 1.808,
+        "normalize_ms": 0.001,
+        "reduce_ms": 0.708
+      }
+    },
+    {
+      "sequence": 47,
+      "bytes": 43807,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 23.659,
+        "admission_ms": 11.507,
+        "normalize_ms": 2.916,
+        "reduce_ms": 9.237
+      },
+      "after": {
+        "intake_ms": 9.159,
+        "admission_ms": 6.148,
+        "normalize_ms": 0.0,
+        "reduce_ms": 2.994
+      }
+    },
+    {
+      "sequence": 48,
+      "bytes": 11087,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 4.17,
+        "admission_ms": 3.071,
+        "normalize_ms": 0.738,
+        "reduce_ms": 0.396
+      },
+      "after": {
+        "intake_ms": 2.188,
+        "admission_ms": 1.791,
+        "normalize_ms": 0.0,
+        "reduce_ms": 0.397
+      }
+    },
+    {
+      "sequence": 49,
+      "bytes": 14982,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 5.448,
+        "admission_ms": 3.812,
+        "normalize_ms": 0.967,
+        "reduce_ms": 0.643
+      },
+      "after": {
+        "intake_ms": 2.913,
+        "admission_ms": 2.218,
+        "normalize_ms": 0.0,
+        "reduce_ms": 0.713
+      }
+    },
+    {
+      "sequence": 50,
+      "bytes": 29591,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 19.751,
+        "admission_ms": 8.997,
+        "normalize_ms": 2.219,
+        "reduce_ms": 8.625
+      },
+      "after": {
+        "intake_ms": 8.221,
+        "admission_ms": 5.014,
+        "normalize_ms": 0.0,
+        "reduce_ms": 3.211
+      }
+    },
+    {
+      "sequence": 51,
+      "bytes": 102301,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 59.559,
+        "admission_ms": 31.388,
+        "normalize_ms": 7.833,
+        "reduce_ms": 20.129
+      },
+      "after": {
+        "intake_ms": 32.456,
+        "admission_ms": 18.367,
+        "normalize_ms": 0.0,
+        "reduce_ms": 14.032
+      }
+    },
+    {
+      "sequence": 52,
+      "bytes": 16195,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 6.057,
+        "admission_ms": 4.264,
+        "normalize_ms": 1.052,
+        "reduce_ms": 0.708
+      },
+      "after": {
+        "intake_ms": 3.086,
+        "admission_ms": 2.331,
+        "normalize_ms": 0.0,
+        "reduce_ms": 0.762
+      }
+    },
+    {
+      "sequence": 53,
+      "bytes": 108455,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 64.034,
+        "admission_ms": 33.703,
+        "normalize_ms": 8.442,
+        "reduce_ms": 21.607
+      },
+      "after": {
+        "intake_ms": 36.628,
+        "admission_ms": 19.386,
+        "normalize_ms": 0.0,
+        "reduce_ms": 17.257
+      }
+    },
+    {
+      "sequence": 54,
+      "bytes": 11075,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 4.532,
+        "admission_ms": 3.184,
+        "normalize_ms": 0.755,
+        "reduce_ms": 0.592
+      },
+      "after": {
+        "intake_ms": 2.521,
+        "admission_ms": 1.812,
+        "normalize_ms": 0.0,
+        "reduce_ms": 0.725
+      }
+    },
+    {
+      "sequence": 55,
+      "bytes": 11473,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 4.476,
+        "admission_ms": 3.196,
+        "normalize_ms": 0.83,
+        "reduce_ms": 0.448
+      },
+      "after": {
+        "intake_ms": 2.392,
+        "admission_ms": 1.892,
+        "normalize_ms": 0.0,
+        "reduce_ms": 0.528
+      }
+    },
+    {
+      "sequence": 56,
+      "bytes": 11210,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 4.283,
+        "admission_ms": 3.044,
+        "normalize_ms": 0.733,
+        "reduce_ms": 0.509
+      },
+      "after": {
+        "intake_ms": 2.322,
+        "admission_ms": 1.796,
+        "normalize_ms": 0.0,
+        "reduce_ms": 0.526
+      }
+    },
+    {
+      "sequence": 57,
+      "bytes": 133618,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 114.015,
+        "admission_ms": 63.89,
+        "normalize_ms": 13.244,
+        "reduce_ms": 36.881
+      },
+      "after": {
+        "intake_ms": 68.085,
+        "admission_ms": 38.963,
+        "normalize_ms": 0.001,
+        "reduce_ms": 29.121
+      }
+    },
+    {
+      "sequence": 58,
+      "bytes": 11105,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 4.619,
+        "admission_ms": 3.237,
+        "normalize_ms": 0.758,
+        "reduce_ms": 0.625
+      },
+      "after": {
+        "intake_ms": 2.378,
+        "admission_ms": 1.845,
+        "normalize_ms": 0.0,
+        "reduce_ms": 0.581
+      }
+    },
+    {
+      "sequence": 59,
+      "bytes": 72101,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 42.629,
+        "admission_ms": 18.15,
+        "normalize_ms": 4.708,
+        "reduce_ms": 19.771
+      },
+      "after": {
+        "intake_ms": 22.068,
+        "admission_ms": 10.117,
+        "normalize_ms": 0.0,
+        "reduce_ms": 11.951
+      }
+    },
+    {
+      "sequence": 60,
+      "bytes": 12627,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 5.097,
+        "admission_ms": 3.479,
+        "normalize_ms": 0.837,
+        "reduce_ms": 0.794
+      },
+      "after": {
+        "intake_ms": 2.858,
+        "admission_ms": 2.016,
+        "normalize_ms": 0.0,
+        "reduce_ms": 0.817
+      }
+    },
+    {
+      "sequence": 61,
+      "bytes": 58995,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 21.808,
+        "admission_ms": 16.782,
+        "normalize_ms": 3.813,
+        "reduce_ms": 1.311
+      },
+      "after": {
+        "intake_ms": 11.089,
+        "admission_ms": 9.804,
+        "normalize_ms": 0.0,
+        "reduce_ms": 1.272
+      }
+    },
+    {
+      "sequence": 62,
+      "bytes": 14982,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 5.535,
+        "admission_ms": 3.914,
+        "normalize_ms": 0.986,
+        "reduce_ms": 0.635
+      },
+      "after": {
+        "intake_ms": 2.942,
+        "admission_ms": 2.24,
+        "normalize_ms": 0.001,
+        "reduce_ms": 0.701
+      }
+    },
+    {
+      "sequence": 63,
+      "bytes": 158392,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 94.736,
+        "admission_ms": 51.049,
+        "normalize_ms": 12.119,
+        "reduce_ms": 31.431
+      },
+      "after": {
+        "intake_ms": 54.92,
+        "admission_ms": 30.737,
+        "normalize_ms": 0.0,
+        "reduce_ms": 24.264
+      }
+    },
+    {
+      "sequence": 64,
+      "bytes": 16193,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 6.317,
+        "admission_ms": 4.325,
+        "normalize_ms": 1.106,
+        "reduce_ms": 0.908
+      },
+      "after": {
+        "intake_ms": 3.404,
+        "admission_ms": 2.397,
+        "normalize_ms": 0.001,
+        "reduce_ms": 1.001
+      }
+    },
+    {
+      "sequence": 65,
+      "bytes": 52036,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 38.989,
+        "admission_ms": 16.807,
+        "normalize_ms": 4.206,
+        "reduce_ms": 18.066
+      },
+      "after": {
+        "intake_ms": 19.851,
+        "admission_ms": 9.78,
+        "normalize_ms": 0.0,
+        "reduce_ms": 10.23
+      }
+    },
+    {
+      "sequence": 66,
+      "bytes": 59544,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 41.616,
+        "admission_ms": 19.365,
+        "normalize_ms": 4.758,
+        "reduce_ms": 17.42
+      },
+      "after": {
+        "intake_ms": 20.908,
+        "admission_ms": 11.349,
+        "normalize_ms": 0.001,
+        "reduce_ms": 9.587
+      }
+    },
+    {
+      "sequence": 67,
+      "bytes": 11035,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 4.379,
+        "admission_ms": 3.08,
+        "normalize_ms": 0.779,
+        "reduce_ms": 0.533
+      },
+      "after": {
+        "intake_ms": 2.336,
+        "admission_ms": 1.763,
+        "normalize_ms": 0.0,
+        "reduce_ms": 0.574
+      }
+    },
+    {
+      "sequence": 68,
+      "bytes": 11433,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 4.423,
+        "admission_ms": 3.22,
+        "normalize_ms": 0.776,
+        "reduce_ms": 0.451
+      },
+      "after": {
+        "intake_ms": 2.315,
+        "admission_ms": 1.865,
+        "normalize_ms": 0.0,
+        "reduce_ms": 0.457
+      }
+    },
+    {
+      "sequence": 69,
+      "bytes": 11170,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 4.267,
+        "admission_ms": 3.01,
+        "normalize_ms": 0.729,
+        "reduce_ms": 0.494
+      },
+      "after": {
+        "intake_ms": 2.311,
+        "admission_ms": 1.794,
+        "normalize_ms": 0.001,
+        "reduce_ms": 0.517
+      }
+    },
+    {
+      "sequence": 70,
+      "bytes": 76608,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 60.788,
+        "admission_ms": 26.405,
+        "normalize_ms": 6.46,
+        "reduce_ms": 27.923
+      },
+      "after": {
+        "intake_ms": 34.349,
+        "admission_ms": 15.511,
+        "normalize_ms": 0.0,
+        "reduce_ms": 18.838
+      }
+    },
+    {
+      "sequence": 71,
+      "bytes": 11065,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 4.662,
+        "admission_ms": 3.206,
+        "normalize_ms": 0.784,
+        "reduce_ms": 0.708
+      },
+      "after": {
+        "intake_ms": 2.507,
+        "admission_ms": 1.819,
+        "normalize_ms": 0.0,
+        "reduce_ms": 0.688
+      }
+    },
+    {
+      "sequence": 72,
+      "bytes": 76240,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 43.421,
+        "admission_ms": 18.966,
+        "normalize_ms": 5.05,
+        "reduce_ms": 19.405
+      },
+      "after": {
+        "intake_ms": 21.742,
+        "admission_ms": 10.532,
+        "normalize_ms": 0.0,
+        "reduce_ms": 11.269
+      }
+    },
+    {
+      "sequence": 73,
+      "bytes": 11086,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 4.326,
+        "admission_ms": 3.146,
+        "normalize_ms": 0.734,
+        "reduce_ms": 0.445
+      },
+      "after": {
+        "intake_ms": 2.274,
+        "admission_ms": 1.795,
+        "normalize_ms": 0.0,
+        "reduce_ms": 0.49
+      }
+    },
+    {
+      "sequence": 74,
+      "bytes": 14980,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 5.508,
+        "admission_ms": 3.834,
+        "normalize_ms": 0.991,
+        "reduce_ms": 0.651
+      },
+      "after": {
+        "intake_ms": 2.943,
+        "admission_ms": 2.234,
+        "normalize_ms": 0.0,
+        "reduce_ms": 0.708
+      }
+    },
+    {
+      "sequence": 75,
+      "bytes": 122974,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 82.752,
+        "admission_ms": 42.311,
+        "normalize_ms": 10.029,
+        "reduce_ms": 30.599
+      },
+      "after": {
+        "intake_ms": 49.077,
+        "admission_ms": 24.625,
+        "normalize_ms": 0.0,
+        "reduce_ms": 24.496
+      }
+    },
+    {
+      "sequence": 76,
+      "bytes": 16193,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 6.492,
+        "admission_ms": 4.175,
+        "normalize_ms": 1.087,
+        "reduce_ms": 1.049
+      },
+      "after": {
+        "intake_ms": 3.336,
+        "admission_ms": 2.394,
+        "normalize_ms": 0.0,
+        "reduce_ms": 0.877
+      }
+    },
+    {
+      "sequence": 77,
+      "bytes": 96505,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 72.892,
+        "admission_ms": 33.646,
+        "normalize_ms": 8.138,
+        "reduce_ms": 31.223
+      },
+      "after": {
+        "intake_ms": 44.126,
+        "admission_ms": 20.005,
+        "normalize_ms": 0.001,
+        "reduce_ms": 24.12
+      }
+    },
+    {
+      "sequence": 78,
+      "bytes": 28310,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 23.696,
+        "admission_ms": 9.111,
+        "normalize_ms": 2.208,
+        "reduce_ms": 12.478
+      },
+      "after": {
+        "intake_ms": 9.171,
+        "admission_ms": 5.24,
+        "normalize_ms": 0.0,
+        "reduce_ms": 3.93
+      }
+    },
+    {
+      "sequence": 79,
+      "bytes": 11074,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 4.331,
+        "admission_ms": 3.046,
+        "normalize_ms": 0.776,
+        "reduce_ms": 0.526
+      },
+      "after": {
+        "intake_ms": 2.35,
+        "admission_ms": 1.8,
+        "normalize_ms": 0.0,
+        "reduce_ms": 0.55
+      }
+    },
+    {
+      "sequence": 80,
+      "bytes": 11472,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 4.44,
+        "admission_ms": 3.214,
+        "normalize_ms": 0.806,
+        "reduce_ms": 0.414
+      },
+      "after": {
+        "intake_ms": 2.253,
+        "admission_ms": 1.839,
+        "normalize_ms": 0.0,
+        "reduce_ms": 0.431
+      }
+    },
+    {
+      "sequence": 81,
+      "bytes": 11209,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 4.207,
+        "admission_ms": 3.024,
+        "normalize_ms": 0.736,
+        "reduce_ms": 0.465
+      },
+      "after": {
+        "intake_ms": 2.277,
+        "admission_ms": 1.792,
+        "normalize_ms": 0.001,
+        "reduce_ms": 0.474
+      }
+    },
+    {
+      "sequence": 82,
+      "bytes": 110272,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 81.774,
+        "admission_ms": 38.193,
+        "normalize_ms": 9.343,
+        "reduce_ms": 33.927
+      },
+      "after": {
+        "intake_ms": 47.878,
+        "admission_ms": 22.63,
+        "normalize_ms": 0.001,
+        "reduce_ms": 24.986
+      }
+    },
+    {
+      "sequence": 83,
+      "bytes": 11104,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 5.078,
+        "admission_ms": 3.298,
+        "normalize_ms": 0.786,
+        "reduce_ms": 1.031
+      },
+      "after": {
+        "intake_ms": 2.836,
+        "admission_ms": 1.842,
+        "normalize_ms": 0.001,
+        "reduce_ms": 0.993
+      }
+    },
+    {
+      "sequence": 84,
+      "bytes": 72278,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 59.96,
+        "admission_ms": 21.085,
+        "normalize_ms": 4.857,
+        "reduce_ms": 34.011
+      },
+      "after": {
+        "intake_ms": 27.463,
+        "admission_ms": 10.47,
+        "normalize_ms": 0.0,
+        "reduce_ms": 16.993
+      }
+    },
+    {
+      "sequence": 85,
+      "bytes": 11086,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 4.722,
+        "admission_ms": 3.244,
+        "normalize_ms": 0.762,
+        "reduce_ms": 0.716
+      },
+      "after": {
+        "intake_ms": 2.609,
+        "admission_ms": 1.84,
+        "normalize_ms": 0.0,
+        "reduce_ms": 0.759
+      }
+    },
+    {
+      "sequence": 86,
+      "bytes": 14980,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 5.641,
+        "admission_ms": 3.965,
+        "normalize_ms": 0.984,
+        "reduce_ms": 0.687
+      },
+      "after": {
+        "intake_ms": 2.953,
+        "admission_ms": 2.23,
+        "normalize_ms": 0.0,
+        "reduce_ms": 0.723
+      }
+    },
+    {
+      "sequence": 87,
+      "bytes": 107068,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 77.844,
+        "admission_ms": 36.252,
+        "normalize_ms": 8.963,
+        "reduce_ms": 32.814
+      },
+      "after": {
+        "intake_ms": 46.759,
+        "admission_ms": 21.206,
+        "normalize_ms": 0.001,
+        "reduce_ms": 25.553
+      }
+    },
+    {
+      "sequence": 88,
+      "bytes": 16193,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 6.441,
+        "admission_ms": 4.326,
+        "normalize_ms": 1.092,
+        "reduce_ms": 1.039
+      },
+      "after": {
+        "intake_ms": 3.418,
+        "admission_ms": 2.371,
+        "normalize_ms": 0.0,
+        "reduce_ms": 1.047
+      }
+    },
+    {
+      "sequence": 89,
+      "bytes": 113686,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 86.582,
+        "admission_ms": 41.603,
+        "normalize_ms": 9.964,
+        "reduce_ms": 35.015
+      },
+      "after": {
+        "intake_ms": 48.447,
+        "admission_ms": 23.899,
+        "normalize_ms": 0.0,
+        "reduce_ms": 24.548
+      }
+    },
+    {
+      "sequence": 90,
+      "bytes": 11074,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 4.8,
+        "admission_ms": 3.187,
+        "normalize_ms": 0.764,
+        "reduce_ms": 0.841
+      },
+      "after": {
+        "intake_ms": 2.634,
+        "admission_ms": 1.814,
+        "normalize_ms": 0.0,
+        "reduce_ms": 0.848
+      }
+    },
+    {
+      "sequence": 91,
+      "bytes": 11472,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 4.618,
+        "admission_ms": 3.281,
+        "normalize_ms": 0.793,
+        "reduce_ms": 0.547
+      },
+      "after": {
+        "intake_ms": 2.387,
+        "admission_ms": 1.865,
+        "normalize_ms": 0.0,
+        "reduce_ms": 0.522
+      }
+    },
+    {
+      "sequence": 92,
+      "bytes": 11209,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 4.248,
+        "admission_ms": 3.001,
+        "normalize_ms": 0.725,
+        "reduce_ms": 0.531
+      },
+      "after": {
+        "intake_ms": 2.352,
+        "admission_ms": 1.809,
+        "normalize_ms": 0.0,
+        "reduce_ms": 0.537
+      }
+    },
+    {
+      "sequence": 93,
+      "bytes": 99313,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 80.732,
+        "admission_ms": 35.831,
+        "normalize_ms": 9.074,
+        "reduce_ms": 35.202
+      },
+      "after": {
+        "intake_ms": 47.201,
+        "admission_ms": 21.225,
+        "normalize_ms": 0.0,
+        "reduce_ms": 25.975
+      }
+    },
+    {
+      "sequence": 94,
+      "bytes": 11104,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 4.931,
+        "admission_ms": 3.395,
+        "normalize_ms": 0.756,
+        "reduce_ms": 0.789
+      },
+      "after": {
+        "intake_ms": 2.663,
+        "admission_ms": 1.852,
+        "normalize_ms": 0.0,
+        "reduce_ms": 0.85
+      }
+    },
+    {
+      "sequence": 95,
+      "bytes": 72278,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 49.467,
+        "admission_ms": 18.264,
+        "normalize_ms": 4.788,
+        "reduce_ms": 26.415
+      },
+      "after": {
+        "intake_ms": 24.773,
+        "admission_ms": 10.114,
+        "normalize_ms": 0.0,
+        "reduce_ms": 14.659
+      }
+    },
+    {
+      "sequence": 96,
+      "bytes": 26552,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 23.931,
+        "admission_ms": 8.617,
+        "normalize_ms": 2.138,
+        "reduce_ms": 13.182
+      },
+      "after": {
+        "intake_ms": 9.254,
+        "admission_ms": 5.071,
+        "normalize_ms": 0.0,
+        "reduce_ms": 4.23
+      }
+    },
+    {
+      "sequence": 97,
+      "bytes": 11086,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 4.316,
+        "admission_ms": 3.1,
+        "normalize_ms": 0.749,
+        "reduce_ms": 0.443
+      },
+      "after": {
+        "intake_ms": 2.254,
+        "admission_ms": 1.789,
+        "normalize_ms": 0.0,
+        "reduce_ms": 0.455
+      }
+    },
+    {
+      "sequence": 98,
+      "bytes": 14980,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 5.534,
+        "admission_ms": 3.925,
+        "normalize_ms": 1.003,
+        "reduce_ms": 0.683
+      },
+      "after": {
+        "intake_ms": 3.036,
+        "admission_ms": 2.246,
+        "normalize_ms": 0.0,
+        "reduce_ms": 0.715
+      }
+    },
+    {
+      "sequence": 99,
+      "bytes": 99199,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 75.162,
+        "admission_ms": 32.401,
+        "normalize_ms": 8.141,
+        "reduce_ms": 34.167
+      },
+      "after": {
+        "intake_ms": 43.46,
+        "admission_ms": 18.897,
+        "normalize_ms": 0.0,
+        "reduce_ms": 24.562
+      }
+    },
+    {
+      "sequence": 100,
+      "bytes": 16194,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 6.376,
+        "admission_ms": 4.332,
+        "normalize_ms": 1.074,
+        "reduce_ms": 1.051
+      },
+      "after": {
+        "intake_ms": 3.45,
+        "admission_ms": 2.416,
+        "normalize_ms": 0.001,
+        "reduce_ms": 1.029
+      }
+    },
+    {
+      "sequence": 101,
+      "bytes": 46078,
+      "samples": 3,
+      "all_exact": true,
+      "before": {
+        "intake_ms": 41.141,
+        "admission_ms": 14.624,
+        "normalize_ms": 3.727,
+        "reduce_ms": 22.79
+      },
+      "after": {
+        "intake_ms": 19.694,
+        "admission_ms": 8.471,
+        "normalize_ms": 0.0,
+        "reduce_ms": 11.223
+      }
+    }
+  ],
+  "raw_evidence": ".runtime/movement-intake/paired.json",
+  "gallery_move_intake": {
+    "before": {
+      "intake_ms": 74.027,
+      "admission_ms": 33.675,
+      "normalize_ms": 8.427,
+      "reduce_ms": 30.386
+    },
+    "after": {
+      "intake_ms": 43.967,
+      "admission_ms": 19.684,
+      "normalize_ms": 0.0,
+      "reduce_ms": 24.099
+    }
+  }
+}

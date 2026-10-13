@@ -134,6 +134,7 @@ async def run(args: argparse.Namespace) -> Path:
     client_config = output / "client.json"
     seat = settings.credentials[0]
     private_json(client_config, {"url":f"http://127.0.0.1:{client_port}", "token":seat.token,
+        "trusted_operations":True,
         "journal":windows_path(output / "journal"), "seat_id":seat.seat_id,
         "test_command_delay_ms":args.test_command_delay_ms,"test_result":windows_path(output / "player-live-checks.json")})
     environment = os.environ.copy()
