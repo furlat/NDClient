@@ -228,6 +228,10 @@ static func receiving_normal(record: Dictionary, cache: Dictionary) -> Dictionar
     return result
 
 static func environment(row: Dictionary, quarter: int, cache: Dictionary, phase: int = 0, time: float = 0.0) -> Dictionary:
+    # Live destroyed after-values and reconnected snapshots settle on the same
+    # authored endpoint as native destruction playback. An explicit active
+    # playback phase still selects its own intermediate samples.
+    if phase==0 and row.get("destroyed",false): phase=2
     return receiving_normal(_environment_source(row,quarter,cache,phase,time),cache)
 
 static func _environment_source(row: Dictionary, quarter: int, cache: Dictionary, phase: int = 0, time: float = 0.0) -> Dictionary:

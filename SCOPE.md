@@ -1290,3 +1290,36 @@ with separate2.121s server dispatch and567.864ms client preparation measurements
 Do not sum nested timings or claim every client cost optimized. Normal artwork
 remains deferred. The shared-engine preview is open and PLAYER_READY; native
 sampling has ended. Final evidence:generated/renderer_publication_optimization.json.
+
+## Gallery passage state correction — 13 October 2026
+
+User reports the Broken Gallery passage looking closed while allowing movement.
+The active preview journal at sequence8 records a destroyed/clear door with
+zero hit points and no blocked channels; its remnant pose is closed/outward.
+The live world adapter currently drops that integrity/outcome and selects the
+intact closed sprite. Root will preserve the authoritative destroyed endpoint
+and remnant pose, select the existing authored debris bank, retain its separate
+stone frame, and include the selection in prepared-media cache identity.
+No backend rules, lighting equations, new artwork or general animation rewrite.
+Observe real recorded object state at the world-row/source/material boundary;
+validate closed/open inward/open outward, destroyed clear/jammed and all four
+views, including retained media state and prepared world publication. Add the
+smallest failing reproduction before the correction. scope_review tracks plan
+adherence, anti-slop and anti-OOP review; native validation is serialized.
+
+User additionally asks which other objects lack destruction animation. Read-only
+coverage audit finds live intermediate environment playback absent (the workshop
+owns the existing graph trigger), although all11 door,113 prop and12 trap owners
+have authored banks. Non-door live rows still ignore destroyed integrity; retained
+remnants can therefore keep intact sources. Creature death playback is connected.
+A separate trap selector mismatch (`active`/`activated`) is recorded, not silently
+folded into this door patch. No general destruction migration is claimed complete.
+
+Validated door correction:219 source/media checks,52 headless full-player checks
+and58 native checks, using the actual Gallery journal prefix and all four views.
+The destroyed state and its debris publish in the same normal process callback;
+canonical replay drains unchanged. Native captures show the retained stone frame
+and authored debris, without the duplicate intact leaf. Source regression data
+is a tracked pair of actual object observations; credentials and full recordings
+remain ignored. scope_review found no production blocker. Native tests finished
+before the user-authorized fresh shared-engine preview was launched.

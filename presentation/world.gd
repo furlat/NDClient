@@ -24,7 +24,17 @@ static func rows(state: Dictionary, cache: Dictionary) -> Dictionary:
         var row = {"id":id,"position":place.position,"base_height_steps":place.base_height_steps,
             "orientation":direction,"boundaries":[direction] if place.kind=="boundary" else [],"layer":1,"item_id":item.item_id}
         if index.doors.has(item.item_id):
-            row.merge({"kind":"door","asset":item.item_id,"state":"open."+(item.get("door_swing") if item.get("door_swing") != null else "inward") if item.get("is_open",false) else "closed"})
+            var opened: bool = item.get("is_open",false)
+            var swing: String = item.door_swing if item.get("door_swing") != null else "inward"
+            if item.get("integrity")=="destroyed":
+                # Destruction clears collision independently of the open flag.
+                # The retained pre-destruction pose selects the authored wreck.
+                var remnant: Dictionary = item.remnant_state if item.get("remnant_state") != null else {}
+                opened = remnant.get("door_open",opened)
+                if remnant.get("door_swing") != null: swing = remnant.door_swing
+                row.destroyed = true
+                row.outcome = item.destruction_outcome
+            row.merge({"kind":"door","asset":item.item_id,"state":"open."+swing if opened else "closed"})
         elif index.props.has(item.item_id):
             var owner = Catalog.read_file(index.props[item.item_id],cache)
             # Prop owners name the backend field and use its JSON value as the

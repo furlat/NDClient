@@ -95,6 +95,27 @@ SubViewport; unshaded 3D materials consume those straight-RGBA results. A gray
 CanvasModulate at 0.18 provides readability. The painted world has no 3D receiving
 lights and no custom diffuse-light loop.
 
+Live destroyed doors now select their authored remnant from integrity, outcome
+and the retained pre-destruction pose; an unchanged `is_open=false` cannot leave
+a cleared passage painted closed. The stone frame stays in place. The Gallery
+regression includes its recorded before/after observations, source/media checks
+for closed/open/clear/jammed states and native playback through the first
+destroyed publication and four camera views. See `generated/door_state_checks.json`
+and `generated/door_state_render_checks_native.json`. The source regression uses
+`tests/fixtures/gallery_door_states.json`; full-player replay requires
+`tests/door_state_render_checks.gd -- --recording <journal-prefix-through-sequence8>`.
+
+**Destruction coverage remains incomplete in the live player.** The offline
+workshop plays intermediate environment destruction frames; live playback does
+not yet schedule those tracks. Authored banks exist for all11 registered door
+owners,113 prop owners and12 trap owners, plus stone/wood walls. Props, traps,
+walls and resource-only fixtures still lack destroyed-state selection, so a
+retained broken object can keep its intact source; removal simply removes it.
+Creature death already has live playback and a corpse endpoint. The audit also
+found a separate trap selector mismatch (`active` versus authored `activated`),
+which is not repaired by this door change. These are integration gaps, not
+evidence that all destruction artwork is missing.
+
 Native Canvas owns accumulated lighting. **Limit overlapping lights** in Escape
 settings caps its HDR illumination with one scalar before applying original
 source colour/tint/style, preserving coloured-light ratios. It reuses the existing
