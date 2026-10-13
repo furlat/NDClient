@@ -37,7 +37,7 @@ func sync_scene(atlas:RefCounted,world:World,changed:bool=false,restyle:bool=fal
     if restyle:scenery_revision+=1
     atlas.sync(world,[world_generation,world_revision,0,"solid",scenery_revision,true,true],
         [world_generation,0,scenery_revision,"solid"],publication_changes,tracked_receivers)
-    atlas.sync_output(world,[world_generation,0,scenery_revision,"solid",atlas.revision])
+    atlas.sync_output(world,[world_generation,0,scenery_revision,"solid",atlas.revision],tracked_receivers)
 func sparse(upserts:Array=[],removed:Array=[])->Dictionary:
     return {"full":false,"upserts":upserts,"removed":removed}
 func floor_receipt(entry:Dictionary,changed:Array=[],removed:Array=[])->void:
@@ -575,9 +575,11 @@ func run()->void:
     var large=MeshInstance3D.new();large.mesh=QuadMesh.new();var material=ShaderMaterial.new();material.shader=ActorSource;large.material_override=material;world.add_child(large)
     var extra={"node":large,"material":material,"cell":Vector2(9000,128),"placement":{"kind":"actor"},"role":"body","source_version":0}
     atlas.style_changed(entry,"0");atlas.visibility_changed(entry)
+    atlas.output_changed(entry)
     world.entries.append(extra);sync_scene(atlas,world,true,false,sparse([extra]))
     check(not atlas.errors.is_empty(),"Oversized allocation fails explicitly")
     check(not atlas.style_dirty.is_empty() and not atlas.visibility_dirty.is_empty() and not atlas.material_dirty.is_empty(),"Rejected admission retains pending display-owner notifications")
+    check(not atlas.output_dirty.is_empty(),"Rejected admission retains pending final-output writes")
     check(atlas.receivers.map(func(r):return [r.id,r.position])==old_rects and atlas.viewport.size==old_view_size and atlas.repack_count==repacks,"Rejected pack leaves prior atlas layout and viewport unchanged")
     check(large.material_override==material and entry.ground_buffer==before,"Rejected pack does not publish partial source overrides or addresses")
     var rejected_id=large.get_instance_id()
@@ -585,6 +587,7 @@ func run()->void:
     sync_scene(atlas,world,true,false,sparse([],[rejected_id]))
     check(atlas.errors.is_empty() and atlas.receivers.size()==2,"Valid sparse publication recovers after rejected pack without poisoned caches")
     check(atlas.style_dirty.is_empty() and atlas.visibility_dirty.is_empty() and atlas.material_dirty.is_empty(),"Successful retry consumes retained display-owner notifications")
+    check(atlas.output_dirty.is_empty(),"Successful retry consumes retained final-output writes")
     check_transport(atlas,entry,"Sparse retry after rejected pack")
     await pixel_oracle(atlas,world,source,"failed-pack-recovery")
     check(before_failed_pack.get_data()==view.get_texture().get_image().get_data(),"First recovered publication restores exact prior final framebuffer")

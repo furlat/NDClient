@@ -1258,3 +1258,25 @@ full calculation as acceptance reference. map_audit owns this bounded diagnosis;
 root owns the live profiling hook and serialized route; scope_review continues.
 New normal assets remain deferred. The renderer's exact54 reference captures and
 improved18.044ms reveal median are preserved; no shader or source changes.
+
+The demand attribution run20261013T003348.323972Z passes411 checks and isolates
+32 Gallery calls:14.161ms median total,4.885ms selection,3.464ms resident refresh,
+1.824ms guard,1.424ms estimates and1.342ms selection readiness refresh. map_audit
+may reject changed exact demand before family equality, use accepted worker byte
+estimates directly, and update residency only where combined roles or pins change.
+Preserve exact greedy iteration, unknown/manual fallback, boot and queue semantics;
+compare with the frozen927a55b full body, not the changed function against itself.
+
+The same run's draw_order median is3.321ms on reveal and0.538ms while moving.
+This timer includes output-material synchronization, whose scenery-revision path
+scans every receiver. render_audit splits sorting/output timing first and measures
+a native reveal recording; if confirmed, update output properties from existing
+exact producer notifications while preserving full/untracked/mode/camera fallback.
+Keep all draw-rank and physical-position polling. Validate source replacement,
+wall fields, masks and modes, then repeat the54 exact native reference captures
+and actual Gallery route. scope_review tracks these bounded measured extensions.
+
+Deferred artwork follow-up requested by the user: environment-normal-quality-2026-10-12
+HANDOFF.txt under the fantasy-unified-catalog directory. Inspect/import only after
+the measured client optimization work is complete; do not mix asset changes into
+performance or approved-framebuffer comparisons. The handoff remains unread so far.

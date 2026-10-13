@@ -313,8 +313,12 @@ func _process(delta: float) -> void:
         FrameProfile.end_phase(profile,"native_2d_lighting",phase)
         # Wall member selection precedes the final painter order and coverage mask.
         phase = Time.get_ticks_usec()
+        subphase = Time.get_ticks_usec()
         _sort_draws()
-        native_light_atlas.sync_output(self,[world_generation,quarter,scenery_revision,wall_mode,native_light_atlas.revision])
+        FrameProfile.end_phase(profile,"draw_sort",subphase)
+        subphase = Time.get_ticks_usec()
+        native_light_atlas.sync_output(self,[world_generation,quarter,scenery_revision,wall_mode,native_light_atlas.revision],true)
+        FrameProfile.end_phase(profile,"native_2d_output",subphase)
         FrameProfile.end_phase(profile,"draw_order",phase)
         phase = Time.get_ticks_usec()
         _discover()
@@ -1364,6 +1368,7 @@ func _sync_wall_mask() -> void:
             entry.material.set_shader_parameter("wall_mask_id",index)
             entry.material.set_shader_parameter("wall_mask_texture",wall_mask_viewport.get_texture())
             entry.material.set_shader_parameter("wall_mask_enabled",wall_mode=="translucent")
+            native_light_atlas.output_changed(entry)
         while wall_mask_nodes.size()>index:
             var retired: ColorRect = wall_mask_nodes.pop_back()
             wall_mask_viewport.remove_child(retired)
@@ -1920,10 +1925,12 @@ func update_wall_visibility(refresh_sight: bool = true, finish_draw_order: bool 
         if entry.get("wall_opacity",-1.0) != alpha:
             entry.wall_opacity = alpha
             entry.material.set_shader_parameter("wall_opacity",alpha)
+            native_light_atlas.output_changed(entry)
         var masked = wall_mode=="translucent" and entry.role!="shadow"
         if entry.get("wall_mask_enabled") != masked:
             entry.wall_mask_enabled = masked
             entry.material.set_shader_parameter("wall_mask_enabled",masked)
+            native_light_atlas.output_changed(entry)
     FrameProfile.end_phase(profile,"wall_candidates",candidates_started)
     wall_visibility_revision = timeline.revision
     wall_visible_cells = senses.get("visible",[]).duplicate(true) if senses != null else []

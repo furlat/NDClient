@@ -292,6 +292,7 @@ static func reconcile(atlas, world, changes: Dictionary) -> bool:
         output.set_shader_parameter("use_instance_atlas",entry.has("batch_rows"))
         output.set_shader_parameter("light_cap",atlas.light_cap)
         entry.node.material_override=output; source.output=output
+        atlas.output_changed(entry)
         if floor_ids.has(id):
             var repairs: Array=[]
             if address_changes.has(id):

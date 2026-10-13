@@ -43,6 +43,10 @@ var admission_stamp: Array = []
 var visibility_stamp: Array = []
 var dynamic_members: Array = []
 var output_stamp: Array = []
+var output_dirty: Dictionary = {}
+var output_tracked := false
+var output_full := false
+var output_admission_failed := false
 var transport_stamp: Array = []
 var known_entry_count := -1
 var last_reconcile_ms := 0.0
@@ -617,6 +621,7 @@ func _reconcile(world: Node) -> bool:
         entry.received_material.set_shader_parameter("light_cap",light_cap)
         if entry.node.material_override!=entry.received_material: entry.node.material_override=entry.received_material
         entry_specs[entry.node.get_instance_id()].output=entry.received_material
+        output_changed(entry)
     transport_stamp=transport
     last_reconcile_phases.output_bindings=output_updates
     last_reconcile_phases.output_bind_ms=(Time.get_ticks_usec()-phase)/1000.0
@@ -668,6 +673,11 @@ func style_changed(entry: Dictionary, row_id: String = "source") -> void:
 
 func visibility_changed(entry: Dictionary) -> void:
     visibility_dirty[entry.node.get_instance_id()]=true
+
+func output_changed(entry: Dictionary) -> void:
+    # These final3D fields are owned by wall selection/coverage and output
+    # creation, not Canvas receiving. Consume only after painter/mask publication.
+    if is_instance_valid(entry.node): output_dirty[entry.node.get_instance_id()]=entry
 
 func _visibility(receiver: Dictionary, screen: Rect2) -> bool:
     var shown: bool = receiver.entry.node.is_visible_in_tree() and (plane_to_screen*receiver.bounds).intersects(screen)
@@ -722,13 +732,16 @@ func sync(world: Node, published: Array = [], styles: Array = [], changes: Dicti
             if applied:
                 Delta.rebuild(self,int(changes.get("serial",-1)))
                 full_reconcile=true
+                output_full=true
             else:
                 entry_specs=previous_specs; membership=previous_membership
         if not applied:
+            output_admission_failed=true
             for issue in errors:
                 if issue not in world.presentation_errors: world.presentation_errors.append(issue)
             last_sync_ms=(Time.get_ticks_usec()-started)/1000.0
             return
+        output_admission_failed=false
         admission_stamp=published.duplicate(); dynamic_members=moving; known_entry_count=world.entries.size()
     last_reconcile_ms=(Time.get_ticks_usec()-phase)/1000.0
     var camera: Camera3D = world.camera
@@ -860,13 +873,42 @@ func sync(world: Node, published: Array = [], styles: Array = [], changes: Dicti
     receivers_tracked=tracked_receivers
     last_sync_ms=(Time.get_ticks_usec()-started)/1000.0
 
-func sync_output(world: Node, published: Array = []) -> void:
+func sync_output(world: Node, published: Array = [], tracked: bool = false) -> void:
     # Only after painter/mask publication. The original texture RID remains live
     # across mask redraws; source/material admissions invalidate this stamp.
-    if not published.is_empty() and published==output_stamp: return
+    last_reconcile_phases.output_entries_checked=0
+    if tracked and output_admission_failed: return
+    var full: bool=not tracked or not output_tracked or output_full or published.is_empty() or output_stamp.is_empty()
+    if not full and (published.size()<4 or output_stamp.size()<4 or published[1]!=output_stamp[1] or published[3]!=output_stamp[3]): full=true
+    if not full and published==output_stamp and output_dirty.is_empty(): return
+    # Legacy/manual callers retain the original stamp shortcut. Explicit dirty
+    # notifications always win, including late mask writes in the same stamp.
+    if not tracked and not published.is_empty() and published==output_stamp and output_dirty.is_empty(): return
+    var pending: Dictionary=output_dirty
+    output_dirty={}
+    if output_full:
+        # Successful complete admission also retires the preceding view's
+        # queued owners. Failed admission never sets this flag.
+        for id in pending.keys():
+            if not entry_specs.has(id): pending.erase(id)
+    if full:
+        for entry in world.entries:
+            if entry.has("received_material") and is_instance_valid(entry.node): pending[entry.node.get_instance_id()]=entry
     output_stamp=published.duplicate()
-    for entry in world.entries:
-        if not entry.has("received_material") or not is_instance_valid(entry.node): continue
+    output_tracked=tracked
+    output_full=false
+    for id in pending:
+        var entry: Dictionary=pending[id]
+        if not is_instance_valid(entry.node) or entry.node.is_queued_for_deletion(): continue
+        if tracked:
+            var admitted: Dictionary=entry_specs.get(id,{})
+            if admitted.is_empty() or not is_same(admitted.entry,entry) or not entry.has("received_material") or admitted.get("output")!=entry.received_material:
+                # A failed/rejected admission must not consume its pending
+                # source writes. Successful binding replaces this exact owner.
+                output_dirty[id]=entry
+                continue
+        if not entry.has("received_material"): continue
+        last_reconcile_phases.output_entries_checked+=1
         var output: ShaderMaterial = entry.received_material
         output.render_priority=entry.material.render_priority
         if entry.has("wall_source"):
@@ -875,6 +917,7 @@ func sync_output(world: Node, published: Array = []) -> void:
                 if output.get_shader_parameter(name)!=value: output.set_shader_parameter(name,value)
 
 func close() -> void:
+    output_dirty.clear(); output_tracked=false; output_full=false; output_admission_failed=false
     var restored = {}
     for receiver in receivers:
         var entry: Dictionary = receiver.entry

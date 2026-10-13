@@ -21,6 +21,9 @@ static func instantiate(path: String) -> RefCounted:
         source+="\nfunc visibility_changed(_entry: Dictionary) -> void:\n    pass\n"
     if not source.contains("func floor_address_token("):
         source+="\nfunc floor_address_token(_entry: Dictionary) -> Array:\n    return []\n"
+    if not source.contains("func output_changed("):
+        source+="\nfunc output_changed(_entry: Dictionary) -> void:\n    pass\n"
+    source=source.replace("func sync_output(world: Node, published: Array = []) -> void:","func sync_output(world: Node, published: Array = [], _tracked: bool = false) -> void:")
     if source==original.source_code: return original.new()
     var compatible=GDScript.new();compatible.source_code=source
     if compatible.reload()!=OK: return null
