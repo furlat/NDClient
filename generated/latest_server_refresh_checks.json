@@ -31,10 +31,21 @@
     "input": "viewport_click",
     "worker_dispatch_ms": 66.21160999929998,
     "host_worker_exchange_ms": 69.328816,
-    "click_to_published_packet_ms": 517.911,
     "click_to_first_animation_ms": 895.981,
     "click_to_completed_presentation_ms": 3798.251,
-    "timing_note": "One real command; distinct clocks. Remaining click latency is not assigned to the client alone without request/discovery/transport attribution. Optional coarse profiling was enabled; no CPU profiler or nested action hooks."
+    "timing_note": "One real command; distinct server and client clocks. The complete SSE event was available at109.446 ms; the earlier517.911 ms metric observes canonical sequence advancement after consumption, not network arrival. Optional coarse profiling; no CPU profiler or nested action hooks.",
+    "click_to_canonical_sequence_observed_ms": 517.911,
+    "breakdown": {
+      "click_to_complete_event_ms": 109.446,
+      "decode_schema_ms": 75.613,
+      "journal_normalize_reduce_ms": 327.87,
+      "preparation_handoff_ms": 0.276,
+      "presentation_compile_ms": 325.702,
+      "compiled_at_ms": 838.985,
+      "compiled_to_first_animation_ms": 56.99599999999998,
+      "after_complete_event_to_animation_ms": 786.535,
+      "note": "Sequential critical path for this operation. Tiny gaps between measured scopes account for the rounding residual. Journal normalization/reduction/I/O and compiler internals are not individually timed. Source inspection shows retained-state deep copies and per-event senses/perception snapshots; their individual contributions are not yet measured."
+    }
   },
   "excluded_attempts": [
     {
@@ -48,5 +59,154 @@
   ],
   "preview_run": "20261013T081427.535789Z",
   "preview": "Fresh ordinary unprofiled launch from current shared checkout; native log reports PLAYER_READY. Includes Alt material fix. Closing it ends this fresh encounter.",
-  "recordings_and_captures": "Retained in ignored .runtime; no credentials or raw packets in this report."
+  "recordings_and_captures": "Retained in ignored .runtime; no credentials or raw packets in this report.",
+  "movement_cohorts": {
+    "before_gallery": {
+      "moves": 10,
+      "viewport_clicks": 2,
+      "first_movement_ms": {
+        "median": 172.67000000000002,
+        "min": 122.211,
+        "max": 508.474
+      },
+      "server_dispatch_ms": {
+        "median": 16.83521850645775,
+        "min": 10.159030003705993,
+        "max": 42.74465799971949
+      },
+      "server_exchange_ms": {
+        "median": 18.3475855,
+        "min": 11.403607,
+        "max": 45.081287
+      },
+      "operation_bytes": {
+        "median": 38294.5,
+        "min": 22265,
+        "max": 142593
+      },
+      "sse_schema_ms": {
+        "median": 15.8605,
+        "min": 8.662,
+        "max": 52.249
+      },
+      "canonical_consumer_ms": {
+        "median": 32.4495,
+        "min": 22.316,
+        "max": 68.063
+      },
+      "presentation_compile_ms": {
+        "median": 24.5995,
+        "min": 14.387,
+        "max": 61.389
+      },
+      "client_to_prepared_ms": {
+        "median": 79.0925,
+        "min": 46.489,
+        "max": 163.908
+      },
+      "client_after_complete_sse_ms": {
+        "median": 127.6845,
+        "min": 85.344,
+        "max": 432.053
+      }
+    },
+    "gallery_entry": {
+      "moves": 3,
+      "viewport_clicks": 3,
+      "first_movement_ms": {
+        "median": 611.632,
+        "min": 271.842,
+        "max": 847.149
+      },
+      "server_dispatch_ms": {
+        "median": 33.606548997340724,
+        "min": 18.3148919895757,
+        "max": 40.50582800118718
+      },
+      "server_exchange_ms": {
+        "median": 38.56831,
+        "min": 20.031858,
+        "max": 43.070099
+      },
+      "operation_bytes": {
+        "median": 128914,
+        "min": 35430,
+        "max": 351726
+      },
+      "sse_schema_ms": {
+        "median": 61.611,
+        "min": 13.809,
+        "max": 150.224
+      },
+      "canonical_consumer_ms": {
+        "median": 141.317,
+        "min": 91.997,
+        "max": 185.881
+      },
+      "presentation_compile_ms": {
+        "median": 119.344,
+        "min": 71.364,
+        "max": 201.008
+      },
+      "client_to_prepared_ms": {
+        "median": 419.652,
+        "min": 177.555,
+        "max": 448.701
+      },
+      "client_after_complete_sse_ms": {
+        "median": 530.0039999999999,
+        "min": 226.40599999999998,
+        "max": 774.094
+      }
+    },
+    "inside_gallery": {
+      "moves": 16,
+      "viewport_clicks": 16,
+      "first_movement_ms": {
+        "median": 836.3415,
+        "min": 349.979,
+        "max": 1197.829
+      },
+      "server_dispatch_ms": {
+        "median": 59.59677950158948,
+        "min": 15.149650993407704,
+        "max": 238.8274880067911
+      },
+      "server_exchange_ms": {
+        "median": 62.8459235,
+        "min": 16.699723,
+        "max": 242.51804
+      },
+      "operation_bytes": {
+        "median": 162776.5,
+        "min": 41469,
+        "max": 249600
+      },
+      "sse_schema_ms": {
+        "median": 66.8015,
+        "min": 16.239,
+        "max": 108.687
+      },
+      "canonical_consumer_ms": {
+        "median": 273.1365,
+        "min": 101.667,
+        "max": 356.071
+      },
+      "presentation_compile_ms": {
+        "median": 270.3965,
+        "min": 98.458,
+        "max": 342.365
+      },
+      "client_to_prepared_ms": {
+        "median": 610.957,
+        "min": 246.207,
+        "max": 787.353
+      },
+      "client_after_complete_sse_ms": {
+        "median": 735.722,
+        "min": 288.476,
+        "max": 1081.95
+      }
+    }
+  }
 }

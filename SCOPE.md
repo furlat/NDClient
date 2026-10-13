@@ -1381,3 +1381,12 @@ exchange and 896.0 ms click-to-first-animation. This is one profiled live sample
 not a before/after speedup claim; the remaining end-to-end delay is still open.
 Fresh unprofiled native preview `20261013T081427.535789Z` reports PLAYER_READY
 against the updated shared checkout and includes the Alt repair.
+
+The user questioned the 830 ms command-to-animation gap. Correlating the existing
+single-clock native trace locates the full event at 109.4 ms, followed by 75.6 ms
+decode/schema admission, 327.9 ms canonical journal/state consumption, 325.7 ms
+presentation compilation and 57.0 ms compiled-to-first-animation handoff/media.
+About 786.5 ms occurs after complete event availability. Both large stages run on
+workers but sequentially gate playback. No production optimization is claimed:
+finer reducer/normalization/I/O/copy costs are not separately measured yet.
+The existing pipeline analyzer and compact refresh report preserve this evidence.

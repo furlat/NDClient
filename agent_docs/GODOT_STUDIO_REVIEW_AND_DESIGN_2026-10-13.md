@@ -47,9 +47,14 @@ Forward+ playback: 58 real client commands reach the far Gallery and pass
 411 checks, including canonical state and cold replay. See
 [`generated/latest_server_refresh_checks.json`](../generated/latest_server_refresh_checks.json).
 This does not close the animation gaps above. Command 50 takes 66.2 ms in worker
-execution but 896.0 ms from click to first animation. These are distinct clocks;
-the remaining request/discovery/transport/presentation delay still needs
-attribution. This single run is not a controlled before/after speedup comparison.
+execution but 896.0 ms from click to first animation. The complete event arrives at 109.4 ms. Client processing then spends 75.6 ms
+decoding/validating, 327.9 ms consuming the canonical journal/state and 325.7 ms
+compiling presentation, followed by 57.0 ms until first animation. Both large
+worker stages are asynchronous to rendering but sequential on the action
+critical path. Their internals still need finer attribution; source inspection
+shows full retained-state copies and per-event senses/perception snapshots.
+Across 16 inside-Gallery movements the median input-to-movement delay is 836.3 ms,
+so this is not merely one outlier. This is not a controlled speedup comparison.
 The report also retains the two unsuitable headless UI attempts rather than
 counting them as passing. A fresh ordinary preview now uses the latest shared
 server checkout and the Alt repair.
