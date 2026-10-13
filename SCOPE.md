@@ -1588,7 +1588,7 @@ Fifteen topology replacements complete asynchronously in up to 79 ms while world
 input remains available; one control-building unit can exceed its cooperative
 1 ms budget (measured phase peak 2.338 ms), so this is not a hard frame-time cap.
 
-Exact schema7/expanded-recording parity passes 701 checks across 99 operations,
+Exact schema 7/expanded-recording parity passes 701 checks across 99 operations,
 237 world updates and 2,929 tile field rows. Strict protocol 7,888, transport 351,
 tile fields 268, journal 33, compiler ownership 435, prefetch 49, trusted choices
 120, media completion 40 and queued/retained HUD 67 checks pass; existing UI 52
@@ -1646,3 +1646,67 @@ width; their registrations are preserved, and finite native fixtures do not
 certify device upload of every possible sheet. Evidence and limitations are in
 generated/environment_normal_acceptance.json. Backend contract work remains
 outside this integration; the preview uses the preserved offline journal.
+
+## Compact choices protocol integration — 13 October 2026
+
+Adopt the user's delivered schema 8 from dnd_engine/sdk/protocol/README.md.
+The current exported schema and SDK helpers supersede the older rich choices
+examples in plan section 4.8. Backend source is delivery input, not edited here.
+Keep the approved renderer, asset selection and event-associated tile reducer.
+
+1. Preserve schema 7 for explicit offline recording admission; install the exact
+   schema 8/identity. Add response-local lookup helpers and bounded reference
+   admission, mirroring the delivered Python/TypeScript semantics. Do not expand
+   shared sets into old target trees or normalize/copy every admitted query again.
+2. Migrate world clicks, action selection, preview, compound continuations and HUD
+   consumers to shared domains. Native discovery/target indices, repeats, sparse
+   defaults, zero references and Preview's separate domains remain authoritative.
+   Retain worker prefetch, revision/correlation checks and displayed-state gates.
+3. Validate semantic fixtures, invalid references, transport correlation and old
+   journal replay. Run actual Windows/Gallery commands against the new server,
+   measuring reply bytes, admission/publication and completion frames. Exercise
+   selected AoE and compound cases at supported client/SDK boundaries.
+4. Record measured results and limitations, review, commit and reopen live play.
+
+Root owns transport/session, recording compatibility and live acceptance.
+map_audit owns SDK helpers/schema admission and focused tests. render_audit owns
+interaction/HUD consumers and focused tests. scope_review tracks plan adherence
+and anti-slop/anti-OOP correctness. Agents share this task only; no other chat
+communications. Native timing runs remain serial and artwork stays gitignored.
+
+Completed compact integration: exact schema 8 and identity installed, schema 7 kept
+for explicit offline replay only. Shared lookup helpers retain native indices,
+ordered repetitions, branch-local secondary sets and Preview-local domains.
+Admitted Choices/Preview remain sparse and are handed to consumers once; request
+correlation, prefetch privacy and event reduction order are preserved. Native
+JSON numeric values are compared by scalar coordinate/ContentRef value at the
+consumer boundary, including all five content identity fields.
+
+Native Windows Forward+ acceptance completed 58 commands / 644 checks with 16 actual
+Gallery viewport movement clicks, 1,761 tiles / 360 objects, no failures or premature
+choices publications. All 29 moves become input-ready in their playback-completion
+frame. The largest choices reply fell from 2,399,276 to 273,132 bytes (88.62% smaller).
+Admission plus normalization/publication fell from 536.056 to 75.911 ms; successful
+query responses have no normalization pass. The SDK contract lane, 8,103 strict
+parity cases, 118 trusted-query checks, 66 compact interaction checks, 52 UI checks,
+67 retained HUD checks, 49 prefetch checks and 22 record retirement checks pass.
+Magic Missile preserves A→B→A ordered targeting over 39 live commands; selected
+Fireball computes 49 affected cells and resolves a real encounter. Both SDK games
+reconnect and cold-replay both seats to their final state. Original schema 7
+Gallery bytes replay to sequence 101. See generated/compact_choices_acceptance.json
+and generated/compact_choices_live_pipeline.json for evidence and limitations.
+
+The integration does not remove all movement latency: the 16 Gallery viewport
+moves start at 317.728 ms median, with 63.934 ms median server dispatch. Source and
+recorded-frame review of remaining client costs was explicitly requested by the
+user: map_audit covers event decoding, render_audit canonical publication and
+copies, scope_review scheduling/media gates. This is read-only diagnosis while
+the user tries the new live preview; no renderer change is implied. Asset and
+frame-time comparisons retain the caveats in the acceptance report.
+
+All three requested source/trace reviews completed. Concrete findings and their
+measurement limits are recorded in generated/compact_latency_review.json.
+Priorities are full actor/state copy amplification, warm metadata gating and
+cold required-media publication; admission traversal and the optional Preview
+roundtrip are smaller candidates. These are diagnosis results, not implemented
+performance improvements. The live preview remains open for user feedback.

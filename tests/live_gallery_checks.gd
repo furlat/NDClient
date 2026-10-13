@@ -55,8 +55,8 @@ func healthy() -> bool:
 func rows() -> Array:
     var result = []
     for family in ["entity_actions","position_actions","self_actions","object_actions"]:
-        for row in scene.available_actions[family]:
-            if row.can_afford and not row.valid_targets.is_empty(): result.append(row)
+        for row in scene.available_actions.get(family,[]):
+            if row.can_afford and not Choices.action_options(scene.available_actions,row).is_empty(): result.append(row)
     return result
 
 func toward(available: Array, origin: Array, destinations: Array) -> Dictionary:
@@ -65,10 +65,11 @@ func toward(available: Array, origin: Array, destinations: Array) -> Dictionary:
     for p in destinations: initial = minf(initial,absf(origin[0]-p[0])+absf(origin[1]-p[1]))
     for row in available:
         if row.behavior_id!="action.move": continue
-        for target in row.valid_targets:
-            if target.get("position")==null: continue
+        for target in Choices.action_options(scene.available_actions,row):
+            var position: Variant = Choices.binding_position(scene.available_actions,target)
+            if position==null: continue
             var distance = INF
-            for p in destinations: distance=minf(distance,absf(target.position[0]-p[0])+absf(target.position[1]-p[1]))
+            for p in destinations: distance=minf(distance,absf(position[0]-p[0])+absf(position[1]-p[1]))
             if distance<initial and distance<score:
                 best={"action":row,"target":target};score=distance
     return best
@@ -83,9 +84,10 @@ func select_route() -> Dictionary:
         if id not in scene.timeline.state.audience.controlled and value.get("present",false) and value.normal_hp>0 and value.name!="Gallery Curator": enemies[id]=true
     var attack = {};var score=INF
     for row in available:
-        if not row.performs_attack and row.behavior_id!="spell.magic_missile": continue
-        for target in row.valid_targets:
-            if not enemies.has(target.get("target_uuid")): continue
+        if not row.get("performs_attack",false) and row.behavior_id!="spell.magic_missile": continue
+        for target in Choices.action_options(scene.available_actions,row):
+            var subject: Variant = Choices.binding_subject(scene.available_actions,target)
+            if subject==null or not enemies.has(subject.uuid): continue
             var distance: float = target.get("distance",0) if target.get("distance")!=null else 0
             var value = distance+(0 if row.behavior_id=="spell.magic_missile" else 1000)+(0 if row.behavior_id=="spell.fire_bolt" else 100)
             if value<score:attack={"action":row,"target":target};score=value
@@ -97,19 +99,20 @@ func select_route() -> Dictionary:
         var identity = ""
         for id in scene.timeline.state.objects:
             if scene.timeline.state.objects[id].item.name==goal[0]: identity=id;break
-        for option in scene.available_actions.world_interactions:
+        for option in scene.available_actions.get("world_interactions",[]):
             if option.subject_uuid!=identity or not option.behavior_id.ends_with(".open"): continue
             for row in available:
                 if row.behavior_id!=option.behavior_id or row.template_name!=option.template_name: continue
-                for target in row.valid_targets:
-                    if row.source_item_uuid==identity or target.get("target_uuid")==identity:
+                for target in Choices.action_options(scene.available_actions,row):
+                    var subject: Variant = Choices.binding_subject(scene.available_actions,target)
+                    if row.get("source_item_uuid")==identity or (subject!=null and subject.uuid==identity):
                         return {"action":row,"target":target,"opens_stage":true}
-            selected=toward(available,current,option.contact_positions)
+            selected=toward(available,current,option.get("contact_positions",[]))
             break
     else: selected=toward(available,current,[goal[1]])
     if not selected.is_empty():return selected
     for row in available:
-        if row.behavior_id=="action.dash":return {"action":row,"target":row.valid_targets[0]}
+        if row.behavior_id=="action.dash":return {"action":row,"target":Choices.action_options(scene.available_actions,row)[0]}
     return {}
 
 func phase_value() -> Dictionary:
@@ -134,11 +137,11 @@ func issue(selected: Dictionary) -> bool:
     var painted_generation: int = scene.available_actions.get("discovery_generation",0)
     if selected.is_empty():scene.end_turn()
     else:
-        var target: Variant=selected.target.get("position")
+        var target: Variant=Choices.binding_position(scene.available_actions,selected.target)
         var click=false
         if label=="action.move" and target!=null:
             var screen=grid_screen(target)
-            click=root.get_visible_rect().has_point(screen) and not scene.hud.pointer_over_controls(screen) and scene.pick_world(screen).get("kind")=="ground" and scene.pick_cell(screen).get("position")==target
+            click=root.get_visible_rect().has_point(screen) and not scene.hud.pointer_over_controls(screen) and scene.pick_world(screen).get("kind")=="ground" and scene.Interaction.same_position(scene.pick_cell(screen).get("position"),target)
         if click:
             scene.cancel_selection();scene.selected_mode="action.move"
             record.input="viewport_click"
@@ -175,7 +178,7 @@ func issue(selected: Dictionary) -> bool:
         observe_actor(actor,observations)
         if not observations.is_empty():
             var native: Dictionary=observations[0]
-            if record.first_movement_ms==null and native.position!=record.from:record.first_movement_ms=elapsed
+            if record.first_movement_ms==null and not scene.Interaction.same_position(native.position,record.from):record.first_movement_ms=elapsed
             if record.first_animation_ms==null and str(native.clip).to_lower()!="idle":record.first_animation_ms=elapsed
             native.occurrence=scene.displayed_samples.get(actor,{}).get("occurrence","")
             native.frame_uv=[]
@@ -188,7 +191,7 @@ func issue(selected: Dictionary) -> bool:
                 record.samples.append({"ms":elapsed,"native":native});native_previous=native
         # Multi-target native previews ask for their remaining disclosed targets.
         if scene.action_request<0 and not scene.command_busy and scene.session.status.next_command_number==number and not scene.selection_preview.is_empty() and not scene.selection_preview.can_confirm:
-            var next: Array=scene.selection_preview.get("next_targets",[])
+            var next: Array=Choices.next_options(scene.selection_preview)
             if not next.is_empty():
                 scene.target_selection.target_indices.append(next[0].index)
                 scene._request_selection(true)
@@ -231,7 +234,7 @@ func issue(selected: Dictionary) -> bool:
     check(record.early_choices_publications.is_empty(),"Choices remain private until displayed command boundary: %d" % number)
     check(not scene.hud.bar_pending() and record.bar_settled_ms!=null,"Queued action bar completes after command: %d" % number)
     check(not completed or (is_same(scene.hud.painted_discovery,scene.available_actions)
-        and scene.hud.action_buttons.all(func(button):return button.get_meta("native_row").discovery_generation==scene.available_actions.discovery_generation)),
+        and scene.hud.action_buttons.all(func(button):return button.get_meta("native_row").get("discovery_generation",0)==scene.available_actions.discovery_generation)),
         "Completed action bar contains current discovery rows: %d" % number)
     record.input_ready_after_samples=ready()
     check(not completed or (post_ready_count>=5 and ready() and record.post_ready_frames.all(func(frame):return frame.state.ready)
@@ -299,6 +302,8 @@ func _run() -> void:
         if not await issue(selected):break
         if selected.get("opens_stage",false):stage+=1
     check(stage==ROUTE.size(),"Actual player reaches far Gallery with client-issued commands")
+    evidence.gallery_viewport_clicks=command_trace.filter(func(record):return record.stage>=8 and record.behavior=="action.move" and record.input=="viewport_click").size()
+    check(evidence.gallery_viewport_clicks>=8,"Gallery route exercises at least eight real viewport movement clicks")
     evidence.live_commands=command_trace.size()
     evidence.live_route_stage=stage
     evidence.command_trace=scene.game_config.test_result.get_base_dir().path_join("live-command-trace.json")

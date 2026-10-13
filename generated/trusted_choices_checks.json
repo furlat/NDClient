@@ -1,8 +1,13 @@
 {
-  "checks": 120,
-  "choices": "res://.runtime/player-runs/20261013T120839.324219Z/largest-choices-admitted.json",
-  "command": "Godot --headless --path \"C:/Users/tommaso/Documents/Dev/NDClientGodot/\" --script res://tests/trusted_choices_checks.gd -- --choices=\"res://.runtime/player-runs/20261013T120839.324219Z/largest-choices-admitted.json\"",
+  "checks": 118,
+  "choices": "C:/Users/tommaso/Documents/Dev/dnd_engine/.runtime/server-latency/checkpoint34-repeat/choices-55.json",
+  "command": "Godot --headless --path \"C:/Users/tommaso/Documents/Dev/NDClientGodot/\" --script res://tests/trusted_choices_checks.gd -- --choices=\"C:/Users/tommaso/Documents/Dev/dnd_engine/.runtime/server-latency/checkpoint34-repeat/choices-55.json\"",
   "failures": [],
-  "payload_bytes": 2399276,
-  "scope": "Actual payload strict-versus-native normalized equality, schema-derived envelope/shallow-family rejection, safe integer/type/default semantics and opted real loopback HTTP scope/correlation. Nested rows are explicitly trusted; no general JSON strictness, deep-body validation or performance claim."
+  "payload_bytes": 267835,
+  "scope": "Schema8 actual compact payload strict/native JSON equality without normalization; once-per-domain structure/reference admission; sparse defaults, safe integer coordinates and native indices. Real loopback HTTP default strict and explicit trusted metadata preserve identity/scope/correlation and reject unsafe references. Native JSON intentionally cannot distinguish integer versus integral-real tokens. Single-call diagnostic timings are not live-frame performance claims.",
+  "timings": {
+    "native_decode_structure_references_ms": 67.4,
+    "references_only_ms": 5.219,
+    "strict_decode_ms": 138.265
+  }
 }

@@ -1,6 +1,8 @@
 extends RefCounted
 # Presentation only: exact native rows, admitted descriptors and authored UI roles.
 const Catalog = preload("res://source_catalog.gd")
+const Choices = preload("res://sdk/choices.gd")
+const Interaction = preload("res://presentation/interaction.gd")
 const GROUPS = ["Base", "Class", "Spells", "Items"]
 const SLOTS = ["Head", "Amulet", "Cloak", "Body", "Hands", "Legs", "Left Ring", "Right Ring", "Backpack", "Feet", "MELEE_MAIN", "MELEE_OFF", "RANGED_MAIN", "RANGED_OFF"]
 
@@ -17,7 +19,7 @@ static func descriptor(state: Dictionary, id: String, exact = null) -> Dictionar
     var identity_lookup = "@" in id
     for row in state.get("content", []):
         if exact != null:
-            if row.ref == exact: return row
+            if Interaction.same_content_ref(row.ref,exact): return row
         elif row.ref.content_id == id or (identity_lookup and "%s:%s:%s@%d" % [row.ref.pack_id,row.ref.definition_kind,row.ref.content_id,row.ref.content_version] == id):
             return row
     return {}
@@ -40,7 +42,7 @@ static func action_key(row: Dictionary, state: Dictionary, cache: Dictionary, va
         var facets = {}
         for facet in row.get("variant_facets",[]): facets[facet.key] = facet.value
         for choice in authored(cache).choices:
-            if choice.owner != owner or not facets.has(choice.facet) or facets[choice.facet] != choice.value: continue
+            if not Interaction.same_content_ref(choice.owner,owner) or not facets.has(choice.facet) or facets[choice.facet] != choice.value: continue
             var matches = true
             for requirement in choice.requirements:
                 if facets.get(requirement) != choice.requirements[requirement]: matches = false
@@ -129,9 +131,7 @@ static func close_images(cache: Dictionary) -> void:
         cache.ui_media.task = -1
 
 static func rows(discovery: Dictionary) -> Array:
-    var result: Array = []
-    for key in ["entity_actions","position_actions","self_actions","object_actions"]: result.append_array(discovery.get(key,[]))
-    return result
+    return Choices.all_actions(discovery)
 
 static func available(row: Dictionary) -> bool:
     return row.get("availability_status","") == "available" and row.get("can_afford",false)
@@ -145,7 +145,7 @@ static func families(discovery: Dictionary, actor: Dictionary) -> Dictionary:
     var owned = {}
     for item in actor.get("controlled_items",[]) if actor.get("controlled_items") != null else []: owned[item.item_uuid] = true
     for row in rows(discovery):
-        if row.get("interaction_affordance",{}).get("surface") != "action_bar": continue
+        if row.get("interaction_affordance",{}).get("surface","action_bar") != "action_bar": continue
         if row.get("behavior_id") in ["action.move","action.swim","action.core.drop","action.pick_up"]: continue
         var group = "Base"
         if row.get("source_item_uuid") != null and row.get("action_category") != "attack":
@@ -165,7 +165,7 @@ static func families(discovery: Dictionary, actor: Dictionary) -> Dictionary:
         var bi = base_order.find(b.rows[0].behavior_id)
         ai = ai if ai >= 0 else 99
         bi = bi if bi >= 0 else 99
-        return int(a.rows[0].discovery_index) < int(b.rows[0].discovery_index) if ai == bi else ai < bi)
+        return int(a.rows[0].get("discovery_index",0)) < int(b.rows[0].get("discovery_index",0)) if ai == bi else ai < bi)
     return groups
 
 static func sheet(state: Dictionary, actor_id: String) -> Dictionary:

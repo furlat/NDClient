@@ -1,0 +1,439 @@
+{
+  "scope": "Schema8 compact choices and sparse response-local consumers; approved renderer/artwork/event codec unchanged.",
+  "source_context": {
+    "client_base": "a5bf4b3",
+    "client_changes": "This commit; all native fixtures run against these source files before commit.",
+    "backend": "Existing dnd_engine working checkout, exact delivered schema/identity, no backend edits.",
+    "identity": {
+      "protocol_version": 1,
+      "player_schema_version": 8,
+      "schema_digest": "4fcef8c815c27300a97cea497a73db210948ac2d36eb45848fc7f3234b7f5afb"
+    },
+    "runtime": "Native Windows Godot4.7.2 Forward+; serialized live runs without other Godot tests or backend CPU/nested profiling."
+  },
+  "native_acceptance": {
+    "run": "20261013T143729.491797Z",
+    "checks": 644,
+    "failures": [],
+    "commands": 58,
+    "gallery_viewport_clicks": 16,
+    "route_stages": 11,
+    "disclosed_tiles": 1761,
+    "disclosed_objects": 360,
+    "early_choices_publications": 0,
+    "sustained_ready_commands": 58,
+    "completion_same_frame_commands": 41,
+    "query_normalization_trace_records": 2,
+    "screenshot": "C:\\Users\\tommaso\\Documents\\Dev\\NDClientGodot\\.runtime\\player-runs\\20261013T143729.491797Z/player-live.png",
+    "profile": "C:/Users/tommaso/Documents/Dev/NDClientGodot/generated/profiles/2026-10-13T16-39-51-gallery-live-commands.json",
+    "query_error_normalizations": 2,
+    "successful_query_normalizations": 0,
+    "movement_completion_same_frame": 29,
+    "moves": 29
+  },
+  "largest_choices": {
+    "before": {
+      "run": "20261013T125350.576972Z",
+      "request_id": 686,
+      "bytes": 2399276,
+      "client_stages_ms": {
+        "http_admission": 122.349,
+        "response_normalization": 332.561,
+        "response_published": 81.146
+      },
+      "client_stages_total_ms": 536.056
+    },
+    "after": {
+      "run": "20261013T143729.491797Z",
+      "request_id": 667,
+      "bytes": 273132,
+      "client_stages_ms": {
+        "http_admission": 75.909,
+        "response_published": 0.002
+      },
+      "client_stages_total_ms": 75.911
+    },
+    "size_reduction_percent": 88.62,
+    "client_processing_speedup": 7.06
+  },
+  "gallery_latency": {
+    "moves": 16,
+    "viewport_clicks": 16,
+    "first_movement_ms": {
+      "median": 317.72749999999996,
+      "min": 173.351,
+      "max": 638.876
+    },
+    "server_dispatch_ms": {
+      "median": 63.934159494237974,
+      "min": 16.57898200210184,
+      "max": 246.6708749998361
+    },
+    "server_exchange_ms": {
+      "median": 66.47056649999999,
+      "min": 17.895375,
+      "max": 249.887534
+    },
+    "operation_bytes": {
+      "median": 100807.0,
+      "min": 28310,
+      "max": 158392
+    },
+    "sse_schema_ms": {
+      "median": 39.605000000000004,
+      "min": 10.717,
+      "max": 71.722
+    },
+    "canonical_consumer_ms": {
+      "median": 90.8495,
+      "min": 48.523,
+      "max": 108.979
+    },
+    "presentation_compile_ms": {
+      "median": 14.9815,
+      "min": 10.298,
+      "max": 37.958
+    },
+    "client_to_prepared_ms": {
+      "median": 154.712,
+      "min": 78.938,
+      "max": 203.68
+    },
+    "client_after_complete_sse_ms": {
+      "median": 217.3635,
+      "min": 120.145,
+      "max": 531.406
+    },
+    "end_to_ready_ms": {
+      "median": 0.0435000000000514,
+      "min": 0.0350000000000819,
+      "max": 0.0899999999996908
+    },
+    "post_ready_frame_peak_ms": {
+      "median": 12.0505,
+      "min": 8.95,
+      "max": 14.763
+    },
+    "post_ready_hud_peak_ms": {
+      "median": 3.3105,
+      "min": 2.416,
+      "max": 4.118
+    },
+    "post_ready_bar_build_peak_ms": {
+      "median": 0.003,
+      "min": 0.002,
+      "max": 0.004
+    }
+  },
+  "representative_viewport_command": {
+    "number": 56,
+    "behavior": "action.move",
+    "stage": 10,
+    "input": "viewport_click",
+    "from": [
+      59,
+      20
+    ],
+    "to": [
+      65,
+      20
+    ],
+    "sequence": 99,
+    "ready_ms": 2846.765,
+    "playback_complete_ms": 2846.723,
+    "end_to_ready_ms": 0.0419999999999163,
+    "post_ready_frame_peak_ms": 12.74,
+    "post_ready_hud_peak_ms": 3.482,
+    "input_ready_after_samples": true,
+    "bar_settled_ms": 2853.776,
+    "post_ready_bar_build_peak_ms": 0.002,
+    "first_movement_ms": 319.538,
+    "first_animation_ms": 319.538,
+    "first_group_ms": 319.538,
+    "complete_sse_frame_ms": 107.346,
+    "operation_bytes": 99199,
+    "packet_shape": {
+      "lineages": 1,
+      "events": 31,
+      "facts": {
+        "movement": 1,
+        "sensory": 12,
+        "spatial": 12,
+        "step": 6
+      },
+      "versions": 76,
+      "observations": 0,
+      "world_tiles": 16,
+      "world_objects": 8,
+      "tile_changes": 200
+    },
+    "server_dispatch_ms": 65.9365669998806,
+    "server_exchange_ms": 68.307327,
+    "server_outer_phases": {
+      "execute_action_ms": 53.54667699430138,
+      "project_audiences_ms": 12.18642998719588
+    },
+    "server_cpu_profiled": false,
+    "server_nested_hooks": false,
+    "sse_schema_ms": 37.827,
+    "canonical_consumer_ms": 102.119,
+    "presentation_packet_ms": 0.265,
+    "presentation_compile_ms": 15.411,
+    "client_to_prepared_ms": 155.697,
+    "client_after_complete_sse_ms": 212.192,
+    "frame_ms": {
+      "max": 18.934,
+      "mean": 4.20415976331361,
+      "p50": 3.87,
+      "p95": 6.094,
+      "p99": 13.352
+    },
+    "client_phase_peaks_ms": {
+      "action_responses": 0.059,
+      "actor_sample": 1.308,
+      "actor_sync": 0.813,
+      "draw_order": 1.577,
+      "draw_sort": 1.558,
+      "hud_bar_build": 0.006,
+      "hud_bar_controls": 0.04,
+      "hud_draw": 0.289,
+      "hud_process": 1.055,
+      "interaction": 0.118,
+      "mask_sync": 0.002,
+      "media_demand_estimate": 1.776,
+      "media_demand_guard": 0.009,
+      "media_demand_queue": 1.135,
+      "media_demand_resident_refresh": 0.969,
+      "media_demand_role_diff": 0.008,
+      "media_demand_selection": 2.695,
+      "media_demand_selection_refresh": 1.347,
+      "media_demand_snapshot": 0.124,
+      "media_plan": 8.649,
+      "media_plan_demand": 8.161,
+      "media_plan_prune": 0.006,
+      "media_plan_request": 0.624,
+      "media_plan_sets": 0.355,
+      "media_publication": 1.847,
+      "modular_shadows": 2.278,
+      "native_2d_atlas": 10.642,
+      "native_2d_lighting": 13.03,
+      "native_2d_output": 0.035,
+      "native_2d_projection": 0.344,
+      "player_process": 17.205,
+      "preparation_step": 8.879,
+      "scenery_sync": 0.315,
+      "session_poll": 0.019,
+      "session_timeline": 11.621,
+      "source_lighting": 0.435,
+      "source_lighting_resolve": 1.249,
+      "static_order": 0.555,
+      "timeline_advance": 3.785,
+      "view_retirement": 0.24,
+      "wall_candidates": 1.154,
+      "wall_targets": 0.002,
+      "wall_visibility": 1.734,
+      "world_ground": 1.618,
+      "world_objects": 0.14,
+      "world_prepare_native": 2.074,
+      "world_rows": 0.04,
+      "world_sync": 4.401,
+      "world_views": 0.004
+    },
+    "sse_framing_cpu_ms": 2.979,
+    "requests": [
+      {
+        "operation": "preview",
+        "request_id": 710,
+        "enqueued_ms": 2.268,
+        "worker_reply_ms": 13.307
+      },
+      {
+        "operation": "submit_command",
+        "request_id": 711,
+        "enqueued_ms": 24.17,
+        "worker_reply_ms": 31.493
+      },
+      {
+        "operation": "choices",
+        "request_id": 714,
+        "enqueued_ms": 261.053,
+        "worker_reply_ms": 469.661
+      }
+    ]
+  },
+  "sdk_tests": {
+    "passed": true,
+    "runtime": "Native Windows Godot 4.7.2 headless",
+    "tests": [
+      {
+        "test": "sdk_decimal_checks",
+        "checks": 3404,
+        "passed": true,
+        "seconds": 0.932,
+        "log": "/mnt/c/Users/tommaso/Documents/Dev/NDClientGodot/.runtime/sdk-checks/sdk_decimal_checks.log"
+      },
+      {
+        "test": "sdk_protocol_checks",
+        "checks": 53,
+        "passed": true,
+        "seconds": 0.285,
+        "log": "/mnt/c/Users/tommaso/Documents/Dev/NDClientGodot/.runtime/sdk-checks/sdk_protocol_checks.log"
+      },
+      {
+        "test": "sdk_protocol_parity",
+        "checks": 8103,
+        "passed": true,
+        "seconds": 2.05,
+        "log": "/mnt/c/Users/tommaso/Documents/Dev/NDClientGodot/.runtime/sdk-checks/sdk_protocol_parity.log"
+      },
+      {
+        "test": "sdk_choices_checks",
+        "checks": 86,
+        "passed": true,
+        "seconds": 0.373,
+        "log": "/mnt/c/Users/tommaso/Documents/Dev/NDClientGodot/.runtime/sdk-checks/sdk_choices_checks.log"
+      },
+      {
+        "test": "sdk_reducer_checks",
+        "checks": 125,
+        "passed": true,
+        "seconds": 0.561,
+        "log": "/mnt/c/Users/tommaso/Documents/Dev/NDClientGodot/.runtime/sdk-checks/sdk_reducer_checks.log"
+      },
+      {
+        "test": "sdk_journal_checks",
+        "checks": 30,
+        "passed": true,
+        "seconds": 3.147,
+        "log": "/mnt/c/Users/tommaso/Documents/Dev/NDClientGodot/.runtime/sdk-checks/sdk_journal_checks.log"
+      },
+      {
+        "test": "sdk_transport_checks",
+        "checks": 351,
+        "passed": true,
+        "seconds": 8.067,
+        "log": "/mnt/c/Users/tommaso/Documents/Dev/NDClientGodot/.runtime/sdk-checks/sdk_transport_checks.log"
+      }
+    ]
+  },
+  "additional_tests": {
+    "trusted_choices": {
+      "checks": 118,
+      "choices": "C:/Users/tommaso/Documents/Dev/dnd_engine/.runtime/server-latency/checkpoint34-repeat/choices-55.json",
+      "command": "Godot --headless --path \"C:/Users/tommaso/Documents/Dev/NDClientGodot/\" --script res://tests/trusted_choices_checks.gd -- --choices=\"C:/Users/tommaso/Documents/Dev/dnd_engine/.runtime/server-latency/checkpoint34-repeat/choices-55.json\"",
+      "failures": [],
+      "payload_bytes": 267835,
+      "scope": "Schema8 actual compact payload strict/native JSON equality without normalization; once-per-domain structure/reference admission; sparse defaults, safe integer coordinates and native indices. Real loopback HTTP default strict and explicit trusted metadata preserve identity/scope/correlation and reject unsafe references. Native JSON intentionally cannot distinguish integer versus integral-real tokens. Single-call diagnostic timings are not live-frame performance claims.",
+      "timings": {
+        "native_decode_structure_references_ms": 67.4,
+        "references_only_ms": 5.219,
+        "strict_decode_ms": 138.265
+      }
+    },
+    "compact_interaction": {
+      "boundary": "compact values to native selections and HUD footprint coordinates; no gameplay/pixel claim",
+      "checks": 66,
+      "failures": []
+    },
+    "ui_checks": 52,
+    "retained_queued_hud_checks": 67,
+    "prefetch_checks": 49,
+    "record_retirement_checks": 22,
+    "schema7_replay": {
+      "live_rejected": true,
+      "objects": 360,
+      "opened": true,
+      "passed": true,
+      "schema": 7,
+      "sequence": 101,
+      "source": "res://.runtime/player-runs/20261013T125350.576972Z/journal",
+      "tiles": 1761
+    }
+  },
+  "live_sdk_scenarios": {
+    "magic-missile": {
+      "evidence": ".runtime/compact-magic-missile-20261013/godot-result.json",
+      "ok": true,
+      "failure": "",
+      "commands": 39,
+      "reconnects": 1,
+      "seats": [
+        {
+          "cursor": {
+            "audience_id": "be347de6-e2bf-49e9-a92e-69fdddcca12b",
+            "game_epoch": "aea1916c-be38-46c2-935f-55625a73b755",
+            "game_id": "combat_magic_missile",
+            "sequence": 59
+          },
+          "id": "amber",
+          "replay_matches": true,
+          "terminal": true
+        },
+        {
+          "cursor": {
+            "audience_id": "d8ea5ce9-6dcd-4e03-bf86-ef140808879e",
+            "game_epoch": "aea1916c-be38-46c2-935f-55625a73b755",
+            "game_id": "combat_magic_missile",
+            "sequence": 59
+          },
+          "id": "blue",
+          "replay_matches": true,
+          "terminal": true
+        }
+      ],
+      "first_selection": {
+        "action_index": 4,
+        "extra_target_positions": [],
+        "prefer_safe": true,
+        "target_indices": [
+          0,
+          1,
+          0
+        ]
+      }
+    },
+    "fireball": {
+      "evidence": ".runtime/compact-fireball-20261013/godot-result.json",
+      "ok": true,
+      "failure": "",
+      "commands": 1,
+      "reconnects": 1,
+      "seats": [
+        {
+          "cursor": {
+            "audience_id": "c7d9e709-107f-49e8-b425-51e86bf68c0b",
+            "game_epoch": "d3a42e97-f7d2-4065-931a-327c244d159c",
+            "game_id": "combat_fireball_six_goblins",
+            "sequence": 2
+          },
+          "id": "amber",
+          "replay_matches": true,
+          "terminal": true
+        },
+        {
+          "cursor": {
+            "audience_id": "7a338d14-21d0-4f66-9173-fec4e11725e7",
+            "game_epoch": "d3a42e97-f7d2-4065-931a-327c244d159c",
+            "game_id": "combat_fireball_six_goblins",
+            "sequence": 2
+          },
+          "id": "blue",
+          "replay_matches": true,
+          "terminal": true
+        }
+      ],
+      "area_preview": "computed",
+      "affected_cells": 49,
+      "affected_entities": 7
+    }
+  },
+  "limitations": [
+    "The size comparison uses the same deterministic Gallery route at each run's largest choices reply, not identical lexical payloads or UUIDs.",
+    "The baseline precedes the improved environment normals integration; frame times are observational, not an isolated renderer comparison.",
+    "Largest query processing measures admission, normalization when present, and mailbox publication only; it excludes network/server wait.",
+    "Initial movement remains about318ms median in the16Galleryviewportmoves; schema8 improves choices work, not all event-pipeline latency. Command56 spends49.537ms between observed media_wait and first group; reviewers are attributing this gate.",
+    "The first compact run used the admitted-action handler, so it is not viewport-click acceptance. The second used actual clicks but failed a stale test-only composite-coordinate equality assertion. Final acceptance uses fixed consumer comparisons and fixed numeric assertions, with an explicit minimum viewport-click gate.",
+    "Magic Missile and Fireball prove native SDK selection/preview/reducer/terminal replay, not completed spell VFX or every possible action animation.",
+    "Counts across SDK/test suites overlap and are not distinct gameplay scenarios."
+  ]
+}

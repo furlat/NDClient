@@ -95,16 +95,17 @@ func _run() -> void:
         var offset: Array = {"north":[0,1],"south":[0,-1],"east":[1,0],"west":[-1,0]}[side]
         var across: Array = [door_position[0]+offset[0],door_position[1]+offset[1]]
         var step = {}
-        for row in scene.available_actions.position_actions:
+        for row in scene.available_actions.get("position_actions",[]):
             if row.behavior_id != "action.move" or not row.can_afford: continue
-            for target in row.valid_targets:
-                if target.get("position") == null or target.position == standing: continue
-                if target.position==across: step = {"action":row,"target":target}; break
+            for target in Choices.action_options(scene.available_actions,row):
+                var position: Variant = Choices.binding_position(scene.available_actions,target)
+                if position == null or position == standing: continue
+                if position==across: step = {"action":row,"target":target,"position":position}; break
             if not step.is_empty(): break
         check(not step.is_empty(),"Native movement offers a step clear of doorway")
         if step.is_empty(): await finish(); return
         command = scene.session.status.next_command_number
-        scene.choose_target(step.target.position)
+        scene.choose_target(step.position)
         if not await until(func():return ready() and scene.session.status.next_command_number>command,"Native actor clears doorway"): await finish(); return
         close_options = Interaction.world_options(scene.available_actions,id)
     check(close_options.any(func(value):return value.behavior_id.contains("close")),"Native door state offers Close after Open")

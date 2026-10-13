@@ -25,4 +25,5 @@ func _serve(connection: Dictionary,path: String,body: Variant) -> void:
         "wrong_force": value.force_attack=not body.force_attack
         "invalid_actor": value.choices.entity_uuid="not a UUID"
         "invalid_family": value.choices.entity_actions={}
+        "invalid_reference": value.choices.target_sets[0][0].subject=999
     _response(connection,value)

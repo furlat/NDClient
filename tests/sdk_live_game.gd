@@ -2,6 +2,7 @@ extends SceneTree
 ## Slow integration lane: two real SDK seats play a native encounter to terminal.
 const Transport = preload("res://sdk/transport.gd")
 const Journal = preload("res://sdk/journal.gd")
+const Choices = preload("res://sdk/choices.gd")
 var seats: Array = []
 var issue := ""
 var started := Time.get_ticks_msec()
@@ -120,7 +121,7 @@ func _run() -> void:
 			var affordable: Array = []
 			for family in ["entity_actions", "position_actions", "self_actions", "object_actions"]:
 				for row in available[family]:
-					if row.can_afford and not row.valid_targets.is_empty(): affordable.append(row)
+					if row.can_afford and not Choices.action_options(available,row).is_empty(): affordable.append(row)
 			if not finish_turn and seat.id == "amber" and case_name in ["magic_missile", "fireball_six_goblins"]:
 				var wanted := "spell.fireball" if case_name == "fireball_six_goblins" else "spell.magic_missile"
 				for row in affordable:
@@ -133,34 +134,48 @@ func _run() -> void:
 				if not finish_turn and selected.is_empty() and row.performs_attack and row.behavior_id == "action.attack" and row.weapon_slot == ("MELEE_MAIN" if case_name == "melee" else "RANGED_MAIN"):
 					selected = row
 					break
-			if not selected.is_empty() and selected.behavior_id == "spell.fireball":
-				selected = selected.duplicate(true)
-				selected.valid_targets.sort_custom(func(a,b): return _blue_count(a) > _blue_count(b))
 			if selected.is_empty() and not finish_turn:
 				for row in available.position_actions:
-					if row.behavior_id == "action.move" and row.can_afford and not row.valid_targets.is_empty():
-						selected = row.duplicate(true)
-						selected.valid_targets.sort_custom(func(a,b): return abs(a.position[0]-7)+abs(a.position[1]-7) < abs(b.position[0]-7)+abs(b.position[1]-7))
+					if row.behavior_id == "action.move" and row.can_afford and not Choices.action_options(available,row).is_empty():
+						selected = row
 						break
 			var intent := {"kind":"end_turn"}
+			var previews: Array = []
 			if not selected.is_empty():
-				var selection := {"action_index":selected.discovery_index,"target_indices":[selected.valid_targets[0].index],"extra_target_positions":[]}
+				var targets: Array = Choices.action_options(available,selected).duplicate()
+				# Test driver policy only: prefer a legal coordinate near the fixture's
+				# centre. Shared SDK sets remain untouched; Preview computes effects.
+				if selected.behavior_id in ["action.move","spell.fireball"]:
+					targets.sort_custom(func(a,b):
+						var pa: Array = Choices.binding_position(available,a)
+						var pb: Array = Choices.binding_position(available,b)
+						return abs(pa[0]-7)+abs(pa[1]-7) < abs(pb[0]-7)+abs(pb[1]-7))
+				var primary: Dictionary = targets[0]
+				var selection: Dictionary = Choices.selection_for(selected,[primary])
 				var confirmed := false
 				for _input in 16:
 					var preview := await _request(seat,"preview",{"actor_uuid":actor,"state_revision":revision,"discovery_generation":available.discovery_generation,"correlation_id":_uuid(),"selection":selection})
 					if not preview.ok: break
 					var offered: Dictionary = preview.value.preview
+					previews.append({"selection":selection.duplicate(true),"preview":offered})
 					if offered.can_confirm and (selected.behavior_id != "spell.magic_missile" or selection.target_indices.size() >= 3):
+						if selected.behavior_id=="spell.fireball" and (offered.area_preview!="computed" or Choices.preview_positions(offered,true).is_empty()):
+							issue="Selected Fireball did not compute its subjective area";break
 						confirmed = true
 						break
-					if not offered.next_targets.is_empty():
-						var next_target: Dictionary = offered.next_targets[0]
+					var continuation: Array = Choices.next_options(offered)
+					var landings: Array = Choices.preview_positions(offered)
+					if not continuation.is_empty():
+						var next_target: Dictionary = continuation[0]
 						# Exercise original ordered selection indexes, including repeated targets.
-						if selection.target_indices.size() == 1:
-							for candidate in offered.next_targets:
-								if candidate.target_uuid != selected.valid_targets[0].target_uuid: next_target = candidate; break
+						var first_subject: Variant = Choices.binding_subject(available,primary)
+						for candidate in continuation:
+							var subject: Variant = Choices.binding_subject(offered,candidate)
+							if subject==null or first_subject==null: continue
+							if (subject.uuid!=first_subject.uuid if selection.target_indices.size()==1 else subject.uuid==first_subject.uuid):
+								next_target=candidate;break
 						selection.target_indices.append(next_target.index)
-					elif not offered.next_positions.is_empty(): selection.extra_target_positions.append(offered.next_positions[0])
+					elif not landings.is_empty(): selection.extra_target_positions.append(landings[0])
 					else: break
 				if not confirmed:
 					issue = "Native ordered preview did not complete"
@@ -177,7 +192,7 @@ func _run() -> void:
 			if result.value.receipt.kind != "committed":
 				issue = "Command failed: " + str(result.value)
 				break
-			commands.append({"seat":seat.id,"behavior":selected.get("behavior_id", "end_turn"),"command":command,"receipt":result.value.receipt,"duplicate_receipt":duplicate.value.receipt})
+			commands.append({"seat":seat.id,"behavior":selected.get("behavior_id", "end_turn"),"command":command,"previews":previews,"receipt":result.value.receipt,"duplicate_receipt":duplicate.value.receipt})
 			if selected.get("behavior_id", "") in ["spell.magic_missile", "spell.fireball"]: casts[actor] = casts.get(actor, 0) + 1
 			if not selected.is_empty() and selected.behavior_id != "action.move": end_after_offense[actor] = true
 			await _request(seat,"wait_for_cursor",{"cursor":result.value.receipt.cursor,"timeout":30})
@@ -203,12 +218,3 @@ func _run() -> void:
 	file.close()
 	print(JSON.stringify({"ok":issue.is_empty(),"failure":issue,"commands":commands.size(),"reconnects":reconnects,"seats":summaries}))
 	quit(0 if issue.is_empty() else 1)
-
-func _blue_count(target: Dictionary) -> int:
-	var names: Variant = target.get("affected_entity_names")
-	var score := 0
-	if names == null: return score
-	for value in names:
-		if value.begins_with("Blue"): score += 1
-		if value.begins_with("Amber"): score -= 10
-	return score

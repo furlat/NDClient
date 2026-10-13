@@ -6,6 +6,7 @@ const Journal = preload("res://sdk/journal.gd")
 const JSONCodec = preload("res://sdk/strict_json.gd")
 const Placement = preload("res://placement.gd")
 const FrameProfile = preload("res://frame_profile.gd")
+const Choices = preload("res://sdk/choices.gd")
 var scene: Node
 var checks = 0
 var failures: Array = []
@@ -46,9 +47,10 @@ func select_position(behavior: String) -> Dictionary:
     var distance = INF
     for action in scene.available_actions.position_actions:
         if action.behavior_id != behavior or not action.can_afford: continue
-        for target in action.valid_targets:
-            if target.get("position") == null: continue
-            var p: Array = target.position
+        for target in Choices.action_options(scene.available_actions,action):
+            var coordinate: Variant = Choices.binding_position(scene.available_actions,target)
+            if coordinate == null: continue
+            var p: Array = coordinate
             if behavior == "action.move":
                 var screen = grid_screen(p)
                 scene.update_wall_visibility()
@@ -65,7 +67,7 @@ func grid_screen(position: Array) -> Vector2:
 
 func click_grid(position: Array) -> void:
     var screen = grid_screen(position)
-    check(scene.pick_cell(screen).get("position") == position,"Viewport ray picks the disclosed target cell")
+    check(scene.Interaction.same_position(scene.pick_cell(screen).get("position"),position),"Viewport ray picks the disclosed target cell")
     check(scene.pick_actor(screen).is_empty(),"Target click does not overlap an actor pixel")
     var motion = InputEventMouseMotion.new()
     motion.position = screen; motion.global_position = screen
@@ -106,7 +108,7 @@ func movement(behavior: String, required: bool) -> bool:
     if behavior == "action.jump": evidence.jump_offered = true
     var actor: String = scene.available_actions.entity_uuid
     var initial: Array = scene.timeline.state.actors[actor].last_visual_position.duplicate()
-    var target: Array = selected.target.position.duplicate()
+    var target: Array = Choices.binding_position(scene.available_actions,selected.target).duplicate()
     var command: int = scene.session.status.next_command_number
     var prior_sequence: int = scene.timeline.sequence
     scene.selected_mode = behavior
@@ -127,9 +129,9 @@ func movement(behavior: String, required: bool) -> bool:
     var receipt = await request("receipt",{"number":command})
     if not receipt.ok: return false
     check(receipt.value.receipt.kind == "committed", "Native action receipt committed: " + behavior)
-    check(scene.timeline.state.actors[actor].last_visual_position == target, "Backend position equals selected legal target: " + behavior)
-    check(scene.visual_actors[actor].row.position == target, "Rendered actor reaches backend destination: " + behavior)
-    check(samples.any(func(value):return value.position != initial and value.position != target), "Native render interpolation observed: " + behavior)
+    check(scene.Interaction.same_position(scene.timeline.state.actors[actor].last_visual_position,target), "Backend position equals selected legal target: " + behavior)
+    check(scene.Interaction.same_position(scene.visual_actors[actor].row.position,target), "Rendered actor reaches backend destination: " + behavior)
+    check(samples.any(func(value):return not scene.Interaction.same_position(value.position,initial) and not scene.Interaction.same_position(value.position,target)), "Native render interpolation observed: " + behavior)
     var expected: String = "Rolling" if behavior == "action.jump" else "Run"
     check(samples.any(func(value):return value.clip == expected and value.source_seconds > 0), "Authored native animation advances: " + behavior)
     check(samples.all(func(value):return is_equal_approx(value.body_position[0],value.position[0]) and is_equal_approx(value.body_position[2],value.position[1])), "Rendered body follows displayed grid contact: " + behavior)

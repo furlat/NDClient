@@ -48,7 +48,7 @@ func run() -> void:
     var carried: Dictionary = state.actors[actor_id].controlled_items[0]
     var item = fixture_row("action.item.use",70,actor_id); item.source_item_uuid = carried.item_uuid; item.action_category = "ability"; rows.append(item)
     var class_row = fixture_row("action.class.fighter.second_wind",80,actor_id); class_row.provided_by_id = "class_feature.fighter.second_wind"; rows.append(class_row)
-    world.available_actions = {"discovery_generation":"ui-boundary-a","entity_uuid":actor_id,"self_actions":rows}
+    world.available_actions = {"discovery_generation":"ui-boundary-a","entity_uuid":actor_id,"self_actions":rows,"target_sets":[[{"kind":"self","index":0}]]}
     var original_discovery: Dictionary = world.available_actions.duplicate(true)
     hud = HUD.new(); hud.world = world; root.add_child(hud)
     await settle_action_bar()
@@ -171,7 +171,7 @@ func run() -> void:
     print("UI_BOUNDARY_CHECKS checks=",checks," failures=",failures)
     quit(1 if failures else 0)
 func fixture_row(behavior: String, index: int, actor: String) -> Dictionary:
-    return {"discovery_generation":"ui-boundary-a","discovery_index":index,"discovery_actor_uuid":actor,"discovery_runtime":"fixture", "behavior_id":behavior,"provided_by_id":behavior,"display_name":behavior.trim_prefix("action.").capitalize(),"description":"Named UI boundary fixture","availability_status":"available","can_afford":true,"valid_targets":[actor],"action_category":"ability","interaction_affordance":{"surface":"action_bar"},"variant_facets":[],"costs":[],"target_type":"self"}
+    return {"discovery_generation":"ui-boundary-a","discovery_index":index,"discovery_actor_uuid":actor,"discovery_runtime":"fixture", "behavior_id":behavior,"provided_by_id":behavior,"display_name":behavior.trim_prefix("action.").capitalize(),"description":"Named UI boundary fixture","availability_status":"available","can_afford":true,"target_set":0,"action_category":"ability","interaction_affordance":{"surface":"action_bar"},"variant_facets":[],"costs":[],"target_type":"self"}
 func key(code: Key, shift: bool = false) -> void:
     var event = InputEventKey.new(); event.keycode = code; event.pressed = true; event.shift_pressed = shift
     hud._input(event)

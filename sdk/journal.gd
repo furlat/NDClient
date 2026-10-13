@@ -20,7 +20,7 @@ func open(path: String, historical_recording: bool = false, replay_existing: boo
 		if not first.value is Dictionary: return _failure("Invalid recording initialization")
 		if not protocol.check_identity(first.value.get("protocol",{})).ok:
 			var matched := false
-			for version in ["pre-tile-fields", "pre-source-lighting", "pre-container-loot"]:
+			for version in ["pre-compact-choices", "pre-tile-fields", "pre-source-lighting", "pre-container-loot"]:
 				var base: String = "res://sdk/recordings/" + str(version) + "/"
 				var archived := Protocol.new(base + "player-api-v1.schema.json", base + "protocol-identity.json")
 				if archived.check_identity(first.value.get("protocol",{})).ok:

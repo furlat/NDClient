@@ -2,6 +2,8 @@ extends Control
 # Native controls own their pointer/focus. Their data is the displayed SDK state.
 const Placement = preload("res://placement.gd")
 const UI = preload("res://presentation/ui_catalog.gd")
+const Choices = preload("res://sdk/choices.gd")
+const Interaction = preload("res://presentation/interaction.gd")
 const StoragePanel = preload("res://ui/storage_panel.gd")
 const HistoryPanel = preload("res://ui/history_panel.gd")
 const SettingsPanel = preload("res://ui/settings_panel.gd")
@@ -620,7 +622,7 @@ func _choices(rows: Array) -> Array:
     return result
 
 func _activate_family(family: Dictionary, origin: Control) -> void:
-    if not bar_build.is_empty() or not world.command_ready() or not _row_current(family.rows[0]): return
+    if not bar_build.is_empty() or not world.command_ready() or not _row_current(family.rows[0]) or not Interaction.owns_action(world.available_actions,family.rows[0]): return
     var choices = _choices(family.rows)
     if choices.size() > 1: _open_choices(family,origin)
     else: _select_row(choices[0])
@@ -628,12 +630,13 @@ func _activate_family(family: Dictionary, origin: Control) -> void:
 func _select_row(row: Dictionary) -> void:
     if not bar_build.is_empty() or not world.command_ready() or not UI.available(row): return
     # Reject controls left from a different actor/discovery even before next redraw.
-    if not _row_current(row): return
+    if not _row_current(row) or not Interaction.owns_action(world.available_actions,row): return
     _close_popup()
     world.select_action(row)
 
 func _row_current(row: Dictionary) -> bool:
-    return row.get("discovery_generation") == world.available_actions.get("discovery_generation") and row.get("discovery_actor_uuid") == world.timeline.state.get("current_actor_uuid")
+    var actor = world.timeline.state.get("current_actor_uuid")
+    return row.get("discovery_generation",0) == world.available_actions.get("discovery_generation") and world.available_actions.get("entity_uuid") == actor and (row.get("discovery_actor_uuid") == null or row.discovery_actor_uuid == actor)
 
 func _page(group: String, direction: int) -> void:
     pages[group] = maxi(0,int(pages[group])+direction)
@@ -641,7 +644,7 @@ func _page(group: String, direction: int) -> void:
     _layout()
 
 func _open_choices(family: Dictionary, origin: Control) -> void:
-    if not bar_build.is_empty() or not world.command_ready() or not _row_current(family.rows[0]): return
+    if not bar_build.is_empty() or not world.command_ready() or not _row_current(family.rows[0]) or not Interaction.owns_action(world.available_actions,family.rows[0]): return
     if popup.visible and popup_family == family.key: return
     _close_popup()
     _clear(popup)
@@ -1091,10 +1094,12 @@ func _draw() -> void:
         if actor.row.id == world.timeline.state.current_actor_uuid:
             outline(actor.row.position,actor.row.base_height_steps,Color("e9c87e"),2)
     var preview: Dictionary = world.hover_preview if world.selected_action.is_empty() else world.selection_preview
-    for target in preview.get("next_targets",[]):
-        if target.get("position") != null: _target_outline(target.position,Color(0.45,0.83,0.76,0.45))
-    for position in preview.get("next_positions",[]): _target_outline(position,Color(0.45,0.83,0.76,0.65))
-    for position in preview.get("affected_positions",[]): _target_outline(position,Color(0.92,0.73,0.36,0.8))
+    if not preview.is_empty():
+        for target in Choices.next_options(preview):
+            var position: Variant = Choices.binding_position(preview,target)
+            if position != null: _target_outline(position,Color(0.45,0.83,0.76,0.45))
+    for position in Choices.preview_positions(preview): _target_outline(position,Color(0.45,0.83,0.76,0.65))
+    for position in Choices.preview_positions(preview,true): _target_outline(position,Color(0.92,0.73,0.36,0.8))
     var route = preview.get("selected_route")
     if route != null:
         var colour = Color("eb8a6d") if route.get("is_hazardous",false) or not route.get("opportunity_attack_exposures",[]).is_empty() else Color("70d6be")

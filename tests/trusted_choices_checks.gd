@@ -1,12 +1,15 @@
 extends SceneTree
 const Protocol=preload("res://sdk/protocol.gd")
 const Transport=preload("res://sdk/transport.gd")
+const Fixture=preload("res://tests/sdk_choices_checks.gd")
+const Choices=preload("res://sdk/choices.gd")
 const Peer=preload("res://tests/trusted_choices_peer.gd")
 const SAFE=9007199254740991
 var checks=0
 var failures: Array=[]
 var path=""
 var payload_bytes=0
+var timings={}
 var peer: RefCounted
 var transport: RefCounted
 var connected: Variant=null
@@ -28,78 +31,70 @@ func _process(_delta: float) -> bool:
             if notice.kind=="response": responses[notice.request_id]=notice.result
     return false
 
-func equal_normalized(protocol: RefCounted,raw: PackedByteArray,label: String) -> Dictionary:
+func equal_values(protocol: RefCounted,raw: PackedByteArray,label: String) -> Dictionary:
+    var tick=Time.get_ticks_usec()
     var strict=protocol.decode("ChoicesResponse",raw)
+    var strict_ms=(Time.get_ticks_usec()-tick)/1000.0
+    tick=Time.get_ticks_usec()
     var trusted=protocol.decode_server_choices(raw)
+    var trusted_ms=(Time.get_ticks_usec()-tick)/1000.0
     check(strict.ok and trusted.ok,label+" accepted by strict and opted-in decoders")
-    if not strict.ok or not trusted.ok: return {}
-    var before=trusted.value.duplicate(true)
-    var expected=protocol._normalize_admitted("ChoicesResponse",strict.value)
-    var actual=protocol._normalize_admitted("ChoicesResponse",trusted.value)
-    check(expected==actual,label+" normalized values exactly match strict admission")
-    check(trusted.value==before,label+" normalization preserves original decoded payload")
-    return actual
+    if not strict.ok or not trusted.ok:
+        print("TRUSTED_ADMISSION_DIAGNOSTIC ",label," ",strict.get("error")," ",trusted.get("error")); return {}
+    var issue=Fixture.difference(strict.value,trusted.value)
+    check(issue.is_empty(),label+" exact raw JSON values match: "+issue)
+    if label=="Actual recorded choices":
+        tick=Time.get_ticks_usec()
+        var reference_issue=Choices.check_choices(trusted.value.choices,true)
+        timings={"strict_decode_ms":strict_ms,"native_decode_structure_references_ms":trusted_ms,
+            "references_only_ms":(Time.get_ticks_usec()-tick)/1000.0}
+        check(reference_issue.is_empty(),"Actual shared reference check independently succeeds")
+    return trusted.value
 
 func run() -> void:
     for arg in OS.get_cmdline_user_args():
         if arg.begins_with("--choices="): path=arg.trim_prefix("--choices=")
     if path.is_empty():
-        check(false,"Usage: --choices=<actual unnormalized ChoicesResponse JSON> is required")
+        check(false,"Usage: --choices=<actual compact ChoicesResponse JSON> is required")
         finish(); return
     var raw=FileAccess.get_file_as_bytes(path)
     payload_bytes=raw.size()
     var protocol=Protocol.new()
     if not check(protocol.setup_error.is_empty(),"Current schema loads"): finish(); return
-    var actual=equal_normalized(protocol,raw,"Actual recorded choices")
+    var actual=equal_values(protocol,raw,"Actual recorded choices")
     if actual.is_empty(): finish(); return
-    var original=Protocol.parse_json(raw).value
-    check(payload_bytes>0 and not original.choices.entity_actions.is_empty(),"Actual fixture contains choices action rows")
-    var small: Dictionary=original.duplicate(true)
-    for family in ["entity_actions","position_actions","self_actions","object_actions","world_interactions","handler_details"]:
-        small.choices[family]=[]
-    small.choices.entity_actions=[original.choices.entity_actions[0].duplicate(true)]
-    var target={}
-    for action in original.choices.position_actions:
-        if not action.valid_targets.is_empty(): target=action.valid_targets[0].duplicate(true); break
-    if not check(not target.is_empty(),"Actual fixture supplies a real nested target row"): finish(); return
-    var minimal: Dictionary=small.duplicate(true)
+    check(payload_bytes>0 and not actual.choices.target_sets.is_empty(),"Actual fixture supplies shared compact domains")
+    var small=Fixture.envelope(Fixture.discovery())
+    var minimal=small.duplicate(true)
     minimal.erase("kind")
-    minimal.choices={"entity_uuid":small.choices.entity_uuid.to_upper()}
-    var defaults=equal_normalized(protocol,JSON.stringify(minimal).to_utf8_buffer(),"Declared defaults and UUID case")
+    minimal.choices={"entity_uuid":"abcdefab-cdef-4abc-8def-abcdefabcdef".to_upper(),"discovery_generation":0}
+    var defaults=equal_values(protocol,JSON.stringify(minimal).to_utf8_buffer(),"Sparse defaults and UUID case")
     if not defaults.is_empty():
-        check(defaults.kind=="choices" and defaults.choices.entity_uuid==small.choices.entity_uuid.to_lower(),"Default discriminator and UUID normalization retained")
-        check(defaults.choices.discovery_generation==0 and defaults.choices.world_interactions==[],"Schema defaults stay schema-owned")
+        check(not defaults.has("kind") and defaults.choices.entity_uuid==minimal.choices.entity_uuid,"Query preserves omitted discriminator and authored UUID case")
+        check(not defaults.choices.has("target_sets") and not defaults.choices.has("entity_actions") and Choices.all_actions(defaults.choices).is_empty(),"Defaults are read at lookup without materializing missing arrays")
     for value in [-SAFE,-2,0,2,SAFE]:
-        var typed=small.duplicate(true)
-        typed.game_epoch=typed.game_epoch.to_upper()
-        typed.audience_id=typed.audience_id.to_upper()
-        typed.correlation_id=typed.correlation_id.to_upper()
-        typed.choices.discovery_generation=value
-        typed.choices.remaining_movement=value
-        var row: Dictionary=typed.choices.entity_actions[0]
-        row.discovery_generation=value; row.discovery_index=value
-        row.can_afford=false; row.allow_same_target=true; row.source_item_uuid=null
-        row.discovery_runtime=row.discovery_runtime.to_upper()
-        row.valid_targets=[target.duplicate(true)]
-        row.valid_targets[0].index=value
-        row.valid_targets[0].position=[value,-value]
-        row.valid_targets[0].target_uuid=small.choices.entity_uuid.to_upper()
-        var normalized=equal_normalized(protocol,JSON.stringify(typed).to_utf8_buffer(),"Safe integer "+str(value))
-        if normalized.is_empty(): continue
-        var got: Dictionary=normalized.choices.entity_actions[0]
-        check(typeof(got.discovery_index)==TYPE_INT and got.discovery_index==value and got.valid_targets[0].index==value,"Nested discovery/target indices retain exact integer value")
-        check(got.valid_targets[0].position==[value,-value],"Signed safe-coordinate boundaries retain exact values")
-        check(typeof(got.can_afford)==TYPE_BOOL and not got.can_afford and got.allow_same_target==true and got.source_item_uuid==null,"Booleans and nullable values retain their types")
-        check(got.discovery_runtime==row.discovery_runtime.to_lower() and got.valid_targets[0].target_uuid==small.choices.entity_uuid.to_lower(),"Nested UUID case normalizes from native JSON")
-    var numeric=small.duplicate(true)
-    numeric.choices.discovery_generation=2.0
-    numeric.choices.entity_actions[0].discovery_index=2.0
-    var floating=equal_normalized(protocol,JSON.stringify(numeric).to_utf8_buffer(),"Integral JSON float2.0")
-    if not floating.is_empty(): check(typeof(floating.choices.entity_actions[0].discovery_index)==TYPE_INT,"Integral native JSON float normalized to integer")
+        var typed=Fixture.envelope({"discovery_generation":1,"entity_uuid":Fixture.UUID,
+            "subjects":[{"uuid":"ABCDEFAB-CDEF-4ABC-8DEF-ABCDEFABCDEF","kind":"creature"}],
+            "positions":[[value,-value]],"target_sets":[[{"kind":"subject","index":absi(value),"subject":0,"position":0}]],
+            "entity_actions":[Fixture.action(0,0)],"remaining_movement":value})
+        typed.choices.entity_actions[0].allow_same_target=true
+        typed.choices.entity_actions[0].source_item_uuid=null
+        var decoded=equal_values(protocol,JSON.stringify(typed).to_utf8_buffer(),"Safe integer "+str(value))
+        if decoded.is_empty(): continue
+        var got=decoded.choices.entity_actions[0]
+        var option=Choices.action_options(decoded.choices,got)[0]
+        check(got.discovery_index==0 and option.index==absi(value),"Native discovery/target integer values remain exact")
+        check(Fixture.difference(Choices.binding_position(decoded.choices,option),[value,-value]).is_empty(),"Signed safe-coordinate boundaries remain exact")
+        check(typeof(got.can_afford)==TYPE_BOOL and got.can_afford and got.allow_same_target==true and got.source_item_uuid==null,"Booleans/null retain native types")
+        check(Choices.binding_subject(decoded.choices,option).uuid==typed.choices.subjects[0].uuid,"Nested UUID case is retained without normalization")
+    # The public strict parser preserves integer-token distinctions. Native JSON,
+    # like TypeScript, sees only Number; its explicit path accepts exact integers.
+    var real_token=JSON.stringify(small).replace('"target_set":0','"target_set":0.0')
+    check(not protocol.decode("ChoicesResponse",real_token.to_utf8_buffer()).ok and protocol.decode_server_choices(real_token.to_utf8_buffer()).ok,"Only opted native-number path accepts integral real-token references")
     for field in ["game_id","game_epoch","audience_id","state_revision","correlation_id","force_attack","choices"]:
         var omitted=small.duplicate(true); omitted.erase(field)
         check(not protocol.decode_server_choices(JSON.stringify(omitted).to_utf8_buffer()).ok,"Missing required envelope "+field+" rejected")
-    for mutation in ["wrong_kind","invalid_actor","null_actor","family_shape","choice_extra","top_extra","fractional_generation","unsafe_generation","force_number"]:
+    for mutation in ["wrong_kind","invalid_actor","null_actor","family_shape","choice_extra","top_extra","fractional_generation","unsafe_generation","force_number","missing_generation","missing_index","float_index","invalid_reference"]:
         var bad=small.duplicate(true)
         match mutation:
             "wrong_kind": bad.kind="operation"
@@ -111,7 +106,11 @@ func run() -> void:
             "fractional_generation": bad.choices.discovery_generation=0.5
             "unsafe_generation": bad.choices.discovery_generation=SAFE+1
             "force_number": bad.force_attack=1
-        check(not protocol.decode_server_choices(JSON.stringify(bad).to_utf8_buffer()).ok,"Envelope/shallow shape rejects "+mutation)
+            "missing_generation": bad.choices.erase("discovery_generation")
+            "missing_index": bad.choices.target_sets[0][0].erase("index")
+            "float_index": bad.choices.target_sets[0][0].index=0.5
+            "invalid_reference": bad.choices.target_sets[0][0].subject=999
+        check(not protocol.decode_server_choices(JSON.stringify(bad).to_utf8_buffer()).ok,"Envelope/shared-domain/reference admission rejects "+mutation)
     for malformed in ["{",'{"choices":',"not json","[]","null"]:
         check(not protocol.decode_server_choices(malformed.to_utf8_buffer()).ok,"Malformed JSON or non-object envelope rejected: "+malformed)
     for invalid_utf8 in [[255],[0xc0,0x80],[0xed,0xa0,0x80],[0xf4,0x90,0x80,0x80]]:
@@ -120,7 +119,7 @@ func run() -> void:
     nested.choices.entity_actions[0].trusted_fixture_marker="nested server data"
     var nested_bytes=JSON.stringify(nested).to_utf8_buffer()
     check(not protocol.decode("ChoicesResponse",nested_bytes).ok,"Generic decoder still rejects undeclared nested action fields")
-    check(protocol.decode_server_choices(nested_bytes).ok,"Opted path explicitly trusts nested rows; no deep-validation claim")
+    check(protocol.decode_server_choices(nested_bytes).ok,"Opted path trusts non-reference action metadata; no deep-validation claim")
     for invalid in [0,1,"true",null]:
         var client=Transport.new()
         check(not client.start("http://127.0.0.1:1","test",Callable(),{"trusted_choices":invalid}).ok,"Trust option requires a real boolean")
@@ -136,13 +135,15 @@ func run() -> void:
         var offered=await request("choices",arguments())
         check(offered.ok,"Opted real HTTP choices succeeds after verified bootstrap/attachment")
         if offered.ok:
-            check(offered.normalized.choices.entity_uuid==Peer.UUID and typeof(offered.normalized.choices.discovery_generation)==TYPE_INT,"Worker provides ordinary schema-normalized choices")
-            offered.normalized.choices.entity_uuid="caller mutation"
-            check(offered.value.choices.entity_uuid==Peer.UUID,"Normalized consumer value stays detached from raw response")
+            check(not offered.has("normalized") and offered.value.choices.entity_uuid==Peer.UUID,"Worker transfers compact query value without a normalized alias")
+            check(not offered.value.choices.has("position_actions") and offered.value.choices.target_sets.size()==6,"Worker preserves sparse defaults and shared sets")
+            offered.value.choices.entity_uuid="caller mutation"
+            var second=await request("choices",arguments())
+            check(second.ok and second.value.choices.entity_uuid==Peer.UUID,"Separate HTTP responses retain independent owners")
         peer.reply_case="trusted_body"
         var trusted_reply=await request("choices",arguments())
-        check(trusted_reply.ok and trusted_reply.value.choices.entity_actions[0].has("trusted_fixture_marker"),"Explicit transport opt-in reaches native trusted-row path")
-        for mode in ["foreign_game","foreign_epoch","foreign_audience","wrong_actor","wrong_revision","wrong_correlation","wrong_force","invalid_actor","invalid_family"]:
+        check(trusted_reply.ok and trusted_reply.value.choices.entity_actions[0].has("trusted_fixture_marker"),"Explicit transport opt-in reaches native trusted-metadata path")
+        for mode in ["foreign_game","foreign_epoch","foreign_audience","wrong_actor","wrong_revision","wrong_correlation","wrong_force","invalid_actor","invalid_family","invalid_reference"]:
             peer.reply_case=mode
             var rejected=await request("choices",arguments())
             check(not rejected.ok and rejected.error.kind=="protocol","Opted HTTP still rejects "+mode)
@@ -184,8 +185,8 @@ func stop_peer() -> void:
         transport.close(); check(not transport.is_running(),"Worker closes cleanly"); transport=null
     if peer!=null: peer.close(); peer=null
 func finish() -> void:
-    var report={"checks":checks,"failures":failures,"choices":path,"payload_bytes":payload_bytes,
+    var report={"checks":checks,"failures":failures,"choices":path,"payload_bytes":payload_bytes,"timings":timings,
         "command":"Godot --headless --path \"%s\" --script res://tests/trusted_choices_checks.gd -- --choices=\"%s\"" % [ProjectSettings.globalize_path("res://"),path],
-        "scope":"Actual payload strict-versus-native normalized equality, schema-derived envelope/shallow-family rejection, safe integer/type/default semantics and opted real loopback HTTP scope/correlation. Nested rows are explicitly trusted; no general JSON strictness, deep-body validation or performance claim."}
+        "scope":"Schema8 actual compact payload strict/native JSON equality without normalization; once-per-domain structure/reference admission; sparse defaults, safe integer coordinates and native indices. Real loopback HTTP default strict and explicit trusted metadata preserve identity/scope/correlation and reject unsafe references. Native JSON intentionally cannot distinguish integer versus integral-real tokens. Single-call diagnostic timings are not live-frame performance claims."}
     FileAccess.open("res://generated/trusted_choices_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("TRUSTED_CHOICES_CHECKS ",JSON.stringify(report)); quit(0 if failures.is_empty() else 1)

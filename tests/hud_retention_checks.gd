@@ -2,7 +2,7 @@ extends "res://tests/ui_checks.gd"
 # Native control boundary: a real recorded actor with small named discovery
 # revisions. No backend gameplay or rendered-pixel/performance claim.
 func discovery(rows: Array, actor: String, generation: int) -> Dictionary:
-    var value={"entity_uuid":actor,"discovery_generation":generation,"self_actions":rows.duplicate(true)}
+    var value={"entity_uuid":actor,"discovery_generation":generation,"self_actions":rows.duplicate(true),"target_sets":[[{"kind":"self","index":0}]]}
     for row in value.self_actions:
         row.discovery_actor_uuid=actor
         row.discovery_generation=generation
@@ -105,7 +105,7 @@ func run() -> void:
     var next=discovery(originals,actor,2)
     next.self_actions[0].description="New native row details"
     next.self_actions[0].costs=[{"cost":2,"cost_type":"actions"}]
-    next.self_actions[0].valid_targets=["new disclosed target"]
+    next.target_sets=[[{"kind":"self","index":17}]]
     world.available_actions=next
     buttons[0].emit_signal("pressed")
     check(world.issued.size()==issued,"Old control callback rejects new generation before repaint")

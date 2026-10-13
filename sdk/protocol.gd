@@ -3,6 +3,7 @@ extends RefCounted
 
 const MAX_BYTES := 64 * 1024 * 1024
 const SAFE_INTEGER := 9007199254740991
+const Choices = preload("res://sdk/choices.gd")
 const StrictJSON = preload("res://sdk/strict_json.gd")
 var schema: Dictionary
 var identity: Dictionary
@@ -88,12 +89,24 @@ func decode_server_choices(raw: PackedByteArray) -> Dictionary:
 	if _server_choices_envelope.is_empty():
 		_server_choices_envelope = schema["$defs"].ChoicesResponse.duplicate(true)
 		var choices := _ref(_server_choices_envelope.properties.choices).duplicate(true)
-		# Keep declared envelope/identity fields, required keys and family shapes.
-		# Rows inside those families are server output, not an untrusted import.
-		for rule in choices.properties.values():
-			if rule.get("type") == "array": rule.items = true
+		# Shared domains retain full structural checks once. Action metadata is
+		# trusted server output, but fields consumed by reference admission retain
+		# their exact shipped scalar shape and requiredness.
+		if schema["$defs"].has("PlayerChoices"):
+			var action := _ref(choices.properties.entity_actions.items)
+			var row := {"type":"object","properties":{},"required":[]}
+			for field in ["target_set","discovery_index","discovery_generation","availability_status","can_afford"]:
+				row.properties[field] = action.properties[field]
+				if field in action.get("required",[]): row.required.append(field)
+			for family in Choices.FAMILIES: choices.properties[family].items = row
+			for family in ["world_interactions","handler_details"]: choices.properties[family].items = true
+		else:
+			for rule in choices.properties.values():
+				if rule.get("type") == "array": rule.items = true
 		_server_choices_envelope.properties.choices = choices
 	var issue := _check(_server_choices_envelope, parser.data, "$", 0)
+	if issue.is_empty() and schema["$defs"].has("PlayerChoices"):
+		issue = Choices.check_choices(parser.data.choices,true)
 	return {"ok":true,"value":parser.data} if issue.is_empty() else failure("Server choices: " + issue)
 
 func validate(root_name: String, value: Variant) -> Dictionary:
@@ -105,6 +118,12 @@ func _validate_schema(root_name: String, value: Variant) -> Dictionary:
 	if not setup_error.is_empty(): return failure(setup_error)
 	if not schema["$defs"].has(root_name): return failure("Unknown schema root: " + root_name)
 	var issue := _check(schema["$defs"][root_name], value, "$", 0)
+	if issue.is_empty() and schema["$defs"].has("PlayerChoices"):
+		match root_name:
+			"ChoicesResponse": issue = Choices.check_choices(value.choices)
+			"PlayerChoices": issue = Choices.check_choices(value)
+			"PreviewResponse": issue = Choices.check_preview(value.preview)
+			"PlayerSelectionPreview": issue = Choices.check_preview(value)
 	if issue.is_empty() and root_name == "InitializationResponse" and value.cursor.sequence != 0: issue = "Initialization sequence must be zero"
 	if issue.is_empty() and root_name == "PlayerOperation" and value.cursor.sequence < 1: issue = "Operation sequence must be positive"
 	return {"ok": true, "value": value} if issue.is_empty() else failure(root_name + ": " + issue)

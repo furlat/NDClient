@@ -2,6 +2,7 @@ extends SceneTree
 const Transport = preload("res://sdk/transport.gd")
 const Journal = preload("res://sdk/journal.gd")
 const JSONCodec = preload("res://sdk/strict_json.gd")
+const Choices = preload("res://sdk/choices.gd")
 var seats: Array = []
 var issue := ""
 var started := Time.get_ticks_msec()
@@ -77,8 +78,8 @@ func _run() -> void:
                     for row in choices[family]:
                         if row.behavior_id != config.behavior or not row.can_afford: continue
                         if config.behavior == "action.attack" and row.weapon_slot != "MELEE_MAIN": continue
-                        for target in row.valid_targets:
-                            if config.behavior == "action.attack" or target.position == config.target:
+                        for target in Choices.action_options(choices,row):
+                            if config.behavior == "action.attack" or Choices.binding_position(choices,target) == config.target:
                                 selected = {"action_index":row.discovery_index,"target_indices":[target.index],"extra_target_positions":[],"prefer_safe":false}
                                 break
                         if not selected.is_empty(): break

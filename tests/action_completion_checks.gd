@@ -130,7 +130,7 @@ func run() -> void:
     player.timeline.paused = false
     player._discover()
     check(player.command_ready() and is_same(player.available_actions,native_value.choices),"Exactly caught-up display publishes original choices and permits input")
-    check(native_value==snapshot and not last_wire.has("kind"),"Publication preserves normalized values and raw omitted defaults")
+    check(native_value==snapshot and not native_value.has("kind") and not last_wire.has("kind"),"Publication preserves sparse admitted values and omitted defaults")
     player._discover()
     check(peer.choices_received==request_count and player.action_request<0,"Accepted boundary does not request duplicate discovery")
 

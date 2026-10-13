@@ -74,7 +74,7 @@ def main():
     parser.add_argument("--engine", type=Path, default=project.parent / "dnd_engine")
     parser.add_argument("--godot", type=Path, default=project.parent / "Tools/Godot-4.7.2/Godot_v4.7.2-stable_win64_console.exe")
     parser.add_argument("--output", type=Path, required=True)
-    parser.add_argument("--case", choices=("ranged", "magic_missile"), default="ranged")
+    parser.add_argument("--case", choices=("ranged", "magic_missile", "fireball_six_goblins"), default="ranged")
     parser.add_argument("--port", type=int, default=8799)
     asyncio.run(run(parser.parse_args()))
 

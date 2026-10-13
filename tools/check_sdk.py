@@ -17,7 +17,7 @@ def main():
     logs = project / ".runtime/sdk-checks"
     logs.mkdir(parents=True, exist_ok=True)
     results = []
-    names = ["sdk_protocol_checks", "sdk_protocol_parity", "sdk_reducer_checks", "sdk_journal_checks", "sdk_transport_checks"]
+    names = ["sdk_protocol_checks", "sdk_protocol_parity", "sdk_choices_checks", "sdk_reducer_checks", "sdk_journal_checks", "sdk_transport_checks"]
     if (project / "tests/sdk_decimal_checks.gd").exists(): names.insert(0, "sdk_decimal_checks")
     for name in names:
         started = time.monotonic()

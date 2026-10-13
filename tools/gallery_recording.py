@@ -14,7 +14,8 @@ from time import monotonic
 from uuid import UUID, uuid4
 
 from dnd_player import (Follower, acknowledge, attach, choices, connect, follow,
-    preview, receipt, status, submit_command, wait_for_cursor)
+    preview, receipt, status, submit_command, wait_for_cursor, action_options,
+    all_actions, binding_position, binding_subject, next_options)
 from dnd.player.facts import PlayerState
 from dnd.player.reduction import reduce_initialization, reduce_operation
 from server.protocol import InitializationResponse, PlayerOperation
@@ -32,18 +33,19 @@ ROUTE = (
 
 
 def rows(discovered):
-    return [row for key in ('entity_actions', 'position_actions', 'self_actions', 'object_actions')
-        for row in discovered[key] if row['can_afford'] and row['valid_targets']]
+    return [row for row in all_actions(discovered)
+        if row['can_afford'] and action_options(discovered, row)]
 
 
-def move_toward(available, current, destinations):
+def move_toward(discovered, available, current, destinations):
     if not destinations:
         return None
     distance = lambda p: min(abs(p[0]-d[0])+abs(p[1]-d[1]) for d in destinations)
     offered = [(row, target) for row in available if row['behavior_id'] == 'action.move'
-        for target in row['valid_targets'] if target['position'] is not None
-        and distance(target['position']) < distance(current)]
-    return min(offered, key=lambda pair: (distance(pair[1]['position']), pair[1]['path_cost'] or 0), default=None)
+        for target in action_options(discovered, row)
+        if binding_position(discovered, target) is not None
+        and distance(binding_position(discovered, target)) < distance(current)]
+    return min(offered, key=lambda pair: (distance(binding_position(discovered, pair[1])), pair[1].get('path_cost') or 0), default=None)
 
 
 def select(state, actor, discovered, stage, leader):
@@ -54,14 +56,15 @@ def select(state, actor, discovered, stage, leader):
         and value.normal_hp > 0 and value.name != 'Gallery Curator'}
     attacks = [(row, target) for row in available
         if row['performs_attack'] or row['behavior_id'] == 'spell.magic_missile'
-        for target in row['valid_targets'] if target['target_uuid'] in enemies]
+        for target in action_options(discovered, row)
+        if (binding_subject(discovered, target) or {}).get('uuid') in enemies]
     if attacks:
         return min(attacks, key=lambda pair: (pair[0]['behavior_id'] != 'spell.magic_missile',
-            pair[0]['behavior_id'] != 'spell.fire_bolt', pair[1]['distance'] or 0)), stage
+            pair[0]['behavior_id'] != 'spell.fire_bolt', pair[1].get('distance') or 0)), stage
     if actor != leader:
         # The other original hero stays with the expedition, using offered paths.
         destination = state.actors[UUID(leader)].last_visual_position
-        selected = move_toward(available, current, (destination,))
+        selected = move_toward(discovered, available, current, (destination,))
         return selected, stage
     name, goal = ROUTE[stage]
     if goal == 'open':
@@ -73,17 +76,18 @@ def select(state, actor, discovered, stage, leader):
         for row in available:
             if row['behavior_id'] != option['behavior_id'] or row['template_name'] != option['template_name']:
                 continue
-            target = next((target for target in row['valid_targets']
-                if row['source_item_uuid'] == identity or target['target_uuid'] == identity), None)
+            target = next((target for target in action_options(discovered, row)
+                if row.get('source_item_uuid') == identity
+                or (binding_subject(discovered, target) or {}).get('uuid') == identity), None)
             if target is not None:
                 return (row, target), stage + 1
-        selected = move_toward(available, current, option['contact_positions'])
+        selected = move_toward(discovered, available, current, option['contact_positions'])
     else:
-        selected = move_toward(available, current, (goal,))
+        selected = move_toward(discovered, available, current, (goal,))
     if selected is not None:
         return selected, stage
     dash = next((row for row in available if row['behavior_id'] == 'action.dash'), None)
-    return ((dash, dash['valid_targets'][0]) if dash else None), stage
+    return ((dash, action_options(discovered, dash)[0]) if dash else None), stage
 
 
 async def record(url, token, output):
@@ -166,7 +170,7 @@ async def record(url, token, output):
                             'correlation_id': str(uuid4()), 'selection': selection})
                         if result['preview']['can_confirm']:
                             break
-                        options = result['preview']['next_targets']
+                        options = next_options(result['preview'])
                         if not options:
                             raise RuntimeError(f'Native preview rejected route selection: {result}')
                         selection['target_indices'].append(options[0]['index'])

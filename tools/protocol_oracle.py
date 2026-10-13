@@ -169,6 +169,10 @@ def build_cases():
             baseline["cursor"]["sequence"] = 0
         if root == "PlayerOperation":
             baseline["cursor"]["sequence"] = 1
+        if root in ("PlayerSelectionPreview", "PreviewResponse"):
+            preview = baseline if root == "PlayerSelectionPreview" else baseline["preview"]
+            preview['target_sets'] = [[]]
+            preview['next_target_set'] = 0
         if not add(root + "/baseline", root, baseline):
             raise AssertionError("Oracle baseline is not a valid example: " + root + ": " + cases[-1]["python_error"])
         for name, value in variations(spec):

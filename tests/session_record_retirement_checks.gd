@@ -36,48 +36,52 @@ func run() -> void:
     await until(func():return session.responses.has(id),"Actual admitted choices response arrives")
     var response: Dictionary=session.responses[id]
     session.responses.erase(id)
-    check(response.ok and response.has("normalized"),"Choices expose raw and worker-normalized records")
+    check(response.ok and not response.has("normalized"),"Choices expose one admitted sparse record")
     var original=response.duplicate(true)
     session.retire_record(response)
     check(session.diagnostics().retired_records==0 and session.diagnostics().retirement_pending_records==1,"Retirement stays staged until the next scene poll")
     await until(func():return session.diagnostics().retired_records==1,"Existing preparer releases its staged record reference")
-    check(response==original and response.value==original.value and response.normalized==original.normalized,"Worker cleanup leaves caller-held raw and normalized records intact")
+    check(response==original and response.value==original.value,"Worker cleanup leaves caller-held admitted tables intact")
     check(session.diagnostics().retired_groups==0 and session.diagnostics().retirement_pending_records==0,"Record cleanup does not change presentation-group totals")
 
     var player=Player.new()
     player.session=session
-    var old: Dictionary=response.normalized.choices.duplicate(true)
+    var old: Dictionary=response.value.choices.duplicate(true)
     player.available_actions=old
+    var boundary={"state_revision":session.status.boundary.state_revision,
+        "actor_uuid":session.status.boundary.input_actor_uuid,"sequence":int(session.status.catch_up_cursor.sequence)}
+    for field in ["game_id","game_epoch","audience_id","attachment_epoch"]: boundary[field]=session.status[field]
     player.action_request=1001
-    player.pending_request={"kind":"choices","force_attack":false,"revision":"r"}
+    player.pending_request={"kind":"choices","force_attack":false,"revision":"r","boundary":boundary}
     session.responses[1001]=response
     player._poll_actions()
-    check(player.available_actions==response.normalized.choices and player.action_request==-1,"Player adopts the admitted choices without altering their value")
-    check(session.diagnostics().retirement_pending_records==2,"Choices consumption stages both response and previous discovery")
+    check(is_same(player.pending_choices.value,response.value) and is_same(player.available_actions,old) and player.action_request==-1,"Private prefetch borrows admitted tables while displayed choices remain owned")
+    check(session.diagnostics().retirement_pending_records==1,"Choices consumption stages its envelope without retiring displayed choices early")
     player.action_request=1002
-    player.pending_request={"kind":"choices","force_attack":false,"revision":"obsolete"}
+    var obsolete=boundary.duplicate();obsolete.state_revision="obsolete"
+    player.pending_request={"kind":"choices","force_attack":false,"revision":"obsolete","boundary":obsolete}
     session.responses[1002]=response
     player._poll_actions()
-    check(player.available_actions==original.normalized.choices and player.action_revision.is_empty(),"Stale choices are rejected before replacing the displayed generation")
-    check(session.diagnostics().retirement_pending_records==3,"Stale response references also enter deferred cleanup")
+    check(player.available_actions==original.value.choices and player.action_revision.is_empty(),"Stale choices are rejected before replacing the displayed generation")
+    check(session.diagnostics().retirement_pending_records==2,"Stale response references also enter deferred cleanup")
     var error=Session.Transport.failure("transport","finite retryable fixture",true)
     player.action_request=1003;player.command_busy=true
     player.pending_request={"kind":"command","number":9}
     session.responses[1003]=error
     player._poll_actions()
     check(player.command_busy and player.pending_request=={"kind":"receipt","number":9},"Failed command retains its original receipt lookup and input hold")
-    check(session.diagnostics().retirement_pending_records==4,"Error responses enter the same passive cleanup")
+    check(session.diagnostics().retirement_pending_records==3,"Error responses enter the same passive cleanup")
     player.hover_request=1004;player.hover_due=Time.get_ticks_msec()+100000
     player.hover_context={"key":["old"]};player.hover_key=["new"]
     session.responses[1004]={"ok":true,"value":{"preview":{"can_confirm":false}}}
     player._update_hover()
     check(player.hover_request==-1 and player.hover_preview.is_empty(),"Stale hover replies never become visible")
-    check(session.diagnostics().retirement_pending_records==5,"Hover envelopes are retained for worker cleanup")
+    check(session.diagnostics().retirement_pending_records==4,"Hover envelopes are retained for worker cleanup")
     player.context_menu.free();player.free()
     session.close()
     var final=session.diagnostics()
-    check(final.retired_records==6 and final.retirement_pending_records==0,"Close drains the final scene's records before joining the existing worker")
-    check(final.retired_groups==0 and response==original and old==original.normalized.choices,"Close preserves exact group counts and all still-owned source data")
+    check(final.retired_records==5 and final.retirement_pending_records==0,"Close drains the final scene's records before joining the existing worker")
+    check(final.retired_groups==0 and response==original and old==original.value.choices,"Close preserves exact group counts and all still-owned source data")
     session.retire_record(untouched)
     check(session.diagnostics().retirement_pending_records==0,"Cancelled sessions do not retain new cleanup records")
     check(session.issue.is_empty(),"Transport and preparation report no failure")

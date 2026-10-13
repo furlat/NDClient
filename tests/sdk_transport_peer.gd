@@ -151,8 +151,8 @@ func _serve(connection: Dictionary, path: String, body: Variant) -> void:
     elif path.ends_with("/preview"):
         var echoed = body.duplicate(true)
         if mode == "bad_preview": echoed.selection.target_indices.reverse()
-        var value = scope(); value.merge({"kind":"preview","state_revision":"r","request":echoed,"preview":{"can_confirm":true}})
+        var value = scope(); value.merge({"kind":"preview","state_revision":"r","request":echoed,"preview":{"can_confirm":true,"next_target_set":0,"target_sets":[[]]}})
         _response(connection,value)
     elif path.ends_with("/choices"):
-        var value = scope(); value.merge({"state_revision":"r","force_attack":false,"correlation_id":body.correlation_id,"choices":{"entity_uuid":"00000000-0000-4000-8000-000000000002" if mode=="bad_choices" else UUID}})
+        var value = scope(); value.merge({"state_revision":"r","force_attack":false,"correlation_id":body.correlation_id,"choices":{"entity_uuid":"00000000-0000-4000-8000-000000000002" if mode=="bad_choices" else UUID,"discovery_generation":1}})
         _response(connection,value)

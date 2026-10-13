@@ -7,6 +7,7 @@ const Characters = preload("res://presentation/characters.gd")
 const WorldRows = preload("res://presentation/world.gd")
 const PlayerHUD = preload("res://play_hud.gd")
 const Interaction = preload("res://presentation/interaction.gd")
+const Choices = preload("res://sdk/choices.gd")
 const Lighting = preload("res://presentation/lighting_2d.gd")
 const NativeLightAtlas = preload("res://presentation/native_light_atlas.gd")
 const GeneratedShadows = preload("res://presentation/canvas_shadows.gd")
@@ -1535,8 +1536,9 @@ func cancel_selection(clear_approach: bool = true) -> void:
     context_menu.hide()
 
 func select_action(row: Dictionary) -> void:
-    if not command_ready(): return
-    if row.discovery_generation != available_actions.discovery_generation or row.discovery_actor_uuid != available_actions.entity_uuid: return
+    if not command_ready() or not Interaction.owns_action(available_actions,row): return
+    if row.get("discovery_generation",0) != available_actions.discovery_generation: return
+    if row.get("discovery_actor_uuid") != null and row.discovery_actor_uuid != available_actions.entity_uuid: return
     if row.availability_status != "available": notice_text = row.availability_status.replace("_"," ").capitalize(); return
     cancel_selection()
     selected_action = row
@@ -1547,7 +1549,7 @@ func select_action(row: Dictionary) -> void:
     target_selection = Interaction.selection(row,[])
     notice_text = row.display_name + ": choose a target."
     if row.target_type == "self":
-        target_selection.target_indices = [row.valid_targets[0].index]
+        target_selection.target_indices = [Choices.action_options(available_actions,row)[0].index]
         _request_selection(true)
     else: _request_selection(false)
 
@@ -1621,8 +1623,9 @@ func storage_action(item_uuid: String = "") -> Dictionary:
         if row.behavior_id != behavior or row.get("source_item_uuid") != loot_object_uuid: continue
         if not item_uuid.is_empty() and row.get("loot_item_uuid") != item_uuid: continue
         if not row.can_afford or row.availability_status != "available" or row.target_type != "self": continue
-        if row.valid_targets.size() == 1:
-            return {"action":row,"selection":Interaction.selection(row,[row.valid_targets[0].index])}
+        var options = Choices.action_options(available_actions,row)
+        if options.size() == 1:
+            return {"action":row,"selection":Choices.selection_for(row,options)}
     return {}
 
 func loot_storage(item_uuid: String = "") -> void:
@@ -1679,11 +1682,13 @@ func choose_target(position: Array, actor_id: String = "") -> void:
     if not command_ready(): return
     if not selected_action.is_empty():
         target_selection.prefer_safe = not Input.is_physical_key_pressed(KEY_SHIFT)
-        if position in selection_preview.get("next_positions",[]):
+        if Choices.preview_positions(selection_preview).any(func(candidate):return Interaction.same_position(candidate,position)):
             target_selection.extra_target_positions.append(position)
             _request_selection(false)
             return
-        var candidate = Interaction.target(selection_preview.get("next_targets",selected_action.valid_targets),position,actor_id)
+        var domains = available_actions if selection_preview.is_empty() else selection_preview
+        var options = Choices.action_options(available_actions,selected_action) if selection_preview.is_empty() else Choices.next_options(selection_preview)
+        var candidate = Interaction.target(domains,options,position,actor_id)
         if candidate.is_empty(): notice_text = selection_preview.get("reason") if selection_preview.get("reason") != null else "Choose a highlighted legal target."; return
         target_selection.target_indices.append(candidate.index)
         var position_spec: Variant = selected_action.get("position_selection")
@@ -1693,15 +1698,14 @@ func choose_target(position: Array, actor_id: String = "") -> void:
     var selected: Dictionary = {}
     var target: Dictionary = {}
     var behavior = "action.attack" if not actor_id.is_empty() and selected_mode == "action.move" else selected_mode
-    for family in ["entity_actions","position_actions","self_actions","object_actions"]:
-        for action in available_actions[family]:
-            if action.behavior_id != behavior or not action.can_afford: continue
-            for candidate in action.valid_targets:
-                if (not actor_id.is_empty() and candidate.get("target_uuid")==actor_id) or (actor_id.is_empty() and candidate.get("position")==position):
-                    selected = action
-                    target = candidate
-                    break
-            if not target.is_empty(): break
+    for action in Choices.all_actions(available_actions):
+        if action.behavior_id != behavior or not action.can_afford: continue
+        for candidate in Choices.action_options(available_actions,action):
+            var subject: Variant = Choices.binding_subject(available_actions,candidate)
+            if (not actor_id.is_empty() and subject != null and subject.uuid == actor_id) or (actor_id.is_empty() and Interaction.same_position(Choices.binding_position(available_actions,candidate),position)):
+                selected = action
+                target = candidate
+                break
         if not target.is_empty(): break
     if target.is_empty(): notice_text = "No disclosed legal target for this action."; return
     _execute_admitted({"action":selected,"selection":Interaction.selection(selected,[target.index],not Input.is_physical_key_pressed(KEY_SHIFT))})
@@ -1742,14 +1746,14 @@ func _poll_actions() -> void:
     match pending_request.kind:
         "choices":
             if pending_request.force_attack != force_attack or not session.matches_choice_boundary(pending_request.boundary): return
-            pending_choices = {"boundary":pending_request.boundary,"force_attack":pending_request.force_attack,"value":response.normalized}
+            pending_choices = {"boundary":pending_request.boundary,"force_attack":pending_request.force_attack,"value":response.value}
         "preview":
             if pending_request.serial != selection_serial or pending_request.revision != session.status.boundary.state_revision or pending_request.generation != available_actions.discovery_generation:
                 command_busy = false
                 return
-            var preview: Dictionary = response.normalized.preview
+            var preview: Dictionary = response.value.preview
             selection_preview = preview
-            preview_positions = preview.get("affected_positions",[])
+            preview_positions = Choices.preview_positions(preview,true)
             command_busy = false
             if pending_request.auto_confirm and preview.can_confirm: confirm_selection()
             else: notice_text = (preview.reason if preview.get("reason") != null else ("Enter to confirm · Backspace to undo" if preview.can_confirm else "Choose a target"))
@@ -1876,7 +1880,7 @@ func _world_click(hit: Dictionary, alternative: bool = false) -> void:
         return
     var options = Interaction.world_options(available_actions,id)
     if options.is_empty(): notice_text = hit.label; return
-    var defaults: Array = options.filter(func(option):return option.default_priority == options[0].default_priority)
+    var defaults: Array = options.filter(func(option):return option.get("default_priority",100) == options[0].get("default_priority",100))
     if not alternative and defaults.size() == 1: _choose_world_option(defaults[0]); return
     context_options = options
     _show_context(options.map(func(option):return option.label))
@@ -2094,9 +2098,9 @@ func _update_hover() -> void:
     if hover_request >= 0: hover_key = []; return
     var value = {}
     if hover_hit.get("id","").is_empty():
-        for row in available_actions.position_actions:
-            if row.behavior_id != "action.move" or not row.variant_facets.any(func(f):return f.key=="movement" and f.value=="walking"): continue
-            var target = Interaction.target(row.valid_targets,hover_hit.get("position",[]))
+        for row in available_actions.get("position_actions",[]):
+            if row.behavior_id != "action.move" or not row.get("variant_facets",[]).any(func(f):return f.key=="movement" and f.value=="walking"): continue
+            var target = Interaction.target(available_actions,Choices.action_options(available_actions,row),hover_hit.get("position",[]))
             if not target.is_empty(): value = {"action":row,"selection":Interaction.selection(row,[target.index],not key[2])}; break
     elif hover_hit.kind == "actor" or force_attack:
         value = Interaction.main_attack(available_actions,hover_hit.id,attack_preference)

@@ -221,7 +221,14 @@ func _emit(value: Dictionary) -> void:
 
 func _reply(command: Dictionary, result: Dictionary) -> void:
     var started = Time.get_ticks_usec() if _profile_enabled else 0
-    _emit({"kind":"response","request_id":command.id,"operation":command.operation,"result":result})
+    var publication = {"kind":"response","request_id":command.id,"operation":command.operation,"result":result}
+    if result.ok and command.operation in ["choices","preview"]:
+        # Response-local query tables are read-only after admission. The worker
+        # neither retains nor mutates this value after handing it to the mailbox.
+        # Transfer that owner instead of walking/copying every shared table again.
+        _mutex.lock(); _outgoing.append(publication); _mutex.unlock()
+    else:
+        _emit(publication)
     if _profile_enabled:
         _profile_record({"stage":"response_published","time_us":Time.get_ticks_usec(),"started_us":started,
             "request_id":command.id,"operation":_profile_operation(command.operation),"ok":result.ok})
@@ -640,9 +647,10 @@ func _finish_job(job: Dictionary, result: Dictionary) -> void:
             var checked_started = Time.get_ticks_usec() if _profile_enabled else 0
             if result.ok: result = _check_reply(job.command,result.value)
             if _profile_enabled: _profile_job(job,"reply_check",{"started_us":checked_started,"ok":result.ok})
-            if result.ok and job.command.operation in ["choices","preview","submit_command","receipt"]:
+            if result.ok and job.command.operation in ["submit_command","receipt"]:
                 # Keep the exact admitted value available to SDK callers, with
-                # a separate defaulted presentation copy prepared off-thread.
+                # a separate defaulted receipt prepared off-thread. Choices and
+                # previews use their sparse shared tables directly after admission.
                 var normalization_started = Time.get_ticks_usec()
                 result.normalized = _protocol._normalize_admitted(job.root,result.value)
                 _timings.response_normalization_ms += (Time.get_ticks_usec()-normalization_started)/1000.0

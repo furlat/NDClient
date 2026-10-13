@@ -1,7 +1,7 @@
 # Godot player SDK
 
 This project-local SDK consumes the current DnD player API: protocol 1, player
-schema 7. It ships the unchanged schema and identity from `dnd_engine/sdk/protocol`.
+schema 8. It ships the unchanged schema and identity from `dnd_engine/sdk/protocol`.
 The current Python/TypeScript transports and `dnd/player/reduction.py` are its
 references. The old `sdk/typescript` client is not a dependency.
 
@@ -74,21 +74,42 @@ shutdown. Credentials belong in caller configuration, never source or recordings
 
 `trusted_choices` defaults to `false` in the SDK. The live player opts in after
 connecting to its own protocol-checked server. That option uses Godot's native
-JSON parser for `ChoicesResponse`, validates its envelope, actor/discovery identity
-and family shapes, and keeps the ordinary scope/revision/correlation checks. The
-nested action rows are trusted server output; they do not receive full schema
-validation. Schema-derived defaults, integer conversion and UUID normalization
-still run on the worker. This is deliberately different from untrusted imports:
+JSON parser for `ChoicesResponse`, validates its envelope, actor/discovery identity,
+shared domains and action references, then checks response-local references. It
+keeps the ordinary scope/revision/correlation checks. Unrelated nested action
+metadata remains trusted server output. Admitted choices and previews are handed
+off once as sparse read-only tables: no defaulted copy, tree expansion or second
+deep copy is made. This is deliberately different from untrusted imports:
 public `decode`/`validate`, canonical events and all journal/replay admission remain
 strict. Native query parsing follows Godot's floating-point conversion and JSON
 syntax tolerance; it does not promise bit-exact decoding of arbitrary decimal
 tokens. It never changes the recorded event codec.
+Native query numbers are floats in Godot. UI/world consumers compare coordinate
+and ContentRef scalar values, not whole Array/Dictionary identity; this preserves
+integer world picks and exact content versions without rewriting shared domains.
 
 Choices are fetched for the latest consumed and acknowledged human-input boundary
 while presentation plays. One result stays private until playback reaches its
 matching cursor and actor; scope, attachment, revision or force-mode changes
 discard stale results. No prefetched targets or action buttons enter a historical
 display, and command submission retains its existing readiness and receipt rules.
+
+`choices.gd` supplies the delivered response-local helper contract:
+`all_actions`, `action_options`, `binding_subject`, `binding_position`,
+`binding_value`, `binding_path`, `secondary_options`, `next_options`,
+`preview_positions`, `selection_for` and optional `position_eligibility`.
+These borrow shared domains rather than reconstructing `valid_targets`.
+Keep selection UI separate from immutable admitted dictionaries. Native action
+and target indices are not table offsets; ordered repeats remain meaningful.
+Missing nullable pair fields mean null, missing hazards mean false, and missing
+exposures mean empty. `secondary_set = 0` is valid, null inherits the primary
+pool, and a reference to an empty set offers no continuation.
+
+Every Preview owns its own subjects, positions and target sets. Resolve its
+continuations and affected cells against that Preview, never against Choices.
+Deferred AoE choices are different from a computed-empty Preview. The current
+player requests the selected Preview for exact subjective geometry; this intake
+does not introduce a second local gameplay or AoE propagation implementation.
 
 The consumer receives `(packet, raw_bytes)` and must return a result. It runs
 before consumed-cursor advancement and ACK. It must retain ownership of its data
@@ -149,8 +170,9 @@ Schema 7 world updates install complete `tiles` before applying ordered
 complete tile, retaining omitted fields and replacing present fields wholesale,
 including explicit clears. Unknown bases fail the transaction. Staging still uses
 only full first-disclosure records; presentation receives reconstructed complete
-after-values at the original commit times. Schema 6 recordings select the exact
-archived contract only through explicit historical replay, never live admission.
+after-values at the original commit times. Schema 7 and older recordings select
+their exact archived contract only through explicit historical replay, never
+live admission. Schema 8 changes query domains, not the tile-field reducer.
 
 ## Validation and deliberate limits
 
@@ -192,7 +214,8 @@ The slower real-service lane starts and cleans up its own host and native worker
 ```
 
 Use a fresh output directory. `--case magic_missile` exercises ordered multi-target
-preview and spell resolution. Private run configurations contain credentials;
+preview and spell resolution; `--case fireball_six_goblins` checks a selected
+computed area against the real encounter. Private run configurations contain credentials;
 the summarized validation report does not. Python prefix comparison uses
 `tools/reducer_oracle.py --journal RUN/amber/journal --states RUN/amber/states`
 and the corresponding blue pair. It normalizes only visible/seen set order and
@@ -215,3 +238,21 @@ latest native state while authored animations play. Choices may prepare ahead,
 but only the matching displayed boundary can publish them or accept input.
 Player controls and rendering are documented in the project README; the older
 exploration scene remains an offline fixture.
+
+
+## Compact discovery acceptance — 13 October 2026
+
+The [schema 8 acceptance report](../generated/compact_choices_acceptance.json)
+records the native Gallery route (58 commands, 644 checks, 16 actual Gallery
+viewport clicks), semantic/transport tests, selected Fireball, repeated-target
+Magic Missile and historical schema 7 replay. Compact interaction tests include
+native JSON floats against integer grid picks and exact ContentRef metadata;
+no response-wide normalization is needed for either.
+
+The largest Gallery choices reply is 273,132 bytes versus 2,399,276 before; client
+admission/publication is 75.911 ms versus 536.056 ms including the former defaulting
+and copy passes. These are query-processing figures, not total movement latency.
+The final real-click route still measures 317.728 ms median click-to-motion in the
+Gallery. Its [per-command trace analysis](../generated/compact_choices_live_pipeline.json)
+keeps server dispatch, event admission, consumer, compiler and completion frames
+separate. No graphics-performance improvement is claimed by this protocol intake.

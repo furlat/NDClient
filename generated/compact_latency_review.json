@@ -1,0 +1,104 @@
+{
+  "scope": "User-requested read-only reviews of remaining client movement latency after compact choices integration. No optimization or renderer changes claimed by this review.",
+  "evidence_run": "20261013T143729.491797Z",
+  "reviewers": [
+    "map_audit: event framing and admission",
+    "render_audit: canonical publication, reduction and copies",
+    "scope_review: scheduling and resource gates"
+  ],
+  "gallery_medians_ms": {
+    "first_motion": 317.7275,
+    "server_dispatch": 63.934159494237974,
+    "event_admission": 39.605,
+    "canonical_consumer": 90.8495,
+    "presentation_compile": 14.9815
+  },
+  "findings": [
+    {
+      "topic": "Repeated full actor snapshots",
+      "sources": [
+        "sdk/transitions.gd:18",
+        "sdk/transitions.gd:47"
+      ],
+      "evidence": "Sequence 87 is 107068 bytes, with 31  referenced actor occurrences and at least 62  full actor copies. The two current actor records include 14/10 controlled items. Serialized-size proxy for repeated actor payload traversal is about 1.45 MB. Canonical stage 107.054 ms includes more than copies.",
+      "status": "Copy count and source paths confirmed; individual copy time and allocations not measured.",
+      "constraint": "Keep exact event-time snapshots; protect mutated item/loadout subcontainers and public input detachment."
+    },
+    {
+      "topic": "Whole-state clone and normalization",
+      "sources": [
+        "sdk/reducer.gd:22",
+        "sdk/reducer.gd:323",
+        "sdk/journal.gd:57",
+        "sdk/protocol.gd:258"
+      ],
+      "evidence": "Before seq 87:1641 tiles, 342 objects, 472 content descriptors; descriptors serialize to approximately 352568 bytes and the operation adds none. Reducer still duplicates full state, while journal recursively normalizes the complete admitted packet.",
+      "status": "Confirmed traversal/copy behavior; stage-specific CPU time not measured.",
+      "next_measurement": "Split stage/flush, normalization, state clone, fact fold, actor captures, rename/publication.",
+      "constraint": "Keep late-failure atomicity, reducer detachment, exact defaults/UUIDs/integers and immutable preparer inputs."
+    },
+    {
+      "topic": "Warm resource metadata gates motion",
+      "sources": [
+        "presentation/media_warmup.gd:43",
+        "presentation/media_warmup.gd:75"
+      ],
+      "evidence": "Command 56 prepared 263.043 ms, first motion 319.538 ms. Frames 38160\u201338173 have zero pending decodes and unchanged decoded count. Metadata job 31.634 ms and main-thread media plan 8.649 ms occur in this 56.495 ms gap.",
+      "status": "Measured warm metadata/adoption wait, not texture decode or next-choices response.",
+      "next_measurement": "Split exact required plan from encounter-family expansion/estimates; retain correctness gate until required data is ready."
+    },
+    {
+      "topic": "Cold source publication tail",
+      "sources": [
+        "presentation/media_warmup.gd:450"
+      ],
+      "evidence": "Command 48 prepared 279.456 ms, motion 638.876 ms.49 sources publish one per frame after metadata; world preparation is ready around 406 ms but media remains blocked.",
+      "status": "Measured publication tail; path identities/required-vs-optional roles absent in current trace.",
+      "next_measurement": "Record required missing paths and readiness reasons; then evaluate upload scheduling and preload budget without weakening required readiness."
+    },
+    {
+      "topic": "Unnecessary Preview for complete single-target movement",
+      "sources": [
+        "play.gd:1556",
+        "play.gd:1570",
+        "play.gd:1751"
+      ],
+      "evidence": "Command 56 Preview enqueue 2.268 ms/reply 13.307 ms; command enqueued 24.170 ms. Delivered backend permits direct command submission without Preview.",
+      "status": "Measured roundtrip; direct submission is an unimplemented candidate.",
+      "constraint": "Limit any future direct path to complete admitted selections; compound/extra-position discovery must keep Preview and current correlation semantics."
+    },
+    {
+      "topic": "Event admission traversal overhead",
+      "sources": [
+        "sdk/protocol.gd:211",
+        "sdk/sse.gd:53",
+        "sdk/protocol.gd:61"
+      ],
+      "evidence": "Seq 87 source-equivalent structural count finds 1587 redundant true-rule union wrapper child visits among 8879 calls. SSE validates complete-line UTF 8 and protocol validates assembled bytes again.",
+      "status": "Duplicated work confirmed from source; runtime savings not measured.",
+      "constraint": "Pure-union early exit must preserve sibling constraints. Internal framing seam must preserve public decode, size/NUL handling, JSON strictness and exact decimals."
+    },
+    {
+      "topic": "Accumulated-state sensory composition",
+      "sources": [
+        "sdk/reducer.gd:228",
+        "sdk/audience.gd:312"
+      ],
+      "evidence": "Lineage first sensory event rebuilds audience view; later events still copy light/hazard maps and recompute contacts/effects.",
+      "status": "Source-level scaling candidate; no isolated timing.",
+      "constraint": "Reuse only with proven canonical provenance; arbitrary public reducer inputs retain exhaustive validation/composition."
+    }
+  ],
+  "ruled_out_as_primary_explanations": [
+    "No duplicate full live JSON decode in journal and no repeated canonical fold in normal prepared movement handoff.",
+    "No evidence currently isolates filesystem flush/rename as the dominant cost.",
+    "Command 56 next choices reply arrives 469.661 ms, after motion 319.538 ms; it is not that motion gate.",
+    "Receipt HOL exists behind synchronous event work, but measured preview/command enqueue-to-send maximum is 2.649 ms. Do not add receipt delay as another motion cost or blame 1 ms polling.",
+    "Seq 87 has 2494 integer tokens and 18 decimals, all 5.0; general decimal-conversion changes are not justified by this packet."
+  ],
+  "notes": [
+    "Per-command intervals and medians are not additive causal totals.",
+    "Serialized-size figures are traversal proxies, not measured VRAM/RSS/allocations.",
+    "The user live preview was left running and reviewers did not run Godot or mutate production code."
+  ]
+}
