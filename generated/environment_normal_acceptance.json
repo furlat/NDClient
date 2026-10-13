@@ -1,0 +1,272 @@
+{
+  "task": "Integrate environment-normal-quality-2026-10-12 selected receiving packets",
+  "selection_report": "generated/environment_normal_intake.json",
+  "byte_validation": "generated/environment_normal_pixel_checks.json",
+  "native_validation": "generated/environment_normal_delivery_checks.json",
+  "native_delivery_checks": 500,
+  "ground_checks": 23,
+  "native_ground_checks": 16,
+  "review": "Independent selection audit and final scope/anti-slop/anti-OOP review found no material integration blocker.",
+  "gallery": {
+    "recording": ".runtime/player-runs/20261013T125350.576972Z/journal",
+    "profile": "generated/profiles/2026-10-13T15-20-51-improved-environment-normals.json",
+    "renderer": "forward_plus",
+    "gpu": "NVIDIA GeForce RTX 5090",
+    "resolution": [
+      1440.0,
+      900.0
+    ],
+    "completed_groups": 122,
+    "final_sequence": 101,
+    "canonical_match": true,
+    "drained": true,
+    "tiles": 1761,
+    "objects": 360,
+    "errors": [],
+    "profile_phases": {
+      "initialization": {
+        "count": 668,
+        "p50": 0.327,
+        "p95": 0.572,
+        "p99": 1.0,
+        "max": 55.105
+      },
+      "traversal": {
+        "count": 9902,
+        "p50": 4.146,
+        "p95": 9.171,
+        "p99": 28.129,
+        "max": 143.189
+      },
+      "rotate_z20_q0": {
+        "count": 20,
+        "p50": 2.874,
+        "p95": 12.194,
+        "p99": 12.194,
+        "max": 33.49
+      },
+      "gallery_z20_q0": {
+        "count": 180,
+        "p50": 2.839,
+        "p95": 3.233,
+        "p99": 3.429,
+        "max": 4.271
+      },
+      "rotate_z20_q1": {
+        "count": 64,
+        "p50": 6.79,
+        "p95": 8.787,
+        "p99": 32.361,
+        "max": 200.739
+      },
+      "gallery_z20_q1": {
+        "count": 180,
+        "p50": 2.768,
+        "p95": 2.981,
+        "p99": 3.192,
+        "max": 3.279
+      },
+      "rotate_z20_q2": {
+        "count": 63,
+        "p50": 6.604,
+        "p95": 9.253,
+        "p99": 30.94,
+        "max": 196.216
+      },
+      "gallery_z20_q2": {
+        "count": 180,
+        "p50": 2.981,
+        "p95": 3.853,
+        "p99": 4.408,
+        "max": 4.621
+      },
+      "rotate_z20_q3": {
+        "count": 65,
+        "p50": 6.821,
+        "p95": 9.097,
+        "p99": 31.232,
+        "max": 193.214
+      },
+      "gallery_z20_q3": {
+        "count": 180,
+        "p50": 2.777,
+        "p95": 3.454,
+        "p99": 4.24,
+        "max": 4.614
+      },
+      "rotate_z70_q0": {
+        "count": 22,
+        "p50": 3.49,
+        "p95": 29.666,
+        "p99": 32.461,
+        "max": 193.471
+      },
+      "gallery_z70_q0": {
+        "count": 180,
+        "p50": 3.339,
+        "p95": 4.117,
+        "p99": 6.54,
+        "max": 7.29
+      },
+      "rotate_z70_q1": {
+        "count": 22,
+        "p50": 3.316,
+        "p95": 10.055,
+        "p99": 32.474,
+        "max": 181.867
+      },
+      "gallery_z70_q1": {
+        "count": 180,
+        "p50": 3.351,
+        "p95": 3.778,
+        "p99": 4.397,
+        "max": 4.536
+      },
+      "rotate_z70_q2": {
+        "count": 22,
+        "p50": 3.381,
+        "p95": 11.151,
+        "p99": 32.058,
+        "max": 193.493
+      },
+      "gallery_z70_q2": {
+        "count": 180,
+        "p50": 3.275,
+        "p95": 3.957,
+        "p99": 4.15,
+        "max": 4.721
+      },
+      "rotate_z70_q3": {
+        "count": 22,
+        "p50": 3.537,
+        "p95": 9.517,
+        "p99": 33.133,
+        "max": 188.879
+      },
+      "gallery_z70_q3": {
+        "count": 180,
+        "p50": 3.381,
+        "p95": 4.023,
+        "p99": 4.611,
+        "max": 4.856
+      },
+      "solid_wide": {
+        "count": 180,
+        "p50": 3.219,
+        "p95": 3.74,
+        "p99": 4.24,
+        "max": 33.634
+      },
+      "hidden_wide": {
+        "count": 180,
+        "p50": 3.127,
+        "p95": 3.857,
+        "p99": 4.584,
+        "max": 28.111
+      }
+    },
+    "peak_video_memory_mib": 12104.9558258057,
+    "final_video_memory_mib": 11849.5849151611,
+    "final_environment_media": {
+      "accounting": "Decoded CPU bytes plus conservative RGBA8 GPU estimate; not measured VRAM/RSS; combined environment and character budget.",
+      "budget_bytes": 17179869184,
+      "combined_estimated_bytes": 17173053440,
+      "cpu_bytes": 161873920,
+      "decode_jobs": 0,
+      "decode_ms": 26247.327,
+      "decode_worker_limit": 4,
+      "decoded": 2844,
+      "demand_counts": {
+        "affected": 0,
+        "known": 2536,
+        "noop": true,
+        "pending_before": 0,
+        "required": 366,
+        "resident_refreshed": 0,
+        "role_changes": 0,
+        "selection_changed": false
+      },
+      "demand_noops": 161,
+      "demand_phases": {
+        "estimate": 0.0,
+        "guard": 0.168,
+        "queue": 0.0,
+        "resident_refresh": 0.0,
+        "role_diff": 0.0,
+        "selection": 0.0,
+        "selection_refresh": 0.0,
+        "snapshot": 0.0,
+        "total": 0.198
+      },
+      "demand_runs": 90,
+      "estimated_bytes": 368574464,
+      "evicted": 801,
+      "eviction_pending_bytes": 0,
+      "failed": {},
+      "gpu_estimated_bytes": 206700544,
+      "metadata_jobs": 115,
+      "metadata_ms": 3534.804,
+      "pending": 0,
+      "pinned_bytes": 368574464,
+      "pinned_over_budget_bytes": 0,
+      "resident_sheets": 170,
+      "selection_jobs": 81,
+      "selection_refreshed": 3553
+    },
+    "final_character_media": {
+      "accounting": "Decoded CPU bytes plus conservative RGBA8 GPU estimate; not measured VRAM/RSS; combined environment and character budget.",
+      "budget_bytes": 17179869184,
+      "combined_estimated_bytes": 17173053440,
+      "cpu_bytes": 2110783488,
+      "decode_jobs": 0,
+      "decode_ms": 26247.327,
+      "decode_worker_limit": 4,
+      "decoded": 2844,
+      "demand_counts": {
+        "affected": 0,
+        "known": 2536,
+        "noop": true,
+        "pending_before": 0,
+        "required": 366,
+        "resident_refreshed": 0,
+        "role_changes": 0,
+        "selection_changed": false
+      },
+      "demand_noops": 161,
+      "demand_phases": {
+        "estimate": 0.0,
+        "guard": 0.168,
+        "queue": 0.0,
+        "resident_refresh": 0.0,
+        "role_diff": 0.0,
+        "selection": 0.0,
+        "selection_refresh": 0.0,
+        "snapshot": 0.0,
+        "total": 0.198
+      },
+      "demand_runs": 90,
+      "estimated_bytes": 16804478976,
+      "evicted": 801,
+      "eviction_pending_bytes": 0,
+      "failed": {},
+      "gpu_estimated_bytes": 14693695488,
+      "metadata_jobs": 115,
+      "metadata_ms": 3534.804,
+      "pending": 0,
+      "pinned_bytes": 16765157376,
+      "pinned_over_budget_bytes": 0,
+      "resident_sheets": 1869,
+      "selection_jobs": 81,
+      "selection_refreshed": 3553
+    },
+    "capture": ".captures/player/improved-environment-normals.png"
+  },
+  "limits": [
+    "Offline replay, not live server latency or an isolated before/after performance benchmark.",
+    "Gallery samples cover four camera quarters at sizes20/70 and solid/translucent/hidden wall modes; native fixtures separately cover1x/1.375x source sampling.",
+    "No shader, light, colour, alpha, depth, registration, event timing, or backend changes.",
+    "Packet-wide byte checks cover all1142 choices; finite native fixtures do not GPU-upload every possible source sheet. Twelve original/replacement animation sheets exceed16384 pixels in width, unchanged by this intake.",
+    "Entire library is not eagerly loaded; measured character/environment caches share the existing16GiB estimate budget. Estimates are distinct from actual whole-renderer video-memory counters.",
+    "Unmatched or rejected source records remain original, including unresolved I5 crack detail. Qualified inferred floor detail is not physical geometry."
+  ]
+}

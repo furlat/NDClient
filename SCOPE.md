@@ -1598,3 +1598,51 @@ generated/action_completion_performance.json retains evidence and limitations:
 remaining normalization cost, first-motion median about 313 ms in the Gallery,
 and other reveal/startup costs are not claimed solved. Backend, shaders, artwork
 and authored event timing remain unchanged by this task.
+
+## Improved environment receiving normals — 13 October 2026
+
+The user now authorizes adopting the environment-normal-quality-2026-10-12
+delivery previously deferred during optimization. quality.json owns its selected
+1,142 replacements and 464 asset dispositions. Preserve its distinction between
+source-pass normals, qualified inferred floor detail and explicitly retained
+originals. No new inference, asset repair, lighting/shader changes or backend work.
+
+1. Build the existing receiving-normal lookup from the selected delivery paths,
+   preserving original media identities and every sampling/placement registration.
+   Reference the private Windows artwork directly; do not copy images into Git.
+2. Validate selected PNG dimensions, exact depth bytes, invalid/support pixels,
+   retained records and manifest coverage. Use the existing resource-demand path;
+   selecting the manifest must not eagerly load its complete packet library.
+3. Exercise selected props, floors, retained cases and animation boundaries through
+   production source selection and native receiving light across quarters/zooms.
+   Use offline native fixtures while the backend contract is being reworked.
+4. Inspect captures, record qualified coverage and residency consequences, commit
+   the small integration and leave a usable offline preview if live is unavailable.
+
+Root owns intake/runtime integration; map_audit independently audits selection and
+coverage; render_audit owns native fixtures. scope_review tracks plan adherence
+and anti-slop/anti-OOP review. Native profiling/render checks run serially.
+
+Completed: all 1,142 selected packets match the delivery, preserving every depth
+byte and unsupported pixel; 7,626,352 receiving-normal pixels change. All 15,210
+explicitly retained frame records keep original paths. Native Forward+ acceptance
+passes 500 checks across 36 source/view/frame fixtures, 72 lit captures and 36
+unlit comparisons; the explicit delivered-path reference is byte-exact. Existing
+ground checks pass 23 assertions and native joined-floor checks pass 16, retaining
+the selected top response and original exposed skirts. Captures were inspected.
+Independent selection and scope/anti-slop/anti-OOP review found no source blocker.
+
+The offline Gallery replay drains all 122 groups through sequence 101 with exact
+canonical state, 1,761 tiles, 360 objects and no errors. Four quarters at camera
+sizes 20/70 and all wall modes were exercised. Steady view frame p95 is 2.981–4.117
+ms; traversal p95 is 9.171 ms with a 143.189 ms maximum. Camera transitions still
+reach 200.739 ms; these are not claimed solved by this asset intake. This is an
+offline acceptance run, not live-action latency or an isolated before/after
+performance comparison. Final environment residency is 170 sheets, estimated
+351.5 MiB CPU+GPU; whole-renderer peak video memory is 11.82 GiB, including the
+existing character caches and render targets. The selected library is not eagerly
+uploaded. Twelve original/replacement animation sheets exceed 16,384 pixels in
+width; their registrations are preserved, and finite native fixtures do not
+certify device upload of every possible sheet. Evidence and limitations are in
+generated/environment_normal_acceptance.json. Backend contract work remains
+outside this integration; the preview uses the preserved offline journal.

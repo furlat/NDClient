@@ -211,14 +211,15 @@ static func imported_record(row: Dictionary, quarter: int, cache: Dictionary, ph
 
 static func receiving_normal(record: Dictionary, cache: Dictionary) -> Dictionary:
     if not record.has("normal"): return record
-    # Small receiving-only derivation from retained source render passes. It is
-    # never a replacement for the source depth, support, color or registration.
-    var key = "__pixel_integrated_receiving_normals"
+    # Delivery-selected receiving detail, never depth/support or paint alpha.
+    # This raw file key lets media preparation publish the lookup to the scene
+    # cache before first use, like the other immutable source documents.
+    var key = "res://generated/environment_receiving_normals.json"
     if not cache.has(key):
-        cache[key] = JSON.parse_string(FileAccess.get_file_as_string("res://generated/environment_receiving_normals.json")).normals
+        cache[key] = JSON.parse_string(FileAccess.get_file_as_string(key))
     var original_path: String = record.normal.region.path
-    if not cache[key].has(original_path): return record
-    var selected: Dictionary = cache[key][original_path]
+    if not cache[key].normals.has(original_path): return record
+    var selected: Dictionary = cache[key].normals[original_path]
     var result = record.duplicate()
     result.normal = record.normal.duplicate()
     result.normal.region = record.normal.region.duplicate()

@@ -1,43 +1,65 @@
-"""Original Cycles receiving normals: bytes/registration, not inferred geometry."""
+"""Selected delivery bytes, independent of the production receiving lookup."""
+from collections import Counter
 import json
 from pathlib import Path
 import unittest
-import zlib
 import numpy as np
 from PIL import Image
+from tools.prepare_receiving_normals import DEFAULT_DELIVERY, DEFAULT_MEDIA, local_path
 
 ROOT = Path(__file__).resolve().parents[1]
-DATA = ROOT.parent / 'NDClientData/.media'
+
 
 class ReceivingNormals(unittest.TestCase):
-    def test_original_pixel_samples_and_unchanged_depth(self):
-        manifest = json.loads((ROOT / 'generated/environment_receiving_normals.json').read_text())
-        self.assertEqual(len(manifest['provenance']), 28)
-        for frame in manifest['provenance']:
-            with self.subTest(bank=frame['bank'], pose=frame['pose']):
-                record = manifest['normals'][frame['original_normal_path']]
-                original = np.asarray(Image.open(DATA / frame['original_normal_path'].removeprefix('/media/')).convert('RGBA'))
-                selected = np.asarray(Image.open(ROOT / record['path'].removeprefix('res://')).convert('RGBA'))
+    def test_selected_packets_preserve_depth_and_unsupported_pixels(self):
+        quality = json.loads((DEFAULT_DELIVERY / 'quality.json').read_text())
+        validation = json.loads((DEFAULT_DELIVERY / 'VALIDATION.json').read_text())
+        installed = json.loads((ROOT / 'generated/environment_receiving_normals.json').read_text())['normals']
+        self.assertEqual(len(installed), 1142)
+        expected = {'/media/' + local_path(path).relative_to(DEFAULT_MEDIA).as_posix(): row
+                    for path, row in quality['normals'].items()}
+        self.assertEqual(set(installed), set(expected))
+        changed_pixels = 0
+        labels = Counter()
+        for index, (identity, source) in enumerate(expected.items()):
+            with self.subTest(packet=identity):
+                chosen = installed[identity]
+                for field in ['path', 'label', 'qualification']:
+                    self.assertEqual(chosen[field], source[field])
+                with Image.open(DEFAULT_MEDIA / identity.removeprefix('/media/')) as image:
+                    self.assertEqual(image.mode, 'RGBA')
+                    original = np.asarray(image).copy()
+                with Image.open(local_path(chosen['path'])) as image:
+                    self.assertEqual(image.mode, 'RGBA')
+                    selected = np.asarray(image).copy()
+                self.assertEqual(selected.shape, original.shape)
                 np.testing.assert_array_equal(selected[..., :2], original[..., :2])
-                x,y,w,h = frame['region']
-                selected = selected[y:y+h,x:x+w]
-                raw = np.frombuffer(zlib.decompress(Path(frame['original_cycles_normal']).read_bytes()), dtype='<f4').reshape(h,w,3).astype(float)
-                raw[...,1] *= -1
-                mask = ((selected[...,0] != 0) | (selected[...,1] != 0)) & (np.linalg.norm(raw,axis=-1)>1e-8)
-                expected = raw[mask] / np.linalg.norm(raw[mask],axis=-1)[:,None]
-                encoded = selected[mask,2:].astype(float)/127.5-1
-                actual = np.column_stack((encoded,1-np.abs(encoded).sum(axis=-1)))
-                fold = np.maximum(-actual[:,2],0)
-                actual[:,:2] -= np.sign(actual[:,:2])*fold[:,None]
-                actual /= np.linalg.norm(actual,axis=-1)[:,None]
-                self.assertLess(float(np.max(np.linalg.norm(actual-expected,axis=-1))), .017)
-                self.assertEqual(frame['retained_center_ray_pixels'],0)
-                self.assertEqual(int(mask.sum()),frame['replaced_pixels'])
-        # The known desk center-ray side hit must now use the original integrated
-        # source normal, not a made-up flat top, smoothing kernel or copied neighbor.
-        path=manifest['normals']['/media/environment/props/interior-writing-desk/intact/geometry/geometry-native.png']['path']
-        value=np.asarray(Image.open(ROOT/path.removeprefix('res://')))[114,95,2:]
-        self.assertNotEqual(tuple(value),(255,128))
-        self.assertNotEqual(tuple(value),(128,128))
+                unsupported = (original[..., 0] == 0) & (original[..., 1] == 0)
+                np.testing.assert_array_equal(selected[unsupported], original[unsupported])
+                changed = np.any(selected[..., 2:] != original[..., 2:], axis=-1)
+                count = int(np.count_nonzero(changed))
+                self.assertGreater(count, 0, 'Identity copies must not masquerade as selected improvements')
+                changed_pixels += count
+                labels[chosen['label']] += 1
+            if (index + 1) % 200 == 0:
+                print(f'Validated {index + 1}/{len(expected)} selected packets', flush=True)
+        self.assertEqual(changed_pixels, validation['packet_counts']['changed_normal_pixels'])
+        # Explicitly retained registrations must not acquire a replacement from
+        # a similar bank, another frame, or a rejected inferred candidate.
+        retained_frames = 0
+        for frame in validation['frame_resolutions']:
+            if not frame['status'].startswith('retained_original'):
+                continue
+            identity = '/media/' + local_path(frame['original']).relative_to(DEFAULT_MEDIA).as_posix()
+            self.assertNotIn(identity, installed)
+            self.assertEqual(frame['selected'], frame['original'])
+            retained_frames += 1
+        report = {'selected_packets': len(expected), 'changed_normal_pixels': changed_pixels,
+                  'retained_frame_records': retained_frames, 'packet_labels': dict(labels),
+                  'failures': [], 'depth_bytes_preserved': True, 'unsupported_rgba_preserved': True,
+                  'scope': 'All selected original/replacement PNG bytes and exact manifest selection. Delivery validation owns source-pass/inference qualification and unadmitted interior/skirts proofs; native tests separately check registration and rendered response.'}
+        (ROOT / 'generated/environment_normal_pixel_checks.json').write_text(json.dumps(report, indent=2) + '\n')
 
-if __name__ == '__main__': unittest.main()
+
+if __name__ == '__main__':
+    unittest.main()

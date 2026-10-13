@@ -1215,14 +1215,29 @@ additional caster (19 components/622,592 prepass triangles versus 18/589,824).
 Publication spikes remain unresolved; neither this intake nor its passing tests
 claim to complete renderer optimization.
 
-The small environment receiving-normal cache can be regenerated from the original
-retained Cycles sample passes with the current project-owned authoring:
+The selected environment receiving normals come from the completed
+`environment-normal-quality-2026-10-12/quality.json` delivery. Install its lookup:
 
 ```sh
-python tools/prepare_receiving_normals.py --banks prop.interior-writing-desk.intact prop.bed.intact prop.interior-bookshelf.intact prop.interior-ingredient-shelves.intact prop.interior-preparation-counter.intact prop.interior-storage-shelving.intact prop.table.intact
+python tools/prepare_receiving_normals.py
 ```
 
-The manifest records each original pass and registration. These are receiving-only
-pixel-integrated normals; original color, alpha, depth and support are unchanged.
-The generated PNGs are disposable, ignored cache files. Connected floor interior
-sides instead use published adjacent tile support; exposed skirts remain authored.
+Use `--delivery` and `--media` to override the sibling Windows asset locations.
+The generated lookup references 1,142 private PNGs directly: 982 retained-source
+pass packets and 160 qualified inferred views for 40 floor families. It supersedes
+the earlier seven-map cache. No images are copied, regenerated or added to Git.
+Full source qualifications and all 464 asset dispositions stay in the delivery.
+Unselected sources, including G17 ramps, I5 cracks and mismatched intact chest
+registrations, retain their existing normals. This is receiving detail, not new
+physical geometry. Original colour, alpha, depth, support and frame registration
+remain unchanged; the shader applies the existing normal transforms exactly once.
+
+The existing media worker shares the lookup and loads only demanded packets.
+Separate receiving copies add texture residency for active sources whose depth
+and normal previously shared one packet; whole-library disk/decoded totals in
+`generated/environment_normal_intake.json` are not measured VRAM. Restart the
+preview after intake to replace its immutable source caches. Connected floor
+interior sides still use published adjacent tile support; exposed skirts remain
+authored. Run `python -m unittest tests/test_receiving_normals.py` for selected
+packet byte guards and the native `tests/environment_normal_delivery_checks.gd`
+fixture for source selection, receiving and registration comparisons.

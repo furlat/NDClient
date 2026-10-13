@@ -11,7 +11,10 @@ func floor_fixture(quarter:int)->Dictionary:
     var material=ShaderMaterial.new();material.shader=EnvironmentReceiver
     for uniform in entry.material.shader.get_shader_uniform_list():material.set_shader_parameter(uniform.name,entry.material.get_shader_parameter(uniform.name))
     material.set_shader_parameter("world_to_canvas",Basis(probe.camera.basis.x,-probe.camera.basis.y,probe.camera.basis.z).transposed())
-    var result={"id":"floor-q"+str(quarter),"material":material,"colour":probe.images[entry.record.path],"visible":1.0,"row":row,"normal":probe.images[entry.record.normal.region.path]}
+    # The selected receiving packet may add admitted top detail. Classify the
+    # original macro top from the unchanged geometry packet, then require the
+    # entire selected top response to survive the separate join interpretation.
+    var result={"id":"floor-q"+str(quarter),"material":material,"colour":probe.images[entry.record.path],"visible":1.0,"row":row,"original_geometry":probe.images[entry.record.geometry_region.path]}
     probe.free();return result
 func run()->void:
     root.unfocusable=true;root.position=Vector2i(-16000,-16000)
@@ -31,7 +34,7 @@ func run()->void:
         var top_changes=0;var top_pixels=0
         for y in 256:
             for x in 256:
-                var packet:Color=fixture.normal.get_pixel(x,y)
+                var packet:Color=fixture.original_geometry.get_pixel(x,y)
                 if fixture.colour.get_pixel(x,y).a>0 and packet.b8==128 and packet.a8==255:
                     top_pixels+=1
                     if before.get_pixel(x,y)!=after.get_pixel(x,y):top_changes+=1
