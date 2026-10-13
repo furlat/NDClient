@@ -1,6 +1,7 @@
 extends RefCounted
 # Port of dnd/player/reduction.py. Inputs are decoded public after-values.
 const Audience = preload("res://sdk/audience.gd")
+const Transitions = preload("res://sdk/transitions.gd")
 const STATE_PRESENTATION_KINDS = ["temporary_hit_points", "spatial", "turn", "sensory", "item_charge", "faction"]
 
 static func success(value: Variant) -> Dictionary:
@@ -85,7 +86,7 @@ static func stage_lineage(target: Dictionary, lineage: Dictionary) -> Dictionary
 static func apply_player_fact(target: Dictionary, fact: Dictionary, source_cursor: Variant = null) -> Dictionary:
     return _apply_player_fact_owned(target, fact, source_cursor, false)
 
-static func _apply_player_fact_owned(target: Dictionary, fact: Dictionary, source_cursor: Variant, composed_senses: bool) -> Dictionary:
+static func _apply_player_fact_owned(target: Dictionary, fact: Dictionary, source_cursor: Variant, composed_senses: bool, cells: Dictionary = {}) -> Dictionary:
     var identity: Variant
     var actor: Variant
     match fact.kind:
@@ -127,10 +128,10 @@ static func _apply_player_fact_owned(target: Dictionary, fact: Dictionary, sourc
         "sensory":
             var audience = Audience.resolve(target.observer_uuid, target.audience)
             if not audience.ok: return audience
-            var observed = Audience._observe_retained(target.perception, audience.value, fact, int(target.reducer_cursor if source_cursor == null else source_cursor))
+            var observed = Audience._observe_retained(target.perception, audience.value, fact, int(target.reducer_cursor if source_cursor == null else source_cursor), cells)
             if not observed.ok: return observed
             target.perception = observed.value
-            target.senses = Audience._view_after(target.perception, target.observer_uuid, target.senses, fact) if composed_senses else Audience._view_retained(target.perception, target.observer_uuid)
+            target.senses = Audience._view_after(target.perception, target.observer_uuid, target.senses, fact, cells) if composed_senses else Audience._view_retained(target.perception, target.observer_uuid)
             if fact.observer_position_changed and target.actors.has(fact.observer_uuid):
                 target.actors[fact.observer_uuid].last_visual_position = fact.observer_position.duplicate()
             for member in fact.entity_contacts_changed:
@@ -197,7 +198,7 @@ static func _apply_player_fact_owned(target: Dictionary, fact: Dictionary, sourc
 static func apply_committed_player_fact(target: Dictionary, fact: Dictionary, source_cursor: int, version_cursors: Dictionary) -> Dictionary:
     return _apply_committed_player_fact_owned(target, fact, source_cursor, version_cursors, false)
 
-static func _apply_committed_player_fact_owned(target: Dictionary, fact: Dictionary, source_cursor: int, version_cursors: Dictionary, composed_senses: bool) -> Dictionary:
+static func _apply_committed_player_fact_owned(target: Dictionary, fact: Dictionary, source_cursor: int, version_cursors: Dictionary, composed_senses: bool, cells: Dictionary = {}) -> Dictionary:
     if fact.kind == "spatial" and fact.entity_uuid != null and fact.change_type in ["entity_entered", "entity_left"]:
         if fact.commit_event_uuid == null or not version_cursors.has(fact.commit_event_uuid):
             return failure("Spatial change at cursor %d lacks its recorded commit version" % source_cursor)
@@ -205,17 +206,18 @@ static func _apply_committed_player_fact_owned(target: Dictionary, fact: Diction
         var previous: int = target.spatial_commit_cursors.get(fact.entity_uuid, -1)
         if committed_at < previous and previous < source_cursor: return success(target)
         target.spatial_commit_cursors[fact.entity_uuid] = committed_at
-    return _apply_player_fact_owned(target, fact, source_cursor, composed_senses)
+    return _apply_player_fact_owned(target, fact, source_cursor, composed_senses, cells)
 
 static func reduce_nodes(target: Dictionary, nodes: Array, versions: Array, observations: Array, updates: Array) -> Dictionary:
     return _reduce_nodes_owned(copy_target(target), nodes, versions, observations, updates)
 
 # Only a detached transaction enters this fold. Intermediate failures discard
 # that candidate without touching a previously published state.
-static func _reduce_nodes_owned(result: Dictionary, nodes: Array, versions: Array, observations: Array, updates: Array) -> Dictionary:
-    # Public callers can supply independently edited senses. Establish the
-    # composed-cell invariant inside this transaction before incremental reuse.
+static func _reduce_nodes_owned(result: Dictionary, nodes: Array, versions: Array, observations: Array, updates: Array, recorded: Variant = null) -> Dictionary:
+    # First compose arbitrary public inputs before reusing the transaction-local
+    # cell indexes. Records remain private until the whole operation succeeds.
     var composed_senses = false
+    var cells = {}
     var indexes = {}
     for row in versions: indexes[row.event_uuid] = row.source_index
     for observation in observations:
@@ -226,15 +228,28 @@ static func _reduce_nodes_owned(result: Dictionary, nodes: Array, versions: Arra
     for row in updates: world_updates[row.event_uuid] = row
     for node in nodes:
         if not indexes.has(node.uuid): return failure("Node has no recorded version")
+        var admitted: Array = []
         while next < pending.size() and indexes[pending[next].event_uuid] <= indexes[node.uuid]:
-            _observe(result, pending[next]); next += 1
-        if world_updates.has(node.uuid): apply_world_update(result, world_updates[node.uuid])
+            _observe(result, pending[next])
+            if recorded != null: admitted.append(pending[next])
+            next += 1
+        var inputs: Dictionary = Transitions.actor_inputs(result,node) if recorded != null else {}
+        var update: Variant = world_updates.get(node.uuid)
+        if update != null: apply_world_update(result, update)
         if not node.canceled and node.fact != null:
-            var folded = _apply_committed_player_fact_owned(result, node.fact, int(indexes[node.uuid]), indexes, composed_senses)
+            var folded = _apply_committed_player_fact_owned(result, node.fact, int(indexes[node.uuid]), indexes, composed_senses, cells)
             if not folded.ok: return folded
             if node.fact.kind == "sensory": composed_senses = true
+        if recorded != null:
+            recorded.events.append({"event_uuid":node.uuid, "source_index":indexes[node.uuid],
+                "actor_inputs":inputs, "delta":Transitions.capture_delta(result,node,admitted,update)})
     while next < pending.size():
-        _observe(result, pending[next]); next += 1
+        var observation: Dictionary = pending[next]
+        _observe(result, observation)
+        if recorded != null:
+            recorded.trailing.actors[observation.actor.uuid] = result.actors[observation.actor.uuid].duplicate(true)
+            if observation.contact != null: recorded.trailing.set.senses = Transitions.snapshot_senses(result.senses)
+        next += 1
     return success(result)
 
 static func reduce_initialization(initialization: Dictionary, content_additions: Array = []) -> Dictionary:
@@ -261,12 +276,12 @@ static func reduce_initialization(initialization: Dictionary, content_additions:
 static func reduce_lineage(target: Dictionary, lineage: Dictionary) -> Dictionary:
     return _reduce_lineage_owned(copy_target(target), lineage)
 
-static func _reduce_lineage_owned(target: Dictionary, lineage: Dictionary) -> Dictionary:
+static func _reduce_lineage_owned(target: Dictionary, lineage: Dictionary, recorded: Variant = null) -> Dictionary:
     var audience = _lineage_audience(target, lineage)
     if not audience.ok: return audience
     if lineage.end_cursor <= target.reducer_cursor:
         return failure("player lineage precedes this reduction position")
-    var folded = _reduce_nodes_owned(target, lineage.events, lineage.version_rows, lineage.observations, lineage.world_updates)
+    var folded = _reduce_nodes_owned(target, lineage.events, lineage.version_rows, lineage.observations, lineage.world_updates, recorded)
     if not folded.ok: return folded
     var result: Dictionary = folded.value
     result.reducer_cursor = lineage.end_cursor
@@ -275,9 +290,21 @@ static func _reduce_lineage_owned(target: Dictionary, lineage: Dictionary) -> Di
         if hud.generation != result.generation or hud.observer_uuid != result.observer_uuid or hud.revision > lineage.end_cursor or (result.hud_snapshot != null and hud.revision < result.hud_snapshot.revision):
             return failure("HUD facts belong to a different observer or generation")
         result.hud_snapshot = hud.duplicate(true)
+    if recorded != null:
+        recorded.trailing.set.reducer_cursor = result.reducer_cursor
+        if hud != null: recorded.trailing.set.hud_snapshot = hud.duplicate(true)
     return success(result)
 
 static func reduce_operation(target: Dictionary, update: Dictionary) -> Dictionary:
+    return _reduce_operation(target, update, false)
+
+# Internal bounded handoff: callers retain these owned, read-only event records
+# only after successful reduction (and journal commit when consuming live bytes).
+static func _reduce_operation_recorded(target: Dictionary, update: Dictionary) -> Dictionary:
+    return _reduce_operation(target, update, true)
+
+static func _reduce_operation(target: Dictionary, update: Dictionary, record_events: bool) -> Dictionary:
+    var records = {"lineages":[]} if record_events else {}
     var audience = Audience.resolve(target.observer_uuid, target.audience)
     if not audience.ok: return audience
     if update.audience != audience.value:
@@ -297,9 +324,12 @@ static func reduce_operation(target: Dictionary, update: Dictionary) -> Dictiona
     for lineage in update.lineages:
         if lineage.start_cursor != result.reducer_cursor:
             return failure("Operation occurrence sequence has a gap")
-        var folded = _reduce_lineage_owned(result, lineage)
+        var recorded: Variant = {"lineage_uuid":lineage.lineage_uuid, "start_cursor":lineage.start_cursor,
+            "end_cursor":lineage.end_cursor, "events":[], "trailing":Transitions.empty_delta()} if record_events else null
+        var folded = _reduce_lineage_owned(result, lineage, recorded)
         if not folded.ok: return folded
         result = folded.value
+        if record_events: records.lineages.append(recorded)
     var hud: Variant = update.hud
     if hud != null:
         if hud.generation != result.generation or hud.observer_uuid != result.observer_uuid or hud.revision > result.reducer_cursor or (result.hud_snapshot != null and hud.revision < result.hud_snapshot.revision):
@@ -311,7 +341,9 @@ static func reduce_operation(target: Dictionary, update: Dictionary) -> Dictiona
         if row.generation != result.generation or row.observer_uuid != result.observer_uuid or row.operation_end_cursor > result.reducer_cursor or row.encounter_log_index != first + i:
             return failure("Standalone log append is out of order or belongs to another audience")
     result.combat_log_appends.append_array(update.combat_log_appends.duplicate(true))
-    return success(result)
+    var accepted = success(result)
+    if record_events: accepted.transitions = records
+    return accepted
 
 static func state_before_event(before: Dictionary, lineage: Dictionary, event: Dictionary) -> Dictionary:
     var first: Variant = null

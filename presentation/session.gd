@@ -48,7 +48,7 @@ var retired_ready: Array = []
 var retired_records_staged: Array = []
 var retired_records_ready: Array = []
 var preparation_metrics = {"compiled_operations":0,"packet_prepare_ms":0.0,"compile_ms":0.0,"journal_ms":0.0,
-    "disk_reloads":0,"handoff_hits":0,"active":false,"held_for_display":false,
+    "disk_reloads":0,"handoff_hits":0,"recorded_handoff_hits":0,"active":false,"held_for_display":false,
     "retired_groups":0,"retirement_ms":0.0,"retirement_peak_groups":0,
     "retired_records":0,"record_retirement_ms":0.0,"retirement_peak_records":0}
 
@@ -155,18 +155,24 @@ func _consume(packet: Dictionary, raw: PackedByteArray) -> Dictionary:
     # Only Transport calls this internal hook after strict admission. Public
     # offline tools keep Journal.consume's independent byte/schema boundary.
     var started = Time.get_ticks_usec()
-    var accepted = journal._consume_admitted(packet,raw)
-    if not accepted.ok: return accepted
     var sequence = int(packet.cursor.sequence)
+    mutex.lock()
+    var record_transitions = sequence>0 and sequence>prepared_sequence and sequence<=displayed_sequence+LOOKAHEAD_OPERATIONS and admitted_pending.size()<LOOKAHEAD_OPERATIONS+1
+    mutex.unlock()
+    var accepted = journal._consume_admitted(packet,raw,record_transitions)
+    if not accepted.ok: return accepted
     var normalized: Dictionary = accepted.get("normalized",{})
     mutex.lock()
     available_sequence = maxi(available_sequence,sequence)
     preparation_metrics.journal_ms += (Time.get_ticks_usec()-started)/1000.0
     # Keep a bounded shortcut only. Overflow is already durably on disk, so ACK
     # continues independently of display pause, missing media, or compilation.
-    if sequence > prepared_sequence and sequence <= displayed_sequence+LOOKAHEAD_OPERATIONS and admitted_pending.size()<LOOKAHEAD_OPERATIONS+1:
+    # Duplicates publish no new normalized value; never replace/retain another
+    # handoff for a sequence the preparer may already be compiling.
+    if not normalized.is_empty() and sequence > prepared_sequence and sequence <= displayed_sequence+LOOKAHEAD_OPERATIONS and admitted_pending.size()<LOOKAHEAD_OPERATIONS+1:
         admitted_pending[sequence] = {"packet":normalized if not normalized.is_empty() else packet,
-            "normalized":not normalized.is_empty(),"final_state":journal.state if int(journal.cursor.sequence)==sequence else {}}
+            "normalized":not normalized.is_empty(),"final_state":journal.state if int(journal.cursor.sequence)==sequence else {},
+            "transitions":accepted.get("transitions",{})}
     mutex.unlock()
     var worker = _ensure_preparer()
     if not worker.ok: return worker
@@ -206,16 +212,17 @@ func _prepare_loop() -> void:
                         result = {"ok":false,"error":{"kind":"recording","message":"Recording audience/epoch mismatch"}}
                         break
             if result.ok and replay_thread != null:
-                result = journal._consume_admitted(result.value,raw)
+                result = journal._consume_admitted(result.value,raw,true)
                 if result.ok:
                     packet = result.normalized
-                    handoff = {"packet":packet,"normalized":true,"final_state":journal.state,"from_disk":true}
+                    handoff = {"packet":packet,"normalized":true,"final_state":journal.state,"transitions":result.get("transitions",{}),"from_disk":true}
             elif result.ok: packet = protocol.normalize(root_name,result.value)
         elif not handoff.normalized:
             packet = protocol.normalize(root_name,packet)
         var decode_ms = (Time.get_ticks_usec()-started)/1000.0
         if _stopping(): break
         var message: Dictionary = {}
+        var used_records = false
         started = Time.get_ticks_usec()
         if result.ok and next==0:
             var initial_state: Dictionary = handoff.get("final_state",{})
@@ -227,7 +234,12 @@ func _prepare_loop() -> void:
                     "events":Compiler.EventTrace.initialization(packet.initialization)}
         elif result.ok:
             var final_state: Dictionary = handoff.get("final_state",{})
-            result = Compiler.compile_admitted(preparation_state,packet,authoring_cache,final_state) if not final_state.is_empty() else Compiler.compile(preparation_state,packet,authoring_cache)
+            var transitions: Dictionary = handoff.get("transitions",{})
+            if not final_state.is_empty() and not transitions.is_empty():
+                used_records = true
+                result = Compiler.compile_recorded(preparation_state,packet,authoring_cache,final_state,transitions)
+            else:
+                result = Compiler.compile(preparation_state,packet,authoring_cache)
             if result.ok:
                 preparation_state = result.value.final_state
                 message = {"kind":"operation","groups":result.value.groups,"sequence":next,
@@ -248,6 +260,7 @@ func _prepare_loop() -> void:
         prepared_sequence = next
         preparation_cursor = packet.cursor.duplicate(true)
         preparation_metrics.compiled_operations += 1
+        if used_records: preparation_metrics.recorded_handoff_hits += 1
         mutex.unlock()
     _release_retired()
 

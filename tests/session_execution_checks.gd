@@ -49,6 +49,7 @@ func run() -> void:
     check(session.diagnostics().retirement_peak_groups<=2 and session.diagnostics().retirement_pending_groups==0,"One-group operations retain at most the bounded prepared window during retirement")
     evidence.live = session.diagnostics()
     check(evidence.live.disk_reloads>0 and evidence.live.handoff_hits>0,"Both admitted handoff and durable overflow paths are exercised")
+    check(evidence.live.recorded_handoff_hits>0,"Live bounded handoff compiles already captured records")
     session.close(); session = null; peer.close(); peer=null
     timeline.retire_group = Callable()
     # Full replay remains bounded until displayed feedback, even with all files
@@ -86,7 +87,18 @@ func run() -> void:
     DirAccess.remove_absolute(directory)
     # Authentic long Gallery recording exercises non-empty lineages, actor
     # motion, revealed terrain and observations through the bounded worker.
-    var gallery="res://.runtime/gallery-route/journal"
+    var gallery=""
+    for argument in OS.get_cmdline_user_args():
+        if argument.begins_with("--recording="): gallery=argument.trim_prefix("--recording=")
+    if gallery.is_empty():
+        check(false,"Supply --recording= with an authentic Gallery journal")
+        print("SESSION_EXECUTION_CHECKS ",JSON.stringify({"checks":checks,"failures":failures}))
+        quit(1)
+        return
+    var last_recorded_sequence=-1
+    var record_name=RegEx.new(); record_name.compile("^[0-9]{16}\\.json$")
+    for filename in DirAccess.get_files_at(gallery):
+        if record_name.search(filename)!=null: last_recorded_sequence=maxi(last_recorded_sequence,filename.trim_suffix(".json").to_int())
     session=Session.new(); session.open_recording(gallery)
     await until(func():return session.recording_ready,"Actual Gallery initialization prepares")
     var actual=Timeline.new()
@@ -97,10 +109,11 @@ func run() -> void:
         actual.advance(1000000)
         session.set_displayed_sequence(actual.sequence)
         await process_frame
-    check(session.issue.is_empty() and actual.sequence==101 and session.terminal,"All 102 authentic Gallery packets reach display, despite bounded lookahead")
+    check(session.issue.is_empty() and actual.sequence==last_recorded_sequence and session.terminal,"All authentic Gallery packets reach display, despite bounded lookahead")
     var independent=Session.Journal.new()
     var replayed=independent.open(gallery,true)
     check(replayed.ok and actual.state==independent.state,"Bounded real Gallery display matches independently replayed durable journal")
+    check(session.diagnostics().recorded_handoff_hits==last_recorded_sequence,"Offline replay captures once per operation and hands records to the compiler")
     evidence.gallery={"sequence":actual.sequence,"completed_groups":actual.completed_group_count,"execution":session.diagnostics()}
     session.close()
     check(session.diagnostics().retired_groups==actual.completed_group_count and session.diagnostics().retirement_pending_groups==0,"Close drains every completed real Gallery group including staged last-frame retirement")
@@ -110,7 +123,7 @@ func run() -> void:
     await until(func():return session.diagnostics().active,"Real recording enters an atomic decode/compile")
     before=Time.get_ticks_msec(); session.close()
     evidence.active_close_ms=Time.get_ticks_msec()-before
-    check(session.diagnostics().prepared_sequence<101 and evidence.active_close_ms<5000,"Cancellation waits at most the active packet, never the rest of the recording")
+    check(session.diagnostics().prepared_sequence<last_recorded_sequence and evidence.active_close_ms<5000,"Cancellation waits at most the active packet, never the rest of the recording")
     session=null
     var report={"checks":checks,"failures":failures,"evidence":evidence}
     FileAccess.open("res://generated/session_execution_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))

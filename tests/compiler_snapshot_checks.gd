@@ -3,6 +3,7 @@ extends SceneTree
 # synthetic sensory facts or live service; the SDK independently folds events.
 # Usage: godot --headless --path <client> --script res://tests/compiler_snapshot_checks.gd
 #        -- --recording=<journal-directory> [--sequence=<operation-number>]
+#        [--oracle=<preserved-compiler.gd>]
 # Without --sequence, the focused regression checks recorded operations 10 and 87.
 const Compiler = preload("res://presentation/compiler.gd")
 const Journal = preload("res://sdk/journal.gd")
@@ -12,16 +13,19 @@ var failures: Array = []
 var counts = {"events":0,"senses_snapshots":0,"perception_snapshots":0,"world_updates":0,"observations":0}
 var cases: Array = []
 var invocation: Dictionary = {}
+var oracle: Script
 func check(ok: bool, label: String) -> void:
     checks += 1
     if not ok: failures.append(label); print("COMPILER_SNAPSHOT_FAIL ",label)
 
 func _initialize() -> void:
     var directory = ""
+    var oracle_path = ""
     var sequences: Array = [10,87]
     for arg in OS.get_cmdline_user_args():
         if arg.begins_with("--recording="): directory = arg.trim_prefix("--recording=")
         if arg.begins_with("--sequence="): sequences = [int(arg.trim_prefix("--sequence="))]
+        if arg.begins_with("--oracle="): oracle_path = arg.trim_prefix("--oracle=")
     if directory.is_empty():
         print("COMPILER_SNAPSHOT_USAGE: --recording=<journal-directory> is required; no local timestamp is assumed.")
         print("godot --headless --path <client> --script res://tests/compiler_snapshot_checks.gd -- --recording=<journal-directory> [--sequence=<operation-number>]")
@@ -30,6 +34,10 @@ func _initialize() -> void:
     invocation = {"script":"res://tests/compiler_snapshot_checks.gd",
         "arguments":Array(OS.get_cmdline_user_args()),"sequences":sequences.duplicate(),
         "recording_requirement":"External recorded journal; not a checked-in fixture. Default operations: 10 and 87."}
+    if not oracle_path.is_empty():
+        oracle = load(oracle_path)
+        check(oracle!=null,"Explicit preserved compiler oracle loads")
+        if oracle==null: finish(); return
     for sequence in sequences:
         var count_before = counts.duplicate()
         var check_before = checks
@@ -59,11 +67,26 @@ func run_case(directory: String, sequence: int) -> void:
     var canonical = Reducer.reduce_operation(before,packet)
     check(canonical.ok,"SDK accepts operation independently")
     if not canonical.ok: return
-    var compiled = Compiler.compile_admitted(before,packet,{},canonical.value)
-    check(compiled.ok,"Admitted operation compiles")
+    var recorded = Reducer._reduce_operation_recorded(before,packet)
+    check(recorded.ok and recorded.value==canonical.value,"Recorded canonical fold equals ordinary public reduction")
+    if not recorded.ok: return
+    var frozen_records = recorded.transitions.duplicate(true)
+    if not recorded.transitions.lineages.is_empty():
+        for field in ["lineage_uuid","start_cursor","end_cursor"]:
+            var mismatched: Dictionary = recorded.transitions.duplicate()
+            mismatched.lineages = recorded.transitions.lineages.duplicate()
+            mismatched.lineages[0] = mismatched.lineages[0].duplicate()
+            mismatched.lineages[0][field] = "different-lineage" if field=="lineage_uuid" else int(mismatched.lineages[0][field])+1
+            check(not Compiler.compile_recorded(before,packet,{},recorded.value,mismatched).ok,
+                "Mismatched recorded "+field+" is rejected before presentation")
+    var compiled = Compiler.compile_recorded(before,packet,{},recorded.value,recorded.transitions)
+    check(compiled.ok,"Canonical records compile without a second event fold")
     if not compiled.ok: return
     var groups: Array = compiled.value.groups
     var frozen_groups = groups.duplicate(true)
+    if oracle!=null:
+        var previous: Dictionary = oracle.compile_admitted(before,packet,{},canonical.value)
+        check(previous.ok and previous.value==compiled.value,"Entire captured result equals the independently preserved refolding compiler")
     check(before==before_copy and packet==packet_copy,"Compilation leaves caller state and packet unchanged")
     var reference = before.duplicate(true)
     for lineage in packet.lineages:
@@ -110,8 +133,13 @@ func run_case(directory: String, sequence: int) -> void:
             Compiler.apply_delta(second,commit.delta)
     check(first==canonical.value and second==canonical.value,"Two independent displayed replays retain exact canonical final state")
     check(groups==frozen_groups,"Later folds and both displayed replays preserve every retained intermediate record")
+    check(recorded.transitions==frozen_records,"Authoring and displayed replay do not mutate canonical event records")
+    var reused = Compiler.compile_recorded(before,packet,{},recorded.value,recorded.transitions)
+    check(reused.ok and reused.value==compiled.value,"Repeated scheduling of the same records preserves all groups and state")
     var public_result = Compiler.compile(before,packet,{})
-    check(public_result.ok and public_result.value==compiled.value,"Public strict compilation and admitted compilation remain identical")
+    check(public_result.ok and public_result.value==compiled.value,"Public strict compilation and captured compilation remain identical")
+    var admitted = Compiler.compile_admitted(before,packet,{},canonical.value)
+    check(admitted.ok and admitted.value==compiled.value,"Final-state-only compatibility uses the same captured compiler")
     # Input containers remain the caller's property. Alter actual sensory inputs
     # after compilation; no event snapshot may still refer to those containers.
     if before.senses!=null:
@@ -119,6 +147,8 @@ func run_case(directory: String, sequence: int) -> void:
         before.senses.entities.clear()
         before.senses.visible.clear()
     before.perception.members.clear()
+    for actor in before.actors.values():
+        if actor.last_visual_position!=null: actor.last_visual_position[0]+=1000
     for lineage in packet.lineages:
         for observation in lineage.observations:
             observation.actor.name="Caller mutation after compilation"
@@ -133,10 +163,11 @@ func run_case(directory: String, sequence: int) -> void:
         for update in lineage.world_updates:
             for tile in update.tiles: tile.elevation_steps+=1000
     check(groups==frozen_groups,"Caller mutation of original sensory/world inputs cannot change compiled history")
+    check(recorded.transitions==frozen_records,"Caller mutation cannot change canonical captures retained across compilation")
     check(counts.senses_snapshots>1 and counts.perception_snapshots>1,"Actual input exercises multiple retained sensory boundaries")
 
 func finish() -> void:
     var report = {"checks":checks,"failures":failures,"counts":counts,"cases":cases,"invocation":invocation,
-        "scope":"Headless actual-recording event snapshots, independent SDK event folds, two exact displayed replays, public/admitted parity and caller sensory/world-input isolation. No rendered-pixel or timing claim."}
+        "scope":"Headless actual-recording event snapshots, independent SDK event folds, two exact displayed replays, public/captured/compatibility parity, repeated record scheduling and caller sensory/world/actor-input isolation. No rendered-pixel or timing claim."}
     FileAccess.open("res://generated/compiler_snapshot_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("COMPILER_SNAPSHOT ",JSON.stringify(report)); quit(0 if failures.is_empty() else 1)

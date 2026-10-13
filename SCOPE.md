@@ -1455,3 +1455,49 @@ still reconstructs from raw history. Passive records must publish only after ful
 semantic validation and durable commit, preserve pre-fact actors and ordered
 intermediate after-values, and keep authored timing/resources outside the SDK.
 This proposed restructuring is not implemented or performance-certified.
+
+## Single live fold and incremental cells — 13 October 2026
+
+The user authorizes implementing the client-side changes from the preceding
+architecture review, independently of any server field-delta proposal. Requested
+behavior remains prompt real-command playback. Boundary: admitted current wire
+operation through journal, authoring compiler and displayed frame. Inputs: real
+Gallery packets, existing oracle fixtures and live clicks. Expected output:
+identical canonical state, intermediate commits, authored tracks and graphics,
+with less repeated reduction, cell scanning/sorting and allocation.
+
+1. Capture passive event-time actor inputs and after-values during the canonical
+   transaction; publish only after complete semantic validation and journal commit.
+   Reuse captures in the existing bounded live handoff. Cold/overflow replay uses
+   the same reducer/collector and compiler without a second semantic fold.
+2. Maintain transaction-local numeric cell lookup data for sparse sensory changes;
+   retain public sorted-array output, full coordinate precision, observer precedence,
+   initial reset behavior and independently held event-time snapshots.
+3. Compare full compiled values against the previous implementation on real movement,
+   attacks/reactions, jumps and other recorded cases; verify late rejection, input
+   isolation, replay, bounded backlog and reconnect through existing boundaries.
+4. Profile the same native Windows Gallery route, inspect remaining client blockers,
+   preserve measured exceptions, commit code/evidence and restore the preview.
+
+Root owns SDK transition capture, journal/session integration and final live
+acceptance. render_audit owns compiler consumption and output parity; map_audit
+owns audience lookup implementation and focused verification. scope_review tracks
+plan adherence and acts as anti-slop/anti-OOP reviewer. Performance runs are serial.
+No new backend/protocol fields, prediction, authoring timing, shaders or artwork.
+No unbounded derived history, alternate Studio executor, per-content repair or
+new worker hierarchy. Further client work follows measured bottlenecks within
+this scope, rather than an unrelated cleanup pass.
+
+Implementation boundary checks pass: 37 focused cell checks (including integer
+coordinates beyond 2^53), 339 SDK ownership checks, 30 journal failure/durability
+checks, 33 bounded-session/cold-replay checks, 351 transport checks and 1,233 Python
+reducer oracle cases. The captured compiler has 569 focused checks and 606 complete
+old/new output comparisons across 118 actual operations, including reactions,
+jumps, damage and death. No authored schedule values differ. Independent review
+found no source blocker; duplicate deliveries now retain the original pending
+handoff rather than replacing it. Six paired actual-operation CPU measurements
+isolate cell bookkeeping: recorded reduction median 100.175→76.053 ms (plain
+87.255→65.124 ms); this is not a live input-latency claim. Native acceptance remains
+pending. The mutable server checkout is now developing a different wire schema;
+use the existing clean client-atlas-profile worktree at compatible committed
+e4d3a879281 for client-only live acceptance, without modifying server work.

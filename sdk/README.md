@@ -115,6 +115,17 @@ history must use separate journal/reducer owners. Interrupted `.tmp` files do
 not become accepted records. This tests process recovery, not hardware power-loss
 durability guarantees.
 
+The player preparation worker uses a bounded internal handoff. During canonical
+operation reduction, `transitions.gd` collects pre-fact actor inputs and ordered
+state after-values. `journal.gd` exposes these records only after the complete
+operation and durable commit succeed. The compiler consumes those records to
+schedule authored tracks; it does not reduce the same sensory facts again.
+Records are private, read-only owned values, not a second public mutable snapshot
+API. They are retained only within the existing two-operation preparation window.
+Overflow and cold replay reconstruct them from the original journal bytes.
+Cell lookups are local to each fold; published visible/seen arrays remain sorted,
+with full integer coordinates and independent event-time versions.
+
 ## Validation and deliberate limits
 
 Completed validation on 2026-10-11 using native Windows Godot 4.7.2:

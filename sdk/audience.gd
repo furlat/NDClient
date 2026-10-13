@@ -77,7 +77,7 @@ static func reduce_senses(expected_observer: String, previous: Variant, event: D
 
 # Internal folds retain immutable prior leaves. Public value-in/value-out helpers
 # above/below detach their result; the reducer already owns its transaction copy.
-static func _reduce_senses_retained(expected_observer: String, previous: Variant, event: Dictionary) -> Dictionary:
+static func _reduce_senses_retained(expected_observer: String, previous: Variant, event: Dictionary, cells: Dictionary = {}) -> Dictionary:
     if event.observer_uuid != expected_observer:
         return failure("sensory update belongs to a different observer")
     if event.initial:
@@ -89,36 +89,39 @@ static func _reduce_senses_retained(expected_observer: String, previous: Variant
             "sense_modes": [], "visual_access": event.visual_access, "hazardous_cells": {}, "spatial_effects": {}}
     if previous == null:
         return failure("sensory delta requires a previously recorded initial state")
-    var result: Dictionary = previous.duplicate()
-    for field in ["entities", "objects", "spatial_effects", "effective_light_levels", "hazardous_cells"]:
-        result[field] = previous[field].duplicate()
-    var visible = {}
-    for point in result.visible: visible[point_key(point)] = point
-    for point in event.visible_cells_removed:
-        var key = point_key(point)
-        visible.erase(key)
-        result.effective_light_levels.erase(key)
-        result.hazardous_cells.erase(key)
-    for point in event.visible_cells_added: visible[point_key(point)] = point.duplicate()
-    result.visible = points_union([], visible.values())
-    result.seen = points_union(result.seen, event.seen_cells_added.duplicate(true))
-    for identity in event.entity_contacts_removed: result.entities.erase(identity)
-    result.entities.merge(event.entity_contacts_changed.duplicate(true), true)
-    for identity in event.object_contacts_removed: result.objects.erase(identity)
-    result.objects.merge(event.object_contacts_changed.duplicate(true), true)
-    for identity in event.spatial_effects_removed: result.spatial_effects.erase(identity)
-    result.spatial_effects.merge(event.spatial_effects_changed.duplicate(true), true)
+    # Reject invalid after-values before changing the fold-local coordinate
+    # lookups. A caller retry must not inherit part of a rejected observation.
+    var lights = {}
+    var hazards = {}
     for key in event.effective_light_levels_changed:
         var parsed = parse_cell_key(key)
         if not parsed.ok: return parsed
         var light = event.effective_light_levels_changed[key]
         if light < 0 or light > 4 or float(light) != floor(float(light)):
             return failure("Unknown recorded light level")
-        result.effective_light_levels[parsed.value] = light
+        lights[parsed.value] = light
     for key in event.hazardous_cells_changed:
         var parsed = parse_cell_key(key)
         if not parsed.ok: return parsed
-        result.hazardous_cells[parsed.value] = event.hazardous_cells_changed[key]
+        hazards[parsed.value] = event.hazardous_cells_changed[key]
+    var indexed = _member_cells(previous, expected_observer, cells)
+    var result: Dictionary = previous.duplicate()
+    for field in ["entities", "objects", "spatial_effects", "effective_light_levels", "hazardous_cells"]:
+        result[field] = previous[field].duplicate()
+    for point in event.visible_cells_removed:
+        var key = point_key(point)
+        result.effective_light_levels.erase(key)
+        result.hazardous_cells.erase(key)
+    result.visible = _update_cells(indexed.visible, event.visible_cells_added, event.visible_cells_removed)
+    result.seen = _update_cells(indexed.seen, event.seen_cells_added, [])
+    for identity in event.entity_contacts_removed: result.entities.erase(identity)
+    result.entities.merge(event.entity_contacts_changed.duplicate(true), true)
+    for identity in event.object_contacts_removed: result.objects.erase(identity)
+    result.objects.merge(event.object_contacts_changed.duplicate(true), true)
+    for identity in event.spatial_effects_removed: result.spatial_effects.erase(identity)
+    result.spatial_effects.merge(event.spatial_effects_changed.duplicate(true), true)
+    result.effective_light_levels.merge(lights,true)
+    result.hazardous_cells.merge(hazards,true)
     if event.sense_modes_changed and event.sense_modes != null:
         result.sense_modes = event.sense_modes.duplicate(true)
         result.sense_modes_hash = modes_signature(result.sense_modes)
@@ -128,6 +131,7 @@ static func _reduce_senses_retained(expected_observer: String, previous: Variant
     if event.visual_access_changed and event.visual_access != null:
         result.visual_access = event.visual_access
     result.paths_dirty = previous.paths_dirty or event.paths_dirty
+    indexed.source = result
     return success(result)
 
 static func observe(previous: Dictionary, audience: Dictionary, event: Dictionary, cursor: int) -> Dictionary:
@@ -135,16 +139,17 @@ static func observe(previous: Dictionary, audience: Dictionary, event: Dictionar
     if result.ok: result.value = result.value.duplicate(true)
     return result
 
-static func _observe_retained(previous: Dictionary, audience: Dictionary, event: Dictionary, cursor: int) -> Dictionary:
+static func _observe_retained(previous: Dictionary, audience: Dictionary, event: Dictionary, cursor: int, cells: Dictionary = {}) -> Dictionary:
     if event.observer_uuid not in audience.observers:
         return failure("Sensory observation does not belong to this audience")
-    var reduced = _reduce_senses_retained(event.observer_uuid, previous.members.get(event.observer_uuid), event)
+    var reduced = _reduce_senses_retained(event.observer_uuid, previous.members.get(event.observer_uuid), event, cells)
     if not reduced.ok: return reduced
     var result: Dictionary = previous.duplicate()
     for field in ["members", "contact_cursors", "effect_cursors", "effect_absences"]:
         result[field] = previous[field].duplicate()
     result.members[event.observer_uuid] = reduced.value
     var current: Dictionary = reduced.value
+    var visible_cells: Dictionary = _member_cells(current,event.observer_uuid,cells).visible
     var before: Variant = previous.members.get(event.observer_uuid)
     for identity in event.entity_contacts_changed:
         result.contact_cursors[event.observer_uuid + "," + identity] = cursor
@@ -154,7 +159,7 @@ static func _observe_retained(previous: Dictionary, audience: Dictionary, event:
         var observed: Dictionary = event.spatial_effects_changed[identity]
         var witnessed = not observed.visible_volume_positions.is_empty() or not observed.upper_volume_surfaces.is_empty()
         for point in observed.positions:
-            if point in current.visible: witnessed = true; break
+            if _has_cell(visible_cells,point): witnessed = true; break
         if witnessed: result.effect_cursors[event.observer_uuid + "," + identity] = cursor
     var known = {}
     var snapshots: Array = previous.members.values()
@@ -166,7 +171,7 @@ static func _observe_retained(previous: Dictionary, audience: Dictionary, event:
         var observed: Variant = current.spatial_effects.get(identity)
         var present: Array = observed.positions if observed != null else []
         for point in known[identity]:
-            if point not in current.visible: continue
+            if not _has_cell(visible_cells,point): continue
             var key: String = identity + "," + point_key(point)
             if result.effect_absences.get(key, -1) > cursor: continue
             if point in present:
@@ -304,13 +309,17 @@ static func _view_retained(perception: Dictionary, observer: String) -> Variant:
 # Only an owned event fold that already composed a sensory view may reuse these
 # cell collections. Initial observer resets still recompute the full union.
 # Contacts/effects stay exhaustive; observations/spatial facts may alter them.
-static func _view_after(perception: Dictionary, observer: String, previous: Variant, event: Dictionary) -> Variant:
+static func _view_after(perception: Dictionary, observer: String, previous: Variant, event: Dictionary, cells: Dictionary = {}) -> Variant:
     if previous == null or event.initial or perception.members.is_empty():
         return _view_retained(perception, observer)
     var anchor: Dictionary = perception.members.get(observer, perception.members.values()[0])
     var result: Dictionary = anchor.duplicate()
     result.effective_light_levels = previous.effective_light_levels.duplicate()
     result.hazardous_cells = previous.hazardous_cells.duplicate()
+    var composed: Dictionary = cells.get("view",{})
+    if composed.is_empty() or not is_same(composed.source,previous):
+        composed = _indexed_senses(previous)
+        cells.view = composed
     var affected = {}
     for point in event.visible_cells_added + event.visible_cells_removed:
         affected[point_key(point)] = point
@@ -321,6 +330,9 @@ static func _view_after(perception: Dictionary, observer: String, previous: Vari
             affected[point_key(point)] = point
     var observers: Array = perception.members.keys()
     observers.sort()
+    var members = {}
+    for identity in observers:
+        members[identity] = _member_cells(perception.members[identity],identity,cells)
     var added: Array = []
     var removed: Array = []
     for key in affected:
@@ -329,7 +341,7 @@ static func _view_after(perception: Dictionary, observer: String, previous: Vari
         var brightness: Variant = null
         for identity in observers:
             var member: Dictionary = perception.members[identity]
-            if point not in member.visible: continue
+            if not _has_cell(members[identity].visible,point): continue
             var level: Variant = member.effective_light_levels.get(key, 1)
             if owner == null or level > brightness:
                 owner = identity
@@ -337,34 +349,66 @@ static func _view_after(perception: Dictionary, observer: String, previous: Vari
         result.effective_light_levels.erase(key)
         result.hazardous_cells.erase(key)
         if owner == null:
-            if point in previous.visible: removed.append(point)
+            if _has_cell(composed.visible,point): removed.append(point)
         else:
-            if point not in previous.visible: added.append(point)
+            if not _has_cell(composed.visible,point): added.append(point)
             var member: Dictionary = perception.members[owner]
             if member.effective_light_levels.has(key): result.effective_light_levels[key] = member.effective_light_levels[key]
             if member.hazardous_cells.has(key): result.hazardous_cells[key] = member.hazardous_cells[key]
-    result.visible = _patch_points(previous.visible, added, removed)
-    result.seen = _patch_points(previous.seen, event.seen_cells_added, [])
+    result.visible = _update_cells(composed.visible, added, removed)
+    result.seen = _update_cells(composed.seen, event.seen_cells_added, [])
     result.paths_dirty = false
     for member in perception.members.values(): result.paths_dirty = result.paths_dirty or member.paths_dirty
     result.entities = _contacts_retained(perception, false)
     result.objects = _contacts_retained(perception, true)
     result.spatial_effects = effects(perception)
+    composed.source = result
     return result
 
-static func _patch_points(previous: Array, added: Array, removed: Array) -> Array:
-    if added.is_empty() and removed.is_empty(): return previous
-    var incoming = points_union([], added.duplicate(true))
+static func _member_cells(senses: Dictionary, observer: String, cells: Dictionary) -> Dictionary:
+    if not cells.has("members"): cells.members = {}
+    var indexed: Dictionary = cells.members.get(observer,{})
+    if indexed.is_empty() or not is_same(indexed.source,senses):
+        indexed = _indexed_senses(senses)
+        cells.members[observer] = indexed
+    return indexed
+
+static func _indexed_senses(senses: Dictionary) -> Dictionary:
+    return {"source":senses,"visible":_cell_index(senses.visible),"seen":_cell_index(senses.seen)}
+
+static func _cell_index(points: Array) -> Dictionary:
+    var columns = {}
+    for point in points:
+        if not columns.has(point[0]): columns[point[0]] = {}
+        columns[point[0]][point[1]] = point
+    return {"columns":columns,"ordered":_ordered_cells(columns)}
+
+static func _has_cell(indexed: Dictionary, point: Array) -> bool:
+    return indexed.columns.has(point[0]) and indexed.columns[point[0]].has(point[1])
+
+static func _update_cells(indexed: Dictionary, added: Array, removed: Array) -> Array:
+    var changed = false
+    var columns: Dictionary = indexed.columns
+    for point in removed:
+        if not _has_cell(indexed,point): continue
+        columns[point[0]].erase(point[1])
+        if columns[point[0]].is_empty(): columns.erase(point[0])
+        changed = true
+    for point in added:
+        if _has_cell(indexed,point): continue
+        if not columns.has(point[0]): columns[point[0]] = {}
+        columns[point[0]][point[1]] = point.duplicate()
+        changed = true
+    if changed: indexed.ordered = _ordered_cells(columns)
+    return indexed.ordered
+
+static func _ordered_cells(columns: Dictionary) -> Array:
+    var xs: Array = columns.keys()
+    xs.sort()
     var result: Array = []
-    var next = 0
-    for point in previous:
-        while next < incoming.size() and _point_less(incoming[next], point):
-            result.append(incoming[next]); next += 1
-        if next < incoming.size() and incoming[next] == point: next += 1
-        if point not in removed: result.append(point)
-    while next < incoming.size():
-        result.append(incoming[next]); next += 1
+    for x in xs:
+        var column: Dictionary = columns[x]
+        var ys: Array = column.keys()
+        ys.sort()
+        for y in ys: result.append(column[y])
     return result
-
-static func _point_less(a: Array, b: Array) -> bool:
-    return a[0] < b[0] if a[0] != b[0] else a[1] < b[1]

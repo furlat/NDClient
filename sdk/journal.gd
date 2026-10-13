@@ -38,7 +38,7 @@ func consume(packet: Dictionary, raw: PackedByteArray) -> Dictionary:
 	if not Protocol._equal(admitted.value, packet): return _failure("Packet differs from journal bytes")
 	return _consume_admitted(admitted.value, raw)
 
-func _consume_admitted(packet: Dictionary, raw: PackedByteArray) -> Dictionary:
+func _consume_admitted(packet: Dictionary, raw: PackedByteArray, record_transitions: bool = false) -> Dictionary:
 	# Internal transport/replay boundary: the caller owns these exact admitted
 	# bytes. Public consume() above always decodes and compares independently.
 	if directory.is_empty(): return _failure("Journal is not open")
@@ -55,7 +55,7 @@ func _consume_admitted(packet: Dictionary, raw: PackedByteArray) -> Dictionary:
 	var saved := _stage(int(next.sequence), raw)
 	if not saved.ok: return saved
 	var normalized: Dictionary = protocol._normalize_admitted("InitializationResponse" if next.sequence == 0 else "PlayerOperation", packet)
-	var reduced := _reduced_state(normalized)
+	var reduced := _reduced_state(normalized, record_transitions)
 	if not reduced.ok: return reduced
 	var target := _file(int(next.sequence))
 	if not FileAccess.file_exists(target):
@@ -63,7 +63,10 @@ func _consume_admitted(packet: Dictionary, raw: PackedByteArray) -> Dictionary:
 		if code != OK: return _failure("Cannot commit journal: " + error_string(code))
 	state = reduced.value
 	cursor = packet.cursor.duplicate(true)
-	return {"ok": true, "value": cursor.duplicate(true), "normalized": normalized}
+	var accepted := {"ok": true, "value": cursor.duplicate(true), "normalized": normalized}
+	# Derived records cross the worker boundary only after durable publication.
+	if reduced.has("transitions"): accepted.transitions = reduced.transitions
+	return accepted
 
 func replay(through_sequence: int = -1) -> Dictionary:
 	# Replay is transactional: leave the prior snapshot intact on any bad record.
@@ -97,12 +100,12 @@ func replay(through_sequence: int = -1) -> Dictionary:
 func snapshot() -> Dictionary:
 	return state.duplicate(true)
 
-func _reduced_state(packet: Dictionary) -> Dictionary:
+func _reduced_state(packet: Dictionary, record_transitions: bool = false) -> Dictionary:
 	var result: Dictionary
 	if packet.cursor.sequence == 0:
 		result = Reducer.reduce_initialization(packet.initialization, packet.content_additions)
 	else:
-		result = Reducer.reduce_operation(state, packet)
+		result = Reducer._reduce_operation_recorded(state, packet) if record_transitions else Reducer.reduce_operation(state, packet)
 	return result
 
 func _file(sequence: int) -> String:

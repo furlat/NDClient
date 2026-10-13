@@ -2,20 +2,12 @@ extends RefCounted
 ## Passive presentation of admitted occurrences. The SDK reducer owns truth.
 const Tracks = preload("res://presentation/tracks.gd")
 const Reducer = preload("res://sdk/reducer.gd")
+const Transitions = preload("res://sdk/transitions.gd")
 const Authoring = preload("res://presentation/authoring.gd")
 const EventTrace = preload("res://presentation/event_trace.gd")
 
 static func empty_delta() -> Dictionary:
-    return {"set":{},"actors":{},"tiles":{},"objects":{},"objects_removed":[],"spatial_commit_cursors":{}}
-
-static func _snapshot_senses(senses: Variant) -> Variant:
-    if senses == null: return null
-    # The compiler owns a detached target. Sensory folds replace the whole
-    # view; spatial facts/observations only replace shell fields or entity-map
-    # entries. Preserve those mutable containers, sharing their private leaves.
-    var result: Dictionary = senses.duplicate()
-    result.entities = senses.entities.duplicate()
-    return result
+    return Transitions.empty_delta()
 
 static func apply_delta(target: Dictionary, delta: Dictionary) -> void:
     for key in delta.get("set", {}): target[key] = delta.set[key]
@@ -177,48 +169,39 @@ static func _schedule(node: Dictionary, start: float, state: Dictionary, group: 
     graph.ends[node.uuid] = finish
     return finish
 
-static func _capture_delta(target: Dictionary, node: Dictionary, observations: Array, update: Variant) -> Dictionary:
-    var delta = empty_delta()
-    var actors = {}
-    for observation in observations: actors[observation.actor.uuid] = true
-    var fact: Variant = node.fact
-    if fact != null and not node.canceled:
-        for field in ["entity_uuid","source_entity_uuid","target_entity_uuid","observer_uuid"]:
-            if fact.get(field) != null: actors[fact[field]] = true
-        if fact.kind == "sensory":
-            for identity in fact.entity_contacts_changed: actors[identity] = true
-            # Audience folds return a new perception snapshot without changing
-            # its predecessor. This private event-time record is already owned.
-            delta.set.perception = target.perception
-        if fact.kind in ["sensory","spatial"]: delta.set.senses = _snapshot_senses(target.senses)
-        if fact.kind == "turn":
-            delta.set.current_actor_uuid = target.current_actor_uuid
-            delta.set.round_number = target.round_number
-        if fact.kind == "spatial" and fact.entity_uuid != null and target.spatial_commit_cursors.has(fact.entity_uuid):
-            delta.spatial_commit_cursors[fact.entity_uuid] = target.spatial_commit_cursors[fact.entity_uuid]
-    for identity in actors:
-        if target.actors.has(identity): delta.actors[identity] = target.actors[identity].duplicate(true)
-    for observation in observations:
-        if observation.contact != null:
-            delta.set.senses = _snapshot_senses(target.senses)
-    if update != null:
-        for tile in update.tiles: delta.tiles[Reducer.Audience.point_key(tile.position)] = tile.duplicate(true)
-        for object in update.objects: delta.objects[object.item.item_uuid] = object.duplicate(true)
-        delta.objects_removed = update.objects_removed.duplicate()
-        delta.set.connectors = target.connectors.duplicate(true)
-    return delta
-
 static func compile(before: Dictionary, packet: Dictionary, cache: Dictionary) -> Dictionary:
-    var validated = Reducer.reduce_operation(before,packet)
-    if not validated.ok: return validated
-    return compile_admitted(before,packet,cache,validated.value)
+    var recorded = Reducer._reduce_operation_recorded(before,packet)
+    if not recorded.ok: return recorded
+    return compile_recorded(before,packet,cache,recorded.value,recorded.transitions)
 
 static func compile_admitted(before: Dictionary, packet: Dictionary, cache: Dictionary, final_state: Dictionary) -> Dictionary:
-    # The session has already transactionally reduced this exact packet in the
-    # journal. Standalone callers use compile(), which retains admission.
-    var target = Reducer.copy_target(before)
+    # Compatibility for callers retaining only an admitted final state. Live
+    # sessions hand off captures directly to compile_recorded instead.
+    var recorded = Reducer._reduce_operation_recorded(before,packet)
+    if not recorded.ok: return recorded
+    return compile_recorded(before,packet,cache,final_state,recorded.transitions)
+
+static func compile_recorded(before: Dictionary, packet: Dictionary, cache: Dictionary,
+        final_state: Dictionary, transitions: Dictionary) -> Dictionary:
+    # Private records belong to this exact admitted operation. Applying their
+    # immutable after-values advances a local presentation view without folding
+    # observations, world updates or sensory facts for a second time.
+    if transitions.get("lineages",[]).size()!=packet.lineages.size():
+        return Reducer.failure("Recorded transition lineage count differs from operation")
+    var target = before.duplicate()
+    for field in ["actors","tiles","objects","spatial_commit_cursors","combat_log_appends"]:
+        target[field] = before[field].duplicate()
     var groups: Array = []
-    for lineage in packet.lineages:
+    for lineage_index in packet.lineages.size():
+        var lineage: Dictionary = packet.lineages[lineage_index]
+        var recorded: Dictionary = transitions.lineages[lineage_index]
+        for field in ["lineage_uuid","start_cursor","end_cursor"]:
+            if recorded.get(field)!=lineage[field]:
+                return Reducer.failure("Recorded transition identity differs from lineage")
+        if lineage.start_cursor!=target.reducer_cursor:
+            return Reducer.failure("Recorded transition lineage does not follow presentation state")
+        if recorded.get("events",[]).size()!=lineage.events.size():
+            return Reducer.failure("Recorded transition event count differs from lineage")
         var group = {"id":lineage.lineage_uuid,"start_cursor":lineage.start_cursor,"end_cursor":lineage.end_cursor,
             "operation_sequence":packet.get("cursor",{}).get("sequence",-1),"operation_end":false,
             "duration_ms":0.0,"actor_tracks":[],"commits":[],"staged_actors":{},"staged_at_ms":{},"staged_tiles":{},"staged_tile_at_ms":{},"skipped":[]}
@@ -231,7 +214,7 @@ static func compile_admitted(before: Dictionary, packet: Dictionary, cache: Dict
                 if not target.tiles.has(key) and not group.staged_tiles.has(key): group.staged_tiles[key] = tile.duplicate(true)
         var graph = {"nodes":{},"first":{},"times":{},"starts":{},"ends":{},"recipes":{},"visited":{},"positions":{},"actor_inputs":{},"contacts":{},"last_motion":{}}
         for actor in target.actors.values() + group.staged_actors.values():
-            graph.positions[actor.uuid] = actor.last_visual_position
+            graph.positions[actor.uuid] = actor.last_visual_position.duplicate() if actor.last_visual_position != null else null
             if actor.last_visual_position != null:
                 var tile: Dictionary = target.tiles.get(Reducer.Audience.point_key(actor.last_visual_position),group.staged_tiles.get(Reducer.Audience.point_key(actor.last_visual_position),{}))
                 graph.contacts[actor.uuid] = {"from_elevation_feet":tile.get("elevation_steps",0)*5.0,
@@ -241,41 +224,19 @@ static func compile_admitted(before: Dictionary, packet: Dictionary, cache: Dict
             cursors[row.event_uuid] = row.source_index
             graph.first[row.lineage_uuid] = mini(graph.first.get(row.lineage_uuid,row.source_index),row.source_index)
         for node in lineage.events: graph.nodes[node.lineage_uuid] = node
-        var pending = Reducer._ordered_rows(lineage.observations,cursors,"event_uuid")
-        var updates = {}
-        for update in lineage.world_updates: updates[update.event_uuid] = update
-        var next = 0
-        var composed_senses = false
-        for node in lineage.events:
-            var admitted: Array = []
-            while next < pending.size() and cursors[pending[next].event_uuid] <= cursors[node.uuid]:
-                Reducer._observe(target,pending[next]); admitted.append(pending[next]); next += 1
-            var actor_inputs = {}
-            if node.fact != null:
-                for field in ["entity_uuid","source_entity_uuid","target_entity_uuid","observer_uuid"]:
-                    var identity: Variant = node.fact.get(field)
-                    if identity != null and target.actors.has(identity): actor_inputs[identity] = target.actors[identity].duplicate(true)
-            graph.actor_inputs[node.uuid] = actor_inputs
-            var update: Variant = updates.get(node.uuid)
-            if update != null: Reducer.apply_world_update(target,update)
-            if not node.canceled and node.fact != null:
-                var folded = Reducer._apply_committed_player_fact_owned(target,node.fact,cursors[node.uuid],cursors,composed_senses)
-                if not folded.ok: return folded
-                if node.fact.kind == "sensory": composed_senses = true
-            group.commits.append({"at_ms":0.0,"source_index":cursors[node.uuid],"event_uuid":node.uuid,
-                "delta":_capture_delta(target,node,admitted,update)})
-        var trailing = empty_delta()
-        while next < pending.size():
-            var observation: Dictionary = pending[next]
-            Reducer._observe(target,observation)
-            trailing.actors[observation.actor.uuid] = target.actors[observation.actor.uuid].duplicate(true)
-            if observation.contact != null: trailing.set.senses = _snapshot_senses(target.senses)
-            next += 1
-        target.reducer_cursor = lineage.end_cursor
-        trailing.set.reducer_cursor = lineage.end_cursor
-        if lineage.hud_snapshot != null:
-            target.hud_snapshot = lineage.hud_snapshot
-            trailing.set.hud_snapshot = lineage.hud_snapshot.duplicate(true)
+        for event_index in lineage.events.size():
+            var node: Dictionary = lineage.events[event_index]
+            var captured: Dictionary = recorded.events[event_index]
+            if captured.event_uuid!=node.uuid or captured.source_index!=cursors[node.uuid]:
+                return Reducer.failure("Recorded transition identity differs from event")
+            graph.actor_inputs[node.uuid] = captured.actor_inputs
+            apply_delta(target,captured.delta)
+            group.commits.append({"at_ms":0.0,"source_index":captured.source_index,"event_uuid":node.uuid,
+                "delta":captured.delta})
+        var trailing: Dictionary = recorded.trailing
+        if trailing.set.get("reducer_cursor")!=lineage.end_cursor:
+            return Reducer.failure("Recorded trailing cursor differs from lineage")
+        apply_delta(target,trailing)
         if lineage.root != null: group.duration_ms = _schedule(lineage.root,0.0,target,group,graph,cache)
         for node in lineage.events:
             if not graph.visited.has(node.lineage_uuid):
@@ -306,6 +267,8 @@ static func compile_admitted(before: Dictionary, packet: Dictionary, cache: Dict
         group.commits.append({"at_ms":group.duration_ms,"source_index":lineage.end_cursor,"delta":trailing})
         group.events = EventTrace.compile_rows(lineage,group,graph,cache)
         groups.append(group)
+    if target.reducer_cursor!=final_state.reducer_cursor:
+        return Reducer.failure("Recorded transitions do not reach the admitted final cursor")
     if groups.is_empty():
         groups.append({"id":"operation:%s" % packet.get("cursor",{}).get("sequence",-1),"start_cursor":before.reducer_cursor,
             "end_cursor":before.reducer_cursor,"operation_sequence":packet.get("cursor",{}).get("sequence",-1),

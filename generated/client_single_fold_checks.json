@@ -1,0 +1,243 @@
+{
+  "scope": "Client single reduction and transaction-local cells. Headless/data acceptance; live native acceptance recorded separately.",
+  "boundary_batch": [
+    {
+      "test": "sdk_cell_checks",
+      "arguments": [
+        "--cases=res://.runtime/sdk-study/reducer-oracle.json"
+      ],
+      "exit_code": 0,
+      "seconds": 0.467,
+      "log": ".runtime/sdk-latency/0-sdk_cell_checks.log",
+      "passed": true
+    },
+    {
+      "test": "sdk_journal_checks",
+      "arguments": [],
+      "exit_code": 0,
+      "seconds": 2.869,
+      "log": ".runtime/sdk-latency/1-sdk_journal_checks.log",
+      "passed": true
+    },
+    {
+      "test": "sdk_snapshot_checks",
+      "arguments": [
+        "--recording=res://.runtime/player-runs/20261013T085650.328082Z/journal",
+        "--sequence=87"
+      ],
+      "exit_code": 0,
+      "seconds": 13.428,
+      "log": ".runtime/sdk-latency/2-sdk_snapshot_checks.log",
+      "passed": true
+    },
+    {
+      "test": "session_execution_checks",
+      "arguments": [
+        "--recording=res://.runtime/player-runs/20261013T085650.328082Z/journal"
+      ],
+      "exit_code": 0,
+      "seconds": 15.273,
+      "log": ".runtime/sdk-latency/3-session_execution_checks.log",
+      "passed": true
+    },
+    {
+      "test": "sdk_transport_checks",
+      "arguments": [],
+      "exit_code": 0,
+      "seconds": 4.909,
+      "log": ".runtime/sdk-latency/4-sdk_transport_checks.log",
+      "passed": true
+    },
+    {
+      "test": "sdk_reducer_checks",
+      "arguments": [
+        "--cases=res://.runtime/sdk-study/reducer-oracle.json"
+      ],
+      "exit_code": 0,
+      "seconds": 0.562,
+      "log": ".runtime/sdk-latency/5-sdk_reducer_checks.log",
+      "passed": true
+    },
+    {
+      "test": "sdk_reducer_checks",
+      "arguments": [
+        "--cases=res://.runtime/sdk-study/reducer-ranged-oracle.json"
+      ],
+      "exit_code": 0,
+      "seconds": 21.007,
+      "log": ".runtime/sdk-latency/6-sdk_reducer_checks.log",
+      "passed": true
+    },
+    {
+      "test": "sdk_reducer_checks",
+      "arguments": [
+        "--cases=res://.runtime/sdk-study/reducer-final-oracle.json"
+      ],
+      "exit_code": 0,
+      "seconds": 34.998,
+      "log": ".runtime/sdk-latency/7-sdk_reducer_checks.log",
+      "passed": true
+    },
+    {
+      "test": "sdk_reducer_checks",
+      "arguments": [
+        "--cases=res://.runtime/sdk-study/reducer-spells-verified-oracle.json"
+      ],
+      "exit_code": 0,
+      "seconds": 27.683,
+      "log": ".runtime/sdk-latency/8-sdk_reducer_checks.log",
+      "passed": true
+    }
+  ],
+  "compiler_recordings": {
+    "cases": [
+      {
+        "arc_facts": 4,
+        "canceled_events": 0,
+        "commits": 1327,
+        "events": 1104,
+        "exact": true,
+        "fact_kinds": {
+          "action": 11,
+          "attack": 9,
+          "condition": 13,
+          "damage": 22,
+          "forced_movement": 1,
+          "life": 2,
+          "movement": 39,
+          "sensory": 313,
+          "shove": 4,
+          "spatial": 320,
+          "spell": 4,
+          "step": 154,
+          "turn": 59
+        },
+        "last_sequence": 101,
+        "lineages": 122,
+        "nonempty_operations": 101,
+        "operations": 101,
+        "opportunity_attacks": 3,
+        "recording": "res://.runtime/player-runs/20261013T085650.328082Z/journal",
+        "tracks": 178
+      },
+      {
+        "arc_facts": 4,
+        "canceled_events": 0,
+        "commits": 30,
+        "events": 24,
+        "exact": true,
+        "fact_kinds": {
+          "attack": 1,
+          "damage": 2,
+          "life": 1,
+          "movement": 1,
+          "sensory": 3,
+          "spatial": 9,
+          "step": 3,
+          "turn": 3
+        },
+        "last_sequence": 2,
+        "lineages": 4,
+        "nonempty_operations": 2,
+        "operations": 2,
+        "opportunity_attacks": 1,
+        "recording": "C:/Users/tommaso/AppData/Local/Temp/ndclient-presentation-oa-jump-late-lethal/amber/journal",
+        "tracks": 6
+      },
+      {
+        "arc_facts": 0,
+        "canceled_events": 0,
+        "commits": 121,
+        "events": 88,
+        "exact": true,
+        "fact_kinds": {
+          "attack": 5,
+          "damage": 6,
+          "life": 2,
+          "sensory": 3,
+          "spatial": 2,
+          "turn": 13
+        },
+        "last_sequence": 15,
+        "lineages": 18,
+        "nonempty_operations": 15,
+        "operations": 15,
+        "opportunity_attacks": 0,
+        "recording": "C:/Users/tommaso/AppData/Local/Temp/ndclient-sdk-ranged-exact/amber/journal",
+        "tracks": 10
+      }
+    ],
+    "checks": 606,
+    "failures": [],
+    "invocation": {
+      "arguments": [
+        "--recording=res://.runtime/player-runs/20261013T085650.328082Z/journal",
+        "--recording=C:/Users/tommaso/AppData/Local/Temp/ndclient-presentation-oa-jump-late-lethal/amber/journal",
+        "--recording=C:/Users/tommaso/AppData/Local/Temp/ndclient-sdk-ranged-exact/amber/journal",
+        "--oracle=res://.runtime/compiler-latency/compiler_before_recorded.gd"
+      ],
+      "script": "res://.runtime/compiler-latency/compare_recordings.gd"
+    },
+    "scope": "Complete old/new compiler outputs on every recorded operation, including empty-operation markers. Native headless data comparison; no GPU, visual or timing claim."
+  },
+  "cell_benchmark": {
+    "equal": true,
+    "rows": [
+      {
+        "before_plain_ms": 87.602,
+        "before_recorded_ms": 97.889,
+        "current_plain_ms": 63.083,
+        "current_recorded_ms": 73.705,
+        "equal": true,
+        "index": 0
+      },
+      {
+        "before_plain_ms": 87.255,
+        "before_recorded_ms": 107.485,
+        "current_plain_ms": 65.124,
+        "current_recorded_ms": 79.232,
+        "equal": true,
+        "index": 1
+      },
+      {
+        "before_plain_ms": 88.744,
+        "before_recorded_ms": 100.175,
+        "current_plain_ms": 69.236,
+        "current_recorded_ms": 81.463,
+        "equal": true,
+        "index": 2
+      },
+      {
+        "before_plain_ms": 87.148,
+        "before_recorded_ms": 101.51,
+        "current_plain_ms": 66.188,
+        "current_recorded_ms": 76.053,
+        "equal": true,
+        "index": 3
+      },
+      {
+        "before_plain_ms": 90.537,
+        "before_recorded_ms": 97.657,
+        "current_plain_ms": 63.034,
+        "current_recorded_ms": 74.323,
+        "equal": true,
+        "index": 4
+      },
+      {
+        "before_plain_ms": 84.074,
+        "before_recorded_ms": 96.214,
+        "current_plain_ms": 61.869,
+        "current_recorded_ms": 70.921,
+        "equal": true,
+        "index": 5
+      }
+    ],
+    "scope": "Actual packet87 isolated Audience change; same current reducer/collector, frozen cedf34f Audience plus unused signature adaptation. Six alternating pairs, warm medians exclude first; no live latency claim.",
+    "warm_medians": {
+      "before_plain_ms": 87.255,
+      "before_recorded_ms": 100.175,
+      "current_plain_ms": 65.124,
+      "current_recorded_ms": 76.053
+    }
+  }
+}
