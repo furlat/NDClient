@@ -1323,3 +1323,50 @@ and authored debris, without the duplicate intact leaf. Source regression data
 is a tracked pair of actual object observations; credentials and full recordings
 remain ignored. scope_review found no production blocker. Native tests finished
 before the user-authorized fresh shared-engine preview was launched.
+
+## Client review and shared Studio design — 13 October 2026
+
+User requests a client review and study of old NeuroClient SpellStudio/NeuroDragon
+Studio plus NDStudio specifications, toward complete authoring-driven server-event
+presentation and effect timelines. This pass reviews production code and historical
+sources, records concrete coverage/correctness gaps, and defines implementation
+against the surviving consolidated master plan §8. It does not claim a completed
+Studio or migrate every animation during an audit. The current Studio specification
+is read-only inspection with external canonical JSON edits/reload; older draft/save
+UI plans are historical references rather than added requirements.
+
+Root owns the findings, shared-runtime design and recorded-prefix diagnostic tool.
+map_audit reviews legacy implementation; render_audit reviews current correctness
+and efficiency; scope_review tracks plan adherence and anti-slop/anti-OOP review.
+Use existing reduction, causal compilation, media/resource ownership and native
+rendering. No separate Studio scheduler, synthetic gameplay outcomes, per-spell
+class hierarchy, backend modifications, lighting changes or artwork import.
+
+Accumulated user feedback: Alt presses left a wall permanently green. The shared
+source builder samples physical input during material creation, which incorrectly
+captures transient UI state in prepared/cached world art. This bounded repair
+initializes sources neutrally, retains live Alt labels, and preserves workshop
+highlighting through its explicit scene/input owner. A focused material-state
+regression covers all camera views and held/released Alt, including workshop
+camera rebuild. It does not claim a native pixel comparison or require ending
+the user's current encounter.
+
+Alt repair validation: 48 headless checks pass, including actual workshop camera
+rebuilds while held and release in all four views. Independent scope/runtime
+reviews found no blocking issue in the bounded correction.
+
+Read-only evidence confirms missing world destruction requirements, intact
+projections for retained non-door remnants, twelve engaged trap state mismatches,
+a false-green body-only dash and a repeated falling clip on stabilization. The
+source inventory includes all 149 spell drafts and 160 condition recipes; counts
+are inputs, not completed animation coverage. Findings and the reviewed sequence
+are in `agent_docs/GODOT_STUDIO_REVIEW_AND_DESIGN_2026-10-13.md`.
+
+The user then requested the latest server optimization build. The active server
+started at 09:24, before the shared Windows engine checkout's 09:32–09:43 grid
+and entity changes. Restarting against that same checkout is authorized by this
+request and necessarily starts a fresh encounter; it also loads the Alt repair.
+Preserve the engine's uncommitted work. Validate real client-issued actions with
+the updated server before launching the fresh native preview. The server plan's
+roughly twelvefold path-query improvement is not a claim of equivalent whole-
+command or client-frame speedup.

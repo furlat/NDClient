@@ -1,0 +1,89 @@
+{
+  "review_baseline_commit": "0635d5f",
+  "scope": "Supplementary headless value probes only; body witness is simulated and no native pixel result is claimed.",
+  "dash_coverage": {
+    "authored_required_media": [
+      {
+        "asset_id": "pending.dash_retreat.back",
+        "attachment": "ground",
+        "id": "dash.back"
+      },
+      {
+        "asset_id": "pending.dash_retreat.front",
+        "attachment": "ground",
+        "id": "dash.front"
+      }
+    ],
+    "condition": "condition.dashing",
+    "kind": "headless_diagnostic_value_probe_no_render_claim",
+    "observed_components": [
+      {
+        "actor_uuid": "diagnostic-actor",
+        "clip": "Run",
+        "end_ms": 400.0,
+        "first_sample_ms": 200.0,
+        "holding_pose": false,
+        "id": "diagnostic-track",
+        "kind": "body",
+        "last_sample_ms": 200.0,
+        "reason": "",
+        "rig": "neuroclient.modular",
+        "sample_count": 1,
+        "source": "catalog/rigs.json:neuroclient.modular.clips.Run",
+        "start_ms": 0.0,
+        "status": "presented",
+        "trace_track_id": "diagnostic-track"
+      }
+    ],
+    "observed_status": "presented",
+    "reproduced_false_full_coverage": true
+  },
+  "life_pose": {
+    "compiled_tracks": [
+      {
+        "actor_uuid": "diagnostic-actor",
+        "clip": "Die",
+        "duration_ms": 1250.0,
+        "from_position": [
+          0,
+          0
+        ],
+        "hidden_slots": [],
+        "holding_pose": true,
+        "loop": false,
+        "motion": false,
+        "occurrence": "diagnostic-life-lineage",
+        "priority": 40,
+        "rig": "neuroclient.modular",
+        "source_end_seconds": 1.25,
+        "source_event_uuid": "diagnostic-life",
+        "source_lineage": "diagnostic-life-lineage",
+        "source_start_seconds": 0.0,
+        "start_ms": 0.0,
+        "to_position": [
+          0,
+          0
+        ],
+        "trace_track_id": "1:diagnostic-life:0",
+        "trajectory": "stationary"
+      }
+    ],
+    "duration_ms": 1250.0,
+    "kind": "headless_diagnostic_compiler_value_probe_no_render_claim",
+    "reproduced_replayed_same_pose": true,
+    "rest_after": {
+      "clip": "Die",
+      "source_seconds": 1.25
+    },
+    "rest_before": {
+      "clip": "Die",
+      "source_seconds": 1.25
+    },
+    "transition": {
+      "entity_uuid": "diagnostic-actor",
+      "kind": "life",
+      "new_state": "stable",
+      "previous_state": "dying"
+    }
+  }
+}
