@@ -1280,3 +1280,13 @@ Deferred artwork follow-up requested by the user: environment-normal-quality-202
 HANDOFF.txt under the fantasy-unified-catalog directory. Inspect/import only after
 the measured client optimization work is complete; do not mix asset changes into
 performance or approved-framebuffer comparisons. The handoff remains unread so far.
+
+Accepted renderer checkpoint4523612:54 reference images and source/clock receipts
+match exactly; live run20261013T005149.264490Z passes411 checks/58 commands and16
+Gallery viewport moves. Baseline686d1da versus final reveal median33.032→16.155ms,
+maximum56.523→22.222ms; moving p95 is11.950→7.054ms. Demand median is7.761ms,
+from14.161ms in the diagnostic run. Actual click response remains2.841s median,
+with separate2.121s server dispatch and567.864ms client preparation measurements.
+Do not sum nested timings or claim every client cost optimized. Normal artwork
+remains deferred. The shared-engine preview is open and PLAYER_READY; native
+sampling has ended. Final evidence:generated/renderer_publication_optimization.json.

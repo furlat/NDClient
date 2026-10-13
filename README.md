@@ -1019,6 +1019,30 @@ engine timers for diagnosis. Summarize a run with
 `python tools/analyze_live_pipeline.py <run-directory> --output <report.json>`.
 SDK transport tracing defaults off, is bounded and excludes payloads/credentials.
 
+The latest renderer pass (2026-10-13) updates admitted receiver rows and output
+materials only where their producers changed. Prepared world membership and
+unchanged floor addresses are retained; wall-mask work is deferred in modes that
+do not use it. Required media preserves the previous budget/queue selection but
+avoids full residency refreshes and repeated estimate lookups. The cap's lighting
+equations and original artwork are unchanged.
+
+On the same pinned backend and 58-command live Gallery route at 1440×900,
+Forward+/RTX5090, reveal-frame median is **16.155 ms** (previous **33.032 ms**),
+with worst reveal **22.222 ms** (previous **56.523 ms**). Moving-frame p95 is
+**7.054 ms** (previous **11.950 ms**). Changing media-demand calls fall from
+14.161 to 7.761 ms median; final output-copy work is 0.018 ms median on live reveals.
+All 411 live checks pass, including 16 viewport-click moves, reaching 1,761 tiles and
+360 objects. All 54 full-scene reference captures and source/clock receipts match
+exactly, with no pixel tolerance. Earlier performance figures below are historical
+checkpoints. The current evidence and sampling limits are in
+[renderer_publication_optimization.json](generated/renderer_publication_optimization.json).
+
+This does not claim every delay is fixed. The same live run still measures
+2.121 seconds median server dispatch and 568 ms client packet preparation before
+presentation; these are separate from moving-frame times. Native buffer uploads
+and bounded mandatory media selection remain. Raw recordings, profiles and
+artwork stay ignored by Git.
+
 The subsequent 58-command diagnostic run passed 410 checks with no lost trace
 records. In-Gallery movement median startup was 4,268 ms, worker dispatch 2,220 ms,
 and client delay after the complete SSE record 1,849 ms. Canonical reduction and
