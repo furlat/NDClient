@@ -48,6 +48,10 @@ def report(run):
     stable = [f for f in gallery if f["view"]["native_2d_reconcile_ms"] < .1]
     active = [f for f in gallery if f["view"].get("active_motion", False) and not f["view"].get("motion_held", False)]
     held = [f for f in gallery if f["view"].get("motion_held", False)]
+    demand_phases = sorted({k for f in gallery for k in f["cpu_ms"] if k.startswith("media_demand_")})
+    demand = {k: distribution([f["cpu_ms"][k] for f in gallery if k in f["cpu_ms"]]) for k in demand_phases}
+    for name in ("media_plan", "media_plan_demand"):
+        demand[name] = distribution([f["cpu_ms"][name] for f in gallery if name in f["cpu_ms"]])
     by_zoom = {str(zoom): summarize([f for f in active if f["view"]["zoom"] == zoom]) for zoom in sorted({f["view"]["zoom"] for f in active})}
     idle = defaultdict(list)
     for f in frames:
@@ -63,6 +67,7 @@ def report(run):
             "gallery_reconcile_below_0_1ms": summarize(stable),
             "gallery_active_motion": summarize(active), "active_motion_by_zoom": by_zoom,
             "gallery_presentation_held": summarize(held),
+            "gallery_media_demand_observed": demand,
             "presentation_held_total_ms": sum(f["frame_ms"] for f in held),
             "atlas_reference": acceptance["evidence"].get("atlas_reference", ""),
             "movement_markers_present": all("active_motion" in f["view"] for f in gallery),

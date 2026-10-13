@@ -36,7 +36,7 @@ func observable(data: Dictionary) -> Dictionary:
         result[key] = data[key]
     for category in [false,true]:
         var stats = Media.diagnostics(data,category)
-        for key in ["demand_runs","demand_noops","metadata_ms","decode_ms"]: stats.erase(key)
+        for key in ["demand_runs","demand_noops","demand_phases","demand_counts","metadata_ms","decode_ms"]: stats.erase(key)
         result[str(category)] = stats
     return result
 
@@ -49,6 +49,15 @@ func demand(label: String, paths: Dictionary, roles: Array = [{},{},{},{}], noop
     Media.demand(reference,paths,roles[0],roles[1],roles[2],roles[3])
     check(observable(fast)==observable(reference),label+": queue, pins, estimates, readiness, errors and boot equal full demand")
     check((fast.demand_noops>count)==noop,label+": expected strict no-op eligibility")
+    var phases: Dictionary = fast.demand_phases
+    var elapsed = 0.0
+    for phase in phases:
+        if phase!="total": elapsed += phases[phase]
+    check(phases.size()==9 and phases.values().all(func(value):return value>=-0.000001) and elapsed<=phases.total+0.000001,
+        label+": last-call exclusive CPU phases fit their independently timed total")
+    if noop:
+        check(phases.estimate==0 and phases.queue==0 and phases.snapshot==0,
+            label+": no-op reports no work in skipped demand phases")
 
 func publish(path: String, gpu: int = 8, fixture: bool = false) -> void:
     # Typed caller publication acknowledgement; worker PNG correctness is tested

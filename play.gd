@@ -984,6 +984,10 @@ func _prepare_media(first: Dictionary = {}) -> void:
     var demand_started = Time.get_ticks_usec()
     MediaWarmup.demand(media_warmup,wanted,environment,fixtures,gpu_only,cpu_required)
     FrameProfile.end_phase(profile,"media_plan_demand",demand_started)
+    for name in media_warmup.get("demand_phases",{}):
+        if name != "total":
+            var phase_name = "media_demand_"+name
+            profile.phases[phase_name] = profile.phases.get(phase_name,0.0)+media_warmup.demand_phases[name]
     media_issue = ""
     for message in media_plan.errors+media_plan.upcoming_errors:
         if not message in presentation_errors: presentation_errors.append(message)

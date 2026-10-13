@@ -21,7 +21,7 @@ static func create() -> Dictionary:
         "selection_revision":-1,"selection_budget":-1,"selection_required":{},"selection_extra":{},"selection_jobs":0,
         "ready_paths":{},"boot_waiting":{},"selected_ready":{},"selected_failed":{},
         "selection_roles":{},"selection_summary":{},"selection_refreshed":0,
-        "demand_snapshot":{},"demand_runs":0,"demand_noops":0}
+        "demand_snapshot":{},"demand_runs":0,"demand_noops":0,"demand_phases":{},"demand_counts":{}}
 
 static func request_plan(data: Dictionary, key: Array, state: Dictionary, groups: Array) -> void:
     # Dictionary membership can change on the scene thread. The after-value
@@ -210,12 +210,24 @@ static func _same_demand(data: Dictionary, paths: Dictionary, roles: Array) -> b
     return accepted.get("paths",{})==family.get("paths",{})
 
 static func demand(data: Dictionary, paths: Dictionary, environment: Dictionary = {}, fixtures: Dictionary = {}, gpu_only: Dictionary = {}, cpu_required: Dictionary = {}) -> void:
+    var started = Time.get_ticks_usec()
+    # Last-call CPU evidence only. Children are exclusive; total is inclusive.
+    var phases = {"guard":0.0,"estimate":0.0,"selection":0.0,"role_diff":0.0,"selection_refresh":0.0,
+        "resident_refresh":0.0,"queue":0.0,"snapshot":0.0,"total":0.0}
+    data.demand_phases = phases
+    data.demand_counts = {"required":paths.size(),"known":data.encounter.get("paths",{}).size(),
+        "pending_before":data.pending.size(),"affected":0,"role_changes":0,"selection_changed":false,"noop":false}
     var exact_roles = [environment,fixtures,gpu_only,cpu_required]
-    if _same_demand(data,paths,exact_roles):
+    var unchanged = _same_demand(data,paths,exact_roles)
+    phases.guard = (Time.get_ticks_usec()-started)/1000.0
+    if unchanged:
         data.wanted = paths; data.environment = environment; data.fixtures = fixtures
         data.gpu_only = gpu_only; data.cpu_required = cpu_required
         data.demand_noops += 1
+        data.demand_counts.noop = true
+        phases.total = (Time.get_ticks_usec()-started)/1000.0
         return
+    var phase_started = Time.get_ticks_usec()
     data.demand_runs += 1
     data.demand_snapshot = {}
     var previous_paths: Dictionary = data.wanted
@@ -247,10 +259,13 @@ static func demand(data: Dictionary, paths: Dictionary, environment: Dictionary 
         if not known.has(path): extra[path] = size
     data.required_estimated_bytes = used
     data.unknown_required = unknown
+    phases.estimate = (Time.get_ticks_usec()-phase_started)/1000.0
+    phase_started = Time.get_ticks_usec()
     var revision: int = data.encounter.get("revision",-1)
     var summary: Dictionary = data.encounter.get("estimate_summary",{})
     var selection_changed: bool = data.selection_revision!=revision or data.selection_budget!=data.budget_bytes \
         or data.selection_extra!=extra or data.selection_summary!=summary or (data.preload_skipped>0 and data.selection_required!=paths)
+    data.demand_counts.selection_changed = selection_changed
     var refresh = {}
     if selection_changed:
         data.selection_jobs += 1
@@ -300,14 +315,21 @@ static func demand(data: Dictionary, paths: Dictionary, environment: Dictionary 
             # Optional animations and normal treatments warm within the budget
             # after this boundary and never delay initial interaction.
             data.boot_paths = paths.duplicate()
+        var role_started = Time.get_ticks_usec()
         var roles = _family_roles(data.encounter)
         var changed = _changed_roles(data.selection_roles,roles)
+        phases.role_diff = (Time.get_ticks_usec()-role_started)/1000.0
+        data.demand_counts.role_changes = changed.size()
         # Queue classifications were counted before accepted family roles moved.
         # Only a real role change of existing work invalidates those aggregates.
         for path in changed:
             if data.queued.has(path): _invalidate(data); break
         data.selection_roles = roles
+        var refresh_started = Time.get_ticks_usec()
         refresh = _selection_delta(data,previous_selected,changed,new_boot)
+        phases.selection_refresh = (Time.get_ticks_usec()-refresh_started)/1000.0
+    phases.selection = (Time.get_ticks_usec()-phase_started)/1000.0-phases.role_diff-phases.selection_refresh
+    phase_started = Time.get_ticks_usec()
     var affected: Dictionary = previous_paths.duplicate()
     affected.merge(paths)
     if selection_changed:
@@ -325,7 +347,10 @@ static func demand(data: Dictionary, paths: Dictionary, environment: Dictionary 
                 var resident: Dictionary = data.resident[path]
                 data.stats[resident.environment].pinned_bytes += (int(current_pin)-int(prior_pin))*int(resident.bytes)
     affected.merge(refresh)
+    data.demand_counts.affected = affected.size()
     for path in affected: _refresh_resident_role(data,path)
+    phases.resident_refresh = (Time.get_ticks_usec()-phase_started)/1000.0
+    phase_started = Time.get_ticks_usec()
     # Promote mandatory sources ahead of unfinished background warmup. Once
     # warm, an action checks only its own small packet, not every retained sheet.
     var pending: Array = data.pending
@@ -338,6 +363,8 @@ static func demand(data: Dictionary, paths: Dictionary, environment: Dictionary 
         if data.preload_selected.has(request.path) and not paths.has(request.path): enqueue(data,request.path,request.absolute)
     for path in refresh:
         if data.preload_selected.has(path) and not paths.has(path): enqueue(data,path,data.preload_selected[path])
+    phases.queue = (Time.get_ticks_usec()-phase_started)/1000.0
+    phase_started = Time.get_ticks_usec()
     # Without header estimates, residency progress can change the budget input.
     # Keep that uncommon path exhaustive instead of tracking another generation.
     if exact_estimates and not summary.is_empty() and summary.unknown==0:
@@ -346,6 +373,8 @@ static func demand(data: Dictionary, paths: Dictionary, environment: Dictionary 
         data.demand_snapshot = {"paths":paths.duplicate(),"order":paths.keys(),"roles":copied_roles,
             "encounter":data.encounter,"epoch":data.encounter_epoch,"budget":data.budget_bytes,
             "boot":[data.boot_started,data.boot_complete]}
+    phases.snapshot = (Time.get_ticks_usec()-phase_started)/1000.0
+    phases.total = (Time.get_ticks_usec()-started)/1000.0
 
 static func _decode(request: Dictionary, result: Dictionary) -> void:
     var started = Time.get_ticks_usec()
@@ -520,7 +549,7 @@ static func diagnostics(data: Dictionary, environment: bool = false) -> Dictiona
         "eviction_pending_bytes":maxi(0,total-maxi(pinned,int(data.budget_bytes))),
         "metadata_ms":data.metadata_ms,"metadata_jobs":data.metadata_jobs,"decode_ms":data.decode_ms,
         "decode_jobs":data.decode_jobs.size(),"decode_worker_limit":DECODE_WORKERS,
-        "budget_bytes":data.budget_bytes,"demand_runs":data.demand_runs,"demand_noops":data.demand_noops,"selection_jobs":data.selection_jobs,"selection_refreshed":data.selection_refreshed,"decoded":data.decoded,"evicted":data.evicted,"failed":data.failed.duplicate(),
+        "budget_bytes":data.budget_bytes,"demand_runs":data.demand_runs,"demand_noops":data.demand_noops,"demand_phases":data.demand_phases.duplicate(),"demand_counts":data.demand_counts.duplicate(),"selection_jobs":data.selection_jobs,"selection_refreshed":data.selection_refreshed,"decoded":data.decoded,"evicted":data.evicted,"failed":data.failed.duplicate(),
         "accounting":"Decoded CPU bytes plus conservative RGBA8 GPU estimate; not measured VRAM/RSS; combined environment and character budget."})
     return result
 

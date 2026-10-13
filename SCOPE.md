@@ -1247,3 +1247,14 @@ error return. Add a real local keepalive-expiry fixture and a received-POST/lost
 reply fixture proving no automatic duplicate mutation. Existing receipt recovery
 is unchanged. render_audit owns the SDK repair/fixtures; root repeats the same
 live route and retains the failed-run evidence separately from performance data.
+
+Live run20261013T002539.222698Z completes411 checks,58 commands and16 Gallery
+clicks. The unchanged-demand guard reports126 no-ops overall but does not resolve
+Gallery's32 changing-demand calls (13.753ms median,21.059ms maximum). Do not claim
+that owner fixed. Add exclusive subphase timing to the same real demand call
+(guard, estimates, selection, role difference, readiness refresh, queue, snapshot),
+then optimize only the measured dominant operation while preserving the existing
+full calculation as acceptance reference. map_audit owns this bounded diagnosis;
+root owns the live profiling hook and serialized route; scope_review continues.
+New normal assets remain deferred. The renderer's exact54 reference captures and
+improved18.044ms reveal median are preserved; no shader or source changes.
