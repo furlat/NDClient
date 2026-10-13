@@ -8,6 +8,7 @@ var schema: Dictionary
 var identity: Dictionary
 var setup_error := ""
 var _patterns: Dictionary = {}
+var _server_choices_envelope: Dictionary = {}
 
 func _init(schema_path: String = "res://sdk/player-api-v1.schema.json", identity_path: String = "res://sdk/protocol-identity.json") -> void:
 	var schema_result := StrictJSON.new().parse(FileAccess.get_file_as_string(schema_path))
@@ -71,13 +72,38 @@ static func parse_json(raw: PackedByteArray) -> Dictionary:
 func decode(root_name: String, raw: PackedByteArray) -> Dictionary:
 	var parsed := parse_json(raw)
 	if not parsed.ok: return parsed
-	return validate(root_name, parsed.value)
+	# The strict parser already establishes finite JSON-only values and depth.
+	return _validate_schema(root_name, parsed.value)
+
+func decode_server_choices(raw: PackedByteArray) -> Dictionary:
+	# Explicit live-query trust boundary. The connected, identity-checked server
+	# owns the nested action data. Public decode and all journal/events stay strict.
+	if not setup_error.is_empty(): return failure(setup_error)
+	if raw.size() > MAX_BYTES: return failure("JSON exceeds 64 MiB")
+	var text_value := utf8(raw)
+	if not text_value.ok: return text_value
+	var parser := JSON.new()
+	if parser.parse(String(text_value.value).trim_prefix(char(0xfeff))) != OK:
+		return failure("Invalid server choices JSON: " + parser.get_error_message())
+	if _server_choices_envelope.is_empty():
+		_server_choices_envelope = schema["$defs"].ChoicesResponse.duplicate(true)
+		var choices := _ref(_server_choices_envelope.properties.choices).duplicate(true)
+		# Keep declared envelope/identity fields, required keys and family shapes.
+		# Rows inside those families are server output, not an untrusted import.
+		for rule in choices.properties.values():
+			if rule.get("type") == "array": rule.items = true
+		_server_choices_envelope.properties.choices = choices
+	var issue := _check(_server_choices_envelope, parser.data, "$", 0)
+	return {"ok":true,"value":parser.data} if issue.is_empty() else failure("Server choices: " + issue)
 
 func validate(root_name: String, value: Variant) -> Dictionary:
-	if not setup_error.is_empty(): return failure(setup_error)
-	if not schema["$defs"].has(root_name): return failure("Unknown schema root: " + root_name)
 	var json_issue := _json_value(value, 0)
 	if not json_issue.is_empty(): return failure(json_issue)
+	return _validate_schema(root_name, value)
+
+func _validate_schema(root_name: String, value: Variant) -> Dictionary:
+	if not setup_error.is_empty(): return failure(setup_error)
+	if not schema["$defs"].has(root_name): return failure("Unknown schema root: " + root_name)
 	var issue := _check(schema["$defs"][root_name], value, "$", 0)
 	if issue.is_empty() and root_name == "InitializationResponse" and value.cursor.sequence != 0: issue = "Initialization sequence must be zero"
 	if issue.is_empty() and root_name == "PlayerOperation" and value.cursor.sequence < 1: issue = "Operation sequence must be positive"
@@ -186,8 +212,8 @@ func _check(original: Variant, value: Variant, path: String, depth: int) -> Stri
 		var prefix: Array = spec.get("prefixItems", [])
 		for i in value.size():
 			var rule: Variant = prefix[i] if i < prefix.size() else spec.get("items", true)
-			var issue := _check(rule, value[i], path + "/" + str(i), depth + 1)
-			if not issue.is_empty(): return issue
+			var issue := _check(rule, value[i], "", depth + 1)
+			if not issue.is_empty(): return path + "/" + str(i) + issue
 			if spec.get("uniqueItems", false):
 				for j in i:
 					if _equal(value[i], value[j]): return path + " has duplicate items"
@@ -199,13 +225,13 @@ func _check(original: Variant, value: Variant, path: String, depth: int) -> Stri
 			if typeof(raw_key) not in [TYPE_STRING, TYPE_STRING_NAME]: return path + " has non-string key"
 			var key := str(raw_key)
 			if spec.has("propertyNames"):
-				var key_issue := _check(spec.propertyNames, key, path + "/<key>", depth + 1)
-				if not key_issue.is_empty(): return key_issue
-			var issue := _check(props.get(key, spec.get("additionalProperties", true)), value[raw_key], path + "/" + key, depth + 1)
-			if not issue.is_empty(): return issue
+				var key_issue := _check(spec.propertyNames, key, "", depth + 1)
+				if not key_issue.is_empty(): return path + "/<key>" + key_issue
+			var issue := _check(props.get(key, spec.get("additionalProperties", true)), value[raw_key], "", depth + 1)
+			if not issue.is_empty(): return path + "/" + key + issue
 	return ""
 
-# Internal journal boundary: only values already accepted by validate/decode.
+# Internal boundary: schema-admitted values or explicitly trusted server choices.
 # Public normalize retains its ordinary branch validation.
 func _normalize_admitted(root_name: String, value: Variant) -> Variant:
 	return _normalize(schema["$defs"][root_name], value, true)

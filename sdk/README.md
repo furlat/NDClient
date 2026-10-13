@@ -1,7 +1,7 @@
 # Godot player SDK
 
 This project-local SDK consumes the current DnD player API: protocol 1, player
-schema 6. It ships the unchanged schema and identity from `dnd_engine/sdk/protocol`.
+schema 7. It ships the unchanged schema and identity from `dnd_engine/sdk/protocol`.
 The current Python/TypeScript transports and `dnd/player/reduction.py` are its
 references. The old `sdk/typescript` client is not a dependency.
 
@@ -72,6 +72,24 @@ The consumer is synchronous and must finish: shutdown cannot forcibly interrupt
 arbitrary caller code. Request failures and pending cursor waits resolve during
 shutdown. Credentials belong in caller configuration, never source or recordings.
 
+`trusted_choices` defaults to `false` in the SDK. The live player opts in after
+connecting to its own protocol-checked server. That option uses Godot's native
+JSON parser for `ChoicesResponse`, validates its envelope, actor/discovery identity
+and family shapes, and keeps the ordinary scope/revision/correlation checks. The
+nested action rows are trusted server output; they do not receive full schema
+validation. Schema-derived defaults, integer conversion and UUID normalization
+still run on the worker. This is deliberately different from untrusted imports:
+public `decode`/`validate`, canonical events and all journal/replay admission remain
+strict. Native query parsing follows Godot's floating-point conversion and JSON
+syntax tolerance; it does not promise bit-exact decoding of arbitrary decimal
+tokens. It never changes the recorded event codec.
+
+Choices are fetched for the latest consumed and acknowledged human-input boundary
+while presentation plays. One result stays private until playback reaches its
+matching cursor and actor; scope, attachment, revision or force-mode changes
+discard stale results. No prefetched targets or action buttons enter a historical
+display, and command submission retains its existing readiness and receipt rules.
+
 The consumer receives `(packet, raw_bytes)` and must return a result. It runs
 before consumed-cursor advancement and ACK. It must retain ownership of its data
 on the worker; queue detached presentation values for the main thread. Do not
@@ -126,6 +144,14 @@ Overflow and cold replay reconstruct them from the original journal bytes.
 Cell lookups are local to each fold; published visible/seen arrays remain sorted,
 with full integer coordinates and independent event-time versions.
 
+Schema 7 world updates install complete `tiles` before applying ordered
+`tile_changes` to known positions at that same event. Each patch creates a new
+complete tile, retaining omitted fields and replacing present fields wholesale,
+including explicit clears. Unknown bases fail the transaction. Staging still uses
+only full first-disclosure records; presentation receives reconstructed complete
+after-values at the original commit times. Schema 6 recordings select the exact
+archived contract only through explicit historical replay, never live admission.
+
 ## Validation and deliberate limits
 
 Completed validation on 2026-10-11 using native Windows Godot 4.7.2:
@@ -175,7 +201,7 @@ signature. All other fields and values compare exactly.
 
 Godot strings cannot represent embedded NUL. Admission explicitly rejects that
 case rather than silently replacing it, even though the Python SDK accepts it.
-Other escaped controls are preserved. Decimal input uses exact IEEE-754 rounding
+Other escaped controls are preserved. Strict event/import decoding uses exact IEEE-754 rounding
 because Godot's built-in decimal parser can differ by one bit; the independent
 Python oracle supplies binary64 bit patterns for the codec tests. State evidence
 and outgoing JSON use full-precision serialization. The JSON nesting limit is 512 and the
@@ -183,8 +209,9 @@ record limit matches the current SDK's 64 MiB. The validator deliberately
 supports the shipped schema vocabulary and fails on unknown keywords; it is not
 advertised as a general JSON Schema implementation.
 
-The exploration scene is still offline. Connecting its renderer, constructing
-the new large backend map and building the UI are subsequent work. UI research
-is recorded in `../SCOPE.md`: shared Themes and Control containers, a disclosed
-causal Tree, and structured RichTextLabel logs, retaining the old NeuroClient's
-reading-position and copy/select behavior. No new UI is introduced here.
+The production player in `../play.gd` consumes this SDK through
+`../presentation/session.gd`. Its displayed timeline and HUD remain behind the
+latest native state while authored animations play. Choices may prepare ahead,
+but only the matching displayed boundary can publish them or accept input.
+Player controls and rendering are documented in the project README; the older
+exploration scene remains an offline fixture.

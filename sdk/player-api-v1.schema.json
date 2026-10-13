@@ -13739,8 +13739,8 @@
           "maximum": 9007199254740991
         },
         "player_schema_version": {
-          "const": 6,
-          "default": 6,
+          "const": 7,
+          "default": 7,
           "title": "Player Schema Version",
           "type": "integer",
           "minimum": -9007199254740991,
@@ -16838,6 +16838,38 @@
       "type": "object",
       "additionalProperties": false
     },
+    "TileFieldUpdate": {
+      "properties": {
+        "position": {
+          "maxItems": 2,
+          "minItems": 2,
+          "prefixItems": [
+            {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            },
+            {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            }
+          ],
+          "title": "Position",
+          "type": "array"
+        },
+        "changes": {
+          "$ref": "#/$defs/WorldTileChanges"
+        }
+      },
+      "required": [
+        "position",
+        "changes"
+      ],
+      "title": "TileFieldUpdate",
+      "type": "object",
+      "additionalProperties": false
+    },
     "TileResidueState": {
       "additionalProperties": false,
       "description": "Observable membership of one persistent residue on its owning tile.",
@@ -18240,6 +18272,92 @@
       "title": "WorldPlacementKind",
       "type": "string"
     },
+    "WorldTileChanges": {
+      "additionalProperties": false,
+      "description": "Present fields replace known tile values; omitted fields are unchanged.",
+      "properties": {
+        "surface": {
+          "$ref": "#/$defs/TileSurface"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "blocks_optics": {
+          "title": "Blocks Optics",
+          "type": "boolean"
+        },
+        "blocks_propagation": {
+          "title": "Blocks Propagation",
+          "type": "boolean"
+        },
+        "walking_cost": {
+          "minimum": 0,
+          "title": "Walking Cost",
+          "type": "integer",
+          "maximum": 9007199254740991
+        },
+        "flying_cost": {
+          "minimum": 0,
+          "title": "Flying Cost",
+          "type": "integer",
+          "maximum": 9007199254740991
+        },
+        "swimming_cost": {
+          "minimum": 0,
+          "title": "Swimming Cost",
+          "type": "integer",
+          "maximum": 9007199254740991
+        },
+        "burrowing_cost": {
+          "minimum": 0,
+          "title": "Burrowing Cost",
+          "type": "integer",
+          "maximum": 9007199254740991
+        },
+        "elevation_steps": {
+          "title": "Elevation Steps",
+          "type": "integer",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991
+        },
+        "surface_kind": {
+          "$ref": "#/$defs/ElevationSurfaceKind"
+        },
+        "slope_axis": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SlopeAxis"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "default_light": {
+          "$ref": "#/$defs/LightLevel"
+        },
+        "resolved_light": {
+          "$ref": "#/$defs/LightLevel"
+        },
+        "condition_names": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Condition Names",
+          "type": "array"
+        },
+        "residues": {
+          "items": {
+            "$ref": "#/$defs/TileResidueState"
+          },
+          "title": "Residues",
+          "type": "array"
+        }
+      },
+      "title": "WorldTileChanges",
+      "type": "object"
+    },
     "WorldTileState": {
       "additionalProperties": false,
       "description": "Complete renderer-neutral state of one admitted support Tile.",
@@ -18402,6 +18520,14 @@
             "$ref": "#/$defs/WorldConnectorState"
           },
           "title": "Connectors",
+          "type": "array"
+        },
+        "tile_changes": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/TileFieldUpdate"
+          },
+          "title": "Tile Changes",
           "type": "array"
         }
       },

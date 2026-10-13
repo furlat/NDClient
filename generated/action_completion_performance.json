@@ -1,0 +1,166 @@
+{
+  "scope": "Schema 7 event-associated tile fields, ahead-of-display choices, trusted live-query decoding, sustained input readiness, retained and queued native action controls. Approved rendering/shaders and authoring unchanged.",
+  "native_before": "20261013T094752.111137Z",
+  "native_after": "20261013T125350.576972Z",
+  "source_context": {
+    "client_base": "e7fd05d",
+    "client_changes": "This commit; profiling done before commit with these source files.",
+    "backend": "Primary dnd_engine working checkout, protocol 1 / schema 7; backend files were not modified by this task.",
+    "runtime": "Native Windows Godot 4.7.2 Forward+; one live renderer, no other Godot test processes, no server CPU profiler or nested phase hooks."
+  },
+  "validation": {
+    "native_checks": 643,
+    "native_failures": [],
+    "commands": 58,
+    "route_stages": 11,
+    "disclosed_tiles": 1761,
+    "disclosed_objects": 360,
+    "sustained_input_ready_commands": 58,
+    "early_choices_publications": 0,
+    "queued_bars_complete": 58,
+    "strict_protocol_checks": 7888,
+    "normalization_oracle_cases": 2451,
+    "strict_transport_checks": 351,
+    "tile_field_checks": 268,
+    "tile_journal_checks": 33,
+    "recording_equivalence_checks": 701,
+    "recording_equivalence_operations": 99,
+    "recording_world_events": 237,
+    "recording_field_updates": 2929,
+    "compiler_snapshot_checks": 435,
+    "prefetch_checks": 49,
+    "trusted_choices_checks": 120,
+    "media_completion_checks": 40,
+    "retained_queued_hud_checks": 67,
+    "existing_ui_checks": 52,
+    "recorded_ui_checks": 77,
+    "dropped_pipeline_records": 0,
+    "native_log": "No errors or warnings. Final native screenshot inspected."
+  },
+  "largest_choices_reply": {
+    "before": {
+      "bytes": 2399276,
+      "request_id": 729,
+      "http_admission_ms": 1719.483,
+      "response_normalization_ms": 781.701,
+      "response_published_ms": 79.727
+    },
+    "after": {
+      "bytes": 2399276,
+      "request_id": 686,
+      "http_admission_ms": 122.349,
+      "response_normalization_ms": 332.561,
+      "response_published_ms": 81.146
+    },
+    "semantics": "Exact actual 2.4 MB normalized values compared against strict decoder. Trusted native choices path is explicit; generic SDK, events and recordings retain strict admission."
+  },
+  "inside_gallery": {
+    "moves": 16,
+    "viewport_clicks": 16,
+    "first_movement_ms": {
+      "median": 312.65250000000003,
+      "min": 166.126,
+      "max": 601.849
+    },
+    "server_dispatch_ms": {
+      "median": 61.92941250628792,
+      "min": 16.363986011128873,
+      "max": 83.32412800518796
+    },
+    "server_exchange_ms": {
+      "median": 64.550164,
+      "min": 17.843813,
+      "max": 86.332945
+    },
+    "operation_bytes": {
+      "median": 101422.0,
+      "min": 28442,
+      "max": 159258
+    },
+    "sse_schema_ms": {
+      "median": 39.0665,
+      "min": 10.68,
+      "max": 71.236
+    },
+    "canonical_consumer_ms": {
+      "median": 84.61449999999999,
+      "min": 48.747,
+      "max": 110.382
+    },
+    "presentation_compile_ms": {
+      "median": 14.58,
+      "min": 10.045,
+      "max": 37.137
+    },
+    "client_to_prepared_ms": {
+      "median": 146.27,
+      "min": 78.499,
+      "max": 197.134
+    },
+    "client_after_complete_sse_ms": {
+      "median": 210.515,
+      "min": 114.811,
+      "max": 491.4390000000001
+    },
+    "end_to_ready_ms": {
+      "median": 0.0389999999999873,
+      "min": 0.0360000000000582,
+      "max": 0.0440000000000964
+    },
+    "post_ready_frame_peak_ms": {
+      "median": 10.998000000000001,
+      "min": 9.782,
+      "max": 12.737
+    },
+    "post_ready_hud_peak_ms": {
+      "median": 3.275,
+      "min": 2.359,
+      "max": 3.767
+    },
+    "post_ready_bar_build_peak_ms": {
+      "median": 0.002,
+      "min": 0.002,
+      "max": 0.003
+    }
+  },
+  "before_inside_gallery": {
+    "moves": 16,
+    "first_movement_median_ms": 354.3745,
+    "maximum_end_to_first_ready_ms": 2986.482,
+    "maximum_end_to_first_ready_source": "Command 54: 7004.336 ms first ready minus 4017.854 ms playback end, original native trace."
+  },
+  "ui_native_costs": {
+    "active_command_and_post_ready_phase_max_ms": {
+      "hud_process": 3.767,
+      "hud_bar_controls": 2.938,
+      "hud_bar_build": 2.338
+    },
+    "post_ready_all_commands_frame_max_ms": 17.512,
+    "queued_replacement_commands": 15,
+    "queued_replacement_largest_settle_after_world_ready_ms": 78.88799999999992,
+    "slice": "At most two group/button units with a cooperative 1 ms time budget; one unit can exceed the budget. Native Control mutation and retirement remain on the scene thread. No claim of a hard per-frame bound."
+  },
+  "notes": [
+    "All 16 Gallery viewport moves finished animation and regained input in the same sampled frame, and stayed ready throughout the post-ready window. Sub-millisecond end_to_ready values are sampling-loop offsets, not sub-frame latency measurements.",
+    "Post-ready window contains at least five native frames and continues until queued HUD publication; expensive canonical comparisons and receipt validation occur afterward. Earlier 27\u201339 ms post-ready samples included test validation and cannot be used as pure production-frame baselines.",
+    "Normalizing the unchanged largest reply still costs about 333 ms on the SDK worker, plus about 81 ms response publication. Long animations overlap that work. Backend payload reduction is separate user work.",
+    "This is not a claim that all startup/reveal/click latency is solved. Full frame and phase traces retain those costs; the first-motion median is about 313 ms inside the Gallery.",
+    "Source timing and all compact-vs-expanded intermediate commits/tracks remain equal. No shader, lighting, asset or authoring timing changes.",
+    "Test totals cover overlapping suites, not additive unique gameplay scenarios."
+  ],
+  "evidence": {
+    "run": ".runtime/player-runs/20261013T125350.576972Z",
+    "profile": "C:/Users/tommaso/Documents/Dev/NDClientGodot/generated/profiles/2026-10-13T14-56-17-gallery-live-commands.json",
+    "equivalence": ".runtime/tile-fields-recording/compare.json",
+    "python_expansion": ".runtime/tile-fields-recording/expansion.json",
+    "protocol_log": ".runtime/sdk-study/schema7-protocol-final.log",
+    "focused_reports": [
+      "generated/action_completion_checks.json",
+      "generated/media_completion_checks.json",
+      "generated/hud_retention_checks.json",
+      "generated/trusted_choices_checks.json",
+      "generated/sdk_tile_field_checks.json",
+      "generated/tile_journal_checks.json"
+    ]
+  }
+}

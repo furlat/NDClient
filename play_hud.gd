@@ -7,6 +7,9 @@ const HistoryPanel = preload("res://ui/history_panel.gd")
 const SettingsPanel = preload("res://ui/settings_panel.gd")
 const ICON = 48
 const GAP = 4
+const BAR_BUILD_UNITS = 2
+const BAR_BUILD_USEC = 1000
+const BAR_RETIRE_UNITS = 8
 var world: Node3D
 var cache: Dictionary = {}
 var pages = {"Base":0,"Class":0,"Spells":0,"Items":0}
@@ -15,6 +18,12 @@ var painted_actor = ""
 var groups: Dictionary = {}
 var shortcuts: Dictionary = {}
 var action_buttons: Array = []
+var bar_topology: Array = []
+var bar_build: Dictionary = {}
+var retired_bars: Array[Control] = []
+var bar_build_units = 0
+var preference_button: Button
+var popup_rows: Array[Button] = []
 var slot_buttons: Dictionary = {}
 var inventory_buttons: Dictionary = {}
 var selected_item = ""
@@ -189,17 +198,22 @@ func _icon_button(key: String, help: String, fallback: String = "") -> Button:
     button.custom_minimum_size = Vector2(ICON+GAP,ICON+GAP)
     button.focus_mode = Control.FOCUS_NONE
     button.mouse_filter = Control.MOUSE_FILTER_STOP
-    button.icon = UI.texture(key,cache)
     button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
     button.expand_icon = true
     button.add_theme_constant_override("icon_max_width",ICON)
+    _set_button_icon(button,key,help,fallback)
+    return button
+
+func _set_button_icon(button: Button, key: String, help: String, fallback: String) -> void:
+    var icon = UI.texture(key,cache)
+    if button.icon != icon: button.icon = icon
     button.tooltip_text = help
+    button.text = ""
     if button.icon == null:
         button.text = fallback.left(3) if not fallback.is_empty() else "—"
         if not fallback.is_empty() and not missing_icons.has(help):
             missing_icons[help] = true
             push_warning("No authored icon for " + help.get_slice("\n",0))
-    return button
 
 func _clear(node: Node) -> void:
     for child in node.get_children():
@@ -207,6 +221,7 @@ func _clear(node: Node) -> void:
         child.queue_free()
 
 func _layout() -> void:
+    var phase = Time.get_ticks_usec()
     var viewport_size = get_viewport_rect().size
     bar.position = Vector2(maxf(20,(viewport_size.x-bar.get_combined_minimum_size().x)/2),viewport_size.y-146)
     metrics.position = Vector2(viewport_size.x-250,18)
@@ -225,6 +240,7 @@ func _layout() -> void:
     history_panel.size = Vector2(minf(550,viewport_size.x-40),minf(500,maxf(330,viewport_size.y-285)))
     history_panel.position = Vector2(viewport_size.x-history_panel.size.x-20,112)
     last_viewport_size = viewport_size
+    world.FrameProfile.end_phase(world.profile,"hud_layout",phase)
 
 func _current_actor() -> Dictionary:
     return world.timeline.state.get("actors",{}).get(world.timeline.state.get("current_actor_uuid"),{})
@@ -267,13 +283,20 @@ func _process(delta: float) -> void:
         last_discovery = generation
         changed = true
         bar_changed = true
-    bar_changed = bar_changed or ready != last_ready or selection != last_selection or str(world.attack_preference) != last_preference
+    var rebuild_bar = bar_changed or str(world.attack_preference) != last_preference or (resized and not bar_build.is_empty())
+    bar_changed = rebuild_bar or ready != last_ready or selection != last_selection
     if changed or bar_changed:
         _refresh_status(actor)
         if panel.visible: _refresh_inventory()
         if not world.loot_object_uuid.is_empty(): loot_panel.refresh()
-    if bar_changed: _rebuild_bar()
-    if resized or bar_changed: _layout()
+    if rebuild_bar: _rebuild_bar()
+    elif bar_changed:
+        var bar_phase = Time.get_ticks_usec()
+        _close_popup()
+        _refresh_bar_state()
+        world.FrameProfile.end_phase(world.profile,"hud_bar_controls",bar_phase)
+    if resized or rebuild_bar: _layout()
+    _prepare_bar()
     last_revision = int(world.timeline.revision)
     last_ready = ready
     last_selection = selection
@@ -317,11 +340,16 @@ func _refresh_status(actor: Dictionary) -> void:
     portrait.visible = portrait.texture != null
 
 func _rebuild_bar() -> void:
+    var phase = Time.get_ticks_usec()
     _close_popup()
-    _clear(bar)
-    shortcuts.clear()
-    action_buttons.clear()
+    world.FrameProfile.end_phase(world.profile,"hud_bar_controls",phase)
+    phase = Time.get_ticks_usec()
+    # Keep the previous passive owner until retained metadata is rebound.
+    # Replaced bars transfer their remaining row owners when they retire.
+    var prior_groups = groups
     groups = UI.families(painted_discovery,_current_actor())
+    world.FrameProfile.end_phase(world.profile,"hud_families",phase)
+    phase = Time.get_ticks_usec()
     var columns = {}
     var total = 0
     var target = mini(12,maxi(4,int((get_viewport_rect().size.x-200)/(ICON+GAP+5))))
@@ -336,88 +364,217 @@ func _rebuild_bar() -> void:
         if best.is_empty(): break
         columns[best] += 1
         total += 1
-    var global_column = 0
-    var headers: Array[Control] = []
+    # Only scalar layout values are retained here, never target payloads.
+    # Preserve the existing columns/page calculation and visible family order.
+    var topology: Array = []
+    var visible: Array = []
     for group in UI.GROUPS:
         if not columns.has(group): continue
-        var block = VBoxContainer.new()
-        block.add_theme_constant_override("separation",3)
-        block.mouse_filter = Control.MOUSE_FILTER_STOP
-        block.mouse_force_pass_scroll_events = false
-        block.gui_input.connect(func(event):
-            if event is InputEventMouseButton and event.pressed and event.button_index in [MOUSE_BUTTON_WHEEL_UP,MOUSE_BUTTON_WHEEL_DOWN]:
-                _page(group,-1 if event.button_index == MOUSE_BUTTON_WHEEL_UP else 1)
-                block.accept_event())
-        bar.add_child(block)
-        var header = HBoxContainer.new()
-        headers.append(header)
-        header.mouse_filter = Control.MOUSE_FILTER_IGNORE
-        block.add_child(header)
-        var label = Label.new()
-        label.text = group
-        label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-        label.add_theme_color_override("font_color",Color("c4c8b6"))
-        header.add_child(label)
-        if group == "Base":
-            var mode = Button.new()
-            mode.text = "Melee · X" if world.attack_preference == "MELEE_MAIN" else "Ranged · X"
-            mode.name = "AttackPreference"
-            mode.tooltip_text = "Ordinary creature click uses this weapon set. X switches the preference."
-            mode.focus_mode = Control.FOCUS_NONE
-            mode.disabled = not world.command_ready()
-            mode.add_theme_font_size_override("font_size",12)
-            mode.pressed.connect(func():
-                if world.command_ready(): world.toggle_attack_preference())
-            header.add_child(mode)
         var capacity: int = columns[group]*2
         var page_count = maxi(1,int(ceil(float(groups[group].size())/capacity)))
         pages[group] = clampi(int(pages[group]),0,page_count-1)
-        if page_count > 1:
-            for sign_value in [-1,1]:
-                var step = Button.new()
-                step.text = "‹" if sign_value < 0 else "›"
-                step.focus_mode = Control.FOCUS_NONE
-                step.tooltip_text = "%s page %d / %d" % [group,pages[group]+1,page_count]
-                step.pressed.connect(func():_page(group,sign_value))
-                header.add_child(step)
-        var grid = GridContainer.new()
-        grid.columns = columns[group]
-        grid.add_theme_constant_override("h_separation",GAP)
-        grid.add_theme_constant_override("v_separation",GAP)
-        block.add_child(grid)
+        var keys: Array = []
         var first: int = pages[group]*capacity
         for i in range(first,mini(first+capacity,groups[group].size())):
             var family: Dictionary = groups[group][i]
             var chosen = _preferred(family.rows)
-            var button = _icon_button(UI.action_key(chosen,world.timeline.state,cache),UI.action_text(chosen),family.label)
-            button.set_meta("native_row",chosen)
-            button.set_meta("family",family)
-            button.set_meta("group",group)
-            button.gui_input.connect(func(event):
-                if event is InputEventMouseButton and event.pressed and event.button_index in [MOUSE_BUTTON_WHEEL_UP,MOUSE_BUTTON_WHEEL_DOWN]:
-                    _page(group,-1 if event.button_index == MOUSE_BUTTON_WHEEL_UP else 1)
-                    button.accept_event())
-            button.disabled = not world.command_ready() or not UI.available(chosen)
-            button.pressed.connect(func():_activate_family(family,button))
-            button.mouse_entered.connect(func():
-                if _choices(family.rows).size() > 1: _open_choices(family,button))
-            if not world.selected_action.is_empty() and UI.family_key(world.selected_action) == family.key:
-                button.add_theme_stylebox_override("normal",_style(Color("3b493dcb"),Color("ebcb85")))
-            grid.add_child(button)
-            action_buttons.append(button)
-            var local_index = i-first
-            var shortcut_index = global_column + local_index%int(columns[group]) + 12*int(local_index/int(columns[group]))
-            shortcuts[shortcut_index] = button
-            _badge(button,_shortcut_label(shortcut_index),false)
-            if chosen.get("weapon_slot") != null: _badge(button,"M" if str(chosen.weapon_slot).begins_with("MELEE") else "R",true)
-            elif _choices(family.rows).size()>1: _badge(button,"▴",true)
-        global_column += columns[group]
-    # Controls beside some titles must not shift their icon rows below others.
-    var header_height = 0.0
-    for header in headers:
-        header_height = maxf(header_height,header.get_combined_minimum_size().y)
-    for header in headers:
-        header.custom_minimum_size.y = header_height
+            keys.append([family.key,_action_badge(chosen,family)])
+            visible.append({"family":family,"chosen":chosen})
+        topology.append([group,columns[group],pages[group],page_count,keys,
+            str(world.attack_preference) if group == "Base" else ""])
+    if topology == bar_topology and visible.size() == action_buttons.size():
+        _cancel_bar_build()
+        for i in range(visible.size()):
+            _bind_action_button(action_buttons[i],visible[i].family,visible[i].chosen)
+        _refresh_bar_state()
+        world.session.retire_record(prior_groups)
+        world.FrameProfile.end_phase(world.profile,"hud_bar_controls",phase)
+        return
+    _cancel_bar_build()
+    var replacement = HBoxContainer.new()
+    replacement.add_theme_constant_override("separation",12)
+    replacement.mouse_filter = Control.MOUSE_FILTER_IGNORE
+    replacement.hide()
+    add_child(replacement)
+    bar_build = {"key":_bar_request_key(),"root":replacement,"topology":topology,
+        "visible":visible,"group_index":0,"row_index":0,"column":0,"grids":{},
+        "headers":[],"buttons":[],"shortcuts":{},"preference":null,"settle_frame":-1}
+    world.session.retire_record(prior_groups)
+    _refresh_bar_state()
+    world.FrameProfile.end_phase(world.profile,"hud_bar_controls",phase)
+
+func bar_pending() -> bool:
+    return not bar_build.is_empty()
+
+func _bar_request_key() -> Array:
+    return [world.timeline.state.get("current_actor_uuid"),
+        world.available_actions.get("entity_uuid"),world.available_actions.get("discovery_generation"),
+        get_viewport_rect().size,pages.values(),str(world.attack_preference)]
+
+func _cancel_bar_build() -> void:
+    if bar_build.is_empty(): return
+    _retire_bar(bar_build.root,bar_build.buttons)
+    world.session.retire_record({"rows":bar_build.visible})
+    bar_build = {}
+
+func _retire_bar(old: Control, buttons: Array) -> void:
+    old.hide()
+    old.process_mode = Node.PROCESS_MODE_DISABLED
+    var families: Array = []
+    for button in buttons:
+        families.append(button.get_meta("family",{}))
+        button.remove_meta("family")
+        button.remove_meta("native_row")
+    # Callbacks own their button, never a discovery payload. Transfer passive
+    # rows before bounded scene-thread disposal of the native hierarchy.
+    world.session.retire_record({"families":families})
+    retired_bars.append(old)
+
+func _retire_bar_slice() -> void:
+    for _unit in range(BAR_RETIRE_UNITS):
+        if retired_bars.is_empty(): break
+        var node: Node = retired_bars[0]
+        while node.get_child_count() > 0: node = node.get_child(0)
+        if node == retired_bars[0]: retired_bars.pop_front()
+        node.free()
+
+func _build_bar_group(plan: Array) -> void:
+    var group: String = plan[0]
+    var block = VBoxContainer.new()
+    block.add_theme_constant_override("separation",3)
+    block.mouse_filter = Control.MOUSE_FILTER_STOP
+    block.mouse_force_pass_scroll_events = false
+    block.gui_input.connect(func(event):
+        if event is InputEventMouseButton and event.pressed and event.button_index in [MOUSE_BUTTON_WHEEL_UP,MOUSE_BUTTON_WHEEL_DOWN]:
+            _page(group,-1 if event.button_index == MOUSE_BUTTON_WHEEL_UP else 1)
+            block.accept_event())
+    bar_build.root.add_child(block)
+    var header = HBoxContainer.new()
+    bar_build.headers.append(header)
+    header.mouse_filter = Control.MOUSE_FILTER_IGNORE
+    block.add_child(header)
+    var label = Label.new()
+    label.text = group
+    label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+    label.add_theme_color_override("font_color",Color("c4c8b6"))
+    header.add_child(label)
+    if group == "Base":
+        var mode = Button.new()
+        mode.text = "Melee · X" if world.attack_preference == "MELEE_MAIN" else "Ranged · X"
+        mode.name = "AttackPreference"
+        bar_build.preference = mode
+        mode.tooltip_text = "Ordinary creature click uses this weapon set. X switches the preference."
+        mode.focus_mode = Control.FOCUS_NONE
+        mode.disabled = not world.command_ready()
+        mode.add_theme_font_size_override("font_size",12)
+        mode.pressed.connect(func():
+            if bar_build.is_empty() and world.command_ready(): world.toggle_attack_preference())
+        header.add_child(mode)
+    var page_count: int = plan[3]
+    if page_count > 1:
+        for sign_value in [-1,1]:
+            var step = Button.new()
+            step.text = "‹" if sign_value < 0 else "›"
+            step.focus_mode = Control.FOCUS_NONE
+            step.tooltip_text = "%s page %d / %d" % [group,plan[2]+1,page_count]
+            step.pressed.connect(func():_page(group,sign_value))
+            header.add_child(step)
+    var grid = GridContainer.new()
+    grid.columns = plan[1]
+    grid.add_theme_constant_override("h_separation",GAP)
+    grid.add_theme_constant_override("v_separation",GAP)
+    block.add_child(grid)
+    bar_build.grids[group] = grid
+
+func _build_bar_button(index: int, plan: Array, local_index: int) -> void:
+    var family: Dictionary = bar_build.visible[index].family
+    var chosen: Dictionary = bar_build.visible[index].chosen
+    var group: String = plan[0]
+    var button = _icon_button(UI.action_key(chosen,world.timeline.state,cache),UI.action_text(chosen),family.label)
+    _bind_action_button(button,family,chosen)
+    button.set_meta("group",group)
+    button.gui_input.connect(func(event):
+        if event is InputEventMouseButton and event.pressed and event.button_index in [MOUSE_BUTTON_WHEEL_UP,MOUSE_BUTTON_WHEEL_DOWN]:
+            _page(group,-1 if event.button_index == MOUSE_BUTTON_WHEEL_UP else 1)
+            button.accept_event())
+    button.pressed.connect(func():
+        var current: Dictionary = button.get_meta("family",{})
+        if not current.is_empty(): _activate_family(current,button))
+    button.mouse_entered.connect(func():
+        var current: Dictionary = button.get_meta("family",{})
+        if not current.is_empty() and _choices(current.rows).size() > 1: _open_choices(current,button))
+    bar_build.grids[group].add_child(button)
+    bar_build.buttons.append(button)
+    var shortcut_index = bar_build.column + local_index%int(plan[1]) + 12*int(local_index/int(plan[1]))
+    bar_build.shortcuts[shortcut_index] = button
+    _badge(button,_shortcut_label(shortcut_index),false)
+    var badge = _action_badge(chosen,family)
+    if not badge.is_empty(): _badge(button,badge,true)
+
+func _prepare_bar() -> void:
+    var phase = Time.get_ticks_usec()
+    bar_build_units = 0
+    _retire_bar_slice()
+    if not bar_build.is_empty() and bar_build.key != _bar_request_key(): _cancel_bar_build()
+    while not bar_build.is_empty() and bar_build_units < BAR_BUILD_UNITS:
+        if bar_build.settle_frame >= 0:
+            if Engine.get_process_frames() > bar_build.settle_frame: _publish_bar()
+            break
+        if bar_build.group_index == bar_build.topology.size():
+            # Let native containers finish deferred layout while hidden.
+            var header_height = 0.0
+            for header in bar_build.headers: header_height = maxf(header_height,header.get_combined_minimum_size().y)
+            for header in bar_build.headers: header.custom_minimum_size.y = header_height
+            bar_build.settle_frame = Engine.get_process_frames()
+            break
+        var plan: Array = bar_build.topology[bar_build.group_index]
+        if not bar_build.grids.has(plan[0]):
+            _build_bar_group(plan)
+        else:
+            _build_bar_button(bar_build.buttons.size(),plan,bar_build.row_index)
+            bar_build.row_index += 1
+            if bar_build.row_index == plan[4].size():
+                bar_build.column += plan[1]
+                bar_build.row_index = 0
+                bar_build.group_index += 1
+        bar_build_units += 1
+        if Time.get_ticks_usec()-phase >= BAR_BUILD_USEC: break
+    world.FrameProfile.end_phase(world.profile,"hud_bar_build",phase)
+
+func _publish_bar() -> void:
+    if bar_build.key != _bar_request_key():
+        _cancel_bar_build()
+        return
+    _retire_bar(bar,action_buttons)
+    bar = bar_build.root
+    action_buttons = bar_build.buttons
+    shortcuts = bar_build.shortcuts
+    preference_button = bar_build.preference
+    bar_topology = bar_build.topology
+    bar_build = {}
+    _refresh_bar_state()
+    _layout()
+    bar.show()
+
+func _action_badge(row: Dictionary, family: Dictionary) -> String:
+    if row.get("weapon_slot") != null: return "M" if str(row.weapon_slot).begins_with("MELEE") else "R"
+    return "▴" if _choices(family.rows).size()>1 else ""
+
+func _bind_action_button(button: Button, family: Dictionary, row: Dictionary) -> void:
+    button.set_meta("native_row",row)
+    button.set_meta("family",family)
+    _set_button_icon(button,UI.action_key(row,world.timeline.state,cache),UI.action_text(row),family.label)
+
+func _refresh_bar_state() -> void:
+    var ready: bool = world.command_ready() and bar_build.is_empty()
+    var selected = "" if world.selected_action.is_empty() else UI.family_key(world.selected_action)
+    for button in action_buttons:
+        button.disabled = not ready or not _row_current(button.get_meta("native_row")) or not UI.available(button.get_meta("native_row"))
+        var active: bool = button.get_meta("family").key == selected
+        if active != button.has_theme_stylebox_override("normal"):
+            if active: button.add_theme_stylebox_override("normal",_style(Color("3b493dcb"),Color("ebcb85")))
+            else: button.remove_theme_stylebox_override("normal")
+    if is_instance_valid(preference_button): preference_button.disabled = not ready
 
 func _shortcut_label(index: int) -> String:
     var keys = ["1","2","3","4","5","6","7","8","9","0","−","="]
@@ -463,17 +620,20 @@ func _choices(rows: Array) -> Array:
     return result
 
 func _activate_family(family: Dictionary, origin: Control) -> void:
-    if not world.command_ready(): return
+    if not bar_build.is_empty() or not world.command_ready() or not _row_current(family.rows[0]): return
     var choices = _choices(family.rows)
     if choices.size() > 1: _open_choices(family,origin)
     else: _select_row(choices[0])
 
 func _select_row(row: Dictionary) -> void:
-    if not world.command_ready() or not UI.available(row): return
+    if not bar_build.is_empty() or not world.command_ready() or not UI.available(row): return
     # Reject controls left from a different actor/discovery even before next redraw.
-    if row.get("discovery_generation") != world.available_actions.get("discovery_generation") or row.get("discovery_actor_uuid") != world.timeline.state.get("current_actor_uuid"): return
+    if not _row_current(row): return
     _close_popup()
     world.select_action(row)
+
+func _row_current(row: Dictionary) -> bool:
+    return row.get("discovery_generation") == world.available_actions.get("discovery_generation") and row.get("discovery_actor_uuid") == world.timeline.state.get("current_actor_uuid")
 
 func _page(group: String, direction: int) -> void:
     pages[group] = maxi(0,int(pages[group])+direction)
@@ -481,7 +641,9 @@ func _page(group: String, direction: int) -> void:
     _layout()
 
 func _open_choices(family: Dictionary, origin: Control) -> void:
+    if not bar_build.is_empty() or not world.command_ready() or not _row_current(family.rows[0]): return
     if popup.visible and popup_family == family.key: return
+    _close_popup()
     _clear(popup)
     popup_family = family.key
     popup_origin = origin
@@ -502,8 +664,9 @@ func _open_choices(family: Dictionary, origin: Control) -> void:
     for row in _choices(family.rows):
         var button = _icon_button(UI.action_key(row,world.timeline.state,cache,true),UI.action_text(row),str(row.get("display_name","")))
         button.set_meta("native_row",row)
+        popup_rows.append(button)
         button.disabled = not world.command_ready() or not UI.available(row)
-        button.pressed.connect(func():_select_row(row))
+        button.pressed.connect(func():_select_row(button.get_meta("native_row",{})))
         grid.add_child(button)
         if row.get("cast_at_level") != null: _badge(button,str(row.cast_at_level),true)
     var rows_count = int(ceil(float(grid.get_child_count())/5))
@@ -515,6 +678,13 @@ func _open_choices(family: Dictionary, origin: Control) -> void:
     popup_close_delay = 0.0
 
 func _close_popup() -> void:
+    var retired: Array = []
+    for button in popup_rows:
+        if is_instance_valid(button):
+            retired.append(button.get_meta("native_row",{}))
+            button.remove_meta("native_row")
+    if not retired.is_empty(): world.session.retire_record({"rows":retired})
+    popup_rows.clear()
     popup.visible = false
     popup_family = ""
     popup_origin = null
@@ -944,4 +1114,5 @@ func _target_outline(position: Array,colour: Color) -> void:
     if not tile.is_empty(): outline(position,tile.elevation_steps,colour,2)
 
 func _exit_tree() -> void:
+    _cancel_bar_build()
     UI.close_images(cache)

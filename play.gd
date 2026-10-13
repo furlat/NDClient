@@ -81,6 +81,8 @@ var selected_mode = "action.move"
 var action_request = -1
 var pending_request: Dictionary = {}
 var available_actions: Dictionary = {}
+var choices_boundary: Dictionary = {}
+var pending_choices: Dictionary = {}
 var action_revision = ""
 var notice_text = "Connecting…"
 var command_busy = false
@@ -143,6 +145,7 @@ var media_metadata_ms = 0.0
 var media_group_plans: Dictionary = {}
 var media_empty_key: Array = []
 var media_empty_plan: Dictionary = {}
+var media_terminal_plan: Dictionary = {}
 var media_requested_key: Array = []
 var media_plan_epoch = -1
 var media_environment_required: Dictionary = {}
@@ -955,6 +958,18 @@ func _prepare_media(first: Dictionary = {}) -> void:
         media_group_plans.clear()
         media_empty_key = []
         media_empty_plan = {}
+        media_terminal_plan = {}
+    if ids.is_empty() and not media_terminal_plan.is_empty():
+        # A successfully prepared group includes every terminal resting outfit
+        # and world source. Reuse it only at that group's exact admitted end;
+        # idle does not need another asynchronous metadata pass for those bytes.
+        var terminal: Dictionary = media_terminal_plan
+        if terminal.epoch == timeline.initialization_revision and is_same(terminal.state,timeline.state) \
+            and terminal.revision == timeline.revision and terminal.completed == timeline.completed_group_count \
+            and not timeline.completed_groups.is_empty() and timeline.completed_groups.back().id == terminal.id:
+            media_empty_key = key
+            media_empty_plan = terminal.plan
+        media_terminal_plan = {}
     for id in media_group_plans.keys():
         if id not in ids: media_group_plans.erase(id)
     var ready: Dictionary = media_empty_plan if ids.is_empty() and media_empty_key==key else media_group_plans.get(ids[0],{}) if not ids.is_empty() else {}
@@ -1008,7 +1023,15 @@ func _prepare_media(first: Dictionary = {}) -> void:
 func _media_ready(group: Dictionary) -> bool:
     _prepare_media(group)
     media_initial_ready = media_metadata_ready and not timeline.state.is_empty() and media_issue.is_empty() and media_plan.errors.is_empty() and MediaWarmup.ready(media_warmup,media_plan.required) and _environment_sources_ready() and MediaWarmup.boot_ready(media_warmup)
-    return media_initial_ready and world_revision>=0 and not (pending_world!=null and pending_world.admitted)
+    var ready: bool = media_initial_ready and world_revision>=0 and not (pending_world!=null and pending_world.admitted)
+    if ready and not group.is_empty() and media_group_plans.has(group.id) \
+        and not media_plan_key[1].is_empty() and media_plan_key[1][0] == group.id:
+        if media_terminal_plan.is_empty() or media_terminal_plan.id != group.id:
+            var committed: int = timeline.commit_index if is_same(timeline.current,group) else 0
+            media_terminal_plan = {"id":group.id,"epoch":timeline.initialization_revision,"state":timeline.state,
+                "revision":timeline.revision+group.commits.size()-committed,
+                "completed":timeline.completed_group_count+1,"plan":media_group_plans[group.id]}
+    return ready
 
 func _environment_media_ready() -> bool:
     return world_revision>=0 and _environment_sources_ready()
@@ -1460,18 +1483,40 @@ func _prepare_rotation() -> void:
     FrameProfile.end_phase(profile,"rotation_publish",started)
 
 func _discover() -> void:
-    if command_busy or action_request >= 0 or not session.ready_for_input(timeline.sequence) or timeline.busy() or timeline.sequence < await_command_cursor: return
-    var boundary: Dictionary = session.status.boundary
-    if action_revision == boundary.state_revision and choices_force_attack == force_attack: return
-    action_revision = boundary.state_revision
-    cancel_selection(false)
-    pending_request = {"kind":"choices","force_attack":force_attack,"revision":action_revision}
-    action_request = session.request("choices",{"actor_uuid":boundary.input_actor_uuid,"state_revision":boundary.state_revision,"force_attack":force_attack,"correlation_id":Session.uuid()})
+    if not pending_choices.is_empty() and (pending_choices.force_attack != force_attack or not session.matches_choice_boundary(pending_choices.boundary)):
+        session.retire_record(pending_choices)
+        pending_choices = {}
+    if command_busy or action_request >= 0: return
+    var boundary = session.ready_choice_boundary()
+    if boundary.is_empty() or session.latest_sequence < await_command_cursor: return
+    if not pending_choices.is_empty():
+        # Neither source targets nor a future actor's buttons enter the HUD
+        # until the exact native boundary has also reached displayed state.
+        if timeline.busy() or timeline.paused or timeline.sequence < await_command_cursor \
+                or not session.ready_for_input(timeline.sequence) \
+                or timeline.state.get("current_actor_uuid") != boundary.actor_uuid: return
+        var value: Dictionary = pending_choices.value
+        session.retire_record(available_actions)
+        cancel_selection(false)
+        available_actions = value.choices
+        choices_boundary = pending_choices.boundary
+        action_revision = boundary.state_revision
+        choices_force_attack = value.force_attack
+        attack_preference = attack_preferences.get(available_actions.entity_uuid,"MELEE_MAIN")
+        pending_choices = {}
+        hover_key = []
+        notice_text = ""
+        _continue_approach()
+        return
+    if action_revision == boundary.state_revision and choices_force_attack == force_attack and session.matches_choice_boundary(choices_boundary): return
+    pending_request = {"kind":"choices","force_attack":force_attack,"revision":boundary.state_revision,"boundary":boundary}
+    action_request = session.request("choices",{"actor_uuid":boundary.actor_uuid,"state_revision":boundary.state_revision,"force_attack":force_attack,"correlation_id":Session.uuid()})
 
 func command_ready() -> bool:
     return media_initial_ready and media_issue.is_empty() and not command_busy and action_request < 0 and not available_actions.is_empty() and not timeline.busy() \
         and not timeline.paused and timeline.sequence >= await_command_cursor and session.ready_for_input(timeline.sequence) \
         and action_revision == session.status.boundary.state_revision and choices_force_attack == force_attack \
+        and session.matches_choice_boundary(choices_boundary) \
         and available_actions.entity_uuid == timeline.state.current_actor_uuid
 
 func cancel_selection(clear_approach: bool = true) -> void:
@@ -1696,17 +1741,8 @@ func _poll_actions() -> void:
         return
     match pending_request.kind:
         "choices":
-            if pending_request.force_attack != force_attack or pending_request.revision != session.status.boundary.state_revision:
-                action_revision = ""
-                return
-            var value: Dictionary = response.normalized
-            session.retire_record(available_actions)
-            available_actions = value.choices
-            attack_preference = attack_preferences.get(available_actions.entity_uuid,"MELEE_MAIN")
-            choices_force_attack = value.force_attack
-            hover_key = []
-            notice_text = ""
-            _continue_approach()
+            if pending_request.force_attack != force_attack or not session.matches_choice_boundary(pending_request.boundary): return
+            pending_choices = {"boundary":pending_request.boundary,"force_attack":pending_request.force_attack,"value":response.normalized}
         "preview":
             if pending_request.serial != selection_serial or pending_request.revision != session.status.boundary.state_revision or pending_request.generation != available_actions.discovery_generation:
                 command_busy = false

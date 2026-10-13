@@ -51,8 +51,7 @@ func run() -> void:
     world.available_actions = {"discovery_generation":"ui-boundary-a","entity_uuid":actor_id,"self_actions":rows}
     var original_discovery: Dictionary = world.available_actions.duplicate(true)
     hud = HUD.new(); hud.world = world; root.add_child(hud)
-    await process_frame
-    await process_frame
+    await settle_action_bar()
     check(not world.normals_visible and not hud.normals_button.button_pressed,"Normals preview starts off")
     check(hud.normals_button.get_global_rect().position.x>hud.grid_button.get_global_rect().end.x,"Normals control is beside Grid without overlapping it")
     var normal_point: Vector2 = hud.normals_button.get_global_rect().get_center()
@@ -72,7 +71,7 @@ func run() -> void:
     var mode: Button = hud.bar.find_child("AttackPreference",true,false)
     check(mode != null and mode.text == "Melee · X","ordinary click preference is visibly labeled")
     mode.emit_signal("pressed")
-    await process_frame
+    await settle_action_bar()
     mode = hud.bar.find_child("AttackPreference",true,false)
     check(world.attack_preference == "RANGED_MAIN" and mode.text == "Ranged · X","mode control toggles preference without issuing an action")
     var ordinary = fixture_row("action.dash",100,actor_id)
@@ -90,7 +89,7 @@ func run() -> void:
     wheel.pressed = true
     wheel.position = first.get_global_rect().get_center()
     root.push_input(wheel)
-    await process_frame
+    await settle_action_bar()
     check(hud.pages.Base==1,"wheel over painted icon pages its group")
     var new_index: int = hud.shortcuts[0].get_meta("native_row").discovery_index
     check(new_index!=old_index,"independent base page changes painted shortcut")
@@ -155,7 +154,7 @@ func run() -> void:
     check(UI.inventory({"controlled_items":null}).is_empty(),"undisclosed inventory stays absent")
     check(UI.unequip_intent("Body")=={"kind":"unequip","item":{"slot":"Body"}},"unequip uses exact nested wire payload")
     root.size = Vector2i(1920,1080)
-    await process_frame; await process_frame
+    await settle_action_bar()
     check(hud.panel.get_rect().end.y <= hud.bar.position.y,"equipment leaves actionbar visible at 1080p")
     root.size = Vector2i(1920,600)
     await process_frame; await process_frame
@@ -183,3 +182,12 @@ func click(point: Vector2) -> void:
         event.position = point; event.global_position = point
         event.button_index = MOUSE_BUTTON_LEFT; event.pressed = pressed
         root.push_input(event)
+
+func settle_action_bar() -> void:
+    await process_frame
+    await process_frame
+    for _frame in range(100):
+        if not hud.bar_pending(): break
+        await process_frame
+    check(not hud.bar_pending(),"Action bar preparation publishes before native input/layout assertions")
+    await process_frame

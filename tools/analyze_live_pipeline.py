@@ -24,7 +24,8 @@ def packet_shape(directory, sequence):
         'versions': sum(len(lineage['version_rows']) for lineage in lineages),
         'observations': sum(len(lineage['observations']) for lineage in lineages),
         'world_tiles': sum(len(update['tiles']) for update in updates),
-        'world_objects': sum(len(update['objects']) for update in updates)}
+        'world_objects': sum(len(update['objects']) for update in updates),
+        'tile_changes': sum(len(update.get('tile_changes',[])) for update in updates)}
 
 
 def summarize(directory):
@@ -54,6 +55,13 @@ def summarize(directory):
         row = {'number':number, 'behavior':command['behavior'], 'stage':command['stage'],
             'input':command['input'], 'from':command['from'], 'to':command['to'],
             'sequence':sequence, 'ready_ms':command['elapsed_ms'],
+            'playback_complete_ms':command.get('playback_complete_ms'),
+            'end_to_ready_ms':command.get('end_to_ready_ms'),
+            'post_ready_frame_peak_ms':max((frame['frame_ms'] for frame in command.get('post_ready_frames',[])), default=None),
+            'post_ready_hud_peak_ms':max((frame['cpu_ms'].get('hud_process',0) for frame in command.get('post_ready_frames',[])), default=None),
+            'input_ready_after_samples':command.get('input_ready_after_samples'),
+            'bar_settled_ms':command.get('bar_settled_ms'),
+            'post_ready_bar_build_peak_ms':max((frame['cpu_ms'].get('hud_bar_build',0) for frame in command.get('post_ready_frames',[])), default=None),
             'first_movement_ms':first, 'first_animation_ms':command['first_animation_ms'],
             'first_group_ms':first_group,
             'complete_sse_frame_ms':packet_ms,
@@ -80,7 +88,8 @@ def summarize(directory):
         row['requests']=request_stages
         rows.append(row)
     metrics = ['first_movement_ms','server_dispatch_ms','server_exchange_ms','operation_bytes',
-        'sse_schema_ms','canonical_consumer_ms','presentation_compile_ms','client_to_prepared_ms','client_after_complete_sse_ms']
+        'sse_schema_ms','canonical_consumer_ms','presentation_compile_ms','client_to_prepared_ms','client_after_complete_sse_ms',
+        'end_to_ready_ms','post_ready_frame_peak_ms','post_ready_hud_peak_ms','post_ready_bar_build_peak_ms']
     sections = {}
     for label, lower, upper in [('before_gallery',0,6),('gallery_entry',7,7),('inside_gallery',8,10)]:
         selected = [row for row in rows if row['behavior']=='action.move' and lower<=row['stage']<=upper and not row['server_cpu_profiled']]
@@ -99,6 +108,7 @@ def summarize(directory):
             'Client post-packet stages may overlap. Nested engine phases overlap and must not be added together.',
             'CPU-profiled commands are excluded from latency aggregates. Nested phase hooks, when enabled, are diagnostic overhead.',
             'First movement is an observed changed actor position at frame_post_draw. Ready includes intended animation and following choices.',
+            'Post-ready samples precede canonical-state test comparisons. input_ready_after_samples distinguishes first readiness from sustained input readiness; older runs lack this field.',
             'Post-packet first-movement time may include required reactions before entry. Client-to-prepared isolates arrival through compilation, before timeline playback.',
             'These are process-attributed measurements. The trace alone does not establish GPU isolation; record whether other previews or native tests were running.'
         ]}

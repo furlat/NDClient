@@ -72,9 +72,12 @@ func start(base_url: String, credential: String, consumer: Callable = Callable()
     if credential.is_empty() or "\r" in credential or "\n" in credential:
         return failure("protocol","Invalid bearer credential")
     _origin = parsed.value; _credential = credential; _consumer = consumer
-    _options = {"request_timeout":30.0,"stream_idle_timeout":45.0,"reconnect_timeout":60.0,"max_requests":8}
+    _options = {"request_timeout":30.0,"stream_idle_timeout":45.0,"reconnect_timeout":60.0,"max_requests":8,"trusted_choices":false}
     for key in options:
         if not _options.has(key): return failure("protocol","Unknown transport option: "+str(key))
+        if key=="trusted_choices":
+            if typeof(options[key])!=TYPE_BOOL: return failure("protocol","trusted_choices must be boolean")
+            continue
         if typeof(options[key]) not in [TYPE_INT,TYPE_FLOAT] or not is_finite(float(options[key])) or float(options[key]) <= 0:
             return failure("protocol","Transport options must be finite and positive")
     if options.has("max_requests") and (int(options.max_requests) != options.max_requests or options.max_requests > 64):
@@ -386,9 +389,11 @@ func _http_tick(job: Dictionary, streaming: bool = false) -> Dictionary:
             if _profile_enabled: _profile_job(job,"body_complete",{"bytes":job.raw.size(),"status":job.code})
             if job.code < 200 or job.code >= 300: return _api_error(job)
             var admission_started = Time.get_ticks_usec()
-            var admitted: Dictionary = _protocol.decode(job.root,job.raw)
+            var trusted_choices: bool = _options.trusted_choices and job.root=="ChoicesResponse" and not _bootstrap.is_empty()
+            var admitted: Dictionary = _protocol.decode_server_choices(job.raw) if trusted_choices else _protocol.decode(job.root,job.raw)
             _timings.admission_ms += (Time.get_ticks_usec()-admission_started)/1000.0
-            if _profile_enabled: _profile_job(job,"http_admission",{"started_us":admission_started,"bytes":job.raw.size(),"ok":admitted.ok})
+            if _profile_enabled: _profile_job(job,"http_admission",{"started_us":admission_started,"bytes":job.raw.size(),"ok":admitted.ok,
+                "validation":"server_choices_envelope" if trusted_choices else "full_schema"})
             if admitted.ok: admitted.raw = job.raw
             return admitted
     return {"pending":true}
@@ -639,7 +644,7 @@ func _finish_job(job: Dictionary, result: Dictionary) -> void:
                 # Keep the exact admitted value available to SDK callers, with
                 # a separate defaulted presentation copy prepared off-thread.
                 var normalization_started = Time.get_ticks_usec()
-                result.normalized = _protocol.normalize(job.root,result.value)
+                result.normalized = _protocol._normalize_admitted(job.root,result.value)
                 _timings.response_normalization_ms += (Time.get_ticks_usec()-normalization_started)/1000.0
                 if _profile_enabled: _profile_job(job,"response_normalization",{"started_us":normalization_started})
             _reply(job.command,result)

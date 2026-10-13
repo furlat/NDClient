@@ -1517,3 +1517,84 @@ arrival 93.989→120.665ms varied separately. Remaining admission 74.008ms and
 prepared-to-sample 60.261ms are explicit. No claim of completely solved latency;
 no new server wire fields or approved graphical behavior changed. Evidence is
 in generated/client_input_latency_checks.json and generated/client_single_fold_checks.json.
+
+## Schema 7 tile field handoff and action completion — 13 October 2026
+
+Requested behavior: consume the delivered event-associated tile_changes contract
+without losing any intermediate state, and investigate the reported movement-end
+freeze in the large room. Boundary: admitted server bytes through reduction,
+recorded presentation, displayed frames and refreshed action choices. Inputs:
+actual schema 7 Gallery records, the backend's existing tile-field fixtures and
+live native clicks. Outputs: exact per-event and final values, immutable prior
+snapshots, explicit failure for missing tile bases, current live protocol identity,
+continued explicit offline replay of schema 6, and measured completion-frame costs.
+
+1. Archive the shipped schema 6 for offline recording admission; copy delivered
+   schema 7/identity unchanged. Do not edit backend owners or loosen identity checks.
+2. Install complete tiles then ordered field after-values inside each event fold.
+   Keep omitted fields; replace present fields including null/false/zero/empty
+   values. Propagate unknown-base failure before publication. Capture complete
+   reconstructed changed rows for the existing presentation path; do not stage
+   future patches or change graphical/authoring behavior.
+3. Compare against current Python reduction and exact expanded real recordings;
+   test first discovery, replacement, hidden rediscovery, repeated changes,
+   cancellation, initialization, late failures, snapshot ownership and replay.
+4. Profile real Gallery input and completion frames with current server schema 7.
+   Diagnose and fix any demonstrated client completion stall without changing
+   approved graphics or authored timings. Record remaining limits, commit and
+   reopen the preview.
+
+Root owns production integration and native acceptance. map_audit owns focused
+fixture/oracle tests. render_audit audits consumers and action-completion stalls;
+scope_review tracks plan adherence and anti-slop/anti-OOP correctness. Timing runs
+remain serial. User feedback about ending movement is part of this same task.
+
+The completion audit found two separate client costs: choices fetched only after
+playback (up to 2.986 seconds of idle input hold), and repeated action-control
+recreation (up to about 11 ms in the HUD controls phase). Initial 27–39 ms
+post-ready frame measurements also included the test's deep state comparison;
+the final sampling window moves that validation afterward. The user requested early
+queued queries, less server-output validation, and UI preparation independent of
+rendering. Fetch one private choices result at the ACKed native boundary; publish
+only at matching display. Retain same-layout controls and rebind their current
+metadata instead of recreating nodes. Queue topology-changing bar builds in small
+main-thread slices and publish a complete current replacement. Godot scene
+mutations remain on the main thread; measured grouping is about 0.2 ms and does
+not justify another worker. Generation/actor/layout changes invalidate pending UI.
+Native sampling also caught input readiness dropping again after completion:
+the terminal group's admitted media union must remain usable while the idle plan
+is established, with exact generation/state checks and ordinary missing-media gates.
+
+Actual 2,399,276-byte choices data measured roughly 800 ms strict JSON parsing,
+670 ms schema checking, 140 ms redundant JSON-value validation and 760 ms public
+normalization. Native JSON parsing is 55 ms on those same values; existing admitted
+normalization is 320 ms. The live player opts into trusted native choices parsing
+with a schema-derived envelope and unchanged correlation checks. The SDK defaults
+to strict decoding, and events/journal/replay retain their exact codec. Arbitrary
+decimal-token bit parity is not claimed for this trusted query path. The backend
+payload reduction belongs to the user's other work and is not edited here.
+
+Completed native acceptance: run 20261013T125350.576972Z passes 643 checks over
+58 real commands and 11 stages, with 1,761 disclosed tiles and 360 objects. All
+16 Gallery viewport moves regain input in the same sampled frame as playback
+completion; every command remains ready through at least five following frames
+and any queued bar publication. There are no premature choices publications or
+logged errors/warnings. Final native capture inspected. The unchanged largest
+2,399,276-byte choices reply takes 122 ms admission plus 333 ms normalization on
+the worker, versus 1,719 ms plus 782 ms before; publication remains about 81 ms.
+Gallery completion frames peak at 12.737 ms, with heavy test comparisons excluded.
+Native HUD processing peaks at 3.767 ms over commands and their completion windows.
+Fifteen topology replacements complete asynchronously in up to 79 ms while world
+input remains available; one control-building unit can exceed its cooperative
+1 ms budget (measured phase peak 2.338 ms), so this is not a hard frame-time cap.
+
+Exact schema7/expanded-recording parity passes 701 checks across 99 operations,
+237 world updates and 2,929 tile field rows. Strict protocol 7,888, transport 351,
+tile fields 268, journal 33, compiler ownership 435, prefetch 49, trusted choices
+120, media completion 40 and queued/retained HUD 67 checks pass; existing UI 52
+and recorded UI 77 also pass. Independent scope/anti-slop/anti-OOP review finds no
+source blocker. These overlapping test counts are not distinct scenario totals.
+generated/action_completion_performance.json retains evidence and limitations:
+remaining normalization cost, first-motion median about 313 ms in the Gallery,
+and other reveal/startup costs are not claimed solved. Backend, shaders, artwork
+and authored event timing remain unchanged by this task.

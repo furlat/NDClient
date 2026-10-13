@@ -1,0 +1,55 @@
+{
+  "cases": [
+    {
+      "checks": 39,
+      "failures": 0,
+      "name": "repeated_light_each_event"
+    },
+    {
+      "checks": 39,
+      "failures": 0,
+      "name": "omission_explicit_clears_whole_surface"
+    },
+    {
+      "checks": 39,
+      "failures": 0,
+      "name": "hidden_then_rediscovery_full_identity_replacement"
+    },
+    {
+      "checks": 31,
+      "failures": 0,
+      "name": "earlier_introduction_then_patch"
+    },
+    {
+      "checks": 6,
+      "failures": 0,
+      "name": "future_introduction_cannot_repair_missing_base"
+    },
+    {
+      "checks": 6,
+      "failures": 0,
+      "name": "later_failure_after_valid_field_change"
+    },
+    {
+      "checks": 23,
+      "failures": 0,
+      "name": "canceled_fact_still_applies_associated_world_update"
+    },
+    {
+      "checks": 23,
+      "failures": 0,
+      "name": "full_introduction_precedes_same_event_field"
+    },
+    {
+      "checks": 23,
+      "failures": 0,
+      "name": "same_event_duplicate_position_ordered_clears"
+    }
+  ],
+  "checks": 268,
+  "command": "Godot --headless --path \"C:/Users/tommaso/Documents/Dev/NDClientGodot/\" --script res://tests/sdk_tile_field_checks.gd -- --cases=\"res://.runtime/sdk-study/tile-field-oracle.json\"",
+  "event_boundaries": 14,
+  "failures": [],
+  "fixture": "res://.runtime/sdk-study/tile-field-oracle.json",
+  "scope": "Python native projection/reduction oracle: exact tile-field admission, initialization, event-time canonical/displayed values, independent staging, cold compilation/replay and snapshot/failure isolation. No rendering, server transport or timing claim."
+}

@@ -32,11 +32,20 @@ static func _ordered_rows(rows: Array, cursors: Dictionary, identity_field: Stri
     for index in order: result.append(rows[index])
     return result
 
-static func apply_world_update(target: Dictionary, update: Dictionary) -> void:
+static func apply_world_update(target: Dictionary, update: Dictionary) -> Dictionary:
     for row in update.tiles: target.tiles[Audience.point_key(row.position)] = row.duplicate(true)
+    # Each row is an after-value at this event, including explicit clears. Never
+    # mutate a tile held by an earlier event or use a future discovery as its base.
+    for row in update.get("tile_changes",[]):
+        var key = Audience.point_key(row.position)
+        if not target.tiles.has(key): return failure("Tile field update requires an already known tile")
+        var tile: Dictionary = target.tiles[key].duplicate()
+        tile.merge(row.changes.duplicate(true),true)
+        target.tiles[key] = tile
     for identity in update.objects_removed: target.objects.erase(identity)
     for row in update.objects: target.objects[row.item.item_uuid] = row.duplicate(true)
     target.connectors = update.connectors.duplicate(true)
+    return success(target)
 
 static func _observe(target: Dictionary, observation: Dictionary) -> void:
     var identity: String = observation.actor.uuid
@@ -235,7 +244,9 @@ static func _reduce_nodes_owned(result: Dictionary, nodes: Array, versions: Arra
             next += 1
         var inputs: Dictionary = Transitions.actor_inputs(result,node) if recorded != null else {}
         var update: Variant = world_updates.get(node.uuid)
-        if update != null: apply_world_update(result, update)
+        if update != null:
+            var updated = apply_world_update(result, update)
+            if not updated.ok: return updated
         if not node.canceled and node.fact != null:
             var folded = _apply_committed_player_fact_owned(result, node.fact, int(indexes[node.uuid]), indexes, composed_senses, cells)
             if not folded.ok: return folded

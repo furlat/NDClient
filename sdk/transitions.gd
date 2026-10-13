@@ -50,6 +50,9 @@ static func capture_delta(target: Dictionary, node: Dictionary, observations: Ar
             delta.set.senses = snapshot_senses(target.senses)
     if update != null:
         for tile in update.tiles: delta.tiles[Audience.point_key(tile.position)] = target.tiles[Audience.point_key(tile.position)]
+        for row in update.get("tile_changes",[]):
+            var key = Audience.point_key(row.position)
+            delta.tiles[key] = target.tiles[key]
         for object in update.objects: delta.objects[object.item.item_uuid] = target.objects[object.item.item_uuid]
         delta.objects_removed = update.objects_removed.duplicate()
         delta.set.connectors = target.connectors

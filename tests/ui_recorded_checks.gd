@@ -37,7 +37,7 @@ func run() -> void:
     world.available_actions = discovery
     root.add_child(world)
     var hud = HUD.new(); hud.world = world; root.add_child(hud)
-    await process_frame; await process_frame
+    await settle_action_bar(hud)
     check(hud.groups.Base.size()==10,"native base family count")
     check(hud.groups.Class.size()==4,"slot conversion and metamagic families")
     check(hud.groups.Spells.size()==11,"all eleven admitted spell families")
@@ -64,12 +64,12 @@ func run() -> void:
     wheel.button_index = MOUSE_BUTTON_WHEEL_DOWN; wheel.pressed = true
     wheel.position = hud.shortcuts[0].get_global_rect().get_center()
     root.push_input(wheel)
-    await process_frame; await process_frame
+    await settle_action_bar(hud)
     check(hud.pages.Base==1,"real base paging changes the painted page")
     check_bar_alignment(hud,"paged base actions")
     for viewport_size in [Vector2i(960,720),Vector2i(1920,1080),Vector2i(1280,720)]:
         root.size = viewport_size
-        await process_frame; await process_frame; await process_frame
+        await settle_action_bar(hud)
         check_bar_alignment(hud,"resized %s" % viewport_size)
     var magic: Dictionary = hud.groups.Spells.filter(func(f):return f.rows[0].behavior_id=="spell.magic_missile")[0]
     check(hud._choices(magic.rows).size()==3,"actual magic missile ranks preserve exact rows")
@@ -126,3 +126,12 @@ func check_bar_alignment(hud: Control, scenario: String) -> void:
         var aligned = rows[row].max()-rows[row].min() <= 1.0
         check(aligned,"%s: all group icons align in row %d (%s)" % [scenario,row,rows[row]])
     bar_layouts.append({"scenario":scenario,"row_y":rows})
+
+func settle_action_bar(subject: Control) -> void:
+    await process_frame
+    await process_frame
+    for _frame in range(100):
+        if not subject.bar_pending(): break
+        await process_frame
+    check(not subject.bar_pending(),"Recorded action bar completes preparation before native layout/input checks")
+    await process_frame

@@ -13,6 +13,30 @@ var leader = ""
 var pipeline_trace: Array = []
 var pipeline_dropped = 0
 var pipeline_poll_us = 0
+var choice_sizes: Dictionary = {}
+var largest_choices: Dictionary = {}
+var largest_choices_bytes = 0
+var largest_choices_request = -1
+
+class CapturingPlayer extends "res://play.gd":
+    var choices_observed: Callable
+    func _poll_actions() -> void:
+        if action_request>=0 and pending_request.get("kind")=="choices" and session.responses.has(action_request):
+            var result: Dictionary=session.responses[action_request]
+            if result.ok: choices_observed.call(action_request,result.value)
+        super._poll_actions()
+
+func capture_choices(request_id: int, value: Dictionary) -> void:
+    # The admission profile publishes the original HTTP byte count before
+    # the response. Keep one immutable value owner; serialize only after timing.
+    collect_pipeline(true)
+    var bytes: int=choice_sizes.get(request_id,0)
+    choice_sizes.erase(request_id)
+    if bytes<=largest_choices_bytes:return
+    scene.session.retire_record(largest_choices)
+    largest_choices=value
+    largest_choices_bytes=bytes
+    largest_choices_request=request_id
 
 func collect_pipeline(force: bool = false) -> void:
     var now=Time.get_ticks_usec()
@@ -20,6 +44,9 @@ func collect_pipeline(force: bool = false) -> void:
     pipeline_poll_us=now
     var stream: Dictionary=scene.session.transport.drain_profile()
     pipeline_trace.append_array(stream.records)
+    for record in stream.records:
+        if record.stage=="http_admission" and record.operation=="choices" and record.ok:
+            choice_sizes[int(record.request_id)]=int(record.bytes)
     pipeline_dropped=maxi(pipeline_dropped,stream.dropped)
 
 func healthy() -> bool:
@@ -101,7 +128,10 @@ func issue(selected: Dictionary) -> bool:
     collect_pipeline(true)
     var record={"number":number,"behavior":label,"stage":stage,"actor":actor,"from":scene.timeline.state.actors[actor].last_visual_position.duplicate(),"start_us":command_start,
         "first_movement_ms":null,"first_animation_ms":null,"published_packet_ms":null,"input":"admitted_action_handler",
-        "start_frame":Engine.get_process_frames(),"phases":[],"samples":[],"frame_intervals":[],"phase_peaks":{},"slow_frames":[]}
+        "start_frame":Engine.get_process_frames(),"phases":[],"samples":[],"frame_intervals":[],"phase_peaks":{},"slow_frames":[],
+        "playback_complete_ms":null,"playback_complete_frame":null,"choices_applied_ms":null,"choices_applied_frame":null,
+        "early_choices_publications":[],"post_ready_frames":[],"bar_settled_ms":null,"bar_settled_frame":null}
+    var painted_generation: int = scene.available_actions.get("discovery_generation",0)
     if selected.is_empty():scene.end_turn()
     else:
         var target: Variant=selected.target.get("position")
@@ -121,6 +151,16 @@ func issue(selected: Dictionary) -> bool:
         collect_pipeline()
         var phase=phase_value()
         var elapsed=(Time.get_ticks_usec()-command_start)/1000.0
+        if phase.group.is_empty() and phase.sequence>sequence and (previous.get("group","")!="" or previous.get("sequence",sequence)!=phase.sequence):
+            record.playback_complete_ms=elapsed
+            record.playback_complete_frame=Engine.get_process_frames()
+        var adopted_generation: int = scene.available_actions.get("discovery_generation",0)
+        if adopted_generation!=painted_generation:
+            record.choices_applied_ms=elapsed
+            record.choices_applied_frame=Engine.get_process_frames()
+            if scene.timeline.busy() or not scene.session.ready_for_input(scene.timeline.sequence) or scene.available_actions.entity_uuid!=scene.timeline.state.current_actor_uuid:
+                record.early_choices_publications.append({"ms":elapsed,"frame":Engine.get_process_frames()})
+            painted_generation=adopted_generation
         if record.published_packet_ms==null and scene.session.latest_sequence>sequence:record.published_packet_ms=elapsed
         if not scene.profile.frames.is_empty():
             var sampled_frame: Dictionary=scene.profile.frames[posmod(scene.profile.cursor-1,scene.profile.frames.size())]
@@ -155,18 +195,52 @@ func issue(selected: Dictionary) -> bool:
         if ready() and scene.timeline.sequence>sequence and scene.session.status.next_command_number>number:break
     record.elapsed_ms=(Time.get_ticks_usec()-command_start)/1000.0
     record.end_us=Time.get_ticks_usec()
-    record.frame_ms=FrameProfile.distribution(record.frame_intervals)
-    record.erase("frame_intervals")
     record.end_frame=Engine.get_process_frames()
-    record.to=scene.timeline.state.actors[actor].last_visual_position.duplicate()
-    command_trace.append(record)
-    var completed: bool=ready() and scene.timeline.sequence>sequence and scene.session.status.next_command_number>number
+    record.end_to_ready_ms=null if record.playback_complete_ms==null else record.elapsed_ms-record.playback_complete_ms
+    var completion_sequence: int=scene.timeline.sequence
+    var completion_command: int=scene.session.status.next_command_number
+    var completion_revision: String=scene.session.status.boundary.state_revision
+    var completed: bool=ready() and completion_sequence>sequence and scene.session.status.next_command_number>number
     if not completed:
         record.failure_context={"notice":scene.notice_text,"pending_kind":scene.pending_request.get("kind",""),
             "command_number":scene.pending_request.get("number",-1),"phase":phase_value()}
-    check(completed,"Client command finishes: %s %d" % [label,number])
-    check(scene.timeline.state==scene.session.journal.state,"Client command reaches canonical state: %d" % number)
+    # HUD adoption occurs after Player's frame sample. Capture these intervals
+    # before deep canonical comparisons or sorting the command frame samples:
+    # test validation must not masquerade as the first post-ready render hitch.
+    scene.profile.label="post_ready_%d" % number
+    var post_ready_deadline=Time.get_ticks_msec()+5000
+    var post_ready_count=0
+    while healthy() and Time.get_ticks_msec()<post_ready_deadline and (post_ready_count<5 or scene.hud.bar_pending()):
+        await RenderingServer.frame_post_draw
+        post_ready_count+=1
+        var hud_pending: bool=scene.hud.bar_pending()
+        if not hud_pending and record.bar_settled_ms==null:
+            record.bar_settled_ms=(Time.get_ticks_usec()-command_start)/1000.0
+            record.bar_settled_frame=Engine.get_process_frames()
+        if not scene.profile.frames.is_empty():
+            var sampled: Dictionary=scene.profile.frames[posmod(scene.profile.cursor-1,scene.profile.frames.size())]
+            record.post_ready_frames.append({"frame":sampled.frame,"frame_ms":sampled.frame_ms,"cpu_ms":sampled.cpu_ms.duplicate(),
+                "state":phase_value(),"media_metadata_pending":scene.media_warmup.plan_task>=0,"hud_pending":hud_pending})
     scene.profile.label="receipt_validation_%d" % number
+    record.validation_start_us=Time.get_ticks_usec()
+    record.frame_ms=FrameProfile.distribution(record.frame_intervals)
+    record.erase("frame_intervals")
+    record.to=scene.timeline.state.actors[actor].last_visual_position.duplicate()
+    command_trace.append(record)
+    check(completed,"Client command finishes: %s %d" % [label,number])
+    check(record.early_choices_publications.is_empty(),"Choices remain private until displayed command boundary: %d" % number)
+    check(not scene.hud.bar_pending() and record.bar_settled_ms!=null,"Queued action bar completes after command: %d" % number)
+    check(not completed or (is_same(scene.hud.painted_discovery,scene.available_actions)
+        and scene.hud.action_buttons.all(func(button):return button.get_meta("native_row").discovery_generation==scene.available_actions.discovery_generation)),
+        "Completed action bar contains current discovery rows: %d" % number)
+    record.input_ready_after_samples=ready()
+    check(not completed or (post_ready_count>=5 and ready() and record.post_ready_frames.all(func(frame):return frame.state.ready)
+        and not scene.timeline.busy() and scene.timeline.sequence==completion_sequence
+        and scene.session.status.next_command_number==completion_command
+        and scene.session.status.boundary.state_revision==completion_revision),
+        "Post-ready samples remain ready at the same quiescent command boundary: %d" % number)
+    check(scene.timeline.state==scene.session.journal.state,"Client command reaches canonical state: %d" % number)
+    record.validation_cpu_ms=(Time.get_ticks_usec()-record.validation_start_us)/1000.0
     if completed:
         var received=await request("receipt",{"number":number})
         if received.ok:
@@ -179,7 +253,7 @@ func issue(selected: Dictionary) -> bool:
 func _run() -> void:
     root.unfocusable=true;root.position=Vector2i(-16000,-16000)
     DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
-    scene=Player.instantiate();scene.profile.recording=true
+    scene=CapturingPlayer.new();scene.choices_observed=capture_choices;scene.profile.recording=true
     evidence.atlas_reference=""
     for argument in OS.get_cmdline_user_args():
         if argument.begins_with("--reference-atlas="):
@@ -252,4 +326,9 @@ func _run() -> void:
     FileAccess.open(evidence.pipeline_trace,FileAccess.WRITE).store_string(JSON.stringify({"clock":"godot_monotonic_usec","dropped":pipeline_dropped,"records":pipeline_trace}))
     FileAccess.open(evidence.command_trace,FileAccess.WRITE).store_string(JSON.stringify(command_trace))
     evidence.full_profile=FrameProfile.save(scene.profile,root,"gallery-live-commands",true)
+    if not largest_choices.is_empty():
+        evidence.choices_sample={"path":scene.game_config.test_result.get_base_dir().path_join("largest-choices-admitted.json"),
+            "original_http_bytes":largest_choices_bytes,"request_id":largest_choices_request,
+            "format":"Unnormalized admitted response reserialized with full_precision=true; original field omissions preserved, not original lexical HTTP bytes."}
+        FileAccess.open(evidence.choices_sample.path,FileAccess.WRITE).store_string(JSON.stringify(largest_choices,"",true,true))
     await finish()

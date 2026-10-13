@@ -149,7 +149,7 @@ func start(config: Dictionary) -> Dictionary:
     var opened = journal.open(config.get("journal", "user://sessions/" + uuid()),false,false)
     if not opened.ok: return opened
     start_ms = Time.get_ticks_msec()
-    return transport.start(config.url, config.token, _consume)
+    return transport.start(config.url, config.token, _consume, {"trusted_choices":true})
 
 func _consume(packet: Dictionary, raw: PackedByteArray) -> Dictionary:
     # Only Transport calls this internal hook after strict admission. Public
@@ -367,6 +367,22 @@ func ready_for_input(displayed_sequence: int) -> bool:
     var ack: Variant = status.get("acknowledged_cursor")
     var catch_up: Variant = status.get("catch_up_cursor")
     return ack != null and catch_up != null and int(ack.sequence) >= int(catch_up.sequence) and displayed_sequence >= int(catch_up.sequence)
+
+func ready_choice_boundary() -> Dictionary:
+    # Discovery can run ahead of playback, but only for an already consumed and
+    # acknowledged human-input boundary. This is private preparation, not input.
+    if not ready_for_input(latest_sequence): return {}
+    return {"game_id":status.game_id,"game_epoch":status.game_epoch,"audience_id":status.audience_id,
+        "attachment_epoch":status.attachment_epoch,"state_revision":status.boundary.state_revision,
+        "actor_uuid":status.boundary.input_actor_uuid,"sequence":int(status.catch_up_cursor.sequence)}
+
+func matches_choice_boundary(boundary: Dictionary) -> bool:
+    if boundary.is_empty() or status.is_empty() or status.get("catch_up_cursor") == null: return false
+    for field in ["game_id","game_epoch","audience_id","attachment_epoch"]:
+        if boundary.get(field) != status[field]: return false
+    return boundary.get("state_revision") == status.boundary.state_revision \
+        and boundary.get("actor_uuid") == status.boundary.input_actor_uuid \
+        and boundary.get("sequence") == int(status.catch_up_cursor.sequence)
 
 func close() -> void:
     # Wake a buffer-full preparer before joining, never under the shared mutex.

@@ -107,7 +107,10 @@ func run_case(directory: String, sequence: int) -> void:
             while cursor<observations.size() and cursors[observations[cursor].event_uuid]<=cursors[node.uuid]:
                 Reducer._observe(reference,observations[cursor]); cursor+=1; counts.observations+=1
             if updates.has(node.uuid):
-                Reducer.apply_world_update(reference,updates[node.uuid]); counts.world_updates+=1
+                var updated = Reducer.apply_world_update(reference,updates[node.uuid])
+                check(updated.ok,"Independent event world after-values apply")
+                if not updated.ok: return
+                counts.world_updates+=1
             if node.fact!=null and not node.canceled:
                 var folded = Reducer.apply_committed_player_fact(reference,node.fact,cursors[node.uuid],cursors)
                 check(folded.ok,"Independent recorded fact folds")
@@ -162,6 +165,7 @@ func run_case(directory: String, sequence: int) -> void:
                 node.fact.effective_light_levels_changed.clear()
         for update in lineage.world_updates:
             for tile in update.tiles: tile.elevation_steps+=1000
+            for row in update.get("tile_changes",[]): row.changes.clear()
     check(groups==frozen_groups,"Caller mutation of original sensory/world inputs cannot change compiled history")
     check(recorded.transitions==frozen_records,"Caller mutation cannot change canonical captures retained across compilation")
     check(counts.senses_snapshots>1 and counts.perception_snapshots>1,"Actual input exercises multiple retained sensory boundaries")
