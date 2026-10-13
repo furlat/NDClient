@@ -1,5 +1,6 @@
 extends SceneTree
 const Media = preload("res://presentation/media_warmup.gd")
+const Encounter = preload("res://presentation/encounter_media.gd")
 const EnvironmentMedia = preload("res://presentation/environment_media.gd")
 const Protocol = preload("res://sdk/protocol.gd")
 const Catalog = preload("res://source_catalog.gd")
@@ -75,12 +76,19 @@ func run() -> void:
     var environment = EnvironmentMedia.plan(parsed.value,[],{})
     var path: String = environment.fixtures.keys()[0]
     var data = Media.create()
+    var exact = {path:Catalog.media_path(path)}
+    var encounter = {"revision":1,"paths":exact,"environment":{path:true},"fixtures":{},"gpu_only":{},"cpu_required":{path:true},
+        "estimates":Encounter.estimates(exact,{path:true},{},{}),"errors":[]}
+    encounter.estimate_summary = Encounter.estimate_summary(encounter)
+    Media.adopt_encounter(data,encounter,1)
     Media.demand(data,{path:Catalog.media_path(path)},{path:true})
     check(Media.poll(data).is_empty() and data.decode_jobs.size()==1 and data.decode_jobs[0].path==path,"Original source decode is dispatched with the colour-only role")
     # The worker now owns its immutable request; even a fast completed worker
     # cannot retroactively acquire the role below before its result is polled.
     Media.demand(data,{path:Catalog.media_path(path)},{path:true},{path:true})
     check(data.pending.is_empty() and data.queued.has(path),"Promotion retains the existing in-flight source request")
+    Media.demand(data,{path:Catalog.media_path(path)},{path:true},{path:true})
+    check(data.demand_noops==1 and data.decode_jobs.size()==1,"Identical promoted demand is a no-op while original worker remains in flight")
     var first = await loaded(data)
     check(first.has("image") and not first.has("energy") and not first.has("emission_centroid"),"First real worker result retains its original role")
     if not first.has("image"): Media.close(data); quit(1); return
@@ -88,11 +96,18 @@ func run() -> void:
     check(not Media.ready(data,{path:true}) and data.pending.size()==1 and data.pending[0].fixture,
         "Unsatisfied publication immediately queues exactly the required fixture preprocessing")
     check(Media.diagnostics(data,true).pending==1,"Replacement work is accounted once")
-    # No further demand() call: a stable accepted scene plan must recover.
+    var noops: int = data.demand_noops
+    Media.demand(data,{path:Catalog.media_path(path)},{path:true},{path:true})
+    check(data.demand_noops==noops and data.pending.size()==1 and data.pending[0].fixture,
+        "Corrective fixture requeue invalidates no-op and retains exact mandatory priority")
+    Media.demand(data,{path:Catalog.media_path(path)},{path:true},{path:true})
+    check(data.demand_noops==noops+1 and data.pending.size()==1,"Repeated corrective demand does not duplicate its exact worker request")
     var second = await loaded(data)
     check(second.has("image") and second.has("energy") and second.has("emission_centroid"),"Existing worker completes the upgraded role without a new scene plan")
     if second.has("image"):
         Media.published(data,second)
+        Media.demand(data,{path:Catalog.media_path(path)},{path:true},{path:true})
+        check(data.demand_noops==noops+2,"Complete fixture publication keeps the exact demand no-op eligible")
         check(second.image.get_data()==first.image.get_data(),"Role preprocessing preserves original source pixels")
         check(Media.ready(data,{path:true}) and data.pending.is_empty() and data.queued.is_empty(),"Newest mandatory role becomes ready with no repeat loop")
         check(data.decoded==2 and Media.diagnostics(data,true).pending==0 and Media.diagnostics(data,true).resident_sheets==1,

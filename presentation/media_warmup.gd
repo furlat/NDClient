@@ -20,7 +20,8 @@ static func create() -> Dictionary:
         "prune_frame":-1,"pruned_this_frame":0,"stats":{},"cpu_release":{},
         "selection_revision":-1,"selection_budget":-1,"selection_required":{},"selection_extra":{},"selection_jobs":0,
         "ready_paths":{},"boot_waiting":{},"selected_ready":{},"selected_failed":{},
-        "selection_roles":{},"selection_summary":{},"selection_refreshed":0}
+        "selection_roles":{},"selection_summary":{},"selection_refreshed":0,
+        "demand_snapshot":{},"demand_runs":0,"demand_noops":0}
 
 static func request_plan(data: Dictionary, key: Array, state: Dictionary, groups: Array) -> void:
     # Dictionary membership can change on the scene thread. The after-value
@@ -90,6 +91,7 @@ static func enqueue(data: Dictionary, path: String, absolute: String) -> void:
     if data.queued.has(path) or data.failed.has(path): return
     if data.resident.has(path) and int(data.resident[path].gpu_bytes)>0 and (not _needs_cpu(data,path) or int(data.resident[path].cpu_bytes) > 0) \
         and (not _fixture(data,path) or data.resident[path].get("fixture_ready",false)): return
+    data.demand_snapshot = {}
     data.queued[path] = true
     data.pending.append({"path":path,"absolute":absolute,"fixture":_fixture(data,path)})
     _pending_delta(data,path,1)
@@ -158,6 +160,8 @@ static func _changed_roles(previous: Dictionary, current: Dictionary) -> Diction
     for role in current:
         var old: Dictionary = previous.get(role,{})
         var new: Dictionary = current[role]
+        # Accepted family role owners are immutable and reused by the worker.
+        if is_same(old,new): continue
         for path in old:
             if not new.has(path): changed[path] = true
         for path in new:
@@ -188,7 +192,32 @@ static func _refresh_resident_role(data: Dictionary, path: String) -> void:
     if int(resident.cpu_bytes)>0 and not _needs_cpu(data,path): data.cpu_release[path] = true
     _refresh_path(data,path)
 
+static func _same_demand(data: Dictionary, paths: Dictionary, roles: Array) -> bool:
+    var prior: Dictionary = data.demand_snapshot
+    if prior.is_empty(): return false
+    var family: Dictionary = data.encounter
+    var accepted: Dictionary = prior.encounter
+    if prior.epoch!=data.encounter_epoch or prior.budget!=data.budget_bytes \
+        or prior.boot!=[data.boot_started,data.boot_complete] \
+        or accepted.get("revision",-1)!=family.get("revision",-1) \
+        or accepted.get("estimate_summary",{})!=family.get("estimate_summary",{}) \
+        or accepted.get("estimates",{})!=family.get("estimates",{}): return false
+    # Exact maps belong to callers, so keep a flat snapshot and compare values,
+    # not identity. Dictionary equality alone does not preserve request priority.
+    if prior.paths!=paths or prior.order!=paths.keys() or prior.roles!=roles: return false
+    for role in ["environment","fixtures","gpu_only","cpu_required"]:
+        if accepted.get(role,{})!=family.get(role,{}): return false
+    return accepted.get("paths",{})==family.get("paths",{})
+
 static func demand(data: Dictionary, paths: Dictionary, environment: Dictionary = {}, fixtures: Dictionary = {}, gpu_only: Dictionary = {}, cpu_required: Dictionary = {}) -> void:
+    var exact_roles = [environment,fixtures,gpu_only,cpu_required]
+    if _same_demand(data,paths,exact_roles):
+        data.wanted = paths; data.environment = environment; data.fixtures = fixtures
+        data.gpu_only = gpu_only; data.cpu_required = cpu_required
+        data.demand_noops += 1
+        return
+    data.demand_runs += 1
+    data.demand_snapshot = {}
     var previous_paths: Dictionary = data.wanted
     var previous_selected: Dictionary = data.preload_selected
     # Exact roles can temporarily classify a retained source differently from
@@ -209,7 +238,9 @@ static func demand(data: Dictionary, paths: Dictionary, environment: Dictionary 
     var unknown = 0
     var extra = {}
     var known: Dictionary = data.encounter.get("paths",{})
+    var exact_estimates = true
     for path in paths:
+        if not data.encounter.get("estimates",{}).get(path,{}).has("bytes"): exact_estimates = false
         var size = _estimate(data,path)
         if size < 0: unknown += 1
         else: used += size
@@ -307,6 +338,14 @@ static func demand(data: Dictionary, paths: Dictionary, environment: Dictionary 
         if data.preload_selected.has(request.path) and not paths.has(request.path): enqueue(data,request.path,request.absolute)
     for path in refresh:
         if data.preload_selected.has(path) and not paths.has(path): enqueue(data,path,data.preload_selected[path])
+    # Without header estimates, residency progress can change the budget input.
+    # Keep that uncommon path exhaustive instead of tracking another generation.
+    if exact_estimates and not summary.is_empty() and summary.unknown==0:
+        var copied_roles: Array = []
+        for role in exact_roles: copied_roles.append(role.duplicate())
+        data.demand_snapshot = {"paths":paths.duplicate(),"order":paths.keys(),"roles":copied_roles,
+            "encounter":data.encounter,"epoch":data.encounter_epoch,"budget":data.budget_bytes,
+            "boot":[data.boot_started,data.boot_complete]}
 
 static func _decode(request: Dictionary, result: Dictionary) -> void:
     var started = Time.get_ticks_usec()
@@ -380,6 +419,10 @@ static func published(data: Dictionary, loaded: Dictionary) -> void:
     if not _needs_cpu(data,loaded.path): data.cpu_release[loaded.path] = true
     _resident_delta(data,loaded.path,data.resident[loaded.path],1)
     _refresh_path(data,loaded.path)
+    # A caller can satisfy queued work from an already-decoded original. The
+    # next full demand must remove that redundant pending request as before.
+    if data.queued.has(loaded.path) or (_pinned(data,loaded.path) and not data.ready_paths.has(loaded.path)):
+        data.demand_snapshot = {}
     # A decode request captures its fixture role before entering the worker.
     # If a newer accepted demand upgrades that role while decoding, its colour
     # may publish first but cannot satisfy readiness without emission metrics.
@@ -477,7 +520,7 @@ static func diagnostics(data: Dictionary, environment: bool = false) -> Dictiona
         "eviction_pending_bytes":maxi(0,total-maxi(pinned,int(data.budget_bytes))),
         "metadata_ms":data.metadata_ms,"metadata_jobs":data.metadata_jobs,"decode_ms":data.decode_ms,
         "decode_jobs":data.decode_jobs.size(),"decode_worker_limit":DECODE_WORKERS,
-        "budget_bytes":data.budget_bytes,"selection_jobs":data.selection_jobs,"selection_refreshed":data.selection_refreshed,"decoded":data.decoded,"evicted":data.evicted,"failed":data.failed.duplicate(),
+        "budget_bytes":data.budget_bytes,"demand_runs":data.demand_runs,"demand_noops":data.demand_noops,"selection_jobs":data.selection_jobs,"selection_refreshed":data.selection_refreshed,"decoded":data.decoded,"evicted":data.evicted,"failed":data.failed.duplicate(),
         "accounting":"Decoded CPU bytes plus conservative RGBA8 GPU estimate; not measured VRAM/RSS; combined environment and character budget."})
     return result
 
@@ -596,6 +639,7 @@ static func plan(state: Dictionary, groups: Array, cache: Dictionary) -> Diction
     return {"required":required,"upcoming":upcoming,"errors":errors,"upcoming_errors":upcoming_errors,"gpu_only":gpu_only,"cpu_required":cpu_required}
 
 static func close(data: Dictionary) -> void:
+    data.demand_snapshot = {}
     if data.plan_task >= 0:
         WorkerThreadPool.wait_for_task_completion(data.plan_task)
         data.plan_task = -1
