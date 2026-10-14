@@ -11,6 +11,7 @@ var failures: Array = []
 class ClickPlayer extends "res://play.gd":
     var requests: Array = []
     var submitted: Array = []
+    func _init() -> void: session = Session.new() # Off-tree interaction fixture owns its native response boundary.
     func command_ready() -> bool: return true
     func _request_selection(auto_confirm: bool) -> void:
         requests.append({"selection":target_selection.duplicate(true),"auto":auto_confirm})

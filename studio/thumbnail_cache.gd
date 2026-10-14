@@ -1,0 +1,497 @@
+extends RefCounted
+## Bounded source previews use shared GPU materials and native simulations.
+const Catalog=preload("res://source_catalog.gd")
+const Characters=preload("res://presentation/characters.gd")
+const Tracks=preload("res://presentation/tracks.gd")
+const Components=preload("res://presentation/components.gd")
+const Palette=preload("res://presentation/palette.gd")
+const ConditionPose=preload("res://presentation/condition_pose.gd")
+const Conditions=preload("res://presentation/conditions.gd")
+const SourceShader=preload("res://studio/source_preview.gdshader")
+const BloodPreview=preload("res://presentation/blood_preview.gd")
+const NativePreview=preload("res://presentation/native_effect_preview.gd")
+const NativeSources=preload("res://presentation/native_effects.gd")
+const RegisteredMedia=preload("res://presentation/registered_media.gd")
+const Lighting=preload("res://presentation/lighting_2d.gd")
+const ConditionOutline=preload("res://presentation/condition_outline.gd")
+const OutlineShader=preload("res://studio/condition_outline_preview.gdshader")
+const BoltShader=preload("res://studio/geometry_projectile_preview.gdshader")
+var source_lights=Lighting.new()
+var outline_source=ConditionOutline.new()
+var host: Node
+var cache: Dictionary={}
+var textures: Dictionary={}
+var errors: Dictionary={}
+var inactive: Dictionary={}
+var suspended=false
+var prewarm_suspended=false
+const NATIVE_READY_TIMEOUT_MS=15000
+var pending: Array=[]
+var warm_pending: Array=[]
+var warm_requested: Dictionary={}
+var requested: Dictionary={}
+var worker: Thread
+var generation=0
+# Preserve the previous 256-sample working set for all four authored views.
+# Published swatches also share a byte budget, including higher precision sources.
+var limit=1024
+var texture_limit=64*1024*1024
+var texture_bytes=0
+var texture_sizes:Dictionary={}
+var active: Dictionary={}
+const COMPOSITE_BATCH_LIMIT=8
+var batch_size=COMPOSITE_BATCH_LIMIT
+var composites:Array=[]
+var images: Dictionary={}
+var image_bytes=0
+var image_generation=-1
+var image_limit=256*1024*1024
+var source_reads=0
+var source_hits=0
+var source_evictions=0
+var pinned:Dictionary={}
+
+func set_demand(keys:Dictionary)->void:
+    if keys==pinned and keys.keys()==pinned.keys():return
+    pinned=keys
+    # A scroll/expand request goes ahead of obsolete viewport work. The running
+    # native sample remains atomic; no worker is synchronously interrupted.
+    var visible:Array=[];var other:Array=[];var by_key={}
+    for job in pending:
+        if pinned.has(job.key):by_key[job.key]=job
+        else:other.append(job)
+    for key in pinned:
+        if by_key.has(key):visible.append(by_key[key])
+    pending=visible+other
+
+func seed_source_images(sources:Dictionary)->bool:
+    # The caller supplies this staged index's admitted renderer source images.
+    # Copy immutable handles only for queued source demand, into our own bounded
+    # cache. Never inspect or mutate this dictionary while its worker runs.
+    if worker!=null and worker.is_alive():return false
+    if image_generation!=generation:
+        images.clear();image_bytes=0;image_generation=generation;source_reads=0;source_hits=0;source_evictions=0
+    var needed={}
+    for job in pending:
+        for layer in job.get("layers",[]):
+            var path:String=layer.paths.get(job.clip,"")
+            if not path.is_empty():needed[path]=true
+            var noise:String=job.resources.get(layer.get("effect",{}).get("palette",{}).get("noiseSheet"),"")
+            if not noise.is_empty():needed[noise]=true
+        var film:String=job.get("resources",{}).get(job.get("material",{}).get("ramp",{}).get("texture"),"")
+        if not film.is_empty():needed[film]=true
+    for path in needed:
+        if images.has(path) or not sources.has(path):continue
+        var source:Image=sources[path]
+        var bytes=source.get_data_size()
+        if bytes>image_limit:continue
+        images[path]=source;image_bytes+=bytes
+        while image_bytes>image_limit:
+            var old=images.keys()[0];image_bytes-=images[old].get_data_size();images.erase(old);source_evictions+=1
+    return true
+
+func request(row: Dictionary,sample_ms: float,quarter: int,prepare_views: bool=true) -> String:
+    var component: Dictionary=row.get("component",{})
+    if row.get("visible_here",true)==false or row.kind in ["other_view","perspective"] or row.get("status")=="missing":return ""
+    var state: Dictionary={}
+    for candidate in row.get("preview_states",[]):
+        if candidate.at_ms>sample_ms:break
+        state=candidate
+    var activities={}
+    if row.get("selection_policy")=="sampled" and not suspended:
+        var eligible: Array=row.get("preview_tracks",[]).filter(func(value):return sample_ms<value.group_end_ms)
+        var actor_samples=Tracks.samples(eligible,sample_ms)
+        for id in actor_samples:activities[id]=actor_samples[id].get("activity","idle")
+        var candidates=Conditions.samples(state.get("condition_owners",row.get("condition_owners",{})).duplicate(),sample_ms,cache,activities,false)
+        var chosen=Conditions.select_layers(candidates.filter(func(value):return value.has("layer")),sample_ms,activities)
+        var matches=chosen.filter(func(value):return value.id==component.id)
+        if matches.is_empty():
+            var idle_key="%s:%s:inactive:%s:%s"%[generation,row.id,floori(sample_ms*32/1000),quarter]
+            inactive[idle_key]="Inactive at this sample (shared condition selection)"
+            while inactive.size()>limit:inactive.erase(inactive.keys()[0])
+            return idle_key
+        component=matches[0]
+    var age=float(component.get("source_age_ms",sample_ms-row.get("source_start_ms",row.start_ms))) if row.get("selection_policy")=="sampled" else sample_ms-row.get("source_start_ms",row.start_ms)
+    if row.kind=="native_effect":age=NativeSources.source_age_ms(component,age)
+    elif component.get("loop",false) and component.has("source_duration_ms"):age=fposmod(age,component.source_duration_ms)
+    var hz=float(row.get("source_fps",component.get("sample_hz",32)))
+    if row.kind in ["audio","feedback_text","damage_number","geometry_projectile"]:quarter=0
+    var key="%s:%s:%s:%s" % [generation,row.id,floori(age*maxf(1,hz)/1000),quarter]
+    if component.has("media_samples"):
+        # A held owner clock can still enter another bank or crossfade weight.
+        key+=":"+JSON.stringify(component.media_samples.map(func(part):return [part.part_id,part.media.asset_id,part.source_age_ms,part.alpha]))
+    if row.kind=="audio":key="%s:audio:%s" % [generation,component.get("clip","")]
+    if textures.has(key):
+        var texture=textures[key];textures.erase(key);textures[key]=texture
+        return key
+    if suspended or requested.has(key) or errors.has(key): return key
+    var job={"key":key,"row":row,"age_ms":age,"sample_ms":sample_ms,"quarter":quarter,"generation":generation,"component":component}
+    # Capture this generation's immutable source tables before worker dispatch.
+    # A thumbnail must not select on-disk authoring edited after this index.
+    job.resources=Catalog.read_file("catalog/resources.json",cache)
+    job.facing_cycle=Catalog.read_file("catalog/rig.json",cache).FACING_CYCLE
+    if row.kind=="native_effect":
+        job.native_age_ms=age
+        job.native_context={}
+        if NativeSources.source_record(component.source_id,cache).get("weapon_path",false):
+            var native_actor:Dictionary=row.get("actor",{})
+            var native_rig:Dictionary=Catalog.read_file("catalog/rigs.json",cache).get(native_actor.get("rig",""),{})
+            var weapon=NativeSources.weapon_context(component,native_actor,native_rig,job.facing_cycle,quarter)
+            if not weapon.error.is_empty():errors[key]=weapon.error;return key
+            job.native_context=weapon.context
+    if row.kind in ["native_effect","audio","registered_media","feedback_text","damage_number","geometry_projectile","residue_deposit"]:
+        _queue(job,prepare_views);return key
+    var actor: Dictionary=row.get("actor",{}) if row.kind in ["body","part","sprite_layer"] else state.get("actor",row.get("actor",{}))
+    if actor.is_empty():errors[key]="No disclosed source actor";return key
+    var track: Dictionary=row.get("track",row.get("source_track",component.get("source_track",{})))
+    var sampled: Dictionary={}
+    if row.kind in ["body","part","sprite_layer"] and not track.is_empty():
+        sampled=Tracks.samples([track],sample_ms-row.get("group_start_ms",row.start_ms-track.start_ms)).get(track.actor_uuid,{})
+        if sampled.is_empty():sampled={"clip":track.clip,"source_seconds":track.get("source_end_seconds",0)}
+    else:
+        var eligible: Array=row.get("preview_tracks",[]).filter(func(value):return sample_ms<value.group_end_ms)
+        sampled=Tracks.samples(eligible,sample_ms).get(actor.id,{})
+        if not sampled.is_empty():track=sampled
+    if sampled.is_empty():
+        sampled=state.get("sampled_pose",row.get("sampled_pose",{})).duplicate()
+        if sampled.get("clock")=="display":sampled.source_seconds=sample_ms/1000.0
+    if sampled.is_empty():errors[key]="No disclosed source pose";return key
+    var rig: Dictionary=Catalog.read_file("catalog/rigs.json",cache)[actor.rig]
+    var clip_name: String=sampled.clip
+    var clip: Dictionary=rig.clips[clip_name]
+    var seconds=float(sampled.source_seconds)
+    if sampled.get("clock")=="condition":seconds=ConditionPose.source_seconds(sampled.condition_pose,clip,sample_ms-sampled.owner_start_ms)
+    if track.get("loop",false) or sampled.get("clock")=="display":seconds=fposmod(seconds,float(clip.frames)/clip.fps)
+    var frame=clampi(int(seconds*clip.fps),0,int(clip.frames)-1)
+    var config: Dictionary=Catalog.read_file("catalog/rig.json",cache)
+    var cycle: Array=config.FACING_CYCLE
+    var direction: String=actor.get("facing","SW")
+    var origin: Variant=track.get("from_position")
+    var target: Variant=track.get("target_position",track.get("to_position"))
+    if origin!=null and target!=null:
+        var delta=Vector2(target[0]-origin[0],target[1]-origin[1])
+        if not delta.is_zero_approx():direction=cycle[posmod(roundi((atan2(delta.y,delta.x)+PI/4)/(TAU/8))+cycle.find("E"),8)]
+    var facing: String=cycle[posmod(cycle.find(direction)+quarter*2,8)]
+    var conditions=Conditions.samples(state.get("condition_owners",row.get("condition_owners",{})).duplicate(),sample_ms,cache)
+    if row.kind=="material_flash":
+        var flash=component.duplicate();flash.age_ms=age;conditions.append(flash)
+    var material=Conditions.material(actor.id,conditions)
+    var layers=Characters.layers(actor,rig,cache)
+    if row.kind=="sprite_layer":
+        var layer: Dictionary=component.layer
+        var sheet: String=layer.get("sourceSheet",rig.clips[clip_name].sheets.get(layer.category,""))
+        var path: String=Catalog.read_file("catalog/resources.json",cache).get(sheet,"")
+        if path.is_empty():errors[key]="Unresolved layer source: "+layer.category+"/"+clip_name;return key
+        layers=[{"slot":layer.slot,"category":layer.category,"tint":0xffffff,"alpha":1.0,"effect":layer,"paths":{clip_name:path}}]
+    if row.kind=="part":layers=layers.filter(func(layer):return layer.slot==row.slot)
+    job.merge({"rig":rig,"clip":clip_name,"frame":frame,"facing":facing,"layers":layers,
+        "hidden":track.get("hidden_slots",[]),"scale_x":actor.get("scale_x",1.0),"material":material})
+    _queue(job,prepare_views)
+    return key
+
+func _queue(job:Dictionary,prepare_views:bool)->void:
+    requested[job.key]=true;pending.append(job)
+    if not prepare_views or job.row.kind in ["audio","feedback_text","damage_number","geometry_projectile"]:return
+    for quarter in 4:
+        if quarter==job.quarter:continue
+        var key="%s:%s:%s:%s"%[generation,job.row.id,job.sample_ms,quarter]
+        if warm_requested.has(key):continue
+        warm_requested[key]=true
+        warm_pending.append({"key":key,"row":job.row,"sample_ms":job.sample_ms,"quarter":quarter,"generation":generation})
+    while warm_pending.size()>limit:
+        warm_requested.erase(warm_pending.pop_front().key)
+
+func queue_prewarm(samples:Array)->Dictionary:
+    # A changed fit/zoom replaces only unresolved background descriptors. The
+    # active worker and exact visible demand retain their existing ownership.
+    warm_pending=[];warm_requested={}
+    var ordered:Array=[]
+    for sample in samples:
+        var row:Dictionary=sample.row
+        if row.get("status")=="missing" or not row.get("visible_here",true):continue
+        ordered.append({"sample":sample,"group":_prewarm_group(row)})
+    ordered.sort_custom(func(a,b):
+        if a.group!=b.group:return a.group<b.group
+        if a.sample.row.id!=b.sample.row.id:return a.sample.row.id<b.sample.row.id
+        if a.sample.sample_ms!=b.sample.sample_ms:return a.sample.sample_ms<b.sample.sample_ms
+        return a.sample.quarter<b.sample.quarter)
+    var skipped=0
+    for entry in ordered:
+        var sample:Dictionary=entry.sample
+        var key="%s:%s:%s:%s"%[generation,sample.row.id,sample.sample_ms,sample.quarter]
+        if warm_requested.has(key):skipped+=1;continue
+        if warm_pending.size()>=limit:skipped+=1;continue
+        warm_requested[key]=true
+        warm_pending.append({"key":key,"row":sample.row,"sample_ms":sample.sample_ms,"quarter":sample.quarter,"generation":generation})
+    return {"queued":warm_pending.size(),"retained":textures.size(),"skipped":skipped}
+
+func _prewarm_group(row:Dictionary)->String:
+    # Main mechanisms retain priority over optional individual gear inspection.
+    # Static source clip metadata is sufficient for locality; actual pose and
+    # condition selection still occurs only in the shared request() sampler.
+    var track:Dictionary=row.get("track",row.get("source_track",row.get("component",{}).get("source_track",{})))
+    var clip:String=track.get("clip",row.get("selected_pose",{}).get("clip",row.get("sampled_pose",{}).get("clip","")))
+    var rig:String=row.get("actor",{}).get("rig","")
+    var source:String=row.get("component",{}).get("source_id",row.get("component",{}).get("asset_id",row.get("source","")))
+    return ("1:" if row.kind=="part" else "0:")+rig+":"+(clip if not clip.is_empty() else source)
+
+func _prepare_view()->void:
+    # Resolve a bounded batch only after foreground work. Already resident
+    # samples return immediately; they never enter decoding or native drawing.
+    if prewarm_suspended or not pending.is_empty() or _foreground_pending():return
+    var deadline=Time.get_ticks_usec()+1000
+    while pending.size()<clampi(batch_size,1,COMPOSITE_BATCH_LIMIT) and not warm_pending.is_empty() and Time.get_ticks_usec()<deadline:
+        var sample:Dictionary=warm_pending.pop_front();warm_requested.erase(sample.key)
+        if sample.generation==generation:request(sample.row,sample.sample_ms,sample.quarter,false)
+
+func _foreground_pending()->bool:
+    for key in pinned:
+        if not textures.has(key) and not errors.has(key) and not inactive.has(key):return true
+    return false
+
+func _image(path: String) -> Image:
+    if images.has(path):
+        var cached:Image=images[path];images.erase(path);images[path]=cached;source_hits+=1
+        return cached
+    var result=Image.load_from_file(Catalog.media_path(path))
+    if result==null or result.is_empty(): return null
+    source_reads+=1
+    if result.get_data_size()>image_limit:return result
+    images[path]=result;image_bytes+=result.get_data_size()
+    while image_bytes>image_limit:
+        var old=images.keys()[0];image_bytes-=images[old].get_data_size();images.erase(old);source_evictions+=1
+    return result
+
+func _decode(job: Dictionary) -> Dictionary:
+    if image_generation!=job.generation:
+        images.clear();image_bytes=0;image_generation=job.generation;source_reads=0;source_hits=0;source_evictions=0
+    var parts: Array=[];var auxiliary={}
+    var resources:Dictionary=job.resources
+    if job.row.kind=="registered_media":
+        var cycle: Array=job.facing_cycle
+        var direction: String=job.row.get("actor",{}).get("facing","SW")
+        var facing: String=cycle[posmod(cycle.find(direction)+job.quarter*2,8)]
+        var component: Dictionary=job.component
+        var samples:Array=component.get("media_samples",[{"media":component.media,"source_age_ms":job.age_ms,"alpha":component.get("alpha",1.0)}])
+        var bounds=Rect2()
+        for sample in samples:
+            if sample.media.status!="available":return {"error":"Missing phase source: "+str(sample.media.asset_id),"job":job}
+            var definition:Dictionary=sample.media.definition
+            var anchor=Vector2(definition.anchor.x*definition.frame.width,definition.anchor.y*definition.frame.height)
+            for part in RegisteredMedia.sample(sample.media,sample.source_age_ms,facing):
+                var source=_image(part.file)
+                if source==null:return {"error":"Missing source: "+str(part.file),"job":job}
+                var region=Rect2i(part.rect[0],part.rect[1],part.rect[2],part.rect[3])
+                var offset=Vector2(part.offset[0],part.offset[1])-anchor
+                var rect=Rect2(offset,Vector2(region.size))
+                bounds=rect if parts.is_empty() else bounds.merge(rect)
+                parts.append({"image":source.get_region(region),"offset":offset,"alpha":sample.alpha})
+        return {"job":job,"parts":parts,"bounds":bounds.grow(3) if bounds.has_area() else Rect2(0,0,1,1)}
+    for layer in job.layers:
+        if layer.slot=="shadow" or layer.slot in job.hidden or not layer.paths.has(job.clip): continue
+        var source=_image(layer.paths[job.clip])
+        if source==null: return {"error":"Missing source: "+str(layer.paths[job.clip]),"job":job}
+        var size=Vector2i(job.rig.cell_width,job.rig.cell_height)
+        var cell=source.get_region(Rect2i(Vector2i(job.frame*size.x,int(job.rig.facing_rows[job.facing])*size.y),size))
+        parts.append({"layer":layer,"image":cell})
+        var noise: String=resources.get(layer.get("effect",{}).get("palette",{}).get("noiseSheet"),"")
+        if not noise.is_empty(): auxiliary[noise]=_image(noise)
+    var film: String=resources.get(job.material.ramp.get("texture"),"")
+    if not film.is_empty():auxiliary[film]=_image(film)
+    if parts.is_empty():return {"error":"No authored layers for this source pose","job":job}
+    var mask: Image
+    if not job.material.outline.is_empty():
+        mask=Image.create_empty(job.rig.cell_width,job.rig.cell_height,false,Image.FORMAT_RGBA8)
+        for part in parts:
+            if part.layer.slot not in Characters.EFFECT_SLOTS:mask.blend_rect(part.image,Rect2i(Vector2i.ZERO,mask.get_size()),Vector2i.ZERO)
+    return {"job":job,"parts":parts,"auxiliary":auxiliary,"resources":resources,"mask":mask}
+
+func _decode_batch(jobs:Array)->Array:
+    # One worker owns the decoded-image LRU. Multiple ordinary swatches share
+    # its source reads, while their unchanged native viewports draw together.
+    var decoded:Array=[]
+    for job in jobs:decoded.append(_decode(job))
+    return decoded
+
+func _ordinary(job:Dictionary)->bool:
+    return job.row.kind not in ["audio","feedback_text","damage_number","geometry_projectile","residue_deposit","native_effect"]
+
+func poll() -> bool:
+    if not is_instance_valid(host): return false
+    if suspended:
+        if active.get("kind")=="native_effect":active.started_ms=Time.get_ticks_msec()
+        return false
+    var changed=false
+    for i in range(composites.size()-1,-1,-1):
+        var composite:Dictionary=composites[i]
+        if not composite.drawn:continue
+        _publish(composite.job,composite.viewport.get_texture().get_image())
+        composite.viewport.queue_free();composites.remove_at(i);changed=true
+    if worker!=null and not worker.is_alive() and composites.is_empty():
+        var batch:Array=worker.wait_to_finish();worker=null
+        for decoded in batch:
+            if decoded.job.generation!=generation:continue
+            if decoded.has("error"):errors[decoded.job.key]=decoded.error;requested.erase(decoded.job.key)
+            else:composites.append(_compose(decoded))
+        if not composites.is_empty():RenderingServer.frame_post_draw.connect(_composites_drawn,CONNECT_ONE_SHOT)
+    if not active.is_empty():
+        if active.kind=="native_effect":
+            var basis=Basis.from_euler(Vector3(-atan(sqrt(.5)),PI/4+active.job.quarter*PI/2,0))
+            var sampled=active.node.sample(active.job.native_age_ms/1000.0,basis,Vector3.ZERO,1.0,[],active.get("context",{}))
+            if sampled.ready and active.draws>1:
+                _publish(active.job,active.node.texture().get_image());_clear_active();changed=true
+            elif not sampled.get("error","").is_empty():
+                errors[active.job.key]=sampled.error;requested.erase(active.job.key);_clear_active();changed=true
+            elif Time.get_ticks_msec()-active.started_ms>=NATIVE_READY_TIMEOUT_MS:
+                errors[active.job.key]="Native source did not become ready within 15 seconds: "+str(active.job.component.source_id)
+                requested.erase(active.job.key);_clear_active();changed=true
+        elif active.kind=="blood":
+            active.node.sample()
+            if active.drawn and active.draws>2 and active.node.renderer.ready:
+                _publish(active.job,active.viewport.get_texture().get_image());_clear_active();changed=true
+        elif active.drawn:
+            _publish(active.job,active.viewport.get_texture().get_image());_clear_active();changed=true
+        if not active.is_empty():active.draws+=1
+    if worker==null and active.is_empty() and pending.is_empty():_prepare_view()
+    if worker==null and active.is_empty() and not pending.is_empty():
+        if _ordinary(pending[0]):
+            var jobs:Array=[]
+            while not pending.is_empty() and jobs.size()<clampi(batch_size,1,COMPOSITE_BATCH_LIMIT) and _ordinary(pending[0]):
+                var next:Dictionary=pending.pop_front()
+                if next.generation==generation:jobs.append(next)
+            if not jobs.is_empty():worker=Thread.new();worker.start(_decode_batch.bind(jobs))
+            return changed
+        if not composites.is_empty():return changed
+        var job: Dictionary=pending.pop_front()
+        if job.generation!=generation:return changed
+        if job.row.kind=="audio": _waveform(job);changed=true
+        elif job.row.kind in ["feedback_text","damage_number","geometry_projectile"]:_primitive(job)
+        elif job.row.kind=="residue_deposit":
+            var view=SubViewport.new();view.size=Vector2i(256,256);view.transparent_bg=true;view.own_world_3d=true
+            view.render_target_update_mode=SubViewport.UPDATE_ALWAYS
+            host.add_child(view)
+            var node=BloodPreview.new();view.add_child(node);node.configure(job.component,cache,job.age_ms,job.quarter,source_lights)
+            active={"kind":"blood","job":job,"node":node,"viewport":view,"draws":0,"drawn":false}
+            RenderingServer.frame_post_draw.connect(_drawn.bind(job.key,job.generation),CONNECT_ONE_SHOT)
+        elif job.row.kind=="native_effect":
+            var node=NativePreview.new();host.add_child(node)
+            var issue=node.configure(job.component.source_id,cache,Components.effect_seed(job.component),job.component.get("palette",[]))
+            if issue.is_empty():issue=node.bind_receiving(source_lights)
+            if issue.is_empty():
+                # Source swatches use neutral illumination, separate from the
+                # scene's actual lights. The source's colour/alpha stays intact.
+                if not node.receiving.is_empty():
+                    for child in node.receiving.output.get_children():
+                        if child is CanvasModulate:child.color=Color.WHITE
+                var context={"screen_origin":Vector2.ZERO,"pixel_scale":1.0,"light_cap":0.0,"supports":[Transform3D(Basis.from_scale(Vector3(3,1,3)),Vector3.ZERO)]}
+                context.merge(job.native_context)
+                active={"kind":"native_effect","job":job,"node":node,"draws":0,"context":context,"started_ms":Time.get_ticks_msec()};node.texture()
+            else: errors[job.key]=issue;requested.erase(job.key);node.queue_free()
+    return changed
+
+func _primitive(job: Dictionary) -> void:
+    var component: Dictionary=job.component
+    var view=SubViewport.new();view.disable_3d=true;view.transparent_bg=true;view.size=Vector2i(128,64)
+    view.render_target_update_mode=SubViewport.UPDATE_ONCE;host.add_child(view)
+    if component.kind=="geometry_projectile":
+        var rect=ColorRect.new();rect.position=Vector2(16,24);rect.size=Vector2(96,16)
+        var shader=ShaderMaterial.new();shader.shader=BoltShader;rect.material=shader
+        var length_px: float=component.style.maximumLengthPx
+        shader.set_shader_parameter("length_px",length_px);shader.set_shader_parameter("extent",Vector2(length_px+component.style.headRadiusPx*2+2,maxf(component.style.headRadiusPx*2,component.style.strokeWidthPx)+2))
+        for field in [["stroke_width","strokeWidthPx"],["stroke_alpha","strokeAlpha"],["head_radius","headRadiusPx"],["head_alpha","headAlpha"]]:shader.set_shader_parameter(field[0],component.style[field[1]])
+        shader.set_shader_parameter("stroke_colour",Color.hex(int(component.colors.secondary)*256+255));shader.set_shader_parameter("head_colour",Color.hex(int(component.colors.primary)*256+255));view.add_child(rect)
+    else:
+        var label=Label.new();label.text=component.text;label.size=Vector2(view.size)
+        label.horizontal_alignment=HORIZONTAL_ALIGNMENT_CENTER;label.vertical_alignment=VERTICAL_ALIGNMENT_CENTER
+        var font=SystemFont.new();font.font_names=PackedStringArray([component.style.fontFamily]);font.font_weight=700
+        label.add_theme_font_override("font",font);label.add_theme_font_size_override("font_size",component.style.fontSizePx)
+        label.add_theme_color_override("font_color",Color.hex(int(component.color)*256+255));label.add_theme_color_override("font_outline_color",Color.hex(int(component.style.strokeColor)*256+255));label.add_theme_constant_override("outline_size",component.style.strokeWidthPx);view.add_child(label)
+    active={"kind":"primitive","job":job,"viewport":view,"draws":0,"drawn":false}
+    RenderingServer.frame_post_draw.connect(_drawn.bind(job.key,job.generation),CONNECT_ONE_SHOT)
+
+func _compose(decoded: Dictionary) -> Dictionary:
+    var job: Dictionary=decoded.job
+    var view=SubViewport.new();view.disable_3d=true;view.transparent_bg=true
+    if job.row.kind=="registered_media":
+        view.size=Vector2i(ceilf(decoded.bounds.size.x),ceilf(decoded.bounds.size.y));view.render_target_update_mode=SubViewport.UPDATE_ONCE;host.add_child(view)
+        for part in decoded.parts:
+            var sprite=Sprite2D.new();sprite.centered=false;sprite.texture=ImageTexture.create_from_image(part.image);sprite.position=part.offset-decoded.bounds.position
+            sprite.modulate.a=part.alpha
+            sprite.texture_filter=CanvasItem.TEXTURE_FILTER_NEAREST;view.add_child(sprite)
+        return {"kind":"media","job":job,"viewport":view,"drawn":false}
+    view.size=Vector2i(job.rig.cell_width,job.rig.cell_height);view.render_target_update_mode=SubViewport.UPDATE_ONCE;host.add_child(view)
+    var resources: Dictionary=decoded.resources;var aux={}
+    for path in decoded.auxiliary:
+        if decoded.auxiliary[path]!=null:aux[path]=ImageTexture.create_from_image(decoded.auxiliary[path])
+    var state: Dictionary=job.material
+    for part in decoded.parts:
+        var sprite=Sprite2D.new();sprite.centered=false;sprite.texture=ImageTexture.create_from_image(part.image)
+        var shader=ShaderMaterial.new();shader.shader=SourceShader;sprite.material=shader
+        shader.set_shader_parameter("sheet",sprite.texture);shader.set_shader_parameter("frame_uv",Vector4(0,0,1,1))
+        shader.set_shader_parameter("tint",Palette.rgb(part.layer.tint));shader.set_shader_parameter("layer_alpha",part.layer.alpha)
+        Palette.bind(shader,part.layer,job.facing,job.frame,aux,resources);Conditions.bind(shader,state,aux,resources)
+        shader.set_shader_parameter("material_cell_size",Vector2(job.rig.cell_width,job.rig.cell_height))
+        sprite.scale.x=absf(job.scale_x)
+        if job.scale_x<0: sprite.flip_h=true
+        sprite.position.x=(view.size.x-view.size.x*absf(job.scale_x))*.5
+        view.add_child(sprite)
+    if decoded.mask!=null:
+        var overlay=Sprite2D.new();overlay.centered=false;overlay.texture=ImageTexture.create_from_image(decoded.mask)
+        var shader=ShaderMaterial.new();shader.shader=OutlineShader
+        shader.set_shader_parameter("assembled",overlay.texture);shader.set_shader_parameter("pulse_mask",outline_source.pulse_mask(view.size))
+        ConditionOutline.bind(shader,state);overlay.material=shader
+        overlay.scale.x=absf(job.scale_x);overlay.flip_h=job.scale_x<0;overlay.position.x=(view.size.x-view.size.x*absf(job.scale_x))*.5;view.add_child(overlay)
+    return {"kind":"body","job":job,"viewport":view,"drawn":false}
+
+func _composites_drawn()->void:
+    for composite in composites:composite.drawn=true
+
+func _drawn(key: String,epoch: int) -> void:
+    if epoch==generation and not active.is_empty() and active.job.key==key: active.drawn=true
+
+func _waveform(job: Dictionary) -> void:
+    var record: Dictionary=Catalog.read_file("audio/waveforms.json",cache).get("clips",{}).get(job.row.component.get("clip"),{})
+    if record.is_empty(): errors[job.key]="No decoded waveform";requested.erase(job.key);return
+    var peaks: Array=record.peaks
+    var output=Image.create_empty(peaks.size(),64,false,Image.FORMAT_RGBA8)
+    for x in peaks.size():
+        var amplitude=clampi(roundi(peaks[x]*30),0,30)
+        for y in range(32-amplitude,33+amplitude): output.set_pixel(x,y,Color("a1cfba"))
+    _publish(job,output)
+
+func _publish(job: Dictionary,output: Image) -> void:
+    requested.erase(job.key)
+    if job.generation!=generation or output==null or output.is_empty(): return
+    if job.row.kind!="audio":
+        var used=output.get_used_rect()
+        if used.has_area():output=output.get_region(used.grow(3).intersection(Rect2i(Vector2i.ZERO,output.get_size())))
+    var factor=minf(1.0,128.0/maxi(output.get_width(),output.get_height()))
+    if factor<1:output.resize(maxi(1,roundi(output.get_width()*factor)),maxi(1,roundi(output.get_height()*factor)),Image.INTERPOLATE_NEAREST)
+    textures[job.key]=ImageTexture.create_from_image(output)
+    texture_bytes-=texture_sizes.get(job.key,0)
+    texture_sizes[job.key]=output.get_data_size();texture_bytes+=texture_sizes[job.key]
+    while textures.size()>limit or texture_bytes>texture_limit:
+        var old=""
+        for candidate in textures:
+            if not pinned.has(candidate):old=candidate;break
+        if old.is_empty():
+            # Refuse an oversized visible demand explicitly instead of cycling
+            # forever between missing pinned samples or growing without a cap.
+            old=job.key;errors[job.key]="Visible source previews exceed the bounded thumbnail budget"
+        texture_bytes-=texture_sizes[old];texture_sizes.erase(old);textures.erase(old)
+
+func _clear_active() -> void:
+    if active.has("node"):active.node.close();active.node.queue_free()
+    if active.has("viewport"):active.viewport.queue_free()
+    active={}
+
+func reset() -> void:
+    generation+=1;pending.clear();warm_pending.clear();warm_requested.clear();requested.clear();pinned.clear();textures.clear();texture_sizes.clear();texture_bytes=0;errors.clear();inactive.clear();cache.clear();_clear_active()
+    if RenderingServer.frame_post_draw.is_connected(_composites_drawn):RenderingServer.frame_post_draw.disconnect(_composites_drawn)
+    for composite in composites:composite.viewport.queue_free()
+    composites.clear()
+
+func close() -> void:
+    reset()
+    if worker!=null:worker.wait_to_finish();worker=null
+    images.clear();image_bytes=0

@@ -20,12 +20,17 @@ static func samples(tracks: Array, local: float) -> Dictionary:
                     sample.source_seconds = lerpf(float(keys[i-1][1]),float(keys[i][1]),t)
                     break
         if track.get("from_position") != null and track.get("to_position") != null:
+            var spatial_fraction=1.0-pow(1.0-fraction,2) if track.get("motion_curve")=="ease_out_quad" else fraction
             var a: Array = track.from_position
             var b: Array = track.to_position
-            sample.position = [lerpf(a[0],b[0],fraction),lerpf(a[1],b[1],fraction)]
-            sample.base_height_steps = lerpf(track.get("from_elevation_feet",0.0),track.get("to_elevation_feet",0.0),fraction)/5.0
+            sample.position = [lerpf(a[0],b[0],spatial_fraction),lerpf(a[1],b[1],spatial_fraction)]
+            sample.base_height_steps = lerpf(track.get("from_elevation_feet",0.0),track.get("to_elevation_feet",0.0),spatial_fraction)/5.0
             var motion = lerpf(track.get("motion_fraction_from",0.0),track.get("motion_fraction_to",1.0),fraction)
-            sample.lift_pixels = sin(PI*motion)*float(track.get("arc_height_px",0)) if track.get("trajectory","") == "direct_arc" else 0.0
+            sample.lift_pixels = sin(PI*motion)*float(track.get("arc_height_px",0)) if track.get("trajectory","") in ["direct_arc","connector_transfer"] else 0.0
+            if track.has("passage"):
+                var approach=smoothstep(0.0,.5-float(track.passage.passageHoldFraction)/2,fraction)
+                var exit_fraction=1.0-smoothstep(.5+float(track.passage.passageHoldFraction)/2,1.0,fraction)
+                sample.passage_weight=pow(minf(approach,exit_fraction),2)
         result[id] = sample
     return result
 
@@ -69,7 +74,11 @@ static func movement(track: Dictionary, fact: Dictionary, motion: Dictionary, bo
     track.merge({"from_position":fact.from_position,"to_position":fact.to_position,
         "from_elevation_feet":fact.from_elevation_feet,"to_elevation_feet":fact.to_elevation_feet,
         "trajectory":fact.trajectory,"motion":true,"arc_height_px":0.0,"motion_fraction_from":0.0,"motion_fraction_to":1.0},true)
-    if fact.trajectory=="direct_arc" and context.has("path"):
+    if fact.trajectory=="connector_transfer" and body_config.has("connector"):
+        track.duration_ms=body_config.connector.durationMs
+        track.arc_height_px=body_config.connector.arcHeightPx
+        track.passage=body_config.connector
+    elif fact.trajectory=="direct_arc" and context.has("path"):
         var edge = context.path.find(fact.from_position)
         track.occurrence = context.occurrence
         track.duration_ms = context.duration/context.count/speed_scale

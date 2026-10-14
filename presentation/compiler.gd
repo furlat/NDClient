@@ -5,6 +5,8 @@ const Reducer = preload("res://sdk/reducer.gd")
 const Transitions = preload("res://sdk/transitions.gd")
 const Authoring = preload("res://presentation/authoring.gd")
 const EventTrace = preload("res://presentation/event_trace.gd")
+const Components = preload("res://presentation/components.gd")
+const DamageTiming = preload("res://presentation/damage_timing.gd")
 
 static func empty_delta() -> Dictionary:
     return Transitions.empty_delta()
@@ -34,6 +36,12 @@ static func _track(group: Dictionary, node: Dictionary, actor: Dictionary, clip_
     var row = Tracks.body(actor.uuid,Authoring.rig_id(actor,cache),clip_name,clip,speed,priority)
     row.merge({"trace_track_id":"%s:%s:%s" % [group.operation_sequence,node.uuid,group.actor_tracks.size()],
         "occurrence":node.lineage_uuid,"source_event_uuid":node.uuid,"source_lineage":node.lineage_uuid,"start_ms":start},true)
+    row.activity={"attack":"attack","spell":"cast","action":"act","shove":"act","condition":"act","damage":"hit","life":"hit","forced_movement":"forced_move"}.get(node.fact.kind,"idle")
+    if node.fact.kind=="step":row.activity="jump" if node.fact.trajectory in ["direct_arc","connector_transfer"] else "move"
+    # The source outfit belongs to this occurrence, not its operation endpoints.
+    row.presentation_actor = {}
+    for field in ["uuid","creature_content_ref","appearance","visual_loadout","last_visual_position","life_state","present","spatial_disposition","remains_disposition"]:
+        if actor.has(field): row.presentation_actor[field] = actor[field]
     group.actor_tracks.append(row)
     return row
 
@@ -58,8 +66,11 @@ static func _schedule(node: Dictionary, start: float, state: Dictionary, group: 
     graph.visited[node.lineage_uuid] = true
     graph.starts[node.uuid] = start
     var fact: Variant = node.fact
+    if fact!=null and fact.kind=="damage":
+        graph.impact_contacts[node.uuid]=graph.contacts.get(fact.target_entity_uuid,{}).duplicate()
     var children = _children(node,graph)
     var finish = start
+    var equipment_commit = start
     var kind: String = fact.kind if fact != null else "undisclosed"
     if kind == "movement":
         if node.canceled: group.skipped.append({"occurrence":node.lineage_uuid,"kind":kind,"reason":"canceled_body"})
@@ -69,6 +80,12 @@ static func _schedule(node: Dictionary, start: float, state: Dictionary, group: 
             context = Tracks.jump_context(fact.path,motion,node.lineage_uuid)
         for child in children: finish = _schedule(child,finish,state,group,graph,cache,context)
     elif kind == "step":
+        if fact.trajectory=="connector_transfer":
+            fact=fact.duplicate()
+            for connector in state.get("connectors",[]):
+                if fact.from_position in connector.endpoints and fact.to_position in connector.endpoints:
+                    fact.connector_presentation_key=connector.presentation_key
+                    break
         graph.positions[fact.source_entity_uuid] = fact.from_position
         var held_contact: Dictionary = graph.contacts.get(fact.source_entity_uuid,{})
         held_contact.from_elevation_feet = fact.from_elevation_feet
@@ -88,7 +105,7 @@ static func _schedule(node: Dictionary, start: float, state: Dictionary, group: 
                 held.source_end_seconds = held.source_start_seconds
                 held.occurrence = previous.get("occurrence",held.occurrence)
         var end_motion = finish
-        if not node.canceled and fact.committed and fact.trajectory in ["path","direct_arc"]:
+        if not node.canceled and fact.committed and fact.trajectory in ["path","direct_arc","connector_transfer"]:
             var actor = _actor(state,group,fact.source_entity_uuid,node,graph)
             var motion = Authoring.load_data("catalog/movement_context.json",cache)
             var body = Authoring.body("movement",actor,fact,cache)
@@ -101,6 +118,14 @@ static func _schedule(node: Dictionary, start: float, state: Dictionary, group: 
                 if fact.trajectory=="direct_arc" and not jump.has("path"):
                     group.skipped.append({"occurrence":node.lineage_uuid,"kind":kind,"reason":"undisclosed_jump_arc_uses_disclosed_edge_only"})
                 Tracks.movement(track,fact,motion,body,Authoring.clip(actor,body.actor.clip,cache),jump,rate,speed_scale,graph.last_motion.get(fact.source_entity_uuid,{}))
+                if fact.trajectory=="path":
+                    track.movement_metrics={"base_step_ms":motion.walkStepDurationMs,
+                        "base_tiles_per_second":1000.0/motion.walkStepDurationMs,
+                        "speed_multiplier":speed_scale,"tiles_per_second":1000.0/motion.walkStepDurationMs*speed_scale,
+                        "resolved_speed_feet":fact.resolved_speed_feet,"reference_speed_feet":Authoring.movement_reference_speed(cache),
+                        "duration_source":"catalog/movement_context.json:/walkStepDurationMs",
+                        "speed_source":"StepFact.resolved_speed_feet"}
+                if body.has("condition_pose"): track.condition_pose=body.condition_pose
                 end_motion = finish + track.duration_ms
                 graph.last_motion[fact.source_entity_uuid] = track
                 graph.contacts[fact.source_entity_uuid] = {"from_elevation_feet":fact.to_elevation_feet,
@@ -109,7 +134,7 @@ static func _schedule(node: Dictionary, start: float, state: Dictionary, group: 
                     "motion_fraction_to":track.motion_fraction_to}
         if not node.canceled and fact.committed:
             graph.positions[fact.source_entity_uuid] = fact.to_position
-            if fact.trajectory not in ["path","direct_arc"]:
+            if fact.trajectory not in ["path","direct_arc","connector_transfer"]:
                 group.skipped.append({"occurrence":node.lineage_uuid,"kind":kind,"reason":"motion_trajectory_out_of_pass","trajectory":fact.trajectory})
         for child in children:
             if not graph.visited.has(child.lineage_uuid): end_motion = maxf(end_motion,_schedule(child,end_motion,state,group,graph,cache))
@@ -135,22 +160,152 @@ static func _schedule(node: Dictionary, start: float, state: Dictionary, group: 
                 var visual = {"actors":{actor.uuid:actor.duplicate(true)}}
                 Reducer.apply_player_fact(visual,fact)
                 track.visual_loadout = visual.actors[actor.uuid].visual_loadout
+                track.presentation_actor.visual_loadout=track.visual_loadout
                 track.hidden_slots = recipe.actor.get("hiddenSlots",[])
+                track.effect_layers=Components.attack_layers(recipe,fact,actor,cache)
+                var trail=Components.weapon_trail(recipe,fact,visual.actors[actor.uuid],cache)
+                if not trail.is_empty():
+                    track.weapon_trail=trail
+                    if fact.damage_types.all(func(type):return type in ["Bludgeoning","Piercing","Slashing"]):
+                        track.effect_layers=track.effect_layers.filter(func(layer):return layer.slot!="slash")
                 track.contact_ms = contact
                 finish = start + track.duration_ms
+                if recipe.get("projectile")!=null and track.from_position!=null and track.target_position!=null:
+                    track.target_elevation_feet=graph.contacts.get(fact.target_entity_uuid,{}).get("from_elevation_feet",0)
+                    contact+=Components.bolt(group,node,recipe.projectile,contact,track,target,cache)
+                    finish=maxf(finish,contact)
+                track.impact_ms=contact
         else: group.skipped.append({"occurrence":node.lineage_uuid,"kind":kind,"reason":"missing_authored_attack_recipe"})
         for child in children: finish = maxf(finish,_schedule(child,contact,state,group,graph,cache))
+    elif kind in ["action","shove"] and not node.canceled:
+        var actor = _actor(state,group,fact.source_entity_uuid,node,graph)
+        var recipe = Authoring.action(fact,cache,actor)
+        graph.recipes[node.uuid] = recipe
+        var contact = start
+        if recipe.get("actor",{}).get("enabled",false):
+            var rate = recipe.actor.playbackSpeed*Authoring.playback_rate(actor,cache)
+            var track = _track(group,node,actor,recipe.actor.clip,start,rate,20,cache)
+            if not track.is_empty():
+                _held_contact(track,fact.source_entity_uuid,graph)
+                Tracks.body_keys(track,recipe,Authoring.clip(actor,recipe.actor.clip,cache))
+                track.source=Authoring.recipe_source(recipe,"actor/clip",cache)
+                track.target_uuid=fact.get("target_entity_uuid")
+                track.target_position=graph.positions.get(track.target_uuid)
+                for anchor in recipe.get("anchors",[]):
+                    if anchor.name in ["contact","effect","release"]: contact=start+float(anchor.frame)/Authoring.clip(actor,recipe.actor.clip,cache).fps*1000/rate
+                track.contact_ms=contact
+                finish=start+track.duration_ms
+        for child in children:
+            # Aggregate weapon actions preserve actual child order. Other effects
+            # begin at the authored action contact and can overlap its recovery.
+            var child_start = finish if not recipe.get("actor",{}).get("enabled",false) and child.get("fact")!=null and child.fact.kind=="attack" else contact
+            finish=maxf(finish,_schedule(child,child_start,state,group,graph,cache))
+    elif kind == "equipment" and not node.canceled:
+        var actor = _actor(state,group,fact.source_entity_uuid,node,graph)
+        var body = Authoring.body("equipment",actor,fact,cache)
+        graph.recipes[node.uuid] = body
+        if body.get("actor",{}).get("enabled",false):
+            var clip = Authoring.clip(actor,body.actor.clip,cache)
+            var track = _track(group,node,actor,body.actor.clip,start,body.actor.playbackSpeed,20,cache)
+            if not track.is_empty():
+                _held_contact(track,fact.source_entity_uuid,graph)
+                Tracks.body_keys(track,body,clip)
+                track.activity="act"
+                track.source=body.source
+                finish=start+track.duration_ms
+                for anchor in body.get("anchors",[]):
+                    if anchor.name=="commit":
+                        var frame=float(clip.frames)-1-float(anchor.frame) if body.get("reversed",false) else float(anchor.frame)
+                        equipment_commit=start+minf(track.duration_ms,frame*1000.0/clip.fps/body.actor.playbackSpeed)
+                track.commit_ms=equipment_commit
+        for child in children:finish=maxf(finish,_schedule(child,equipment_commit,state,group,graph,cache))
+    elif kind == "forced_movement" and not node.canceled:
+        var actor = _actor(state,group,fact.target_entity_uuid,node,graph)
+        var profile = Authoring.load_data("catalog/forced_movement_profile.json",cache)
+        var context = Authoring.load_data("catalog/forced_movement_context.json",cache)
+        if fact.start_position!=fact.end_position:
+            var track = _track(group,node,actor,profile.target_clip,start,profile.playback_speed,25,cache)
+            if not track.is_empty():
+                track.duration_ms=profile.duration_ms*context.durationScale
+                track.source_start_seconds=float(profile.brace_frame)/Authoring.clip(actor,profile.target_clip,cache).fps
+                track.source_end_seconds=track.source_start_seconds
+                track.merge({"from_position":fact.start_position,"to_position":fact.end_position,
+                    "from_elevation_feet":fact.start_elevation_feet,"to_elevation_feet":fact.end_elevation_feet,
+                    "motion":true,"trajectory":"forced","motion_curve":context.motionCurve,"target_position":graph.positions.get(fact.source_entity_uuid)},true)
+                finish=start+track.duration_ms
+                graph.positions[fact.target_entity_uuid]=fact.end_position
+        for child in children: finish=maxf(finish,_schedule(child,finish,state,group,graph,cache))
+    elif kind == "condition" and not node.canceled:
+        var actor = _actor(state,group,fact.target_entity_uuid,node,graph)
+        var recipe: Dictionary = Authoring.load_data("catalog/condition_recipes.json",cache).get(fact.condition.behavior_id,{})
+        graph.recipes[node.uuid]=recipe
+        var phase = "removal" if fact.event_type=="condition_removal" else "application"
+        var body: Dictionary=recipe.get(phase,{}).get("bodyAnimation",{}) if fact.event_type in ["condition_application","condition_removal"] else {}
+        if not body.is_empty():
+            var track=_track(group,node,actor,body.bodyClip,start,body.get("bodyPlaybackSpeed",1.0),35,cache)
+            if not track.is_empty():
+                _held_contact(track,fact.target_entity_uuid,graph)
+                Tracks.body_keys(track,{"actor":{"hiddenSlots":[]},"reversed":body.get("reversed",false)},Authoring.clip(actor,body.bodyClip,cache))
+                track.holding_pose=false
+                finish=start+track.duration_ms
+        for child in children: finish=maxf(finish,_schedule(child,start,state,group,graph,cache))
+    elif kind == "spell" and not node.canceled:
+        var actor = _actor(state,group,fact.source_entity_uuid,node,graph)
+        var recipe = Authoring.spell(fact,cache)
+        graph.recipes[node.uuid]=recipe
+        var cast: Dictionary=recipe.get("cast",{})
+        var application: Variant=fact.get("application")
+        var cast_key: String=application.lineage_uuid if application!=null else node.lineage_uuid
+        var contact=start
+        if not graph.casts.has(cast_key) and not cast.is_empty():
+            var rate=cast.get("bodyPlaybackSpeed",1.0)*Authoring.playback_rate(actor,cache)
+            var track=_track(group,node,actor,cast.actionClip,start,rate,20,cache)
+            if not track.is_empty():
+                _held_contact(track,fact.source_entity_uuid,graph)
+                track.target_position=graph.positions.get(fact.get("target_entity_uuid"))
+                track.hidden_slots=["weapon","offhand"] if cast.get("equipment",{}).get("kind")=="hidden" else []
+                track.effect_layers=Components.cast_layers(cast,actor,cache)
+                contact=start+cast.get("releaseFrame",0)/Authoring.clip(actor,cast.actionClip,cache).fps*1000.0/rate
+                track.contact_ms=contact
+                finish=start+track.duration_ms
+            graph.casts[cast_key]={"start":start,"release":contact,"finish":finish,"recipe":recipe,"source_event_uuid":node.uuid}
+        var owner: Dictionary=graph.casts.get(cast_key,{"release":start,"finish":start,"start":start})
+        contact=owner.release
+        if application!=null:
+            contact+=float(application.index)*recipe.get("projectile",{}).get("missileStaggerMs",0)
+            var projectile: Dictionary=recipe.get("projectile",{})
+            var source: Variant=graph.positions.get(fact.source_entity_uuid)
+            var target: Variant=graph.positions.get(fact.get("target_entity_uuid"))
+            if not projectile.is_empty() and source!=null and target!=null:
+                var config=Authoring.load_data("catalog/rig.json",cache)
+                var distance=Vector2(source[0]-target[0],source[1]-target[1]).length()*float(config.TILE_W)
+                var travel=maxf(projectile.get("minimumTravelDurationMs",150),distance/maxf(1,projectile.get("speedPxPerSecond",800))*1000)
+                Components.projectile(group,node,recipe,contact,travel,source,target,graph.contacts,cache)
+                contact+=travel
+        var has_applications=false
+        for child in children:
+            if child.get("fact")!=null and child.fact.kind=="spell" and child.fact.get("application")!=null: has_applications=true
+        for child in children: finish=maxf(finish,_schedule(child,owner.start if has_applications else contact,state,group,graph,cache))
+        finish=maxf(finish,contact)
     elif kind == "damage" and fact.stage == "applied" and not node.canceled:
         var actor = _actor(state,group,fact.target_entity_uuid,node,graph)
-        var body = Authoring.body("damage",actor,fact,cache)
-        if fact.applied_damage > 0:
+        var timing=DamageTiming.resolve(node,graph,actor,start,cache)
+        graph.damage_timings[node.uuid]=timing
+        start=timing.start
+        graph.starts[node.uuid]=start
+        finish=maxf(start,timing.hp)
+        var body:Dictionary=timing.body
+        if timing.body_enabled:
             var track = _track(group,node,actor,body.actor.clip,start,body.actor.playbackSpeed,30,cache)
             if not track.is_empty():
                 _held_contact(track,fact.target_entity_uuid,graph)
                 Tracks.body_keys(track,body,Authoring.clip(actor,body.actor.clip,cache))
-                finish = start + track.duration_ms
-        for child in children: finish = maxf(finish,_schedule(child,start,state,group,graph,cache))
+                finish = maxf(finish,start + track.duration_ms)
+        for child in children: finish = maxf(finish,_schedule(child,timing.hp,state,group,graph,cache))
     elif kind == "life" and not node.canceled:
+        start=DamageTiming.life_time(node,graph,start)
+        graph.starts[node.uuid]=start
+        finish=start
         var actor = _actor(state,group,fact.entity_uuid,node,graph)
         var body = Authoring.body("death" if fact.new_state == "dead" else "life",actor,fact,cache)
         if not body.is_empty() and body.actor.enabled:
@@ -159,13 +314,20 @@ static func _schedule(node: Dictionary, start: float, state: Dictionary, group: 
                 _held_contact(track,fact.entity_uuid,graph)
                 Tracks.body_keys(track,body,Authoring.clip(actor,body.actor.clip,cache))
                 track.holding_pose = fact.new_state != "alive"
+                var previous_pose:Dictionary=Authoring.load_data("catalog/life_state_context.json",cache).bodyPoses.get(fact.previous_state,{})
+                if fact.new_state=="dead" and previous_pose.get("bodyPose")==track.clip:
+                    # Dying/Stable already owns this terminal pose. Death does
+                    # not replay a fresh fall from a standing source frame.
+                    track.source_start_seconds=track.source_end_seconds
+                    track.erase("source_time_keys")
+                    track.duration_ms=0.0
                 finish = start + track.duration_ms
         for child in children: finish = maxf(finish,_schedule(child,start,state,group,graph,cache))
     else:
         for child in children: finish = maxf(finish,_schedule(child,start,state,group,graph,cache,jump))
         group.skipped.append({"occurrence":node.lineage_uuid,"kind":kind,"reason":"canceled_body" if node.canceled else "no_body_visual_in_this_pass"})
     # HP/life after-values are exposed at their effect contact, not recovery end.
-    graph.times[node.uuid] = start if kind in ["damage","life"] else finish
+    graph.times[node.uuid] = equipment_commit if kind=="equipment" else (graph.damage_timings[node.uuid].hp if graph.damage_timings.has(node.uuid) else (start if kind in ["damage","life","condition"] else finish))
     graph.ends[node.uuid] = finish
     return finish
 
@@ -183,6 +345,9 @@ static func compile_admitted(before: Dictionary, packet: Dictionary, cache: Dict
 
 static func compile_recorded(before: Dictionary, packet: Dictionary, cache: Dictionary,
         final_state: Dictionary, transitions: Dictionary) -> Dictionary:
+    var authoring_errors = Authoring.Catalog.validate_native(cache)
+    if not authoring_errors.is_empty():
+        return Reducer.failure("Invalid native presentation authoring: "+"; ".join(authoring_errors))
     # Private records belong to this exact admitted operation. Applying their
     # immutable after-values advances a local presentation view without folding
     # observations, world updates or sensory facts for a second time.
@@ -204,7 +369,7 @@ static func compile_recorded(before: Dictionary, packet: Dictionary, cache: Dict
             return Reducer.failure("Recorded transition event count differs from lineage")
         var group = {"id":lineage.lineage_uuid,"start_cursor":lineage.start_cursor,"end_cursor":lineage.end_cursor,
             "operation_sequence":packet.get("cursor",{}).get("sequence",-1),"operation_end":false,
-            "duration_ms":0.0,"actor_tracks":[],"commits":[],"staged_actors":{},"staged_at_ms":{},"staged_tiles":{},"staged_tile_at_ms":{},"skipped":[]}
+            "duration_ms":0.0,"actor_tracks":[],"components":[],"commits":[],"staged_actors":{},"staged_at_ms":{},"staged_tiles":{},"staged_tile_at_ms":{},"skipped":[]}
         for observation in lineage.observations:
             if not target.actors.has(observation.actor.uuid) and not group.staged_actors.has(observation.actor.uuid):
                 group.staged_actors[observation.actor.uuid] = observation.actor.duplicate(true)
@@ -212,7 +377,17 @@ static func compile_recorded(before: Dictionary, packet: Dictionary, cache: Dict
             for tile in update.tiles:
                 var key = Reducer.Audience.point_key(tile.position)
                 if not target.tiles.has(key) and not group.staged_tiles.has(key): group.staged_tiles[key] = tile.duplicate(true)
-        var graph = {"nodes":{},"first":{},"times":{},"starts":{},"ends":{},"recipes":{},"visited":{},"positions":{},"actor_inputs":{},"contacts":{},"last_motion":{}}
+        var graph = {"nodes":{},"first":{},"times":{},"starts":{},"ends":{},"recipes":{},"visited":{},"positions":{},"actor_inputs":{},"object_inputs":{},"contacts":{},"impact_contacts":{},"last_motion":{},"casts":{},"damage_timings":{}}
+        # Retain only authoritative blood receiving cells needed to reveal a
+        # later residue increment. No future tile or full-map snapshot is made.
+        graph.initial_tiles={}
+        for event in lineage.events:
+            var release: Variant=event.get("fact",{}).get("body_release") if event.get("fact")!=null else null
+            if release==null or release.get("release_id")!="body.blood":continue
+            for region in release.get("regions",[]):
+                for point in region.positions:
+                    var key=Reducer.Audience.point_key(point)
+                    graph.initial_tiles[key]=target.tiles.get(key,{})
         for actor in target.actors.values() + group.staged_actors.values():
             graph.positions[actor.uuid] = actor.last_visual_position.duplicate() if actor.last_visual_position != null else null
             if actor.last_visual_position != null:
@@ -230,6 +405,8 @@ static func compile_recorded(before: Dictionary, packet: Dictionary, cache: Dict
             if captured.event_uuid!=node.uuid or captured.source_index!=cursors[node.uuid]:
                 return Reducer.failure("Recorded transition identity differs from event")
             graph.actor_inputs[node.uuid] = captured.actor_inputs
+            if node.fact!=null and node.fact.kind=="object_damage":
+                graph.object_inputs[node.uuid]=target.objects.get(node.fact.object_uuid,{})
             apply_delta(target,captured.delta)
             group.commits.append({"at_ms":0.0,"source_index":captured.source_index,"event_uuid":node.uuid,
                 "delta":captured.delta})
@@ -265,6 +442,7 @@ static func compile_recorded(before: Dictionary, packet: Dictionary, cache: Dict
                     if track.get(field) != null and Reducer.Audience.point_key(track[field]) == key: visible_at = minf(visible_at,track.start_ms)
             group.staged_tile_at_ms[key] = visible_at
         group.commits.append({"at_ms":group.duration_ms,"source_index":lineage.end_cursor,"delta":trailing})
+        Components.compile(group,lineage,graph,cache)
         group.events = EventTrace.compile_rows(lineage,group,graph,cache)
         groups.append(group)
     if target.reducer_cursor!=final_state.reducer_cursor:

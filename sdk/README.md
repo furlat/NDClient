@@ -1,13 +1,23 @@
 # Godot player SDK
 
 This project-local SDK consumes the current DnD player API: protocol 1, player
-schema 8. It ships the unchanged schema and identity from `dnd_engine/sdk/protocol`.
+schema 9. It ships the unchanged schema and identity from `dnd_engine/sdk/protocol`.
 The current Python/TypeScript transports and `dnd/player/reduction.py` are its
 references. The old `sdk/typescript` client is not a dependency.
 
 The SDK uses built-in Godot facilities and GDScript. The optional unsigned
 GDSchema extension evaluated during research is not installed in this project;
 no certificate or Windows security-policy changes are required.
+
+Schema 9 adds optical source observations to existing sensory after-values.
+The SDK retains source revisions and removal revisions, unions permitted
+footprints only at the newest revision, and coalesces disclosed optional anchors.
+Equal-revision loss of one observer's view does not erase another observer's
+current source; a newer removal retires older retained observations. These are
+passive renderer inputs, not another light simulation or gameplay calculation.
+An explicit empty `light_sources` map is authoritative. Historical schemas omit
+that key and retain legacy source discovery; Studio selects their archived schema
+explicitly. Live connections continue to require the current identity.
 
 ## Ownership and API
 

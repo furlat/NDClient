@@ -59,7 +59,7 @@ func sync(visual_actors: Array, camera: Camera3D, canvas_sources: Array) -> Arra
         var bounds := _bounds(snapshots,origin,ground,projection.position,camera)
         var source: Dictionary=_sources[selection]
         var visible_rect := Rect2(Vector2.ZERO,camera.get_viewport().get_visible_rect().size)
-        var cookie_rect := Rect2(source.screen_position-source.span*0.5,source.span)
+        var cookie_rect := Rect2(source.cookie_position-source.span*0.5,source.span)
         var rect: Rect2=(cookie_rect if bounds.unbounded else bounds.rect.grow(2.0*maxf(zoom,1.0))).intersection(cookie_rect).intersection(visible_rect)
         if not rect.has_area(): continue
         # At close range use one sample per source pixel. At distance never
@@ -112,10 +112,12 @@ func _prepare_sources(input: Array) -> bool:
         if strength<=0: continue
         var row: Dictionary=source.duplicate()
         row.strength=strength
+        row.cookie_position=source.get("cookie_position",source.screen_position)
+        row.shadow_cookie_position=source.get("cookie_position",source.get("shadow_rank_position",source.screen_position))
         row.shadow_rank_position=source.get("shadow_rank_position",source.screen_position)
         row.shadow_rank_strength=float(source.get("shadow_rank_energy",source.energy))*(0.2126*colour.r+0.7152*colour.g+0.0722*colour.b)
         sources.append(row)
-        key.append([row.id,row.screen_position,row.span,row.height,row.texture.get_rid(),row.energy,row.color,row.shadow_rank_position,row.shadow_rank_strength])
+        key.append([row.id,row.screen_position,row.cookie_position,row.span,row.height,row.texture.get_rid(),row.energy,row.color,row.shadow_rank_position,row.shadow_rank_strength])
     if key==_source_key: return true
     if not _prepare_cookies(sources): return false
     # This is a small numeric parameter upload (3 RGBA float texels/source),
@@ -124,7 +126,7 @@ func _prepare_sources(input: Array) -> bool:
     for i in sources.size():
         var source: Dictionary=sources[i]
         var rect: Rect2=_cookie_rects[source.texture.get_rid()]
-        data.set_pixel(0,i,Color(source.screen_position.x,source.screen_position.y,source.span.x,source.span.y))
+        data.set_pixel(0,i,Color(source.cookie_position.x,source.cookie_position.y,source.span.x,source.span.y))
         data.set_pixel(1,i,Color(rect.position.x,rect.position.y,rect.size.x,rect.size.y))
         data.set_pixel(2,i,Color(source.strength,0,0,0))
     if _source_texture==null or _source_texture.get_height()!=data.get_height(): _source_texture=ImageTexture.create_from_image(data)
@@ -186,7 +188,7 @@ func _dominant(foot: Vector2) -> int:
     var strongest := 0.0
     for i in _sources.size():
         var source: Dictionary=_sources[i]
-        var uv: Vector2=(foot-source.shadow_rank_position)/source.span+Vector2.ONE*0.5
+        var uv: Vector2=(foot-source.shadow_cookie_position)/source.span+Vector2.ONE*0.5
         var score: float=source.shadow_rank_strength*_cookie_at(_cookie_images[source.texture.get_rid()],uv)
         # Strict comparison preserves exact input order for equal scores.
         if score>strongest: strongest=score; selected=i

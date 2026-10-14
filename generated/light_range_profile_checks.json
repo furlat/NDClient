@@ -1,0 +1,180 @@
+{
+  "cases": [
+    {
+      "case": "actual_torch",
+      "feet": [
+        10,
+        20,
+        20
+      ],
+      "finite": true,
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "monotonic": true,
+      "offsets": [
+        0.0,
+        0.25,
+        0.5,
+        1.0
+      ],
+      "outer_cells": 8.0
+    },
+    {
+      "case": "different_inner_same_outer",
+      "feet": [
+        5,
+        15,
+        25
+      ],
+      "finite": true,
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "monotonic": true,
+      "offsets": [
+        0.0,
+        0.125,
+        0.375,
+        1.0
+      ],
+      "outer_cells": 8.0
+    },
+    {
+      "case": "same_ratios_double_radius",
+      "feet": [
+        20,
+        40,
+        40
+      ],
+      "finite": true,
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "monotonic": true,
+      "offsets": [
+        0.0,
+        0.25,
+        0.5,
+        1.0
+      ],
+      "outer_cells": 16.0
+    },
+    {
+      "case": "fractional_very_floored_bright",
+      "feet": [
+        7,
+        17,
+        23
+      ],
+      "finite": true,
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "monotonic": true,
+      "offsets": [
+        0.0,
+        0.174999997019768,
+        0.375,
+        1.0
+      ],
+      "outer_cells": 8.0
+    },
+    {
+      "case": "coincident_inner_boundaries",
+      "feet": [
+        10,
+        10,
+        30
+      ],
+      "finite": true,
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "monotonic": true,
+      "offsets": [
+        0.0,
+        0.25,
+        1.0
+      ],
+      "outer_cells": 8.0
+    },
+    {
+      "case": "zero_very",
+      "feet": [
+        0,
+        20,
+        20
+      ],
+      "finite": true,
+      "maximum": 0.850000023841858,
+      "minimum": 0.0,
+      "monotonic": true,
+      "offsets": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "outer_cells": 8.0
+    },
+    {
+      "case": "no_dim",
+      "feet": [
+        10,
+        20,
+        0
+      ],
+      "finite": true,
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "monotonic": true,
+      "offsets": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "outer_cells": 4.0
+    },
+    {
+      "case": "all_zero_native_minimum",
+      "feet": [
+        0,
+        0,
+        0
+      ],
+      "finite": true,
+      "maximum": 0.850000023841858,
+      "minimum": 0.0,
+      "monotonic": true,
+      "offsets": [
+        0.0,
+        1.0
+      ],
+      "outer_cells": 1.0
+    },
+    {
+      "case": "very_at_outer",
+      "feet": [
+        20,
+        20,
+        0
+      ],
+      "finite": true,
+      "maximum": 1.0,
+      "minimum": 0.0,
+      "monotonic": true,
+      "offsets": [
+        0.0,
+        1.0
+      ],
+      "outer_cells": 4.0
+    }
+  ],
+  "checks": 105,
+  "failures": [],
+  "invocation": {
+    "arguments": [
+      "--recording=res://.runtime/studio-cases/hide-light-seed3/blue/journal",
+      "--sequence=8"
+    ],
+    "script": "res://tests/light_range_profile_checks.gd"
+  },
+  "recording": "res://.runtime/studio-cases/hide-light-seed3/blue/journal",
+  "scope": "Headless native PointLight2D/GradientTexture2D boundary from actual admitted Hide/light state plus named radius perturbations. Tests source ratios, finite monotonic radial profile, identity reuse and unchanged positioning/color/height. No framebuffer, world-floor radiance or gameplay-light equivalence claim.",
+  "sequence": 8
+}

@@ -68,19 +68,26 @@ static func instantiate(parent: Node, library: AnimationLibrary, graph: Animatio
     host.set_meta("state", state)
     return host
 
+static func character_loops(rig: Dictionary, clip: String) -> bool:
+    if rig.clips.get(clip,{}).has("loop"): return bool(rig.clips[clip].loop)
+    if rig.get("rest_pose_anchors",{}).has(clip):return false
+    var loop=clip in ["Idle","Idle2","Idle4","Run"]
+    for context in rig.get("body_contexts", []):
+        var body: Dictionary = context.body
+        if not body.actor.enabled or body.actor.clip!=clip:continue
+        if context.role=="death":return false
+        if body.get("playback")=="loop":loop=true
+    return loop
+
 static func build_character(parent: Node, rig: Dictionary, sampled: bool = false) -> Node:
     var animations = {}
     var returns: Array[String] = []
-    var loops: Array = ["Idle", "Idle2", "Idle4", "Run"]
     var holds: Array = rig.get("rest_pose_anchors", {}).keys()
     for context in rig.get("body_contexts", []):
-        var body: Dictionary = context.body
-        if not body.actor.enabled: continue
-        if body.get("playback") == "loop" and body.actor.clip not in loops: loops.append(body.actor.clip)
-        if context.role == "death" and body.actor.clip not in holds: holds.append(body.actor.clip)
+        if context.body.actor.enabled and context.role=="death" and context.body.actor.clip not in holds:holds.append(context.body.actor.clip)
     for name in rig.clips:
         var source: Dictionary = rig.clips[name]
-        var loop = name in loops and name not in holds
+        var loop = character_loops(rig,name)
         animations[name] = animation(name, float(source.frames) / float(source.fps), loop)
         if not loop and name not in holds:
             returns.append(name)

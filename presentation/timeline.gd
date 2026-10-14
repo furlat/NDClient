@@ -3,6 +3,8 @@ extends RefCounted
 const Tracks = preload("res://presentation/tracks.gd")
 const Compiler = preload("res://presentation/compiler.gd")
 const EventTrace = preload("res://presentation/event_trace.gd")
+const Conditions = preload("res://presentation/conditions.gd")
+const ImpactPlacement = preload("res://presentation/impact_placement.gd")
 var state: Dictionary = {}
 var queue: Array = []
 var current: Dictionary = {}
@@ -40,16 +42,25 @@ var skipped_count = 0
 var completed_groups: Array = []
 var skipped: Array = []
 var media_ready: Callable
+var replay_media_ready: Callable
+var replay_media_release: Callable
 var world_ready: Callable
 var waiting_for_world = false
 var pending_world: Dictionary = {}
 var _world_plan: Dictionary = {}
+var _replay_prepared_plan: Dictionary = {}
 var _preview_world: Dictionary = {}
 var _preview_signature: Array = []
 var _scheduled_group: Dictionary = {}
 var _staged_world_times: Array = []
 var retire_group: Callable
 var waiting_for_media = false
+var retained_components: Array = []
+var retained_directions: Dictionary = {}
+var resolved_impacts: Dictionary = {}
+var condition_owners: Dictionary = {}
+var crossed_audio: Array = []
+var component_sample_ms = -1.0
 var trace = EventTrace.create()
 var trace_revision: int:
     get: return int(trace.revision)
@@ -58,6 +69,7 @@ func accept(message: Dictionary) -> void:
     if message.kind == "initialization":
         initialization_revision += 1
         pending_world = {}; _world_plan = {}; waiting_for_world = false
+        _replay_prepared_plan={}
         _preview_world = {}; _preview_signature = []
         _scheduled_group = {}; _staged_world_times = []
         # A new admitted initialization replaces the pending presentation epoch.
@@ -67,10 +79,13 @@ func accept(message: Dictionary) -> void:
         queue = []
         if not current.is_empty(): previous.push_front(current)
         current = {}; commit_index = 0; group_start_ms = display_ms
+        retained_components=[]; retained_directions={}; resolved_impacts={}
+        condition_owners={}; crossed_audio=[];component_sample_ms=-1.0
         waiting_for_media = false
         if retire_group.is_valid():
             for group in previous: retire_group.call(group)
         state = message.state
+        Conditions.observe(condition_owners,state.actors,display_ms,true)
         sequence = int(message.sequence)
         revision += 1
         world_revision += 1
@@ -96,6 +111,81 @@ func advance(delta_ms: float) -> void:
         _scheduled_group = {}; _staged_world_times = []
         _advance_immediate(delta_ms)
 
+# Offline comparisons prepare each independent reducer before publishing either.
+# These use the same group planner and delta consumer as ordinary playback.
+func replay_plan(target_ms: float) -> Dictionary:
+    # A comparison cut includes every due group, including consecutive zero-time
+    # tails. Per-group media admission belongs to live playback; a replay host
+    # proves the received recording's complete source closure before publication.
+    var target=maxf(display_ms,target_ms)
+    var plan={"segments":[],"groups":[],"display_ms":target,"boundary":false,"media_wait":false,"replay":true}
+    var cursor=display_ms
+    var groups: Array=[]
+    if not current.is_empty():groups.append(current)
+    groups.append_array(queue)
+    for group in groups:
+        var active=is_same(group,current)
+        var start=group_start_ms if active else maxf(cursor,float(group.get("preview_start_ms",cursor)))
+        if target<start:break
+        var first=commit_index if active else 0
+        var step=_plan_group_world(group,start,first,cursor,target,not active,_group_stage_times(group),false)
+        plan.segments.append_array(step.segments)
+        plan.groups.append(group)
+        plan.boundary=plan.boundary or step.boundary
+        cursor=step.display_ms
+        if not step.segments.back().complete:break
+    plan.base = [initialization_revision,revision,world_revision,display_ms,completed_group_count,group_start_ms,commit_index,queue.size()]
+    plan.base_current=current
+    return plan
+
+func replay_plan_current(plan: Dictionary) -> bool:
+    if plan.get("base",[]) != [initialization_revision,revision,world_revision,display_ms,completed_group_count,group_start_ms,commit_index,queue.size()]:return false
+    if not is_same(plan.get("base_current"),current):return false
+    var next=0
+    for segment in plan.get("segments",[]):
+        if segment.activate:
+            if next>=queue.size() or not is_same(segment.group,queue[next]):return false
+            next+=1
+        elif not is_same(segment.group,current):return false
+    return true
+
+func replay_prepare(plan: Dictionary) -> bool:
+    if not replay_plan_current(plan): return false
+    _replay_prepared_plan={}
+    # Never ask the live callback to prepare a future group against current
+    # pins. A rendering replay host must supply its explicit closure proof.
+    waiting_for_media = not replay_media_ready.call(plan) if replay_media_ready.is_valid() else media_ready.is_valid()
+    waiting_for_world = false
+    if waiting_for_media: return false
+    if plan.boundary:
+        if not is_same(_world_plan,plan):
+            _world_plan = plan
+            pending_world = _world_candidate(plan)
+            pending_world.replay=true
+            pending_world.replay_groups=plan.groups
+        if world_ready.is_valid() and not world_ready.call(pending_world):
+            waiting_for_world = true
+            return false
+    else:
+        pending_world={};_world_plan={}
+    _replay_prepared_plan=plan
+    return true
+
+func replay_can_publish(plan: Dictionary) -> bool:
+    return replay_plan_current(plan) and is_same(_replay_prepared_plan,plan)
+
+func replay_publish(plan: Dictionary) -> bool:
+    if not replay_can_publish(plan): return false
+    _apply_world_plan(plan)
+    replay_cancel_preparation()
+    return true
+
+func replay_cancel_preparation() -> void:
+    pending_world = {}; _world_plan = {}
+    _replay_prepared_plan={}
+    waiting_for_world = false; waiting_for_media = false
+    if replay_media_release.is_valid():replay_media_release.call()
+
 func _advance_immediate(delta_ms: float) -> void:
     if paused or state.is_empty(): return
     waiting_for_media = false
@@ -107,6 +197,14 @@ func _advance_immediate(delta_ms: float) -> void:
     while true:
         if current.is_empty():
             if queue.is_empty(): display_ms = target; return
+            # Studio may space already compiled operations on this same display
+            # clock. The interval contains only the prior real SDK state; no
+            # group, event, actor sample or future commit is activated early.
+            var start = maxf(display_ms,float(queue[0].get("preview_start_ms",display_ms)))
+            if target < start:
+                display_ms = target
+                return
+            display_ms = start
             # Preparation must precede even zero-duration groups and staging.
             # Waiting wall time is not added to the presentation clock later.
             if media_ready.is_valid() and not media_ready.call(queue[0]):
@@ -122,6 +220,7 @@ func _advance_immediate(delta_ms: float) -> void:
         while commit_index < commits.size() and float(commits[commit_index].at_ms) <= local + 0.000001:
             var delta: Dictionary = commits[commit_index].delta
             Compiler.apply_delta(state,delta)
+            Conditions.observe(condition_owners,delta.get("actors",{}),group_start_ms+commits[commit_index].at_ms)
             if commits[commit_index].has("event_uuid"):
                 EventTrace.commit(trace,int(current.operation_sequence),commits[commit_index].event_uuid)
             EventTrace.append_logs(trace,commits[commit_index].get("trace_logs",[]))
@@ -139,6 +238,7 @@ func _advance_immediate(delta_ms: float) -> void:
         completed_group_count += 1
         completed_groups.append({"id":current.id,"at_ms":display_ms,"sequence":sequence})
         if completed_groups.size()>DIAGNOSTIC_LIMIT: completed_groups.pop_front()
+        _retain_completed_presentation()
         if retire_group.is_valid(): retire_group.call(current)
         current = {}
 
@@ -202,17 +302,21 @@ func _plan_world_advance(target: float) -> Dictionary:
     if group.is_empty():
         if queue.is_empty(): return {"segments":[],"display_ms":target,"boundary":false,"media_wait":false}
         group = queue[0]
-        start = cursor; first_commit = 0; activate = true
+        start = maxf(cursor,float(group.get("preview_start_ms",cursor)))
+        if target < start: return {"segments":[],"display_ms":target,"boundary":false,"media_wait":false}
+        cursor = start; first_commit = 0; activate = true
     if media_ready.is_valid() and not media_ready.call(group):
         return {"segments":[],"display_ms":cursor,"boundary":false,"media_wait":true}
     return _plan_group_world(group,start,first_commit,cursor,target,activate,_group_stage_times(group))
 
 func _plan_group_world(group: Dictionary, start: float, first_commit: int, cursor: float,
-        target: float, activate: bool, stage_times: Array) -> Dictionary:
+        target: float, activate: bool, stage_times: Array, stop_at_boundary: bool=true) -> Dictionary:
     var segments: Array = []
     var duration = float(group.duration_ms)
     var before = cursor-start
-    var local = minf(target-start,duration)
+    # Compare on the absolute clock before subtracting: (start+duration)-start
+    # can round below duration and leave an exactly clamped replay busy forever.
+    var local = duration if target>=start+duration else minf(target-start,duration)
     var boundary_at = INF
     var commits: Array = group.commits
     for i in range(first_commit,commits.size()):
@@ -233,7 +337,7 @@ func _plan_group_world(group: Dictionary, start: float, first_commit: int, curso
     if local>=duration and not _tiles_for(group,duration,state).is_empty():
         boundary_at = minf(boundary_at,duration)
     var boundary = boundary_at!=INF
-    if boundary: local = minf(local,boundary_at)
+    if boundary and stop_at_boundary: local = minf(local,boundary_at)
     var end_commit = first_commit
     while end_commit<commits.size() and float(commits[end_commit].at_ms)<=local+0.000001: end_commit += 1
     var complete = local>=duration
@@ -270,7 +374,7 @@ func preview_world() -> Dictionary:
     var cursor = display_ms
     for group in groups:
         var active = is_same(group,current)
-        var start = group_start_ms if active else cursor
+        var start = group_start_ms if active else maxf(cursor,float(group.get("preview_start_ms",cursor)))
         var first = commit_index if active else 0
         var times = {}
         for key in group.get("staged_tiles",{}):
@@ -334,6 +438,7 @@ func _apply_world_plan(plan: Dictionary) -> void:
             var commit: Dictionary = current.commits[i]
             var delta: Dictionary = commit.delta
             Compiler.apply_delta(state,delta)
+            Conditions.observe(condition_owners,delta.get("actors",{}),group_start_ms+commit.at_ms)
             if commit.has("event_uuid"): EventTrace.commit(trace,int(current.operation_sequence),commit.event_uuid)
             EventTrace.append_logs(trace,commit.get("trace_logs",[]))
             if _world_delta(delta):
@@ -347,6 +452,7 @@ func _apply_world_plan(plan: Dictionary) -> void:
             completed_groups.append({"id":current.id,"at_ms":display_ms,"sequence":sequence})
             if completed_groups.size()>DIAGNOSTIC_LIMIT: completed_groups.pop_front()
             _scheduled_group = {}; _staged_world_times = []
+            _retain_completed_presentation()
             if retire_group.is_valid(): retire_group.call(current)
             current = {}
     display_ms = plan.display_ms
@@ -358,6 +464,72 @@ func staged_actors() -> Dictionary:
         if local >= float(current.get("staged_at_ms",{}).get(id,0.0)):
             admitted[id] = current.staged_actors[id]
     return admitted
+
+static func _directions(tracks: Array, local: float, target: Dictionary) -> void:
+    var ordered=tracks.duplicate()
+    ordered.sort_custom(func(a,b): return a.start_ms<b.start_ms)
+    for track in ordered:
+        if track.start_ms>local: continue
+        var origin: Variant=track.get("from_position")
+        var end: Variant=track.get("target_position",track.get("to_position"))
+        if origin!=null and end!=null and origin!=end: target[track.actor_uuid]=[origin,end]
+
+func actor_directions() -> Dictionary:
+    var result=retained_directions.duplicate()
+    _directions(current.get("actor_tracks",[]),display_ms-group_start_ms,result)
+    return result
+
+static func component_direction(group: Dictionary,component: Dictionary,previous: Dictionary) -> Array:
+    var directions=previous.duplicate()
+    _directions(group.get("actor_tracks",[]),component.start_ms,directions)
+    return directions.get(component.get("actor_uuid"),[])
+
+func _retain_completed_presentation() -> void:
+    for component in current.get("components",[]):
+        if component.kind=="audio": crossed_audio.append({"component":component,"group_start_ms":group_start_ms})
+        if group_start_ms+component.start_ms+component.duration_ms>display_ms:
+            var item={"component":component,"group_start_ms":group_start_ms}
+            if component.has("impact"):item.impact_direction=component_direction(current,component,retained_directions)
+            retained_components.append(item)
+    _directions(current.get("actor_tracks",[]),INF,retained_directions)
+
+func component_samples(cache: Dictionary={}) -> Array:
+    var result: Array=[]
+    var alive: Array=[]
+    for item in retained_components:
+        var component: Dictionary=item.component
+        if item.group_start_ms+component.start_ms+component.duration_ms>display_ms:
+            alive.append(item)
+    retained_components=alive
+    var candidates=alive.duplicate()
+    candidates.append_array(crossed_audio);crossed_audio=[]
+    for component in current.get("components",[]): candidates.append({"component":component,"group_start_ms":group_start_ms})
+    var seen={}
+    var active_impacts={}
+    for item in candidates:
+        var component: Dictionary=item.component
+        if seen.has(component.id): continue
+        seen[component.id]=true
+        var age=display_ms-item.group_start_ms-component.start_ms
+        var crossed=component.kind=="audio" and item.group_start_ms+component.start_ms>=component_sample_ms
+        if age>=0 and (age<component.duration_ms or crossed):
+            var sample=component.duplicate(); sample.age_ms=age; sample.absolute_start_ms=item.group_start_ms+component.start_ms
+            if component.has("impact"):
+                active_impacts[component.id]=true
+                if not resolved_impacts.has(component.id):
+                    var direction:Array=item.impact_direction if item.has("impact_direction") else component_direction(current,component,retained_directions)
+                    resolved_impacts[component.id]=ImpactPlacement.with_direction(component.impact,direction,cache)
+                sample.impact=resolved_impacts[component.id]
+                if sample.impact.status=="missing":sample.status="missing";sample.reason=sample.impact.reason
+            result.append(sample)
+    for id in resolved_impacts.keys():
+        if not active_impacts.has(id):resolved_impacts.erase(id)
+    component_sample_ms=display_ms
+    var activities={}
+    var bodies=actor_samples()
+    for id in bodies:activities[id]=bodies[id].get("activity","idle")
+    result.append_array(Conditions.samples(condition_owners,display_ms,cache,activities))
+    return result
 
 func staged_tiles() -> Dictionary:
     var admitted = {}

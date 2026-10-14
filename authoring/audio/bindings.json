@@ -1,0 +1,225 @@
+{
+  "movement": {
+    "path": {
+      "cue": "footstep",
+      "timing": "body.source_frame",
+      "review_status": "provisional"
+    },
+    "takeoff": {
+      "cue": "jump_takeoff",
+      "timing": "body.source_frame",
+      "review_status": "provisional"
+    },
+    "landing": {
+      "cue": "landing",
+      "timing": "body.source_frame",
+      "review_status": "provisional"
+    }
+  },
+  "weapons": {
+    "weapon.dagger": {
+      "cue": "weapon_swing",
+      "timing": "body.contact",
+      "review_status": "provisional"
+    },
+    "weapon.shortsword": {
+      "cue": "weapon_swing",
+      "timing": "body.contact",
+      "review_status": "provisional"
+    },
+    "weapon.longsword": {
+      "cue": "weapon_swing",
+      "timing": "body.contact",
+      "review_status": "provisional"
+    },
+    "weapon.greatsword": {
+      "cue": "weapon_swing",
+      "timing": "body.contact",
+      "review_status": "provisional"
+    },
+    "weapon.scimitar": {
+      "cue": "weapon_swing",
+      "timing": "body.contact",
+      "review_status": "provisional"
+    },
+    "weapon.rapier": {
+      "cue": "weapon_swing",
+      "timing": "body.contact",
+      "review_status": "provisional"
+    },
+    "weapon.greataxe": {
+      "cue": "weapon_swing_heavy",
+      "timing": "body.contact",
+      "review_status": "provisional"
+    },
+    "weapon.handaxe": {
+      "cue": "weapon_swing_heavy",
+      "timing": "body.contact",
+      "review_status": "provisional"
+    },
+    "weapon.battleaxe": {
+      "cue": "weapon_swing_heavy",
+      "timing": "body.contact",
+      "review_status": "provisional"
+    },
+    "weapon.mace": {
+      "cue": "weapon_swing_heavy",
+      "timing": "body.contact",
+      "review_status": "provisional"
+    },
+    "weapon.club": {
+      "cue": "weapon_swing_heavy",
+      "timing": "body.contact",
+      "review_status": "provisional"
+    },
+    "weapon.greatclub": {
+      "cue": "weapon_swing_heavy",
+      "timing": "body.contact",
+      "review_status": "provisional"
+    },
+    "weapon.warhammer": {
+      "cue": "weapon_swing_heavy",
+      "timing": "body.contact",
+      "review_status": "provisional"
+    },
+    "weapon.maul": {
+      "cue": "weapon_swing_heavy",
+      "timing": "body.contact",
+      "review_status": "provisional"
+    },
+    "weapon.quarterstaff": {
+      "cue": "weapon_swing_heavy",
+      "timing": "body.contact",
+      "review_status": "provisional"
+    },
+    "weapon.shortbow": {
+      "cue": "projectile_release",
+      "timing": "body.contact",
+      "review_status": "provisional"
+    },
+    "weapon.longbow": {
+      "cue": "projectile_release",
+      "timing": "body.contact",
+      "review_status": "provisional"
+    }
+  },
+  "actions": {
+    "action.dash": {
+      "cue": "stance_transition",
+      "timing": "event.start",
+      "review_status": "provisional"
+    },
+    "action.dodge": {
+      "cue": "stance_transition",
+      "timing": "event.start",
+      "review_status": "provisional"
+    },
+    "action.disengage": {
+      "cue": "stance_transition",
+      "timing": "event.start",
+      "review_status": "provisional"
+    },
+    "action.shove": {
+      "cue": "stance_transition",
+      "timing": "body.impact",
+      "review_status": "provisional"
+    },
+    "action.class.fighter.action_surge": {
+      "cue": "action_surge",
+      "timing": "body.impact",
+      "review_status": "provisional"
+    },
+    "action.environment.door.open": {
+      "cue": "door_open",
+      "timing": "event.start",
+      "review_status": "provisional"
+    },
+    "action.environment.door.close": {
+      "cue": "door_close",
+      "timing": "event.start",
+      "review_status": "provisional"
+    },
+    "action.environment.directional_door.open": {
+      "cue": "door_open",
+      "timing": "event.start",
+      "review_status": "provisional"
+    },
+    "action.environment.directional_door.close": {
+      "cue": "door_close",
+      "timing": "event.start",
+      "review_status": "provisional"
+    }
+  },
+  "damage_types": {
+    "Bludgeoning": {
+      "cue": "physical_impact",
+      "timing": "damage.hp",
+      "review_status": "provisional"
+    },
+    "Piercing": {
+      "cue": "physical_impact",
+      "timing": "damage.hp",
+      "review_status": "provisional"
+    },
+    "Slashing": {
+      "cue": "physical_impact",
+      "timing": "damage.hp",
+      "review_status": "provisional"
+    }
+  },
+  "life": {
+    "fall": {
+      "cue": "body_fall",
+      "timing": "body.end",
+      "review_status": "provisional"
+    },
+    "rise": {
+      "cue": "stand_up",
+      "timing": "event.start",
+      "review_status": "provisional"
+    }
+  },
+  "conditions": {
+    "condition.concentrating": {
+      "persistent": {
+        "cue": "condition_loop",
+        "timing": "condition.interval",
+        "review_status": "provisional"
+      }
+    },
+    "condition.prone": {
+      "application": {
+        "cue": "body_fall",
+        "timing": "body.end",
+        "review_status": "provisional"
+      },
+      "removal": {
+        "cue": "stand_up",
+        "timing": "event.start",
+        "review_status": "provisional"
+      }
+    }
+  },
+  "objects": {
+    "environment.window.fantasy_g8.insert": {
+      "destroyed": {
+        "cue": "wood_break",
+        "timing": "event.start",
+        "review_status": "provisional"
+      },
+      "impact": {
+        "cue": "wood_impact",
+        "timing": "event.start",
+        "review_status": "provisional"
+      }
+    }
+  },
+  "spells": {
+    "spell.magic_missile": {
+      "cue": "spell_release",
+      "timing": "body.contact",
+      "review_status": "provisional"
+    }
+  },
+  "movement_contacts": "audio/contacts.json"
+}

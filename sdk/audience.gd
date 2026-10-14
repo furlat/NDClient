@@ -108,6 +108,17 @@ static func _reduce_senses_retained(expected_observer: String, previous: Variant
     var result: Dictionary = previous.duplicate()
     for field in ["entities", "objects", "spatial_effects", "effective_light_levels", "hazardous_cells"]:
         result[field] = previous[field].duplicate()
+    # Presence distinguishes current authoritative emptiness from an archived
+    # protocol that never supplied optical source observations.
+    if previous.has("light_sources") or event.has("light_sources_changed") or event.has("light_sources_removed"):
+        result.light_sources = previous.get("light_sources", {}).duplicate()
+        result.light_source_removals = previous.get("light_source_removals", {}).duplicate()
+        for identity in event.get("light_sources_removed", {}):
+            result.light_sources.erase(identity)
+            result.light_source_removals[identity] = event.light_sources_removed[identity]
+        for identity in event.get("light_sources_changed", {}):
+            result.light_sources[identity] = event.light_sources_changed[identity].duplicate(true)
+            result.light_source_removals.erase(identity)
     for point in event.visible_cells_removed:
         var key = point_key(point)
         result.effective_light_levels.erase(key)
@@ -316,6 +327,37 @@ static func view(perception: Dictionary, observer: String) -> Variant:
     var result: Variant = _view_retained(perception, observer)
     return result.duplicate(true) if result != null else null
 
+static func _light_sources_retained(perception: Dictionary) -> Dictionary:
+    var revisions = {}
+    var supplied = false
+    for member in perception.members.values():
+        supplied = supplied or member.has("light_sources") or member.has("light_source_removals")
+        for identity in member.get("light_source_removals", {}):
+            revisions[identity] = maxi(revisions.get(identity, -1), member.light_source_removals[identity])
+        for identity in member.get("light_sources", {}):
+            revisions[identity] = maxi(revisions.get(identity, -1), member.light_sources[identity].revision)
+    if not supplied: return {}
+    var sources = {}
+    var observers: Array = perception.members.keys()
+    observers.sort()
+    for observer in observers:
+        for identity in perception.members[observer].get("light_sources", {}):
+            var source: Dictionary = perception.members[observer].light_sources[identity]
+            if source.revision != revisions[identity]: continue
+            if not sources.has(identity):
+                sources[identity] = source
+            else:
+                var merged: Dictionary = sources[identity].duplicate()
+                merged.affected_tiles = merged.affected_tiles.duplicate()
+                merged.affected_tiles.merge(source.affected_tiles, true)
+                for field in ["anchor_entity_uuid", "anchor_item_uuid"]:
+                    if merged.get(field) == null: merged[field] = source.get(field)
+                sources[identity] = merged
+    var removals = {}
+    for identity in revisions:
+        if not sources.has(identity): removals[identity] = revisions[identity]
+    return {"light_sources":sources, "light_source_removals":removals}
+
 static func _view_retained(perception: Dictionary, observer: String) -> Variant:
     if perception.members.is_empty(): return null
     var anchor: Dictionary = perception.members.get(observer, perception.members.values()[0])
@@ -336,6 +378,7 @@ static func _view_retained(perception: Dictionary, observer: String) -> Variant:
     result.entities = _contacts_retained(perception, false)
     result.objects = _contacts_retained(perception, true)
     result.spatial_effects = effects(perception)
+    result.merge(_light_sources_retained(perception), true)
     return result
 
 # Only an owned event fold that already composed a sensory view may reuse these
@@ -394,6 +437,7 @@ static func _view_after(perception: Dictionary, observer: String, previous: Vari
     result.entities = _contacts_retained(perception, false)
     result.objects = _object_contacts_after(perception, previous.objects, event)
     result.spatial_effects = effects(perception)
+    result.merge(_light_sources_retained(perception), true)
     composed.source = result
     return result
 

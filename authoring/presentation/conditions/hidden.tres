@@ -1,0 +1,40 @@
+[gd_resource type="Resource" script_class="ConditionPresentation" load_steps=10 format=3]
+
+[ext_resource type="Script" path="res://presentation/resources/condition_presentation.gd" id="1"]
+[ext_resource type="Script" path="res://presentation/resources/body_filter.gd" id="2"]
+[ext_resource type="Script" path="res://presentation/resources/activity_pose.gd" id="3"]
+[ext_resource type="Script" path="res://presentation/resources/feedback_text.gd" id="4"]
+
+[sub_resource type="Resource" id="Filter"]
+script = ExtResource("2")
+opacity = 0.55
+
+[sub_resource type="Resource" id="Idle"]
+script = ExtResource("3")
+rig_id = "neuroclient.modular"
+activity = "idle"
+clip = "CrouchIdle"
+
+[sub_resource type="Resource" id="Move"]
+script = ExtResource("3")
+rig_id = "neuroclient.modular"
+activity = "move"
+clip = "CrouchRun"
+
+[sub_resource type="Resource" id="Applied"]
+script = ExtResource("4")
+prefix = "+"
+color = Color(0.89411765, 0.34509804, 0.87450980, 1)
+
+[sub_resource type="Resource" id="Removed"]
+script = ExtResource("4")
+prefix = "−"
+color = Color(0.80784314, 0.15294118, 0.43529412, 1)
+
+[resource]
+script = ExtResource("1")
+behavior_id = "condition.hidden"
+body_filter = SubResource("Filter")
+activity_poses = Array[ExtResource("3")]([SubResource("Idle"), SubResource("Move")])
+application_feedback = SubResource("Applied")
+removal_feedback = SubResource("Removed")

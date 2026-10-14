@@ -1,0 +1,162 @@
+{
+  "behavior": "action.disengage",
+  "command": {
+    "arguments": [
+      "--recording=res://.runtime/studio-cases/disengage-seed3/amber/journal",
+      "--behavior=action.disengage",
+      "--output=res://generated/studio_disengage_capability_report.json"
+    ],
+    "script": "res://tools/studio_capability_report.gd"
+  },
+  "context_gaps": [],
+  "counts": {
+    "all_timeline_gaps": 1,
+    "context_gaps": 0,
+    "occurrences": 1,
+    "owned_gaps": 1
+  },
+  "failures": [
+    {
+      "failures": [
+        {
+          "count": 1,
+          "reason": "unresolved_owned_requirements"
+        }
+      ],
+      "id": "2:8e742bd1-fa4e-40c1-a6bb-2e83a2ac8373",
+      "reason": "occurrence_incomplete"
+    }
+  ],
+  "identity": {
+    "audience_id": "84b4ae93-9040-4992-9f44-83588d4ecf55",
+    "game_epoch": "5af4a97f-8d18-41f6-8366-3b44f51f6edb",
+    "game_id": "presentation_attack",
+    "sequence": 0
+  },
+  "occurrences": [
+    {
+      "actor_uuid": "fcc8760e-8ecb-4210-9ca5-e25bc3b96852",
+      "behavior_id": "action.disengage",
+      "body_tracks": [],
+      "child_conditions": [
+        {
+          "application_event_uuid": "f8f97a44-521f-42cb-b33e-228d1bdd837f",
+          "application_markers": [
+            {
+              "at_ms": 500.0,
+              "kind": "commit",
+              "source": "compiled.commits.at_ms"
+            }
+          ],
+          "behavior_id": "condition.disengaging",
+          "condition_uuid": "32a11144-b8b5-4aba-8759-acb7285a7c5e",
+          "end_ms": 1616.66666666667,
+          "id": "condition:32a11144-b8b5-4aba-8759-acb7285a7c5e",
+          "initial": false,
+          "kind": "condition",
+          "label": "Disengaging",
+          "legacy_source": "",
+          "markers": [],
+          "parent_id": "2:f8f97a44-521f-42cb-b33e-228d1bdd837f",
+          "rendered": "not_witnessed",
+          "source": "catalog/condition_recipes.json:/condition.disengaging",
+          "source_event_uuid": "",
+          "start_ms": 500.0,
+          "status": "available",
+          "timing": {
+            "status": "compiled"
+          }
+        }
+      ],
+      "commit_markers": [
+        {
+          "at_ms": 500.0,
+          "kind": "commit",
+          "source": "compiled.commits.at_ms"
+        }
+      ],
+      "component_tracks": [
+        {
+          "coverage": {
+            "implementation": "resolved",
+            "prepared": "not_examined",
+            "rendered": "not_witnessed",
+            "source": "available"
+          },
+          "end_ms": 1900.0,
+          "id": "2:f8f97a44-521f-42cb-b33e-228d1bdd837f:feedback_text:0",
+          "kind": "feedback_text",
+          "label": "+Disengaging",
+          "legacy_source": "catalog/condition_recipes.json:/condition.disengaging/application/feedbackEnabled",
+          "markers": [],
+          "parent_id": "2:f8f97a44-521f-42cb-b33e-228d1bdd837f",
+          "rendered": "not_witnessed",
+          "source": "catalog/condition_recipes.json:/condition.disengaging/application/feedbackEnabled",
+          "source_event_uuid": "f8f97a44-521f-42cb-b33e-228d1bdd837f",
+          "start_ms": 500.0,
+          "status": "available",
+          "timing": {
+            "status": "compiled"
+          }
+        }
+      ],
+      "end_ms": 500.0,
+      "event_kind": "action",
+      "event_reasons": [
+        "state_only_no_animation_claim"
+      ],
+      "event_status": "state_only",
+      "event_uuid": "8e742bd1-fa4e-40c1-a6bb-2e83a2ac8373",
+      "failures": [
+        {
+          "count": 1,
+          "reason": "unresolved_owned_requirements"
+        }
+      ],
+      "group_id": "3bd609de-b696-40f5-a7b5-cbc1125849a5",
+      "id": "2:8e742bd1-fa4e-40c1-a6bb-2e83a2ac8373",
+      "parent_id": "",
+      "passed": false,
+      "requirements": [],
+      "sequence": 2,
+      "start_ms": 500.0,
+      "unresolved_requirements": [
+        {
+          "category": "authoring",
+          "coverage": {
+            "implementation": "not_applicable",
+            "prepared": "not_prepared",
+            "rendered": "not_rendered",
+            "source": "not_assigned"
+          },
+          "end_ms": 500.0,
+          "id": "condition:32a11144-b8b5-4aba-8759-acb7285a7c5e:required:0",
+          "implementation": "not_applicable",
+          "kind": "requirement",
+          "label": "Missing · persistent_indicator",
+          "legacy_source": "",
+          "markers": [],
+          "parent_id": "condition:32a11144-b8b5-4aba-8759-acb7285a7c5e",
+          "prepared": "not_prepared",
+          "reason": "persistent_visual_assignment_missing",
+          "rendered": "not_witnessed",
+          "required_kind": "persistent_indicator",
+          "source": "catalog/condition_recipes.json:/condition.disengaging/persistent",
+          "source_availability": "not_assigned",
+          "source_event_uuid": "",
+          "start_ms": 500.0,
+          "status": "missing",
+          "timing": {
+            "reason": "Authored condition component timing is unresolved",
+            "status": "unresolved"
+          }
+        }
+      ]
+    }
+  ],
+  "passed": false,
+  "recording": "res://.runtime/studio-cases/disengage-seed3/amber/journal",
+  "require_body": false,
+  "scope": "Compiled occurrence implementation and current referenced-file availability only. Prepared resources, rendered pixels and audible output require separate native evidence; context gaps are not hidden by a passing scoped action.",
+  "version": 1
+}

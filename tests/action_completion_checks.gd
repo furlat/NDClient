@@ -90,6 +90,7 @@ func run() -> void:
     if not check_start(): return
     var directory = "user://checks/action-completion-"+Session.uuid()
     player = Player.new()
+    player.session = Session.new() # This request-only fixture deliberately stays outside the scene tree.
     check(player.session.start({"url":"http://127.0.0.1:%d" % peer.port,"token":"loopback-fixture","journal":directory}).ok,"Start real HTTP session")
     if not await pump_until(func():return player.session.following and player.session.latest_sequence==0,"Native initialization/attachment/follower ready: "):
         await finish(directory); return

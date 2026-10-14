@@ -1,0 +1,273 @@
+extends RefCounted
+## Finite authored blood geometry. The display clock is the only age owner.
+## Persistent fields belong to exact current tile residues; completed fields
+## are retained and never rerasterized just because the camera or light moves.
+const Blood=preload("res://presentation/blood.gd")
+const Placement=preload("res://placement.gd")
+const GridOrder=preload("res://grid_order.gd")
+const Kernel=preload("res://presentation/blood_kernel.gdshader")
+const Surface=preload("res://presentation/blood_surface.gdshader")
+const Droplet=preload("res://presentation/blood_droplet.gdshader")
+const Irradiance=preload("res://presentation/blood_irradiance.gdshader")
+var deposits:Dictionary={}
+var pending_deposits:Dictionary={}
+var prepare_frame=-1
+var prepare_allocations=0
+var prepare_usec=0
+var flights:Dictionary={}
+var pages:Dictionary={}
+var source:Dictionary={}
+var tiles_owner:Dictionary={}
+var tiles_revision=-1
+var tiles:Dictionary={}
+var field_uploads=0
+var last_sample_usec=0
+var last_allocations=0
+var peak_sample_usec=0
+var visible_fields:Dictionary={}
+var ready=true
+
+func _page(world:Node,name:String)->SubViewport:
+    if pages.has(name):return pages[name].view
+    var view=SubViewport.new();view.disable_3d=true;view.transparent_bg=true;view.use_hdr_2d=true
+    view.render_target_update_mode=SubViewport.UPDATE_ALWAYS;world.add_child(view)
+    var ambient=CanvasModulate.new();ambient.color=Color(.18,.18,.18).linear_to_srgb();view.add_child(ambient)
+    var rectangle=ColorRect.new();rectangle.mouse_filter=Control.MOUSE_FILTER_IGNORE
+    var material=ShaderMaterial.new();material.shader=Irradiance;rectangle.material=material;view.add_child(rectangle)
+    world.source_lighting.attach_page(view)
+    pages[name]={"view":view,"rectangle":rectangle,"material":material,"ready":false}
+    var page:Dictionary=pages[name]
+    RenderingServer.frame_post_draw.connect(func():page.ready=true,CONNECT_ONE_SHOT)
+    return view
+
+func _entry(world:Node,id:String,mesh:Mesh,role:String,position:Array,height:float,layer:int,shader:Shader)->Dictionary:
+    var node=MeshInstance3D.new();node.mesh=mesh;node.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+    var material=ShaderMaterial.new();material.shader=shader;node.material_override=material;world.add_child(node)
+    var row={"id":id,"position":position,"base_height_steps":height,"kind":"effect","layer":1}
+    var entry={"id":id,"node":node,"material":material,"placement":row,"role":role,"layer":layer}
+    world.actor_entries.append(entry);world.draw_order_dirty=true
+    return entry
+
+func _deposit(world:Node,key:String,tile:Dictionary)->Dictionary:
+    last_allocations+=1
+    var field=SubViewport.new();field.size=Vector2i(64,64);field.disable_3d=true;field.transparent_bg=true;field.use_hdr_2d=true
+    field.render_target_update_mode=SubViewport.UPDATE_ONCE;world.add_child(field)
+    var mesh=QuadMesh.new();mesh.size=Vector2(2,2)
+    var multimesh=MultiMesh.new();multimesh.transform_format=MultiMesh.TRANSFORM_2D;multimesh.use_custom_data=true;multimesh.mesh=mesh
+    var kernels=MultiMeshInstance2D.new();kernels.multimesh=multimesh
+    kernels.material=ShaderMaterial.new();kernels.material.shader=Kernel;field.add_child(kernels)
+    var plane=PlaneMesh.new();plane.size=Vector2.ONE
+    var entry=_entry(world,"blood:tile:"+key,plane,"covering",tile.position,tile.get("elevation_steps",0),1,Surface)
+    entry.node.position=Placement.contact(entry.placement)
+    entry.material.set_shader_parameter("field_texture",field.get_texture())
+    entry.material.set_shader_parameter("tile_position",Vector2(tile.position[0],tile.position[1]))
+    entry.material.set_shader_parameter("illumination",_page(world,"floor").get_texture())
+    entry.node.visible=false
+    var handle={"entry":entry,"field":field,"kernels":kernels,"value":{},"phase":[],"updates":0,"ready":false}
+    RenderingServer.frame_post_draw.connect(func():handle.ready=true,CONNECT_ONE_SHOT)
+    return handle
+
+func _upload(handle:Dictionary,kernels:Array)->void:
+    var multimesh:MultiMesh=handle.kernels.multimesh
+    multimesh.instance_count=kernels.size()
+    for i in kernels.size():
+        var transform:Transform2D=kernels[i].transform
+        transform.x*=sqrt(1.5)*64.;transform.y*=sqrt(1.5)*64.;transform.origin=(transform.origin+Vector2(.5,.5))*64.
+        multimesh.set_instance_transform_2d(i,transform)
+        multimesh.set_instance_custom_data(i,Color(kernels[i].mass,0,0,0))
+    handle.field.render_target_update_mode=SubViewport.UPDATE_ONCE
+    handle.updates+=1;field_uploads+=1
+
+func prepare(world:Node,groups:Array)->bool:
+    var began=Time.get_ticks_usec()
+    var frame=Engine.get_process_frames()
+    if prepare_frame!=frame:prepare_frame=frame;prepare_allocations=0;prepare_usec=0
+    var complete=true
+    for group in groups:
+        for component in group.get("components",[]):
+            if component.kind!="residue_deposit":continue
+            for reveal in component.reveals:
+                var key=Blood.key(reveal.position)
+                if deposits.has(key):continue
+                if not pending_deposits.has(key):
+                    if prepare_allocations>=2:complete=false;continue
+                    var tile={"position":reveal.position,"elevation_steps":reveal.elevation_steps}
+                    pending_deposits[key]=_deposit(world,key,tile)
+                    pending_deposits[key].groups={}
+                    prepare_allocations+=1
+                var handle:Dictionary=pending_deposits[key]
+                handle.groups[group.id]=true
+                complete=complete and handle.ready and pages.floor.ready
+    prepare_usec+=Time.get_ticks_usec()-began
+    return complete
+
+func _prune_pending(world:Node)->void:
+    var ids={}
+    if world.timeline.current!=null and not world.timeline.current.is_empty():ids[world.timeline.current.id]=true
+    for group in world.timeline.queue:ids[group.id]=true
+    for key in pending_deposits.keys():
+        var keep=false
+        for id in pending_deposits[key].groups:
+            if ids.has(id):keep=true;break
+        if not keep:
+            _free_deposit(world,pending_deposits[key]);pending_deposits.erase(key)
+
+func _active(world:Node,samples:Array)->Array:
+    var result:Array=[];var ids={}
+    for component in samples:
+        if component.kind=="residue_deposit":result.append(component);ids[component.id]=true
+    # A tile update may precede its parent DamageApplied completion. Retain the
+    # previous contribution until the event-owned flight reaches that tile.
+    if world.timeline.current!=null:
+        for component in world.timeline.current.get("components",[]):
+            if component.kind!="residue_deposit" or ids.has(component.id):continue
+            var copy=component.duplicate();copy.age_ms=world.timeline.display_ms-world.timeline.group_start_ms-component.start_ms
+            if copy.age_ms<0:result.append(copy)
+    return result
+
+func sample(world:Node,samples:Array)->void:
+    var began=Time.get_ticks_usec()
+    ready=true;last_allocations=0
+    if source.is_empty():source=Blood.asset(world.catalog_cache)
+    _prune_pending(world)
+    var state:Dictionary=world.timeline.state
+    if tiles_revision!=world.timeline.world_revision or not is_same(tiles_owner,state.get("tiles",{})):
+        tiles_owner=state.get("tiles",{});tiles_revision=world.timeline.world_revision;tiles={}
+        for key in tiles_owner:
+            if not Blood.residue(tiles_owner[key]).is_empty():tiles[key]=tiles_owner[key]
+    var active=_active(world,samples);var by_tile={};var live_flights={}
+    for component in active:
+        var age:float=component.age_ms/1000.
+        var step=Blood.landing_step(source,component.body_release.pattern,age)
+        for reveal in component.reveals:
+            var cell=Blood.key(reveal.position)
+            if not by_tile.has(cell):by_tile[cell]=[]
+            var row=reveal.duplicate();row.pattern=component.body_release.pattern;row.age_seconds=age;row.id=component.id
+            row.step=step;by_tile[cell].append(row)
+        if age>=0:
+            _flight(world,component,age,live_flights)
+    var visible:Dictionary=world.scenery_visible_cells
+    visible_fields={}
+    for key in tiles:
+        var tile:Dictionary=tiles[key];var value=Blood.residue(tile)
+        var on_screen=_tile_visible(world,tile)
+        if not on_screen and not deposits.has(key):continue
+        if not deposits.has(key):
+            if pending_deposits.has(key):
+                deposits[key]=pending_deposits[key];pending_deposits.erase(key)
+            else:deposits[key]=_deposit(world,key,tile)
+        var handle:Dictionary=deposits[key]
+        handle.entry.node.visible=on_screen and handle.ready and pages.floor.ready
+        if not on_screen:continue
+        ready=ready and handle.ready and pages.floor.ready
+        var reveals:Array=by_tile.get(key,[]);var phase=reveals.map(func(row):return [row.id,row.step])
+        if not is_same(handle.value,value) or handle.phase!=phase:
+            var kernels=Blood.kernels(value,tile.position,reveals,source)
+            _upload(handle,kernels);handle.value=value;handle.phase=phase
+            handle.coverage=Blood.has_coverage(kernels)
+        if handle.get("coverage",false) and handle.entry.node.visible:visible_fields[key]=true
+        var entry:Dictionary=handle.entry
+        entry.placement.base_height_steps=tile.get("elevation_steps",0);entry.node.position=Placement.contact(entry.placement)
+        entry.material.set_shader_parameter("visibility",1. if visible.has(key) else 0.)
+        entry.material.set_shader_parameter("light_cap",1. if world.light_cap_enabled else 0.)
+        entry.material.set_shader_parameter("normals_visible",world.normals_visible)
+    for key in deposits.keys():
+        if not tiles.has(key):_erase_deposit(world,key)
+    for key in flights.keys():
+        if not live_flights.has(key):_erase_flight(world,key)
+    var normal=world.camera.global_basis.inverse()*Vector3.UP;normal.y=-normal.y
+    for name in pages:
+        var page:Dictionary=pages[name];page.view.size=Vector2i(world.get_viewport().get_visible_rect().size)
+        page.rectangle.size=Vector2(page.view.size)
+        page.material.set_shader_parameter("receiving_normal",normal if name=="floor" else Vector3(0,0,1))
+        page.view.render_target_update_mode=SubViewport.UPDATE_ALWAYS if ((not visible_fields.is_empty() or not page.ready) if name=="floor" else not flights.is_empty()) else SubViewport.UPDATE_DISABLED
+    for handle in deposits.values():handle.entry.material.set_shader_parameter("receiving_normal",normal)
+    last_sample_usec=Time.get_ticks_usec()-began
+    peak_sample_usec=maxi(peak_sample_usec,last_sample_usec)
+
+func visible_deposit(component:Dictionary)->bool:
+    for reveal in component.reveals:
+        if visible_fields.has(Blood.key(reveal.position)):return true
+    return false
+
+static func _tile_visible(world:Node,tile:Dictionary)->bool:
+    var center=Vector3(tile.position[0],tile.get("elevation_steps",0)*Placement.HEIGHT_UNIT,tile.position[1])
+    if world.camera.is_position_behind(center):return false
+    var bounds=Rect2(world.camera.unproject_position(center+Vector3(-.5,0,-.5)),Vector2.ZERO)
+    for dx in [-.5,.5]:
+        for dz in [-.5,.5]:bounds=bounds.expand(world.camera.unproject_position(center+Vector3(dx,0,dz)))
+    return bounds.intersects(world.get_viewport().get_visible_rect())
+
+func _flight(world:Node,component:Dictionary,age:float,live:Dictionary)->void:
+    var buckets={};var zoom:float=world.camera.unproject_position(world.camera.global_basis.x).distance_to(world.camera.unproject_position(Vector3.ZERO))/Placement.PIXELS_PER_UNIT
+    var pixel_unit=1.0/Placement.PIXELS_PER_UNIT
+    var actor:Dictionary=world.visual_actors.get(component.actor_uuid,{})
+    var actor_prefix:Array=GridOrder.key(actor.row,"body",0,0).slice(0,5) if not actor.is_empty() else []
+    for particle in Blood.particles(component,source,age):
+        var row={"position":[particle.position.x,particle.position.y],"base_height_steps":particle.support_height,"kind":"effect"}
+        var prefix=GridOrder.key(row,"native_effect",100,0).slice(0,5)
+        var key=component.id+":"+str(prefix)
+        if not buckets.has(key):
+            # Within the recipient's painter cell, use its exact contact key
+            # so the two pre-blend halves surround every assembled body layer.
+            buckets[key]={"row":actor.row.duplicate() if prefix==actor_prefix else row,"pieces":[]}
+        var point=Vector3(particle.position.x,particle.height*Placement.HEIGHT_UNIT,particle.position.y)
+        var previous=Vector3(particle.previous.x,particle.previous_height*Placement.HEIGHT_UNIT,particle.previous.y)
+        var screen=world.camera.unproject_position(point);var old=world.camera.unproject_position(previous)
+        var direction=(screen-old).normalized();if direction.is_zero_approx():direction=Vector2.RIGHT
+        var tangent=(world.camera.basis.x*direction.x-world.camera.basis.y*direction.y).normalized()
+        var across=world.camera.basis.z.cross(tangent)
+        var length_px=clampf(screen.distance_to(old)/maxf(.001,zoom),source.tailMinPx,source.tailMaxPx)
+        var snap=float(source.snapPx)*zoom
+        var snapped=Vector2(Blood.even_round(screen.x/snap),Blood.even_round(screen.y/snap))*snap
+        point+=world.camera.basis.x*(snapped.x-screen.x)/maxf(.001,zoom)*pixel_unit-world.camera.basis.y*(snapped.y-screen.y)/maxf(.001,zoom)*pixel_unit
+        # Original physical-blood vocabulary: body rectangle plus bright edge.
+        for shape in [[-length_px,-particle.size,2.,particle.size,source.colors[0]],[-1.,-particle.size,1.,-particle.size+maxf(1.,particle.size*.6),source.colors[1]]]:
+            var width:float=shape[2]-shape[0];var height:float=shape[3]-shape[1]
+            var center=point+tangent*(shape[0]+shape[2])*.5*pixel_unit-across*(shape[1]+shape[3])*.5*pixel_unit
+            buckets[key].pieces.append({"transform":Transform3D(Basis(tangent*width*pixel_unit,across*height*pixel_unit,world.camera.basis.z),center),"color":Color.hex(int(shape[4])*256+255)})
+    for bucket_key in buckets:
+        var bucket:Dictionary=buckets[bucket_key]
+        var plane=Vector3(world.camera.basis.z.x,0,world.camera.basis.z.z).normalized()
+        var foot=Placement.contact(actor.row) if not actor.is_empty() else Vector3.ZERO
+        for half in ["back","front"]:
+            var key=bucket_key+":"+half
+            live[key]=true
+            if not flights.has(key):
+                last_allocations+=1
+                var mesh=QuadMesh.new();mesh.size=Vector2.ONE
+                var multi=MultiMesh.new();multi.transform_format=MultiMesh.TRANSFORM_3D;multi.use_colors=true;multi.mesh=mesh
+                var node=MultiMeshInstance3D.new();node.multimesh=multi;node.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+                var material=ShaderMaterial.new();material.shader=Droplet;material.set_shader_parameter("illumination",_page(world,"air").get_texture());node.material_override=material;world.add_child(node)
+                var row:Dictionary=bucket.row.duplicate();row.id=key
+                var entry={"id":key,"node":node,"material":material,"placement":row,"role":"native_effect","layer":-10 if half=="back" else 100}
+                world.actor_entries.append(entry);world.draw_order_dirty=true;flights[key]=entry
+            var entry:Dictionary=flights[key];var multi:MultiMesh=entry.node.multimesh
+            entry.placement=bucket.row.duplicate();entry.placement.id=key
+            entry.node.visible=pages.air.ready;ready=ready and pages.air.ready
+            multi.instance_count=bucket.pieces.size()
+            for i in bucket.pieces.size():multi.set_instance_transform(i,bucket.pieces[i].transform);multi.set_instance_color(i,bucket.pieces[i].color)
+            entry.material.set_shader_parameter("partition",not actor.is_empty())
+            entry.material.set_shader_parameter("back",half=="back")
+            entry.material.set_shader_parameter("plane_origin",foot);entry.material.set_shader_parameter("plane_normal",plane)
+            entry.material.set_shader_parameter("light_cap",1. if world.light_cap_enabled else 0.)
+            entry.material.set_shader_parameter("normals_visible",world.normals_visible)
+
+func _erase_flight(world:Node,key:String)->void:
+    var entry:Dictionary=flights[key];world.actor_entries.erase(entry);entry.node.queue_free();flights.erase(key);world.draw_order_dirty=true
+
+func _free_deposit(world:Node,handle:Dictionary)->void:
+    world.actor_entries.erase(handle.entry)
+    handle.entry.material.set_shader_parameter("field_texture",null);handle.entry.node.queue_free();handle.field.queue_free()
+    world.draw_order_dirty=true
+
+func _erase_deposit(world:Node,key:String)->void:
+    _free_deposit(world,deposits[key]);deposits.erase(key)
+
+func close(world:Node)->void:
+    for key in flights.keys():_erase_flight(world,key)
+    for key in deposits.keys():_erase_deposit(world,key)
+    for handle in pending_deposits.values():_free_deposit(world,handle)
+    pending_deposits.clear()
+    for page in pages.values():world.source_lighting.detach_page(page.view);page.view.queue_free()
+    pages={};tiles_owner={};tiles={};source={};tiles_revision=-1

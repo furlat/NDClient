@@ -133,7 +133,7 @@ func floor_entry(world:Node3D,source:Image)->Dictionary:
 func native_page(size:Vector2i)->SubViewport:
     var view=SubViewport.new();view.size=size;view.disable_3d=true;view.transparent_bg=true;view.render_target_update_mode=SubViewport.UPDATE_ALWAYS
     view.canvas_item_default_texture_filter=Viewport.DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_NEAREST;root.add_child(view)
-    var ambient=CanvasModulate.new();ambient.color=Color(.18,.18,.18,1);view.add_child(ambient)
+    var ambient=CanvasModulate.new();ambient.color=Color(Atlas.AMBIENT_INTENSITY,Atlas.AMBIENT_INTENSITY,Atlas.AMBIENT_INTENSITY,1);view.add_child(ambient)
     return view
 func capture(view:Viewport)->Image:
     await process_frame;await RenderingServer.frame_post_draw

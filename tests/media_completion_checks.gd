@@ -15,6 +15,7 @@ var character_path := ""
 var environment_path := ""
 var disclosed_tile: Dictionary = {}
 var disclosed_cell := ""
+var admitted_sources: Dictionary = {}
 
 func _initialize() -> void: run.call_deferred()
 
@@ -29,6 +30,9 @@ func group(id: String, commits: Array = [], duration := 20.0) -> Dictionary:
 
 func fixture(row: Dictionary) -> Node3D:
     var player = Player.new()
+    player.session = Player.Session.new() # Explicit input boundary; this fixture does not enter _ready.
+    player.catalog_cache = Characters.Catalog.source_snapshot(admitted_sources)
+    player.media_warmup.plan_cache = Characters.Catalog.source_snapshot(admitted_sources)
     player.timeline.accept({"kind":"initialization","sequence":0,"state":{
         "actors":{},"tiles":{},"objects":{},"spatial_commit_cursors":{},"combat_log_appends":[],
         "senses":null,"audience":{"controlled":[]},"current_actor_uuid":Peer.UUID}})
@@ -86,6 +90,8 @@ func authored_union(path: String) -> void:
     environment_path = world_plan.required.keys()[0]
     disclosed_cell = original.tiles.keys()[0]
     disclosed_tile = original.tiles[disclosed_cell]
+    # Match Play._ready's admitted source handoff before any metadata worker.
+    admitted_sources = Characters.Catalog.source_snapshot(cache)
     evidence = {"state":path,"group_character_sources":plan.required.size(),"terminal_character_sources":terminal.required.size(),
         "terminal_environment_sources":terminal_world.required.size()}
 

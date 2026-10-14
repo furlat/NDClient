@@ -1,0 +1,386 @@
+extends RefCounted
+## Finite, passive presentation mechanisms shared by the compiler and renderer.
+const Authoring=preload("res://presentation/authoring.gd")
+const Palette=preload("res://presentation/palette.gd")
+const AudioCues=preload("res://presentation/audio_cues.gd")
+const Placement=preload("res://placement.gd")
+const Characters=preload("res://presentation/characters.gd")
+const Blood=preload("res://presentation/blood.gd")
+const ImpactPlacement=preload("res://presentation/impact_placement.gd")
+
+static func effect_seed(component:Dictionary)->int:
+    var occurrence:String=component.get("source_event_uuid","")
+    if occurrence.is_empty():
+        occurrence=component.get("id","")
+        var prefix=occurrence.get_slice(":",0)
+        if prefix.is_valid_int() and occurrence.contains(":"):occurrence=occurrence.substr(prefix.length()+1)
+    return absi(hash([occurrence,component.get("kind",""),component.get("source_id",""),component.get("source",""),
+        component.get("attachment",""),component.get("actor_uuid",""),component.get("target_uuid",""),
+        component.get("condition_uuid",""),component.get("layer",{}).get("id",""),component.get("application",{}).get("index",0)]))
+
+static func weapon_trail(recipe: Dictionary,fact: Dictionary,actor: Dictionary,cache: Dictionary) -> Dictionary:
+    var trail: Dictionary=recipe.get("weaponTrail",{}) if recipe.get("weaponTrail")!=null else {}
+    if trail.is_empty() or recipe.get("projectile")!=null or fact.get("attack_source_kind")!="equipped":return {}
+    var outcome: String={"Hit":"hit","Miss":"miss","Crit":"critical","Crit Miss":"critical_miss"}.get(fact.get("attack_outcome"),"")
+    if fact.behavior_id not in trail.get("behaviorIds",[]) and outcome not in trail.get("outcomes",[]):return {}
+    var rig_id=Authoring.rig_id(actor,cache)
+    var rig: Dictionary=Authoring.load_data("catalog/rigs.json",cache)[rig_id]
+    var outfit=Characters._select_layers(actor,rig,actor.get("appearance",{}).get("presentation_kind")=="layered",cache)
+    if not outfit.ok:return {}
+    var slot="offhand" if fact.weapon_slot=="MELEE_OFF" else "weapon"
+    for layer in outfit.value:
+        if layer.slot!=slot:continue
+        for pose in trail.poses:
+            if pose.rigId==rig_id and pose.category==layer.category and pose.clip==recipe.actor.clip:
+                return {"pose":pose,"palette":trail.palette,"impact_asset_id":trail.impactAssetId}
+    return {}
+
+static func attack_colors(fact: Dictionary,cache: Dictionary) -> Dictionary:
+    var palettes: Dictionary=Authoring.load_data("catalog/damage_context.json",cache).palette
+    var selected: String=""
+    for type in fact.get("damage_types",[]):
+        if selected.is_empty():selected=type
+        if type not in ["Bludgeoning","Piercing","Slashing"]:selected=type;break
+    return palettes.byDamageType.get(selected,palettes.untyped).elementColors
+
+static func attack_layers(recipe: Dictionary,fact: Dictionary,actor: Dictionary,cache: Dictionary) -> Array:
+    var outcome="onCrit" if fact.attack_outcome=="Crit" else ("onHit" if fact.attack_outcome=="Hit" else "onMiss")
+    var selected: Dictionary=recipe.get("attackVfx",{}).get(outcome,{})
+    var rig: Dictionary=Authoring.load_data("catalog/rigs.json",cache).get(Authoring.rig_id(actor,cache),{})
+    var colors=attack_colors(fact,cache)
+    var result: Array=[]
+    var tokens={"white":0xffffff,"$element":colors.primary,"$element.primary":colors.primary,"$element.secondary":colors.secondary,"$element.tertiary":colors.tertiary}
+    for slot in selected:
+        var layer: Dictionary=selected[slot]
+        if not layer.category in rig.get("slot_categories",{}).get(slot,[]):continue
+        if not rig.get("clips",{}).get(recipe.actor.clip,{}).get("sheets",{}).has(layer.category):continue
+        var tint: int=int(tokens.get(layer.tint,0xffffff)) if layer.tint is String else int(layer.tint)
+        var palette=[colors.tertiary,tint,colors.secondary] if layer.tint is String and layer.tint.begins_with("$element") else [tint]
+        result.append(Palette.prepare({"id":"attack."+slot,"slot":slot,"enabled":true,"hidden":false,"category":layer.category,"palette":{"colors":palette}},rig,recipe.actor.clip,cache))
+    return result
+
+static func bolt(group: Dictionary,node: Dictionary,recipe: Dictionary,start: float,track: Dictionary,target: Dictionary,cache: Dictionary) -> float:
+    var a: Array=track.from_position;var b: Array=track.target_position
+    var config=Authoring.load_data("catalog/rig.json",cache)
+    var rig: Dictionary=Authoring.load_data("catalog/rigs.json",cache)[track.rig]
+    var appearance: Dictionary=track.presentation_actor.appearance
+    var direction=Vector2(b[0]-a[0],b[1]-a[1])
+    var cycle: Array=config.FACING_CYCLE
+    var facing: String=cycle[posmod(roundi((atan2(direction.y,direction.x)+PI/4)/(TAU/8))+cycle.find("E"),8)]
+    var socket: Variant=recipe.get("sourceSocketsByRig",{}).get(track.rig,{}).get("release",{}).get(facing)
+    var offset=Vector2(recipe.originX,recipe.originY)*appearance.visual_scale
+    if socket!=null:offset=Vector2((socket.x-rig.cell_width*.5)*appearance.visual_scale_x,socket.y-rig.cell_height+rig.origin_y_from_ground)*appearance.visual_scale
+    var source=Placement.project(Vector2(a[0],a[1]),0,0)*config.TILE_W/128.0+offset
+    var destination=Placement.project(Vector2(b[0],b[1]),0,0)*config.TILE_W/128.0
+    destination.y+=float(recipe.targetY)*target.get("appearance",{}).get("visual_scale",0)
+    var forward=(destination-source).normalized()
+    source+=forward*recipe.get("sourceForwardPx",0);destination-=forward*recipe.get("targetForwardPx",0)
+    var height=(track.get("target_elevation_feet",0)-track.get("from_elevation_feet",0))/5.0*64.0*config.TILE_W/128.0
+    var distance=Vector2(source.distance_to(destination),height).length()
+    var duration=maxf(recipe.minimumTravelDurationMs,distance*1000.0/recipe.speedPxPerSecond) if distance>=1 else 0.0
+    var endpoint: Variant=node.fact.get("projectile_deflection_position")
+    if endpoint!=null:
+        var route=Vector2(b[0]-a[0],b[1]-a[1]);var along=Vector2(endpoint[0]-a[0],endpoint[1]-a[1])
+        duration*=clampf(along.dot(route)/maxf(.001,route.length_squared()),0,1);b=endpoint
+    if duration<=0:return 0.0
+    add(group,node,"geometry_projectile",start,duration,"catalog/attack_recipes.json:/"+str(node.fact.behavior_id)+"/projectile",
+        {"actor_uuid":track.actor_uuid,"target_uuid":node.fact.target_entity_uuid,"attachment":"projectile","recipe":recipe,
+        "from_position":a,"to_position":b,"from_elevation_feet":track.get("from_elevation_feet",0),"to_elevation_feet":track.get("target_elevation_feet",0),
+        "style":Authoring.load_data("catalog/bolt_style.json",cache),"colors":attack_colors(node.fact,cache),"source_track":track})
+    return duration
+
+static func cast_layers(cast: Dictionary, actor: Dictionary, cache: Dictionary) -> Array:
+    var layers: Array=[]
+    for field in ["weaponGlow","aura"]:
+        var layer: Dictionary=cast.get(field,{}) if cast.get(field)!=null else {}
+        if layer.get("enabled",false) and not layer.get("hidden",false): layers.append(layer)
+    for layer in cast.get("effects",[]):
+        if layer.get("enabled",true) and not layer.get("hidden",false): layers.append(layer)
+    var rig: Dictionary=Authoring.load_data("catalog/rigs.json",cache).get(Authoring.rig_id(actor,cache),{})
+    if rig.is_empty(): return []
+    return layers.map(func(layer): return Palette.prepare(layer,rig,cast.actionClip,cache))
+
+static func add(group: Dictionary, node: Dictionary, kind: String, start: float, duration: float, source: String, parameters: Dictionary) -> Dictionary:
+    var row={"id":"%s:%s:%s:%d" % [group.operation_sequence,node.uuid,kind,group.components.size()],
+        "kind":kind,"source_event_uuid":node.uuid,"source_lineage":node.lineage_uuid,
+        "parent_id":"%s:%s" % [group.operation_sequence,node.uuid],"start_ms":start,"duration_ms":duration,
+        "source":source,"status":"available","sample_hz":60.0}
+    row.merge(parameters,true); group.components.append(row)
+    return row
+
+static func _source(group: Dictionary, node: Dictionary, source_id: String, start: float, parameters: Dictionary, cache: Dictionary) -> Dictionary:
+    var sources: Dictionary=Authoring.load_data("native_effects/index.json",cache).sources
+    var record: Dictionary=sources.get(source_id,{})
+    parameters=parameters.duplicate()
+    parameters.source_id=source_id
+    parameters.sample_hz=record.get("sample_hz",60)
+    parameters.status="available" if not record.is_empty() else "missing"
+    parameters.reason="" if not record.is_empty() else "native_source_not_imported"
+    return add(group,node,"native_effect",start,record.get("duration",0)*1000,"native_effects/index.json:/sources/"+source_id,parameters)
+
+static func projectile(group: Dictionary,node: Dictionary,recipe: Dictionary,start: float,duration: float,source: Array,target: Array,contacts: Dictionary,cache: Dictionary) -> void:
+    var fact: Dictionary=node.fact
+    var common={"actor_uuid":fact.source_entity_uuid,"target_uuid":fact.target_entity_uuid,
+        "from_position":source,"to_position":target,"from_elevation_feet":contacts.get(fact.source_entity_uuid,{}).get("from_elevation_feet",0),
+        "to_elevation_feet":contacts.get(fact.target_entity_uuid,{}).get("from_elevation_feet",0),
+        "attachment":"projectile","recipe":recipe.projectile,"application":fact.application,"scale":recipe.projectile.scale}
+    var row=_source(group,node,native_phase(recipe.projectile,"travel",cache),start,common,cache)
+    row.duration_ms=duration
+    var impact=common.duplicate(); impact.attachment="target_body"
+    _source(group,node,native_phase(recipe.projectile,"impact",cache),start+duration,impact,cache)
+
+static func native_phase(projectile_recipe: Dictionary, phase: String, cache: Dictionary) -> String:
+    var asset: String=projectile_recipe.get(phase,{}).get("assetId",projectile_recipe.get("sprite",{}).get("assetId",""))
+    for id in Authoring.load_data("native_effects/index.json",cache).sources:
+        var record: Dictionary=Authoring.load_data("native_effects/index.json",cache).sources[id]
+        if record.get("phase")==phase and asset in record.get("media_ids",[]): return id
+    return "unassigned:"+asset+":"+phase
+
+static func compile(group: Dictionary,lineage: Dictionary,graph: Dictionary,cache: Dictionary) -> void:
+    var sounds: Dictionary=Authoring.load_data("audio/bindings.json",cache)
+    var nodes: Dictionary={}
+    var blood_previous:Dictionary={}
+    for node in lineage.events: nodes[node.uuid]=node
+    for track in group.actor_tracks:
+        for layer in track.get("effect_layers",[]):
+            add(group,nodes[track.source_event_uuid],"sprite_layer",track.start_ms,track.duration_ms,
+                ("spells/"+str(nodes[track.source_event_uuid].fact.behavior_id)+".json:/cast") if nodes[track.source_event_uuid].fact.kind=="spell" else "catalog/attack_recipes.json:/"+str(nodes[track.source_event_uuid].fact.behavior_id)+"/attackVfx/"+layer.slot,
+                {"actor_uuid":track.actor_uuid,"body_track_id":track.trace_track_id,"layer":layer,"clip":track.clip,"rig":track.rig,"source_track":track,"sample_hz":Authoring.clip(track.presentation_actor,track.clip,cache).fps})
+        var track_node: Dictionary=nodes[track.source_event_uuid]
+        if track.has("weapon_trail"):
+            var trail: Dictionary=track.weapon_trail
+            var contact_seconds=(track.contact_ms-track.start_ms)/1000.0
+            var rate=.67/maxf(.001,contact_seconds)
+            var slash=_source(group,track_node,"class.martial.slash",track.start_ms,
+                {"actor_uuid":track.actor_uuid,"attachment":"ground","scale":track.presentation_actor.appearance.visual_scale,
+                "weapon_pose":trail.pose,"weapon_contact_seconds":contact_seconds*track.source_end_seconds/(track.duration_ms/1000.0),"native_age_rate":rate,"palette":trail.palette,"source_track":track},cache)
+            slash.duration_ms=.94/rate*1000.0
+            if track_node.fact.attack_outcome in ["Hit","Crit"]:
+                _source(group,track_node,"class.martial.impact",track.impact_ms,
+                    {"actor_uuid":track.actor_uuid,"target_uuid":track.target_uuid,"attachment":"target_body","scale":track.presentation_actor.appearance.visual_scale,"palette":trail.palette},cache)
+        if track.get("motion",false) and track_node.fact.kind=="step":
+            _movement_audio(group,track_node,track,sounds,cache)
+        elif track_node.fact.kind=="spell":
+            var markers={"event.start":track.start_ms}
+            if track.has("contact_ms"):markers["body.contact"]=track.contact_ms
+            _bound_audio(group,track_node,sounds.get("spells",{}),track_node.fact.behavior_id,markers,track.actor_uuid,"spells",cache,track)
+    var native_sources: Dictionary=Authoring.load_data("native_effects/index.json",cache).sources
+    for node in lineage.events:
+        if node.canceled or node.get("fact")==null: continue
+        var fact: Dictionary=node.fact
+        var start: float=graph.starts.get(node.uuid,0)
+        var recipe: Dictionary=graph.recipes.get(node.uuid,{})
+        var contact=start
+        var release_time=start
+        var body_end=start
+        var audio_track:Dictionary={}
+        var audio_markers={"event.start":start}
+        for track in group.actor_tracks:
+            if track.source_event_uuid==node.uuid:
+                release_time=track.get("contact_ms",start)
+                contact=track.get("impact_ms",release_time)
+                body_end=track.start_ms+track.duration_ms
+                audio_track=track
+                audio_markers["body.end"]=body_end
+                if track.has("contact_ms"):audio_markers["body.contact"]=track.contact_ms
+                if track.has("impact_ms"):audio_markers["body.impact"]=track.impact_ms
+                elif track.has("contact_ms"):audio_markers["body.impact"]=track.contact_ms
+                break
+        if fact.kind=="attack":
+            var outcome: String={"Hit":"hit","Miss":"miss","Crit":"critical","Crit Miss":"critical_miss"}.get(fact.attack_outcome,"")
+            var feedback: Variant=recipe.get("attackFeedback",{}).get(outcome) if recipe.get("attackFeedback")!=null else null
+            if feedback!=null:_feedback(group,node,feedback,contact,fact.target_entity_uuid,"catalog/attack_recipes.json:/"+str(fact.behavior_id)+"/attackFeedback/"+outcome,cache)
+            _bound_audio(group,node,sounds.weapons,str(fact.get("source_item_id","")),audio_markers,fact.source_entity_uuid,"weapons",cache,audio_track)
+        elif fact.kind=="heal" and fact.get("actual_healing",0)>0:
+            var context=Authoring.load_data("catalog/healing_context.json",cache)
+            if context.get("feedbackEnabled",false):_feedback(group,node,{"text":str(fact.actual_healing)+" "+context.feedbackLabel,"color":context.feedbackColor,"durationMs":context.feedbackDurationMs},start,fact.target_entity_uuid,"catalog/healing_context.json",cache)
+        elif fact.kind=="life":
+            var context=Authoring.load_data("catalog/life_state_context.json",cache)
+            var feedback: Dictionary=context.get("revived" if fact.new_state=="alive" else fact.new_state,{})
+            if feedback.get("enabled",false):_feedback(group,node,feedback,start,fact.entity_uuid,"catalog/life_state_context.json:/"+fact.new_state,cache)
+            if fact.new_state in ["dying","dead"] and fact.get("previous_state")=="alive":
+                _bound_audio(group,node,sounds.life,"fall",audio_markers,fact.entity_uuid,"life",cache,audio_track)
+            elif fact.new_state=="alive" and fact.get("previous_state") in ["dying","stable"]:
+                _bound_audio(group,node,sounds.life,"rise",audio_markers,fact.entity_uuid,"life",cache,audio_track)
+        elif fact.kind=="death_save":
+            var key="criticalSuccess" if fact.natural_roll==20 else ("criticalFailure" if fact.natural_roll==1 else ("success" if fact.succeeded else "failure"))
+            var feedback: Dictionary=Authoring.load_data("catalog/death_save_context.json",cache).get(key,{})
+            if feedback.get("enabled",false):_feedback(group,node,feedback,start,fact.entity_uuid,"catalog/death_save_context.json:/"+key,cache)
+        elif fact.kind=="object_damage" and fact.applied_damage>0 and fact.resulting_hp>0:
+            var object: Dictionary=graph.object_inputs.get(node.uuid,{})
+            var binding: Dictionary=sounds.objects.get(object.get("item",{}).get("item_id"),{})
+            if binding.has("impact"):
+                _bound_audio(group,node,binding,"impact",audio_markers,"","objects/"+object.item.item_id,cache)
+                group.components.back().attachment="ground"
+                group.components.back().position=object.placement.position
+                group.components.back().elevation_feet=object.placement.base_height_steps*5.0
+        elif fact.kind=="object_destroyed":
+            var binding: Dictionary=sounds.objects.get(fact.item_id,{})
+            if binding.has("destroyed"):
+                _bound_audio(group,node,binding,"destroyed",audio_markers,"","objects/"+fact.item_id,cache)
+                group.components.back().position=fact.placement.position
+                group.components.back().elevation_feet=fact.placement.base_height_steps*5.0
+        if fact.kind in ["action","shove"]:
+            if recipe.get("actionFeedback")!=null:_feedback(group,node,recipe.actionFeedback,contact,fact.source_entity_uuid,"catalog/body_action_recipes.json:/"+str(fact.behavior_id)+"/actionFeedback",cache)
+            if not recipe.get("effectAudioCue","").is_empty():
+                _audio(group,node,recipe.effectAudioCue,contact,fact.source_entity_uuid,cache)
+                group.components.back().assignment_source=Authoring.recipe_source(recipe,"effectAudioCue",cache)
+                for anchor_index in recipe.get("anchors",[]).size():
+                    if recipe.anchors[anchor_index].name=="effect":
+                        group.components.back().timing_source=Authoring.recipe_source(recipe,"anchors/"+str(anchor_index)+"/frame",cache)
+                        break
+                group.components.back().timing_selector="recipe.effect_anchor"
+                if not audio_track.is_empty():
+                    group.components.back().body_track_id=audio_track.trace_track_id
+                    group.components.back().source_track=audio_track
+            if recipe.get("effectAudioCue","").is_empty():
+                _bound_audio(group,node,sounds.actions,fact.behavior_id,audio_markers,fact.source_entity_uuid,"actions",cache,audio_track)
+            var resolved_sources={}
+            for media in recipe.get("media",[]):
+                for source_id in native_sources:
+                    if media.assetId not in native_sources[source_id].get("media_ids",[]) or resolved_sources.has(source_id): continue
+                    resolved_sources[source_id]=true
+                    var component=_source(group,node,source_id,start+media.get("startOffsetMs",0),
+                        {"actor_uuid":fact.source_entity_uuid,"attachment":media.attachment,"scale":media.get("scale",1),"alpha":media.get("alpha",1)},cache)
+                    component.duration_ms=media.get("durationMs",component.duration_ms)
+                    component.loop=media.get("loop",false)
+                    component.source_duration_ms=native_sources[source_id].duration*1000.0
+                    component.fade_in_ms=media.get("fadeInMs",0);component.fade_out_ms=media.get("fadeOutMs",0)
+                    component.fade_curve=media.get("fadeCurve","linear")
+        elif fact.kind=="damage" and fact.get("stage")=="applied" and fact.get("applied_damage",0)>0:
+            var context=Authoring.load_data("catalog/damage_context.json",cache)
+            var parent: Dictionary=graph.nodes.get(node.get("parent_lineage"),{})
+            var damage_recipe: Dictionary={}
+            while not parent.is_empty():
+                if graph.recipes.has(parent.uuid) and graph.recipes[parent.uuid].has("damage"):
+                    damage_recipe=graph.recipes[parent.uuid].damage; break
+                parent=graph.nodes.get(parent.get("parent_lineage"),{})
+            var timing: Dictionary=graph.get("damage_timings",{}).get(node.uuid,{})
+            var flash: Dictionary=damage_recipe.get("hitFlash",{})
+            if flash.get("enabled",context.get("flashEnabled",false)):
+                var colors: Array=flash.get("palette",{}).get("colors",[])
+                if colors.is_empty():
+                    var palette: Dictionary=context.palette.byDamageType.get(fact.get("damage_type"),context.palette.untyped)
+                    colors=[palette.elementColors.secondary,palette.elementColors.primary,palette.elementColors.tertiary]
+                add(group,node,"material_flash",timing.get("flash",start),flash.get("durationMs",context.get("flashDurationMs",150)),
+                    "catalog/damage_context.json:/flashEnabled",{"actor_uuid":fact.target_entity_uuid,"material":flash,"colors":colors,"damage_type":fact.get("damage_type"),"attachment":"body"})
+            if context.get("numberEnabled",false):
+                var palette: Dictionary=context.palette.byDamageType.get(fact.get("damage_type"),context.palette.untyped)
+                add(group,node,"damage_number",timing.get("number",start),damage_recipe.get("floatingNumber",{}).get("durationMs",900),
+                    "catalog/damage_context.json:/numberEnabled",{"actor_uuid":fact.target_entity_uuid,"amount":fact.applied_damage,"text":str(fact.applied_damage),"color":palette.impactColor,"style":Authoring.load_data("catalog/number_style.json",cache),"attachment":"head"})
+            _bound_audio(group,node,sounds.damage_types,str(fact.get("damage_type")),{"damage.hp":timing.get("hp",start),"event.start":start},fact.target_entity_uuid,"damage_types",cache)
+            var release: Dictionary=fact.get("body_release",{}) if fact.get("body_release")!=null else {}
+            # Damage alone never authorizes blood or a receiving tile. Region
+            # artwork uses the same server ellipse and allowed-cell list as the
+            # persistent after-values; air-only releases retain native spray.
+            if release.get("release_id")=="body.blood":
+                var blood_start:float=graph.get("damage_timings",{}).get(node.uuid,{}).get("hp",start)
+                if not release.get("regions",[]).is_empty() and release.get("pattern")!=null:
+                    var blood_asset=Blood.asset(cache)
+                    var revealed=Blood.reveals(group,node,graph.get("initial_tiles",{}),blood_previous)
+                    var blood_contact:Dictionary=graph.impact_contacts.get(node.uuid,{})
+                    var source_height:Variant=blood_contact.get("from_elevation_feet")
+                    if source_height!=null:source_height=float(source_height)/5.0
+                    else:
+                        for region in release.regions:
+                            for point in region.positions:
+                                if Blood.key(point)==Blood.key(release.position):source_height=region.elevation_steps
+                    add(group,node,"residue_deposit",blood_start,Blood.duration(release,blood_asset),
+                        "catalog/action_media_assets.json:/particles.region.blood",
+                        {"actor_uuid":fact.target_entity_uuid,"attachment":"ground","position":release.position,
+                        "elevation_steps":source_height,"flight_enabled":source_height!=null,
+                        "body_release":release.duplicate(true),"reveals":revealed,"residue_deposition":true,
+                        "authority_source":"DamageResultFact.body_release.regions + WorldTileState.residues"})
+                else:
+                    var selection: Dictionary=Authoring.load_data("native_effects/responses.json",cache)
+                    var source_id: String=selection.damage_types.get(str(release.get("primary_damage_type")),selection.default)
+                    var actors: Dictionary=graph.actor_inputs.get(node.uuid,{})
+                    var impact=ImpactPlacement.prepare(actors.get(fact.target_entity_uuid,{}),group.actor_tracks,blood_start,graph.impact_contacts.get(node.uuid,{}),cache)
+                    var common={"actor_uuid":fact.target_entity_uuid,"source_actor_uuid":fact.get("source_entity_uuid"),"attachment":"impact","impact":impact,"scale":selection.scale,
+                        "body_release":release.duplicate(true),"residue_deposition":false,
+                        "direction_from":actors.get(fact.get("source_entity_uuid"),{}).get("last_visual_position"),"direction_to":actors.get(fact.target_entity_uuid,{}).get("last_visual_position")}
+                    var spray=_source(group,node,source_id,blood_start,common,cache)
+                    if impact.status=="missing":spray.status="missing";spray.reason=impact.reason
+        elif fact.kind=="condition" and fact.event_type in ["condition_application","condition_removal"]:
+            var phase="removal" if fact.event_type=="condition_removal" else "application"
+            var binding: Dictionary=sounds.conditions.get(fact.condition.behavior_id,{})
+            _bound_audio(group,node,binding,phase,audio_markers,fact.target_entity_uuid,"conditions/"+fact.condition.behavior_id,cache,audio_track)
+            var feedback: Dictionary=recipe.get(phase,{})
+            if feedback.get("feedbackEnabled",false):
+                var style=Authoring.load_data("catalog/badge_style.json",cache)
+                var prefix:String=feedback.get("feedbackPrefix","−" if phase=="removal" else "+")
+                var text:String=prefix+str(fact.condition.get("name",recipe.get("label",fact.condition.behavior_id)))
+                var pointer=str(fact.condition.behavior_id)+"/"+phase+"/feedbackEnabled"
+                _feedback(group,node,{"text":text,"color":feedback.feedbackColor,
+                    "durationMs":feedback.get("feedbackDurationMs",style.durationMs)},start,fact.target_entity_uuid,
+                    Authoring.Catalog.source_pointer("catalog/condition_recipes.json",pointer,cache),cache)
+                group.components.back().legacy_source="catalog/condition_recipes.json:/"+pointer
+    var projectiles={}
+    for component in group.components:
+        var actor: Dictionary=graph.actor_inputs.get(component.source_event_uuid,{}).get(component.get("actor_uuid"),{})
+        component.presentation_actor={}
+        for field in ["uuid","creature_content_ref","appearance","visual_loadout","last_visual_position","life_state","present","spatial_disposition","remains_disposition"]:
+            if actor.has(field):component.presentation_actor[field]=actor[field]
+        if not component.has("source_track"):
+            for track in group.actor_tracks:
+                if track.actor_uuid==component.get("actor_uuid") and track.start_ms<=component.start_ms and (track.start_ms+track.duration_ms>component.start_ms or track.get("holding_pose",false)):
+                    if not component.has("source_track") or component.source_track.priority<=track.priority:component.source_track=track
+        if component.get("attachment")=="projectile" and component.has("application"):
+            var key=str(component.application.lineage_uuid)+":"+str(component.target_uuid)
+            if not projectiles.has(key):projectiles[key]=[]
+            projectiles[key].append(component)
+    for family in projectiles.values():
+        family.sort_custom(func(a,b):return a.application.index<b.application.index)
+        for i in family.size():family[i].same_target_index=i;family[i].same_target_count=family.size()
+
+static func _movement_audio(group:Dictionary,node:Dictionary,track:Dictionary,sounds:Dictionary,cache:Dictionary)->void:
+    if node.fact.get("movement_mode")!="walking":return
+    var document:String=sounds.movement_contacts
+    var contacts:Dictionary=Authoring.load_data(document,cache).rigs.get(track.rig,{}).get(track.clip,{}).get(track.trajectory,{})
+    var source=document+":/rigs/"+track.rig+"/"+track.clip+"/"+track.trajectory
+    if contacts.get("markers",[]).is_empty():
+        var key="path" if track.trajectory=="path" else "landing"
+        var row=_audio(group,node,sounds.movement[key].cue,track.start_ms,track.actor_uuid,cache)
+        row.status="missing";row.reason="source_contact_markers_not_authored";row.duration_ms=0.0
+        row.start_ms=track.start_ms;row.contact_ms=track.start_ms
+        row.assignment_source="audio/bindings.json:/movement/"+key;row.timing_source=source
+        row.body_track_id=track.trace_track_id;row.source_track=track
+        return
+    var clip=Authoring.clip(track.presentation_actor,track.clip,cache)
+    for marker in contacts.markers:
+        var invalid=AudioCues.contact_marker_error(marker,clip,track.get("loop",false))
+        if not sounds.movement.has(marker.get("binding","")) or sounds.movement.get(marker.get("binding",""),{}).get("timing")!="body.source_frame":invalid="contact_binding_not_authored"
+        if not invalid.is_empty():
+            var gap=_audio(group,node,sounds.movement.get(marker.get("binding",""),{}).get("cue",""),track.start_ms,track.actor_uuid,cache)
+            gap.status="missing";gap.reason=invalid;gap.duration_ms=0.0;gap.start_ms=track.start_ms;gap.contact_ms=track.start_ms
+            gap.timing_source=source+"/markers/"+str(contacts.markers.find(marker));gap.body_track_id=track.trace_track_id;gap.source_track=track
+            continue
+        var times=AudioCues.source_frame_times(track,float(marker.frame),float(clip.fps),int(clip.frames),marker.direction)
+        for at in times:
+            var row=_bound_audio(group,node,sounds.movement,marker.binding,{"body.source_frame":at},track.actor_uuid,"movement",cache,track)
+            row.timing_source=source+"/markers/"+str(contacts.markers.find(marker))
+            row.source_frame=marker.frame;row.source_frame_boundary=marker.get("boundary","frame_start")
+            row.contact_id=marker.id;row.contact_direction=marker.direction;row.contact_review=contacts.get("review_status","unreviewed")
+
+static func _bound_audio(group:Dictionary,node:Dictionary,bindings:Dictionary,key:String,markers:Dictionary,actor_id:String,section:String,cache:Dictionary,track:Dictionary={})->Dictionary:
+    if not bindings.has(key):return {}
+    var binding:Dictionary=bindings[key]
+    var available=markers.has(binding.timing)
+    var row=_audio(group,node,binding.cue,float(markers.get(binding.timing,markers.get("event.start",0.0))),actor_id,cache)
+    row.assignment_source="audio/bindings.json:/"+section+"/"+key
+    row.timing_source=row.assignment_source+"/timing";row.timing_selector=binding.timing
+    row.timing_review=binding.get("review_status","unreviewed")
+    if not track.is_empty():row.body_track_id=track.trace_track_id;row.source_track=track
+    if not available:row.status="missing";row.reason="authored_audio_timing_unavailable";row.duration_ms=0.0
+    return row
+
+static func _audio(group:Dictionary,node:Dictionary,cue:String,start:float,actor_id:String,cache:Dictionary)->Dictionary:
+    var row=AudioCues.resolve(cue,str(group.operation_sequence)+":"+node.uuid,group.components.size(),start,-1,
+        {"actor_uuid":actor_id,"parent_id":str(group.operation_sequence)+":"+node.uuid,"source_event_uuid":node.uuid,"source_lineage":node.lineage_uuid},cache)
+    group.components.append(row)
+    return row
+
+static func _feedback(group: Dictionary,node: Dictionary,feedback: Dictionary,start: float,actor_id: String,source: String,cache: Dictionary) -> void:
+    var style=Authoring.load_data("catalog/badge_style.json",cache)
+    add(group,node,"feedback_text",start,feedback.get("durationMs",style.durationMs),source,
+        {"actor_uuid":actor_id,"text":feedback.text,"color":feedback.color,"style":style,"attachment":"head"})

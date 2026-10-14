@@ -1,0 +1,162 @@
+{
+  "behavior": "action.dodge",
+  "command": {
+    "arguments": [
+      "--recording=res://.runtime/studio-cases/dodge-seed3/amber/journal",
+      "--behavior=action.dodge",
+      "--output=res://generated/studio_dodge_capability_report.json"
+    ],
+    "script": "res://tools/studio_capability_report.gd"
+  },
+  "context_gaps": [],
+  "counts": {
+    "all_timeline_gaps": 1,
+    "context_gaps": 0,
+    "occurrences": 1,
+    "owned_gaps": 1
+  },
+  "failures": [
+    {
+      "failures": [
+        {
+          "count": 1,
+          "reason": "unresolved_owned_requirements"
+        }
+      ],
+      "id": "2:bfbfb0c9-f0e8-4db6-8569-886e575ec723",
+      "reason": "occurrence_incomplete"
+    }
+  ],
+  "identity": {
+    "audience_id": "97dab1de-ff11-4cb0-a54f-558caf52a162",
+    "game_epoch": "b41c63bf-ac3e-47f1-b587-525680ec7862",
+    "game_id": "presentation_attack",
+    "sequence": 0
+  },
+  "occurrences": [
+    {
+      "actor_uuid": "af61c6b4-577d-41ef-a32d-1e2c6e3b8ed8",
+      "behavior_id": "action.dodge",
+      "body_tracks": [],
+      "child_conditions": [
+        {
+          "application_event_uuid": "dce82e50-6525-4125-9614-81e17351db8f",
+          "application_markers": [
+            {
+              "at_ms": 500.0,
+              "kind": "commit",
+              "source": "compiled.commits.at_ms"
+            }
+          ],
+          "behavior_id": "condition.dodging",
+          "condition_uuid": "6593af48-b05b-4e15-8004-e9b5d8553013",
+          "end_ms": 2450.0,
+          "id": "condition:6593af48-b05b-4e15-8004-e9b5d8553013",
+          "initial": false,
+          "kind": "condition",
+          "label": "Dodging",
+          "legacy_source": "",
+          "markers": [],
+          "parent_id": "2:dce82e50-6525-4125-9614-81e17351db8f",
+          "rendered": "not_witnessed",
+          "source": "catalog/condition_recipes.json:/condition.dodging",
+          "source_event_uuid": "",
+          "start_ms": 500.0,
+          "status": "available",
+          "timing": {
+            "status": "compiled"
+          }
+        }
+      ],
+      "commit_markers": [
+        {
+          "at_ms": 500.0,
+          "kind": "commit",
+          "source": "compiled.commits.at_ms"
+        }
+      ],
+      "component_tracks": [
+        {
+          "coverage": {
+            "implementation": "resolved",
+            "prepared": "not_examined",
+            "rendered": "not_witnessed",
+            "source": "available"
+          },
+          "end_ms": 1900.0,
+          "id": "2:dce82e50-6525-4125-9614-81e17351db8f:feedback_text:0",
+          "kind": "feedback_text",
+          "label": "+Dodging",
+          "legacy_source": "catalog/condition_recipes.json:/condition.dodging/application/feedbackEnabled",
+          "markers": [],
+          "parent_id": "2:dce82e50-6525-4125-9614-81e17351db8f",
+          "rendered": "not_witnessed",
+          "source": "catalog/condition_recipes.json:/condition.dodging/application/feedbackEnabled",
+          "source_event_uuid": "dce82e50-6525-4125-9614-81e17351db8f",
+          "start_ms": 500.0,
+          "status": "available",
+          "timing": {
+            "status": "compiled"
+          }
+        }
+      ],
+      "end_ms": 500.0,
+      "event_kind": "action",
+      "event_reasons": [
+        "state_only_no_animation_claim"
+      ],
+      "event_status": "state_only",
+      "event_uuid": "bfbfb0c9-f0e8-4db6-8569-886e575ec723",
+      "failures": [
+        {
+          "count": 1,
+          "reason": "unresolved_owned_requirements"
+        }
+      ],
+      "group_id": "dde18cbe-9b89-4819-b472-41dc1bd23aee",
+      "id": "2:bfbfb0c9-f0e8-4db6-8569-886e575ec723",
+      "parent_id": "",
+      "passed": false,
+      "requirements": [],
+      "sequence": 2,
+      "start_ms": 500.0,
+      "unresolved_requirements": [
+        {
+          "category": "authoring",
+          "coverage": {
+            "implementation": "not_applicable",
+            "prepared": "not_prepared",
+            "rendered": "not_rendered",
+            "source": "not_assigned"
+          },
+          "end_ms": 500.0,
+          "id": "condition:6593af48-b05b-4e15-8004-e9b5d8553013:required:0",
+          "implementation": "not_applicable",
+          "kind": "requirement",
+          "label": "Missing · persistent_indicator",
+          "legacy_source": "",
+          "markers": [],
+          "parent_id": "condition:6593af48-b05b-4e15-8004-e9b5d8553013",
+          "prepared": "not_prepared",
+          "reason": "persistent_visual_assignment_missing",
+          "rendered": "not_witnessed",
+          "required_kind": "persistent_indicator",
+          "source": "catalog/condition_recipes.json:/condition.dodging/persistent",
+          "source_availability": "not_assigned",
+          "source_event_uuid": "",
+          "start_ms": 500.0,
+          "status": "missing",
+          "timing": {
+            "reason": "Authored condition component timing is unresolved",
+            "status": "unresolved"
+          }
+        }
+      ]
+    }
+  ],
+  "passed": false,
+  "recording": "res://.runtime/studio-cases/dodge-seed3/amber/journal",
+  "require_body": false,
+  "scope": "Compiled occurrence implementation and current referenced-file availability only. Prepared resources, rendered pixels and audible output require separate native evidence; context gaps are not hidden by a passing scoped action.",
+  "version": 1
+}

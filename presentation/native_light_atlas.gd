@@ -14,6 +14,7 @@ const WaterReceiver = preload("res://presentation/canvas_water.gdshader")
 const NonreceivingDebug = preload("res://presentation/canvas_nonreceiving_debug.gdshader")
 const FlameReceiver = preload("res://presentation/canvas_fixture_flame.gdshader")
 const MAX_SIZE = 8192
+const AMBIENT_INTENSITY = 0.30
 var light_cap: float = 0.0
 var ambient: CanvasModulate
 var viewport: SubViewport
@@ -86,7 +87,7 @@ func attach(parent: Node3D) -> void:
     projection_root.name="ReceivingProjection"
     viewport.add_child(projection_root)
     ambient = CanvasModulate.new()
-    ambient.color = Color(0.18,0.18,0.18,1.0).linear_to_srgb() if _uses_hdr() else Color(0.18,0.18,0.18,1.0)
+    ambient.color = Color(AMBIENT_INTENSITY,AMBIENT_INTENSITY,AMBIENT_INTENSITY,1.0).linear_to_srgb() if _uses_hdr() else Color(AMBIENT_INTENSITY,AMBIENT_INTENSITY,AMBIENT_INTENSITY,1.0)
     viewport.add_child(ambient)
     RenderingServer.viewport_set_measure_render_time(viewport.get_viewport_rid(),true)
     var pixel = Image.create(1,1,false,Image.FORMAT_RGBA8)
@@ -100,8 +101,8 @@ func set_light_cap(value: float) -> void:
     if is_instance_valid(viewport):
         viewport.use_hdr_2d=_uses_hdr()
         # Godot4.7.2 converts CanvasModulate for HDR, while native light colour
-        # and cookie atlas values are unchanged. Retain former numeric ambient.
-        ambient.color=Color(0.18,0.18,0.18,1.0).linear_to_srgb() if _uses_hdr() else Color(0.18,0.18,0.18,1.0)
+        # and cookie atlas values are unchanged. Preserve calibrated numeric ambient.
+        ambient.color=Color(AMBIENT_INTENSITY,AMBIENT_INTENSITY,AMBIENT_INTENSITY,1.0).linear_to_srgb() if _uses_hdr() else Color(AMBIENT_INTENSITY,AMBIENT_INTENSITY,AMBIENT_INTENSITY,1.0)
     for group in groups.values(): group.version=-1
     membership.clear(); admission_stamp.clear(); output_stamp.clear()
     delta_ready=false
@@ -118,7 +119,7 @@ func set_normals_visible(value: bool) -> void:
     normals_visible=value
     if is_instance_valid(viewport):
         viewport.use_hdr_2d=_uses_hdr()
-        ambient.color=Color(0.18,0.18,0.18,1.0).linear_to_srgb() if _uses_hdr() else Color(0.18,0.18,0.18,1.0)
+        ambient.color=Color(AMBIENT_INTENSITY,AMBIENT_INTENSITY,AMBIENT_INTENSITY,1.0).linear_to_srgb() if _uses_hdr() else Color(AMBIENT_INTENSITY,AMBIENT_INTENSITY,AMBIENT_INTENSITY,1.0)
     for group in groups.values(): group.version=-1
     membership.clear(); admission_stamp.clear(); output_stamp.clear()
     delta_ready=false

@@ -1,0 +1,141 @@
+{
+  "checks": 2550,
+  "condition_lifecycle": [
+    {
+      "active_samples": 3,
+      "applications": 1,
+      "expired_tail_checks": 1,
+      "indexed_mechanisms": {
+        "kinds": {
+          "condition_material": 3,
+          "condition_pose": 2
+        },
+        "members": 5
+      },
+      "indexed_state_intervals": 0,
+      "initial": 0,
+      "recording": "res://.runtime/studio-cases/hide-seed3-v3/amber/journal",
+      "removals": 1,
+      "suppressed_samples": 0
+    },
+    {
+      "active_samples": 0,
+      "applications": 0,
+      "expired_tail_checks": 0,
+      "indexed_mechanisms": {
+        "kinds": {},
+        "members": 0
+      },
+      "indexed_state_intervals": 0,
+      "initial": 0,
+      "recording": "res://.runtime/studio-cases/hide-seed3-v3/blue/journal",
+      "removals": 0,
+      "suppressed_samples": 0
+    },
+    {
+      "active_samples": 9,
+      "applications": 3,
+      "expired_tail_checks": 3,
+      "indexed_mechanisms": {
+        "kinds": {
+          "condition_material": 2,
+          "condition_pose": 1,
+          "registered_media": 8
+        },
+        "members": 11
+      },
+      "indexed_state_intervals": 0,
+      "initial": 0,
+      "recording": "res://.runtime/studio-cases/hold_person-seed3/amber/journal",
+      "removals": 3,
+      "suppressed_samples": 0
+    },
+    {
+      "active_samples": 0,
+      "applications": 0,
+      "expired_tail_checks": 0,
+      "indexed_mechanisms": {
+        "kinds": {},
+        "members": 0
+      },
+      "indexed_state_intervals": 0,
+      "initial": 0,
+      "recording": "res://.runtime/studio-cases/action_economy-seed3-v2/amber/journal",
+      "removals": 0,
+      "suppressed_samples": 0
+    }
+  ],
+  "failed": 0,
+  "failures": [],
+  "invocation": {
+    "arguments": [
+      "--recording=res://.runtime/studio-cases/hide-seed3-v3/amber/journal",
+      "--recording=res://.runtime/studio-cases/hide-seed3-v3/blue/journal",
+      "--recording=res://.runtime/studio-cases/hold_person-seed3/amber/journal",
+      "--recording=res://.runtime/studio-cases/action_economy-seed3-v2/amber/journal",
+      "--output=res://generated/studio_seek_native_authoring_checks.json"
+    ],
+    "script": "res://tests/studio_seek_checks.gd"
+  },
+  "real_reverse_steps": 0,
+  "recordings": [
+    {
+      "bodies": 3,
+      "canonical_endpoints": 9,
+      "commits": 62,
+      "components": 11,
+      "duration_ms": 3054.35095214844,
+      "events": 42,
+      "facing_observations": 1,
+      "groups": 11,
+      "operations": 9,
+      "recording": "res://.runtime/studio-cases/hide-seed3-v3/amber/journal",
+      "rows": 96,
+      "seek_samples": 8
+    },
+    {
+      "bodies": 1,
+      "canonical_endpoints": 9,
+      "commits": 55,
+      "components": 5,
+      "duration_ms": 1250.0,
+      "events": 35,
+      "facing_observations": 0,
+      "groups": 11,
+      "operations": 9,
+      "recording": "res://.runtime/studio-cases/hide-seed3-v3/blue/journal",
+      "rows": 53,
+      "seek_samples": 3
+    },
+    {
+      "bodies": 1,
+      "canonical_endpoints": 8,
+      "commits": 39,
+      "components": 4,
+      "duration_ms": 1250.0,
+      "events": 20,
+      "facing_observations": 0,
+      "groups": 11,
+      "operations": 8,
+      "recording": "res://.runtime/studio-cases/hold_person-seed3/amber/journal",
+      "rows": 51,
+      "seek_samples": 5
+    },
+    {
+      "bodies": 9,
+      "canonical_endpoints": 6,
+      "commits": 106,
+      "components": 34,
+      "duration_ms": 8916.66666666667,
+      "events": 94,
+      "facing_observations": 0,
+      "groups": 6,
+      "operations": 6,
+      "recording": "res://.runtime/studio-cases/action_economy-seed3-v2/amber/journal",
+      "rows": 237,
+      "seek_samples": 19
+    }
+  ],
+  "scope": "Offline real-recording index/commit/seek ownership and source metadata. Native frame, media gating, material/particle/audio and UI appearance require separate integration evidence.",
+  "seek_differences": []
+}

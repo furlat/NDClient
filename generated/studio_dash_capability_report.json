@@ -1,0 +1,193 @@
+{
+  "behavior": "action.dash",
+  "command": {
+    "arguments": [
+      "--recording=res://.runtime/studio-cases/dash-seed3/amber/journal",
+      "--behavior=action.dash",
+      "--output=res://generated/studio_dash_capability_report.json"
+    ],
+    "script": "res://tools/studio_capability_report.gd"
+  },
+  "context_gaps": [
+    {
+      "category": "implementation",
+      "coverage": {
+        "implementation": "missing",
+        "prepared": "not_prepared",
+        "rendered": "not_rendered",
+        "source": "not_examined"
+      },
+      "end_ms": 1516.66666666667,
+      "id": "3:043585c5-2a45-4e6c-98e6-b68b0d2b9c1e:required:5",
+      "implementation": "missing",
+      "kind": "requirement",
+      "label": "Missing · residue_deposit",
+      "legacy_source": "",
+      "markers": [],
+      "parent_id": "3:043585c5-2a45-4e6c-98e6-b68b0d2b9c1e",
+      "prepared": "not_prepared",
+      "reason": "authoritative_residue_renderer_not_implemented",
+      "rendered": "not_witnessed",
+      "required_kind": "residue_deposit",
+      "source": "world.json:/residue_ground/residue.blood",
+      "source_availability": "not_examined",
+      "source_event_uuid": "043585c5-2a45-4e6c-98e6-b68b0d2b9c1e",
+      "start_ms": 1516.66666666667,
+      "status": "missing",
+      "timing": {
+        "reason": "persistent_residue_follows_authoritative_tile_state",
+        "status": "unresolved"
+      }
+    }
+  ],
+  "counts": {
+    "all_timeline_gaps": 2,
+    "context_gaps": 1,
+    "occurrences": 1,
+    "owned_gaps": 1
+  },
+  "failures": [
+    {
+      "failures": [
+        {
+          "count": 1,
+          "reason": "unresolved_owned_requirements"
+        }
+      ],
+      "id": "2:498cbe25-ae01-4076-8e82-ccb8a893b4dd",
+      "reason": "occurrence_incomplete"
+    }
+  ],
+  "identity": {
+    "audience_id": "55a61a87-ee06-4407-9fef-acec47c20992",
+    "game_epoch": "c7afdffa-b0ff-49f2-8b10-df5179407691",
+    "game_id": "presentation_attack",
+    "sequence": 0
+  },
+  "occurrences": [
+    {
+      "actor_uuid": "735b69ec-a5ba-407f-b725-e6c67a48ed0e",
+      "behavior_id": "action.dash",
+      "body_tracks": [],
+      "child_conditions": [
+        {
+          "application_event_uuid": "aa875a55-3b44-43c9-b449-47123dcda8e1",
+          "application_markers": [
+            {
+              "at_ms": 500.0,
+              "kind": "commit",
+              "source": "compiled.commits.at_ms"
+            }
+          ],
+          "behavior_id": "condition.dashing",
+          "condition_uuid": "50793331-349b-4662-a7c0-cddd1dca4fd4",
+          "end_ms": 3533.33333333333,
+          "id": "condition:50793331-349b-4662-a7c0-cddd1dca4fd4",
+          "initial": false,
+          "kind": "condition",
+          "label": "Dashing",
+          "legacy_source": "",
+          "markers": [],
+          "parent_id": "2:aa875a55-3b44-43c9-b449-47123dcda8e1",
+          "rendered": "not_witnessed",
+          "source": "catalog/condition_recipes.json:/condition.dashing",
+          "source_event_uuid": "",
+          "start_ms": 500.0,
+          "status": "available",
+          "timing": {
+            "status": "compiled"
+          }
+        }
+      ],
+      "commit_markers": [
+        {
+          "at_ms": 500.0,
+          "kind": "commit",
+          "source": "compiled.commits.at_ms"
+        }
+      ],
+      "component_tracks": [
+        {
+          "coverage": {
+            "implementation": "resolved",
+            "prepared": "not_examined",
+            "rendered": "not_witnessed",
+            "source": "available"
+          },
+          "end_ms": 1900.0,
+          "id": "2:aa875a55-3b44-43c9-b449-47123dcda8e1:feedback_text:0",
+          "kind": "feedback_text",
+          "label": "+Dashing",
+          "legacy_source": "catalog/condition_recipes.json:/condition.dashing/application/feedbackEnabled",
+          "markers": [],
+          "parent_id": "2:aa875a55-3b44-43c9-b449-47123dcda8e1",
+          "rendered": "not_witnessed",
+          "source": "catalog/condition_recipes.json:/condition.dashing/application/feedbackEnabled",
+          "source_event_uuid": "aa875a55-3b44-43c9-b449-47123dcda8e1",
+          "start_ms": 500.0,
+          "status": "available",
+          "timing": {
+            "status": "compiled"
+          }
+        }
+      ],
+      "end_ms": 500.0,
+      "event_kind": "action",
+      "event_reasons": [
+        "state_only_no_animation_claim"
+      ],
+      "event_status": "state_only",
+      "event_uuid": "498cbe25-ae01-4076-8e82-ccb8a893b4dd",
+      "failures": [
+        {
+          "count": 1,
+          "reason": "unresolved_owned_requirements"
+        }
+      ],
+      "group_id": "cd07fe5c-b2a0-4ea9-979b-fa778d532610",
+      "id": "2:498cbe25-ae01-4076-8e82-ccb8a893b4dd",
+      "parent_id": "",
+      "passed": false,
+      "requirements": [],
+      "sequence": 2,
+      "start_ms": 500.0,
+      "unresolved_requirements": [
+        {
+          "category": "authoring",
+          "coverage": {
+            "implementation": "not_applicable",
+            "prepared": "not_prepared",
+            "rendered": "not_rendered",
+            "source": "not_assigned"
+          },
+          "end_ms": 500.0,
+          "id": "condition:50793331-349b-4662-a7c0-cddd1dca4fd4:required:0",
+          "implementation": "not_applicable",
+          "kind": "requirement",
+          "label": "Missing · persistent_indicator",
+          "legacy_source": "",
+          "markers": [],
+          "parent_id": "condition:50793331-349b-4662-a7c0-cddd1dca4fd4",
+          "prepared": "not_prepared",
+          "reason": "persistent_visual_assignment_missing",
+          "rendered": "not_witnessed",
+          "required_kind": "persistent_indicator",
+          "source": "catalog/condition_recipes.json:/condition.dashing/persistent",
+          "source_availability": "not_assigned",
+          "source_event_uuid": "",
+          "start_ms": 500.0,
+          "status": "missing",
+          "timing": {
+            "reason": "Authored condition component timing is unresolved",
+            "status": "unresolved"
+          }
+        }
+      ]
+    }
+  ],
+  "passed": false,
+  "recording": "res://.runtime/studio-cases/dash-seed3/amber/journal",
+  "require_body": false,
+  "scope": "Compiled occurrence implementation and current referenced-file availability only. Prepared resources, rendered pixels and audible output require separate native evidence; context gaps are not hidden by a passing scoped action.",
+  "version": 1
+}

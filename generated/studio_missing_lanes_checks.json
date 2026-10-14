@@ -1,0 +1,53 @@
+{
+  "checks": 47,
+  "command": "--headless --script res://tests/studio_missing_lanes_checks.gd -- --recording=res://.runtime/studio-cases/rage-seed3-v3/amber/journal --recording=res://.runtime/studio-cases/ranged-seed3/amber/journal --recording=res://.runtime/studio-cases/hide-seed3-v3/amber/journal --recording=res://.runtime/studio-cases/hold_person-seed3/amber/journal",
+  "evidence": [
+    {
+      "end_ms": 500.0,
+      "label": "Missing inspection · appearance transition",
+      "reason": "Current state is rendered; the operation has no separate inspection track.",
+      "recording": "res://.runtime/studio-cases/hide-seed3-v3/amber/journal",
+      "source": "res://sdk/player-api-v1.schema.json:/$defs/PlayerNode/properties/fact/anyOf/0/discriminator/mapping/equipment",
+      "start_ms": 500.0,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 1083.33333333333,
+      "label": "Unassessed · factual save; optional authored avoidance",
+      "reason": "Selected operation requires source-to-renderer assessment.",
+      "recording": "res://.runtime/studio-cases/hold_person-seed3/amber/journal",
+      "source": "res://sdk/player-api-v1.schema.json:/$defs/PlayerNode/properties/fact/anyOf/0/discriminator/mapping/saving_throw",
+      "start_ms": 1083.33333333333,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 500.0,
+      "label": "Missing inspection · Cast equipment · hidden",
+      "reason": "Current state is rendered; the operation has no separate inspection track.",
+      "recording": "res://.runtime/studio-cases/hold_person-seed3/amber/journal",
+      "source": "spells/spell.hold_person.json:/cast/equipment",
+      "start_ms": 500.0,
+      "timing": "unresolved"
+    },
+    {
+      "end_ms": 1750.0,
+      "label": "Unassessed · factual save; optional authored avoidance",
+      "reason": "Selected operation requires source-to-renderer assessment.",
+      "recording": "res://.runtime/studio-cases/hold_person-seed3/amber/journal",
+      "source": "res://sdk/player-api-v1.schema.json:/$defs/PlayerNode/properties/fact/anyOf/0/discriminator/mapping/saving_throw",
+      "start_ms": 1750.0,
+      "timing": "unresolved"
+    }
+  ],
+  "failures": [],
+  "observed": {
+    "authored_timing": 0,
+    "condition_lifecycle": 4,
+    "inspection_gaps": 2,
+    "missing_audio": 0,
+    "requirements": 4,
+    "unassessed_operations": 2,
+    "unresolved_timing": 4
+  },
+  "scope": "Normative authored omissions and actual compiled missing sources remain visible independently of available renderer components. No invented clocks or preview images."
+}

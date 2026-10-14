@@ -36,6 +36,7 @@ func run() -> void:
     check(prepared.size()==1 and prepared[0].kind=="initialization" and prepared[0].state==session.journal.state,"Initial display receives the admitted canonical state")
     check(FileAccess.get_file_as_bytes(directory.path_join("0000000000000000.json"))==raw and not initial.has("kind"),"Preparation preserves original default-omitted bytes")
     var player = Player.new()
+    player.session = Session.new() # The receipt fixture deliberately has no scene-tree startup.
     var receipt = peer.scope()
     receipt.merge({"command_number":1,"cursor":peer.cursor(1)})
     var response = {"receipt":receipt}

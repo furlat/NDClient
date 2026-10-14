@@ -1,6 +1,8 @@
 extends RefCounted
 ## Passive, bounded diagnostics. No canonical snapshots or packets are retained.
 const Authoring = preload("res://presentation/authoring.gd")
+const MovementMedia = preload("res://presentation/movement_media.gd")
+const Requirements = preload("res://presentation/requirements.gd")
 const LIMIT = 2000
 
 static func create() -> Dictionary:
@@ -10,7 +12,8 @@ static func create() -> Dictionary:
 static func _component(kind: String, reason: String, source: String = "") -> Dictionary:
     return {"id":kind,"kind":kind,"trace_track_id":"","actor_uuid":"","rig":"","clip":"",
         "start_ms":0.0,"end_ms":0.0,"status":"missing","reason":reason,"source":source,
-        "sample_count":0,"first_sample_ms":null,"last_sample_ms":null}
+        "sample_count":0,"first_sample_ms":null,"last_sample_ms":null,
+        "timing":{"resolved":false,"reason":"authored_timing_not_resolved"}}
 
 static func _base(node: Dictionary, sequence: int, group: String, versions: Array) -> Dictionary:
     var fact: Dictionary = node.fact if node.get("fact") != null else {}
@@ -44,20 +47,99 @@ static func initialization(initial: Dictionary) -> Array:
     _bind_parents(result)
     return result
 
-static func _recipe_missing(row: Dictionary, recipe: Dictionary, source: String) -> void:
+static func _has(row: Dictionary, kind: String, field: String = "", value: Variant = null) -> bool:
+    return row.components.any(func(component):return component.kind==kind and (field.is_empty() or component.get(field)==value) and not component.trace_track_id.is_empty())
+
+static func _need(row: Dictionary, kind: String, reason: String, source: String, field: String = "", value: Variant = null, pointer: String = "") -> void:
+    if not _has(row,kind,field,value):
+        var missing=_component(kind,reason,source)
+        if not field.is_empty():missing[field]=value
+        if not pointer.is_empty():missing.source_pointer=pointer
+        row.components.append(missing)
+
+static func _media_needed(row: Dictionary, media: Array, source: String, base_ms: float=INF, pointer: String="") -> void:
+    for index in media.size():
+        var item:Dictionary=media[index]
+        var asset: String=item.get("assetId","")
+        if not asset.is_empty() and row.components.any(func(component):return asset in component.get("asset_ids",[]) and not component.trace_track_id.is_empty()):continue
+        var missing=_component("media","authored_media_not_implemented",source+":"+str(item.get("id",asset)))
+        missing.authored_id=item.get("id",asset);missing.asset_ids=[asset]
+        if not pointer.is_empty():missing.source_pointer=pointer+"/"+str(index)
+        if not is_inf(base_ms) and item.has("durationMs"):
+            var start=base_ms+float(item.get("startOffsetMs",0))
+            missing.timing={"resolved":true,"start_ms":start,"end_ms":start+float(item.durationMs),"reason":"authored_offset_duration_from_occurrence"}
+        row.components.append(missing)
+
+static func _recipe_missing(row: Dictionary, recipe: Dictionary, source: String, pointer: String) -> void:
     if recipe.is_empty():
-        row.reasons = ["unclassified_no_animation_claim"]; return
+        var unresolved=_component("recipe","action_presentation_owner_unresolved",pointer)
+        unresolved.merge(Requirements.row("recipe","Presentation owner unassessed",pointer,"unassessed","missing",[row.kind],"owner","No selected recipe resolves this occurrence's own or delegated presentation. An absent recipe is not an explicit state-only decision."),true)
+        row.components.append(unresolved);return
     if recipe.get("disposition") == "state_only": return
-    if not recipe.get("media",[]).is_empty() or not recipe.get("actor",{}).get("media",[]).is_empty():
-        row.components.append(_component("media","authored_media_not_implemented",source+".media"))
-    if recipe.get("actor",{}).get("enabled",false):
+    _media_needed(row,recipe.get("media",[]),source+".media",row._start_ms,pointer+"/media")
+    if not Requirements.accepted_action_strip(recipe):
+        _media_needed(row,recipe.get("actor",{}).get("media",[]),source+".actor.media",row._start_ms,pointer+"/actor/media")
+    elif not recipe.get("actor",{}).get("media",[]).is_empty():
+        row.reasons.append("accepted_legacy_potion_source_strip_omission")
+    if recipe.get("actor",{}).get("enabled",false) and not _has(row,"body"):
         var component = _component("body","authored_body_not_implemented",source+".actor")
         component.clip = recipe.actor.get("clip","")
         row.components.append(component)
     if recipe.get("actionFeedback") != null:
-        row.components.append(_component("feedback","authored_feedback_not_implemented",source+".actionFeedback"))
+        _need(row,"feedback_text","authored_feedback_not_implemented",source+".actionFeedback","text",recipe.actionFeedback.get("text",""))
+    if not recipe.get("effectAudioCue","").is_empty():
+        _need(row,"audio","authored_action_audio_not_implemented",recipe.get("_source_fields",{}).get("effectAudioCue",pointer+"/effectAudioCue"),"cue_id",recipe.effectAudioCue)
 
-static func _requirements(row: Dictionary, node: Dictionary, actor: Dictionary, cache: Dictionary, attack_recipe: Dictionary) -> void:
+static func _persistent_condition(row: Dictionary, condition: Dictionary, persistent: Dictionary, cache: Dictionary, rig_id: String) -> void:
+    var prefix = str(condition.behavior_id)+"/persistent/"
+    var source = "catalog/condition_recipes.json:/"+prefix.trim_suffix("/")
+    var mechanisms: Array=[]
+    for field in ["bodyColor","bodyRamp","bodyOutline","bodyPose","frozenPose"]:
+        if persistent.get(field)!=null:mechanisms.append(field)
+    if persistent.get("alphaMultiplier",1.0)!=1.0:mechanisms.append("alphaMultiplier")
+    for layer in persistent.get("layers",[]):mechanisms.append("layer:"+str(layer.id))
+    var activity_poses:Array=persistent.get("activityPoses",[])
+    for i in activity_poses.size():
+        if activity_poses[i].rigId==rig_id:mechanisms.append("activityPoses:"+str(i))
+    if not activity_poses.is_empty() and not activity_poses.any(func(pose):return pose.rigId==rig_id):
+        row.components.append(_component("condition","authored_condition_pose_rig_unassigned",
+            Authoring.Catalog.source_pointer("catalog/condition_recipes.json",prefix+"activityPoses",cache)))
+    for mechanism in mechanisms:
+        var key="condition:"+str(condition.condition_uuid)+":"+mechanism
+        var property=mechanism.replace("activityPoses:","activityPoses/")
+        var pointer=prefix+property
+        var component=_component("condition", "",Authoring.Catalog.source_pointer("catalog/condition_recipes.json",pointer,cache))
+        component.legacy_source="catalog/condition_recipes.json:/"+pointer
+        component.merge({"id":key,"trace_track_id":key,"actor_uuid":row.actor_uuid,"mechanism":mechanism,
+            "start_ms":row.get("_commit_ms",row._admit_ms),"persistent":true,"status":"playing"},true)
+        row.components.append(component)
+    # These authoring mechanisms remain separate requirements until a real
+    # implementation emits their exact samples; a body or marker is insufficient.
+    for field in ["equipmentModifiers","appearanceLayers"]:
+        if not persistent.get(field,[]).is_empty():row.components.append(_component("condition","authored_condition_"+field+"_not_implemented",source+"."+field))
+    for field in ["bodyScale","bodyDistortion","liveCopies","absenceEcho"]:
+        if persistent.get(field)!=null:row.components.append(_component("condition","authored_condition_"+field+"_not_implemented",source+"."+field))
+
+static func _compiled_component(component: Dictionary, cache: Dictionary) -> Dictionary:
+    var row=_component(component.kind,component.get("reason",""),component.get("source",""))
+    row.merge({"id":component.id,"trace_track_id":component.id,"actor_uuid":component.get("actor_uuid",""),
+        "start_ms":component.start_ms,"end_ms":component.start_ms+component.duration_ms,
+        "status":"missing" if component.get("status")=="missing" else "playing",
+        "timing":{"resolved":true,"start_ms":component.start_ms,"end_ms":component.start_ms+component.duration_ms,"reason":"compiled_source_clock"}},true)
+    # Only finite diagnostic identities are retained. No actor/world snapshots,
+    # source tracks, materials or native handles enter the bounded live trace.
+    for field in ["attachment","text","source_id","authored_id","cue_id"]:
+        if component.has(field):row[field]=component[field]
+    if component.has("layer"):
+        row.slot=component.layer.get("slot","");row.authored_id=component.layer.get("id","")
+    if component.kind=="native_effect":
+        row.selected_weapon_pose=not component.get("weapon_pose",{}).is_empty()
+        var selected:Dictionary=Authoring.load_data("native_effects/index.json",cache).get("sources",{}).get(component.get("source_id"),{})
+        row.asset_ids=selected.get("media_ids",[component.asset_id] if component.has("asset_id") else []).duplicate()
+    elif component.has("asset_id"):row.asset_ids=[component.asset_id]
+    return row
+
+static func _requirements(row: Dictionary, node: Dictionary, actor: Dictionary, cache: Dictionary, resolved_recipe: Dictionary) -> void:
     var fact: Dictionary = node.fact if node.get("fact") != null else {}
     if node.get("canceled",false): row.components = []; row.reasons = ["canceled"]; return
     if fact.is_empty(): row.reasons = ["fact_not_disclosed"]; return
@@ -65,81 +147,163 @@ static func _requirements(row: Dictionary, node: Dictionary, actor: Dictionary, 
         "movement": row.reasons = ["movement_container_visuals_belong_to_steps"]
         "step":
             if not fact.get("committed",false): row.components = []; row.reasons = ["uncommitted_step"]; return
-            if row.components.is_empty(): row.components.append(_component("body","missing_authored_movement", "catalog/movement_context.json"))
+            _need(row,"body","missing_authored_movement", "catalog/movement_context.json")
+            var phase:Dictionary={}
+            for component in row.components:
+                if component.kind=="body" and component.has("motion_phase"):phase=component.motion_phase
+            for binding in MovementMedia.selected(actor,fact.get("trajectory",""),cache,phase):
+                var media:Dictionary=binding.media
+                if row.components.any(func(component):return media.assetId in component.get("asset_ids",[])):continue
+                # A very short fast edge can fall between emission markers.
+                # Source absence is still a gap; a zero-emission interval is not.
+                var duration=0.0
+                for component in row.components:
+                    if component.kind=="body":duration=maxf(duration,component.end_ms-component.start_ms)
+                if not MovementMedia.native_source(media.assetId,cache).is_empty() and media.role=="trail" and duration<float(media.get("emitIntervalMs",0)):continue
+                var missing=_component("native_effect","authored_movement_media_not_implemented",binding.source)
+                missing.asset_ids=[media.assetId];missing.authored_id=media.id
+                row.components.append(missing)
         "attack":
-            var recipe = attack_recipe.duplicate()
+            var recipe = resolved_recipe
             if recipe.is_empty():
                 row.components.append(_component("body","missing_authored_attack_recipe","catalog/attack_recipes.json"))
             else:
-                for variant in recipe.get("variants",[]):
-                    if variant.id == recipe.get("selected_variant",""):
-                        for field in ["projectile","attackVfx","attackFeedback","weaponTrail"]:
-                            if variant.has(field): recipe[field] = variant[field]
                 var source = "catalog/attack_recipes.json:"+str(fact.behavior_id)
-                if recipe.get("actor",{}).get("enabled",false) and row.components.is_empty():
-                    row.components.append(_component("body","missing_authored_clip",source+".actor"))
+                if recipe.get("actor",{}).get("enabled",false):_need(row,"body","missing_authored_clip",source+".actor")
                 if recipe.get("projectile") != null:
-                    row.components.append(_component("projectile","authored_projectile_not_implemented",source+".projectile"))
+                    if not _has(row,"geometry_projectile") and not _has(row,"native_effect","attachment","projectile"):
+                        row.components.append(_component("projectile","authored_projectile_not_implemented",source+".projectile"))
                 var outcome: String = {"Hit":"hit","Miss":"miss","Crit":"critical","Crit Miss":"critical_miss"}.get(fact.get("attack_outcome"),"")
                 var effect: String = "onCrit" if outcome == "critical" else ("onHit" if outcome == "hit" else "onMiss")
-                if not recipe.get("attackVfx",{}).get(effect,{}).is_empty():
-                    row.components.append(_component("attack_vfx","authored_attack_vfx_not_implemented",source+".attackVfx."+effect))
+                var vfx:Dictionary=recipe.get("attackVfx",{}).get(effect,{})
+                var native_trail=row.components.any(func(component):return component.kind=="native_effect" and component.get("source_id")=="class.martial.slash" and component.get("selected_weapon_pose",false) and not component.trace_track_id.is_empty())
+                for slot in vfx:
+                    if slot=="slash" and native_trail and fact.get("damage_types",[]).all(func(type):return type in ["Bludgeoning","Piercing","Slashing"]):continue
+                    _need(row,"sprite_layer","authored_attack_vfx_not_implemented",source+".attackVfx."+effect+"."+slot,"slot",slot)
                 if recipe.get("attackFeedback",{}) != null and recipe.get("attackFeedback",{}).get(outcome) != null:
-                    row.components.append(_component("feedback","authored_attack_feedback_not_implemented",source+".attackFeedback."+outcome))
+                    _need(row,"feedback_text","authored_attack_feedback_not_implemented",source+".attackFeedback."+outcome,"text",recipe.attackFeedback[outcome].get("text",""))
                 var trail: Dictionary = recipe.get("weaponTrail",{}) if recipe.get("weaponTrail") != null else {}
-                if fact.behavior_id in trail.get("behaviorIds",[]) or outcome in trail.get("outcomes",[]):
-                    row.components.append(_component("weapon_trail","authored_weapon_trail_not_implemented",source+".weaponTrail"))
+                if recipe.get("projectile")==null and fact.get("attack_source_kind")=="equipped" and (fact.behavior_id in trail.get("behaviorIds",[]) or outcome in trail.get("outcomes",[])):
+                    var trail_pointer="catalog/attack_recipes.json:/"+str(fact.behavior_id)+"/weaponTrail"
+                    for variant_index in recipe.get("variants",[]).size():
+                        var variant:Dictionary=recipe.variants[variant_index]
+                        if variant.id==recipe.get("selected_variant","") and variant.has("weaponTrail"):trail_pointer="catalog/attack_recipes.json:/"+str(fact.behavior_id)+"/variants/"+str(variant_index)+"/weaponTrail"
+                    if not native_trail:_need(row,"weapon_trail","authored_weapon_trail_not_implemented",source+".weaponTrail","",null,trail_pointer)
+                    elif fact.get("attack_outcome") in ["Hit","Crit"]:_need(row,"native_effect","authored_weapon_impact_not_implemented",source+".weaponTrail.impactAssetId","source_id","class.martial.impact")
         "damage":
             if fact.get("stage") != "applied" or fact.get("applied_damage",0) <= 0:
                 row.reasons = ["no_applied_damage_visual"]; return
-            if row.components.is_empty(): row.components.append(_component("body","missing_authored_clip","catalog/damage_context.json.bodyClip"))
+            # Terminal/lethal damage deliberately has no TakeDamage body; its
+            # actual Life fact owns the death pose. Keep that choice inspectable.
+            if row.get("damage_timing",{}).get("body_enabled",true):
+                _need(row,"body","missing_authored_clip","catalog/damage_context.json.bodyClip")
             var context = Authoring.load_data("catalog/damage_context.json",cache)
             for field in ["flashEnabled","numberEnabled"]:
-                if context.get(field,false): row.components.append(_component(field,"authored_damage_feedback_not_implemented","catalog/damage_context.json."+field))
+                if context.get(field,false):_need(row,"material_flash" if field=="flashEnabled" else "damage_number","authored_damage_feedback_not_implemented","catalog/damage_context.json."+field)
+            var release:Dictionary=fact.get("body_release",{}) if fact.get("body_release")!=null else {}
+            if release.get("release_id")=="body.blood" and not release.get("regions",[]).is_empty() and not _has(row,"residue_deposit"):
+                var residue=_component("residue_deposit","authoritative_residue_renderer_not_implemented","world.json:/residue_ground/residue.blood")
+                residue.source_pointer=residue.source
+                residue.actor_uuid=fact.target_entity_uuid
+                residue.gap_kind="renderer"
+                residue.authority_source="DamageResultFact.body_release.regions"
+                residue.body_release=release.duplicate(true)
+                residue.timing={"resolved":false,"reason":"persistent_residue_follows_authoritative_tile_state"}
+                row.components.append(residue)
         "life":
             var role = "death" if fact.new_state == "dead" else "life"
             var body = Authoring.body(role,actor,fact,cache)
-            if body.get("actor",{}).get("enabled",false) and row.components.is_empty():
+            if body.get("actor",{}).get("enabled",false) and not _has(row,"body"):
                 row.components.append(_component("body","missing_authored_clip","catalog/"+role+"_context.json"))
             if role == "death":
-                if not Authoring.load_data("catalog/death_context.json",cache).get("silhouetteDust",{}).is_empty():
+                if fact.get("remains_disposition","intact")=="disintegrated" and not Authoring.load_data("catalog/death_context.json",cache).get("silhouetteDust",{}).is_empty():
                     row.components.append(_component("death_dust","authored_death_dust_not_implemented","catalog/death_context.json.silhouetteDust"))
             else:
                 var key: String = "revived" if fact.new_state == "alive" else fact.new_state
-                if Authoring.load_data("catalog/life_state_context.json",cache).get(key,{}).get("enabled",false):
-                    row.components.append(_component("feedback","authored_life_feedback_not_implemented","catalog/life_state_context.json."+key))
+                var feedback: Dictionary=Authoring.load_data("catalog/life_state_context.json",cache).get(key,{})
+                if feedback.get("enabled",false):
+                    _need(row,"feedback_text","authored_life_feedback_not_implemented","catalog/life_state_context.json."+key,"text",feedback.get("text",""))
         "equipment":
-            var context = Authoring.load_data("catalog/equipment_context.json",cache)
-            if context.get("bodyEnabled",false): row.components.append(_component("body","authored_equipment_body_not_implemented","catalog/equipment_context.json"))
+            if resolved_recipe.get("actor",{}).get("enabled",false):
+                _need(row,"body","authored_equipment_body_not_implemented",resolved_recipe.source)
         "heal":
-            if fact.get("actual_healing",0) > 0 and Authoring.load_data("catalog/healing_context.json",cache).get("feedbackEnabled",false):
-                row.components.append(_component("feedback","authored_healing_feedback_not_implemented","catalog/healing_context.json"))
+            var healing: Dictionary=Authoring.load_data("catalog/healing_context.json",cache)
+            if fact.get("actual_healing",0) > 0 and healing.get("feedbackEnabled",false):
+                _need(row,"feedback_text","authored_healing_feedback_not_implemented","catalog/healing_context.json","text",str(fact.actual_healing)+" "+str(healing.feedbackLabel))
         "forced_movement":
             if fact.get("start_position") != fact.get("end_position"):
-                row.components.append(_component("motion","authored_forced_movement_not_implemented","catalog/forced_movement_context.json"))
+                _need(row,"body","authored_forced_movement_not_implemented","catalog/forced_movement_context.json","motion",true)
         "death_save":
-            row.components.append(_component("feedback","authored_death_save_feedback_not_implemented","catalog/death_save_context.json"))
+            var key="criticalSuccess" if fact.natural_roll==20 else ("criticalFailure" if fact.natural_roll==1 else ("success" if fact.succeeded else "failure"))
+            var feedback: Dictionary=Authoring.load_data("catalog/death_save_context.json",cache).get(key,{})
+            if feedback.get("enabled",false):_need(row,"feedback_text","authored_death_save_feedback_not_implemented","catalog/death_save_context.json:/"+key,"text",feedback.get("text",""))
         "condition":
             var key: String = str(fact.condition.get("behavior_id",""))
             row.behavior_id = key
             row.name = fact.condition.get("name",key)
-            var recipe: Dictionary = Authoring.load_data("catalog/condition_recipes.json",cache).get(key,{})
-            var phase = "removal" if fact.event_type == "condition_removal" else "application"
-            var change: Dictionary = recipe.get(phase,{})
-            var persistent: Dictionary = recipe.get("persistent",{}) if phase == "application" else {}
-            if change.get("feedbackEnabled",false) or not change.get("effects",[]).is_empty() or not persistent.get("layers",[]).is_empty() or persistent.has("bodyColor") or persistent.has("bodyRamp"):
-                row.components.append(_component("condition","authored_condition_presentation_not_implemented","catalog/condition_recipes.json:"+key+"."+phase))
+            var recipe: Dictionary = resolved_recipe
+            if fact.event_type not in ["condition_application","condition_removal"]:
+                row.reasons=["condition_state_change_no_application_replay"]
+            else:
+                var phase = "removal" if fact.event_type == "condition_removal" else "application"
+                var change: Dictionary = recipe.get(phase,{})
+                var source="catalog/condition_recipes.json:"+key+"."+phase
+                if change.get("feedbackEnabled",false):
+                    _need(row,"feedback_text","authored_condition_feedback_not_implemented",
+                        Authoring.Catalog.source_pointer("catalog/condition_recipes.json",key+"/"+phase+"/feedbackEnabled",cache))
+                _media_needed(row,change.get("effects",[]),source+".effects",row._commit_ms,"catalog/condition_recipes.json:/"+key+"/"+phase+"/effects")
+                if phase=="application":_persistent_condition(row,fact.condition,recipe.get("persistent",{}),cache,Authoring.rig_id(actor,cache))
         "action", "shove":
             var file = "catalog/shove_recipes.json" if row.kind == "shove" else "catalog/body_action_recipes.json"
             var recipe_id: String = str(fact.get("behavior_id",""))
             if row.kind == "action":
                 recipe_id = Authoring.load_data("catalog/body_action_bindings.json",cache).get(recipe_id,{}).get("source_recipe",recipe_id)
-            _recipe_missing(row,Authoring.load_data(file,cache).get(recipe_id,{}),file+":"+recipe_id)
-        "spell": row.components.append(_component("spell","spell_presentation_not_implemented"))
-    if row.components.is_empty() and row.reasons.is_empty(): row.reasons = ["state_only_no_animation_claim"]
+            _recipe_missing(row,resolved_recipe,resolved_recipe.get("_resource_source",file+":"+recipe_id),file+":/"+recipe_id)
+        "spell":
+            var recipe:Dictionary=resolved_recipe
+            if recipe.is_empty():row.components.append(_component("spell","spell_presentation_not_implemented"))
+            else:
+                var source="spells/"+str(fact.behavior_id)+".json"
+                var cast:Dictionary=recipe.get("cast",{})
+                if row.get("cast_owner_event",node.uuid)==node.uuid and not cast.is_empty() and cast.get("enabled",true):
+                    _need(row,"body","missing_authored_cast_body",source+".cast")
+                    var layers:Array=[]
+                    for field in ["weaponGlow","aura"]:
+                        if cast.get(field)!=null:layers.append(cast[field])
+                    layers.append_array(cast.get("effects",[]))
+                    for layer in layers:
+                        if layer.get("enabled",true) and not layer.get("hidden",false):_need(row,"sprite_layer","authored_cast_layer_not_implemented",source+".cast:"+str(layer.get("id","")),"authored_id",layer.get("id",""))
+                if fact.get("application")!=null and recipe.get("projectile")!=null and not _has(row,"native_effect","attachment","projectile") and not _has(row,"geometry_projectile"):
+                    row.components.append(_component("projectile","authored_projectile_not_implemented",source+".projectile"))
+    _operation_requirements(row,node,resolved_recipe,cache)
+    if row.components.is_empty() and row.reasons.is_empty():
+        row.reasons = ["state_only_no_animation_claim" if row.kind in Requirements.STATE_ONLY else "no_independent_component_selected"]
     # A visual actor was never disclosed; this is not evidence of missing art.
     if row.actor_uuid != null and actor.get("last_visual_position") == null and not row.components.is_empty():
         row.components = []; row.status = "not_visible"; row.reasons = ["actor_not_visually_disclosed"]
+
+static func _operation_requirements(row:Dictionary,node:Dictionary,recipe:Dictionary,cache:Dictionary)->void:
+    var source:String=recipe.get("_legacy_source","")
+    if source.is_empty():
+        if row.kind=="spell":source="spells/"+str(node.fact.get("behavior_id",""))+".json:"
+        elif row.kind in ["action","shove","attack"]:source="catalog/"+{"action":"body_action_recipes","shove":"shove_recipes","attack":"attack_recipes"}[row.kind]+".json:/"+str(node.fact.get("behavior_id",""))
+        else:source="catalog/"+str(row.kind)+"_context.json:"
+    for expected in Requirements.occurrence(node.fact,recipe,source,cache):
+        if expected.status!="missing":continue
+        # A shared cast's equipment/recovery belongs only to the cast owner.
+        if expected.participant=="caster" and row.get("cast_owner_event",node.uuid)!=node.uuid:continue
+        var matched=false
+        for component in row.components:
+            if component.trace_track_id.is_empty():continue
+            if component.source==expected.source and component.kind==expected.kind:matched=true
+            for asset in expected.get("asset_ids",[]):
+                if not str(asset).is_empty() and asset in component.get("asset_ids",[]) and not str(expected.get("authored_id","")).is_empty() and component.get("authored_id")==expected.authored_id:matched=true
+        if matched:continue
+        if row.components.any(func(c):return c.get("source_pointer",c.source)==expected.source and c.kind==expected.kind):continue
+        var required=_component(expected.kind,expected.reason,expected.source)
+        required.merge(expected,true)
+        required.trace_track_id=""
+        row.components.append(required)
 
 static func compile_rows(lineage: Dictionary, group: Dictionary, graph: Dictionary, cache: Dictionary) -> Array:
     var result: Array = []
@@ -151,8 +315,19 @@ static func compile_rows(lineage: Dictionary, group: Dictionary, graph: Dictiona
         var row = _base(node,int(group.operation_sequence),group.id,lineage.version_rows)
         row._display_log = _unique_children(row._log,native_logs) if row._log != null else null
         row._end_ms = graph.ends.get(node.uuid,0.0)
+        row._start_ms = graph.starts.get(node.uuid,0.0)
         row._group_duration_ms = group.duration_ms
         row._admit_ms = commits.get(node.uuid,group.duration_ms)
+        row._commit_ms = row._admit_ms
+        if graph.get("damage_timings",{}).has(node.uuid):
+            var timing:Dictionary=graph.damage_timings[node.uuid]
+            row.damage_timing={}
+            for field in ["start","hp","flash","number","body_enabled","terminal","lethal"]:
+                row.damage_timing[field]=timing[field]
+        if row.kind=="spell":
+            var application:Variant=node.fact.get("application")
+            var cast_key:String=application.lineage_uuid if application!=null else node.lineage_uuid
+            row.cast_owner_event=graph.get("casts",{}).get(cast_key,{}).get("source_event_uuid",node.uuid)
         if row.kind in ["damage","condition","heal","forced_movement"]: row.actor_uuid = row.target_uuid
         for track in group.actor_tracks:
             if track.source_event_uuid != node.uuid or int(track.priority) < 10: continue
@@ -160,8 +335,13 @@ static func compile_rows(lineage: Dictionary, group: Dictionary, graph: Dictiona
             var component = _component("body","", "catalog/rigs.json:"+track.rig+".clips."+track.clip)
             component.merge({"id":track.trace_track_id,"trace_track_id":track.trace_track_id,"actor_uuid":track.actor_uuid,
                 "rig":track.rig,"clip":track.clip,"start_ms":track.start_ms,"end_ms":track.start_ms+track.duration_ms,
-                "status":"playing","holding_pose":track.get("holding_pose",false)},true)
+                "status":"playing","holding_pose":track.get("holding_pose",false),"motion":track.get("motion",false)},true)
+            if track.has("motion_fraction_from"):
+                component.motion_phase={"from":track.motion_fraction_from,"to":track.motion_fraction_to}
             row.components.append(component)
+        for component in group.get("components",[]):
+            if component.source_event_uuid!=node.uuid:continue
+            row.components.append(_compiled_component(component,cache))
         var actor: Dictionary = graph.actor_inputs.get(node.uuid,{}).get(row.actor_uuid,{})
         _requirements(row,node,actor,cache,graph.recipes.get(node.uuid,{}))
         if row.components.is_empty(): row._admit_ms = commits.get(node.uuid,group.duration_ms)
@@ -210,10 +390,16 @@ static func activate(trace: Dictionary, rows: Array, start_ms: float) -> void:
         trace.rows[row.id] = row
         trace.order.append(row.id)
         for component in row.components:
-            if not component.trace_track_id.is_empty(): trace.tracks[component.trace_track_id] = {"row":row,"component":component}
+            if component.trace_track_id.is_empty():continue
+            if not trace.tracks.has(component.trace_track_id):trace.tracks[component.trace_track_id]=[]
+            trace.tracks[component.trace_track_id].append({"row":row,"component":component})
         while trace.order.size() > LIMIT:
             var expired: Dictionary = trace.rows[trace.order.pop_front()]
-            for component in expired.components: trace.tracks.erase(component.trace_track_id)
+            for component in expired.components:
+                var key: String=component.trace_track_id
+                if not trace.tracks.has(key):continue
+                trace.tracks[key]=trace.tracks[key].filter(func(binding):return binding.row.id!=expired.id)
+                if trace.tracks[key].is_empty():trace.tracks.erase(key)
             trace.rows.erase(expired.id)
             trace.evicted_events += 1
         trace.revision += 1
@@ -251,29 +437,31 @@ static func tick(trace: Dictionary, rows: Array, local_ms: float) -> void:
 
 static func record(trace: Dictionary, evidence: Array) -> void:
     for sample in evidence:
-        var found: Dictionary = trace.tracks.get(sample.get("trace_track_id",""),{})
-        if found.is_empty(): continue
-        var row: Dictionary = found.row
-        if not row._admitted: continue
-        var component: Dictionary = found.component
-        var previous: Array = [component.status,component.reason]
-        if sample.get("visible",false):
-            var at = float(sample.get("display_ms",-1.0))
-            var end = float(row._group_duration_ms) if component.get("holding_pose",false) else float(component.end_ms)
-            if at < row._start_ms+component.start_ms or at > row._start_ms+end: continue
-            if component.last_sample_ms != null and at <= float(component.last_sample_ms): continue
-            component.status = "presented"; component.reason = ""
-            component.sample_count += 1
-            if component.first_sample_ms == null: component.first_sample_ms = at
-            component.last_sample_ms = at
-        elif component.sample_count == 0:
-            var reason: String = sample.get("reason","renderer_missing")
-            component.status = "not_visible" if reason in ["offscreen","not_visible"] else "missing"
-            component.reason = reason
-        var changed = _refresh(row)
-        # Sampling statistics remain available on demand, without rebuilding a
-        # visible UI every frame once the coverage status is unchanged.
-        if changed or previous != [component.status,component.reason]: trace.revision += 1
+        # A refreshed condition UUID can belong to several retained events.
+        # Each binding retains its own admission and time boundary; eviction
+        # removes it from this same bounded index.
+        for found in trace.tracks.get(sample.get("trace_track_id",""),[]):
+            var row: Dictionary = found.row
+            if not row._admitted: continue
+            var component: Dictionary = found.component
+            var previous: Array = [component.status,component.reason]
+            if sample.get("visible",false):
+                var at = float(sample.get("display_ms",-1.0))
+                var end = INF if component.get("persistent",false) else (float(row._group_duration_ms) if component.get("holding_pose",false) else float(component.end_ms))
+                if at < row._start_ms+component.start_ms or at > row._start_ms+end: continue
+                if component.last_sample_ms != null and at <= float(component.last_sample_ms): continue
+                component.status = "presented"; component.reason = ""
+                component.sample_count += 1
+                if component.first_sample_ms == null: component.first_sample_ms = at
+                component.last_sample_ms = at
+            elif component.sample_count == 0:
+                var reason: String = sample.get("reason","renderer_missing")
+                component.status = "not_visible" if reason in ["offscreen","not_visible"] else "missing"
+                component.reason = reason
+            var changed = _refresh(row)
+            # Sampling statistics remain available on demand, without rebuilding
+            # a visible UI every frame after the coverage status stabilizes.
+            if changed or previous != [component.status,component.reason]: trace.revision += 1
 
 static func snapshot(trace: Dictionary, limit: int, selected: String, queued: int, status_filter: String = "") -> Dictionary:
     var admitted = {}

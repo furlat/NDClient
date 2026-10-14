@@ -1,0 +1,1224 @@
+{
+  "cases": [
+    {
+      "name": "movement-oa",
+      "descriptor": ".runtime/studio-cases/movement-oa/case.json",
+      "journal": "res://.runtime/studio-cases/movement-oa/journal",
+      "operation_prefix": {
+        "first_sequence": 0,
+        "last_sequence": 8
+      },
+      "interval": {
+        "end_ms": 10880.9223075708,
+        "start_ms": 0
+      },
+      "checks": 69,
+      "failures": [],
+      "facts": {
+        "action": 4,
+        "attack": 2,
+        "condition": 2,
+        "damage": 4,
+        "item_charge": 1,
+        "movement": 3,
+        "sensory": 36,
+        "spatial": 34,
+        "step": 16,
+        "turn": 1
+      },
+      "behaviors": {
+        "action.dash": 1,
+        "action.environment.directional_door.open": 2,
+        "action.item.potion_haste.drink": 1,
+        "reaction.opportunity_attack": 2
+      },
+      "attack_outcomes": {
+        "Hit": 2
+      },
+      "conditions": [
+        [
+          "condition_application",
+          "Haste"
+        ],
+        [
+          "condition_application",
+          "Dashing"
+        ]
+      ],
+      "initial_conditions": []
+    },
+    {
+      "name": "dash-seed3",
+      "descriptor": ".runtime/studio-cases/dash-seed3/amber/case.json",
+      "journal": "res://.runtime/studio-cases/dash-seed3/amber/journal",
+      "operation_prefix": {
+        "first_sequence": 0,
+        "last_sequence": 7
+      },
+      "interval": {
+        "end_ms": 2333.33333333333,
+        "start_ms": 0
+      },
+      "checks": 65,
+      "failures": [],
+      "facts": {
+        "action": 1,
+        "attack": 1,
+        "condition": 2,
+        "damage": 2,
+        "movement": 1,
+        "sensory": 1,
+        "spatial": 2,
+        "step": 1,
+        "turn": 7
+      },
+      "behaviors": {
+        "action.dash": 1,
+        "reaction.opportunity_attack": 1
+      },
+      "attack_outcomes": {
+        "Hit": 1
+      },
+      "conditions": [
+        [
+          "condition_application",
+          "Dashing"
+        ],
+        [
+          "condition_removal",
+          "Dashing"
+        ]
+      ],
+      "initial_conditions": []
+    },
+    {
+      "name": "dodge-seed3",
+      "descriptor": ".runtime/studio-cases/dodge-seed3/amber/case.json",
+      "journal": "res://.runtime/studio-cases/dodge-seed3/amber/journal",
+      "operation_prefix": {
+        "first_sequence": 0,
+        "last_sequence": 7
+      },
+      "interval": {
+        "end_ms": 1250.0,
+        "start_ms": 0
+      },
+      "checks": 66,
+      "failures": [],
+      "facts": {
+        "action": 1,
+        "attack": 1,
+        "condition": 2,
+        "turn": 7
+      },
+      "behaviors": {
+        "action.attack": 1,
+        "action.dodge": 1
+      },
+      "attack_outcomes": {
+        "Miss": 1
+      },
+      "conditions": [
+        [
+          "condition_application",
+          "Dodging"
+        ],
+        [
+          "condition_removal",
+          "Dodging"
+        ]
+      ],
+      "initial_conditions": []
+    },
+    {
+      "name": "disengage-seed3",
+      "descriptor": ".runtime/studio-cases/disengage-seed3/amber/case.json",
+      "journal": "res://.runtime/studio-cases/disengage-seed3/amber/journal",
+      "operation_prefix": {
+        "first_sequence": 0,
+        "last_sequence": 7
+      },
+      "interval": {
+        "end_ms": 416.666666666667,
+        "start_ms": 0
+      },
+      "checks": 66,
+      "failures": [],
+      "facts": {
+        "action": 1,
+        "condition": 2,
+        "movement": 1,
+        "sensory": 1,
+        "spatial": 2,
+        "step": 1,
+        "turn": 7
+      },
+      "behaviors": {
+        "action.disengage": 1
+      },
+      "attack_outcomes": {},
+      "conditions": [
+        [
+          "condition_application",
+          "Disengaging"
+        ],
+        [
+          "condition_removal",
+          "Disengaging"
+        ]
+      ],
+      "initial_conditions": []
+    },
+    {
+      "name": "shove-seed3",
+      "descriptor": ".runtime/studio-cases/shove-seed3/amber/case.json",
+      "journal": "res://.runtime/studio-cases/shove-seed3/amber/journal",
+      "operation_prefix": {
+        "first_sequence": 0,
+        "last_sequence": 6
+      },
+      "interval": {
+        "end_ms": 1250.0,
+        "start_ms": 0
+      },
+      "checks": 55,
+      "failures": [],
+      "facts": {
+        "forced_movement": 1,
+        "sensory": 2,
+        "shove": 1,
+        "spatial": 4,
+        "turn": 7
+      },
+      "behaviors": {
+        "action.shove": 1
+      },
+      "attack_outcomes": {},
+      "conditions": [],
+      "initial_conditions": []
+    },
+    {
+      "name": "shove-seed1",
+      "descriptor": ".runtime/studio-cases/shove-seed1/amber/case.json",
+      "journal": "res://.runtime/studio-cases/shove-seed1/amber/journal",
+      "operation_prefix": {
+        "first_sequence": 0,
+        "last_sequence": 6
+      },
+      "interval": {
+        "end_ms": 1250.0,
+        "start_ms": 0
+      },
+      "checks": 55,
+      "failures": [],
+      "facts": {
+        "shove": 1,
+        "turn": 7
+      },
+      "behaviors": {
+        "action.shove": 1
+      },
+      "attack_outcomes": {},
+      "conditions": [],
+      "initial_conditions": []
+    },
+    {
+      "name": "melee-seed3",
+      "descriptor": ".runtime/studio-cases/melee-seed3/amber/case.json",
+      "journal": "res://.runtime/studio-cases/melee-seed3/amber/journal",
+      "operation_prefix": {
+        "first_sequence": 0,
+        "last_sequence": 2
+      },
+      "interval": {
+        "end_ms": 1916.66666666667,
+        "start_ms": 0
+      },
+      "checks": 21,
+      "failures": [],
+      "facts": {
+        "attack": 1,
+        "damage": 2,
+        "turn": 1
+      },
+      "behaviors": {
+        "action.attack": 1
+      },
+      "attack_outcomes": {
+        "Hit": 1
+      },
+      "conditions": [],
+      "initial_conditions": []
+    },
+    {
+      "name": "ranged-seed3",
+      "descriptor": ".runtime/studio-cases/ranged-seed3/amber/case.json",
+      "journal": "res://.runtime/studio-cases/ranged-seed3/amber/journal",
+      "operation_prefix": {
+        "first_sequence": 0,
+        "last_sequence": 2
+      },
+      "interval": {
+        "end_ms": 2083.33333333333,
+        "start_ms": 0
+      },
+      "checks": 21,
+      "failures": [],
+      "facts": {
+        "attack": 1,
+        "damage": 2,
+        "life": 1,
+        "sensory": 2,
+        "turn": 1
+      },
+      "behaviors": {
+        "action.attack": 1
+      },
+      "attack_outcomes": {
+        "Hit": 1
+      },
+      "conditions": [],
+      "initial_conditions": []
+    },
+    {
+      "name": "ranged-seed1",
+      "descriptor": ".runtime/studio-cases/ranged-seed1/amber/case.json",
+      "journal": "res://.runtime/studio-cases/ranged-seed1/amber/journal",
+      "operation_prefix": {
+        "first_sequence": 0,
+        "last_sequence": 2
+      },
+      "interval": {
+        "end_ms": 1250.0,
+        "start_ms": 0
+      },
+      "checks": 21,
+      "failures": [],
+      "facts": {
+        "attack": 1,
+        "turn": 1
+      },
+      "behaviors": {
+        "action.attack": 1
+      },
+      "attack_outcomes": {
+        "Miss": 1
+      },
+      "conditions": [],
+      "initial_conditions": []
+    },
+    {
+      "name": "magic_missile-seed3",
+      "descriptor": ".runtime/studio-cases/magic_missile-seed3/amber/case.json",
+      "journal": "res://.runtime/studio-cases/magic_missile-seed3/amber/journal",
+      "operation_prefix": {
+        "first_sequence": 0,
+        "last_sequence": 2
+      },
+      "interval": {
+        "end_ms": 1250.0,
+        "start_ms": 0
+      },
+      "checks": 23,
+      "failures": [],
+      "facts": {
+        "condition": 2,
+        "spell": 4,
+        "turn": 1
+      },
+      "behaviors": {
+        "spell.magic_missile": 4
+      },
+      "attack_outcomes": {},
+      "conditions": [
+        [
+          "condition_application",
+          "Shield"
+        ],
+        [
+          "condition_application",
+          "Shield"
+        ]
+      ],
+      "initial_conditions": []
+    },
+    {
+      "name": "hold_person-seed3",
+      "descriptor": ".runtime/studio-cases/hold_person-seed3/amber/case.json",
+      "journal": "res://.runtime/studio-cases/hold_person-seed3/amber/journal",
+      "operation_prefix": {
+        "first_sequence": 0,
+        "last_sequence": 8
+      },
+      "interval": {
+        "end_ms": 1250.0,
+        "start_ms": 0
+      },
+      "checks": 74,
+      "failures": [],
+      "facts": {
+        "action": 1,
+        "condition": 7,
+        "saving_throw": 2,
+        "spell": 1,
+        "turn": 9
+      },
+      "behaviors": {
+        "action.drop_concentration": 1,
+        "spell.hold_person": 1
+      },
+      "attack_outcomes": {},
+      "conditions": [
+        [
+          "condition_application",
+          "Concentrating"
+        ],
+        [
+          "condition_application",
+          "Paralyzed"
+        ],
+        [
+          "condition_application",
+          "Hold Person"
+        ],
+        [
+          "condition_state_changed",
+          "Concentrating"
+        ],
+        [
+          "condition_removal",
+          "Paralyzed"
+        ],
+        [
+          "condition_removal",
+          "Hold Person"
+        ],
+        [
+          "condition_removal",
+          "Concentrating"
+        ]
+      ],
+      "initial_conditions": []
+    },
+    {
+      "name": "window-seed3-v2",
+      "descriptor": ".runtime/studio-cases/window-seed3-v2/amber/case.json",
+      "journal": "res://.runtime/studio-cases/window-seed3-v2/amber/journal",
+      "operation_prefix": {
+        "first_sequence": 0,
+        "last_sequence": 3
+      },
+      "interval": {
+        "end_ms": 900.0,
+        "start_ms": 0
+      },
+      "checks": 30,
+      "failures": [],
+      "facts": {
+        "movement": 2,
+        "sensory": 2,
+        "spatial": 4,
+        "step": 2,
+        "turn": 1
+      },
+      "behaviors": {},
+      "attack_outcomes": {},
+      "conditions": [],
+      "initial_conditions": []
+    },
+    {
+      "name": "window_break-seed3-v3",
+      "descriptor": ".runtime/studio-cases/window_break-seed3-v3/amber/case.json",
+      "journal": "res://.runtime/studio-cases/window_break-seed3-v3/amber/journal",
+      "operation_prefix": {
+        "first_sequence": 0,
+        "last_sequence": 4
+      },
+      "interval": {
+        "end_ms": 2950.0,
+        "start_ms": 0
+      },
+      "checks": 38,
+      "failures": [],
+      "facts": {
+        "attack": 2,
+        "movement": 1,
+        "object_damage": 2,
+        "object_destroyed": 1,
+        "sensory": 1,
+        "spatial": 3,
+        "step": 1,
+        "turn": 1
+      },
+      "behaviors": {
+        "action.attack": 1,
+        "action.feature.extra_attack": 1
+      },
+      "attack_outcomes": {
+        "Hit": 2
+      },
+      "conditions": [],
+      "initial_conditions": []
+    },
+    {
+      "name": "action_economy-seed3-v2",
+      "descriptor": ".runtime/studio-cases/action_economy-seed3-v2/amber/case.json",
+      "journal": "res://.runtime/studio-cases/action_economy-seed3-v2/amber/journal",
+      "operation_prefix": {
+        "first_sequence": 0,
+        "last_sequence": 6
+      },
+      "interval": {
+        "end_ms": 8916.66666666667,
+        "start_ms": 0
+      },
+      "checks": 54,
+      "failures": [],
+      "facts": {
+        "action": 1,
+        "attack": 4,
+        "damage": 8,
+        "turn": 1
+      },
+      "behaviors": {
+        "action.attack": 2,
+        "action.class.fighter.action_surge": 1,
+        "action.feature.extra_attack": 2
+      },
+      "attack_outcomes": {
+        "Crit": 1,
+        "Hit": 3
+      },
+      "conditions": [],
+      "initial_conditions": []
+    },
+    {
+      "name": "poisoned-seed3-v2",
+      "descriptor": ".runtime/studio-cases/poisoned-seed3-v2/amber/case.json",
+      "journal": "res://.runtime/studio-cases/poisoned-seed3-v2/amber/journal",
+      "operation_prefix": {
+        "first_sequence": 0,
+        "last_sequence": 3
+      },
+      "interval": {
+        "end_ms": 1666.66666666667,
+        "start_ms": 0
+      },
+      "checks": 31,
+      "failures": [],
+      "facts": {
+        "condition": 1,
+        "movement": 1,
+        "sensory": 2,
+        "spatial": 2,
+        "spell": 1,
+        "step": 1,
+        "turn": 1
+      },
+      "behaviors": {
+        "spell.lesser_restoration": 1
+      },
+      "attack_outcomes": {},
+      "conditions": [
+        [
+          "condition_removal",
+          "Poisoned"
+        ]
+      ],
+      "initial_conditions": [
+        "Poisoned"
+      ]
+    },
+    {
+      "name": "walk_diagonal-seed3-v2",
+      "descriptor": ".runtime/studio-cases/walk_diagonal-seed3-v2/amber/case.json",
+      "journal": "res://.runtime/studio-cases/walk_diagonal-seed3-v2/amber/journal",
+      "operation_prefix": {
+        "first_sequence": 0,
+        "last_sequence": 2
+      },
+      "interval": {
+        "end_ms": 1767.76692271233,
+        "start_ms": 0
+      },
+      "checks": 21,
+      "failures": [],
+      "facts": {
+        "movement": 1,
+        "sensory": 3,
+        "spatial": 6,
+        "step": 3,
+        "turn": 1
+      },
+      "behaviors": {},
+      "attack_outcomes": {},
+      "conditions": [],
+      "initial_conditions": []
+    },
+    {
+      "name": "elevation-seed3",
+      "descriptor": ".runtime/studio-cases/elevation-seed3/amber/case.json",
+      "journal": "res://.runtime/studio-cases/elevation-seed3/amber/journal",
+      "operation_prefix": {
+        "first_sequence": 0,
+        "last_sequence": 2
+      },
+      "interval": {
+        "end_ms": 1250.0,
+        "start_ms": 0
+      },
+      "checks": 22,
+      "failures": [],
+      "facts": {
+        "movement": 1,
+        "sensory": 3,
+        "spatial": 6,
+        "step": 3,
+        "turn": 1
+      },
+      "behaviors": {},
+      "attack_outcomes": {},
+      "conditions": [],
+      "initial_conditions": []
+    },
+    {
+      "name": "jump-seed3-v2",
+      "descriptor": ".runtime/studio-cases/jump-seed3-v2/amber/case.json",
+      "journal": "res://.runtime/studio-cases/jump-seed3-v2/amber/journal",
+      "operation_prefix": {
+        "first_sequence": 0,
+        "last_sequence": 2
+      },
+      "interval": {
+        "end_ms": 950.0,
+        "start_ms": 0
+      },
+      "checks": 21,
+      "failures": [],
+      "facts": {
+        "movement": 1,
+        "sensory": 3,
+        "spatial": 10,
+        "step": 3,
+        "turn": 1
+      },
+      "behaviors": {},
+      "attack_outcomes": {},
+      "conditions": [],
+      "initial_conditions": []
+    },
+    {
+      "name": "oa_jump-seed3-v2",
+      "descriptor": ".runtime/studio-cases/oa_jump-seed3-v2/amber/case.json",
+      "journal": "res://.runtime/studio-cases/oa_jump-seed3-v2/amber/journal",
+      "operation_prefix": {
+        "first_sequence": 0,
+        "last_sequence": 2
+      },
+      "interval": {
+        "end_ms": 2766.66666666667,
+        "start_ms": 0
+      },
+      "checks": 22,
+      "failures": [],
+      "facts": {
+        "attack": 1,
+        "damage": 2,
+        "movement": 1,
+        "sensory": 2,
+        "spatial": 8,
+        "step": 2,
+        "turn": 1
+      },
+      "behaviors": {
+        "reaction.opportunity_attack": 1
+      },
+      "attack_outcomes": {
+        "Hit": 1
+      },
+      "conditions": [],
+      "initial_conditions": []
+    },
+    {
+      "name": "oa_jump_lethal-seed5-v2",
+      "descriptor": ".runtime/studio-cases/oa_jump_lethal-seed5-v2/amber/case.json",
+      "journal": "res://.runtime/studio-cases/oa_jump_lethal-seed5-v2/amber/journal",
+      "operation_prefix": {
+        "first_sequence": 0,
+        "last_sequence": 2
+      },
+      "interval": {
+        "end_ms": 1951.75438596491,
+        "start_ms": 0
+      },
+      "checks": 25,
+      "failures": [],
+      "facts": {
+        "attack": 1,
+        "damage": 2,
+        "life": 1,
+        "movement": 1,
+        "sensory": 1,
+        "spatial": 1,
+        "step": 1,
+        "turn": 3
+      },
+      "behaviors": {
+        "reaction.opportunity_attack": 1
+      },
+      "attack_outcomes": {
+        "Hit": 1
+      },
+      "conditions": [],
+      "initial_conditions": []
+    },
+    {
+      "name": "oa_jump_late_lethal-seed5-v2",
+      "descriptor": ".runtime/studio-cases/oa_jump_late_lethal-seed5-v2/amber/case.json",
+      "journal": "res://.runtime/studio-cases/oa_jump_late_lethal-seed5-v2/amber/journal",
+      "operation_prefix": {
+        "first_sequence": 0,
+        "last_sequence": 2
+      },
+      "interval": {
+        "end_ms": 2801.75438596491,
+        "start_ms": 0
+      },
+      "checks": 25,
+      "failures": [],
+      "facts": {
+        "attack": 1,
+        "damage": 2,
+        "life": 1,
+        "movement": 1,
+        "sensory": 3,
+        "spatial": 9,
+        "step": 3,
+        "turn": 3
+      },
+      "behaviors": {
+        "reaction.opportunity_attack": 1
+      },
+      "attack_outcomes": {
+        "Hit": 1
+      },
+      "conditions": [],
+      "initial_conditions": []
+    },
+    {
+      "name": "prone-seed3-v3",
+      "descriptor": ".runtime/studio-cases/prone-seed3-v3/blue/case.json",
+      "journal": "res://.runtime/studio-cases/prone-seed3-v3/blue/journal",
+      "operation_prefix": {
+        "first_sequence": 0,
+        "last_sequence": 4
+      },
+      "interval": {
+        "end_ms": 3166.66666666667,
+        "start_ms": 0
+      },
+      "checks": 40,
+      "failures": [],
+      "facts": {
+        "attack": 1,
+        "condition": 1,
+        "damage": 2,
+        "movement": 1,
+        "sensory": 1,
+        "spatial": 2,
+        "step": 1,
+        "turn": 3
+      },
+      "behaviors": {
+        "reaction.opportunity_attack": 1
+      },
+      "attack_outcomes": {
+        "Hit": 1
+      },
+      "conditions": [
+        [
+          "condition_removal",
+          "Prone"
+        ]
+      ],
+      "initial_conditions": [
+        "Prone"
+      ]
+    },
+    {
+      "name": "rage-seed3-v3",
+      "descriptor": ".runtime/studio-cases/rage-seed3-v3/amber/case.json",
+      "journal": "res://.runtime/studio-cases/rage-seed3-v3/amber/journal",
+      "operation_prefix": {
+        "first_sequence": 0,
+        "last_sequence": 7
+      },
+      "interval": {
+        "end_ms": 2187.5,
+        "start_ms": 0
+      },
+      "checks": 65,
+      "failures": [],
+      "facts": {
+        "action": 1,
+        "condition": 4,
+        "movement": 1,
+        "sensory": 3,
+        "spatial": 6,
+        "step": 3,
+        "turn": 7
+      },
+      "behaviors": {
+        "action.class.barbarian.frenzy": 1
+      },
+      "attack_outcomes": {},
+      "conditions": [
+        [
+          "condition_application",
+          "Raging"
+        ],
+        [
+          "condition_application",
+          "Frenzied"
+        ],
+        [
+          "condition_removal",
+          "Frenzied"
+        ],
+        [
+          "condition_removal",
+          "Raging"
+        ]
+      ],
+      "initial_conditions": []
+    },
+    {
+      "name": "hide-seed3-v3",
+      "descriptor": ".runtime/studio-cases/hide-seed3-v3/amber/case.json",
+      "journal": "res://.runtime/studio-cases/hide-seed3-v3/amber/journal",
+      "operation_prefix": {
+        "first_sequence": 0,
+        "last_sequence": 9
+      },
+      "interval": {
+        "end_ms": 2500.0,
+        "start_ms": 0
+      },
+      "checks": 81,
+      "failures": [],
+      "facts": {
+        "action": 2,
+        "attack": 1,
+        "condition": 2,
+        "damage": 2,
+        "equipment": 1,
+        "movement": 1,
+        "sensory": 2,
+        "spatial": 4,
+        "step": 1,
+        "turn": 7
+      },
+      "behaviors": {
+        "action.attack": 1,
+        "action.hide": 1,
+        "action.item.torch.extinguish": 1
+      },
+      "attack_outcomes": {
+        "Crit": 1
+      },
+      "conditions": [
+        [
+          "condition_application",
+          "Hidden"
+        ],
+        [
+          "condition_removal",
+          "Hidden"
+        ]
+      ],
+      "initial_conditions": []
+    },
+    {
+      "name": "hide-light-schema9-seed3",
+      "descriptor": ".runtime/studio-cases/hide-light-schema9-seed3/amber/case.json",
+      "journal": "res://.runtime/studio-cases/hide-light-schema9-seed3/amber/journal",
+      "operation_prefix": {
+        "first_sequence": 0,
+        "last_sequence": 14
+      },
+      "interval": {
+        "end_ms": 3261.84461514155,
+        "start_ms": 0
+      },
+      "checks": 119,
+      "failures": [],
+      "facts": {
+        "action": 4,
+        "condition": 2,
+        "equipment": 3,
+        "movement": 3,
+        "sensory": 9,
+        "spatial": 14,
+        "step": 6,
+        "turn": 9
+      },
+      "behaviors": {
+        "action.hide": 1,
+        "action.item.torch.extinguish": 2,
+        "action.item.torch.ignite": 1
+      },
+      "attack_outcomes": {},
+      "conditions": [
+        [
+          "condition_application",
+          "Hidden"
+        ],
+        [
+          "condition_removal",
+          "Hidden"
+        ]
+      ],
+      "initial_conditions": [],
+      "rule_checks": 45,
+      "rule_failures": [],
+      "light_probes": [
+        {
+          "label": "hidden",
+          "sequence": 3,
+          "sampled_tile": [
+            4,
+            6
+          ],
+          "world_resolved_light": 4,
+          "observer_effective_light": null,
+          "tile_currently_visible": false,
+          "objective_timing": "remembered_not_current",
+          "amber_hidden_present": true,
+          "source_position": [
+            12,
+            8
+          ],
+          "source_uuids": [
+            "2b1c33c0-d971-433b-8e2a-6b3b0ac93cf2"
+          ],
+          "compiled_at_ms": 416.666666666667,
+          "timing_basis": "Raw shared compiler group end, excluding Studio preroll/inter-operation inspection pauses. Resolve Studio time by original sequence in Recording.read groups."
+        },
+        {
+          "label": "dim",
+          "sequence": 8,
+          "sampled_tile": [
+            4,
+            6
+          ],
+          "world_resolved_light": 2,
+          "observer_effective_light": 2,
+          "tile_currently_visible": true,
+          "objective_timing": "current_visible",
+          "amber_hidden_present": true,
+          "source_position": [
+            10,
+            6
+          ],
+          "source_uuids": [
+            "03c2aaf2-3076-44f9-b427-192856de5398"
+          ],
+          "compiled_at_ms": 1595.17794847488,
+          "timing_basis": "Raw shared compiler group end, excluding Studio preroll/inter-operation inspection pauses. Resolve Studio time by original sequence in Recording.read groups."
+        },
+        {
+          "label": "bright",
+          "sequence": 13,
+          "sampled_tile": [
+            4,
+            6
+          ],
+          "world_resolved_light": 3,
+          "observer_effective_light": 3,
+          "tile_currently_visible": true,
+          "objective_timing": "current_visible",
+          "amber_hidden_present": true,
+          "source_position": [
+            7,
+            6
+          ],
+          "source_uuids": [
+            "03c2aaf2-3076-44f9-b427-192856de5398"
+          ],
+          "compiled_at_ms": 2845.17794847488,
+          "timing_basis": "Raw shared compiler group end, excluding Studio preroll/inter-operation inspection pauses. Resolve Studio time by original sequence in Recording.read groups."
+        },
+        {
+          "label": "very_bright",
+          "sequence": 14,
+          "sampled_tile": [
+            4,
+            6
+          ],
+          "world_resolved_light": 4,
+          "observer_effective_light": 4,
+          "tile_currently_visible": true,
+          "objective_timing": "current_visible",
+          "amber_hidden_present": false,
+          "source_position": [
+            6,
+            6
+          ],
+          "source_uuids": [
+            "03c2aaf2-3076-44f9-b427-192856de5398"
+          ],
+          "compiled_at_ms": 3261.84461514155,
+          "timing_basis": "Raw shared compiler group end, excluding Studio preroll/inter-operation inspection pauses. Resolve Studio time by original sequence in Recording.read groups."
+        }
+      ],
+      "protocol_schema_version": 9
+    },
+    {
+      "name": "condition_suppression-seed3-v2",
+      "descriptor": ".runtime/studio-cases/condition_suppression-seed3-v2/amber/case.json",
+      "journal": "res://.runtime/studio-cases/condition_suppression-seed3-v2/amber/journal",
+      "operation_prefix": {
+        "first_sequence": 0,
+        "last_sequence": 8
+      },
+      "interval": {
+        "end_ms": 4583.33333333333,
+        "start_ms": 0
+      },
+      "checks": 72,
+      "failures": [],
+      "facts": {
+        "action": 1,
+        "condition": 6,
+        "equipment": 24,
+        "movement": 2,
+        "sensory": 9,
+        "spatial": 12,
+        "spatial_effect_state": 7,
+        "spell": 2,
+        "step": 5,
+        "turn": 3
+      },
+      "behaviors": {
+        "action.drop_concentration": 1,
+        "spell.antimagic_field": 1,
+        "spell.mirror_image": 1
+      },
+      "attack_outcomes": {},
+      "conditions": [
+        [
+          "condition_application",
+          "Mirror Image"
+        ],
+        [
+          "condition_application",
+          "Concentrating"
+        ],
+        [
+          "condition_state_changed",
+          "Concentrating"
+        ],
+        [
+          "condition_state_changed",
+          "Mirror Image"
+        ],
+        [
+          "condition_state_changed",
+          "Mirror Image"
+        ],
+        [
+          "condition_removal",
+          "Concentrating"
+        ]
+      ],
+      "initial_conditions": []
+    },
+    {
+      "name": "condition_owners-seed4",
+      "descriptor": ".runtime/studio-cases/condition_owners-seed4/amber/case.json",
+      "journal": "res://.runtime/studio-cases/condition_owners-seed4/amber/journal",
+      "operation_prefix": {
+        "first_sequence": 0,
+        "last_sequence": 15
+      },
+      "interval": {
+        "end_ms": 2500.0,
+        "start_ms": 0
+      },
+      "checks": 135,
+      "failures": [],
+      "facts": {
+        "action": 2,
+        "condition": 13,
+        "saving_throw": 4,
+        "spell": 3,
+        "turn": 17
+      },
+      "behaviors": {
+        "action.drop_concentration": 2,
+        "spell.hold_monster": 2,
+        "spell.hold_person": 1
+      },
+      "attack_outcomes": {},
+      "conditions": [
+        [
+          "condition_application",
+          "Concentrating"
+        ],
+        [
+          "condition_application",
+          "Paralyzed"
+        ],
+        [
+          "condition_application",
+          "Hold Person"
+        ],
+        [
+          "condition_state_changed",
+          "Concentrating"
+        ],
+        [
+          "condition_application",
+          "Concentrating"
+        ],
+        [
+          "condition_application",
+          "Hold Monster"
+        ],
+        [
+          "condition_state_changed",
+          "Concentrating"
+        ],
+        [
+          "condition_removal",
+          "Hold Person"
+        ],
+        [
+          "condition_removal",
+          "Concentrating"
+        ],
+        [
+          "condition_state_changed",
+          "Hold Monster"
+        ],
+        [
+          "condition_removal",
+          "Paralyzed"
+        ],
+        [
+          "condition_removal",
+          "Hold Monster"
+        ],
+        [
+          "condition_removal",
+          "Concentrating"
+        ]
+      ],
+      "initial_conditions": []
+    },
+    {
+      "name": "invisibility-seed3-v2",
+      "descriptor": ".runtime/studio-cases/invisibility-seed3-v2/amber/case.json",
+      "journal": "res://.runtime/studio-cases/invisibility-seed3-v2/amber/journal",
+      "operation_prefix": {
+        "first_sequence": 0,
+        "last_sequence": 10
+      },
+      "interval": {
+        "end_ms": 3333.33333333333,
+        "start_ms": 0
+      },
+      "checks": 87,
+      "failures": [],
+      "facts": {
+        "action": 1,
+        "condition": 6,
+        "movement": 2,
+        "sensory": 2,
+        "spatial": 6,
+        "spell": 2,
+        "step": 2,
+        "turn": 7
+      },
+      "behaviors": {
+        "action.drop_concentration": 1,
+        "spell.invisibility": 1,
+        "spell.see_invisibility": 1
+      },
+      "attack_outcomes": {},
+      "conditions": [
+        [
+          "condition_application",
+          "Invisible"
+        ],
+        [
+          "condition_application",
+          "Concentrating"
+        ],
+        [
+          "condition_state_changed",
+          "Concentrating"
+        ],
+        [
+          "condition_application",
+          "See Invisibility"
+        ],
+        [
+          "condition_removal",
+          "Invisible"
+        ],
+        [
+          "condition_removal",
+          "Concentrating"
+        ]
+      ],
+      "initial_conditions": [],
+      "perspective_checks": {
+        "amber": 87,
+        "blue": 87
+      },
+      "qualification": "Canonical/compiled replay only. Observed outcomes qualify only themselves; visual/audio coverage and missing required outcomes remain separate."
+    },
+    {
+      "name": "dying-seed5",
+      "descriptor": ".runtime/studio-cases/dying-seed5/amber/case.json",
+      "journal": "res://.runtime/studio-cases/dying-seed5/amber/journal",
+      "operation_prefix": {
+        "first_sequence": 0,
+        "last_sequence": 13
+      },
+      "interval": {
+        "end_ms": 1916.66666666667,
+        "start_ms": 0
+      },
+      "checks": 122,
+      "failures": [],
+      "facts": {
+        "attack": 1,
+        "damage": 2,
+        "death_save": 4,
+        "life": 2,
+        "sensory": 1,
+        "turn": 25
+      },
+      "behaviors": {
+        "action.attack": 1
+      },
+      "attack_outcomes": {
+        "Hit": 1
+      },
+      "conditions": [],
+      "initial_conditions": []
+    }
+  ],
+  "checks": 1424,
+  "failures": [],
+  "capture_route": "tools/studio_capture.py -> current ServerConfig recipe/test_host -> SDK choices/preview/commands -> original follower bytes; tests/studio_capture.gd strict replay/shared compiler",
+  "scope": "29 local SDK-qualified cases. Dying uses actual lethal damage followed by failed death saves; source availability and native presentation qualification remain separate. Condition-owner/suppression cases qualify lifecycle mechanisms, not complete higher-level spell visuals.",
+  "remaining_gaps": [
+    "Prone is an already-active owner initialization plus engine auto-stand; standard current discovery exposes no voluntary Drop Prone/Stand Up template.",
+    "Poisoned begins active; the batch proves movement and removal, not a witnessed poison application.",
+    "Magic Missile proves A/B/A applications, with actual automatic defenses in this seed; no fabricated damage.",
+    "Visual/audio coverage and native replay/render acceptance remain separate from strict semantic checks."
+  ]
+}

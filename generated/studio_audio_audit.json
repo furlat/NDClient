@@ -1,0 +1,85 @@
+{
+  "native_presenter": {
+    "driver": "WASAPI",
+    "exact_start_resume_shots": 0,
+    "pcm": [
+      {
+        "counters": {
+          "crossed": 1,
+          "expired": 0,
+          "limited": 0,
+          "loops": 0,
+          "missing": 0,
+          "shots": 1
+        },
+        "frames": 10752,
+        "listener_distance": 1.0,
+        "peak": 0.0229217316955328
+      },
+      {
+        "counters": {
+          "crossed": 1,
+          "expired": 0,
+          "limited": 0,
+          "loops": 0,
+          "missing": 0,
+          "shots": 1
+        },
+        "frames": 10752,
+        "listener_distance": 19.5959186553955,
+        "peak": 0.0140899177640677
+      }
+    ],
+    "preroll_crossing_shots": 1,
+    "scope": "Production presenter and actual footstep source: paused-onset resume vs forward crossing; spatial gain at test listener distance vs Studio camera offset. Not full Studio capture."
+  },
+  "studio_move_replay": {
+    "first_cue": "2:ee894a12-c56b-43ea-9615-e0aa9e67907f:audio:footstep:0",
+    "footstep_rows": 3,
+    "recording": "res://.runtime/studio-cases/walk_diagonal-seed3-v2/amber/journal",
+    "scope": "Actual Studio world, production components and SFX PCM through complete Move replay and selecting its first footstep interval.",
+    "select_footstep": {
+      "counters": {
+        "crossed": 2,
+        "expired": 0,
+        "limited": 0,
+        "loops": 0,
+        "missing": 0,
+        "shots": 2
+      },
+      "end_ms": 2380.55592271233,
+      "errors": [],
+      "pcm_frames": 64000,
+      "peak": 0.00652376702055335,
+      "started_cues": [
+        "2:426dd452-7ba0-4651-8a63-a4ea03bd4c2d:audio:footstep:1",
+        "2:83b2b7d9-cfd2-45fb-a8b5-df108998325c:audio:footstep:2"
+      ]
+    },
+    "whole_study": {
+      "counters": {
+        "crossed": 3,
+        "expired": 0,
+        "limited": 0,
+        "loops": 0,
+        "missing": 0,
+        "shots": 3
+      },
+      "end_ms": 2380.55592271233,
+      "errors": [],
+      "pcm_frames": 114176,
+      "peak": 0.0125731257721782,
+      "started_cues": [
+        "2:ee894a12-c56b-43ea-9615-e0aa9e67907f:audio:footstep:0",
+        "2:426dd452-7ba0-4651-8a63-a4ea03bd4c2d:audio:footstep:1",
+        "2:83b2b7d9-cfd2-45fb-a8b5-df108998325c:audio:footstep:2"
+      ]
+    }
+  },
+  "status": "Investigation evidence: exact-onset omission reproduced; no audio fix applied.",
+  "limits": [
+    "Captured SFX bus PCM is mixer evidence, not proof of physical speaker output.",
+    "The selected-cue probe disabled looping after selection and continued through the study; it tests cue admission, not selected-range stopping.",
+    "The distance probe uses one source and a native Camera/Listener; it does not qualify the complete Studio mix."
+  ]
+}

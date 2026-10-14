@@ -6,6 +6,7 @@ uniform vec4 frame_uv;
 uniform vec3 tint = vec3(1.0);
 uniform float layer_alpha = 1.0;
 uniform bool shadow = false;
+#include "res://presentation/character_material.gdshaderinc"
 uniform float authored_base_light = 1.0;
 // Native component packet: linear RGB normals + affine byte depth, with
 // independent validity masks. It is not the environment RG16/oct packet.
@@ -32,6 +33,7 @@ void fragment() {
     // Ordinary authored layer tint multiplies every source shade exactly once.
     // Do this in encoded colour before the existing receiving-light boundary.
     colour.rgb *= tint;
+    if(!shadow) colour=character_material(colour,UV);
     // Compatibility linearizes shader outputs itself; Forward+/Mobile require
     // linear values from this raw, unpremultiplied source sampler.
     if (!OUTPUT_IS_SRGB) { colour.rgb = linear_colour(colour.rgb); }

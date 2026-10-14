@@ -1,0 +1,827 @@
+{
+  "cases": [
+    {
+      "case": "movement-oa",
+      "duration_ms": 10880.9223075708,
+      "journal": "res://.runtime/studio-cases/movement-oa/journal",
+      "kinds": {
+        "audio": 18,
+        "body": 25,
+        "condition": 4,
+        "condition_material": 2,
+        "damage_number": 2,
+        "event": 134,
+        "feedback_text": 1,
+        "material_flash": 4,
+        "native_effect": 4,
+        "part": 183,
+        "parts": 25,
+        "registered_media": 8,
+        "requirement": 1
+      },
+      "missing": [
+        {
+          "event": "Drink Haste Potion",
+          "kind": "media",
+          "reason": "authored_media_not_implemented",
+          "row_id": "4:c8c4d266-1ccb-46e9-b303-ee0da6f4272a",
+          "source": "catalog/body_action_recipes.json:action.item.potion_haste.drink.actor.media:haste-potion-release"
+        }
+      ],
+      "operations": 8,
+      "presentation_end_ms": 13422.5889742374,
+      "rows": 411
+    },
+    {
+      "case": "dash-seed3",
+      "duration_ms": 2333.33333333333,
+      "journal": "res://.runtime/studio-cases/dash-seed3/amber/journal",
+      "kinds": {
+        "audio": 3,
+        "body": 4,
+        "condition": 1,
+        "damage_number": 1,
+        "event": 38,
+        "material_flash": 3,
+        "native_effect": 2,
+        "part": 41,
+        "parts": 4,
+        "sprite_layer": 1
+      },
+      "missing": [],
+      "operations": 7,
+      "presentation_end_ms": 4666.66666666667,
+      "rows": 98
+    },
+    {
+      "case": "dodge-seed3",
+      "duration_ms": 1250.0,
+      "journal": "res://.runtime/studio-cases/dodge-seed3/amber/journal",
+      "kinds": {
+        "audio": 1,
+        "body": 1,
+        "condition": 1,
+        "event": 11,
+        "feedback_text": 1,
+        "material_flash": 2,
+        "part": 11,
+        "parts": 1,
+        "sprite_layer": 1
+      },
+      "missing": [],
+      "operations": 7,
+      "presentation_end_ms": 2066.66666666667,
+      "rows": 30
+    },
+    {
+      "case": "disengage-seed3",
+      "duration_ms": 416.666666666667,
+      "journal": "res://.runtime/studio-cases/disengage-seed3/amber/journal",
+      "kinds": {
+        "audio": 1,
+        "body": 1,
+        "condition": 1,
+        "event": 15,
+        "material_flash": 2,
+        "part": 10,
+        "parts": 1
+      },
+      "missing": [],
+      "operations": 7,
+      "presentation_end_ms": 616.666666666667,
+      "rows": 31
+    },
+    {
+      "case": "shove-seed3",
+      "duration_ms": 1250.0,
+      "journal": "res://.runtime/studio-cases/shove-seed3/amber/journal",
+      "kinds": {
+        "body": 2,
+        "event": 15,
+        "part": 20,
+        "parts": 2
+      },
+      "missing": [],
+      "operations": 6,
+      "presentation_end_ms": 1250.0,
+      "rows": 39
+    },
+    {
+      "case": "shove-seed1",
+      "duration_ms": 1250.0,
+      "journal": "res://.runtime/studio-cases/shove-seed1/amber/journal",
+      "kinds": {
+        "body": 1,
+        "event": 8,
+        "part": 10,
+        "parts": 1
+      },
+      "missing": [],
+      "operations": 6,
+      "presentation_end_ms": 1250.0,
+      "rows": 20
+    },
+    {
+      "case": "melee-seed3",
+      "duration_ms": 1916.66666666667,
+      "journal": "res://.runtime/studio-cases/melee-seed3/amber/journal",
+      "kinds": {
+        "audio": 2,
+        "body": 2,
+        "damage_number": 1,
+        "event": 24,
+        "material_flash": 1,
+        "native_effect": 2,
+        "part": 21,
+        "parts": 2,
+        "sprite_layer": 1
+      },
+      "missing": [],
+      "operations": 2,
+      "presentation_end_ms": 4666.66666666667,
+      "rows": 56
+    },
+    {
+      "case": "ranged-seed3",
+      "duration_ms": 2441.10420735677,
+      "journal": "res://.runtime/studio-cases/ranged-seed3/amber/journal",
+      "kinds": {
+        "audio": 2,
+        "body": 3,
+        "damage_number": 1,
+        "event": 26,
+        "geometry_projectile": 1,
+        "material_flash": 1,
+        "native_effect": 2,
+        "part": 4,
+        "parts": 3,
+        "sprite_layer": 1
+      },
+      "missing": [
+        {
+          "event": "Attack_RANGED_MAIN",
+          "kind": "audio",
+          "reason": "No selected bow/crossbow release recording.",
+          "row_id": "2:94ba1e11-30c5-4836-8ed1-b84c51cf1daa",
+          "source": "audio/cues.json:/cues/projectile_release"
+        },
+        {
+          "event": "projectile_release",
+          "kind": "audio",
+          "reason": "No selected bow/crossbow release recording.",
+          "row_id": "2:94ba1e11-30c5-4836-8ed1-b84c51cf1daa:audio:projectile_release:7",
+          "source": "audio/cues.json:/cues/projectile_release"
+        }
+      ],
+      "operations": 2,
+      "presentation_end_ms": 5191.10420735677,
+      "rows": 44
+    },
+    {
+      "case": "ranged-seed1",
+      "duration_ms": 1250.0,
+      "journal": "res://.runtime/studio-cases/ranged-seed1/amber/journal",
+      "kinds": {
+        "audio": 1,
+        "body": 1,
+        "event": 2,
+        "feedback_text": 1,
+        "geometry_projectile": 1,
+        "part": 2,
+        "parts": 1,
+        "sprite_layer": 1
+      },
+      "missing": [
+        {
+          "event": "Attack_RANGED_MAIN",
+          "kind": "audio",
+          "reason": "No selected bow/crossbow release recording.",
+          "row_id": "2:ad8eff29-0e27-47f8-a08d-887e7ab01fb5",
+          "source": "audio/cues.json:/cues/projectile_release"
+        },
+        {
+          "event": "projectile_release",
+          "kind": "audio",
+          "reason": "No selected bow/crossbow release recording.",
+          "row_id": "2:ad8eff29-0e27-47f8-a08d-887e7ab01fb5:audio:projectile_release:3",
+          "source": "audio/cues.json:/cues/projectile_release"
+        }
+      ],
+      "operations": 2,
+      "presentation_end_ms": 2591.10420735677,
+      "rows": 10
+    },
+    {
+      "case": "magic_missile-seed3",
+      "duration_ms": 1250.0,
+      "journal": "res://.runtime/studio-cases/magic_missile-seed3/amber/journal",
+      "kinds": {
+        "audio": 1,
+        "body": 1,
+        "condition": 2,
+        "event": 10,
+        "native_effect": 6,
+        "part": 8,
+        "parts": 1,
+        "registered_media": 4,
+        "sprite_layer": 2
+      },
+      "missing": [],
+      "operations": 2,
+      "presentation_end_ms": 2403.92333333333,
+      "rows": 35
+    },
+    {
+      "case": "hold_person-seed3",
+      "duration_ms": 1250.0,
+      "journal": "res://.runtime/studio-cases/hold_person-seed3/amber/journal",
+      "kinds": {
+        "body": 1,
+        "condition": 3,
+        "condition_exit": 2,
+        "condition_material": 2,
+        "condition_pose": 1,
+        "event": 20,
+        "material_flash": 2,
+        "part": 8,
+        "parts": 1,
+        "registered_media": 6,
+        "sprite_layer": 2
+      },
+      "missing": [],
+      "operations": 8,
+      "presentation_end_ms": 1450.0,
+      "rows": 48
+    },
+    {
+      "case": "window-seed3-v2",
+      "duration_ms": 900.0,
+      "journal": "res://.runtime/studio-cases/window-seed3-v2/amber/journal",
+      "kinds": {
+        "audio": 2,
+        "body": 2,
+        "event": 11,
+        "part": 20,
+        "parts": 2
+      },
+      "missing": [],
+      "operations": 3,
+      "presentation_end_ms": 1308.396,
+      "rows": 37
+    },
+    {
+      "case": "window_break-seed3-v3",
+      "duration_ms": 2950.0,
+      "journal": "res://.runtime/studio-cases/window_break-seed3-v3/amber/journal",
+      "kinds": {
+        "audio": 3,
+        "body": 3,
+        "event": 14,
+        "native_effect": 2,
+        "part": 31,
+        "parts": 3,
+        "sprite_layer": 1
+      },
+      "missing": [],
+      "operations": 4,
+      "presentation_end_ms": 3358.396,
+      "rows": 57
+    },
+    {
+      "case": "action_economy-seed3-v2",
+      "duration_ms": 8916.66666666667,
+      "journal": "res://.runtime/studio-cases/action_economy-seed3-v2/amber/journal",
+      "kinds": {
+        "audio": 9,
+        "body": 9,
+        "damage_number": 4,
+        "event": 94,
+        "feedback_text": 1,
+        "material_flash": 4,
+        "native_effect": 15,
+        "part": 91,
+        "parts": 9,
+        "sprite_layer": 1
+      },
+      "missing": [],
+      "operations": 6,
+      "presentation_end_ms": 11666.6666666667,
+      "rows": 237
+    },
+    {
+      "case": "poisoned-seed3-v2",
+      "duration_ms": 1666.66666666667,
+      "journal": "res://.runtime/studio-cases/poisoned-seed3-v2/amber/journal",
+      "kinds": {
+        "audio": 1,
+        "body": 2,
+        "condition": 1,
+        "condition_exit": 1,
+        "condition_material": 2,
+        "event": 9,
+        "material_flash": 1,
+        "part": 15,
+        "parts": 2,
+        "registered_media": 2,
+        "sprite_layer": 2
+      },
+      "missing": [],
+      "operations": 3,
+      "presentation_end_ms": 1666.66666666667,
+      "rows": 38
+    },
+    {
+      "case": "walk_diagonal-seed3-v2",
+      "duration_ms": 1767.76692271233,
+      "journal": "res://.runtime/studio-cases/walk_diagonal-seed3-v2/amber/journal",
+      "kinds": {
+        "audio": 3,
+        "body": 3,
+        "event": 14,
+        "part": 30,
+        "parts": 3
+      },
+      "missing": [],
+      "operations": 2,
+      "presentation_end_ms": 1880.55592271233,
+      "rows": 53
+    },
+    {
+      "case": "elevation-seed3",
+      "duration_ms": 1250.0,
+      "journal": "res://.runtime/studio-cases/elevation-seed3/amber/journal",
+      "kinds": {
+        "audio": 3,
+        "body": 3,
+        "event": 14,
+        "part": 30,
+        "parts": 3
+      },
+      "missing": [],
+      "operations": 2,
+      "presentation_end_ms": 1362.789,
+      "rows": 53
+    },
+    {
+      "case": "jump-seed3-v2",
+      "duration_ms": 950.0,
+      "journal": "res://.runtime/studio-cases/jump-seed3-v2/amber/journal",
+      "kinds": {
+        "audio": 1,
+        "body": 3,
+        "event": 18,
+        "part": 30,
+        "parts": 3
+      },
+      "missing": [],
+      "operations": 2,
+      "presentation_end_ms": 1358.396,
+      "rows": 55
+    },
+    {
+      "case": "oa_jump-seed3-v2",
+      "duration_ms": 2766.66666666667,
+      "journal": "res://.runtime/studio-cases/oa_jump-seed3-v2/amber/journal",
+      "kinds": {
+        "audio": 3,
+        "body": 5,
+        "damage_number": 1,
+        "event": 37,
+        "material_flash": 1,
+        "native_effect": 2,
+        "part": 51,
+        "parts": 5,
+        "sprite_layer": 1
+      },
+      "missing": [],
+      "operations": 2,
+      "presentation_end_ms": 4666.66666666667,
+      "rows": 106
+    },
+    {
+      "case": "oa_jump_lethal-seed5-v2",
+      "duration_ms": 1951.75438596491,
+      "journal": "res://.runtime/studio-cases/oa_jump_lethal-seed5-v2/amber/journal",
+      "kinds": {
+        "audio": 1,
+        "body": 4,
+        "damage_number": 1,
+        "event": 32,
+        "material_flash": 1,
+        "native_effect": 2,
+        "part": 28,
+        "parts": 4,
+        "sprite_layer": 1
+      },
+      "missing": [],
+      "operations": 2,
+      "presentation_end_ms": 4701.75438596491,
+      "rows": 74
+    },
+    {
+      "case": "oa_jump_late_lethal-seed5-v2",
+      "duration_ms": 2801.75438596491,
+      "journal": "res://.runtime/studio-cases/oa_jump_late_lethal-seed5-v2/amber/journal",
+      "kinds": {
+        "audio": 2,
+        "body": 6,
+        "damage_number": 1,
+        "event": 24,
+        "material_flash": 1,
+        "native_effect": 2,
+        "part": 42,
+        "parts": 6,
+        "sprite_layer": 1
+      },
+      "missing": [],
+      "operations": 2,
+      "presentation_end_ms": 5551.75438596491,
+      "rows": 85
+    },
+    {
+      "case": "prone-seed3-v3",
+      "duration_ms": 3166.66666666667,
+      "journal": "res://.runtime/studio-cases/prone-seed3-v3/blue/journal",
+      "kinds": {
+        "audio": 3,
+        "body": 5,
+        "condition": 1,
+        "condition_exit": 1,
+        "damage_number": 1,
+        "event": 32,
+        "material_flash": 2,
+        "native_effect": 2,
+        "part": 51,
+        "parts": 5,
+        "registered_media": 1,
+        "sprite_layer": 1
+      },
+      "missing": [],
+      "operations": 4,
+      "presentation_end_ms": 5500.0,
+      "rows": 105
+    },
+    {
+      "case": "rage-seed3-v3",
+      "duration_ms": 2187.5,
+      "journal": "res://.runtime/studio-cases/rage-seed3-v3/amber/journal",
+      "kinds": {
+        "audio": 3,
+        "body": 4,
+        "condition": 2,
+        "condition_exit": 2,
+        "condition_material": 2,
+        "event": 25,
+        "material_flash": 4,
+        "part": 24,
+        "parts": 4,
+        "registered_media": 4,
+        "requirement": 1
+      },
+      "missing": [
+        {
+          "event": "Frenzy",
+          "kind": "media",
+          "reason": "authored_media_not_implemented",
+          "row_id": "2:4268379b-f894-488c-b5b0-ffae342d57fd",
+          "source": "catalog/body_action_recipes.json:action.class.barbarian.frenzy.media:class.frenzy.ground-q0-ground"
+        }
+      ],
+      "operations": 7,
+      "presentation_end_ms": 2537.5,
+      "rows": 75
+    },
+    {
+      "case": "hide-seed3-v3",
+      "duration_ms": 3054.35095214844,
+      "journal": "res://.runtime/studio-cases/hide-seed3-v3/amber/journal",
+      "kinds": {
+        "audio": 3,
+        "body": 3,
+        "condition": 1,
+        "damage_number": 1,
+        "event": 42,
+        "feedback_text": 1,
+        "geometry_projectile": 1,
+        "material_flash": 3,
+        "native_effect": 2,
+        "part": 29,
+        "parts": 3,
+        "requirement": 2
+      },
+      "missing": [
+        {
+          "event": "equipment",
+          "kind": "body",
+          "reason": "authored_equipment_body_not_implemented",
+          "row_id": "2:5bc52305-0d5e-485e-bd18-6e9b8229df45",
+          "source": "catalog/equipment_context.json"
+        },
+        {
+          "event": "Attack_RANGED_MAIN",
+          "kind": "audio",
+          "reason": "No selected bow/crossbow release recording.",
+          "row_id": "9:06b616e2-717d-4f92-851b-61c98b1547f7",
+          "source": "audio/cues.json:/cues/projectile_release"
+        },
+        {
+          "event": "Attack_RANGED_MAIN",
+          "kind": "weapon_trail",
+          "reason": "authored_weapon_trail_not_implemented",
+          "row_id": "9:06b616e2-717d-4f92-851b-61c98b1547f7",
+          "source": "catalog/attack_recipes.json:action.attack.weaponTrail"
+        },
+        {
+          "event": "projectile_release",
+          "kind": "audio",
+          "reason": "No selected bow/crossbow release recording.",
+          "row_id": "9:06b616e2-717d-4f92-851b-61c98b1547f7:audio:projectile_release:8",
+          "source": "audio/cues.json:/cues/projectile_release"
+        }
+      ],
+      "operations": 9,
+      "presentation_end_ms": 5804.35095214844,
+      "rows": 91
+    },
+    {
+      "case": "condition_suppression-seed3-v2",
+      "duration_ms": 4583.33333333333,
+      "journal": "res://.runtime/studio-cases/condition_suppression-seed3-v2/amber/journal",
+      "kinds": {
+        "audio": 5,
+        "body": 7,
+        "condition": 2,
+        "condition_state": 3,
+        "event": 73,
+        "material_flash": 2,
+        "part": 51,
+        "parts": 7,
+        "requirement": 25,
+        "sprite_layer": 4
+      },
+      "missing": [
+        {
+          "event": "Mirror Image",
+          "kind": "condition",
+          "reason": "authored_condition_liveCopies_not_implemented",
+          "row_id": "2:3c3beace-0cee-441e-933c-bc4426a77261",
+          "source": "catalog/condition_recipes.json:condition.spell.mirror_image.persistent.liveCopies"
+        },
+        {
+          "event": "equipment",
+          "kind": "body",
+          "reason": "authored_equipment_body_not_implemented",
+          "row_id": "5:4a834536-e21b-43d4-925b-f2070bfe92ae",
+          "source": "catalog/equipment_context.json"
+        },
+        {
+          "event": "equipment",
+          "kind": "body",
+          "reason": "authored_equipment_body_not_implemented",
+          "row_id": "5:c6606a5c-c4ee-4d3f-b06e-0892bc120657",
+          "source": "catalog/equipment_context.json"
+        },
+        {
+          "event": "equipment",
+          "kind": "body",
+          "reason": "authored_equipment_body_not_implemented",
+          "row_id": "5:9290760c-910f-4876-8681-32158207fac1",
+          "source": "catalog/equipment_context.json"
+        },
+        {
+          "event": "equipment",
+          "kind": "body",
+          "reason": "authored_equipment_body_not_implemented",
+          "row_id": "5:b77b4216-3a50-400f-9535-dd85986047cc",
+          "source": "catalog/equipment_context.json"
+        },
+        {
+          "event": "equipment",
+          "kind": "body",
+          "reason": "authored_equipment_body_not_implemented",
+          "row_id": "5:f7d5e3bc-a9ca-4af1-a79a-dd6e498de111",
+          "source": "catalog/equipment_context.json"
+        },
+        {
+          "event": "equipment",
+          "kind": "body",
+          "reason": "authored_equipment_body_not_implemented",
+          "row_id": "5:83df9efc-5f7b-4c7c-a2f7-198ac5f00895",
+          "source": "catalog/equipment_context.json"
+        },
+        {
+          "event": "equipment",
+          "kind": "body",
+          "reason": "authored_equipment_body_not_implemented",
+          "row_id": "6:7de937c3-4536-46d1-9648-713b762682aa",
+          "source": "catalog/equipment_context.json"
+        },
+        {
+          "event": "equipment",
+          "kind": "body",
+          "reason": "authored_equipment_body_not_implemented",
+          "row_id": "6:83ccce3f-65b4-42b3-a945-2b52973b22c1",
+          "source": "catalog/equipment_context.json"
+        },
+        {
+          "event": "equipment",
+          "kind": "body",
+          "reason": "authored_equipment_body_not_implemented",
+          "row_id": "6:dd266891-82d2-4189-96ee-2c04cde77e9f",
+          "source": "catalog/equipment_context.json"
+        },
+        {
+          "event": "equipment",
+          "kind": "body",
+          "reason": "authored_equipment_body_not_implemented",
+          "row_id": "6:b7f0f86f-a06a-47db-b0ac-3ed408aebf97",
+          "source": "catalog/equipment_context.json"
+        },
+        {
+          "event": "equipment",
+          "kind": "body",
+          "reason": "authored_equipment_body_not_implemented",
+          "row_id": "6:912f442b-24f8-4651-8328-9affdf1a96fe",
+          "source": "catalog/equipment_context.json"
+        },
+        {
+          "event": "equipment",
+          "kind": "body",
+          "reason": "authored_equipment_body_not_implemented",
+          "row_id": "6:7d4a239b-2255-43d8-806b-4bc027caddfe",
+          "source": "catalog/equipment_context.json"
+        },
+        {
+          "event": "equipment",
+          "kind": "body",
+          "reason": "authored_equipment_body_not_implemented",
+          "row_id": "7:07d8c8a2-7f1b-4d5d-884c-ff722f1a62ca",
+          "source": "catalog/equipment_context.json"
+        },
+        {
+          "event": "equipment",
+          "kind": "body",
+          "reason": "authored_equipment_body_not_implemented",
+          "row_id": "7:b2e97b85-4bc9-416d-8b46-9c469e04d3f7",
+          "source": "catalog/equipment_context.json"
+        },
+        {
+          "event": "equipment",
+          "kind": "body",
+          "reason": "authored_equipment_body_not_implemented",
+          "row_id": "7:7423e26f-3622-442b-a8e0-6c2172c8c1bb",
+          "source": "catalog/equipment_context.json"
+        },
+        {
+          "event": "equipment",
+          "kind": "body",
+          "reason": "authored_equipment_body_not_implemented",
+          "row_id": "7:9e64f5c3-f8b2-45f3-a0ea-d649abbc7273",
+          "source": "catalog/equipment_context.json"
+        },
+        {
+          "event": "equipment",
+          "kind": "body",
+          "reason": "authored_equipment_body_not_implemented",
+          "row_id": "7:03a95032-f183-4cad-82b1-de2358b8873a",
+          "source": "catalog/equipment_context.json"
+        },
+        {
+          "event": "equipment",
+          "kind": "body",
+          "reason": "authored_equipment_body_not_implemented",
+          "row_id": "7:e68cf92d-705e-4d68-9737-df28ca89f2e7",
+          "source": "catalog/equipment_context.json"
+        },
+        {
+          "event": "equipment",
+          "kind": "body",
+          "reason": "authored_equipment_body_not_implemented",
+          "row_id": "8:69121866-c144-4860-9b84-105800fb6173",
+          "source": "catalog/equipment_context.json"
+        },
+        {
+          "event": "equipment",
+          "kind": "body",
+          "reason": "authored_equipment_body_not_implemented",
+          "row_id": "8:03333654-1b5c-4316-894c-41874abccc82",
+          "source": "catalog/equipment_context.json"
+        },
+        {
+          "event": "equipment",
+          "kind": "body",
+          "reason": "authored_equipment_body_not_implemented",
+          "row_id": "8:cfe34592-cc66-4f37-bc32-3c14fae80362",
+          "source": "catalog/equipment_context.json"
+        },
+        {
+          "event": "equipment",
+          "kind": "body",
+          "reason": "authored_equipment_body_not_implemented",
+          "row_id": "8:e0158b4c-a98c-476e-9375-19f514d25cf1",
+          "source": "catalog/equipment_context.json"
+        },
+        {
+          "event": "equipment",
+          "kind": "body",
+          "reason": "authored_equipment_body_not_implemented",
+          "row_id": "8:f511292e-4808-47a7-bc69-3852fc4093fd",
+          "source": "catalog/equipment_context.json"
+        },
+        {
+          "event": "equipment",
+          "kind": "body",
+          "reason": "authored_equipment_body_not_implemented",
+          "row_id": "8:265bb659-4f97-404d-a167-030028fc466c",
+          "source": "catalog/equipment_context.json"
+        }
+      ],
+      "operations": 8,
+      "presentation_end_ms": 4783.33333333333,
+      "rows": 179
+    },
+    {
+      "case": "condition_owners-seed4",
+      "duration_ms": 2500.0,
+      "journal": "res://.runtime/studio-cases/condition_owners-seed4/amber/journal",
+      "kinds": {
+        "body": 2,
+        "condition": 5,
+        "condition_exit": 3,
+        "condition_material": 3,
+        "condition_pose": 2,
+        "event": 39,
+        "material_flash": 4,
+        "part": 16,
+        "parts": 2,
+        "registered_media": 13,
+        "sprite_layer": 4
+      },
+      "missing": [],
+      "operations": 15,
+      "presentation_end_ms": 2700.0,
+      "rows": 93
+    }
+  ],
+  "failures": [],
+  "gaps": {
+    "audio | No selected bow/crossbow release recording. | audio/cues.json:/cues/projectile_release": {
+      "cases": {
+        "hide-seed3-v3": true,
+        "ranged-seed1": true,
+        "ranged-seed3": true
+      },
+      "kind": "audio",
+      "occurrences": 6,
+      "reason": "No selected bow/crossbow release recording.",
+      "source": "audio/cues.json:/cues/projectile_release"
+    },
+    "body | authored_equipment_body_not_implemented | catalog/equipment_context.json": {
+      "cases": {
+        "condition_suppression-seed3-v2": true,
+        "hide-seed3-v3": true
+      },
+      "kind": "body",
+      "occurrences": 25,
+      "reason": "authored_equipment_body_not_implemented",
+      "source": "catalog/equipment_context.json"
+    },
+    "condition | authored_condition_liveCopies_not_implemented | catalog/condition_recipes.json:condition.spell.mirror_image.persistent.liveCopies": {
+      "cases": {
+        "condition_suppression-seed3-v2": true
+      },
+      "kind": "condition",
+      "occurrences": 1,
+      "reason": "authored_condition_liveCopies_not_implemented",
+      "source": "catalog/condition_recipes.json:condition.spell.mirror_image.persistent.liveCopies"
+    },
+    "media | authored_media_not_implemented | catalog/body_action_recipes.json:action.class.barbarian.frenzy.media:class.frenzy.ground-q0-ground": {
+      "cases": {
+        "rage-seed3-v3": true
+      },
+      "kind": "media",
+      "occurrences": 1,
+      "reason": "authored_media_not_implemented",
+      "source": "catalog/body_action_recipes.json:action.class.barbarian.frenzy.media:class.frenzy.ground-q0-ground"
+    },
+    "media | authored_media_not_implemented | catalog/body_action_recipes.json:action.item.potion_haste.drink.actor.media:haste-potion-release": {
+      "cases": {
+        "movement-oa": true
+      },
+      "kind": "media",
+      "occurrences": 1,
+      "reason": "authored_media_not_implemented",
+      "source": "catalog/body_action_recipes.json:action.item.potion_haste.drink.actor.media:haste-potion-release"
+    },
+    "weapon_trail | authored_weapon_trail_not_implemented | catalog/attack_recipes.json:action.attack.weaponTrail": {
+      "cases": {
+        "hide-seed3-v3": true
+      },
+      "kind": "weapon_trail",
+      "occurrences": 1,
+      "reason": "authored_weapon_trail_not_implemented",
+      "source": "catalog/attack_recipes.json:action.attack.weaponTrail"
+    }
+  },
+  "scope": "Shared compiled current records and source declarations across all actual case prefixes. Status is implementation/source availability, not native pixel or whole-spell qualification."
+}

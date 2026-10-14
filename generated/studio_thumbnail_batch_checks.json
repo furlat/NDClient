@@ -1,0 +1,85 @@
+{
+  "checks": 49,
+  "evidence": [
+    {
+      "batch_ms": 173,
+      "batch_source_reads": 21,
+      "case": "melee-seed3",
+      "kinds": [
+        "body",
+        "sprite_layer",
+        "material_flash"
+      ],
+      "peak_batch_views": 8,
+      "pixel_mismatches": [],
+      "samples": 24,
+      "serial_ms": 317,
+      "serial_source_reads": 21
+    },
+    {
+      "batch_ms": 213,
+      "batch_source_reads": 30,
+      "case": "hide-light-schema9-seed3",
+      "kinds": [
+        "body",
+        "condition_material",
+        "condition_restore"
+      ],
+      "peak_batch_views": 8,
+      "pixel_mismatches": [],
+      "samples": 24,
+      "serial_ms": 369,
+      "serial_source_reads": 30
+    },
+    {
+      "batch_ms": 194,
+      "batch_source_reads": 21,
+      "case": "dodge-seed3",
+      "kinds": [
+        "body",
+        "sprite_layer",
+        "condition_material",
+        "condition_restore"
+      ],
+      "peak_batch_views": 8,
+      "pixel_mismatches": [],
+      "samples": 32,
+      "serial_ms": 365,
+      "serial_source_reads": 21
+    },
+    {
+      "batch_ms": 170,
+      "batch_source_reads": 17,
+      "case": "condition_owners-seed4",
+      "kinds": [
+        "body",
+        "sprite_layer",
+        "condition_material",
+        "registered_media",
+        "condition_restore"
+      ],
+      "peak_batch_views": 8,
+      "pixel_mismatches": [],
+      "samples": 40,
+      "serial_ms": 393,
+      "serial_source_reads": 17
+    },
+    {
+      "batch_ms": 91,
+      "batch_source_reads": 9,
+      "case": "magic_missile-seed3",
+      "kinds": [
+        "body",
+        "sprite_layer",
+        "registered_media"
+      ],
+      "peak_batch_views": 8,
+      "pixel_mismatches": [],
+      "samples": 24,
+      "serial_ms": 230,
+      "serial_source_reads": 9
+    }
+  ],
+  "failures": [],
+  "scope": "Actual source recipes through identical Godot shaders/viewports at batch size one/eight. Pixel-for-pixel comparison; native VFX and blood simulation paths remain unchanged."
+}

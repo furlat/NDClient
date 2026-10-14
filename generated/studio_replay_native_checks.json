@@ -1,0 +1,959 @@
+{
+  "checks": 4079,
+  "evidence": [
+    {
+      "audio_peer": {
+        "counters": {
+          "crossed": 1,
+          "expired": 0,
+          "limited": 0,
+          "loops": 0,
+          "missing": 0,
+          "muted": 1,
+          "shots": 0,
+          "started": 0
+        },
+        "enabled": false,
+        "errors": [],
+        "rows": {
+          "9:4d29af4b-b4b9-4744-93de-26736b15c1c5:audio:physical_impact:2": {
+            "attachment": "target_body",
+            "bus": "SFX",
+            "cue_id": "physical_impact",
+            "display_ms": 4190.14733333333,
+            "enabled": false,
+            "gain_db": -12.0,
+            "id": "9:4d29af4b-b4b9-4744-93de-26736b15c1c5:audio:physical_impact:2",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "muted",
+            "source_ready": true,
+            "starts": 0,
+            "state": "skipped"
+          }
+        }
+      },
+      "audio_primary": {
+        "counters": {
+          "crossed": 4,
+          "expired": 0,
+          "limited": 0,
+          "loops": 0,
+          "missing": 0,
+          "muted": 0,
+          "shots": 4,
+          "started": 4
+        },
+        "enabled": true,
+        "errors": [],
+        "rows": {
+          "3:6a558b3b-2c55-4e54-be48-c33a1e5f6256:audio:hide_transition:1": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "hide_transition",
+            "display_ms": 2253.786,
+            "enabled": true,
+            "gain_db": -24.0,
+            "id": "3:6a558b3b-2c55-4e54-be48-c33a1e5f6256:audio:hide_transition:1",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "4:473c135e-ff75-4ef0-9e46-ad2be038fe33:audio:footstep:0": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 2560.33933333333,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "4:473c135e-ff75-4ef0-9e46-ad2be038fe33:audio:footstep:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "9:06b616e2-717d-4f92-851b-61c98b1547f7:audio:projectile_release:7": {
+            "attachment": "weapon",
+            "bus": "SFX",
+            "cue_id": "projectile_release",
+            "display_ms": 4056.426,
+            "enabled": true,
+            "gain_db": -13.0,
+            "id": "9:06b616e2-717d-4f92-851b-61c98b1547f7:audio:projectile_release:7",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "attachment_socket_unavailable",
+            "source_ready": true,
+            "starts": 1,
+            "state": "skipped"
+          },
+          "9:4d29af4b-b4b9-4744-93de-26736b15c1c5:audio:physical_impact:3": {
+            "attachment": "target_body",
+            "bus": "SFX",
+            "cue_id": "physical_impact",
+            "display_ms": 4625.724,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "9:4d29af4b-b4b9-4744-93de-26736b15c1c5:audio:physical_impact:3",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          }
+        }
+      },
+      "case": "hide-seed3-v3",
+      "diagnostics": {
+        "candidate_panes": 0,
+        "comparison": true,
+        "listening_perspective": "amber",
+        "panes": [
+          {
+            "audio_enabled": true,
+            "media_budget_bytes": 8589934592,
+            "perspective_id": "amber",
+            "sequence": 9,
+            "session_active": false,
+            "time_ms": 5587.68428548177,
+            "world_revision": 25
+          },
+          {
+            "audio_enabled": false,
+            "media_budget_bytes": 8589934592,
+            "perspective_id": "blue",
+            "sequence": 9,
+            "session_active": false,
+            "time_ms": 5587.68428548177,
+            "world_revision": 20
+          }
+        ],
+        "publications": 599,
+        "spare_panes": 2,
+        "wait_frames": 15,
+        "waiting": false
+      },
+      "frames": 614,
+      "functional_max_frame_ms_including_oracle": 40.378
+    },
+    {
+      "case": "res://.runtime/studio-cases/hide-seed3-v3/amber/journal",
+      "frames": 774,
+      "max_buffer_bytes": 49764948,
+      "max_frame_ms": 21.98,
+      "max_play_hosts": 4,
+      "max_texture_bytes": 4360133632,
+      "measurement": "native_pair_no_oracle",
+      "median_frame_ms": 6.963,
+      "note": "Whole native process frame interval; includes ordinary replay preparation, excludes test restore oracles and captures.",
+      "p95_frame_ms": 12.092
+    },
+    {
+      "audio_peer": {
+        "counters": {
+          "crossed": 6,
+          "expired": 0,
+          "limited": 0,
+          "loops": 0,
+          "missing": 0,
+          "muted": 6,
+          "shots": 0,
+          "started": 0
+        },
+        "enabled": false,
+        "errors": [],
+        "rows": {
+          "13:6d5f8793-5f4a-4efb-bf43-37ed6d938731:audio:footstep:1": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 5939.31588888889,
+            "enabled": false,
+            "gain_db": -12.0,
+            "id": "13:6d5f8793-5f4a-4efb-bf43-37ed6d938731:audio:footstep:1",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "muted",
+            "source_ready": true,
+            "starts": 0,
+            "state": "skipped"
+          },
+          "13:c1f8144b-8fb5-4797-818c-a875af10c189:audio:footstep:0": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 5515.99988888888,
+            "enabled": false,
+            "gain_db": -12.0,
+            "id": "13:c1f8144b-8fb5-4797-818c-a875af10c189:audio:footstep:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "muted",
+            "source_ready": true,
+            "starts": 0,
+            "state": "skipped"
+          },
+          "13:f95f0a81-46a3-452b-a5ab-2bc354c852ac:audio:footstep:2": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 6358.70593650793,
+            "enabled": false,
+            "gain_db": -12.0,
+            "id": "13:f95f0a81-46a3-452b-a5ab-2bc354c852ac:audio:footstep:2",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "muted",
+            "source_ready": true,
+            "starts": 0,
+            "state": "skipped"
+          },
+          "14:db1d7be1-b0f7-487a-8440-365ce165f4d2:audio:footstep:0": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 7123.24688888888,
+            "enabled": false,
+            "gain_db": -12.0,
+            "id": "14:db1d7be1-b0f7-487a-8440-365ce165f4d2:audio:footstep:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "muted",
+            "source_ready": true,
+            "starts": 0,
+            "state": "skipped"
+          },
+          "8:06952097-8d8d-41c2-8774-23d18f26ef2c:audio:footstep:1": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 4747.50588888888,
+            "enabled": false,
+            "gain_db": -12.0,
+            "id": "8:06952097-8d8d-41c2-8774-23d18f26ef2c:audio:footstep:1",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "muted",
+            "source_ready": true,
+            "starts": 0,
+            "state": "skipped"
+          },
+          "8:2b0bcbf0-43ce-4d6b-a3fa-7e38067c9323:audio:footstep:0": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 4164.31955555555,
+            "enabled": false,
+            "gain_db": -12.0,
+            "id": "8:2b0bcbf0-43ce-4d6b-a3fa-7e38067c9323:audio:footstep:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "muted",
+            "source_ready": true,
+            "starts": 0,
+            "state": "skipped"
+          }
+        }
+      },
+      "audio_primary": {
+        "counters": {
+          "crossed": 7,
+          "expired": 0,
+          "limited": 0,
+          "loops": 0,
+          "missing": 0,
+          "muted": 0,
+          "shots": 7,
+          "started": 7
+        },
+        "enabled": true,
+        "errors": [],
+        "rows": {
+          "13:6d5f8793-5f4a-4efb-bf43-37ed6d938731:audio:footstep:1": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 6042.62122222222,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "13:6d5f8793-5f4a-4efb-bf43-37ed6d938731:audio:footstep:1",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "13:c1f8144b-8fb5-4797-818c-a875af10c189:audio:footstep:0": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 5632.66655555555,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "13:c1f8144b-8fb5-4797-818c-a875af10c189:audio:footstep:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "13:f95f0a81-46a3-452b-a5ab-2bc354c852ac:audio:footstep:2": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 6465.77422222222,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "13:f95f0a81-46a3-452b-a5ab-2bc354c852ac:audio:footstep:2",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "14:db1d7be1-b0f7-487a-8440-365ce165f4d2:audio:footstep:0": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 7218.31455555555,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "14:db1d7be1-b0f7-487a-8440-365ce165f4d2:audio:footstep:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "3:5df3443e-68ee-4567-8527-4de0c6e4faed:audio:hide_transition:1": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "hide_transition",
+            "display_ms": 2257.93066666667,
+            "enabled": true,
+            "gain_db": -24.0,
+            "id": "3:5df3443e-68ee-4567-8527-4de0c6e4faed:audio:hide_transition:1",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "8:06952097-8d8d-41c2-8774-23d18f26ef2c:audio:footstep:1": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 4869.08722222222,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "8:06952097-8d8d-41c2-8774-23d18f26ef2c:audio:footstep:1",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "8:2b0bcbf0-43ce-4d6b-a3fa-7e38067c9323:audio:footstep:0": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 4291.86822222222,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "8:2b0bcbf0-43ce-4d6b-a3fa-7e38067c9323:audio:footstep:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          }
+        }
+      },
+      "case": "hide-light-schema9-seed3",
+      "diagnostics": {
+        "candidate_panes": 0,
+        "comparison": true,
+        "listening_perspective": "amber",
+        "panes": [
+          {
+            "audio_enabled": true,
+            "media_budget_bytes": 8589934592,
+            "perspective_id": "amber",
+            "sequence": 14,
+            "session_active": false,
+            "time_ms": 8511.84461514155,
+            "world_revision": 24
+          },
+          {
+            "audio_enabled": false,
+            "media_budget_bytes": 8589934592,
+            "perspective_id": "blue",
+            "sequence": 14,
+            "session_active": false,
+            "time_ms": 8511.84461514155,
+            "world_revision": 22
+          }
+        ],
+        "publications": 3658,
+        "spare_panes": 2,
+        "wait_frames": 97,
+        "waiting": false
+      },
+      "frames": 840,
+      "functional_max_frame_ms_including_oracle": 42.36
+    },
+    {
+      "audio_peer": {
+        "counters": {
+          "crossed": 1,
+          "expired": 0,
+          "limited": 0,
+          "loops": 0,
+          "missing": 0,
+          "muted": 2,
+          "shots": 0,
+          "started": 0
+        },
+        "enabled": false,
+        "errors": [],
+        "rows": {
+          "9:fe6202a8-19be-41af-a2f4-5e1e669e3f95:audio:footstep:0": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 4886.09160911795,
+            "enabled": false,
+            "gain_db": -12.0,
+            "id": "9:fe6202a8-19be-41af-a2f4-5e1e669e3f95:audio:footstep:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "muted",
+            "source_ready": true,
+            "starts": 0,
+            "state": "skipped"
+          },
+          "condition:ae60dec4-82f5-44f4-9c67-d3e6f70d7fe3:audio:condition_loop:0": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "condition_loop",
+            "display_ms": 5230.45816467351,
+            "enabled": false,
+            "gain_db": -24.0,
+            "id": "condition:ae60dec4-82f5-44f4-9c67-d3e6f70d7fe3:audio:condition_loop:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "muted",
+            "source_ready": true,
+            "starts": 0,
+            "state": "skipped"
+          }
+        }
+      },
+      "audio_primary": {
+        "counters": {
+          "crossed": 2,
+          "expired": 0,
+          "limited": 0,
+          "loops": 1,
+          "missing": 0,
+          "muted": 0,
+          "shots": 2,
+          "started": 3
+        },
+        "enabled": true,
+        "errors": [],
+        "rows": {
+          "3:873066c3-5d25-480e-baf7-e65c40c6802c:audio:footstep:0": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 2626.90131811266,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "3:873066c3-5d25-480e-baf7-e65c40c6802c:audio:footstep:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "9:fe6202a8-19be-41af-a2f4-5e1e669e3f95:audio:footstep:0": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 4990.48605356239,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "9:fe6202a8-19be-41af-a2f4-5e1e669e3f95:audio:footstep:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "condition:ae60dec4-82f5-44f4-9c67-d3e6f70d7fe3:audio:condition_loop:0": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "condition_loop",
+            "display_ms": 5237.40260911796,
+            "enabled": true,
+            "gain_db": -24.0,
+            "id": "condition:ae60dec4-82f5-44f4-9c67-d3e6f70d7fe3:audio:condition_loop:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          }
+        }
+      },
+      "case": "invisibility-seed3-v2",
+      "diagnostics": {
+        "candidate_panes": 0,
+        "comparison": true,
+        "listening_perspective": "amber",
+        "panes": [
+          {
+            "audio_enabled": true,
+            "media_budget_bytes": 8589934592,
+            "perspective_id": "amber",
+            "sequence": 10,
+            "session_active": false,
+            "time_ms": 6633.33333333333,
+            "world_revision": 9
+          },
+          {
+            "audio_enabled": false,
+            "media_budget_bytes": 8589934592,
+            "perspective_id": "blue",
+            "sequence": 10,
+            "session_active": false,
+            "time_ms": 6633.33333333333,
+            "world_revision": 7
+          }
+        ],
+        "publications": 4482,
+        "spare_panes": 0,
+        "wait_frames": 103,
+        "waiting": false
+      },
+      "frames": 831,
+      "functional_max_frame_ms_including_oracle": 36.025
+    },
+    {
+      "audio_peer": {
+        "counters": {
+          "crossed": 3,
+          "expired": 0,
+          "limited": 0,
+          "loops": 0,
+          "missing": 0,
+          "muted": 3,
+          "shots": 0,
+          "started": 0
+        },
+        "enabled": false,
+        "errors": [],
+        "rows": {
+          "2:727658c2-dd10-4281-ba4f-32f1e123167c:audio:physical_impact:3": {
+            "attachment": "target_body",
+            "bus": "SFX",
+            "cue_id": "physical_impact",
+            "display_ms": 1210.44670707071,
+            "enabled": false,
+            "gain_db": -12.0,
+            "id": "2:727658c2-dd10-4281-ba4f-32f1e123167c:audio:physical_impact:3",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "muted",
+            "source_ready": true,
+            "starts": 0,
+            "state": "skipped"
+          },
+          "2:b4d7d81e-3e9e-4dc8-bdab-1b87fdada3b9:audio:body_fall:5": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "body_fall",
+            "display_ms": 2456.94970707071,
+            "enabled": false,
+            "gain_db": -13.0,
+            "id": "2:b4d7d81e-3e9e-4dc8-bdab-1b87fdada3b9:audio:body_fall:5",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "muted",
+            "source_ready": true,
+            "starts": 0,
+            "state": "skipped"
+          },
+          "2:dce41208-4015-4d35-aae5-9eedf3d08cd2:audio:weapon_swing_heavy:6": {
+            "attachment": "weapon",
+            "bus": "SFX",
+            "cue_id": "weapon_swing_heavy",
+            "display_ms": 1210.44670707071,
+            "enabled": false,
+            "gain_db": -13.0,
+            "id": "2:dce41208-4015-4d35-aae5-9eedf3d08cd2:audio:weapon_swing_heavy:6",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "muted",
+            "source_ready": true,
+            "starts": 0,
+            "state": "skipped"
+          }
+        }
+      },
+      "audio_primary": {
+        "counters": {
+          "crossed": 3,
+          "expired": 0,
+          "limited": 0,
+          "loops": 0,
+          "missing": 0,
+          "muted": 0,
+          "shots": 2,
+          "started": 2
+        },
+        "enabled": true,
+        "errors": [],
+        "rows": {
+          "2:727658c2-dd10-4281-ba4f-32f1e123167c:audio:physical_impact:3": {
+            "attachment": "target_body",
+            "bus": "SFX",
+            "cue_id": "physical_impact",
+            "display_ms": 1645.45170707071,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "2:727658c2-dd10-4281-ba4f-32f1e123167c:audio:physical_impact:3",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "2:b4d7d81e-3e9e-4dc8-bdab-1b87fdada3b9:audio:body_fall:5": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "body_fall",
+            "display_ms": 2956.85638596491,
+            "enabled": true,
+            "gain_db": -13.0,
+            "id": "2:b4d7d81e-3e9e-4dc8-bdab-1b87fdada3b9:audio:body_fall:5",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "2:dce41208-4015-4d35-aae5-9eedf3d08cd2:audio:weapon_swing_heavy:6": {
+            "attachment": "weapon",
+            "bus": "SFX",
+            "cue_id": "weapon_swing_heavy",
+            "display_ms": 1210.44670707071,
+            "enabled": true,
+            "gain_db": -13.0,
+            "id": "2:dce41208-4015-4d35-aae5-9eedf3d08cd2:audio:weapon_swing_heavy:6",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "attachment_unavailable",
+            "source_ready": true,
+            "starts": 0,
+            "state": "skipped"
+          }
+        }
+      },
+      "case": "oa_jump_lethal-seed5-v2",
+      "diagnostics": {
+        "candidate_panes": 0,
+        "comparison": true,
+        "listening_perspective": "amber",
+        "panes": [
+          {
+            "audio_enabled": true,
+            "media_budget_bytes": 8589934592,
+            "perspective_id": "amber",
+            "sequence": 2,
+            "session_active": false,
+            "time_ms": 2956.85638596491,
+            "world_revision": 23
+          },
+          {
+            "audio_enabled": false,
+            "media_budget_bytes": 8589934592,
+            "perspective_id": "blue",
+            "sequence": 2,
+            "session_active": false,
+            "time_ms": 2956.85638596491,
+            "world_revision": 22
+          }
+        ],
+        "publications": 4706,
+        "spare_panes": 0,
+        "wait_frames": 114,
+        "waiting": false
+      },
+      "frames": 236,
+      "functional_max_frame_ms_including_oracle": 52.861
+    },
+    {
+      "transport": [
+        {
+          "create_ms": 5.095,
+          "created_usec": 5276956,
+          "loop": false,
+          "publish_ms": 2710.113,
+          "ready_ms": 2691.094,
+          "requested_usec": 5257945,
+          "restore_wait_ms": 13.916,
+          "reused_spare": false,
+          "target_ms": 0.0
+        },
+        {
+          "create_ms": 6.46,
+          "created_usec": 8056155,
+          "loop": false,
+          "publish_ms": 283.198,
+          "ready_ms": 255.207,
+          "requested_usec": 8028173,
+          "restore_wait_ms": 21.522,
+          "reused_spare": false,
+          "target_ms": 2514.4579284668
+        },
+        {
+          "create_ms": 1.453,
+          "created_usec": 8499768,
+          "loop": false,
+          "publish_ms": 212.136,
+          "ready_ms": 191.23,
+          "requested_usec": 8478871,
+          "restore_wait_ms": 19.444,
+          "reused_spare": true,
+          "target_ms": 5028.91585693359
+        },
+        {
+          "create_ms": 1.563,
+          "created_usec": 8743689,
+          "loop": false,
+          "publish_ms": 95.087,
+          "ready_ms": 74.747,
+          "requested_usec": 8723358,
+          "restore_wait_ms": 18.768,
+          "reused_spare": true,
+          "target_ms": 558.768428548177
+        },
+        {
+          "create_ms": 6.305,
+          "created_usec": 8874543,
+          "loop": false,
+          "publish_ms": 224.073,
+          "ready_ms": 201.178,
+          "requested_usec": 8851656,
+          "restore_wait_ms": 16.582,
+          "reused_spare": true,
+          "target_ms": 2514.4579284668
+        },
+        {
+          "create_ms": 3.363,
+          "created_usec": 9262297,
+          "loop": false,
+          "publish_ms": 86.473,
+          "ready_ms": 63.562,
+          "requested_usec": 9239397,
+          "restore_wait_ms": 19.536,
+          "reused_spare": true,
+          "target_ms": 0.0
+        },
+        {
+          "create_ms": 1.546,
+          "created_usec": 15078938,
+          "loop": false,
+          "publish_ms": 77.269,
+          "ready_ms": 63.874,
+          "requested_usec": 15065551,
+          "restore_wait_ms": 11.841,
+          "reused_spare": true,
+          "target_ms": 0.0
+        },
+        {
+          "create_ms": 4.986,
+          "created_usec": 15816649,
+          "loop": false,
+          "publish_ms": 222.445,
+          "ready_ms": 196.639,
+          "requested_usec": 15790852,
+          "restore_wait_ms": 20.811,
+          "reused_spare": true,
+          "target_ms": 3911.37899983724
+        },
+        {
+          "create_ms": 1.414,
+          "created_usec": 16077162,
+          "loop": false,
+          "publish_ms": 242.618,
+          "ready_ms": 216.808,
+          "requested_usec": 16051361,
+          "restore_wait_ms": 24.386,
+          "reused_spare": true,
+          "target_ms": 4470.14742838542
+        },
+        {
+          "create_ms": 1.923,
+          "created_usec": 16410097,
+          "loop": false,
+          "publish_ms": 101.815,
+          "ready_ms": 81.822,
+          "requested_usec": 16390113,
+          "restore_wait_ms": 18.06,
+          "reused_spare": true,
+          "target_ms": 0.0
+        },
+        {
+          "create_ms": 5.934,
+          "created_usec": 16512317,
+          "loop": true,
+          "publish_ms": 5663.379,
+          "ready_ms": 67.024,
+          "requested_usec": 16492535,
+          "restore_wait_ms": 13.848,
+          "reused_spare": true,
+          "target_ms": 0
+        },
+        {
+          "create_ms": 4.524,
+          "created_usec": 22189808,
+          "loop": true,
+          "publish_ms": 5710.355,
+          "ready_ms": 64.503,
+          "requested_usec": 22156617,
+          "restore_wait_ms": 28.667,
+          "reused_spare": true,
+          "target_ms": 0
+        },
+        {
+          "create_ms": 5.254,
+          "created_usec": 27918475,
+          "loop": false,
+          "publish_ms": 86.946,
+          "ready_ms": 63.841,
+          "requested_usec": 27895378,
+          "restore_wait_ms": 17.842,
+          "reused_spare": true,
+          "target_ms": 0.0
+        },
+        {
+          "create_ms": 5.189,
+          "created_usec": 37035447,
+          "loop": false,
+          "publish_ms": 2537.483,
+          "ready_ms": 2518.494,
+          "requested_usec": 37016466,
+          "restore_wait_ms": 13.792,
+          "reused_spare": false,
+          "target_ms": 0.0
+        },
+        {
+          "create_ms": 6.7,
+          "created_usec": 39986656,
+          "loop": false,
+          "publish_ms": 181.595,
+          "ready_ms": 149.69,
+          "requested_usec": 39954762,
+          "restore_wait_ms": 25.194,
+          "reused_spare": false,
+          "target_ms": 7111.84361514155
+        },
+        {
+          "create_ms": 1.574,
+          "created_usec": 40471831,
+          "loop": false,
+          "publish_ms": 116.865,
+          "ready_ms": 90.798,
+          "requested_usec": 40445773,
+          "restore_wait_ms": 24.484,
+          "reused_spare": true,
+          "target_ms": 7112.84461514155
+        },
+        {
+          "create_ms": 1.841,
+          "created_usec": 40908104,
+          "loop": false,
+          "publish_ms": 102.83,
+          "ready_ms": 80.748,
+          "requested_usec": 40886031,
+          "restore_wait_ms": 20.232,
+          "reused_spare": true,
+          "target_ms": 0.0
+        },
+        {
+          "create_ms": 4.51,
+          "created_usec": 54418448,
+          "loop": false,
+          "publish_ms": 1439.995,
+          "ready_ms": 1421.547,
+          "requested_usec": 54400009,
+          "restore_wait_ms": 13.928,
+          "reused_spare": false,
+          "target_ms": 0.0
+        },
+        {
+          "create_ms": 3.909,
+          "created_usec": 66166350,
+          "loop": false,
+          "publish_ms": 875.951,
+          "ready_ms": 851.253,
+          "requested_usec": 66141661,
+          "restore_wait_ms": 20.78,
+          "reused_spare": false,
+          "target_ms": 0.0
+        }
+      ]
+    }
+  ],
+  "failures": []
+}

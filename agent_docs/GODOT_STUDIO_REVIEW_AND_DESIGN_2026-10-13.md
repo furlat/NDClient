@@ -1,5 +1,7 @@
 # Godot client review and shared Studio design — 13 October 2026
 
+The current first delivery is specified in the [base-mechanics Studio plan](GODOT_STUDIO_BASE_MECHANICS_PLAN_2026-10-13.md). It incorporates the later user requests for a half-screen resizable preview/timeline, recovered TS/Pygame layers, immediate native base-action VFX, blood/material flashes, condition coverage and sound. Its implementation slices supersede the older ordering below for that first chunk; the findings here remain review evidence, not completion claims.
+
 Review baseline: `0635d5f`. This is a review and implementation design, not a
 claim that Studio or all animation families have been implemented. The concurrent
 Alt highlight repair is a separate small correction identified by the user.

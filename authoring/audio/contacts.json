@@ -1,0 +1,68 @@
+{
+  "frame_convention": "Zero-based source frame boundaries; frame_count denotes the end boundary only for nonlooping clips. Markers own their arrival crossing; held frames do not repeat.",
+  "rigs": {
+    "neuroclient.modular": {
+      "Run": {
+        "path": {
+          "review_status": "source_frame_reviewed",
+          "evidence": "NakedBody/Run.png E and SW: first planted strides at frames3 and10; .captures/audio-contact/Run-{E,SW}.png",
+          "markers": [
+            {
+              "id": "foot_a",
+              "binding": "path",
+              "frame": 3,
+              "direction": "forward"
+            },
+            {
+              "id": "foot_b",
+              "binding": "path",
+              "frame": 10,
+              "direction": "forward"
+            }
+          ]
+        }
+      },
+      "CrouchRun": {
+        "path": {
+          "review_status": "source_frame_reviewed",
+          "evidence": "NakedBody/CrouchRun.png E and SW: lowered stride contacts at frames2 and9; .captures/audio-contact/CrouchRun-{E,SW}.png",
+          "markers": [
+            {
+              "id": "foot_a",
+              "binding": "path",
+              "frame": 2,
+              "direction": "forward"
+            },
+            {
+              "id": "foot_b",
+              "binding": "path",
+              "frame": 9,
+              "direction": "forward"
+            }
+          ]
+        }
+      },
+      "Rolling": {
+        "direct_arc": {
+          "review_status": "native_world_contact_reviewed",
+          "evidence": "Actual Jump journal/native viewport: frame11 lift35.67px, frame14 lift9.98px; frame15 boundary reaches destination ground at1450ms. .captures/audio-contact/native/jump-source-frame-{11,14,15}.png. Source recovery pose alone is not a world touchdown.",
+          "markers": [
+            {
+              "id": "takeoff",
+              "binding": "takeoff",
+              "frame": 0,
+              "direction": "forward"
+            },
+            {
+              "id": "touchdown",
+              "binding": "landing",
+              "frame": 15,
+              "boundary": "clip_end",
+              "direction": "forward"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

@@ -63,6 +63,9 @@ static func rows(state: Dictionary, cache: Dictionary) -> Dictionary:
         else:
             missing.append("object:"+item.item_id)
             continue
+        if item.get("integrity")=="destroyed" and row.kind in ["prop","wall"]:
+            row.destroyed = true
+            if item.get("destruction_outcome") != null: row.outcome = item.destruction_outcome
         result.append(row)
     return {"rows":result,"visual_rows":join_walls(result,world),"unresolved":missing}
 
@@ -295,7 +298,9 @@ static func join_walls(rows: Array, world: Dictionary) -> Array:
     # intact for commands; this is only grid-to-art assembly at world revisions.
     var cells = {}
     for row in rows:
-        if row.kind != "wall": continue
+        # A corner is one intact source. A destroyed edge must retain its own
+        # authored endpoint instead of borrowing the other edge's state.
+        if row.kind != "wall" or row.get("destroyed",false): continue
         var key = JSON.stringify([row.position,row.material,row.base_height_steps,row.top_height_steps])
         if not cells.has(key): cells[key] = []
         cells[key].append(row)
@@ -321,10 +326,15 @@ static func join_walls(rows: Array, world: Dictionary) -> Array:
     return visual
 
 static func visible_actor(actor: Dictionary, state: Dictionary, staged: bool = false) -> bool:
-    if not actor.get("present",true) or actor.get("last_visual_position") == null: return false
+    if not actor.get("present",true) or actor.get("last_visual_position") == null \
+        or actor.get("spatial_disposition","present")!="present" \
+        or actor.get("remains_disposition","intact")=="disintegrated": return false
     var senses: Variant = state.get("senses")
     var contact: Dictionary = senses.entities.get(actor.uuid,{}) if senses != null else {}
-    return staged or actor.uuid in state.audience.controlled or contact.get("visual",false)
+    # The server retires Dead actors from living-creature sensory contacts.
+    # Like the original scene adapter, retain their witnessed corpse pose at
+    # the disclosed last position; never retain an unseen living actor.
+    return staged or actor.uuid in state.audience.controlled or contact.get("visual",false) or actor.get("life_state")=="dead"
 
 static func visibility(state: Dictionary) -> Dictionary:
     # Current sight is separate from the last-observed map. Never grow the map

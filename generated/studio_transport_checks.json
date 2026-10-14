@@ -1,0 +1,119 @@
+{
+  "checks": 59,
+  "evidence": {
+    "loop_frame_ms": {
+      "max": 34.941,
+      "median": 7.318,
+      "p95": 15.451
+    },
+    "loop_visible_hosts": 2,
+    "loop_wraps": 3,
+    "max_hosts": 2,
+    "max_loop_end_hold_ms": 17,
+    "preparations": [
+      {
+        "create_ms": 2.504,
+        "created_usec": 4356052,
+        "loop": false,
+        "publish_ms": 1862.182,
+        "ready_ms": 1852.776,
+        "requested_usec": 4346651,
+        "restore_wait_ms": 6.896,
+        "reused_spare": false,
+        "target_ms": 0.0
+      },
+      {
+        "create_ms": 3.394,
+        "created_usec": 6496772,
+        "loop": false,
+        "publish_ms": 127.897,
+        "ready_ms": 108.127,
+        "requested_usec": 6477006,
+        "restore_wait_ms": 16.372,
+        "reused_spare": false,
+        "target_ms": 1516.66666666667
+      },
+      {
+        "create_ms": 2.463,
+        "created_usec": 6626568,
+        "loop": true,
+        "publish_ms": 1248.22,
+        "ready_ms": 71.857,
+        "requested_usec": 6605254,
+        "restore_wait_ms": 18.851,
+        "reused_spare": true,
+        "target_ms": 1516.66666666667
+      },
+      {
+        "create_ms": 1.092,
+        "created_usec": 7879934,
+        "loop": true,
+        "publish_ms": 1252.714,
+        "ready_ms": 82.554,
+        "requested_usec": 7853797,
+        "restore_wait_ms": 25.045,
+        "reused_spare": true,
+        "target_ms": 1516.66666666667
+      },
+      {
+        "create_ms": 1.101,
+        "created_usec": 9129158,
+        "loop": true,
+        "publish_ms": 1257.214,
+        "ready_ms": 71.033,
+        "requested_usec": 9106862,
+        "restore_wait_ms": 21.194,
+        "reused_spare": true,
+        "target_ms": 1516.66666666667
+      },
+      {
+        "create_ms": 1.067,
+        "created_usec": 10404531,
+        "loop": false,
+        "publish_ms": 72.437,
+        "ready_ms": 64.463,
+        "requested_usec": 10396561,
+        "restore_wait_ms": 6.903,
+        "reused_spare": true,
+        "target_ms": 2079.16679609841
+      },
+      {
+        "create_ms": 1.129,
+        "created_usec": 10500334,
+        "loop": false,
+        "publish_ms": 78.684,
+        "ready_ms": 69.46,
+        "requested_usec": 10491118,
+        "restore_wait_ms": 8.087,
+        "reused_spare": true,
+        "target_ms": 2391.66653723492
+      },
+      {
+        "create_ms": 2.193,
+        "created_usec": 15181132,
+        "loop": false,
+        "publish_ms": 826.741,
+        "ready_ms": 810.453,
+        "requested_usec": 15164848,
+        "restore_wait_ms": 14.091,
+        "reused_spare": false,
+        "target_ms": 0.0
+      }
+    ],
+    "retained_texture_handles": 293,
+    "rotation_ready_ms": [
+      24,
+      27,
+      27,
+      21
+    ],
+    "select_to_ready_ms": 148,
+    "visible_thumbnails": {
+      "awaited_keys": 61,
+      "ready_ms": 106,
+      "take_damage_previews": 28
+    }
+  },
+  "failures": [],
+  "scope": "Native actual track-label/ruler/splitter/key input, exact forward/backward seek, three causal two-host loops, retained source/track/atlas handles, no-op seek, study/case atomic publication and rejected case retention."
+}

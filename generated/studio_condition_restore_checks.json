@@ -1,0 +1,200 @@
+{
+  "checks": 187,
+  "evidence": [
+    {
+      "actor": "Amber presentation actor",
+      "case": "hide-seed3-v3",
+      "end_ms": 5437.68428548177,
+      "from": 0.55,
+      "mechanism": "alphaMultiplier",
+      "removed_ms": 4187.68428548177,
+      "start_ms": 4187.68428548177,
+      "to": 1.0
+    },
+    {
+      "actor": "Amber presentation actor",
+      "case": "hide-seed3-v3",
+      "end_ms": 5437.68428548177,
+      "from": {
+        "activity": "idle",
+        "clip": "CrouchIdle",
+        "condition_uuid": "a652450d-63c3-451f-b9a7-db97c4892b46",
+        "frame": 0,
+        "sampling": "loop",
+        "source": "res://authoring/presentation/conditions/hidden.tres::activity_poses/0"
+      },
+      "mechanism": "pose",
+      "removed_ms": 4187.68428548177,
+      "start_ms": 4187.68428548177,
+      "to": {
+        "activity": "idle",
+        "clip": "Idle",
+        "condition_uuid": "",
+        "frame": null,
+        "sampling": "loop",
+        "source": "catalog/rigs.json:/neuroclient.modular/clips/Idle"
+      }
+    },
+    {
+      "actor": "Amber presentation actor",
+      "case": "hide-light-schema9-seed3",
+      "end_ms": 8511.84461514155,
+      "from": 0.55,
+      "mechanism": "alphaMultiplier",
+      "removed_ms": 7111.84461514155,
+      "start_ms": 7111.84461514155,
+      "to": 1.0
+    },
+    {
+      "actor": "Amber presentation actor",
+      "case": "hide-light-schema9-seed3",
+      "end_ms": 8511.84461514155,
+      "from": {
+        "activity": "idle",
+        "clip": "CrouchIdle",
+        "condition_uuid": "ebe61e95-98b4-45f6-8dd5-091880791a1f",
+        "frame": 0,
+        "sampling": "loop",
+        "source": "res://authoring/presentation/conditions/hidden.tres::activity_poses/0"
+      },
+      "mechanism": "pose",
+      "removed_ms": 7111.84461514155,
+      "start_ms": 7111.84461514155,
+      "to": {
+        "activity": "idle",
+        "clip": "Idle",
+        "condition_uuid": "",
+        "frame": null,
+        "sampling": "loop",
+        "source": "catalog/rigs.json:/neuroclient.modular/clips/Idle"
+      }
+    },
+    {
+      "actor": "Amber presentation actor",
+      "case": "dodge-seed3",
+      "end_ms": 3850.0,
+      "from": {
+        "alphaThreshold": 100,
+        "color": 5805540,
+        "onsetMs": 300.0,
+        "opacity": 0.35,
+        "periodMs": 1400.0,
+        "pulseColor": 5805540,
+        "pulseOpacity": 0.0
+      },
+      "mechanism": "bodyOutline",
+      "removed_ms": 2450.0,
+      "start_ms": 2450.0,
+      "to": {}
+    },
+    {
+      "actor": "Amber lifecycle 1",
+      "case": "invisibility-seed3-v2",
+      "end_ms": 6633.33333333333,
+      "from": {
+        "brightness": 0.96,
+        "saturation": 0.62,
+        "tint": "(0.717647, 0.780392, 1.0)"
+      },
+      "mechanism": "bodyColor",
+      "removed_ms": 5233.33333333333,
+      "start_ms": 5233.33333333333,
+      "to": {
+        "brightness": 1.0,
+        "saturation": 1.0,
+        "tint": "(1.0, 1.0, 1.0)"
+      }
+    },
+    {
+      "actor": "Amber lifecycle 1",
+      "case": "invisibility-seed3-v2",
+      "end_ms": 6633.33333333333,
+      "from": 0.5,
+      "mechanism": "alphaMultiplier",
+      "removed_ms": 5233.33333333333,
+      "start_ms": 5233.33333333333,
+      "to": 1.0
+    },
+    {
+      "actor": "Amber presentation actor",
+      "case": "rage-seed3-v3",
+      "end_ms": 4787.5,
+      "from": {
+        "brightness": 1.08,
+        "saturation": 1.4,
+        "tint": "(1.0, 0.470588, 0.588235)"
+      },
+      "mechanism": "bodyColor",
+      "removed_ms": 3387.5,
+      "start_ms": 3737.5,
+      "to": {
+        "brightness": 1.0,
+        "saturation": 1.0,
+        "tint": "(1.0, 1.0, 1.0)"
+      }
+    },
+    {
+      "actor": "Amber presentation actor",
+      "case": "rage-seed3-v3",
+      "end_ms": 4787.5,
+      "from": {
+        "applicationMs": 180.0,
+        "colors": [
+          7874091.0,
+          14301503.0,
+          15760232.0,
+          16745070.0
+        ],
+        "gain": 0.48,
+        "mapping": "flowing_film",
+        "removalMs": 350.0,
+        "texture": "class.material.film",
+        "textureFrames": 64.0,
+        "textureWeight": 0.4
+      },
+      "mechanism": "bodyRamp",
+      "removed_ms": 3387.5,
+      "start_ms": 3737.5,
+      "to": {}
+    },
+    {
+      "actor": "Blue lifecycle 1",
+      "case": "condition_owners-seed4",
+      "end_ms": 6768.75,
+      "from": {
+        "color": 16761417.0,
+        "pulseColor": 16766076.0
+      },
+      "mechanism": "bodyOutline",
+      "removed_ms": 4050.0,
+      "start_ms": 4250.0,
+      "to": {}
+    },
+    {
+      "actor": "Blue lifecycle 1",
+      "case": "condition_owners-seed4",
+      "end_ms": 6768.75,
+      "from": {
+        "activity": "idle",
+        "clip": "Idle",
+        "condition_uuid": "fe5663a1-ba95-4d54-b7ab-09d82089c1ba",
+        "frame": 3.0,
+        "sampling": "hold",
+        "source": "catalog/condition_recipes.json:/condition.paralyzed/persistent/frozenPose"
+      },
+      "mechanism": "pose",
+      "removed_ms": 4050.0,
+      "start_ms": 4050.0,
+      "to": {
+        "activity": "idle",
+        "clip": "Idle",
+        "condition_uuid": "",
+        "frame": null,
+        "sampling": "loop",
+        "source": "catalog/rigs.json:/neuroclient.modular/clips/Idle"
+      }
+    }
+  ],
+  "failures": [],
+  "scope": "Actual SDK Hide, optical reveal, Dodge, Invisibility, Rage, overlapping owner and suppression journals; source-owned removal commits, shared composed pose/material restoration, real after-state intervals and thumbnail requests. No native framebuffer claim."
+}

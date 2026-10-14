@@ -2,6 +2,7 @@ extends RefCounted
 # Exact current/near-future character sheets, prepared off the scene thread.
 # Dictionaries are passive demand/residency records; only the scene uploads.
 const Characters = preload("res://presentation/characters.gd")
+const Conditions = preload("res://presentation/conditions.gd")
 const WorldRows = preload("res://presentation/world.gd")
 const EnvironmentMedia = preload("res://presentation/environment_media.gd")
 const EncounterMedia = preload("res://presentation/encounter_media.gd")
@@ -18,7 +19,7 @@ static func create() -> Dictionary:
         "required_plan":false,"metadata_phases":{},"publication":{},
         "gpu_only":{},"cpu_required":{},"metadata_ms":0.0,"decode_ms":0.0,"metadata_jobs":0,
         "budget_bytes":maxi(0,int(ProjectSettings.get_setting("source_data/encounter_cache_mib",16384)))*1024*1024,
-        "encounter":{},"encounter_epoch":-1,"preload_selected":{},"preload_skipped":0,"preload_estimated_bytes":0,
+        "encounter":{},"encounter_override":{},"encounter_epoch":-1,"preload_selected":{},"preload_skipped":0,"preload_estimated_bytes":0,
         "required_estimated_bytes":0,"unknown_required":0,"boot_paths":{},"boot_started":false,"boot_complete":false,
         "prune_frame":-1,"pruned_this_frame":0,"stats":{},"cpu_release":{},
         "selection_revision":-1,"selection_budget":-1,"selection_required":{},"selection_extra":{},"selection_jobs":0,
@@ -78,20 +79,13 @@ static func _start_plan(data: Dictionary) -> void:
     if not data.plan_pending.is_empty():
         request = data.plan_pending
         data.plan_pending = {}
-    elif not data.optional_pending.is_empty():
+    elif not data.optional_pending.is_empty() and data.encounter_override.is_empty():
         request = data.optional_pending
         data.optional_pending = {}; optional = true
     else: return
     data.plan_result = {}
     var work = _plan_optional.bind(request,data.plan_result,data.plan_cache) if optional else _plan_sources.bind(request,data.plan_result,data.plan_cache)
     data.plan_task = WorkerThreadPool.add_task(work,false,"Optional authored families" if optional else "Required authored media")
-
-static func _source_files(cache: Dictionary) -> Dictionary:
-    var files = {}
-    for path in cache:
-        if path is String and path.ends_with(".json") and not path.begins_with("__"):
-            files[path] = cache[path]
-    return files
 
 static func _plan_sources(request: Dictionary, result: Dictionary, cache: Dictionary) -> void:
     var started = Time.get_ticks_usec()
@@ -107,7 +101,7 @@ static func _plan_sources(request: Dictionary, result: Dictionary, cache: Dictio
     # The single metadata owner schedules optional families only after this
     # exact required packet has crossed the completed-task publication boundary.
     result.optional_request = {"key":request.key,"state":request.state,"groups":request.groups,"required":result.value}
-    result.source_files = _source_files(cache)
+    result.source_files = Characters.Catalog.source_snapshot(cache)
     result.phases = {"characters":(characters_done-started)/1000.0,
         "environment":(environment_done-characters_done)/1000.0,"source_files":(Time.get_ticks_usec()-environment_done)/1000.0}
     for phase in environment.get("diagnostics",{}).get("phases",{}):
@@ -140,7 +134,7 @@ static func _plan_optional(request: Dictionary, result: Dictionary, cache: Dicti
             encounter.errors.append(encounter.estimates[path].error)
     var estimates_done = Time.get_ticks_usec()
     result.value = {"encounter":encounter}
-    result.source_files = _source_files(cache)
+    result.source_files = Characters.Catalog.source_snapshot(cache)
     result.phases = {"families":(families_done-started)/1000.0,"estimates":(estimates_done-families_done)/1000.0,
         "source_files":(Time.get_ticks_usec()-estimates_done)/1000.0}
     result.elapsed_ms = (Time.get_ticks_usec()-started)/1000.0
@@ -153,7 +147,7 @@ static func poll_plan(data: Dictionary) -> Dictionary:
     if not completed.get("complete",false):
         completed.error = "Authored media metadata preparation did not complete; inspect the source error log."
     if completed.has("optional_request"):
-        if data.plan_pending.is_empty() and data.optional_pending.is_empty():
+        if data.encounter_override.is_empty() and data.plan_pending.is_empty() and data.optional_pending.is_empty():
             data.optional_pending = completed.optional_request
         completed.erase("optional_request")
     data.metadata_ms += completed.get("elapsed_ms",0.0)
@@ -176,7 +170,7 @@ static func enqueue(data: Dictionary, path: String, absolute: String) -> void:
 static func _adopt_epoch(data: Dictionary, epoch: int) -> void:
     if data.encounter_epoch == epoch: return
     data.encounter_epoch = epoch
-    data.encounter = {}; data.required_plan = false
+    data.encounter = data.encounter_override; data.required_plan = false
     data.boot_paths = {}; data.boot_waiting = {}; data.boot_started = false; data.boot_complete = false
     data.selection_revision = -2
 
@@ -188,7 +182,9 @@ static func adopt_required(data: Dictionary, epoch: int) -> void:
 static func adopt_encounter(data: Dictionary, encounter: Dictionary, epoch: int) -> void:
     # Called only for an accepted scene epoch, never on worker completion alone.
     _adopt_epoch(data,epoch)
-    data.encounter = encounter
+    # Studio knows the exact admitted recording, so its finite source set can
+    # replace generic optional rig families without altering required demand.
+    data.encounter = encounter if data.encounter_override.is_empty() else data.encounter_override
 
 static func _environment(data: Dictionary, path: String) -> bool:
     return data.environment.has(path) or data.encounter.get("environment",{}).has(path)
@@ -714,11 +710,19 @@ static func _add_actor(paths: Dictionary, actor: Dictionary, clips: Array, cache
     var rest = Characters.rest_sample(actor,rigs[rig],cache)
     if not rest.ok: errors.append(rest.error.message); return
     if rest.value.clip not in wanted: wanted.append(rest.value.clip)
+    # An admitted condition may select both resting and locomotion sources.
+    # Prepare that finite closure together, before its first movement; actor
+    # tracks still name the exact clip for attack/jump/hit/death independently.
+    for activity in ["idle","move"]:
+        var pose=Conditions.ConditionPose.select(actor,rig,activity,cache)
+        if not pose.is_empty() and pose.clip not in wanted: wanted.append(pose.clip)
     var resolved = Characters.sheet_paths(actor,wanted,cache)
     if not resolved.ok: errors.append(resolved.error.message); return
     paths.merge(resolved.value)
     gpu_only.merge(resolved.gpu_only)
     cpu_required.merge(resolved.cpu_required)
+    var effects=Conditions.paths(actor,cache)
+    paths.merge(effects);cpu_required.merge(effects)
 
 static func _witness(witnesses: Dictionary, id: String, actor: Dictionary) -> void:
     if not witnesses.has(id): witnesses[id] = []
@@ -728,7 +732,7 @@ static func _witness(witnesses: Dictionary, id: String, actor: Dictionary) -> vo
     for prior in witnesses[id]:
         if prior.get("creature_content_ref") == actor.get("creature_content_ref") \
             and prior.appearance == actor.appearance and prior.visual_loadout == actor.visual_loadout \
-            and prior.life_state == actor.life_state and _drawable(prior) == _drawable(actor): return
+            and prior.life_state == actor.life_state and prior.get("conditions",[])==actor.get("conditions",[]) and _drawable(prior) == _drawable(actor): return
     witnesses[id].append(actor)
 
 static func _visible_ids(visible: Dictionary, senses: Variant, audience: Dictionary) -> void:
@@ -751,6 +755,7 @@ static func plan(state: Dictionary, groups: Array, cache: Dictionary) -> Diction
     var upcoming_errors: Array = []
     var gpu_only = {}
     var cpu_required = {}
+    errors.append_array(Characters.Catalog.validate_native(cache))
     if state.is_empty(): return {"required":required,"upcoming":upcoming,"errors":errors,"upcoming_errors":upcoming_errors,"gpu_only":gpu_only,"cpu_required":cpu_required}
     var actors: Dictionary = state.actors.duplicate()
     var senses: Variant = state.senses
@@ -785,14 +790,14 @@ static func plan(state: Dictionary, groups: Array, cache: Dictionary) -> Diction
         for track in group.get("actor_tracks",[]):
             var key: String = track.actor_uuid + ":" + track.rig + ":" + track.clip
             if not requested.has(key): requested[key] = []
-            var loadout: Variant = track.get("visual_loadout")
+            var loadout: Variant = [track.get("visual_loadout"),track.get("effect_layers",[])]
             if loadout in requested[key]: continue
             requested[key].append(loadout)
             for actor in witnesses.get(track.actor_uuid,[]):
                 if Characters.rig_id(actor,cache) != track.rig: continue
-                var shown: Dictionary = actor
+                var shown: Dictionary = actor.duplicate()
+                shown.presentation_layers=track.get("effect_layers",[])
                 if track.has("visual_loadout"):
-                    shown = actor.duplicate()
                     shown.visual_loadout = track.visual_loadout
                 _add_actor(paths,shown,[track.clip],cache,group_errors,gpu_only,cpu_required)
     for path in cpu_required: gpu_only.erase(path)

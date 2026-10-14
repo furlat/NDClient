@@ -56,9 +56,9 @@ func run()->void:
             for value in values:
                 var node:PointLight2D=adapter.nodes[value.id]
                 check(node.position.is_equal_approx(camera.unproject_position(value.world_position)),"Exact projected world position: "+value.id)
-                check(is_equal_approx(value.span.x,value.outer*ppu*2) and is_equal_approx(value.span.y,value.outer*ppu*2),"Native cookie diameter follows exact disclosed outer radius: "+value.id)
+                check(is_equal_approx(value.span.x,value.outer*ppu*2) and is_equal_approx(value.span.y,value.outer*ppu*2*absf(camera.basis.z.y)),"Native authored cookie matches the projected support-plane circle: "+value.id)
                 check(is_equal_approx(node.height,56.0*2.0/Placement.PIXELS_PER_UNIT*ppu),"Native normal height follows source pixels and orthographic zoom: "+value.id)
-                check(node.energy==adapter.sampled[value.id].energy and node.texture==adapter.cookie and node.enabled,"Native energy/cookie/activation retain actual sampled values")
+                check(node.energy==adapter.sampled[value.id].energy and node.texture==value.texture and node.enabled,"Native energy/cookie/activation agree with casting-source exposure")
                 check(node.color==Lighting.TORCH_COLOUR,"Only known actual Torch/Wall Torch semantic IDs use reference warm colour")
             quarter_rows.append({"quarter":q,"camera_size":size,"source_count":values.size(),"pixels_per_unit":ppu})
     check(adapter.nodes[carried.item_uuid]==held,"Reprojection retains original native source identity")

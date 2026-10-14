@@ -1,0 +1,823 @@
+{
+  "cases": [
+    {
+      "actions": [
+        {
+          "behavior": "action.environment.directional_door.open",
+          "bodies": [
+            "Attack5"
+          ],
+          "event_uuid": "9b8d9002-43df-414d-9dc7-c4b5989d2180"
+        },
+        {
+          "behavior": "action.item.potion_haste.drink",
+          "bodies": [
+            "Taunt"
+          ],
+          "event_uuid": "c8c4d266-1ccb-46e9-b303-ee0da6f4272a"
+        },
+        {
+          "behavior": "action.dash",
+          "bodies": [],
+          "event_uuid": "34652564-8ae6-4385-8e85-7a00a7f486d4"
+        },
+        {
+          "behavior": "action.environment.directional_door.open",
+          "bodies": [
+            "Attack5"
+          ],
+          "event_uuid": "eabd42d4-27a4-40f6-b862-28393ae4f206"
+        }
+      ],
+      "case": "movement-oa",
+      "duration_ms": 13480.9223075708,
+      "missing": [
+        {
+          "kind": "requirement",
+          "label": "Missing · haste-potion-release",
+          "reason": "authored_media_not_implemented",
+          "source": "catalog/body_action_recipes.json:/action.item.potion_haste.drink/actor/media/0"
+        }
+      ],
+      "operations": 8,
+      "presentation_end_ms": 13593.7113075708
+    },
+    {
+      "actions": [
+        {
+          "behavior": "action.dash",
+          "bodies": [],
+          "event_uuid": "498cbe25-ae01-4076-8e82-ccb8a893b4dd"
+        }
+      ],
+      "case": "dash-seed3",
+      "duration_ms": 3533.33333333333,
+      "missing": [],
+      "operations": 7,
+      "presentation_end_ms": 4933.33333333333
+    },
+    {
+      "actions": [
+        {
+          "behavior": "action.dodge",
+          "bodies": [],
+          "event_uuid": "bfbfb0c9-f0e8-4db6-8569-886e575ec723"
+        },
+        {
+          "behavior": "action.attack",
+          "bodies": [
+            "Attack1"
+          ],
+          "event_uuid": "78798183-b470-4f14-b776-b266223a0a3b"
+        }
+      ],
+      "case": "dodge-seed3",
+      "duration_ms": 2450.0,
+      "missing": [],
+      "operations": 7,
+      "presentation_end_ms": 3850.0
+    },
+    {
+      "actions": [
+        {
+          "behavior": "action.disengage",
+          "bodies": [],
+          "event_uuid": "8e742bd1-fa4e-40c1-a6bb-2e83a2ac8373"
+        }
+      ],
+      "case": "disengage-seed3",
+      "duration_ms": 1616.66666666667,
+      "missing": [],
+      "operations": 7,
+      "presentation_end_ms": 3016.66666666667
+    },
+    {
+      "actions": [
+        {
+          "behavior": "action.shove",
+          "bodies": [
+            "Kick"
+          ],
+          "event_uuid": "ae615ae3-3951-4ac3-b671-a7d73720fc4b"
+        }
+      ],
+      "case": "shove-seed3",
+      "duration_ms": 1750.0,
+      "missing": [],
+      "operations": 6,
+      "presentation_end_ms": 1750.0
+    },
+    {
+      "actions": [
+        {
+          "behavior": "action.shove",
+          "bodies": [
+            "Kick"
+          ],
+          "event_uuid": "b81ec6f5-f9fa-49e9-bb7d-483030bc9137"
+        }
+      ],
+      "case": "shove-seed1",
+      "duration_ms": 1750.0,
+      "missing": [],
+      "operations": 6,
+      "presentation_end_ms": 1750.0
+    },
+    {
+      "actions": [
+        {
+          "behavior": "action.attack",
+          "bodies": [
+            "Attack1"
+          ],
+          "event_uuid": "5605c8fb-e56c-40f7-b07e-6166ac81d932"
+        }
+      ],
+      "case": "melee-seed3",
+      "duration_ms": 2416.66666666667,
+      "missing": [],
+      "operations": 2,
+      "presentation_end_ms": 2416.66666666667
+    },
+    {
+      "actions": [
+        {
+          "behavior": "action.attack",
+          "bodies": [
+            "Attack3"
+          ],
+          "event_uuid": "94ba1e11-30c5-4836-8ed1-b84c51cf1daa"
+        }
+      ],
+      "case": "ranged-seed3",
+      "duration_ms": 2941.10420735677,
+      "missing": [],
+      "operations": 2,
+      "presentation_end_ms": 3446.20620735677
+    },
+    {
+      "actions": [
+        {
+          "behavior": "action.attack",
+          "bodies": [
+            "Attack3"
+          ],
+          "event_uuid": "ad8eff29-0e27-47f8-a08d-887e7ab01fb5"
+        }
+      ],
+      "case": "ranged-seed1",
+      "duration_ms": 1750.0,
+      "missing": [],
+      "operations": 2,
+      "presentation_end_ms": 3091.10420735677
+    },
+    {
+      "actions": [],
+      "case": "magic_missile-seed3",
+      "duration_ms": 1750.0,
+      "missing": [
+        {
+          "kind": "requirement",
+          "label": "Missing · layer:persistent.shield.back:application_asset_id",
+          "reason": "condition_media_lifecycle_not_implemented",
+          "source": "catalog/condition_media.json:/persistent.shield.back/application_asset_id"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · layer:persistent.shield.back:removal_mask_asset_id",
+          "reason": "condition_media_lifecycle_not_implemented",
+          "source": "catalog/condition_media.json:/persistent.shield.back/removal_mask_asset_id"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · layer:persistent.shield.front:application_asset_id",
+          "reason": "condition_media_lifecycle_not_implemented",
+          "source": "catalog/condition_media.json:/persistent.shield.front/application_asset_id"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · layer:persistent.shield.front:removal_mask_asset_id",
+          "reason": "condition_media_lifecycle_not_implemented",
+          "source": "catalog/condition_media.json:/persistent.shield.front/removal_mask_asset_id"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · layer:persistent.shield.hit.E.back",
+          "reason": "condition_phase_effect_not_compiled",
+          "source": "catalog/condition_recipes.json:/condition.spell.shield/interceptionEffectsByDirection/E/0"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · layer:persistent.shield.hit.E.front",
+          "reason": "condition_phase_effect_not_compiled",
+          "source": "catalog/condition_recipes.json:/condition.spell.shield/interceptionEffectsByDirection/E/1"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · layer:persistent.shield.hit.N.back",
+          "reason": "condition_phase_effect_not_compiled",
+          "source": "catalog/condition_recipes.json:/condition.spell.shield/interceptionEffectsByDirection/N/0"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · layer:persistent.shield.hit.N.front",
+          "reason": "condition_phase_effect_not_compiled",
+          "source": "catalog/condition_recipes.json:/condition.spell.shield/interceptionEffectsByDirection/N/1"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · layer:persistent.shield.hit.NE.back",
+          "reason": "condition_phase_effect_not_compiled",
+          "source": "catalog/condition_recipes.json:/condition.spell.shield/interceptionEffectsByDirection/NE/0"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · layer:persistent.shield.hit.NE.front",
+          "reason": "condition_phase_effect_not_compiled",
+          "source": "catalog/condition_recipes.json:/condition.spell.shield/interceptionEffectsByDirection/NE/1"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · layer:persistent.shield.hit.NW.back",
+          "reason": "condition_phase_effect_not_compiled",
+          "source": "catalog/condition_recipes.json:/condition.spell.shield/interceptionEffectsByDirection/NW/0"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · layer:persistent.shield.hit.NW.front",
+          "reason": "condition_phase_effect_not_compiled",
+          "source": "catalog/condition_recipes.json:/condition.spell.shield/interceptionEffectsByDirection/NW/1"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · layer:persistent.shield.hit.S.back",
+          "reason": "condition_phase_effect_not_compiled",
+          "source": "catalog/condition_recipes.json:/condition.spell.shield/interceptionEffectsByDirection/S/0"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · layer:persistent.shield.hit.S.front",
+          "reason": "condition_phase_effect_not_compiled",
+          "source": "catalog/condition_recipes.json:/condition.spell.shield/interceptionEffectsByDirection/S/1"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · layer:persistent.shield.hit.SE.back",
+          "reason": "condition_phase_effect_not_compiled",
+          "source": "catalog/condition_recipes.json:/condition.spell.shield/interceptionEffectsByDirection/SE/0"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · layer:persistent.shield.hit.SE.front",
+          "reason": "condition_phase_effect_not_compiled",
+          "source": "catalog/condition_recipes.json:/condition.spell.shield/interceptionEffectsByDirection/SE/1"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · layer:persistent.shield.hit.SW.back",
+          "reason": "condition_phase_effect_not_compiled",
+          "source": "catalog/condition_recipes.json:/condition.spell.shield/interceptionEffectsByDirection/SW/0"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · layer:persistent.shield.hit.SW.front",
+          "reason": "condition_phase_effect_not_compiled",
+          "source": "catalog/condition_recipes.json:/condition.spell.shield/interceptionEffectsByDirection/SW/1"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · layer:persistent.shield.hit.W.back",
+          "reason": "condition_phase_effect_not_compiled",
+          "source": "catalog/condition_recipes.json:/condition.spell.shield/interceptionEffectsByDirection/W/0"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · layer:persistent.shield.hit.W.front",
+          "reason": "condition_phase_effect_not_compiled",
+          "source": "catalog/condition_recipes.json:/condition.spell.shield/interceptionEffectsByDirection/W/1"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · cast_binding",
+          "reason": "condition_reaction_binding_not_compiled",
+          "source": "catalog/condition_recipes.json:/condition.spell.shield/reactionCastBinding"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · layer:persistent.shield.back:application_asset_id",
+          "reason": "condition_media_lifecycle_not_implemented",
+          "source": "catalog/condition_media.json:/persistent.shield.back/application_asset_id"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · layer:persistent.shield.back:removal_mask_asset_id",
+          "reason": "condition_media_lifecycle_not_implemented",
+          "source": "catalog/condition_media.json:/persistent.shield.back/removal_mask_asset_id"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · layer:persistent.shield.front:application_asset_id",
+          "reason": "condition_media_lifecycle_not_implemented",
+          "source": "catalog/condition_media.json:/persistent.shield.front/application_asset_id"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · layer:persistent.shield.front:removal_mask_asset_id",
+          "reason": "condition_media_lifecycle_not_implemented",
+          "source": "catalog/condition_media.json:/persistent.shield.front/removal_mask_asset_id"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · layer:persistent.shield.hit.E.back",
+          "reason": "condition_phase_effect_not_compiled",
+          "source": "catalog/condition_recipes.json:/condition.spell.shield/interceptionEffectsByDirection/E/0"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · layer:persistent.shield.hit.E.front",
+          "reason": "condition_phase_effect_not_compiled",
+          "source": "catalog/condition_recipes.json:/condition.spell.shield/interceptionEffectsByDirection/E/1"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · layer:persistent.shield.hit.N.back",
+          "reason": "condition_phase_effect_not_compiled",
+          "source": "catalog/condition_recipes.json:/condition.spell.shield/interceptionEffectsByDirection/N/0"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · layer:persistent.shield.hit.N.front",
+          "reason": "condition_phase_effect_not_compiled",
+          "source": "catalog/condition_recipes.json:/condition.spell.shield/interceptionEffectsByDirection/N/1"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · layer:persistent.shield.hit.NE.back",
+          "reason": "condition_phase_effect_not_compiled",
+          "source": "catalog/condition_recipes.json:/condition.spell.shield/interceptionEffectsByDirection/NE/0"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · layer:persistent.shield.hit.NE.front",
+          "reason": "condition_phase_effect_not_compiled",
+          "source": "catalog/condition_recipes.json:/condition.spell.shield/interceptionEffectsByDirection/NE/1"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · layer:persistent.shield.hit.NW.back",
+          "reason": "condition_phase_effect_not_compiled",
+          "source": "catalog/condition_recipes.json:/condition.spell.shield/interceptionEffectsByDirection/NW/0"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · layer:persistent.shield.hit.NW.front",
+          "reason": "condition_phase_effect_not_compiled",
+          "source": "catalog/condition_recipes.json:/condition.spell.shield/interceptionEffectsByDirection/NW/1"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · layer:persistent.shield.hit.S.back",
+          "reason": "condition_phase_effect_not_compiled",
+          "source": "catalog/condition_recipes.json:/condition.spell.shield/interceptionEffectsByDirection/S/0"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · layer:persistent.shield.hit.S.front",
+          "reason": "condition_phase_effect_not_compiled",
+          "source": "catalog/condition_recipes.json:/condition.spell.shield/interceptionEffectsByDirection/S/1"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · layer:persistent.shield.hit.SE.back",
+          "reason": "condition_phase_effect_not_compiled",
+          "source": "catalog/condition_recipes.json:/condition.spell.shield/interceptionEffectsByDirection/SE/0"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · layer:persistent.shield.hit.SE.front",
+          "reason": "condition_phase_effect_not_compiled",
+          "source": "catalog/condition_recipes.json:/condition.spell.shield/interceptionEffectsByDirection/SE/1"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · layer:persistent.shield.hit.SW.back",
+          "reason": "condition_phase_effect_not_compiled",
+          "source": "catalog/condition_recipes.json:/condition.spell.shield/interceptionEffectsByDirection/SW/0"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · layer:persistent.shield.hit.SW.front",
+          "reason": "condition_phase_effect_not_compiled",
+          "source": "catalog/condition_recipes.json:/condition.spell.shield/interceptionEffectsByDirection/SW/1"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · layer:persistent.shield.hit.W.back",
+          "reason": "condition_phase_effect_not_compiled",
+          "source": "catalog/condition_recipes.json:/condition.spell.shield/interceptionEffectsByDirection/W/0"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · layer:persistent.shield.hit.W.front",
+          "reason": "condition_phase_effect_not_compiled",
+          "source": "catalog/condition_recipes.json:/condition.spell.shield/interceptionEffectsByDirection/W/1"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · cast_binding",
+          "reason": "condition_reaction_binding_not_compiled",
+          "source": "catalog/condition_recipes.json:/condition.spell.shield/reactionCastBinding"
+        }
+      ],
+      "operations": 2,
+      "presentation_end_ms": 2903.92333333333
+    },
+    {
+      "actions": [
+        {
+          "behavior": "action.drop_concentration",
+          "bodies": [],
+          "event_uuid": "dcf2b341-686b-4016-bf65-b217ae05fde2"
+        }
+      ],
+      "case": "hold_person-seed3",
+      "duration_ms": 2100.0,
+      "missing": [
+        {
+          "kind": "requirement",
+          "label": "Missing · persistent_indicator",
+          "reason": "persistent_visual_assignment_missing",
+          "source": "catalog/condition_recipes.json:/condition.concentrating/persistent"
+        }
+      ],
+      "operations": 8,
+      "presentation_end_ms": 4818.75
+    },
+    {
+      "actions": [],
+      "case": "window-seed3-v2",
+      "duration_ms": 1750.0,
+      "missing": [],
+      "operations": 3,
+      "presentation_end_ms": 2158.396
+    },
+    {
+      "actions": [
+        {
+          "behavior": "action.attack",
+          "bodies": [
+            "Attack1"
+          ],
+          "event_uuid": "843668a0-a2d6-4869-8664-ad8adcf67977"
+        },
+        {
+          "behavior": "action.feature.extra_attack",
+          "bodies": [
+            "Attack1"
+          ],
+          "event_uuid": "4ae1f88b-c34d-4d24-8bbc-b8d7dbcc6650"
+        }
+      ],
+      "case": "window_break-seed3-v3",
+      "duration_ms": 4150.0,
+      "missing": [],
+      "operations": 4,
+      "presentation_end_ms": 4558.396
+    },
+    {
+      "actions": [
+        {
+          "behavior": "action.attack",
+          "bodies": [
+            "Attack1"
+          ],
+          "event_uuid": "d35b1fd1-1bb4-4ded-939c-390d0fc7a242"
+        },
+        {
+          "behavior": "action.feature.extra_attack",
+          "bodies": [
+            "Attack1"
+          ],
+          "event_uuid": "54464993-17c7-46bf-86fe-92f927da1213"
+        },
+        {
+          "behavior": "action.class.fighter.action_surge",
+          "bodies": [
+            "Idle4"
+          ],
+          "event_uuid": "fe0f6f4f-2517-4ff9-834a-72e6cc09ddeb"
+        },
+        {
+          "behavior": "action.attack",
+          "bodies": [
+            "Attack1"
+          ],
+          "event_uuid": "5ecb0211-d42f-4a56-8913-cf7b0db2c2dc"
+        },
+        {
+          "behavior": "action.feature.extra_attack",
+          "bodies": [
+            "Attack1"
+          ],
+          "event_uuid": "0269d9fc-cf36-4431-bd2d-6f64b9defa57"
+        }
+      ],
+      "case": "action_economy-seed3-v2",
+      "duration_ms": 10816.6666666667,
+      "missing": [],
+      "operations": 6,
+      "presentation_end_ms": 10816.6666666667
+    },
+    {
+      "actions": [],
+      "case": "poisoned-seed3-v2",
+      "duration_ms": 2516.66666666667,
+      "missing": [],
+      "operations": 3,
+      "presentation_end_ms": 3250.0
+    },
+    {
+      "actions": [],
+      "case": "walk_diagonal-seed3-v2",
+      "duration_ms": 2267.76692271233,
+      "missing": [],
+      "operations": 2,
+      "presentation_end_ms": 2380.55592271233
+    },
+    {
+      "actions": [],
+      "case": "elevation-seed3",
+      "duration_ms": 1750.0,
+      "missing": [],
+      "operations": 2,
+      "presentation_end_ms": 1862.789
+    },
+    {
+      "actions": [],
+      "case": "jump-seed3-v2",
+      "duration_ms": 1450.0,
+      "missing": [],
+      "operations": 2,
+      "presentation_end_ms": 1858.396
+    },
+    {
+      "actions": [],
+      "case": "oa_jump-seed3-v2",
+      "duration_ms": 3266.66666666667,
+      "missing": [],
+      "operations": 2,
+      "presentation_end_ms": 3675.06266666667
+    },
+    {
+      "actions": [],
+      "case": "oa_jump_lethal-seed5-v2",
+      "duration_ms": 2451.75438596491,
+      "missing": [],
+      "operations": 2,
+      "presentation_end_ms": 2956.85638596491
+    },
+    {
+      "actions": [],
+      "case": "oa_jump_late_lethal-seed5-v2",
+      "duration_ms": 3301.75438596491,
+      "missing": [],
+      "operations": 2,
+      "presentation_end_ms": 3806.85638596491
+    },
+    {
+      "actions": [],
+      "case": "prone-seed3-v3",
+      "duration_ms": 4016.66666666667,
+      "missing": [],
+      "operations": 4,
+      "presentation_end_ms": 4124.30866666667
+    },
+    {
+      "actions": [
+        {
+          "behavior": "action.class.barbarian.frenzy",
+          "bodies": [
+            "Idle4"
+          ],
+          "event_uuid": "4268379b-f894-488c-b5b0-ffae342d57fd"
+        }
+      ],
+      "case": "rage-seed3-v3",
+      "duration_ms": 3387.5,
+      "missing": [],
+      "operations": 7,
+      "presentation_end_ms": 4787.5
+    },
+    {
+      "actions": [
+        {
+          "behavior": "action.item.torch.extinguish",
+          "bodies": [],
+          "event_uuid": "1bb3d1a7-cb07-48f2-902c-6876018b6fdb"
+        },
+        {
+          "behavior": "action.hide",
+          "bodies": [
+            "CrouchIdle"
+          ],
+          "event_uuid": "6a558b3b-2c55-4e54-be48-c33a1e5f6256"
+        },
+        {
+          "behavior": "action.attack",
+          "bodies": [
+            "Attack3"
+          ],
+          "event_uuid": "06b616e2-717d-4f92-851b-61c98b1547f7"
+        }
+      ],
+      "case": "hide-seed3-v3",
+      "duration_ms": 5437.68428548177,
+      "missing": [],
+      "operations": 9,
+      "presentation_end_ms": 5587.68428548177
+    },
+    {
+      "actions": [
+        {
+          "behavior": "action.item.torch.extinguish",
+          "bodies": [],
+          "event_uuid": "fb2b8287-ca08-4138-9e72-2d4a07e247da"
+        },
+        {
+          "behavior": "action.hide",
+          "bodies": [
+            "CrouchIdle"
+          ],
+          "event_uuid": "5df3443e-68ee-4567-8527-4de0c6e4faed"
+        },
+        {
+          "behavior": "action.item.torch.extinguish",
+          "bodies": [],
+          "event_uuid": "efc3dad3-a18f-4681-b207-53dc37d67177"
+        },
+        {
+          "behavior": "action.item.torch.ignite",
+          "bodies": [],
+          "event_uuid": "9ff0aa5c-9764-467b-8350-65023e30f55b"
+        }
+      ],
+      "case": "hide-light-schema9-seed3",
+      "duration_ms": 7111.84461514155,
+      "missing": [],
+      "operations": 14,
+      "presentation_end_ms": 8511.84461514155
+    },
+    {
+      "actions": [
+        {
+          "behavior": "action.drop_concentration",
+          "bodies": [],
+          "event_uuid": "3c164753-31d7-470c-975f-a353df0ce6e7"
+        }
+      ],
+      "case": "condition_suppression-seed3-v2",
+      "duration_ms": 7816.66666666667,
+      "missing": [
+        {
+          "kind": "requirement",
+          "label": "Missing · condition",
+          "reason": "authored_condition_liveCopies_not_implemented",
+          "source": "catalog/condition_recipes.json:/condition.spell.mirror_image/persistent.liveCopies"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · liveCopies",
+          "reason": "condition_liveCopies_not_implemented",
+          "source": "catalog/condition_recipes.json:/condition.spell.mirror_image/persistent/liveCopies"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · layer:persistent.mirror_image.smoke.back",
+          "reason": "condition_phase_effect_not_compiled",
+          "source": "catalog/condition_recipes.json:/condition.spell.mirror_image/persistent/liveCopies/applicationEffects/0"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · layer:persistent.mirror_image.smoke.front",
+          "reason": "condition_phase_effect_not_compiled",
+          "source": "catalog/condition_recipes.json:/condition.spell.mirror_image/persistent/liveCopies/applicationEffects/1"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · layer:persistent.mirror_image.smoke.back",
+          "reason": "condition_phase_effect_not_compiled",
+          "source": "catalog/condition_recipes.json:/condition.spell.mirror_image/persistent/liveCopies/removalEffects/0"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · layer:persistent.mirror_image.smoke.front",
+          "reason": "condition_phase_effect_not_compiled",
+          "source": "catalog/condition_recipes.json:/condition.spell.mirror_image/persistent/liveCopies/removalEffects/1"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · persistent_indicator",
+          "reason": "persistent_visual_assignment_missing",
+          "source": "catalog/condition_recipes.json:/condition.concentrating/persistent"
+        }
+      ],
+      "operations": 8,
+      "presentation_end_ms": 8800.0
+    },
+    {
+      "actions": [
+        {
+          "behavior": "action.drop_concentration",
+          "bodies": [],
+          "event_uuid": "78736d71-f873-48c4-adf5-c4e58730de1a"
+        },
+        {
+          "behavior": "action.drop_concentration",
+          "bodies": [],
+          "event_uuid": "c50e30dd-e5ba-454f-9d43-0356f6c43def"
+        }
+      ],
+      "case": "condition_owners-seed4",
+      "duration_ms": 4050.0,
+      "missing": [
+        {
+          "kind": "requirement",
+          "label": "Missing · persistent_indicator",
+          "reason": "persistent_visual_assignment_missing",
+          "source": "catalog/condition_recipes.json:/condition.concentrating/persistent"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · persistent_indicator",
+          "reason": "persistent_visual_assignment_missing",
+          "source": "catalog/condition_recipes.json:/condition.concentrating/persistent"
+        }
+      ],
+      "operations": 15,
+      "presentation_end_ms": 6768.75
+    },
+    {
+      "actions": [
+        {
+          "behavior": "action.drop_concentration",
+          "bodies": [],
+          "event_uuid": "4473d1aa-b8e5-46f2-bea6-08637d9dba26"
+        }
+      ],
+      "case": "invisibility-seed3-v2",
+      "duration_ms": 5233.33333333333,
+      "missing": [
+        {
+          "kind": "requirement",
+          "label": "Missing · persistent_indicator",
+          "reason": "persistent_visual_assignment_missing",
+          "source": "catalog/condition_recipes.json:/condition.concentrating/persistent"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · layer:sensory.see_invisibility.back:application_asset_id",
+          "reason": "condition_media_lifecycle_not_implemented",
+          "source": "catalog/condition_media.json:/sensory.see_invisibility.back/application_asset_id"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · layer:sensory.see_invisibility.back:sustain_start_ms",
+          "reason": "condition_media_clock_not_implemented",
+          "source": "catalog/condition_media.json:/sensory.see_invisibility.back/sustain_start_ms"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · layer:sensory.see_invisibility.front:application_asset_id",
+          "reason": "condition_media_lifecycle_not_implemented",
+          "source": "catalog/condition_media.json:/sensory.see_invisibility.front/application_asset_id"
+        },
+        {
+          "kind": "requirement",
+          "label": "Missing · layer:sensory.see_invisibility.front:sustain_start_ms",
+          "reason": "condition_media_clock_not_implemented",
+          "source": "catalog/condition_media.json:/sensory.see_invisibility.front/sustain_start_ms"
+        }
+      ],
+      "operations": 10,
+      "presentation_end_ms": 6633.33333333333
+    },
+    {
+      "actions": [
+        {
+          "behavior": "action.attack",
+          "bodies": [
+            "Attack1"
+          ],
+          "event_uuid": "ba4ae8a5-a53a-4e95-9604-1ad095f43333"
+        }
+      ],
+      "case": "dying-seed5",
+      "duration_ms": 3816.66666666667,
+      "missing": [],
+      "operations": 13,
+      "presentation_end_ms": 5216.66666666667
+    }
+  ],
+  "failures": [],
+  "scope": "Current compiled real-case requirement audit; not rendered/audio acceptance."
+}

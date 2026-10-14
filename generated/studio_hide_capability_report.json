@@ -1,0 +1,585 @@
+{
+  "behavior": "action.hide",
+  "command": {
+    "arguments": [
+      "--recording=res://.runtime/studio-cases/hide-seed3-v3/amber/journal",
+      "--behavior=action.hide",
+      "--require-body",
+      "--output=res://generated/studio_hide_capability_report.json"
+    ],
+    "script": "res://tools/studio_capability_report.gd"
+  },
+  "context_gaps": [
+    {
+      "category": "implementation",
+      "coverage": {
+        "implementation": "missing",
+        "prepared": "not_prepared",
+        "rendered": "not_rendered",
+        "source": "not_examined"
+      },
+      "end_ms": 500.0,
+      "id": "2:5bc52305-0d5e-485e-bd18-6e9b8229df45:required:0",
+      "implementation": "missing",
+      "kind": "requirement",
+      "label": "Missing · body",
+      "legacy_source": "",
+      "markers": [],
+      "parent_id": "2:5bc52305-0d5e-485e-bd18-6e9b8229df45",
+      "prepared": "not_prepared",
+      "reason": "authored_equipment_body_not_implemented",
+      "rendered": "not_witnessed",
+      "required_kind": "body",
+      "source": "catalog/equipment_context.json",
+      "source_availability": "not_examined",
+      "source_event_uuid": "5bc52305-0d5e-485e-bd18-6e9b8229df45",
+      "start_ms": 500.0,
+      "status": "missing",
+      "timing": {
+        "reason": "authored_timing_not_resolved",
+        "status": "unresolved"
+      }
+    },
+    {
+      "category": "implementation",
+      "coverage": {
+        "implementation": "missing",
+        "prepared": "not_prepared",
+        "rendered": "not_rendered",
+        "source": "not_examined"
+      },
+      "end_ms": 3421.0176188151,
+      "id": "9:4d29af4b-b4b9-4744-93de-26736b15c1c5:required:5",
+      "implementation": "missing",
+      "kind": "requirement",
+      "label": "Missing · residue_deposit",
+      "legacy_source": "",
+      "markers": [],
+      "parent_id": "9:4d29af4b-b4b9-4744-93de-26736b15c1c5",
+      "prepared": "not_prepared",
+      "reason": "authoritative_residue_renderer_not_implemented",
+      "rendered": "not_witnessed",
+      "required_kind": "residue_deposit",
+      "source": "world.json:/residue_ground/residue.blood",
+      "source_availability": "not_examined",
+      "source_event_uuid": "4d29af4b-b4b9-4744-93de-26736b15c1c5",
+      "start_ms": 3421.0176188151,
+      "status": "missing",
+      "timing": {
+        "reason": "persistent_residue_follows_authoritative_tile_state",
+        "status": "unresolved"
+      }
+    },
+    {
+      "category": "implementation",
+      "coverage": {
+        "implementation": "missing",
+        "prepared": "not_prepared",
+        "rendered": "not_rendered",
+        "source": "not_examined"
+      },
+      "end_ms": 2033.33333333333,
+      "id": "9:06b616e2-717d-4f92-851b-61c98b1547f7:required:4",
+      "implementation": "missing",
+      "kind": "requirement",
+      "label": "Missing · weapon_trail",
+      "legacy_source": "",
+      "markers": [],
+      "parent_id": "9:06b616e2-717d-4f92-851b-61c98b1547f7",
+      "prepared": "not_prepared",
+      "reason": "authored_weapon_trail_not_implemented",
+      "rendered": "not_witnessed",
+      "required_kind": "weapon_trail",
+      "source": "catalog/attack_recipes.json:/action.attack/weaponTrail",
+      "source_availability": "not_examined",
+      "source_event_uuid": "06b616e2-717d-4f92-851b-61c98b1547f7",
+      "start_ms": 2033.33333333333,
+      "status": "missing",
+      "timing": {
+        "reason": "authored_timing_not_resolved",
+        "status": "unresolved"
+      }
+    },
+    {
+      "category": "source",
+      "coverage": {
+        "implementation": "resolved",
+        "prepared": "not_examined",
+        "rendered": "not_witnessed",
+        "source": "missing"
+      },
+      "end_ms": 2033.33333333333,
+      "id": "9:06b616e2-717d-4f92-851b-61c98b1547f7:audio:projectile_release:7",
+      "implementation": "resolved",
+      "kind": "audio",
+      "label": "projectile_release",
+      "legacy_source": "",
+      "markers": [],
+      "parent_id": "9:06b616e2-717d-4f92-851b-61c98b1547f7",
+      "prepared": "not_examined",
+      "reason": "No selected bow/crossbow release recording.",
+      "rendered": "not_witnessed",
+      "required_kind": "audio",
+      "source": "audio/cues.json:/cues/projectile_release",
+      "source_availability": "missing",
+      "source_event_uuid": "06b616e2-717d-4f92-851b-61c98b1547f7",
+      "start_ms": 2033.33333333333,
+      "status": "missing",
+      "timing": {
+        "status": "compiled"
+      }
+    }
+  ],
+  "counts": {
+    "all_timeline_gaps": 4,
+    "context_gaps": 4,
+    "occurrences": 1,
+    "owned_gaps": 0
+  },
+  "failures": [],
+  "identity": {
+    "audience_id": "ff715b70-b6b9-4fdf-9a3c-435b9b5a13cf",
+    "game_epoch": "107352aa-6b09-4ca1-80e5-0d88ed8ecc5f",
+    "game_id": "presentation_walk",
+    "sequence": 0
+  },
+  "occurrences": [
+    {
+      "actor_uuid": "7a25a76a-de36-4397-a580-df225af87c51",
+      "behavior_id": "action.hide",
+      "body_tracks": [
+        {
+          "clip": "CrouchIdle",
+          "duration_ms": 416.666666666667,
+          "end_ms": 916.666666666667,
+          "id": "3:6a558b3b-2c55-4e54-be48-c33a1e5f6256:0",
+          "kind": "body",
+          "label": "Body · CrouchIdle",
+          "legacy_source": "",
+          "markers": [
+            {
+              "at_ms": 916.666666666667,
+              "kind": "contact",
+              "source": "compiled.actor_tracks.contact_ms"
+            }
+          ],
+          "missing_paths": [],
+          "parent_id": "3:6a558b3b-2c55-4e54-be48-c33a1e5f6256",
+          "prepared": "not_examined",
+          "rendered": "not_witnessed",
+          "rig": "neuroclient.modular",
+          "source": "res://authoring/presentation/clips/modular_crouch_idle.tres",
+          "source_available": true,
+          "source_end_seconds": 1.25,
+          "source_event_uuid": "6a558b3b-2c55-4e54-be48-c33a1e5f6256",
+          "source_lookup_ok": true,
+          "source_paths": [
+            "/media/smallscale/modular/NakedBody/CrouchIdle.png",
+            "C:/Users/tommaso/Documents/assets/fantasy-unified-catalog/modular-character-geometry-2026-10-11/full-components/exports/fused/maps/NakedBody/CrouchIdle/depth.png",
+            "C:/Users/tommaso/Documents/assets/fantasy-unified-catalog/modular-character-geometry-2026-10-11/full-components/exports/fused/maps/NakedBody/CrouchIdle/normals.png",
+            "C:/Users/tommaso/Documents/assets/fantasy-unified-catalog/modular-character-geometry-2026-10-11/full-components/exports/fused/maps/NakedBody/CrouchIdle/raw-support.png",
+            "C:/Users/tommaso/Documents/assets/fantasy-unified-catalog/modular-character-geometry-2026-10-11/full-components/exports/fused/maps/NakedBody/CrouchIdle/normal-valid.png",
+            "C:/Users/tommaso/Documents/Dev/NDCharacterLight/.derived/normals/gentle/NakedBody/CrouchIdle.png",
+            "C:/Users/tommaso/Documents/Dev/NDCharacterLight/.derived/normals/reference/NakedBody/CrouchIdle.png",
+            "/media/smallscale/modular/Legs7/CrouchIdle.png",
+            "C:/Users/tommaso/Documents/assets/fantasy-unified-catalog/modular-character-geometry-2026-10-11/full-components/exports/fused/maps/Legs7/CrouchIdle/depth.png",
+            "C:/Users/tommaso/Documents/assets/fantasy-unified-catalog/modular-character-geometry-2026-10-11/full-components/exports/fused/maps/Legs7/CrouchIdle/normals.png",
+            "C:/Users/tommaso/Documents/assets/fantasy-unified-catalog/modular-character-geometry-2026-10-11/full-components/exports/fused/maps/Legs7/CrouchIdle/raw-support.png",
+            "C:/Users/tommaso/Documents/assets/fantasy-unified-catalog/modular-character-geometry-2026-10-11/full-components/exports/fused/maps/Legs7/CrouchIdle/normal-valid.png",
+            "C:/Users/tommaso/Documents/Dev/NDCharacterLight/.derived/normals/gentle/Legs7/CrouchIdle.png",
+            "C:/Users/tommaso/Documents/Dev/NDCharacterLight/.derived/normals/reference/Legs7/CrouchIdle.png",
+            "/media/smallscale/modular/Shoes2/CrouchIdle.png",
+            "C:/Users/tommaso/Documents/assets/fantasy-unified-catalog/modular-character-geometry-2026-10-11/full-components/exports/fused/maps/Shoes2/CrouchIdle/depth.png",
+            "C:/Users/tommaso/Documents/assets/fantasy-unified-catalog/modular-character-geometry-2026-10-11/full-components/exports/fused/maps/Shoes2/CrouchIdle/normals.png",
+            "C:/Users/tommaso/Documents/assets/fantasy-unified-catalog/modular-character-geometry-2026-10-11/full-components/exports/fused/maps/Shoes2/CrouchIdle/raw-support.png",
+            "C:/Users/tommaso/Documents/assets/fantasy-unified-catalog/modular-character-geometry-2026-10-11/full-components/exports/fused/maps/Shoes2/CrouchIdle/normal-valid.png",
+            "C:/Users/tommaso/Documents/Dev/NDCharacterLight/.derived/normals/gentle/Shoes2/CrouchIdle.png",
+            "C:/Users/tommaso/Documents/Dev/NDCharacterLight/.derived/normals/reference/Shoes2/CrouchIdle.png",
+            "/media/smallscale/modular/Chest7/CrouchIdle.png",
+            "C:/Users/tommaso/Documents/assets/fantasy-unified-catalog/modular-character-geometry-2026-10-11/full-components/exports/fused/maps/Chest7/CrouchIdle/depth.png",
+            "C:/Users/tommaso/Documents/assets/fantasy-unified-catalog/modular-character-geometry-2026-10-11/full-components/exports/fused/maps/Chest7/CrouchIdle/normals.png",
+            "C:/Users/tommaso/Documents/assets/fantasy-unified-catalog/modular-character-geometry-2026-10-11/full-components/exports/fused/maps/Chest7/CrouchIdle/raw-support.png",
+            "C:/Users/tommaso/Documents/assets/fantasy-unified-catalog/modular-character-geometry-2026-10-11/full-components/exports/fused/maps/Chest7/CrouchIdle/normal-valid.png",
+            "C:/Users/tommaso/Documents/Dev/NDCharacterLight/.derived/normals/gentle/Chest7/CrouchIdle.png",
+            "C:/Users/tommaso/Documents/Dev/NDCharacterLight/.derived/normals/reference/Chest7/CrouchIdle.png",
+            "/media/smallscale/modular/Belt1/CrouchIdle.png",
+            "C:/Users/tommaso/Documents/assets/fantasy-unified-catalog/modular-character-geometry-2026-10-11/full-components/exports/fused/maps/Belt1/CrouchIdle/depth.png",
+            "C:/Users/tommaso/Documents/assets/fantasy-unified-catalog/modular-character-geometry-2026-10-11/full-components/exports/fused/maps/Belt1/CrouchIdle/normals.png",
+            "C:/Users/tommaso/Documents/assets/fantasy-unified-catalog/modular-character-geometry-2026-10-11/full-components/exports/fused/maps/Belt1/CrouchIdle/raw-support.png",
+            "C:/Users/tommaso/Documents/assets/fantasy-unified-catalog/modular-character-geometry-2026-10-11/full-components/exports/fused/maps/Belt1/CrouchIdle/normal-valid.png",
+            "C:/Users/tommaso/Documents/Dev/NDCharacterLight/.derived/normals/gentle/Belt1/CrouchIdle.png",
+            "C:/Users/tommaso/Documents/Dev/NDCharacterLight/.derived/normals/reference/Belt1/CrouchIdle.png",
+            "/media/smallscale/modular/Shield5/CrouchIdle.png",
+            "C:/Users/tommaso/Documents/assets/fantasy-unified-catalog/modular-character-geometry-2026-10-11/full-components/exports/fused/maps/Shield5/CrouchIdle/depth.png",
+            "C:/Users/tommaso/Documents/assets/fantasy-unified-catalog/modular-character-geometry-2026-10-11/full-components/exports/fused/maps/Shield5/CrouchIdle/normals.png",
+            "C:/Users/tommaso/Documents/assets/fantasy-unified-catalog/modular-character-geometry-2026-10-11/full-components/exports/fused/maps/Shield5/CrouchIdle/raw-support.png",
+            "C:/Users/tommaso/Documents/assets/fantasy-unified-catalog/modular-character-geometry-2026-10-11/full-components/exports/fused/maps/Shield5/CrouchIdle/normal-valid.png",
+            "C:/Users/tommaso/Documents/Dev/NDCharacterLight/.derived/normals/gentle/Shield5/CrouchIdle.png",
+            "C:/Users/tommaso/Documents/Dev/NDCharacterLight/.derived/normals/reference/Shield5/CrouchIdle.png",
+            "/media/smallscale/modular/Melee2/CrouchIdle.png",
+            "C:/Users/tommaso/Documents/assets/fantasy-unified-catalog/modular-character-geometry-2026-10-11/full-components/exports/fused/maps/Melee2/CrouchIdle/depth.png",
+            "C:/Users/tommaso/Documents/assets/fantasy-unified-catalog/modular-character-geometry-2026-10-11/full-components/exports/fused/maps/Melee2/CrouchIdle/normals.png",
+            "C:/Users/tommaso/Documents/assets/fantasy-unified-catalog/modular-character-geometry-2026-10-11/full-components/exports/fused/maps/Melee2/CrouchIdle/raw-support.png",
+            "C:/Users/tommaso/Documents/assets/fantasy-unified-catalog/modular-character-geometry-2026-10-11/full-components/exports/fused/maps/Melee2/CrouchIdle/normal-valid.png",
+            "C:/Users/tommaso/Documents/Dev/NDCharacterLight/.derived/normals/gentle/Melee2/CrouchIdle.png",
+            "C:/Users/tommaso/Documents/Dev/NDCharacterLight/.derived/normals/reference/Melee2/CrouchIdle.png",
+            "/media/smallscale/modular/Head2/CrouchIdle.png",
+            "C:/Users/tommaso/Documents/assets/fantasy-unified-catalog/modular-character-geometry-2026-10-11/full-components/exports/fused/maps/Head2/CrouchIdle/depth.png",
+            "C:/Users/tommaso/Documents/assets/fantasy-unified-catalog/modular-character-geometry-2026-10-11/full-components/exports/fused/maps/Head2/CrouchIdle/normals.png",
+            "C:/Users/tommaso/Documents/assets/fantasy-unified-catalog/modular-character-geometry-2026-10-11/full-components/exports/fused/maps/Head2/CrouchIdle/raw-support.png",
+            "C:/Users/tommaso/Documents/assets/fantasy-unified-catalog/modular-character-geometry-2026-10-11/full-components/exports/fused/maps/Head2/CrouchIdle/normal-valid.png",
+            "C:/Users/tommaso/Documents/Dev/NDCharacterLight/.derived/normals/gentle/Head2/CrouchIdle.png",
+            "C:/Users/tommaso/Documents/Dev/NDCharacterLight/.derived/normals/reference/Head2/CrouchIdle.png",
+            "/media/smallscale/modular/Head10/CrouchIdle.png",
+            "C:/Users/tommaso/Documents/assets/fantasy-unified-catalog/modular-character-geometry-2026-10-11/full-components/exports/fused/maps/Head10/CrouchIdle/depth.png",
+            "C:/Users/tommaso/Documents/assets/fantasy-unified-catalog/modular-character-geometry-2026-10-11/full-components/exports/fused/maps/Head10/CrouchIdle/normals.png",
+            "C:/Users/tommaso/Documents/assets/fantasy-unified-catalog/modular-character-geometry-2026-10-11/full-components/exports/fused/maps/Head10/CrouchIdle/raw-support.png",
+            "C:/Users/tommaso/Documents/assets/fantasy-unified-catalog/modular-character-geometry-2026-10-11/full-components/exports/fused/maps/Head10/CrouchIdle/normal-valid.png",
+            "C:/Users/tommaso/Documents/Dev/NDCharacterLight/.derived/normals/gentle/Head10/CrouchIdle.png",
+            "C:/Users/tommaso/Documents/Dev/NDCharacterLight/.derived/normals/reference/Head10/CrouchIdle.png",
+            "/media/smallscale/modular/Head13/CrouchIdle.png",
+            "C:/Users/tommaso/Documents/assets/fantasy-unified-catalog/modular-character-geometry-2026-10-11/full-components/exports/fused/maps/Head13/CrouchIdle/depth.png",
+            "C:/Users/tommaso/Documents/assets/fantasy-unified-catalog/modular-character-geometry-2026-10-11/full-components/exports/fused/maps/Head13/CrouchIdle/normals.png",
+            "C:/Users/tommaso/Documents/assets/fantasy-unified-catalog/modular-character-geometry-2026-10-11/full-components/exports/fused/maps/Head13/CrouchIdle/raw-support.png",
+            "C:/Users/tommaso/Documents/assets/fantasy-unified-catalog/modular-character-geometry-2026-10-11/full-components/exports/fused/maps/Head13/CrouchIdle/normal-valid.png",
+            "C:/Users/tommaso/Documents/Dev/NDCharacterLight/.derived/normals/gentle/Head13/CrouchIdle.png",
+            "C:/Users/tommaso/Documents/Dev/NDCharacterLight/.derived/normals/reference/Head13/CrouchIdle.png"
+          ],
+          "source_start_seconds": 0.0,
+          "source_time_keys": [],
+          "start_ms": 500.0,
+          "status": "available",
+          "timing": {
+            "status": "compiled"
+          },
+          "valid_clip": true
+        }
+      ],
+      "child_conditions": [
+        {
+          "application_event_uuid": "1418850b-84ba-40d8-a472-627b24f9a0ab",
+          "application_markers": [
+            {
+              "at_ms": 916.666666666667,
+              "kind": "commit",
+              "source": "compiled.commits.at_ms"
+            }
+          ],
+          "behavior_id": "condition.hidden",
+          "condition_uuid": "a652450d-63c3-451f-b9a7-db97c4892b46",
+          "end_ms": 3421.0176188151,
+          "id": "condition:a652450d-63c3-451f-b9a7-db97c4892b46",
+          "initial": false,
+          "kind": "condition",
+          "label": "Hidden",
+          "legacy_source": "",
+          "markers": [],
+          "parent_id": "3:1418850b-84ba-40d8-a472-627b24f9a0ab",
+          "rendered": "not_witnessed",
+          "source": "catalog/condition_recipes.json:/condition.hidden",
+          "source_event_uuid": "",
+          "start_ms": 916.666666666667,
+          "status": "available",
+          "timing": {
+            "status": "compiled"
+          }
+        }
+      ],
+      "commit_markers": [
+        {
+          "at_ms": 916.666666666667,
+          "kind": "commit",
+          "source": "compiled.commits.at_ms"
+        }
+      ],
+      "component_tracks": [
+        {
+          "coverage": {
+            "implementation": "resolved",
+            "prepared": "not_examined",
+            "rendered": "not_witnessed",
+            "source": "available"
+          },
+          "end_ms": 2316.66666666667,
+          "id": "3:1418850b-84ba-40d8-a472-627b24f9a0ab:feedback_text:0",
+          "kind": "feedback_text",
+          "label": "+Hidden",
+          "legacy_source": "catalog/condition_recipes.json:/condition.hidden/application/feedbackEnabled",
+          "markers": [],
+          "parent_id": "3:1418850b-84ba-40d8-a472-627b24f9a0ab",
+          "rendered": "not_witnessed",
+          "source": "res://authoring/presentation/conditions/hidden.tres::application_feedback/enabled",
+          "source_event_uuid": "1418850b-84ba-40d8-a472-627b24f9a0ab",
+          "start_ms": 916.666666666667,
+          "status": "available",
+          "timing": {
+            "status": "compiled"
+          }
+        },
+        {
+          "coverage": {
+            "implementation": "resolved",
+            "prepared": "not_examined",
+            "rendered": "not_witnessed",
+            "source": "available"
+          },
+          "end_ms": 1485.45866666667,
+          "id": "3:6a558b3b-2c55-4e54-be48-c33a1e5f6256:audio:hide_transition:1",
+          "kind": "audio",
+          "label": "hide_transition",
+          "legacy_source": "",
+          "markers": [
+            {
+              "at_ms": 916.666666666667,
+              "kind": "action.effect",
+              "source": "compiled.component.source_marker"
+            }
+          ],
+          "parent_id": "3:6a558b3b-2c55-4e54-be48-c33a1e5f6256",
+          "rendered": "not_witnessed",
+          "source": "audio/cues.json:/cues/hide_transition",
+          "source_event_uuid": "6a558b3b-2c55-4e54-be48-c33a1e5f6256",
+          "start_ms": 916.666666666667,
+          "status": "available",
+          "timing": {
+            "status": "compiled"
+          }
+        },
+        {
+          "end_ms": 1266.66666666667,
+          "id": "condition:a652450d-63c3-451f-b9a7-db97c4892b46:member:0:material",
+          "kind": "condition_material",
+          "label": "Material · alphaMultiplier",
+          "legacy_source": "",
+          "markers": [],
+          "parent_id": "condition:a652450d-63c3-451f-b9a7-db97c4892b46",
+          "rendered": "not_witnessed",
+          "source": "catalog/condition_recipes.json:/condition.hidden",
+          "source_event_uuid": "",
+          "source_fields": {
+            "alphaMultiplier": "res://authoring/presentation/conditions/hidden.tres::body_filter/opacity"
+          },
+          "start_ms": 916.666666666667,
+          "status": "available",
+          "timing": {
+            "status": "compiled"
+          }
+        },
+        {
+          "end_ms": 1266.66666666667,
+          "id": "condition:a652450d-63c3-451f-b9a7-db97c4892b46:member:0:pose",
+          "kind": "condition_pose",
+          "label": "Idle · CrouchIdle",
+          "legacy_source": "catalog/condition_recipes.json:/condition.hidden/persistent/activityPoses/0",
+          "markers": [],
+          "parent_id": "condition:a652450d-63c3-451f-b9a7-db97c4892b46",
+          "rendered": "not_witnessed",
+          "source": "res://authoring/presentation/conditions/hidden.tres::activity_poses/0",
+          "source_event_uuid": "",
+          "start_ms": 916.666666666667,
+          "status": "available",
+          "timing": {
+            "status": "compiled"
+          }
+        },
+        {
+          "end_ms": 1683.33333333333,
+          "id": "condition:a652450d-63c3-451f-b9a7-db97c4892b46:member:1:material",
+          "kind": "condition_material",
+          "label": "Material · alphaMultiplier",
+          "legacy_source": "",
+          "markers": [],
+          "parent_id": "condition:a652450d-63c3-451f-b9a7-db97c4892b46",
+          "rendered": "not_witnessed",
+          "source": "catalog/condition_recipes.json:/condition.hidden",
+          "source_event_uuid": "",
+          "source_fields": {
+            "alphaMultiplier": "res://authoring/presentation/conditions/hidden.tres::body_filter/opacity"
+          },
+          "start_ms": 1266.66666666667,
+          "status": "available",
+          "timing": {
+            "status": "compiled"
+          }
+        },
+        {
+          "end_ms": 1683.33333333333,
+          "id": "condition:a652450d-63c3-451f-b9a7-db97c4892b46:member:1:pose",
+          "kind": "condition_pose",
+          "label": "Move · CrouchRun",
+          "legacy_source": "catalog/condition_recipes.json:/condition.hidden/persistent/activityPoses/1",
+          "markers": [],
+          "parent_id": "condition:a652450d-63c3-451f-b9a7-db97c4892b46",
+          "rendered": "not_witnessed",
+          "source": "res://authoring/presentation/conditions/hidden.tres::activity_poses/1",
+          "source_event_uuid": "",
+          "start_ms": 1266.66666666667,
+          "status": "available",
+          "timing": {
+            "status": "compiled"
+          }
+        },
+        {
+          "end_ms": 2033.33333333333,
+          "id": "condition:a652450d-63c3-451f-b9a7-db97c4892b46:member:2:material",
+          "kind": "condition_material",
+          "label": "Material · alphaMultiplier",
+          "legacy_source": "",
+          "markers": [],
+          "parent_id": "condition:a652450d-63c3-451f-b9a7-db97c4892b46",
+          "rendered": "not_witnessed",
+          "source": "catalog/condition_recipes.json:/condition.hidden",
+          "source_event_uuid": "",
+          "source_fields": {
+            "alphaMultiplier": "res://authoring/presentation/conditions/hidden.tres::body_filter/opacity"
+          },
+          "start_ms": 1683.33333333333,
+          "status": "available",
+          "timing": {
+            "status": "compiled"
+          }
+        },
+        {
+          "end_ms": 2033.33333333333,
+          "id": "condition:a652450d-63c3-451f-b9a7-db97c4892b46:member:2:pose",
+          "kind": "condition_pose",
+          "label": "Idle · CrouchIdle",
+          "legacy_source": "catalog/condition_recipes.json:/condition.hidden/persistent/activityPoses/0",
+          "markers": [],
+          "parent_id": "condition:a652450d-63c3-451f-b9a7-db97c4892b46",
+          "rendered": "not_witnessed",
+          "source": "res://authoring/presentation/conditions/hidden.tres::activity_poses/0",
+          "source_event_uuid": "",
+          "start_ms": 1683.33333333333,
+          "status": "available",
+          "timing": {
+            "status": "compiled"
+          }
+        },
+        {
+          "end_ms": 3283.33333333333,
+          "id": "condition:a652450d-63c3-451f-b9a7-db97c4892b46:member:3:material",
+          "kind": "condition_material",
+          "label": "Material · alphaMultiplier",
+          "legacy_source": "",
+          "markers": [],
+          "parent_id": "condition:a652450d-63c3-451f-b9a7-db97c4892b46",
+          "rendered": "not_witnessed",
+          "source": "catalog/condition_recipes.json:/condition.hidden",
+          "source_event_uuid": "",
+          "source_fields": {
+            "alphaMultiplier": "res://authoring/presentation/conditions/hidden.tres::body_filter/opacity"
+          },
+          "start_ms": 2033.33333333333,
+          "status": "available",
+          "timing": {
+            "status": "compiled"
+          }
+        },
+        {
+          "end_ms": 3421.0176188151,
+          "id": "condition:a652450d-63c3-451f-b9a7-db97c4892b46:member:4:material",
+          "kind": "condition_material",
+          "label": "Material · alphaMultiplier",
+          "legacy_source": "",
+          "markers": [],
+          "parent_id": "condition:a652450d-63c3-451f-b9a7-db97c4892b46",
+          "rendered": "not_witnessed",
+          "source": "catalog/condition_recipes.json:/condition.hidden",
+          "source_event_uuid": "",
+          "source_fields": {
+            "alphaMultiplier": "res://authoring/presentation/conditions/hidden.tres::body_filter/opacity"
+          },
+          "start_ms": 3283.33333333333,
+          "status": "available",
+          "timing": {
+            "status": "compiled"
+          }
+        },
+        {
+          "end_ms": 3421.0176188151,
+          "id": "condition:a652450d-63c3-451f-b9a7-db97c4892b46:member:4:pose",
+          "kind": "condition_pose",
+          "label": "Idle · CrouchIdle",
+          "legacy_source": "catalog/condition_recipes.json:/condition.hidden/persistent/activityPoses/0",
+          "markers": [],
+          "parent_id": "condition:a652450d-63c3-451f-b9a7-db97c4892b46",
+          "rendered": "not_witnessed",
+          "source": "res://authoring/presentation/conditions/hidden.tres::activity_poses/0",
+          "source_event_uuid": "",
+          "start_ms": 3283.33333333333,
+          "status": "available",
+          "timing": {
+            "status": "compiled"
+          }
+        }
+      ],
+      "end_ms": 916.666666666667,
+      "event_kind": "action",
+      "event_reasons": [],
+      "event_status": "state_only",
+      "event_uuid": "6a558b3b-2c55-4e54-be48-c33a1e5f6256",
+      "failures": [],
+      "group_id": "20010004-73bd-4ac8-85f1-8945458f9f08",
+      "id": "3:6a558b3b-2c55-4e54-be48-c33a1e5f6256",
+      "parent_id": "",
+      "passed": true,
+      "requirements": [
+        {
+          "actor_uuid": "7a25a76a-de36-4397-a580-df225af87c51",
+          "clip": "CrouchIdle",
+          "end_ms": 416.666666666667,
+          "first_sample_ms": null,
+          "holding_pose": false,
+          "id": "3:6a558b3b-2c55-4e54-be48-c33a1e5f6256:0",
+          "kind": "body",
+          "last_sample_ms": null,
+          "motion": false,
+          "reason": "",
+          "rig": "neuroclient.modular",
+          "sample_count": 0,
+          "source": "catalog/rigs.json:neuroclient.modular.clips.CrouchIdle",
+          "start_ms": 0.0,
+          "status": "playing",
+          "timing": {
+            "reason": "authored_timing_not_resolved",
+            "resolved": false
+          },
+          "trace_track_id": "3:6a558b3b-2c55-4e54-be48-c33a1e5f6256:0"
+        },
+        {
+          "actor_uuid": "7a25a76a-de36-4397-a580-df225af87c51",
+          "attachment": "body",
+          "clip": "",
+          "cue_id": "hide_transition",
+          "end_ms": 985.458666666667,
+          "first_sample_ms": null,
+          "id": "3:6a558b3b-2c55-4e54-be48-c33a1e5f6256:audio:hide_transition:1",
+          "kind": "audio",
+          "last_sample_ms": null,
+          "reason": "",
+          "rig": "",
+          "sample_count": 0,
+          "source": "audio/cues.json:/cues/hide_transition",
+          "start_ms": 416.666666666667,
+          "status": "playing",
+          "timing": {
+            "end_ms": 985.458666666667,
+            "reason": "compiled_source_clock",
+            "resolved": true,
+            "start_ms": 416.666666666667
+          },
+          "trace_track_id": "3:6a558b3b-2c55-4e54-be48-c33a1e5f6256:audio:hide_transition:1"
+        }
+      ],
+      "sequence": 3,
+      "start_ms": 500.0,
+      "unresolved_requirements": []
+    }
+  ],
+  "passed": true,
+  "recording": "res://.runtime/studio-cases/hide-seed3-v3/amber/journal",
+  "require_body": true,
+  "scope": "Compiled occurrence implementation and current referenced-file availability only. Prepared resources, rendered pixels and audible output require separate native evidence; context gaps are not hidden by a passing scoped action.",
+  "version": 1
+}

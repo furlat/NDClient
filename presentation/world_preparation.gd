@@ -262,7 +262,7 @@ func _prepare_order_record(index: int) -> void:
         order_updates.append(record)
 
 func publish_order() -> void:
-    if not result.needs_order: return
+    if not result.needs_order or not is_same(host.static_entries,membership.entries): return
     for record in order_updates:
         var entry: Dictionary = record.entry
         entry.order_key = record.key; entry.order_placement = entry.placement

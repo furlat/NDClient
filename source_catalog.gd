@@ -1,6 +1,7 @@
 extends RefCounted
 # Read the existing authoring owners; adapters return transient draw records.
 const Placement = preload("res://placement.gd")
+const NativeAuthoring = preload("res://presentation/native_authoring.gd")
 # Client original-rest selection policy, reusing the explicit chest pairs in
 # tools/build_unity_map.py. Source owner JSON binds reconstructed destruction
 # rests; retain those banks for destruction, and use the registered originals
@@ -21,11 +22,52 @@ static func media_path(path: String) -> String:
         return "//?/UNC/"+absolute.trim_prefix("//")
     return absolute
 
-static func read_file(relative_path: String, cache: Dictionary) -> Dictionary:
+static func read_file(relative_path: String, cache: Dictionary) -> Variant:
     if not cache.has(relative_path):
         var root: String = ProjectSettings.get_setting("source_data/authoring_root")
-        cache[relative_path] = JSON.parse_string(FileAccess.get_file_as_string(root.path_join(relative_path)))
+        var legacy: Variant = JSON.parse_string(FileAccess.get_file_as_string(root.path_join(relative_path)))
+        cache[relative_path] = NativeAuthoring.overlay(relative_path, legacy, cache)
     return cache[relative_path]
+
+static func source_pointer(document: String, pointer: String, cache: Dictionary) -> String:
+    return NativeAuthoring.source_pointer(document, pointer, read_file(document, cache))
+
+static func source_snapshot(cache: Dictionary) -> Dictionary:
+    # Effective source documents are immutable after admission. Give each worker
+    # its own cache shell, without reloading selected Resources or sharing derived
+    # caches. Validation belongs to this same source revision, including failures.
+    var snapshot = {}
+    for path in cache:
+        if path is String and path.ends_with(".json") and not path.begins_with("__"):
+            snapshot[path] = cache[path]
+    if cache.has("native_references_validated"):
+        snapshot.native_references_validated = cache.native_references_validated
+    if cache.has("native_authoring_errors"):
+        snapshot.native_authoring_errors = cache.native_authoring_errors.duplicate()
+    return snapshot
+
+static func validate_native(cache: Dictionary) -> Array:
+    # Passive metadata only. No texture decoding, scene creation or shader upload.
+    for document in ["catalog/condition_recipes.json", "catalog/body_action_recipes.json", "catalog/rigs.json", "catalog/resources.json"]:
+        read_file(document, cache)
+    if not cache.has("native_references_validated"):
+        var rigs:Dictionary=cache["catalog/rigs.json"]
+        for recipe in cache["catalog/body_action_recipes.json"].values():
+            if not recipe.has("_resource_source"):continue
+            var clip:Dictionary=rigs.get(recipe.rigId,{}).get("clips",{}).get(recipe.actor.clip,{})
+            if clip.is_empty():NativeAuthoring._error(cache,"Selected action has no source clip: "+recipe._resource_source)
+            else:
+                for marker in recipe.anchors:
+                    if marker.frame>clip.frames:NativeAuthoring._error(cache,"Selected action marker exceeds source duration: "+recipe._resource_source)
+        for recipe in cache["catalog/condition_recipes.json"].values():
+            for pose in recipe.get("persistent",{}).get("activityPoses",[]):
+                var clip:Dictionary=rigs.get(pose.rigId,{}).get("clips",{}).get(pose.clip,{})
+                if clip.is_empty():
+                    NativeAuthoring._error(cache,"Selected activity pose has no source clip: "+pose.rigId+"/"+pose.clip)
+                elif pose.sampling=="hold" and pose.frame>=clip.frames:
+                    NativeAuthoring._error(cache,"Selected held frame exceeds source clip: "+pose.rigId+"/"+pose.clip)
+        cache.native_references_validated=true
+    return cache.get("native_authoring_errors", [])
 
 static func bank_for(row: Dictionary, broken: bool, cache: Dictionary) -> String:
     var index = read_file("environment/index.json", cache)

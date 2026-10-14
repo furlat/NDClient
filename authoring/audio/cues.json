@@ -1,0 +1,576 @@
+{
+  "status": "temporary",
+  "source_manifest": "res://authoring/audio/sources.json",
+  "clock_policy": "bindings.json timing selectors and contacts.json source-frame markers resolve the shared component contact; per-variant source_sync_s aligns the sound transient. source_marker is descriptive provenance. One-shots require forward timeline crossing; silent scrub does not emit historical shots.",
+  "mix": {
+    "max_simultaneous_voices": 24,
+    "max_voices_per_cue": 4,
+    "note": "Admission/fades may bound audio overlap only; never delay authoritative events."
+  },
+  "cues": {
+    "footstep": {
+      "status": "temporary",
+      "clips": [
+        "res://assets/audio/kenney/impact/footstep_concrete_000.ogg",
+        "res://assets/audio/kenney/impact/footstep_concrete_001.ogg",
+        "res://assets/audio/kenney/impact/footstep_concrete_002.ogg"
+      ],
+      "clip_durations_s": [
+        0.105918,
+        0.107642,
+        0.112789
+      ],
+      "duration_s": 0.112789,
+      "gain_db": -12,
+      "bus": "SFX",
+      "attachment": "ground",
+      "loop": false,
+      "fade_out_ms": 0,
+      "source_marker": "movement.foot_contact",
+      "variation": "occurrence_ordinal_mod_clip_count",
+      "purpose": "Temporary hard-surface footsteps; concrete source, not a claim of distinct stone, dirt or armor recordings.",
+      "surfaces": [
+        "hard"
+      ],
+      "source_sync_s": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "footstep_wood": {
+      "status": "temporary",
+      "clips": [
+        "res://assets/audio/kenney/impact/footstep_wood_000.ogg",
+        "res://assets/audio/kenney/impact/footstep_wood_001.ogg",
+        "res://assets/audio/kenney/impact/footstep_wood_002.ogg"
+      ],
+      "clip_durations_s": [
+        0.249592,
+        0.251565,
+        0.251383
+      ],
+      "duration_s": 0.251565,
+      "gain_db": -12,
+      "bus": "SFX",
+      "attachment": "ground",
+      "loop": false,
+      "fade_out_ms": 0,
+      "source_marker": "movement.foot_contact",
+      "variation": "occurrence_ordinal_mod_clip_count",
+      "purpose": "Authored wood footstep variants.",
+      "surfaces": [
+        "wood"
+      ],
+      "source_sync_s": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "landing": {
+      "status": "temporary",
+      "clips": [
+        "res://assets/audio/jump-landing/jumpland.wav"
+      ],
+      "clip_durations_s": [
+        0.408396
+      ],
+      "duration_s": 0.408396,
+      "gain_db": -10,
+      "bus": "SFX",
+      "attachment": "ground",
+      "loop": false,
+      "fade_out_ms": 0,
+      "source_marker": "jump.landing",
+      "variation": "occurrence_ordinal_mod_clip_count",
+      "purpose": "Full authored landing recording: primary impact at source80ms aligns with rendered ground contact; preserve the softer lead-in.",
+      "source_sync_s": [
+        0.08
+      ],
+      "sync_evidence": "jumpland.wav: peak at81.75ms; 10ms RMS rises from0.0153 at0ms to0.2671 at70ms and0.4976 at80ms. Native Jump touchdown is the source-frame15 boundary."
+    },
+    "weapon_swing": {
+      "status": "temporary",
+      "clips": [
+        "res://assets/audio/kenney/rpg/knifeSlice.ogg",
+        "res://assets/audio/kenney/rpg/knifeSlice2.ogg"
+      ],
+      "clip_durations_s": [
+        0.599542,
+        0.568792
+      ],
+      "duration_s": 0.599542,
+      "gain_db": -14,
+      "bus": "SFX",
+      "attachment": "weapon",
+      "loop": false,
+      "fade_out_ms": 0,
+      "source_marker": "attack.release",
+      "variation": "occurrence_ordinal_mod_clip_count",
+      "purpose": "Temporary blade swishes from knife-slice recordings; not a bow, crossbow, fist or heavy blunt weapon.",
+      "weapon_families": [
+        "blade"
+      ],
+      "source_sync_s": [
+        0.0,
+        0.0
+      ]
+    },
+    "physical_impact": {
+      "status": "temporary",
+      "clips": [
+        "res://assets/audio/kenney/impact/impactPunch_medium_000.ogg"
+      ],
+      "clip_durations_s": [
+        0.430544
+      ],
+      "duration_s": 0.430544,
+      "gain_db": -12,
+      "bus": "SFX",
+      "attachment": "target_body",
+      "loop": false,
+      "fade_out_ms": 0,
+      "source_marker": "attack.contact",
+      "variation": "occurrence_ordinal_mod_clip_count",
+      "purpose": "Temporary physical body contact from authored punch impact.",
+      "target_materials": [
+        "flesh"
+      ],
+      "source_sync_s": [
+        0.0
+      ]
+    },
+    "wood_impact": {
+      "status": "temporary",
+      "clips": [
+        "res://assets/audio/kenney/impact/impactWood_medium_000.ogg",
+        "res://assets/audio/kenney/impact/impactWood_heavy_000.ogg"
+      ],
+      "clip_durations_s": [
+        0.332676,
+        0.313039
+      ],
+      "duration_s": 0.332676,
+      "gain_db": -12,
+      "bus": "SFX",
+      "attachment": "target_body",
+      "loop": false,
+      "fade_out_ms": 0,
+      "source_marker": "attack.contact",
+      "variation": "occurrence_ordinal_mod_clip_count",
+      "purpose": "Temporary impact on wood; not a complete window destruction/debris sound.",
+      "target_materials": [
+        "wood"
+      ],
+      "source_sync_s": [
+        0.0,
+        0.0
+      ]
+    },
+    "metal_impact": {
+      "status": "temporary",
+      "clips": [
+        "res://assets/audio/kenney/impact/impactMetal_light_000.ogg"
+      ],
+      "clip_durations_s": [
+        0.351474
+      ],
+      "duration_s": 0.351474,
+      "gain_db": -14,
+      "bus": "SFX",
+      "attachment": "target_body",
+      "loop": false,
+      "fade_out_ms": 0,
+      "source_marker": "attack.contact",
+      "variation": "occurrence_ordinal_mod_clip_count",
+      "purpose": "Light metal impact; no assumed heavy armor or sword-clash coverage.",
+      "target_materials": [
+        "metal"
+      ],
+      "source_sync_s": [
+        0.0
+      ]
+    },
+    "action_surge": {
+      "status": "temporary",
+      "clips": [
+        "res://assets/audio/magical-release/magical_1.ogg"
+      ],
+      "clip_durations_s": [
+        1.609002
+      ],
+      "duration_s": 1.609002,
+      "gain_db": -16,
+      "bus": "SFX",
+      "attachment": "body",
+      "loop": false,
+      "fade_out_ms": 0,
+      "source_marker": "action.release",
+      "variation": "occurrence_ordinal_mod_clip_count",
+      "purpose": "Named temporary supernatural empowerment cue using an authored dungeon-crawler spell sound.",
+      "behaviors": [
+        "action.class.fighter.action_surge"
+      ],
+      "source_sync_s": [
+        0.0
+      ]
+    },
+    "spell_release": {
+      "status": "temporary",
+      "clips": [
+        "res://assets/audio/magical-impact/magical_3.ogg"
+      ],
+      "clip_durations_s": [
+        1.82059
+      ],
+      "duration_s": 1.82059,
+      "gain_db": -16,
+      "bus": "SFX",
+      "attachment": "body",
+      "loop": false,
+      "fade_out_ms": 0,
+      "source_marker": "spell.release",
+      "variation": "occurrence_ordinal_mod_clip_count",
+      "purpose": "Named temporary Magic Missile probe release using an authored dungeon-crawler spell sound; no fallback for other spells.",
+      "behaviors": [
+        "spell.magic_missile"
+      ],
+      "source_sync_s": [
+        0.0
+      ]
+    },
+    "condition_loop": {
+      "status": "temporary",
+      "clips": [
+        "res://assets/audio/energy-loop/movingshield_sound.ogg"
+      ],
+      "clip_durations_s": [
+        5.237302
+      ],
+      "duration_s": 5.237302,
+      "gain_db": -24,
+      "bus": "SFX",
+      "attachment": "body",
+      "loop": true,
+      "fade_out_ms": 120,
+      "source_marker": "condition.active_interval",
+      "variation": "occurrence_ordinal_mod_clip_count",
+      "purpose": "Temporary magical concentration sustain using an authored energy-field loop; no loop for mundane conditions.",
+      "conditions": [
+        "Concentrating"
+      ],
+      "loop_start_s": 0,
+      "loop_end_s": 5.237302,
+      "source_sync_s": [
+        0.0
+      ]
+    },
+    "hide_transition": {
+      "status": "temporary",
+      "clips": [
+        "res://assets/audio/kenney/rpg/knifeSlice2.ogg"
+      ],
+      "clip_durations_s": [
+        0.568792
+      ],
+      "duration_s": 0.568792,
+      "gain_db": -24,
+      "bus": "SFX",
+      "attachment": "body",
+      "loop": false,
+      "fade_out_ms": 0,
+      "source_marker": "action.effect",
+      "variation": "occurrence_ordinal_mod_clip_count",
+      "purpose": "Temporary quiet swish for the authored Hide stance transition; reuses the installed CC0 knife-slice sound as a presentation cue.",
+      "source_sync_s": [
+        0.0
+      ]
+    },
+    "projectile_release": {
+      "status": "temporary",
+      "clips": [
+        "res://assets/audio/battle/Bow.wav"
+      ],
+      "clip_durations_s": [
+        0.548571
+      ],
+      "duration_s": 0.548571,
+      "gain_db": -13,
+      "bus": "SFX",
+      "attachment": "weapon",
+      "loop": false,
+      "fade_out_ms": 0,
+      "source_marker": "attack.release",
+      "variation": "occurrence_ordinal_mod_clip_count",
+      "purpose": "Bow-string release for the explicitly listed bow weapons.",
+      "source_sync_s": [
+        0.0
+      ]
+    },
+    "weapon_swing_heavy": {
+      "status": "temporary",
+      "clips": [
+        "res://assets/audio/battle/swish_2.wav"
+      ],
+      "clip_durations_s": [
+        0.370816
+      ],
+      "duration_s": 0.370816,
+      "gain_db": -13,
+      "bus": "SFX",
+      "attachment": "weapon",
+      "loop": false,
+      "fade_out_ms": 0,
+      "source_marker": "attack.release",
+      "variation": "occurrence_ordinal_mod_clip_count",
+      "purpose": "Authored broad swish for listed axe and blunt swings; no claim of a weapon contact.",
+      "source_sync_s": [
+        0.0
+      ]
+    },
+    "jump_takeoff": {
+      "status": "temporary",
+      "clips": [
+        "res://assets/audio/kenney/rpg/cloth2.ogg"
+      ],
+      "clip_durations_s": [
+        0.415063
+      ],
+      "duration_s": 0.415063,
+      "gain_db": -18,
+      "bus": "SFX",
+      "attachment": "body",
+      "loop": false,
+      "fade_out_ms": 0,
+      "source_marker": "jump.takeoff",
+      "variation": "occurrence_ordinal_mod_clip_count",
+      "purpose": "Cloth movement at the first actual committed airborne segment.",
+      "source_sync_s": [
+        0.0
+      ]
+    },
+    "stance_transition": {
+      "status": "temporary",
+      "clips": [
+        "res://assets/audio/kenney/rpg/cloth2.ogg",
+        "res://assets/audio/kenney/rpg/cloth3.ogg"
+      ],
+      "clip_durations_s": [
+        0.415063,
+        0.476563
+      ],
+      "duration_s": 0.476563,
+      "gain_db": -20,
+      "bus": "SFX",
+      "attachment": "body",
+      "loop": false,
+      "fade_out_ms": 0,
+      "source_marker": "action.effect",
+      "variation": "occurrence_ordinal_mod_clip_count",
+      "purpose": "Quiet body/cloth movement on a base stance change.",
+      "source_sync_s": [
+        0.0,
+        0.0
+      ]
+    },
+    "body_fall": {
+      "status": "temporary",
+      "clips": [
+        "res://assets/audio/kenney/impact/impactSoft_heavy_000.ogg"
+      ],
+      "clip_durations_s": [
+        0.505102
+      ],
+      "duration_s": 0.505102,
+      "gain_db": -13,
+      "bus": "SFX",
+      "attachment": "ground",
+      "loop": false,
+      "fade_out_ms": 0,
+      "source_marker": "life.body_end",
+      "variation": "occurrence_ordinal_mod_clip_count",
+      "purpose": "Nonvocal body contact at the authored fall completion; not a voice profile.",
+      "source_sync_s": [
+        0.0
+      ]
+    },
+    "stand_up": {
+      "status": "temporary",
+      "clips": [
+        "res://assets/audio/kenney/rpg/cloth3.ogg"
+      ],
+      "clip_durations_s": [
+        0.476563
+      ],
+      "duration_s": 0.476563,
+      "gain_db": -19,
+      "bus": "SFX",
+      "attachment": "body",
+      "loop": false,
+      "fade_out_ms": 0,
+      "source_marker": "body.start",
+      "variation": "occurrence_ordinal_mod_clip_count",
+      "purpose": "Cloth movement on the actual reverse fall/stand-up body.",
+      "source_sync_s": [
+        0.0
+      ]
+    },
+    "wood_break": {
+      "status": "temporary",
+      "clips": [
+        "res://assets/audio/breaking/bfh1_wood_breaking_01.ogg"
+      ],
+      "clip_durations_s": [
+        0.298042
+      ],
+      "duration_s": 0.298042,
+      "gain_db": -14,
+      "bus": "SFX",
+      "attachment": "ground",
+      "loop": false,
+      "fade_out_ms": 0,
+      "source_marker": "object.destroyed",
+      "variation": "occurrence_ordinal_mod_clip_count",
+      "purpose": "Breaking wood for the explicitly selected wooden destructible insert.",
+      "source_sync_s": [
+        0.0
+      ]
+    },
+    "door_open": {
+      "status": "temporary",
+      "clips": [
+        "res://assets/audio/kenney/rpg/doorOpen_1.ogg"
+      ],
+      "clip_durations_s": [
+        0.918958
+      ],
+      "duration_s": 0.918958,
+      "gain_db": -17,
+      "bus": "SFX",
+      "attachment": "body",
+      "loop": false,
+      "fade_out_ms": 0,
+      "source_marker": "action.effect",
+      "variation": "occurrence_ordinal_mod_clip_count",
+      "purpose": "Selected mechanical door sound at the real interaction effect marker.",
+      "source_sync_s": [
+        0.0
+      ]
+    },
+    "door_close": {
+      "status": "temporary",
+      "clips": [
+        "res://assets/audio/kenney/rpg/doorClose_1.ogg"
+      ],
+      "clip_durations_s": [
+        0.675042
+      ],
+      "duration_s": 0.675042,
+      "gain_db": -17,
+      "bus": "SFX",
+      "attachment": "body",
+      "loop": false,
+      "fade_out_ms": 0,
+      "source_marker": "action.effect",
+      "variation": "occurrence_ordinal_mod_clip_count",
+      "purpose": "Selected mechanical door sound at the real interaction effect marker.",
+      "source_sync_s": [
+        0.0
+      ]
+    }
+  },
+  "missing_cues": {
+    "damage_reaction_voice": "No selected character voice recording.",
+    "window_traversal": "Use actual foot contacts/landing only; no dedicated traversal clip.",
+    "condition_apply": "No general condition application clip; initialization must not invent an entry sound.",
+    "condition_remove": "No general removal one-shot; qualified concentration loop fades on actual end.",
+    "spell_impact": "No separately qualified Magic Missile impact clip.",
+    "other_surfaces_and_gear": "Only hard/concrete and wood footstep variants; no material or gear inference.",
+    "other_abilities_and_spells": "No generic magic fallback beyond the named temporary Action Surge and Magic Missile cues."
+  },
+  "sources": [
+    {
+      "id": "kenney-impact",
+      "author": "Kenney",
+      "title": "Impact Sounds 1.0",
+      "page": "https://kenney.nl/assets/impact-sounds",
+      "download": "https://kenney.nl/media/pages/assets/impact-sounds/87b4ddecda-1677589768/kenney_impact-sounds.zip",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "verified_date": "2026-10-13"
+    },
+    {
+      "id": "kenney-rpg",
+      "author": "Kenney",
+      "title": "RPG Audio 1.0",
+      "page": "https://kenney.nl/assets/rpg-audio",
+      "download": "https://kenney.nl/media/pages/assets/rpg-audio/8e99002d76-1677590336/kenney_rpg-audio.zip",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "verified_date": "2026-10-13"
+    },
+    {
+      "id": "jump-landing",
+      "author": "MentalSanityOff; shared by qubodup",
+      "title": "Jump Landing Sound",
+      "page": "https://opengameart.org/content/jump-landing-sound",
+      "download": "https://opengameart.org/sites/default/files/jumpland.wav",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "verified_date": "2026-10-13"
+    },
+    {
+      "id": "magical-release",
+      "author": "JaggedStone",
+      "title": "Magic Spell SFX / magical_1",
+      "page": "https://opengameart.org/content/magic-spell-sfx",
+      "download": "https://opengameart.org/sites/default/files/magical_1_0.ogg",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "verified_date": "2026-10-13"
+    },
+    {
+      "id": "magical-impact",
+      "author": "JaggedStone",
+      "title": "Magic Spell SFX / magical_3",
+      "page": "https://opengameart.org/content/magic-spell-sfx",
+      "download": "https://opengameart.org/sites/default/files/magical_3.ogg",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "verified_date": "2026-10-13"
+    },
+    {
+      "id": "energy-loop",
+      "author": "zeroisnotnull",
+      "title": "Seamless Energy Emission Loop",
+      "page": "https://opengameart.org/content/seamless-energy-emission-loop",
+      "download": "https://opengameart.org/sites/default/files/movingshield_sound.ogg",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "verified_date": "2026-10-13"
+    },
+    {
+      "id": "battle",
+      "author": "artisticdude (submitted by Ogrebane)",
+      "title": "Battle Sound Effects",
+      "page": "https://opengameart.org/content/battle-sound-effects",
+      "download": "https://opengameart.org/sites/default/files/battle_sound_effects_0.zip",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "verified_date": "2026-10-14",
+      "license_selection": "CC0 selected from the author/uploader page's alternative licences."
+    },
+    {
+      "id": "breaking",
+      "author": "rubberduck",
+      "title": "75 CC0 breaking / falling / hit sfx",
+      "page": "https://opengameart.org/content/75-cc0-breaking-falling-hit-sfx",
+      "download": "https://opengameart.org/sites/default/files/sfx_breaking_and_falling.zip",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "verified_date": "2026-10-14"
+    }
+  ],
+  "qualification": "Original clips/source licenses and complete decoder pass qualified. Native spatial playback, waveform display, authored-marker integration and human mix audition are separate runtime acceptance; not claimed by intake."
+}

@@ -1,5 +1,6 @@
 extends RefCounted
 const CharacterGeometry = preload("res://presentation/character_geometry.gd")
+const Catalog = preload("res://source_catalog.gd")
 # Passive adapter from canonical player data to the existing authoring owners.
 # The caller owns the cache; keep it on the same thread as its reader.
 const VISUAL_SLOT = {"MELEE_MAIN":"weapon_melee_main", "MELEE_OFF":"weapon_melee_off",
@@ -10,10 +11,7 @@ const WEAPON_SET = {"MELEE_MAIN":"melee", "MELEE_OFF":"melee", "RANGED_MAIN":"ra
 const EFFECT_SLOTS = ["weaponGlow", "aura", "slash", "effect", "effect2", "effect3"]
 
 static func _read(path: String, cache: Dictionary) -> Variant:
-    if not cache.has(path):
-        var root: String = ProjectSettings.get_setting("source_data/authoring_root")
-        cache[path] = JSON.parse_string(FileAccess.get_file_as_string(root.path_join(path)))
-    return cache[path]
+    return Catalog.read_file(path, cache)
 
 static func _error(message: String) -> Dictionary:
     return {"ok":false, "error":{"kind":"authoring", "message":message, "retryable":false}}
@@ -86,6 +84,11 @@ static func _select_layers(actor: Dictionary, rig: Dictionary, modular: bool, ca
                 value.equipment = true
                 value.item_uuid = item.item_uuid
                 selected[layer.render_layer] = value
+    for effect in actor.get("presentation_layers",[]):
+        var slot: String=effect.slot
+        var value=_layer(effect.category)
+        value.effect=effect
+        selected[slot]=value
     var result: Array = []
     for slot in selected:
         if slot not in rig.slot_order or selected[slot].category not in rig.slot_categories[slot]:
@@ -151,7 +154,7 @@ static func layers(row: Dictionary, rig: Dictionary, cache: Dictionary) -> Array
     for layer in result:
         layer.paths = {}
         for clip in rig.clips:
-            var sheet: String = rig.clips[clip].sheets.get(layer.category, "")
+            var sheet: String = layer.get("effect",{}).get("sourceSheet",rig.clips[clip].sheets.get(layer.category, ""))
             if sheet.is_empty(): continue
             layer.paths[clip] = _sheet_path(layer.slot,sheet,resources,components,cache)
     return result
@@ -174,7 +177,10 @@ static func sheet_paths(actor: Dictionary, clips: Array, cache: Dictionary) -> D
     for clip in clips:
         if not rig.clips.has(clip): return _error("Rig has no authored clip " + id + "/" + clip)
         for layer in selected.value:
-            var sheet: String = rig.clips[clip].sheets.get(layer.category, "")
+            var effect: Dictionary=layer.get("effect",{})
+            var noise: Variant=effect.get("palette",{}).get("noiseSheet")
+            if noise!=null and resources.has(noise): paths[resources[noise]]=true; colour_paths[resources[noise]]=true
+            var sheet: String = effect.get("sourceSheet",rig.clips[clip].sheets.get(layer.category, ""))
             if not sheet.is_empty():
                 var path = _sheet_path(layer.slot,sheet,resources,components,cache)
                 paths[path] = true

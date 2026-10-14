@@ -1,0 +1,997 @@
+{
+  "arguments": [
+    "--dying=res://.runtime/studio-cases/dying-seed5/amber/journal",
+    "--lethal=res://.runtime/studio-cases/oa_jump_late_lethal-seed5-v2/amber/journal",
+    "--hit=res://.runtime/studio-cases/melee-seed3/amber/journal",
+    "--revival=res://.runtime/studio-cases/dying-seed3-v3/amber/journal"
+  ],
+  "checks": 1750,
+  "evidence": [
+    {
+      "case": "dying seq2",
+      "event_uuid": "3181e19a-94a7-48cf-8f8f-c91ed1fca39f",
+      "mode": "current",
+      "timing": {
+        "body_enabled": true,
+        "flash": 666.666666666667,
+        "hp": 666.666666666667,
+        "lethal": false,
+        "number": 666.666666666667,
+        "start": 666.666666666667,
+        "terminal": false
+      }
+    },
+    {
+      "case": "dying seq2",
+      "event_uuid": "3181e19a-94a7-48cf-8f8f-c91ed1fca39f",
+      "mode": "defaults",
+      "timing": {
+        "body_enabled": true,
+        "flash": 735.222222222222,
+        "hp": 790.777777777778,
+        "lethal": false,
+        "number": 790.777777777778,
+        "start": 679.666666666667,
+        "terminal": false
+      }
+    },
+    {
+      "case": "dying seq2",
+      "event_uuid": "3181e19a-94a7-48cf-8f8f-c91ed1fca39f",
+      "mode": "ancestor",
+      "timing": {
+        "body_enabled": true,
+        "flash": 806.777777777778,
+        "hp": 862.333333333333,
+        "lethal": false,
+        "number": 862.333333333333,
+        "start": 695.666666666667,
+        "terminal": false
+      }
+    },
+    {
+      "displayed_combat_logs": [
+        {
+          "entry": {
+            "compact": "{cyan:Amber presentation actor} {green:hits} {yellow:Blue presentation actor} for {red:7} damage",
+            "data": {
+              "ac_breakdown": [
+                {
+                  "name": "Armor",
+                  "source": "self",
+                  "value": 16
+                },
+                {
+                  "name": "Shield Ac",
+                  "source": "self",
+                  "value": 2
+                }
+              ],
+              "advantage_breakdown": [],
+              "attack_breakdown": [
+                {
+                  "name": "Prof",
+                  "source": "self",
+                  "value": 2
+                },
+                {
+                  "name": "Character Total-Level Proficiency",
+                  "source": "self",
+                  "value": 1
+                },
+                {
+                  "name": "Strength Ability",
+                  "source": "self",
+                  "value": 4
+                }
+              ],
+              "attack_roll": {
+                "advantage_status": "none",
+                "all_d20_rolls": [
+                  12
+                ],
+                "bonus": 7,
+                "d20_used": 12,
+                "dice_str": "d20",
+                "results": [
+                  12
+                ],
+                "total": 19
+              },
+              "attacker_name": "Amber presentation actor",
+              "attacker_uuid": "bd17af64-edd3-4c9a-9908-c9426556505e",
+              "damage_rolls": [
+                {
+                  "bonus": 6,
+                  "bonus_breakdown": [
+                    {
+                      "name": "Strength Ability",
+                      "source": "self",
+                      "value": 4
+                    }
+                  ],
+                  "damage_type": "Slashing",
+                  "dice_results": [
+                    1
+                  ],
+                  "dice_str": "1d8",
+                  "total": 7
+                }
+              ],
+              "is_crit": false,
+              "is_hit": true,
+              "is_long_range": false,
+              "is_opportunity_attack": false,
+              "is_threatened": false,
+              "kind": "attack",
+              "outcome": "hit",
+              "target_ac": 18,
+              "target_hp": 0,
+              "target_name": "Blue presentation actor",
+              "target_uuid": "d91ab501-ae6f-4022-ae50-9ee3e3fc538d",
+              "total_damage": 7,
+              "weapon_name": "Longsword",
+              "weapon_slot": "MELEE_MAIN"
+            },
+            "detailed": "{cyan:Amber presentation actor} → {yellow:Blue presentation actor} (Longsword)\n  Attack: d20({cyan:12}) +7 [Prof +2, Character Total-Level Proficiency +1, Strength Ability +4] = 19 vs AC 18 [Armor +16, Shield Ac +2] → {green:HIT}\n  Damage: 1d8({red:1}) +6 [Strength Ability +4] = {bold red:7} Slashing",
+            "entry_type": "attack",
+            "source_name": "Amber presentation actor",
+            "source_uuid": "bd17af64-edd3-4c9a-9908-c9426556505e",
+            "sub_entries": [],
+            "success": true,
+            "target_name": "Blue presentation actor",
+            "target_uuid": "d91ab501-ae6f-4022-ae50-9ee3e3fc538d",
+            "verbose": "{cyan:Amber presentation actor} → {yellow:Blue presentation actor} (Longsword)\n  Attack: d20({cyan:12}) +7 = 19 vs AC 18 → {green:HIT}\n  Damage: 1d8({red:1}) +6 = {bold red:7} Slashing"
+          },
+          "event_uuid": "ba4ae8a5-a53a-4e95-9604-1ad095f43333",
+          "kind": "attack",
+          "log_kind": "attack",
+          "parent": "",
+          "sequence": 2
+        },
+        {
+          "entry": {
+            "compact": "{yellow:Blue presentation actor} takes {red:7} slashing",
+            "data": {
+              "blocked": null,
+              "blocked_reason": null,
+              "damage": 7,
+              "damage_type": "slashing",
+              "effect_id": null,
+              "kind": "damage_taken",
+              "source_name": "terrain",
+              "target_name": "Blue presentation actor"
+            },
+            "detailed": "{yellow:Blue presentation actor} takes {red:7} slashing\n  Rolls: [1]",
+            "entry_type": "damage_taken",
+            "source_name": "Amber presentation actor",
+            "source_uuid": "bd17af64-edd3-4c9a-9908-c9426556505e",
+            "sub_entries": [],
+            "success": true,
+            "target_name": "Blue presentation actor",
+            "target_uuid": "d91ab501-ae6f-4022-ae50-9ee3e3fc538d",
+            "verbose": "{yellow:Blue presentation actor} takes {red:7} slashing"
+          },
+          "event_uuid": "54a47f69-216b-4e9c-9166-e8782bcfcfc2",
+          "kind": "damage",
+          "log_kind": "damage_taken",
+          "parent": "2:ba4ae8a5-a53a-4e95-9604-1ad095f43333",
+          "sequence": 2
+        },
+        {
+          "entry": {
+            "compact": "{yellow:Blue presentation actor} death save {cyan:15} vs DC 10: success (1 successes, 0 failures)",
+            "data": {
+              "became_stable": false,
+              "dc": 10,
+              "died": false,
+              "entity_name": "Blue presentation actor",
+              "entity_uuid": "d91ab501-ae6f-4022-ae50-9ee3e3fc538d",
+              "failures": 0,
+              "kind": "death_save",
+              "natural_roll": 15,
+              "regained_hit_point": false,
+              "roll": 15,
+              "successes": 1
+            },
+            "detailed": "{yellow:Blue presentation actor} death save {cyan:15} vs DC 10: success (1 successes, 0 failures)",
+            "entry_type": "saving_throw",
+            "source_name": "Blue presentation actor",
+            "source_uuid": "d91ab501-ae6f-4022-ae50-9ee3e3fc538d",
+            "sub_entries": [],
+            "success": true,
+            "target_name": "Blue presentation actor",
+            "target_uuid": "d91ab501-ae6f-4022-ae50-9ee3e3fc538d",
+            "verbose": "{yellow:Blue presentation actor} death save {cyan:15} vs DC 10: success (1 successes, 0 failures)"
+          },
+          "event_uuid": "6827f411-71d5-4794-8833-f828d9397ba5",
+          "kind": "death_save",
+          "log_kind": "death_save",
+          "parent": "4:cabefa94-4e50-4301-97e3-35ac208f9414",
+          "sequence": 4
+        },
+        {
+          "entry": {
+            "compact": "{yellow:Blue presentation actor} death save {cyan:8} vs DC 10: failure (1 successes, 1 failures)",
+            "data": {
+              "became_stable": false,
+              "dc": 10,
+              "died": false,
+              "entity_name": "Blue presentation actor",
+              "entity_uuid": "d91ab501-ae6f-4022-ae50-9ee3e3fc538d",
+              "failures": 1,
+              "kind": "death_save",
+              "natural_roll": 8,
+              "regained_hit_point": false,
+              "roll": 8,
+              "successes": 1
+            },
+            "detailed": "{yellow:Blue presentation actor} death save {cyan:8} vs DC 10: failure (1 successes, 1 failures)",
+            "entry_type": "saving_throw",
+            "source_name": "Blue presentation actor",
+            "source_uuid": "d91ab501-ae6f-4022-ae50-9ee3e3fc538d",
+            "sub_entries": [],
+            "success": false,
+            "target_name": "Blue presentation actor",
+            "target_uuid": "d91ab501-ae6f-4022-ae50-9ee3e3fc538d",
+            "verbose": "{yellow:Blue presentation actor} death save {cyan:8} vs DC 10: failure (1 successes, 1 failures)"
+          },
+          "event_uuid": "7455c739-3030-4f94-ac03-8bcf70473057",
+          "kind": "death_save",
+          "log_kind": "death_save",
+          "parent": "7:7a4d28c1-9ded-4508-93a2-75a517b15fd0",
+          "sequence": 7
+        },
+        {
+          "entry": {
+            "compact": "{yellow:Blue presentation actor} death save {cyan:2} vs DC 10: failure (1 successes, 2 failures)",
+            "data": {
+              "became_stable": false,
+              "dc": 10,
+              "died": false,
+              "entity_name": "Blue presentation actor",
+              "entity_uuid": "d91ab501-ae6f-4022-ae50-9ee3e3fc538d",
+              "failures": 2,
+              "kind": "death_save",
+              "natural_roll": 2,
+              "regained_hit_point": false,
+              "roll": 2,
+              "successes": 1
+            },
+            "detailed": "{yellow:Blue presentation actor} death save {cyan:2} vs DC 10: failure (1 successes, 2 failures)",
+            "entry_type": "saving_throw",
+            "source_name": "Blue presentation actor",
+            "source_uuid": "d91ab501-ae6f-4022-ae50-9ee3e3fc538d",
+            "sub_entries": [],
+            "success": false,
+            "target_name": "Blue presentation actor",
+            "target_uuid": "d91ab501-ae6f-4022-ae50-9ee3e3fc538d",
+            "verbose": "{yellow:Blue presentation actor} death save {cyan:2} vs DC 10: failure (1 successes, 2 failures)"
+          },
+          "event_uuid": "c16269d3-c9f3-4533-99a8-0708cc0e0d63",
+          "kind": "death_save",
+          "log_kind": "death_save",
+          "parent": "10:dd20b089-b559-4389-8684-44b3a9ca796b",
+          "sequence": 10
+        },
+        {
+          "entry": {
+            "compact": "{yellow:Blue presentation actor} death save {cyan:6} vs DC 10: death (0 successes, 3 failures)",
+            "data": {
+              "became_stable": false,
+              "dc": 10,
+              "died": true,
+              "entity_name": "Blue presentation actor",
+              "entity_uuid": "d91ab501-ae6f-4022-ae50-9ee3e3fc538d",
+              "failures": 3,
+              "kind": "death_save",
+              "natural_roll": 6,
+              "regained_hit_point": false,
+              "roll": 6,
+              "successes": 0
+            },
+            "detailed": "{yellow:Blue presentation actor} death save {cyan:6} vs DC 10: death (0 successes, 3 failures)",
+            "entry_type": "saving_throw",
+            "source_name": "Blue presentation actor",
+            "source_uuid": "d91ab501-ae6f-4022-ae50-9ee3e3fc538d",
+            "sub_entries": [],
+            "success": false,
+            "target_name": "Blue presentation actor",
+            "target_uuid": "d91ab501-ae6f-4022-ae50-9ee3e3fc538d",
+            "verbose": "{yellow:Blue presentation actor} death save {cyan:6} vs DC 10: death (0 successes, 3 failures)"
+          },
+          "event_uuid": "934ca40f-4bda-485c-b780-ce157f480e4c",
+          "kind": "death_save",
+          "log_kind": "death_save",
+          "parent": "13:cedd72d2-a705-4de8-be6c-977e886b69c5",
+          "sequence": 13
+        },
+        {
+          "entry": {
+            "compact": "☠ {bold red:Blue presentation actor} has been defeated!",
+            "data": {
+              "entity_name": "Blue presentation actor",
+              "final_hp": 0,
+              "kind": "death"
+            },
+            "detailed": "☠ {bold red:Blue presentation actor} has been defeated!\n  Dropped to 0 HP\n  Killed by: {cyan:Blue presentation actor}",
+            "entry_type": "death",
+            "source_name": "Blue presentation actor",
+            "source_uuid": "d91ab501-ae6f-4022-ae50-9ee3e3fc538d",
+            "sub_entries": [],
+            "success": true,
+            "target_name": null,
+            "target_uuid": null,
+            "verbose": "☠ {bold red:Blue presentation actor} has been defeated!"
+          },
+          "event_uuid": "97459012-e232-4303-91f3-ce6eb5d68ba7",
+          "kind": "undisclosed",
+          "log_kind": "death",
+          "parent": "13:934ca40f-4bda-485c-b780-ce157f480e4c",
+          "sequence": 13
+        }
+      ],
+      "recording": "res://.runtime/studio-cases/dying-seed5/amber/journal"
+    },
+    {
+      "counts": {
+        "damage": 1,
+        "dying": 1,
+        "falls": 1,
+        "held_dead": 1,
+        "lethal": 0,
+        "revival": 0
+      },
+      "recording": "res://.runtime/studio-cases/dying-seed5/amber/journal",
+      "role": "dying"
+    },
+    {
+      "case": "lethal seq2",
+      "event_uuid": "80a9e70c-2758-470c-b46b-493624710eda",
+      "mode": "current",
+      "timing": {
+        "body_enabled": false,
+        "flash": 1551.75438596491,
+        "hp": 1551.75438596491,
+        "lethal": true,
+        "number": 1551.75438596491,
+        "start": 1551.75438596491,
+        "terminal": false
+      }
+    },
+    {
+      "case": "lethal seq2",
+      "event_uuid": "80a9e70c-2758-470c-b46b-493624710eda",
+      "mode": "defaults",
+      "timing": {
+        "body_enabled": false,
+        "flash": 1564.75438596491,
+        "hp": 1564.75438596491,
+        "lethal": true,
+        "number": 1564.75438596491,
+        "start": 1564.75438596491,
+        "terminal": false
+      }
+    },
+    {
+      "case": "lethal seq2",
+      "event_uuid": "80a9e70c-2758-470c-b46b-493624710eda",
+      "mode": "ancestor",
+      "timing": {
+        "body_enabled": false,
+        "flash": 1580.75438596491,
+        "hp": 1580.75438596491,
+        "lethal": true,
+        "number": 1580.75438596491,
+        "start": 1580.75438596491,
+        "terminal": false
+      }
+    },
+    {
+      "displayed_combat_logs": [
+        {
+          "entry": {
+            "compact": "{cyan:Blue presentation actor} {green:hits} {yellow:Amber presentation actor} for {red:16} damage",
+            "data": {
+              "ac_breakdown": [
+                {
+                  "name": "Unarmored Armor Class",
+                  "source": "self",
+                  "value": 10
+                },
+                {
+                  "name": "Dexterity Ability",
+                  "source": "self",
+                  "value": 2
+                }
+              ],
+              "advantage_breakdown": [],
+              "attack_breakdown": [
+                {
+                  "name": "Prof",
+                  "source": "self",
+                  "value": 2
+                },
+                {
+                  "name": "Character Total-Level Proficiency",
+                  "source": "self",
+                  "value": 1
+                },
+                {
+                  "name": "Strength Ability",
+                  "source": "self",
+                  "value": 4
+                }
+              ],
+              "attack_roll": {
+                "advantage_status": "none",
+                "all_d20_rolls": [
+                  12
+                ],
+                "bonus": 7,
+                "d20_used": 12,
+                "dice_str": "d20",
+                "results": [
+                  12
+                ],
+                "total": 19
+              },
+              "attacker_name": "Blue presentation actor",
+              "attacker_uuid": "15af6a73-8a33-4432-b6fc-5cfde1b3658a",
+              "damage_rolls": [
+                {
+                  "bonus": 4,
+                  "bonus_breakdown": [
+                    {
+                      "name": "Strength Ability",
+                      "source": "self",
+                      "value": 4
+                    }
+                  ],
+                  "damage_type": "Slashing",
+                  "dice_results": [
+                    12
+                  ],
+                  "dice_str": "1d12",
+                  "total": 16
+                }
+              ],
+              "is_crit": false,
+              "is_hit": true,
+              "is_long_range": false,
+              "is_opportunity_attack": true,
+              "is_threatened": false,
+              "kind": "attack",
+              "outcome": "hit",
+              "target_ac": 12,
+              "target_hp": -8,
+              "target_name": "Amber presentation actor",
+              "target_uuid": "9e939092-d6fd-4f6b-a6e2-b985beca63ae",
+              "total_damage": 16,
+              "weapon_name": "Greataxe",
+              "weapon_slot": "MELEE_MAIN"
+            },
+            "detailed": "{cyan:Blue presentation actor} → {yellow:Amber presentation actor} (Greataxe)\n  Attack (OA): d20({cyan:12}) +7 [Prof +2, Character Total-Level Proficiency +1, Strength Ability +4] = 19 vs AC 12 [Unarmored Armor Class +10, Dexterity Ability +2] → {green:HIT}\n  Damage: 1d12({red:12}) +4 [Strength Ability +4] = {bold red:16} Slashing",
+            "entry_type": "attack",
+            "source_name": "Blue presentation actor",
+            "source_uuid": "15af6a73-8a33-4432-b6fc-5cfde1b3658a",
+            "sub_entries": [],
+            "success": true,
+            "target_name": "Amber presentation actor",
+            "target_uuid": "9e939092-d6fd-4f6b-a6e2-b985beca63ae",
+            "verbose": "{cyan:Blue presentation actor} → {yellow:Amber presentation actor} (Greataxe)\n  Attack (OA): d20({cyan:12}) +7 = 19 vs AC 12 → {green:HIT}\n  Damage: 1d12({red:12}) +4 = {bold red:16} Slashing"
+          },
+          "event_uuid": "0850e0cb-64ed-46a1-a7ae-7eb7e812f8f9",
+          "kind": "attack",
+          "log_kind": "attack",
+          "parent": "2:66ec0cfd-ea5f-4be7-8176-6cc4b7999d77",
+          "sequence": 2
+        },
+        {
+          "entry": {
+            "compact": "{yellow:Amber presentation actor} takes {red:16} slashing",
+            "data": {
+              "blocked": null,
+              "blocked_reason": null,
+              "damage": 16,
+              "damage_type": "slashing",
+              "effect_id": null,
+              "kind": "damage_taken",
+              "source_name": "terrain",
+              "target_name": "Amber presentation actor"
+            },
+            "detailed": "{yellow:Amber presentation actor} takes {red:16} slashing\n  Rolls: [12]",
+            "entry_type": "damage_taken",
+            "source_name": "Blue presentation actor",
+            "source_uuid": "15af6a73-8a33-4432-b6fc-5cfde1b3658a",
+            "sub_entries": [],
+            "success": true,
+            "target_name": "Amber presentation actor",
+            "target_uuid": "9e939092-d6fd-4f6b-a6e2-b985beca63ae",
+            "verbose": "{yellow:Amber presentation actor} takes {red:16} slashing"
+          },
+          "event_uuid": "d7b07b27-4339-45e3-9ff3-815c55cf3505",
+          "kind": "damage",
+          "log_kind": "damage_taken",
+          "parent": "2:0850e0cb-64ed-46a1-a7ae-7eb7e812f8f9",
+          "sequence": 2
+        },
+        {
+          "entry": {
+            "compact": "☠ {bold red:Amber presentation actor} has been defeated!",
+            "data": {
+              "entity_name": "Amber presentation actor",
+              "final_hp": -8,
+              "kind": "death"
+            },
+            "detailed": "☠ {bold red:Amber presentation actor} has been defeated!\n  Dropped to -8 HP\n  Killed by: {cyan:Blue presentation actor}",
+            "entry_type": "death",
+            "source_name": "Amber presentation actor",
+            "source_uuid": "9e939092-d6fd-4f6b-a6e2-b985beca63ae",
+            "sub_entries": [],
+            "success": true,
+            "target_name": null,
+            "target_uuid": null,
+            "verbose": "☠ {bold red:Amber presentation actor} has been defeated!"
+          },
+          "event_uuid": "46d37186-9024-4a45-b637-80487c655fe7",
+          "kind": "undisclosed",
+          "log_kind": "death",
+          "parent": "2:d7b07b27-4339-45e3-9ff3-815c55cf3505",
+          "sequence": 2
+        }
+      ],
+      "recording": "res://.runtime/studio-cases/oa_jump_late_lethal-seed5-v2/amber/journal"
+    },
+    {
+      "counts": {
+        "damage": 1,
+        "dying": 0,
+        "falls": 0,
+        "held_dead": 0,
+        "lethal": 1,
+        "revival": 0
+      },
+      "recording": "res://.runtime/studio-cases/oa_jump_late_lethal-seed5-v2/amber/journal",
+      "role": "lethal"
+    },
+    {
+      "case": "hit seq2",
+      "event_uuid": "8307200c-d69d-4dda-8486-6094de652064",
+      "mode": "current",
+      "timing": {
+        "body_enabled": true,
+        "flash": 666.666666666667,
+        "hp": 666.666666666667,
+        "lethal": false,
+        "number": 666.666666666667,
+        "start": 666.666666666667,
+        "terminal": false
+      }
+    },
+    {
+      "case": "hit seq2",
+      "event_uuid": "8307200c-d69d-4dda-8486-6094de652064",
+      "mode": "defaults",
+      "timing": {
+        "body_enabled": true,
+        "flash": 735.222222222222,
+        "hp": 790.777777777778,
+        "lethal": false,
+        "number": 790.777777777778,
+        "start": 679.666666666667,
+        "terminal": false
+      }
+    },
+    {
+      "case": "hit seq2",
+      "event_uuid": "8307200c-d69d-4dda-8486-6094de652064",
+      "mode": "ancestor",
+      "timing": {
+        "body_enabled": true,
+        "flash": 806.777777777778,
+        "hp": 862.333333333333,
+        "lethal": false,
+        "number": 862.333333333333,
+        "start": 695.666666666667,
+        "terminal": false
+      }
+    },
+    {
+      "displayed_combat_logs": [
+        {
+          "entry": {
+            "compact": "{cyan:Amber presentation actor} {green:hits} {yellow:Blue presentation actor} for {red:9} damage",
+            "data": {
+              "ac_breakdown": [
+                {
+                  "name": "Armor",
+                  "source": "self",
+                  "value": 16
+                },
+                {
+                  "name": "Shield Ac",
+                  "source": "self",
+                  "value": 2
+                }
+              ],
+              "advantage_breakdown": [],
+              "attack_breakdown": [
+                {
+                  "name": "Prof",
+                  "source": "self",
+                  "value": 2
+                },
+                {
+                  "name": "Character Total-Level Proficiency",
+                  "source": "self",
+                  "value": 1
+                },
+                {
+                  "name": "Strength Ability",
+                  "source": "self",
+                  "value": 4
+                }
+              ],
+              "attack_roll": {
+                "advantage_status": "none",
+                "all_d20_rolls": [
+                  18
+                ],
+                "bonus": 7,
+                "d20_used": 18,
+                "dice_str": "d20",
+                "results": [
+                  18
+                ],
+                "total": 25
+              },
+              "attacker_name": "Amber presentation actor",
+              "attacker_uuid": "fbaf0a18-941f-4cc6-ac02-5530f752eb35",
+              "damage_rolls": [
+                {
+                  "bonus": 6,
+                  "bonus_breakdown": [
+                    {
+                      "name": "Strength Ability",
+                      "source": "self",
+                      "value": 4
+                    }
+                  ],
+                  "damage_type": "Slashing",
+                  "dice_results": [
+                    3
+                  ],
+                  "dice_str": "1d8",
+                  "total": 9
+                }
+              ],
+              "is_crit": false,
+              "is_hit": true,
+              "is_long_range": false,
+              "is_opportunity_attack": false,
+              "is_threatened": false,
+              "kind": "attack",
+              "outcome": "hit",
+              "target_ac": 18,
+              "target_hp": 35,
+              "target_name": "Blue presentation actor",
+              "target_uuid": "f955b293-c25d-4d72-abf6-4d876bcfcbc6",
+              "total_damage": 9,
+              "weapon_name": "Longsword",
+              "weapon_slot": "MELEE_MAIN"
+            },
+            "detailed": "{cyan:Amber presentation actor} → {yellow:Blue presentation actor} (Longsword)\n  Attack: d20({cyan:18}) +7 [Prof +2, Character Total-Level Proficiency +1, Strength Ability +4] = 25 vs AC 18 [Armor +16, Shield Ac +2] → {green:HIT}\n  Damage: 1d8({red:3}) +6 [Strength Ability +4] = {bold red:9} Slashing",
+            "entry_type": "attack",
+            "source_name": "Amber presentation actor",
+            "source_uuid": "fbaf0a18-941f-4cc6-ac02-5530f752eb35",
+            "sub_entries": [],
+            "success": true,
+            "target_name": "Blue presentation actor",
+            "target_uuid": "f955b293-c25d-4d72-abf6-4d876bcfcbc6",
+            "verbose": "{cyan:Amber presentation actor} → {yellow:Blue presentation actor} (Longsword)\n  Attack: d20({cyan:18}) +7 = 25 vs AC 18 → {green:HIT}\n  Damage: 1d8({red:3}) +6 = {bold red:9} Slashing"
+          },
+          "event_uuid": "5605c8fb-e56c-40f7-b07e-6166ac81d932",
+          "kind": "attack",
+          "log_kind": "attack",
+          "parent": "",
+          "sequence": 2
+        },
+        {
+          "entry": {
+            "compact": "{yellow:Blue presentation actor} takes {red:9} slashing",
+            "data": {
+              "blocked": null,
+              "blocked_reason": null,
+              "damage": 9,
+              "damage_type": "slashing",
+              "effect_id": null,
+              "kind": "damage_taken",
+              "source_name": "terrain",
+              "target_name": "Blue presentation actor"
+            },
+            "detailed": "{yellow:Blue presentation actor} takes {red:9} slashing\n  Rolls: [3]",
+            "entry_type": "damage_taken",
+            "source_name": "Amber presentation actor",
+            "source_uuid": "fbaf0a18-941f-4cc6-ac02-5530f752eb35",
+            "sub_entries": [],
+            "success": true,
+            "target_name": "Blue presentation actor",
+            "target_uuid": "f955b293-c25d-4d72-abf6-4d876bcfcbc6",
+            "verbose": "{yellow:Blue presentation actor} takes {red:9} slashing"
+          },
+          "event_uuid": "4bf1203c-86d6-44ce-aa6d-70d0f631392e",
+          "kind": "damage",
+          "log_kind": "damage_taken",
+          "parent": "2:5605c8fb-e56c-40f7-b07e-6166ac81d932",
+          "sequence": 2
+        }
+      ],
+      "recording": "res://.runtime/studio-cases/melee-seed3/amber/journal"
+    },
+    {
+      "counts": {
+        "damage": 1,
+        "dying": 0,
+        "falls": 0,
+        "held_dead": 0,
+        "lethal": 0,
+        "revival": 0
+      },
+      "recording": "res://.runtime/studio-cases/melee-seed3/amber/journal",
+      "role": "hit"
+    },
+    {
+      "case": "revival seq2",
+      "event_uuid": "856c96cc-0245-452e-8903-dd6f4f6da92e",
+      "mode": "current",
+      "timing": {
+        "body_enabled": true,
+        "flash": 666.666666666667,
+        "hp": 666.666666666667,
+        "lethal": false,
+        "number": 666.666666666667,
+        "start": 666.666666666667,
+        "terminal": false
+      }
+    },
+    {
+      "case": "revival seq2",
+      "event_uuid": "856c96cc-0245-452e-8903-dd6f4f6da92e",
+      "mode": "defaults",
+      "timing": {
+        "body_enabled": true,
+        "flash": 735.222222222222,
+        "hp": 790.777777777778,
+        "lethal": false,
+        "number": 790.777777777778,
+        "start": 679.666666666667,
+        "terminal": false
+      }
+    },
+    {
+      "case": "revival seq2",
+      "event_uuid": "856c96cc-0245-452e-8903-dd6f4f6da92e",
+      "mode": "ancestor",
+      "timing": {
+        "body_enabled": true,
+        "flash": 806.777777777778,
+        "hp": 862.333333333333,
+        "lethal": false,
+        "number": 862.333333333333,
+        "start": 695.666666666667,
+        "terminal": false
+      }
+    },
+    {
+      "displayed_combat_logs": [
+        {
+          "entry": {
+            "compact": "{cyan:Amber presentation actor} {green:hits} {yellow:Blue presentation actor} for {red:9} damage",
+            "data": {
+              "ac_breakdown": [
+                {
+                  "name": "Armor",
+                  "source": "self",
+                  "value": 16
+                },
+                {
+                  "name": "Shield Ac",
+                  "source": "self",
+                  "value": 2
+                }
+              ],
+              "advantage_breakdown": [],
+              "attack_breakdown": [
+                {
+                  "name": "Prof",
+                  "source": "self",
+                  "value": 2
+                },
+                {
+                  "name": "Character Total-Level Proficiency",
+                  "source": "self",
+                  "value": 1
+                },
+                {
+                  "name": "Strength Ability",
+                  "source": "self",
+                  "value": 4
+                }
+              ],
+              "attack_roll": {
+                "advantage_status": "none",
+                "all_d20_rolls": [
+                  18
+                ],
+                "bonus": 7,
+                "d20_used": 18,
+                "dice_str": "d20",
+                "results": [
+                  18
+                ],
+                "total": 25
+              },
+              "attacker_name": "Amber presentation actor",
+              "attacker_uuid": "bab71e73-8535-47f9-8f83-fc0b4f39c1e0",
+              "damage_rolls": [
+                {
+                  "bonus": 6,
+                  "bonus_breakdown": [
+                    {
+                      "name": "Strength Ability",
+                      "source": "self",
+                      "value": 4
+                    }
+                  ],
+                  "damage_type": "Slashing",
+                  "dice_results": [
+                    3
+                  ],
+                  "dice_str": "1d8",
+                  "total": 9
+                }
+              ],
+              "is_crit": false,
+              "is_hit": true,
+              "is_long_range": false,
+              "is_opportunity_attack": false,
+              "is_threatened": false,
+              "kind": "attack",
+              "outcome": "hit",
+              "target_ac": 18,
+              "target_hp": 0,
+              "target_name": "Blue presentation actor",
+              "target_uuid": "7b4b3aca-3c23-40b7-842b-1ec94b1612b7",
+              "total_damage": 9,
+              "weapon_name": "Longsword",
+              "weapon_slot": "MELEE_MAIN"
+            },
+            "detailed": "{cyan:Amber presentation actor} → {yellow:Blue presentation actor} (Longsword)\n  Attack: d20({cyan:18}) +7 [Prof +2, Character Total-Level Proficiency +1, Strength Ability +4] = 25 vs AC 18 [Armor +16, Shield Ac +2] → {green:HIT}\n  Damage: 1d8({red:3}) +6 [Strength Ability +4] = {bold red:9} Slashing",
+            "entry_type": "attack",
+            "source_name": "Amber presentation actor",
+            "source_uuid": "bab71e73-8535-47f9-8f83-fc0b4f39c1e0",
+            "sub_entries": [],
+            "success": true,
+            "target_name": "Blue presentation actor",
+            "target_uuid": "7b4b3aca-3c23-40b7-842b-1ec94b1612b7",
+            "verbose": "{cyan:Amber presentation actor} → {yellow:Blue presentation actor} (Longsword)\n  Attack: d20({cyan:18}) +7 = 25 vs AC 18 → {green:HIT}\n  Damage: 1d8({red:3}) +6 = {bold red:9} Slashing"
+          },
+          "event_uuid": "70a80d95-252e-412a-978b-76b69e7493a2",
+          "kind": "attack",
+          "log_kind": "attack",
+          "parent": "",
+          "sequence": 2
+        },
+        {
+          "entry": {
+            "compact": "{yellow:Blue presentation actor} takes {red:9} slashing",
+            "data": {
+              "blocked": null,
+              "blocked_reason": null,
+              "damage": 9,
+              "damage_type": "slashing",
+              "effect_id": null,
+              "kind": "damage_taken",
+              "source_name": "terrain",
+              "target_name": "Blue presentation actor"
+            },
+            "detailed": "{yellow:Blue presentation actor} takes {red:9} slashing\n  Rolls: [3]",
+            "entry_type": "damage_taken",
+            "source_name": "Amber presentation actor",
+            "source_uuid": "bab71e73-8535-47f9-8f83-fc0b4f39c1e0",
+            "sub_entries": [],
+            "success": true,
+            "target_name": "Blue presentation actor",
+            "target_uuid": "7b4b3aca-3c23-40b7-842b-1ec94b1612b7",
+            "verbose": "{yellow:Blue presentation actor} takes {red:9} slashing"
+          },
+          "event_uuid": "8075e963-be8c-48cb-9d24-2b1b1045585a",
+          "kind": "damage",
+          "log_kind": "damage_taken",
+          "parent": "2:70a80d95-252e-412a-978b-76b69e7493a2",
+          "sequence": 2
+        },
+        {
+          "entry": {
+            "compact": "{yellow:Blue presentation actor} death save {cyan:12} vs DC 10: success (1 successes, 0 failures)",
+            "data": {
+              "became_stable": false,
+              "dc": 10,
+              "died": false,
+              "entity_name": "Blue presentation actor",
+              "entity_uuid": "7b4b3aca-3c23-40b7-842b-1ec94b1612b7",
+              "failures": 0,
+              "kind": "death_save",
+              "natural_roll": 12,
+              "regained_hit_point": false,
+              "roll": 12,
+              "successes": 1
+            },
+            "detailed": "{yellow:Blue presentation actor} death save {cyan:12} vs DC 10: success (1 successes, 0 failures)",
+            "entry_type": "saving_throw",
+            "source_name": "Blue presentation actor",
+            "source_uuid": "7b4b3aca-3c23-40b7-842b-1ec94b1612b7",
+            "sub_entries": [],
+            "success": true,
+            "target_name": "Blue presentation actor",
+            "target_uuid": "7b4b3aca-3c23-40b7-842b-1ec94b1612b7",
+            "verbose": "{yellow:Blue presentation actor} death save {cyan:12} vs DC 10: success (1 successes, 0 failures)"
+          },
+          "event_uuid": "33d55431-6511-4ac0-a286-fe705e589ebc",
+          "kind": "death_save",
+          "log_kind": "death_save",
+          "parent": "4:123dfe67-4ede-4a28-b2da-540ad293699a",
+          "sequence": 4
+        },
+        {
+          "entry": {
+            "compact": "{yellow:Blue presentation actor} death save {cyan:20} vs DC 10: natural 20 (0 successes, 0 failures)",
+            "data": {
+              "became_stable": false,
+              "dc": 10,
+              "died": false,
+              "entity_name": "Blue presentation actor",
+              "entity_uuid": "7b4b3aca-3c23-40b7-842b-1ec94b1612b7",
+              "failures": 0,
+              "kind": "death_save",
+              "natural_roll": 20,
+              "regained_hit_point": true,
+              "roll": 20,
+              "successes": 0
+            },
+            "detailed": "{yellow:Blue presentation actor} death save {cyan:20} vs DC 10: natural 20 (0 successes, 0 failures)",
+            "entry_type": "saving_throw",
+            "source_name": "Blue presentation actor",
+            "source_uuid": "7b4b3aca-3c23-40b7-842b-1ec94b1612b7",
+            "sub_entries": [],
+            "success": true,
+            "target_name": "Blue presentation actor",
+            "target_uuid": "7b4b3aca-3c23-40b7-842b-1ec94b1612b7",
+            "verbose": "{yellow:Blue presentation actor} death save {cyan:20} vs DC 10: natural 20 (0 successes, 0 failures)"
+          },
+          "event_uuid": "94e2d728-5bf3-45a2-8f69-d24a21abd9d4",
+          "kind": "death_save",
+          "log_kind": "death_save",
+          "parent": "7:6ed30281-660e-439b-b283-bd1833fba685",
+          "sequence": 7
+        }
+      ],
+      "recording": "res://.runtime/studio-cases/dying-seed3-v3/amber/journal"
+    },
+    {
+      "counts": {
+        "damage": 1,
+        "dying": 1,
+        "falls": 1,
+        "held_dead": 0,
+        "lethal": 0,
+        "revival": 1
+      },
+      "recording": "res://.runtime/studio-cases/dying-seed3-v3/amber/journal",
+      "role": "revival"
+    }
+  ],
+  "failures": [],
+  "qualification": "SDK/compiler value and temporal sampling only; no native graphics/audio output claim."
+}
