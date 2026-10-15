@@ -16,6 +16,11 @@ var resources_ready:bool=false
 var resource_frame:int=-1
 var deposits:Dictionary={}
 var pending_deposits:Dictionary={}
+# Passive exact after-value work only. Scene resources remain scene-owned.
+var kernel_preparations:Array=[]
+var kernel_jobs:Array=[]
+const KERNEL_WORKERS=2
+var _prepare_budget:Dictionary={"frame":-1,"used_usec":0,"limit_usec":2000}
 var prepare_frame=-1
 var prepare_allocations=0
 var prepare_usec=0
@@ -122,8 +127,74 @@ func _upload(handle:Dictionary,kernels:Array)->void:
     handle.field.render_target_update_mode=SubViewport.UPDATE_ONCE
     handle.updates+=1;field_uploads+=1
 
+static func _warm_kernels(input:Dictionary,output:Dictionary)->void:
+    var cache:Dictionary={}
+    Blood.kernels(input.value,input.position,[],input.source,cache)
+    var active:Dictionary=input.reveal.duplicate()
+    active.pattern=input.pattern;active.age_seconds=-INF
+    Blood.kernels(input.value,input.position,[active],input.source,cache)
+    Blood.prepare_landing(cache,input.reveal,input.pattern)
+    output.cache=cache
+
+static func _warm_kernel_batch(inputs:Array,control:Dictionary)->void:
+    for input in inputs:
+        control.mutex.lock()
+        var cancelled:bool=control.cancelled
+        control.mutex.unlock()
+        if cancelled:return
+        _warm_kernels(input.value,input.output)
+
+func _poll_kernel_preparations()->void:
+    for job in kernel_jobs.duplicate():
+        if not WorkerThreadPool.is_task_completed(job.task):continue
+        WorkerThreadPool.wait_for_task_completion(job.task)
+        for prepared in job.rows:prepared.task=-1 if prepared.output.has("cache") else -2
+        kernel_jobs.erase(job)
+
+func _start_kernel_jobs(budget:Dictionary)->void:
+    if budget.used_usec>=budget.limit_usec:return
+    var available:int=KERNEL_WORKERS-kernel_jobs.size()
+    if available<=0:return
+    var pending:Array=kernel_preparations.filter(func(prepared):return prepared.task==-2 and not prepared.groups.is_empty())
+    if pending.is_empty():return
+    # Partition the received closure, not individual frame-sized tile prefixes.
+    # Each worker owns private outputs; only completion permits cache adoption.
+    var size:int=ceili(float(pending.size())/available)
+    for offset in range(0,pending.size(),size):
+        var rows:Array=pending.slice(offset,mini(offset+size,pending.size()))
+        var inputs:Array=[]
+        for prepared in rows:inputs.append({"value":prepared.input,"output":prepared.output})
+        var control={"mutex":Mutex.new(),"cancelled":false}
+        var task:int=WorkerThreadPool.add_task(_warm_kernel_batch.bind(inputs,control),false,"Prepare exact received blood shapes")
+        for prepared in rows:prepared.task=task
+        kernel_jobs.append({"task":task,"rows":rows,"control":control})
+
+func _prepare_kernels(key:String,reveal:Dictionary,pattern:String,group_id:String,budget:Dictionary)->bool:
+    for prepared in kernel_preparations:
+        if prepared.key==key and is_same(prepared.source,source) and prepared.value==reveal.after:
+            prepared.groups[group_id]=true
+            return prepared.task==-1 and prepared.output.has("cache")
+    var input={"value":reveal.after,"position":reveal.position.duplicate(),"source":source,"reveal":reveal,"pattern":pattern}
+    var output:Dictionary={}
+    kernel_preparations.append({"key":key,"value":reveal.after,"source":source,"groups":{group_id:true},"input":input,"output":output,"task":-2})
+    return false
+
+func _adopt_kernel_cache(handle:Dictionary,key:String,value:Dictionary)->void:
+    if is_same(handle.kernel_cache.get("value"),value):return
+    for prepared in kernel_preparations:
+        if prepared.key==key and prepared.task==-1 and not prepared.groups.is_empty() and is_same(prepared.source,source) and prepared.value==value and prepared.output.get("cache",{}).get("value")==value:
+            handle.kernel_cache=prepared.output.cache
+            # After-values may be copied during admission. Verify equality once
+            # at field adoption, then keep the existing identity-only hot path.
+            handle.kernel_cache.value=value
+            return
+
 func prepare(world:Node,groups:Array,budget:Dictionary={})->bool:
+    if budget.is_empty():
+        budget=_prepare_budget
+        if budget.frame!=Engine.get_process_frames():budget.frame=Engine.get_process_frames();budget.used_usec=0
     var began=Time.get_ticks_usec()
+    _poll_kernel_preparations()
     var charged_before:int=budget.get("used_usec",0)
     var frame=Engine.get_process_frames()
     if prepare_frame!=frame:prepare_frame=frame;prepare_allocations=0;prepare_usec=0
@@ -131,24 +202,27 @@ func prepare(world:Node,groups:Array,budget:Dictionary={})->bool:
         prepare_usec+=Time.get_ticks_usec()-began
         if not budget.is_empty():budget.used_usec+=maxi(0,Time.get_ticks_usec()-began-(budget.used_usec-charged_before))
         return false
+    if source.is_empty():source=Blood.asset(world.catalog_cache)
+    for group in groups:
+        for component in group.get("components",[]):
+            if component.kind!="residue_deposit":continue
+            for reveal in component.reveals:_prepare_kernels(Blood.key(reveal.position),reveal,component.body_release.pattern,group.id,budget)
+    _start_kernel_jobs(budget)
     var complete=true
     for group in groups:
         for component in group.get("components",[]):
             if component.kind!="residue_deposit":continue
             for reveal in component.reveals:
                 var key=Blood.key(reveal.position)
+                var shapes_ready:bool=_prepare_kernels(key,reveal,component.body_release.pattern,group.id,budget)
+                complete=complete and shapes_ready
                 if deposits.has(key):continue
                 if not pending_deposits.has(key):
-                    if prepare_allocations>=2 or (not budget.is_empty() and budget.used_usec>=budget.limit_usec):complete=false;continue
+                    if budget.used_usec>=budget.limit_usec:complete=false;continue
                     var allocation_started:int=Time.get_ticks_usec()
                     var tile={"position":reveal.position,"elevation_steps":reveal.elevation_steps}
                     pending_deposits[key]=_deposit(world,key,tile)
                     pending_deposits[key].groups={}
-                    # Exact settled shapes from the already-received after-value
-                    # can be prepared while this field is still hidden. Landing
-                    # later selects those same particle shapes; no field upload,
-                    # residue publication or flight clock advances here.
-                    Blood.kernels(reveal.after,reveal.position,[],source,pending_deposits[key].kernel_cache)
                     prepare_allocations+=1
                     if not budget.is_empty():budget.used_usec+=Time.get_ticks_usec()-allocation_started
                 var handle:Dictionary=pending_deposits[key]
@@ -162,6 +236,14 @@ func _prune_pending(world:Node)->void:
     var ids={}
     if world.timeline.current!=null and not world.timeline.current.is_empty():ids[world.timeline.current.id]=true
     for group in world.timeline.queue:ids[group.id]=true
+    _poll_kernel_preparations()
+    for prepared in kernel_preparations.duplicate():
+        for id in prepared.groups.keys():
+            if not ids.has(id):prepared.groups.erase(id)
+        if prepared.task<0 and prepared.groups.is_empty():kernel_preparations.erase(prepared)
+    for job in kernel_jobs:
+        if job.rows.all(func(prepared):return prepared.groups.is_empty()):
+            job.control.mutex.lock();job.control.cancelled=true;job.control.mutex.unlock()
     for key in pending_deposits.keys():
         var keep=false
         for id in pending_deposits[key].groups:
@@ -182,7 +264,21 @@ func _active(world:Node,samples:Array)->Array:
             if copy.age_ms<0:result.append(copy)
     return result
 
-func sample(world:Node,samples:Array)->void:
+func sync_tiles(owner:Dictionary,revision:int,changes:Dictionary={})->void:
+    if tiles_revision==revision and is_same(tiles_owner,owner):return
+    # The displayed world already unions every changed canonical tile. Reuse
+    # that exact ledger only when no publication or snapshot owner was missed.
+    var sparse=is_same(tiles_owner,owner) and not changes.get("full",true) \
+        and changes.get("base_revision",-1)==tiles_revision and changes.get("revision",-2)==revision
+    var keys:Array=changes.get("tiles",{}).keys() if sparse else owner.keys()
+    if not sparse:tiles={}
+    tiles_owner=owner;tiles_revision=revision
+    for key in keys:
+        var tile:Dictionary=owner.get(key,{})
+        if not Blood.residue(tile).is_empty():tiles[key]=tile
+        else:tiles.erase(key)
+
+func sample(world:Node,samples:Array,changes:Dictionary={})->void:
     var began=Time.get_ticks_usec()
     sample_phases={}
     var stage_started:int=began
@@ -191,10 +287,7 @@ func sample(world:Node,samples:Array)->void:
     _prune_pending(world)
     _phase("pending",stage_started);stage_started=Time.get_ticks_usec()
     var state:Dictionary=world.timeline.state
-    if tiles_revision!=world.timeline.world_revision or not is_same(tiles_owner,state.get("tiles",{})):
-        tiles_owner=state.get("tiles",{});tiles_revision=world.timeline.world_revision;tiles={}
-        for key in tiles_owner:
-            if not Blood.residue(tiles_owner[key]).is_empty():tiles[key]=tiles_owner[key]
+    sync_tiles(state.get("tiles",{}),world.timeline.world_revision,changes)
     _phase("tile_index",stage_started);stage_started=Time.get_ticks_usec()
     var active=_active(world,samples);var by_tile={};var live_flights={}
     for component in active:
@@ -227,6 +320,7 @@ func sample(world:Node,samples:Array)->void:
         var reveals:Array=by_tile.get(key,[]);var phase=reveals.map(func(row):return [row.id,row.step])
         if not is_same(handle.value,value) or handle.phase!=phase:
             var kernel_started:int=Time.get_ticks_usec()
+            _adopt_kernel_cache(handle,key,value)
             var kernels=Blood.kernels(value,tile.position,reveals,source,handle.kernel_cache)
             _phase("kernels",kernel_started)
             var upload_started:int=Time.get_ticks_usec()
@@ -271,6 +365,11 @@ static func _tile_visible(world:Node,tile:Dictionary)->bool:
 func _flight(world:Node,component:Dictionary,age:float,live:Dictionary)->void:
     var buckets={};var zoom:float=world.camera.unproject_position(world.camera.global_basis.x).distance_to(world.camera.unproject_position(Vector3.ZERO))/Placement.PIXELS_PER_UNIT
     var pixel_unit=1.0/Placement.PIXELS_PER_UNIT
+    var basis:Basis=world.camera.basis
+    var scale:float=maxf(.001,zoom)
+    var snap:float=float(source.snapPx)*zoom
+    var tail_min:float=source.tailMinPx;var tail_max:float=source.tailMaxPx
+    var colors:Array=[Color.hex(int(source.colors[0])*256+255),Color.hex(int(source.colors[1])*256+255)]
     var actor:Dictionary=world.visual_actors.get(component.actor_uuid,{})
     var actor_prefix:Array=GridOrder.key(actor.row,"body",0,0).slice(0,5) if not actor.is_empty() else []
     for particle in Blood.particles(component,source,age):
@@ -285,20 +384,24 @@ func _flight(world:Node,component:Dictionary,age:float,live:Dictionary)->void:
         var previous=Vector3(particle.previous.x,particle.previous_height*Placement.HEIGHT_UNIT,particle.previous.y)
         var screen=world.camera.unproject_position(point);var old=world.camera.unproject_position(previous)
         var direction=(screen-old).normalized();if direction.is_zero_approx():direction=Vector2.RIGHT
-        var tangent=(world.camera.basis.x*direction.x-world.camera.basis.y*direction.y).normalized()
-        var across=world.camera.basis.z.cross(tangent)
-        var length_px=clampf(screen.distance_to(old)/maxf(.001,zoom),source.tailMinPx,source.tailMaxPx)
-        var snap=float(source.snapPx)*zoom
+        var tangent=(basis.x*direction.x-basis.y*direction.y).normalized()
+        var across=basis.z.cross(tangent)
+        var length_px=clampf(screen.distance_to(old)/scale,tail_min,tail_max)
         var snapped=Vector2(Blood.even_round(screen.x/snap),Blood.even_round(screen.y/snap))*snap
-        point+=world.camera.basis.x*(snapped.x-screen.x)/maxf(.001,zoom)*pixel_unit-world.camera.basis.y*(snapped.y-screen.y)/maxf(.001,zoom)*pixel_unit
+        point+=basis.x*(snapped.x-screen.x)/scale*pixel_unit-basis.y*(snapped.y-screen.y)/scale*pixel_unit
         # Original physical-blood vocabulary: body rectangle plus bright edge.
-        for shape in [[-length_px,-particle.size,2.,particle.size,source.colors[0]],[-1.,-particle.size,1.,-particle.size+maxf(1.,particle.size*.6),source.colors[1]]]:
-            var width:float=shape[2]-shape[0];var height:float=shape[3]-shape[1]
-            var center=point+tangent*(shape[0]+shape[2])*.5*pixel_unit-across*(shape[1]+shape[3])*.5*pixel_unit
-            buckets[key].pieces.append({"transform":Transform3D(Basis(tangent*width*pixel_unit,across*height*pixel_unit,world.camera.basis.z),center),"color":Color.hex(int(shape[4])*256+255)})
+        var size:float=particle.size
+        var width:float=2.+length_px;var height:float=size-(-size)
+        var center:Vector3=point+tangent*(-length_px+2.)*.5*pixel_unit
+        var pieces:Array=buckets[key].pieces
+        pieces.append({"transform":Transform3D(Basis(tangent*width*pixel_unit,across*height*pixel_unit,basis.z),center),"color":colors[0]})
+        var edge:float=-size+maxf(1.,size*.6)
+        width=2.;height=edge-(-size)
+        center=point-across*(-size+edge)*.5*pixel_unit
+        pieces.append({"transform":Transform3D(Basis(tangent*width*pixel_unit,across*height*pixel_unit,basis.z),center),"color":colors[1]})
     for bucket_key in buckets:
         var bucket:Dictionary=buckets[bucket_key]
-        var plane=Vector3(world.camera.basis.z.x,0,world.camera.basis.z.z).normalized()
+        var plane=Vector3(basis.z.x,0,basis.z.z).normalized()
         var foot=Placement.contact(actor.row) if not actor.is_empty() else Vector3.ZERO
         for half in ["back","front"]:
             var key=bucket_key+":"+half
@@ -335,6 +438,11 @@ func _erase_deposit(world:Node,key:String)->void:
     _free_deposit(world,deposits[key]);deposits.erase(key)
 
 func close(world:Node)->void:
+    for job in kernel_jobs:
+        job.control.mutex.lock();job.control.cancelled=true;job.control.mutex.unlock()
+    for job in kernel_jobs:WorkerThreadPool.wait_for_task_completion(job.task)
+    kernel_jobs.clear()
+    kernel_preparations.clear()
     for key in flights.keys():_erase_flight(world,key)
     for key in deposits.keys():_erase_deposit(world,key)
     for handle in pending_deposits.values():_free_deposit(world,handle)

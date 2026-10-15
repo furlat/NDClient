@@ -112,9 +112,23 @@ func run() -> void:
     reset(plan)
     demand("Externally satisfied pending baseline",{"a":"/test/a.png"})
     for data in [fast,reference]: Media.published(data,{"path":"a","cpu_bytes":8,"gpu_bytes":8})
-    demand("Already decoded publication cancels queued duplicate",{"a":"/test/a.png"})
+    demand("Already decoded publication cancels queued duplicate",{"a":"/test/a.png"},[{},{},{},{}],true)
     check(fast.pending.all(func(request):return request.path!="a") and Media.ready(fast,{"a":true}),
         "Caller publication while pending removes redundant original request")
+
+    reset(plan)
+    demand("Optional external publication baseline",{"a":"/test/a.png"})
+    for data in [fast,reference]:
+        Media.diagnostics(data)
+        Media.published(data,{"path":"b","cpu_bytes":8,"gpu_bytes":8})
+    check(fast.pending.map(func(request):return request.path)==["a","c"] and not fast.queued.has("b"),
+        "Satisfied optional publication removes only its request and preserves mandatory/tail order")
+    check(Media.diagnostics(fast).pending==2 and fast.selected_ready.has("b"),
+        "Optional publication updates pending accounting and exact selected readiness immediately")
+    demand("Optional publication retains unchanged exact demand",{"a":"/test/a.png"},[{},{},{},{}],true)
+    demand("Mandatory promotion after optional publication",{"c":"/test/c.png","a":"/test/a.png"})
+    check(fast.pending.map(func(request):return request.path)==["c","a"],
+        "Real required order changes still promote mandatory work after optional publication")
 
     reset(plan,16)
     demand("Capped optional family",{"a":"/test/a.png"})
@@ -158,6 +172,7 @@ func run() -> void:
     var equal_plan = plan.duplicate(true)
     for data in [fast,reference]: Media.adopt_encounter(data,equal_plan,1)
     demand("Equal immutable estimate owners",{"a":"/test/a.png"},[{},{},{},{}],true)
+    demand("Repeated demand after equal family adoption",{"a":"/test/a.png"},[{},{},{},{}],true)
     var redistributed = equal_plan.duplicate(true)
     redistributed.estimates.a.bytes = 20; redistributed.estimates.b.bytes = 12
     redistributed.estimate_bytes = Encounter.estimate_bytes(redistributed.estimates)
@@ -270,6 +285,55 @@ func run() -> void:
     demand("Family coverage removal still refreshes selected owners",all_paths,[{},{},{"a":true},{}])
     check(Media.release_cold_images(fast,-1)==Media.release_cold_images(reference,-1) and fast.resident.a.cpu_bytes==0,
         "Family role changes cannot reuse earlier covered-role readiness")
+
+    reset(family(),16)
+    demand("Deferred role initial selected source",{"a":"/test/a.png"})
+    publish("a")
+    for data in [fast,reference]:Media.boot_ready(data)
+    publish("b")
+    demand("Unselected resident retains deferred exact role",{"a":"/test/a.png"},[{"b":true},{},{},{}])
+    for data in [fast,reference]:data.budget_bytes=32
+    demand("Later optional selection applies deferred exact role",{"a":"/test/a.png"},[{"b":true},{},{},{}])
+    check(fast.resident.b.environment and reference.resident.b.environment,
+        "Membership refresh cannot reuse a category from before an out-of-demand role change")
+
+    reset(plan)
+    demand("Queued category ledger baseline",{"a":"/test/a.png"})
+    var retained_stats:Dictionary=fast.stats
+    demand("Queued exact environment category promotion",{"a":"/test/a.png"},[{"b":true},{},{},{}])
+    check(is_same(fast.stats,retained_stats) and fast.stats[true].pending==1 and fast.stats[false].pending==2,
+        "One actual pending category change preserves the resident accounting owner")
+    demand("Queued exact environment category removal",{"a":"/test/a.png"})
+    check(is_same(fast.stats,retained_stats) and fast.stats[true].pending==0 and fast.stats[false].pending==3,
+        "Removing a pending environment role reverses only its category delta")
+    var category_family=plan.duplicate(true)
+    category_family.revision+=1
+    category_family.environment={"c":true}
+    for data in [fast,reference]:Media.adopt_encounter(data,category_family,1)
+    demand("Changed accepted family environment category",{"a":"/test/a.png"})
+    check(is_same(fast.stats,retained_stats) and fast.stats[true].pending==1 and fast.stats[false].pending==2,
+        "Pending category ledger follows accepted family role ownership")
+
+    var indexed_family={"revision":1,"paths":{},"estimates":{},"environment":{},"fixtures":{},"cpu_required":{},"gpu_only":{},"errors":[]}
+    var amounts=[0,5,7,32,1,16,4,9]
+    for i in amounts.size():
+        var id:String="indexed-"+str(i)
+        indexed_family.paths[id]="/test/"+id+".png"
+        indexed_family.estimates[id]={"bytes":amounts[i]}
+    indexed_family.estimate_bytes=Encounter.estimate_bytes(indexed_family.estimates)
+    indexed_family.estimate_summary=Encounter.estimate_summary(indexed_family)
+    indexed_family.selection_index=Encounter.selection_index(indexed_family)
+    for limit in [0,1,7,17,31,48,64,96]:
+        for required_ids in [[],[0],[3],[0,2],[1,4,7],[3,5,6],[0,1,2,3,4,5,6,7]]:
+            reset(indexed_family,limit)
+            var required:Dictionary={}
+            for i in required_ids:required["indexed-"+str(i)]=indexed_family.paths["indexed-"+str(i)]
+            demand("Indexed greedy cap %d required %s"%[limit,str(required_ids)],required)
+            for data in [fast,reference]:Media.boot_ready(data)
+            var next_required:Dictionary={"indexed-7":indexed_family.paths["indexed-7"]}
+            for data in [fast,reference]:Media.adopt_source_sizes(data,{"outside-index":5},1)
+            next_required["outside-index"]="/test/outside-index.png"
+            demand("Indexed changed exact demand cap %d required %s"%[limit,str(required_ids)],next_required)
 
     var missing = "res://tests/no-such-demand-fixture.png"
     var failed_family = {"revision":1,"paths":{missing:missing},"estimates":{missing:{"bytes":8}},

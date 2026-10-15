@@ -1,31 +1,9 @@
 {
-  "checks": 47,
-  "evidence": {
-    "metadata_phases": {
-      "optional": {
-        "estimates": 116.97,
-        "families": 28.413,
-        "source_files": 0.041
-      },
-      "required": {
-        "characters": 180.455,
-        "environment": 71.733,
-        "environment_all_paths": 0.089,
-        "environment_commit_updates": 0.0,
-        "environment_initial_update": 71.599,
-        "source_files": 0.033,
-        "source_sizes": 10.67
-      }
-    },
-    "publication": {
-      "budget_ms": 2.0,
-      "count": 3,
-      "elapsed_ms": 0.161,
-      "optional": 0,
-      "required": 3
-    }
-  },
-  "failures": [],
+  "checks": 1,
+  "evidence": {},
+  "failures": [
+    "Usage: --state=<recorded canonical state.json>"
+  ],
   "scope": "Original source closure parity, required-before-optional metadata readiness, immutable input snapshots, stale epochs/requests and real PNG publication order/bytes. Headless texture adapter only; native upload/frame timing requires live acceptance.",
-  "state": "res://.runtime/player-runs/20261011T223103.996259Z/state.json"
+  "state": ""
 }

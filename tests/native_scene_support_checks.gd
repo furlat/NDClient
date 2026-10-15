@@ -10,6 +10,7 @@ var checks:int=0
 var failures:Array=[]
 var timings:Dictionary={}
 var images:Dictionary={}
+var actor_count:int=6
 func _initialize()->void:run.call_deferred()
 func check(value:bool,label:String)->void:
     checks+=1
@@ -28,7 +29,7 @@ func make_world(script:Script)->Dictionary:
         var output=ShaderMaterial.new();output.shader=Output;output.set_shader_parameter("received",images.white);output.set_shader_parameter("atlas_region",Vector4(0,0,1,1));output.set_shader_parameter("source_quad_size",Vector2.ONE);node.material_override=output
         var placement={"position":[float(i%6)-2.5,float(i/6)-2.5],"base_height_steps":0}
         state.floors.append({"id":"floor"+str(i),"role":"terrain","source_version":0,"node":node,"placement":placement,"received_material":output})
-    for i in 6:
+    for i in actor_count:
         var node=MeshInstance3D.new();node.mesh=QuadMesh.new();node.mesh.size=Vector2(.8,1.4);host.add_child(node)
         var material=ShaderMaterial.new();material.shader=Source
         var output=ShaderMaterial.new();output.shader=Output;node.material_override=output
@@ -47,13 +48,25 @@ func camera_view(state:Dictionary,quarter:int,zoom:float)->void:
         state.actors.body.entries[i].node.position=Vector3(float(i%3)-1,.7,float(i/3)-.5)
         state.actors.body.entries[i].node.basis=camera.basis
 func sync(state:Dictionary)->void:state.support.sync(state.floors,state.actors,state.host.camera)
+func floor_proxy(state:Dictionary,index:int)->MeshInstance3D:
+    var entry:Dictionary=state.floors[index]
+    var key:Variant=entry.node.get_instance_id()
+    if not state.support.floors.has(key):key=entry.id
+    return state.support.floors.get(key)
+func floor_members(state:Dictionary)->Array:
+    var result:Array=[]
+    for i in state.floors.size():
+        if floor_proxy(state,i)!=null:result.append(i)
+    return result
 func draw()->void:
     await process_frame;await RenderingServer.frame_post_draw
     await process_frame;await RenderingServer.frame_post_draw
 func compare(a:Dictionary,b:Dictionary,label:String)->void:
     check(a.support.viewport.get_texture().get_image().get_data()==b.support.viewport.get_texture().get_image().get_data(),label+": exact native packed receiver pixels")
     check(a.view.get_texture().get_image().get_data()==b.view.get_texture().get_image().get_data(),label+": exact painted output pixels")
-    check(a.support.floors.keys()==b.support.floors.keys() and a.support.actors.keys()==b.support.actors.keys(),label+": exact receiver membership/order")
+    check(floor_members(a)==floor_members(b) and a.support.floors.size()==b.support.floors.size() and a.support.actors.keys()==b.support.actors.keys(),label+": exact receiver source membership and actor order")
+    for i in floor_members(a):
+        check(floor_proxy(a,i).position==floor_proxy(b,i).position,label+": exact floor contact "+str(i))
     for id in a.support.actors:
         var actual:MeshInstance3D=a.support.actors[id];var expected:MeshInstance3D=b.support.actors[id]
         check(actual.global_transform==expected.global_transform and actual.sorting_offset==expected.sorting_offset and actual.material_override.render_priority==expected.material_override.render_priority,label+": exact proxy transform/order "+id)
@@ -69,13 +82,42 @@ func run()->void:
     root.unfocusable=true;root.position=Vector2i(-16000,-16000);root.size=Vector2i(320,240);Engine.max_fps=60
     create_timer(60).timeout.connect(func():printerr("Support check deadline");quit(2))
     images={"white":texture(Color.WHITE),"depth":texture(Color(.5,0,0,1)),"changed":texture(Color(.75,0,0,1)),"empty":texture(Color(0,0,0,1))}
-    var a=make_world(Support);var b=make_world(Original)
+    var candidate:Script=Support;var before:Script=Support
+    for argument in OS.get_cmdline_user_args():
+        if argument.begins_with("--candidate="):candidate=load(argument.trim_prefix("--candidate="))
+        if argument.begins_with("--before="):before=load(argument.trim_prefix("--before="))
+        if argument.begins_with("--actors="):actor_count=int(argument.trim_prefix("--actors="))
+    var a=make_world(candidate);var b=make_world(Original);var c=make_world(before)
     for quarter in 4:
         for zoom in [4.0,6.0]:
-            for state in [a,b]:camera_view(state,quarter,zoom);sync(state)
+            for state in [a,b,c]:camera_view(state,quarter,zoom);sync(state)
             await draw();compare(a,b,"view%d zoom%.0f"%[quarter,zoom])
-    var states=[a,b]
-    for label in ["unchanged","clock","geometry","atlas","opacity","restore","hidden","reveal","output_replace","output_recopy","stamped_recopy","same_count_replace","mask","removed","sleep","wake"]:
+            var retained:MeshInstance3D=floor_proxy(a,0)
+            for state in [a,b,c]:
+                state.floors[0].id="floor-representative-%d-%.0f"%[quarter,zoom]
+                state.floors[0].placement=state.floors[0].placement.duplicate(true)
+                state.floors[0].placement.base_height_steps=1 if zoom==4.0 else 0
+                sync(state)
+            check(floor_proxy(a,0)==retained,"Representative ID/contact change retains same source-owned floor proxy")
+            check(a.support.last_sync_phases.floor_created==0 and a.support.last_sync_phases.floor_retired==0,"Representative replacement avoids receiver creation and retirement")
+            await draw();compare(a,b,"representative_change_view%d_zoom%.0f"%[quarter,zoom])
+            retained=floor_proxy(a,0)
+            for state in [a,b,c]:
+                var entry:Dictionary=state.floors[0]
+                var old_source:Node=entry.node
+                entry.node=old_source.duplicate()
+                state.host.add_child(entry.node)
+                old_source.free()
+                var old_output:ShaderMaterial=entry.received_material
+                entry.received_material=old_output.duplicate()
+                entry.node.material_override=entry.received_material
+                sync(state)
+                check(old_output.get_shader_parameter("native_scene_enabled")==false,"Replaced floor output disabled")
+            check(not is_instance_valid(retained),"Actual source-node replacement retires old floor proxy despite same row ID")
+            check(a.support.last_sync_phases.floor_created==1 and a.support.last_sync_phases.floor_retired==1,"Actual source-node replacement creates and retires exactly one receiver")
+            await draw();compare(a,b,"source_node_replacement_view%d_zoom%.0f"%[quarter,zoom])
+    var states=[a,b,c]
+    for label in ["unchanged","clock","geometry","atlas","opacity","restore","hidden","reveal","output_replace","output_recopy","stamped_recopy","same_count_replace","mask","pivot","ground","cell_size","solid_missing","solid_arrival","copy_proof","copy_stable","copy_overwrite","first_draw","removed","sleep","wake"]:
         for state in states:
             var entry:Dictionary=state.actors.body.entries[0]
             match label:
@@ -91,29 +133,62 @@ func run()->void:
                 "stamped_recopy":entry.received_material.set_shader_parameter("native_scene_enabled",false);entry.received_material.set_shader_parameter("native_scene_pivot",Vector2.ZERO)
                 "same_count_replace":entry.id="replacement";state.floors[0].id="floor-replacement"
                 "mask":state.support.solid_masks.body=images.empty
+                "pivot":entry.pivot=Vector2(7,14)
+                "ground":entry.geometry_ground_pixels=3.0
+                "cell_size":entry.geometry_cell_size=Vector2(17,18)
+                "solid_missing":state.support.solid_masks.erase("body")
+                "solid_arrival":state.support.solid_masks.body=images.changed
+                "copy_proof":
+                    for source in state.actors.body.entries:
+                        source.source_version=30
+                        source.received_source_key={"source":source.material,"shader":source.material.shader,"version":30,"output":source.received_material,"output_shader":source.received_material.shader}
+                "copy_stable":pass
+                "copy_overwrite":
+                    entry.received_material.set_shader_parameter("native_scene_enabled",false)
+                    entry.received_material.set_shader_parameter("native_scene_pivot",Vector2.ZERO)
+                    entry.received_source_key=entry.received_source_key.duplicate()
+                "first_draw":entry.pivot=Vector2(6,15);entry.geometry_ground_pixels=2.0
                 "removed":state.actors.body.entries[1].node.hide()
                 "sleep":state.support.set_enabled(false)
                 "wake":state.support.set_enabled(true);state.support.solid_masks.body=images.white
             if label!="sleep":sync(state)
+        if label=="first_draw":
+            await process_frame;await RenderingServer.frame_post_draw
+            compare(a,b,"first_draw_after_one_frame")
         await draw();compare(a,b,label)
         if label=="sleep":check(a.support.actors.values().all(func(node):return node.material_override.get_shader_parameter("sheet")==null),"Inactive support releases texture references")
     for state in states:
-        for entry in state.actors.body.entries:entry.source_version=10
+        for entry in state.actors.body.entries:
+            entry.source_version=10
+            entry.received_source_key={"source":entry.material,"shader":entry.material.shader,"version":10,"output":entry.received_material,"output_shader":entry.received_material.shader}
         sync(state)
-    for name in ["original","revised"]:
-        var state:Dictionary=b if name=="original" else a
-        var samples:Array=[]
-        for i in 200:
-            var started=Time.get_ticks_usec();sync(state);samples.append((Time.get_ticks_usec()-started)/1000.0)
-        samples.sort();timings[name]={"median_ms":samples[100],"p95_ms":samples[190],"max_ms":samples[-1]}
-    # Same-count floor replacements must invalidate the optional completed token.
+    var measured={"original":[],"before":[],"revised":[]}
+    # Alternate complete sync calls against the immediate pre-edit source,
+    # rather than attributing its earlier source-binding improvement here.
+    for round_index in 9:
+        var order=["revised","before","original"] if round_index%2==0 else ["original","before","revised"]
+        for name in order:
+            var state:Dictionary=b if name=="original" else (c if name=="before" else a)
+            for i in 40:
+                var started=Time.get_ticks_usec();sync(state);measured[name].append((Time.get_ticks_usec()-started)/1000.0)
+    for name in measured:
+        var samples:Array=measured[name];samples.sort()
+        timings[name]={"median_ms":samples[samples.size()/2],"p95_ms":samples[int(samples.size()*.95)],"max_ms":samples[-1]}
+    # Hidden preparation also follows actual source identity, not row labels.
     a.support.set_enabled(false)
     for i in 64:a.support.prepare_hidden(a.floors,a.actors)
-    var old:Node=a.support.floors["floor-replacement"]
+    var old:Node=floor_proxy(a,0)
     a.floors[0].id="floor-new"
     for i in 64:a.support.prepare_hidden(a.floors,a.actors)
-    check(not a.support.floors.has("floor-replacement") and a.support.floors.has("floor-new") and not is_instance_valid(old),"Changed publication replaces same-count hidden floor identity")
-    for state in states:state.support.close();state.view.queue_free()
+    check(floor_proxy(a,0)==old and is_instance_valid(old),"Hidden representative change retains same source-owned receiver")
+    var source:Node=a.floors[0].node
+    a.floors[0].node=source.duplicate();a.host.add_child(a.floors[0].node);source.free()
+    for i in 64:a.support.prepare_hidden(a.floors,a.actors)
+    check(floor_proxy(a,0)!=null and not is_instance_valid(old),"Hidden actual source replacement retires obsolete receiver")
+    for state in states:
+        state.support.close()
+        check(state.support.floors.is_empty() and state.support.actors.is_empty(),"Close releases every floor and actor receiver")
+        state.view.queue_free()
     await draw()
-    var report={"checks":checks,"failures":failures,"timings":timings,"scope":"Original versus revised receiver depth and painted-output byte parity across fourviews/twozooms, live unstamped material/atlas/opacity/mask changes, membership, inactive media release. Synthetic finite receiver fixture; full real replay timing separate."}
+    var report={"actor_proxies":actor_count,"checks":checks,"failures":failures,"timings":timings,"scope":"Original versus revised receiver depth and painted-output byte parity across fourviews/twozooms, live unstamped material/atlas/opacity/mask changes, membership, inactive media release. Synthetic finite receiver fixture; full real replay timing separate."}
     FileAccess.open("res://.runtime/native-scene-support-checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "));print("NATIVE_SCENE_SUPPORT_CHECKS ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)

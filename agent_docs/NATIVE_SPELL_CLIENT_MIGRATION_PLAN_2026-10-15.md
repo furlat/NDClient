@@ -1,5 +1,438 @@
 # Native spells in the client and Studio
 
+> **15 October review checkpoint:** incremental optimization is paused. The next
+> design is [Preparation, publication and ownership](PREPARATION_PUBLICATION_OWNERSHIP_PLAN_2026-10-15.md).
+> That plan supersedes the performance continuation below, while preserving this
+> document's event semantics, approved graphics and artistic deferrals.
+
+## Current continuation — live gameplay feedback
+
+Latest actual-player continuation (20:35 UTC), `.runtime/player-runs/20261015T203539.824901Z`:
+81 checks passed, zero trace drops and zero media/native/world holds after either
+Fireball starts. Complete-packet-to-first-animation is70.236 /64.223 ms; whole-action
+maximum frames32.600 /29.158 ms (prior20:23 run34.233 /40.204 ms). Server execution
+is542.618 /396.777 ms, measured separately. The <30 ms response and no-spikes
+objectives remain unmet. Other applications remain on the GPU; aggregate changes
+are not isolated attribution. Default runtime, graphics and authored timing stay
+unchanged. Owned probes exit; no user preview/application was interrupted.
+
+The impact trace proved representative terrain row IDs could change while their
+actual mesh node stayed identical. NativeSceneSupport now keys its existing floor
+map by that node identity, both in hidden preparation and displayed sync. At the
+measured impact the old1.881 ms retirement is now0 ms, with zero created/retired
+helpers and the same source node. Original painted-output/depth comparisons pass
+12,121 checks across four views/two zooms, row/contact change, actual node replacement,
+visibility, disable/wake and output cleanup. Feedback review finds no blocker.
+
+Worker demand supersets now require exact prior scene/epoch/family/roles/header
+proofs and the combined optional+required budget cap. Exact current roles/readiness
+refresh immediately; the existing worker refills optional selection. The subsequent
+typed-header change allows proven contractions whose metadata has raw dimensions
+and explicit CPU/GPU ownership; unknown/residency-dependent inputs still fall back.
+1,342 oracle/worker checks and119 actual-PNG race checks pass;27 recorded comparisons
+show5.810→4.029 ms. Live719→603 contraction now defers selection in6.007 ms rather
+than repeating the old11.5 ms full selection. Admission still has an11.058 ms demand,
+and a new-family superset guard takes3.388 ms. Motion owns further measured demand
+work; feedback independently reviews budget/readiness, anti-slop and anti-OOP.
+
+Actor diagnostics show impact binding1.387 ms and outfit checks0.626 ms across55
+layers. Interaction investigates whether material keys deep-copy/compare unused
+flash and body-surface provenance, and whether one per-actor shader operand payload
+can remove repeated per-layer derivation while preserving exact uniforms/pixels.
+Root owns sequential live measurements and overall plan adherence. The proposed
+shadow parameter delta was pixel-identical but negligible and reverted; a bulk
+blood upload matched10,656 actual native buffer checks but saved only~0.006 ms/sample
+and was rejected. No new framework or artistic change is justified by those probes.
+
+The atlas diagnostics proved58 actor preparations accepted, with zero proof
+misses;47 outputs were nevertheless allocated again because extending an aliased
+source directory was incorrectly treated as extending the separate prepared-output
+directory. The two membership guards now consult actual output membership. The
+combined actor-preparation/static-prefix/dynamic-extra regression passes1708 native
+and56 sparse checks, including exact first-draw pixels and no replacement allocation.
+The previous idle-version explanation was not the measured cause.
+
+Particle construction qualification: only already-prepared resources whose child
+resources were audited as constant may keep those children when making a private
+ParticleProcessMaterial shell. Raw sources, scripted materials and mutable child
+resources retain full duplication. Built-in property names are derived once;
+64 ownership/mode cases and518 actual Fireball source/clock/peer/donor checks pass.
+Alternating fire/smoke constructor medians2.910->2.178 /2.977->2.257 ms; scan medians
+1.411->0.718 /1.403->0.709 ms. A full per-emitter guard scan was slower and rejected.
+These are isolated measurements; combined live qualification remains pending.
+
+Corrected optional-demand comparison uses the actual lowercase reference normal
+profile:589->452 paths, not the earlier capitalized-profile547->410 fixture.
+Fourteen exact-order/state checks pass; immediate demand5.524->1.983 ms and capture
+1.271->0.373 ms. The earlier isolated numbers should not be treated as the actual
+default-profile closure. Later8–9 ms expansions still occur after metadata intent
+ends; the current continuation uses the existing worker for proven contractions
+of an internally frozen completed family. Rejection diagnostics distinguish absent
+exact estimates from changed captured inputs; no broad fallback is relaxed.
+
+Latest combined actual-input run (19:08) passed81 checks with zero dropped
+trace records and zero later media/native/world holds during either Fireball.
+Packet-to-animation was70.568 /87.400 ms, with whole-action maximum frames
+33.613 /45.598 ms: the target remains unmet and the combined changes did not
+produce an overall improvement. First required-set contraction deferred optional
+selection, but the second did not. The continuous actor UV certificate did not
+reduce the47 cold atlas outputs; it is not evidence that their cause was fixed.
+
+Next qualification is narrowly scoped to measured work: exact private readonly
+selection ownership avoids recopying/recomparing1900 path maps; source headers
+invalidate optional planning only when they can change the participating estimate;
+the existing finite actor packet retains its resolved base closure for optical-role
+projection. Atlas diagnostics now distinguish absent preparation (including missing
+textures) from rejected prepared materials. Independent review confirms a missing
+actor-source attempt is currently not retried, but the actual47 misses still need
+live attribution. Existing native Factory constructor timings are forwarded into
+the frame profile to decompose indivisible construction overruns. Root owns live
+measurement; motion owns demand/worker capture, interaction owns actor closures,
+feedback owns atlas diagnostics and plan/anti-slop/anti-OOP review.
+
+Root's follow-up blood geometry changes hoist per-flight camera/source operands
+and directly assemble the original two rectangles per particle. The unchanged
+MultiMesh buffers/painter ownership pass 10,656 recorded checks; 24 native
+view/age samples retain exact scene and receiving-field bytes (604 checks).
+Alternating CPU medians were 169.745 -> 140.065 ms for 320 samples. The eviction
+policy remains the existing oldest-two scan; typed local pin/resident maps reduce
+its 1,996-entry benchmark from 0.851 to 0.489 ms (471 pins), with the existing
+109 pressure/role/accounting checks passing. These are isolated CPU figures;
+combined live improvements remain to be measured. No graphical reduction,
+new prediction, server change, or user-preview restart is authorized by this work.
+
+Continuation evidence (2026-10-15, before the next combined live run):
+`.runtime/player-runs/20261015T181917.584355Z` passes 81 actual-input checks,
+zero dropped trace records, and zero later media/native/world holds during both
+Fireballs. Packet-to-first-animation remains 68.105 / 81.210 ms; server dispatch
+is separately 584.109 / 424.387 ms. Whole-action frame maxima are 33.060 / 35.780
+ms. The previous 11-frame, 202.508 ms impact hold did not recur in two runs after
+required publication stopped consuming the world-preparation budget for future
+images. Proposed-step environment readiness still takes priority; full future
+source ownership remains intact. The tenfold latency/no-spikes objective is NOT
+achieved.
+
+Next measured work stays within that objective: exact reducer snapshot reuse,
+immutable actor media selector reuse, removal of redundant log subtree copies,
+optional metadata preparation using the existing worker, and prepared native
+atlas output/style binding. Root owns real player-command profiling and blood
+impact sampling; motion owns SDK/demand work; interaction reviews exact
+authoring/trace/blood output; feedback owns atlas qualification and independent
+plan/anti-slop/anti-OOP review. No server edits or user-preview restart.
+
+Blood impact qualification: the existing received-shape worker now prepares the
+two actual per-particle landing amounts, retaining only particles whose shapes
+touch that tile at either amount. A single exact reveal can select those arrays
+by its authored landing time; simultaneous reveals use the original general
+evaluator. No blood fact, geometry, light, timing or upload format changes.
+167,993 checks compare all 83 recorded receiving versions across 2,019 exact
+landing boundaries against the immediate pre-change evaluator. Alternating
+9-run CPU medians for 1,660 warm evaluations are 76.097 -> 5.133 ms. The expanded
+worker/adoption test passes 56,881 checks including negative finite schedules,
+missing-preparation fallback, overlap, reverse playback and cancellation. Live
+impact savings are still to be measured. A preceding structural cache attempt
+was slower (77.481 -> 109.948 ms) and was removed; it is not part of the change.
+
+Current user target: reduce the remaining 284–313 ms client packet-to-animation
+delay by at least 10×. Root changes whole-group component admission to require
+only cues due at the proposed display boundary, while preparing later received
+cues during the cast. Full retention/media ownership and pre-commit readiness
+remain mandatory; replay seeking retains its full closure. Measure later cue
+holds as well as the first visible frame so delay is not merely relocated.
+Motion reviewer owns SDK intake/parsing; interaction reviewer owns presentation
+compilation and metadata enumeration. Feedback reviewer independently tracks
+plan adherence, anti-slop, anti-OOP and event/graphics correctness. Use real
+recorded inputs for isolated checks, then the same live Gallery player actions.
+No server edits, prediction, graphic reductions or user-preview restart.
+
+Latest optimization scope: prepare assets while the player targets, but reduce
+the underlying cost rather than moving an 800 ms stall earlier. Selection hints
+remain optional, bounded by the media budget, and never predict/commit outcomes.
+The actual received group retains its exact readiness and event order. Trace
+targeting frames as well as submit-to-response/preparation/animation separately.
+The user has a separate server worker; this task fixes client costs and reports
+observed server waiting separately.
+
+The user also requested replacing large resource loads used for tiny queries.
+First concrete change: bake exact authored hand/body optical samples in ignored
+`.derived/surface-sockets` sidecars; metadata workers admit them, renderer lookups
+do no IO/readback, and full optical textures remain on the GPU. Missing/stale
+sidecars retain the original CPU path. Qualify every baked finite point and
+assembled top-layer ownership/placement against the original images. Preserve
+color buffers where pixel picking still consumes them. Audit other consumers
+(palette statistics, profile variants, alpha/bounds) before changing roles; do
+not claim a GPU-only consumer while any real CPU reader remains.
+Root owns attachment integration and validation; feedback reviewer owns measured
+media demand costs, motion reviewer owns optional selection lifetime/coverage,
+interaction reviewer owns the compact sample baker and blood-worker qualification.
+They also check plan adherence, anti-slop and anti-OOP; no graphics/rule changes.
+
+Qualified compact data: 2,147 registered authored sources now use 17,824,463
+bytes of sidecars for 750,885 finite optical queries. Only demanded source records
+are loaded. This is CPU query data; original GPU textures remain unchanged.
+All sample bounds/byte ranges pass. The initial 156 Gallery/sandbox sources pass
+55,948 independent Godot byte checks and 3,512 assembled mirrored/scaled/four-view
+placement checks with optical CPU images removed. A further 24-source sample
+spanning all 19 effective authored clips/eight facings passes 8,576 checks.
+Unregistered poses, non-solid sources and creature sources without the existing
+attachment reference retain the original fallback; the bake invents no geometry.
+Evidence: `.runtime/surface-socket-full-bake-summary.json` and
+`.runtime/surface-socket-full-library-byte-checks.json`.
+Persisted palette operands pass 110 checks against full source scans, including
+replaced source/incomplete cache recovery; existing cached Gallery operands load
+in approximately 0.4–0.7 ms. The prior bounded scan was roughly 13–19 ms.
+
+Latest live run before the final profile/owner changes:
+`.runtime/player-runs/20261015T143629.031782Z`, original Gallery door/move/haste/two
+Fireballs, 81 checks, zero dropped trace records. Hover p99 is 23.458/28.310 ms;
+whole-action worst frames are 54.115/36.009 ms. First animation after submit is
+1091.9/686.7 ms, of which server dispatch is 645.1/396.3 ms. Complete packet to
+animation still costs 415.5/271.0 ms. These are blockers, not smooth-play claims.
+The original user window remained open on the same GPU throughout comparisons.
+
+That run uploaded a 231 MB speculative monument destruction map although neither
+cast destroyed the monument. The existing committed lossless page tool had not
+been applied to the installed v1 manifest. Regeneration now selects 98 unchanged
+numeric pages at 4.5 MiB each; 5,023 checks prove all saved bytes, actual frame/view
+selection, readiness closures and settled endpoints. This reduces individual
+upload size, not total artwork bytes. Upload/frame causality needs the next live
+run's absolute timestamps. Root owns final live measurement; motion owns selected
+normal-profile projection and preserving resource hints across a target query;
+interaction owns sparse ground transforms and rebaking after Geometry is frozen.
+Feedback remains independent plan/anti-slop/anti-OOP and resource-closure reviewer.
+
+Follow-up live evidence: `.runtime/player-runs/20261015T152417.554892Z` passes
+81 checks with no dropped trace records. Both Fireballs enter their component gate
+with zero missing required character/environment textures. Batching the existing
+18 authoritative blood cells reduces that gate from 152.6 to 112.9 ms and from
+138.1 to 98.5 ms, with native effect construction/hit draw acknowledgement now last.
+Required worker metadata still takes 97/48 ms, and packet-to-animation is 345/255
+ms. Whole-action worst frames are 30.95/41.44 ms: no overall smoothness claim.
+The second cast reveals two new floor cells and spent 4.86 ms rebuilding support
+geometry. The follow-up changes only those contacts under the existing complete
+revision proof. New/remove/zero-to-raised/raised-to-zero native transitions match
+the frozen full-snapshot renderer across four views (354 pixel/picking, 50 support,
+11 transform checks). Isolated two-support sync averages 2.308 to 0.290 ms;
+new live measurement is pending. Native atlas reveal cost remains approximately
+26 ms.
+
+Review rejected the attempted membership-only resident-readiness shortcut: a
+previously deferred exact-role change could be skipped when an optional source
+later becomes selected. Removed it rather than adding another readiness cache.
+The independent frozen-demand oracle now covers that sequence (612 checks), plus
+107 actual PNG role/race checks. Full role/readiness refresh remains authoritative.
+Image accounting uses Godot's `get_data_size()` instead of requesting pixel data
+only to count its bytes. The existing metadata handoff checks pass 52; its known
+11 ObjectDB/one Resource exit diagnostics predate these changes.
+
+Required metadata decomposition found duplicate compact-file admission: selected
+action preparation had already qualified those same files, but only the scene
+received them. The session worker now consumes accepted, immutable compact records
+through its existing mutex at packet boundaries. It alone updates its cache;
+cancelled/unaccepted selection results, mutable records and rules documents do
+not cross this mailbox. Close discards pending records and joins the worker.
+Actual recorded selection/Fireball handoff passes 30 checks with identical required
+paths/roles and no additional compact-file admission. Character preparation alone
+falls 79.636 to 6.048 ms offline; environment/header-cache effects are not credited
+to this change. Existing session retirement passes 22. The new passive fixture
+reports three ObjectDB instances at exit; no functional failure. Live evidence follows.
+
+Live confirmation `.runtime/player-runs/20261015T153934.817124Z` passes 81
+checks, no dropped trace records. Character metadata is 6.086/7.753 ms; the
+two-new-support boundary is 0.050 ms. Complete packet to animation is still
+300/236 ms, with server dispatch 685/459 ms separately. The whole-action worst
+frames are 92.881/43.810 ms: the first includes a 79.808 ms worker upload of the
+61,341,696-byte chair destruction geometry overlapping the slow frame's absolute
+interval (player CPU itself 25.425 ms). Do not hide that aiming-frame outlier by
+reporting only frames after submission. Extend the existing lossless page tool
+only to the measured chair/bookshelf numeric sheets (four sources, 36 pages at
+most 4.5 MiB each), preserve current monument pages, and independently qualify
+authored rectangles/selected normals/readiness before another live run.
+That conversion now passes 8,192 independent Godot checks (1,288 numeric cells,
+644 actual Catalog samples, all frames/four views and settled/finite closures)
+plus the partial-page Python check. Existing monument pages and all 177 compact
+sample source stamps remain valid. No runtime shader/provider changed.
+
+Final live check for this batch: `.runtime/player-runs/20261015T155004.219576Z`,
+81 checks, no failures or dropped trace records. Same live door, room movement,
+haste and two Fireballs; the user's separate preview remained open on the GPU.
+Published chair/bookshelf numeric pages are at most 4,718,592 bytes, with worker
+upload maxima of 1.089/0.877 ms. Their original monolithic destruction numeric
+sheets are absent from the published upload trace. The previous 92.881 ms aiming
+outlier did not recur in this run; this is one observation, not a no-spikes claim.
+Fireball aiming maxima are 30.850/32.857 ms, whole-action maxima 37.039/40.667 ms.
+All-action worst is the door at 62.070 ms, including a 25.354 ms lighting-atlas
+phase. Thus the 100 FPS/no-stall target is still unmet.
+
+Fireball server dispatch is 663.982/437.977 ms; complete packet to first animation
+is independently 313.132/283.719 ms. Within client preparation, strict JSON is
+35.822/21.032 ms, canonical consumption 6.955/9.531 ms, presentation compilation
+50.697/11.733 ms and required metadata 36.204/29.771 ms. Packet-to-prepared spans
+131.013/74.299 ms; remaining time is after preparation and still needs work on
+main-thread admission, resource readiness and native effect construction/draw
+acknowledgement. These intervals must not be added to server time twice.
+The worst first-cast frame includes 15.887 ms media planning (12.317 ms demand);
+the worst second-cast frame has 27.654 ms player CPU, including 8.854 ms actor
+sampling, 4.448 ms blood and 4.657 ms native lighting. These are remaining measured
+client costs, not a justification for changing approved graphics/event order.
+Full comparison: `.runtime/client-small-query-comparison.json`. Test processes
+exited; the user's existing encounter was not restarted.
+
+Other large-data consumers audited: original colour buffers still serve actual
+alpha picking and top-layer attachment ownership. Shadow cookies are read once
+per registered texture and consumed as complete images by shadow projection;
+fixture pixels are already decoded for rendering, with emission statistics on
+the decode worker. These are not replaced by guessed point samples. Palette
+statistics and finite socket queries are derived data; normals/light receivers
+remain original GPU media. Required normal profiles, optional selection lifetime,
+bounded decode batches and lossless destruction pages retain separate tests.
+
+Intermediate evidence: same-host live Gallery Fireball run
+`.runtime/player-runs/20261015T141033.963962Z` passes its 81 command/state checks,
+but selection preload regresses first targeting p99 to 47.165 ms (from 15.992).
+Its 23 ms demand rebuild is a blocker, even though first animation after submit
+drops from 1511 to 1040 ms. Do not present that candidate as smooth or finished.
+Source and profile fixes must be remeasured together after the regression is fixed.
+
+Current task: investigate the freeze when the player casts Fireball after entering
+the large room using a live connected player and real commands, not replay as the
+primary performance evidence. Trace click/selection, request queue, server execution,
+response decode/admission, event preparation, native spell readiness and rendered
+frames. Fix measured client stalls and move preparation earlier where it is valid,
+without changing graphics or event order. Record remaining server/client costs.
+Also fix the spell-level/variant popup's overlapping action-bar click ownership.
+Accumulated targeting feedback: highlight the actual hovered character/object
+selected by the admitted click intent; clear this temporary highlight on selection
+or exit. Alt highlights disclosed active interactables. Suppress the misleading
+cursor tile for subject-targeting, retain cells/AoE for ground-targeting. Reuse
+existing presentation controls and keep undisclosed actors/objects concealed.
+Acceptance: actual native popup clicks select only their choice; live room-entry
+and Fireball timings distinguish server waiting from blocked rendering. Reviewers
+track plan adherence, anti-slop and anti-OOP; avoid unrelated renderer/UI redesign.
+
+Latest follow-up: party portraits belong LEFT with larger 48×64 art and HP
+values; initiative uses smaller 36×48 art across the top, matching original
+Pygame roles. Keep portrait art/frame/HP padding separate. The Fireball hover
+grid must not flash between the selected-prefix eligibility cells and hovered
+affected cells while queries arrive. Keep eligibility stable and replace only
+the authoritative hover result atomically, preserving stale-response/authority
+guards and never using held visual data to authorize a click. Review is
+plan-adherence/anti-slop/anti-OOP; scope is these two UI corrections only.
+
+Follow-up implemented: legal cells and continuation positions now come from the
+selected-prefix preview. A valid same-prefix pointer move retains the last full
+authoritative footprint until the matching reply replaces it. Invalid targets,
+UI capture and changed command authority still clear it; held display data never
+authorizes a command. The real-reply gesture checks pass 38, compact interaction
+77, and whole-player native capture 36. Six rendered pending frames preserve both
+the ground marks and their publication revision. Capture uses recorded server
+replies with controlled delivery; it is not a new live-server performance run.
+Portrait geometry passes 426 checks and HUD boundaries 78, including an error/Copy
+row that stays clear of the left party. Native pending/published captures are in
+`.captures/targeting-native/`. The user's running encounter was not restarted.
+
+Latest user correction supersedes the log's content-sized layout: keep a tall
+upper-right panel extending down to just above End Turn, resizable and translucent,
+with its toggle on the right and no Escape dismissal. Keep exact authored combat
+wording/math, put expanded details beside their own event rather than a detached
+bottom pane, and publish entries at the corresponding presentation beat while
+preserving attack/damage/death causality. Implement real prospective spell/AoE
+hover previews and ordered targeting using the SDK, with cursor intent matching
+click behavior. Restore top initiative and left-side party portraits (latest
+explicit correction; supersedes the earlier right-side message), distinguish inspection from turn authority, and replace
+permanent resource prose with compact action/bonus/reaction/movement/spell-slot
+indicators and tooltips. Respect the user's existing action-bar design. Fix repeated
+death/death-save animation from the actual final encounter recording. Investigate
+the idle text flicker/frame hitch with measured native idle frames and identify its
+actual owner before changing preparation/network behavior. Preserve approved lights.
+Owners: interaction agent log/timing, motion agent targeting/cursors, feedback agent
+lifecycle plus plan-adherence/anti-slop/anti-OOP review; root portraits/resources,
+idle investigation and integration. Acceptance includes saved real events, native
+interaction/hover/occlusion, and an idle measurement, not assertion counts alone.
+
+Implemented in this continuation: the tall log remains open on Escape, its toggle
+sits beside End Turn, and exact authored math expands inline. Generic action logs
+publish at contact rather than recovery end; existing damage/aggregate causality
+gates remain. Already-downed stabilization/death transitions hold their terminal
+pose instead of replaying a fall. Top initiative and left party portraits use
+displayed snapshots; inspection is independent of command ownership. Resources
+use compact native amounts/tooltips, including grants above nominal capacity.
+Native flow containers keep these banks clear of the log and targeting controls
+at narrow sizes. Retained player action icons use their actual discovery actor.
+Spell hover uses the same admitted ordered-prefix operation as clicking, including
+repeated recipients, stale-response guards, actual affected-cell fill and disclosed
+recipient/allocation labels. Ordinary cursors/hover labels share click intent.
+Action tooltips expose native baseline dice/save/attack/cost facts without claiming
+a target-adjusted hit probability. Existing approved light/shader artwork is unchanged.
+
+Evidence: `generated/log_publication_timing_checks.json` covers four real journals
+(2,154 checks); `generated/recorded_lifecycle_checks.json` covers the user's 221
+operations plus real revival/terminal transitions (1,111 checks). Native log UI
+checks pass 20; responsive actor HUD geometry/resource checks pass 408. Real SDK
+Fireball/Magic Missile hover queries preserve state revision/cursor/command number
+(13 checks), and the actual player gesture path passes 28 checks against those
+saved replies. Ground occlusion/fill/cache checks pass 241 across four quarters
+and two elevations. Snapshot-driven HUD boundary checks pass 77, and recorded
+player inventory/action-bar projection passes 77. All reports identify their scope;
+fixture UI dispatch is not represented as a new backend action.
+
+The fresh connected 20-second native idle sample did not reproduce notice flicker
+(p99 8.55 ms, max 10.36 ms). The user's late recording did reproduce boundary
+stalls while hidden AI turns published 244 legitimate light-only tile changes.
+The ground overlay now reuses unchanged geometry/order; immutable media demand
+owners avoid repeated equality scans (251 independent frozen-reference checks).
+The paired profile retains original 181–221 arrival timing and exact final state.
+It reduces measured sorting work and median boundary cost, but worst-frame
+variation remains; this is not a claim that gameplay is spike-free. Full artifacts
+are under `.runtime/late-idle-*`. No status-message recurrence was observed in
+either measured run.
+
+Final residue-index qualification: use the existing consumed changed-tile ledger
+only with matching canonical owner and complete base/current revision proof;
+initialization, seeking and missed publication retain the full-scan fallback.
+51 checks include actual opportunity-hit deposits, light-only changes and removal.
+The final identical native replay reaches the exact sequence-221 canonical state:
+blood indexing median 1.277 -> 0.013 ms; late-traffic p99 18.717 -> 15.306 ms;
+worst late frame 29.895 -> 21.075 ms; fully warm idle p99 7.999 ms. Real update
+frames still exceed the 10 ms target, so this does not certify spike-free gameplay.
+Full-window native targeting captures pass 22 checks after waiting for real icon
+decoding, using a SubViewport-local pointer without moving the user's mouse.
+They show Fireball hover before spending, ordered Missile allocations and the
+open log; the original recording and canonical state remain unchanged. The fixture's
+generic caster has no authored portrait and retains an explicit initial fallback.
+
+The user returned to the live Gallery encounter. First fix the media preparation
+error that blocks playback, using the actual required-worker/player boundary and
+the saved encounter journal. Add a Copy button beside the displayed error which
+copies its exact message and concise playback diagnostics. Preserve event order
+and source-readiness gates. Then put the grid and targeting previews above ground
+but below walls/actors; keep elevation and G toggle. Narrow the translucent combat
+log, allow resizing and vertical content growth, remove empty detail space, and
+improve highlighting/expansion without rewriting recorded combat text. Remove
+generic HUD instructions. The requested Pygame motion, feedback and interaction
+audits remain inventories, not authorization to implement every discovered gap.
+The feedback audit agent tracks plan adherence, anti-slop and anti-OOP review;
+the interaction agent owns the history panel and the motion agent owns ground
+overlay placement. Validate real worker completion, native UI interaction and
+occlusion without changing approved lighting or restarting the user's encounter
+before the repair is ready.
+
+Implemented and checked on 2026-10-15: restored the required media worker's
+completion publication (regression introduced in checkpoint 813d21f). The new
+fallback assertion failed before the fix and the handoff suite passes 52 checks
+after it. Replaying the user's original saved journal through sequence 31 and
+preparing its real compiled group passes 11 checks; this verifies metadata, not
+GPU upload readiness. Native HUD checks pass 59, including clicking Copy and
+retaining the exact displayed message. History checks pass 17 against 181 real
+recorded log entries, preserving their text. Ground grid/preview tests pass 193
+native pixel and picking checks over four quarters and two elevations; the
+existing draw merge checks pass 1,012. An actual launch exposed one extra picker
+assumption about QuadMesh, now fixed by excluding noninteractive overlay entries.
+The corrected live Gallery launched with PLAYER_READY and no script errors.
+The original failed journal remains under .runtime/player-runs/20261015T105810.768342Z.
+Full-game frame-time performance was not requalified in this gameplay/UI repair.
+Headless media tests retain their existing shutdown ObjectDB warnings.
+
 ## Current continuation — finish the existing spell batch
 
 ### User correction: interactive Studio performance and clutter

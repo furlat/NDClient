@@ -75,6 +75,7 @@ var next_source_order := 0
 var prepared_receiver_sources: Dictionary = {}
 var prepared_source_bindings: Dictionary = {}
 var prepared_delta: Dictionary = {}
+var prepared_style_receivers: Dictionary = {}
 var prepared_cleanup: Dictionary = {}
 
 func attach(parent: Node3D) -> void:
@@ -321,11 +322,23 @@ func _candidate_specs(entries: Array, information: Dictionary, geometry: Diction
     last_reconcile_phases.floor_packets_reused=packets_reused
     return {"ok":true,"specs":specs,"members":members,"entries":caches,"indices":indices,"supports":supports,"reused":reused}
 
-func _frame_change(entry:Dictionary,previous_version:int,source:ShaderMaterial)->bool:
+func _parameter_changes(entry:Dictionary,previous_version:int,source:ShaderMaterial)->Variant:
     var change:Dictionary=entry.get("source_frame_change",{})
-    return (previous_version>=0 and not change.is_empty() and change.base_version==previous_version
-        and change.version==previous_version+1 and change.version==entry.get("source_version",0)
+    var valid:bool=(previous_version>=0 and not change.is_empty()
+        and previous_version>=int(change.get("full_version",change.base_version)) and previous_version<int(change.version)
+        and change.base_version==change.version-1 and change.version==entry.get("source_version",0)
         and change.source==source and change.shader==source.shader)
+    if not valid:return null
+    if not change.has("parameters"):return [&"frame_uv"]
+    var names:Array=[]
+    for name in change.parameters:
+        if int(change.parameters[name])>previous_version:names.append(name)
+    return names
+
+func _frame_change(entry:Dictionary,previous_version:int,source:ShaderMaterial)->bool:
+    # Prepared material proofs still admit UV-only changes, never conditions.
+    var names:Variant=_parameter_changes(entry,previous_version,source)
+    return names!=null and names.size()==1 and names[0]==&"frame_uv"
 
 func _copy_output_source(entry: Dictionary) -> void:
     if not entry.has("received_material"): return
@@ -344,10 +357,14 @@ func _copy_output_source(entry: Dictionary) -> void:
             if accepted.has(row.name) and not str(row.name).begins_with("wall_") and row.name!="use_instance_visibility": names.append(row.name)
         parameter_names[key]=names
     var mesh: QuadMesh=entry.node.multimesh.mesh if entry.has("batch_rows") else entry.node.mesh
-    var frame_only=same_owner and previous.get("quad_size") == mesh.size and _frame_change(entry,previous.version,source) and &"frame_uv" in parameter_names[key]
-    if frame_only:
-        output.set_shader_parameter("frame_uv",source.get_shader_parameter("frame_uv"))
-        last_reconcile_phases.material_frame_copies=last_reconcile_phases.get("material_frame_copies",0)+1
+    var changes:Variant=_parameter_changes(entry,previous.version,source) if same_owner and previous.get("quad_size")==mesh.size else null
+    if changes!=null:
+        var copied:int=0
+        for name in changes:
+            if name in parameter_names[key]:output.set_shader_parameter(name,source.get_shader_parameter(name));copied+=1
+        if changes.size()==1 and changes[0]==&"frame_uv":last_reconcile_phases.material_frame_copies=last_reconcile_phases.get("material_frame_copies",0)+1
+        else:last_reconcile_phases.material_parameter_copies=last_reconcile_phases.get("material_parameter_copies",0)+1
+        last_reconcile_phases.material_parameter_uniforms=last_reconcile_phases.get("material_parameter_uniforms",0)+copied
     else:
         for name in parameter_names[key]: output.set_shader_parameter(name,source.get_shader_parameter(name))
         output.set_shader_parameter("use_instance_visibility",entry.has("batch_rows"))
@@ -370,10 +387,15 @@ func _copy_parameters(group: Dictionary) -> bool:
         for row in source.shader.get_shader_uniform_list():
             if accepted.has(row.name): names.append(row.name)
         parameter_names[key]=names
-    var frame_only=group.get("source_material")==source and group.source_shader==source.shader and group.get("target_material")==group.material and group.get("target_shader")==group.material.shader and _frame_change(group.entry,group.version,source) and &"frame_uv" in parameter_names[key]
-    if frame_only:
-        group.material.set_shader_parameter("frame_uv",source.get_shader_parameter("frame_uv"))
-        last_reconcile_phases.material_frame_copies=last_reconcile_phases.get("material_frame_copies",0)+1
+    var same_owner:bool=group.get("source_material")==source and group.source_shader==source.shader and group.get("target_material")==group.material and group.get("target_shader")==group.material.shader
+    var changes:Variant=_parameter_changes(group.entry,group.version,source) if same_owner else null
+    if changes!=null:
+        var copied:int=0
+        for name in changes:
+            if name in parameter_names[key]:group.material.set_shader_parameter(name,source.get_shader_parameter(name));copied+=1
+        if changes.size()==1 and changes[0]==&"frame_uv":last_reconcile_phases.material_frame_copies=last_reconcile_phases.get("material_frame_copies",0)+1
+        else:last_reconcile_phases.material_parameter_copies=last_reconcile_phases.get("material_parameter_copies",0)+1
+        last_reconcile_phases.material_parameter_uniforms=last_reconcile_phases.get("material_parameter_uniforms",0)+copied
     else:
         for name in parameter_names[key]: group.material.set_shader_parameter(name,source.get_shader_parameter(name))
         group.material.set_shader_parameter("use_instance_visibility",false)
@@ -390,7 +412,7 @@ func _copy_parameters(group: Dictionary) -> bool:
     group.version = group.entry.get("source_version",0)
     group.source_shader = source.shader
     group.source_material=source;group.target_material=group.material;group.target_shader=group.material.shader
-    return not frame_only
+    return changes==null
 
 func _group(entry: Dictionary, crop: Dictionary, visibility: float, receiver_id: String, info: Dictionary = {}, join_mask: int = 0) -> Dictionary:
     # GLES3 reserves 16 vec4 slots per instance-uniform CanvasItem and has only
@@ -477,17 +499,30 @@ func prepare_source_binding(entry:Dictionary,snapshot:Dictionary,world:Node,dyna
         _prepare_source_group(prepared,float(entry.get("scenery_value",1.0)),"",0)
     return prepared
 
+func dynamic_prepared_miss(entry:Dictionary,prepared:Dictionary,reason:String)->bool:
+    # Current-sync diagnostics only; no readiness/resource ownership changes.
+    if not last_reconcile_phases.has("dynamic_prepared_misses"):last_reconcile_phases.dynamic_prepared_misses={}
+    var counts:Dictionary=last_reconcile_phases.dynamic_prepared_misses
+    counts[reason]=counts.get(reason,0)+1
+    if not last_reconcile_phases.has("dynamic_prepared_samples"):last_reconcile_phases.dynamic_prepared_samples=[]
+    if last_reconcile_phases.dynamic_prepared_samples.size()<8:
+        last_reconcile_phases.dynamic_prepared_samples.append({"id":entry.get("id",entry.placement.get("id","")),
+            "reason":reason,"prepared_version":prepared.get("version",-1),"version":entry.get("source_version",-1),
+            "frame_certificate":entry.get("source_frame_change",{}).get("full_version",-1),
+            "preparation":entry.get("atlas_preparation",{})})
+    return false
+
 func prepared_dynamic_materials_match(prepared:Dictionary,entry:Dictionary)->bool:
     var proof:Dictionary=prepared.get("material_proof",{})
-    if proof.is_empty() or not prepared.get("material_only",false):return false
+    if proof.is_empty() or not prepared.get("material_only",false):return dynamic_prepared_miss(entry,prepared,"no_material_proof")
     var mesh:QuadMesh=entry.node.mesh
-    if proof.source!=entry.material or proof.shader!=entry.material.shader \
-        or proof.quad!=[mesh,mesh.size,mesh.center_offset] \
-        or proof.output!=prepared.output.received_material or proof.output_shader!=prepared.output.received_material.shader \
-        or proof.transport!=[viewport.get_instance_id(),_uses_hdr(),light_cap]:return false
+    if proof.source!=entry.material or proof.shader!=entry.material.shader:return dynamic_prepared_miss(entry,prepared,"source_material_or_shader")
+    if proof.quad!=[mesh,mesh.size,mesh.center_offset]:return dynamic_prepared_miss(entry,prepared,"quad")
+    if proof.output!=prepared.output.received_material or proof.output_shader!=prepared.output.received_material.shader:return dynamic_prepared_miss(entry,prepared,"output_material_or_shader")
+    if proof.transport!=[viewport.get_instance_id(),_uses_hdr(),light_cap]:return dynamic_prepared_miss(entry,prepared,"transport")
     for group in prepared.groups.values():
         if group.source_material!=entry.material or group.source_shader!=entry.material.shader \
-            or group.target_material!=group.material or group.target_shader!=group.material.shader:return false
+            or group.target_material!=group.material or group.target_shader!=group.material.shader:return dynamic_prepared_miss(entry,prepared,"receiving_group")
     if proof.shader==FlameSource:
         if proof.frames!=entry.material.get_shader_parameter("frames") or proof.alpha_pedestal!=entry.material.get_shader_parameter("alpha_pedestal"):return false
         var version:int=entry.get("source_version",0)
@@ -496,15 +531,18 @@ func prepared_dynamic_materials_match(prepared:Dictionary,entry:Dictionary)->boo
         # Retain the copied version: normal sync copies all three current source
         # uniforms, never a synthetic frame or a new partial-update path.
         return version==prepared.version+1
-    if proof.get("condition_key",[])!=entry.get("bound_condition_key",[]) or proof.get("geometry",[])!=entry.get("geometry_binding",[]):return false
+    if proof.get("condition_key",[])!=entry.get("bound_condition_key",[]):return dynamic_prepared_miss(entry,prepared,"condition_key")
+    if proof.get("geometry",[])!=entry.get("geometry_binding",[]):return dynamic_prepared_miss(entry,prepared,"geometry_binding")
     var current:Array=entry.get("sampled_source_key",[])
-    if prepared.version==entry.get("source_version",0):return proof.source_key==current
-    if not _frame_change(entry,prepared.version,entry.material) or current.size()!=proof.source_key.size():return false
-    # The existing one-version certificate permits only an ordinary frame UV.
+    if prepared.version==entry.get("source_version",0):
+        return true if proof.source_key==current else dynamic_prepared_miss(entry,prepared,"same_version_source_key")
+    if not _frame_change(entry,prepared.version,entry.material):return dynamic_prepared_miss(entry,prepared,"frame_certificate")
+    if current.size()!=proof.source_key.size():return dynamic_prepared_miss(entry,prepared,"source_key_shape")
+    # The producer certificate spans only a continuous ordinary-UV chain.
     # Check its captured source/condition/geometry owners as well as its clock.
     for index in current.size():
-        if index!=1 and proof.source_key[index]!=current[index]:return false
-    return proof.source_key[1][0]==current[1][0] and proof.source_key[1][3]==current[1][3]
+        if index!=1 and proof.source_key[index]!=current[index]:return dynamic_prepared_miss(entry,prepared,"source_key_"+str(index))
+    return true if proof.source_key[1][0]==current[1][0] and proof.source_key[1][3]==current[1][3] else dynamic_prepared_miss(entry,prepared,"sheet_or_noise")
 
 func _prepare_source_group(prepared:Dictionary,visibility:float,receiver_id:String,join_mask:int)->Dictionary:
     var entry:Dictionary=prepared.entry
@@ -643,8 +681,9 @@ func _publish_addresses(floor_receivers: Dictionary, changed_outputs: Array) -> 
         var entry: Dictionary=floor.entry
         var output: ShaderMaterial=entry.received_material
         var crop: Dictionary=floor.crop if floor.has("crop") else floor.receivers[0].crop
-        output.set_shader_parameter("source_crop",crop.uv)
-        output.set_shader_parameter("atlas_cell_size",Vector2(crop.pixels.size)/target)
+        if not floor.get("region_prepared",false):
+            output.set_shader_parameter("source_crop",crop.uv)
+            output.set_shader_parameter("atlas_cell_size",Vector2(crop.pixels.size)/target)
         rows_preserved+=int(floor.get("preserved_rows",0))
         if floor.has("prepared"):
             var prepared:Dictionary=floor.prepared
@@ -697,7 +736,23 @@ func _publish_addresses(floor_receivers: Dictionary, changed_outputs: Array) -> 
     last_reconcile_phases.address_packet_reads_skipped=packet_reads_skipped
 
 
-func _refresh_normalized_addresses() -> void:
+func prepare_output_region(output:Dictionary,source:Dictionary,positions:Dictionary,target:Vector2)->void:
+    # Only the candidate-owned output is changed. Integer floor addresses stay
+    # in their existing prepared packet; a growth changes normalized UVs only.
+    var material:ShaderMaterial=output.received_material
+    var entry:Dictionary=source.entry
+    material.set_shader_parameter("source_crop",source.crop.uv)
+    if entry.has("batch_rows"):
+        material.set_shader_parameter("atlas_cell_size",Vector2(source.crop.pixels.size)/target)
+    else:
+        var id:String=str(entry.node.get_instance_id())+":source"
+        var position:Vector2i=positions[id] if positions.has(id) else source.receivers["source"].position
+        var origin:Vector2=Vector2(position)/target
+        var size:Vector2=Vector2(source.crop.pixels.size)/target
+        material.set_shader_parameter("atlas_region",Vector4(origin.x,origin.y,size.x,size.y))
+    output.region_target=target
+
+func _refresh_normalized_addresses(prepared:Dictionary={}) -> void:
     # Append growth preserves all integer pixel addresses and source geometry.
     # The output's normalized region/cell size is the only retained binding
     # dependent on viewport height; do not reread/reupload unchanged floor data.
@@ -705,6 +760,7 @@ func _refresh_normalized_addresses() -> void:
     var updated=0
     for source in entry_specs.values():
         var entry: Dictionary=source.entry
+        if prepared.has(entry.node.get_instance_id()):continue
         var output: ShaderMaterial=entry.received_material
         if entry.has("batch_rows"):
             output.set_shader_parameter("atlas_cell_size",Vector2(source.crop.pixels.size)/target)
@@ -1035,15 +1091,16 @@ func sync(world: Node, published: Array = [], styles: Array = [], changes: Dicti
     if restyle or not style_dirty.is_empty():
         if full_receivers:
             for receiver in static_receivers:
-                _style(receiver); style_checks+=1
+                if not is_same(prepared_style_receivers.get(receiver.id,{}),receiver):_style(receiver); style_checks+=1
         else:
             for id in style_dirty:
                 if not receiver_index.has(id): continue
                 var receiver: Dictionary=receiver_index[id]
                 if receiver.dynamic: continue
-                _style(receiver); style_checks+=1
+                if not is_same(prepared_style_receivers.get(receiver.id,{}),receiver):_style(receiver); style_checks+=1
         visibility_stamp=styles.duplicate()
     for receiver in dynamic_receivers: _style(receiver)
+    last_reconcile_phases.prepared_style_receivers=prepared_style_receivers.size()
     last_reconcile_phases.style_receivers_checked=style_checks
     last_reconcile_phases.style_ms=(Time.get_ticks_usec()-phase)/1000.0
     phase=Time.get_ticks_usec()
@@ -1136,7 +1193,7 @@ func sync(world: Node, published: Array = [], styles: Array = [], changes: Dicti
         if _visibility(receiver,screen): live_receivers+=1
     last_reconcile_phases.cull_receivers_checked=cull_checks
     last_projection_ms=(Time.get_ticks_usec()-phase)/1000.0
-    style_dirty.clear(); visibility_dirty.clear(); cull_dirty.clear()
+    style_dirty.clear(); visibility_dirty.clear(); cull_dirty.clear(); prepared_style_receivers.clear()
     receivers_tracked=tracked_receivers
     last_sync_ms=(Time.get_ticks_usec()-started)/1000.0
 
@@ -1205,7 +1262,7 @@ func close() -> void:
     receivers.clear(); static_receivers.clear(); dynamic_receivers.clear(); groups.clear(); membership.clear(); layout_members.clear(); crop_cache.clear()
     entry_specs.clear(); published_supports.clear(); shelf_cursor=Vector3i(1,1,0)
     receiver_index.clear(); support_owners.clear(); source_groups.clear(); material_dirty.clear(); delta_ready=false; delta_serial=-1
-    style_dirty.clear(); visibility_dirty.clear(); cull_dirty.clear(); receivers_tracked=false
+    style_dirty.clear(); visibility_dirty.clear(); cull_dirty.clear(); prepared_style_receivers.clear(); receivers_tracked=false
     static_live_receivers=0; live_receivers=0
     admission_stamp.clear(); visibility_stamp.clear(); dynamic_members.clear(); output_stamp.clear(); transport_stamp.clear(); canvas_key.clear(); known_entry_count=-1
     if is_instance_valid(viewport): viewport.queue_free()

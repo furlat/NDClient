@@ -20,8 +20,33 @@ func check(ok:bool,label:String)->void:
 static func complete_projection(result:Dictionary)->void:
     result.merge({"complete":true,"wanted":{},"ground":{},"actors":{}})
 
+func media_retirement_lane()->void:
+    var host=Host.new();root.add_child(host)
+    host.timeline.state={"actors":{}}
+    host.media_plan_epoch=host.timeline.initialization_revision
+    host.media_empty_key=[host.media_plan_epoch,[],host.timeline.revision]
+    host.media_empty_plan={"character":{},"environment":{},"fixtures":{},"errors":[]}
+    host.media_warmup.budget_bytes=0
+    # Typed publication acknowledgement, as in the residency accounting suite.
+    # No decode/upload is needed to test which owner retires this cold source.
+    host.MediaWarmup.published(host.media_warmup,{"path":"cold","cpu_bytes":8,"gpu_bytes":8})
+    host.source_images.cold=Image.create(1,1,false,Image.FORMAT_RGBA8)
+    var budget:Dictionary=host._preparation_budget();budget.used_usec=budget.limit_usec
+    host._prepare_media()
+    check(host.media_metadata_ready and host.media_warmup.resident.has("cold") and host.source_images.has("cold"),
+        "Demand admission updates exact pins without running an unbudgeted retirement slice")
+    check(budget.used_usec==budget.limit_usec and host.media_warmup.evicted==0,
+        "Admitting media does not hide eviction work outside the spent allowance")
+    host._prepare_optional_work()
+    check(not host.media_warmup.resident.has("cold") and not host.source_images.has("cold") and host.media_warmup.evicted==1,
+        "Existing over-budget cleanup still releases a cold source when the optional allowance is spent")
+    check(budget.minimum_cleanup==1 and budget.used_usec>=budget.limit_usec,
+        "Forced retirement is charged to the same frame instead of a second independent slice")
+    host.free()
+
 func run()->void:
     create_timer(15).timeout.connect(func():printerr("Preparation admission fixture deadline");quit(2))
+    media_retirement_lane()
     var host=Host.new();root.add_child(host)
     var budget:Dictionary=host._preparation_budget()
     budget.used_usec=budget.limit_usec
@@ -33,6 +58,13 @@ func run()->void:
     while not WorkerThreadPool.is_task_completed(candidate.task):await process_frame
     budget=host._preparation_budget();budget.used_usec=budget.limit_usec
     host.pending_world=candidate
+    candidate.boundary={"display_ms":1000.0}
+    check(host._world_preparation_due(16.0),"Initial world keeps preparation priority before playback")
+    candidate.initial=false;host.timeline.display_ms=100.0
+    check(not host._world_preparation_due(16.0),"Later impact world leaves the first preparation turn available to earlier effects")
+    host.timeline.display_ms=984.0
+    check(host._world_preparation_due(16.0),"World due within this playback step keeps priority before its authoritative boundary")
+    candidate.initial=true;host.timeline.display_ms=0.0
     host._step_world_preparation()
     check(candidate.task<0 and candidate.phase=="cookie_resources" and not candidate.prepared
         and candidate.native_actors.is_empty() and candidate.entries.is_empty(),

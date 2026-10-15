@@ -9,6 +9,11 @@ Python environment; private credentials, logs and SDK recordings stay under
 `.runtime/player-runs/<timestamp>/`. The launcher reports readiness only after
 initialization, acknowledgement and current command choices are available.
 
+Use **`play.cmd --scenario gallery_sorcerer`** to play the big map with the
+Expedition sorcerer against backend AI opponents. This opens the normal player;
+spell selection and movement are under your control. The automated spell
+profiling script remains a separate explicit launch option.
+
 The Windows project uses **Forward+ with Vulkan**, validated on the RTX 5090.
 Opening the project directly selects the same player scene; use the launcher to
 provide its backend connection. The 3D world still receives its painted lighting
@@ -330,6 +335,25 @@ warmth. See `generated/player_startup_checks.json`.
 Original colour images retain their unchanged CPU alpha for picking until the
 whole source is evicted. Modular normal/depth/support/validity companions
 release CPU Images after upload; their resident GPU textures satisfy readiness.
+Hand/body attachments use exact authored optical point samples from ignored
+`.derived/surface-sockets` sidecars. Metadata workers load those small records;
+rendering does no depth readback. Missing or stale sidecars use the original
+CPU-image path. The registered library bake contains 750,885 exact samples across
+2,147 sources in 17.8 MB; a session loads only the source records it demands.
+Sources without authored attachment/reference data keep their original fallback.
+Accepted targeting preparation shares these immutable records with the event
+preparer at its next worker boundary, avoiding a second disk-validation pass.
+After changing socket authoring, run Godot headlessly with
+`--script res://tools/export_surface_socket_inputs.gd`, then run
+`tools/bake_surface_socket_samples.py --all` with the existing Pillow-enabled
+Python environment. The baker preserves original artwork and GPU textures.
+Palette row statistics likewise persist as small derived records, invalidated
+when their source changes, so new metadata workers need not rescan the sheets.
+Required character media includes the selected normal profile. Other variants
+remain eligible for optional background loading within the same budget. A cold
+profile setting change keeps the current appearance until the requested maps
+for displayed/upcoming actors are resident; it then applies and saves the choice.
+Replacing or cancelling that request releases its pending demand.
 Revisiting a resident source therefore does not decode it merely to restore
 picking data. Budget pressure releases at most two unpinned textures per
 rendered frame. Accepted source-family membership and residency diagnostics
@@ -341,6 +365,15 @@ The same queue prepares original environment colour, depth, normals, masks,
 door partitions, corner members, water inputs and fixture frames for all four
 views. World creation waits for these sources; a selector miss is explicit,
 without a synchronous live decode fallback. Fixture luminance uses the same native image reduction as before on the worker.
+
+Large numeric destruction sheets use lossless frame-cell pages through
+`generated/environment_texture_layouts.json`. The monument, wooden chair and
+bookshelf currently use 134 pages of at most 4.5 MiB each. Original pixel values
+and frame rectangles are preserved; this bounds individual uploads, not total
+residency. Rebuild an explicit bank with
+`tools/prepare_environment_texture_layout.py --bank prop.interior-wooden-chair.break`
+(repeat `--bank` for additional banks). The tool derives numeric cell dimensions
+from authored rectangles, verifies saved bytes and preserves unrelated layouts.
 
 Source metadata is prepared on a worker with its own authoring cache and shallow
 snapshots of the relevant canonical map indexes. Immutable group unions cover all

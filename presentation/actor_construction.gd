@@ -38,16 +38,15 @@ static func actor_with_loadout(actor:Dictionary,loadouts:Dictionary)->Dictionary
     return result
 
 static func material_key(value:Dictionary,textures:Dictionary,resources:Dictionary)->Array:
-    var palette:Dictionary=value.flash.get("material",{}).get("palette",{})
-    return [value,textures.get(resources.get(palette.get("noiseSheet"),"")),
-        textures.get(resources.get(value.ramp.get("texture"),""))]
+    return [Conditions.parameters(value,textures,resources)]
 
 static func prepare_neutral(entry:Dictionary,textures:Dictionary,resources:Dictionary)->void:
     # Only unpublished new layers call this. Current sampling compares the full
     # value and replaces every binding if a condition or hit is active at admission.
     var value:Dictionary=Conditions.material(entry.placement.id,[])
-    Conditions.bind(entry.material,value,textures,resources)
-    entry.bound_condition_key=material_key(value,textures,resources).duplicate(true)
+    var key:Array=material_key(value,textures,resources)
+    Conditions.bind_parameters(entry.material,key[0])
+    entry.bound_condition_key=key.duplicate(true)
 
 static func graph(owner:Node,rig:Dictionary,templates:Array)->Node:
     return Graphs.character(owner,rig,true,templates)
@@ -76,22 +75,38 @@ static func bind_source(owner:Node,entry:Dictionary,rig:Dictionary,path:String,l
     var source_key = [path,frame_key,owner.character_light_profile,owner.source_depth,owner.source_normals,row.get("scale_x",1.0),material_key]
     var previous_source:Array=entry.get("sampled_source_key",[])
     if previous_source != source_key:
-        # Ordinary body/gear frames only change their sampled UV. A
-        # palette, sheet, geometry or clocked condition change retains
-        # the complete material copy; no partial patch spans versions.
-        var frame_only=palette.is_empty() and entry.get("sampled_source_palette_empty",false) and previous_source.size()==source_key.size()
-        if frame_only:
-            frame_only=previous_source[0]==path and previous_source[1][0]==sheet and previous_source[1][3]==frame_key[3]
-            for at in range(2,source_key.size()):
-                if previous_source[at]!=source_key[at]:frame_only=false;break
-            frame_only=frame_only and entry.get("bound_condition_key",[])==material_key and entry.get("geometry_binding",[])==[path,owner.source_depth,owner.source_normals,entry.scale,entry.placement.get("scale_x",1.0),owner.character_light_profile]
+        # Same-sheet ordinary layers can change UV and exact condition
+        # operands. Palette, sheet or geometry changes still require full copies.
+        var previous_condition:Array=entry.get("bound_condition_key",[])
+        var partial=palette.is_empty() and entry.get("sampled_source_palette_empty",false) and previous_source.size()==source_key.size()
+        if partial:
+            partial=previous_source[0]==path and previous_source[1][0]==sheet and previous_source[1][3]==frame_key[3]
+            for at in range(2,source_key.size()-1):
+                if previous_source[at]!=source_key[at]:partial=false;break
+            partial=partial and previous_condition.size()==1 and previous_condition[0].has("condition_alpha") \
+                and previous_source[-1]==previous_condition and entry.get("geometry_binding",[])==[path,owner.source_depth,owner.source_normals,entry.scale,entry.placement.get("scale_x",1.0),owner.character_light_profile]
         var base_version:int=entry.get("source_version",0)
         if material_snapshot.is_empty():material_snapshot=material_key.duplicate(true)
         source_key[-1]=material_snapshot
         entry.sampled_source_key = source_key
         entry.sampled_source_palette_empty=palette.is_empty()
         entry.source_version = base_version+1
-        if frame_only:entry.source_frame_change={"base_version":base_version,"version":base_version+1,"source":entry.material,"shader":entry.material.shader}
+        if partial:
+            var previous_change:Dictionary=entry.get("source_frame_change",{})
+            var full_version:int=base_version
+            var parameters:Dictionary={}
+            # This remains one bounded producer certificate, not a history.
+            # Last-change versions let each receiver skip already-copied fields.
+            if previous_change.get("version",-1)==base_version and previous_change.get("source")==entry.material \
+                    and previous_change.get("shader")==entry.material.shader \
+                    and previous_change.get("base_version",-1)==base_version-1:
+                full_version=int(previous_change.get("full_version",previous_change.base_version))
+                parameters=previous_change.parameters.duplicate() if previous_change.has("parameters") else {&"frame_uv":base_version}
+            if entry.get("bound_frame_key",[])!=frame_key:parameters[&"frame_uv"]=base_version+1
+            for field in material_key[0]:
+                if not previous_condition[0].has(field) or previous_condition[0][field]!=material_key[0][field]:parameters[field]=base_version+1
+            entry.source_frame_change={"base_version":base_version,"full_version":full_version,
+                "version":base_version+1,"source":entry.material,"shader":entry.material.shader,"parameters":parameters}
         else:entry.erase("source_frame_change")
     entry.texture_path = path
     if entry.get("bound_frame_key",[])!=frame_key:
@@ -103,6 +118,6 @@ static func bind_source(owner:Node,entry:Dictionary,rig:Dictionary,path:String,l
     if entry.get("bound_condition_key",[])!=material_key:
         if material_snapshot.is_empty():material_snapshot=material_key.duplicate(true)
         entry.bound_condition_key=material_snapshot
-        Conditions.bind(entry.material,material_state,owner.textures,owner.resources)
+        Conditions.bind_parameters(entry.material,material_key[0])
     CharacterGeometry.bind(entry,path,owner.catalog_cache,owner.texture,owner.source_depth,owner.source_normals,owner.character_light_profile)
     return material_snapshot

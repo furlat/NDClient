@@ -94,3 +94,49 @@ static func main_attack(choices: Dictionary, identity: String, preference: Strin
         var hit = target(choices,Choices.action_options(choices,row),[],identity)
         if not hit.is_empty(): return {"action":row,"target":hit,"selection":selection(row,[hit.index])}
     return {}
+
+static func extend_selection(choices: Dictionary, action: Dictionary, prefix: Dictionary,
+        preview: Dictionary, position: Array, identity: String = "", safe: bool = true) -> Dictionary:
+    # Only the current prefix's native continuation can authorize an append.
+    # A computed empty continuation must never fall back to initial eligibility.
+    var selected = prefix.duplicate(true)
+    selected.prefer_safe = safe
+    if Choices.preview_positions(preview).any(func(point):return same_position(point,position)):
+        selected.extra_target_positions.append(position.duplicate())
+        return {"selection":selected,"position":position}
+    var domains = choices if preview.is_empty() else preview
+    var options = Choices.action_options(choices,action) if preview.is_empty() else Choices.next_options(preview)
+    var candidate = target(domains,options,position,identity)
+    if candidate.is_empty(): return {}
+    selected.target_indices.append(candidate.index)
+    return {"selection":selected,"target":candidate,"position":Choices.binding_position(domains,candidate)}
+
+static func idle_intent(choices: Dictionary, state: Dictionary, hit: Dictionary,
+        force_attack: bool, preference: String, mode: String, safe: bool = true) -> Dictionary:
+    # Shared ordinary-click/hover policy. Every preview selection is an actual
+    # admitted SDK choice, including a distant object's ordinary safe approach.
+    if hit.is_empty(): return {}
+    var id: String = hit.get("id","")
+    if id.is_empty():
+        if force_attack: return {}
+        for row in actions(choices):
+            if row.behavior_id != mode or not row.can_afford: continue
+            var candidate = target(choices,Choices.action_options(choices,row),hit.get("position",[]))
+            if not candidate.is_empty():
+                return {"kind":"move","label":row.display_name,"value":{"action":row,"selection":selection(row,[candidate.index],safe)}}
+        return {}
+    if hit.get("kind")=="actor" or force_attack:
+        var attack = main_attack(choices,id,preference)
+        return {"kind":"attack","label":attack.action.display_name,"value":attack} if not attack.is_empty() else {}
+    if state.get("objects",{}).get(id,{}).get("contained_items") != null:
+        return {"kind":"storage","label":"Open storage","id":id}
+    var options = world_options(choices,id)
+    if options.is_empty(): return {}
+    var defaults = options.filter(func(option):return option.get("default_priority",100)==options[0].get("default_priority",100))
+    if defaults.size()!=1: return {"kind":"context","label":"Choose interaction"}
+    var option: Dictionary = defaults[0]
+    var direct = admitted(choices,option)
+    if not direct.is_empty(): return {"kind":"interaction","label":option.label,"option":option,"value":direct[0] if direct.size()==1 else {}}
+    var travel = approach(choices,option)
+    if not travel.is_empty(): return {"kind":"approach","label":"Approach · "+str(option.label),"option":option,"value":travel}
+    return {}

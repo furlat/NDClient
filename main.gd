@@ -790,6 +790,7 @@ func pick_object(screen: Vector2) -> Dictionary:
     var size = get_viewport().get_visible_rect().size
     for i in range(draw_order.size() - 1, -1, -1):
         var entry: Dictionary = draw_order[i]
+        if entry.get("ground_overlay",false): continue
         if not entry.node.visible and not entry.get("batched",false):continue
         if entry.placement.kind == "actor" or entry.role == "shadow": continue
         var contact = camera.unproject_position(entry.node.position)

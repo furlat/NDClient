@@ -17,6 +17,7 @@ static func frame(data: Dictionary, viewport: Viewport, context: Dictionary) -> 
         return
     var rid = viewport.get_viewport_rid()
     var sample = {"frame":Engine.get_process_frames(),"time_ms":(now-data.started_usec)/1000.0,
+        "interval_start_us":data.last_usec,"interval_end_us":now,
         "frame_ms":(now-data.last_usec)/1000.0,"cpu_ms":data.phases.duplicate(),
         "render_cpu_ms":RenderingServer.viewport_get_measured_render_time_cpu(rid),
         "render_setup_cpu_ms":RenderingServer.get_frame_setup_time_cpu(),

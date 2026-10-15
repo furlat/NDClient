@@ -8,10 +8,14 @@ const Protocol = preload("res://sdk/protocol.gd")
 const Reducer = preload("res://sdk/reducer.gd")
 const Compiler = preload("res://presentation/compiler.gd")
 const MediaWarmup = preload("res://presentation/media_warmup.gd")
+const SocketSamples = preload("res://presentation/surface_socket_samples.gd")
+const Catalog = preload("res://source_catalog.gd")
 var transport = Transport.new()
 var journal = Journal.new()
 var protocol = Protocol.new()
 var authoring_cache: Dictionary = {}
+var source_files_pending: Dictionary = {}
+var source_headers_pending: Dictionary = {}
 var mutex = Mutex.new()
 var prepared: Array = []
 var prepared_sequence = -1
@@ -184,8 +188,38 @@ func _consume(packet: Dictionary, raw: PackedByteArray, canonical_server_operati
     if journal.profile_enabled: reply.profile_phases = journal.last_profile
     return reply
 
+func offer_prepared_sources(files:Dictionary,headers:Dictionary={})->void:
+    # The same immutable local source snapshot already crosses from selection
+    # to the renderer. Give the preparer its own shell, never shared derived
+    # caches or action/world state. Existing sources win within this session.
+    var offered:Dictionary=Catalog.source_snapshot(files)
+    for path in offered.keys():
+        if path is String and path.begins_with(SocketSamples.ROOT):
+            var record:Dictionary=offered[path]
+            if not record.is_read_only() or not record.get("valid",false):offered.erase(path)
+    mutex.lock()
+    if not cancelled:
+        source_files_pending.merge(offered,false)
+        source_headers_pending.merge(headers,false)
+    mutex.unlock()
+    wake.post()
+
+func _merge_prepared_sources()->void:
+    # The preparer alone owns the writable cache shell, between packet jobs.
+    mutex.lock()
+    var offered:Dictionary=source_files_pending if not cancelled else {}
+    var headers:Dictionary=source_headers_pending if not cancelled else {}
+    source_files_pending={}
+    source_headers_pending={}
+    mutex.unlock()
+    authoring_cache.merge(offered,false)
+    if not headers.is_empty():
+        if not authoring_cache.has("__required_headers"):authoring_cache.__required_headers={}
+        authoring_cache.__required_headers.merge(headers,false)
+
 func _prepare_loop() -> void:
     while not _stopping():
+        _merge_prepared_sources()
         _release_retired()
         mutex.lock()
         var next = prepared_sequence+1
@@ -254,7 +288,7 @@ func _prepare_loop() -> void:
         var compiled_at = Time.get_ticks_usec()
         var media_ms = 0.0
         if result.ok and next>0 and not _stopping():
-            message.media = MediaWarmup.prepare_handoff(before,result.value.groups,authoring_cache)
+            message.media = MediaWarmup.prepare_handoff(before,result.value.groups,authoring_cache,result.value.final_state)
             media_ms = (Time.get_ticks_usec()-compiled_at)/1000.0
         if _stopping(): break
         transport.profile_preparation(next,packet_started,started,Time.get_ticks_usec(),result.ok,handoff.is_empty() or handoff.get("from_disk",false),compiled_at,media_ms)
@@ -404,6 +438,8 @@ func close() -> void:
     retired_records_ready.append_array(retired_records_staged)
     retired_records_staged = []
     cancelled = true
+    source_files_pending = {}
+    source_headers_pending = {}
     mutex.unlock()
     wake.post()
     transport.close()

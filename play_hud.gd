@@ -1,12 +1,14 @@
 extends Control
 # Native controls own their pointer/focus. Their data is the displayed SDK state.
-const Placement = preload("res://placement.gd")
 const UI = preload("res://presentation/ui_catalog.gd")
 const Choices = preload("res://sdk/choices.gd")
 const Interaction = preload("res://presentation/interaction.gd")
 const StoragePanel = preload("res://ui/storage_panel.gd")
 const HistoryPanel = preload("res://ui/history_panel.gd")
 const SettingsPanel = preload("res://ui/settings_panel.gd")
+const ActorHUD = preload("res://ui/actor_hud.gd")
+const Placement = preload("res://placement.gd")
+const HoverOutline = preload("res://presentation/condition_outline.gd")
 const ICON = 48
 const GAP = 4
 const BAR_BUILD_UNITS = 2
@@ -38,10 +40,10 @@ var last_selection = ""
 var last_preference = ""
 var last_viewport_size = Vector2(-1,-1)
 var top = HBoxContainer.new()
-var portrait = TextureRect.new()
-var actor_label = Label.new()
-var resources = Label.new()
 var notice = Label.new()
+var notice_row = HBoxContainer.new()
+var copy_notice = Button.new()
+var copied_notice = ""
 var metrics = Label.new()
 var bar = HBoxContainer.new()
 var end_button: Button
@@ -70,37 +72,45 @@ var popup_close_delay = 0.0
 var missing_icons: Dictionary = {}
 var world_label_buttons: Dictionary = {}
 var hover_info = Label.new()
+var actor_hud = ActorHUD.new()
+var inspected_actor_id = ""
+var hover_outline = HoverOutline.new()
+var hover_feedback_dismissed = false
+var hover_object_materials: Dictionary = {}
+var hover_object_key: Array = []
+var hover_object_discovery: Dictionary = {}
 
 func _ready() -> void:
     set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
     mouse_filter = Control.MOUSE_FILTER_IGNORE
     texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
     _install_theme()
+    add_child(actor_hud)
+    actor_hud.inspected.connect(_inspect_portrait)
+    actor_hud.focused.connect(_focus_portrait)
     top.position = Vector2(20,18)
     top.add_theme_constant_override("separation",12)
     top.mouse_filter = Control.MOUSE_FILTER_IGNORE
     add_child(top)
-    portrait.custom_minimum_size = Vector2(54,72)
-    portrait.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-    portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
-    portrait.mouse_filter = Control.MOUSE_FILTER_IGNORE
-    top.add_child(portrait)
-    var stats = VBoxContainer.new()
-    stats.mouse_filter = Control.MOUSE_FILTER_IGNORE
-    top.add_child(stats)
-    actor_label.add_theme_font_size_override("font_size",19)
-    stats.add_child(actor_label)
-    stats.add_child(resources)
-    stats.add_child(notice)
+    top.add_child(notice_row)
+    notice_row.mouse_filter = Control.MOUSE_FILTER_IGNORE
+    notice_row.add_child(notice)
+    notice_row.add_child(copy_notice)
+    copy_notice.text = "Copy"
+    copy_notice.tooltip_text = "Copy this message and playback diagnostics"
+    copy_notice.focus_mode = Control.FOCUS_NONE
+    copy_notice.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+    copy_notice.pressed.connect(_copy_notice)
+    notice_row.hide()
     notice.add_theme_color_override("font_color",Color("afc1c8"))
     notice.custom_minimum_size.x = 280
     notice.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-    for label in [actor_label,resources,notice,metrics]:
+    for label in [notice,metrics]:
         label.mouse_filter = Control.MOUSE_FILTER_IGNORE
         label.add_theme_color_override("font_shadow_color",Color("080c12"))
         label.add_theme_constant_override("shadow_offset_x",1)
         label.add_theme_constant_override("shadow_offset_y",2)
-    metrics.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+    metrics.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
     add_child(metrics)
     bar.add_theme_constant_override("separation",12)
     bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -131,7 +141,7 @@ func _ready() -> void:
     add_child(loot_panel)
     history_panel.hud = self
     add_child(history_panel)
-    history_button.text = "Log / Events"
+    history_button.text = "Log"
     history_button.tooltip_text = "Combat log & event stream · L"
     history_button.focus_mode = Control.FOCUS_NONE
     history_button.pressed.connect(toggle_history)
@@ -226,21 +236,20 @@ func _layout() -> void:
     var phase = Time.get_ticks_usec()
     var viewport_size = get_viewport_rect().size
     bar.position = Vector2(maxf(20,(viewport_size.x-bar.get_combined_minimum_size().x)/2),viewport_size.y-146)
-    metrics.position = Vector2(viewport_size.x-250,18)
-    metrics.size = Vector2(230,40)
+    metrics.position = Vector2(20,18)
+    metrics.size = Vector2(160,40)
     inventory_button.position = Vector2(20,viewport_size.y-74)
-    history_button.position = Vector2(84,viewport_size.y-60)
-    grid_button.position = history_button.position+Vector2(history_button.get_combined_minimum_size().x+8,0)
+    history_button.position = Vector2(viewport_size.x-90-history_button.get_combined_minimum_size().x,viewport_size.y-60)
+    grid_button.position = Vector2(84,viewport_size.y-60)
     normals_button.position = grid_button.position+Vector2(grid_button.get_combined_minimum_size().x+8,0)
     end_button.position = Vector2(viewport_size.x-74,viewport_size.y-74)
-    confirm_button.position = Vector2(viewport_size.x/2-94,viewport_size.y-188)
-    cancel_button.position = Vector2(viewport_size.x/2+6,viewport_size.y-188)
+    confirm_button.position = Vector2(viewport_size.x/2-94,viewport_size.y-220)
+    cancel_button.position = Vector2(viewport_size.x/2+6,viewport_size.y-220)
     panel.position = Vector2(20,112)
     panel.size = Vector2(minf(790,viewport_size.x-40),minf(480,maxf(260,viewport_size.y-325)))
     loot_panel.position = Vector2(maxf(20,viewport_size.x-410),112)
     loot_panel.size = Vector2(minf(390,viewport_size.x-40),minf(365,maxf(260,viewport_size.y-285)))
-    history_panel.size = Vector2(minf(550,viewport_size.x-40),minf(500,maxf(330,viewport_size.y-285)))
-    history_panel.position = Vector2(viewport_size.x-history_panel.size.x-20,112)
+    history_panel.layout_in(viewport_size,end_button.position.y-12)
     last_viewport_size = viewport_size
     world.FrameProfile.end_phase(world.profile,"hud_layout",phase)
 
@@ -248,9 +257,28 @@ func _current_actor() -> Dictionary:
     return world.timeline.state.get("actors",{}).get(world.timeline.state.get("current_actor_uuid"),{})
 
 func _inspect_actor() -> Dictionary:
+    var inspected: Dictionary = world.timeline.state.get("actors",{}).get(inspected_actor_id,{})
+    if not inspected.is_empty(): return inspected
     var current = _current_actor()
     if not current.is_empty() and current.get("controlled_items") != null: return current
     return world.timeline.state.get("actors",{}).get(world.timeline.state.get("observer_uuid"),{})
+
+func _action_actor() -> Dictionary:
+    # Enemy turns disable the retained player's controls; they do not rebuild
+    # the player's bar or load an enemy's portrait into the resource header.
+    var id = world.available_actions.get("entity_uuid",world.timeline.state.get("observer_uuid",""))
+    return world.timeline.state.get("actors",{}).get(id,{})
+
+func _inspect_portrait(id: String) -> void:
+    inspected_actor_id = id
+    actor_hud.sync(world.timeline.state,_action_actor(),inspected_actor_id,cache)
+    if panel.visible: _refresh_inventory()
+
+func _focus_portrait(id: String) -> void:
+    _inspect_portrait(id)
+    if not world.visual_actors.has(id): return
+    world.camera_focus = Placement.contact(world.visual_actors[id].row)
+    world.position_camera()
 
 func _process(delta: float) -> void:
     if world == null: return
@@ -258,7 +286,7 @@ func _process(delta: float) -> void:
     UI.poll_images(cache)
     var ready: bool = world.command_ready()
     var state: Dictionary = world.timeline.state
-    var actor = _current_actor()
+    var actor = _action_actor()
     var id = str(actor.get("uuid",""))
     var changed = int(world.timeline.revision) != last_revision
     var generation = str(world.available_actions.get("discovery_generation",""))
@@ -304,13 +332,13 @@ func _process(delta: float) -> void:
     last_selection = selection
     last_preference = str(world.attack_preference)
     history_panel.refresh()
-    notice.text = world.notice_text
-    metrics.text = "%d FPS" % Engine.get_frames_per_second()
-    if world.timeline.paused: metrics.text += " · Paused"
-    elif world.timeline.waiting_for_media: metrics.text += " · Loading…"
-    metrics.text += " · Walls: %s [Z]" % world.wall_mode
+    _refresh_notice()
+    var metric_text = "%d FPS" % Engine.get_frames_per_second()
+    if world.timeline.paused: metric_text += " · Paused"
+    elif world.timeline.waiting_for_media: metric_text += " · Loading…"
     var cursor = world.pick_cell(get_viewport().get_mouse_position())
-    if not cursor.is_empty(): metrics.text += "\n%d, %d · Z %s" % [cursor.position[0],cursor.position[1],cursor.height]
+    if not cursor.is_empty(): metric_text += "\n%d, %d · Z %s" % [cursor.position[0],cursor.position[1],cursor.height]
+    if metrics.text != metric_text: metrics.text = metric_text
     if grid_button.button_pressed != world.grid_visible:
         grid_button.set_pressed_no_signal(world.grid_visible)
     if normals_button.button_pressed != world.normals_visible:
@@ -319,27 +347,33 @@ func _process(delta: float) -> void:
     confirm_button.visible = not world.selected_action.is_empty() and world.selected_action.get("target_type") != "self"
     cancel_button.visible = confirm_button.visible
     confirm_button.disabled = not ready or not world.selection_preview.get("can_confirm",false)
+    actor_hud.layout_in(viewport_size,bar.position.y,history_panel.get_global_rect() if history_panel.visible else Rect2(),confirm_button.get_global_rect().merge(cancel_button.get_global_rect()) if confirm_button.visible else Rect2())
+    metrics.position = Vector2(20,18)
+    if actor_hud.initiative.get_child_count()>0 and metrics.get_rect().intersects(actor_hud.initiative.get_global_rect()):
+        metrics.position.y = actor_hud.initiative.get_rect().end.y+10
+    if actor_hud.party.get_child_count()>0 and metrics.get_rect().intersects(actor_hud.party.get_global_rect()):
+        metrics.position.x = actor_hud.party.get_rect().end.x+12
+    top.position = Vector2(20,metrics.get_rect().end.y+8)
+    if notice_row.visible and actor_hud.party.get_child_count()>0 and top.get_rect().intersects(actor_hud.party.get_global_rect()):
+        top.position.y = actor_hud.party.get_rect().end.y+8
     if popup.visible:
         if popup_bridge.has_point(get_global_mouse_position()): popup_close_delay = 0.0
         else:
             popup_close_delay += delta
             if popup_close_delay > 0.25: _close_popup()
+    var hover_phase = Time.get_ticks_usec()
     _refresh_world_labels()
-    queue_redraw()
+    _refresh_hover_feedback()
+    world.FrameProfile.end_phase(world.profile,"hud_hover_feedback",hover_phase)
+    hover_phase = Time.get_ticks_usec()
+    _update_ground_preview()
+    world.FrameProfile.end_phase(world.profile,"hud_ground_preview",hover_phase)
     world.FrameProfile.end_phase(world.profile,"hud_process",phase)
 
 func _refresh_status(actor: Dictionary) -> void:
     var state: Dictionary = world.timeline.state
-    var sheet = UI.sheet(state,str(actor.get("uuid","")))
-    actor_label.text = str(actor.get("name",state.get("world",{}).get("battlefield_name","")))
-    if not actor.is_empty(): actor_label.text += "   %d / %d HP" % [actor.get("normal_hp",0),actor.get("maximum_hp",0)]
-    var values: Array[String] = []
-    for resource in sheet.get("resources",[]):
-        if resource.key in ["actions","bonus_actions","reactions","movement"]:
-            values.append("%s %d/%d" % [resource.label,resource.current,resource.maximum])
-    resources.text = "   ·   ".join(values)
-    portrait.texture = UI.texture(UI.portrait_key(actor,sheet,state),cache,true)
-    portrait.visible = portrait.texture != null
+    if inspected_actor_id.is_empty(): inspected_actor_id=str(actor.get("uuid",""))
+    actor_hud.sync(state,actor,inspected_actor_id,cache)
 
 func _rebuild_bar() -> void:
     var phase = Time.get_ticks_usec()
@@ -349,7 +383,7 @@ func _rebuild_bar() -> void:
     # Keep the previous passive owner until retained metadata is rebound.
     # Replaced bars transfer their remaining row owners when they retire.
     var prior_groups = groups
-    groups = UI.families(painted_discovery,_current_actor())
+    groups = UI.families(painted_discovery,_action_actor())
     world.FrameProfile.end_phase(world.profile,"hud_families",phase)
     phase = Time.get_ticks_usec()
     var columns = {}
@@ -676,6 +710,9 @@ func _open_choices(family: Dictionary, origin: Control) -> void:
     scroll.custom_minimum_size.y = minf(230,rows_count*(ICON+GAP+4))
     popup.size = Vector2(310,scroll.custom_minimum_size.y+34)
     popup.position = Vector2(clampf(origin.global_position.x,8,get_viewport_rect().size.x-popup.size.x-8),maxf(8,origin.global_position.y-popup.size.y+2))
+    # Native GUI picking follows sibling order, independently of paint z_index.
+    # Rebuilt action bars are appended later; keep choices above them for input.
+    move_child(popup,get_child_count()-1)
     popup.visible = true
     popup_bridge = popup.get_global_rect().merge(origin.get_global_rect())
     popup_close_delay = 0.0
@@ -750,7 +787,6 @@ func open_settings() -> void:
     _close_popup()
     panel.hide()
     if search.has_focus(): search.release_focus()
-    history_panel.hide_panel()
     world.close_storage()
     settings_panel.show_panel()
 
@@ -761,7 +797,6 @@ func toggle_inventory() -> void:
     if settings_open(): return
     panel.visible = not panel.visible
     if panel.visible:
-        history_panel.hide_panel()
         if get_viewport_rect().size.x < 1260: world.close_storage()
     _close_popup()
     if panel.visible: _refresh_inventory()
@@ -784,7 +819,6 @@ func open_loot() -> void:
     if get_viewport_rect().size.x < 1260:
         panel.hide()
         if search.has_focus(): search.release_focus()
-    if get_viewport_rect().size.x < 990: history_panel.hide_panel()
     _close_popup()
     loot_panel.refresh()
     _layout()
@@ -945,6 +979,8 @@ func _item_command(label: String, callback: Callable) -> Button:
     return button
 
 func _input(event: InputEvent) -> void:
+    if event is InputEventMouseMotion and event.relative != Vector2.ZERO:
+        hover_feedback_dismissed = false
     if settings_open():
         if event is InputEventKey and event.pressed and not event.echo and event.keycode==KEY_ESCAPE:
             settings_panel.escape()
@@ -964,7 +1000,6 @@ func _input(event: InputEvent) -> void:
     if event.keycode == KEY_ESCAPE:
         if popup.visible: _close_popup()
         elif loot_panel.visible: world.close_storage()
-        elif history_panel.visible: history_panel.hide_panel()
         elif panel.visible: toggle_inventory()
         elif not world.selected_action.is_empty(): world.cancel_selection()
         else: open_settings()
@@ -972,6 +1007,11 @@ func _input(event: InputEvent) -> void:
         return
     var focus = get_viewport().gui_get_focus_owner()
     if focus is LineEdit or focus is TextEdit: return
+    if event.keycode>=KEY_F1 and event.keycode<=KEY_F4:
+        var index = event.keycode-KEY_F1
+        if index<actor_hud.party_ids.size(): _focus_portrait(actor_hud.party_ids[index])
+        get_viewport().set_input_as_handled()
+        return
     if event.keycode == KEY_L and not event.ctrl_pressed and not event.alt_pressed and not event.meta_pressed:
         toggle_history()
         get_viewport().set_input_as_handled()
@@ -994,6 +1034,62 @@ func _input(event: InputEvent) -> void:
         var button: Button = shortcuts[index]
         if is_instance_valid(button) and not button.disabled: _activate_family(button.get_meta("family"),button)
         get_viewport().set_input_as_handled()
+
+# Resolve the same admitted binding used by the click. A body underneath a
+# position-target spell does not turn that spell into an entity-target action.
+func _hover_target_subject() -> String:
+    var intent: Dictionary = world.hover_intent
+    if intent.is_empty(): return ""
+    if intent.kind == "target":
+        var target: Dictionary = intent.get("value",{}).get("target",{})
+        if target.is_empty(): return ""
+        var domains: Dictionary = world.available_actions if world.selection_preview.is_empty() else world.selection_preview
+        var subject: Variant = Choices.binding_subject(domains,target)
+        return str(subject.uuid) if subject != null else ""
+    if intent.kind in ["attack","storage","interaction","approach","context"]:
+        return str(world.hover_hit.get("id",""))
+    return ""
+
+func clear_hover_feedback() -> void:
+    hover_feedback_dismissed = true
+    for id in hover_outline.owners.keys(): hover_outline.erase(world,id)
+    _restore_object_highlights()
+    hover_object_key = []
+
+func _restore_object_highlights() -> void:
+    for material in hover_object_materials:
+        material.set_shader_parameter("highlighted",hover_object_materials[material])
+    hover_object_materials.clear()
+
+func _refresh_hover_feedback() -> void:
+    var focus = get_viewport().gui_get_focus_owner()
+    var alt = not settings_open() and Input.is_key_pressed(KEY_ALT) and not (focus is LineEdit or focus is TextEdit)
+    var ready: bool = world.command_ready() and not settings_open()
+    var subject = _hover_target_subject() if ready and not pointer_over_controls() and not hover_feedback_dismissed else ""
+    var actor_id = subject if world.visual_actors.has(subject) else ""
+    for id in hover_outline.owners.keys():
+        if id != actor_id: hover_outline.erase(world,id)
+    if not actor_id.is_empty():
+        hover_outline.sample(world,actor_id,{"outline":{"color":0x70d6be,"pulseColor":0x70d6be,"opacity":.9,"pulseOpacity":0.0},"outline_age_ms":0.0,"outline_initial":true,"outline_alpha":1.0})
+        if hover_outline.owners.has(actor_id): hover_outline.owners[actor_id].entry.id = actor_id+":hover_outline"
+    var key = [alt,subject,ready,world.timeline.world_revision,world.world_generation,world.quarter]
+    if key == hover_object_key and is_same(world.available_actions,hover_object_discovery): return
+    hover_object_key = key
+    hover_object_discovery = world.available_actions
+    _restore_object_highlights()
+    if not ready or (not alt and subject.is_empty()): return
+    var objects = {}
+    for row in world.world_labels():
+        # Scenery sight is the displayed renderer's native disclosure set;
+        # remembered map objects and force-picked hidden walls stay unmarked.
+        if not world.scenery_visibility.has(row.id): continue
+        if alt or row.id == subject: objects[row.id] = true
+    if objects.is_empty(): return
+    for entry in world.static_entries:
+        if entry.role == "shadow" or not entry.node.visible or not objects.has(entry.placement.id): continue
+        var material: ShaderMaterial = entry.material
+        hover_object_materials[material] = material.get_shader_parameter("highlighted")
+        material.set_shader_parameter("highlighted",true)
 
 func _refresh_world_labels() -> void:
     var focus = get_viewport().gui_get_focus_owner()
@@ -1022,23 +1118,58 @@ func _refresh_world_labels() -> void:
             world_label_buttons.erase(id)
     hover_info.visible = not alt and not world.hover_hit.is_empty() and not pointer_over_controls()
     if hover_info.visible:
-        hover_info.text = str(world.hover_hit.get("label",""))
-        var route = world.hover_preview.get("selected_route")
+        var label_text = str(world.hover_hit.get("label",""))
+        if not world.selected_action.is_empty():
+            label_text = str(world.selected_action.display_name)+(": "+label_text if not label_text.is_empty() else "")
+            if world.selected_action.get("target_type")=="multi_entity":
+                var count = world.target_selection.get("target_indices",[]).size()
+                var total = world.selected_action.get("num_projectiles")
+                label_text += "\n"+("%d / %d selected" % [count,total] if total!=null else "%d selected" % count)
+        elif not world.hover_intent.is_empty():
+            label_text = str(world.hover_intent.label)+(": "+label_text if not label_text.is_empty() else "")
+        var shown: Dictionary = world.hover_preview if not world.hover_preview.is_empty() else world.selection_preview
+        var affected: Array = shown.get("affected_entity_names",[])
+        if not affected.is_empty(): label_text += "\nTargets: "+(", ".join(affected) if affected.size()<=3 else str(affected.size()))
+        var counts = {}
+        for id in shown.get("effective_target_uuids",[]): counts[id]=int(counts.get(id,0))+1
+        if not counts.is_empty():
+            var allocations: Array[String] = []
+            for id in counts:
+                var name: String = world.timeline.state.get("actors",{}).get(id,{}).get("name","Target")
+                allocations.append("%s ×%d" % [name,counts[id]])
+            label_text += "\nAllocation: "+(", ".join(allocations) if allocations.size()<=3 else "%d recipients · %d applications" % [counts.size(),shown.effective_target_uuids.size()])
+        var route = shown.get("selected_route")
         if route != null:
-            hover_info.text += "\n%s ft" % str(route.get("cost_feet",0))
-            if route.get("is_hazardous",false): hover_info.text += " · Hazardous"
-            if not route.get("opportunity_attack_exposures",[]).is_empty(): hover_info.text += " · Opportunity attack"
+            label_text += "\n%s ft" % str(route.get("cost_feet",0))
+            if route.get("is_hazardous",false): label_text += " · Hazardous"
+            if not route.get("opportunity_attack_exposures",[]).is_empty(): label_text += " · Opportunity attack"
+        if hover_info.text != label_text: hover_info.text = label_text
         hover_info.position = get_global_mouse_position()+Vector2(18,20)
+        hover_info.position = hover_info.position.min(get_viewport_rect().size-hover_info.get_combined_minimum_size()-Vector2(8,8)).max(Vector2(8,8))
+        if history_panel.visible and Rect2(hover_info.position,hover_info.get_combined_minimum_size()).intersects(history_panel.get_global_rect()):
+            hover_info.position.x = maxf(8.0,history_panel.get_global_rect().position.x-hover_info.get_combined_minimum_size().x-8.0)
+
+func _refresh_notice() -> void:
+    notice.text = world.notice_text
+    notice_row.visible = not notice.text.is_empty()
+    copy_notice.text = "Copied" if copied_notice==notice.text else "Copy"
+
+func _copy_notice() -> void:
+    if notice.text.is_empty(): return
+    DisplayServer.clipboard_set(JSON.stringify(world.error_report(notice.text),"  "))
+    copied_notice = notice.text
+    copy_notice.text = "Copied"
 
 func pointer_over_controls(point: Vector2 = Vector2.INF) -> bool:
     if settings_open(): return true
     if point == Vector2.INF: point = get_global_mouse_position()
+    if actor_hud.contains(point): return true
     if panel.visible and panel.get_global_rect().has_point(point): return true
     if loot_panel.visible and loot_panel.get_global_rect().has_point(point): return true
     if history_panel.visible and history_panel.get_global_rect().has_point(point): return true
     if popup.visible and popup_bridge.has_point(point): return true
-    for control in [bar,inventory_button,history_button,grid_button,normals_button,end_button,confirm_button,cancel_button]:
-        if control.visible and control.get_global_rect().has_point(point): return true
+    for control in [bar,inventory_button,history_button,grid_button,normals_button,end_button,confirm_button,cancel_button,copy_notice]:
+        if control.is_visible_in_tree() and control.get_global_rect().has_point(point): return true
     for control in world_label_buttons.values():
         if control.get_global_rect().has_point(point): return true
     return false
@@ -1048,76 +1179,83 @@ func owns_keyboard_focus() -> bool:
     var focus = get_viewport().gui_get_focus_owner()
     return focus != null and history_panel.visible and history_panel.is_ancestor_of(focus)
 
-func outline(position: Array,height: float,colour: Color,width: float = 1.0) -> void:
-    var points = PackedVector2Array()
-    for offset in [Vector2(-0.5,-0.5),Vector2(0.5,-0.5),Vector2(0.5,0.5),Vector2(-0.5,0.5),Vector2(-0.5,-0.5)]:
-        points.append(world.camera.unproject_position(Vector3(position[0]+offset.x,height*Placement.HEIGHT_UNIT,position[1]+offset.y)))
-    draw_polyline(points,colour,width,true)
+var ground_preview_key: Array = []
+var ground_preview_source: Dictionary = {}
+var ground_preview_choices: Dictionary = {}
+var ground_preview_eligibility: Dictionary = {}
+var ground_base_key: Array = []
+var ground_base_choices: Dictionary = {}
+var ground_base_eligibility: Dictionary = {}
+var ground_base_marks: Dictionary = {}
 
-var grid_cache_key: Array = []
-var grid_cache_lines = PackedVector2Array()
-var grid_cache_geometry = PackedVector3Array()
-
-func _update_grid_lines() -> void:
-    var key = [world.timeline.world_revision,world.camera.global_transform,world.camera.size,get_viewport_rect()]
-    if key == grid_cache_key: return
-    var camera_changed = grid_cache_key.is_empty() or key.slice(1) != grid_cache_key.slice(1)
-    grid_cache_key = key
-    var previous_count = grid_cache_geometry.size()
-    var count: int = world.timeline.state.tiles.size()
-    grid_cache_geometry.resize(count)
-    grid_cache_lines.resize(count*8)
-    var index = 0
-    for tile in world.timeline.state.tiles.values():
-        var position = Vector3(tile.position[0],tile.elevation_steps*Placement.HEIGHT_UNIT,tile.position[1])
-        # Sight, fixture and object updates also advance world_revision. Retain
-        # existing projected edges when this tile's geometry has not changed.
-        if camera_changed or index >= previous_count or position != grid_cache_geometry[index]:
-            grid_cache_geometry[index] = position
-            var corners = PackedVector2Array()
-            for offset in [Vector2(-0.5,-0.5),Vector2(0.5,-0.5),Vector2(0.5,0.5),Vector2(-0.5,0.5)]:
-                corners.append(world.camera.unproject_position(position+Vector3(offset.x,0,offset.y)))
-            for i in range(4):
-                grid_cache_lines[index*8+i*2] = corners[i]
-                grid_cache_lines[index*8+i*2+1] = corners[(i+1)%4]
-        index += 1
-
-func _draw() -> void:
+func _update_ground_preview() -> void:
     if not is_instance_valid(world.camera) or world.timeline.state.is_empty(): return
-    var phase = Time.get_ticks_usec()
-    if world.grid_visible:
-        _update_grid_lines()
-        if not grid_cache_lines.is_empty(): draw_multiline(grid_cache_lines,Color(0.56,0.70,0.85,0.12),1,false)
-    var cursor = world.pick_cell(get_viewport().get_mouse_position())
-    if not cursor.is_empty(): outline(cursor.position,cursor.height,Color("70d6be"),2)
-    for actor in world.visual_actors.values():
-        if actor.row.id == world.timeline.state.current_actor_uuid:
-            outline(actor.row.position,actor.row.base_height_steps,Color("e9c87e"),2)
-    var preview: Dictionary = world.hover_preview if world.selected_action.is_empty() else world.selection_preview
-    if not preview.is_empty():
-        for target in Choices.next_options(preview):
-            var position: Variant = Choices.binding_position(preview,target)
-            if position != null: _target_outline(position,Color(0.45,0.83,0.76,0.45))
-    for position in Choices.preview_positions(preview): _target_outline(position,Color(0.45,0.83,0.76,0.65))
-    for position in Choices.preview_positions(preview,true): _target_outline(position,Color(0.92,0.73,0.36,0.8))
+    var ready: bool = world.command_ready()
+    var over_ui = pointer_over_controls()
+    var entity_click = not _hover_target_subject().is_empty()
+    var cursor: Dictionary = {} if over_ui or entity_click else world.pick_cell(get_viewport().get_mouse_position())
+    # A position spell aimed over elevated artwork uses its admitted target
+    # position, not a different floor cell found by projecting below the body.
+    var aimed_position: Variant = world.hover_intent.get("value",{}).get("position")
+    if not over_ui and not entity_click and aimed_position != null:
+        cursor = {"position":aimed_position}
+    var preview: Dictionary = (world.hover_preview if not world.hover_preview.is_empty() else world.selection_preview) if ready and not over_ui else {}
+    var eligibility: Dictionary = world.selection_preview if ready and not world.selected_action.is_empty() else preview
+    var current: Dictionary = world.visual_actors.get(world.timeline.state.get("current_actor_uuid",""),{}).get("row",{})
+    var show_reachable: bool = ready and not over_ui and world.selected_action.is_empty() and world.hover_hit.get("kind")=="ground"
+    var key = [world.timeline.world_revision,cursor,current.get("position"),show_reachable,ready]
+    if key==ground_preview_key and is_same(preview,ground_preview_source) and is_same(eligibility,ground_preview_eligibility) and is_same(world.available_actions,ground_preview_choices): return
+    ground_preview_key = key.duplicate(true)
+    ground_preview_source = preview
+    ground_preview_choices = world.available_actions
+    ground_preview_eligibility = eligibility
+    # The selected-prefix legal set does not move with the pointer. Reuse its
+    # immutable styles while replacing only affected cells, actor and cursor.
+    # Disclosed support/choice/prefix changes still invalidate that set.
+    var base_key = [world.timeline.world_revision,show_reachable]
+    if base_key!=ground_base_key or not is_same(eligibility,ground_base_eligibility) or not is_same(world.available_actions,ground_base_choices):
+        ground_base_key = base_key
+        ground_base_eligibility = eligibility
+        ground_base_choices = world.available_actions
+        ground_base_marks = {}
+        if show_reachable:
+            for action in world.available_actions.get("position_actions",[]):
+                if action.behavior_id!="action.move" or action.availability_status!="available": continue
+                if not action.get("variant_facets",[]).any(func(f):return f.key=="movement" and f.value=="walking"): continue
+                for target in Choices.action_options(world.available_actions,action):
+                    var position = Choices.binding_position(world.available_actions,target)
+                    if position!=null: _ground_mark(ground_base_marks,position,Color(0.45,0.83,0.76,0.24),1.0)
+                break
+        if not eligibility.is_empty():
+            for target in Choices.next_options(eligibility):
+                var position = Choices.binding_position(eligibility,target)
+                if position!=null: _ground_mark(ground_base_marks,position,Color(0.45,0.83,0.76,0.45))
+        for position in Choices.preview_positions(eligibility): _ground_mark(ground_base_marks,position,Color(0.45,0.83,0.76,0.65))
+    var marks = ground_base_marks.duplicate()
+    for position in Choices.preview_positions(preview,true):
+        _ground_mark(marks,position,Color(0.92,0.73,0.36,0.8))
+        var affected_key = "%d,%d" % [position[0],position[1]]
+        if preview.get("area_preview")=="computed" and marks.has(affected_key): marks[affected_key].fill_colour=Color(0.92,0.59,0.23,0.2)
+    for id in preview.get("affected_entity_uuids",[]):
+        var row: Dictionary=world.visual_actors.get(id,{}).get("row",{})
+        if not row.is_empty(): _ground_mark(marks,row.position,Color("f0aa69"),3.0)
+    if not current.is_empty(): _ground_mark(marks,current.position,Color("e9c87e"))
+    if not cursor.is_empty(): _ground_mark(marks,cursor.position,Color("70d6be"))
     var route = preview.get("selected_route")
-    if route != null:
-        var colour = Color("eb8a6d") if route.get("is_hazardous",false) or not route.get("opportunity_attack_exposures",[]).is_empty() else Color("70d6be")
-        var points = PackedVector2Array()
-        for position in route.path:
-            var tile: Dictionary = world.timeline.state.tiles.get("%d,%d" % [position[0],position[1]],{})
-            if tile.is_empty():
-                if points.size()>1: draw_polyline(points,colour,2,true)
-                points.clear()
-                continue
-            points.append(world.camera.unproject_position(Vector3(position[0],tile.elevation_steps*Placement.HEIGHT_UNIT+0.03,position[1])))
-        if points.size()>1: draw_polyline(points,colour,2,true)
-    world.FrameProfile.end_phase(world.profile,"hud_draw",phase)
+    var colour = Color("70d6be")
+    if route!=null and (route.get("is_hazardous",false) or not route.get("opportunity_attack_exposures",[]).is_empty()): colour=Color("eb8a6d")
+    world.ground_overlay.set_preview(marks,route.path if route!=null else [],colour)
 
-func _target_outline(position: Array,colour: Color) -> void:
-    var tile: Dictionary = world.timeline.state.tiles.get("%d,%d" % [position[0],position[1]],{})
-    if not tile.is_empty(): outline(position,tile.elevation_steps,colour,2)
+func _ground_mark(marks: Dictionary, position: Array, colour: Color, width: float=2.0) -> void:
+    var key = "%d,%d" % [position[0],position[1]]
+    if world.timeline.state.tiles.has(key):
+        var style: Dictionary=marks.get(key,{}).duplicate()
+        style.colour=colour; style.width=width
+        marks[key]=style
 
 func _exit_tree() -> void:
+    if is_instance_valid(world):
+        hover_outline.close(world)
+        _restore_object_highlights()
     _cancel_bar_build()
     UI.close_images(cache)

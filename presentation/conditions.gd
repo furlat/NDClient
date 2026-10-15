@@ -111,6 +111,9 @@ static func samples(owners: Dictionary, at_ms: float, cache: Dictionary, activit
             sound.absolute_start_ms=sound.start_ms;sound.age_ms=maxf(0,at_ms-sound.start_ms)
             if sound.timing_selector!="condition.interval":sound.status="missing";sound.reason="authored_audio_timing_unavailable"
             result.append(sound)
+    # Native preparation has no output to compose when these owners supply
+    # only body/legacy effects. Expiry above still runs for every owner.
+    if native_only and not result.any(func(sample):return sample.get("native_spell",false)):return []
     var selected_owners={}
     var selected_recipes={}
     var actors={}
@@ -247,51 +250,61 @@ static func select_recipes(actor_id: String,samples: Array) -> Array:
     return result
 
 static func bind(material: ShaderMaterial, value: Dictionary, textures: Dictionary, resources: Dictionary) -> void:
-    BodySurfaces.bind(material,value.get("body_surfaces",{}))
-    material.set_shader_parameter("condition_tint",value.tint)
-    material.set_shader_parameter("condition_saturation",value.saturation)
-    material.set_shader_parameter("condition_brightness",value.brightness)
-    material.set_shader_parameter("condition_alpha",value.alpha)
+    bind_parameters(material,parameters(value,textures,resources))
+
+static func bind_parameters(material:ShaderMaterial,values:Dictionary)->void:
+    for field in values:material.set_shader_parameter(field,values[field])
+
+static func parameters(value:Dictionary,textures:Dictionary,resources:Dictionary)->Dictionary:
+    # One actor's layers consume these exact uniforms. Keep source/provenance
+    # metadata outside the material key and project the shared operands once.
+    var surfaces:Dictionary=value.get("body_surfaces",{})
+    var result:Dictionary={"body_surface_enabled":false,"body_surface_count":0,"body_surface_texture":null} if surfaces.is_empty() else surfaces.parameters.duplicate()
+    result.condition_tint=value.tint
+    result.condition_saturation=value.saturation
+    result.condition_brightness=value.brightness
+    result.condition_alpha=value.alpha
     var flash: Dictionary=value.flash
     var treatment:Dictionary=flash.get("material",{})
     var strength=0.0 if flash.is_empty() else clampf(1-flash.age_ms/maxf(1,flash.duration_ms),0,1)
     if not flash.is_empty() and treatment.get("envelope","")=="hold_fade":
         var hold=float(treatment.get("holdMs",0.0))
         strength=1.0-smoothstep(hold,maxf(hold+.001,flash.duration_ms),flash.age_ms)
-    material.set_shader_parameter("flash_strength",strength)
+    result.flash_strength=strength
     var native_surface:Texture2D=flash.get("native_surface")
-    material.set_shader_parameter("native_body_enabled",native_surface!=null)
-    material.set_shader_parameter("native_body_strength",strength if native_surface!=null else 0.0)
-    material.set_shader_parameter("native_body_surface",native_surface)
+    result.native_body_enabled=native_surface!=null
+    result.native_body_strength=strength if native_surface!=null else 0.0
+    result.native_body_surface=native_surface
     var finishing:Dictionary=flash.get("native_finishing",{})
-    material.set_shader_parameter("native_body_ramp",flash.get("native_ramp"))
-    material.set_shader_parameter("native_body_ramp_count",finishing.get("ramp",[]).size())
-    var parameters:Dictionary=finishing.get("parameters",{})
-    material.set_shader_parameter("native_body_ramp_floor",parameters.get("ramp_floor",0.0))
-    material.set_shader_parameter("native_body_ramp_ceiling",parameters.get("ramp_ceiling",1.0))
-    material.set_shader_parameter("native_body_ramp_uses_luma",parameters.get("ramp_uses_luma",false))
+    result.native_body_ramp=flash.get("native_ramp")
+    result.native_body_ramp_count=finishing.get("ramp",[]).size()
+    var finishing_parameters:Dictionary=finishing.get("parameters",{})
+    result.native_body_ramp_floor=finishing_parameters.get("ramp_floor",0.0)
+    result.native_body_ramp_ceiling=finishing_parameters.get("ramp_ceiling",1.0)
+    result.native_body_ramp_uses_luma=finishing_parameters.get("ramp_uses_luma",false)
     var flash_palette:Dictionary=treatment.get("palette",{})
     var noise:String=resources.get(flash_palette.get("noiseSheet"),"")
-    material.set_shader_parameter("flash_has_noise",not noise.is_empty() and textures.has(noise))
-    if textures.has(noise):material.set_shader_parameter("flash_noise",textures[noise])
-    material.set_shader_parameter("flash_gamma",float(flash_palette.get("gamma",1.0)))
-    material.set_shader_parameter("flash_screen_blend",treatment.get("blendMode","")=="screen")
-    material.set_shader_parameter("flash_untinted",flash_palette.get("untinted",false))
-    material.set_shader_parameter("flash_frame",float(flash.get("age_ms",0.0))*.012)
+    result.flash_has_noise=not noise.is_empty() and textures.has(noise)
+    if textures.has(noise):result.flash_noise=textures[noise]
+    result.flash_gamma=float(flash_palette.get("gamma",1.0))
+    result.flash_screen_blend=treatment.get("blendMode","")=="screen"
+    result.flash_untinted=flash_palette.get("untinted",false)
+    result.flash_frame=float(flash.get("age_ms",0.0))*.012
     var colors=PackedVector3Array()
     for color in flash.get("colors",[]): colors.append(Palette.rgb(int(color)))
-    material.set_shader_parameter("flash_palette_count",mini(32,colors.size()));colors.resize(32)
-    material.set_shader_parameter("flash_palette",colors)
+    result.flash_palette_count=mini(32,colors.size());colors.resize(32)
+    result.flash_palette=colors
     var ramp: Dictionary=value.ramp
     var path: String=resources.get(ramp.get("texture"),"")
-    material.set_shader_parameter("condition_film_enabled",ramp.get("mapping")=="flowing_film" and textures.has(path))
+    result.condition_film_enabled=ramp.get("mapping")=="flowing_film" and textures.has(path)
     if ramp.get("mapping")=="flowing_film" and textures.has(path):
-        material.set_shader_parameter("condition_film",textures[path])
-        material.set_shader_parameter("condition_film_frames",int(ramp.textureFrames))
-        material.set_shader_parameter("condition_film_frame",floori(value.time_ms/1000.0*ramp.get("textureFps",32)))
-        material.set_shader_parameter("condition_film_gain",ramp.gain)
-        material.set_shader_parameter("condition_film_weight",ramp.textureWeight)
-        material.set_shader_parameter("condition_film_strength",value.get("ramp_alpha",1.0)*(1.0 if value.get("ramp_initial",false) else minf(1,value.time_ms/maxf(1,ramp.get("applicationMs",0)))))
+        result.condition_film=textures[path]
+        result.condition_film_frames=int(ramp.textureFrames)
+        result.condition_film_frame=floori(value.time_ms/1000.0*ramp.get("textureFps",32))
+        result.condition_film_gain=ramp.gain
+        result.condition_film_weight=ramp.textureWeight
+        result.condition_film_strength=value.get("ramp_alpha",1.0)*(1.0 if value.get("ramp_initial",false) else minf(1,value.time_ms/maxf(1,ramp.get("applicationMs",0))))
         var palette=PackedVector3Array()
         for color in ramp.colors: palette.append(Palette.rgb(int(color)))
-        palette.resize(4);material.set_shader_parameter("condition_film_palette",palette)
+        palette.resize(4);result.condition_film_palette=palette
+    return result

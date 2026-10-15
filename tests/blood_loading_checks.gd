@@ -63,8 +63,12 @@ func run()->void:
         check(world.renderer.pages[name].view.render_target_update_mode==SubViewport.UPDATE_DISABLED,"Unused receiving page stops drawing: "+name)
     var page_ids:Array=world.renderer.pages.values().map(func(page):return page.view.get_instance_id())
     world.timeline.queue=[group]
-    world.renderer.prepare(world,[group])
-    check(not world.renderer.pending_deposits.is_empty() and world.renderer.pending_deposits.size()<=2,"Future blood prepares only a bounded hidden prefix")
+    world.renderer.prepare(world,[group],{"used_usec":2000,"limit_usec":2000})
+    check(world.renderer.pending_deposits.is_empty() and world.renderer.kernel_jobs.is_empty(),"Exhausted admission starts neither worker work nor native field allocation")
+    var future_budget={"used_usec":0,"limit_usec":100000}
+    var future_ready:bool=world.renderer.prepare(world,[group],future_budget)
+    check(world.renderer.pending_deposits.size()>2 and world.renderer.pending_deposits.size()<=20,"Available time admits more than two exact received fields without a fixed frame-count cap")
+    check(not future_ready and world.renderer.pending_deposits.values().all(func(handle):return not handle.ready and not handle.entry.node.visible),"Even a complete allocation turn cannot bypass the actual draw fence or publish residue")
     world.timeline.queue=[];world.sample()
     check(world.renderer.pending_deposits.is_empty() and world.actor_entries.is_empty(),"Cancelling future groups retires their unpublished fields")
     check(world.timeline.state.tiles.is_empty() and world.renderer.deposits.is_empty(),"Cancelled preparation publishes no residue")
@@ -74,9 +78,10 @@ func run()->void:
     var costs:Array=[];var first_construction:Array=[];complete=false
     for attempt in 20:
         var before:int=world.renderer.deposit_create_usec;var began:int=Time.get_ticks_usec()
-        complete=world.renderer.prepare(world,[group]);costs.append((Time.get_ticks_usec()-began)/1000.)
+        var field_budget={"used_usec":0,"limit_usec":2000}
+        complete=world.renderer.prepare(world,[group],field_budget);costs.append((Time.get_ticks_usec()-began)/1000.)
         if world.renderer.prepare_allocations>0:first_construction.append((world.renderer.deposit_create_usec-before)/1000.)
-        check(world.renderer.prepare_allocations<=2,"Actual preparation remains bounded: "+str(attempt))
+        check(field_budget.used_usec>=0 and world.renderer.pending_deposits.size()<=20,"Actual preparation remains budget-accounted and confined to the received closure: "+str(attempt))
         for handle in world.renderer.pending_deposits.values():check(not handle.entry.node.visible,"Prepared actual field stays hidden")
         world.sample();await frame()
         if complete:break
@@ -100,8 +105,8 @@ func run()->void:
         reference.configure(component,cache,350.,0,reference.source_lighting)
         await frame();await frame()
     var pixel_samples:Array=[]
-    for quarter in [0,1]:
-        for age in [350.,800.,component.duration_ms+1.]:
+    for quarter in [0,1,2,3]:
+        for age in [50.,150.,350.,500.,800.,component.duration_ms+1.]:
             for instance in [world,reference]:
                 if instance==null:continue
                 instance.camera.basis=Basis.from_euler(Vector3(-atan(sqrt(.5)),PI/4+quarter*PI/2,0))

@@ -142,7 +142,7 @@ static func make(parent: Node3D, clip: Dictionary, layer_mask:int=DEFAULT_LAYER,
         if node is GPUParticles3D:
             handle.emitter_speeds[node.get_instance_id()]=node.speed_scale
             node.speed_scale = 0
-            var units=ParticleUnits.prepare(node)
+            var units=ParticleUnits.prepare(node,all_prepared)
             if not units.is_empty():handle.particle_units.append(units)
             handle.emitters.append(node)
         if node is Light3D:

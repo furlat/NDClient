@@ -4,6 +4,7 @@ extends RefCounted
 const Geometry = preload("res://presentation/character_geometry.gd")
 const Characters = preload("res://presentation/characters.gd")
 const Placement = preload("res://placement.gd")
+const Samples = preload("res://presentation/surface_socket_samples.gd")
 
 static func resolve(world: Node, actor_id: String, clip: String, frame: int,
         facing: String, socket_pixel: Vector2, painted_point: Vector3,
@@ -67,15 +68,30 @@ static func resolve(world: Node, actor_id: String, clip: String, frame: int,
         var paths := {"depth":root.path_join(source.files.depth),
             "support":root.path_join(source.files.support),
             "solid":reference.get_base_dir().path_join("solid-valid.png")}
-        for channel in paths:
-            if not world.source_images.has(paths[channel]):
-                return _missing(result, "source_" + channel + "_not_prepared")
-            if not _contains(world.source_images[paths[channel]], sheet_pixel):
-                return _missing(result, "source_" + channel + "_layout_mismatch")
-        var depth: Color = world.source_images[paths.depth].get_pixelv(sheet_pixel)
-        if depth.a <= .5 or world.source_images[paths.support].get_pixelv(sheet_pixel).r <= .5:
+        var compact=Samples.sample(source_path,source,sheet_pixel,world.catalog_cache)
+        var depth:Color
+        var supported:bool
+        var solid:bool
+        if compact.size()==4:
+            # Construct Color to retain the same float32 normalization as the
+            # original Image.get_pixel; geometric placement is unchanged.
+            depth=Color(float(compact[0])/255.0,0,0,float(compact[1])/255.0)
+            supported=int(compact[2])>127
+            solid=int(compact[3])>127
+        else:
+            # Unbaked/new source authoring and arbitrary offline probes retain
+            # the existing exact CPU path. No readback or nearby-pixel guess.
+            for channel in paths:
+                if not world.source_images.has(paths[channel]):
+                    return _missing(result, "source_" + channel + "_not_prepared")
+                if not _contains(world.source_images[paths[channel]], sheet_pixel):
+                    return _missing(result, "source_" + channel + "_layout_mismatch")
+            depth=world.source_images[paths.depth].get_pixelv(sheet_pixel)
+            supported=world.source_images[paths.support].get_pixelv(sheet_pixel).r>.5
+            solid=world.source_images[paths.solid].get_pixelv(sheet_pixel).r>.5
+        if depth.a <= .5 or not supported:
             return _missing(result, "unsupported_source_pixel")
-        if world.source_images[paths.solid].get_pixelv(sheet_pixel).r <= .5:
+        if not solid:
             return _missing(result, "source_pixel_not_solid")
         var optical: Dictionary = source.get("optical_camera", world.catalog_cache[table].get("optical_camera", {}))
         if optical.is_empty(): return _missing(result, "source_optical_registration_missing")

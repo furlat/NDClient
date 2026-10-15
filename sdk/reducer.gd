@@ -108,13 +108,15 @@ static func stage_lineage(target: Dictionary, lineage: Dictionary) -> Dictionary
 static func apply_player_fact(target: Dictionary, fact: Dictionary, source_cursor: Variant = null) -> Dictionary:
     return _apply_player_fact_owned(target, fact, source_cursor, false)
 
-static func _apply_player_fact_owned(target: Dictionary, fact: Dictionary, source_cursor: Variant, composed_senses: bool, cells: Dictionary = {}) -> Dictionary:
+static func _apply_player_fact_owned(target: Dictionary, fact: Dictionary, source_cursor: Variant, composed_senses: bool, cells: Dictionary = {}, actor_snapshots:Dictionary={}) -> Dictionary:
     var identity: Variant
     var actor: Variant
     match fact.kind:
         "faction":
+            actor_snapshots.clear()
             if target.actors.has(fact.entity_uuid): target.actors[fact.entity_uuid].faction = fact.faction_after
         "spatial":
+            actor_snapshots.clear()
             identity = fact.entity_uuid
             actor = target.actors.get(identity)
             if fact.terminal_departure and actor != null:
@@ -129,6 +131,7 @@ static func _apply_player_fact_owned(target: Dictionary, fact: Dictionary, sourc
                 if target.senses != null and identity == target.observer_uuid: target.senses.position = fact.position.duplicate()
                 if actor != null: actor.last_visual_position = fact.position.duplicate()
         "item_charge":
+            actor_snapshots.clear()
             identity = fact.source_entity_uuid
             if not target.actors.has(identity): return failure("Missing actor: " + identity)
             actor = target.actors[identity]
@@ -148,6 +151,7 @@ static func _apply_player_fact_owned(target: Dictionary, fact: Dictionary, sourc
                 if not (fact.item_destroyed and layer.item_uuid == fact.item_uuid): layers.append(layer)
             actor.visual_loadout.layers = layers
         "sensory":
+            actor_snapshots.clear()
             var audience = Audience.resolve(target.observer_uuid, target.audience)
             if not audience.ok: return audience
             var observed = Audience._observe_retained(target.perception, audience.value, fact, int(target.reducer_cursor if source_cursor == null else source_cursor), cells)
@@ -161,12 +165,14 @@ static func _apply_player_fact_owned(target: Dictionary, fact: Dictionary, sourc
                 if contact.visual and target.actors.has(member) and target.actors[member].present:
                     target.actors[member].last_visual_position = contact.position.duplicate()
         "attack":
+            actor_snapshots.clear()
             if target.actors.has(fact.source_entity_uuid):
                 var stance = "none" if fact.attack_source_kind != "equipped" else ("ranged" if fact.weapon_slot in ["RANGED_MAIN", "RANGED_OFF"] else "melee")
                 target.actors[fact.source_entity_uuid].visual_loadout.active_weapon_set = stance
         "damage", "heal":
             if fact.kind == "damage" and fact.stage != "applied": return success(target)
             if fact.kind == "heal" and fact.was_blocked: return success(target)
+            actor_snapshots.clear()
             identity = fact.target_entity_uuid
             if not target.actors.has(identity): return failure("Missing actor: " + identity)
             if fact.resulting_normal_hp == null or fact.resulting_temporary_hp == null:
@@ -175,23 +181,27 @@ static func _apply_player_fact_owned(target: Dictionary, fact: Dictionary, sourc
             actor.normal_hp = fact.resulting_normal_hp; actor.temporary_hp = fact.resulting_temporary_hp
             if fact.resulting_temporary_hp <= 0: actor.temporary_hp_grant = null
         "temporary_hit_points":
+            actor_snapshots.clear()
             identity = fact.entity_uuid
             if not target.actors.has(identity): return failure("Missing actor: " + identity)
             target.actors[identity].temporary_hp = fact.resulting_temporary_hp
             target.actors[identity].temporary_hp_grant = fact.grant.duplicate(true) if fact.grant != null else null
         "life":
+            actor_snapshots.clear()
             identity = fact.entity_uuid
             if not target.actors.has(identity): return failure("Missing actor: " + identity)
             actor = target.actors[identity]
             actor.life_state = fact.new_state; actor.normal_hp = fact.normal_hit_points
             actor.remains_disposition = fact.remains_disposition
         "equipment":
+            actor_snapshots.clear()
             actor = target.actors.get(fact.source_entity_uuid)
             if actor != null:
                 actor.visual_loadout = fact.visual_loadout.duplicate(true)
                 actor.armor_class = fact.armor_class
                 actor.controlled_items = fact.controlled_items.duplicate(true) if fact.controlled_items != null else null
         "condition":
+            actor_snapshots.clear()
             identity = fact.target_entity_uuid
             if not target.actors.has(identity): return failure("Missing actor: " + identity)
             actor = target.actors[identity]
@@ -220,7 +230,7 @@ static func _apply_player_fact_owned(target: Dictionary, fact: Dictionary, sourc
 static func apply_committed_player_fact(target: Dictionary, fact: Dictionary, source_cursor: int, version_cursors: Dictionary) -> Dictionary:
     return _apply_committed_player_fact_owned(target, fact, source_cursor, version_cursors, false)
 
-static func _apply_committed_player_fact_owned(target: Dictionary, fact: Dictionary, source_cursor: int, version_cursors: Dictionary, composed_senses: bool, cells: Dictionary = {}) -> Dictionary:
+static func _apply_committed_player_fact_owned(target: Dictionary, fact: Dictionary, source_cursor: int, version_cursors: Dictionary, composed_senses: bool, cells: Dictionary = {}, actor_snapshots:Dictionary={}) -> Dictionary:
     if fact.kind == "spatial" and fact.entity_uuid != null and fact.change_type in ["entity_entered", "entity_left"]:
         if fact.commit_event_uuid == null or not version_cursors.has(fact.commit_event_uuid):
             return failure("Spatial change at cursor %d lacks its recorded commit version" % source_cursor)
@@ -228,7 +238,7 @@ static func _apply_committed_player_fact_owned(target: Dictionary, fact: Diction
         var previous: int = target.spatial_commit_cursors.get(fact.entity_uuid, -1)
         if committed_at < previous and previous < source_cursor: return success(target)
         target.spatial_commit_cursors[fact.entity_uuid] = committed_at
-    return _apply_player_fact_owned(target, fact, source_cursor, composed_senses, cells)
+    return _apply_player_fact_owned(target, fact, source_cursor, composed_senses, cells, actor_snapshots)
 
 static func reduce_nodes(target: Dictionary, nodes: Array, versions: Array, observations: Array, updates: Array) -> Dictionary:
     return _reduce_nodes_owned(copy_target(target), nodes, versions, observations, updates)
@@ -239,6 +249,10 @@ static func _reduce_nodes_owned(result: Dictionary, nodes: Array, versions: Arra
     # Arbitrary public inputs first compose exhaustively. Only a context bound
     # to this exact committed state can carry that proof across operations.
     var composed_senses: bool = cells.get("composed",false)
+    # A fold-local snapshot can serve adjacent event inputs/deltas until a
+    # fact or observation edits actors. Mutation branches invalidate it before
+    # writing; no snapshots or readiness survive this transaction boundary.
+    var actor_snapshots:Dictionary={}
     var indexes = {}
     for row in versions: indexes[row.event_uuid] = row.source_index
     for observation in observations:
@@ -251,11 +265,12 @@ static func _reduce_nodes_owned(result: Dictionary, nodes: Array, versions: Arra
         if not indexes.has(node.uuid): return failure("Node has no recorded version")
         var admitted: Array = []
         while next < pending.size() and indexes[pending[next].event_uuid] <= indexes[node.uuid]:
+            actor_snapshots.clear()
             _observe(result, pending[next])
             if recorded != null: admitted.append(pending[next])
             next += 1
         var started: int = Time.get_ticks_usec() if profile != null else 0
-        var inputs: Dictionary = Transitions.actor_inputs(result,node) if recorded != null else {}
+        var inputs: Dictionary = Transitions.actor_inputs(result,node,actor_snapshots) if recorded != null else {}
         if profile != null: _profile_elapsed(profile, "actor_inputs", started)
         started = Time.get_ticks_usec() if profile != null else 0
         var update: Variant = world_updates.get(node.uuid)
@@ -265,7 +280,7 @@ static func _reduce_nodes_owned(result: Dictionary, nodes: Array, versions: Arra
         if profile != null: _profile_elapsed(profile, "world", started)
         started = Time.get_ticks_usec() if profile != null else 0
         if not node.canceled and node.fact != null:
-            var folded = _apply_committed_player_fact_owned(result, node.fact, int(indexes[node.uuid]), indexes, composed_senses, cells)
+            var folded = _apply_committed_player_fact_owned(result, node.fact, int(indexes[node.uuid]), indexes, composed_senses, cells, actor_snapshots)
             if not folded.ok: return folded
             if node.fact.kind == "sensory":
                 composed_senses = true
@@ -276,7 +291,7 @@ static func _reduce_nodes_owned(result: Dictionary, nodes: Array, versions: Arra
         started = Time.get_ticks_usec() if profile != null else 0
         if recorded != null:
             recorded.events.append({"event_uuid":node.uuid, "source_index":indexes[node.uuid],
-                "actor_inputs":inputs, "delta":Transitions.capture_delta(result,node,admitted,update)})
+                "actor_inputs":inputs, "delta":Transitions.capture_delta(result,node,admitted,update,actor_snapshots)})
         if profile != null: _profile_elapsed(profile, "captures", started)
     while next < pending.size():
         var observation: Dictionary = pending[next]

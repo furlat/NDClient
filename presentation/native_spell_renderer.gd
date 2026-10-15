@@ -20,6 +20,7 @@ var ready:bool=true
 var issues:Array=[]
 var witnesses:Array=[]
 var required_images:Dictionary={}
+var required_cpu_images:Dictionary={}
 var _owner:Node3D
 var _support:RefCounted
 var _epoch:int=-1
@@ -71,7 +72,7 @@ func _ensure(world:Node)->void:
         Layer.set_enabled(layer,false)
         spare_layers.append(layer)
 
-func prepare(compiled_groups:Array,cache:Dictionary,world:Node=null,prefetch_groups:Array=[],budget:Dictionary={},allow_optional:bool=true)->Dictionary:
+func prepare(compiled_groups:Array,cache:Dictionary,world:Node=null,prefetch_groups:Array=[],budget:Dictionary={},allow_optional:bool=true,optical_groups:Array=[])->Dictionary:
     var admission_started:int=Time.get_ticks_usec();var charged_before:int=budget.get("used_usec",0)
     var wanted:Dictionary={};var optional:Dictionary={};var clips:Array=[]
     for pair in [[compiled_groups,wanted],[prefetch_groups,optional]]:
@@ -82,7 +83,13 @@ func prepare(compiled_groups:Array,cache:Dictionary,world:Node=null,prefetch_gro
     for id in wanted:
         optional.erase(id)
         if not handles.has(id):clips.append(wanted[id].native_clip)
-    _required_ids=wanted
+    var optical:Dictionary=wanted
+    if not optical_groups.is_empty():
+        optical={}
+        for group in optical_groups:
+            for component in group.get("components",[]):
+                if accepts(component) and component.get("status")!="missing":optical[component.id]=component
+    _required_ids=optical
     var started:int=Time.get_ticks_usec()
     var result:Dictionary
     if not clips.is_empty() and not budget.is_empty() and budget.used_usec>=budget.limit_usec:
@@ -97,7 +104,7 @@ func prepare(compiled_groups:Array,cache:Dictionary,world:Node=null,prefetch_gro
     _ensure(world)
     if not budget.is_empty():budget.used_usec+=maxi(0,Time.get_ticks_usec()-admission_started-(budget.used_usec-charged_before))
     # Epoch reset owns all resources/instances, including required-image pins.
-    _required_ids=wanted
+    _required_ids=optical
     if result.ready:
         for id in wanted:
             if handles.has(id):continue
@@ -135,6 +142,13 @@ func _construct(component:Dictionary)->String:
     var clip:Dictionary=component.native_clip.duplicate(true)
     if component.native_cue.has("opacity_uniform"):clip.opacity_uniform=component.native_cue.opacity_uniform
     var handle=Factory.make(_owner,clip,0)
+    # Factory already measures its constructor stages. Preserve that breakdown
+    # in the live frame profile so an indivisible construction overrun is
+    # attributable without adding another set of timers around its internals.
+    var frame_phases:Dictionary=_owner.get_parent().profile.phases
+    for phase in handle.get("construction_phases",{}):
+        var name:String="native_construct_"+str(phase)
+        frame_phases[name]=frame_phases.get(name,0.0)+handle.construction_phases[phase]
     if not handle.error.is_empty():
         var error:String=handle.error;_prepare_failures[component.id]=error;Factory.close(handle);return error
     var seed:int=Components.effect_seed(component)
@@ -324,6 +338,9 @@ func sync(world:Node)->void:
     started=Time.get_ticks_usec()
     _support.sync(world.static_entries,world.visual_actors,world.camera)
     FrameProfile.end_phase(world.profile,"native_support_sync",started)
+    for phase in ["camera","floor","actors","retirement"]:
+        var name:String="native_support_"+str(phase)
+        world.profile.phases[name]=world.profile.phases.get(name,0.0)+_support.last_sync_phases[phase]
     started=Time.get_ticks_usec()
     for layer in groups.values():Layer.sync(layer,world)
     FrameProfile.end_phase(world.profile,"native_pass_sync",started)
@@ -407,7 +424,7 @@ func _pending(component:Dictionary,reason:String)->void:
 
 func close(world:Node=null)->void:
     for handle in handles.values():Factory.close(handle)
-    handles.clear();diagnostics.clear();witnesses.clear();issues.clear();required_images.clear()
+    handles.clear();diagnostics.clear();witnesses.clear();issues.clear();required_images.clear();required_cpu_images.clear()
     for layer in groups.values():Layer.close(layer)
     for layer in spare_layers:Layer.close(layer)
     groups.clear();spare_layers.clear()
@@ -425,8 +442,7 @@ func _image_requirements(world:Node)->void:
     # occurrence. Gather each actor/clip once before resolving delivery metadata.
     var actor_clips:Dictionary={}
     for handle_id in _required_ids:
-        if not handles.has(handle_id):continue
-        var component:Dictionary=handles[handle_id].component
+        var component:Dictionary=_required_ids[handle_id]
         for id in [component.actor_uuid,component.target_uuid]:
             if not actor_clips.has(id):actor_clips[id]={"Idle":true}
             if id==component.actor_uuid:actor_clips[id][component.cast_recipe.get("actionClip","")]=true
@@ -445,14 +461,17 @@ func _image_requirements(world:Node)->void:
                 for clip in actor_clips.get(id,{}):
                     path=entry.actor_layer.paths.get(clip,"")
                     if not path.is_empty():inputs[[path,slot]]=true
-    for input in inputs:key.append([input[0],input[1],inputs[input]])
+    for input in inputs:key.append([input[0],input[1],inputs[input],Support.socket_samples_ready(input[0],input[1],world.catalog_cache)])
     if key==_image_key:return
     _image_key=key
     var wanted:Dictionary={}
+    var cpu:Dictionary={}
     for input in inputs:
         if not _path_requirements.has(input):_path_requirements[input]=Support.required_paths(input[0],input[1],world.catalog_cache)
         var paths:Dictionary=_path_requirements[input]
         if inputs[input]:
             for value in paths.values():wanted[value]=true
+            cpu.merge(Support.cpu_required_paths(input[0],input[1],world.catalog_cache))
         elif not paths.is_empty():wanted[paths.solid]=true
     required_images=wanted
+    required_cpu_images=cpu

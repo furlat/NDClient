@@ -100,7 +100,7 @@ static func _reaction_casts(lineage:Dictionary,state:Dictionary,group:Dictionary
                 aim=cause.get("source_position",threat.get("last_visual_position"))
                 if aim!=null:break
             ancestor=graph.nodes.get(ancestor.get("parent_lineage"),{})
-        var recipe=Components.NativeSpells.recipe({"behavior_id":binding},cache)
+        var recipe: Dictionary=_spell_sources(binding,graph,cache).recipe
         var track=_cast_track(group,node,actor,recipe,binding,0.0,aim,graph,cache,float(commits[node.uuid]))
         if track.is_empty():continue
         var held:Dictionary=graph.reaction_contacts[node.uuid]
@@ -111,6 +111,14 @@ static func _reaction_casts(lineage:Dictionary,state:Dictionary,group:Dictionary
         track.source=Authoring.Catalog.source_pointer("catalog/condition_recipes.json",str(fact.condition.behavior_id)+"/reactionCastBinding",cache)
         graph.ends[node.uuid]=maxf(graph.ends.get(node.uuid,0),track.start_ms+track.duration_ms)
         group.duration_ms=maxf(group.duration_ms,track.start_ms+track.duration_ms)
+
+static func _spell_sources(behavior: String, graph: Dictionary, cache: Dictionary) -> Dictionary:
+    # Both selectors consume only the behavior and immutable authored documents.
+    # Applications retain their own timing/delivery below; share no runtime state.
+    if not graph.spell_sources.has(behavior):
+        graph.spell_sources[behavior] = {"recipe":Components.NativeSpells.recipe({"behavior_id":behavior},cache),
+            "selection":Components.NativeSpells.selection(behavior,cache)}
+    return graph.spell_sources[behavior]
 
 static func _children(node: Dictionary, graph: Dictionary) -> Array:
     var rows: Array = []
@@ -261,6 +269,7 @@ static func _schedule(node: Dictionary, start: float, state: Dictionary, group: 
             # begin at the authored action contact and can overlap its recovery.
             var child_start = finish if not recipe.get("actor",{}).get("enabled",false) and child.get("fact")!=null and child.fact.kind=="attack" else contact
             finish=maxf(finish,_schedule(child,child_start,state,group,graph,cache))
+        effect_commit=contact
     elif kind == "equipment" and not node.canceled:
         var actor = _actor(state,group,fact.source_entity_uuid,node,graph)
         var body = Authoring.body("equipment",actor,fact,cache)
@@ -315,7 +324,8 @@ static func _schedule(node: Dictionary, start: float, state: Dictionary, group: 
         for child in children: finish=maxf(finish,_schedule(child,start,state,group,graph,cache))
     elif kind == "spell" and not node.canceled:
         var actor = _actor(state,group,fact.source_entity_uuid,node,graph)
-        var recipe = Components.NativeSpells.recipe(fact,cache)
+        var sources = _spell_sources(str(fact.behavior_id),graph,cache)
+        var recipe: Dictionary = sources.recipe
         graph.recipes[node.uuid]=recipe
         var cast: Dictionary=recipe.get("cast",{})
         var application: Variant=fact.get("application")
@@ -334,7 +344,7 @@ static func _schedule(node: Dictionary, start: float, state: Dictionary, group: 
         var has_applications=false
         for child in children:
             if child.get("fact")!=null and child.fact.kind=="spell" and child.fact.get("application")!=null: has_applications=true
-        var selected:Dictionary=Components.NativeSpells.selection(str(fact.behavior_id),cache)
+        var selected:Dictionary=sources.selection
         var selected_delivery:Dictionary={}
         if not selected.is_empty():selected_delivery=SpellDelivery.selected_for(selected,fact)
         var shared_area:bool=not selected_delivery.is_empty() and selected_delivery.get("delivery",{}).get("scope")=="area"
@@ -391,10 +401,11 @@ static func _schedule(node: Dictionary, start: float, state: Dictionary, group: 
                 _held_contact(track,fact.entity_uuid,graph)
                 Tracks.body_keys(track,body,Authoring.clip(actor,body.actor.clip,cache))
                 track.holding_pose = fact.new_state != "alive"
-                var previous_pose:Dictionary=Authoring.load_data("catalog/life_state_context.json",cache).bodyPoses.get(fact.previous_state,{})
-                if fact.new_state=="dead" and previous_pose.get("bodyPose")==track.clip:
-                    # Dying/Stable already owns this terminal pose. Death does
-                    # not replay a fresh fall from a standing source frame.
+                if fact.new_state!="alive" and fact.previous_state in ["dying","stable","dead"]:
+                    # An already downed body stays down through stabilization
+                    # and death. Only a real recovery permits another fall.
+                    # The new state may select another rig-specific rest clip;
+                    # sample its endpoint without replaying its standing entry.
                     track.source_start_seconds=track.source_end_seconds
                     track.erase("source_time_keys")
                     track.duration_ms=0.0
@@ -461,7 +472,7 @@ static func compile_recorded(before: Dictionary, packet: Dictionary, cache: Dict
             for tile in update.tiles:
                 var key = Reducer.Audience.point_key(tile.position)
                 if not target.tiles.has(key) and not group.staged_tiles.has(key): group.staged_tiles[key] = tile.duplicate(true)
-        var graph = {"nodes":{},"first":{},"times":{},"starts":{},"ends":{},"recipes":{},"visited":{},"positions":{},"actor_inputs":{},"object_inputs":{},"contacts":{},"impact_contacts":{},"reaction_contacts":{},"last_motion":{},"casts":{},"damage_timings":{}}
+        var graph = {"nodes":{},"first":{},"times":{},"starts":{},"ends":{},"recipes":{},"visited":{},"positions":{},"actor_inputs":{},"object_inputs":{},"contacts":{},"impact_contacts":{},"reaction_contacts":{},"last_motion":{},"casts":{},"damage_timings":{},"spell_sources":{}}
         # Retain only authoritative blood receiving cells needed to reveal a
         # later residue increment. No future tile or full-map snapshot is made.
         graph.initial_tiles={}

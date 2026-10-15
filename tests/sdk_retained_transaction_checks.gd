@@ -125,6 +125,10 @@ func _initialize() -> void:
     var before: Dictionary=charge.arguments[0].duplicate(true)
     _object_winners(before,charge.arguments[1],cases["contract/audience_observe_1"].arguments[2])
     var first: Dictionary=charge.arguments[1].events[0].fact.duplicate(true)
+    # Actual spell facts do not mutate actor state. Repeated event-time inputs
+    # must retain the previous charge and survive later nested inventory writes.
+    var spell:Dictionary=cases["contract/fact/12_spell"].arguments[1].events[0].fact.duplicate(true)
+    spell.source_entity_uuid=before.observer_uuid
     var second: Dictionary=first.duplicate(true)
     second.charges_after=0;second.stack_count_after=0;second.item_destroyed=true
     var attack: Dictionary=cases["contract/fact/1_attack"].arguments[1].events[0].fact.duplicate(true)
@@ -142,14 +146,14 @@ func _initialize() -> void:
     later_contact.observer_position=[11,12]
     later_contact.entity_contacts_changed[before.observer_uuid].position=[11,12]
     var departure: Dictionary=cases["contract/fact/terminal_departure"].arguments[1].events[0].fact
-    var packet=_operation(before,charge.arguments[1],[first,attack,second,melee,equip,condition,removed,contact,later_contact,departure])
+    var packet=_operation(before,charge.arguments[1],[first,spell,spell,attack,second,spell,melee,equip,spell,condition,removed,contact,spell,later_contact,departure])
     var frozen_before=before.duplicate(true)
     var frozen_packet=packet.duplicate(true)
     var held: Array=[];var frozen: Array=[]
     var state=before
     for iteration in range(3):
         if iteration>0:
-            packet=_operation(state,charge.arguments[1],[attack,melee,equip,condition,removed,contact,later_contact,departure])
+            packet=_operation(state,charge.arguments[1],[spell,attack,spell,melee,equip,spell,condition,removed,contact,spell,later_contact,departure])
         var public=Reducer._reduce_operation_recorded(state,packet)
         var retained=Reducer._reduce_operation_retained(state,packet,true)
         check(public.ok and retained.ok,"Both transaction boundaries accept mutation sequence "+str(iteration))

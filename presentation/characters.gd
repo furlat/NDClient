@@ -186,6 +186,7 @@ static func sheet_paths(actor: Dictionary, clips: Array, cache: Dictionary) -> D
     var paths = {}
     var colour_paths = {}
     var geometry_slots = {}
+    var normal_sets = {}
     var gpu_only = {}
     var resources: Dictionary = _read(index.resources, cache)
     var components: Dictionary = _read(index.sheet_components, cache)
@@ -204,9 +205,11 @@ static func sheet_paths(actor: Dictionary, clips: Array, cache: Dictionary) -> D
                 if not companions.ok: return companions
                 paths.merge(companions.value)
                 gpu_only.merge(companions.value)
+                normal_sets.merge(companions.get("normal_sets",{}))
                 if effect.is_empty() and not companions.value.is_empty():geometry_slots[path]=layer.slot
     for path in colour_paths: gpu_only.erase(path)
-    return {"ok":true,"value":paths,"gpu_only":gpu_only,"cpu_required":colour_paths,"geometry_slots":geometry_slots}
+    normal_sets.make_read_only()
+    return {"ok":true,"value":paths,"gpu_only":gpu_only,"cpu_required":colour_paths,"geometry_slots":geometry_slots,"normal_sets":normal_sets}
 
 static func rest_sample(actor: Dictionary, rig: Dictionary, cache: Dictionary) -> Dictionary:
     var index: Dictionary = _read("catalog-index.json", cache)

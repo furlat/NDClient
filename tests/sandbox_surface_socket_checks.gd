@@ -131,6 +131,7 @@ func run() -> void:
     var missing_catalog := Sockets.resolve(fixture, "caster", "Attack5", 7, "E", pixel, lifted_painted)
     check(not missing_catalog.supported and missing_catalog.reason == "source_geometry_catalog_not_prepared", "Resolve cannot lazily reload a missing metadata catalog")
     fixture.catalog_cache[Geometry.TABLE] = cached
+    if "--compact" in OS.get_cmdline_user_args(): compact_samples(fixture,entries,rig)
     var report := {"checks":checks, "failures":failures, "release_surface_samples":evidence,
         "qualification":"Real delivered optical data with source-over ownership; no physical arbitrary-assembly or temporal-consistency claim"}
     FileAccess.open("res://generated/sandbox_surface_socket_checks.json", FileAccess.WRITE).store_string(JSON.stringify(report, "  "))
@@ -138,3 +139,47 @@ func run() -> void:
     await process_frame
     print("SURFACE_SOCKET_CHECKS ", checks, " failures=", failures.size())
     quit(0 if failures.is_empty() else 1)
+
+func compact_samples(fixture:Fixture,entries:Array,rig:Dictionary)->void:
+    var samples=load("res://presentation/surface_socket_samples.gd")
+    var sidecars={};var queries={}
+    for entry in entries:
+        for clip in entry.actor_layer.paths:
+            var path:String=entry.actor_layer.paths[clip]
+            var source:Dictionary=Geometry.record(path,entry.actor_layer.slot,fixture.catalog_cache)
+            var file:String=samples.file_for(path,source)
+            check(FileAccess.file_exists(file),"Actual fixture sidecar exists: "+path)
+            if not FileAccess.file_exists(file):return
+            var sidecar:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(file))
+            sidecars[path]={"source":source,"root":Geometry._root(source)}
+            if not queries.has(clip):queries[clip]={}
+            for key in sidecar.samples:queries[clip][key]=true
+    var original_images:Dictionary=fixture.source_images.duplicate()
+    var baseline_cache:Dictionary=fixture.catalog_cache.duplicate()
+    var compact_cache:Dictionary=fixture.catalog_cache.duplicate()
+    for path in sidecars:
+        check(samples.prepare(path,sidecars[path].source,sidecars[path].root,compact_cache),"Small sample metadata admits current source: "+path)
+    var count=0
+    for quarter in 4:
+        fixture.camera.position=Vector3(8,6.5319726474,8).rotated(Vector3.UP,quarter*PI/2)
+        fixture.camera.look_at(Vector3.ZERO)
+        for entry in entries:entry.node.basis=fixture.camera.basis.scaled_local(Vector3(-1,.7,1) if quarter==1 else Vector3.ONE)
+        for clip in queries:
+            var cases=[]
+            fixture.catalog_cache=baseline_cache;fixture.source_images=original_images
+            for key in queries[clip]:
+                var xy=key.split(",")
+                var sheet=Vector2i(int(xy[0]),int(xy[1]))
+                var frame=sheet.x/int(rig.cell_width)
+                var facing:String=rig.facing_rows.find_key(float(sheet.y/int(rig.cell_height)))
+                var pixel=Vector2(sheet.x%int(rig.cell_width)+.5,sheet.y%int(rig.cell_height)+.5)
+                var painted=_painted(entries[0],pixel)
+                cases.append([frame,facing,pixel,painted,Sockets.resolve(fixture,"caster",clip,frame,facing,pixel,painted)])
+            fixture.catalog_cache=compact_cache;fixture.source_images={}
+            for path in original_images:
+                if path.begins_with("/media/"):fixture.source_images[path]=original_images[path]
+            for case in cases:
+                var actual=Sockets.resolve(fixture,"caster",clip,case[0],case[1],case[2],case[3])
+                check(actual==case[4],"CPU-free optical sample retains painted owner/mask/depth/point q%d/%s/%s/%d/%s"%[quarter,clip,case[1],case[0],case[2]])
+                count+=1
+    evidence.append({"compact_samples_compared":count,"cpu_images_retained":fixture.source_images.size(),"qualification":"Exact assembled output with all depth/support/solid CPU images removed; four camera quarters including mirrored passage scale."})

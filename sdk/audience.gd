@@ -106,13 +106,25 @@ static func _reduce_senses_retained(expected_observer: String, previous: Variant
         hazards[parsed.value] = event.hazardous_cells_changed[key]
     var indexed = _member_cells(previous, expected_observer, cells)
     var result: Dictionary = previous.duplicate()
-    for field in ["entities", "objects", "spatial_effects", "effective_light_levels", "hazardous_cells"]:
-        result[field] = previous[field].duplicate()
+    # Retained member leaves are immutable. Detach a collection only when this
+    # event edits it; public reduce_senses/observe still deep-detach their result.
+    for fields in [["entities","entity_contacts_changed","entity_contacts_removed"],
+            ["objects","object_contacts_changed","object_contacts_removed"],
+            ["spatial_effects","spatial_effects_changed","spatial_effects_removed"]]:
+        if not event[fields[1]].is_empty() or not event[fields[2]].is_empty():
+            result[fields[0]] = previous[fields[0]].duplicate()
+    if not lights.is_empty() or not event.visible_cells_removed.is_empty():
+        result.effective_light_levels = previous.effective_light_levels.duplicate()
+    if not hazards.is_empty() or not event.visible_cells_removed.is_empty():
+        result.hazardous_cells = previous.hazardous_cells.duplicate()
     # Presence distinguishes current authoritative emptiness from an archived
     # protocol that never supplied optical source observations.
     if previous.has("light_sources") or event.has("light_sources_changed") or event.has("light_sources_removed"):
-        result.light_sources = previous.get("light_sources", {}).duplicate()
-        result.light_source_removals = previous.get("light_source_removals", {}).duplicate()
+        result.light_sources = previous.get("light_sources", {})
+        result.light_source_removals = previous.get("light_source_removals", {})
+        if not event.get("light_sources_changed", {}).is_empty() or not event.get("light_sources_removed", {}).is_empty():
+            result.light_sources = result.light_sources.duplicate()
+            result.light_source_removals = result.light_source_removals.duplicate()
         for identity in event.get("light_sources_removed", {}):
             result.light_sources.erase(identity)
             result.light_source_removals[identity] = event.light_sources_removed[identity]
@@ -126,13 +138,13 @@ static func _reduce_senses_retained(expected_observer: String, previous: Variant
     result.visible = _update_cells(indexed.visible, event.visible_cells_added, event.visible_cells_removed)
     result.seen = _update_cells(indexed.seen, event.seen_cells_added, [])
     for identity in event.entity_contacts_removed: result.entities.erase(identity)
-    result.entities.merge(event.entity_contacts_changed.duplicate(true), true)
+    if not event.entity_contacts_changed.is_empty():result.entities.merge(event.entity_contacts_changed.duplicate(true), true)
     for identity in event.object_contacts_removed: result.objects.erase(identity)
-    result.objects.merge(event.object_contacts_changed.duplicate(true), true)
+    if not event.object_contacts_changed.is_empty():result.objects.merge(event.object_contacts_changed.duplicate(true), true)
     for identity in event.spatial_effects_removed: result.spatial_effects.erase(identity)
-    result.spatial_effects.merge(event.spatial_effects_changed.duplicate(true), true)
-    result.effective_light_levels.merge(lights,true)
-    result.hazardous_cells.merge(hazards,true)
+    if not event.spatial_effects_changed.is_empty():result.spatial_effects.merge(event.spatial_effects_changed.duplicate(true), true)
+    if not lights.is_empty():result.effective_light_levels.merge(lights,true)
+    if not hazards.is_empty():result.hazardous_cells.merge(hazards,true)
     if event.sense_modes_changed and event.sense_modes != null:
         result.sense_modes = event.sense_modes.duplicate(true)
         result.sense_modes_hash = modes_signature(result.sense_modes)
@@ -392,8 +404,8 @@ static func _view_after(perception: Dictionary, observer: String, previous: Vari
         return _view_retained(perception, observer)
     var anchor: Dictionary = perception.members.get(observer, perception.members.values()[0])
     var result: Dictionary = anchor.duplicate()
-    result.effective_light_levels = previous.effective_light_levels.duplicate()
-    result.hazardous_cells = previous.hazardous_cells.duplicate()
+    result.effective_light_levels = previous.effective_light_levels
+    result.hazardous_cells = previous.hazardous_cells
     var composed: Dictionary = cells.get("view",{})
     if composed.is_empty() or not is_same(composed.source,previous):
         composed = _indexed_senses(previous)
@@ -406,6 +418,9 @@ static func _view_after(perception: Dictionary, observer: String, previous: Vari
             var parts: PackedStringArray = key.split(",")
             var point = [int(parts[0]), int(parts[1])]
             affected[point_key(point)] = point
+    if not affected.is_empty():
+        result.effective_light_levels = result.effective_light_levels.duplicate()
+        result.hazardous_cells = result.hazardous_cells.duplicate()
     var observers: Array = perception.members.keys()
     observers.sort()
     var members = {}

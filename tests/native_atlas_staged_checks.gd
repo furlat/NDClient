@@ -2,6 +2,37 @@ extends "res://tests/native_atlas_growth_checks.gd"
 ## Private receiving resources and future ground packets versus the unchanged
 ## complete planner. No gameplay events or modified artwork are used here.
 const Preparation=preload("res://presentation/world_preparation.gd")
+const FullCapture=preload("res://tests/native_light_capture_reference.gd")
+const Construction=preload("res://presentation/actor_construction.gd")
+class ActorMaterialHost extends Node3D:
+    var camera:Camera3D
+    var textures:Dictionary={}
+    var resources:Dictionary={}
+    var catalog_cache:Dictionary={}
+    var source_depth:bool=false
+    var source_normals:bool=false
+    var character_light_profile:String="original"
+    func texture(path:String)->Texture2D:return textures.get(path)
+
+func prepared_dynamic_actor(side:Dictionary,prepare_copy:bool)->Dictionary:
+    var host=ActorMaterialHost.new();side.world.add_child(host);host.camera=side.world.camera
+    var path="/fixture/staged-actor.png";host.textures[path]=side.texture
+    host.catalog_cache[Construction.CharacterGeometry.TABLE]={"records":{}}
+    var entry:Dictionary=single(side.world,side.texture,19,Vector2(256,512),true)
+    entry.material=ShaderMaterial.new();entry.material.shader=Construction.MODULAR_SHADER
+    entry.node.material_override=entry.material;entry.node.hide()
+    entry.actor_layer={"slot":"body","paths":{"Idle":path}};entry.scale=1.0;entry.placement.scale_x=1.0
+    var state:Dictionary=Construction.Conditions.material("actor",[])
+    var key:Array=Construction.material_key(state,host.textures,host.resources)
+    var rig={"cell_width":256,"cell_height":512,"facing_rows":{"SW":0}}
+    Construction.bind_source(host,entry,rig,path,0,"SW",state,key,[])
+    if prepare_copy:
+        var material:Dictionary=side.atlas.prepare_source_binding(entry,{},host,true)
+        side.dynamic_output=weakref(material.output.received_material)
+        check(side.atlas.adopt_source_binding(material),"Actual producer private actor materials enter the existing atlas preparation owner")
+    Construction.bind_source(host,entry,rig,path,1,"SW",state,key,[])
+    return entry
+
 class EmptyPreparationHost extends Node3D:
     var native_light_atlas
     var camera:Camera3D
@@ -59,6 +90,7 @@ func staged_case(source:Image,label:String,cap:bool,normals:bool,stale:bool=fals
     await first_draw(a,b,label+"-initial")
     var before:Image=a.view.get_texture().get_image()
     var old_positions:Dictionary=positions(a.atlas)
+    var initial_atlas_size:Vector2i=a.atlas.viewport.size
     var old_buffer:PackedFloat32Array=a.floor.ground_buffer.duplicate()
     var old_output:ShaderMaterial=a.floor.received_material
     var candidate=Node3D.new();candidate.visible=false;a.world.add_child(candidate)
@@ -116,11 +148,21 @@ func staged_case(source:Image,label:String,cap:bool,normals:bool,stale:bool=fals
         bindings[entry.node.get_instance_id()]=value
         jobs.append({"entry":entry,"prepared":value,"packet":packet_a if is_floor else {},
             "rows":packet_a.geometry_changes.changed if is_floor else [entry.placement]})
+    var full_prefix:Dictionary=FullCapture.begin_candidate(a.atlas,jobs,{},a.world)
+    while not FullCapture.capture_candidate(a.atlas,full_prefix,a.world):pass
+    FullCapture.compute_candidate(full_prefix)
     var prefix:Dictionary=Atlas.Delta.begin_candidate(a.atlas,jobs,{},a.world)
     while not Atlas.Delta.capture_candidate(a.atlas,prefix,a.world):pass
     var task:int=WorkerThreadPool.add_task(Atlas.Delta.compute_candidate.bind(prefix),false,"Qualify private atlas plan")
     while not WorkerThreadPool.is_task_completed(task):await process_frame
     WorkerThreadPool.wait_for_task_completion(task)
+    check(prefix.get("error","")==full_prefix.get("error",""),label+" sparse capture has the original full-prefix outcome")
+    if prefix.get("complete",false) and full_prefix.get("complete",false):
+        var plan:Dictionary=prefix.plan.duplicate();var expected:Dictionary=full_prefix.plan.duplicate()
+        for field in ["specs_ms","reservations_ms"]:plan.erase(field);expected.erase(field)
+        check(plan==expected and prefix.bind_ids==full_prefix.bind_ids,label+" sparse plan/reservation/bind order equals independently frozen full capture")
+        for id in prefix.floor_ids:
+            check(prefix.source_patches[id].prepared_addresses==full_prefix.source_patches[id].prepared_addresses,label+" complete future floor buffer/addresses equal frozen full capture")
     while not Atlas.Delta.prepare_candidate_binding(a.atlas,prefix,bindings):pass
     check(not prefix.has("error"),label+" passive private prefix reserves the complete exact input")
     await process_frame;await RenderingServer.frame_post_draw
@@ -139,6 +181,10 @@ func staged_case(source:Image,label:String,cap:bool,normals:bool,stale:bool=fals
         for side in [a,b]:
             var actor:Dictionary=side.world.actor_entries[0].duplicate();actor.source_version+=1
             side.world.entries[side.world.entries.size()-1]=actor;side.world.actor_entries=[actor]
+    if extra_mode=="prepared_dynamic_append":
+        for side in [a,b]:
+            side.late_actor=prepared_dynamic_actor(side,side==a)
+            side.world.actor_entries.append(side.late_actor)
     if extra_mode in ["append","changed_base"]:
         for side in [a,b]:
             var actor:Dictionary=single(side.world,side.texture,19,Vector2(512,512),true)
@@ -148,6 +194,12 @@ func staged_case(source:Image,label:String,cap:bool,normals:bool,stale:bool=fals
             else:side.late_actor=actor
     if extra_mode=="hover_after_prepare":
         for entry in [add_a[0],add_b[0],a.floor,b.floor]:entry.material.set_shader_parameter("highlighted",true)
+    if extra_mode=="retained_output_changed":
+        for side in [a,b]:
+            var retained:Dictionary=side.world.entries[1]
+            retained.material.set_shader_parameter("source_tint",Color(.4,.8,.6,1));retained.source_version=retained.get("source_version",0)+1
+            retained.material.set_shader_parameter("highlighted",true)
+
     if extra_mode=="water":
         for entry in [add_a[1],add_b[1]]:entry.material.set_shader_parameter("displayed_time_seconds",2.5)
     if stale:
@@ -165,8 +217,9 @@ func staged_case(source:Image,label:String,cap:bool,normals:bool,stale:bool=fals
     for entry in add_a:entry.node.reparent(a.world,false)
     for entry in add_b:entry.node.show()
     a.world.entries.append_array(add_a);b.world.entries.append_array(add_b)
-    if extra_mode=="append":
+    if extra_mode in ["append","prepared_dynamic_append"]:
         a.world.entries.append(a.late_actor);b.world.entries.append(b.late_actor)
+        a.late_actor.node.show();b.late_actor.node.show()
     publish_floor(a.floor,packet_a);publish_floor(b.floor,packet_b)
     if changed_visibility:
         for side in [a,b]:
@@ -175,17 +228,27 @@ func staged_case(source:Image,label:String,cap:bool,normals:bool,stale:bool=fals
             set_visibility(side.floor,values)
     publish(a,false,add_a+[a.floor]);publish(b,true,b.world.entries)
     check(a.atlas.last_reconcile_phases.get("prepared_receiver_bindings",0)==(0 if view_change=="basis" else 3 if stale or extra_mode=="missing_shell" else 4),label+" only current prepared receiver records are adopted")
-    check(a.atlas.last_reconcile_phases.get("prepared_output_materials",0)==(0 if view_change=="basis" else 2 if stale else 3),label+" only exact source versions adopt pre-copied outputs")
+    check(a.atlas.last_reconcile_phases.get("prepared_output_materials",0)==(0 if view_change=="basis" else 2 if stale else 4 if extra_mode=="prepared_dynamic_append" else 3),label+" only exact source versions adopt pre-copied outputs")
     check((a.atlas.last_reconcile_phases.get("prepared_receiver_materials",0)>0)==(view_change!="basis"),label+" actual receiver groups reuse only current private pre-copied materials")
     check(a.atlas.prepared_source_bindings.is_empty(),label+" publication releases temporary preparation ownership")
+    if extra_mode=="prepared_dynamic_append":
+        check(a.dynamic_output.get_ref()!=null and a.late_actor.received_material==a.dynamic_output.get_ref(),label+" actual dynamic extra keeps its accepted private output through static-prefix publication and cleanup")
+        check(a.atlas.last_reconcile_phases.get("output_created",0)==0,label+" accepted dynamic copy allocates no replacement output material")
+        check(not a.atlas.entry_specs[a.late_actor.node.get_instance_id()].has("prepared_output"),label+" dynamic extra detaches private preparation payload after exact output adoption")
+
     if extra_mode=="hover_after_prepare":
         for entry in [add_a[0],a.floor]:check(entry.received_material.get_shader_parameter("highlighted")==true,label+" current hover replaces the privately prepared output style without a source version change")
     check((a.atlas.last_reconcile_phases.get("prepared_prefix_specs",0)>0)==(not stale and view_change.is_empty() and not changed_visibility and extra_mode!="changed_base"),label+" exact private prefix accepted or unchanged transaction used after stale input")
     if extra_mode=="missing_shell":check(a.atlas.last_reconcile_phases.get("prepared_bulk_registered",0)==3,label+" an ordinary unprepared row preserves bulk list offsets for the remaining ready receivers")
     if extra_mode in ["removed_floor","replace_floor"]:check(a.atlas.last_reconcile_phases.get("prepared_bulk_registered",0)==4,label+" exact planned removals preserve bulk registration and final group/list ownership")
     if extra_mode=="plain_append":check(a.atlas.last_reconcile_phases.get("prepared_bulk_registered",0)==4,label+" exact static append publishes already-bound native receiver arrays")
+    if extra_mode in ["plain_append","retained_output_changed"]:
+        check(a.atlas.last_reconcile_phases.get("prepared_output_regions",0)==3,label+" exact future output regions publish without repeating shader writes")
+        check(a.atlas.last_reconcile_phases.get("resize_output_regions",0)==a.world.entries.size()-3,label+" retained growth uses the original bounded normalized-region writes")
+        check(a.atlas.last_reconcile_phases.get("prepared_style_receivers",0)==4,label+" exact prepared rows keep their already-bound visibility on first publication")
+
     if extra_mode=="group_replaced":check(a.atlas.last_reconcile_phases.get("prepared_bulk_registered",0)==0,label+" replaced actual group material uses the unchanged binding transaction")
-    check(a.atlas.viewport.size==Vector2i(8192,2048) and a.atlas.viewport.size==b.atlas.viewport.size,label+" prepared append grows using the unchanged bounded planner")
+    check(a.atlas.viewport.size==Vector2i(8192,initial_atlas_size.y*2) and a.atlas.viewport.size==b.atlas.viewport.size,label+" prepared append grows using the unchanged bounded planner")
     check(positions(a.atlas)==positions(b.atlas),label+" every reserved pixel address equals complete planning")
     var first_group:Dictionary=row_receiver(a.atlas,a.floor,"new-0").group
     var second_group:Dictionary=row_receiver(a.atlas,a.floor,"new-1").group
@@ -301,6 +364,8 @@ func run()->void:
     await staged_case(source,"staged-bulk-group-replaced",true,false,false,"",false,"group_replaced")
     await staged_case(source,"staged-bulk-missing-shell",true,false,false,"",false,"missing_shell")
     await staged_case(source,"staged-current-hover",true,false,false,"",false,"hover_after_prepare")
+    await staged_case(source,"staged-prepared-actor-extra",true,false,false,"",false,"prepared_dynamic_append")
+    await staged_case(source,"staged-retained-output-changed",true,false,false,"",false,"retained_output_changed")
     var report={"renderer":RenderingServer.get_current_rendering_method(),"checks":checks,"failures":failures,"cases":cases,
         "scope":"Private future source/spec/material/receiver preparation; exact source-version admission; changed ground packets; growth, cancellation and first-draw byte parity against complete original planning. No gameplay latency claim."}
     FileAccess.open("res://generated/native_atlas_staged_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))

@@ -26,16 +26,20 @@ static func snapshot_actor(actor: Dictionary) -> Dictionary:
         result.controlled_items = items
     return result
 
-static func actor_inputs(target: Dictionary, node: Dictionary) -> Dictionary:
+static func _captured_actor(target:Dictionary, identity:String, snapshots:Dictionary) -> Dictionary:
+    if not snapshots.has(identity):snapshots[identity] = snapshot_actor(target.actors[identity])
+    return snapshots[identity]
+
+static func actor_inputs(target: Dictionary, node: Dictionary, snapshots:Dictionary={}) -> Dictionary:
     var result = {}
     if node.fact != null:
         for field in ["entity_uuid", "source_entity_uuid", "target_entity_uuid", "observer_uuid"]:
             var identity: Variant = node.fact.get(field)
             if identity != null and target.actors.has(identity) and not result.has(identity):
-                result[identity] = snapshot_actor(target.actors[identity])
+                result[identity] = _captured_actor(target,identity,snapshots)
     return result
 
-static func capture_delta(target: Dictionary, node: Dictionary, observations: Array, update: Variant) -> Dictionary:
+static func capture_delta(target: Dictionary, node: Dictionary, observations: Array, update: Variant, snapshots:Dictionary={}) -> Dictionary:
     var delta = empty_delta()
     var actors = {}
     for observation in observations: actors[observation.actor.uuid] = true
@@ -55,7 +59,7 @@ static func capture_delta(target: Dictionary, node: Dictionary, observations: Ar
         if fact.kind == "spatial" and fact.entity_uuid != null and target.spatial_commit_cursors.has(fact.entity_uuid):
             delta.spatial_commit_cursors[fact.entity_uuid] = target.spatial_commit_cursors[fact.entity_uuid]
     for identity in actors:
-        if target.actors.has(identity): delta.actors[identity] = snapshot_actor(target.actors[identity])
+        if target.actors.has(identity): delta.actors[identity] = _captured_actor(target,identity,snapshots)
     for observation in observations:
         if observation.contact != null:
             delta.set.senses = snapshot_senses(target.senses)

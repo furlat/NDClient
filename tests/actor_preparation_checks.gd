@@ -133,7 +133,7 @@ func construction_ownership(index:Dictionary)->void:
             if value!=null:check(entry.material.get_shader_parameter(name)==value,"Hidden neutral initialization equals original binder: "+name)
     # The key owns a passive value snapshot, not a mutable frame sample.
     neutral.alpha=.25
-    check(prepared.entries.all(func(entry):return entry.bound_condition_key[0].alpha==1.0),"A later sampled material value cannot mutate prepared condition keys")
+    check(prepared.entries.all(func(entry):return entry.bound_condition_key[0].condition_alpha==1.0),"A later sampled material value cannot mutate prepared condition keys")
     var original_entries:Array=prepared.entries.duplicate()
     # Compare with the exact shared original constructor, under an independent owner.
     var reference=host_for(index)

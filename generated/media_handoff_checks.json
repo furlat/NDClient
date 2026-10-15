@@ -1,12 +1,16 @@
 {
-  "checks": 49,
+  "checks": 51,
   "evidence": {
     "environment": 85,
     "groups_prepared": 2,
-    "optional_completions": 2,
+    "optional_completions": 1,
     "required": 126
   },
-  "failures": [],
+  "failures": [
+    "Matching latest optional completion preserves encounter preload planning",
+    "First received activation needs no second required metadata task",
+    "Later queued event receives its exact media plan without a false preparation error"
+  ],
   "scope": "Exact authored source closure from operation-before, accepted group ownership, older current plus two queued operations, no early state/pins/readiness, immutable optional transfer, >2 fallback, same-epoch stale owner/reset/close. Headless only; no live latency claim.",
   "state": "res://.runtime/player-runs/20261011T223103.996259Z/state.json"
 }

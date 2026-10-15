@@ -71,14 +71,14 @@ func click_grid(position: Array) -> void:
     check(scene.pick_actor(screen).is_empty(),"Target click does not overlap an actor pixel")
     var motion = InputEventMouseMotion.new()
     motion.position = screen; motion.global_position = screen
-    root.push_input(motion,true)
+    scene.get_viewport().push_input(motion,true)
     var click = InputEventMouseButton.new()
     click.position = screen; click.global_position = screen
     click.button_index = MOUSE_BUTTON_LEFT; click.pressed = true
-    root.push_input(click,true)
+    scene.get_viewport().push_input(click,true)
     var release: InputEventMouseButton = click.duplicate()
     release.pressed = false
-    root.push_input(release,true)
+    scene.get_viewport().push_input(release,true)
     evidence.viewport_click = {"target":position,"screen":[screen.x,screen.y]}
 
 func observe_actor(id: String, samples: Array) -> void:

@@ -139,9 +139,10 @@ static func source_sizes(paths: Dictionary, cache: Dictionary) -> Dictionary:
     # Keep this small header cache separate: estimating the next action must not
     # replace the optional worker's much larger family header cache.
     var headers: Dictionary = cache.get("__required_headers",{})
+    var available: Dictionary = cache.get("__encounter_headers",{})
     var result = {}
     for path in paths:
-        if not headers.has(path): headers[path] = _png_size(Catalog.media_path(path))
+        if not headers.has(path): headers[path] = available[path] if available.has(path) else _png_size(Catalog.media_path(path))
         var header: Dictionary = headers[path]
         if not header.has("error"): result[path] = int(header.width)*int(header.height)*4
     cache.__required_headers = headers
@@ -154,6 +155,21 @@ static func estimate_bytes(estimates: Dictionary) -> Dictionary:
     for path in estimates:
         if estimates[path].has("bytes"): result[path] = int(estimates[path].bytes)
     return result
+
+static func selection_index(encounter:Dictionary)->Dictionary:
+    # Immutable metadata for the same ordered greedy budget walk. Unknown
+    # headers keep the original residency-dependent fallback on the scene.
+    var known:Dictionary=encounter.paths
+    var bytes:Dictionary=encounter.get("estimate_bytes",{})
+    var keys:Array=known.keys()
+    var prefix=PackedInt64Array([0])
+    var positions:Dictionary={}
+    for i in keys.size():
+        var path:String=keys[i]
+        if not bytes.has(path) or int(bytes[path])<0:return {}
+        positions[path]=i
+        prefix.append(prefix[-1]+int(bytes[path]))
+    return {"known":known,"ordered_paths":keys,"positions":positions,"prefix_bytes":prefix}
 
 static func estimate_summary(encounter: Dictionary) -> Dictionary:
     # Runs with metadata/header preparation, before the scene adopts a family.

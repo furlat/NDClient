@@ -95,11 +95,51 @@ static func contribution_amount(value:Dictionary,ellipses:Array)->float:
         if contribution.ellipses==ellipses:return float(contribution.amount)
     return 0.0
 
+static func prepare_landing(cache:Dictionary,reveal:Dictionary,pattern:String)->void:
+    # Both finite amounts have already been prepared by the received-shape
+    # worker. Keep only particles with a shape in this tile at either amount.
+    # Multiple simultaneous reveals retain the general evaluator below.
+    cache.erase("landing")
+    var value:Dictionary=cache.value;var source:Dictionary=cache.source
+    var position:Array=cache.position;var family:Dictionary=source.region.families.get(pattern,{})
+    if family.is_empty():return
+    var rows:Array=[];var ordinal:int=0
+    for contribution in value.get("contributions",[]):
+        var after=contribution_amount(reveal.after,contribution.ellipses)
+        var before=contribution_amount(reveal.before,contribution.ellipses)
+        var changed:bool=after>before and contribution.amount>=after
+        var full=float(contribution.amount)
+        var initial=full-(after-before) if changed else full
+        var before_fraction=maxf(0.,initial)/float(value.max_amount)
+        var after_fraction=maxf(0.,full)/float(value.max_amount)
+        for ellipse in contribution.ellipses:
+            var world=ellipse.duplicate();world.center=[ellipse.center[0]+position[0],ellipse.center[1]+position[1]]
+            for particle in template(source.region,world).particles:
+                var shapes:Dictionary=cache.particles.get(ordinal,{})
+                # Missing preparation is not an empty clipped shape. Keep the
+                # general evaluator if either finite amount was not prepared.
+                if (before_fraction>0. and not shapes.has(before_fraction)) or (after_fraction>0. and not shapes.has(after_fraction)):return
+                var first:Array=shapes.get(before_fraction,[])
+                var last:Array=shapes.get(after_fraction,[])
+                if not first.is_empty() or not last.is_empty():
+                    var time= schedule(particle,family) if changed else Vector2(-INF,0.)
+                    rows.append([time.x+time.y,first,last])
+                ordinal+=1
+    cache.landing={"before":reveal.before,"after":reveal.after,"pattern":pattern,"rows":rows}
+
 static func kernels(value:Dictionary,position:Array,active:Array,source:Dictionary,cache:Dictionary={}) -> Array:
     # Residue after-values are immutable. Each field keeps only its current
     # value's exact particle shapes; a new value/source discards those shapes.
     if not is_same(cache.get("value"),value) or cache.get("position")!=position or not is_same(cache.get("source"),source):
         cache.clear();cache.merge({"value":value,"position":position.duplicate(),"source":source,"particles":{}})
+    var prepared:Dictionary=cache.get("landing",{})
+    if active.size()==1 and not prepared.is_empty():
+        var reveal:Dictionary=active[0]
+        if reveal.pattern==prepared.pattern and (is_same(reveal.before,prepared.before) or reveal.before==prepared.before) \
+                and (is_same(reveal.after,prepared.after) or reveal.after==prepared.after):
+            var landed:Array=[];var age:float=reveal.age_seconds
+            for row in prepared.rows:landed.append_array(row[1] if age<row[0] else row[2])
+            return landed
     var result:Array=[];var style:Dictionary=source.region;var ordinal:int=0
     for contribution in value.get("contributions",[]):
         # Matching whole ellipse lists once per contribution is equivalent to

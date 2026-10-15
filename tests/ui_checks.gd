@@ -52,6 +52,62 @@ func run() -> void:
     var original_discovery: Dictionary = world.available_actions.duplicate(true)
     hud = HUD.new(); hud.world = world; root.add_child(hud)
     await settle_action_bar()
+    check(hud.actor_hud.initiative_buttons.keys()==state.hud_snapshot.initiative,"Initiative portraits preserve the actual disclosed server order")
+    check(hud.actor_hud.party_ids==state.audience.controlled,"Party portraits use disclosed controlled sheets")
+    check(hud.actor_hud.party.position.x==20,"Party stays on the left edge")
+    check(hud.actor_hud.party_buttons[actor_id].health==state.actors[actor_id].normal_hp,"Portrait HP comes from displayed actor state")
+    check(hud.actor_hud.party_buttons[actor_id].tooltip_text.contains("AC "+str(state.actors[actor_id].armor_class)),"Portrait inspect includes disclosed armor class")
+    var image: Texture2D=hud.actor_hud.party_buttons[actor_id].portrait
+    if image!=null: check(image.changed.is_connected(hud.actor_hud.party_buttons[actor_id].queue_redraw),"Async portrait image arrival refreshes source crop and redraw")
+    var enemy: String=state.hud_snapshot.initiative[1]
+    hud.actor_hud.initiative_buttons[enemy].emit_signal("pressed")
+    check(hud._inspect_actor().uuid==enemy and hud._action_actor().uuid==actor_id and world.issued.is_empty(),"Enemy portrait inspection cannot change command owner or issue a command")
+    hud._inspect_portrait(actor_id)
+    for resource in UI.sheet(state,actor_id).resources:
+        check(hud.actor_hud.resource_buttons[resource.key].tooltip_text==resource.label+": "+str(resource.current)+" / "+str(resource.maximum),"Resource tooltip retains exact displayed amount: "+resource.key)
+    var bar_identity= hud.bar.get_instance_id()
+    world.allow_commands=false
+    world.timeline.state=state.duplicate(true)
+    world.timeline.state.current_actor_uuid=enemy
+    world.timeline.revision+=1
+    await process_frame; await process_frame
+    check(hud.bar.get_instance_id()==bar_identity and hud.painted_actor==actor_id,"Enemy turn disables existing player bar without rebuilding it for the enemy")
+    check(hud.actor_hud.initiative_buttons[enemy].current_turn,"Initiative advances to displayed enemy turn independently of inspection")
+    world.timeline.state=state; world.timeline.revision+=1; world.allow_commands=true
+    await process_frame; await process_frame
+    hud.toggle_history(); await process_frame; await process_frame
+    check(hud.history_button.position.x>root.size.x*.75 and hud.history_button.get_rect().end.x<hud.end_button.position.x,"Log toggle sits beside End Turn on the right")
+    check(hud.history_panel.position.y<100 and absf(hud.history_panel.get_rect().end.y-(hud.end_button.position.y-12))<2,"Log spans from upper-right to just above End Turn")
+    key(KEY_ESCAPE); await process_frame
+    check(hud.history_panel.visible and hud.settings_open(),"Escape opens settings without hiding the combat log")
+    key(KEY_ESCAPE); hud.toggle_history(); await process_frame
+    world.notice_text = "Authored media metadata preparation did not complete; inspect the source error log."
+    await process_frame; await process_frame; await process_frame
+    check(hud.copy_notice.is_visible_in_tree(),"Error exposes Copy directly beside the visible message")
+    check(not hud.top.get_global_rect().intersects(hud.actor_hud.party.get_global_rect()),"Multiline error and Copy remain clear of left party portraits")
+    var copy_point: Vector2 = hud.copy_notice.get_global_rect().get_center()
+    check(hud.pointer_over_controls(copy_point),"Copy consumes its click instead of issuing a world action")
+    if DisplayServer.get_name()!="headless":
+        var prior_clipboard = DisplayServer.clipboard_get()
+        click(copy_point); await process_frame
+        var copied = JSON.parse_string(DisplayServer.clipboard_get())
+        check(copied!=null and copied.message==world.notice_text,"Click copies the exact error and diagnostic context")
+        check(hud.notice.text==world.notice_text and hud.copy_notice.text=="Copied","Copy feedback retains the error on screen")
+        DisplayServer.clipboard_set(prior_clipboard)
+    world.notice_text = ""
+    await process_frame
+    check(not hud.copy_notice.is_visible_in_tree(),"Copy and message row disappear when no notice is present")
+    var observed_position: Array = state.actors[actor_id].last_visual_position
+    check(not state.actors[actor_id].has("position"),"Recorded canonical actor uses the original last_visual_position schema")
+    world.visual_actors[actor_id] = {"row":{"position":observed_position,"base_height_steps":0}}
+    world.camera = Camera3D.new(); world.add_child(world.camera)
+    hud._update_ground_preview()
+    var cell_key = "%d,%d" % [observed_position[0],observed_position[1]]
+    check(world.ground_overlay.marks.has(cell_key),"Turn cell marker uses the rendered actor position without reading a nonexistent SDK field")
+    var marked={cell_key:{"fill_colour":Color(1,.5,0,.2)}}
+    hud._ground_mark(marked,observed_position,Color.WHITE)
+    check(marked[cell_key].fill_colour==Color(1,.5,0,.2),"Cursor/current-actor outline preserves computed AoE fill underneath")
+    world.camera.free(); world.camera = null; world.visual_actors.clear()
     check(not world.normals_visible and not hud.normals_button.button_pressed,"Normals preview starts off")
     check(hud.normals_button.get_global_rect().position.x>hud.grid_button.get_global_rect().end.x,"Normals control is beside Grid without overlapping it")
     var normal_point: Vector2 = hud.normals_button.get_global_rect().get_center()
@@ -109,17 +165,38 @@ func run() -> void:
     key(KEY_1)
     check(world.issued.size()==before,"catchup boundary rejects spending")
     world.allow_commands = true
+    await process_frame
     var origin: Button
     for button in hud.action_buttons:
         if button.get_meta("group") == "Spells": origin = button; break
-    origin.emit_signal("mouse_entered")
-    check(hud.popup.visible,"hover opens authored native variant choices")
+    click(origin.get_global_rect().get_center())
+    check(hud.popup.visible,"Native pointer opens authored variant choices")
     var grid = hud.popup.get_child(0).get_child(1).get_child(0)
     check(grid.get_child_count()==3,"popup contains only actual discovered variants")
     check(grid.get_child(2).disabled,"unaffordable native variant remains inspectable and disabled")
     check(hud.popup_bridge.has_point(origin.get_global_rect().get_center()),"continuous capture region includes source icon")
-    grid.get_child(1).emit_signal("pressed")
-    check(world.issued[-1].discovery_index==51,"variant selection dispatches the exact native upcast row")
+    # Force a native overlapping boundary without changing the production layout.
+    # Bar rebuilds append a newer sibling than the visible popup: paint Z alone
+    # must not let that lower action receive a popup choice's mouse event.
+    var underneath: Button = hud.shortcuts[0]
+    var choice: Button = grid.get_child(1)
+    await process_frame; await process_frame
+    var disabled_choice: Button = grid.get_child(2)
+    var disabled_offset: Vector2 = disabled_choice.get_global_rect().get_center()-hud.popup.global_position
+    hud.popup.global_position = underneath.get_global_rect().get_center()-disabled_offset
+    hud.popup_bridge = hud.popup.get_global_rect().merge(origin.get_global_rect())
+    var disabled_before: int = world.issued.size()
+    click(disabled_choice.get_global_rect().get_center())
+    check(world.issued.size()==disabled_before and hud.popup.visible,"Disabled overlapping native choice cannot click the underlying action")
+    var choice_offset: Vector2 = choice.get_global_rect().get_center()-hud.popup.global_position
+    hud.popup.global_position = underneath.get_global_rect().get_center()-choice_offset
+    hud.popup_bridge = hud.popup.get_global_rect().merge(origin.get_global_rect())
+    var choice_point: Vector2 = choice.get_global_rect().get_center()
+    check(underneath.get_global_rect().has_point(choice_point),"Native variant click overlaps a real underlying action button")
+    var choice_before: int = world.issued.size()
+    click(choice_point)
+    check(world.issued.size()==choice_before+1 and world.issued[-1].discovery_index==51,"Actual overlapping mouse dispatch selects only the exact native upcast row")
+    check(not hud.popup.visible,"Selecting a native variant closes its choice popup")
     before = world.issued.size()
     origin.emit_signal("mouse_entered")
     key(KEY_ESCAPE)

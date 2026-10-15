@@ -19,6 +19,23 @@ from devtools.player_server_acceptance.fixtures import configuration
 from delayed_backend import close_delayed_backend, start_delayed_backend
 from live_spell_profile import drive_blue
 from studio_gallery_spell_capture import setup as gallery_sorcerer_setup
+from dnd.ai.policies.basic import BASIC_POLICY_ID
+from dnd.core.content.encounters import EncounterRecipe, RosterControllerDefaults, RosterControllerKind
+
+
+def interactive_sorcerer(settings):
+    """Use the existing Gallery roster with ordinary backend AI opponents."""
+    slots = tuple(slot.model_copy(update={"controller_defaults": RosterControllerDefaults(
+        controller=RosterControllerKind.AI, participant_name=slot.roster_slot_id,
+        policy_id=BASIC_POLICY_ID)}) if slot.roster_slot_id == "blue" else slot
+        for slot in settings.recipe.roster_slots)
+    recipe = EncounterRecipe.create(**{
+        **settings.recipe.model_dump(exclude={"recipe_digest", "roster_slots", "deployment", "opening_policy"}),
+        "roster_slots": slots, "deployment": settings.recipe.deployment,
+        "opening_policy": settings.recipe.opening_policy})
+    return settings.model_copy(update={"game_id": "gallery_sorcerer", "recipe": recipe,
+        "assignments": tuple(seat for seat in settings.assignments if seat.seat_id == "amber"),
+        "credentials": tuple(seat for seat in settings.credentials if seat.seat_id == "amber")})
 
 
 def windows_path(path: Path) -> str:
@@ -127,8 +144,11 @@ async def run(args: argparse.Namespace) -> Path:
         raise RuntimeError("Godot executable was not found: " + str(args.godot))
     output = project / ".runtime/player-runs" / datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S.%fZ")
     output.mkdir(parents=True, mode=0o700)
-    spell_profile = args.scenario == "gallery_sorcerer"
-    settings, profile_steps = gallery_sorcerer_setup(output, 3) if spell_profile else (configuration(args.scenario, output), [])
+    sorcerer = args.scenario == "gallery_sorcerer"
+    spell_profile = sorcerer and args.test_script == "res://tests/live_spell_checks.gd" and not args.live_fireball_ui
+    settings, profile_steps = gallery_sorcerer_setup(output, 3) if sorcerer else (configuration(args.scenario, output), [])
+    if sorcerer and not spell_profile:
+        settings = interactive_sorcerer(settings)
     server_config = output / "server.json"
     private_json(server_config, settings.model_dump(mode="json"))
     port = args.port or available_port()
@@ -147,6 +167,14 @@ async def run(args: argparse.Namespace) -> Path:
             {"behavior":"spell.fire_bolt", "actor_name":"Expedition sorcerer", "offered_opponent":True}]
         client_values["blue_request"] = windows_path(output / "blue-request.json")
         client_values["blue_result"] = windows_path(output / "blue-result.json")
+    if args.live_fireball_ui:
+        client_values["live_fireball_ui"] = True
+        client_values["profile_steps"] = [
+            {"behavior":"action.environment.directional_door.open", "actor_name":"Expedition sorcerer", "display_name":"Open Door (Lantern gallery door)"},
+            {"behavior":"action.move", "actor_name":"Expedition sorcerer", "position":[26,6]},
+            {"behavior":"action.item.potion_haste.drink", "actor_name":"Expedition sorcerer"},
+            {"behavior":"spell.fireball", "actor_name":"Expedition sorcerer", "position":[32,8]},
+            {"behavior":"spell.fireball", "actor_name":"Expedition sorcerer", "position":[33,7]}]
     private_json(client_config, client_values)
     environment = os.environ.copy()
     environment["PYTHONPATH"] = os.pathsep.join((str(args.engine.resolve()),
@@ -173,7 +201,7 @@ async def run(args: argparse.Namespace) -> Path:
             if spell_profile:
                 blue_driver = asyncio.create_task(drive_blue(f"http://127.0.0.1:{port}", settings.credentials[1].token, output))
             native_args = [str(args.godot), "--path", windows_path(project)]
-            if spell_profile or args.profile_view_size is not None or args.profile_stop_stage is not None:
+            if sorcerer or args.profile_view_size is not None or args.profile_stop_stage is not None:
                 native_args.extend(["--rendering-method", "forward_plus", "--rendering-driver", "vulkan"])
             if args.headless:
                 native_args.extend(["--headless", "--max-fps", "60"])
@@ -181,6 +209,8 @@ async def run(args: argparse.Namespace) -> Path:
                 native_args.extend(["--quit-after", str(args.quit_after)])
             native_args.extend(["--script", args.test_script] if args.test_script else ["res://play.tscn"])
             native_args.extend(["--", "--config", windows_path(client_config)])
+            if args.live_fireball_ui:
+                native_args.append("--live-fireball-ui")
             if args.test_atlas_reference:
                 native_args.append("--reference-atlas=" + args.test_atlas_reference)
             if args.test_light_cap is not None:
@@ -242,7 +272,8 @@ def main() -> None:
     parser.add_argument("--scenario", choices=("crypt", "crypt_gallery", "gallery_sorcerer"), default="crypt_gallery", help="Backend encounter; crypt retains the original small baseline")
     parser.add_argument("--headless", action="store_true", help="Headless Godot for launch validation")
     parser.add_argument("--quit-after", type=int, default=0, metavar="FRAMES", help="Close after a bounded number of Godot frames")
-    parser.add_argument("--test-script", choices=("res://tests/player_startup_checks.gd", "res://tests/live_gallery_checks.gd", "res://tests/live_spell_checks.gd", "res://tests/player_wait_checks.gd", "res://tests/player_live_checks.gd", "res://tests/player_interaction_checks.gd", "res://tests/lighting_live_checks.gd", "res://tests/chest_live_checks.gd"), help="Run a bounded production-scene acceptance test")
+    parser.add_argument("--test-script", choices=("res://tests/player_startup_checks.gd", "res://tests/live_idle_ui_checks.gd", "res://tests/live_gallery_checks.gd", "res://tests/live_spell_checks.gd", "res://tests/player_wait_checks.gd", "res://tests/player_live_checks.gd", "res://tests/player_interaction_checks.gd", "res://tests/lighting_live_checks.gd", "res://tests/chest_live_checks.gd"), help="Run a bounded production-scene acceptance test")
+    parser.add_argument("--live-fireball-ui", action="store_true", help="Live spell profile: ordinary Gallery AI setup and native Fireball selection/hover/Confirm input")
     parser.add_argument("--test-command-delay-ms", type=int, default=0, help="Acceptance only: hold the first real command before forwarding it")
     parser.add_argument("--test-atlas-reference", default="", help="Gallery profiling only: load a frozen reference atlas script instead of the current atlas")
     parser.add_argument("--test-light-cap", choices=("on", "off"), help="Gallery profiling only: compare live movement with or without the light cap")
@@ -252,12 +283,14 @@ def main() -> None:
     parser.add_argument("--profile-view-size", type=float, help="Live Gallery profiling: fixed orthographic camera size, with a 1600×960 native window")
     parser.add_argument("--profile-stop-stage", type=int, help="Live Gallery profiling: stop after 9–11 route stages and retain a three-second idle control instead of the full zoom/cap matrix")
     args = parser.parse_args()
+    if args.live_fireball_ui and (args.scenario != "gallery_sorcerer" or args.test_script != "res://tests/live_spell_checks.gd"):
+        parser.error("Live Fireball UI requires Gallery sorcerer and live_spell_checks.gd")
     if args.test_atlas_reference and args.test_script != "res://tests/live_gallery_checks.gd":
         parser.error("Reference atlas requires the live Gallery acceptance script")
     if args.test_light_cap is not None and args.test_script != "res://tests/live_gallery_checks.gd":
         parser.error("Light-cap profiling requires the live Gallery acceptance script")
-    if args.scenario == "gallery_sorcerer" and args.test_script != "res://tests/live_spell_checks.gd":
-        parser.error("Gallery sorcerer requires the live spell profiling script")
+    if args.scenario == "gallery_sorcerer" and args.test_script not in (None, "res://tests/live_spell_checks.gd", "res://tests/live_idle_ui_checks.gd"):
+        parser.error("Gallery sorcerer supports normal play or the live spell profiling script")
     if args.test_script == "res://tests/live_spell_checks.gd" and args.scenario != "gallery_sorcerer":
         parser.error("Live spell profiling requires the Gallery sorcerer setup")
     if args.profile_view_size is not None:

@@ -9,6 +9,7 @@ var state: Dictionary = {}
 var queue: Array = []
 var current: Dictionary = {}
 var display_ms = 0.0
+var media_target_ms = 0.0
 var group_start_ms = 0.0
 var commit_index = 0
 var sequence = -1
@@ -70,6 +71,7 @@ var trace_revision: int:
 func accept(message: Dictionary) -> void:
     if message.kind == "initialization":
         initialization_revision += 1
+        media_target_ms = display_ms
         pending_world = {}; _world_plan = {}; waiting_for_world = false
         _replay_prepared_plan={}
         _preview_world = {}; _preview_signature = []
@@ -107,6 +109,9 @@ func busy() -> bool:
     return not current.is_empty() or not queue.is_empty()
 
 func advance(delta_ms: float) -> void:
+    # Readiness proves the proposed frame before any event/state publication.
+    # Waiting never accrues extra time; retry from the unchanged display clock.
+    media_target_ms = display_ms + maxf(0,delta_ms)
     if world_ready.is_valid():
         _advance_with_world_preparation(delta_ms)
     else:
@@ -253,11 +258,12 @@ func _advance_with_world_preparation(delta_ms: float) -> void:
     if paused or state.is_empty(): return
     waiting_for_world = false; waiting_for_media = false
     var first: Dictionary = current if not current.is_empty() else (queue[0] if not queue.is_empty() else {})
+    var proved_target: float = display_ms+maxf(0,delta_ms)
     if media_ready.is_valid() and not media_ready.call(first):
         waiting_for_media = true
         return
     if pending_world.is_empty():
-        var plan = _plan_world_advance(display_ms+maxf(0,delta_ms))
+        var plan = _plan_world_advance(display_ms+maxf(0,delta_ms),first,proved_target)
         waiting_for_media = plan.media_wait
         if not plan.boundary:
             _apply_world_plan(plan)
@@ -295,7 +301,7 @@ func _actors_for(group: Dictionary, local: float) -> Dictionary:
         if local>=float(group.get("staged_at_ms",{}).get(id,0.0)): result[id] = group.staged_actors[id]
     return result
 
-func _plan_world_advance(target: float) -> Dictionary:
+func _plan_world_advance(target: float, ready_group: Dictionary = {}, ready_target: float = -INF) -> Dictionary:
     # Plan only ordinary trace/actor progress preceding the next world boundary.
     # No state copy or source enumeration occurs on an ordinary animation frame.
     var group: Dictionary = current
@@ -309,7 +315,10 @@ func _plan_world_advance(target: float) -> Dictionary:
         start = maxf(cursor,float(group.get("preview_start_ms",cursor)))
         if target < start: return {"segments":[],"display_ms":target,"boundary":false,"media_wait":false}
         cursor = start; first_commit = 0; activate = true
-    if media_ready.is_valid() and not media_ready.call(group):
+    # The live caller already checked this exact group and proposed clock.
+    # This proof lasts only for this call; independent planners still check.
+    var ready_proved: bool = is_same(group,ready_group) and target==ready_target
+    if not ready_proved and media_ready.is_valid() and not media_ready.call(group):
         return {"segments":[],"display_ms":cursor,"boundary":false,"media_wait":true}
     return _plan_group_world(group,start,first_commit,cursor,target,activate,_group_stage_times(group))
 
@@ -441,7 +450,7 @@ func _world_candidate(plan: Dictionary) -> Dictionary:
             actor_layers.append(component);actor_layer_ids[component.id]=true
     return {"key":[initialization_revision,revision,last.group.operation_sequence,last.group.id,last.start_ms,last.end_commit,last.local_ms,last.complete],
         "preparation_key":[initialization_revision,world_revision,_support_signature(),last.group.operation_sequence,last.group.id,last.end_commit,last.local_ms,last.complete],
-        "source_group_id":last.group.id,
+        "source_group_id":last.group.id,"source_local_ms":last.local_ms,
         "state":snapshot,"presentation_state":presented,"staged_tiles":supports,"staged_actors":_actors_for(group,last.local_ms),
         "actor_samples":Tracks.samples(group.get("actor_tracks",[]),last.local_ms),"actor_layers":actor_layers,
         "changes":changes,"display_ms":plan.display_ms,"revision":next_revision,"world_revision":next_world_revision,

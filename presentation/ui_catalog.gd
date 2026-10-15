@@ -26,7 +26,9 @@ static func descriptor(state: Dictionary, id: String, exact = null) -> Dictionar
 
 static func action_key(row: Dictionary, state: Dictionary, cache: Dictionary, variant: bool = false) -> String:
     # Weapon buttons and carried-item actions retain their admitted item identity.
-    var actor: Dictionary = state.get("actors",{}).get(state.get("current_actor_uuid"),{})
+    var actor_id = row.get("discovery_actor_uuid")
+    if actor_id==null: actor_id=state.get("current_actor_uuid")
+    var actor: Dictionary = state.get("actors",{}).get(actor_id,{})
     if row.get("source_item_uuid") != null:
         for item in inventory(actor):
             if item.item_uuid == row.source_item_uuid: return item_key(item,state,cache)
@@ -218,8 +220,33 @@ static func action_text(row: Dictionary) -> String:
     if row.get("restricted_action_budget") != null: parts.append(str(row.restricted_action_budget))
     var cost = cost_text(row)
     if not cost.is_empty(): parts.append(cost)
+    if row.get("requires_concentration",false): parts.append("Concentration")
+    var outcome = outcome_text(row)
+    if not outcome.is_empty(): parts.append(outcome)
     if not available(row): parts.append(str(row.get("availability_status","Unavailable")).replace("_"," ").capitalize())
     if not str(row.get("description","")).is_empty(): parts.append(str(row.description))
+    return "\n".join(parts)
+
+static func outcome_text(row: Dictionary) -> String:
+    # Native actor-baseline facts, never an invented target hit probability.
+    var profile = row.get("outcome_profile")
+    if profile==null: return ""
+    var parts: Array[String] = []
+    if profile.get("attack_bonus")!=null:
+        parts.append("Attack %+d · actor baseline" % int(profile.attack_bonus))
+    if profile.get("save_dc")!=null:
+        parts.append("DC %d %s save" % [int(profile.save_dc),str(profile.get("save_ability",""))])
+    var rolls: Array[String] = []
+    for roll in profile.get("damage_rolls",[]):
+        var dice = "%dd%d" % [int(roll.dice_count),int(roll.die_size)] if int(roll.dice_count)>0 else ""
+        var flat = int(roll.flat_bonus)
+        if dice.is_empty(): dice=str(flat)
+        elif flat!=0: dice+="%+d" % flat
+        rolls.append(dice+" "+str(roll.damage_type))
+    if not rolls.is_empty(): parts.append("Damage: "+" + ".join(rolls))
+    if profile.get("half_damage_on_save",false): parts.append("Half damage on successful save")
+    if row.get("num_projectiles")!=null and int(row.num_projectiles)>1:
+        parts.append("%d projectiles · damage per projectile" % int(row.num_projectiles))
     return "\n".join(parts)
 
 static func equip_intent(item_uuid: String, slot: String) -> Dictionary:

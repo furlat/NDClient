@@ -62,13 +62,47 @@ func parallel_sources(environment: Dictionary) -> void:
     var closing = Media.create()
     Media.demand(closing,wanted,wanted)
     Media.poll(closing)
-    check(Media.diagnostics(closing).decode_jobs==4 and closing.pending.size()==2,"Close fixture owns four actual workers and two undispatched requests")
+    check(Media.diagnostics(closing).decode_jobs==4 and Media.diagnostics(closing,true).pending==wanted.size(),"Close fixture owns bounded workers and accounts for every unpublished request")
     var started = Time.get_ticks_msec()
     Media.close(closing)
     check(closing.decode_jobs.is_empty() and closing.pending.is_empty() and closing.queued.is_empty()
         and Media.poll(closing).is_empty() and not Media.ready(closing,wanted),"Close joins every owned worker and never publishes unfinished sources")
     parallel_evidence = {"sources":wanted.keys(),"publication_order":published,"worker_limit":4,
         "observed_peak":peak,"close_ms":Time.get_ticks_msec()-started}
+
+func finite_batches(environment:Dictionary)->void:
+    var source:String=environment.required.keys()[0]
+    var absolute:String=Catalog.media_path(source)
+    var reference:Image=Image.load_from_file(absolute)
+    var wanted:Dictionary={}
+    for i in 18:wanted["batch-source-"+str(i)]=absolute
+    var data=Media.create()
+    Media.demand(data,wanted,wanted)
+    Media.poll(data,false,false)
+    var deadline=Time.get_ticks_msec()+10000
+    while not data.decode_jobs.all(func(job):return WorkerThreadPool.is_task_completed(job.task)) and Time.get_ticks_msec()<deadline:await process_frame
+    var completed:int=0
+    for job in data.decode_jobs:completed+=job.result.get("images",[]).size()
+    check(completed==16 and data.pending.size()==2 and data.decode_jobs.size()==4,
+        "Four finite workers decode sixteen real PNGs without a scene publication or per-image redispatch")
+    check(data.resident.is_empty() and not Media.ready(data,wanted) and Media.diagnostics(data,true).pending==18,
+        "Completed batches preserve exact unpublished readiness and pending accounting")
+    # Cancellation can discard later members of an already completed batch.
+    var remaining:Dictionary={}
+    for i in [3,7,11,15,17]:remaining["batch-source-"+str(i)]=absolute
+    Media.demand(data,remaining,remaining)
+    var published:Array=[]
+    deadline=Time.get_ticks_msec()+10000
+    while (not data.decode_jobs.is_empty() or not data.pending.is_empty()) and Time.get_ticks_msec()<deadline:
+        var result:Dictionary=Media.poll(data)
+        if result.is_empty():await process_frame;continue
+        check(remaining.has(result.path) and not published.has(result.path),"Changed demand publishes each retained batch member once")
+        check(result.image.get_data()==reference.get_data(),"Batch worker preserves original PNG pixels")
+        check(not Media.ready(data,{result.path:true}),"Completed batch member is not ready before publication")
+        Media.published(data,result);published.append(result.path)
+    check(published.size()==remaining.size() and Media.ready(data,remaining) and data.queued.is_empty(),
+        "Changed demand drains retained sources and discards cancelled unpublished batch members")
+    Media.close(data)
 
 func held_decode(request: Dictionary, result: Dictionary, release: Semaphore) -> void:
     release.wait()
@@ -139,6 +173,81 @@ func completed_later(environment: Dictionary, optional_slots: bool) -> void:
     check(Media.ready(data,wanted) and Media.boot_ready(data) and data.decoded==6,prefix+": final required gate completes after all originals publish once")
     Media.close(data)
 
+func externally_satisfied_worker(path:String) -> void:
+    var data:Dictionary=Media.create()
+    var exact:Dictionary={path:Catalog.media_path(path)}
+    var encounter:Dictionary={"revision":1,"paths":exact,"environment":{path:true},"fixtures":{},"gpu_only":{},"cpu_required":{path:true},
+        "estimates":Encounter.estimates(exact,{path:true},{},{}),"errors":[]}
+    encounter.estimate_summary=Encounter.estimate_summary(encounter)
+    Media.adopt_encounter(data,encounter,1)
+    Media.demand(data,exact,{path:true})
+    Media.poll(data)
+    check(data.decode_jobs.size()==1 and data.pending.is_empty() and data.queued.has(path),
+        "External-publication fixture retains one real PNG worker owner")
+    var image:Image=Image.new()
+    check(image.load(Catalog.media_path(path))==OK,"External publication reads the same actual PNG")
+    var loaded_source:Dictionary={"path":path,"cpu_bytes":image.get_data_size(),"gpu_bytes":image.get_width()*image.get_height()*4}
+    Media.published(data,loaded_source)
+    var noops:int=data.demand_noops
+    Media.demand(data,exact,{path:true})
+    check(data.demand_noops==noops+1 and Media.ready(data,exact) and data.queued.has(path) and data.decode_jobs.size()==1,
+        "Satisfied external publication keeps immutable demand eligible without releasing an active worker")
+    check(Media.diagnostics(data,true).pending==1,"Active worker remains accounted after external publication")
+    var completed:Dictionary=await loaded(data)
+    check(completed.has("image") and completed.image.get_data()==image.get_data(),
+        "Retained worker completion preserves the exact external PNG bytes")
+    if completed.has("image"):Media.published(data,completed)
+    check(data.queued.is_empty() and Media.diagnostics(data,true).pending==0 and Media.ready(data,exact),
+        "Ordinary worker completion clears ownership once without losing published readiness")
+    Media.close(data)
+
+func removed_optional_cpu(path:String) -> void:
+    var data:Dictionary=Media.create()
+    var absolute:String=Catalog.media_path(path)
+    var estimates:Dictionary=Encounter.estimates({path:absolute},{path:true},{},{})
+    for synthetic in ["a","c","outside"]:estimates[synthetic]={"bytes":16}
+    var family:Dictionary={"revision":1,"paths":{"a":"/test/a.png",path:absolute,"c":"/test/c.png"},
+        "environment":{},"fixtures":{},"gpu_only":{},"cpu_required":{},"errors":[],"estimates":estimates}
+    family.estimate_bytes=Encounter.estimate_bytes(estimates)
+    family.estimate_summary=Encounter.estimate_summary(family)
+    for field in ["paths","environment","fixtures","gpu_only","cpu_required","estimate_bytes","estimate_summary"]:family[field].make_read_only()
+    family.selection_index=Encounter.selection_index(family)
+    family.selection_index.positions.make_read_only();family.selection_index.ordered_paths.make_read_only()
+    family.selection_index.make_read_only();family.make_read_only()
+    data.budget_bytes=int(estimates[path].bytes)+32
+    Media.adopt_encounter(data,family,1)
+    var old:Dictionary={"a":"/test/a.png",path:absolute,"outside":"/test/outside.png"}
+    Media.demand(data,old)
+    for synthetic in ["a","outside"]:Media.published(data,{"path":synthetic,"cpu_bytes":8,"gpu_bytes":8})
+    var original:Dictionary=await loaded(data)
+    check(original.has("image") and original.path==path,"Removed-role fixture decodes actual original PNG with initial CPU ownership")
+    if not original.has("image"):Media.close(data);return
+    Media.published(data,original);Media.boot_ready(data);Media.demand(data,old)
+    Media.demand(data,old,{},{},{path:true})
+    check(Media.release_cold_images(data,-1)==[path] and data.resident[path].cpu_bytes==0,
+        "Actual GPU-only role releases CPU bytes while original resident fallback remains CPU-retaining")
+    var current:Dictionary={"a":"/test/a.png"}
+    Media.demand(data,current)
+    check(data.demand_counts.selection_deferred and data.preload_selected.has(path) and Media.ready(data,current),
+        "Removed GPU role retains capped optional source without holding current received source")
+    check(not data.selected_ready.has(path) and data.pending.size()==1 and data.pending[0].path==path,
+        "Removed non-priority GPU role truthfully queues missing optional CPU even with no old backlog")
+    var completed:Dictionary={}
+    while completed.is_empty():
+        completed=Media.poll_plan(data)
+        if completed.is_empty():await process_frame
+    data.demand_precomputation=completed.value.demand_precomputation
+    Media.demand(data,current)
+    Media.published(data,{"path":"c","cpu_bytes":8,"gpu_bytes":8})
+    var restored:Dictionary=await loaded(data)
+    check(restored.has("image") and restored.path==path and restored.image.get_data()==original.image.get_data(),
+        "Optional CPU recovery preserves exact original PNG pixels")
+    if restored.has("image"):Media.published(data,restored)
+    check(Media.ready(data,current) and data.selected_ready.has(path) and data.resident[path].cpu_bytes>0 \
+        and data.pending.is_empty() and Media.diagnostics(data).pinned_bytes<=data.budget_bytes,
+        "Recovered removed-role source restores CPU readiness and exact capped accounting")
+    Media.close(data)
+
 func run() -> void:
     var parsed = Protocol.parse_json(FileAccess.get_file_as_bytes("res://.runtime/player-runs/20261011T223103.996259Z/state.json"))
     check(parsed.ok,"Actual disclosed fixture source state parses")
@@ -183,7 +292,10 @@ func run() -> void:
         check(data.decoded==2 and Media.diagnostics(data,true).pending==0 and Media.diagnostics(data,true).resident_sheets==1,
             "Two worker requests retain one original source residency and truthful queue accounting")
     Media.close(data)
+    await removed_optional_cpu(path)
+    await externally_satisfied_worker(path)
     await parallel_sources(environment)
+    await finite_batches(environment)
     await completed_later(environment,false)
     await completed_later(environment,true)
     var report = {"checks":checks,"failures":failures,"source":path,"parallel":parallel_evidence,

@@ -139,6 +139,7 @@ func run() -> void:
         metadata_result = Media.poll_plan(metadata)
         if metadata_result.is_empty(): await process_frame
     check(not metadata_result.is_empty(),"Worker metadata preparation completes")
+    check(not metadata_result.has("error") and metadata_result.get("complete",false),"Successful authored worker completion is consumable without a false media error")
     if not metadata_result.is_empty():
         check(metadata_result.value.required==resting.required and metadata_result.value.environment_required==sources.required,
             "Worker source plan is isolated from later scene dictionary membership changes")

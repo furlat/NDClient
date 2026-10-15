@@ -33,10 +33,10 @@ var prepared_groups: Dictionary={}
 var pending_evidence: Array=[]
 var _native_prepare_key:Array=[]
 var _native_prepare_groups:Array=[]
+var _native_optical_groups:Array=[]
 var _native_prepare_components:Array=[]
 var _native_prepare_records:Array=[]
 const NATIVE_PREFETCH_MS=4000.0
-const NATIVE_PREFETCH_OCCURRENCES=24
 const NATIVE_CONSTRUCTION_USEC=2000
 var _native_budget:Dictionary={"frame":-1,"used_usec":0,"limit_usec":NATIVE_CONSTRUCTION_USEC}
 var _optional_components:Array=[]
@@ -102,7 +102,9 @@ func _native_closure(groups:Array,world:Node,cache:Dictionary)->Dictionary:
     # these resources. Compare the actual owner values (including suppression,
     # removal clocks and spatial footprints), not just UUIDs or global revision.
     # Deep snapshots prevent a later in-place owner update changing an old key.
-    var key:Array=[world.timeline.group_start_ms,world.timeline.condition_owners.duplicate(true),world.timeline.spatial_effect_owners.duplicate(true)]
+    var start:float=world.timeline.group_start_ms
+    if world.timeline.current.is_empty() and groups.any(func(group):return group.has("id")):start=world.timeline.display_ms
+    var key:Array=[start,world.timeline.condition_owners.duplicate(true),world.timeline.spatial_effect_owners.duplicate(true)]
     for group in groups:key.append(group.id if group.has("id") else group.get("components",[]).map(func(item):return item.id))
     for record in _native_prepare_records:
         if record.key==key:return record
@@ -111,7 +113,7 @@ func _native_closure(groups:Array,world:Node,cache:Dictionary)->Dictionary:
     for id in world.timeline.spatial_effect_owners:areas[id]=world.timeline.spatial_effect_owners[id].duplicate()
     var persistent:Array=Conditions.native_samples(owners,world.timeline.display_ms,cache)
     persistent.append_array(Conditions.NativePersistent.spatial_samples(areas,world.timeline.display_ms,cache))
-    var at:float=world.timeline.group_start_ms
+    var at:float=start
     for group in groups:
         at=maxf(at,float(group.get("preview_start_ms",at)))
         for commit in group.get("commits",[]):
@@ -146,7 +148,23 @@ func ensure_epoch(world: Node) -> void:
     if epoch!=world.timeline.initialization_revision:
         close(world);epoch=world.timeline.initialization_revision
 
-func prepare(groups: Array,cache: Dictionary,world: Node=null,admission:Dictionary={},allow_optional:bool=true) -> Dictionary:
+static func due_groups(groups:Array,world:Node,through_ms:float)->Array:
+    if is_inf(through_ms):return groups
+    var result:Array=[]
+    var start:float=world.timeline.group_start_ms if not world.timeline.current.is_empty() else world.timeline.display_ms
+    for group in groups:
+        start=maxf(start,float(group.get("preview_start_ms",start)))
+        var components:Array=[]
+        for component in group.get("components",[]):
+            var at:float=float(component.get("absolute_start_ms",start+float(component.get("start_ms",0.0))))
+            if group.get("preparation_always_due",false) or at<=through_ms+0.000001:components.append(component)
+        # Preserve the original group owner for blood preparation/retirement.
+        # Only this preparation view is narrowed; timeline records stay intact.
+        result.append({"id":group.get("id",""),"components":components})
+        start+=float(group.get("duration_ms",0.0))
+    return result
+
+func prepare(groups: Array,cache: Dictionary,world: Node=null,admission:Dictionary={},allow_optional:bool=true,through_ms:float=INF) -> Dictionary:
     var budget:Dictionary=_native_budget if admission.is_empty() else admission
     if budget.frame!=Engine.get_process_frames():budget.frame=Engine.get_process_frames();budget.used_usec=0
     var charged_before:int=budget.used_usec
@@ -174,7 +192,9 @@ func prepare(groups: Array,cache: Dictionary,world: Node=null,admission:Dictiona
         stage_started=Time.get_ticks_usec()
         var deposit_before:int=blood.deposit_create_usec
         var page_before:int=blood.light_page_create_usec
-        var blood_ready:bool=blood.prepare(world,groups,budget)
+        var blood_groups:Array=due_groups(groups,world,through_ms)
+        var blood_due:bool=is_inf(through_ms) or blood_groups.any(func(group):return group.components.any(func(component):return component.get("kind")=="residue_deposit"))
+        var blood_ready:bool=not blood_due or blood.prepare(world,blood_groups,budget)
         # Already received injuries may allocate hidden receiving fields during
         # the preceding animation. Their completion never gates this group;
         # Blood.prepare shares its two-field frame budget with required work.
@@ -188,17 +208,19 @@ func prepare(groups: Array,cache: Dictionary,world: Node=null,admission:Dictiona
         var required_groups:Array=groups.filter(func(group):return not group.is_empty())
         if not world.timeline.current.is_empty() and not required_groups.any(func(item):return item.get("id")==world.timeline.current.id):required_groups.push_front(world.timeline.current)
         var retained_components:Array=world.timeline.retained_components.map(func(item):return item.component)
-        if not retained_components.is_empty():required_groups.append({"components":retained_components})
+        if not retained_components.is_empty():required_groups.append({"components":retained_components,"preparation_always_due":true})
         var required=_native_closure(required_groups,world,cache)
         var future=_native_closure(_native_prefetch(required_groups,world),world,cache)
-        _native_prepare_key=required.key;_native_prepare_groups=required.groups;_native_prepare_components=required.components
+        var due:Array=due_groups(required.groups,world,through_ms)
+        var due_components:Array=[]
+        for group in due:due_components.append_array(group.components)
+        _native_prepare_key=required.key;_native_prepare_groups=due;_native_prepare_components=due_components;_native_optical_groups=required.groups
         var required_ids:Dictionary={}
-        for component in required.components:required_ids[component.id]=true
+        for component in due_components:required_ids[component.id]=true
         var optional:Array=[];var seen:Dictionary={}
         for component in future.components:
             if required_ids.has(component.id) or seen.has(component.id):continue
             if not component.get("native_spell",false) and component.get("native_hit",{}).is_empty():continue
-            if optional.size()>=NATIVE_PREFETCH_OCCURRENCES:break
             optional.append(component);seen[component.id]=true
         _optional_components=optional
         _optional_owner=[world.timeline.initialization_revision,world.timeline.revision,world.timeline.group_start_ms,world.timeline.current,world.timeline.queue.duplicate()]
@@ -207,10 +229,10 @@ func prepare(groups: Array,cache: Dictionary,world: Node=null,admission:Dictiona
         stage_started=Time.get_ticks_usec()
         # Required owners always get the shared frame budget first. Optional
         # queries have independent readiness and cannot pause current playback.
-        var native=native_spells.prepare(required.groups,cache,world,[{"components":optional}],budget,false)
+        var native=native_spells.prepare(due,cache,world,[{"components":optional}],budget,false,required.groups)
         FrameProfile.end_phase(world.profile,"component_prepare_sources",stage_started)
         stage_started=Time.get_ticks_usec()
-        var hits=native_hits.prepare(world,required.components,cache,optional,budget,false)
+        var hits=native_hits.prepare(world,due_components,cache,optional,budget,false)
         readiness.native_sources=native.ready;readiness.native_hits=hits.ready
         FrameProfile.end_phase(world.profile,"component_prepare_hits",stage_started)
         result.ready=result.ready and native.ready and hits.ready
@@ -242,7 +264,7 @@ func prepare_optional(world:Node,cache:Dictionary,admission:Dictionary={})->void
     var started:int=Time.get_ticks_usec();var charged_before:int=budget.used_usec
     if not _optional_blood_groups.is_empty():blood.prepare(world,_optional_blood_groups,budget)
     if not _optional_components.is_empty() and budget.used_usec<budget.limit_usec:
-        native_spells.prepare(_native_prepare_groups,cache,world,[{"components":_optional_components}],budget)
+        native_spells.prepare(_native_prepare_groups,cache,world,[{"components":_optional_components}],budget,true,_native_optical_groups)
         native_hits.prepare(world,_native_prepare_components,cache,_optional_components,budget)
     budget.used_usec+=maxi(0,Time.get_ticks_usec()-started-(budget.used_usec-charged_before))
     FrameProfile.end_phase(world.profile,"component_prepare_prefetch",started)
@@ -273,7 +295,7 @@ func sample(world: Node, samples: Array,frame_seconds: float=1.0/60.0,budget:Dic
     ensure_epoch(world)
     ready=true
     var blood_started:int=Time.get_ticks_usec()
-    blood.sample(world,samples)
+    blood.sample(world,samples,world.world_changes)
     FrameProfile.end_phase(world.profile,"blood_sample",blood_started)
     for phase in blood.sample_phases:
         world.profile.phases["blood_"+phase]=world.profile.phases.get("blood_"+phase,0.0)+blood.sample_phases[phase]
@@ -631,6 +653,6 @@ func close(world: Node) -> void:
     for entry in media_handles.values():world.actor_entries.erase(entry);entry.node.queue_free()
     media_handles.clear();audio.close()
     prepared_groups.clear();pending_evidence=[]
-    _native_prepare_key=[];_native_prepare_groups=[];_native_prepare_components=[];_native_prepare_records=[]
+    _native_prepare_key=[];_native_prepare_groups=[];_native_optical_groups=[];_native_prepare_components=[];_native_prepare_records=[]
     _native_budget={"frame":-1,"used_usec":0,"limit_usec":NATIVE_CONSTRUCTION_USEC}
     _optional_components=[];_optional_blood_groups=[];_optional_owner=[]

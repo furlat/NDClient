@@ -1,48 +1,40 @@
 {
   "cases": [
     {
-      "checks": 140,
+      "checks": 386,
       "counts": {
-        "events": 4,
-        "observations": 3,
-        "perception_snapshots": 2,
-        "senses_snapshots": 3,
-        "world_updates": 2
-      },
-      "failures": 0,
-      "sequence": 10
-    },
-    {
-      "checks": 441,
-      "counts": {
-        "events": 31,
+        "events": 98,
         "observations": 0,
-        "perception_snapshots": 12,
-        "senses_snapshots": 24,
-        "world_updates": 9
+        "perception_snapshots": 0,
+        "senses_snapshots": 3,
+        "world_updates": 74
       },
-      "failures": 0,
-      "sequence": 87
+      "failures": 1,
+      "sequence": 5
     }
   ],
-  "checks": 581,
+  "checks": 386,
   "counts": {
-    "events": 35,
-    "observations": 3,
-    "perception_snapshots": 14,
-    "senses_snapshots": 27,
-    "world_updates": 11
+    "events": 98,
+    "observations": 0,
+    "perception_snapshots": 0,
+    "senses_snapshots": 3,
+    "world_updates": 74
   },
-  "failures": [],
+  "failures": [
+    "Actual input exercises multiple retained sensory boundaries"
+  ],
   "invocation": {
     "arguments": [
-      "--recording=res://.runtime/gallery-route/journal"
+      "--recording=res://.runtime/player-runs/20261015T181917.584355Z/journal",
+      "--sequence=5",
+      "--runner-id",
+      "client-review-450e03f79455476aaeee9525ca4b6fbe"
     ],
     "recording_requirement": "External recorded journal; not a checked-in fixture. Default operations: 10 and 87.",
     "script": "res://tests/compiler_snapshot_checks.gd",
     "sequences": [
-      10,
-      87
+      5
     ]
   },
   "scope": "Headless actual-recording event snapshots, independent SDK event folds, two exact displayed replays, public/captured/compatibility parity, repeated record scheduling and caller sensory/world/actor-input isolation. No rendered-pixel or timing claim."

@@ -8,7 +8,7 @@ class Spy extends RefCounted:
     var components:Array=[]
     var optional:Array=[]
     var blocked:Dictionary={}
-    func prepare(groups:Array,_cache:Dictionary,_world:Node=null,_prefetch:Array=[],_budget:Dictionary={},_allow_optional:bool=true)->Dictionary:
+    func prepare(groups:Array,_cache:Dictionary,_world:Node=null,_prefetch:Array=[],_budget:Dictionary={},_allow_optional:bool=true,_optical:Array=[])->Dictionary:
         components=[]
         for group in groups:components.append_array(group.get("components",[]))
         optional=[]
@@ -21,7 +21,7 @@ class BloodSpy extends RefCounted:
     var light_page_create_usec:int=0
     var blocked:Dictionary={}
     var requested:Dictionary={}
-    func prepare(_world:Node,_groups:Array)->bool:
+    func prepare(_world:Node,_groups:Array,_budget:Dictionary={})->bool:
         var ready:bool=true
         for group in _groups:
             var id:String=group.get("id","")
@@ -72,6 +72,50 @@ func inputs(components:Array)->Dictionary:
         if component.get("native_spell",false):result[component.id]=[component.native_clip,component.get("cast_recipe",{}),component.get("actor_uuid"),component.get("target_uuid"),component.get("native_cue",{}),component.get("optical",{}),component.get("finish_profile",{}),component.get("resolved_area_positions",[])]
         elif component.has("native_hit"):result[component.id]=component.native_hit
     return result
+
+func scheduled_admission(index:Dictionary)->void:
+    var cases=0
+    for item in index.groups:
+        var later:Array=item.group.get("components",[]).filter(func(component):return component.get("native_spell",false) and component.start_ms>20 and component.get("status")=="available")
+        if later.is_empty():continue
+        later.sort_custom(func(a,b):return a.start_ms<b.start_ms)
+        var late:Dictionary=later[0]
+        for world_boundary in [false,true]:
+            var world=World.new()
+            world.timeline=Recording.restore(index,maxf(0,item.start_ms-0.001))
+            world.timeline.current={};world.timeline.queue=[item.group]
+            world.timeline.display_ms=item.start_ms;world.timeline.group_start_ms=item.start_ms;world.timeline.commit_index=0
+            world.timeline.paused=false
+            if world_boundary:world.timeline.world_ready=func(_candidate):return true
+            var renderer=Renderer.new();var spy=Spy.new()
+            renderer.native_spells=spy;renderer.native_hits=HitSpy.new();renderer.blood=BloodSpy.new()
+            renderer.epoch=world.timeline.initialization_revision
+            spy.blocked[late.id]=true
+            world.timeline.media_ready=func(group):return renderer.prepare([group],index.cache,world,{"frame":Engine.get_process_frames(),"used_usec":0,"limit_usec":1000000},false,world.timeline.media_target_ms).ready
+            world.timeline.advance(1.0)
+            check(not world.timeline.waiting_for_media and world.timeline.display_ms>item.start_ms,"Real cast starts while a later cue is unavailable; world boundary="+str(world_boundary))
+            check(spy.optional.any(func(component):return component.id==late.id),"Later authoritative cue remains in background preparation")
+            var due=item.start_ms+late.start_ms
+            for step in 1000:
+                if world.timeline.display_ms>=due-1:break
+                world.timeline.advance(minf(5,due-1-world.timeline.display_ms))
+            var before=world.timeline.display_ms
+            var state=var_to_bytes(world.timeline.state)
+            var trace_revision=world.timeline.trace_revision
+            world.timeline.advance(2.0)
+            check(world.timeline.waiting_for_media and world.timeline.display_ms==before,"Missing due cue blocks before its scheduled use")
+            check(var_to_bytes(world.timeline.state)==state and world.timeline.trace_revision==trace_revision,"Missing due cue publishes no state/log/event changes")
+            spy.blocked.clear();world.timeline.advance(2.0)
+            check(not world.timeline.waiting_for_media,"Prepared cue releases the same boundary")
+            var expected=Recording.restore(index,world.timeline.display_ms)
+            check(world.timeline.state==expected.state,"Resumed actual cast keeps authoritative event order")
+            # Replay explicitly proves all supplied sources, regardless of time.
+            spy.blocked[late.id]=true
+            check(not renderer.prepare([item.group],index.cache,world,{"frame":Engine.get_process_frames(),"used_usec":0,"limit_usec":1000000},false).ready,"Full replay preparation still waits for later cues")
+            renderer.audio.close();world.free()
+        cases+=1
+        if cases>=6:break
+    check(cases>0,"Real recording exercises scheduled cue admission")
 func old_images(renderer:RefCounted,world:World)->Dictionary:
     var wanted={}
     if renderer.handles.is_empty():return wanted
@@ -180,6 +224,7 @@ func run()->void:
     check(index.ok,"Actual Gallery recording admitted")
     if not index.ok:quit(1);return
     time_closure(index)
+    scheduled_admission(index)
     owner_values("res://.runtime/studio-spells-20261015/shield-seed3/blue/journal","Shield",false)
     owner_values("res://.runtime/studio-spells-20261015/web-seed2/amber/journal","Web",true)
     var native_count=0;var hit_count=0;var clips={}
@@ -224,6 +269,7 @@ func run()->void:
         for future_group in renderer._native_prefetch([group],world):
             if future_group.get("id","")!=group.id:renderer.blood.blocked[future_group.id]=true
         check(renderer.prepare([group],index.cache,world).ready,"Slow optional sources cannot gate current group at "+str(at))
+        renderer.prepare_optional(world,index.cache,{"frame":Engine.get_process_frames(),"used_usec":0,"limit_usec":1000000})
         for id in renderer.blood.blocked:check(renderer.blood.requested.has(id),"Already received future blood gets preparation time")
         renderer.blood.blocked[group.id]=true
         check(not renderer.prepare([group],index.cache,world).ready,"An unprepared current blood receiver still gates its own event")
@@ -236,7 +282,8 @@ func run()->void:
         var expected=Recording.restore(index,before+step)
         check(not world.timeline.waiting_for_media and is_equal_approx(world.timeline.display_ms,before+step),"Current real playback advances while future source is unready at "+str(at))
         check(world.timeline.state==expected.state,"Canonical ordered commits match the same real recording while prefetch waits at "+str(at))
-        check(spy.optional.size()<=Renderer.NATIVE_PREFETCH_OCCURRENCES,"Optional occurrence admission stays bounded at "+str(at))
+        var future_inputs:Dictionary=inputs(reference(renderer._native_prefetch([group],world),world.timeline,index.cache))
+        check(spy.optional.all(func(component):return future_inputs.has(component.id)),"Optional occurrences belong to the received preparation horizon at "+str(at))
         future_wait_cases+=1
     spy.blocked={}
     renderer.blood.blocked={}
@@ -258,7 +305,8 @@ func run()->void:
         elif change==2:world.visual_actors["0"].entries[0].texture_path=selected[2]
         elif change==3:native.handles.clear()
         elif change==4:native.handles["new"]={"component":{"actor_uuid":"2","target_uuid":"1","cast_recipe":{"actionClip":"Run"}}}
-        native._required_ids=native.handles.duplicate()
+        native._required_ids={}
+        for id in native.handles:native._required_ids[id]=native.handles[id].component
         native._image_requirements(world)
         check(native.required_images==old_images(native,world),"Exact optical demand matches old full traversal after change "+str(change))
         var retained=native.required_images

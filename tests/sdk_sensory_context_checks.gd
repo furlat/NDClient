@@ -58,7 +58,8 @@ func _initialize() -> void:
     var steps=[
         [_sensory(sensory,observers[0],[[0,0],[31,1]],[[0,1],[9007199254740993,7]]),_sensory(sensory,observers[1],[[32,2]],[[0,0],[0,1]])],
         [spatial],
-        [_sensory(sensory,observers[1],[[0,0],[9007199254740993,7]],[[31,1],[32,2]])]
+        [_sensory(sensory,observers[1],[[0,0],[9007199254740993,7]],[[31,1],[32,2]])],
+        [_sensory(sensory,observers[0],[]),_sensory(sensory,observers[1],[])]
     ]
     for i in range(steps.size()):
         var packet=_operation(state,template,steps[i])

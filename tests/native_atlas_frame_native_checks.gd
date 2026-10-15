@@ -1,5 +1,63 @@
 extends "res://tests/native_atlas_lifecycle_checks.gd"
 ## Extend the native lifecycle suite with actual modular UV-frame pixels.
+const Construction=preload("res://presentation/actor_construction.gd")
+class FrameHost extends Node3D:
+    var camera:Camera3D
+    var textures:Dictionary={}
+    var source_images:Dictionary={}
+    var resources:Dictionary={}
+    var catalog_cache:Dictionary={}
+    var source_depth:bool=false
+    var source_normals:bool=false
+    var character_light_profile:String="original"
+    func texture(path:String)->Texture2D:return textures.get(path)
+
+func bind_frame(host:FrameHost,actor:Dictionary,frame:int,alpha:float=.9)->void:
+    var state:Dictionary=Construction.Conditions.material("actor",[]);state.alpha=alpha
+    Construction.bind_source(host,actor,{"cell_width":64,"cell_height":64,"facing_rows":{"SW":0}},
+        "/fixture/frame-range.png",frame,"SW",state,Construction.material_key(state,host.textures,host.resources),[])
+
+func producer_range_pixels(atlas:RefCounted,world:World,actor:Dictionary)->void:
+    var host=FrameHost.new();world.add_child(host);host.camera=world.camera
+    host.textures["/fixture/frame-range.png"]=actor.material.get_shader_parameter("sheet")
+    host.catalog_cache[Construction.CharacterGeometry.TABLE]={"records":{}}
+    actor.actor_layer={"slot":"body","paths":{"Idle":"/fixture/frame-range.png"}}
+    actor.scale=1.0;actor.placement.scale_x=1.0
+    atlas.set_light_cap(1.0)
+    var quad_size:Vector2=actor.node.mesh.size
+    for quarter in 4:
+        world.camera.position=Vector3(0,0,10).rotated(Vector3.UP,quarter*PI*.5)
+        world.camera.look_at(Vector3.ZERO,Vector3.UP)
+        actor.node.basis=world.camera.global_basis
+        for mode in ["range","opacity_return","palette_return","geometry_return","quad_changed","highlight","output_replaced"]:
+            actor.node.mesh.size=quad_size
+            bind_frame(host,actor,0)
+            sync_scene(atlas,world)
+            var prepared:Dictionary=atlas.prepare_source_binding(actor,{},host,true)
+            check(not prepared.is_empty(),"Quarter"+str(quarter)+" prepares current private actor copies")
+            match mode:
+                "opacity_return":bind_frame(host,actor,1,.4);bind_frame(host,actor,0,.9)
+                "palette_return":
+                    actor.actor_layer.effect={"palette":{"colors":[0xffffff,0x4488aa]}};bind_frame(host,actor,1)
+                    actor.actor_layer.effect={};bind_frame(host,actor,0)
+                "geometry_return":
+                    host.source_depth=true;bind_frame(host,actor,1)
+                    host.source_depth=false;bind_frame(host,actor,0)
+                "quad_changed":actor.node.mesh.size=quad_size*1.2
+                "highlight":actor.material.set_shader_parameter("highlighted",true)
+                "output_replaced":prepared.output.received_material=prepared.output.received_material.duplicate()
+            bind_frame(host,actor,1);bind_frame(host,actor,0);bind_frame(host,actor,1)
+            var accepted:bool=atlas.prepared_dynamic_materials_match(prepared,actor)
+            check(accepted==(mode in ["range","highlight"]),"Quarter"+str(quarter)+" exact producer range/full-owner proof "+mode)
+            atlas.adopt_source_binding(prepared)
+            sync_scene(atlas,world,true,false,sparse([actor]))
+            await native_frame_oracle(atlas,world,actor,"producer-range-q"+str(quarter)+"-"+mode,null)
+            actor.material.set_shader_parameter("highlighted",false)
+    actor.node.mesh.size=quad_size
+    world.camera.position=Vector3(0,0,10);world.camera.look_at(Vector3.ZERO,Vector3.UP)
+    actor.node.basis=world.camera.global_basis
+    host.queue_free()
+
 func tracked_material_checks(atlas:RefCounted,world:World,entry:Dictionary,source:Image)->void:
     await super.tracked_material_checks(atlas,world,entry,source)
     var sheet=Image.create(128,64,false,Image.FORMAT_RGBA8)
@@ -37,6 +95,7 @@ func tracked_material_checks(atlas:RefCounted,world:World,entry:Dictionary,sourc
     sync_scene(atlas,world)
     check(atlas.last_reconcile_phases.get("material_frame_copies",0)==0,"Skipped native frame version never accepts a partial copy")
     await native_frame_oracle(atlas,world,actor,"modular-missed-version",null)
+    await producer_range_pixels(atlas,world,actor)
     atlas.set_light_cap(0);var id=node.get_instance_id();world.entries.pop_back();world.actor_entries=[];node.queue_free()
     sync_scene(atlas,world,true,false,sparse([],[id]))
 

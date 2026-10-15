@@ -1,6 +1,19 @@
 extends "res://tests/media_latency_checks.gd"
 ## Prepared metadata crosses the same accepted operation boundary as its groups.
 
+func active_character_paths(plan:Dictionary,profile:String)->Dictionary:
+    # Independent membership oracle: neutral metadata retains all alternatives;
+    # displayed demand excludes only registered normals of inactive profiles.
+    var variants={}
+    var selected={}
+    for profiles in plan.get("normal_sets",{}).values():
+        for path in profiles.values():variants[path]=true
+        if profiles.has(profile):selected[profiles[profile]]=true
+    var paths={}
+    for path in plan.character:
+        if not variants.has(path) or selected.has(path):paths[path]=plan.character[path]
+    return paths
+
 func packet(state: Dictionary, rows: Array, cache: Dictionary, sequence: int) -> Dictionary:
     return {"kind":"operation","sequence":sequence,"groups":rows,
         "media":Media.prepare_handoff(state,rows,cache)}
@@ -32,6 +45,7 @@ func optional_interleaving(state: Dictionary, prepared: Dictionary, queued: bool
     if queued:
         var next := await poll_plan(data)
         check(next.get("stage")=="required" and next.key[1]==["queued-required"],"Already queued required work keeps priority over newer optional handoff")
+    Media.demand(data,wanted) # Scene demand admits the pending optional job after required completion.
     var optional := await poll_plan(data)
     check(optional.get("stage")=="optional" and optional.key==key_b and not optional.value.encounter.is_empty(),
         "Newer handoff optional intent survives older required completion"+(" and pending dispatch" if queued else ""))
@@ -85,12 +99,17 @@ func run() -> void:
     player._adopt_received_media(message)
     check(not player.media_group_plans.has(first.id) and player.media_warmup.metadata_jobs==0,"Unaccepted compiled group cannot install metadata or schedule optional work")
     player.timeline.accept(message)
+    var session = Player.Session.new()
+    player.session = session
     player._adopt_received_media(message)
+    check(player.session.source_files_pending.is_empty() and player.session.source_headers_pending.is_empty(),"Session-produced source handoff is not echoed back to its own worker")
+    session.close()
+    player.session = null
     check(player.media_group_plans.has(first.id) and player.media_group_plans.has(second.id) and not player.media_group_plans.has(third.id),"Accepted operation installs its two prepared group plans")
     check(is_same(player.media_group_plans[old.id],old_plan) and player.media_warmup.wanted==old_wanted,"Ahead metadata does not replace displayed current pins")
     player._prepare_media()
-    check(player.media_metadata_ready and player.media_plan.required==old_plan.character,"Older active group remains the required source owner")
-    check(player.media_plan.upcoming==player.media_group_plans[first.id].character,"Only the first queued group becomes the ordinary upcoming demand")
+    check(player.media_metadata_ready and player.media_plan.required==active_character_paths(old_plan,player.character_light_profile),"Older active group remains the required source owner")
+    check(player.media_plan.upcoming==active_character_paths(player.media_group_plans[first.id],player.character_light_profile),"Only the first queued group becomes the ordinary upcoming demand")
     check(player.media_warmup.plan_pending.is_empty(),"Attached source metadata avoids a duplicate required worker request")
     check(player.media_group_plans.has(second.id),"Second received group survives a window containing older current plus first received")
     check(not Media.ready(player.media_warmup,player.media_plan.required),"Metadata alone never grants texture readiness")
@@ -103,7 +122,7 @@ func run() -> void:
     player._adopt_received_media(later)
     player._prepare_media()
     check(player.media_received_owners.size()==4 and player.media_group_plans.has(second.id) and player.media_group_plans.has(later_second.id),"Two admitted preparation-window operations keep their four exact pending group owners")
-    check(player.media_plan.required==old_plan.character and player.media_warmup.plan_pending.is_empty(),"Second ahead operation neither changes current pins nor duplicates required work")
+    check(player.media_plan.required==active_character_paths(old_plan,player.character_light_profile) and player.media_warmup.plan_pending.is_empty(),"Second ahead operation neither changes current pins nor duplicates required work")
     var jobs: int = player.media_warmup.metadata_jobs
     var stale: Dictionary = message.duplicate()
     stale.media = message.media.duplicate(); stale.media.groups = [first.duplicate(true),second]
@@ -132,7 +151,7 @@ func run() -> void:
     player.timeline.current = first
     player.timeline.queue.erase(first)
     player._prepare_media()
-    check(player.media_plan.required==player.media_group_plans[first.id].character and player.media_plan.upcoming==player.media_group_plans[second.id].character,"First received group uses prepared exact current/upcoming owners")
+    check(player.media_plan.required==active_character_paths(player.media_group_plans[first.id],player.character_light_profile) and player.media_plan.upcoming==active_character_paths(player.media_group_plans[second.id],player.character_light_profile),"First received group uses prepared exact current/upcoming owners")
     check(player.media_warmup.plan_pending.is_empty() and player.media_warmup.plan_task<0,"First received activation needs no second required metadata task")
     check(not player.media_group_plans.has(old.id),"Retired nonreceived current plan is released")
     player.timeline.current = second
@@ -140,6 +159,13 @@ func run() -> void:
     player._prepare_media()
     check(not player.media_received_owners.has(first.id),"Retired received group releases its retained metadata owner")
     check(player.media_requested_key[1]==[second.id,third.id] and player.media_warmup.plan_task>=0,"Groups beyond the first two retain the original required worker fallback")
+    var fallback := await poll_plan(player.media_warmup)
+    check(not fallback.has("error") and fallback.get("complete",false),"Required fallback publishes successful completion instead of freezing live playback")
+    player._adopt_media_plan(fallback)
+    player._prepare_media()
+    check(player.media_issue.is_empty() and player.media_plan.errors.is_empty() and player.media_group_plans.has(third.id),
+        "Later queued event receives its exact media plan without a false preparation error")
+    check(player.timeline.current==second and player.timeline.queue.has(third),"Media completion cannot advance or reorder the displayed events")
 
     # Reinitialization invalidates the old group identities, even for the same
     # canonical generation value; late completions cannot enter this new epoch.

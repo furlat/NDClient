@@ -64,6 +64,39 @@ func compare(path:String,rig:Dictionary,clip:String,layer:Dictionary,passes:int)
     baseline.sort();candidate.sort()
     timings.append({"path":path,"baseline_ms":baseline,"candidate_ms":candidate,
         "baseline_median_ms":baseline[baseline.size()/2],"candidate_median_ms":candidate[candidate.size()/2]})
+func persistent_cache_checks()->void:
+    # Owned tiny source: exercise fresh-process-equivalent authoring caches,
+    # source replacement and damaged optional metadata without editing artwork.
+    var media_root=ProjectSettings.get_setting("source_data/media_root")
+    var fixture_root="res://.runtime/palette-source-checks"
+    DirAccess.make_dir_recursive_absolute(fixture_root)
+    ProjectSettings.set_setting("source_data/media_root",ProjectSettings.globalize_path(fixture_root))
+    var path="/media/cache-fixture.png"
+    var stats="res://.derived/palette-ranges/cache-fixture-2.json"
+    DirAccess.remove_absolute(stats)
+    var rig={"cell_height":2,"facing_rows":{"front":0},"clips":{"fixture":{"sheets":{"fixture":"sheet"}}}}
+    var layer={"category":"fixture","palette":{"colors":[0xffffff]}}
+    var resources={"catalog/resources.json":{"sheet":path}}
+    var source=Image.create(2,2,false,Image.FORMAT_RGBA8)
+    source.fill(Color8(25,75,125,255))
+    check(source.save_png(fixture_root+"/cache-fixture.png")==OK,"Owned persistent source saves")
+    var expected=original(layer,rig,"fixture",resources.duplicate(true))
+    check(Palette.prepare(layer,rig,"fixture",resources.duplicate(true))==expected,"Missing palette metadata computes exact operands")
+    check(FileAccess.file_exists(stats),"Computed operands persist for a later authoring cache")
+    check(Palette.prepare(layer,rig,"fixture",resources.duplicate(true))==expected,"Fresh authoring cache restores exact persisted operands")
+    source=Image.create(7,2,false,Image.FORMAT_RGBA8)
+    for y in 2:
+        for x in 7:source.set_pixel(x,y,Color8(x*30,y*70,240,255))
+    check(source.save_png(fixture_root+"/cache-fixture.png")==OK,"Owned source replacement saves")
+    var changed=original(layer,rig,"fixture",resources.duplicate(true))
+    check(changed!=expected,"Replacement source has observably different palette operands")
+    check(Palette.prepare(layer,rig,"fixture",resources.duplicate(true))==changed,"Stale persisted metadata cannot override replacement artwork")
+    var damaged=FileAccess.open(stats,FileAccess.WRITE)
+    damaged.store_string('{"schema":1}');damaged.close()
+    check(Palette.prepare(layer,rig,"fixture",resources.duplicate(true))==changed,"Incomplete optional cache falls back to exact source scan")
+    ProjectSettings.set_setting("source_data/media_root",media_root)
+    DirAccess.remove_absolute(stats)
+    DirAccess.remove_absolute(fixture_root+"/cache-fixture.png")
 func run()->void:
     var cache={}
     var rig:Dictionary=Catalog.read_file("catalog/rigs.json",cache)["neuroclient.modular"]
@@ -83,6 +116,7 @@ func run()->void:
     var fixture={"cell_height":7.0,"facing_rows":{"empty":0,"below":1,"mixed":2,"edge":3},"clips":{"fixture":{"sheets":{"fixture":"sheet"}}}}
     compare(path,fixture,"fixture",{"category":"fixture","palette":{"colors":[0xffffff]}},1)
     check(Palette.prepare({"category":"fixture"},fixture,"fixture",{})=={"category":"fixture"},"No treatment requires no image or catalog")
-    var report={"checks":checks,"failures":failures,"timings":timings,"scope":"Exact rendered palette operands, real Gallery sheets and alpha/empty-row boundaries; cold CPU extraction timing only."}
+    persistent_cache_checks()
+    var report={"checks":checks,"failures":failures,"timings":timings,"scope":"Exact rendered palette operands, real Gallery sheets, alpha/empty-row boundaries and persisted-cache invalidation. Timings use fresh authoring caches; persisted candidate operands may already exist on disk."}
     FileAccess.open("res://.runtime/palette-prepare-checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("PALETTE_PREPARE_CHECKS ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)

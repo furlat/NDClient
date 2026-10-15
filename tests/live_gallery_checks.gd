@@ -24,6 +24,28 @@ var bounded_profile = false
 class CapturingPlayer extends "res://play.gd":
     var choices_observed: Callable
     var profiling_configured:Dictionary
+    var submit_markers:Array=[]
+    func _submit(intent:Dictionary)->void:
+        submit_markers.append({"time_us":Time.get_ticks_usec(),"frame":Engine.get_process_frames(),"number":session.status.next_command_number,"intent":intent.duplicate(true)})
+        super._submit(intent)
+    var media_gate_trace:Array=[]
+    var last_gate_snapshot:Dictionary={}
+    func _media_ready(group:Dictionary)->bool:
+        var result:bool=super._media_ready(group)
+        if not game_config.get("live_fireball_ui",false) or group.is_empty():return result
+        var missing:Array=[]
+        for path in media_plan.required:
+            if not media_warmup.ready_paths.has(path):missing.append(path)
+        var missing_environment:Array=[]
+        for path in media_environment_required:
+            if not media_warmup.ready_paths.has(path):missing_environment.append(path)
+        var snapshot={"group":group.id,"ready":result,"display_ms":timeline.display_ms,"media_target_ms":timeline.media_target_ms,"group_start_ms":timeline.group_start_ms,"current":timeline.current.get("id",""),"gate":media_gate.duplicate(true),"missing":missing,"environment_missing":missing_environment,
+            "pending":media_warmup.pending.size(),"jobs":media_warmup.decode_jobs.size(),"decoded":media_warmup.decoded,
+            "required_count":media_plan.required.size(),"optical_required":component_renderer.native_spells.required_images.size(),"worker_decode_ms":media_warmup.decode_ms,"publication":media_warmup.publication.duplicate(true)}
+        if snapshot!=last_gate_snapshot:
+            last_gate_snapshot=snapshot
+            media_gate_trace.append({"time_us":Time.get_ticks_usec(),"frame":Engine.get_process_frames(),"snapshot":snapshot})
+        return result
     var capture_media_demand=false
     var media_demand_trace:Array=[]
     func _prepare_media(first:Dictionary={}) -> void:
@@ -147,6 +169,20 @@ func _subject_uuid(owner:Dictionary,option:Dictionary)->String:
     var subject:Variant=Choices.binding_subject(owner,option)
     return "" if subject==null else str(subject.uuid)
 
+func _issue_input(selected:Dictionary,record:Dictionary)->void:
+    if selected.is_empty():scene.end_turn()
+    else:
+        var target: Variant=Choices.binding_position(scene.available_actions,selected.target)
+        var click=false
+        if record.behavior=="action.move" and target!=null:
+            var screen=grid_screen(target)
+            click=root.get_visible_rect().has_point(screen) and not scene.hud.pointer_over_controls(screen) and scene.pick_world(screen).get("kind")=="ground" and scene.Interaction.same_position(scene.pick_cell(screen).get("position"),target)
+        if click:
+            scene.cancel_selection();scene.selected_mode="action.move"
+            record.input="viewport_click"
+            click_grid(target)
+        else:scene._execute_admitted({"action":selected.action,"selection":scene.Interaction.selection(selected.action,[selected.target.index])})
+
 func issue(selected: Dictionary) -> bool:
     var actor: String=scene.available_actions.entity_uuid
     var number: int=scene.session.status.next_command_number
@@ -162,18 +198,12 @@ func issue(selected: Dictionary) -> bool:
         "playback_complete_ms":null,"playback_complete_frame":null,"choices_applied_ms":null,"choices_applied_frame":null,
         "early_choices_publications":[],"post_ready_frames":[],"bar_settled_ms":null,"bar_settled_frame":null}
     var painted_generation: int = scene.available_actions.get("discovery_generation",0)
-    if selected.is_empty():scene.end_turn()
-    else:
-        var target: Variant=Choices.binding_position(scene.available_actions,selected.target)
-        var click=false
-        if label=="action.move" and target!=null:
-            var screen=grid_screen(target)
-            click=root.get_visible_rect().has_point(screen) and not scene.hud.pointer_over_controls(screen) and scene.pick_world(screen).get("kind")=="ground" and scene.Interaction.same_position(scene.pick_cell(screen).get("position"),target)
-        if click:
-            scene.cancel_selection();scene.selected_mode="action.move"
-            record.input="viewport_click"
-            click_grid(target)
-        else:scene._execute_admitted({"action":selected.action,"selection":scene.Interaction.selection(selected.action,[selected.target.index])})
+    await _issue_input(selected,record)
+    if not failures.is_empty():
+        record.input_failed=true
+        command_trace.append(record)
+        return false
+    record.submit_markers=scene.submit_markers.filter(func(marker):return marker.time_us>=command_start)
     var previous={};var native_previous={}
     var previous_compilations:Dictionary=record.pipeline_before
     record.pipeline_changes=[]
@@ -235,6 +265,7 @@ func issue(selected: Dictionary) -> bool:
                 scene.target_selection.target_indices.append(target.index)
                 scene._request_selection(true)
         if ready() and scene.timeline.sequence>sequence and scene.session.status.next_command_number>number:break
+    record.submit_markers=scene.submit_markers.filter(func(marker):return marker.time_us>=command_start)
     record.pipeline_after=FrameProfile.pipeline_compilations()
     record.elapsed_ms=(Time.get_ticks_usec()-command_start)/1000.0
     record.end_us=Time.get_ticks_usec()

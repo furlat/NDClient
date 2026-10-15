@@ -438,6 +438,7 @@ func _create(id: String) -> Dictionary:
         "entry":entry,"key":[],"pending":false,"unbounded":false}
 
 func _update(state: Dictionary,snapshots: Array,camera: Camera3D,origin: Vector3,ground: float,projection: Dictionary,rect: Rect2,size: Vector2i,pixels_per_world: float) -> void:
+    var update_started:int=Time.get_ticks_usec()
     var wanted := {}
     for snapshot in snapshots:
         wanted[snapshot.id]=true
@@ -453,9 +454,24 @@ func _update(state: Dictionary,snapshots: Array,camera: Camera3D,origin: Vector3
         var parameters:Array=[]
         for parameter in CASTER_PARAMETERS:parameters.append(snapshot[parameter])
         var sample_key:Array=[parameters,snapshot.component_cell_size,camera.global_basis,snapshot.pivot,
-            snapshot.scale_x,ground,snapshot.position-origin]
-        if state.caster_samples.get(snapshot.id,[])==sample_key:continue
+            snapshot.scale_x,ground,snapshot.position-origin,caster.material_override,caster.material_override.shader]
+        var previous:Array=state.caster_samples.get(snapshot.id,[])
+        if previous==sample_key:continue
         state.caster_samples[snapshot.id]=sample_key
+        # These operands already prove the full caster sample. An animation UV
+        # changes no sheet, optical packet, transform, material owner or bounds.
+        var frame_only:bool=previous.size()==sample_key.size()
+        if frame_only:
+            for index in range(1,sample_key.size()):
+                if previous[index]!=sample_key[index]:frame_only=false;break
+        if frame_only:
+            for index in parameters.size():
+                if index!=1 and previous[0][index]!=parameters[index]:frame_only=false;break
+        if frame_only:
+            caster.material_override.set_shader_parameter("frame_uv",snapshot.frame_uv)
+            _last_counts.caster_frame_copies=int(_last_counts.get("caster_frame_copies",0))+1
+            continue
+        _last_counts.caster_full_copies=int(_last_counts.get("caster_full_copies",0))+1
         caster.mesh=_caster_mesh(snapshot.component_cell_size)
         caster.position=snapshot.position-origin
         for parameter in CASTER_PARAMETERS: caster.material_override.set_shader_parameter(parameter,snapshot[parameter])
@@ -469,7 +485,9 @@ func _update(state: Dictionary,snapshots: Array,camera: Camera3D,origin: Vector3
         RenderingServer.instance_set_custom_aabb(caster.get_instance(),caster.custom_aabb)
     for id in state.casters.keys():
         if not wanted.has(id): state.casters[id].free(); state.casters.erase(id);state.caster_samples.erase(id)
+    _timed("update_casters",update_started);update_started=Time.get_ticks_usec()
     state.viewport.size=size
+    _timed("update_target",update_started);update_started=Time.get_ticks_usec()
     var center := _on_plane(camera,rect.get_center(),origin.y+ground)-origin
     var plane_bounds := AABB(center,Vector3.ZERO)
     var helper_range := 2.0
@@ -483,6 +501,7 @@ func _update(state: Dictionary,snapshots: Array,camera: Camera3D,origin: Vector3
     state.ground.material_override.set_shader_parameter("helper_range",helper_range)
     state.light.position=projection.position
     state.light.omni_range=helper_range
+    _timed("update_light_plane",update_started);update_started=Time.get_ticks_usec()
     var distance: float=maxf(20.0,helper_range*2.0)
     state.camera.transform=Transform3D(camera.global_basis,center+camera.global_basis.z*distance)
     state.camera.size=rect.size.y/pixels_per_world
@@ -490,6 +509,7 @@ func _update(state: Dictionary,snapshots: Array,camera: Camera3D,origin: Vector3
     state.entry.node.global_transform=Transform3D(camera.global_basis,center+origin)
     state.entry.node.mesh.size=rect.size/pixels_per_world
     state.entry.node.custom_aabb=state.entry.node.mesh.get_aabb()
+    _timed("update_camera_output",update_started)
     # Dependency rendering runs before the parent consumes the texture. Keep
     # ALWAYS for this actual frame; frame_post_draw disables unchanged helpers.
     state.viewport.render_target_update_mode=SubViewport.UPDATE_ALWAYS

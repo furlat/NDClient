@@ -32,9 +32,36 @@ static func display_path(path: String, slot: String, cache: Dictionary) -> Strin
     # delivered colour is that exact partition, at the original native size.
     return _root(source).path_join(source.colour_path) if source.has("colour_path") else path
 
-static func paths(path: String, slot: String, cache: Dictionary) -> Dictionary:
+static func paths(path: String, slot: String, cache: Dictionary, profile: String = "") -> Dictionary:
     var resolved = source_paths(path,slot,cache)
-    return resolved.value if resolved.ok else {}
+    if not resolved.ok:return {}
+    return resolved.value if profile.is_empty() else for_profile(resolved.value,resolved.get("normal_sets",{}),profile,cache,"source:"+path+":"+slot)
+
+static func for_profile(paths: Dictionary, normal_sets: Dictionary, profile: String,
+        cache: Dictionary = {}, owner: String = "") -> Dictionary:
+    # Source metadata and handoffs remain neutral. This projection changes only
+    # which existing normal map is required, never its pixels or shader choice.
+    if normal_sets.is_empty() or profile.is_empty():return paths
+    var key=[&"__normal_profile_projection",owner,profile]
+    var held: Dictionary=cache.get(key,{})
+    if is_same(held.get("source"),paths) and is_same(held.get("normal_sets"),normal_sets):return held.paths
+    var variants={};var selected={}
+    for profiles in normal_sets.values():
+        for path in profiles.values():variants[path]=true
+        if profiles.has(profile):selected[profiles[profile]]=true
+    var result={}
+    for path in paths:
+        if not variants.has(path) or selected.has(path):result[path]=paths[path]
+    result.make_read_only()
+    cache[key]={"source":paths,"normal_sets":normal_sets,"paths":result}
+    return result
+
+static func profile_normals(paths: Dictionary, normal_sets: Dictionary, profile: String) -> Dictionary:
+    var result={}
+    for profiles in normal_sets.values():
+        var selected: String=profiles.get(profile,"")
+        if not selected.is_empty() and paths.has(selected):result[selected]=true
+    return result
 
 static func _error(message: String) -> Dictionary:
     return {"ok":false,"error":{"kind":"presentation","message":message}}
@@ -77,6 +104,9 @@ static func source_paths(path: String, slot: String, cache: Dictionary) -> Dicti
     var result = _source_paths(path,slot,cache)
     if result.ok:
         result.value.make_read_only()
+        if result.has("normal_sets"):
+            for profiles in result.normal_sets.values():profiles.make_read_only()
+            result.normal_sets.make_read_only()
         result.make_read_only()
         var memo = {"source":cache.get(table),"profiles":cache.get(PROFILE_TABLE),
             "character_root":ProjectSettings.get_setting("source_data/character_geometry_root"),
@@ -95,7 +125,7 @@ static func _source_paths(path: String, slot: String, cache: Dictionary) -> Dict
     var result = {}
     for relative in source.files.values(): result[root.path_join(relative)] = true
     for absolute in profiles.value.values(): result[absolute] = true
-    return {"ok":true,"value":result}
+    return {"ok":true,"value":result,"normal_sets":{path:profiles.value}}
 
 static func clear(entry: Dictionary) -> void:
     entry.material.set_shader_parameter("has_component_geometry",false)

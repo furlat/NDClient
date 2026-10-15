@@ -43,6 +43,7 @@ static func recipe_source(recipe:Dictionary,field:String,cache:Dictionary)->Stri
 
 static func spell(fact: Dictionary, cache: Dictionary) -> Dictionary:
     var path = "spells/"+str(fact.get("behavior_id",""))+".json"
+    if cache.has(path): return cache[path]
     var root: String = ProjectSettings.get_setting("source_data/authoring_root")
     if not FileAccess.file_exists(root.path_join(path)): return {}
     return load_data(path,cache)

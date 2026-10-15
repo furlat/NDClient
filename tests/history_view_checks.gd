@@ -38,7 +38,8 @@ func tree_ids(parent: TreeItem) -> Array:
     var result: Array = []
     var item = parent.get_first_child()
     while item != null:
-        result.append(item.get_metadata(0))
+        # Expanded authored text is a visual child, not another native event.
+        if not item.get_meta("authored_detail",false): result.append(item.get_metadata(0))
         result.append_array(tree_ids(item))
         item = item.get_next()
     return result
@@ -86,6 +87,8 @@ func run() -> void:
     await frame()
     report.first_open={"rect":str(panel.get_global_rect()),"minimum":str(panel.get_combined_minimum_size())}
     check(root.get_visible_rect().encloses(panel.get_global_rect()),"History fits viewport on its first opening before any resize")
+    check(panel.size.x<=380,"History opens as a narrow side panel")
+    check(panel.find_children("*","RichTextLabel",true,false).is_empty(),"Combat details remain inline rather than reserving a bottom pane")
     check(not panel.tree.hide_folding,"Native history exposes expandable event/subevent hierarchy")
     var log_snapshot: Array = scene.timeline.event_log(200).entries
     var lethal = {}
@@ -126,7 +129,10 @@ func run() -> void:
     key(KEY_Q); await frame()
     check(scene.quarter==quarter and not scene.rotation_pending(),"History keyboard focus does not request world rotation")
     key(KEY_ESCAPE); await frame()
-    check(not panel.visible and not scene.hud.owns_keyboard_focus(),"Escape closes history and releases focus")
+    check(panel.visible,"Escape leaves the combat log open")
+    if scene.hud.settings_open(): key(KEY_ESCAPE); await frame()
+    key(KEY_L); await frame()
+    check(not panel.visible and not scene.hud.owns_keyboard_focus(),"Explicit log toggle closes history and releases focus")
     key(KEY_Q); await frame()
     while scene.rotation_pending() and Time.get_ticks_msec()<deadline: await frame()
     check(not scene.rotation_pending() and scene.quarter!=quarter,"World keyboard navigation resumes after closing history and publishes its quarter")
@@ -169,14 +175,17 @@ func run() -> void:
     for dimensions in [Vector2i(960,720),Vector2i(1280,720)]:
         root.size=dimensions; await frame(); await frame()
         check(root.get_visible_rect().encloses(panel.get_global_rect()),"History fits viewport "+str(dimensions))
-        check(absf(panel.get_global_rect().end.x-float(dimensions.x-20))<1,"History remains docked to the right at "+str(dimensions))
+        var right_gap: float = float(dimensions.x)-panel.get_global_rect().end.x
+        check(right_gap>=0 and right_gap<=32,"History remains docked near the right edge at "+str(dimensions))
+        check(absf(panel.get_global_rect().end.y-(scene.hud.end_button.position.y-12))<1,"Tall history stays above End Turn at "+str(dimensions))
         var click = InputEventMouseButton.new(); click.button_index=MOUSE_BUTTON_LEFT; click.pressed=true
         click.position=panel.summary.get_global_rect().get_center()
         var prior_sequence: int=scene.timeline.sequence
         root.push_input(click,true); click=click.duplicate(); click.pressed=false; root.push_input(click,true)
         await frame()
         check(scene.timeline.sequence==prior_sequence and not scene.command_busy,"Right history panel consumes clicks without world commands")
-        check(panel.tree.size.y>=90 and panel.details.size.y>=100,"History retains usable list and details at "+str(dimensions))
+        check(panel.tree.size.y>=40,"History retains a usable list within the available height at "+str(dimensions))
+        check(panel.find_children("*","RichTextLabel",true,false).is_empty(),"History keeps roll details inline at "+str(dimensions))
     panel.selected_id=partial.get("id",green.get("id","")); panel.revision=-1; panel.refresh()
     DirAccess.make_dir_recursive_absolute("res://.runtime/ui")
     await frame(); root.get_texture().get_image().save_png("res://.runtime/ui/event-stream.png")

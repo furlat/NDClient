@@ -49,7 +49,9 @@
   "checks": 268,
   "command": "Godot --headless --path \"C:/Users/tommaso/Documents/Dev/NDClientGodot/\" --script res://tests/sdk_tile_field_checks.gd -- --cases=\"res://.runtime/sdk-study/tile-field-oracle.json\"",
   "event_boundaries": 14,
-  "failures": [],
+  "failures": [
+    "Fixture uses the exact current exported protocol identity"
+  ],
   "fixture": "res://.runtime/sdk-study/tile-field-oracle.json",
   "scope": "Python native projection/reduction oracle: exact tile-field admission, initialization, event-time canonical/displayed values, independent staging, cold compilation/replay and snapshot/failure isolation. No rendering, server transport or timing claim."
 }

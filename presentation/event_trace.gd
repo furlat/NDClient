@@ -19,13 +19,19 @@ static func _component(kind: String, reason: String, source: String = "") -> Dic
         "sample_count":0,"first_sample_ms":null,"last_sample_ms":null,
         "timing":{"resolved":false,"reason":"authored_timing_not_resolved"}}
 
-static func _base(node: Dictionary, sequence: int, group: String, versions: Array) -> Dictionary:
+static func _version_index(versions: Array) -> Dictionary:
+    var lineages = {}; var events = {}
+    for version in versions:
+        if not lineages.has(version.lineage_uuid): lineages[version.lineage_uuid] = []
+        lineages[version.lineage_uuid].append(version)
+        events[version.event_uuid] = int(version.source_index)
+    return {"lineages":lineages,"events":events}
+
+static func _base(node: Dictionary, sequence: int, group: String, versions: Dictionary) -> Dictionary:
     var fact: Dictionary = node.fact if node.get("fact") != null else {}
     var history: Array = []
-    var index = -1
-    for version in versions:
-        if version.lineage_uuid == node.lineage_uuid: history.append(version.duplicate())
-        if version.event_uuid == node.uuid: index = int(version.source_index)
+    var index: int = versions.events.get(node.uuid,-1)
+    for version in versions.lineages.get(node.lineage_uuid,[]): history.append(version.duplicate())
     return {"id":"%s:%s" % [sequence,node.uuid],"sequence":sequence,"group_id":group,
         "event_uuid":node.uuid,"lineage_uuid":node.lineage_uuid,"source_index":index,
         "parent_event":node.get("parent_event"),"parent_lineage":node.get("parent_lineage"),
@@ -41,8 +47,9 @@ static func _base(node: Dictionary, sequence: int, group: String, versions: Arra
 static func initialization(initial: Dictionary) -> Array:
     var result: Array = []
     var native_logs = _node_logs(initial.nodes)
+    var versions = _version_index(initial.version_rows)
     for node in initial.nodes:
-        var row = _base(node,0,"initialization",initial.version_rows)
+        var row = _base(node,0,"initialization",versions)
         row._display_log = _unique_children(row._log,native_logs) if row._log != null else null
         row.reasons = ["initial_snapshot_no_animation_claim"]
         row.completed = true
@@ -174,7 +181,7 @@ static func _compiled_component(component: Dictionary, cache: Dictionary) -> Dic
     elif component.has("asset_id"):row.asset_ids=[component.asset_id]
     return row
 
-static func _requirements(row: Dictionary, node: Dictionary, actor: Dictionary, cache: Dictionary, resolved_recipe: Dictionary) -> void:
+static func _requirements(row: Dictionary, node: Dictionary, actor: Dictionary, cache: Dictionary, resolved_recipe: Dictionary, spell_sources: Dictionary = {}) -> void:
     var fact: Dictionary = node.fact if node.get("fact") != null else {}
     if node.get("canceled",false):
         # Canceling the hostile outcome does not cancel the condition response
@@ -301,7 +308,7 @@ static func _requirements(row: Dictionary, node: Dictionary, actor: Dictionary, 
                 if phase=="application":_persistent_condition(row,fact.condition,recipe.get("persistent",{}),cache,Authoring.rig_id(actor,cache))
                 if phase=="application" and recipe.get("reactionCastBinding")!=null:
                     var binding:String=recipe.reactionCastBinding
-                    var cast_recipe=NativeSpells.recipe({"behavior_id":binding},cache)
+                    var cast_recipe:Dictionary=spell_sources[binding].recipe if spell_sources.has(binding) else NativeSpells.recipe({"behavior_id":binding},cache)
                     var pointer=Authoring.Catalog.source_pointer("catalog/condition_recipes.json",key+"/reactionCastBinding",cache)
                     if cast_recipe.is_empty():_need(row,"body","condition_reaction_binding_recipe_missing",pointer)
                     else:_cast_requirements(row,cast_recipe.get("cast",{}),pointer,binding)
@@ -319,7 +326,8 @@ static func _requirements(row: Dictionary, node: Dictionary, actor: Dictionary, 
                 var cast:Dictionary=recipe.get("cast",{})
                 if row.get("cast_owner_event",node.uuid)==node.uuid and not cast.is_empty() and cast.get("enabled",true):
                     _cast_requirements(row,cast,source+".cast")
-                var selected=NativeSpells.selection(str(fact.behavior_id),cache)
+                var behavior:String=str(fact.behavior_id)
+                var selected:Dictionary=spell_sources[behavior].selection if spell_sources.has(behavior) else NativeSpells.selection(behavior,cache)
                 var shared_area:bool=not selected.is_empty() and SpellDelivery.selected_for(selected,fact).get("delivery",{}).get("scope")=="area"
                 if fact.get("application")!=null and not shared_area and recipe.get("projectile")!=null and not _has(row,"native_effect","attachment","projectile") and not _has(row,"geometry_projectile"):
                     row.components.append(_component("projectile","authored_projectile_not_implemented",source+".projectile"))
@@ -357,10 +365,19 @@ static func compile_rows(lineage: Dictionary, group: Dictionary, graph: Dictiona
     var result: Array = []
     var commits = {}
     var native_logs = _node_logs(lineage.events)
+    var versions = _version_index(lineage.version_rows)
+    var tracks = {}; var components = {}
+    for track in group.actor_tracks:
+        if int(track.priority) < 10: continue
+        if not tracks.has(track.source_event_uuid): tracks[track.source_event_uuid] = []
+        tracks[track.source_event_uuid].append(track)
+    for component in group.get("components",[]):
+        if not components.has(component.source_event_uuid): components[component.source_event_uuid] = []
+        components[component.source_event_uuid].append(component)
     for commit_row in group.commits:
         if commit_row.has("event_uuid"): commits[commit_row.event_uuid] = float(commit_row.at_ms)
     for node in lineage.events:
-        var row = _base(node,int(group.operation_sequence),group.id,lineage.version_rows)
+        var row = _base(node,int(group.operation_sequence),group.id,versions)
         row._display_log = _unique_children(row._log,native_logs) if row._log != null else null
         row._end_ms = graph.ends.get(node.uuid,0.0)
         row._start_ms = graph.starts.get(node.uuid,0.0)
@@ -376,8 +393,7 @@ static func compile_rows(lineage: Dictionary, group: Dictionary, graph: Dictiona
             var cast_key:String=SpellDelivery.cast_key(node,graph)
             row.cast_owner_event=graph.get("casts",{}).get(cast_key,{}).get("source_event_uuid",node.uuid)
         if row.kind in ["damage","condition","heal","forced_movement"]: row.actor_uuid = row.target_uuid
-        for track in group.actor_tracks:
-            if track.source_event_uuid != node.uuid or int(track.priority) < 10: continue
+        for track in tracks.get(node.uuid,[]):
             row._admit_ms = minf(row._admit_ms,float(track.start_ms))
             var component = _component("body","", "catalog/rigs.json:"+track.rig+".clips."+track.clip)
             component.merge({"id":track.trace_track_id,"trace_track_id":track.trace_track_id,"actor_uuid":track.actor_uuid,
@@ -390,12 +406,11 @@ static func compile_rows(lineage: Dictionary, group: Dictionary, graph: Dictiona
                 component.source=track.source
                 component.condition_uuid=track.condition_uuid
             row.components.append(component)
-        for component in group.get("components",[]):
-            if component.source_event_uuid!=node.uuid:continue
+        for component in components.get(node.uuid,[]):
             row.components.append(_compiled_component(component,cache))
             for channel in NativeChannels.channels(component):row.components.append(_compiled_component(channel,cache))
         var actor: Dictionary = graph.actor_inputs.get(node.uuid,{}).get(row.actor_uuid,{})
-        _requirements(row,node,actor,cache,graph.recipes.get(node.uuid,{}))
+        _requirements(row,node,actor,cache,graph.recipes.get(node.uuid,{}),graph.get("spell_sources",{}))
         if row.components.is_empty(): row._admit_ms = commits.get(node.uuid,group.duration_ms)
         result.append(row)
     result.sort_custom(func(a,b): return a.source_index < b.source_index)
@@ -435,7 +450,12 @@ static func _append_log(trace: Dictionary, id: String, event: Dictionary, entry:
 static func activate(trace: Dictionary, rows: Array, start_ms: float) -> void:
     for source in rows:
         if trace.rows.has(source.id): continue
-        var row: Dictionary = source.duplicate(true)
+        # Runtime changes only the event shell and each component's status and
+        # sample counters. Authored histories/logs/material payloads are passive;
+        # public snapshot/log accessors still return independent deep copies.
+        var row: Dictionary = source.duplicate()
+        row.components = []
+        for component in source.components: row.components.append(component.duplicate())
         row._start_ms = start_ms
         row._admitted = float(row.get("_admit_ms",0.0)) <= 0.0
         _refresh(row)
@@ -684,7 +704,13 @@ static func _node_logs(nodes: Array) -> Array:
     return logs
 
 static func _unique_children(entry: Dictionary, native_logs: Array) -> Dictionary:
-    var result = entry.duplicate(true)
+    # Child trees are rebuilt below. Copying them here would duplicate every
+    # descendant before immediately discarding that copy at each ancestor.
+    var result = entry.duplicate()
+    for field in result:
+        if field=="sub_entries": continue
+        var value: Variant = result[field]
+        if value is Dictionary or value is Array: result[field]=value.duplicate(true)
     result.sub_entries = []
     var unmatched: Array=native_logs.duplicate()
     for child in entry.get("sub_entries",[]):

@@ -21,8 +21,11 @@ func run()->void:
     var selected:Array=[packet(authored,FACTORY.path_join("delivery"),"goblin-01/idle"),modular()]
     var cookie=texture("C:/Users/tommaso/Documents/Dev/NDCharacterLight/.reference-template/scenes/vfx/textures/T_basic1_vfx.PNG")
     var timings:Dictionary={"original":[],"cached":[]}
+    var frame_timings:Dictionary={"original":[],"cached":[]}
+    var frame_copies:int=0
     for entry in selected:
         var actor:Dictionary={"valid":true,"row":entry.placement,"entries":[entry]}
+        var sources:Array=[]
         for quarter in 4:
             camera.basis=Basis.from_euler(Vector3(-atan(sqrt(.5)),PI/4+quarter*PI/2,0))
             camera.position=camera.basis.z*12;entry.node.basis=camera.basis
@@ -33,7 +36,7 @@ func run()->void:
                 uv.x=float(step%3)/entry.frames;uv.y=float(quarter*2)/8
                 entry.material.set_shader_parameter("frame_uv",uv)
                 var zoom:float=1.0/Placement.PIXELS_PER_UNIT*camera.unproject_position(camera.basis.x).distance_to(camera.unproject_position(Vector3.ZERO))
-                var sources:Array=[{"id":"reference","screen_position":camera.unproject_position(origin)+Vector2(14+step*3,42)*zoom,
+                sources=[{"id":"reference","screen_position":camera.unproject_position(origin)+Vector2(14+step*3,42)*zoom,
                     "span":Vector2(cookie.get_size())*19.36*zoom,"height":(20+step)*zoom,"texture":cookie,
                     "energy":2.0,"color":Color(.809372,.429306,.269121),"enabled":true}]
                 var actual=manager.sync([actor],camera,sources)
@@ -51,6 +54,18 @@ func run()->void:
                 var shape:Dictionary=manager._caster_shapes[entry.id]
                 manager.sync([actor],camera,sources)
                 check(is_same(shape,manager._caster_shapes[entry.id]),"Repeated sample reuses immutable geometry")
+                # This second actual source frame keeps actor/light/geometry
+                # fixed, exercising only the existing sample key's UV operand.
+                var next_uv:Vector4=entry.material.get_shader_parameter("frame_uv")
+                next_uv.x=float((step+1)%3)/entry.frames
+                entry.material.set_shader_parameter("frame_uv",next_uv)
+                manager.sync([actor],camera,sources);reference.sync([actor],camera,sources)
+                frame_copies+=int(manager.diagnostics().sync_counts.get("caster_frame_copies",0))
+                await process_frame;await RenderingServer.frame_post_draw
+                check(current.viewport.get_texture().get_image().get_data()==previous.viewport.get_texture().get_image().get_data(),"Byte-exact actual-frame UV-only redraw "+str([entry.id,quarter,step]))
+                for parameter in Shadows.CASTER_PARAMETERS+["component_cell_size","display_basis","sprite_pivot","horizontal_scale","ground_height"]:
+                    check(a.material_override.get_shader_parameter(parameter)==b.material_override.get_shader_parameter(parameter),"Exact UV-only caster parameter "+parameter)
+                check(a.custom_aabb==b.custom_aabb and a.position==b.position,"UV-only redraw retains exact contact/bounds")
                 # A light-only change must redraw shadows without recomputing
                 # or rebinding the unchanged source body.
                 sources[0].height+=zoom*.5
@@ -60,11 +75,33 @@ func run()->void:
                 check(is_same(shape,manager._caster_shapes[entry.id]),"Light movement preserves cached local geometry")
                 await process_frame;await RenderingServer.frame_post_draw
                 check(current.viewport.get_texture().get_image().get_data()==previous.viewport.get_texture().get_image().get_data(),"Byte-exact light-only redraw")
+        for cycle in 9:
+            for step in 40:
+                var uv:Vector4=entry.material.get_shader_parameter("frame_uv")
+                uv.x=float(step%3)/entry.frames
+                entry.material.set_shader_parameter("frame_uv",uv)
+                var order=[[reference,"original"],[manager,"cached"]] if cycle%2==0 else [[manager,"cached"],[reference,"original"]]
+                for pair in order:
+                    var began=Time.get_ticks_usec();pair[0].sync([actor],camera,sources)
+                    frame_timings[pair[1]].append((Time.get_ticks_usec()-began)/1000.)
+        # Replacing the private caster material must use the complete update,
+        # even when the delivered source changes only its next frame UV.
+        var current:Dictionary=manager.actors[entry.id];var previous:Dictionary=reference.actors[entry.id]
+        for state in [current,previous]:
+            state.casters[entry.id].material_override=state.casters[entry.id].material_override.duplicate()
+            state.casters[entry.id].material_override.set_shader_parameter("component_units",0.0)
+        var replacement_uv:Vector4=entry.material.get_shader_parameter("frame_uv");replacement_uv.x=float(2)/entry.frames
+        entry.material.set_shader_parameter("frame_uv",replacement_uv)
+        manager.sync([actor],camera,sources);reference.sync([actor],camera,sources)
+        check(manager.diagnostics().sync_counts.get("caster_frame_copies",0)==0,"Material replacement refuses UV-only update")
+        for parameter in Shadows.CASTER_PARAMETERS:
+            check(current.casters[entry.id].material_override.get_shader_parameter(parameter)==previous.casters[entry.id].material_override.get_shader_parameter(parameter),"Replacement preserves complete caster material: "+parameter)
         manager.sync([],camera,[]);reference.sync([],camera,[])
         check(manager._caster_shapes.is_empty(),"Retired body releases cached shape")
         entry.node.hide()
+    check(frame_copies>0,"Delivered body animations exercise UV-only update across views")
     manager.close();reference.close();viewport.queue_free();await process_frame;await process_frame
     var profile=load("res://frame_profile.gd")
-    var report:Dictionary={"checks":checks,"failures":failures,"timings":{"original":profile.distribution(timings.original),"cached":profile.distribution(timings.cached)},"scope":"Delivered goblin and modular chest; four cameras, animated UVs, moving actor and light; byte-exact pre-edit native visibility and all caster parameters. Isolated timings, not full-game acceptance."}
+    var report:Dictionary={"checks":checks,"failures":failures,"timings":{"original":profile.distribution(timings.original),"cached":profile.distribution(timings.cached)},"frame_only_timings":{"original":profile.distribution(frame_timings.original),"cached":profile.distribution(frame_timings.cached)},"frame_copies":frame_copies,"scope":"Delivered goblin and modular chest; four cameras, animated UVs, moving actor and light; byte-exact pre-edit native visibility and all caster parameters. Isolated timings, not full-game acceptance."}
     FileAccess.open("res://.runtime/shadow-geometry-cache-checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("SHADOW_GEOMETRY_CACHE_CHECKS ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)

@@ -334,13 +334,17 @@ func _prepare_actor_source(prepared:Dictionary,entry:Dictionary)->void:
     var selected:Dictionary=prepared.get("source_sample",{})
     var clip:String=selected.get("clip","")
     var layer:Dictionary=entry.actor_layer
+    entry.atlas_preparation={"status":"no_selected_clip","clip":clip}
     if not layer.paths.has(clip) or not prepared.rig.clips.has(clip):return
     var path:String=layer.paths[clip]
     # This only initializes hidden material resources. It never requests media
     # or samples a graph; the displayed actor still chooses its current pose.
-    if not host.textures.has(path) or not host.source_images.has(path):return
-    for companion in ActorConstruction.CharacterGeometry.paths(path,layer.slot,host.catalog_cache):
-        if not host.textures.has(companion):return
+    entry.atlas_preparation.path=path
+    if not host.textures.has(path):entry.atlas_preparation.status="missing_colour_texture";return
+    if not host.source_images.has(path):entry.atlas_preparation.status="missing_colour_image";return
+    for companion in ActorConstruction.CharacterGeometry.paths(path,layer.slot,host.catalog_cache,host.character_light_profile):
+        if not host.textures.has(companion):
+            entry.atlas_preparation.status="missing_companion";entry.atlas_preparation.missing_path=companion;return
     var facing:String=prepared.row.facing
     if host.external_playback:facing="SW"
     var cycle:Array=host.rig_config.FACING_CYCLE
@@ -351,11 +355,14 @@ func _prepare_actor_source(prepared:Dictionary,entry:Dictionary)->void:
     var neutral:Dictionary=ActorConstruction.Conditions.material(entry.placement.id,[])
     var key:Array=ActorConstruction.material_key(neutral,host.textures,host.resources)
     ActorConstruction.bind_source(host,entry,prepared.rig,path,frame,facing,neutral,key,[])
+    entry.atlas_preparation.status="atlas_not_ready"
     if host.native_light_atlas.delta_ready:
+        entry.atlas_preparation.status="empty_material_binding"
         var materials:Dictionary=host.native_light_atlas.prepare_source_binding(entry,{},host,true)
         if not materials.is_empty():
             if not prepared.has("materials"):prepared.materials={}
             prepared.materials[entry.node.get_instance_id()]=materials
+            entry.atlas_preparation.status="prepared"
 
 func take_actor(id:String,row:Dictionary,rig:Dictionary)->Dictionary:
     var prepared:Dictionary=native_actors.get(id,{})

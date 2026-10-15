@@ -19,6 +19,7 @@ class ClickPlayer extends "res://play.gd":
 
 class FootprintHUD extends "res://play_hud.gd":
     var outlines: Array = []
+    func pointer_over_controls(_point: Vector2 = Vector2.INF) -> bool: return false
     func _ready() -> void:
         super._ready()
         set_process(false)
@@ -69,6 +70,19 @@ func run() -> void:
     check(admitted.size()==1 and admitted[0].selection==Interaction.selection(opened,[33]),"Sparse world affordance/facets resolves exact admitted open action")
     check(Interaction.same_option(option,{"subject_uuid":"wall","behavior_id":"action.open","label":"Open","variant_facets":[]}),"Omitted and empty optional facets mean the same world verb")
     check(Interaction.world_options(choices,"wall")==[option],"Missing default_priority retains native priority100")
+    var actor_hit = {"kind":"actor","id":"goblin","position":[2,3]}
+    var object_hit = {"kind":"prop","id":"wall","position":[2,3]}
+    var ground_hit = {"kind":"ground","position":[4,5]}
+    check(Interaction.idle_intent(choices,{},actor_hit,false,"MELEE_MAIN","action.move").value.selection.target_indices==[7],"Ordinary hover and click share the actual melee attack choice")
+    check(Interaction.idle_intent(choices,{},actor_hit,false,"RANGED_MAIN","action.move").is_empty(),"Unavailable weapon preference cannot promise an attack cursor")
+    check(Interaction.idle_intent(choices,{},object_hit,false,"MELEE_MAIN","action.move").kind=="interaction","Ordinary object hover resolves the same default open verb")
+    check(Interaction.idle_intent(choices,{},object_hit,true,"MELEE_MAIN","action.move").value.selection.target_indices==[91],"Force attack overrides object default using exact admitted target")
+    check(Interaction.idle_intent(choices,{"objects":{"wall":{"contained_items":[]}}},object_hit,false,"MELEE_MAIN","action.move").kind=="storage","Storage cursor and ordinary open-storage click share precedence")
+    check(Interaction.idle_intent(choices,{},ground_hit,false,"MELEE_MAIN","action.move").value.selection.target_indices==[23],"Movement cursor preview resolves same actual walking destination")
+    var distant = choices.duplicate(true)
+    distant.world_interactions=[{"subject_uuid":"distant","behavior_id":"action.open","label":"Open","contact_positions":[[4,5]]}]
+    var approach_intent = Interaction.idle_intent(distant,{}, {"kind":"prop","id":"distant","position":[8,8]},false,"MELEE_MAIN","action.move")
+    check(approach_intent.kind=="approach" and approach_intent.value.selection.target_indices==[23],"Distant-object hover previews the same actual safe approach as its ordinary click")
     var approach = Interaction.approach(choices,{"contact_positions":[[4,5],[6,7]]})
     check(approach.selection.target_indices==[23],"Approach uses binding-local position and rejects unaffordable hazardous safe path")
     check(Interaction.approach(choices,{}).is_empty(),"Missing contact positions does not invent an approach")
@@ -110,9 +124,12 @@ func run() -> void:
 
     # Returned raw preview publication preserves omitted fields and resolves only
     # the small visible affected footprint; stale replies remain rejected.
-    player.session.status={"boundary":{"state_revision":"rev"}}
+    player.session.status={"boundary":{"state_revision":"rev","input_actor_uuid":player.available_actions.entity_uuid}}
     player.selection_serial=7
-    player.pending_request={"kind":"preview","serial":7,"revision":"rev","generation":0,"auto_confirm":false}
+    player.action_revision="rev"
+    player.timeline.state={"current_actor_uuid":player.available_actions.entity_uuid}
+    player.pending_request={"kind":"preview","serial":7,"revision":"rev","generation":0,"auto_confirm":false,
+        "actor_uuid":player.available_actions.entity_uuid,"selection":player.target_selection.duplicate(true)}
     player.action_request=4
     player.session.responses[4]={"ok":true,"value":{"preview":preview}}
     player._poll_actions()
@@ -152,11 +169,18 @@ func run() -> void:
     hud._select_row(sparse)
     check(world.issued.size()==1,"HUD rejects stale sparse generation zero")
     world.selected_action={};world.hover_preview=preview
-    hud.outlines.clear();hud._draw()
-    check(hud.outlines.map(func(value):return value.position)==[[9,10],[11,12],[13,14]],"HUD outlines contacts, next points and affected points in Preview-local coordinates")
+    for position in [[9,10],[11,12],[13,14]]: world.timeline.state.tiles["%d,%d" % position]={"position":position,"elevation_steps":0}
+    hud._update_ground_preview()
+    check(world.ground_overlay.marks.keys()==["9,10","11,12","13,14"],"Ground UI marks contacts, next points and affected points in Preview-local coordinates")
+    world.selected_action=missile; world.selection_preview=preview
+    world.timeline.state.tiles["20,21"]={"position":[20,21],"elevation_steps":0}
+    world.hover_preview={"positions":[[20,21]],"affected_positions":[0],"area_preview":"computed","next_positions":[],"next_target_set":0,"target_sets":[[]]}
+    hud._update_ground_preview()
+    check(world.ground_overlay.marks.keys()==["9,10","11,12","20,21"],"Prospective empty continuation preserves selected-prefix legal subjects and extra positions while replacing affected area")
+    world.selected_action={}
     world.hover_preview={"can_confirm":false,"next_target_set":0,"target_sets":[[]],"area_preview":"deferred"}
-    hud.outlines.clear();hud._draw()
-    check(hud.outlines.is_empty(),"Deferred AoE draws no invented footprint")
+    hud._update_ground_preview()
+    check(world.ground_overlay.marks.is_empty(),"Deferred AoE draws no invented footprint")
     check(choices==original,"Interaction and HUD leave shared source domains unchanged")
     native_number_cases(player,choices)
     content_ref_cases()
