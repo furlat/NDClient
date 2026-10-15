@@ -8,6 +8,8 @@ const ConditionCoverage = preload("res://presentation/condition_coverage.gd")
 const ConditionPose = preload("res://presentation/condition_pose.gd")
 const World = preload("res://presentation/world.gd")
 const LightTracks = preload("res://studio/light_tracks.gd")
+const NativeChannels=preload("res://presentation/native_spell_channels.gd")
+const NativePersistent=preload("res://presentation/native_persistent.gd")
 const ReplayComparison = preload("res://studio/replay_comparison.gd")
 const PREVIEW_LEAD_IN_MS = 500.0
 const PREVIEW_OPERATION_GAP_MS = 350.0
@@ -69,6 +71,7 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
     files.sort()
     if files.is_empty(): return {"ok":false,"error":"No SDK packets found in "+directory}
     var result = {"ok":true,"directory":directory,"initialization":{},"groups":[],"rows":[],"duration_ms":0.0,"operations":0,"cache":{},"bytes":0,"compile_ms":0.0}
+    var read_profile={"decode_ms":0.0,"reduce_ms":0.0,"compile_ms":0.0,"index_ms":0.0,"packets":[]}
     if not projection.is_empty():result.cache=projection.cache.duplicate()
     var native_errors=Compiler.Authoring.Catalog.validate_native(result.cache)
     if not native_errors.is_empty():return {"ok":false,"error":"Invalid native authoring: "+"; ".join(native_errors)}
@@ -79,6 +82,8 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
     var condition_history={}
     var condition_removals={}
     var light_history={}
+    var spatial_history={}
+    var spatial_owners={}
     var condition_parents={}
     var condition_intervals={}
     var preview_state={}
@@ -90,11 +95,18 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
         if files[sequence] != "%016d.json" % sequence: return {"ok":false,"error":"Recording requires a complete contiguous prefix from initialization"}
         var raw = FileAccess.get_file_as_bytes(directory.path_join(files[sequence]))
         result.bytes += raw.size()
+        var phase_started=Time.get_ticks_usec()
         var decoded = journal.protocol.decode("InitializationResponse" if sequence==0 else "PlayerOperation",raw)
+        var packet_profile={"sequence":sequence,"bytes":raw.size(),"decode_ms":(Time.get_ticks_usec()-phase_started)/1000.0}
+        read_profile.decode_ms+=packet_profile.decode_ms
         if not decoded.ok: return decoded
         if int(decoded.value.cursor.sequence)!=sequence: return {"ok":false,"error":"Recording filename/cursor mismatch"}
         var before: Dictionary = journal.state
+        phase_started=Time.get_ticks_usec()
         var admitted = journal._consume_admitted(decoded.value,raw,true)
+        packet_profile.reduce_ms=(Time.get_ticks_usec()-phase_started)/1000.0
+        read_profile.reduce_ms+=packet_profile.reduce_ms
+        read_profile.packets.append(packet_profile)
         if not admitted.ok: return admitted
         if sequence==0:
             result.identity=decoded.value.cursor.duplicate()
@@ -104,15 +116,20 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
             preview_state=journal.state.duplicate(true)
             _preview_states(preview_states,preview_state,preview_state.actors,condition_history,0.0,result.cache)
             LightTracks.observe(light_history,preview_state,0.0,"",0,result.cache)
+            _observe_spatial_history(spatial_history,spatial_owners,preview_state.senses.get("spatial_effects",{}),0.0,"",true)
             continue
         var compiled:Dictionary
+        phase_started=Time.get_ticks_usec()
         if projection.is_empty():compiled=Compiler.compile_recorded(before,admitted.normalized,result.cache,journal.state,admitted.transitions)
         else:
             var groups:Array=projection.operations.get(sequence,[])
             if groups.is_empty() or groups.any(func(group):return group.cursor!=decoded.value.cursor):
                 return {"ok":false,"error":"Comparison projection does not belong to this independently admitted operation"}
             compiled={"ok":true,"value":{"groups":groups}}
+        packet_profile.compile_ms=(Time.get_ticks_usec()-phase_started)/1000.0
+        read_profile.compile_ms+=packet_profile.compile_ms
         if not compiled.ok: return compiled
+        phase_started=Time.get_ticks_usec()
         for lineage in admitted.normalized.lineages:
             for node in lineage.events:
                 var fact:Dictionary=node.fact if node.get("fact")!=null else {}
@@ -137,6 +154,7 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
             for commit in group.commits:
                 Compiler.apply_delta(preview_state,commit.delta)
                 LightTracks.observe(light_history,preview_state,offset+commit.at_ms,commit.get("event_uuid",""),sequence,result.cache)
+                _observe_spatial_history(spatial_history,spatial_owners,preview_state.senses.get("spatial_effects",{}),offset+commit.at_ms,commit.get("event_uuid",""))
                 if nodes.has(commit.get("event_uuid","")):
                     var event:Dictionary=nodes[commit.event_uuid]
                     var contacts={}
@@ -207,7 +225,7 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
                     for body_row in result.rows:
                         if body_row.id==component.body_track_id:actor=body_row.actor;source_track=body_row.track;break
                 result.rows.append({"id":component.id,"parent":component.parent_id,"kind":component.kind,
-                    "label":str(component.get("text")) if component.kind=="feedback_text" else str(component.get("cue_id",component.get("source_id",component.kind))),"depth":1,
+                    "label":str(component.native_cue.role).capitalize() if component.get("native_spell",false) else str(component.get("text")) if component.kind=="feedback_text" else str(component.get("cue_id",component.get("source_id",component.kind))),"depth":1,
                     "start_ms":offset+component.start_ms,"end_ms":offset+component.start_ms+component.duration_ms,
                     "component":component,"group_start_ms":offset,"group_id":group.id,
                     "source_event_uuid":component.source_event_uuid,"source":component.get("source",""),
@@ -215,9 +233,19 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
                     "missing_category":"source" if component.get("status")=="missing" else "",
                     "coverage":{"implementation":"resolved","source":component.get("status","missing"),"prepared":"not_examined","rendered":"not_witnessed"},"source_fps":component.get("sample_hz",0),"actor":actor,"source_track":source_track,
                     "markers":[{"kind":component.source_marker,"at_ms":offset+component.get("contact_ms",component.start_ms),"source":component.get("timing_source","compiled.component.source_marker")}] if component.has("source_marker") else []})
+                for channel in NativeChannels.channels(component):
+                    result.rows.append({"id":channel.id,"parent":component.id,"kind":channel.kind,"label":channel.label,
+                        "start_ms":offset+channel.start_ms,"end_ms":offset+channel.start_ms+channel.duration_ms,
+                        "component":channel,"group_start_ms":offset,"group_id":group.id,"source_event_uuid":channel.source_event_uuid,
+                        "source":channel.source,"status":channel.status,"reason":channel.get("reason",""),
+                        "render_method":channel.render_method,"preview_scope":channel.get("preview_scope","source_property_keys"),
+                        "markers":NativeChannels.markers(channel,offset),
+                        "coverage":{"implementation":"resolved","source":channel.status,"prepared":"not_examined","rendered":"not_witnessed"}})
             Timeline._directions(group.actor_tracks,INF,previous_directions)
             offset += group.duration_ms
         result.operations += 1
+        packet_profile.index_ms=(Time.get_ticks_usec()-phase_started)/1000.0
+        read_profile.index_ms+=packet_profile.index_ms
     if not projection.is_empty():offset=maxf(offset,projection.duration_ms)
     result.duration_ms = offset
     result.presentation_end_ms=offset
@@ -225,6 +253,8 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
     for owner in condition_history.values():
         var fade=Timeline.Conditions.fade_ms(owner.condition,result.cache)
         if not is_inf(owner.end_ms):result.presentation_end_ms=maxf(result.presentation_end_ms,owner.end_ms+fade)
+    for owner in spatial_owners.values():
+        if not is_inf(owner.end_ms):result.presentation_end_ms=maxf(result.presentation_end_ms,owner.end_ms+NativePersistent.fade_ms(NativePersistent.spatial_selection(owner.effect,result.cache)))
     var condition_ids={}
     for owner in condition_history.values():condition_ids[owner.condition.behavior_id]=true
     var condition_requirements={}
@@ -263,8 +293,10 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
             _condition_rows(result.rows,exit_row,owner,[{"start_ms":owner.end_ms,"end_ms":owner.end_ms+fade,"suppressed":Timeline.Conditions.suppressed(owner.condition),"source_event":origin.get("removal_event","")}],preview_states.get(owner.actor_uuid,[]),result.cache,preview_tracks.get(owner.actor_uuid,[]),requirements)
         _condition_restoration_rows(result,owner,condition_removals.get(owner.id,{}),preview_states.get(owner.actor_uuid,[]),preview_tracks.get(owner.actor_uuid,[]))
     result.rows.append_array(LightTracks.rows(light_history,result,preview_tracks))
+    _spatial_rows(result,spatial_history,spatial_owners,occurrence_ids)
     for row in result.rows:
-        var actor_id: String=row.get("track",row.get("component",{})).get("actor_uuid",row.get("actor_uuid",row.get("owner",{}).get("actor_uuid","")))
+        var actor_value:Variant=row.get("track",row.get("component",{})).get("actor_uuid",row.get("actor_uuid",row.get("owner",{}).get("actor_uuid","")))
+        var actor_id:String="" if actor_value==null else str(actor_value)
         if preview_states.has(actor_id):
             row.actor_uuid=actor_id
             row.actor_name=_actor_name_at(preview_states[actor_id],row.start_ms)
@@ -283,6 +315,7 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
         if row.has("recipient_uuid"):
             row.recipient_name=_actor_name_at(preview_states.get(row.recipient_uuid,[]),row.start_ms)
     result.compile_ms = (Time.get_ticks_usec()-started)/1000.0
+    result.read_profile=read_profile
     return result
 
 static func _actor_name_at(states:Array,at_ms:float)->String:
@@ -902,6 +935,11 @@ static func _condition_rows(rows: Array, parent: Dictionary, owner: Dictionary, 
         samples=samples.filter(func(sample):return sample.get("condition_uuid")==owner.id or (sample.kind=="audio" and sample.id.begins_with("condition:"+owner.id+":")))
         var prefix:String=parent.id+":member:"+str(n)+":"
         for sample in samples:
+            var sample_end:float=end
+            if sample.get("native_spell",false) and not is_inf(owner.end_ms):
+                var window:Dictionary=sample.lifecycle
+                sample_end=minf(end,float(owner.end_ms)+(float(window.get("exit_end_seconds",0))-float(window.get("exit_start_seconds",0)))*1000.0)
+                if sample_end<=start:continue
             var common={"parent":parent.id,"start_ms":start,"end_ms":end,"owner":sampled_owner,
                 "component":sample,"source":sample.source,"status":sample.status,"source_fps":sample.get("sample_hz",0),
                 "condition_phase":parent.kind,"interval_causes":spans[n].causes,
@@ -936,9 +974,70 @@ static func _condition_rows(rows: Array, parent: Dictionary, owner: Dictionary, 
                     rows.append(pose)
             else:
                 var component=common.duplicate()
+                component.end_ms=sample_end
                 if sample.has("layer"):component.selection_policy="sampled"
-                component.merge({"id":prefix+sample.id,"kind":sample.kind,"label":str(sample.get("cue_id",sample.get("layer",{}).get("id",sample.get("source_id",sample.kind))))})
+                component.merge({"id":prefix+sample.id,"kind":sample.kind,"trace_track_id":sample.id,
+                    "label":str(sample.native_cue.role).capitalize() if sample.get("native_spell",false) else str(sample.get("cue_id",sample.get("layer",{}).get("id",sample.get("source_id",sample.kind)))),
+                    "coverage":{"implementation":"resolved","source":sample.status,"prepared":"not_examined","rendered":"not_witnessed"}})
                 rows.append(component)
+                if sample.get("native_spell",false):_persistent_native_channels(rows,component,sample)
+
+static func _persistent_native_channels(rows:Array,parent:Dictionary,sample:Dictionary)->void:
+    # These are inspection children of the same sampled owner, never a second
+    # light/material scheduler. UI spans may split; the source clock does not.
+    for channel in NativeChannels.channels(sample):
+        var row=parent.duplicate(false)
+        row.merge({"id":parent.id+":"+channel.id.trim_prefix(sample.id+":"),"parent":parent.id,
+            "kind":channel.kind,"label":channel.label,"component":channel,"trace_track_id":channel.id,
+            "source":channel.source,"status":channel.status,"reason":channel.get("reason",""),
+            "render_method":channel.render_method,"preview_scope":channel.get("preview_scope","source_property_keys"),
+            "markers":NativeChannels.markers(channel,0.0).filter(func(marker):return marker.at_ms>=parent.start_ms and marker.at_ms<=parent.end_ms),"source_clock":sample.native_cue,
+            "coverage":{"implementation":"resolved","source":channel.status,"prepared":"not_examined","rendered":"not_witnessed"}},true)
+        # Keys follow the actual native entry/held-pose/close mapping. They are
+        # source property changes, not invented gameplay illumination curves.
+        rows.append(row)
+
+static func _observe_spatial_history(history:Dictionary,owners:Dictionary,effects:Dictionary,at_ms:float,event_uuid:String,initial:bool=false)->void:
+    NativePersistent.observe_spatial(owners,effects,at_ms,initial)
+    for id in owners:
+        var owner:Dictionary=owners[id]
+        if not history.has(id):history[id]={"source_event_uuid":event_uuid,"keys":[]}
+        var keys:Array=history[id].keys
+        if not keys.is_empty() and keys.back().owner==owner:continue
+        keys.append({"at_ms":at_ms,"source_event_uuid":event_uuid,"owner":owner.duplicate(true)})
+
+static func _spatial_rows(index:Dictionary,history:Dictionary,owners:Dictionary,events:Dictionary)->void:
+    # Record the disclosed after-values once. The same NativePersistent sampler
+    # used by Timeline owns source age, footprint and actual removal behavior.
+    for id in history:
+        var owner:Dictionary=owners[id]
+        var selected=NativePersistent.spatial_selection(owner.effect,index.cache)
+        if selected.is_empty():continue
+        var end=minf(index.presentation_end_ms,float(owner.end_ms)+NativePersistent.fade_ms(selected))
+        var life={"id":"spatial:"+str(id),"parent":events.get(history[id].source_event_uuid,""),
+            "kind":"spatial_effect","label":str(owner.effect.get("name",selected.id)),
+            "start_ms":owner.start_ms,"end_ms":end,"owner":owner,
+            "source":"PlayerState.senses.spatial_effects/"+str(id),"status":"available",
+            "timing_source":"Actual disclosed spatial-effect membership and after-values"}
+        index.rows.append(life)
+        var keys:Array=history[id].keys
+        for n in keys.size():
+            var key:Dictionary=keys[n]
+            var start:float=key.at_ms
+            var interval_end=minf(end,float(keys[n+1].at_ms) if n+1<keys.size() else end)
+            if interval_end<=start:continue
+            var sampled_owner:Dictionary=key.owner.duplicate()
+            sampled_owner.end_ms=owner.end_ms
+            for sample in NativePersistent.spatial_samples({id:sampled_owner},start,index.cache):
+                var row={"id":life.id+":member:"+str(n)+":"+sample.id,"parent":life.id,
+                    "kind":sample.kind,"label":str(sample.native_cue.role).capitalize(),
+                    "start_ms":start,"end_ms":interval_end,"source_start_ms":sample.absolute_start_ms,
+                    "owner":sampled_owner,"component":sample,"trace_track_id":sample.id,
+                    "source":sample.source,"source_fps":sample.sample_hz,"status":sample.status,
+                    "interval_causes":["event:"+str(key.source_event_uuid)] if not key.source_event_uuid.is_empty() else ["initial:"+str(id)],
+                    "coverage":{"implementation":"resolved","source":sample.status,"prepared":"not_examined","rendered":"not_witnessed"}}
+                index.rows.append(row)
+                _persistent_native_channels(index.rows,row,sample)
 
 static func _preview_states(output: Dictionary,state: Dictionary,actors: Dictionary,owners: Dictionary,at_ms: float,cache: Dictionary,source_event_uuid:String="")->void:
     for id in actors:

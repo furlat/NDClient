@@ -7,6 +7,12 @@ const POSES = ["e", "s", "w", "n"]
 const DIRECTIONS = {"east": Vector2(1, 0), "north": Vector2(0, 1), "west": Vector2(-1, 0), "south": Vector2(0, -1)}
 const STAGES = {"terrain": 0, "covering": 1, "shadow": 2, "body": 3, "wall": 3, "cliff": 3}
 
+static func camera_transform(focus: Vector3, quarter: int) -> Transform3D:
+    var offset=Basis(Vector3.UP,quarter*PI*.5)*Vector3(12,12*HEIGHT_UNIT,12)
+    # Pan changes only translation. Subtracting a translated target in look_at
+    # introduces tiny rotation changes and invalidates every light receiver.
+    return Transform3D(Basis.looking_at(-offset),focus+offset)
+
 static func contact(row: Dictionary) -> Vector3:
     return Vector3(row.position[0], row.base_height_steps * HEIGHT_UNIT, row.position[1])
 

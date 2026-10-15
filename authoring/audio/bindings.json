@@ -148,6 +148,26 @@
       "cue": "door_close",
       "timing": "event.start",
       "review_status": "provisional"
+    },
+    "action.class.barbarian.frenzy": {
+      "cue": "stance_transition",
+      "timing": "body.contact",
+      "review_status": "provisional"
+    },
+    "action.item.torch.ignite": {
+      "cue": "torch_ignite",
+      "timing": "event.start",
+      "review_status": "provisional"
+    },
+    "action.item.torch.extinguish": {
+      "cue": "torch_extinguish",
+      "timing": "event.start",
+      "review_status": "provisional"
+    },
+    "action.item.potion_haste.drink": {
+      "cue": "potion_drink",
+      "timing": "body.contact",
+      "review_status": "provisional"
     }
   },
   "damage_types": {
@@ -184,7 +204,9 @@
       "persistent": {
         "cue": "condition_loop",
         "timing": "condition.interval",
-        "review_status": "provisional"
+        "review_status": "unassigned_by_human",
+        "enabled": false,
+        "reason": "spell_audio_deferred"
       }
     },
     "condition.prone": {
@@ -218,8 +240,24 @@
     "spell.magic_missile": {
       "cue": "spell_release",
       "timing": "body.contact",
+      "review_status": "unassigned_by_human",
+      "enabled": false,
+      "reason": "spell_audio_deferred"
+    }
+  },
+  "movement_contacts": "audio/contacts.json",
+  "equipment": {
+    "change": {
+      "cue": "equipment_handle",
+      "timing": "body.commit",
       "review_status": "provisional"
     }
   },
-  "movement_contacts": "audio/contacts.json"
+  "attack_sources": {
+    "unarmed": {
+      "cue": "unarmed_swing",
+      "timing": "body.contact",
+      "review_status": "provisional"
+    }
+  }
 }

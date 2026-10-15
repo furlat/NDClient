@@ -32,8 +32,9 @@ its dependent reaction/effect tails. The disclosure triangle only expands rows.
 Drag the playhead on the ruler or on its vertical line through the tracks; pointer
 motion updates the requested time and release restores that exact authoritative
 prefix. Loop is enabled by default; disabling it stops at the true presentation
-end. The beginning button returns to the whole study. Visible source previews and their four camera variants prepare before a new
-selection appears. Original decoded images from that prepared scene seed the
+end. The beginning button returns to the whole study. The exact selected scene
+gates publication; optional recording media and thumbnail preparation do not.
+Original decoded images from that prepared scene seed the
 bounded thumbnail cache. Ordinary previews render in batches of up to eight with
 the same shaders. Remaining current-window tracks warm in the background, grouped
 by source clip; visible demand takes priority. Expansion, scrolling and zoom retain
@@ -42,11 +43,35 @@ matching hit-test and scrub geometry. This is bounded preparation, not a claim t
 every possible zoom is resident. Divider
 resizing preserves orthographic pixel scale.
 
-Case loading prepares the actual recorded body/environment sources, including
+The timeline opens at **240 pixels per second** so animation previews remain
+readable. **Fit** explicitly shows the whole recording; **− / +** and Ctrl-wheel
+change the time scale. These controls never change playback speed or duration.
+**Follow**, enabled by default beside Loop, keeps both the playhead and the
+currently playing component lane in view, including while the next loop prepares. Its action and lane stay
+identified in the ruler. Select an actor's track, then **Inspect → Follow selected actor** to keep
+that actor centered in the preview; middle-drag returns to manual panning.
+Following stops moving the camera while that actor is undisclosed.
+
+The default timeline groups each causal action. Movement occupies one strip using
+the renderer's actual track priority, preserving reaction pauses. Repeated native
+deliveries share one phase strip with centered source previews; expand it to inspect
+each original delivery. Different spell sources remain distinct. Missing work is
+summarized per action; **Details** opens the original hierarchy. Neither grouping
+nor scrolling changes source duration, event order or the recording.
+
+Opening prepares only the selected faction's original journal. Selecting another
+faction loads it on demand and maps the corresponding recorded event/phase; its
+numeric presentation time may differ. Each loaded audience retains its own state
+and index. The previous preview remains visible during preparation.
+
+Case loading plans the actual recorded body/environment sources, including
 later groups, using the production media planners and existing memory budget.
 It does not load every possible pose/outfit in the rig library. Selected assets
 stay resident across seeks; assets beyond the budget still pass normal exact
-readiness when needed. Native VFX/audio keep their own preparation owners.
+readiness when needed. Native VFX preparation uses the selected recording's
+actual sources. Sources at the displayed or requested seek time are mandatory;
+upcoming sources warm through the existing background budget. Opening no longer
+waits for every registered spell source. Native VFX/audio keep their own preparation owners.
 
 The 14 October native interaction run measured first track selection after case
 preparation at **148 ms** (previously 2,221 ms), warm seeks at **72–79 ms**, and
@@ -142,6 +167,148 @@ metadata and detailed missing-source explanations stay in the inspector. The exi
 under **Conditions → Perception**.
 
 ## Native authoring and the shared event pipeline
+
+### Saved native timeline previews
+
+Native spell timeline thumbnails are baked separately from interactive playback:
+
+```bat
+bake-studio-previews.cmd
+rem Rebuild only an edited spell; unchanged source pages are reused.
+bake-studio-previews.cmd --only=fireball
+rem Add previews for a new recorded sequence.
+bake-studio-previews.cmd --recording=res://.runtime/my-case/amber/journal
+```
+
+The baker reads the existing recorded cases and saves compressed Godot `.res`
+Resources under `.derived/studio-native-previews/`. These contain the rendered
+RGBA frames, source specification, fixed source timestamps and camera quarter.
+Each page holds at most64 frames; the runtime Resource cache retains at most64MiB,
+in addition to the existing bounded visible-thumbnail cache. The files are local
+derived artwork and remain Git-ignored. They survive Studio/app restarts. Source
+or visual-authoring changes invalidate the affected previews on the next index
+reload; unavailable samples use the existing native preview fallback. The main
+game still renders live native effects.
+
+Run the baker with `--plan-only` for a no-render inventory or `--force` to replace
+the selected derived previews. Baking uses the same native source sampler and
+one forward history per phase/view, retaining the existing source sampling and
+128-pixel published thumbnails. It does not run a backend encounter.
+
+The full 30-spell bake took 175 seconds once. A subsequent actual Fireball Library
+test loaded its visible source previews in **80 ms**, with zero native simulation
+jobs and zero misses. Whole-case publication took **3.8 seconds**, including
+recording indexing and world preparation; the thumbnail result does not claim
+that opening a complete case takes 80 ms.
+
+One Gallery destruction asset has a numeric depth/normal sheet wider than the
+GPU's texture limit. `tools/prepare_environment_texture_layout.py` losslessly
+reflows its original cells into `.derived/environment-texture-layouts/` and writes
+the lookup in `generated/environment_texture_layouts.json`. Run it once with a
+Python environment containing Pillow when preparing a fresh artwork checkout.
+It preserves every source pixel, frame, pivot and animation clock; it neither
+resizes artwork nor changes its lighting. Runtime upload readiness checks the
+device limit and reports oversized images before attempting a GPU upload.
+
+### Large-map spell run
+
+The recorded **Sorcerer expedition · Lantern Gallery** study (`GAL01`) contains
+60 successful SDK commands on the existing large map. It includes the entrance
+door, movement through the furnished hall, six spell types, an enemy Magic Missile
+that triggers the Sorcerer's Shield, real damage and environment destruction,
+then Dash and further movement. Both original faction journals are retained.
+Open it from Library or the **Spell composition → Large-map expedition** selectors.
+The playback lasts 42.85 seconds; it does not need a running backend.
+
+For this local captured run, start with actor and track following enabled:
+
+```bat
+studio.cmd --recording=res://.runtime/gallery-sorcerer-20261015-seed3-door/amber/journal --follow-actor=d9d66cc6-2e1b-4180-91a2-3a04ba1e76ab --follow-tracks --view-size=12
+```
+
+`--view-size` sets only the starting orthographic view size. The wider Gallery
+framing keeps the caster and distant area effects in view; wheel zoom remains
+available and seeking retains the chosen zoom.
+
+`tools/studio_gallery_spell_capture.py` regenerates a new run through the normal
+SDK. Its explicit scenario setup grants the premade Sorcerer the Shield reaction;
+all subsequent reactions and outcomes are server-owned.
+
+### Capture a recorded sequence for visual review
+
+`tools/review_studio_sequence.py` opens its own offline Studio process and captures
+the actual UI plus clean world panes through the existing replay/readiness gates.
+It never generates server outcomes or replaces the current user preview. Times
+are seconds on the published Studio timeline; requested and published times,
+source/event rows, faction, camera and rendering errors remain in each receipt.
+
+```sh
+# Existing Factory Python environment supplies Pillow; ffmpeg must be on PATH.
+/home/tommaso/.cache/vfxfactory/export-venv/bin/python tools/review_studio_sequence.py \
+  --godot /mnt/c/Users/tommaso/Documents/Dev/Tools/Godot-4.7.2/Godot_v4.7.2-stable_win64_console.exe \
+  --factory /mnt/c/Users/tommaso/Documents/assets/VFXFactory \
+  --spells fire_bolt magic_missile --perspective amber --camera 0 \
+  --review-fps 12 --output .captures/studio-sequence-review/first-pass
+```
+
+Use a fresh output directory. `--spells all` selects the30 real recordings in
+`generated/studio_spell_case_inventory.json`, including their original journal
+paths. Use `--recording res://.../amber/journal` for another existing SDK journal.
+`--row <exact-row-id>` selects an authored occurrence's interval; `--start` and
+`--end` bound a full-recording review. `--at 1.2` instead captures one settled
+still and needs neither ffmpeg nor Pillow, so ordinary `python3` is sufficient.
+`--godot` can also come from `GODOT`; `--factory` from `VFXFACTORY_ROOT`.
+
+The runner imports the Factory's existing `package()` and `contact_moments()`;
+it does not copy the packager or the Factory renderer. Each completed sequence
+gets MP4, a contact sheet and `sequence.json`; stills keep their original PNGs.
+The batch has `index.html`, `job.json`, `capture.json`, `runner.json` and both
+console/Godot logs. Successful sequences retain selected contact frames by
+default; `--retain-frames` keeps every UI/world image. Failed or incomplete
+receipts keep their frames. The watcher stops only its own executable/job on
+script error or `--timeout`; other Godot previews remain open.
+
+The owned capture process runs at60Hz; review FPS controls screenshot sampling,
+not the renderer's source clock. A
+12-FPS clip can miss a brief hit flash: use a higher rate or an exact-time still
+for that boundary. A finished capture is evidence to inspect, not artistic
+approval or proof that every recorded presentation channel is implemented.
+
+**Inspect → Follow active track** follows the newest active component lane,
+opens its event ancestors and keeps the playhead in view. It follows the actual
+published replay time. Sequence capture enables this and rejects a capture if
+the selected lane is outside the published timeline viewport. Receipts include
+the followed row, all active row IDs, scroll position and both faction clocks.
+
+The first production qualification captured Fire Bolt (55 frames), Magic
+Missile (36), Mage Armor (59) and Web (46) at12FPS. Web retains two independently
+reduced panes at the same published time throughout. A requested-time rounding
+error at Magic Missile's cast boundary was caught by the visibility assertion;
+the observer now follows the published clock, just like Studio playback.
+Evidence is under `.captures/studio-sequence-review/first-production` (Fire Bolt)
+and `.captures/studio-sequence-review/production-final` (the other three).
+
+The30 migrated spells select their native Factory phases through
+`authoring/native_effects/index.json:/spells`. The real player and Studio use the
+same compiled event components, native source sampler, placement and receiving
+body material. Phase rows show actual source previews; their child rows expose
+source-light keys and the actual damaged recipient's material interval.
+**Inspect → Full spell hit material** switches between that material and Colour
+treatment. The dedicated assembled-body thumbnail remains an explicit gap;
+inspect the receiving actor in the replay for that channel.
+
+The real Shield-blocked case can be opened with
+`studio.cmd --recording=res://.runtime/studio-cases/magic_missile-seed3/amber/journal`.
+Its missiles must not produce damage flashes. The migration's successful-hit,
+seek/loop and native framebuffer checks use the other recorded cases listed in
+[the migration plan](../agent_docs/NATIVE_SPELL_CLIENT_MIGRATION_PLAN_2026-10-15.md).
+The complete batch is selectable under **Spell composition** and the capability
+Library, with original recordings for both audiences in
+`generated/studio_spell_case_inventory.json`. Native condition entry/hold/removal,
+Shield interception, Web ownership, healing and area effects use the same player
+components and are exposed on their owner tracks. Aid, Bless, False Life and
+Sacred Flame are deferred and **not accepted**. Every spell's timing and
+positioning still needs artist tuning.
 
 Hide now has separate selected action and condition recipes. Open **Hide → Apply / move / attack →
 Hide and subsequent attack** to inspect its real paired faction recording.
@@ -307,7 +474,7 @@ and `frenzy_render_checks.json` under `generated/`.
 This does not establish completion of every base-case scene; blood, damage/life
 timing and expanded licensed audio have the separate finite acceptance below
 and above. Unselected spell/condition mechanisms, remaining native assignments,
-the Magic Missile control mismatch and deferred Gallery performance work remain
+and deferred Gallery performance work remain
 separately visible; source availability is not a rendering qualification.
 
 The combat timing suite passes 1750 semantic checks across damage, dying, lethal

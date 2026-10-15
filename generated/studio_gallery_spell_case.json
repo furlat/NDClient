@@ -1,0 +1,646 @@
+{
+  "id": "gallery-sorcerer-expedition",
+  "label": "Sorcerer expedition \u00b7 Lantern Gallery",
+  "capability": "Spell composition",
+  "interaction": "Large-map expedition",
+  "descriptor": "res://.runtime/gallery-sorcerer-20261015-seed3-door/capture-result.json",
+  "perspectives": [
+    {
+      "id": "amber",
+      "label": "Amber",
+      "journal": "res://.runtime/gallery-sorcerer-20261015-seed3-door/amber/journal"
+    },
+    {
+      "id": "blue",
+      "label": "Blue",
+      "journal": "res://.runtime/gallery-sorcerer-20261015-seed3-door/blue/journal"
+    }
+  ],
+  "qualification": "Existing Lantern Gallery battlefield; ordinary premade sorcerer with an explicit scenario Shield reaction grant. Both original SDK follower streams; only legal commands, no manufactured outcomes.",
+  "caster_uuid": "d9d66cc6-2e1b-4180-91a2-3a04ba1e76ab",
+  "facts": {
+    "turn": 100,
+    "sensory": 37,
+    "spatial": 75,
+    "action": 2,
+    "step": 35,
+    "movement": 8,
+    "condition": 5,
+    "spell": 23,
+    "damage": 16,
+    "attack": 3,
+    "saving_throw": 3,
+    "object_destroyed": 4,
+    "object_damage": 4,
+    "area_reach": 1
+  },
+  "spells": {
+    "spell.magic_missile": 8,
+    "spell.ray_of_frost": 1,
+    "spell.scorching_ray": 4,
+    "spell.acid_splash": 2,
+    "spell.fireball": 7,
+    "spell.chill_touch": 1
+  },
+  "shield_events": [
+    {
+      "sequence": 8,
+      "event_uuid": "32d071f5-491f-48e1-a090-934c2059e08a",
+      "fact": {
+        "kind": "condition",
+        "target_entity_uuid": "d9d66cc6-2e1b-4180-91a2-3a04ba1e76ab",
+        "event_type": "condition_application",
+        "condition": {
+          "event_uuid": "32d071f5-491f-48e1-a090-934c2059e08a",
+          "condition_uuid": "caf90df2-4f5d-4c6d-bc3e-8c28b820af09",
+          "name": "Shield",
+          "category": "status",
+          "behavior_id": "condition.spell.shield",
+          "resulting_max_hp": null,
+          "resulting_ac": 20,
+          "state": {
+            "duration": {
+              "duration_type": "permanent",
+              "remaining_rounds": null
+            },
+            "condition_uuid": "caf90df2-4f5d-4c6d-bc3e-8c28b820af09",
+            "name": "Shield",
+            "category": "status",
+            "semantic_key": "condition.spell.shield",
+            "behavior_id": "condition.spell.shield",
+            "tags": [
+              "magical"
+            ],
+            "removal_triggers": [],
+            "agency_denial": "none",
+            "outcome_protections": [
+              {
+                "protection_id": "dnd.spells.abjuration.ShieldBuff.magic_missile",
+                "blocked_effect_ids": [
+                  "dnd.spells.evocation.MagicMissile.damage"
+                ]
+              }
+            ],
+            "applied_source_event_cursor": null,
+            "suppression_provider_uuids": [],
+            "duplicate_count": null,
+            "size_change": null,
+            "energy_type": null,
+            "metamagic_mode": null,
+            "affected_item_uuid": null,
+            "enhanced_ability": null,
+            "concentration_slots": []
+          },
+          "resulting_stats": {
+            "normal_hp": 37,
+            "maximum_hp": 37,
+            "temporary_hp": 0,
+            "temporary_hp_grant": null,
+            "armor_class": 20,
+            "healing_blocked": false,
+            "damage_affinities": [],
+            "resolved_size": "Medium",
+            "native_plane_id": "material",
+            "current_plane_id": "material",
+            "spatial_disposition": "present"
+          },
+          "resulting_tile": null,
+          "resulting_item": null,
+          "consumed": false
+        },
+        "consumed": false
+      }
+    },
+    {
+      "sequence": 16,
+      "event_uuid": "a661d483-c403-44ad-8063-75a5c6fe2e42",
+      "fact": {
+        "kind": "condition",
+        "target_entity_uuid": "d9d66cc6-2e1b-4180-91a2-3a04ba1e76ab",
+        "event_type": "condition_removal",
+        "condition": {
+          "event_uuid": "a661d483-c403-44ad-8063-75a5c6fe2e42",
+          "condition_uuid": "caf90df2-4f5d-4c6d-bc3e-8c28b820af09",
+          "name": "Shield",
+          "category": "status",
+          "behavior_id": "condition.spell.shield",
+          "resulting_max_hp": null,
+          "resulting_ac": 15,
+          "state": {
+            "duration": {
+              "duration_type": "permanent",
+              "remaining_rounds": null
+            },
+            "condition_uuid": "caf90df2-4f5d-4c6d-bc3e-8c28b820af09",
+            "name": "Shield",
+            "category": "status",
+            "semantic_key": "condition.spell.shield",
+            "behavior_id": "condition.spell.shield",
+            "tags": [
+              "magical"
+            ],
+            "removal_triggers": [],
+            "agency_denial": "none",
+            "outcome_protections": [
+              {
+                "protection_id": "dnd.spells.abjuration.ShieldBuff.magic_missile",
+                "blocked_effect_ids": [
+                  "dnd.spells.evocation.MagicMissile.damage"
+                ]
+              }
+            ],
+            "applied_source_event_cursor": 83,
+            "suppression_provider_uuids": [],
+            "duplicate_count": null,
+            "size_change": null,
+            "energy_type": null,
+            "metamagic_mode": null,
+            "affected_item_uuid": null,
+            "enhanced_ability": null,
+            "concentration_slots": []
+          },
+          "resulting_stats": {
+            "normal_hp": 37,
+            "maximum_hp": 37,
+            "temporary_hp": 0,
+            "temporary_hp_grant": null,
+            "armor_class": 15,
+            "healing_blocked": false,
+            "damage_affinities": [],
+            "resolved_size": "Medium",
+            "native_plane_id": "material",
+            "current_plane_id": "material",
+            "spatial_disposition": "present"
+          },
+          "resulting_tile": null,
+          "resulting_item": null,
+          "consumed": false
+        },
+        "consumed": false
+      }
+    }
+  ],
+  "requested_positions": [
+    [
+      26,
+      6
+    ],
+    [
+      30,
+      5
+    ],
+    [
+      32,
+      6
+    ],
+    [
+      36,
+      7
+    ],
+    [
+      41,
+      6
+    ],
+    [
+      46,
+      6
+    ],
+    [
+      46,
+      12
+    ],
+    [
+      46,
+      18
+    ]
+  ],
+  "committed_steps": [
+    {
+      "sequence": 3,
+      "event_uuid": "1833dec8-466b-47b9-be1c-e0e8a5dda3ef",
+      "from_position": [
+        23,
+        6
+      ],
+      "to_position": [
+        24,
+        6
+      ]
+    },
+    {
+      "sequence": 3,
+      "event_uuid": "596e8c9f-befc-4005-a19c-297637b14ab9",
+      "from_position": [
+        24,
+        6
+      ],
+      "to_position": [
+        25,
+        6
+      ]
+    },
+    {
+      "sequence": 3,
+      "event_uuid": "a32b1bc2-c05b-495e-afa8-f0e34a481043",
+      "from_position": [
+        25,
+        6
+      ],
+      "to_position": [
+        26,
+        6
+      ]
+    },
+    {
+      "sequence": 18,
+      "event_uuid": "04088730-c36b-46cb-86d5-41d7a4c50a1a",
+      "from_position": [
+        26,
+        6
+      ],
+      "to_position": [
+        27,
+        6
+      ]
+    },
+    {
+      "sequence": 18,
+      "event_uuid": "6bf160ee-56a8-4093-991a-43969d71707d",
+      "from_position": [
+        27,
+        6
+      ],
+      "to_position": [
+        28,
+        6
+      ]
+    },
+    {
+      "sequence": 18,
+      "event_uuid": "62f73d4f-3b61-4bbd-b440-5ccfa4901c74",
+      "from_position": [
+        28,
+        6
+      ],
+      "to_position": [
+        29,
+        6
+      ]
+    },
+    {
+      "sequence": 18,
+      "event_uuid": "896ce6fa-bfa5-413f-ae07-47c05c10b16e",
+      "from_position": [
+        29,
+        6
+      ],
+      "to_position": [
+        30,
+        5
+      ]
+    },
+    {
+      "sequence": 32,
+      "event_uuid": "1b2e61a0-9688-40b8-86af-fcc178aa88c5",
+      "from_position": [
+        30,
+        5
+      ],
+      "to_position": [
+        31,
+        5
+      ]
+    },
+    {
+      "sequence": 32,
+      "event_uuid": "68d09905-f6ea-429c-afd2-53333a861059",
+      "from_position": [
+        31,
+        5
+      ],
+      "to_position": [
+        32,
+        6
+      ]
+    },
+    {
+      "sequence": 46,
+      "event_uuid": "71b3bf5f-fe02-43e9-a7b1-e4044ee3a8a5",
+      "from_position": [
+        32,
+        6
+      ],
+      "to_position": [
+        33,
+        7
+      ]
+    },
+    {
+      "sequence": 46,
+      "event_uuid": "816ec342-ce9e-4042-b6f9-d88532da9c8f",
+      "from_position": [
+        33,
+        7
+      ],
+      "to_position": [
+        34,
+        7
+      ]
+    },
+    {
+      "sequence": 46,
+      "event_uuid": "13a9909b-1aae-4581-b79a-9d6054a49407",
+      "from_position": [
+        34,
+        7
+      ],
+      "to_position": [
+        35,
+        7
+      ]
+    },
+    {
+      "sequence": 46,
+      "event_uuid": "6f72e55c-e76c-4abb-bb58-d33c91bf38ec",
+      "from_position": [
+        35,
+        7
+      ],
+      "to_position": [
+        36,
+        7
+      ]
+    },
+    {
+      "sequence": 60,
+      "event_uuid": "e993d54c-4233-4da1-a8b8-f6c0bbf859be",
+      "from_position": [
+        36,
+        7
+      ],
+      "to_position": [
+        37,
+        6
+      ]
+    },
+    {
+      "sequence": 60,
+      "event_uuid": "4502fc9f-0c9f-4d24-836f-c0e1dd58c0cb",
+      "from_position": [
+        37,
+        6
+      ],
+      "to_position": [
+        38,
+        6
+      ]
+    },
+    {
+      "sequence": 60,
+      "event_uuid": "221a18ed-51e6-46e1-9dfc-2918d47b0aea",
+      "from_position": [
+        38,
+        6
+      ],
+      "to_position": [
+        39,
+        6
+      ]
+    },
+    {
+      "sequence": 60,
+      "event_uuid": "35f053d9-2e7f-4b55-b196-717db72b8a9c",
+      "from_position": [
+        39,
+        6
+      ],
+      "to_position": [
+        40,
+        6
+      ]
+    },
+    {
+      "sequence": 60,
+      "event_uuid": "35308d45-6691-4a0b-a586-ec2f8e6293e5",
+      "from_position": [
+        40,
+        6
+      ],
+      "to_position": [
+        41,
+        6
+      ]
+    },
+    {
+      "sequence": 87,
+      "event_uuid": "0c33dbac-2486-4ad2-b802-ddf49f536927",
+      "from_position": [
+        41,
+        6
+      ],
+      "to_position": [
+        42,
+        6
+      ]
+    },
+    {
+      "sequence": 87,
+      "event_uuid": "38176f5a-e409-44f3-9baa-0b2c0a36ce72",
+      "from_position": [
+        42,
+        6
+      ],
+      "to_position": [
+        43,
+        5
+      ]
+    },
+    {
+      "sequence": 87,
+      "event_uuid": "2d4d413a-2203-4504-8ec1-5c298ff05c11",
+      "from_position": [
+        43,
+        5
+      ],
+      "to_position": [
+        44,
+        5
+      ]
+    },
+    {
+      "sequence": 87,
+      "event_uuid": "b98fe66a-ba03-4533-880d-e7ecf981e9af",
+      "from_position": [
+        44,
+        5
+      ],
+      "to_position": [
+        45,
+        5
+      ]
+    },
+    {
+      "sequence": 87,
+      "event_uuid": "57854273-2f51-484d-a5c0-4b296e7a4e5b",
+      "from_position": [
+        45,
+        5
+      ],
+      "to_position": [
+        46,
+        6
+      ]
+    },
+    {
+      "sequence": 100,
+      "event_uuid": "d6de1090-944e-4b8d-8941-fc3640519e0d",
+      "from_position": [
+        46,
+        6
+      ],
+      "to_position": [
+        46,
+        7
+      ]
+    },
+    {
+      "sequence": 100,
+      "event_uuid": "600dc53d-3351-469a-8787-3cad73f368ea",
+      "from_position": [
+        46,
+        7
+      ],
+      "to_position": [
+        46,
+        8
+      ]
+    },
+    {
+      "sequence": 100,
+      "event_uuid": "06268dc8-d758-4557-a1a4-099d48fa1219",
+      "from_position": [
+        46,
+        8
+      ],
+      "to_position": [
+        46,
+        9
+      ]
+    },
+    {
+      "sequence": 100,
+      "event_uuid": "e2e7f691-f0bb-4d6e-9334-bb6825a4b1a9",
+      "from_position": [
+        46,
+        9
+      ],
+      "to_position": [
+        46,
+        10
+      ]
+    },
+    {
+      "sequence": 100,
+      "event_uuid": "771b05cb-d4cc-4325-baaa-85d369509eac",
+      "from_position": [
+        46,
+        10
+      ],
+      "to_position": [
+        46,
+        11
+      ]
+    },
+    {
+      "sequence": 100,
+      "event_uuid": "664619f8-eb37-42bc-a8f4-1a29f5ccd596",
+      "from_position": [
+        46,
+        11
+      ],
+      "to_position": [
+        46,
+        12
+      ]
+    },
+    {
+      "sequence": 102,
+      "event_uuid": "f65b9326-59f3-4e2f-b50d-76fb66b2d288",
+      "from_position": [
+        46,
+        12
+      ],
+      "to_position": [
+        46,
+        13
+      ]
+    },
+    {
+      "sequence": 102,
+      "event_uuid": "3c1e11eb-c299-4f9a-abae-d58d81033a53",
+      "from_position": [
+        46,
+        13
+      ],
+      "to_position": [
+        46,
+        14
+      ]
+    },
+    {
+      "sequence": 102,
+      "event_uuid": "7cf1d4f0-a4d3-4447-8bca-bda6af8f900d",
+      "from_position": [
+        46,
+        14
+      ],
+      "to_position": [
+        46,
+        15
+      ]
+    },
+    {
+      "sequence": 102,
+      "event_uuid": "2203bf61-bd65-4906-aceb-1fae8e72435e",
+      "from_position": [
+        46,
+        15
+      ],
+      "to_position": [
+        46,
+        16
+      ]
+    },
+    {
+      "sequence": 102,
+      "event_uuid": "0f65e915-3cb6-4c47-8524-655dd815976d",
+      "from_position": [
+        46,
+        16
+      ],
+      "to_position": [
+        46,
+        17
+      ]
+    },
+    {
+      "sequence": 102,
+      "event_uuid": "f6080776-0c02-43f0-acf5-fd0ef18a3b96",
+      "from_position": [
+        46,
+        17
+      ],
+      "to_position": [
+        46,
+        18
+      ]
+    }
+  ],
+  "final_position": [
+    46,
+    18
+  ],
+  "commands": 60,
+  "checks": 10,
+  "failures": []
+}

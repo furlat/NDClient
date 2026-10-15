@@ -3,6 +3,10 @@ extends RefCounted
 const Authoring = preload("res://presentation/authoring.gd")
 const MovementMedia = preload("res://presentation/movement_media.gd")
 const Requirements = preload("res://presentation/requirements.gd")
+const NativeChannels=preload("res://presentation/native_spell_channels.gd")
+const NativeSpells=preload("res://presentation/native_spell_authoring.gd")
+const NativePersistent=preload("res://presentation/native_persistent.gd")
+const SpellDelivery=preload("res://presentation/spell_delivery.gd")
 const LIMIT = 2000
 
 static func create() -> Dictionary:
@@ -57,10 +61,22 @@ static func _need(row: Dictionary, kind: String, reason: String, source: String,
         if not pointer.is_empty():missing.source_pointer=pointer
         row.components.append(missing)
 
-static func _media_needed(row: Dictionary, media: Array, source: String, base_ms: float=INF, pointer: String="") -> void:
+static func _cast_requirements(row:Dictionary,cast:Dictionary,source:String,binding:String="")->void:
+    if cast.is_empty() or not cast.get("enabled",true):return
+    _need(row,"body","missing_authored_cast_body",source,"reaction_cast_binding" if not binding.is_empty() else "",binding)
+    var layers:Array=[]
+    for field in ["weaponGlow","aura"]:
+        if cast.get(field)!=null:layers.append(cast[field])
+    layers.append_array(cast.get("effects",[]))
+    for layer in layers:
+        if layer.get("enabled",true) and not layer.get("hidden",false):
+            _need(row,"sprite_layer","authored_cast_layer_not_implemented",source+":"+str(layer.get("id","")),"authored_id",layer.get("id",""))
+
+static func _media_needed(row: Dictionary, media: Array, source: String, base_ms: float=INF, pointer: String="",replaced:Array=[]) -> void:
     for index in media.size():
         var item:Dictionary=media[index]
         var asset: String=item.get("assetId","")
+        if asset in replaced:continue
         if not asset.is_empty() and row.components.any(func(component):return asset in component.get("asset_ids",[]) and not component.trace_track_id.is_empty()):continue
         var missing=_component("media","authored_media_not_implemented",source+":"+str(item.get("id",asset)))
         missing.authored_id=item.get("id",asset);missing.asset_ids=[asset]
@@ -94,10 +110,13 @@ static func _persistent_condition(row: Dictionary, condition: Dictionary, persis
     var prefix = str(condition.behavior_id)+"/persistent/"
     var source = "catalog/condition_recipes.json:/"+prefix.trim_suffix("/")
     var mechanisms: Array=[]
+    var native=NativeSpells.condition(str(condition.behavior_id),cache)
+    var replaced:Array=native.get("lifecycle",{}).get("replaces_media",[])
     for field in ["bodyColor","bodyRamp","bodyOutline","bodyPose","frozenPose"]:
         if persistent.get(field)!=null:mechanisms.append(field)
     if persistent.get("alphaMultiplier",1.0)!=1.0:mechanisms.append("alphaMultiplier")
-    for layer in persistent.get("layers",[]):mechanisms.append("layer:"+str(layer.id))
+    for layer in persistent.get("layers",[]):
+        if layer.get("assetId","") not in replaced:mechanisms.append("layer:"+str(layer.id))
     var activity_poses:Array=persistent.get("activityPoses",[])
     for i in activity_poses.size():
         if activity_poses[i].rigId==rig_id:mechanisms.append("activityPoses:"+str(i))
@@ -113,12 +132,28 @@ static func _persistent_condition(row: Dictionary, condition: Dictionary, persis
         component.merge({"id":key,"trace_track_id":key,"actor_uuid":row.actor_uuid,"mechanism":mechanism,
             "start_ms":row.get("_commit_ms",row._admit_ms),"persistent":true,"status":"playing"},true)
         row.components.append(component)
+    _native_persistent_components(row,native,"condition:"+str(condition.condition_uuid),row.target_uuid,cache)
     # These authoring mechanisms remain separate requirements until a real
     # implementation emits their exact samples; a body or marker is insufficient.
     for field in ["equipmentModifiers","appearanceLayers"]:
         if not persistent.get(field,[]).is_empty():row.components.append(_component("condition","authored_condition_"+field+"_not_implemented",source+"."+field))
     for field in ["bodyScale","bodyDistortion","liveCopies","absenceEcho"]:
         if persistent.get(field)!=null:row.components.append(_component("condition","authored_condition_"+field+"_not_implemented",source+"."+field))
+
+static func _native_persistent_components(row:Dictionary,selected:Dictionary,owner_id:String,actor_uuid:Variant,cache:Dictionary)->void:
+    var native_index=0
+    for phase in NativeSpells.condition_phases(selected):
+        var sample=phase.duplicate()
+        sample.merge({"id":owner_id+":native:"+str(native_index),"kind":"native_effect","native_spell":true,
+            "actor_uuid":actor_uuid,"start_ms":row.get("_commit_ms",row._admit_ms),"duration_ms":INF},true)
+        var component=_compiled_component(sample,cache)
+        component.persistent=true
+        row.components.append(component)
+        for channel in NativeChannels.channels(sample):
+            var child=_compiled_component(channel,cache)
+            child.persistent=true
+            row.components.append(child)
+        native_index+=1
 
 static func _compiled_component(component: Dictionary, cache: Dictionary) -> Dictionary:
     var row=_component(component.kind,component.get("reason",""),component.get("source",""))
@@ -128,7 +163,7 @@ static func _compiled_component(component: Dictionary, cache: Dictionary) -> Dic
         "timing":{"resolved":true,"start_ms":component.start_ms,"end_ms":component.start_ms+component.duration_ms,"reason":"compiled_source_clock"}},true)
     # Only finite diagnostic identities are retained. No actor/world snapshots,
     # source tracks, materials or native handles enter the bounded live trace.
-    for field in ["attachment","text","source_id","authored_id","cue_id"]:
+    for field in ["attachment","text","source_id","authored_id","cue_id","intercepted_by_condition_uuid"]:
         if component.has(field):row[field]=component[field]
     if component.has("layer"):
         row.slot=component.layer.get("slot","");row.authored_id=component.layer.get("id","")
@@ -141,9 +176,19 @@ static func _compiled_component(component: Dictionary, cache: Dictionary) -> Dic
 
 static func _requirements(row: Dictionary, node: Dictionary, actor: Dictionary, cache: Dictionary, resolved_recipe: Dictionary) -> void:
     var fact: Dictionary = node.fact if node.get("fact") != null else {}
-    if node.get("canceled",false): row.components = []; row.reasons = ["canceled"]; return
+    if node.get("canceled",false):
+        # Canceling the hostile outcome does not cancel the condition response
+        # which actually intercepted it. Preserve only that compiled evidence.
+        row.components=row.components.filter(func(component):return component.has("intercepted_by_condition_uuid"))
+        row.reasons=["canceled"];return
     if fact.is_empty(): row.reasons = ["fact_not_disclosed"]; return
     match row.kind:
+        "sensory":
+            # The disclosed after-value owns this diagnostic requirement. It
+            # creates no effect and requires no private source actor identity.
+            for id in fact.get("spatial_effects_changed",{}):
+                var selected=NativePersistent.spatial_selection(fact.spatial_effects_changed[id],cache)
+                _native_persistent_components(row,selected,"spatial:"+str(id),null,cache)
         "movement": row.reasons = ["movement_container_visuals_belong_to_steps"]
         "step":
             if not fact.get("committed",false): row.components = []; row.reasons = ["uncommitted_step"]; return
@@ -251,8 +296,15 @@ static func _requirements(row: Dictionary, node: Dictionary, actor: Dictionary, 
                 if change.get("feedbackEnabled",false):
                     _need(row,"feedback_text","authored_condition_feedback_not_implemented",
                         Authoring.Catalog.source_pointer("catalog/condition_recipes.json",key+"/"+phase+"/feedbackEnabled",cache))
-                _media_needed(row,change.get("effects",[]),source+".effects",row._commit_ms,"catalog/condition_recipes.json:/"+key+"/"+phase+"/effects")
+                var replaced:Array=NativeSpells.condition(key,cache).get("lifecycle",{}).get("replaces_media",[])
+                _media_needed(row,change.get("effects",[]),source+".effects",row._commit_ms,"catalog/condition_recipes.json:/"+key+"/"+phase+"/effects",replaced)
                 if phase=="application":_persistent_condition(row,fact.condition,recipe.get("persistent",{}),cache,Authoring.rig_id(actor,cache))
+                if phase=="application" and recipe.get("reactionCastBinding")!=null:
+                    var binding:String=recipe.reactionCastBinding
+                    var cast_recipe=NativeSpells.recipe({"behavior_id":binding},cache)
+                    var pointer=Authoring.Catalog.source_pointer("catalog/condition_recipes.json",key+"/reactionCastBinding",cache)
+                    if cast_recipe.is_empty():_need(row,"body","condition_reaction_binding_recipe_missing",pointer)
+                    else:_cast_requirements(row,cast_recipe.get("cast",{}),pointer,binding)
         "action", "shove":
             var file = "catalog/shove_recipes.json" if row.kind == "shove" else "catalog/body_action_recipes.json"
             var recipe_id: String = str(fact.get("behavior_id",""))
@@ -266,14 +318,10 @@ static func _requirements(row: Dictionary, node: Dictionary, actor: Dictionary, 
                 var source="spells/"+str(fact.behavior_id)+".json"
                 var cast:Dictionary=recipe.get("cast",{})
                 if row.get("cast_owner_event",node.uuid)==node.uuid and not cast.is_empty() and cast.get("enabled",true):
-                    _need(row,"body","missing_authored_cast_body",source+".cast")
-                    var layers:Array=[]
-                    for field in ["weaponGlow","aura"]:
-                        if cast.get(field)!=null:layers.append(cast[field])
-                    layers.append_array(cast.get("effects",[]))
-                    for layer in layers:
-                        if layer.get("enabled",true) and not layer.get("hidden",false):_need(row,"sprite_layer","authored_cast_layer_not_implemented",source+".cast:"+str(layer.get("id","")),"authored_id",layer.get("id",""))
-                if fact.get("application")!=null and recipe.get("projectile")!=null and not _has(row,"native_effect","attachment","projectile") and not _has(row,"geometry_projectile"):
+                    _cast_requirements(row,cast,source+".cast")
+                var selected=NativeSpells.selection(str(fact.behavior_id),cache)
+                var shared_area:bool=not selected.is_empty() and SpellDelivery.selected_for(selected,fact).get("delivery",{}).get("scope")=="area"
+                if fact.get("application")!=null and not shared_area and recipe.get("projectile")!=null and not _has(row,"native_effect","attachment","projectile") and not _has(row,"geometry_projectile"):
                     row.components.append(_component("projectile","authored_projectile_not_implemented",source+".projectile"))
     _operation_requirements(row,node,resolved_recipe,cache)
     if row.components.is_empty() and row.reasons.is_empty():
@@ -325,8 +373,7 @@ static func compile_rows(lineage: Dictionary, group: Dictionary, graph: Dictiona
             for field in ["start","hp","flash","number","body_enabled","terminal","lethal"]:
                 row.damage_timing[field]=timing[field]
         if row.kind=="spell":
-            var application:Variant=node.fact.get("application")
-            var cast_key:String=application.lineage_uuid if application!=null else node.lineage_uuid
+            var cast_key:String=SpellDelivery.cast_key(node,graph)
             row.cast_owner_event=graph.get("casts",{}).get(cast_key,{}).get("source_event_uuid",node.uuid)
         if row.kind in ["damage","condition","heal","forced_movement"]: row.actor_uuid = row.target_uuid
         for track in group.actor_tracks:
@@ -338,10 +385,15 @@ static func compile_rows(lineage: Dictionary, group: Dictionary, graph: Dictiona
                 "status":"playing","holding_pose":track.get("holding_pose",false),"motion":track.get("motion",false)},true)
             if track.has("motion_fraction_from"):
                 component.motion_phase={"from":track.motion_fraction_from,"to":track.motion_fraction_to}
+            if track.has("reaction_cast_binding"):
+                component.reaction_cast_binding=track.reaction_cast_binding
+                component.source=track.source
+                component.condition_uuid=track.condition_uuid
             row.components.append(component)
         for component in group.get("components",[]):
             if component.source_event_uuid!=node.uuid:continue
             row.components.append(_compiled_component(component,cache))
+            for channel in NativeChannels.channels(component):row.components.append(_compiled_component(channel,cache))
         var actor: Dictionary = graph.actor_inputs.get(node.uuid,{}).get(row.actor_uuid,{})
         _requirements(row,node,actor,cache,graph.recipes.get(node.uuid,{}))
         if row.components.is_empty(): row._admit_ms = commits.get(node.uuid,group.duration_ms)
@@ -359,7 +411,7 @@ static func _refresh(row: Dictionary) -> bool:
     for component in row.components:
         if component.status == "missing": missing.append(component.reason)
         elif component.status == "not_visible": hidden.append(component.reason)
-        elif component.status != "presented": pending = true
+        elif component.status not in ["presented","inactive"]: pending = true
     row.reasons = missing if not missing.is_empty() else hidden
     if not missing.is_empty(): row.status = "missing"
     elif pending or not row.completed: row.status = "playing"
@@ -454,6 +506,8 @@ static func record(trace: Dictionary, evidence: Array) -> void:
                 component.sample_count += 1
                 if component.first_sample_ms == null: component.first_sample_ms = at
                 component.last_sample_ms = at
+            elif component.sample_count == 0 and sample.get("inactive",false):
+                component.status="inactive";component.reason=sample.get("reason","not_selected")
             elif component.sample_count == 0:
                 var reason: String = sample.get("reason","renderer_missing")
                 component.status = "not_visible" if reason in ["offscreen","not_visible"] else "missing"

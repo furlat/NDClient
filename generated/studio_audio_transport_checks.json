@@ -1,6 +1,6 @@
 {
   "audio_driver": "WASAPI",
-  "checks": 65,
+  "checks": 249,
   "evidence": [
     {
       "attachments": {
@@ -22,17 +22,17 @@
           "clock_error_s": 0.0,
           "contact_ms": 1333.33333333333,
           "cue_id": "footstep",
-          "display_ms": 1339.25564090411,
+          "display_ms": 1339.18641868188,
           "lift_pixels": 0.0,
           "native_actor_position": [
-            5.42426407597289,
-            7.42426407597289
+            5.4241466019643,
+            7.4241466019643
           ],
           "native_ground_distance": 0.0,
-          "native_position_s": 0.00882086157798767,
-          "offset_s": 0.00592230757077164,
+          "native_position_s": 0.00875283405184746,
+          "offset_s": 0.00585308534854971,
           "source_frame": 10.0,
-          "source_seconds": 0.839255640904105,
+          "source_seconds": 0.839186418681883,
           "source_sync_s": 0.0
         },
         "2:83b2b7d9-cfd2-45fb-a8b5-df108998325c:audio:footstep:2": {
@@ -56,17 +56,17 @@
           "clock_error_s": 0.0,
           "contact_ms": 750.0,
           "cue_id": "footstep",
-          "display_ms": 750.144761904761,
+          "display_ms": 753.730888888888,
           "lift_pixels": 0.0,
           "native_actor_position": [
-            4.42450974507594,
-            6.42450974507594
+            4.43059560448091,
+            6.43059560448091
           ],
           "native_ground_distance": 0.0,
-          "native_position_s": 0.000144761899719015,
-          "offset_s": 0.000144761904760912,
+          "native_position_s": 0.00373088894411922,
+          "offset_s": 0.0037308888888881,
           "source_frame": 3.0,
-          "source_seconds": 0.250144761904761,
+          "source_seconds": 0.253730888888888,
           "source_sync_s": 0.0
         }
       },
@@ -80,6 +80,339 @@
           "muted": 0,
           "shots": 3,
           "started": 3
+        },
+        "enabled": true,
+        "errors": [],
+        "rows": {
+          "2:426dd452-7ba0-4651-8a63-a4ea03bd4c2d:audio:footstep:1": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 1443.35308534855,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "2:426dd452-7ba0-4651-8a63-a4ea03bd4c2d:audio:footstep:1",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "2:83b2b7d9-cfd2-45fb-a8b5-df108998325c:audio:footstep:2": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 2116.01128180821,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "2:83b2b7d9-cfd2-45fb-a8b5-df108998325c:audio:footstep:2",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "2:ee894a12-c56b-43ea-9615-e0aa9e67907f:audio:footstep:0": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 861.11311111111,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "2:ee894a12-c56b-43ea-9615-e0aa9e67907f:audio:footstep:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          }
+        }
+      },
+      "end_ms": 2267.76692271233,
+      "label": "whole_move",
+      "onsets": {
+        "2:426dd452-7ba0-4651-8a63-a4ea03bd4c2d:audio:footstep:1": {
+          "display_ms": 1339.18641868188,
+          "native_position_s": 0.00875283405184746,
+          "scheduled_ms": 1333.33333333333,
+          "source_offset_s": 0.00585308534854971,
+          "source_policy": "rendered_actor",
+          "world_position": "(5.424147, 0.0, 7.424147)"
+        },
+        "2:83b2b7d9-cfd2-45fb-a8b5-df108998325c:audio:footstep:2": {
+          "display_ms": 2004.9001706971,
+          "native_position_s": 0.00780045334249735,
+          "scheduled_ms": 2000.0,
+          "source_offset_s": 0.00490017069710166,
+          "source_policy": "rendered_actor",
+          "world_position": "(6.5539, 0.0, 8.553901)"
+        },
+        "2:ee894a12-c56b-43ea-9615-e0aa9e67907f:audio:footstep:0": {
+          "display_ms": 753.730888888888,
+          "native_position_s": 0.00373088894411922,
+          "scheduled_ms": 750.0,
+          "source_offset_s": 0.0037308888888881,
+          "source_policy": "rendered_actor",
+          "world_position": "(4.430595, 0.0, 6.430595)"
+        }
+      },
+      "pcm_capture": "res://.captures/studio/audio/whole_move.wav",
+      "pcm_frames": 108032,
+      "peak": 0.0112529071047902,
+      "recording": "res://.runtime/studio-cases/walk_diagonal-seed3-v2/amber/journal",
+      "starts": {
+        "2:426dd452-7ba0-4651-8a63-a4ea03bd4c2d:audio:footstep:1": 1,
+        "2:83b2b7d9-cfd2-45fb-a8b5-df108998325c:audio:footstep:2": 1,
+        "2:ee894a12-c56b-43ea-9615-e0aa9e67907f:audio:footstep:0": 1
+      },
+      "transport": {
+        "busy": false,
+        "duration_ms": 2267.76692271233,
+        "loop_enabled": false,
+        "paused": true,
+        "presentation_end_ms": 2267.76692271233
+      }
+    },
+    {
+      "attachments": {
+        "2:426dd452-7ba0-4651-8a63-a4ea03bd4c2d:audio:footstep:1": {
+          "attachment": "ground",
+          "distance_from_ground_contact": 0.0
+        },
+        "2:83b2b7d9-cfd2-45fb-a8b5-df108998325c:audio:footstep:2": {
+          "attachment": "ground",
+          "distance_from_ground_contact": 0.0
+        },
+        "2:ee894a12-c56b-43ea-9615-e0aa9e67907f:audio:footstep:0": {
+          "attachment": "ground",
+          "distance_from_ground_contact": 0.0
+        }
+      },
+      "contacts": {
+        "2:426dd452-7ba0-4651-8a63-a4ea03bd4c2d:audio:footstep:1": {
+          "clock_error_s": 0.0,
+          "contact_ms": 1333.33333333333,
+          "cue_id": "footstep",
+          "display_ms": 1336.88700598347,
+          "lift_pixels": 0.0,
+          "native_actor_position": [
+            5.42024436914921,
+            7.42024436914921
+          ],
+          "native_ground_distance": 0.0,
+          "native_position_s": 0.00643990933895111,
+          "offset_s": 0.00355367265013842,
+          "source_frame": 10.0,
+          "source_seconds": 0.836887005983472,
+          "source_sync_s": 0.0
+        },
+        "2:83b2b7d9-cfd2-45fb-a8b5-df108998325c:audio:footstep:2": {
+          "clock_error_s": 0.0,
+          "contact_ms": 2000.0,
+          "cue_id": "footstep",
+          "display_ms": 2005.01461514155,
+          "lift_pixels": 0.0,
+          "native_actor_position": [
+            6.55409454007494,
+            8.55409454007494
+          ],
+          "native_ground_distance": 0.0,
+          "native_position_s": 0.00501461513340473,
+          "offset_s": 0.00501461514154607,
+          "source_frame": 3.0,
+          "source_seconds": 1.50501461514155,
+          "source_sync_s": 0.0
+        },
+        "2:ee894a12-c56b-43ea-9615-e0aa9e67907f:audio:footstep:0": {
+          "clock_error_s": 0.0,
+          "contact_ms": 750.0,
+          "cue_id": "footstep",
+          "display_ms": 765.234333333333,
+          "lift_pixels": 0.0,
+          "native_actor_position": [
+            4.45011759739182,
+            6.45011759739182
+          ],
+          "native_ground_distance": 0.0,
+          "native_position_s": 0.0152343334630132,
+          "offset_s": 0.0152343333333333,
+          "source_frame": 3.0,
+          "source_seconds": 0.265234333333333,
+          "source_sync_s": 0.0
+        }
+      },
+      "diagnostics": {
+        "counters": {
+          "crossed": 3,
+          "expired": 0,
+          "limited": 0,
+          "loops": 0,
+          "missing": 0,
+          "muted": 0,
+          "shots": 3,
+          "started": 3
+        },
+        "enabled": true,
+        "errors": [],
+        "rows": {
+          "2:426dd452-7ba0-4651-8a63-a4ea03bd4c2d:audio:footstep:1": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 1441.27856153903,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "2:426dd452-7ba0-4651-8a63-a4ea03bd4c2d:audio:footstep:1",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "2:83b2b7d9-cfd2-45fb-a8b5-df108998325c:audio:footstep:2": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 2116.12572625266,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "2:83b2b7d9-cfd2-45fb-a8b5-df108998325c:audio:footstep:2",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "2:ee894a12-c56b-43ea-9615-e0aa9e67907f:audio:footstep:0": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 856.609666666667,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "2:ee894a12-c56b-43ea-9615-e0aa9e67907f:audio:footstep:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          }
+        }
+      },
+      "end_ms": 2267.76692271233,
+      "label": "selected_onset",
+      "onsets": {
+        "2:426dd452-7ba0-4651-8a63-a4ea03bd4c2d:audio:footstep:1": {
+          "display_ms": 1336.88700598347,
+          "native_position_s": 0.00643990933895111,
+          "scheduled_ms": 1333.33333333333,
+          "source_offset_s": 0.00355367265013842,
+          "source_policy": "rendered_actor",
+          "world_position": "(5.420244, 0.0, 7.420244)"
+        },
+        "2:83b2b7d9-cfd2-45fb-a8b5-df108998325c:audio:footstep:2": {
+          "display_ms": 2005.01461514155,
+          "native_position_s": 0.00501461513340473,
+          "scheduled_ms": 2000.0,
+          "source_offset_s": 0.00501461514154607,
+          "source_policy": "rendered_actor",
+          "world_position": "(6.554094, 0.0, 8.554094)"
+        },
+        "2:ee894a12-c56b-43ea-9615-e0aa9e67907f:audio:footstep:0": {
+          "display_ms": 765.234333333333,
+          "native_position_s": 0.0152343334630132,
+          "scheduled_ms": 750.0,
+          "source_offset_s": 0.0152343333333333,
+          "source_policy": "rendered_actor",
+          "world_position": "(4.450118, 0.0, 6.450118)"
+        }
+      },
+      "pcm_capture": "res://.captures/studio/audio/selected_onset.wav",
+      "pcm_frames": 73728,
+      "peak": 0.0112063670530915,
+      "recording": "res://.runtime/studio-cases/walk_diagonal-seed3-v2/amber/journal",
+      "starts": {
+        "2:426dd452-7ba0-4651-8a63-a4ea03bd4c2d:audio:footstep:1": 1,
+        "2:83b2b7d9-cfd2-45fb-a8b5-df108998325c:audio:footstep:2": 1,
+        "2:ee894a12-c56b-43ea-9615-e0aa9e67907f:audio:footstep:0": 1
+      },
+      "transport": {
+        "busy": false,
+        "duration_ms": 2267.76692271233,
+        "loop_enabled": false,
+        "paused": true,
+        "presentation_end_ms": 2267.76692271233
+      }
+    },
+    {
+      "attachments": {
+        "2:426dd452-7ba0-4651-8a63-a4ea03bd4c2d:audio:footstep:1": {
+          "attachment": "ground",
+          "distance_from_ground_contact": 0.0
+        },
+        "2:83b2b7d9-cfd2-45fb-a8b5-df108998325c:audio:footstep:2": {
+          "attachment": "ground",
+          "distance_from_ground_contact": 0.0
+        }
+      },
+      "contacts": {
+        "2:426dd452-7ba0-4651-8a63-a4ea03bd4c2d:audio:footstep:1": {
+          "clock_error_s": 0.0,
+          "contact_ms": 1333.33333333333,
+          "cue_id": "footstep",
+          "display_ms": 1339.25564090411,
+          "lift_pixels": 0.0,
+          "native_actor_position": [
+            5.42426407597289,
+            7.42426407597289
+          ],
+          "native_ground_distance": 0.0,
+          "native_position_s": 0.00592230772599578,
+          "offset_s": 0.00592230757077164,
+          "source_frame": 10.0,
+          "source_seconds": 0.839255640904105,
+          "source_sync_s": 0.0
+        },
+        "2:83b2b7d9-cfd2-45fb-a8b5-df108998325c:audio:footstep:2": {
+          "clock_error_s": 0.0,
+          "contact_ms": 2000.0,
+          "cue_id": "footstep",
+          "display_ms": 2004.9001706971,
+          "lift_pixels": 0.0,
+          "native_actor_position": [
+            6.55390032140905,
+            8.55390032140905
+          ],
+          "native_ground_distance": 0.0,
+          "native_position_s": 0.00490017049014568,
+          "offset_s": 0.00490017069710166,
+          "source_frame": 3.0,
+          "source_seconds": 1.5049001706971,
+          "source_sync_s": 0.0
+        }
+      },
+      "diagnostics": {
+        "counters": {
+          "crossed": 5,
+          "expired": 0,
+          "limited": 0,
+          "loops": 0,
+          "missing": 0,
+          "muted": 0,
+          "shots": 5,
+          "started": 5
         },
         "enabled": true,
         "errors": [],
@@ -120,285 +453,6 @@
             "attachment": "ground",
             "bus": "SFX",
             "cue_id": "footstep",
-            "display_ms": 860.660634920634,
-            "enabled": true,
-            "gain_db": -12.0,
-            "id": "2:ee894a12-c56b-43ea-9615-e0aa9e67907f:audio:footstep:0",
-            "native_playing": false,
-            "offset_s": null,
-            "paused": false,
-            "reason": "",
-            "source_ready": true,
-            "starts": 1,
-            "state": "finished"
-          }
-        }
-      },
-      "end_ms": 2267.76692271233,
-      "label": "whole_move",
-      "pcm_frames": 107520,
-      "peak": 0.022913733497262,
-      "recording": "res://.runtime/studio-cases/walk_diagonal-seed3-v2/amber/journal",
-      "starts": {
-        "2:426dd452-7ba0-4651-8a63-a4ea03bd4c2d:audio:footstep:1": 1,
-        "2:83b2b7d9-cfd2-45fb-a8b5-df108998325c:audio:footstep:2": 1,
-        "2:ee894a12-c56b-43ea-9615-e0aa9e67907f:audio:footstep:0": 1
-      },
-      "transport": {
-        "busy": false,
-        "duration_ms": 2267.76692271233,
-        "loop_enabled": false,
-        "paused": true,
-        "presentation_end_ms": 2267.76692271233
-      }
-    },
-    {
-      "attachments": {
-        "2:426dd452-7ba0-4651-8a63-a4ea03bd4c2d:audio:footstep:1": {
-          "attachment": "ground",
-          "distance_from_ground_contact": 0.0
-        },
-        "2:83b2b7d9-cfd2-45fb-a8b5-df108998325c:audio:footstep:2": {
-          "attachment": "ground",
-          "distance_from_ground_contact": 0.0
-        },
-        "2:ee894a12-c56b-43ea-9615-e0aa9e67907f:audio:footstep:0": {
-          "attachment": "ground",
-          "distance_from_ground_contact": 0.0
-        }
-      },
-      "contacts": {
-        "2:426dd452-7ba0-4651-8a63-a4ea03bd4c2d:audio:footstep:1": {
-          "clock_error_s": 0.0,
-          "contact_ms": 1333.33333333333,
-          "cue_id": "footstep",
-          "display_ms": 1339.39175201522,
-          "lift_pixels": 0.0,
-          "native_actor_position": [
-            5.42449506419203,
-            7.42449506419203
-          ],
-          "native_ground_distance": 0.0,
-          "native_position_s": 0.00605841865763068,
-          "offset_s": 0.00605841868188281,
-          "source_frame": 10.0,
-          "source_seconds": 0.839391752015216,
-          "source_sync_s": 0.0
-        },
-        "2:83b2b7d9-cfd2-45fb-a8b5-df108998325c:audio:footstep:2": {
-          "clock_error_s": 0.0,
-          "contact_ms": 2000.0,
-          "cue_id": "footstep",
-          "display_ms": 2005.05194847488,
-          "lift_pixels": 0.0,
-          "native_actor_position": [
-            6.55415789684362,
-            8.55415789684362
-          ],
-          "native_ground_distance": 0.0,
-          "native_position_s": 0.00505194859579206,
-          "offset_s": 0.00505194847487951,
-          "source_frame": 3.0,
-          "source_seconds": 1.50505194847488,
-          "source_sync_s": 0.0
-        },
-        "2:ee894a12-c56b-43ea-9615-e0aa9e67907f:audio:footstep:0": {
-          "clock_error_s": 0.0,
-          "contact_ms": 750.0,
-          "cue_id": "footstep",
-          "display_ms": 765.129333333333,
-          "lift_pixels": 0.0,
-          "native_actor_position": [
-            4.44993940647991,
-            6.44993940647991
-          ],
-          "native_ground_distance": 0.0,
-          "native_position_s": 0.0180272106081247,
-          "offset_s": 0.0151293333333333,
-          "source_frame": 3.0,
-          "source_seconds": 0.265129333333333,
-          "source_sync_s": 0.0
-        }
-      },
-      "diagnostics": {
-        "counters": {
-          "crossed": 3,
-          "expired": 0,
-          "limited": 0,
-          "loops": 0,
-          "missing": 0,
-          "muted": 0,
-          "shots": 3,
-          "started": 3
-        },
-        "enabled": true,
-        "errors": [],
-        "rows": {
-          "2:426dd452-7ba0-4651-8a63-a4ea03bd4c2d:audio:footstep:1": {
-            "attachment": "ground",
-            "bus": "SFX",
-            "cue_id": "footstep",
-            "display_ms": 1443.59319645966,
-            "enabled": true,
-            "gain_db": -12.0,
-            "id": "2:426dd452-7ba0-4651-8a63-a4ea03bd4c2d:audio:footstep:1",
-            "native_playing": false,
-            "offset_s": null,
-            "paused": false,
-            "reason": "",
-            "source_ready": true,
-            "starts": 1,
-            "state": "finished"
-          },
-          "2:83b2b7d9-cfd2-45fb-a8b5-df108998325c:audio:footstep:2": {
-            "attachment": "ground",
-            "bus": "SFX",
-            "cue_id": "footstep",
-            "display_ms": 2116.26939291932,
-            "enabled": true,
-            "gain_db": -12.0,
-            "id": "2:83b2b7d9-cfd2-45fb-a8b5-df108998325c:audio:footstep:2",
-            "native_playing": false,
-            "offset_s": null,
-            "paused": false,
-            "reason": "",
-            "source_ready": true,
-            "starts": 1,
-            "state": "finished"
-          },
-          "2:ee894a12-c56b-43ea-9615-e0aa9e67907f:audio:footstep:0": {
-            "attachment": "ground",
-            "bus": "SFX",
-            "cue_id": "footstep",
-            "display_ms": 856.299888888889,
-            "enabled": true,
-            "gain_db": -12.0,
-            "id": "2:ee894a12-c56b-43ea-9615-e0aa9e67907f:audio:footstep:0",
-            "native_playing": false,
-            "offset_s": null,
-            "paused": false,
-            "reason": "",
-            "source_ready": true,
-            "starts": 1,
-            "state": "finished"
-          }
-        }
-      },
-      "end_ms": 2267.76692271233,
-      "label": "selected_onset",
-      "pcm_frames": 73728,
-      "peak": 0.0102411825209856,
-      "recording": "res://.runtime/studio-cases/walk_diagonal-seed3-v2/amber/journal",
-      "starts": {
-        "2:426dd452-7ba0-4651-8a63-a4ea03bd4c2d:audio:footstep:1": 1,
-        "2:83b2b7d9-cfd2-45fb-a8b5-df108998325c:audio:footstep:2": 1,
-        "2:ee894a12-c56b-43ea-9615-e0aa9e67907f:audio:footstep:0": 1
-      },
-      "transport": {
-        "busy": false,
-        "duration_ms": 2267.76692271233,
-        "loop_enabled": false,
-        "paused": true,
-        "presentation_end_ms": 2267.76692271233
-      }
-    },
-    {
-      "attachments": {
-        "2:426dd452-7ba0-4651-8a63-a4ea03bd4c2d:audio:footstep:1": {
-          "attachment": "ground",
-          "distance_from_ground_contact": 0.0
-        },
-        "2:83b2b7d9-cfd2-45fb-a8b5-df108998325c:audio:footstep:2": {
-          "attachment": "ground",
-          "distance_from_ground_contact": 0.0
-        }
-      },
-      "contacts": {
-        "2:426dd452-7ba0-4651-8a63-a4ea03bd4c2d:audio:footstep:1": {
-          "clock_error_s": 0.0,
-          "contact_ms": 1333.33333333333,
-          "cue_id": "footstep",
-          "display_ms": 1339.42886312633,
-          "lift_pixels": 0.0,
-          "native_actor_position": [
-            5.42455804383709,
-            7.42455804383709
-          ],
-          "native_ground_distance": 0.0,
-          "native_position_s": 0.00609552999958396,
-          "offset_s": 0.00609552979299451,
-          "source_frame": 10.0,
-          "source_seconds": 0.839428863126328,
-          "source_sync_s": 0.0
-        },
-        "2:83b2b7d9-cfd2-45fb-a8b5-df108998325c:audio:footstep:2": {
-          "clock_error_s": 0.0,
-          "contact_ms": 2000.0,
-          "cue_id": "footstep",
-          "display_ms": 2005.14250403044,
-          "lift_pixels": 0.0,
-          "native_actor_position": [
-            6.55431157472003,
-            8.55431157472003
-          ],
-          "native_ground_distance": 0.0,
-          "native_position_s": 0.00514250388368964,
-          "offset_s": 0.00514250403043548,
-          "source_frame": 3.0,
-          "source_seconds": 1.50514250403044,
-          "source_sync_s": 0.0
-        }
-      },
-      "diagnostics": {
-        "counters": {
-          "crossed": 5,
-          "expired": 0,
-          "limited": 0,
-          "loops": 0,
-          "missing": 0,
-          "muted": 0,
-          "shots": 5,
-          "started": 5
-        },
-        "enabled": true,
-        "errors": [],
-        "rows": {
-          "2:426dd452-7ba0-4651-8a63-a4ea03bd4c2d:audio:footstep:1": {
-            "attachment": "ground",
-            "bus": "SFX",
-            "cue_id": "footstep",
-            "display_ms": 1443.59552979299,
-            "enabled": true,
-            "gain_db": -12.0,
-            "id": "2:426dd452-7ba0-4651-8a63-a4ea03bd4c2d:audio:footstep:1",
-            "native_playing": false,
-            "offset_s": null,
-            "paused": false,
-            "reason": "",
-            "source_ready": true,
-            "starts": 1,
-            "state": "finished"
-          },
-          "2:83b2b7d9-cfd2-45fb-a8b5-df108998325c:audio:footstep:2": {
-            "attachment": "ground",
-            "bus": "SFX",
-            "cue_id": "footstep",
-            "display_ms": 2117.2839643479,
-            "enabled": true,
-            "gain_db": -12.0,
-            "id": "2:83b2b7d9-cfd2-45fb-a8b5-df108998325c:audio:footstep:2",
-            "native_playing": false,
-            "offset_s": null,
-            "paused": false,
-            "reason": "",
-            "source_ready": true,
-            "starts": 1,
-            "state": "finished"
-          },
-          "2:ee894a12-c56b-43ea-9615-e0aa9e67907f:audio:footstep:0": {
-            "attachment": "ground",
-            "bus": "SFX",
-            "cue_id": "footstep",
             "display_ms": 770.0,
             "enabled": true,
             "gain_db": -12.0,
@@ -415,8 +469,27 @@
       },
       "end_ms": 2267.76692271233,
       "label": "inside_old_one_shot",
-      "pcm_frames": 72704,
-      "peak": 0.010078995488584,
+      "onsets": {
+        "2:426dd452-7ba0-4651-8a63-a4ea03bd4c2d:audio:footstep:1": {
+          "display_ms": 1339.25564090411,
+          "native_position_s": 0.00592230772599578,
+          "scheduled_ms": 1333.33333333333,
+          "source_offset_s": 0.00592230757077164,
+          "source_policy": "rendered_actor",
+          "world_position": "(5.424264, 0.0, 7.424264)"
+        },
+        "2:83b2b7d9-cfd2-45fb-a8b5-df108998325c:audio:footstep:2": {
+          "display_ms": 2004.9001706971,
+          "native_position_s": 0.00490017049014568,
+          "scheduled_ms": 2000.0,
+          "source_offset_s": 0.00490017069710166,
+          "source_policy": "rendered_actor",
+          "world_position": "(6.5539, 0.0, 8.553901)"
+        }
+      },
+      "pcm_capture": "res://.captures/studio/audio/inside_old_one_shot.wav",
+      "pcm_frames": 72192,
+      "peak": 0.0109937470406294,
       "recording": "res://.runtime/studio-cases/walk_diagonal-seed3-v2/amber/journal",
       "starts": {
         "2:426dd452-7ba0-4651-8a63-a4ea03bd4c2d:audio:footstep:1": 1,
@@ -442,17 +515,17 @@
           "clock_error_s": 0.0,
           "contact_ms": 750.0,
           "cue_id": "footstep",
-          "display_ms": 761.161571428571,
+          "display_ms": 757.222253968254,
           "lift_pixels": 0.0,
           "native_actor_position": [
-            4.44320589112709,
-            6.44320589112709
+            4.43652064759803,
+            6.43652064759803
           ],
           "native_ground_distance": 0.0,
-          "native_position_s": 0.0111615713685751,
-          "offset_s": 0.0111615714285714,
+          "native_position_s": 0.0101133789867163,
+          "offset_s": 0.00722225396825399,
           "source_frame": 3.0,
-          "source_seconds": 0.261161571428571,
+          "source_seconds": 0.257222253968254,
           "source_sync_s": 0.0
         }
       },
@@ -506,12 +579,12 @@
             "attachment": "ground",
             "bus": "SFX",
             "cue_id": "footstep",
-            "display_ms": 754.674,
+            "display_ms": 756.877,
             "enabled": true,
             "gain_db": -12.0,
             "id": "2:ee894a12-c56b-43ea-9615-e0aa9e67907f:audio:footstep:0",
             "native_playing": true,
-            "offset_s": 0.00467399999999998,
+            "offset_s": 0.00687699999999995,
             "paused": false,
             "reason": "",
             "source_ready": true,
@@ -520,10 +593,21 @@
           }
         }
       },
-      "end_ms": 754.674,
+      "end_ms": 756.877,
       "label": "selected_clip_loop",
-      "pcm_frames": 6656,
-      "peak": 0.00546346046030521,
+      "onsets": {
+        "2:ee894a12-c56b-43ea-9615-e0aa9e67907f:audio:footstep:0": {
+          "display_ms": 757.222253968254,
+          "native_position_s": 0.0101133789867163,
+          "scheduled_ms": 750.0,
+          "source_offset_s": 0.00722225396825399,
+          "source_policy": "rendered_actor",
+          "world_position": "(4.436521, 0.0, 6.436521)"
+        }
+      },
+      "pcm_capture": "res://.captures/studio/audio/selected_clip_loop.wav",
+      "pcm_frames": 7168,
+      "peak": 0.00630814023315907,
       "recording": "res://.runtime/studio-cases/walk_diagonal-seed3-v2/amber/journal",
       "starts": {
         "2:ee894a12-c56b-43ea-9615-e0aa9e67907f:audio:footstep:0": 2
@@ -544,7 +628,7 @@
         },
         "2:a67ca160-9fbc-48a2-8a77-732ee150893a:audio:jump_takeoff:0": {
           "attachment": "body",
-          "distance_from_ground_contact": 1.43785572052002
+          "distance_from_ground_contact": 1.43950939178467
         }
       },
       "contacts": {
@@ -559,7 +643,7 @@
             6
           ],
           "native_ground_distance": 0.0,
-          "native_position_s": 0.0841666683554649,
+          "native_position_s": 0.083708330988884,
           "offset_s": 0.08,
           "source_frame": 15.0,
           "source_seconds": -1,
@@ -569,17 +653,17 @@
           "clock_error_s": 0.0,
           "contact_ms": 500.0,
           "cue_id": "jump_takeoff",
-          "display_ms": 508.649888888889,
-          "lift_pixels": 1.37283646649765,
+          "display_ms": 506.944444444444,
+          "lift_pixels": 1.10221632381495,
           "native_actor_position": [
-            4.02731543859649,
+            4.0219298245614,
             6.0
           ],
-          "native_ground_distance": 0.0350286327302456,
-          "native_position_s": 0.0113124996423721,
-          "offset_s": 0.00864988888888877,
+          "native_ground_distance": 0.0281236208975315,
+          "native_position_s": 0.00960416626185179,
+          "offset_s": 0.00694444444444446,
           "source_frame": 0.0,
-          "source_seconds": 0.0113814327485379,
+          "source_seconds": 0.00913742690058481,
           "source_sync_s": 0.0
         }
       },
@@ -617,7 +701,7 @@
             "attachment": "body",
             "bus": "SFX",
             "cue_id": "jump_takeoff",
-            "display_ms": 915.733809523809,
+            "display_ms": 917.48,
             "enabled": true,
             "gain_db": -18.0,
             "id": "2:a67ca160-9fbc-48a2-8a77-732ee150893a:audio:jump_takeoff:0",
@@ -633,8 +717,27 @@
       },
       "end_ms": 1778.396,
       "label": "jump-seed3-v2/amber",
-      "pcm_frames": 79360,
-      "peak": 0.266864061355591,
+      "onsets": {
+        "2:a1e0d653-29b3-46fe-a007-0b7e447defb0:audio:landing:1": {
+          "display_ms": 1376.38888888889,
+          "native_position_s": 0.00904166698455811,
+          "scheduled_ms": 1370.0,
+          "source_offset_s": 0.0063888888888855,
+          "source_policy": "rendered_actor",
+          "world_position": "(6.767544, 0.0, 6.0)"
+        },
+        "2:a67ca160-9fbc-48a2-8a77-732ee150893a:audio:jump_takeoff:0": {
+          "display_ms": 506.944444444444,
+          "native_position_s": 0.00960416626185179,
+          "scheduled_ms": 500.0,
+          "source_offset_s": 0.00694444444444446,
+          "source_policy": "rendered_actor",
+          "world_position": "(3.908648, 0.420425, 5.792969)"
+        }
+      },
+      "pcm_capture": "res://.captures/studio/audio/jump-seed3-v2-amber.wav",
+      "pcm_frames": 79872,
+      "peak": 0.266866385936737,
       "recording": "res://.runtime/studio-cases/jump-seed3-v2/amber/journal",
       "starts": {
         "2:a1e0d653-29b3-46fe-a007-0b7e447defb0:audio:landing:1": 1,
@@ -678,7 +781,7 @@
             "attachment": "weapon",
             "bus": "SFX",
             "cue_id": "weapon_swing",
-            "display_ms": 1250.552,
+            "display_ms": 1251.83333333333,
             "enabled": true,
             "gain_db": -14.0,
             "id": "2:5605c8fb-e56c-40f7-b07e-6166ac81d932:audio:weapon_swing:5",
@@ -694,7 +797,7 @@
             "attachment": "target_body",
             "bus": "SFX",
             "cue_id": "physical_impact",
-            "display_ms": 1600.45352380952,
+            "display_ms": 1599.147,
             "enabled": true,
             "gain_db": -12.0,
             "id": "2:8307200c-d69d-4dda-8486-6094de652064:audio:physical_impact:3",
@@ -710,7 +813,26 @@
       },
       "end_ms": 2416.66666666667,
       "label": "melee-seed3/amber",
-      "pcm_frames": 110592,
+      "onsets": {
+        "2:5605c8fb-e56c-40f7-b07e-6166ac81d932:audio:weapon_swing:5": {
+          "display_ms": 1173.61111111111,
+          "native_position_s": 0.00960416626185179,
+          "scheduled_ms": 1166.66666666667,
+          "source_offset_s": 0.00694444444444434,
+          "source_policy": "rendered_actor",
+          "world_position": "(4.043836, 0.298742, 5.712242)"
+        },
+        "2:8307200c-d69d-4dda-8486-6094de652064:audio:physical_impact:3": {
+          "display_ms": 1173.61111111111,
+          "native_position_s": 0.00984126981347799,
+          "scheduled_ms": 1166.66666666667,
+          "source_offset_s": 0.00694444444444434,
+          "source_policy": "rendered_actor",
+          "world_position": "(4.789063, 0.516689, 5.789063)"
+        }
+      },
+      "pcm_capture": "res://.captures/studio/audio/melee-seed3-amber.wav",
+      "pcm_frames": 111104,
       "peak": 0.225742846727371,
       "recording": "res://.runtime/studio-cases/melee-seed3/amber/journal",
       "starts": {
@@ -739,7 +861,19 @@
           "attachment": "ground",
           "distance_from_ground_contact": 0.0
         },
+        "2:ab854fa6-128f-4260-b57f-5fc266afd7a0:audio:equipment_handle:0": {
+          "attachment": "body",
+          "distance_from_ground_contact": 0.59662127494812
+        },
         "3:5df3443e-68ee-4567-8527-4de0c6e4faed:audio:hide_transition:1": {
+          "attachment": "body",
+          "distance_from_ground_contact": 0.59662127494812
+        },
+        "7:9ff0aa5c-9764-467b-8350-65023e30f55b:audio:torch_ignite:1": {
+          "attachment": "body",
+          "distance_from_ground_contact": 0.59662127494812
+        },
+        "7:ebe3189d-6012-4b16-95e3-52fad54503bd:audio:equipment_handle:0": {
           "attachment": "body",
           "distance_from_ground_contact": 0.59662127494812
         },
@@ -764,7 +898,7 @@
             6.0
           ],
           "native_ground_distance": 0.0,
-          "native_position_s": 0.00984126981347799,
+          "native_position_s": 0.00694399978965521,
           "offset_s": 0.00694400000000042,
           "source_frame": 10.0,
           "source_seconds": 0.840277333333333,
@@ -781,7 +915,7 @@
             6.0
           ],
           "native_ground_distance": 0.0,
-          "native_position_s": 0.00702947843819857,
+          "native_position_s": 0.00412799976766109,
           "offset_s": 0.00412800000003608,
           "source_frame": 3.0,
           "source_seconds": 0.254128000000036,
@@ -798,7 +932,7 @@
             6.0
           ],
           "native_ground_distance": 0.0,
-          "native_position_s": 0.0157369617372751,
+          "native_position_s": 0.00702947843819857,
           "offset_s": 0.00412800000003608,
           "source_frame": 3.0,
           "source_seconds": 0.254128000000036,
@@ -815,7 +949,7 @@
             6.57576307692794
           ],
           "native_ground_distance": 0.0,
-          "native_position_s": 0.00879818573594093,
+          "native_position_s": 0.00590630760416389,
           "offset_s": 0.00590630757078998,
           "source_frame": 10.0,
           "source_seconds": 0.839239640904123,
@@ -832,7 +966,7 @@
             7.56873047560464
           ],
           "native_ground_distance": 0.0,
-          "native_position_s": 0.00412799976766109,
+          "native_position_s": 0.00702947843819857,
           "offset_s": 0.00412799999999652,
           "source_frame": 3.0,
           "source_seconds": 0.254127999999997,
@@ -841,14 +975,14 @@
       },
       "diagnostics": {
         "counters": {
-          "crossed": 6,
+          "crossed": 10,
           "expired": 0,
           "limited": 0,
           "loops": 0,
           "missing": 0,
           "muted": 0,
-          "shots": 6,
-          "started": 6
+          "shots": 10,
+          "started": 10
         },
         "enabled": true,
         "errors": [],
@@ -901,6 +1035,22 @@
             "starts": 1,
             "state": "finished"
           },
+          "2:ab854fa6-128f-4260-b57f-5fc266afd7a0:audio:equipment_handle:0": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "equipment_handle",
+            "display_ms": 890.300555555556,
+            "enabled": true,
+            "gain_db": -18.0,
+            "id": "2:ab854fa6-128f-4260-b57f-5fc266afd7a0:audio:equipment_handle:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
           "3:5df3443e-68ee-4567-8527-4de0c6e4faed:audio:hide_transition:1": {
             "attachment": "body",
             "bus": "SFX",
@@ -909,6 +1059,54 @@
             "enabled": true,
             "gain_db": -24.0,
             "id": "3:5df3443e-68ee-4567-8527-4de0c6e4faed:audio:hide_transition:1",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "6:573ba18a-2b05-432b-b3ac-55090bcdee2e:audio:equipment_handle:0": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "equipment_handle",
+            "display_ms": 2422.19733333333,
+            "enabled": true,
+            "gain_db": -18.0,
+            "id": "6:573ba18a-2b05-432b-b3ac-55090bcdee2e:audio:equipment_handle:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "7:9ff0aa5c-9764-467b-8350-65023e30f55b:audio:torch_ignite:1": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "torch_ignite",
+            "display_ms": 3973.56266666666,
+            "enabled": true,
+            "gain_db": -22.0,
+            "id": "7:9ff0aa5c-9764-467b-8350-65023e30f55b:audio:torch_ignite:1",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "7:ebe3189d-6012-4b16-95e3-52fad54503bd:audio:equipment_handle:0": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "equipment_handle",
+            "display_ms": 3188.864,
+            "enabled": true,
+            "gain_db": -18.0,
+            "id": "7:ebe3189d-6012-4b16-95e3-52fad54503bd:audio:equipment_handle:0",
             "native_playing": false,
             "offset_s": null,
             "paused": false,
@@ -953,14 +1151,101 @@
       },
       "end_ms": 8511.84461514155,
       "label": "hide-light-schema9-seed3/amber",
-      "pcm_frames": 408064,
-      "peak": 0.0133229307830334,
+      "onsets": {
+        "13:6d5f8793-5f4a-4efb-bf43-37ed6d938731:audio:footstep:1": {
+          "display_ms": 5935.45528180822,
+          "native_position_s": 0.00694399978965521,
+          "scheduled_ms": 5928.51128180822,
+          "source_offset_s": 0.00694400000000042,
+          "source_policy": "rendered_actor",
+          "world_position": "(7.983335, 0.0, 6.0)"
+        },
+        "13:c1f8144b-8fb5-4797-818c-a875af10c189:audio:footstep:0": {
+          "display_ms": 5349.30594847492,
+          "native_position_s": 0.00412799976766109,
+          "scheduled_ms": 5345.17794847488,
+          "source_offset_s": 0.00412800000003608,
+          "source_policy": "rendered_actor",
+          "world_position": "(9.390093, 0.0, 6.0)"
+        },
+        "14:db1d7be1-b0f7-487a-8440-365ce165f4d2:audio:footstep:0": {
+          "display_ms": 6949.30594847492,
+          "native_position_s": 0.00702947843819857,
+          "scheduled_ms": 6945.17794847488,
+          "source_offset_s": 0.00412800000003608,
+          "source_policy": "rendered_actor",
+          "world_position": "(6.390093, 0.0, 6.0)"
+        },
+        "2:ab854fa6-128f-4260-b57f-5fc266afd7a0:audio:equipment_handle:0": {
+          "display_ms": 618.048,
+          "native_position_s": 0.00693688867613673,
+          "scheduled_ms": 611.111111111111,
+          "source_offset_s": 0.00693688888888926,
+          "source_policy": "disclosed_stationary_body",
+          "world_position": "(3.789063, 0.516689, 5.789063)"
+        },
+        "3:5df3443e-68ee-4567-8527-4de0c6e4faed:audio:hide_transition:1": {
+          "display_ms": 1683.33333333333,
+          "native_position_s": 0.0,
+          "scheduled_ms": 1683.33333333333,
+          "source_offset_s": 0.0,
+          "source_policy": "rendered_actor",
+          "world_position": "(3.789063, 0.516689, 5.789063)"
+        },
+        "6:573ba18a-2b05-432b-b3ac-55090bcdee2e:audio:equipment_handle:0": {
+          "display_ms": 2151.38133333333,
+          "native_position_s": 0.00958333350718021,
+          "scheduled_ms": 2144.44444444444,
+          "source_offset_s": 0.00693688888888801,
+          "source_policy": "disclosed_stationary_body",
+          "world_position": "(11.78906, 0.516689, 7.789063)"
+        },
+        "7:9ff0aa5c-9764-467b-8350-65023e30f55b:audio:torch_ignite:1": {
+          "display_ms": 2800.0,
+          "native_position_s": 0.0,
+          "scheduled_ms": 2800.0,
+          "source_offset_s": 0.0,
+          "source_policy": "rendered_actor",
+          "world_position": "(11.78906, 0.516689, 7.789063)"
+        },
+        "7:ebe3189d-6012-4b16-95e3-52fad54503bd:audio:equipment_handle:0": {
+          "display_ms": 2918.048,
+          "native_position_s": 0.00693688867613673,
+          "scheduled_ms": 2911.11111111111,
+          "source_offset_s": 0.00693688888888801,
+          "source_policy": "disclosed_stationary_body",
+          "world_position": "(11.78906, 0.516689, 7.789063)"
+        },
+        "8:06952097-8d8d-41c2-8774-23d18f26ef2c:audio:footstep:1": {
+          "display_ms": 4405.90630757079,
+          "native_position_s": 0.00590630760416389,
+          "scheduled_ms": 4400.0,
+          "source_offset_s": 0.00590630757078998,
+          "source_policy": "rendered_actor",
+          "world_position": "(10.57576, 0.0, 6.575763)"
+        },
+        "8:2b0bcbf0-43ce-4d6b-a3fa-7e38067c9323:audio:footstep:0": {
+          "display_ms": 3820.79466666666,
+          "native_position_s": 0.00702947843819857,
+          "scheduled_ms": 3816.66666666667,
+          "source_offset_s": 0.00412799999999652,
+          "source_policy": "rendered_actor",
+          "world_position": "(11.56873, 0.0, 7.56873)"
+        }
+      },
+      "pcm_capture": "res://.captures/studio/audio/hide-light-schema9-seed3-amber.wav",
+      "pcm_frames": 407552,
+      "peak": 0.0258953645825386,
       "recording": "res://.runtime/studio-cases/hide-light-schema9-seed3/amber/journal",
       "starts": {
         "13:6d5f8793-5f4a-4efb-bf43-37ed6d938731:audio:footstep:1": 1,
         "13:c1f8144b-8fb5-4797-818c-a875af10c189:audio:footstep:0": 1,
         "14:db1d7be1-b0f7-487a-8440-365ce165f4d2:audio:footstep:0": 1,
+        "2:ab854fa6-128f-4260-b57f-5fc266afd7a0:audio:equipment_handle:0": 1,
         "3:5df3443e-68ee-4567-8527-4de0c6e4faed:audio:hide_transition:1": 1,
+        "6:573ba18a-2b05-432b-b3ac-55090bcdee2e:audio:equipment_handle:0": 1,
+        "7:9ff0aa5c-9764-467b-8350-65023e30f55b:audio:torch_ignite:1": 1,
+        "7:ebe3189d-6012-4b16-95e3-52fad54503bd:audio:equipment_handle:0": 1,
         "8:06952097-8d8d-41c2-8774-23d18f26ef2c:audio:footstep:1": 1,
         "8:2b0bcbf0-43ce-4d6b-a3fa-7e38067c9323:audio:footstep:0": 1
       },
@@ -971,8 +1256,2649 @@
         "paused": true,
         "presentation_end_ms": 8511.84461514155
       }
+    },
+    {
+      "attachments": {
+        "2:ab854fa6-128f-4260-b57f-5fc266afd7a0:audio:equipment_handle:0": {
+          "attachment": "body",
+          "distance_from_ground_contact": 0.59662127494812
+        }
+      },
+      "contacts": {},
+      "diagnostics": {
+        "counters": {
+          "crossed": 11,
+          "expired": 0,
+          "limited": 0,
+          "loops": 0,
+          "missing": 0,
+          "muted": 0,
+          "shots": 11,
+          "started": 11
+        },
+        "enabled": true,
+        "errors": [],
+        "rows": {
+          "2:ab854fa6-128f-4260-b57f-5fc266afd7a0:audio:equipment_handle:0": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "equipment_handle",
+            "display_ms": 618.055111111111,
+            "enabled": true,
+            "gain_db": -18.0,
+            "id": "2:ab854fa6-128f-4260-b57f-5fc266afd7a0:audio:equipment_handle:0",
+            "native_playing": true,
+            "offset_s": 0.00694399999999996,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "started"
+          },
+          "3:5df3443e-68ee-4567-8527-4de0c6e4faed:audio:hide_transition:1": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "hide_transition",
+            "display_ms": 611.111111111111,
+            "enabled": true,
+            "gain_db": -24.0,
+            "id": "3:5df3443e-68ee-4567-8527-4de0c6e4faed:audio:hide_transition:1",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 0,
+            "state": "ready"
+          }
+        }
+      },
+      "end_ms": 618.055111111111,
+      "label": "equipment_selected_loop",
+      "onsets": {
+        "2:ab854fa6-128f-4260-b57f-5fc266afd7a0:audio:equipment_handle:0": {
+          "display_ms": 625.795111137404,
+          "native_position_s": 0.0173333324491978,
+          "scheduled_ms": 611.111111111111,
+          "source_offset_s": 0.0146840000262931,
+          "source_policy": "disclosed_stationary_body",
+          "world_position": "(3.789063, 0.516689, 5.789063)"
+        }
+      },
+      "pcm_capture": "res://.captures/studio/audio/equipment_selected_loop.wav",
+      "pcm_frames": 15872,
+      "peak": 0.0031871534883976,
+      "recording": "res://.runtime/studio-cases/hide-light-schema9-seed3/amber/journal",
+      "starts": {
+        "2:ab854fa6-128f-4260-b57f-5fc266afd7a0:audio:equipment_handle:0": 2
+      },
+      "transport": {
+        "busy": true,
+        "duration_ms": 7111.84461514155,
+        "loop_enabled": true,
+        "paused": true,
+        "presentation_end_ms": 8511.84461514155
+      }
+    },
+    {
+      "attachments": {
+        "13:6d5f8793-5f4a-4efb-bf43-37ed6d938731:audio:footstep:1": {
+          "attachment": "ground",
+          "distance_from_ground_contact": 0.0
+        },
+        "13:c1f8144b-8fb5-4797-818c-a875af10c189:audio:footstep:0": {
+          "attachment": "ground",
+          "distance_from_ground_contact": 0.0
+        },
+        "14:db1d7be1-b0f7-487a-8440-365ce165f4d2:audio:footstep:0": {
+          "attachment": "ground",
+          "distance_from_ground_contact": 0.0
+        },
+        "3:5df3443e-68ee-4567-8527-4de0c6e4faed:audio:hide_transition:1": {
+          "attachment": "body",
+          "distance_from_ground_contact": 0.59662127494812
+        },
+        "7:9ff0aa5c-9764-467b-8350-65023e30f55b:audio:torch_ignite:1": {
+          "attachment": "body",
+          "distance_from_ground_contact": 0.59662127494812
+        },
+        "7:ebe3189d-6012-4b16-95e3-52fad54503bd:audio:equipment_handle:0": {
+          "attachment": "body",
+          "distance_from_ground_contact": 0.59662127494812
+        },
+        "8:06952097-8d8d-41c2-8774-23d18f26ef2c:audio:footstep:1": {
+          "attachment": "ground",
+          "distance_from_ground_contact": 0.0
+        },
+        "8:2b0bcbf0-43ce-4d6b-a3fa-7e38067c9323:audio:footstep:0": {
+          "attachment": "ground",
+          "distance_from_ground_contact": 0.0
+        }
+      },
+      "contacts": {
+        "13:6d5f8793-5f4a-4efb-bf43-37ed6d938731:audio:footstep:1": {
+          "clock_error_s": 0.0,
+          "contact_ms": 5928.51128180822,
+          "cue_id": "footstep",
+          "display_ms": 5935.45528180822,
+          "lift_pixels": 0.0,
+          "native_actor_position": [
+            7.9833344,
+            6.0
+          ],
+          "native_ground_distance": 0.0,
+          "native_position_s": 0.00694399978965521,
+          "offset_s": 0.00694400000000042,
+          "source_frame": 10.0,
+          "source_seconds": 0.840277333333333,
+          "source_sync_s": 0.0
+        },
+        "13:c1f8144b-8fb5-4797-818c-a875af10c189:audio:footstep:0": {
+          "clock_error_s": 0.0,
+          "contact_ms": 5345.17794847488,
+          "cue_id": "footstep",
+          "display_ms": 5349.30594847492,
+          "lift_pixels": 0.0,
+          "native_actor_position": [
+            9.39009279999991,
+            6.0
+          ],
+          "native_ground_distance": 0.0,
+          "native_position_s": 0.00412799976766109,
+          "offset_s": 0.00412800000003608,
+          "source_frame": 3.0,
+          "source_seconds": 0.254128000000036,
+          "source_sync_s": 0.0
+        },
+        "14:db1d7be1-b0f7-487a-8440-365ce165f4d2:audio:footstep:0": {
+          "clock_error_s": 0.0,
+          "contact_ms": 6945.17794847488,
+          "cue_id": "footstep",
+          "display_ms": 6949.30594847492,
+          "lift_pixels": 0.0,
+          "native_actor_position": [
+            6.39009279999991,
+            6.0
+          ],
+          "native_ground_distance": 0.0,
+          "native_position_s": 0.00702947843819857,
+          "offset_s": 0.00412800000003608,
+          "source_frame": 3.0,
+          "source_seconds": 0.254128000000036,
+          "source_sync_s": 0.0
+        },
+        "8:06952097-8d8d-41c2-8774-23d18f26ef2c:audio:footstep:1": {
+          "clock_error_s": 0.0,
+          "contact_ms": 4400.0,
+          "cue_id": "footstep",
+          "display_ms": 4405.92230757077,
+          "lift_pixels": 0.0,
+          "native_actor_position": [
+            10.5757359240271,
+            6.57573592402711
+          ],
+          "native_ground_distance": 0.0,
+          "native_position_s": 0.00592230772599578,
+          "offset_s": 0.00592230757077141,
+          "source_frame": 10.0,
+          "source_seconds": 0.839255640904105,
+          "source_sync_s": 0.0
+        },
+        "8:2b0bcbf0-43ce-4d6b-a3fa-7e38067c9323:audio:footstep:0": {
+          "clock_error_s": 0.0,
+          "contact_ms": 3816.66666666667,
+          "cue_id": "footstep",
+          "display_ms": 3820.83333333332,
+          "lift_pixels": 0.0,
+          "native_actor_position": [
+            11.5686648560942,
+            7.56866485609423
+          ],
+          "native_ground_distance": 0.0,
+          "native_position_s": 0.0070521542802453,
+          "offset_s": 0.00416666666665788,
+          "source_frame": 3.0,
+          "source_seconds": 0.254166666666658,
+          "source_sync_s": 0.0
+        }
+      },
+      "diagnostics": {
+        "counters": {
+          "crossed": 10,
+          "expired": 0,
+          "limited": 0,
+          "loops": 0,
+          "missing": 0,
+          "muted": 0,
+          "shots": 10,
+          "started": 10
+        },
+        "enabled": true,
+        "errors": [],
+        "rows": {
+          "13:6d5f8793-5f4a-4efb-bf43-37ed6d938731:audio:footstep:1": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 6039.61528180822,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "13:6d5f8793-5f4a-4efb-bf43-37ed6d938731:audio:footstep:1",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "13:c1f8144b-8fb5-4797-818c-a875af10c189:audio:footstep:0": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 5453.46594847493,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "13:c1f8144b-8fb5-4797-818c-a875af10c189:audio:footstep:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "14:db1d7be1-b0f7-487a-8440-365ce165f4d2:audio:footstep:0": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 7053.46594847493,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "14:db1d7be1-b0f7-487a-8440-365ce165f4d2:audio:footstep:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "2:ab854fa6-128f-4260-b57f-5fc266afd7a0:audio:equipment_handle:0": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "equipment_handle",
+            "display_ms": 631.111111111111,
+            "enabled": true,
+            "gain_db": -18.0,
+            "id": "2:ab854fa6-128f-4260-b57f-5fc266afd7a0:audio:equipment_handle:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "seek_inside",
+            "source_ready": true,
+            "starts": 0,
+            "state": "skipped"
+          },
+          "3:5df3443e-68ee-4567-8527-4de0c6e4faed:audio:hide_transition:1": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "hide_transition",
+            "display_ms": 2255.55555555555,
+            "enabled": true,
+            "gain_db": -24.0,
+            "id": "3:5df3443e-68ee-4567-8527-4de0c6e4faed:audio:hide_transition:1",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "6:573ba18a-2b05-432b-b3ac-55090bcdee2e:audio:equipment_handle:0": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "equipment_handle",
+            "display_ms": 2422.22222222222,
+            "enabled": true,
+            "gain_db": -18.0,
+            "id": "6:573ba18a-2b05-432b-b3ac-55090bcdee2e:audio:equipment_handle:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "7:9ff0aa5c-9764-467b-8350-65023e30f55b:audio:torch_ignite:1": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "torch_ignite",
+            "display_ms": 3973.6111111111,
+            "enabled": true,
+            "gain_db": -22.0,
+            "id": "7:9ff0aa5c-9764-467b-8350-65023e30f55b:audio:torch_ignite:1",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "7:ebe3189d-6012-4b16-95e3-52fad54503bd:audio:equipment_handle:0": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "equipment_handle",
+            "display_ms": 3188.88888888888,
+            "enabled": true,
+            "gain_db": -18.0,
+            "id": "7:ebe3189d-6012-4b16-95e3-52fad54503bd:audio:equipment_handle:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "8:06952097-8d8d-41c2-8774-23d18f26ef2c:audio:footstep:1": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 4510.08897423744,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "8:06952097-8d8d-41c2-8774-23d18f26ef2c:audio:footstep:1",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "8:2b0bcbf0-43ce-4d6b-a3fa-7e38067c9323:audio:footstep:0": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 3924.99999999999,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "8:2b0bcbf0-43ce-4d6b-a3fa-7e38067c9323:audio:footstep:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          }
+        }
+      },
+      "end_ms": 8511.84461514155,
+      "label": "equipment_seek_inside",
+      "onsets": {
+        "13:6d5f8793-5f4a-4efb-bf43-37ed6d938731:audio:footstep:1": {
+          "display_ms": 5935.45528180822,
+          "native_position_s": 0.00694399978965521,
+          "scheduled_ms": 5928.51128180822,
+          "source_offset_s": 0.00694400000000042,
+          "source_policy": "rendered_actor",
+          "world_position": "(7.983335, 0.0, 6.0)"
+        },
+        "13:c1f8144b-8fb5-4797-818c-a875af10c189:audio:footstep:0": {
+          "display_ms": 5349.30594847492,
+          "native_position_s": 0.00412799976766109,
+          "scheduled_ms": 5345.17794847488,
+          "source_offset_s": 0.00412800000003608,
+          "source_policy": "rendered_actor",
+          "world_position": "(9.390093, 0.0, 6.0)"
+        },
+        "14:db1d7be1-b0f7-487a-8440-365ce165f4d2:audio:footstep:0": {
+          "display_ms": 6949.30594847492,
+          "native_position_s": 0.00702947843819857,
+          "scheduled_ms": 6945.17794847488,
+          "source_offset_s": 0.00412800000003608,
+          "source_policy": "rendered_actor",
+          "world_position": "(6.390093, 0.0, 6.0)"
+        },
+        "3:5df3443e-68ee-4567-8527-4de0c6e4faed:audio:hide_transition:1": {
+          "display_ms": 1683.33333333333,
+          "native_position_s": 0.0,
+          "scheduled_ms": 1683.33333333333,
+          "source_offset_s": 0.0,
+          "source_policy": "rendered_actor",
+          "world_position": "(3.789063, 0.516689, 5.789063)"
+        },
+        "6:573ba18a-2b05-432b-b3ac-55090bcdee2e:audio:equipment_handle:0": {
+          "display_ms": 2151.38888888889,
+          "native_position_s": 0.00960416626185179,
+          "scheduled_ms": 2144.44444444444,
+          "source_offset_s": 0.00694444444444252,
+          "source_policy": "disclosed_stationary_body",
+          "world_position": "(11.78906, 0.516689, 7.789063)"
+        },
+        "7:9ff0aa5c-9764-467b-8350-65023e30f55b:audio:torch_ignite:1": {
+          "display_ms": 2800.0,
+          "native_position_s": 0.0,
+          "scheduled_ms": 2800.0,
+          "source_offset_s": 0.0,
+          "source_policy": "rendered_actor",
+          "world_position": "(11.78906, 0.516689, 7.789063)"
+        },
+        "7:ebe3189d-6012-4b16-95e3-52fad54503bd:audio:equipment_handle:0": {
+          "display_ms": 2918.05555555555,
+          "native_position_s": 0.00694444449618459,
+          "scheduled_ms": 2911.11111111111,
+          "source_offset_s": 0.00694444444444252,
+          "source_policy": "disclosed_stationary_body",
+          "world_position": "(11.78906, 0.516689, 7.789063)"
+        },
+        "8:06952097-8d8d-41c2-8774-23d18f26ef2c:audio:footstep:1": {
+          "display_ms": 4405.92230757077,
+          "native_position_s": 0.00592230772599578,
+          "scheduled_ms": 4400.0,
+          "source_offset_s": 0.00592230757077141,
+          "source_policy": "rendered_actor",
+          "world_position": "(10.57574, 0.0, 6.575736)"
+        },
+        "8:2b0bcbf0-43ce-4d6b-a3fa-7e38067c9323:audio:footstep:0": {
+          "display_ms": 3820.83333333332,
+          "native_position_s": 0.0070521542802453,
+          "scheduled_ms": 3816.66666666667,
+          "source_offset_s": 0.00416666666665788,
+          "source_policy": "rendered_actor",
+          "world_position": "(11.56866, 0.0, 7.568665)"
+        }
+      },
+      "pcm_capture": "res://.captures/studio/audio/equipment_seek_inside.wav",
+      "pcm_frames": 384000,
+      "peak": 0.0258953645825386,
+      "recording": "res://.runtime/studio-cases/hide-light-schema9-seed3/amber/journal",
+      "starts": {
+        "13:6d5f8793-5f4a-4efb-bf43-37ed6d938731:audio:footstep:1": 1,
+        "13:c1f8144b-8fb5-4797-818c-a875af10c189:audio:footstep:0": 1,
+        "14:db1d7be1-b0f7-487a-8440-365ce165f4d2:audio:footstep:0": 1,
+        "3:5df3443e-68ee-4567-8527-4de0c6e4faed:audio:hide_transition:1": 1,
+        "6:573ba18a-2b05-432b-b3ac-55090bcdee2e:audio:equipment_handle:0": 1,
+        "7:9ff0aa5c-9764-467b-8350-65023e30f55b:audio:torch_ignite:1": 1,
+        "7:ebe3189d-6012-4b16-95e3-52fad54503bd:audio:equipment_handle:0": 1,
+        "8:06952097-8d8d-41c2-8774-23d18f26ef2c:audio:footstep:1": 1,
+        "8:2b0bcbf0-43ce-4d6b-a3fa-7e38067c9323:audio:footstep:0": 1
+      },
+      "transport": {
+        "busy": false,
+        "duration_ms": 7111.84461514155,
+        "loop_enabled": false,
+        "paused": true,
+        "presentation_end_ms": 8511.84461514155
+      }
+    },
+    {
+      "attachments": {
+        "2:4268379b-f894-488c-b5b0-ffae342d57fd:audio:stance_transition:2": {
+          "attachment": "body",
+          "distance_from_ground_contact": 0.59662127494812
+        },
+        "3:7e554801-b307-4a25-9cc4-3aab6ff47f57:audio:footstep:1": {
+          "attachment": "ground",
+          "distance_from_ground_contact": 0.0
+        },
+        "3:86810cff-14ff-46af-af39-840f67effcb3:audio:footstep:0": {
+          "attachment": "ground",
+          "distance_from_ground_contact": 0.0
+        }
+      },
+      "contacts": {
+        "3:7e554801-b307-4a25-9cc4-3aab6ff47f57:audio:footstep:1": {
+          "clock_error_s": 0.0,
+          "contact_ms": 2725.0,
+          "cue_id": "footstep",
+          "display_ms": 2731.94444444444,
+          "lift_pixels": 0.0,
+          "native_actor_position": [
+            6.02222222222221,
+            6.0
+          ],
+          "native_ground_distance": 0.0,
+          "native_position_s": 0.00694444449618459,
+          "offset_s": 0.0069444444444398,
+          "source_frame": 10.0,
+          "source_seconds": 0.842592592592586,
+          "source_sync_s": 0.0
+        },
+        "3:86810cff-14ff-46af-af39-840f67effcb3:audio:footstep:0": {
+          "clock_error_s": 0.0,
+          "contact_ms": 2287.5,
+          "cue_id": "footstep",
+          "display_ms": 2291.66666666666,
+          "lift_pixels": 0.0,
+          "native_actor_position": [
+            4.61333333333331,
+            6.0
+          ],
+          "native_ground_distance": 0.0,
+          "native_position_s": 0.00416666688397527,
+          "offset_s": 0.00416666666665878,
+          "source_frame": 3.0,
+          "source_seconds": 0.255555555555545,
+          "source_sync_s": 0.0
+        }
+      },
+      "diagnostics": {
+        "counters": {
+          "crossed": 3,
+          "expired": 0,
+          "limited": 0,
+          "loops": 0,
+          "missing": 0,
+          "muted": 0,
+          "shots": 3,
+          "started": 3
+        },
+        "enabled": true,
+        "errors": [],
+        "rows": {
+          "2:4268379b-f894-488c-b5b0-ffae342d57fd:audio:stance_transition:2": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "stance_transition",
+            "display_ms": 920.460333333333,
+            "enabled": true,
+            "gain_db": -20.0,
+            "id": "2:4268379b-f894-488c-b5b0-ffae342d57fd:audio:stance_transition:2",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "3:7e554801-b307-4a25-9cc4-3aab6ff47f57:audio:footstep:1": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 2836.1111111111,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "3:7e554801-b307-4a25-9cc4-3aab6ff47f57:audio:footstep:1",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "3:86810cff-14ff-46af-af39-840f67effcb3:audio:footstep:0": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 2395.83333333332,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "3:86810cff-14ff-46af-af39-840f67effcb3:audio:footstep:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          }
+        }
+      },
+      "end_ms": 4787.5,
+      "label": "rage-seed3-v3/amber",
+      "onsets": {
+        "2:4268379b-f894-488c-b5b0-ffae342d57fd:audio:stance_transition:2": {
+          "display_ms": 510.053333333333,
+          "native_position_s": 0.0127083333209157,
+          "scheduled_ms": 500.0,
+          "source_offset_s": 0.0100533333333333,
+          "source_policy": "rendered_actor",
+          "world_position": "(3.789063, 0.516689, 5.789063)"
+        },
+        "3:7e554801-b307-4a25-9cc4-3aab6ff47f57:audio:footstep:1": {
+          "display_ms": 2731.94444444444,
+          "native_position_s": 0.00694444449618459,
+          "scheduled_ms": 2725.0,
+          "source_offset_s": 0.0069444444444398,
+          "source_policy": "rendered_actor",
+          "world_position": "(6.022222, 0.0, 6.0)"
+        },
+        "3:86810cff-14ff-46af-af39-840f67effcb3:audio:footstep:0": {
+          "display_ms": 2291.66666666666,
+          "native_position_s": 0.00416666688397527,
+          "scheduled_ms": 2287.5,
+          "source_offset_s": 0.00416666666665878,
+          "source_policy": "rendered_actor",
+          "world_position": "(4.613333, 0.0, 6.0)"
+        }
+      },
+      "pcm_capture": "res://.captures/studio/audio/rage-seed3-v3-amber.wav",
+      "pcm_frames": 227840,
+      "peak": 0.0297259800136089,
+      "recording": "res://.runtime/studio-cases/rage-seed3-v3/amber/journal",
+      "starts": {
+        "2:4268379b-f894-488c-b5b0-ffae342d57fd:audio:stance_transition:2": 1,
+        "3:7e554801-b307-4a25-9cc4-3aab6ff47f57:audio:footstep:1": 1,
+        "3:86810cff-14ff-46af-af39-840f67effcb3:audio:footstep:0": 1
+      },
+      "transport": {
+        "busy": false,
+        "duration_ms": 3387.5,
+        "loop_enabled": false,
+        "paused": true,
+        "presentation_end_ms": 4787.5
+      }
+    },
+    {
+      "attachments": {
+        "2:223f42ca-0026-4a3d-a673-2251dd0521a2:audio:footstep:1": {
+          "attachment": "ground",
+          "distance_from_ground_contact": 0.0
+        },
+        "2:9b8d1178-ae6b-4247-8805-5f02a888bdfb:audio:footstep:0": {
+          "attachment": "ground",
+          "distance_from_ground_contact": 0.0
+        },
+        "3:9b8d9002-43df-414d-9dc7-c4b5989d2180:audio:door_open:0": {
+          "attachment": "body",
+          "distance_from_ground_contact": 0.59662127494812
+        },
+        "4:c8c4d266-1ccb-46e9-b303-ee0da6f4272a:audio:potion_drink:2": {
+          "attachment": "head",
+          "distance_from_ground_contact": 0.756075322628021
+        },
+        "5:34652564-8ae6-4385-8e85-7a00a7f486d4:audio:stance_transition:1": {
+          "attachment": "body",
+          "distance_from_ground_contact": 0.59662127494812
+        },
+        "6:480edb17-de1c-47da-b0b8-a9e8ea0e8ead:audio:footstep:1": {
+          "attachment": "ground",
+          "distance_from_ground_contact": 0.0
+        },
+        "6:5e899e58-8222-47b7-a469-d3c860583a40:audio:footstep:0": {
+          "attachment": "ground",
+          "distance_from_ground_contact": 0.0
+        },
+        "6:6ab05996-4bbb-443b-b05b-c2c007fe92c3:audio:footstep:2": {
+          "attachment": "ground",
+          "distance_from_ground_contact": 0.0
+        },
+        "7:eabd42d4-27a4-40f6-b862-28393ae4f206:audio:door_open:0": {
+          "attachment": "body",
+          "distance_from_ground_contact": 0.59662127494812
+        },
+        "8:0b535241-f8d6-49c8-93b6-13ce560d7c66:audio:physical_impact:13": {
+          "attachment": "target_body",
+          "distance_from_ground_contact": 0.59662127494812
+        },
+        "8:235ed730-6dcb-49a6-bda2-dfc4dcd99b1e:audio:footstep:3": {
+          "attachment": "ground",
+          "distance_from_ground_contact": 0.0
+        },
+        "8:3e818ebb-d41d-44ad-8735-e3e5a3383757:audio:footstep:0": {
+          "attachment": "ground",
+          "distance_from_ground_contact": 0.0
+        },
+        "8:646d454e-c390-46c2-86d4-91ad27336510:audio:footstep:4": {
+          "attachment": "ground",
+          "distance_from_ground_contact": 0.0
+        },
+        "8:946c676a-4c9a-420b-b579-09214c81868d:audio:unarmed_swing:15": {
+          "attachment": "body",
+          "distance_from_ground_contact": 0.331456303596497
+        },
+        "8:a5280e76-6c6a-420b-8fc1-7a9a592dd398:audio:footstep:2": {
+          "attachment": "ground",
+          "distance_from_ground_contact": 0.0
+        },
+        "8:cc62475b-1ce0-49fd-8dd9-f2e940252853:audio:physical_impact:8": {
+          "attachment": "target_body",
+          "distance_from_ground_contact": 0.59662127494812
+        },
+        "8:ef4bd5e3-ab8e-4a46-841c-e22773dc2c2c:audio:footstep:5": {
+          "attachment": "ground",
+          "distance_from_ground_contact": 0.0
+        },
+        "8:f6158c4b-f980-417e-b607-3c85c6d14ed3:audio:footstep:1": {
+          "attachment": "ground",
+          "distance_from_ground_contact": 0.0
+        }
+      },
+      "contacts": {
+        "2:223f42ca-0026-4a3d-a673-2251dd0521a2:audio:footstep:1": {
+          "clock_error_s": 0.0,
+          "contact_ms": 1333.33333333333,
+          "cue_id": "footstep",
+          "display_ms": 1333.33333333333,
+          "lift_pixels": 0.0,
+          "native_actor_position": [
+            6.0,
+            5.0
+          ],
+          "native_ground_distance": 0.0,
+          "native_position_s": 0.0,
+          "offset_s": 0.0,
+          "source_frame": 10.0,
+          "source_seconds": 0.833333333333333,
+          "source_sync_s": 0.0
+        },
+        "2:9b8d1178-ae6b-4247-8805-5f02a888bdfb:audio:footstep:0": {
+          "clock_error_s": 0.0,
+          "contact_ms": 750.0,
+          "cue_id": "footstep",
+          "display_ms": 755.640666666667,
+          "lift_pixels": 0.0,
+          "native_actor_position": [
+            4.6135376,
+            5.0
+          ],
+          "native_ground_distance": 0.0,
+          "native_position_s": 0.00564066646620631,
+          "offset_s": 0.00564066666666679,
+          "source_frame": 3.0,
+          "source_seconds": 0.255640666666667,
+          "source_sync_s": 0.0
+        },
+        "6:480edb17-de1c-47da-b0b8-a9e8ea0e8ead:audio:footstep:1": {
+          "clock_error_s": 0.0,
+          "contact_ms": 5989.25564090411,
+          "cue_id": "footstep",
+          "display_ms": 5989.25564090411,
+          "lift_pixels": 0.0,
+          "native_actor_position": [
+            9.0,
+            6.0
+          ],
+          "native_ground_distance": 0.0,
+          "native_position_s": 0.00290249427780509,
+          "offset_s": 0.0,
+          "source_frame": 10.0,
+          "source_seconds": 0.833333333333334,
+          "source_sync_s": 0.0
+        },
+        "6:5e899e58-8222-47b7-a469-d3c860583a40:audio:footstep:0": {
+          "clock_error_s": 0.0,
+          "contact_ms": 5697.58897423744,
+          "cue_id": "footstep",
+          "display_ms": 5701.72497423747,
+          "lift_pixels": 0.0,
+          "native_actor_position": [
+            7.61985280000014,
+            6.0
+          ],
+          "native_ground_distance": 0.0,
+          "native_position_s": 0.00702947843819857,
+          "offset_s": 0.00413600000002862,
+          "source_frame": 3.0,
+          "source_seconds": 0.258272000000057,
+          "source_sync_s": 0.0
+        },
+        "6:6ab05996-4bbb-443b-b05b-c2c007fe92c3:audio:footstep:2": {
+          "clock_error_s": 0.0,
+          "contact_ms": 6322.58897423744,
+          "cue_id": "footstep",
+          "display_ms": 6329.52497423745,
+          "lift_pixels": 0.0,
+          "native_actor_position": [
+            10.6332928,
+            6.0
+          ],
+          "native_ground_distance": 0.0,
+          "native_position_s": 0.00981859397143126,
+          "offset_s": 0.00693600000000788,
+          "source_frame": 3.0,
+          "source_seconds": 1.51387200000002,
+          "source_sync_s": 0.0
+        },
+        "8:235ed730-6dcb-49a6-bda2-dfc4dcd99b1e:audio:footstep:3": {
+          "clock_error_s": 0.0,
+          "contact_ms": 9147.58897423744,
+          "cue_id": "footstep",
+          "display_ms": 9147.58897423744,
+          "lift_pixels": 0.0,
+          "native_actor_position": [
+            16.0,
+            6.0
+          ],
+          "native_ground_distance": 0.0,
+          "native_position_s": 0.0,
+          "offset_s": 0.0,
+          "source_frame": 10.0,
+          "source_seconds": 2.08333333333333,
+          "source_sync_s": 0.0
+        },
+        "8:3e818ebb-d41d-44ad-8735-e3e5a3383757:audio:footstep:0": {
+          "clock_error_s": 0.0,
+          "contact_ms": 8230.92230757077,
+          "cue_id": "footstep",
+          "display_ms": 8234.72141868188,
+          "lift_pixels": 0.0,
+          "native_actor_position": [
+            11.6182357333333,
+            6.0
+          ],
+          "native_ground_distance": 0.0,
+          "native_position_s": 0.00668934220448136,
+          "offset_s": 0.00379911111110596,
+          "source_frame": 3.0,
+          "source_seconds": 0.25759822222221,
+          "source_sync_s": 0.0
+        },
+        "8:646d454e-c390-46c2-86d4-91ad27336510:audio:footstep:4": {
+          "clock_error_s": 0.0,
+          "contact_ms": 11230.9223075708,
+          "cue_id": "footstep",
+          "display_ms": 11237.7783075707,
+          "lift_pixels": 0.0,
+          "native_actor_position": [
+            17.6329087999995,
+            6.0
+          ],
+          "native_ground_distance": 0.0,
+          "native_position_s": 0.00975056644529104,
+          "offset_s": 0.00685599999990154,
+          "source_frame": 3.0,
+          "source_seconds": 2.7637119999998,
+          "source_sync_s": 0.0
+        },
+        "8:a5280e76-6c6a-420b-8fc1-7a9a592dd398:audio:footstep:2": {
+          "clock_error_s": 0.0,
+          "contact_ms": 8855.92230757077,
+          "cue_id": "footstep",
+          "display_ms": 8860.93720704167,
+          "lift_pixels": 0.0,
+          "native_actor_position": [
+            14.6240715174603,
+            6.0
+          ],
+          "native_ground_distance": 0.0,
+          "native_position_s": 0.00501489965245128,
+          "offset_s": 0.00501489947089431,
+          "source_frame": 3.0,
+          "source_seconds": 1.51002979894179,
+          "source_sync_s": 0.0
+        },
+        "8:ef4bd5e3-ab8e-4a46-841c-e22773dc2c2c:audio:footstep:5": {
+          "clock_error_s": 0.0,
+          "contact_ms": 11522.5889742374,
+          "cue_id": "footstep",
+          "display_ms": 11522.5889742374,
+          "lift_pixels": 0.0,
+          "native_actor_position": [
+            19.0,
+            6.0
+          ],
+          "native_ground_distance": 0.0,
+          "native_position_s": 0.0,
+          "offset_s": 0.0,
+          "source_frame": 10.0,
+          "source_seconds": 3.33333333333333,
+          "source_sync_s": 0.0
+        },
+        "8:f6158c4b-f980-417e-b607-3c85c6d14ed3:audio:footstep:1": {
+          "clock_error_s": 0.0,
+          "contact_ms": 8522.58897423744,
+          "cue_id": "footstep",
+          "display_ms": 8522.58897423744,
+          "lift_pixels": 0.0,
+          "native_actor_position": [
+            13.0,
+            6.0
+          ],
+          "native_ground_distance": 0.0,
+          "native_position_s": 0.00290249427780509,
+          "offset_s": 0.0,
+          "source_frame": 10.0,
+          "source_seconds": 0.833333333333334,
+          "source_sync_s": 0.0
+        }
+      },
+      "diagnostics": {
+        "counters": {
+          "crossed": 19,
+          "expired": 0,
+          "limited": 0,
+          "loops": 0,
+          "missing": 0,
+          "muted": 0,
+          "shots": 18,
+          "started": 18
+        },
+        "enabled": true,
+        "errors": [],
+        "rows": {
+          "2:223f42ca-0026-4a3d-a673-2251dd0521a2:audio:footstep:1": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 1444.43733333333,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "2:223f42ca-0026-4a3d-a673-2251dd0521a2:audio:footstep:1",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "2:9b8d1178-ae6b-4247-8805-5f02a888bdfb:audio:footstep:0": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 856.474,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "2:9b8d1178-ae6b-4247-8805-5f02a888bdfb:audio:footstep:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "3:9b8d9002-43df-414d-9dc7-c4b5989d2180:audio:door_open:0": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "door_open",
+            "display_ms": 3196.15697423744,
+            "enabled": true,
+            "gain_db": -17.0,
+            "id": "3:9b8d9002-43df-414d-9dc7-c4b5989d2180:audio:door_open:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "4:c8c4d266-1ccb-46e9-b303-ee0da6f4272a:audio:potion_drink:2": {
+            "attachment": "head",
+            "bus": "SFX",
+            "cue_id": "potion_drink",
+            "display_ms": 4751.67697423748,
+            "enabled": true,
+            "gain_db": -19.0,
+            "id": "4:c8c4d266-1ccb-46e9-b303-ee0da6f4272a:audio:potion_drink:2",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "5:34652564-8ae6-4385-8e85-7a00a7f486d4:audio:stance_transition:1": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "stance_transition",
+            "display_ms": 5701.72497423747,
+            "enabled": true,
+            "gain_db": -20.0,
+            "id": "5:34652564-8ae6-4385-8e85-7a00a7f486d4:audio:stance_transition:1",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "6:480edb17-de1c-47da-b0b8-a9e8ea0e8ead:audio:footstep:1": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 6100.35964090412,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "6:480edb17-de1c-47da-b0b8-a9e8ea0e8ead:audio:footstep:1",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "6:5e899e58-8222-47b7-a469-d3c860583a40:audio:footstep:0": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 5808.69830757078,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "6:5e899e58-8222-47b7-a469-d3c860583a40:audio:footstep:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "6:6ab05996-4bbb-443b-b05b-c2c007fe92c3:audio:footstep:2": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 6440.64230757078,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "6:6ab05996-4bbb-443b-b05b-c2c007fe92c3:audio:footstep:2",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "7:eabd42d4-27a4-40f6-b862-28393ae4f206:audio:door_open:0": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "door_open",
+            "display_ms": 7678.14452979299,
+            "enabled": true,
+            "gain_db": -17.0,
+            "id": "7:eabd42d4-27a4-40f6-b862-28393ae4f206:audio:door_open:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "8:0b535241-f8d6-49c8-93b6-13ce560d7c66:audio:physical_impact:13": {
+            "attachment": "target_body",
+            "bus": "SFX",
+            "cue_id": "physical_impact",
+            "display_ms": 12458.6258631264,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "8:0b535241-f8d6-49c8-93b6-13ce560d7c66:audio:physical_impact:13",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "8:235ed730-6dcb-49a6-bda2-dfc4dcd99b1e:audio:footstep:3": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 9258.69297423743,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "8:235ed730-6dcb-49a6-bda2-dfc4dcd99b1e:audio:footstep:3",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "8:3e818ebb-d41d-44ad-8735-e3e5a3383757:audio:footstep:0": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 8344.16438164485,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "8:3e818ebb-d41d-44ad-8735-e3e5a3383757:audio:footstep:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "8:646d454e-c390-46c2-86d4-91ad27336510:audio:footstep:4": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 11342.0334186819,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "8:646d454e-c390-46c2-86d4-91ad27336510:audio:footstep:4",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "8:861682c7-c225-40ad-9e3b-955417655eb1:audio:weapon_swing_heavy:10": {
+            "attachment": "weapon",
+            "bus": "SFX",
+            "cue_id": "weapon_swing_heavy",
+            "display_ms": 9862.86630757077,
+            "enabled": true,
+            "gain_db": -13.0,
+            "id": "8:861682c7-c225-40ad-9e3b-955417655eb1:audio:weapon_swing_heavy:10",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "attachment_socket_unavailable",
+            "source_ready": true,
+            "starts": 0,
+            "state": "skipped"
+          },
+          "8:946c676a-4c9a-420b-b579-09214c81868d:audio:unarmed_swing:15": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "unarmed_swing",
+            "display_ms": 12403.0738631264,
+            "enabled": true,
+            "gain_db": -20.0,
+            "id": "8:946c676a-4c9a-420b-b579-09214c81868d:audio:unarmed_swing:15",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "8:a5280e76-6c6a-420b-8fc1-7a9a592dd398:audio:footstep:2": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 8974.96992661839,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "8:a5280e76-6c6a-420b-8fc1-7a9a592dd398:audio:footstep:2",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "8:cc62475b-1ce0-49fd-8dd9-f2e940252853:audio:physical_impact:8": {
+            "attachment": "target_body",
+            "bus": "SFX",
+            "cue_id": "physical_impact",
+            "display_ms": 10293.3943075707,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "8:cc62475b-1ce0-49fd-8dd9-f2e940252853:audio:physical_impact:8",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "8:ef4bd5e3-ab8e-4a46-841c-e22773dc2c2c:audio:footstep:5": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 11640.644529793,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "8:ef4bd5e3-ab8e-4a46-841c-e22773dc2c2c:audio:footstep:5",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "8:f6158c4b-f980-417e-b607-3c85c6d14ed3:audio:footstep:1": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 8632.89754566601,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "8:f6158c4b-f980-417e-b607-3c85c6d14ed3:audio:footstep:1",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          }
+        }
+      },
+      "end_ms": 13480.9223075708,
+      "label": "movement-oa",
+      "onsets": {
+        "2:223f42ca-0026-4a3d-a673-2251dd0521a2:audio:footstep:1": {
+          "display_ms": 1333.33333333333,
+          "native_position_s": 0.0,
+          "scheduled_ms": 1333.33333333333,
+          "source_offset_s": 0.0,
+          "source_policy": "rendered_actor",
+          "world_position": "(6.0, 0.0, 5.0)"
+        },
+        "2:9b8d1178-ae6b-4247-8805-5f02a888bdfb:audio:footstep:0": {
+          "display_ms": 755.640666666667,
+          "native_position_s": 0.00564066646620631,
+          "scheduled_ms": 750.0,
+          "source_offset_s": 0.00564066666666679,
+          "source_policy": "rendered_actor",
+          "world_position": "(4.613538, 0.0, 5.0)"
+        },
+        "3:9b8d9002-43df-414d-9dc7-c4b5989d2180:audio:door_open:0": {
+          "display_ms": 2276.73297423744,
+          "native_position_s": 0.00414399988949299,
+          "scheduled_ms": 2272.58897423744,
+          "source_offset_s": 0.00414399999999796,
+          "source_policy": "rendered_actor",
+          "world_position": "(6.789063, 0.516689, 5.789063)"
+        },
+        "4:c8c4d266-1ccb-46e9-b303-ee0da6f4272a:audio:potion_drink:2": {
+          "display_ms": 4411.42097423746,
+          "native_position_s": 0.0068229166790843,
+          "scheduled_ms": 4405.92230757078,
+          "source_offset_s": 0.00549866666668277,
+          "source_policy": "rendered_actor",
+          "world_position": "(6.673828, 0.763871, 5.702474)"
+        },
+        "5:34652564-8ae6-4385-8e85-7a00a7f486d4:audio:stance_transition:1": {
+          "display_ms": 5222.58897423744,
+          "native_position_s": 0.0,
+          "scheduled_ms": 5222.58897423744,
+          "source_offset_s": 0.0,
+          "source_policy": "rendered_actor",
+          "world_position": "(6.789063, 0.516689, 5.789063)"
+        },
+        "6:480edb17-de1c-47da-b0b8-a9e8ea0e8ead:audio:footstep:1": {
+          "display_ms": 5989.25564090411,
+          "native_position_s": 0.00290249427780509,
+          "scheduled_ms": 5989.25564090411,
+          "source_offset_s": 0.0,
+          "source_policy": "rendered_actor",
+          "world_position": "(9.0, 0.0, 6.0)"
+        },
+        "6:5e899e58-8222-47b7-a469-d3c860583a40:audio:footstep:0": {
+          "display_ms": 5701.72497423747,
+          "native_position_s": 0.00702947843819857,
+          "scheduled_ms": 5697.58897423744,
+          "source_offset_s": 0.00413600000002862,
+          "source_policy": "rendered_actor",
+          "world_position": "(7.619853, 0.0, 6.0)"
+        },
+        "6:6ab05996-4bbb-443b-b05b-c2c007fe92c3:audio:footstep:2": {
+          "display_ms": 6329.52497423745,
+          "native_position_s": 0.00981859397143126,
+          "scheduled_ms": 6322.58897423744,
+          "source_offset_s": 0.00693600000000788,
+          "source_policy": "rendered_actor",
+          "world_position": "(10.63329, 0.0, 6.0)"
+        },
+        "7:eabd42d4-27a4-40f6-b862-28393ae4f206:audio:door_open:0": {
+          "display_ms": 6760.0663075708,
+          "native_position_s": 0.00679166661575437,
+          "scheduled_ms": 6755.92230757078,
+          "source_offset_s": 0.00414400000002115,
+          "source_policy": "rendered_actor",
+          "world_position": "(10.78906, 0.516689, 5.789063)"
+        },
+        "8:0b535241-f8d6-49c8-93b6-13ce560d7c66:audio:physical_impact:13": {
+          "display_ms": 12022.5889742374,
+          "native_position_s": 0.0,
+          "scheduled_ms": 12022.5889742374,
+          "source_offset_s": 0.0,
+          "source_policy": "rendered_actor",
+          "world_position": "(18.78906, 0.516689, 5.789063)"
+        },
+        "8:235ed730-6dcb-49a6-bda2-dfc4dcd99b1e:audio:footstep:3": {
+          "display_ms": 9147.58897423744,
+          "native_position_s": 0.0,
+          "scheduled_ms": 9147.58897423744,
+          "source_offset_s": 0.0,
+          "source_policy": "rendered_actor",
+          "world_position": "(16.0, 0.0, 6.0)"
+        },
+        "8:3e818ebb-d41d-44ad-8735-e3e5a3383757:audio:footstep:0": {
+          "display_ms": 8234.72141868188,
+          "native_position_s": 0.00668934220448136,
+          "scheduled_ms": 8230.92230757077,
+          "source_offset_s": 0.00379911111110596,
+          "source_policy": "rendered_actor",
+          "world_position": "(11.61824, 0.0, 6.0)"
+        },
+        "8:646d454e-c390-46c2-86d4-91ad27336510:audio:footstep:4": {
+          "display_ms": 11237.7783075707,
+          "native_position_s": 0.00975056644529104,
+          "scheduled_ms": 11230.9223075708,
+          "source_offset_s": 0.00685599999990154,
+          "source_policy": "rendered_actor",
+          "world_position": "(17.63291, 0.0, 6.0)"
+        },
+        "8:946c676a-4c9a-420b-b579-09214c81868d:audio:unarmed_swing:15": {
+          "display_ms": 12022.5889742374,
+          "native_position_s": 0.0,
+          "scheduled_ms": 12022.5889742374,
+          "source_offset_s": 0.0,
+          "source_policy": "rendered_actor",
+          "world_position": "(17.88281, 0.28705, 6.882813)"
+        },
+        "8:a5280e76-6c6a-420b-8fc1-7a9a592dd398:audio:footstep:2": {
+          "display_ms": 8860.93720704167,
+          "native_position_s": 0.00501489965245128,
+          "scheduled_ms": 8855.92230757077,
+          "source_offset_s": 0.00501489947089431,
+          "source_policy": "rendered_actor",
+          "world_position": "(14.62407, 0.0, 6.0)"
+        },
+        "8:cc62475b-1ce0-49fd-8dd9-f2e940252853:audio:physical_impact:8": {
+          "display_ms": 9862.86630757077,
+          "native_position_s": 0.00694399978965521,
+          "scheduled_ms": 9855.92230757077,
+          "source_offset_s": 0.00694399999999951,
+          "source_policy": "rendered_actor",
+          "world_position": "(16.78906, 0.516689, 5.789063)"
+        },
+        "8:ef4bd5e3-ab8e-4a46-841c-e22773dc2c2c:audio:footstep:5": {
+          "display_ms": 11522.5889742374,
+          "native_position_s": 0.0,
+          "scheduled_ms": 11522.5889742374,
+          "source_offset_s": 0.0,
+          "source_policy": "rendered_actor",
+          "world_position": "(19.0, 0.0, 6.0)"
+        },
+        "8:f6158c4b-f980-417e-b607-3c85c6d14ed3:audio:footstep:1": {
+          "display_ms": 8522.58897423744,
+          "native_position_s": 0.00290249427780509,
+          "scheduled_ms": 8522.58897423744,
+          "source_offset_s": 0.0,
+          "source_policy": "rendered_actor",
+          "world_position": "(13.0, 0.0, 6.0)"
+        }
+      },
+      "pcm_capture": "res://.captures/studio/audio/movement-oa.wav",
+      "pcm_frames": 648192,
+      "peak": 0.149974927306175,
+      "recording": "res://.runtime/studio-cases/movement-oa/journal",
+      "starts": {
+        "2:223f42ca-0026-4a3d-a673-2251dd0521a2:audio:footstep:1": 1,
+        "2:9b8d1178-ae6b-4247-8805-5f02a888bdfb:audio:footstep:0": 1,
+        "3:9b8d9002-43df-414d-9dc7-c4b5989d2180:audio:door_open:0": 1,
+        "4:c8c4d266-1ccb-46e9-b303-ee0da6f4272a:audio:potion_drink:2": 1,
+        "5:34652564-8ae6-4385-8e85-7a00a7f486d4:audio:stance_transition:1": 1,
+        "6:480edb17-de1c-47da-b0b8-a9e8ea0e8ead:audio:footstep:1": 1,
+        "6:5e899e58-8222-47b7-a469-d3c860583a40:audio:footstep:0": 1,
+        "6:6ab05996-4bbb-443b-b05b-c2c007fe92c3:audio:footstep:2": 1,
+        "7:eabd42d4-27a4-40f6-b862-28393ae4f206:audio:door_open:0": 1,
+        "8:0b535241-f8d6-49c8-93b6-13ce560d7c66:audio:physical_impact:13": 1,
+        "8:235ed730-6dcb-49a6-bda2-dfc4dcd99b1e:audio:footstep:3": 1,
+        "8:3e818ebb-d41d-44ad-8735-e3e5a3383757:audio:footstep:0": 1,
+        "8:646d454e-c390-46c2-86d4-91ad27336510:audio:footstep:4": 1,
+        "8:946c676a-4c9a-420b-b579-09214c81868d:audio:unarmed_swing:15": 1,
+        "8:a5280e76-6c6a-420b-8fc1-7a9a592dd398:audio:footstep:2": 1,
+        "8:cc62475b-1ce0-49fd-8dd9-f2e940252853:audio:physical_impact:8": 1,
+        "8:ef4bd5e3-ab8e-4a46-841c-e22773dc2c2c:audio:footstep:5": 1,
+        "8:f6158c4b-f980-417e-b607-3c85c6d14ed3:audio:footstep:1": 1
+      },
+      "transport": {
+        "busy": false,
+        "duration_ms": 13480.9223075708,
+        "loop_enabled": false,
+        "paused": true,
+        "presentation_end_ms": 13480.9223075708
+      }
+    },
+    {
+      "attachments": {
+        "2:d35b1fd1-1bb4-4ded-939c-390d0fc7a242:audio:weapon_swing:5": {
+          "attachment": "weapon",
+          "distance_from_ground_contact": 0.417100667953491
+        },
+        "2:f5e123d3-91a2-4eb6-ac3b-7768c0faac87:audio:physical_impact:3": {
+          "attachment": "target_body",
+          "distance_from_ground_contact": 0.59662127494812
+        },
+        "3:54464993-17c7-46bf-86fe-92f927da1213:audio:weapon_swing:6": {
+          "attachment": "weapon",
+          "distance_from_ground_contact": 0.417100667953491
+        },
+        "3:766e6834-8359-450f-b06f-b2e1712efe35:audio:physical_impact:4": {
+          "attachment": "target_body",
+          "distance_from_ground_contact": 0.59662127494812
+        },
+        "4:fe0f6f4f-2517-4ff9-834a-72e6cc09ddeb:audio:action_surge:0": {
+          "attachment": "body",
+          "distance_from_ground_contact": 0.59662127494812
+        },
+        "5:0c89133a-8258-47ce-a82d-13e5c6c59a2e:audio:physical_impact:4": {
+          "attachment": "target_body",
+          "distance_from_ground_contact": 0.59662127494812
+        },
+        "5:5ecb0211-d42f-4a56-8913-cf7b0db2c2dc:audio:weapon_swing:7": {
+          "attachment": "weapon",
+          "distance_from_ground_contact": 0.417100667953491
+        },
+        "6:0269d9fc-cf36-4431-bd2d-6f64b9defa57:audio:weapon_swing:6": {
+          "attachment": "weapon",
+          "distance_from_ground_contact": 0.417100667953491
+        },
+        "6:c8386716-962f-46e0-ab16-a9a2f3d16caf:audio:physical_impact:4": {
+          "attachment": "target_body",
+          "distance_from_ground_contact": 0.59662127494812
+        }
+      },
+      "contacts": {},
+      "diagnostics": {
+        "counters": {
+          "crossed": 9,
+          "expired": 0,
+          "limited": 0,
+          "loops": 0,
+          "missing": 0,
+          "muted": 0,
+          "shots": 9,
+          "started": 9
+        },
+        "enabled": true,
+        "errors": [],
+        "rows": {
+          "2:d35b1fd1-1bb4-4ded-939c-390d0fc7a242:audio:weapon_swing:5": {
+            "attachment": "weapon",
+            "bus": "SFX",
+            "cue_id": "weapon_swing",
+            "display_ms": 1253.508,
+            "enabled": true,
+            "gain_db": -14.0,
+            "id": "2:d35b1fd1-1bb4-4ded-939c-390d0fc7a242:audio:weapon_swing:5",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "attachment_socket_unavailable",
+            "source_ready": true,
+            "starts": 1,
+            "state": "skipped"
+          },
+          "2:f5e123d3-91a2-4eb6-ac3b-7768c0faac87:audio:physical_impact:3": {
+            "attachment": "target_body",
+            "bus": "SFX",
+            "cue_id": "physical_impact",
+            "display_ms": 1598.38226166426,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "2:f5e123d3-91a2-4eb6-ac3b-7768c0faac87:audio:physical_impact:3",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "3:54464993-17c7-46bf-86fe-92f927da1213:audio:weapon_swing:6": {
+            "attachment": "weapon",
+            "bus": "SFX",
+            "cue_id": "weapon_swing",
+            "display_ms": 3519.08088888889,
+            "enabled": true,
+            "gain_db": -14.0,
+            "id": "3:54464993-17c7-46bf-86fe-92f927da1213:audio:weapon_swing:6",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "attachment_socket_unavailable",
+            "source_ready": true,
+            "starts": 1,
+            "state": "skipped"
+          },
+          "3:766e6834-8359-450f-b06f-b2e1712efe35:audio:physical_impact:4": {
+            "attachment": "target_body",
+            "bus": "SFX",
+            "cue_id": "physical_impact",
+            "display_ms": 3865.99477777777,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "3:766e6834-8359-450f-b06f-b2e1712efe35:audio:physical_impact:4",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "4:fe0f6f4f-2517-4ff9-834a-72e6cc09ddeb:audio:action_surge:0": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "action_surge",
+            "display_ms": 5454.16666666666,
+            "enabled": true,
+            "gain_db": -20.0,
+            "id": "4:fe0f6f4f-2517-4ff9-834a-72e6cc09ddeb:audio:action_surge:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "5:0c89133a-8258-47ce-a82d-13e5c6c59a2e:audio:physical_impact:4": {
+            "attachment": "target_body",
+            "bus": "SFX",
+            "cue_id": "physical_impact",
+            "display_ms": 7737.33861904762,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "5:0c89133a-8258-47ce-a82d-13e5c6c59a2e:audio:physical_impact:4",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "5:5ecb0211-d42f-4a56-8913-cf7b0db2c2dc:audio:weapon_swing:7": {
+            "attachment": "weapon",
+            "bus": "SFX",
+            "cue_id": "weapon_swing",
+            "display_ms": 7385.16452380953,
+            "enabled": true,
+            "gain_db": -14.0,
+            "id": "5:5ecb0211-d42f-4a56-8913-cf7b0db2c2dc:audio:weapon_swing:7",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "attachment_socket_unavailable",
+            "source_ready": true,
+            "starts": 1,
+            "state": "skipped"
+          },
+          "6:0269d9fc-cf36-4431-bd2d-6f64b9defa57:audio:weapon_swing:6": {
+            "attachment": "weapon",
+            "bus": "SFX",
+            "cue_id": "weapon_swing",
+            "display_ms": 9658.33066666667,
+            "enabled": true,
+            "gain_db": -14.0,
+            "id": "6:0269d9fc-cf36-4431-bd2d-6f64b9defa57:audio:weapon_swing:6",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "attachment_socket_unavailable",
+            "source_ready": true,
+            "starts": 1,
+            "state": "skipped"
+          },
+          "6:c8386716-962f-46e0-ab16-a9a2f3d16caf:audio:physical_impact:4": {
+            "attachment": "target_body",
+            "bus": "SFX",
+            "cue_id": "physical_impact",
+            "display_ms": 10004.1386666667,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "6:c8386716-962f-46e0-ab16-a9a2f3d16caf:audio:physical_impact:4",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          }
+        }
+      },
+      "end_ms": 10816.6666666667,
+      "label": "action_economy-seed3-v2/amber",
+      "onsets": {
+        "2:d35b1fd1-1bb4-4ded-939c-390d0fc7a242:audio:weapon_swing:5": {
+          "display_ms": 1176.62466666667,
+          "native_position_s": 0.0126041667535901,
+          "scheduled_ms": 1166.66666666667,
+          "source_offset_s": 0.00995800000000008,
+          "source_policy": "rendered_actor",
+          "world_position": "(4.043836, 0.298742, 5.712242)"
+        },
+        "2:f5e123d3-91a2-4eb6-ac3b-7768c0faac87:audio:physical_impact:3": {
+          "display_ms": 1176.62466666667,
+          "native_position_s": 0.0128571428358555,
+          "scheduled_ms": 1166.66666666667,
+          "source_offset_s": 0.00995800000000008,
+          "source_policy": "rendered_actor",
+          "world_position": "(4.789063, 0.516689, 5.789063)"
+        },
+        "3:54464993-17c7-46bf-86fe-92f927da1213:audio:weapon_swing:6": {
+          "display_ms": 3446.86222222222,
+          "native_position_s": 0.0161875002086163,
+          "scheduled_ms": 3433.33333333333,
+          "source_offset_s": 0.013528888888889,
+          "source_policy": "rendered_actor",
+          "world_position": "(4.043836, 0.298742, 5.712242)"
+        },
+        "3:766e6834-8359-450f-b06f-b2e1712efe35:audio:physical_impact:4": {
+          "display_ms": 3446.86222222222,
+          "native_position_s": 0.016417233273387,
+          "scheduled_ms": 3433.33333333333,
+          "source_offset_s": 0.013528888888889,
+          "source_policy": "rendered_actor",
+          "world_position": "(4.789063, 0.516689, 5.789063)"
+        },
+        "4:fe0f6f4f-2517-4ff9-834a-72e6cc09ddeb:audio:action_surge:0": {
+          "display_ms": 5037.49999999999,
+          "native_position_s": 0.00416666688397527,
+          "scheduled_ms": 5033.33333333333,
+          "source_offset_s": 0.00416666666666151,
+          "source_policy": "rendered_actor",
+          "world_position": "(3.789063, 0.516689, 5.789063)"
+        },
+        "5:0c89133a-8258-47ce-a82d-13e5c6c59a2e:audio:physical_impact:4": {
+          "display_ms": 7300.0,
+          "native_position_s": 0.00290249427780509,
+          "scheduled_ms": 7300.0,
+          "source_offset_s": 0.0,
+          "source_policy": "rendered_actor",
+          "world_position": "(4.789063, 0.516689, 5.789063)"
+        },
+        "5:5ecb0211-d42f-4a56-8913-cf7b0db2c2dc:audio:weapon_swing:7": {
+          "display_ms": 7300.0,
+          "native_position_s": 0.00266666663810611,
+          "scheduled_ms": 7300.0,
+          "source_offset_s": 0.0,
+          "source_policy": "rendered_actor",
+          "world_position": "(4.043836, 0.298742, 5.712242)"
+        },
+        "6:0269d9fc-cf36-4431-bd2d-6f64b9defa57:audio:weapon_swing:6": {
+          "display_ms": 9573.61111111111,
+          "native_position_s": 0.00960416626185179,
+          "scheduled_ms": 9566.66666666667,
+          "source_offset_s": 0.00694444444444525,
+          "source_policy": "rendered_actor",
+          "world_position": "(4.043836, 0.298742, 5.712242)"
+        },
+        "6:c8386716-962f-46e0-ab16-a9a2f3d16caf:audio:physical_impact:4": {
+          "display_ms": 9573.61111111111,
+          "native_position_s": 0.00984126981347799,
+          "scheduled_ms": 9566.66666666667,
+          "source_offset_s": 0.00694444444444525,
+          "source_policy": "rendered_actor",
+          "world_position": "(4.789063, 0.516689, 5.789063)"
+        }
+      },
+      "pcm_capture": "res://.captures/studio/audio/action_economy-seed3-v2-amber.wav",
+      "pcm_frames": 515584,
+      "peak": 0.225935161113739,
+      "recording": "res://.runtime/studio-cases/action_economy-seed3-v2/amber/journal",
+      "starts": {
+        "2:d35b1fd1-1bb4-4ded-939c-390d0fc7a242:audio:weapon_swing:5": 1,
+        "2:f5e123d3-91a2-4eb6-ac3b-7768c0faac87:audio:physical_impact:3": 1,
+        "3:54464993-17c7-46bf-86fe-92f927da1213:audio:weapon_swing:6": 1,
+        "3:766e6834-8359-450f-b06f-b2e1712efe35:audio:physical_impact:4": 1,
+        "4:fe0f6f4f-2517-4ff9-834a-72e6cc09ddeb:audio:action_surge:0": 1,
+        "5:0c89133a-8258-47ce-a82d-13e5c6c59a2e:audio:physical_impact:4": 1,
+        "5:5ecb0211-d42f-4a56-8913-cf7b0db2c2dc:audio:weapon_swing:7": 1,
+        "6:0269d9fc-cf36-4431-bd2d-6f64b9defa57:audio:weapon_swing:6": 1,
+        "6:c8386716-962f-46e0-ab16-a9a2f3d16caf:audio:physical_impact:4": 1
+      },
+      "transport": {
+        "busy": false,
+        "duration_ms": 10816.6666666667,
+        "loop_enabled": false,
+        "paused": true,
+        "presentation_end_ms": 10816.6666666667
+      }
+    },
+    {
+      "attachments": {
+        "13:6d5f8793-5f4a-4efb-bf43-37ed6d938731:audio:footstep:1": {
+          "attachment": "ground",
+          "distance_from_ground_contact": 0.0
+        },
+        "13:c1f8144b-8fb5-4797-818c-a875af10c189:audio:footstep:0": {
+          "attachment": "ground",
+          "distance_from_ground_contact": 0.0
+        },
+        "14:db1d7be1-b0f7-487a-8440-365ce165f4d2:audio:footstep:0": {
+          "attachment": "ground",
+          "distance_from_ground_contact": 0.0
+        },
+        "2:ab854fa6-128f-4260-b57f-5fc266afd7a0:audio:equipment_handle:0": {
+          "attachment": "body",
+          "distance_from_ground_contact": 0.59662127494812
+        },
+        "3:5df3443e-68ee-4567-8527-4de0c6e4faed:audio:hide_transition:1": {
+          "attachment": "body",
+          "distance_from_ground_contact": 0.59662127494812
+        },
+        "7:9ff0aa5c-9764-467b-8350-65023e30f55b:audio:torch_ignite:1": {
+          "attachment": "body",
+          "distance_from_ground_contact": 0.59662127494812
+        },
+        "7:ebe3189d-6012-4b16-95e3-52fad54503bd:audio:equipment_handle:0": {
+          "attachment": "body",
+          "distance_from_ground_contact": 0.59662127494812
+        },
+        "8:06952097-8d8d-41c2-8774-23d18f26ef2c:audio:footstep:1": {
+          "attachment": "ground",
+          "distance_from_ground_contact": 0.0
+        },
+        "8:2b0bcbf0-43ce-4d6b-a3fa-7e38067c9323:audio:footstep:0": {
+          "attachment": "ground",
+          "distance_from_ground_contact": 0.0
+        }
+      },
+      "contacts": {
+        "13:6d5f8793-5f4a-4efb-bf43-37ed6d938731:audio:footstep:1": {
+          "clock_error_s": 0.0,
+          "contact_ms": 5928.51128180822,
+          "cue_id": "footstep",
+          "display_ms": 5929.61789369893,
+          "lift_pixels": 0.0,
+          "native_actor_position": [
+            7.99734413146229,
+            6.0
+          ],
+          "native_ground_distance": 0.0,
+          "native_position_s": 0.00399092957377434,
+          "offset_s": 0.00110661189071107,
+          "source_frame": 10.0,
+          "source_seconds": 0.834439945224045,
+          "source_sync_s": 0.0
+        },
+        "13:c1f8144b-8fb5-4797-818c-a875af10c189:audio:footstep:0": {
+          "clock_error_s": 0.0,
+          "contact_ms": 5345.17794847488,
+          "cue_id": "footstep",
+          "display_ms": 5356.18797306401,
+          "lift_pixels": 0.0,
+          "native_actor_position": [
+            9.37357594098611,
+            6.0
+          ],
+          "native_ground_distance": 0.0,
+          "native_position_s": 0.0110100246965885,
+          "offset_s": 0.0110100245891226,
+          "source_frame": 3.0,
+          "source_seconds": 0.261010024589123,
+          "source_sync_s": 0.0
+        },
+        "14:db1d7be1-b0f7-487a-8440-365ce165f4d2:audio:footstep:0": {
+          "clock_error_s": 0.0,
+          "contact_ms": 6945.17794847488,
+          "cue_id": "footstep",
+          "display_ms": 6954.25531794136,
+          "lift_pixels": 0.0,
+          "native_actor_position": [
+            6.37821431328046,
+            6.0
+          ],
+          "native_ground_distance": 0.0,
+          "native_position_s": 0.00907736923545599,
+          "offset_s": 0.00907736946647401,
+          "source_frame": 3.0,
+          "source_seconds": 0.259077369466474,
+          "source_sync_s": 0.0
+        },
+        "8:06952097-8d8d-41c2-8774-23d18f26ef2c:audio:footstep:1": {
+          "clock_error_s": 0.0,
+          "contact_ms": 4400.0,
+          "cue_id": "footstep",
+          "display_ms": 4403.91026936029,
+          "lift_pixels": 0.0,
+          "native_actor_position": [
+            10.5791504661559,
+            6.57915046615587
+          ],
+          "native_ground_distance": 0.0,
+          "native_position_s": 0.00391026958823204,
+          "offset_s": 0.00391026936029266,
+          "source_frame": 10.0,
+          "source_seconds": 0.837243602693626,
+          "source_sync_s": 0.0
+        },
+        "8:2b0bcbf0-43ce-4d6b-a3fa-7e38067c9323:audio:footstep:0": {
+          "clock_error_s": 0.0,
+          "contact_ms": 3816.66666666667,
+          "cue_id": "footstep",
+          "display_ms": 3822.45682491584,
+          "lift_pixels": 0.0,
+          "native_actor_position": [
+            11.5659096994698,
+            7.56590969946981
+          ],
+          "native_ground_distance": 0.0,
+          "native_position_s": 0.005790158174932,
+          "offset_s": 0.0057901582491736,
+          "source_frame": 3.0,
+          "source_seconds": 0.255790158249174,
+          "source_sync_s": 0.0
+        }
+      },
+      "diagnostics": {
+        "counters": {
+          "crossed": 10,
+          "expired": 0,
+          "limited": 0,
+          "loops": 0,
+          "missing": 0,
+          "muted": 0,
+          "shots": 10,
+          "started": 10
+        },
+        "enabled": true,
+        "errors": [],
+        "rows": {
+          "13:6d5f8793-5f4a-4efb-bf43-37ed6d938731:audio:footstep:1": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 6039.71890379994,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "13:6d5f8793-5f4a-4efb-bf43-37ed6d938731:audio:footstep:1",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "13:c1f8144b-8fb5-4797-818c-a875af10c189:audio:footstep:0": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 5461.34841750845,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "13:c1f8144b-8fb5-4797-818c-a875af10c189:audio:footstep:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "14:db1d7be1-b0f7-487a-8440-365ce165f4d2:audio:footstep:0": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 7051.49722703226,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "14:db1d7be1-b0f7-487a-8440-365ce165f4d2:audio:footstep:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "2:ab854fa6-128f-4260-b57f-5fc266afd7a0:audio:equipment_handle:0": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "equipment_handle",
+            "display_ms": 888.061218855217,
+            "enabled": true,
+            "gain_db": -18.0,
+            "id": "2:ab854fa6-128f-4260-b57f-5fc266afd7a0:audio:equipment_handle:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "3:5df3443e-68ee-4567-8527-4de0c6e4faed:audio:hide_transition:1": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "hide_transition",
+            "display_ms": 2253.62646224146,
+            "enabled": true,
+            "gain_db": -24.0,
+            "id": "3:5df3443e-68ee-4567-8527-4de0c6e4faed:audio:hide_transition:1",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "6:573ba18a-2b05-432b-b3ac-55090bcdee2e:audio:equipment_handle:0": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "equipment_handle",
+            "display_ms": 2424.42555218856,
+            "enabled": true,
+            "gain_db": -18.0,
+            "id": "6:573ba18a-2b05-432b-b3ac-55090bcdee2e:audio:equipment_handle:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "7:9ff0aa5c-9764-467b-8350-65023e30f55b:audio:torch_ignite:1": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "torch_ignite",
+            "display_ms": 3975.62255218857,
+            "enabled": true,
+            "gain_db": -22.0,
+            "id": "7:9ff0aa5c-9764-467b-8350-65023e30f55b:audio:torch_ignite:1",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "7:ebe3189d-6012-4b16-95e3-52fad54503bd:audio:equipment_handle:0": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "equipment_handle",
+            "display_ms": 3196.10130976432,
+            "enabled": true,
+            "gain_db": -18.0,
+            "id": "7:ebe3189d-6012-4b16-95e3-52fad54503bd:audio:equipment_handle:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "8:06952097-8d8d-41c2-8774-23d18f26ef2c:audio:footstep:1": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 4515.57693602696,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "8:06952097-8d8d-41c2-8774-23d18f26ef2c:audio:footstep:1",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "8:2b0bcbf0-43ce-4d6b-a3fa-7e38067c9323:audio:footstep:0": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 3924.89955218857,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "8:2b0bcbf0-43ce-4d6b-a3fa-7e38067c9323:audio:footstep:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          }
+        }
+      },
+      "end_ms": 8511.84461514155,
+      "label": "listening_amber",
+      "listening": "amber",
+      "onsets": {
+        "13:6d5f8793-5f4a-4efb-bf43-37ed6d938731:audio:footstep:1": {
+          "display_ms": 5929.61789369893,
+          "native_position_s": 0.00399092957377434,
+          "scheduled_ms": 5928.51128180822,
+          "source_offset_s": 0.00110661189071107,
+          "source_policy": "rendered_actor",
+          "world_position": "(7.997344, 0.0, 6.0)"
+        },
+        "13:c1f8144b-8fb5-4797-818c-a875af10c189:audio:footstep:0": {
+          "display_ms": 5356.18797306401,
+          "native_position_s": 0.0110100246965885,
+          "scheduled_ms": 5345.17794847488,
+          "source_offset_s": 0.0110100245891226,
+          "source_policy": "rendered_actor",
+          "world_position": "(9.373576, 0.0, 6.0)"
+        },
+        "14:db1d7be1-b0f7-487a-8440-365ce165f4d2:audio:footstep:0": {
+          "display_ms": 6954.25531794136,
+          "native_position_s": 0.00907736923545599,
+          "scheduled_ms": 6945.17794847488,
+          "source_offset_s": 0.00907736946647401,
+          "source_policy": "rendered_actor",
+          "world_position": "(6.378214, 0.0, 6.0)"
+        },
+        "2:ab854fa6-128f-4260-b57f-5fc266afd7a0:audio:equipment_handle:0": {
+          "display_ms": 614.549218855216,
+          "native_position_s": 0.00343810766935349,
+          "scheduled_ms": 611.111111111111,
+          "source_offset_s": 0.0034381077441052,
+          "source_policy": "disclosed_stationary_body",
+          "world_position": "(3.789063, 0.516689, 5.789063)"
+        },
+        "3:5df3443e-68ee-4567-8527-4de0c6e4faed:audio:hide_transition:1": {
+          "display_ms": 1691.37921885522,
+          "native_position_s": 0.0107083329930902,
+          "scheduled_ms": 1683.33333333333,
+          "source_offset_s": 0.00804588552188284,
+          "source_policy": "rendered_actor",
+          "world_position": "(3.789063, 0.516689, 5.789063)"
+        },
+        "6:573ba18a-2b05-432b-b3ac-55090bcdee2e:audio:equipment_handle:0": {
+          "display_ms": 2146.4836050986,
+          "native_position_s": 0.00203916057944298,
+          "scheduled_ms": 2144.44444444444,
+          "source_offset_s": 0.00203916065415842,
+          "source_policy": "disclosed_stationary_body",
+          "world_position": "(11.78906, 0.516689, 7.789063)"
+        },
+        "7:9ff0aa5c-9764-467b-8350-65023e30f55b:audio:torch_ignite:1": {
+          "display_ms": 2806.34555218856,
+          "native_position_s": 0.00634555239230394,
+          "scheduled_ms": 2800.0,
+          "source_offset_s": 0.00634555218856303,
+          "source_policy": "rendered_actor",
+          "world_position": "(11.78906, 0.516689, 7.789063)"
+        },
+        "7:ebe3189d-6012-4b16-95e3-52fad54503bd:audio:equipment_handle:0": {
+          "display_ms": 2913.28999663301,
+          "native_position_s": 0.00483333319425583,
+          "scheduled_ms": 2911.11111111111,
+          "source_offset_s": 0.00217888552189879,
+          "source_policy": "disclosed_stationary_body",
+          "world_position": "(11.78906, 0.516689, 7.789063)"
+        },
+        "8:06952097-8d8d-41c2-8774-23d18f26ef2c:audio:footstep:1": {
+          "display_ms": 4403.91026936029,
+          "native_position_s": 0.00391026958823204,
+          "scheduled_ms": 4400.0,
+          "source_offset_s": 0.00391026936029266,
+          "source_policy": "rendered_actor",
+          "world_position": "(10.57915, 0.0, 6.579151)"
+        },
+        "8:2b0bcbf0-43ce-4d6b-a3fa-7e38067c9323:audio:footstep:0": {
+          "display_ms": 3822.45682491584,
+          "native_position_s": 0.005790158174932,
+          "scheduled_ms": 3816.66666666667,
+          "source_offset_s": 0.0057901582491736,
+          "source_policy": "rendered_actor",
+          "world_position": "(11.56591, 0.0, 7.56591)"
+        }
+      },
+      "pcm_capture": "res://.captures/studio/audio/listening_amber.wav",
+      "pcm_frames": 409088,
+      "peak": 0.0258267894387245,
+      "peer_diagnostics": {
+        "counters": {
+          "crossed": 9,
+          "expired": 0,
+          "limited": 0,
+          "loops": 0,
+          "missing": 0,
+          "muted": 9,
+          "shots": 0,
+          "started": 0
+        },
+        "enabled": false,
+        "errors": [],
+        "rows": {
+          "13:6d5f8793-5f4a-4efb-bf43-37ed6d938731:audio:footstep:1": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 5929.61789369893,
+            "enabled": false,
+            "gain_db": -12.0,
+            "id": "13:6d5f8793-5f4a-4efb-bf43-37ed6d938731:audio:footstep:1",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "muted",
+            "source_ready": true,
+            "starts": 0,
+            "state": "skipped"
+          },
+          "13:c1f8144b-8fb5-4797-818c-a875af10c189:audio:footstep:0": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 5356.18797306401,
+            "enabled": false,
+            "gain_db": -12.0,
+            "id": "13:c1f8144b-8fb5-4797-818c-a875af10c189:audio:footstep:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "muted",
+            "source_ready": true,
+            "starts": 0,
+            "state": "skipped"
+          },
+          "14:db1d7be1-b0f7-487a-8440-365ce165f4d2:audio:footstep:0": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 6954.25531794136,
+            "enabled": false,
+            "gain_db": -12.0,
+            "id": "14:db1d7be1-b0f7-487a-8440-365ce165f4d2:audio:footstep:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "muted",
+            "source_ready": true,
+            "starts": 0,
+            "state": "skipped"
+          },
+          "2:ab854fa6-128f-4260-b57f-5fc266afd7a0:audio:equipment_handle:0": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "equipment_handle",
+            "display_ms": 614.549218855216,
+            "enabled": false,
+            "gain_db": -18.0,
+            "id": "2:ab854fa6-128f-4260-b57f-5fc266afd7a0:audio:equipment_handle:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "muted",
+            "source_ready": true,
+            "starts": 0,
+            "state": "skipped"
+          },
+          "6:573ba18a-2b05-432b-b3ac-55090bcdee2e:audio:equipment_handle:0": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "equipment_handle",
+            "display_ms": 2146.4836050986,
+            "enabled": false,
+            "gain_db": -18.0,
+            "id": "6:573ba18a-2b05-432b-b3ac-55090bcdee2e:audio:equipment_handle:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "muted",
+            "source_ready": true,
+            "starts": 0,
+            "state": "skipped"
+          },
+          "7:9ff0aa5c-9764-467b-8350-65023e30f55b:audio:torch_ignite:1": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "torch_ignite",
+            "display_ms": 2806.34555218856,
+            "enabled": false,
+            "gain_db": -22.0,
+            "id": "7:9ff0aa5c-9764-467b-8350-65023e30f55b:audio:torch_ignite:1",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "muted",
+            "source_ready": true,
+            "starts": 0,
+            "state": "skipped"
+          },
+          "7:ebe3189d-6012-4b16-95e3-52fad54503bd:audio:equipment_handle:0": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "equipment_handle",
+            "display_ms": 2913.28999663301,
+            "enabled": false,
+            "gain_db": -18.0,
+            "id": "7:ebe3189d-6012-4b16-95e3-52fad54503bd:audio:equipment_handle:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "muted",
+            "source_ready": true,
+            "starts": 0,
+            "state": "skipped"
+          },
+          "8:06952097-8d8d-41c2-8774-23d18f26ef2c:audio:footstep:1": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 4403.91026936029,
+            "enabled": false,
+            "gain_db": -12.0,
+            "id": "8:06952097-8d8d-41c2-8774-23d18f26ef2c:audio:footstep:1",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "muted",
+            "source_ready": true,
+            "starts": 0,
+            "state": "skipped"
+          },
+          "8:2b0bcbf0-43ce-4d6b-a3fa-7e38067c9323:audio:footstep:0": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 3822.45682491584,
+            "enabled": false,
+            "gain_db": -12.0,
+            "id": "8:2b0bcbf0-43ce-4d6b-a3fa-7e38067c9323:audio:footstep:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "muted",
+            "source_ready": true,
+            "starts": 0,
+            "state": "skipped"
+          }
+        }
+      },
+      "peer_recording": "res://.runtime/studio-cases/hide-light-schema9-seed3/blue/journal",
+      "recording": "res://.runtime/studio-cases/hide-light-schema9-seed3/amber/journal",
+      "starts": {
+        "13:6d5f8793-5f4a-4efb-bf43-37ed6d938731:audio:footstep:1": 1,
+        "13:c1f8144b-8fb5-4797-818c-a875af10c189:audio:footstep:0": 1,
+        "14:db1d7be1-b0f7-487a-8440-365ce165f4d2:audio:footstep:0": 1,
+        "2:ab854fa6-128f-4260-b57f-5fc266afd7a0:audio:equipment_handle:0": 1,
+        "3:5df3443e-68ee-4567-8527-4de0c6e4faed:audio:hide_transition:1": 1,
+        "6:573ba18a-2b05-432b-b3ac-55090bcdee2e:audio:equipment_handle:0": 1,
+        "7:9ff0aa5c-9764-467b-8350-65023e30f55b:audio:torch_ignite:1": 1,
+        "7:ebe3189d-6012-4b16-95e3-52fad54503bd:audio:equipment_handle:0": 1,
+        "8:06952097-8d8d-41c2-8774-23d18f26ef2c:audio:footstep:1": 1,
+        "8:2b0bcbf0-43ce-4d6b-a3fa-7e38067c9323:audio:footstep:0": 1
+      },
+      "transport": {
+        "busy": false,
+        "duration_ms": 7111.84461514155,
+        "loop_enabled": false,
+        "paused": true,
+        "presentation_end_ms": 8511.84461514155
+      }
+    },
+    {
+      "attachments": {},
+      "contacts": {},
+      "diagnostics": {
+        "counters": {
+          "crossed": 10,
+          "expired": 0,
+          "limited": 0,
+          "loops": 0,
+          "missing": 0,
+          "muted": 10,
+          "shots": 0,
+          "started": 0
+        },
+        "enabled": false,
+        "errors": [],
+        "rows": {
+          "13:6d5f8793-5f4a-4efb-bf43-37ed6d938731:audio:footstep:1": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 5928.56410101007,
+            "enabled": false,
+            "gain_db": -12.0,
+            "id": "13:6d5f8793-5f4a-4efb-bf43-37ed6d938731:audio:footstep:1",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "muted",
+            "source_ready": true,
+            "starts": 0,
+            "state": "skipped"
+          },
+          "13:c1f8144b-8fb5-4797-818c-a875af10c189:audio:footstep:0": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 5350.51778787876,
+            "enabled": false,
+            "gain_db": -12.0,
+            "id": "13:c1f8144b-8fb5-4797-818c-a875af10c189:audio:footstep:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "muted",
+            "source_ready": true,
+            "starts": 0,
+            "state": "skipped"
+          },
+          "14:db1d7be1-b0f7-487a-8440-365ce165f4d2:audio:footstep:0": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 6954.78710101007,
+            "enabled": false,
+            "gain_db": -12.0,
+            "id": "14:db1d7be1-b0f7-487a-8440-365ce165f4d2:audio:footstep:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "muted",
+            "source_ready": true,
+            "starts": 0,
+            "state": "skipped"
+          },
+          "2:ab854fa6-128f-4260-b57f-5fc266afd7a0:audio:equipment_handle:0": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "equipment_handle",
+            "display_ms": 611.348989898993,
+            "enabled": false,
+            "gain_db": -18.0,
+            "id": "2:ab854fa6-128f-4260-b57f-5fc266afd7a0:audio:equipment_handle:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "muted",
+            "source_ready": true,
+            "starts": 0,
+            "state": "skipped"
+          },
+          "3:5df3443e-68ee-4567-8527-4de0c6e4faed:audio:hide_transition:1": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "hide_transition",
+            "display_ms": 1686.71266666666,
+            "enabled": false,
+            "gain_db": -24.0,
+            "id": "3:5df3443e-68ee-4567-8527-4de0c6e4faed:audio:hide_transition:1",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "muted",
+            "source_ready": true,
+            "starts": 0,
+            "state": "skipped"
+          },
+          "6:573ba18a-2b05-432b-b3ac-55090bcdee2e:audio:equipment_handle:0": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "equipment_handle",
+            "display_ms": 2145.04599999999,
+            "enabled": false,
+            "gain_db": -18.0,
+            "id": "6:573ba18a-2b05-432b-b3ac-55090bcdee2e:audio:equipment_handle:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "muted",
+            "source_ready": true,
+            "starts": 0,
+            "state": "skipped"
+          },
+          "7:9ff0aa5c-9764-467b-8350-65023e30f55b:audio:torch_ignite:1": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "torch_ignite",
+            "display_ms": 2804.7682222222,
+            "enabled": false,
+            "gain_db": -22.0,
+            "id": "7:9ff0aa5c-9764-467b-8350-65023e30f55b:audio:torch_ignite:1",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "muted",
+            "source_ready": true,
+            "starts": 0,
+            "state": "skipped"
+          },
+          "7:ebe3189d-6012-4b16-95e3-52fad54503bd:audio:equipment_handle:0": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "equipment_handle",
+            "display_ms": 2918.39618181816,
+            "enabled": false,
+            "gain_db": -18.0,
+            "id": "7:ebe3189d-6012-4b16-95e3-52fad54503bd:audio:equipment_handle:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "muted",
+            "source_ready": true,
+            "starts": 0,
+            "state": "skipped"
+          },
+          "8:06952097-8d8d-41c2-8774-23d18f26ef2c:audio:footstep:1": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 4411.96975757573,
+            "enabled": false,
+            "gain_db": -12.0,
+            "id": "8:06952097-8d8d-41c2-8774-23d18f26ef2c:audio:footstep:1",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "muted",
+            "source_ready": true,
+            "starts": 0,
+            "state": "skipped"
+          },
+          "8:2b0bcbf0-43ce-4d6b-a3fa-7e38067c9323:audio:footstep:0": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 3819.56399999998,
+            "enabled": false,
+            "gain_db": -12.0,
+            "id": "8:2b0bcbf0-43ce-4d6b-a3fa-7e38067c9323:audio:footstep:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "muted",
+            "source_ready": true,
+            "starts": 0,
+            "state": "skipped"
+          }
+        }
+      },
+      "end_ms": 8511.84461514155,
+      "label": "listening_blue",
+      "listening": "blue",
+      "onsets": {},
+      "pcm_capture": "res://.captures/studio/audio/listening_blue.wav",
+      "pcm_frames": 417280,
+      "peak": 0.0257885009050369,
+      "peer_diagnostics": {
+        "counters": {
+          "crossed": 9,
+          "expired": 0,
+          "limited": 0,
+          "loops": 0,
+          "missing": 0,
+          "muted": 0,
+          "shots": 9,
+          "started": 9
+        },
+        "enabled": true,
+        "errors": [],
+        "rows": {
+          "13:6d5f8793-5f4a-4efb-bf43-37ed6d938731:audio:footstep:1": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 6048.69143434341,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "13:6d5f8793-5f4a-4efb-bf43-37ed6d938731:audio:footstep:1",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "13:c1f8144b-8fb5-4797-818c-a875af10c189:audio:footstep:0": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 5459.60869696967,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "13:c1f8144b-8fb5-4797-818c-a875af10c189:audio:footstep:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "14:db1d7be1-b0f7-487a-8440-365ce165f4d2:audio:footstep:0": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 7053.77699999997,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "14:db1d7be1-b0f7-487a-8440-365ce165f4d2:audio:footstep:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "2:ab854fa6-128f-4260-b57f-5fc266afd7a0:audio:equipment_handle:0": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "equipment_handle",
+            "display_ms": 888.101555555558,
+            "enabled": true,
+            "gain_db": -18.0,
+            "id": "2:ab854fa6-128f-4260-b57f-5fc266afd7a0:audio:equipment_handle:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "6:573ba18a-2b05-432b-b3ac-55090bcdee2e:audio:equipment_handle:0": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "equipment_handle",
+            "display_ms": 2422.82377777776,
+            "enabled": true,
+            "gain_db": -18.0,
+            "id": "6:573ba18a-2b05-432b-b3ac-55090bcdee2e:audio:equipment_handle:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "7:9ff0aa5c-9764-467b-8350-65023e30f55b:audio:torch_ignite:1": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "torch_ignite",
+            "display_ms": 3976.20506060603,
+            "enabled": true,
+            "gain_db": -22.0,
+            "id": "7:9ff0aa5c-9764-467b-8350-65023e30f55b:audio:torch_ignite:1",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "7:ebe3189d-6012-4b16-95e3-52fad54503bd:audio:equipment_handle:0": {
+            "attachment": "body",
+            "bus": "SFX",
+            "cue_id": "equipment_handle",
+            "display_ms": 3191.23327272725,
+            "enabled": true,
+            "gain_db": -18.0,
+            "id": "7:ebe3189d-6012-4b16-95e3-52fad54503bd:audio:equipment_handle:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "8:06952097-8d8d-41c2-8774-23d18f26ef2c:audio:footstep:1": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 4516.77599999997,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "8:06952097-8d8d-41c2-8774-23d18f26ef2c:audio:footstep:1",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          },
+          "8:2b0bcbf0-43ce-4d6b-a3fa-7e38067c9323:audio:footstep:0": {
+            "attachment": "ground",
+            "bus": "SFX",
+            "cue_id": "footstep",
+            "display_ms": 3930.75051515149,
+            "enabled": true,
+            "gain_db": -12.0,
+            "id": "8:2b0bcbf0-43ce-4d6b-a3fa-7e38067c9323:audio:footstep:0",
+            "native_playing": false,
+            "offset_s": null,
+            "paused": false,
+            "reason": "",
+            "source_ready": true,
+            "starts": 1,
+            "state": "finished"
+          }
+        }
+      },
+      "peer_recording": "res://.runtime/studio-cases/hide-light-schema9-seed3/blue/journal",
+      "recording": "res://.runtime/studio-cases/hide-light-schema9-seed3/amber/journal",
+      "starts": {},
+      "transport": {
+        "busy": false,
+        "duration_ms": 7111.84461514155,
+        "loop_enabled": false,
+        "paused": true,
+        "presentation_end_ms": 8511.84461514155
+      }
     }
   ],
   "failures": [],
-  "scope": "Actual Studio Move source contacts, Jump ground/transient sync, selected onset, seek-inside, looping, melee impact and Hide/light replay; native voice dispatch and SFX mixer PCM are separate evidence, not physical-speaker audibility."
+  "runtime_attachment_gaps": [
+    {
+      "component_id": "8:861682c7-c225-40ad-9e3b-955417655eb1:audio:weapon_swing_heavy:10",
+      "context": "movement-oa",
+      "cue": "weapon_swing_heavy",
+      "reason": "attachment_socket_unavailable",
+      "source_ready": true
+    }
+  ],
+  "scope": "Actual Studio base cues, Move/Jump clocks, equipment seek/loop, Action Surge and separate listening factions; admitted native voice dispatch and captured SFX mixer PCM. Explicit skipped attachments are gaps, not played coverage or physical-speaker audibility."
 }

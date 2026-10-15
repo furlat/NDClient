@@ -24,7 +24,7 @@ func _initialize() -> void:
         var estimate: Dictionary = encounter.estimates[path]
         var started = Time.get_ticks_usec()
         Media.published(data,{"path":path,"cpu_bytes":estimate.cpu_bytes,"gpu_bytes":estimate.gpu_bytes,"energy":0.0,"emission_centroid":Vector2.ZERO})
-        Media.release_cold_images(data)
+        Media.release_cold_images(data,-1) # Offline bulk-accounting probe, no live frame.
         for i in range(3): Media.boot_ready(data)
         Media.preload_progress(data)
         Media.diagnostics(data); Media.diagnostics(data,true)

@@ -9,6 +9,11 @@ const Kernel=preload("res://presentation/blood_kernel.gdshader")
 const Surface=preload("res://presentation/blood_surface.gdshader")
 const Droplet=preload("res://presentation/blood_droplet.gdshader")
 const Irradiance=preload("res://presentation/blood_irradiance.gdshader")
+const Admission=preload("res://presentation/native_source_admission.gd")
+static var _programs_prepared:int=0
+static var _program_frame:int=-1
+var resources_ready:bool=false
+var resource_frame:int=-1
 var deposits:Dictionary={}
 var pending_deposits:Dictionary={}
 var prepare_frame=-1
@@ -26,13 +31,48 @@ var last_allocations=0
 var peak_sample_usec=0
 var visible_fields:Dictionary={}
 var ready=true
+var deposit_create_usec:int=0
+var light_page_create_usec:int=0
+var sample_phases:Dictionary={}
+
+func _phase(name:String,started:int)->void:
+    sample_phases[name]=sample_phases.get(name,0.0)+(Time.get_ticks_usec()-started)/1000.0
+
+func prepare_resources(world:Node,budget:Dictionary={})->bool:
+    if resources_ready:return true
+    var frame:int=Engine.get_process_frames()
+    if _programs_prepared<4:
+        if _program_frame==frame or (not budget.is_empty() and budget.used_usec>=budget.limit_usec) or not Admission.begin_mutation():return false
+        var started:int=Time.get_ticks_usec()
+        _program_frame=frame
+        [Kernel,Surface,Droplet,Irradiance][_programs_prepared].get_rid()
+        _programs_prepared+=1
+        if not budget.is_empty():budget.used_usec+=Time.get_ticks_usec()-started
+        return false
+    # These are the actual retained receiving pages, not a simulated injury.
+    # Their first native canvas draw must finish during loading: otherwise the
+    # following SubViewport constructor pays its cold render-server work.
+    if resource_frame==frame:return false
+    resource_frame=frame
+    for name in ["floor","air"]:
+        if not pages.has(name):
+            if (not budget.is_empty() and budget.used_usec>=budget.limit_usec) or not Admission.begin_mutation():return false
+            var began:int=Time.get_ticks_usec()
+            _page(world,name)
+            light_page_create_usec+=Time.get_ticks_usec()-began
+            if not budget.is_empty():budget.used_usec+=Time.get_ticks_usec()-began
+            return false
+        if not pages[name].ready:return false
+    resources_ready=true
+    return true
 
 func _page(world:Node,name:String)->SubViewport:
     if pages.has(name):return pages[name].view
     var view=SubViewport.new();view.disable_3d=true;view.transparent_bg=true;view.use_hdr_2d=true
+    view.size=Vector2i(world.get_viewport().get_visible_rect().size)
     view.render_target_update_mode=SubViewport.UPDATE_ALWAYS;world.add_child(view)
     var ambient=CanvasModulate.new();ambient.color=Color(.18,.18,.18).linear_to_srgb();view.add_child(ambient)
-    var rectangle=ColorRect.new();rectangle.mouse_filter=Control.MOUSE_FILTER_IGNORE
+    var rectangle=ColorRect.new();rectangle.mouse_filter=Control.MOUSE_FILTER_IGNORE;rectangle.size=Vector2(view.size)
     var material=ShaderMaterial.new();material.shader=Irradiance;rectangle.material=material;view.add_child(rectangle)
     world.source_lighting.attach_page(view)
     pages[name]={"view":view,"rectangle":rectangle,"material":material,"ready":false}
@@ -49,6 +89,7 @@ func _entry(world:Node,id:String,mesh:Mesh,role:String,position:Array,height:flo
     return entry
 
 func _deposit(world:Node,key:String,tile:Dictionary)->Dictionary:
+    var phase:int=Time.get_ticks_usec()
     last_allocations+=1
     var field=SubViewport.new();field.size=Vector2i(64,64);field.disable_3d=true;field.transparent_bg=true;field.use_hdr_2d=true
     field.render_target_update_mode=SubViewport.UPDATE_ONCE;world.add_child(field)
@@ -61,9 +102,12 @@ func _deposit(world:Node,key:String,tile:Dictionary)->Dictionary:
     entry.node.position=Placement.contact(entry.placement)
     entry.material.set_shader_parameter("field_texture",field.get_texture())
     entry.material.set_shader_parameter("tile_position",Vector2(tile.position[0],tile.position[1]))
+    deposit_create_usec+=Time.get_ticks_usec()-phase
+    phase=Time.get_ticks_usec()
     entry.material.set_shader_parameter("illumination",_page(world,"floor").get_texture())
+    light_page_create_usec+=Time.get_ticks_usec()-phase
     entry.node.visible=false
-    var handle={"entry":entry,"field":field,"kernels":kernels,"value":{},"phase":[],"updates":0,"ready":false}
+    var handle={"entry":entry,"field":field,"kernels":kernels,"value":{},"phase":[],"updates":0,"ready":false,"kernel_cache":{}}
     RenderingServer.frame_post_draw.connect(func():handle.ready=true,CONNECT_ONE_SHOT)
     return handle
 
@@ -78,10 +122,15 @@ func _upload(handle:Dictionary,kernels:Array)->void:
     handle.field.render_target_update_mode=SubViewport.UPDATE_ONCE
     handle.updates+=1;field_uploads+=1
 
-func prepare(world:Node,groups:Array)->bool:
+func prepare(world:Node,groups:Array,budget:Dictionary={})->bool:
     var began=Time.get_ticks_usec()
+    var charged_before:int=budget.get("used_usec",0)
     var frame=Engine.get_process_frames()
     if prepare_frame!=frame:prepare_frame=frame;prepare_allocations=0;prepare_usec=0
+    if not prepare_resources(world,budget):
+        prepare_usec+=Time.get_ticks_usec()-began
+        if not budget.is_empty():budget.used_usec+=maxi(0,Time.get_ticks_usec()-began-(budget.used_usec-charged_before))
+        return false
     var complete=true
     for group in groups:
         for component in group.get("components",[]):
@@ -90,15 +139,23 @@ func prepare(world:Node,groups:Array)->bool:
                 var key=Blood.key(reveal.position)
                 if deposits.has(key):continue
                 if not pending_deposits.has(key):
-                    if prepare_allocations>=2:complete=false;continue
+                    if prepare_allocations>=2 or (not budget.is_empty() and budget.used_usec>=budget.limit_usec):complete=false;continue
+                    var allocation_started:int=Time.get_ticks_usec()
                     var tile={"position":reveal.position,"elevation_steps":reveal.elevation_steps}
                     pending_deposits[key]=_deposit(world,key,tile)
                     pending_deposits[key].groups={}
+                    # Exact settled shapes from the already-received after-value
+                    # can be prepared while this field is still hidden. Landing
+                    # later selects those same particle shapes; no field upload,
+                    # residue publication or flight clock advances here.
+                    Blood.kernels(reveal.after,reveal.position,[],source,pending_deposits[key].kernel_cache)
                     prepare_allocations+=1
+                    if not budget.is_empty():budget.used_usec+=Time.get_ticks_usec()-allocation_started
                 var handle:Dictionary=pending_deposits[key]
                 handle.groups[group.id]=true
                 complete=complete and handle.ready and pages.floor.ready
     prepare_usec+=Time.get_ticks_usec()-began
+    if not budget.is_empty():budget.used_usec+=maxi(0,Time.get_ticks_usec()-began-(budget.used_usec-charged_before))
     return complete
 
 func _prune_pending(world:Node)->void:
@@ -127,14 +184,18 @@ func _active(world:Node,samples:Array)->Array:
 
 func sample(world:Node,samples:Array)->void:
     var began=Time.get_ticks_usec()
+    sample_phases={}
+    var stage_started:int=began
     ready=true;last_allocations=0
     if source.is_empty():source=Blood.asset(world.catalog_cache)
     _prune_pending(world)
+    _phase("pending",stage_started);stage_started=Time.get_ticks_usec()
     var state:Dictionary=world.timeline.state
     if tiles_revision!=world.timeline.world_revision or not is_same(tiles_owner,state.get("tiles",{})):
         tiles_owner=state.get("tiles",{});tiles_revision=world.timeline.world_revision;tiles={}
         for key in tiles_owner:
             if not Blood.residue(tiles_owner[key]).is_empty():tiles[key]=tiles_owner[key]
+    _phase("tile_index",stage_started);stage_started=Time.get_ticks_usec()
     var active=_active(world,samples);var by_tile={};var live_flights={}
     for component in active:
         var age:float=component.age_ms/1000.
@@ -145,7 +206,10 @@ func sample(world:Node,samples:Array)->void:
             var row=reveal.duplicate();row.pattern=component.body_release.pattern;row.age_seconds=age;row.id=component.id
             row.step=step;by_tile[cell].append(row)
         if age>=0:
+            var flight_started:int=Time.get_ticks_usec()
             _flight(world,component,age,live_flights)
+            _phase("flight",flight_started)
+    _phase("active",stage_started);stage_started=Time.get_ticks_usec()
     var visible:Dictionary=world.scenery_visible_cells
     visible_fields={}
     for key in tiles:
@@ -162,15 +226,20 @@ func sample(world:Node,samples:Array)->void:
         ready=ready and handle.ready and pages.floor.ready
         var reveals:Array=by_tile.get(key,[]);var phase=reveals.map(func(row):return [row.id,row.step])
         if not is_same(handle.value,value) or handle.phase!=phase:
-            var kernels=Blood.kernels(value,tile.position,reveals,source)
+            var kernel_started:int=Time.get_ticks_usec()
+            var kernels=Blood.kernels(value,tile.position,reveals,source,handle.kernel_cache)
+            _phase("kernels",kernel_started)
+            var upload_started:int=Time.get_ticks_usec()
             _upload(handle,kernels);handle.value=value;handle.phase=phase
             handle.coverage=Blood.has_coverage(kernels)
+            _phase("upload",upload_started)
         if handle.get("coverage",false) and handle.entry.node.visible:visible_fields[key]=true
         var entry:Dictionary=handle.entry
         entry.placement.base_height_steps=tile.get("elevation_steps",0);entry.node.position=Placement.contact(entry.placement)
         entry.material.set_shader_parameter("visibility",1. if visible.has(key) else 0.)
         entry.material.set_shader_parameter("light_cap",1. if world.light_cap_enabled else 0.)
         entry.material.set_shader_parameter("normals_visible",world.normals_visible)
+    _phase("fields",stage_started);stage_started=Time.get_ticks_usec()
     for key in deposits.keys():
         if not tiles.has(key):_erase_deposit(world,key)
     for key in flights.keys():
@@ -180,8 +249,9 @@ func sample(world:Node,samples:Array)->void:
         var page:Dictionary=pages[name];page.view.size=Vector2i(world.get_viewport().get_visible_rect().size)
         page.rectangle.size=Vector2(page.view.size)
         page.material.set_shader_parameter("receiving_normal",normal if name=="floor" else Vector3(0,0,1))
-        page.view.render_target_update_mode=SubViewport.UPDATE_ALWAYS if ((not visible_fields.is_empty() or not page.ready) if name=="floor" else not flights.is_empty()) else SubViewport.UPDATE_DISABLED
+        page.view.render_target_update_mode=SubViewport.UPDATE_ALWAYS if not page.ready or (not visible_fields.is_empty() if name=="floor" else not flights.is_empty()) else SubViewport.UPDATE_DISABLED
     for handle in deposits.values():handle.entry.material.set_shader_parameter("receiving_normal",normal)
+    _phase("retire_pages",stage_started)
     last_sample_usec=Time.get_ticks_usec()-began
     peak_sample_usec=maxi(peak_sample_usec,last_sample_usec)
 
@@ -271,3 +341,4 @@ func close(world:Node)->void:
     pending_deposits.clear()
     for page in pages.values():world.source_lighting.detach_page(page.view);page.view.queue_free()
     pages={};tiles_owner={};tiles={};source={};tiles_revision=-1
+    resources_ready=false;resource_frame=-1

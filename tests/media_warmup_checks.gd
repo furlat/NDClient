@@ -33,6 +33,54 @@ func loaded(data: Dictionary) -> Dictionary:
     return {}
 
 func run() -> void:
+    var rejected=Media.create()
+    var oversized={"path":"fixture/oversized","image":Image.create(3,2,false,Image.FORMAT_RGBA8)}
+    rejected.wanted[oversized.path]=oversized.path
+    rejected.preload_selected[oversized.path]=oversized.path
+    Media.validate_upload_dimensions(rejected,oversized,2)
+    check(oversized.has("error") and rejected.failed.has(oversized.path),"An oversized upload is rejected before creating an invalid GPU texture")
+    check(not Media.ready(rejected,rejected.wanted) and rejected.resident.is_empty() and rejected.selected_failed.has(oversized.path),
+        "Rejected GPU upload cannot enter residency or satisfy either required or preload readiness")
+    var fitting={"path":"fixture/fitting","image":Image.create(2,2,false,Image.FORMAT_RGBA8)}
+    Media.validate_upload_dimensions(rejected,fitting,2)
+    check(not fitting.has("error") and fitting.image.get_size()==Vector2i(2,2),"A supported image retains its exact dimensions")
+    Media.close(rejected)
+    # Completed optional PNG jobs must not monopolize all four decode slots
+    # when the next actual required request arrives. No GPU publication is
+    # implied by freeing a worker slot.
+    var slot_image:Image=Image.create(8,8,false,Image.FORMAT_RGBA8)
+    slot_image.fill(Color(.2,.4,.6,1))
+    var slot_file:String="user://media-required-decode-slot.png"
+    check(slot_image.save_png(slot_file)==OK,"Decode-slot fixture PNG saves")
+    var slot_data:Dictionary=Media.create()
+    var family:Dictionary={"revision":1,"paths":{},"estimates":{},"errors":[]}
+    var slot_required:String="required-after-optional"
+    for i in Media.DECODE_WORKERS+1:
+        var id:String=slot_required if i==Media.DECODE_WORKERS else "optional-slot-"+str(i)
+        family.paths[id]=slot_file;family.estimates[id]={"bytes":512}
+    Media.adopt_encounter(slot_data,family,1)
+    Media.demand(slot_data,{})
+    Media.poll(slot_data,true,false)
+    while not slot_data.decode_jobs.all(func(job):return WorkerThreadPool.is_task_completed(job.task)):await process_frame
+    check(slot_data.decode_jobs.size()==Media.DECODE_WORKERS and Media.poll(slot_data,true).is_empty(),
+        "Required-only polling leaves completed optional jobs untouched when no required decode is blocked")
+    Media.demand(slot_data,{slot_required:slot_file})
+    check(slot_data.pending.size()==1 and slot_data.decode_jobs.size()==Media.DECODE_WORKERS,
+        "New required PNG waits behind the actual full worker slots")
+    var reclaimed:Dictionary=Media.poll(slot_data,true)
+    check(reclaimed.has("image") and family.paths.has(reclaimed.path) and slot_data.pending.is_empty()
+        and slot_data.decode_jobs.any(func(job):return job.path==slot_required),
+        "Required-only poll reclaims one completed optional image and immediately dispatches the blocked required PNG")
+    check(not Media.ready(slot_data,{slot_required:true}) and not Media.ready(slot_data,{reclaimed.get("path","missing"):true}) and slot_data.resident.is_empty(),
+        "Slot reclamation cannot publish either image or satisfy readiness early")
+    while not slot_data.decode_jobs.filter(func(job):return job.path==slot_required).all(func(job):return WorkerThreadPool.is_task_completed(job.task)):await process_frame
+    var required_image:Dictionary=Media.poll(slot_data,true)
+    check(required_image.get("path")==slot_required and required_image.has("image"),
+        "Required image completes without any later optional turn")
+    Media.published(slot_data,required_image)
+    check(Media.ready(slot_data,{slot_required:true}) and not Media.ready(slot_data,{reclaimed.get("path","missing"):true}),
+        "Only the explicit required publication establishes readiness")
+    Media.close(slot_data);DirAccess.remove_absolute(ProjectSettings.globalize_path(slot_file))
     var cache = {}
     var parsed = Protocol.parse_json(FileAccess.get_file_as_bytes("res://.runtime/player-runs/20261011T223103.996259Z/state.json"))
     check(parsed.ok,"Captured canonical outfit state parses")
@@ -98,8 +146,8 @@ func run() -> void:
         var published_files: Dictionary = metadata_result.source_files
         check(published_files.has("res://generated/character_geometry.json") and published_files.has("res://generated/normal_profiles.json") and published_files.has("catalog-index.json") and published_files.has("environment/index.json"),
             "Completed worker publishes exact original actor/geometry/environment JSON before scene binding")
-        check(published_files.keys().all(func(path):return path.ends_with(".json") and not path.begins_with("__")) and not published_files.has("__environment_demand_index"),
-            "Published source files exclude mutable planner indexes and selector caches")
+        check(published_files.keys().all(func(path):return (path.ends_with(".json") and not path.begins_with("__")) or path in ["native_references_validated","native_authoring_errors"]) and not published_files.has("__environment_demand_index"),
+            "Published source revision contains documents and their validation result, excluding mutable planner indexes and selector caches")
         var scene_cache={}
         scene_cache.merge(published_files,false)
         var warmed=Media.plan(state,[],scene_cache)
@@ -139,6 +187,13 @@ func run() -> void:
     check(data.pending.size()==1 and not Media.ready(data,{path:true}),"Exact source queued once and not prematurely ready")
     Media.demand(data,{path:Catalog.media_path(path)})
     check(data.pending.size()==1,"Repeated demand deduplicates pending decode")
+    check(Media.poll(data,true,false).is_empty() and data.pending.is_empty() and data.decode_jobs.size()==1,
+        "Exhausted upload allowance still dispatches the exact queued worker without harvesting an image")
+    while not WorkerThreadPool.is_task_completed(data.decode_jobs[0].task):await process_frame
+    var completed_task:int=data.decode_jobs[0].task
+    check(Media.poll(data,true,false).is_empty() and data.decode_jobs.size()==1 and data.decode_jobs[0].task==completed_task
+        and data.queued.has(path) and data.decoded==0 and not Media.ready(data,{path:true}),
+        "Completed decode stays owned and pending until a later publication allowance; it cannot falsely satisfy readiness")
     var image = await loaded(data)
     check(not image.is_empty() and not image.has("error") and image.image.get_width()>0,"Native worker decodes original authored PNG")
     if image.is_empty() or image.has("error"): Media.close(data); quit(1); return
@@ -190,8 +245,13 @@ func run() -> void:
         removed_cpu_bytes += int(decoded.cpu_bytes)
         Media.published(gpu_data,decoded)
     var bytes_before = Media.diagnostics(gpu_data).estimated_bytes
-    var released: Array = Media.release_cold_images(gpu_data)
-    for companion in released: companion_images.erase(companion)
+    var released: Array = []
+    while released.size()<4:
+        var batch:Array=Media.release_cold_images(gpu_data)
+        check(batch.size()<=Media.CPU_RELEASES_PER_FRAME,"Original companion CPU retirement respects the frame allowance")
+        for companion in batch: companion_images.erase(companion)
+        released.append_array(batch)
+        if released.size()<4:await process_frame
     check(released.size()==4 and companion_images.is_empty() and companion_textures.size()==4,
         "Uploaded exact companion packet releases CPU images while all texture handles remain resident")
     check(Media.ready(gpu_data,companion_demand) and Media.prune(gpu_data,0).is_empty(),

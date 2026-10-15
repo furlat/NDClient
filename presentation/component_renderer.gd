@@ -10,6 +10,16 @@ const Components=preload("res://presentation/components.gd")
 const ConditionOutline=preload("res://presentation/condition_outline.gd")
 const BoltShader=preload("res://presentation/geometry_projectile.gdshader")
 const BloodRenderer=preload("res://presentation/blood_renderer.gd")
+const NativeSpells=preload("res://presentation/native_spell_renderer.gd")
+const NativeHits=preload("res://presentation/native_spell_hits.gd")
+const SpellPlacement=preload("res://presentation/spell_placement.gd")
+const FrameProfile=preload("res://frame_profile.gd")
+const NativeChannels=preload("res://presentation/native_spell_channels.gd")
+const NativeAuthoring=preload("res://presentation/native_spell_authoring.gd")
+const Choices=preload("res://sdk/choices.gd")
+const Catalog=preload("res://source_catalog.gd")
+var native_spells=NativeSpells.new()
+var native_hits=NativeHits.new()
 var blood=BloodRenderer.new()
 var outlines=ConditionOutline.new()
 var audio=AudioPresenter.new()
@@ -18,33 +28,262 @@ var numbers: Dictionary={}
 var media_handles: Dictionary={}
 var epoch=-1
 var ready=true
+var readiness:Dictionary={}
 var prepared_groups: Dictionary={}
 var pending_evidence: Array=[]
+var _native_prepare_key:Array=[]
+var _native_prepare_groups:Array=[]
+var _native_prepare_components:Array=[]
+var _native_prepare_records:Array=[]
+const NATIVE_PREFETCH_MS=4000.0
+const NATIVE_PREFETCH_OCCURRENCES=24
+const NATIVE_CONSTRUCTION_USEC=2000
+var _native_budget:Dictionary={"frame":-1,"used_usec":0,"limit_usec":NATIVE_CONSTRUCTION_USEC}
+var _optional_components:Array=[]
+var _optional_blood_groups:Array=[]
+var _optional_owner:Array=[]
+
+var _choice_ids:Array=[]
+var _choice_job:Dictionary={}
+var _choice_resource_cache:Dictionary={}
+var choice_preparation:Dictionary={"ready":true,"behaviors":[],"pending":0,"errors":[]}
+
+func request_choice_resources(choices:Dictionary,cache:Dictionary)->void:
+    var ids:Array=[]
+    for action in Choices.all_actions(choices):
+        var id:String=action.get("behavior_id","")
+        if not id.is_empty() and id not in ids:ids.append(id)
+    ids.sort()
+    if ids==_choice_ids:return
+    _choice_ids=ids
+    if _choice_job.is_empty() or int(_choice_job.get("task",-1))<0:_start_choice_resources(cache)
+
+func _start_choice_resources(cache:Dictionary)->void:
+    # Only immutable authoring/metadata crosses this worker boundary. It never
+    # receives actor coordinates, constructs nodes, or simulates an outcome.
+    _choice_job={"ids":_choice_ids.duplicate(),"cache":Catalog.source_snapshot(cache),"clips":[],"cursor":0,"task":-1}
+    _choice_job.task=WorkerThreadPool.add_task(_resolve_choice_resources.bind(_choice_job),false,"Disclosed native spell resources")
+    choice_preparation={"ready":false,"behaviors":_choice_ids.duplicate(),"pending":_choice_ids.size(),"errors":[]}
+
+static func _resolve_choice_resources(job:Dictionary)->void:
+    var seen:Dictionary={}
+    for id in job.ids:
+        var selected:Dictionary=NativeAuthoring.selection(id,job.cache)
+        for clip in selected.get("clips",[]):
+            if not seen.has(clip.id):job.clips.append(clip);seen[clip.id]=true
+
+func prepare_choice_resources(world:Node,admission:Dictionary={})->void:
+    var budget:Dictionary=_native_budget if admission.is_empty() else admission
+    if _choice_job.is_empty():return
+    if _choice_job.task>=0:
+        if not WorkerThreadPool.is_task_completed(_choice_job.task):return
+        WorkerThreadPool.wait_for_task_completion(_choice_job.task);_choice_job.task=-1
+        if _choice_job.ids!=_choice_ids:_start_choice_resources(world.catalog_cache);return
+        world.catalog_cache.merge(_choice_job.cache,false)
+    if budget.frame!=Engine.get_process_frames():
+        budget.frame=Engine.get_process_frames();budget.used_usec=0
+    while _choice_job.cursor<_choice_job.clips.size() and budget.used_usec<budget.limit_usec:
+        var started:int=Time.get_ticks_usec()
+        var result=NativeSpells.Factory.prepare([_choice_job.clips[_choice_job.cursor]],_choice_resource_cache)
+        budget.used_usec+=Time.get_ticks_usec()-started
+        for error in result.errors:
+            if error not in choice_preparation.errors:choice_preparation.errors.append(error)
+        if not result.ready and result.errors.is_empty():break
+        _choice_job.cursor+=1
+    choice_preparation.pending=_choice_job.clips.size()-_choice_job.cursor
+    choice_preparation.ready=choice_preparation.pending==0 and choice_preparation.errors.is_empty()
+
+func _notification(what:int)->void:
+    if what==NOTIFICATION_PREDELETE and not _choice_job.is_empty() and _choice_job.get("task",-1)>=0:
+        WorkerThreadPool.wait_for_task_completion(_choice_job.task)
+
+func _native_closure(groups:Array,world:Node,cache:Dictionary)->Dictionary:
+    # Movement/world commits change the canonical revision without changing
+    # these resources. Compare the actual owner values (including suppression,
+    # removal clocks and spatial footprints), not just UUIDs or global revision.
+    # Deep snapshots prevent a later in-place owner update changing an old key.
+    var key:Array=[world.timeline.group_start_ms,world.timeline.condition_owners.duplicate(true),world.timeline.spatial_effect_owners.duplicate(true)]
+    for group in groups:key.append(group.id if group.has("id") else group.get("components",[]).map(func(item):return item.id))
+    for record in _native_prepare_records:
+        if record.key==key:return record
+    var owners:Dictionary={};var areas:Dictionary={}
+    for id in world.timeline.condition_owners:owners[id]=world.timeline.condition_owners[id].duplicate()
+    for id in world.timeline.spatial_effect_owners:areas[id]=world.timeline.spatial_effect_owners[id].duplicate()
+    var persistent:Array=Conditions.native_samples(owners,world.timeline.display_ms,cache)
+    persistent.append_array(Conditions.NativePersistent.spatial_samples(areas,world.timeline.display_ms,cache))
+    var at:float=world.timeline.group_start_ms
+    for group in groups:
+        at=maxf(at,float(group.get("preview_start_ms",at)))
+        for commit in group.get("commits",[]):
+            Conditions.observe(owners,commit.delta.get("actors",{}),at+commit.at_ms)
+            if commit.delta.get("set",{}).has("senses"):
+                Conditions.NativePersistent.observe_spatial(areas,commit.delta.set.senses.get("spatial_effects",{}),at+commit.at_ms)
+            persistent.append_array(Conditions.native_samples(owners,at+commit.at_ms,cache))
+            persistent.append_array(Conditions.NativePersistent.spatial_samples(areas,at+commit.at_ms,cache))
+        at+=group.get("duration_ms",0.0)
+    var native_groups=groups.duplicate();native_groups.append({"components":persistent})
+    var components:Array=[]
+    for group in native_groups:components.append_array(group.get("components",[]))
+    var record={"key":key,"groups":native_groups,"components":components}
+    _native_prepare_records.append(record)
+    if _native_prepare_records.size()>4:_native_prepare_records.pop_front()
+    return record
+
+func _native_prefetch(groups:Array,world:Node)->Array:
+    # Future reduced groups are already authoritative. This horizon admits
+    # preparation only: it never activates a cue or advances a commit.
+    var result=groups.duplicate()
+    var at:float=world.timeline.group_start_ms+float(world.timeline.current.get("duration_ms",0.0))
+    at=maxf(at,world.timeline.display_ms)
+    for group in world.timeline.queue:
+        at=maxf(at,float(group.get("preview_start_ms",at)))
+        if at-world.timeline.display_ms>NATIVE_PREFETCH_MS:break
+        if not result.any(func(item):return item.get("id")==group.id):result.append(group)
+        at+=float(group.duration_ms)
+    return result
 
 func ensure_epoch(world: Node) -> void:
     if epoch!=world.timeline.initialization_revision:
         close(world);epoch=world.timeline.initialization_revision
 
-func prepare(groups: Array,cache: Dictionary,world: Node=null) -> Dictionary:
+func prepare(groups: Array,cache: Dictionary,world: Node=null,admission:Dictionary={},allow_optional:bool=true) -> Dictionary:
+    var budget:Dictionary=_native_budget if admission.is_empty() else admission
+    if budget.frame!=Engine.get_process_frames():budget.frame=Engine.get_process_frames();budget.used_usec=0
+    var charged_before:int=budget.used_usec
+    var prepare_started:int=Time.get_ticks_usec()
+    if world!=null:ensure_epoch(world)
+    var stage_started:int=Time.get_ticks_usec()
     var sources: Array=[]
     for group in groups:
         if group.is_empty() or is_same(prepared_groups.get(group.get("id")),group):continue
         audio.prepare(group.get("components",[]))
         for component in group.get("components",[]):
-            if component.kind=="native_effect" and component.status=="available" and component.source_id not in sources:sources.append(component.source_id)
-    var result=NativeSources.prepare(sources,cache)
+            if component.kind=="native_effect" and not component.get("native_spell",false) and component.status=="available" and component.source_id not in sources:sources.append(component.source_id)
+    var result:Dictionary
+    if not sources.is_empty() and budget.used_usec>=budget.limit_usec:
+        NativeSources.Admission.can_mutate() # Poll an existing load; admit no new work.
+        result={"ready":false,"pending":sources.size(),"errors":[]}
+    else:result=NativeSources.prepare(sources,cache)
+    budget.used_usec+=Time.get_ticks_usec()-stage_started
     if result.ready:
         for group in groups:
             if not group.is_empty():prepared_groups[group.id]=group
         while prepared_groups.size()>32:prepared_groups.erase(prepared_groups.keys()[0])
-    if world!=null:result.ready=blood.prepare(world,groups) and result.ready
+    if world!=null:
+        FrameProfile.end_phase(world.profile,"component_prepare_static",stage_started)
+        stage_started=Time.get_ticks_usec()
+        var deposit_before:int=blood.deposit_create_usec
+        var page_before:int=blood.light_page_create_usec
+        var blood_ready:bool=blood.prepare(world,groups,budget)
+        # Already received injuries may allocate hidden receiving fields during
+        # the preceding animation. Their completion never gates this group;
+        # Blood.prepare shares its two-field frame budget with required work.
+        _optional_blood_groups=_native_prefetch(groups,world)
+        readiness={"blood":blood_ready,"legacy_sources":result.ready}
+        result.ready=blood_ready and result.ready
+        world.profile.phases["blood_deposit_create"]=world.profile.phases.get("blood_deposit_create",0.0)+(blood.deposit_create_usec-deposit_before)/1000.0
+        world.profile.phases["blood_light_page_create"]=world.profile.phases.get("blood_light_page_create",0.0)+(blood.light_page_create_usec-page_before)/1000.0
+        FrameProfile.end_phase(world.profile,"component_prepare_blood",stage_started)
+        stage_started=Time.get_ticks_usec()
+        var required_groups:Array=groups.filter(func(group):return not group.is_empty())
+        if not world.timeline.current.is_empty() and not required_groups.any(func(item):return item.get("id")==world.timeline.current.id):required_groups.push_front(world.timeline.current)
+        var retained_components:Array=world.timeline.retained_components.map(func(item):return item.component)
+        if not retained_components.is_empty():required_groups.append({"components":retained_components})
+        var required=_native_closure(required_groups,world,cache)
+        var future=_native_closure(_native_prefetch(required_groups,world),world,cache)
+        _native_prepare_key=required.key;_native_prepare_groups=required.groups;_native_prepare_components=required.components
+        var required_ids:Dictionary={}
+        for component in required.components:required_ids[component.id]=true
+        var optional:Array=[];var seen:Dictionary={}
+        for component in future.components:
+            if required_ids.has(component.id) or seen.has(component.id):continue
+            if not component.get("native_spell",false) and component.get("native_hit",{}).is_empty():continue
+            if optional.size()>=NATIVE_PREFETCH_OCCURRENCES:break
+            optional.append(component);seen[component.id]=true
+        _optional_components=optional
+        _optional_owner=[world.timeline.initialization_revision,world.timeline.revision,world.timeline.group_start_ms,world.timeline.current,world.timeline.queue.duplicate()]
+        budget.used_usec+=Time.get_ticks_usec()-stage_started
+        FrameProfile.end_phase(world.profile,"component_prepare_persistent",stage_started)
+        stage_started=Time.get_ticks_usec()
+        # Required owners always get the shared frame budget first. Optional
+        # queries have independent readiness and cannot pause current playback.
+        var native=native_spells.prepare(required.groups,cache,world,[{"components":optional}],budget,false)
+        FrameProfile.end_phase(world.profile,"component_prepare_sources",stage_started)
+        stage_started=Time.get_ticks_usec()
+        var hits=native_hits.prepare(world,required.components,cache,optional,budget,false)
+        readiness.native_sources=native.ready;readiness.native_hits=hits.ready
+        FrameProfile.end_phase(world.profile,"component_prepare_hits",stage_started)
+        result.ready=result.ready and native.ready and hits.ready
+        if result.ready:
+            # Do not reserve a later class cue ahead of required spell loads.
+            # Only an active missing presenter can construct in sample() below.
+            # Legacy first-visible presenters are required atomic work: the
+            # existing owner constructs after Timeline admission. Charge them
+            # below, but never drop an admitted effect to fit optional work.
+            var current:Dictionary=world.timeline.current
+            if current.is_empty() and not groups.is_empty():current=groups[0]
+            var current_age:float=maxf(0.0,world.timeline.display_ms-world.timeline.group_start_ms)
+            var needs_native_constructor:bool=current.get("components",[]).any(func(component):return component.get("kind")=="native_effect" and not component.get("native_spell",false) and component.get("status")=="available" and not handles.has(component.id) and current_age>=float(component.get("start_ms",0.0)) and current_age<float(component.get("start_ms",0.0))+float(component.get("duration_ms",0.0)))
+            if needs_native_constructor:result.ready=NativeSources.Admission.begin_mutation()
+        budget.used_usec+=maxi(0,Time.get_ticks_usec()-prepare_started-(budget.used_usec-charged_before))
+        if result.ready and allow_optional:prepare_optional(world,cache,budget)
+        result.errors.append_array(native.errors)
+        for issue in hits.issues:
+            if issue.get("status")=="missing":result.errors.append(str(issue))
+    budget.used_usec+=maxi(0,Time.get_ticks_usec()-prepare_started-(budget.used_usec-charged_before))
+    if world!=null:FrameProfile.end_phase(world.profile,"component_prepare",prepare_started)
     return result
 
-func sample(world: Node, samples: Array,frame_seconds: float=1.0/60.0) -> void:
+func prepare_optional(world:Node,cache:Dictionary,admission:Dictionary={})->void:
+    var budget:Dictionary=_native_budget if admission.is_empty() else admission
+    if budget.frame!=Engine.get_process_frames():budget.frame=Engine.get_process_frames();budget.used_usec=0
+    if budget.used_usec>=budget.limit_usec:return
+    if _optional_owner.is_empty() or _optional_owner!=[world.timeline.initialization_revision,world.timeline.revision,world.timeline.group_start_ms,world.timeline.current,world.timeline.queue]:return
+    var started:int=Time.get_ticks_usec();var charged_before:int=budget.used_usec
+    if not _optional_blood_groups.is_empty():blood.prepare(world,_optional_blood_groups,budget)
+    if not _optional_components.is_empty() and budget.used_usec<budget.limit_usec:
+        native_spells.prepare(_native_prepare_groups,cache,world,[{"components":_optional_components}],budget)
+        native_hits.prepare(world,_native_prepare_components,cache,_optional_components,budget)
+    budget.used_usec+=maxi(0,Time.get_ticks_usec()-started-(budget.used_usec-charged_before))
+    FrameProfile.end_phase(world.profile,"component_prepare_prefetch",started)
+
+func decorate(world:Node,samples:Array)->void:
+    native_hits.decorate(world,samples,world.native_spell_hit_material)
+
+func capture_native_channels(world:Node)->void:
+    # Called after the native atlas has received/projected this frame's lights.
+    # Play acknowledges this evidence only on frame_post_draw.
+    for component in world.displayed_components:
+        if component.get("native_spell",false):
+            var native:Dictionary=native_spells.diagnostics.get(component.id,{})
+            if not is_equal_approx(float(native.get("age_ms",-1)),float(component.age_ms)):continue
+            for light in component.get("native_lights",[]):
+                var id="native-effect/"+str(component.id)+"/"+str(light.path)
+                if world.source_lighting.effect_was_submitted(id):
+                    _witness(world,{"id":NativeChannels.light_id(component.id,light.path)},true)
+        elif component.has("native_hit"):
+            if not world.native_spell_hit_material:
+                pending_evidence.append({"trace_track_id":component.id+":native_material","display_ms":world.timeline.display_ms,"inactive":true,"reason":"colour_treatment_selected"})
+                continue
+            var selected:Dictionary=Conditions.material(component.actor_uuid,world.displayed_components).get("flash",{})
+            if selected.get("id")==component.id and selected.get("native_surface")!=null:
+                _witness(world,{"id":component.id+":native_material"},_actor_visible(world,component.actor_uuid))
+
+func sample(world: Node, samples: Array,frame_seconds: float=1.0/60.0,budget:Dictionary={}) -> void:
     ensure_epoch(world)
     ready=true
+    var blood_started:int=Time.get_ticks_usec()
     blood.sample(world,samples)
+    FrameProfile.end_phase(world.profile,"blood_sample",blood_started)
+    for phase in blood.sample_phases:
+        world.profile.phases["blood_"+phase]=world.profile.phases.get("blood_"+phase,0.0)+blood.sample_phases[phase]
     ready=blood.ready
+    native_spells.sample(world,samples,frame_seconds)
+    ready=ready and native_spells.ready and native_hits.ready
+    for issue in native_spells.issues+native_hits.issues.filter(func(row):return row.get("status")=="missing"):
+        if issue not in world.presentation_errors:world.presentation_errors.append(issue)
+    for witness in native_spells.witnesses:
+        if witness.status=="rendered":pending_evidence.append({"trace_track_id":witness.id,"display_ms":world.timeline.display_ms,"visible":true})
     var live_media={}
     var sounds: Array=[]
     var alive={}
@@ -54,6 +293,7 @@ func sample(world: Node, samples: Array,frame_seconds: float=1.0/60.0) -> void:
     for actor_id in outlines.owners.keys():
         if not world.visual_actors.has(actor_id):outlines.erase(world,actor_id)
     for component in samples:
+        if component.get("native_spell",false):continue
         if component.kind=="residue_deposit":
             _witness(world,component,blood.visible_deposit(component));continue
         if component.get("status")=="missing": continue
@@ -73,17 +313,27 @@ func sample(world: Node, samples: Array,frame_seconds: float=1.0/60.0) -> void:
         if component.kind=="native_effect":
             alive[component.id]=true
             if not handles.has(component.id):
+                if not NativeSources.Admission.can_mutate():
+                    ready=false;continue
+                var construction_started:int=Time.get_ticks_usec()
+                if not budget.is_empty():budget["required_legacy_constructors"]=budget.get("required_legacy_constructors",0)+1
                 var presenter=NativePreview.new(); world.add_child(presenter)
                 var issue=presenter.configure(component.source_id,world.catalog_cache,Components.effect_seed(component),component.get("palette",[]))
                 if not issue.is_empty():
-                    world.presentation_errors.append(issue); presenter.queue_free(); continue
+                    world.presentation_errors.append(issue); presenter.queue_free()
+                    if not budget.is_empty():budget.used_usec+=Time.get_ticks_usec()-construction_started
+                    continue
                 issue=presenter.bind_receiving(world.source_lighting)
-                if not issue.is_empty():world.presentation_errors.append(issue);presenter.close();presenter.queue_free();continue
+                if not issue.is_empty():
+                    world.presentation_errors.append(issue);presenter.close();presenter.queue_free()
+                    if not budget.is_empty():budget.used_usec+=Time.get_ticks_usec()-construction_started
+                    continue
                 var placement=row.duplicate(); placement.id=component.id
                 var draws=presenter.draw_entries(component.id,placement,-10,100)
                 world.actor_entries.append_array(draws)
                 handles[component.id]={"node":presenter,"draws":draws,"placement":placement,"component":component}
                 world.draw_order_dirty=true
+                if not budget.is_empty():budget.used_usec+=Time.get_ticks_usec()-construction_started
             var handle: Dictionary=handles[component.id]
             handle.placement.position=row.position
             handle.placement.base_height_steps=row.base_height_steps
@@ -269,6 +519,10 @@ static func _audio_attachment(world: Node, component: Dictionary) -> Dictionary:
     var actor_id:String=component.get("target_uuid",component.get("actor_uuid","")) if attachment=="target_body" else component.get("actor_uuid","")
     var actor:Dictionary=world.visual_actors.get(actor_id,{})
     if actor.is_empty():
+        var track:Dictionary=component.get("source_track",{})
+        var disclosed=Components.AudioCues.disclosed_body(component,world.timeline.presentation_state().actors.get(actor_id,{}),world.rigs.get(track.get("rig",""),{}))
+        if not disclosed.is_empty():
+            sound.world_position=_socket(world,disclosed,"body_center");sound.attachment_source="disclosed_stationary_body";return sound
         sound.attachment_error="attachment_unavailable";return sound
     var row:Dictionary=actor.row
     if attachment=="ground":sound.world_position=Placement.contact(row)
@@ -305,63 +559,13 @@ static func _receiving_context(world: Node,record: Dictionary,component: Diction
     return context
 
 static func _projectile_point(world: Node,component: Dictionary,fraction: float) -> Vector3:
-    var recipe: Dictionary=component.recipe
-    var a=Vector3(component.from_position[0],component.from_elevation_feet/5.0*Placement.HEIGHT_UNIT,component.from_position[1])
-    var b=Vector3(component.to_position[0],component.to_elevation_feet/5.0*Placement.HEIGHT_UNIT,component.to_position[1])
-    var visual: Dictionary=world.visual_actors.get(component.actor_uuid,{})
-    if not visual.is_empty():
-        var row: Dictionary=visual.row.duplicate()
-        var rig: Dictionary=world.rigs[row.rig]
-        var delta=Vector2(component.to_position[0]-component.from_position[0],component.to_position[1]-component.from_position[1])
-        if not delta.is_zero_approx():row.facing=world._facing(delta)
-        var facing=_facing(world,row)
-        var socket: Variant=recipe.get("sourceSockets",recipe.get("sourceSocketsByRig",{}).get(row.rig,{})).get("release",{}).get(facing)
-        var unit=128.0/float(world.rig_config.TILE_W)*row.scale/Placement.PIXELS_PER_UNIT
-        if socket!=null:a+=world.camera.basis.x*(socket.x-rig.cell_width*.5)*unit*row.get("scale_x",1.0)+world.camera.basis.y*(rig.cell_height-rig.origin_y_from_ground-socket.y)*unit
-        else:a+=world.camera.basis.x*float(recipe.get("originX",0))*unit-world.camera.basis.y*float(recipe.get("originY",recipe.get("sourceAnchor",{}).get("liftY",0)))*unit
-    var target: Dictionary=world.visual_actors.get(component.target_uuid,{})
-    if not target.is_empty():
-        var target_row=target.row.duplicate();target_row.position=component.to_position;target_row.base_height_steps=component.to_elevation_feet/5.0
-        if component.kind=="geometry_projectile":
-            b-=world.camera.basis.y*float(recipe.targetY)*128.0/float(world.rig_config.TILE_W)*target_row.scale/Placement.PIXELS_PER_UNIT
-        else:b=_socket(world,target_row,"body_center")
-    var forward=(b-a).normalized()
-    var unit=128.0/float(world.rig_config.TILE_W)/Placement.PIXELS_PER_UNIT
-    a+=forward*float(recipe.get("sourceForwardPx",0))*unit;b-=forward*float(recipe.get("targetForwardPx",0))*unit
-    var trajectory: Dictionary=recipe.get("trajectory",{})
-    if trajectory.get("type")!="bezier":return a.lerp(b,fraction)
-    var distance=a.distance_to(b)
-    var delta=b-a
-    var x=delta.dot(world.camera.basis.x);var y=delta.dot(world.camera.basis.y)
-    var perpendicular=(world.camera.basis.x*-y+world.camera.basis.y*x).normalized()
-    var spread=1.0
-    if trajectory.get("sameTargetSpread",false) and component.get("same_target_count",1)>1:
-        spread=2.0*float(component.same_target_index)/float(component.same_target_count-1)-1.0
-    var control=(a+b)*.5+perpendicular*distance*trajectory.get("curvature",0.0)*spread
-    return a*(1-fraction)*(1-fraction)+control*2*fraction*(1-fraction)+b*fraction*fraction
+    return SpellPlacement.projectile_point(world,component,fraction)
 
 static func _socket(world: Node,row: Dictionary,socket: String) -> Vector3:
-    var base=Placement.contact(row)
-    if not row.has("rig"): return base
-    var rig: Dictionary=world.rigs[row.rig]
-    var playback: Node=world.playbacks.get(row.id)
-    var clip: String=playback.clip if playback!=null else "Idle"
-    var frame=mini(int((playback.sample_seconds if playback!=null else 0.0)*rig.clips[clip].fps),int(rig.clips[clip].frames)-1)
-    var points: Array=rig.get("pose_sockets",{}).get(socket,{}).get(clip,{}).get(_facing(world,row),[])
-    var point: Variant=points[mini(frame,points.size()-1)] if not points.is_empty() else null
-    if point==null: point=rig.get("body_anchor") if socket=="body_center" else null
-    if point==null: return base
-    var unit=128.0/float(world.rig_config.TILE_W)*row.scale/Placement.PIXELS_PER_UNIT
-    return base+world.camera.basis.x*(point.x-rig.cell_width*.5)*unit*row.get("scale_x",1.0)+world.camera.basis.y*(rig.cell_height-rig.origin_y_from_ground-point.y)*unit+Vector3.UP*row.get("visual_height",0.0)*Placement.HEIGHT_UNIT
+    return SpellPlacement.socket(world,row,socket)
 
 static func _has_socket(world: Node,row: Dictionary,socket: String) -> bool:
-    var rig: Dictionary=world.rigs[row.rig]
-    var playback: Node=world.playbacks.get(row.id)
-    var clip: String=playback.clip if playback!=null else "Idle"
-    var points: Array=rig.get("pose_sockets",{}).get(socket,{}).get(clip,{}).get(_facing(world,row),[])
-    if points.is_empty():return false
-    var frame=mini(int((playback.sample_seconds if playback!=null else 0.0)*rig.clips[clip].fps),int(rig.clips[clip].frames)-1)
-    return points[mini(frame,points.size()-1)]!=null
+    return SpellPlacement.has_socket(world,row,socket)
 
 func _witness(world: Node,component: Dictionary,visible: bool) -> void:
     if not visible:return
@@ -417,6 +621,8 @@ func _release(world: Node, id: String) -> void:
     world.draw_order_dirty=true
 
 func close(world: Node) -> void:
+    native_spells.close(world)
+    native_hits.close()
     blood.close(world)
     outlines.close(world)
     for id in handles.keys(): _release(world,id)
@@ -425,3 +631,6 @@ func close(world: Node) -> void:
     for entry in media_handles.values():world.actor_entries.erase(entry);entry.node.queue_free()
     media_handles.clear();audio.close()
     prepared_groups.clear();pending_evidence=[]
+    _native_prepare_key=[];_native_prepare_groups=[];_native_prepare_components=[];_native_prepare_records=[]
+    _native_budget={"frame":-1,"used_usec":0,"limit_usec":NATIVE_CONSTRUCTION_USEC}
+    _optional_components=[];_optional_blood_groups=[];_optional_owner=[]

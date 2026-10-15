@@ -91,8 +91,7 @@ func configure(owner: Node, target: int, cached: Dictionary = {}) -> void:
 
 func set_target_camera() -> void:
     camera.size = host.camera.size; camera.near = host.camera.near; camera.far = host.camera.far
-    camera.position = host.camera_focus + Basis(Vector3.UP,quarter*PI*.5)*Vector3(12,12*Placement.HEIGHT_UNIT,12)
-    camera.look_at(host.camera_focus)
+    camera.transform=Placement.camera_transform(host.camera_focus,quarter)
 
 func begin_style() -> void:
     wall_mode = host.wall_mode

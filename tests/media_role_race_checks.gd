@@ -102,11 +102,22 @@ func completed_later(environment: Dictionary, optional_slots: bool) -> void:
         await process_frame
     var prefix = "Completed optional slots" if optional_slots else "Slow first required"
     check(not WorkerThreadPool.is_task_completed(data.decode_jobs[0].task),prefix+": first worker remains deliberately held")
+    var next:Dictionary
     if optional_slots:
-        check(Media.poll(data,true).is_empty(),prefix+": required-only publication respects optional frame allowance")
-    var next = Media.poll(data)
+        # Full decode slots contain completed optional results, while two
+        # required requests wait. The existing priority contract reclaims one
+        # completed slot; withholding publication must still preserve it.
+        check(not data.worker_upload,"Role fixture uses the original CPU-only worker path")
+        check(Media.poll(data,true,false).is_empty() and data.decode_jobs.size()==4 and data.pending.size()==2,
+            prefix+": no publication allowance leaves completed optional slots owned")
+        next=Media.poll(data,true)
+        check(next.get("path")==paths[1] and next.has("image"),
+            prefix+": required-only poll reclaims exactly one completed optional slot blocking required work")
+        check(not Media.ready(data,{paths[1]:true}),prefix+": reclaim does not publish optional readiness")
+    else:next=Media.poll(data)
     check(next.get("path")==paths[1] and next.has("image"),prefix+": ready later worker publishes without the held first worker")
-    if next.has("image"): Media.published(data,next)
+    var published:Dictionary={}
+    if next.has("image"): Media.published(data,next);published[next.path]=true
     check(data.decode_jobs.size()==4 and data.decode_jobs.any(func(job):return job.path==paths[4]),prefix+": freed slot immediately admits queued required work")
     check(not Media.ready(data,wanted) and not Media.boot_ready(data),prefix+": missing required image still holds exact readiness and boot")
     if optional_slots:
@@ -115,10 +126,8 @@ func completed_later(environment: Dictionary, optional_slots: bool) -> void:
             await process_frame
         var required = Media.poll(data,true)
         check(required.get("path")==paths[4] and required.has("image"),prefix+": newly ready required result precedes completed optional results")
-        if required.has("image"): Media.published(data,required)
+        if required.has("image"): Media.published(data,required);published[required.path]=true
     release.post()
-    var published = {}
-    if next.has("image"): published[next.path]=true
     while not data.decode_jobs.is_empty() or not data.pending.is_empty():
         var result = await loaded(data)
         if result.is_empty(): check(false,prefix+": remaining original workers complete"); break

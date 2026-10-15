@@ -1,7 +1,9 @@
 // Ordinary outfit tint is applied by the caller. These are explicit authored
 // effect/condition operations; the native receiving/output passes share them.
+#include "native_body_material.gdshaderinc"
+#include "body_surface.gdshaderinc"
 uniform bool effect_palette_enabled=false;
-uniform vec3 effect_palette[16];
+uniform vec3 effect_palette[32];
 uniform int effect_palette_count=0;
 uniform vec2 effect_range=vec2(0.0,1.0);
 uniform float effect_gamma=1.0;
@@ -14,8 +16,14 @@ uniform float condition_brightness=1.0;
 uniform float condition_alpha=1.0;
 uniform vec2 material_cell_size=vec2(128.0);
 uniform float flash_strength=0.0;
-uniform vec3 flash_palette[16];
+uniform vec3 flash_palette[32];
 uniform int flash_palette_count=0;
+uniform bool flash_has_noise=false;
+uniform sampler2D flash_noise:filter_nearest,repeat_disable;
+uniform float flash_gamma=1.0;
+uniform bool flash_untinted=false;
+uniform float flash_frame=0.0;
+uniform bool flash_screen_blend=false;
 uniform bool condition_film_enabled=false;
 uniform sampler2D condition_film:filter_nearest,repeat_disable;
 uniform int condition_film_frames=1;
@@ -24,15 +32,20 @@ uniform vec3 condition_film_palette[4];
 uniform float condition_film_strength=0.0;
 uniform float condition_film_gain=0.0;
 uniform float condition_film_weight=0.0;
-vec4 character_material(vec4 source,vec2 cell_uv) {
+// Both hand magic and receiver feedback use the delivered cell-local material
+// pattern. Original component alpha remains the body mask throughout.
+float spell_pattern(float value,vec2 cell_uv,sampler2D pattern_texture,float frame) {
+    vec2 noise_uv=vec2(cell_uv.x,fract(cell_uv.y-floor(frame*128.0*.05/12.0)/128.0));
+    float pattern=clamp((texture(pattern_texture,noise_uv).r*255.0-52.0)/91.0,0.0,1.0);
+    return pattern<.10?0.0:clamp(pow(pattern,1.5)*.85+value*.15,0.0,1.0);
+}
+vec4 character_material(vec4 source,vec2 cell_uv,vec3 untinted_source) {
     vec4 result=source;
     if(effect_palette_enabled && effect_palette_count>0) {
         float luminance=dot(source.rgb,vec3(.2126,.7152,.0722));
         float value=pow(clamp((luminance-effect_range.x)/max(effect_range.y-effect_range.x,1.0/255.0),0.0,1.0),effect_gamma);
         if(effect_has_noise) {
-            vec2 noise_uv=vec2(cell_uv.x,fract(cell_uv.y-floor(effect_frame*128.0*.05/12.0)/128.0));
-            float pattern=clamp((texture(effect_noise,noise_uv).r*255.0-52.0)/91.0,0.0,1.0);
-            value=pattern<.10?0.0:clamp(pow(pattern,1.5)*.85+value*.15,0.0,1.0);
+            value=spell_pattern(value,cell_uv,effect_noise,effect_frame);
         }
         result.rgb=effect_palette[min(effect_palette_count-1,int(value*float(effect_palette_count)))];
     } else {
@@ -54,9 +67,12 @@ vec4 character_material(vec4 source,vec2 cell_uv) {
             result.rgb=combined_alpha>0.0?(film*added_alpha+result.rgb*result.a*(1.0-added_alpha))/combined_alpha:vec3(0.0);
             result.a=combined_alpha;
         }
-        if(flash_strength>0.0 && flash_palette_count>0) {
-            float brightness=clamp(max(result.r,max(result.g,result.b)),0.0,1.0);
-            vec3 painted=flash_palette[min(flash_palette_count-1,int(brightness*float(flash_palette_count)))];
+        if(!native_body_enabled && flash_strength>0.0 && flash_palette_count>0) {
+            vec3 base=flash_untinted?untinted_source:source.rgb;
+            float brightness=pow(clamp(flash_has_noise?dot(base,vec3(.2126,.7152,.0722)):max(base.r,max(base.g,base.b)),0.0,1.0),flash_gamma);
+            if(flash_has_noise) brightness=spell_pattern(brightness,cell_uv,flash_noise,flash_frame);
+            vec3 painted=flash_palette[min(min(flash_palette_count,32)-1,int(brightness*float(min(flash_palette_count,32))))];
+            if(flash_screen_blend) painted=vec3(1.0)-(vec3(1.0)-result.rgb)*(vec3(1.0)-painted);
             result.rgb=mix(result.rgb,painted,flash_strength);
         }
     }

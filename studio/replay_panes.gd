@@ -9,7 +9,13 @@ static func viewport()->SubViewport:
     return view
 
 static func discard(pane:Dictionary)->void:
-    if not pane.is_empty() and is_instance_valid(pane.viewport):pane.viewport.queue_free()
+    if pane.is_empty() or not is_instance_valid(pane.viewport):return
+    pane.viewport.audio_listener_enable_3d=false
+    if is_instance_valid(pane.world):
+        pane.world.component_renderer.audio.set_enabled(false)
+        pane.world.timeline.paused=true
+        freeze(pane,true)
+    pane.viewport.queue_free()
 
 static func freeze(pane:Dictionary,value:bool)->void:
     if pane.is_empty():return
@@ -29,7 +35,7 @@ static func freeze(pane:Dictionary,value:bool)->void:
         pane.frozen=[]
 
 static func prepare(parent:Node,restored:RefCounted,source:Dictionary,reference:Node3D,
-        spare:Dictionary,budget:int,paired:bool,share_sources:bool,retain_view:bool)->Dictionary:
+        spare:Dictionary,budget:int,share_sources:bool,retain_view:bool)->Dictionary:
     var pane={}
     if not spare.is_empty():
         if is_same(spare.index,source):
@@ -42,7 +48,7 @@ static func prepare(parent:Node,restored:RefCounted,source:Dictionary,reference:
     var reused=not pane.is_empty()
     if not reused:
         var view=viewport();view.size=reference.get_viewport().size;parent.add_child(view)
-        var host=Play.new();host.external_playback=true;host.external_clock=paired
+        var host=Play.new();host.external_playback=true;host.external_clock=false
         host.component_renderer.audio.set_enabled(false)
         host.catalog_cache=Play.Catalog.source_snapshot(source.cache)
         host.media_warmup.budget_bytes=budget
@@ -57,7 +63,9 @@ static func prepare(parent:Node,restored:RefCounted,source:Dictionary,reference:
                 host.media_warmup.resident[path]=reference.media_warmup.resident[path].duplicate()
         pane={"world":host,"viewport":view,"index":source,"frozen":[]}
     var owner:Node3D=pane.world
-    owner.external_clock=paired
+    owner.external_clock=false
+    owner.native_startup_plan=source.native_startup_plan if source.has("native_startup_plan") else Play.NativeStartup.recording_plan(source.get("rows",[]))
+    owner.native_startup_requested_ms=restored.display_ms
     owner.media_warmup.budget_bytes=budget
     owner.media_warmup.encounter_override=source.get("media_preload",{})
     if share_sources:
@@ -66,6 +74,7 @@ static func prepare(parent:Node,restored:RefCounted,source:Dictionary,reference:
     owner.quarter=reference.quarter;owner.requested_quarter=reference.quarter
     owner.wall_mode=reference.wall_mode;owner.grid_visible=reference.grid_visible
     if not reused:pane.viewport.add_child(owner)
+    owner.native_spell_hit_material=reference.native_spell_hit_material
     owner.camera.size=reference.camera.size if retain_view else 6.0
     owner.camera_focus=reference.camera_focus;owner.initial_focus=retain_view
     owner.playback_speed=reference.playback_speed

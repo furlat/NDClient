@@ -5,6 +5,52 @@ links the existing full authored media identity; Magic Missile additionally has
 an explicit `phase`. The source plan is
 `agent_docs/GODOT_STUDIO_BASE_MECHANICS_PLAN_2026-10-13.md`.
 
+The `spells` table selects the shared-World3D path for the30 non-deferred
+capabilities in the current sandbox batch. **Aid, Bless, False Life and Sacred
+Flame remain deferred and are not activated here.** Registration is technical
+availability, not artistic approval; timing and placement still need tuning for
+every spell. See the
+[migration plan](../../agent_docs/NATIVE_SPELL_CLIENT_MIGRATION_PLAN_2026-10-15.md)
+and [Factory handoff](../../agent_docs/NATIVE_VFX_FACTORY_HANDOFF.md) for current
+qualification.
+
+`presentation/native_spell_authoring.gd` reads the existing imported manifest,
+flat projectile staging and nested `sandbox/batches/{combat,support}.json`
+staging. Manifest clips already contain their selected source/material overrides.
+The production selection omits sandbox delivery counts, target fixtures, test
+body actions and local hold durations. Entry `delivery` describes real application
+versus area ownership; Ice Knife's separately recorded burst has its own role
+selection. Shield's demonstration hostile projectile is excluded; its native
+contact source is available only to actual interception events.
+
+Entry `lifecycle` names exact disclosed condition or spatial-effect owners,
+source cue IDs, replaced legacy media and source-time windows. The currently
+finite donor lifecycles use an explicitly held native pose between opening and
+closing. That held source pose is a rendering choice, not a game-duration rule
+or an assertion of a seamless animated sustain. Actual owner removal/suppression
+controls visibility and closure. Existing markers and recipient restraint layers
+remain separate. Light's native orb does not add another optical emitter over
+the authoritative light state. Web's native ground mesh is clipped to the actual
+disclosed, unsuppressed cells.
+
+`source_bounds` stores measured native animation lengths, particle tails and
+source-light property tracks. Per-emitter paths let release/contact controls
+exclude hidden subtrees while retaining visible smoke and ribbons. GPUTrail's
+`length_seconds` defines its decay; its `lifetime` is a history-sample count,
+not a duration. Regenerate this metadata with Windows Godot:
+
+```text
+--headless --path <client> --script res://tools/native_spell_light_intake.gd -- --write-index
+```
+
+This finite intake samples source components/AnimationPlayers for light metadata;
+it does not run geometry trail callbacks or qualify framebuffer output. Reports
+stay under `.runtime/native-spell-light-{intake,inventory}.json`. The actual light
+animation remains source-owned. No new artwork is imported by this command.
+
+The interfaces and historical Magic Missile adapter below describe the older
+`sources` path, which still serves the class and blood selections.
+
 Regenerate the selected dependency closure (originals are never written):
 
 ```sh

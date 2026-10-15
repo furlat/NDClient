@@ -21,6 +21,7 @@ const MapData = preload("res://map_data.gd")
 const Editor = preload("res://editor.gd")
 const Modular = preload("res://modular.gd")
 const CharacterGeometry = preload("res://presentation/character_geometry.gd")
+const EnvironmentMedia = preload("res://presentation/environment_media.gd")
 const MODULAR_SHADER = preload("res://modular.gdshader")
 const ACTOR_SHADER = preload("res://actor.gdshader")
 const SHADOW_SHADER = preload("res://shadow.gdshader")
@@ -176,6 +177,8 @@ func prune_texture_cache(limit: int = 2147483647) -> void:
         for role in record.get("roles",[]):
             if role.selection.kind == "mask": active[role.selection.mask.region.path] = true
         if record.has("water"): active[Catalog.read_file("assets.json",catalog_cache).resources[record.water.ripple].path] = true
+    for playback in destruction.values() if texture_gc_dirty else []:
+        if playback.phase!=2: active.merge(playback.get_meta("numeric_pages",{}))
     texture_gc_dirty = false
     var oldest = textures.keys()
     oldest.sort_custom(func(a,b): return texture_last_use[a] < texture_last_use[b])
@@ -353,7 +356,20 @@ func break_object(row: Dictionary) -> bool:
     if destruction.has(row.id) or row.kind == "actor": return false
     var duration = Catalog.break_duration(row,catalog_cache)
     if duration <= 0: return false
+    var page_started = Time.get_ticks_usec()
+    var pages = EnvironmentMedia.animation_pages(row,catalog_cache)
+    if not pages.errors.is_empty():
+        for error in pages.errors: push_error(error)
+        return false
+    # The legacy workshop loader is synchronous. Complete its finite numeric
+    # page admission before requesting the animation; this cold cost is not a
+    # live-player performance claim. Play retains its asynchronous media gate.
+    for path in pages.paths:
+        if texture(path)==null: return false
     var playback = Graphs.destruction(self, duration)
+    playback.set_meta("numeric_pages",pages.paths)
+    playback.set_meta("numeric_page_preparation_ms",(Time.get_ticks_usec()-page_started)/1000.0)
+    texture_gc_dirty = true
     destruction[row.id] = playback
     Graphs.request(playback, "Breaking")
     if not gpu_grid.is_empty():
@@ -403,9 +419,7 @@ func reset_destruction() -> void:
     update_camera()
 
 func position_camera() -> void:
-    var rotation = Basis(Vector3.UP, quarter * PI * 0.5)
-    camera.position = camera_focus + rotation * Vector3(12.0, 12.0 * Placement.HEIGHT_UNIT, 12.0)
-    camera.look_at(camera_focus)
+    camera.transform=Placement.camera_transform(camera_focus,quarter)
 
 func update_camera(refresh_materials: bool = true, incremental: bool = false) -> void:
     var started = Time.get_ticks_usec()

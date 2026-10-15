@@ -11,7 +11,9 @@ static func plan(index:Dictionary)->Dictionary:
     var cache=Catalog.source_snapshot(index.cache)
     var groups:Array=index.groups.map(func(item):return item.group)
     var actors=MediaWarmup.plan(index.initialization.state,groups,cache)
-    var world=EnvironmentMedia.plan(index.initialization.state,groups,cache)
+    # The prefix walk below already collects every later group's environment.
+    # An all-groups walk here duplicated it and then rewound its mutable index.
+    var world=EnvironmentMedia.plan(index.initialization.state,groups.slice(0,1),cache)
     var priority:Dictionary=actors.required.duplicate()
     priority.merge(world.required)
     var paths=priority.duplicate()

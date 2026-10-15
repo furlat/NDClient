@@ -84,6 +84,28 @@
       "license": "CC0-1.0",
       "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
       "verified_date": "2026-10-14"
+    },
+    "torch-ignition": {
+      "author": "qubodup",
+      "title": "Flare ignition",
+      "page": "https://opengameart.org/content/flare-ignition",
+      "download": "https://opengameart.org/sites/default/files/ignition.flac",
+      "archive": false,
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "verified_date": "2026-10-14",
+      "verification": "Author upload page explicitly lists CC0; source package preserved in .runtime/audio-intake."
+    },
+    "bottle-drink": {
+      "author": "qubodup",
+      "title": "Liquid Bottle Drink Set",
+      "page": "https://opengameart.org/content/liquid-bottle-drink-set",
+      "download": "https://opengameart.org/sites/default/files/qubodup-bottle-and-drink-sounds.7z",
+      "archive": true,
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "verified_date": "2026-10-14",
+      "verification": "Author upload page explicitly lists CC0; source package preserved in .runtime/audio-intake."
     }
   },
   "clips": {
@@ -207,6 +229,22 @@
       "source": "kenney-rpg",
       "member": "Audio/doorClose_1.ogg",
       "path": "res://assets/audio/kenney/rpg/doorClose_1.ogg"
+    },
+    "equipment.belt": {
+      "source": "kenney-rpg",
+      "member": "Audio/beltHandle1.ogg",
+      "path": "res://assets/audio/kenney/rpg/beltHandle1.ogg"
+    },
+    "torch.ignition": {
+      "source": "torch-ignition",
+      "path": "res://assets/audio/torch-ignition/ignition.wav",
+      "pcm_wav": "pcm_s24le"
+    },
+    "bottle.swallow": {
+      "source": "bottle-drink",
+      "member": "qubodup-bottle-and-drink-sounds/swallow-01.flac",
+      "path": "res://assets/audio/bottle-drink/swallow-01.wav",
+      "pcm_wav": "pcm_s24le"
     }
   }
 }

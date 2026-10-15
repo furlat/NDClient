@@ -7,8 +7,7 @@ func run()->void:
     var studio=Studio.new();root.add_child(studio);studio.loop_enabled=false
     if not await settle(studio):await finish(studio);return
     check(studio.active_directory=="res://.runtime/studio-cases/oa_jump_late_lethal-seed5-v2/amber/journal","Exact late lethal reaction recording loaded")
-    check(not studio.peer.is_empty(),"Late lethal recording admits both original native body clocks")
-    if studio.peer.is_empty():await finish(studio);return
+    check(studio.case_bundle.views.size()==2,"Late lethal recording retains both independent body clocks")
     verify_prefix(studio,"late lethal initial")
     await play_once(studio,"oa_jump_late_lethal-seed5-v2")
     await save_capture(studio,"late-lethal-end")

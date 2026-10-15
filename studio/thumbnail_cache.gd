@@ -10,6 +10,8 @@ const Conditions=preload("res://presentation/conditions.gd")
 const SourceShader=preload("res://studio/source_preview.gdshader")
 const BloodPreview=preload("res://presentation/blood_preview.gd")
 const NativePreview=preload("res://presentation/native_effect_preview.gd")
+const NativeSpellPreview=preload("res://studio/native_spell_preview.gd")
+const NativePreviewStore=preload("res://studio/native_preview_store.gd")
 const NativeSources=preload("res://presentation/native_effects.gd")
 const RegisteredMedia=preload("res://presentation/registered_media.gd")
 const Lighting=preload("res://presentation/lighting_2d.gd")
@@ -17,6 +19,8 @@ const ConditionOutline=preload("res://presentation/condition_outline.gd")
 const OutlineShader=preload("res://studio/condition_outline_preview.gdshader")
 const BoltShader=preload("res://studio/geometry_projectile_preview.gdshader")
 var source_lights=Lighting.new()
+var native_store=NativePreviewStore.new()
+var native_descriptors:Dictionary={}
 var outline_source=ConditionOutline.new()
 var host: Node
 var cache: Dictionary={}
@@ -42,6 +46,9 @@ var active: Dictionary={}
 const COMPOSITE_BATCH_LIMIT=8
 var batch_size=COMPOSITE_BATCH_LIMIT
 var composites:Array=[]
+const NATIVE_BATCH_LIMIT=8
+var native_batch_size=NATIVE_BATCH_LIMIT
+var native_composites:Array=[]
 var images: Dictionary={}
 var image_bytes=0
 var image_generation=-1
@@ -115,8 +122,10 @@ func request(row: Dictionary,sample_ms: float,quarter: int,prepare_views: bool=t
     if row.kind=="native_effect":age=NativeSources.source_age_ms(component,age)
     elif component.get("loop",false) and component.has("source_duration_ms"):age=fposmod(age,component.source_duration_ms)
     var hz=float(row.get("source_fps",component.get("sample_hz",32)))
+    var tick:int=floori(age*maxf(1,hz)/1000.0)
+    if component.get("native_spell",false):age=tick*1000.0/maxf(1,hz)
     if row.kind in ["audio","feedback_text","damage_number","geometry_projectile"]:quarter=0
-    var key="%s:%s:%s:%s" % [generation,row.id,floori(age*maxf(1,hz)/1000),quarter]
+    var key="%s:%s:%s:%s" % [generation,row.id,tick,quarter]
     if component.has("media_samples"):
         # A held owner clock can still enter another bank or crossfade weight.
         key+=":"+JSON.stringify(component.media_samples.map(func(part):return [part.part_id,part.media.asset_id,part.source_age_ms,part.alpha]))
@@ -125,6 +134,13 @@ func request(row: Dictionary,sample_ms: float,quarter: int,prepare_views: bool=t
         var texture=textures[key];textures.erase(key);textures[key]=texture
         return key
     if suspended or requested.has(key) or errors.has(key): return key
+    if row.kind=="native_effect" and component.get("native_spell",false):
+        var descriptor_key:String=str(row.id)+":"+str(hz)
+        if not native_descriptors.has(descriptor_key):native_descriptors[descriptor_key]=native_store.descriptor(component,maxf(1,hz))
+        var baked:Texture2D=native_store.lookup(native_descriptors[descriptor_key],tick,quarter)
+        if baked!=null:
+            _publish_texture(key,baked,native_store.last_texture_bytes)
+            return key
     var job={"key":key,"row":row,"age_ms":age,"sample_ms":sample_ms,"quarter":quarter,"generation":generation,"component":component}
     # Capture this generation's immutable source tables before worker dispatch.
     # A thumbnail must not select on-disk authoring edited after this index.
@@ -320,8 +336,16 @@ func poll() -> bool:
     if not is_instance_valid(host): return false
     if suspended:
         if active.get("kind")=="native_effect":active.started_ms=Time.get_ticks_msec()
+        for composite in native_composites:composite.started_ms=Time.get_ticks_msec()
         return false
     var changed=false
+    # Each spell swatch retains its own simulation and private viewport. They
+    # advance one existing 60 Hz history step together per drawn frame, rather
+    # than replaying every visible sample's entire history serially.
+    for i in range(native_composites.size()-1,-1,-1):
+        var composite:Dictionary=native_composites[i]
+        if _sample_native(composite):
+            _close_native(composite);native_composites.remove_at(i);changed=true
     for i in range(composites.size()-1,-1,-1):
         var composite:Dictionary=composites[i]
         if not composite.drawn:continue
@@ -336,24 +360,26 @@ func poll() -> bool:
         if not composites.is_empty():RenderingServer.frame_post_draw.connect(_composites_drawn,CONNECT_ONE_SHOT)
     if not active.is_empty():
         if active.kind=="native_effect":
-            var basis=Basis.from_euler(Vector3(-atan(sqrt(.5)),PI/4+active.job.quarter*PI/2,0))
-            var sampled=active.node.sample(active.job.native_age_ms/1000.0,basis,Vector3.ZERO,1.0,[],active.get("context",{}))
-            if sampled.ready and active.draws>1:
-                _publish(active.job,active.node.texture().get_image());_clear_active();changed=true
-            elif not sampled.get("error","").is_empty():
-                errors[active.job.key]=sampled.error;requested.erase(active.job.key);_clear_active();changed=true
-            elif Time.get_ticks_msec()-active.started_ms>=NATIVE_READY_TIMEOUT_MS:
-                errors[active.job.key]="Native source did not become ready within 15 seconds: "+str(active.job.component.source_id)
-                requested.erase(active.job.key);_clear_active();changed=true
+            if _sample_native(active):_clear_active();changed=true
         elif active.kind=="blood":
             active.node.sample()
             if active.drawn and active.draws>2 and active.node.renderer.ready:
                 _publish(active.job,active.viewport.get_texture().get_image());_clear_active();changed=true
         elif active.drawn:
             _publish(active.job,active.viewport.get_texture().get_image());_clear_active();changed=true
-        if not active.is_empty():active.draws+=1
+        if not active.is_empty() and active.kind!="native_effect":active.draws+=1
     if worker==null and active.is_empty() and pending.is_empty():_prepare_view()
     if worker==null and active.is_empty() and not pending.is_empty():
+        while native_composites.size()<clampi(native_batch_size,1,NATIVE_BATCH_LIMIT) and not pending.is_empty() and pending[0].row.kind=="native_effect" and pending[0].component.get("native_spell",false):
+            var next:Dictionary=pending.pop_front()
+            if next.generation!=generation:continue
+            var composite:Dictionary=_start_native(next)
+            if not composite.is_empty():native_composites.append(composite)
+            else:changed=true
+        if pending.is_empty():return changed
+        # A full native batch must leave the next spell job queued. Ordinary
+        # image decoding can still use its existing independent worker.
+        if pending[0].row.kind=="native_effect" and pending[0].component.get("native_spell",false):return changed
         if _ordinary(pending[0]):
             var jobs:Array=[]
             while not pending.is_empty() and jobs.size()<clampi(batch_size,1,COMPOSITE_BATCH_LIMIT) and _ordinary(pending[0]):
@@ -362,6 +388,8 @@ func poll() -> bool:
             if not jobs.is_empty():worker=Thread.new();worker.start(_decode_batch.bind(jobs))
             return changed
         if not composites.is_empty():return changed
+        # Native class swatches share the same compiler boundary as spells.
+        if pending[0].row.kind=="native_effect" and not NativePreview.Sources.Admission.can_mutate():return changed
         var job: Dictionary=pending.pop_front()
         if job.generation!=generation:return changed
         if job.row.kind=="audio": _waveform(job);changed=true
@@ -374,20 +402,41 @@ func poll() -> bool:
             active={"kind":"blood","job":job,"node":node,"viewport":view,"draws":0,"drawn":false}
             RenderingServer.frame_post_draw.connect(_drawn.bind(job.key,job.generation),CONNECT_ONE_SHOT)
         elif job.row.kind=="native_effect":
-            var node=NativePreview.new();host.add_child(node)
-            var issue=node.configure(job.component.source_id,cache,Components.effect_seed(job.component),job.component.get("palette",[]))
-            if issue.is_empty():issue=node.bind_receiving(source_lights)
-            if issue.is_empty():
-                # Source swatches use neutral illumination, separate from the
-                # scene's actual lights. The source's colour/alpha stays intact.
-                if not node.receiving.is_empty():
-                    for child in node.receiving.output.get_children():
-                        if child is CanvasModulate:child.color=Color.WHITE
-                var context={"screen_origin":Vector2.ZERO,"pixel_scale":1.0,"light_cap":0.0,"supports":[Transform3D(Basis.from_scale(Vector3(3,1,3)),Vector3.ZERO)]}
-                context.merge(job.native_context)
-                active={"kind":"native_effect","job":job,"node":node,"draws":0,"context":context,"started_ms":Time.get_ticks_msec()};node.texture()
-            else: errors[job.key]=issue;requested.erase(job.key);node.queue_free()
+            active=_start_native(job)
     return changed
+
+func _start_native(job:Dictionary)->Dictionary:
+    var node:Node=NativeSpellPreview.new() if job.component.get("native_spell",false) else NativePreview.new()
+    host.add_child(node)
+    var issue:String=node.configure_component(job.component) if job.component.get("native_spell",false) else node.configure(job.component.source_id,cache,Components.effect_seed(job.component),job.component.get("palette",[]))
+    if issue.is_empty() and not job.component.get("native_spell",false):issue=node.bind_receiving(source_lights)
+    if not issue.is_empty():
+        errors[job.key]=issue;requested.erase(job.key);node.close();node.queue_free();return {}
+    # Source swatches retain their existing neutral illumination, independent
+    # of the scene's actual lights and of every other preview's source state.
+    if not job.component.get("native_spell",false) and not node.receiving.is_empty():
+        for child in node.receiving.output.get_children():
+            if child is CanvasModulate:child.color=Color.WHITE
+    var context={"screen_origin":Vector2.ZERO,"pixel_scale":1.0,"light_cap":0.0,"supports":[Transform3D(Basis.from_scale(Vector3(3,1,3)),Vector3.ZERO)]}
+    context.merge(job.native_context)
+    node.texture()
+    return {"kind":"native_effect","job":job,"node":node,"draws":0,"context":context,"started_ms":Time.get_ticks_msec()}
+
+func _sample_native(composite:Dictionary)->bool:
+    var basis=Basis.from_euler(Vector3(-atan(sqrt(.5)),PI/4+composite.job.quarter*PI/2,0))
+    var sampled= composite.node.sample(composite.job.native_age_ms/1000.0,basis,Vector3.ZERO,1.0,[],composite.context)
+    if sampled.ready and composite.draws>1:
+        _publish(composite.job,composite.node.texture().get_image());return true
+    if not sampled.get("error","").is_empty():
+        errors[composite.job.key]=sampled.error;requested.erase(composite.job.key);return true
+    if Time.get_ticks_msec()-composite.started_ms>=NATIVE_READY_TIMEOUT_MS:
+        errors[composite.job.key]="Native source did not become ready within 15 seconds: "+str(composite.job.component.source_id)
+        requested.erase(composite.job.key);return true
+    composite.draws+=1
+    return false
+
+func _close_native(composite:Dictionary)->void:
+    composite.node.close();composite.node.queue_free()
 
 func _primitive(job: Dictionary) -> void:
     var component: Dictionary=job.component
@@ -467,9 +516,12 @@ func _publish(job: Dictionary,output: Image) -> void:
         if used.has_area():output=output.get_region(used.grow(3).intersection(Rect2i(Vector2i.ZERO,output.get_size())))
     var factor=minf(1.0,128.0/maxi(output.get_width(),output.get_height()))
     if factor<1:output.resize(maxi(1,roundi(output.get_width()*factor)),maxi(1,roundi(output.get_height()*factor)),Image.INTERPOLATE_NEAREST)
-    textures[job.key]=ImageTexture.create_from_image(output)
-    texture_bytes-=texture_sizes.get(job.key,0)
-    texture_sizes[job.key]=output.get_data_size();texture_bytes+=texture_sizes[job.key]
+    _publish_texture(job.key,ImageTexture.create_from_image(output),output.get_data_size())
+
+func _publish_texture(key:String,texture:Texture2D,bytes:int)->void:
+    textures[key]=texture
+    texture_bytes-=texture_sizes.get(key,0)
+    texture_sizes[key]=bytes;texture_bytes+=bytes
     while textures.size()>limit or texture_bytes>texture_limit:
         var old=""
         for candidate in textures:
@@ -477,7 +529,7 @@ func _publish(job: Dictionary,output: Image) -> void:
         if old.is_empty():
             # Refuse an oversized visible demand explicitly instead of cycling
             # forever between missing pinned samples or growing without a cap.
-            old=job.key;errors[job.key]="Visible source previews exceed the bounded thumbnail budget"
+            old=key;errors[key]="Visible source previews exceed the bounded thumbnail budget"
         texture_bytes-=texture_sizes[old];texture_sizes.erase(old);textures.erase(old)
 
 func _clear_active() -> void:
@@ -487,6 +539,9 @@ func _clear_active() -> void:
 
 func reset() -> void:
     generation+=1;pending.clear();warm_pending.clear();warm_requested.clear();requested.clear();pinned.clear();textures.clear();texture_sizes.clear();texture_bytes=0;errors.clear();inactive.clear();cache.clear();_clear_active()
+    for composite in native_composites:_close_native(composite)
+    native_composites.clear()
+    native_descriptors.clear();native_store.reset()
     if RenderingServer.frame_post_draw.is_connected(_composites_drawn):RenderingServer.frame_post_draw.disconnect(_composites_drawn)
     for composite in composites:composite.viewport.queue_free()
     composites.clear()

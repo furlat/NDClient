@@ -47,7 +47,7 @@ func run()->void:
             layers+=1
             check(is_equal_approx(float(entry.material.get_shader_parameter("condition_alpha")),point.alpha),"Real body/gear receives the composed opacity: "+point.name+" "+entry.actor_layer.slot)
         check(layers>1,"Assembled original body and equipment remain present")
-        var preview=studio.tracks.prepare_visible(true)
+        var preview=studio.tracks.prepare_visible()
         check(preview.ready and preview.errors.is_empty(),"Visible restoration swatches are prepared before publication: "+point.name)
         check(studio.world.presentation_errors.is_empty() and studio.world.media_issue.is_empty(),"Native source/presentation pipeline has no error: "+point.name)
         await capture(studio,point.name)

@@ -11,6 +11,23 @@ static func source_seconds(row:Dictionary,age_ms:float)->float:
         if seconds>=end:seconds=begin+fposmod(seconds-begin,maxf(.000001,end-begin))
     return seconds
 
+static func disclosed_body(component:Dictionary,actor:Dictionary,rig:Dictionary)->Dictionary:
+    # An explicit stationary source grant, independent of a visual draw handle.
+    # Retained/unknown actor positions and unqualified sockets are not grants.
+    if component.get("attachment_source")!="disclosed_stationary_body" or component.get("attachment")!="body":return {}
+    var track:Dictionary=component.get("source_track",{})
+    var source_actor:Dictionary=component.get("presentation_actor",{})
+    var id:String=component.get("actor_uuid","")
+    var point:Variant=track.get("from_position")
+    if id.is_empty() or actor.get("uuid")!=id or source_actor.get("uuid")!=id or track.get("actor_uuid")!=id:return {}
+    if not actor.get("present",false) or actor.get("spatial_disposition")!="present" or actor.get("remains_disposition","intact")=="disintegrated":return {}
+    if point==null or track.get("to_position")!=point or actor.get("last_visual_position")!=point or track.get("motion",true):return {}
+    if track.get("from_elevation_feet")==null or track.get("to_elevation_feet")!=track.from_elevation_feet or not is_zero_approx(float(track.get("arc_height_px",0))):return {}
+    if rig.get("body_anchor")==null or source_actor.get("appearance")==null:return {}
+    if not rig.body_anchor.has("x") or not rig.body_anchor.has("y"):return {}
+    return {"id":id,"rig":track.rig,"position":point.duplicate(),"base_height_steps":track.from_elevation_feet/5.0,
+        "visual_height":0.0,"scale":source_actor.appearance.visual_scale,"scale_x":source_actor.appearance.visual_scale_x,"facing":"SW"}
+
 static func contact_marker_error(marker:Dictionary,clip:Dictionary,loop:bool)->String:
     if not is_finite(float(clip.fps)) or float(clip.fps)<=0 or not is_finite(float(clip.frames)) or int(clip.frames)<=0:return "invalid_contact_clip_clock"
     if str(marker.get("id","")).strip_edges().is_empty():return "contact_id_not_authored"
@@ -56,11 +73,13 @@ static func resolve(cue_id: String, occurrence_id: String, ordinal: int, start_m
         "start_ms":start_ms,"duration_ms":0.0,"source":"audio/cues.json:/cues/"+cue_id,
         "status":"missing","reason":catalog.get("missing_cues",{}).get(cue_id,"cue_not_selected")}
     row.merge(parameters,true)
+    if not row.get("assignment_enabled",true):
+        row.reason=row.get("assignment_reason","audio_assignment_disabled");return row
     if cue.is_empty() or cue.clips.is_empty(): return row
     if cue.loop and interval_ms<0:
         row.reason="loop_interval_not_resolved"; return row
     var variation=posmod(ordinal,cue.clips.size())
-    for field in ["gain_db","bus","attachment","loop","fade_out_ms","source_marker","loop_start_s","loop_end_s"]:
+    for field in ["gain_db","bus","attachment","attachment_source","loop","fade_out_ms","source_marker","loop_start_s","loop_end_s"]:
         if cue.has(field): row[field]=cue[field]
     row.clip=cue.clips[variation]
     row.clip_duration_s=cue.clip_durations_s[variation]

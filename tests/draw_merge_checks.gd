@@ -101,6 +101,22 @@ func run() -> void:
     hidden.node.visible=true; actor.node.visible=false
     scene.static_order_dirty=true; scene._sort_draws(); physical_rank(scene,"native visibility changed")
     check(hidden in scene.draw_order and not actor in scene.draw_order,"Native visibility changes replace the visible subsequences")
+    # Walk continuously across and between the static objects in every view,
+    # including actor/actor crossings, jumps and a hidden body becoming visible.
+    # Every submitted native offset must equal the original full merge oracle.
+    actor.node.visible=true
+    for quarter in range(4):
+        scene.quarter=quarter; scene.static_order_dirty=true
+        scene.camera.transform=scene.Placement.camera_transform(Vector3.ZERO,quarter)
+        for step in range(120):
+            var x: float=-1.0+float(step)/30.0
+            actor.placement.position=[x,0.25]
+            shadow.placement.position=[2.0-x,0.25]
+            actor.node.position=Vector3(x,sin(step*.1),0.25)
+            shadow.node.position=Vector3(2.0-x,0,0.25)
+            actor.node.visible=step<60 or step>=70
+            scene._sort_draws()
+            physical_rank(scene,"interpolated q%d step%d"%[quarter,step])
     var report={"checks":checks,"failures":failures,"scope":"Old linear-merge occurrence oracle for empty/extreme/interleaved/exact ties/hidden/layered four-view inputs; production native order and physical depth compensation with unchanged logical keys. Headless only, no pixel or speedup claim."}
     FileAccess.open("res://generated/draw_merge_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("DRAW_MERGE_CHECKS ",JSON.stringify(report))

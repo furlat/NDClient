@@ -1,11 +1,13 @@
 extends RefCounted
 ## Condition ownership follows disclosed instance UUIDs, never a visual name.
+const NativePersistent=preload("res://presentation/native_persistent.gd")
 const Authoring=preload("res://presentation/authoring.gd")
 const Palette=preload("res://presentation/palette.gd")
 const AudioCues=preload("res://presentation/audio_cues.gd")
 const MediaSamples=preload("res://presentation/condition_media_samples.gd")
 const RegisteredMedia=preload("res://presentation/registered_media.gd")
 const ConditionPose=preload("res://presentation/condition_pose.gd")
+const BodySurfaces=preload("res://presentation/body_surfaces.gd")
 
 static func observe(owners: Dictionary, actors: Dictionary, at_ms: float, initial: bool=false) -> void:
     for actor_id in actors:
@@ -33,24 +35,34 @@ static func suppressed(condition: Dictionary) -> bool:
     return state!=null and not state.get("suppression_provider_uuids",[]).is_empty()
 
 static func fade_ms(condition: Dictionary, cache: Dictionary) -> float:
-    var persistent: Dictionary=recipe(condition,cache).get("persistent",{})
-    var fade=float(persistent.get("bodyRamp",{}).get("removalMs",0))
+    var selected=NativePersistent.Spells.condition(str(condition.get("behavior_id","")),cache)
+    return _fade_ms(recipe(condition,cache),selected,NativePersistent.Spells.condition_phases(selected),cache)
+
+static func _fade_ms(config:Dictionary,selected:Dictionary,phases:Array,cache:Dictionary)->float:
+    var persistent:Dictionary=config.get("persistent",{})
+    var fade=maxf(float(persistent.get("bodyRamp",{}).get("removalMs",0)),NativePersistent.phase_fade_ms(phases))
     var media: Dictionary=Authoring.load_data("catalog/condition_media.json",cache)
     for layer in persistent.get("layers",[]):
+        if layer.get("assetId","") in selected.get("lifecycle",{}).get("replaces_media",[]):continue
         var metadata:Dictionary=media.get(layer.assetId,{})
         var duration=float(metadata.get("removal_fade_ms",200))
         if metadata.get("removal_asset_id")!=null:duration=MediaSamples.duration_ms(metadata.removal_asset_id,cache)
         fade=maxf(fade,duration)
     return fade
 
-static func samples(owners: Dictionary, at_ms: float, cache: Dictionary, activities: Dictionary={}, select_layers_now: bool=true) -> Array:
+static func native_samples(owners:Dictionary,at_ms:float,cache:Dictionary)->Array:
+    return samples(owners,at_ms,cache,{},true,true)
+
+static func samples(owners: Dictionary, at_ms: float, cache: Dictionary, activities: Dictionary={}, select_layers_now: bool=true, native_only: bool=false) -> Array:
     var result: Array=[]
     for owner_id in owners.keys():
         var owner: Dictionary=owners[owner_id]
         var config=recipe(owner.condition,cache)
-        var fade=fade_ms(owner.condition,cache)
+        var native_selection=NativePersistent.Spells.condition(str(owner.condition.behavior_id),cache)
+        var native_phases=NativePersistent.Spells.condition_phases(native_selection)
+        var fade=0.0 if is_inf(owner.end_ms) else _fade_ms(config,native_selection,native_phases,cache)
         if at_ms>=owner.end_ms+fade:owners.erase(owner_id);continue
-        if config.is_empty() or config.get("disposition")=="state_only": continue
+        if (config.is_empty() or config.get("disposition")=="state_only") and native_selection.is_empty(): continue
         var persistent: Dictionary=config.get("persistent",{})
         var media: Dictionary=Authoring.load_data("catalog/condition_media.json",cache)
         if suppressed(owner.condition): continue
@@ -60,9 +72,15 @@ static func samples(owners: Dictionary, at_ms: float, cache: Dictionary, activit
             "source":"catalog/condition_recipes.json:/"+str(owner.condition.behavior_id),"source_event_uuid":"",
             "status":"available","start_ms":owner.start_ms,"absolute_start_ms":owner.start_ms,"duration_ms":owner.end_ms-owner.start_ms,
             "age_ms":age,"initial":owner.initial,"alpha":alpha,"recipe":config,"condition":owner.condition,"sample_hz":32.0}
+        common.removal_age_ms=null if is_inf(owner.end_ms) else maxf(0,at_ms-owner.end_ms)
         result.append(common)
+        result.append_array(NativePersistent.phase_samples(common,native_phases))
+        # Keep the common owner rows through the same recipe priority/removal
+        # selection below; only audio and legacy layer construction are skipped.
+        if native_only:continue
         var natives: Dictionary=Authoring.load_data("native_effects/index.json",cache).sources
         for layer in persistent.get("layers",[]):
+            if layer.get("assetId","") in native_selection.get("lifecycle",{}).get("replaces_media",[]):continue
             var row=common.duplicate();row.id+=":"+layer.id;row.layer=layer;row.attachment=layer.attachment
             row.trace_keys=["condition:"+owner.id+":layer:"+str(layer.id)]
             row.metadata=media.get(layer.assetId,{})
@@ -86,7 +104,8 @@ static func samples(owners: Dictionary, at_ms: float, cache: Dictionary, activit
             result.append(row)
         var audio_binding:Dictionary=Authoring.load_data("audio/bindings.json",cache).get("conditions",{}).get(owner.condition.behavior_id,{})
         if audio_binding.has("persistent") and is_inf(owner.end_ms):
-            var sound=AudioCues.resolve(audio_binding.persistent.cue,common.id,0,owner.start_ms,INF,{"actor_uuid":owner.actor_uuid},cache)
+            var sound=AudioCues.resolve(audio_binding.persistent.cue,common.id,0,owner.start_ms,INF,
+                {"actor_uuid":owner.actor_uuid,"assignment_enabled":audio_binding.persistent.get("enabled",true),"assignment_reason":audio_binding.persistent.get("reason","audio_assignment_disabled")},cache)
             sound.assignment_source="audio/bindings.json:/conditions/"+owner.condition.behavior_id+"/persistent"
             sound.timing_source=sound.assignment_source+"/timing";sound.timing_selector=audio_binding.persistent.timing
             sound.absolute_start_ms=sound.start_ms;sound.age_ms=maxf(0,at_ms-sound.start_ms)
@@ -103,6 +122,7 @@ static func samples(owners: Dictionary, at_ms: float, cache: Dictionary, activit
             selected_owners[sample.condition_uuid]=true
             selected_recipes[id][JSON.stringify(sample.recipe.definitionRef,"",false)]=true
     result=result.filter(func(sample):return sample.kind=="condition" or not sample.has("condition_uuid") or selected_owners.has(sample.condition_uuid) or (sample.get("layer",{}).get("markerGroup")!=null and selected_recipes.get(sample.actor_uuid,{}).has(JSON.stringify(sample.recipe.definitionRef,"",false))))
+    if native_only:return result.filter(func(sample):return sample.get("native_spell",false))
     if not select_layers_now:return result
     var layers=select_layers(result.filter(func(sample):return sample.has("layer")),at_ms,activities)
     result=result.filter(func(sample):return not sample.has("layer"))
@@ -184,7 +204,7 @@ static func pose(actor: Dictionary, rig_id: String, cache: Dictionary) -> Dictio
     return ConditionPose.select(actor,rig_id,"idle",cache)
 
 static func material(actor_id: String, samples: Array) -> Dictionary:
-    var value={"tint":Vector3.ONE,"saturation":1.0,"brightness":1.0,"alpha":1.0,"outline":{},"ramp":{},"flash":{},"time_ms":0.0}
+    var value={"tint":Vector3.ONE,"saturation":1.0,"brightness":1.0,"alpha":1.0,"outline":{},"ramp":{},"flash":{},"body_surfaces":BodySurfaces.compose(actor_id,samples),"time_ms":0.0}
     for sample in samples:
         if sample.get("actor_uuid")!=actor_id: continue
         if sample.kind=="material_flash":
@@ -227,15 +247,40 @@ static func select_recipes(actor_id: String,samples: Array) -> Array:
     return result
 
 static func bind(material: ShaderMaterial, value: Dictionary, textures: Dictionary, resources: Dictionary) -> void:
+    BodySurfaces.bind(material,value.get("body_surfaces",{}))
     material.set_shader_parameter("condition_tint",value.tint)
     material.set_shader_parameter("condition_saturation",value.saturation)
     material.set_shader_parameter("condition_brightness",value.brightness)
     material.set_shader_parameter("condition_alpha",value.alpha)
     var flash: Dictionary=value.flash
-    material.set_shader_parameter("flash_strength",0.0 if flash.is_empty() else clampf(1-flash.age_ms/maxf(1,flash.duration_ms),0,1))
+    var treatment:Dictionary=flash.get("material",{})
+    var strength=0.0 if flash.is_empty() else clampf(1-flash.age_ms/maxf(1,flash.duration_ms),0,1)
+    if not flash.is_empty() and treatment.get("envelope","")=="hold_fade":
+        var hold=float(treatment.get("holdMs",0.0))
+        strength=1.0-smoothstep(hold,maxf(hold+.001,flash.duration_ms),flash.age_ms)
+    material.set_shader_parameter("flash_strength",strength)
+    var native_surface:Texture2D=flash.get("native_surface")
+    material.set_shader_parameter("native_body_enabled",native_surface!=null)
+    material.set_shader_parameter("native_body_strength",strength if native_surface!=null else 0.0)
+    material.set_shader_parameter("native_body_surface",native_surface)
+    var finishing:Dictionary=flash.get("native_finishing",{})
+    material.set_shader_parameter("native_body_ramp",flash.get("native_ramp"))
+    material.set_shader_parameter("native_body_ramp_count",finishing.get("ramp",[]).size())
+    var parameters:Dictionary=finishing.get("parameters",{})
+    material.set_shader_parameter("native_body_ramp_floor",parameters.get("ramp_floor",0.0))
+    material.set_shader_parameter("native_body_ramp_ceiling",parameters.get("ramp_ceiling",1.0))
+    material.set_shader_parameter("native_body_ramp_uses_luma",parameters.get("ramp_uses_luma",false))
+    var flash_palette:Dictionary=treatment.get("palette",{})
+    var noise:String=resources.get(flash_palette.get("noiseSheet"),"")
+    material.set_shader_parameter("flash_has_noise",not noise.is_empty() and textures.has(noise))
+    if textures.has(noise):material.set_shader_parameter("flash_noise",textures[noise])
+    material.set_shader_parameter("flash_gamma",float(flash_palette.get("gamma",1.0)))
+    material.set_shader_parameter("flash_screen_blend",treatment.get("blendMode","")=="screen")
+    material.set_shader_parameter("flash_untinted",flash_palette.get("untinted",false))
+    material.set_shader_parameter("flash_frame",float(flash.get("age_ms",0.0))*.012)
     var colors=PackedVector3Array()
     for color in flash.get("colors",[]): colors.append(Palette.rgb(int(color)))
-    material.set_shader_parameter("flash_palette_count",colors.size());colors.resize(16)
+    material.set_shader_parameter("flash_palette_count",mini(32,colors.size()));colors.resize(32)
     material.set_shader_parameter("flash_palette",colors)
     var ramp: Dictionary=value.ramp
     var path: String=resources.get(ramp.get("texture"),"")

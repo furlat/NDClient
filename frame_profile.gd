@@ -31,6 +31,7 @@ static func frame(data: Dictionary, viewport: Viewport, context: Dictionary) -> 
     else: data.frames[data.cursor]=sample
     data.cursor = (data.cursor+1)%HISTORY
     if data.recording:
+        sample.pipeline_compilations=pipeline_compilations()
         if data.recorded.is_empty():
             data.recorded_total = 0
             data.recorded_cursor = 0
@@ -47,6 +48,15 @@ static func distribution(values: Array) -> Dictionary:
     var total=0.0
     for value in values: total+=value
     return {"mean":total/values.size(),"p50":values[int((values.size()-1)*0.5)],"p95":values[int((values.size()-1)*0.95)],"p99":values[int((values.size()-1)*0.99)],"max":values.back()}
+
+static func pipeline_compilations()->Dictionary:
+    # Cumulative native counters. Differences identify new programs/pipelines;
+    # counts alone do not attribute elapsed time to GPU compilation.
+    return {"canvas":RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_PIPELINE_COMPILATIONS_CANVAS),
+        "mesh":RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_PIPELINE_COMPILATIONS_MESH),
+        "surface":RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_PIPELINE_COMPILATIONS_SURFACE),
+        "draw":RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_PIPELINE_COMPILATIONS_DRAW),
+        "specialization":RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_PIPELINE_COMPILATIONS_SPECIALIZATION)}
 
 static func save(data: Dictionary, viewport: Viewport, label: String = "", use_recording: bool = true) -> String:
     var samples: Array = data.recorded.duplicate() if use_recording and not data.recorded.is_empty() else data.frames.duplicate()
@@ -67,6 +77,7 @@ static func save(data: Dictionary, viewport: Viewport, label: String = "", use_r
         "sample_count":samples.size(),"recording_total":data.recorded_total,
         "recording_evicted":maxi(0,data.recorded_total-data.recorded.size()),"recording_capacity":RECORDING_HISTORY,"summary":{"frame_ms":distribution(samples.map(func(s):return s.frame_ms)),"cpu_ms":phases,
             "render_cpu_ms":distribution(samples.map(func(s):return s.render_cpu_ms)),"gpu_ms":distribution(samples.map(func(s):return s.gpu_ms)),
+            "frames_over_10ms":samples.filter(func(s):return s.frame_ms>10.0).size(),"frames_over_16ms":samples.filter(func(s):return s.frame_ms>16.667).size(),
             "frames_over_33ms":samples.filter(func(s):return s.frame_ms>33.333).size(),"frames_over_100ms":samples.filter(func(s):return s.frame_ms>100).size()},"frames":samples}
     var file=FileAccess.open(path,FileAccess.WRITE)
     if file==null: return "Could not write profile: "+error_string(FileAccess.get_open_error())

@@ -34,8 +34,8 @@ def summarize(directory):
     records = trace['records']
     worker = [json.loads(line) for line in (directory/'worker-dispatch.jsonl').read_text().splitlines()]
     exchanges = [json.loads(line) for line in (directory/'server-exchanges.jsonl').read_text().splitlines()]
-    worker_by_command = {row['command_number']:row for row in worker if row['kind']=='command'}
-    exchange_by_command = {row['command_number']:row for row in exchanges if row['kind']=='command'}
+    worker_by_command = {(row.get('actor_uuid'),row['command_number']):row for row in worker if row['kind']=='command'}
+    exchange_by_command = {(row.get('actor_uuid'),row['command_number']):row for row in exchanges if row['kind']=='command'}
     ready_by_frame = {row['frame_id']:row for row in records if row['stage']=='sse_record_ready'}
     rows = []
     for command in commands:
@@ -47,12 +47,14 @@ def summarize(directory):
         consumer = next((row for row in records if row['stage']=='canonical_consumer' and row['sequence']==sequence), None)
         prepare = next((row for row in records if row['stage']=='presentation_prepare' and row['sequence']==sequence), None)
         events = [row for row in records if start<=row['time_us']<=command['end_us']]
-        command_worker = worker_by_command[number]
-        exchange = exchange_by_command[number]
+        command_worker = worker_by_command.get((command['actor'],number),worker_by_command.get((None,number)))
+        exchange = exchange_by_command.get((command['actor'],number),exchange_by_command.get((None,number)))
+        if command_worker is None or exchange is None:
+            raise ValueError('No exact actor/command timing for '+str((command['actor'],number)))
         first = command['first_movement_ms']
         packet_ms = (packet['time_us']-start)/1000 if packet else None
         first_group = next((phase['ms'] for phase in command['phases'] if phase['state']['group']), None)
-        row = {'number':number, 'behavior':command['behavior'], 'stage':command['stage'],
+        row = {'number':number, 'actor':command['actor'], 'behavior':command['behavior'], 'stage':command['stage'],
             'input':command['input'], 'from':command['from'], 'to':command['to'],
             'sequence':sequence, 'ready_ms':command['elapsed_ms'],
             'playback_complete_ms':command.get('playback_complete_ms'),

@@ -69,8 +69,11 @@ def main():
                 'action_phase_hooks': args.action_phases,
                 'outer_phases': dict(outer), 'nested_action_phases': phases,
                 'publications': len(result[1])}
+            if request.kind == 'command':
+                row['actor_uuid'] = str(request.request.actor_uuid)
+                row['seat_id'] = request.seat_id
             if profiler is not None:
-                path = args.output.with_name('command-%d.pstats' % number)
+                path = args.output.with_name('command-%s-%d.pstats' % (request.seat_id, number))
                 profiler.dump_stats(str(path))
                 functions = [{'file': key[0], 'line': key[1], 'function': key[2],
                     'calls': value[1], 'self_ms': value[2]*1000,

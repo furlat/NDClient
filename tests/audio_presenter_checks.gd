@@ -37,9 +37,28 @@ func run()->void:
     var owner={"id":"condition-owner","actor_uuid":"actor","start_ms":0.0,"end_ms":INF,"initial":false,"condition":{"condition_uuid":"condition-owner","behavior_id":"condition.concentrating","state":{}}}
     var owners={"condition-owner":owner};var binding_cache={}
     var persistent=Conditions.samples(owners,100,binding_cache).filter(func(sample):return sample.kind=="audio")
-    check(persistent.size()==1 and persistent[0].cue_id=="condition_loop" and persistent[0].assignment_source=="audio/bindings.json:/conditions/condition.concentrating/persistent","Concentrating loop is selected from inspectable audio bindings")
+    check(persistent.size()==1 and persistent[0].status=="missing" and persistent[0].reason=="spell_audio_deferred" and not persistent[0].has("clip") and persistent[0].assignment_source=="audio/bindings.json:/conditions/condition.concentrating/persistent","Concentration audio is explicitly unassigned and cannot prepare a stream")
+    check(presenter.prepare(persistent).is_empty() and not presenter.outcomes.has(persistent[0].id),"Disabled concentration assignment never enters native source preparation")
     binding_cache["audio/bindings.json"].conditions["condition.concentrating"].erase("persistent")
     check(Conditions.samples(owners,100,binding_cache).all(func(sample):return sample.kind!="audio"),"Removing the authored persistent binding removes the sound without special condition code")
+    var actor={"uuid":"actor","present":true,"spatial_disposition":"present","last_visual_position":[2,3]}
+    var body={"attachment":"body","attachment_source":"disclosed_stationary_body","actor_uuid":"actor",
+        "presentation_actor":{"uuid":"actor","appearance":{"visual_scale":1.0,"visual_scale_x":1.0}},
+        "source_track":{"actor_uuid":"actor","rig":"rig","motion":false,"from_position":[2,3],"to_position":[2,3],"from_elevation_feet":10.0,"to_elevation_feet":10.0}}
+    var rig={"body_anchor":{"x":64.0,"y":60.0}}
+    var emitter=Cues.disclosed_body(body,actor,rig)
+    check(emitter.position==[2,3] and emitter.base_height_steps==2,"Authored body audio can use its disclosed stationary source without a draw handle")
+    for change in [{"last_visual_position":null},{"last_visual_position":[9,9]},{"present":false},{"spatial_disposition":"absent"},{"uuid":"different"}]:
+        var changed=actor.duplicate(true);changed.merge(change,true)
+        check(Cues.disclosed_body(body,changed,rig).is_empty(),"Unknown/moved/removed/wrong actor never supplies an audio origin: "+JSON.stringify(change))
+    check(Cues.disclosed_body(body,actor,{}).is_empty(),"No authored rig anchor remains an attachment gap")
+    var unknown_space=actor.duplicate(true);unknown_space.erase("spatial_disposition")
+    check(Cues.disclosed_body(body,unknown_space,rig).is_empty(),"Missing spatial disclosure cannot grant a body audio origin")
+    check(Cues.disclosed_body(body,actor,{"body_anchor":{}}).is_empty(),"Incomplete body anchor remains an attachment gap")
+    var moving=body.duplicate(true);moving.source_track.motion=true
+    check(Cues.disclosed_body(moving,actor,rig).is_empty(),"Stationary source grant does not infer a moving body")
+    var socket=body.duplicate(true);socket.attachment="hand"
+    check(Cues.disclosed_body(socket,actor,rig).is_empty(),"Disclosed body source never invents a hand socket")
     check(row("footstep","a",0,-1,0).clip==row("footstep","b",0,-1,3).clip and row("footstep","a",0,-1,1).clip!=row("footstep","a",0,-1,0).clip,"Variation uses occurrence ordinal deterministically")
     var host=Node3D.new();root.add_child(host)
     var shot=row("footstep","shot",100)

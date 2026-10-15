@@ -6,6 +6,7 @@ var card = PanelContainer.new()
 var profiles = OptionButton.new()
 var fire_flicker = CheckBox.new()
 var light_cap = CheckBox.new()
+var spell_hits = OptionButton.new()
 var strength = HSlider.new()
 var strength_value = Label.new()
 var strength_save = Timer.new()
@@ -13,6 +14,7 @@ var description = Label.new()
 var resume_button = Button.new()
 var close_button = Button.new()
 var prior_focus: WeakRef
+var stack=VBoxContainer.new()
 const DESCRIPTIONS = {
     "original":"Original lighting detail, without normal smoothing.",
     "gentle":"A softer lighting response with light smoothing.",
@@ -39,9 +41,12 @@ func _ready() -> void:
     border.content_margin_top = 20
     border.content_margin_bottom = 22
     card.add_theme_stylebox_override("panel",border)
-    var stack = VBoxContainer.new()
+    var scroll=ScrollContainer.new()
+    scroll.horizontal_scroll_mode=ScrollContainer.SCROLL_MODE_DISABLED
+    card.add_child(scroll)
+    stack.size_flags_horizontal=Control.SIZE_EXPAND_FILL
     stack.add_theme_constant_override("separation",16)
-    card.add_child(stack)
+    scroll.add_child(stack)
     var header = HBoxContainer.new()
     stack.add_child(header)
     var title = Label.new()
@@ -99,6 +104,10 @@ func _ready() -> void:
     light_cap.tooltip_text = "Limit combined illumination while preserving the light colour. Dim lighting and source transparency are unchanged."
     light_cap.toggled.connect(_select_light_cap)
     lighting.add_child(light_cap)
+    var hit_label=Label.new();hit_label.text="Spell hit appearance";stack.add_child(hit_label)
+    spell_hits.add_item("Colour treatment");spell_hits.add_item("Full spell material")
+    spell_hits.item_selected.connect(func(index:int):hud.world.set_native_spell_hit_material(index==1))
+    stack.add_child(spell_hits)
     var note = Label.new()
     note.text = "The game continues while settings are open."
     note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -116,7 +125,7 @@ func _ready() -> void:
 func _layout() -> void:
     if not is_node_ready(): return
     var width = minf(440,maxf(240,size.x-40))
-    card.size = Vector2(width,card.get_combined_minimum_size().y)
+    card.size = Vector2(width,minf(maxf(100,size.y-40),stack.get_combined_minimum_size().y+42))
     card.position = (size-card.size)*0.5
 
 func refresh() -> void:
@@ -124,6 +133,7 @@ func refresh() -> void:
     strength_value.text = "%d%%" % roundi(hud.world.light_strength*100)
     fire_flicker.set_pressed_no_signal(hud.world.fire_light_flicker)
     light_cap.set_pressed_no_signal(hud.world.light_cap_enabled)
+    spell_hits.select(1 if hud.world.native_spell_hit_material else 0)
     var profile: String = hud.world.character_light_profile
     for index in range(profiles.item_count):
         if profiles.get_item_metadata(index)==profile: profiles.select(index);break
@@ -141,6 +151,7 @@ func show_panel() -> void:
 func hide_panel() -> void:
     if not strength_save.is_stopped(): _save_strength()
     profiles.get_popup().hide()
+    spell_hits.get_popup().hide()
     var focus = get_viewport().gui_get_focus_owner()
     if focus != null and is_ancestor_of(focus): focus.release_focus()
     hide()
@@ -150,6 +161,7 @@ func hide_panel() -> void:
 
 func escape() -> void:
     if profiles.get_popup().visible: profiles.get_popup().hide()
+    elif spell_hits.get_popup().visible: spell_hits.get_popup().hide()
     else: hud.close_settings()
 
 func _select_profile(index: int) -> void:

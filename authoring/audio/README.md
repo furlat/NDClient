@@ -74,12 +74,13 @@ human-readable description, not the timing program.
 | Selector | Current assignments | Review status |
 | --- | --- | --- |
 | `body.source_frame` | Walking stride, jump takeoff/touchdown | Markers above reviewed; sounds/mix provisional. |
-| `body.contact` | Weapon release/swing, Magic Missile release | Existing authored body contact; artistic review pending. |
+| `body.contact` | Weapon/unarmed release, physical potion swallow, Frenzy stance | Existing authored body contact; artistic review pending. |
+| `body.commit` | Equipment handling | Same authored equipment frame as the visual/state commit; sound/mix provisional. |
 | `body.impact` | Shove, Action Surge | Existing authored body impact; artistic review pending. |
 | `body.end` | Body fall, Prone application | Existing completion choice, **not** a reviewed floor-contact frame. |
-| `event.start` | Dash/Dodge/Disengage, door state changes, rise, Prone removal, object impact/break | Explicit provisional event timing; these actions do not necessarily have an enabled body clip. |
+| `event.start` | Dash/Dodge/Disengage, door state changes, torch ignition, rise, Prone removal, object impact/break | Explicit provisional event timing; these actions do not necessarily have an enabled body clip. |
 | `damage.hp` | Physical damage impact | Existing causal damage clock; artistic review pending. |
-| `condition.interval` | Concentration loop | Disclosed condition ownership; sound/mix provisional. |
+| `condition.interval` | Concentration audio intentionally unassigned | Binding disabled by the human; generic loop-player support and sources remain preserved. |
 | `recipe.effect_anchor` | Hide transition | Native `hide.tres` effect frame; selected cue remains provisional. |
 
 Missing body timing stays a gap instead of falling back to event start. The
@@ -116,3 +117,68 @@ clocks and SFX mixer PCM separately. Start it with
 `--recording=res://.runtime/studio-cases/walk_diagonal-seed3-v2/amber/journal`.
 Native source-frame screenshots are under `.captures/audio-contact/`. This is
 render/mixer evidence, not a claim of physical-speaker audibility or a final mix.
+
+## Current base coverage and deliberate omissions — 14 October
+
+The human excluded spell/VFX sound authoring and requested removal of the existing
+Magic Missile sound. Its release and concentration's persistent sound now have
+`enabled: false` and `reason: spell_audio_deferred` in `bindings.json`. The shared
+resolver returns inspectable missing components without a clip. Removing or
+disabling an assignment never removes source assets, licenses or generic native
+loop support. Spell audio remains a separate authoring pass.
+
+Base additions use the same compiler components as tracks and native playback:
+equipment handling at `body.commit`, explicitly disclosed unarmed attacks at
+`body.contact`, Frenzy's quiet cloth transition, physical potion swallowing and
+torch ignition. Action Surge now uses physical cloth rather than its former
+magical source. An absent weapon alone does not select unarmed audio. Potion
+swallowing is independent of its magical effect. Ignition is a provisional
+adaptation of qubodup's matchstick/flare recording, assigned only to the physical
+torch action. Torch and unarmed cues deliberately use provisional body placement;
+no hand socket is inferred. Sound selection, transient placement and mix remain
+an artist pass.
+
+Equipment's `attachment_source: disclosed_stationary_body` permits its actual
+stationary source body to emit without a visual draw handle. The component keeps
+this policy beside its source track. Exact actor identity, explicit current
+presence/spatial presence, matching disclosed position, stationary position and
+elevation, and an existing authored rig body anchor are required. Unknown, moved
+or removed actors and missing anchors remain attachment gaps. This does not
+grant a hand/weapon socket or disclose another actor's location.
+
+New source selections/provenance are in `sources.json` and `licenses/`: Kenney's
+existing CC0 belt sound, qubodup's CC0 Liquid Bottle Drink Set and Flare ignition.
+Original FLACs/packages stay in `.runtime/audio-intake/`; the selected FLACs use
+classic PCM24 WAV containers with equal decoded source samples. There is no
+resampling, gain processing or source deletion. `tools/import_studio_audio.py`
+checks equality, source duration and waveforms. For 7z members it uses native
+Windows `tar`/libarchive; from WSL pass
+`--archive-extractor /mnt/c/Windows/System32/tar.exe`.
+
+Current explicit gaps include torch extinguishing (no suitable selected source),
+window `Rolling/connector_transfer` contact markers and the looped/disclosed-edge
+`Rolling/direct_arc` clip-end markers in the late-lethal Blue jump perspective.
+The current movement/OA Goblin handaxe occurrence also has no qualified weapon
+socket; its ready source is explicitly skipped and reported by native diagnostics.
+Those two end-marker gaps are preserved; they do not authorize changing the
+animation clock or inventing touchdown. Unreviewed creature contacts are also
+unchanged, and no creature movement is exercised in the current Library set.
+Other unassigned spell/condition lifecycles are inventoried without inventing a
+universal entry/removal sound.
+
+`tools/studio_audio_coverage_audit.gd` reads all current Library audiences and
+reports actual event owners, resolved sources/timing and condition assignments
+to `generated/studio_audio_coverage.json`. The initial inventory is retained in
+`generated/studio_audio_coverage_before.json`. Neither report is playback proof.
+Native source PCM and actual Studio transport evidence are separate in
+`generated/base_audio_native_checks.json` and
+`generated/studio_audio_transport_checks.json`; replay mixer WAVs for audition
+are under `.captures/studio/audio/`.
+
+This pass qualifies 54 contact, 94 presenter, 1838 real-binding (57 audience),
+71 isolated native and 249 actual Studio checks. The Studio lane saves 14 replay
+mixer captures, verifies the new equipment selected-loop and silent-inside-seek,
+plays physical Action Surge in the real action-economy study and verifies both
+listening factions without duplicate native starts. The coverage audit links
+those saved dispatch/skip outcomes to the same component IDs. A source-ready
+handaxe socket omission remains a reported runtime gap, not a successful voice.

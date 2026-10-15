@@ -1,0 +1,60 @@
+{
+  "scope": "Actual Studio UI plus primary and independent peer panes; continuous published clock, visible followed lane, no backend session. Capture observer uses ordinary Studio publication and source clocks.",
+  "cases": [
+    {
+      "id": "fire_bolt",
+      "recording": "res://.runtime/studio-spells-20261015/fire_bolt-seed3/amber/journal",
+      "frames": 55,
+      "complete": true,
+      "camera": 0,
+      "paired": false,
+      "max_clock_difference_ms": 2.000888343900442e-11,
+      "followed_rows": 6,
+      "source_report": ".captures/studio-sequence-review/first-production/capture.json",
+      "failures": []
+    },
+    {
+      "id": "magic_missile",
+      "recording": "res://.runtime/studio-spells-20261015/magic_missile-seed3/amber/journal",
+      "frames": 36,
+      "complete": true,
+      "camera": 0,
+      "paired": false,
+      "max_clock_difference_ms": 1.000444171950221e-11,
+      "followed_rows": 7,
+      "source_report": ".captures/studio-sequence-review/production-final/capture.json",
+      "failures": []
+    },
+    {
+      "id": "mage_armor",
+      "recording": "res://.runtime/studio-spells-20261015/mage_armor-lifecycle-seed3/amber/journal",
+      "frames": 59,
+      "complete": true,
+      "camera": 0,
+      "paired": false,
+      "max_clock_difference_ms": 2.000888343900442e-11,
+      "followed_rows": 14,
+      "source_report": ".captures/studio-sequence-review/production-final/capture.json",
+      "failures": []
+    },
+    {
+      "id": "web",
+      "recording": "res://.runtime/studio-spells-20261015/web-seed2/amber/journal",
+      "frames": 46,
+      "complete": true,
+      "camera": 0,
+      "paired": true,
+      "max_clock_difference_ms": 2.000888343900442e-11,
+      "followed_rows": 5,
+      "source_report": ".captures/studio-sequence-review/production-final/capture.json",
+      "failures": []
+    }
+  ],
+  "frames": 196,
+  "failures": [],
+  "limitations": [
+    "12FPS screenshots are inspection evidence, not every-frame validation.",
+    "The first Magic Missile attempt caught a requested/published float-boundary discrepancy; retained in first-production and missile-follow-continuous receipts.",
+    "Artistic tuning and existing missing authoring channels remain open."
+  ]
+}

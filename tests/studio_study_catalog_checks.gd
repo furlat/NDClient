@@ -5,6 +5,7 @@ const Cases=preload("res://studio/case_library.gd")
 const Audit=preload("res://studio/authoring_audit.gd")
 const Recording=preload("res://studio/recording.gd")
 const Movement=preload("res://presentation/movement_media.gd")
+const NATIVE_SPELLS=["acid_splash","chill_touch","eldritch_blast","fire_bolt","fireball","guiding_bolt","ice_knife","magic_missile","poison_spray","produce_flame","ray_of_frost","scorching_ray","sleep","web","bane","command","mage_armor","sanctuary","shield","shocking_grasp","burning_hands","thunderwave","cure_wounds","healing_word","guidance","resistance","light","thaumaturgy","shield_of_faith","true_strike"]
 var checks=0
 var failures:Array=[]
 func _initialize()->void:run.call_deferred()
@@ -41,6 +42,23 @@ func run()->void:
     for asset in migration.assets:check(index.has(asset.asset_id),"Unmapped VFX source remains visible: "+asset.asset_id)
     check(index.has("spell.aegis_spark") and index["spell.aegis_spark"].requirements.any(func(row):return row.status=="missing"),"Spell with missing draft is visible without a replay or render implementation")
     check(index["spell.aegis_spark"].scenarios.is_empty(),"No generic invented study fills an unauthored spell sequence")
+    for id in NATIVE_SPELLS:
+        var capability:Dictionary=index.get("spell."+id,{})
+        check(capability.get("kind")=="Spell","Native recording retains the actual spell capability: "+id)
+        var scenarios:Array=capability.get("scenarios",[]).filter(func(row):return row.id=="native-spell-"+id)
+        check(scenarios.size()==1,"Exactly one selected real spell sequence is discoverable: "+id)
+        if scenarios.size()!=1:continue
+        var scenario:Dictionary=scenarios[0]
+        check(scenario.source.begins_with(Study.SPELL_CASES+":/cases/"),"Recorded sequence has its actual capture inventory source: "+id)
+        check(scenario.recordings.size()==1 and scenario.recordings[0].available,"Spell study has an openable exact recording: "+id)
+        if scenario.recordings.size()==1 and scenario.recordings[0].available:
+            var record:Dictionary=scenario.recordings[0].record
+            check(record.id=="native-spell-"+id and record.spell_id==id,"Open recording cannot fall back to another spell: "+id)
+            check(record.perspectives.size()==2,"Both independently recorded factions are selectable: "+id)
+        check(scenario.coverage.native_render=="not_assessed_by_this_catalog","Recorded facts do not claim rendered qualification: "+id)
+    for id in ["aid","bless","false_life","sacred_flame"]:
+        check(index.has("spell."+id),"Deferred spell remains in the capability denominator: "+id)
+        check(not index.get("spell."+id,{}).get("scenarios",[]).any(func(row):return row.id=="native-spell-"+id),"Deferred spell receives no new completed batch study: "+id)
     var expected_fields={}
     for id in ["action.move","action.jump"]:
         for requirement in index[id].requirements:
@@ -68,6 +86,7 @@ func run()->void:
         check(not missing.is_empty(),"Actual Dash occurrence exposes missing original trails instead of false green")
     var without_records=Study.build(cache,[])
     check(without_records.capabilities.size()==built.capabilities.size(),"Removing all recordings cannot remove any capability")
+    check(without_records.counts.scenarios==built.counts.scenarios,"Removing recording files cannot remove the authored study sequences")
     check(without_records.counts.recorded_scenarios==0 and without_records.counts.partial_scenarios==0,"Unrecorded authored studies stay visible without claiming coverage")
     check(without_records.capabilities.all(func(capability):return capability.scenarios.all(func(scenario):return scenario.recordings.all(func(binding):return not binding.available))),"No implicit CaseLibrary lookup bypasses the supplied recording boundary")
     var result={"checks":checks,"failures":failures,"counts":built.counts,"build_ms":elapsed,"actual_dash_missing_components":missing.size(),"scope":built.scope}

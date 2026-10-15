@@ -18,7 +18,7 @@ func mixed_frames(probe:AudioEffectCapture,count:int)->Dictionary:
     return {"frames":frames,"peak":peak}
 func run()->void:
     root.unfocusable=true;root.position=Vector2i(-16000,-16000)
-    var paths=["melee-seed3/amber","ranged-seed3/amber","jump-seed3-v2/amber","dying-seed5/amber","window_break-seed3-v3/amber","prone-seed3-v3/blue","dash-seed3/amber","movement-oa"]
+    var paths=["melee-seed3/amber","ranged-seed3/amber","jump-seed3-v2/amber","dying-seed5/amber","window_break-seed3-v3/amber","prone-seed3-v3/blue","dash-seed3/amber","movement-oa","hide-light-schema9-seed3/amber","rage-seed3-v3/amber"]
     var selected={}
     for path in paths:
         var index=Recording.read("res://.runtime/studio-cases/"+path+"/journal")

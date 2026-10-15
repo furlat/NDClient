@@ -195,24 +195,24 @@
     "action_surge": {
       "status": "temporary",
       "clips": [
-        "res://assets/audio/magical-release/magical_1.ogg"
+        "res://assets/audio/kenney/rpg/cloth2.ogg",
+        "res://assets/audio/kenney/rpg/cloth3.ogg"
       ],
       "clip_durations_s": [
-        1.609002
+        0.415063,
+        0.476563
       ],
-      "duration_s": 1.609002,
-      "gain_db": -16,
+      "duration_s": 0.476563,
+      "gain_db": -20,
       "bus": "SFX",
       "attachment": "body",
       "loop": false,
       "fade_out_ms": 0,
-      "source_marker": "action.release",
+      "source_marker": "action.effect",
       "variation": "occurrence_ordinal_mod_clip_count",
-      "purpose": "Named temporary supernatural empowerment cue using an authored dungeon-crawler spell sound.",
-      "behaviors": [
-        "action.class.fighter.action_surge"
-      ],
+      "purpose": "Physical cloth/exertion cue for the base Action Surge ability; replaces the earlier magical source.",
       "source_sync_s": [
+        0.0,
         0.0
       ]
     },
@@ -478,16 +478,102 @@
       "source_sync_s": [
         0.0
       ]
+    },
+    "equipment_handle": {
+      "status": "temporary",
+      "clips": [
+        "res://assets/audio/kenney/rpg/beltHandle1.ogg"
+      ],
+      "clip_durations_s": [
+        0.276708
+      ],
+      "duration_s": 0.276708,
+      "gain_db": -18,
+      "bus": "SFX",
+      "attachment": "body",
+      "loop": false,
+      "fade_out_ms": 0,
+      "source_marker": "equipment.commit",
+      "variation": "occurrence_ordinal_mod_clip_count",
+      "source_sync_s": [
+        0.0
+      ],
+      "purpose": "Belt/equipment handling at the authored equipment commit; no inferred armor/material sound.",
+      "attachment_source": "disclosed_stationary_body"
+    },
+    "torch_ignite": {
+      "status": "temporary",
+      "clips": [
+        "res://assets/audio/torch-ignition/ignition.wav"
+      ],
+      "clip_durations_s": [
+        1.169116
+      ],
+      "duration_s": 1.169116,
+      "gain_db": -22,
+      "bus": "SFX",
+      "attachment": "body",
+      "loop": false,
+      "fade_out_ms": 0,
+      "source_marker": "action.effect",
+      "variation": "occurrence_ordinal_mod_clip_count",
+      "source_sync_s": [
+        0.0
+      ],
+      "purpose": "Provisional physical ignition for the disclosed torch action; this is not assigned to spell fire."
+    },
+    "potion_drink": {
+      "status": "temporary",
+      "clips": [
+        "res://assets/audio/bottle-drink/swallow-01.wav"
+      ],
+      "clip_durations_s": [
+        0.340781
+      ],
+      "duration_s": 0.340781,
+      "gain_db": -19,
+      "bus": "SFX",
+      "attachment": "head",
+      "loop": false,
+      "fade_out_ms": 0,
+      "source_marker": "action.effect",
+      "variation": "occurrence_ordinal_mod_clip_count",
+      "source_sync_s": [
+        0.0
+      ],
+      "purpose": "Quiet physical swallow at the potion body effect marker; no magical potion-release sound."
+    },
+    "unarmed_swing": {
+      "status": "temporary",
+      "clips": [
+        "res://assets/audio/battle/swish_2.wav"
+      ],
+      "clip_durations_s": [
+        0.370816
+      ],
+      "duration_s": 0.370816,
+      "gain_db": -20,
+      "bus": "SFX",
+      "attachment": "body",
+      "loop": false,
+      "fade_out_ms": 0,
+      "source_marker": "attack.release",
+      "variation": "occurrence_ordinal_mod_clip_count",
+      "purpose": "Quiet physical body swish for an explicitly disclosed unarmed attack; body attachment is provisional, without an inferred hand socket or absent-weapon inference.",
+      "source_sync_s": [
+        0.0
+      ]
     }
   },
   "missing_cues": {
     "damage_reaction_voice": "No selected character voice recording.",
     "window_traversal": "Use actual foot contacts/landing only; no dedicated traversal clip.",
     "condition_apply": "No general condition application clip; initialization must not invent an entry sound.",
-    "condition_remove": "No general removal one-shot; qualified concentration loop fades on actual end.",
-    "spell_impact": "No separately qualified Magic Missile impact clip.",
+    "condition_remove": "No general removal one-shot; spell/concentration audio is intentionally unassigned.",
+    "spell_impact": "Spell/VFX audio intentionally deferred for separate authoring.",
     "other_surfaces_and_gear": "Only hard/concrete and wood footstep variants; no material or gear inference.",
-    "other_abilities_and_spells": "No generic magic fallback beyond the named temporary Action Surge and Magic Missile cues."
+    "other_abilities_and_spells": "No generic ability sound fallback; spell/VFX sound assignments are deferred.",
+    "torch_extinguish": "No selected suitable licensed extinguishing source; keep the disclosed action visibly unassigned."
   },
   "sources": [
     {
@@ -570,6 +656,28 @@
       "license": "CC0-1.0",
       "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
       "verified_date": "2026-10-14"
+    },
+    {
+      "id": "torch-ignition",
+      "author": "qubodup",
+      "title": "Flare ignition",
+      "page": "https://opengameart.org/content/flare-ignition",
+      "download": "https://opengameart.org/sites/default/files/ignition.flac",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "verified_date": "2026-10-14",
+      "verification": "Author upload page explicitly lists CC0; source package preserved in .runtime/audio-intake."
+    },
+    {
+      "id": "bottle-drink",
+      "author": "qubodup",
+      "title": "Liquid Bottle Drink Set",
+      "page": "https://opengameart.org/content/liquid-bottle-drink-set",
+      "download": "https://opengameart.org/sites/default/files/qubodup-bottle-and-drink-sounds.7z",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "verified_date": "2026-10-14",
+      "verification": "Author upload page explicitly lists CC0; source package preserved in .runtime/audio-intake."
     }
   ],
   "qualification": "Original clips/source licenses and complete decoder pass qualified. Native spatial playback, waveform display, authored-marker integration and human mix audition are separate runtime acceptance; not claimed by intake."

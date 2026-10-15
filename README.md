@@ -35,6 +35,8 @@ from native Godot 2D lights and authored normal maps.
   keyboard/mouse input while the displayed timeline and SDK intake continue.
   **Light strength** scales native emitted light from 0–150%, without changing
   source colours or the ambient floor; **Fire light flicker** defaults off.
+  **Spell hit material** selects Colour treatment or Full spell material for
+  supported native spells; Studio exposes the same choice under **Inspect**.
   Legal self actions execute once from their icon. **Space** ends the turn.
 - **I** opens equipment and the searchable carried inventory. Hover an item or
   slot to see native compatibility; equip, unequip, use and drop preserve the

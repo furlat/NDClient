@@ -132,6 +132,27 @@ func run() -> void:
     demand("Zero optional budget",{"b":"/test/b.png"})
     check(fast.preload_selected.keys()==["b"],"Mandatory source remains pinned over zero optional budget")
 
+    reset(plan,80)
+    demand("Warm family before a newly admitted source",{"a":"/test/a.png"})
+    publish("a");publish("b");publish("c")
+    for data in [fast,reference]: Media.boot_ready(data)
+    # The required worker already knows this source's PNG size. Optional family
+    # discovery has not included it yet; retain the same capped warm selection.
+    for data in [fast,reference]: Media.adopt_source_sizes(data,{"d":16},1)
+    demand("Required header arrives before optional family",{"d":"/test/d.png"})
+    check(fast.unknown_required==0 and fast.preload_selected.size()==3 and fast.pending.map(func(row):return row.path)==["d"],
+        "New known-size required source keeps warm optional textures and queues only its own bytes")
+    check(fast.required_estimated_bytes==32 and not Media.ready(fast,{"d":true}),
+        "Header includes CPU plus GPU budget but grants no texture readiness")
+    demand("Same header with GPU-only role",{"d":"/test/d.png"},[{},{},{"d":true},{}])
+    check(fast.required_estimated_bytes==16,"Header budget uses the current exact CPU role")
+    for data in [fast,reference]:data.budget_bytes=48
+    demand("Header does not bypass finite cap",{"d":"/test/d.png"})
+    check(fast.preload_selected.size()==1 and fast.required_estimated_bytes+fast.preload_estimated_bytes==48,
+        "New required byte reservation still evicts optional selection when the real budget requires it")
+    for data in [fast,reference]:Media.adopt_required(data,2)
+    check(fast.source_sizes.is_empty(),"Required size metadata cannot leak across initialization epochs")
+
     reset(plan)
     demand("Accepted family baseline",{"a":"/test/a.png"})
     var equal_plan = plan.duplicate(true)
@@ -195,6 +216,61 @@ func run() -> void:
     check(Media.ready(fast,{"a":true}),"GPU-only readiness survives CPU release")
     demand("CPU role upgrade reloads source",{"a":"/test/a.png"},[{},{},{},{"a":true}])
     check(not Media.ready(fast,{"a":true}) and fast.pending[0].path=="a","Required original CPU pixels are recovered")
+
+    reset(plan)
+    var mixed_paths={"a":"/test/a.png","b":"/test/b.png"}
+    var mixed_roles=[{},{},{"b":true},{}]
+    demand("Warm mandatory queue baseline",mixed_paths,mixed_roles)
+    publish("a");publish("b")
+    for data in [fast,reference]:Media.release_cold_images(data)
+    demand("Warm mandatory order changes preserve optional backlog",{"b":"/test/b.png","a":"/test/a.png"},mixed_roles)
+    check(fast.pending.map(func(row):return row.path)==["c"] and Media.ready(fast,mixed_paths),
+        "Already-ready mandatory sheets do not requeue; original optional order remains")
+    demand("Warm mandatory CPU upgrade bypasses ready shortcut",mixed_paths,[{},{},{"b":true},{"b":true}])
+    check(fast.pending.map(func(row):return row.path)==["b","c"] and not Media.ready(fast,{"b":true}),
+        "CPU upgrade queues its missing image before optional work despite warm GPU residency")
+    publish("b")
+    demand("Warm mandatory fixture upgrade bypasses ready shortcut",mixed_paths,[{},{"b":true},{"b":true},{"b":true}])
+    check(fast.pending[0].path=="b" and fast.pending[0].fixture and not Media.ready(fast,{"b":true}),
+        "Fixture upgrade queues actual emission preprocessing rather than trusting old colour readiness")
+    publish("b",8,true)
+    demand("Completed mandatory fixture leaves optional order intact",{"b":"/test/b.png","a":"/test/a.png"},[{},{"b":true},{"b":true},{"b":true}])
+    check(fast.pending.map(func(row):return row.path)==["c"] and Media.ready(fast,mixed_paths),
+        "Actual fixture publication acknowledges mandatory readiness without another decode")
+    var covered_family=family()
+    covered_family.cpu_required={"a":true}
+    covered_family.gpu_only={"b":true}
+    covered_family.environment={"c":true};covered_family.fixtures={"c":true}
+    reset(covered_family)
+    var all_paths:Dictionary=covered_family.paths.duplicate()
+    demand("Family-owned readiness baseline",all_paths)
+    publish("a");publish("b");publish("c",8,true)
+    for data in [fast,reference]:Media.release_cold_images(data);Media.boot_ready(data)
+    demand("Family-owned completed boot",all_paths)
+    demand("Redundant exact family roles",all_paths,[{"c":true},{"c":true},{"a":true,"b":true,"c":true},{"a":true,"c":true}])
+    check(fast.demand_counts.resident_refreshed==0 and Media.ready(fast,all_paths),
+        "Family-covered exact role changes retain ready sources without rescanning residents")
+    demand("Remove redundant exact family roles",all_paths)
+    check(fast.demand_counts.resident_refreshed==0 and fast.cpu_release.is_empty(),
+        "Family-covered role removals preserve readiness and CPU ownership")
+    demand("Uncovered fixture still needs preprocessing",all_paths,[{},{"a":true},{},{}])
+    check(not Media.ready(fast,{"a":true}) and fast.pending[0].fixture,
+        "Family CPU ownership cannot hide a new fixture preprocessing requirement")
+    publish("a",8,true)
+    demand("Uncovered GPU-only source gains CPU role",all_paths,[{},{},{},{"b":true}])
+    check(not Media.ready(fast,{"b":true}) and fast.pending[0].path=="b",
+        "Family GPU-only role cannot hide an exact CPU requirement")
+    publish("b")
+    demand("Uncovered CPU role removal releases original pixels",all_paths)
+    check(Media.release_cold_images(fast)==Media.release_cold_images(reference) and fast.resident.b.cpu_bytes==0,
+        "Effective CPU role removal retains the original release result")
+    var removed_cover=covered_family.duplicate(true)
+    removed_cover.revision+=1;removed_cover.cpu_required={};removed_cover.fixtures={}
+    for data in [fast,reference]:Media.adopt_encounter(data,removed_cover,1)
+    demand("Family coverage removal still refreshes selected owners",all_paths,[{},{},{"a":true},{}])
+    check(Media.release_cold_images(fast,-1)==Media.release_cold_images(reference,-1) and fast.resident.a.cpu_bytes==0,
+        "Family role changes cannot reuse earlier covered-role readiness")
+
     var missing = "res://tests/no-such-demand-fixture.png"
     var failed_family = {"revision":1,"paths":{missing:missing},"estimates":{missing:{"bytes":8}},
         "estimate_bytes":{missing:8},"estimate_summary":{"bytes":8,"unknown":0},"errors":[]}
@@ -208,6 +284,21 @@ func run() -> void:
     demand("Actual failed decode retains error on no-op",{missing:missing},[{},{},{},{}],true)
     check(not Media.ready(fast,{missing:true}) and fast.selected_failed.has(missing) and fast.pending.is_empty(),
         "Worker failure remains explicit without duplicate retry or false readiness")
+    var failed_message:String=fast.failed[missing]
+    var failed_promotion=failed_family.duplicate(true)
+    failed_promotion.revision=2;failed_promotion.fixtures={missing:true}
+    for data in [fast,reference]:Media.adopt_encounter(data,failed_promotion,1)
+    demand("Failed nonresident source receives new family roles",{missing:missing})
+    check(fast.selected_failed.get(missing)==failed_message and not fast.ready_paths.has(missing) and fast.pending.is_empty(),
+        "Single deferred refresh preserves failed-source diagnostics without admitting pixels or retrying")
+    for data in [fast,reference]:Media.boot_ready(data);data.budget_bytes=0
+    demand("Failed source leaves optional selection",{})
+    check(fast.selected_failed.is_empty() and fast.failed.get(missing)==failed_message,
+        "Removing selection removes its error badge but retains the actual source failure")
+    for data in [fast,reference]:data.budget_bytes=8
+    demand("Failed nonresident source is selected again",{missing:missing})
+    check(fast.selected_failed.get(missing)==failed_message and not Media.ready(fast,{missing:true}) and fast.pending.is_empty(),
+        "Re-admission restores failure ownership without stale readiness or duplicate queue work")
     Media.close(fast); Media.close(reference)
     var report = {"checks":checks,"failures":failures,
         "scope":"Passive typed queue/residency acknowledgements versus the independent frozen 927a55b demand body; exact ordered paths/roles, budgets, accepted estimates, epoch, boot and CPU recovery. Actual PNG in-flight promotion is covered by media_role_race_checks."}

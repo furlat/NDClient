@@ -16,13 +16,16 @@ static func prepare(layer: Dictionary, rig: Dictionary, clip: String, cache: Dic
         var ranges={}
         if image!=null and not image.is_empty():
             image.convert(Image.FORMAT_RGBA8)
-            var bytes=image.get_data()
             for facing in rig.facing_rows:
                 var samples=PackedFloat32Array()
                 var y0=int(rig.facing_rows[facing])*int(rig.cell_height)
-                for y in range(y0,y0+int(rig.cell_height)):
-                    for x in image.get_width():
-                        var i=(y*image.get_width()+x)*4
+                var row=image.get_region(Rect2i(0,y0,image.get_width(),int(rig.cell_height)))
+                # Native bounds omit only transparent padding. Keep the exact
+                # original alpha threshold, luminance samples and percentiles.
+                var used=row.get_used_rect()
+                if used.has_area():
+                    var bytes:PackedByteArray=row.get_region(used).get_data()
+                    for i in range(0,bytes.size(),4):
                         if bytes[i+3]>128: samples.append(bytes[i]*.2126+bytes[i+1]*.7152+bytes[i+2]*.0722)
                 samples.sort()
                 ranges[facing]=Vector2(_percentile(samples,.03),_percentile(samples,.98))/255.0
@@ -45,9 +48,9 @@ static func bind(material: ShaderMaterial, layer: Dictionary, facing: String, fr
     if palette.is_empty(): return
     var colors=PackedVector3Array()
     for value in palette.colors: colors.append(rgb(int(value)))
-    colors.resize(16)
+    colors.resize(32)
     material.set_shader_parameter("effect_palette",colors)
-    material.set_shader_parameter("effect_palette_count",mini(16,palette.colors.size()))
+    material.set_shader_parameter("effect_palette_count",mini(32,palette.colors.size()))
     material.set_shader_parameter("effect_range",effect.get("palette_ranges",{}).get(facing,Vector2(0,1)))
     material.set_shader_parameter("effect_gamma",palette.get("gamma",1.0))
     material.set_shader_parameter("effect_frame",frame)

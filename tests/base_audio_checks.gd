@@ -3,6 +3,7 @@ extends SceneTree
 const Authoring=preload("res://presentation/authoring.gd")
 const AudioCues=preload("res://presentation/audio_cues.gd")
 const Recording=preload("res://studio/recording.gd")
+const Library=preload("res://studio/case_library.gd")
 var checks=0
 var failures:Array=[]
 var evidence:Array=[]
@@ -30,24 +31,39 @@ func inspect(directory:String)->void:
         var ids={}
         for cue in group.components:
             if cue.kind!="audio":continue
-            count+=1;heard[cue.cue_id]=true
+            count+=1
+            if cue.status=="available":
+                heard[cue.cue_id]=true
+                check(cue.cue_id not in ["spell_release","condition_loop"] and not cue.clip.contains("/magical-") and not cue.clip.contains("/energy-loop/"),"Actual recordings emit base physical sounds only: "+cue.id)
             check(not ids.has(cue.id),"Sound occurrence is unique: "+cue.id);ids[cue.id]=true
             check(facts.get(cue.source_event_uuid)!=null,"Sound has an actually disclosed server fact: "+cue.id)
-            if cue.status=="missing" and cue.reason=="source_contact_markers_not_authored":
+            if cue.status=="missing" and cue.reason in ["source_contact_markers_not_authored","invalid_contact_end_boundary"]:
                 check(cue.duration_ms==0 and cue.has("timing_source"),"Unaudited contact remains an inspectable gap: "+cue.id)
                 authoring_gaps.append({"recording":directory,"source":cue.timing_source})
+            elif cue.status=="missing" and cue.reason=="spell_audio_deferred":
+                check(not cue.assignment_enabled and cue.duration_ms==0 and not cue.has("clip"),"Deferred spell assignment has no executable stream: "+cue.id)
+            elif cue.status=="missing" and cue.cue_id=="torch_extinguish":
+                check(cue.duration_ms==0 and not cue.has("clip") and cue.reason==Authoring.load_data("audio/cues.json",{}).missing_cues.torch_extinguish,"Unselected extinguishing source remains a real owner gap")
+                authoring_gaps.append({"recording":directory,"source":cue.assignment_source})
             else:check(cue.status=="available" and FileAccess.file_exists(cue.clip),"Sound source is present: "+cue.id)
             check(cue.has("timing_source"),"Timing authoring is inspectable: "+cue.id)
-            check(cue.has("assignment_source") or cue.cue_id=="spell_release","Selected binding is inspectable: "+cue.id)
+            check(cue.has("assignment_source"),"Selected binding is inspectable: "+cue.id)
         for track in group.actor_tracks:
             var fact:Dictionary=facts.get(track.source_event_uuid,{})
             var own=group.components.filter(func(c):return c.kind=="audio" and c.source_event_uuid==track.source_event_uuid)
+            if fact.get("kind")=="equipment":
+                var handling=own.filter(func(c):return c.cue_id=="equipment_handle")
+                check(handling.size()==1 and handling[0].status=="available" and is_equal_approx(handling[0].contact_ms,track.commit_ms),"Equipment handling follows the authored visual/state commit once")
+            if fact.get("kind")=="attack" and fact.attack_source_kind=="unarmed":
+                check(own.size()==1 and own[0].cue_id=="unarmed_swing" and own[0].attachment=="body" and is_equal_approx(own[0].contact_ms,track.contact_ms),"Explicit unarmed attack has a physical body release at its authored contact")
+            if fact.get("kind")=="action" and fact.behavior_id=="action.item.potion_haste.drink":
+                check(own.size()==1 and own[0].cue_id=="potion_drink" and is_equal_approx(own[0].contact_ms,track.contact_ms),"Potion swallow follows the physical body effect once")
             if fact.get("kind")=="attack" and fact.get("source_item_id") in ["weapon.longbow","weapon.shortbow"]:
                 var release=own.filter(func(c):return c.cue_id=="projectile_release")
                 check(release.size()==1,"Actual bow attack owns one bow release")
                 if release.size()==1:
                     check(is_equal_approx(release[0].start_ms,track.contact_ms),"Bow sound follows authored release, not windup or target impact")
-            if fact.get("kind")=="step" and track.get("motion",false) and fact.movement_mode=="walking":
+            if fact.get("kind")=="step" and track.get("motion",false) and (fact.movement_mode=="walking" or track.trajectory=="connector_transfer"):
                 var marker_set=Authoring.load_data("audio/contacts.json",{}).rigs.get(track.rig,{}).get(track.clip,{}).get(track.trajectory,{})
                 var steps=own.filter(func(c):return c.get("body_track_id")==track.trace_track_id)
                 if marker_set.is_empty():
@@ -56,9 +72,10 @@ func inspect(directory:String)->void:
                 var clip=Authoring.clip(track.presentation_actor,track.clip,{})
                 var expected=0
                 for marker in marker_set.markers:
-                    expected+=AudioCues.source_frame_times(track,marker.frame,clip.fps,int(clip.frames),marker.direction).size()
+                    expected+=AudioCues.source_frame_times(track,marker.frame,clip.fps,int(clip.frames),marker.direction).size() if AudioCues.contact_marker_error(marker,clip,track.loop).is_empty() else 1
                 check(steps.size()==expected,"Each actual body frame crossing has exactly one contact cue")
                 for cue in steps:
+                    if cue.status=="missing":continue
                     check(is_equal_approx(cue.contact_ms-cue.start_ms,cue.source_sync_s*1000),"Source transient aligns with authored body contact")
                     check(cue.contact_ms>=track.start_ms and cue.contact_ms<=track.start_ms+track.duration_ms+.001,"Contact belongs to its actual body segment")
                     if cue.cue_id=="landing":
@@ -82,9 +99,9 @@ func inspect(directory:String)->void:
     evidence.append({"recording":directory,"audio_components":count})
 
 func run()->void:
-    var inventory:Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://generated/studio_case_inventory.json"))
     var paths={}
-    for item in inventory.cases:paths[item.journal]=true
+    for item in Library.read():
+        for audience in item.perspectives:paths[audience.journal]=true
     paths["res://.runtime/studio-cases/dying-seed5/amber/journal"]=true
     var explicit=false
     for arg in OS.get_cmdline_user_args():
@@ -92,7 +109,7 @@ func run()->void:
             if not explicit:paths.clear();explicit=true
             paths[arg.trim_prefix("--recording=")]=true
     for path in paths:inspect(path)
-    for cue in ["footstep","landing","jump_takeoff","weapon_swing","weapon_swing_heavy","projectile_release","physical_impact","stance_transition","body_fall","stand_up","wood_break","action_surge","hide_transition"]:
+    for cue in ["footstep","landing","jump_takeoff","weapon_swing","weapon_swing_heavy","projectile_release","physical_impact","stance_transition","body_fall","stand_up","wood_break","action_surge","hide_transition","equipment_handle","unarmed_swing","potion_drink","torch_ignite"]:
         if explicit:continue
         check(heard.has(cue),"Actual recorded suite exercises cue "+cue)
     var report={"checks":checks,"failures":failures,"recordings":evidence,"cues":heard.keys(),"authoring_gaps":authoring_gaps,"scope":"Actual shared-compiler cue assignments, disclosed owners, authored markers and source availability; native audible output is separately checked."}

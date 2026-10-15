@@ -67,7 +67,8 @@ func prepared_floor_packet(entry:Dictionary,stale_ids:Array=[],token:Array=[],ro
     # Production reserves instances in blocks of 256. This mathematical fixture
     # intentionally allocates exactly two; discard only unused capacity padding,
     # retaining every visible row and its full 20-float packet unchanged.
-    prepared.buffer.resize(entry.node.multimesh.instance_count*20)
+    if prepared.rows.size()<=entry.node.multimesh.instance_count:
+        prepared.buffer.resize(entry.node.multimesh.instance_count*20)
     return prepared
 func publish_floor(entry:Dictionary,prepared:Dictionary)->void:
     var publisher=Sources.new();entry.pivot=Vector2(32,32);entry.scale=1.0
@@ -548,9 +549,11 @@ func run()->void:
     for i in 10:sync_scene(atlas,world)
     check(atlas.repack_count==fast_pack,"Idle published scene retains exact atlas layout")
     var projection_errors=0
+    var material_updates=0
     for settings in [Vector3(0.125,0.25,7.5),Vector3(-0.75,0.375,6.25),Vector3(0.0,0.0,12.5)]:
         camera.position=Vector3(settings.x,settings.y,10);camera.size=settings.z
         sync_scene(atlas,world)
+        material_updates+=atlas.last_reconcile_phases.material_sources_updated
         for receiver in atlas.receivers:
             for point in [Vector2(.5,.5),Vector2(25.5,15.5),Vector2(51.5,31.5)]:
                 var full=point+Vector2(receiver.crop.pixels.position)
@@ -559,6 +562,7 @@ func run()->void:
                 if projected.distance_to(reference)>.0001:projection_errors+=1
     check(projection_errors==0,"Native parent pan/zoom preserves independent original3D camera projection at source pixels")
     check(atlas.repack_count==fast_pack,"Pan and fractional zoom never repack source cells")
+    check(material_updates==0,"Pan and fractional zoom preserve source uniforms without resynchronizing materials")
     # A shadow presentation handle is not a source receiver and has no cell.
     var shadow=MeshInstance3D.new();shadow.mesh=QuadMesh.new();world.add_child(shadow)
     world.actor_entries=[{"node":shadow,"generated_shadow":true}]

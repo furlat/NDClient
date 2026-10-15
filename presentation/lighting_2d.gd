@@ -103,6 +103,12 @@ func _source_cookie(source: Dictionary) -> Texture2D:
     _range_cookies[key] = texture
     return texture
 
+func prepare_cookie(source: Dictionary) -> Texture2D:
+    # Only immutable artwork is admitted here. The current source list, native
+    # light nodes and camera projection remain owned by sync()/project().
+    _load_cookie()
+    return _source_cookie(source)
+
 func attach(parent: Node) -> void:
     clear_pages()
     attach_page(parent)

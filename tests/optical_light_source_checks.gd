@@ -39,7 +39,15 @@ func run() -> void:
             check(state.senses.has("light_sources"),audience+": current optical observations are explicit")
             if not state.senses.has("light_sources"): continue
             check(not state.senses.light_sources.is_empty(),audience+": actual illuminating source reaches this view")
-            adapter.sync(state)
+            # The recorded archive retains its original footprints. Current
+            # descriptors render identically with an empty or omitted map.
+            var compact = state.duplicate(true)
+            for observed in compact.senses.light_sources.values():
+                if probe.label=="bright": observed.erase("affected_tiles")
+                else: observed.affected_tiles = {}
+            var compact_before = compact.duplicate(true)
+            check(Lighting.resolve(compact)==Lighting.resolve(state),audience+": compact source resolves exactly like archive "+probe.label)
+            adapter.sync(compact)
             check(adapter.nodes.size()==state.senses.light_sources.size(),audience+": one native light per observed source, no private-inventory duplicate")
             for quarter in 4:
                 var angle = PI/4+quarter*PI/2
@@ -61,10 +69,11 @@ func run() -> void:
                         check(light.color==(Lighting.TORCH_COLOUR if observed.appearance=="torch" else Color.WHITE),audience+": explicit optical appearance calibrates colour")
                         check(is_equal_approx(light.energy,2.0),audience+": existing reference intensity retained")
             check(state==original,audience+": presentation leaves recorded gameplay state unchanged")
+            check(compact==compact_before,audience+": presentation preserves compact input")
             evidence.append({"audience":audience,"sequence":probe.sequence,"label":probe.label,
                 "objective":state.tiles["4,6"].resolved_light,"perceived":state.senses.effective_light_levels.get("4,6"),
                 "sources":state.senses.light_sources.size()})
-            last_state = state
+            last_state = compact
     if not last_state.is_empty() and not adapter.sources.is_empty():
         # Named adapter perturbations: no outcome or replay facts are fabricated.
         # They check identity privacy and disappearance at its public boundary.
@@ -72,6 +81,7 @@ func run() -> void:
         var before = adapter.sampled.duplicate(true)
         for observed in hidden.senses.light_sources.values():
             observed.anchor_entity_uuid = null; observed.anchor_item_uuid = null
+            hidden.senses.visible.erase(observed.position)
         adapter.sync(hidden); adapter.project(camera)
         for id in before:
             check(adapter.sampled[id].position==before[id].position,"Withheld identities preserve optical elevation and location")

@@ -3,6 +3,8 @@ extends RefCounted
 const Authoring=preload("res://presentation/authoring.gd")
 const RegisteredMedia=preload("res://presentation/registered_media.gd")
 const Catalog=preload("res://source_catalog.gd")
+const NativeSpells=preload("res://presentation/native_spell_authoring.gd")
+const NativeFactory=preload("res://presentation/native_factory_source.gd")
 
 static func _require(entry: Dictionary,phase: String,mechanism: String,source: String,implemented: bool,reason: String="",availability: String="not_required",details: Dictionary={}) -> Dictionary:
     var row={"id":source+"#"+mechanism,"phase":phase,"mechanism":mechanism,"source":source,
@@ -141,30 +143,57 @@ static func _layer(entry: Dictionary,phase: String,layer: Dictionary,pointer: St
             var supported=field=="sustain_start_ms" and metadata.get("application_mode","crossfade")=="crossfade"
             _require(entry,phase,"layer:"+str(layer.id)+":"+field,"catalog/condition_media.json:/"+asset+"/"+field,supported,"" if supported else "condition_media_clock_not_implemented")
 
-static func _effects(entry: Dictionary,phase: String,effects: Array,pointer: String,cache: Dictionary,availability: Dictionary) -> void:
-    for i in effects.size():_layer(entry,phase,effects[i],pointer+"/"+str(i),false,cache,availability)
+static func _effects(entry: Dictionary,phase: String,effects: Array,pointer: String,cache: Dictionary,availability: Dictionary,replaced:Array=[]) -> void:
+    for i in effects.size():
+        if effects[i].get("assetId","") not in replaced:_layer(entry,phase,effects[i],pointer+"/"+str(i),false,cache,availability)
+
+static func _native(entry:Dictionary,selected:Dictionary)->void:
+    var index=0
+    for phase in NativeSpells.condition_phases(selected):
+        _native_phase(entry,phase,"persistent","native:"+str(index))
+        index+=1
+    index=0
+    for phase in NativeSpells.contact_phases(selected):
+        _native_phase(entry,phase,"interception","native_contact:"+str(index))
+        index+=1
+
+static func _native_phase(entry:Dictionary,phase:Dictionary,owner_phase:String,mechanism:String)->void:
+    var missing:Array=[]
+    for path in NativeFactory.resource_paths(phase.native_clip):
+        if not FileAccess.file_exists(path):missing.append(path)
+    var present=not phase.native_clip.is_empty() and missing.is_empty() and phase.get("status")!="missing"
+    _require(entry,owner_phase,mechanism,phase.source,true,
+        "" if present else phase.get("reason","selected_native_source_missing"),"available" if present else "missing",
+        {"component_kind":"native_effect","source_id":phase.source_id,"missing_paths":missing,
+        "lifecycle":phase.get("lifecycle",{}),"label":str(phase.native_cue.role).capitalize()+" · "+str(phase.source_id)})
 
 static func _recorded(entry: Dictionary,rows: Array) -> void:
     for row in rows:
         if row.kind in ["condition","condition_exit","condition_state"]:continue
         var persistent=row.get("owner",{}).get("condition",{}).get("behavior_id")==entry.id
-        var component_source:String=row.get("component",{}).get("source","")
+        var component_source:String=row.get("component",{}).get("source",row.get("track",{}).get("source",""))
         if not persistent and not entry.requirements.any(func(requirement):return component_source in [requirement.source,requirement.get("legacy_source",requirement.source)]):continue
         for requirement in entry.requirements:
             var matched=false
-            if not persistent:
+            if requirement.mechanism.begins_with("native_contact:"):
+                matched=row.kind=="native_effect" and row.get("component",{}).has("intercepted_by_condition_uuid") and component_source in [requirement.source,requirement.get("legacy_source",requirement.source)]
+            elif requirement.mechanism=="cast_binding":
+                matched=row.kind=="body" and row.get("track",{}).get("reaction_cast_binding")==requirement.binding and component_source in [requirement.source,requirement.get("legacy_source",requirement.source)]
+            elif not persistent:
                 matched=component_source in [requirement.source,requirement.get("legacy_source",requirement.source)] and requirement.mechanism==row.kind
             elif row.kind=="condition_material":matched=requirement.mechanism in row.get("operations",{})
             elif row.kind=="condition_pose":
                 matched=requirement.mechanism in ["bodyPose","frozenPose"]
                 if requirement.mechanism.begins_with("activityPoses:"):
                     matched=row.get("pose",{}).get("source")==requirement.source
+            elif row.get("component",{}).get("native_spell",false):
+                matched=requirement.mechanism.begins_with("native:") and component_source in [requirement.source,requirement.get("legacy_source",requirement.source)] and row.kind=="native_effect"
             else:
                 var layer:Dictionary=row.get("component",{}).get("layer",{})
                 matched=requirement.mechanism=="layer:"+str(layer.get("id",""))
             if not matched or (persistent and requirement.phase!="persistent"):continue
             requirement.evidence.append({"kind":"indexed_candidate" if row.get("selection_policy")=="sampled" else "resolved_recording","recording":row.get("recording",""),"row_id":row.id,
-                "condition_uuid":row.get("owner",{}).get("id"),"start_ms":row.start_ms,"end_ms":row.end_ms,"source_start_ms":row.get("source_start_ms",row.start_ms)})
+                "condition_uuid":row.get("component",{}).get("intercepted_by_condition_uuid",row.get("track",{}).get("condition_uuid",row.get("owner",{}).get("id"))),"start_ms":row.start_ms,"end_ms":row.end_ms,"source_start_ms":row.get("source_start_ms",row.start_ms)})
             if requirement.status!="missing" and row.get("selection_policy")!="sampled":requirement.status="implemented"
 
 static func build(cache: Dictionary={},recorded_rows: Array=[],condition_ids: Dictionary={}) -> Dictionary:
@@ -178,11 +207,14 @@ static func build(cache: Dictionary={},recorded_rows: Array=[],condition_ids: Di
         if not condition_ids.is_empty() and not condition_ids.has(id):continue
         totals.entries+=1
         var recipe:Dictionary=recipes[id]
+        var native=NativeSpells.condition(id,cache)
+        var replaced:Array=native.get("lifecycle",{}).get("replaces_media",[])
         var source="catalog/condition_recipes.json:/"+id
         var entry={"id":id,"label":recipe.get("label",id),"definition_ref":recipe.get("definitionRef",{}).duplicate(true),
             "source":source,"disposition":recipe.get("disposition",""),"classification":recipe.get("classification",{}).duplicate(true),"requirements":[],"status":"unexercised"}
         _motion_assignments(entry,cache)
         _indicator_assignment(entry,recipe,cache)
+        _native(entry,native)
         var persistent:Dictionary=recipe.get("persistent",{})
         for field in ["bodyColor","bodyOutline","bodyPose","frozenPose"]:
             if persistent.get(field)!=null:_require(entry,"persistent",field,source+"/persistent/"+field,true)
@@ -211,12 +243,13 @@ static func build(cache: Dictionary={},recorded_rows: Array=[],condition_ids: Di
             for field in ["back","front"]:
                 var asset:String=persistent.absenceEcho.get(field,"")
                 if not asset.is_empty():_layer(entry,"persistent",{"id":"absenceEcho:"+field,"assetId":asset},source+"/persistent/absenceEcho/"+field,false,cache,availability)
-        for n in persistent.get("layers",[]).size():_layer(entry,"persistent",persistent.layers[n],source+"/persistent/layers/"+str(n),true,cache,availability)
+        for n in persistent.get("layers",[]).size():
+            if persistent.layers[n].get("assetId","") not in replaced:_layer(entry,"persistent",persistent.layers[n],source+"/persistent/layers/"+str(n),true,cache,availability)
         for phase in ["application","removal"]:
             var change:Dictionary=recipe.get(phase,{})
             if change.get("feedbackEnabled",false):_require(entry,phase,"feedback_text",source+"/"+phase+"/feedbackEnabled",true)
             if not change.get("bodyAnimation",{}).is_empty():_require(entry,phase,"body",source+"/"+phase+"/bodyAnimation",true)
-            _effects(entry,phase,change.get("effects",[]),source+"/"+phase+"/effects",cache,availability)
+            _effects(entry,phase,change.get("effects",[]),source+"/"+phase+"/effects",cache,availability,replaced)
         if not recipe.get("activation",{}).is_empty():
             _require(entry,"activation","trigger",source+"/activation/trigger",false,"condition_activation_not_compiled")
             _effects(entry,"activation",recipe.activation.get("effects",[]),source+"/activation/effects",cache,availability)
@@ -224,8 +257,13 @@ static func build(cache: Dictionary={},recorded_rows: Array=[],condition_ids: Di
             _require(entry,"response","trigger:"+str(n),source+"/responses/"+str(n)+"/trigger",false,"condition_response_not_compiled")
             _effects(entry,"response",recipe.responses[n].get("effects",[]),source+"/responses/"+str(n)+"/effects",cache,availability)
         for direction in recipe.get("interceptionEffectsByDirection",{}):
-            _effects(entry,"interception",recipe.interceptionEffectsByDirection[direction],source+"/interceptionEffectsByDirection/"+direction,cache,availability)
-        if recipe.get("reactionCastBinding")!=null:_require(entry,"reaction","cast_binding",source+"/reactionCastBinding",false,"condition_reaction_binding_not_compiled")
+            _effects(entry,"interception",recipe.interceptionEffectsByDirection[direction],source+"/interceptionEffectsByDirection/"+direction,cache,availability,replaced)
+        if recipe.get("reactionCastBinding")!=null:
+            var bound=NativeSpells.recipe({"behavior_id":recipe.reactionCastBinding},cache)
+            var assigned:bool=not bound.get("cast",{}).is_empty()
+            _require(entry,"reaction","cast_binding",source+"/reactionCastBinding",assigned,
+                "" if assigned else "condition_reaction_binding_recipe_missing","available" if assigned else "missing",
+                {"binding":recipe.reactionCastBinding,"bound_source":"spells/"+str(recipe.reactionCastBinding)+".json:/cast"})
         # Resolve effective Resource fields only after collecting canonical
         # pointers, keeping the original JSON ownership available for inspection.
         entry.legacy_source=source

@@ -16335,6 +16335,74 @@
         "audio": "not_assessed_by_this_catalog",
         "note": "Partial — R10 is a spell/Shield composition probe; do not count an intercepted sequence as successful repeated damage. A successful damaging capture is still required."
       }
+    },
+    {
+      "id": "gallery.sorcerer_expedition",
+      "code": "GAL01",
+      "label": "Sorcerer expedition · Lantern Gallery",
+      "purpose": "Inspect several real spell families, recipient reactions, Shield application/removal and movement across the existing large furnished map.",
+      "capability_ids": [
+        "action.move",
+        "action.dash",
+        "spell.ray_of_frost",
+        "spell.scorching_ray",
+        "spell.acid_splash",
+        "spell.fireball",
+        "spell.magic_missile",
+        "spell.chill_touch",
+        "condition.spell.shield"
+      ],
+      "setup": "Existing73x39 Lantern Gallery. Ordinary level5 sorcerer with an explicit scenario Shield reaction grant, one hostile arcanist and four sentries. Both factions issue ordinary SDK commands.",
+      "sequence": [
+        "Open the gallery entrance and enter",
+        "Receive Magic Missile and trigger Shield; inspect its removal on the next turn",
+        "Cast Ray of Frost, Scorching Ray and Acid Splash while advancing",
+        "Cast Fireball into the sentries and nearby furnishing",
+        "Use Magic Missile and Chill Touch on another sentry",
+        "Move and Dash to the central nave"
+      ],
+      "participants": [
+        "sorcerer",
+        "hostile caster",
+        "four sentries"
+      ],
+      "modifiers": [
+        "lighting",
+        "visibility",
+        "reaction availability",
+        "spell slots"
+      ],
+      "expectations": [
+        {
+          "id": "GAL01.authority",
+          "label": "Both faction streams retain actual movement, damage, destruction and Shield owners",
+          "phase": "Recorded sequence",
+          "participants": [
+            "sorcerer",
+            "hostile caster",
+            "sentries"
+          ],
+          "authority": "server",
+          "description": "All60 commands are committed. No local hit, reaction or destruction outcome is manufactured. Missing rendering remains visible in the tracks.",
+          "rule_sources": [
+            "res://generated/studio_gallery_spell_case.json"
+          ],
+          "authoring_sources": []
+        }
+      ],
+      "recordings": [
+        {
+          "case_id": "gallery-sorcerer-expedition",
+          "evidence": "recorded",
+          "gaps": [],
+          "reference": "res://generated/studio_gallery_spell_case.json"
+        }
+      ],
+      "coverage": {
+        "recording": "recorded",
+        "native_render": "not_assessed_by_this_catalog",
+        "audio": "not_assessed_by_this_catalog"
+      }
     }
   ],
   "document": {

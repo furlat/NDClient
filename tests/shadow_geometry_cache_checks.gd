@@ -1,0 +1,70 @@
+extends "res://tests/creature_shadow_checks.gd"
+## Same delivered bodies and exact pre-edit shadow calculation, with independent
+## helper viewports. The optional oracle is a saved source file, never gameplay.
+var reference:RefCounted
+func run()->void:
+    if DisplayServer.get_name()=="headless":quit(2);return
+    create_timer(90).timeout.connect(func():printerr("Shadow cache qualification deadline");quit(2))
+    var oracle:String=""
+    for argument in OS.get_cmdline_user_args():
+        if argument.begins_with("--oracle="):oracle=argument.trim_prefix("--oracle=")
+    if oracle.is_empty():printerr("Provide the saved pre-edit shadow source with --oracle");quit(2);return
+    reference=load(oracle).new()
+    root.unfocusable=true;root.position=Vector2i(-16000,-16000)
+    Engine.max_fps=0;DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
+    viewport=SubViewport.new();viewport.size=Vector2i(512,512);viewport.world_3d=World3D.new()
+    viewport.render_target_update_mode=SubViewport.UPDATE_ALWAYS;root.add_child(viewport)
+    stage=Node3D.new();viewport.add_child(stage);camera=Camera3D.new();stage.add_child(camera)
+    camera.projection=Camera3D.PROJECTION_ORTHOGONAL;camera.size=4
+    manager.attach(stage);reference.attach(stage)
+    var authored=read(FACTORY.path_join("delivery/catalog.json"))
+    var selected:Array=[packet(authored,FACTORY.path_join("delivery"),"goblin-01/idle"),modular()]
+    var cookie=texture("C:/Users/tommaso/Documents/Dev/NDCharacterLight/.reference-template/scenes/vfx/textures/T_basic1_vfx.PNG")
+    var timings:Dictionary={"original":[],"cached":[]}
+    for entry in selected:
+        var actor:Dictionary={"valid":true,"row":entry.placement,"entries":[entry]}
+        for quarter in 4:
+            camera.basis=Basis.from_euler(Vector3(-atan(sqrt(.5)),PI/4+quarter*PI/2,0))
+            camera.position=camera.basis.z*12;entry.node.basis=camera.basis
+            for step in 6:
+                var origin:=Vector3(step*.05,0,0)
+                actor.row.position=[origin.x,origin.z];entry.node.position=origin
+                var uv:Vector4=entry.material.get_shader_parameter("frame_uv")
+                uv.x=float(step%3)/entry.frames;uv.y=float(quarter*2)/8
+                entry.material.set_shader_parameter("frame_uv",uv)
+                var zoom:float=1.0/Placement.PIXELS_PER_UNIT*camera.unproject_position(camera.basis.x).distance_to(camera.unproject_position(Vector3.ZERO))
+                var sources:Array=[{"id":"reference","screen_position":camera.unproject_position(origin)+Vector2(14+step*3,42)*zoom,
+                    "span":Vector2(cookie.get_size())*19.36*zoom,"height":(20+step)*zoom,"texture":cookie,
+                    "energy":2.0,"color":Color(.809372,.429306,.269121),"enabled":true}]
+                var actual=manager.sync([actor],camera,sources)
+                var expected=reference.sync([actor],camera,sources)
+                check(actual.size()==expected.size() and actual.size()==1,"Both helpers admit actual body "+str([entry.id,quarter,step]))
+                if actual.is_empty() or expected.is_empty():continue
+                var current:Dictionary=manager.actors[entry.id];var previous:Dictionary=reference.actors[entry.id]
+                await process_frame;await RenderingServer.frame_post_draw
+                check(current.viewport.get_texture().get_image().get_data()==previous.viewport.get_texture().get_image().get_data(),"Byte-exact shadow visibility "+str([entry.id,quarter,step]))
+                check(current.viewport.size==previous.viewport.size and current.camera.transform==previous.camera.transform and current.camera.size==previous.camera.size,"Exact receiver projection")
+                var a:MeshInstance3D=current.casters[entry.id];var b:MeshInstance3D=previous.casters[entry.id]
+                check(a.position==b.position and a.custom_aabb==b.custom_aabb,"Exact local bounds and contact")
+                for parameter in Shadows.CASTER_PARAMETERS+["component_cell_size","display_basis","sprite_pivot","horizontal_scale","ground_height"]:
+                    check(a.material_override.get_shader_parameter(parameter)==b.material_override.get_shader_parameter(parameter),"Exact caster parameter "+parameter)
+                var shape:Dictionary=manager._caster_shapes[entry.id]
+                manager.sync([actor],camera,sources)
+                check(is_same(shape,manager._caster_shapes[entry.id]),"Repeated sample reuses immutable geometry")
+                # A light-only change must redraw shadows without recomputing
+                # or rebinding the unchanged source body.
+                sources[0].height+=zoom*.5
+                for pair in [[reference,"original"],[manager,"cached"]]:
+                    var began:int=Time.get_ticks_usec();pair[0].sync([actor],camera,sources)
+                    timings[pair[1]].append((Time.get_ticks_usec()-began)/1000.)
+                check(is_same(shape,manager._caster_shapes[entry.id]),"Light movement preserves cached local geometry")
+                await process_frame;await RenderingServer.frame_post_draw
+                check(current.viewport.get_texture().get_image().get_data()==previous.viewport.get_texture().get_image().get_data(),"Byte-exact light-only redraw")
+        manager.sync([],camera,[]);reference.sync([],camera,[])
+        check(manager._caster_shapes.is_empty(),"Retired body releases cached shape")
+        entry.node.hide()
+    manager.close();reference.close();viewport.queue_free();await process_frame;await process_frame
+    var profile=load("res://frame_profile.gd")
+    var report:Dictionary={"checks":checks,"failures":failures,"timings":{"original":profile.distribution(timings.original),"cached":profile.distribution(timings.cached)},"scope":"Delivered goblin and modular chest; four cameras, animated UVs, moving actor and light; byte-exact pre-edit native visibility and all caster parameters. Isolated timings, not full-game acceptance."}
+    FileAccess.open("res://.runtime/shadow-geometry-cache-checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
+    print("SHADOW_GEOMETRY_CACHE_CHECKS ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)

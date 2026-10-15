@@ -17,6 +17,8 @@ import sys
 
 from devtools.player_server_acceptance.fixtures import configuration
 from delayed_backend import close_delayed_backend, start_delayed_backend
+from live_spell_profile import drive_blue
+from studio_gallery_spell_capture import setup as gallery_sorcerer_setup
 
 
 def windows_path(path: Path) -> str:
@@ -125,7 +127,8 @@ async def run(args: argparse.Namespace) -> Path:
         raise RuntimeError("Godot executable was not found: " + str(args.godot))
     output = project / ".runtime/player-runs" / datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S.%fZ")
     output.mkdir(parents=True, mode=0o700)
-    settings = configuration(args.scenario, output)
+    spell_profile = args.scenario == "gallery_sorcerer"
+    settings, profile_steps = gallery_sorcerer_setup(output, 3) if spell_profile else (configuration(args.scenario, output), [])
     server_config = output / "server.json"
     private_json(server_config, settings.model_dump(mode="json"))
     port = args.port or available_port()
@@ -133,16 +136,25 @@ async def run(args: argparse.Namespace) -> Path:
     client_port = proxy["port"] if proxy else port
     client_config = output / "client.json"
     seat = settings.credentials[0]
-    private_json(client_config, {"url":f"http://127.0.0.1:{client_port}", "token":seat.token,
+    client_values = {"url":f"http://127.0.0.1:{client_port}", "token":seat.token,
         "trusted_operations":True,
         "journal":windows_path(output / "journal"), "seat_id":seat.seat_id,
-        "test_command_delay_ms":args.test_command_delay_ms,"test_result":windows_path(output / "player-live-checks.json")})
+        "test_command_delay_ms":args.test_command_delay_ms,"test_result":windows_path(output / "player-live-checks.json")}
+    if spell_profile:
+        client_values["profile_steps"] = profile_steps + [
+            {"behavior":"spell.fire_bolt", "actor_name":"Expedition sorcerer", "offered_opponent":True},
+            {"behavior":"end_turn", "actor_name":"Expedition sorcerer"},
+            {"behavior":"spell.fire_bolt", "actor_name":"Expedition sorcerer", "offered_opponent":True}]
+        client_values["blue_request"] = windows_path(output / "blue-request.json")
+        client_values["blue_result"] = windows_path(output / "blue-result.json")
+    private_json(client_config, client_values)
     environment = os.environ.copy()
     environment["PYTHONPATH"] = os.pathsep.join((str(args.engine.resolve()),
         str(args.engine.resolve() / "sdk/python/src")))
     stop = output / "server.stop"
     client = None
-    print(("Lantern Gallery" if args.scenario == "crypt_gallery" else "Lantern Crypt") + " · Expedition", flush=True)
+    blue_driver = None
+    print(("Lantern Gallery" if args.scenario in ("crypt_gallery", "gallery_sorcerer") else "Lantern Crypt") + " · Expedition", flush=True)
     print("Run files: " + str(output), flush=True)
     with (output / "server.log").open("wb") as server_log, (output / "godot.log").open("wb") as godot_log:
         host_entry = [str(project / "tools/profile_host.py"), "--cpu-commands", args.profile_cpu_commands] if args.profile_pipeline else ["-m", "devtools.player_server_acceptance.test_host"]
@@ -158,7 +170,11 @@ async def run(args: argparse.Namespace) -> Path:
                     if host.returncode is not None:
                         raise RuntimeError("Backend startup failed; inspect " + str(output / "server.log"))
                     await asyncio.sleep(0.1)
+            if spell_profile:
+                blue_driver = asyncio.create_task(drive_blue(f"http://127.0.0.1:{port}", settings.credentials[1].token, output))
             native_args = [str(args.godot), "--path", windows_path(project)]
+            if spell_profile or args.profile_view_size is not None or args.profile_stop_stage is not None:
+                native_args.extend(["--rendering-method", "forward_plus", "--rendering-driver", "vulkan"])
             if args.headless:
                 native_args.extend(["--headless", "--max-fps", "60"])
             if args.quit_after:
@@ -169,11 +185,18 @@ async def run(args: argparse.Namespace) -> Path:
                 native_args.append("--reference-atlas=" + args.test_atlas_reference)
             if args.test_light_cap is not None:
                 native_args.append("--profile-light-cap=" + args.test_light_cap)
+            if args.profile_view_size is not None:
+                native_args.append("--profile-view-size=" + str(args.profile_view_size))
+            if args.profile_stop_stage is not None:
+                native_args.append("--profile-stop-stage=" + str(args.profile_stop_stage))
             client = await asyncio.create_subprocess_exec(*native_args, stdout=godot_log, stderr=godot_log)
             print("Godot opened; waiting for initialization and current player choices…", flush=True)
             player_ready = False
             with (output / "godot.log").open(encoding="utf-8", errors="replace") as observed:
                 while client.returncode is None:
+                    if blue_driver is not None and blue_driver.done():
+                        await blue_driver
+                        raise RuntimeError("Blue SDK driver stopped unexpectedly")
                     if host.returncode is not None:
                         raise RuntimeError("Backend stopped unexpectedly; inspect " + str(output / "server.log"))
                     errors = observed.read()
@@ -185,6 +208,8 @@ async def run(args: argparse.Namespace) -> Path:
                     if any(marker in errors for marker in ("SCRIPT ERROR:", "Parse Error:", "Failed loading resource")):
                         raise RuntimeError("Godot failed to load or run the player scene; inspect " + str(output / "godot.log"))
                     await asyncio.sleep(0.2)
+            if blue_driver is not None and blue_driver.done():
+                await blue_driver
             if await client.wait() != 0:
                 raise RuntimeError("Godot exited with an error; inspect " + str(output / "godot.log"))
             # A parse error can exit Godot with status zero before the polling
@@ -197,6 +222,9 @@ async def run(args: argparse.Namespace) -> Path:
                 if client is not None:
                     await stop_godot(client, client_config)
             finally:
+                if blue_driver is not None:
+                    blue_driver.cancel()
+                    await asyncio.gather(blue_driver, return_exceptions=True)
                 if proxy:
                     await close_delayed_backend(proxy)
                     private_json(output / "delay-evidence.json",proxy["state"])
@@ -211,21 +239,36 @@ def main() -> None:
     parser.add_argument("--engine", type=Path, default=project.parent / "dnd_engine")
     parser.add_argument("--godot", type=Path, default=project.parent / "Tools/Godot-4.7.2/Godot_v4.7.2-stable_win64_console.exe")
     parser.add_argument("--port", type=int, default=0, help="Backend port; default checks native Windows and WSL availability")
-    parser.add_argument("--scenario", choices=("crypt", "crypt_gallery"), default="crypt_gallery", help="Backend encounter; crypt retains the original small baseline")
+    parser.add_argument("--scenario", choices=("crypt", "crypt_gallery", "gallery_sorcerer"), default="crypt_gallery", help="Backend encounter; crypt retains the original small baseline")
     parser.add_argument("--headless", action="store_true", help="Headless Godot for launch validation")
     parser.add_argument("--quit-after", type=int, default=0, metavar="FRAMES", help="Close after a bounded number of Godot frames")
-    parser.add_argument("--test-script", choices=("res://tests/player_startup_checks.gd", "res://tests/live_gallery_checks.gd", "res://tests/player_wait_checks.gd", "res://tests/player_live_checks.gd", "res://tests/player_interaction_checks.gd", "res://tests/lighting_live_checks.gd", "res://tests/chest_live_checks.gd"), help="Run a bounded production-scene acceptance test")
+    parser.add_argument("--test-script", choices=("res://tests/player_startup_checks.gd", "res://tests/live_gallery_checks.gd", "res://tests/live_spell_checks.gd", "res://tests/player_wait_checks.gd", "res://tests/player_live_checks.gd", "res://tests/player_interaction_checks.gd", "res://tests/lighting_live_checks.gd", "res://tests/chest_live_checks.gd"), help="Run a bounded production-scene acceptance test")
     parser.add_argument("--test-command-delay-ms", type=int, default=0, help="Acceptance only: hold the first real command before forwarding it")
     parser.add_argument("--test-atlas-reference", default="", help="Gallery profiling only: load a frozen reference atlas script instead of the current atlas")
     parser.add_argument("--test-light-cap", choices=("on", "off"), help="Gallery profiling only: compare live movement with or without the light cap")
     parser.add_argument("--profile-pipeline", action="store_true", help="Record worker execution and host exchange timings during real live commands")
     parser.add_argument("--profile-cpu-commands", default="", help="Optional comma-separated command numbers for cProfile; adds overhead to those commands")
     parser.add_argument("--profile-action-phases", action="store_true", help="Optional nested engine phase hooks; adds diagnostic overhead")
+    parser.add_argument("--profile-view-size", type=float, help="Live Gallery profiling: fixed orthographic camera size, with a 1600×960 native window")
+    parser.add_argument("--profile-stop-stage", type=int, help="Live Gallery profiling: stop after 9–11 route stages and retain a three-second idle control instead of the full zoom/cap matrix")
     args = parser.parse_args()
     if args.test_atlas_reference and args.test_script != "res://tests/live_gallery_checks.gd":
         parser.error("Reference atlas requires the live Gallery acceptance script")
     if args.test_light_cap is not None and args.test_script != "res://tests/live_gallery_checks.gd":
         parser.error("Light-cap profiling requires the live Gallery acceptance script")
+    if args.scenario == "gallery_sorcerer" and args.test_script != "res://tests/live_spell_checks.gd":
+        parser.error("Gallery sorcerer requires the live spell profiling script")
+    if args.test_script == "res://tests/live_spell_checks.gd" and args.scenario != "gallery_sorcerer":
+        parser.error("Live spell profiling requires the Gallery sorcerer setup")
+    if args.profile_view_size is not None:
+        if (args.test_script, args.scenario) not in (("res://tests/live_gallery_checks.gd", "crypt_gallery"), ("res://tests/live_spell_checks.gd", "gallery_sorcerer")):
+            parser.error("Fixed-view profiling requires a live Gallery movement or spell fixture")
+    if args.profile_stop_stage is not None and (args.test_script != "res://tests/live_gallery_checks.gd" or args.scenario != "crypt_gallery"):
+        parser.error("Bounded route stages require the live Gallery movement fixture")
+    if args.profile_view_size is not None and not 4 <= args.profile_view_size <= 80:
+        parser.error("Profile view size must be between 4 and 80")
+    if args.profile_stop_stage is not None and not 9 <= args.profile_stop_stage <= 11:
+        parser.error("Profile stop stage must be 9–11, including Gallery entry and an interior move")
     if args.test_command_delay_ms and (not args.test_script or not 1 <= args.test_command_delay_ms <= 10000):
         parser.error("Command delay is limited to 1–10000 ms and requires a test script")
     if not 0 <= args.port <= 65535 or args.quit_after < 0:

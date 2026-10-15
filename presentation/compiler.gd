@@ -6,6 +6,7 @@ const Transitions = preload("res://sdk/transitions.gd")
 const Authoring = preload("res://presentation/authoring.gd")
 const EventTrace = preload("res://presentation/event_trace.gd")
 const Components = preload("res://presentation/components.gd")
+const SpellDelivery=preload("res://presentation/spell_delivery.gd")
 const DamageTiming = preload("res://presentation/damage_timing.gd")
 
 static func empty_delta() -> Dictionary:
@@ -53,6 +54,64 @@ static func _held_contact(track: Dictionary, identity: String, graph: Dictionary
     track.from_position = point
     track.to_position = point
 
+static func _cast_track(group:Dictionary,node:Dictionary,actor:Dictionary,recipe:Dictionary,spell_id:String,
+        start:float,aim:Variant,graph:Dictionary,cache:Dictionary,release_ms:float=INF)->Dictionary:
+    var cast:Dictionary=recipe.get("cast",{})
+    if actor.is_empty() or cast.is_empty() or not cast.get("enabled",true):return {}
+    var rate:float=cast.get("bodyPlaybackSpeed",1.0)*Authoring.playback_rate(actor,cache)
+    var clip:Dictionary=Authoring.clip(actor,cast.actionClip,cache)
+    if clip.is_empty() or rate<=0:return _track(group,node,actor,cast.actionClip,start,rate,20,cache) if rate>0 else {}
+    var release_source:float=float(cast.get("releaseFrame",0))/clip.fps
+    var source_start:float=0.0
+    if is_finite(release_ms):
+        # A reaction cannot move its authoritative application. Fit its windup
+        # before that existing commit, cropping only at this group's boundary.
+        start=maxf(0.0,release_ms-release_source*1000.0/rate)
+        source_start=maxf(0.0,release_source-(release_ms-start)*rate/1000.0)
+    var track=_track(group,node,actor,cast.actionClip,start,rate,20,cache)
+    if track.is_empty():return track
+    _held_contact(track,actor.uuid,graph)
+    track.activity="cast";track.target_position=aim
+    track.hidden_slots=["weapon","offhand"] if cast.get("equipment",{}).get("kind")=="hidden" else []
+    track.effect_layers=Components.cast_layers(cast,actor,cache)
+    track.source_start_seconds=source_start
+    track.duration_ms=(track.source_end_seconds-source_start)*1000.0/rate
+    track.contact_ms=release_ms if is_finite(release_ms) else start+release_source*1000.0/rate
+    track.cast_source="spells/"+spell_id+".json:/cast"
+    return track
+
+static func _reaction_casts(lineage:Dictionary,state:Dictionary,group:Dictionary,graph:Dictionary,cache:Dictionary)->void:
+    var commits={}
+    for commit in group.commits:commits[commit.event_uuid]=commit.at_ms
+    for node in lineage.events:
+        var fact:Variant=node.get("fact")
+        if node.canceled or fact==null or fact.kind!="condition" or fact.event_type!="condition_application":continue
+        var condition_recipe:Dictionary=graph.recipes.get(node.uuid,{})
+        var binding:String=condition_recipe.get("reactionCastBinding","")
+        if binding.is_empty():continue
+        var actor=_actor(state,group,fact.target_entity_uuid,node,graph)
+        if actor.get("last_visual_position")==null:continue
+        var aim:Variant=null
+        var ancestor:Dictionary=graph.nodes.get(node.get("parent_lineage"),{})
+        while not ancestor.is_empty():
+            var cause:Variant=ancestor.get("fact")
+            if cause!=null and cause.get("source_entity_uuid")!=null and cause.source_entity_uuid!=actor.uuid:
+                var threat=_actor(state,group,cause.source_entity_uuid,ancestor,graph)
+                aim=cause.get("source_position",threat.get("last_visual_position"))
+                if aim!=null:break
+            ancestor=graph.nodes.get(ancestor.get("parent_lineage"),{})
+        var recipe=Components.NativeSpells.recipe({"behavior_id":binding},cache)
+        var track=_cast_track(group,node,actor,recipe,binding,0.0,aim,graph,cache,float(commits[node.uuid]))
+        if track.is_empty():continue
+        var held:Dictionary=graph.reaction_contacts[node.uuid]
+        track.merge(held.contact,true)
+        track.from_position=held.position;track.to_position=held.position
+        track.reaction_cast_binding=binding
+        track.condition_uuid=fact.condition.condition_uuid
+        track.source=Authoring.Catalog.source_pointer("catalog/condition_recipes.json",str(fact.condition.behavior_id)+"/reactionCastBinding",cache)
+        graph.ends[node.uuid]=maxf(graph.ends.get(node.uuid,0),track.start_ms+track.duration_ms)
+        group.duration_ms=maxf(group.duration_ms,track.start_ms+track.duration_ms)
+
 static func _children(node: Dictionary, graph: Dictionary) -> Array:
     var rows: Array = []
     for identity in node.children_lineages:
@@ -70,6 +129,7 @@ static func _schedule(node: Dictionary, start: float, state: Dictionary, group: 
         graph.impact_contacts[node.uuid]=graph.contacts.get(fact.target_entity_uuid,{}).duplicate()
     var children = _children(node,graph)
     var finish = start
+    var effect_commit = INF
     var equipment_commit = start
     var kind: String = fact.kind if fact != null else "undisclosed"
     if kind == "movement":
@@ -177,6 +237,7 @@ static func _schedule(node: Dictionary, start: float, state: Dictionary, group: 
                 track.impact_ms=contact
         else: group.skipped.append({"occurrence":node.lineage_uuid,"kind":kind,"reason":"missing_authored_attack_recipe"})
         for child in children: finish = maxf(finish,_schedule(child,contact,state,group,graph,cache))
+        effect_commit=contact
     elif kind in ["action","shove"] and not node.canceled:
         var actor = _actor(state,group,fact.source_entity_uuid,node,graph)
         var recipe = Authoring.action(fact,cache,actor)
@@ -239,6 +300,9 @@ static func _schedule(node: Dictionary, start: float, state: Dictionary, group: 
         var actor = _actor(state,group,fact.target_entity_uuid,node,graph)
         var recipe: Dictionary = Authoring.load_data("catalog/condition_recipes.json",cache).get(fact.condition.behavior_id,{})
         graph.recipes[node.uuid]=recipe
+        if fact.event_type=="condition_application" and recipe.get("reactionCastBinding")!=null:
+            graph.reaction_contacts[node.uuid]={"position":graph.positions.get(fact.target_entity_uuid),
+                "contact":graph.contacts.get(fact.target_entity_uuid,{}).duplicate()}
         var phase = "removal" if fact.event_type=="condition_removal" else "application"
         var body: Dictionary=recipe.get(phase,{}).get("bodyAnimation",{}) if fact.event_type in ["condition_application","condition_removal"] else {}
         if not body.is_empty():
@@ -251,28 +315,43 @@ static func _schedule(node: Dictionary, start: float, state: Dictionary, group: 
         for child in children: finish=maxf(finish,_schedule(child,start,state,group,graph,cache))
     elif kind == "spell" and not node.canceled:
         var actor = _actor(state,group,fact.source_entity_uuid,node,graph)
-        var recipe = Authoring.spell(fact,cache)
+        var recipe = Components.NativeSpells.recipe(fact,cache)
         graph.recipes[node.uuid]=recipe
         var cast: Dictionary=recipe.get("cast",{})
         var application: Variant=fact.get("application")
-        var cast_key: String=application.lineage_uuid if application!=null else node.lineage_uuid
+        var cast_key: String=SpellDelivery.cast_key(node,graph)
         var contact=start
-        if not graph.casts.has(cast_key) and not cast.is_empty():
+        if not graph.casts.has(cast_key) and not cast.is_empty() and cast.get("enabled",true):
             var rate=cast.get("bodyPlaybackSpeed",1.0)*Authoring.playback_rate(actor,cache)
-            var track=_track(group,node,actor,cast.actionClip,start,rate,20,cache)
+            var track=_cast_track(group,node,actor,recipe,str(fact.behavior_id),start,SpellDelivery.aim_position(fact,graph),graph,cache)
             if not track.is_empty():
-                _held_contact(track,fact.source_entity_uuid,graph)
-                track.target_position=graph.positions.get(fact.get("target_entity_uuid"))
-                track.hidden_slots=["weapon","offhand"] if cast.get("equipment",{}).get("kind")=="hidden" else []
-                track.effect_layers=Components.cast_layers(cast,actor,cache)
-                contact=start+cast.get("releaseFrame",0)/Authoring.clip(actor,cast.actionClip,cache).fps*1000.0/rate
-                track.contact_ms=contact
+                contact=track.contact_ms
                 finish=start+track.duration_ms
-            graph.casts[cast_key]={"start":start,"release":contact,"finish":finish,"recipe":recipe,"source_event_uuid":node.uuid}
+            var preparation=start+float(cast.get("prepareFrame",recipe.get("projectile",{}).get("prepare",{}).get("startFrame",0)))/maxf(1.0,Authoring.clip(actor,cast.actionClip,cache).get("fps",12))*1000.0/rate
+            graph.casts[cast_key]={"start":start,"prepare":preparation,"release":contact,"finish":finish,"recipe":recipe,"source_event_uuid":node.uuid}
         var owner: Dictionary=graph.casts.get(cast_key,{"release":start,"finish":start,"start":start})
-        contact=owner.release
-        if application!=null:
-            contact+=float(application.index)*recipe.get("projectile",{}).get("missileStaggerMs",0)
+        contact=maxf(start,owner.release)
+        var has_applications=false
+        for child in children:
+            if child.get("fact")!=null and child.fact.kind=="spell" and child.fact.get("application")!=null: has_applications=true
+        var selected:Dictionary=Components.NativeSpells.selection(str(fact.behavior_id),cache)
+        var selected_delivery:Dictionary={}
+        if not selected.is_empty():selected_delivery=SpellDelivery.selected_for(selected,fact)
+        var shared_area:bool=not selected_delivery.is_empty() and selected_delivery.get("delivery",{}).get("scope")=="area"
+        if not selected_delivery.is_empty():
+            if SpellDelivery.owns_delivery(node,graph,selected_delivery,has_applications):
+                var points=SpellDelivery.endpoints(fact,graph,state,selected_delivery)
+                if not points.is_empty():
+                    if application!=null:contact+=float(application.index)*recipe.get("projectile",{}).get("missileStaggerMs",0)
+                    var travel=SpellDelivery.travel_ms(selected_delivery,recipe,points,cache)
+                    Components.native_spell(group,node,recipe,selected_delivery,contact,travel,points,cache,owner)
+                    contact+=travel
+            elif shared_area:
+                # The carrier already scheduled the single ground effect. Every
+                # recipient applies its actual outcome at that carrier contact.
+                contact=start
+        elif application!=null or not has_applications:
+            if application!=null:contact+=float(application.index)*recipe.get("projectile",{}).get("missileStaggerMs",0)
             var projectile: Dictionary=recipe.get("projectile",{})
             var source: Variant=graph.positions.get(fact.source_entity_uuid)
             var target: Variant=graph.positions.get(fact.get("target_entity_uuid"))
@@ -280,13 +359,11 @@ static func _schedule(node: Dictionary, start: float, state: Dictionary, group: 
                 var config=Authoring.load_data("catalog/rig.json",cache)
                 var distance=Vector2(source[0]-target[0],source[1]-target[1]).length()*float(config.TILE_W)
                 var travel=maxf(projectile.get("minimumTravelDurationMs",150),distance/maxf(1,projectile.get("speedPxPerSecond",800))*1000)
-                Components.projectile(group,node,recipe,contact,travel,source,target,graph.contacts,cache)
+                Components.projectile(group,node,recipe,contact,travel,source,target,graph.contacts,cache,owner)
                 contact+=travel
-        var has_applications=false
-        for child in children:
-            if child.get("fact")!=null and child.fact.kind=="spell" and child.fact.get("application")!=null: has_applications=true
-        for child in children: finish=maxf(finish,_schedule(child,owner.start if has_applications else contact,state,group,graph,cache))
+        for child in children: finish=maxf(finish,_schedule(child,owner.start if has_applications and not shared_area else contact,state,group,graph,cache))
         finish=maxf(finish,contact)
+        effect_commit=contact
     elif kind == "damage" and fact.stage == "applied" and not node.canceled:
         var actor = _actor(state,group,fact.target_entity_uuid,node,graph)
         var timing=DamageTiming.resolve(node,graph,actor,start,cache)
@@ -325,9 +402,16 @@ static func _schedule(node: Dictionary, start: float, state: Dictionary, group: 
         for child in children: finish = maxf(finish,_schedule(child,start,state,group,graph,cache))
     else:
         for child in children: finish = maxf(finish,_schedule(child,start,state,group,graph,cache,jump))
+        effect_commit=start
         group.skipped.append({"occurrence":node.lineage_uuid,"kind":kind,"reason":"canceled_body" if node.canceled else "no_body_visual_in_this_pass"})
+    # Application/passive envelopes complete after their children's effects,
+    # not their recovery animations. The source-order commit pass below must
+    # not make one missile's TakeDamage recovery delay the next missile's HP.
+    if is_finite(effect_commit):
+        for child in children:effect_commit=maxf(effect_commit,graph.times.get(child.uuid,start))
+    else:effect_commit=finish
     # HP/life after-values are exposed at their effect contact, not recovery end.
-    graph.times[node.uuid] = equipment_commit if kind=="equipment" else (graph.damage_timings[node.uuid].hp if graph.damage_timings.has(node.uuid) else (start if kind in ["damage","life","condition"] else finish))
+    graph.times[node.uuid] = equipment_commit if kind=="equipment" else (graph.damage_timings[node.uuid].hp if graph.damage_timings.has(node.uuid) else (start if kind in ["damage","life","condition"] else effect_commit))
     graph.ends[node.uuid] = finish
     return finish
 
@@ -377,7 +461,7 @@ static func compile_recorded(before: Dictionary, packet: Dictionary, cache: Dict
             for tile in update.tiles:
                 var key = Reducer.Audience.point_key(tile.position)
                 if not target.tiles.has(key) and not group.staged_tiles.has(key): group.staged_tiles[key] = tile.duplicate(true)
-        var graph = {"nodes":{},"first":{},"times":{},"starts":{},"ends":{},"recipes":{},"visited":{},"positions":{},"actor_inputs":{},"object_inputs":{},"contacts":{},"impact_contacts":{},"last_motion":{},"casts":{},"damage_timings":{}}
+        var graph = {"nodes":{},"first":{},"times":{},"starts":{},"ends":{},"recipes":{},"visited":{},"positions":{},"actor_inputs":{},"object_inputs":{},"contacts":{},"impact_contacts":{},"reaction_contacts":{},"last_motion":{},"casts":{},"damage_timings":{}}
         # Retain only authoritative blood receiving cells needed to reveal a
         # later residue increment. No future tile or full-map snapshot is made.
         graph.initial_tiles={}
@@ -423,6 +507,7 @@ static func compile_recorded(before: Dictionary, packet: Dictionary, cache: Dict
             at = maxf(at,graph.times.get(commit.event_uuid,at))
             commit.at_ms = at
         group.duration_ms = maxf(group.duration_ms,at)
+        _reaction_casts(lineage,target,group,graph,cache)
         for identity in group.staged_actors:
             var admitted_at = group.duration_ms
             for commit in group.commits:

@@ -84,7 +84,9 @@ func _initialize() -> void:
                 check(Protocol._equal(record, comparable), "Independent Python exact source/tombstone/objective parity " + side + "/" + str(index))
         summaries.append({"audience":side, "sequences":names.size(), "cursor":journal.cursor.get("sequence",-1)})
     check(not template.is_empty() and not source.is_empty() and not member.is_empty(), "Actual typed input supports observer composition cases")
-    if not template.is_empty() and not source.is_empty(): composition(template, source, member)
+    if not template.is_empty() and not source.is_empty():
+        composition(template, source, member)
+        compact_composition(template, source, member)
     var old = Journal.new()
     check(old.open(legacy, true, false).ok and old.protocol.identity.player_schema_version == 8, "Historical mode selects archived schema8")
     var restored = old.replay(0)
@@ -138,6 +140,43 @@ func composition(template: Dictionary, source: Dictionary, member: Dictionary) -
     event.effective_light_levels_changed = {"4,6":9}
     var denied = Audience.reduce_senses(first, a, event)
     check(not denied.ok and a == snapshot, "Rejected sensory value does not publish partial source edits")
+
+func compact_composition(template: Dictionary, source: Dictionary, member: Dictionary) -> void:
+    var first = "00000000-0000-0000-0000-000000000001"
+    var second = "00000000-0000-0000-0000-000000000002"
+    var identity: String = source.source_uuid
+    var protocol = Protocol.new()
+    for omitted in [false, true]:
+        var label = "Omitted footprint" if omitted else "Empty footprint"
+        var row: Dictionary = source.duplicate(true)
+        row.affected_tiles = {}; row.anchor_entity_uuid = null; row.anchor_item_uuid = null
+        if omitted: row.erase("affected_tiles")
+        check(protocol.decode("PerceivedLightSource", JSON.stringify(row).to_utf8_buffer()).ok, label+": unchanged schema admits compact source")
+        var a: Dictionary = member.duplicate(true)
+        var event: Dictionary = template.duplicate(true)
+        event.initial = false; event.observer_uuid = first
+        event.light_sources_changed = {identity:row}; event.light_sources_removed = {}
+        var reduced = Audience.reduce_senses(first, a, event)
+        check(reduced.ok and reduced.value.light_sources[identity]==row, label+": sensory reducer retains compact descriptor")
+        if not reduced.ok: continue
+        a = reduced.value
+        var b: Dictionary = a.duplicate(true)
+        var other: Dictionary = row.duplicate(true)
+        other.anchor_entity_uuid = second
+        b.light_sources = {identity:other}
+        var perception = {"members":{first:a,second:b},"contact_cursors":{},"effect_cursors":{},"effect_absences":{}}
+        var before = perception.duplicate(true)
+        var joined = Audience.view(perception, first)
+        check(joined.light_sources[identity].get("affected_tiles",{}).is_empty(), label+": observer union needs no cell footprint")
+        check(joined.light_sources[identity].anchor_entity_uuid==second and joined.light_sources[identity].anchor_item_uuid==null, label+": only disclosed anchor joins compact source")
+        joined.light_sources[identity].position[0] += 1
+        check(perception==before, label+": public descriptor remains detached")
+        other.revision += 1; other.position = [2,3]
+        var moved = Audience.view(perception, first)
+        check(moved.light_sources[identity]==other, label+": newer compact position replaces stale observer")
+        b.light_sources = {}; b.light_source_removals = {identity:other.revision+1}
+        var removed = Audience.view(perception, first)
+        check(removed.light_sources.is_empty() and removed.light_source_removals[identity]==other.revision+1, label+": newer removal retires compact descriptor")
 
 func finish() -> void:
     var report = {"checks":checks,"failures":failures,"recordings":summaries,

@@ -1,6 +1,7 @@
 extends RefCounted
 ## Native source resources and sampling only. Occurrence timing/placement belongs
 ## to the production compiler/sampler; this helper never advances that clock.
+const Admission=preload("res://presentation/native_source_admission.gd")
 const INDEX = "res://authoring/native_effects/index.json"
 const ClassPalette = preload("res://presentation/native_effect_palette.gdshader")
 
@@ -47,22 +48,14 @@ static func prepare(source_ids: Array, cache: Dictionary) -> Dictionary:
         var record=source_record(str(id),cache)
         if record.is_empty():errors.append("Native source not selected: "+str(id));continue
         for path in record.get("preload_paths",[record.get("scene",record.get("script",""))]):paths[path]=true
-    for path in paths:
-        var status=ResourceLoader.load_threaded_get_status(path)
-        if status==ResourceLoader.THREAD_LOAD_LOADED:
-            cache[path]=ResourceLoader.load_threaded_get(path)
-            continue
-        if ResourceLoader.has_cached(path):continue
-        if status==ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
-            var error=ResourceLoader.load_threaded_request(path)
-            if error!=OK:errors.append("Native resource preparation failed: "+str(path));continue
-            pending+=1
-        elif status==ResourceLoader.THREAD_LOAD_FAILED:errors.append("Native resource preparation failed: "+str(path))
-        else:pending+=1
-    return {"ready":pending==0 and errors.is_empty(),"pending":pending,"errors":errors}
+    var loading:Dictionary=Admission.prepare(paths.keys(),cache)
+    loading.errors.append_array(errors)
+    loading.ready=loading.ready and errors.is_empty()
+    return loading
 
 static func make(parent: Node3D, record: Dictionary, occurrence_seed: int = 0) -> Dictionary:
     if record.is_empty(): return {"error":"Native source is not selected"}
+    if not Admission.begin_mutation():return {"error":"Native construction admission is pending"}
     var handle = {"record":record,"root":Node3D.new(),"subject":null,"players":[],
         "emitters":[],"clocks":[],"age":0.0,"initialized":false,"pending":false,
         "history":[],"error":"","seed":occurrence_seed}
@@ -183,7 +176,9 @@ static func _isolate(node: Node) -> void:
     # Share source textures/meshes; only mutable material owners are copied.
     if node is GeometryInstance3D and node.material_override != null:
         node.material_override = node.material_override.duplicate(false)
-    if node is MeshInstance3D and node.mesh != null:
+    # A whole-mesh override supersedes surface materials. Duplicating that same
+    # override into each surface adds unused RD dependencies during teardown.
+    if node is MeshInstance3D and node.mesh != null and node.material_override == null:
         for surface in node.mesh.get_surface_count():
             var material: Material = node.get_active_material(surface)
             if material != null: node.set_surface_override_material(surface,material.duplicate(false))

@@ -76,7 +76,7 @@ static func _select_layers(actor: Dictionary, rig: Dictionary, modular: bool, ca
             if not VISUAL_SLOT.has(item.slot): continue
             if WEAPON_SET.has(item.slot) and WEAPON_SET[item.slot] != loadout.active_weapon_set: continue
             if item.equipped_visual_policy == "hidden": continue
-            var authored = _equipment(item, VISUAL_SLOT[item.slot], visuals, appearances)
+            var authored = _equipment(item, VISUAL_SLOT[item.slot], visuals, appearances, cache)
             if not authored.ok: return authored
             for layer in authored.value:
                 if layer.render_layer in EFFECT_SLOTS: continue
@@ -99,20 +99,34 @@ static func _select_layers(actor: Dictionary, rig: Dictionary, modular: bool, ca
             result.append(selected[slot])
     return {"ok":true, "value":result}
 
-static func _equipment(item: Dictionary, slot: String, visuals: Dictionary, appearances: Dictionary) -> Dictionary:
-    var root: Dictionary = {}
+static func _equipment_index(visuals: Dictionary, appearances: Dictionary, cache: Dictionary) -> Dictionary:
+    var previous:Dictionary=cache.get("__equipment_index",{})
+    if not previous.is_empty() and is_same(previous.visuals,visuals) and is_same(previous.appearances,appearances) \
+        and is_same(previous.categories,visuals.categories) and is_same(previous.hands,appearances.hands):return previous
+    # Build once from immutable admitted documents. Only this cache shell is
+    # changed; completed indexes and their original source arrays are read-only.
+    var result={"visuals":visuals,"appearances":appearances,"categories":visuals.categories,"hands":appearances.hands,
+        "roots":{},"bindings":{},"hand_layers":{}}
     for category in visuals.categories:
-        if category.base_category == item.visual_item_name: root = category; break
+        if not result.roots.has(category.base_category):result.roots[category.base_category]=category
+        for binding in category.factory_presentation_bindings:
+            var key:Array=[binding.factory_identity,binding.equipment_slot]
+            if not result.bindings.has(key):result.bindings[key]=[]
+            if category not in result.bindings[key]:result.bindings[key].append(category)
+    for hand in appearances.hands:
+        var key:Array=[hand.category,hand.variant,hand.slot]
+        if not result.hand_layers.has(key):result.hand_layers[key]=hand.layers
+    cache.__equipment_index=result
+    return result
+
+static func _equipment(item: Dictionary, slot: String, visuals: Dictionary, appearances: Dictionary, cache: Dictionary={}) -> Dictionary:
+    var index:Dictionary=_equipment_index(visuals,appearances,cache)
+    var root:Dictionary=index.roots.get(item.visual_item_name,{})
     if root.is_empty() or root.mechanical_factory_identity == null:
         return _error("No authored item visual " + item.visual_item_name)
-    for hand in appearances.hands:
-        if hand.category == item.visual_item_name and hand.variant == item.visual_variant_id and hand.slot == slot:
-            return {"ok":true, "value":hand.layers}
-    var matches: Array = []
-    for category in visuals.categories:
-        for binding in category.factory_presentation_bindings:
-            if binding.factory_identity == root.mechanical_factory_identity and binding.equipment_slot == slot:
-                if not category in matches: matches.append(category)
+    var hand:Array=[item.visual_item_name,item.visual_variant_id,slot]
+    if index.hand_layers.has(hand):return {"ok":true,"value":index.hand_layers[hand]}
+    var matches:Array=index.bindings.get([root.mechanical_factory_identity,slot],[])
     if matches.size() != 1: return _error("No unique authored equipment binding " + item.visual_item_name + "/" + slot)
     var category: Dictionary = matches[0]
     if item.visual_variant_id == null: return {"ok":true, "value":category.base_presentation.equipment_layers}
@@ -171,6 +185,7 @@ static func sheet_paths(actor: Dictionary, clips: Array, cache: Dictionary) -> D
     if not selected.ok: return selected
     var paths = {}
     var colour_paths = {}
+    var geometry_slots = {}
     var gpu_only = {}
     var resources: Dictionary = _read(index.resources, cache)
     var components: Dictionary = _read(index.sheet_components, cache)
@@ -189,8 +204,9 @@ static func sheet_paths(actor: Dictionary, clips: Array, cache: Dictionary) -> D
                 if not companions.ok: return companions
                 paths.merge(companions.value)
                 gpu_only.merge(companions.value)
+                if effect.is_empty() and not companions.value.is_empty():geometry_slots[path]=layer.slot
     for path in colour_paths: gpu_only.erase(path)
-    return {"ok":true,"value":paths,"gpu_only":gpu_only,"cpu_required":colour_paths}
+    return {"ok":true,"value":paths,"gpu_only":gpu_only,"cpu_required":colour_paths,"geometry_slots":geometry_slots}
 
 static func rest_sample(actor: Dictionary, rig: Dictionary, cache: Dictionary) -> Dictionary:
     var index: Dictionary = _read("catalog-index.json", cache)

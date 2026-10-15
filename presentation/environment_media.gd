@@ -16,6 +16,30 @@ static func record_paths(record: Dictionary, paths: Dictionary, cache: Dictionar
     if record.has("water"):
         paths[Catalog.read_file("assets.json",cache).resources[record.water.ripple].path] = true
 
+static func animation_pages(row: Dictionary, cache: Dictionary) -> Dictionary:
+    # Only the explicit finite workshop destruction bank needs its entire page
+    # closure. Ordinary live after-values retain row_paths' selected endpoint.
+    # Enumerate source records, not time steps, so authored irregular clocks and
+    # every camera pose remain covered without inventing a playback phase.
+    var paths = {}
+    var errors: Array = []
+    var source: Dictionary = row.get("break_owner",row)
+    if source.has("source_sprite"): return {"paths":paths,"errors":errors}
+    var bank_id = Catalog.bank_for(source,true,cache)
+    if bank_id.is_empty(): return {"paths":paths,"errors":errors}
+    var bank: Dictionary = Catalog.bank_data(bank_id,cache)
+    var layouts = Catalog.texture_layouts(cache)
+    for frames in bank.surface_frames_by_pose.values():
+        for frame in frames:
+            var record = Catalog.receiving_normal(frame,cache)
+            for region in [record.get("geometry_region",{}),record.get("normal",{}).get("region",{})]:
+                var layout: Dictionary = layouts.get(region.get("path",""),{})
+                if not layout.has("pages"): continue
+                var selected = Catalog._layout_region(region,layouts)
+                if selected.is_empty(): errors.append("Invalid animation texture page region: "+str(region))
+                else: paths[selected.path] = true
+    return {"paths":paths,"errors":errors}
+
 static func row_paths(row: Dictionary, cache: Dictionary) -> Dictionary:
     # Live source selection depends on these authored selectors, not ID/contact.
     # Repeated tiles/walls in large rooms share a finite original source set.

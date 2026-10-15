@@ -58,7 +58,7 @@ func run() -> void:
         if not loaded.has("image"): Media.close(loader); quit(1); return
         textures[loaded.path] = ImageTexture.create_from_image(loaded.image)
         Media.published(loader,loaded)
-    check(Media.ready(loader,wanted) and Media.release_cold_images(loader).size()==6,"Published variant packet is ready and every companion releases its CPU copy")
+    check(Media.ready(loader,wanted) and Media.release_cold_images(loader,-1).size()==6,"Published variant packet is ready and every companion releases its CPU copy (offline batch)")
     var node = MeshInstance3D.new()
     node.mesh = QuadMesh.new()
     var material = ShaderMaterial.new()

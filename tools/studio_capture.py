@@ -15,7 +15,7 @@ from uuid import uuid4
 
 from dnd_player import (Follower, acknowledge, action_options, all_actions, attach,
     binding_position, binding_subject, choices, connect, follow, next_options,
-    preview, receipt, selection_for, status, submit_command, wait_for_cursor)
+    preview, preview_positions, receipt, selection_for, status, submit_command, wait_for_cursor)
 from dnd.conditions import Poisoned, Prone
 from dnd.core.content.encounters import (RosterStartingCondition, RosterStartingDamage, RosterSpellGrant,
     EncounterRecipe, EncounterRosterRecipe, EncounterDeploymentSpec)
@@ -339,7 +339,7 @@ def qualify_dying(output):
         'provenance': 'Original public follower packets, independent current Python reduction; existing setup damage and actual offered attack commands only.'}
 
 
-async def record(config, url, output, steps):
+async def record(config, url, output, steps, *, command_limit=40):
     seats, trace = [], []
     failure = None
     try:
@@ -358,6 +358,7 @@ async def record(config, url, output, steps):
                 if packet['kind'] == 'initialization':
                     owner['controlled'] = set(packet['initialization']['audience']['controlled'])
                     owner['names'] = {row['actor']['uuid']: row['actor']['name'] for row in packet['initialization']['observations']}
+                    owner['items'] = {row['actor']['uuid']: row['actor'].get('controlled_items') or [] for row in packet['initialization']['observations']}
             seat['follower'] = Follower(connection, consume)
             seat['task'] = asyncio.create_task(follow(seat['follower']))
             seats.append(seat)
@@ -373,7 +374,7 @@ async def record(config, url, output, steps):
                             active = seat, now; break
                     if active is None: await asyncio.sleep(.01)
             seat, now = active; connection = seat['connection']; actor = now['boundary']['input_actor_uuid']
-            if ordinal >= 40: raise RuntimeError('Named actor was not reached within bounded legal turns')
+            if ordinal >= command_limit: raise RuntimeError('Named actor was not reached within bounded legal turns')
             if step.get('actor_name') is not None and seat['names'].get(actor) != step['actor_name']:
                 # Advance through the real initiative order, recording every end.
                 steps.insert(ordinal, action('end_turn', waiting_for_actor=step['actor_name']))
@@ -382,11 +383,15 @@ async def record(config, url, output, steps):
             revision = now['boundary']['state_revision']
             row_evidence = {'step': ordinal, 'request': step, 'seat': seat['id'], 'previews': []}
             intent = {'kind': 'end_turn'}
-            if step['behavior'] != 'end_turn':
+            if step['behavior'] == 'equip':
+                items = [item for item in seat['items'].get(actor, []) if item['item_id'] == step['item_id']]
+                if len(items) != 1: raise RuntimeError('Expected one observed setup item for equip')
+                intent = {'kind': 'equip', 'item': {'item_uuid': items[0]['item_uuid'], 'slot': step['slot']}}
+            elif step['behavior'] != 'end_turn':
                 discovered = (await choices(connection, {'actor_uuid': actor, 'state_revision': revision, 'force_attack': False, 'correlation_id': str(uuid4())}))['choices']
                 (output / f'choices-{ordinal:02}.json').write_text(json.dumps(discovered))
                 offered = [row for row in all_actions(discovered) if row['behavior_id'] == step['behavior'] and row['can_afford'] and action_options(discovered, row)
-                    and all(row.get(key) == value for key, value in step.items() if key in ('weapon_slot',))
+                    and all(row.get(key) == value for key, value in step.items() if key in ('weapon_slot', 'display_name'))
                     and ('position' not in step or step['behavior']!='action.traverse_connector' or row['connector_traversal']['command']['destination_position']==step['position'])]
                 if step.get('expect_unavailable'):
                     row_evidence['unavailable'] = not offered; trace.append(row_evidence)
@@ -401,6 +406,14 @@ async def record(config, url, output, steps):
                 if 'subject_name' in step: targets = [target for target in targets if (binding_subject(discovered, target) or {}).get('name') == step['subject_name']]
                 if not targets: raise RuntimeError('Current legal action does not offer requested target: '+str(step))
                 target = targets[0]
+                if 'affected_position' in step:
+                    target = None
+                    for candidate in targets:
+                        aimed = (await preview(connection, {'actor_uuid': actor, 'state_revision': revision, 'discovery_generation': discovered['discovery_generation'], 'correlation_id': str(uuid4()), 'selection': selection_for(row, [candidate], prefer_safe=False)}))['preview']
+                        row_evidence['previews'].append(aimed)
+                        if aimed['can_confirm'] and step['affected_position'] in preview_positions(aimed, affected=True):
+                            target = candidate; break
+                    if target is None: raise RuntimeError('No offered aim affects requested public position')
                 first_uuid = (binding_subject(discovered, target) or {}).get('uuid')
                 other_uuid = next(((binding_subject(discovered, item) or {}).get('uuid') for item in targets if (binding_subject(discovered, item) or {}).get('uuid') not in (None, first_uuid)), first_uuid)
                 sequence = [first_uuid, other_uuid]

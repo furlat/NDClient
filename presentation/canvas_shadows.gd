@@ -7,6 +7,8 @@ const VISIBILITY = preload("shadow_visibility.gdshader")
 const COMPOSITE = preload("shadow_composite.gdshader")
 const CASTER_PARAMETERS = ["sheet","frame_uv","component_depth","component_support",
     "component_depth_range","component_units","component_reconstruction_origin","component_elevation"]
+const RETAINED_COOKIE_IMAGES=16
+const RETAINED_COOKIE_BYTES=4*1024*1024
 
 var enabled := true
 var shadow_atlas_size := 2048
@@ -18,11 +20,19 @@ var _sources: Array = []
 var _source_key: Array = []
 var _cookie_key: Array = []
 var _cookie_images: Dictionary = {}
+var _retained_cookies:Dictionary={}
+var _cookie_use:int=0
 var _cookie_rects: Dictionary = {}
 var _cookie_texture: Texture2D
 var _source_texture: ImageTexture
 var _updates := 0
 var _last_cpu_ms := 0.0
+var _last_phases: Dictionary = {}
+var _last_counts: Dictionary = {}
+var _caster_shapes: Dictionary = {}
+
+func _timed(name: String, started: int) -> void:
+    _last_phases[name]=float(_last_phases.get(name,0.0))+(Time.get_ticks_usec()-started)/1000.0
 
 func attach(parent: Node3D) -> void:
     close()
@@ -35,33 +45,43 @@ func attach(parent: Node3D) -> void:
 ## order. They are NOT undisclosed backend objects or future prepared actors.
 func sync(visual_actors: Array, camera: Camera3D, canvas_sources: Array) -> Array:
     var started := Time.get_ticks_usec()
+    _last_phases={};_last_counts={"new_actors":0,"new_casters":0,"new_meshes":0,"cookie_reads":0,"cookie_cache_hits":0,"updated_actors":0,"removed_actors":0}
     issues.clear()
     var result: Array = []
     var retained := {}
-    if not is_instance_valid(_parent): return result
+    if not is_instance_valid(_parent): _last_cpu_ms=0.0;return result
+    var phase_started:=Time.get_ticks_usec()
     if not enabled or not _prepare_sources(canvas_sources):
+        _timed("sources",phase_started);phase_started=Time.get_ticks_usec()
         _clear_actors()
+        _timed("retire",phase_started);_last_cpu_ms=float(Time.get_ticks_usec()-started)/1000.0
         return result
+    _timed("sources",phase_started)
     for actor in visual_actors:
         if not actor.get("valid",true): continue
         var row: Dictionary=actor.row
+        phase_started=Time.get_ticks_usec()
         var snapshots := _snapshots(actor.entries,camera)
+        _timed("snapshots",phase_started)
         if snapshots.is_empty(): continue
+        phase_started=Time.get_ticks_usec()
         var origin := Placement.contact(row)
         var pixels_per_world := camera.unproject_position(origin+camera.global_basis.x).distance_to(camera.unproject_position(origin))
         var units: float=snapshots[0].component_units
         var zoom: float=units*pixels_per_world
-        if zoom<=0.00001: continue
+        if zoom<=0.00001: _timed("layout",phase_started);continue
         var ground: float=snapshots[0].ground_pixels*units
+        for snapshot in snapshots:
+            snapshot.caster_shape=_caster_shape(snapshot,ground)
         var selection := _dominant(camera.unproject_position(origin))
-        if selection<0: continue
+        if selection<0: _timed("layout",phase_started);continue
         var projection := _projection(camera,origin,ground,units,zoom,_sources[selection])
         var bounds := _bounds(snapshots,origin,ground,projection.position,camera)
         var source: Dictionary=_sources[selection]
         var visible_rect := Rect2(Vector2.ZERO,camera.get_viewport().get_visible_rect().size)
         var cookie_rect := Rect2(source.cookie_position-source.span*0.5,source.span)
         var rect: Rect2=(cookie_rect if bounds.unbounded else bounds.rect.grow(2.0*maxf(zoom,1.0))).intersection(cookie_rect).intersection(visible_rect)
-        if not rect.has_area(): continue
+        if not rect.has_area(): _timed("layout",phase_started);continue
         # At close range use one sample per source pixel. At distance never
         # allocate a target larger than its actual displayed footprint.
         var sample_scale := maxf(zoom,1.0)
@@ -69,7 +89,11 @@ func sync(visual_actors: Array, camera: Camera3D, canvas_sources: Array) -> Arra
         var size := Vector2i((rect.size/sample_scale).round())
         var id: String=row.id
         retained[id]=true
-        if not actors.has(id): actors[id]=_create(id)
+        _timed("layout",phase_started)
+        if not actors.has(id):
+            phase_started=Time.get_ticks_usec();actors[id]=_create(id)
+            _timed("create",phase_started);_last_counts.new_actors+=1
+        phase_started=Time.get_ticks_usec()
         var state: Dictionary=actors[id]
         state.entry.placement=row
         state.source_id=_sources[selection].id
@@ -79,14 +103,24 @@ func sync(visual_actors: Array, camera: Camera3D, canvas_sources: Array) -> Arra
         state.entry.material.set_shader_parameter("source_data",_source_texture)
         state.entry.material.set_shader_parameter("cookie_atlas",_cookie_texture)
         var key: Array=[snapshots,origin,camera.global_basis,projection,rect,size]
+        _timed("bind",phase_started)
         if state.key!=key:
+            phase_started=Time.get_ticks_usec()
             _update(state,snapshots,camera,origin,ground,projection,rect,size,pixels_per_world)
+            _timed("update",phase_started);_last_counts.updated_actors+=1
             state.key=key
             state.unbounded=bounds.unbounded
         state.entry.node.visible=true
         result.append(state.entry)
+    phase_started=Time.get_ticks_usec()
     for id in actors.keys():
-        if not retained.has(id): _remove(id)
+        if not retained.has(id): _remove(id);_last_counts.removed_actors+=1
+    var retained_shapes:Dictionary={}
+    for state in actors.values():
+        for id in state.casters:retained_shapes[id]=true
+    for id in _caster_shapes.keys():
+        if not retained_shapes.has(id):_caster_shapes.erase(id)
+    _timed("retire",phase_started)
     _last_cpu_ms=float(Time.get_ticks_usec()-started)/1000.0
     return result
 
@@ -96,6 +130,10 @@ static func _sampling_rect(rect: Rect2, sample_scale: float) -> Rect2:
     # Godot render targets require at least2 samples per axis. Expand the shared
     # screen footprint too, so helper camera and output quad use the same aspect.
     last=last.max(first+Vector2.ONE*2.0*sample_scale)
+    # Forward+ rasterizes clustered-light coverage at quarter resolution. A
+    # partial final raster sample can leave an unlit strip at a cluster edge
+    # (observed at x256 in a257px helper). Pad all shared dimensions together.
+    last=first+((last-first)/(sample_scale*4.0)).ceil()*(sample_scale*4.0)
     return Rect2(first,last-first)
 
 func _prepare_sources(input: Array) -> bool:
@@ -135,23 +173,56 @@ func _prepare_sources(input: Array) -> bool:
     _sources=sources
     return true
 
+func cookie_prepared(texture: Texture2D) -> bool:
+    if texture==null:return false
+    var retained:Dictionary=_retained_cookies.get(texture.get_rid(),{})
+    return is_same(retained.get("texture"),texture) and retained.get("image")!=null
+
+func _cookie_image(texture: Texture2D) -> Image:
+    var id:RID=texture.get_rid()
+    var retained:Dictionary=_retained_cookies.get(id,{})
+    var image:Image=retained.get("image") if is_same(retained.get("texture"),texture) else null
+    if image==null:
+        _last_counts.cookie_reads=int(_last_counts.get("cookie_reads",0))+1
+        image=texture.get_image()
+        if image==null or image.is_empty():
+            issues.append("Generated shadow cannot read original light cookie once at registration")
+            return null
+        image=image.duplicate()
+        if image.is_compressed():image.decompress()
+        image.convert(Image.FORMAT_RGBA8)
+        # Retain the exact native texture, never just a recyclable RID.
+        retained={"texture":texture,"image":image,"bytes":image.get_width()*image.get_height()*4,"used":0}
+        _retained_cookies[id]=retained
+    else:_last_counts.cookie_cache_hits=int(_last_counts.get("cookie_cache_hits",0))+1
+    _cookie_use+=1;retained.used=_cookie_use
+    return image
+
+func prepare_cookie(texture: Texture2D) -> bool:
+    # World preparation calls this only after the native texture's draw fence.
+    # CPU image retention does not publish source selection or a shadow atlas.
+    var image:Image=_cookie_image(texture)
+    var active:Dictionary=_cookie_images.duplicate()
+    active[texture.get_rid()]=true
+    _trim_cookie_images(active)
+    return image!=null
+
 func _prepare_cookies(sources: Array) -> bool:
     var textures: Dictionary={}
     for source in sources: textures[source.texture.get_rid()]=source.texture
     var key: Array=textures.keys()
     if key==_cookie_key: return true
+    var phase_started:=Time.get_ticks_usec()
     var images: Dictionary={}
     for id in textures:
-        var image: Image=_cookie_images.get(id)
+        var image:Image=_cookie_image(textures[id])
         if image==null:
-            image=textures[id].get_image()
-            if image==null or image.is_empty():
-                issues.append("Generated shadow cannot read original light cookie once at registration")
-                return false
-            image=image.duplicate()
-            if image.is_compressed(): image.decompress()
-            image.convert(Image.FORMAT_RGBA8)
+            _trim_cookie_images(textures)
+            _timed("cookie_read_format",phase_started)
+            return false
         images[id]=image
+    _trim_cookie_images(textures)
+    _timed("cookie_read_format",phase_started);phase_started=Time.get_ticks_usec()
     var width := 1
     var height := 1
     for image in images.values():
@@ -177,11 +248,28 @@ func _prepare_cookies(sources: Array) -> bool:
         atlas.set_pixel(size.x+1,y+size.y,image.get_pixel(size.x-1,size.y-1))
         rects[id]=Rect2(Vector2(1,y)/Vector2(width,height),Vector2(size)/Vector2(width,height))
         y+=size.y+2
+    _timed("cookie_pack",phase_started);phase_started=Time.get_ticks_usec()
     _cookie_texture=ImageTexture.create_from_image(atlas)
+    _timed("cookie_upload",phase_started)
     _cookie_rects=rects
     _cookie_images=images
     _cookie_key=key
     return true
+
+func _trim_cookie_images(active:Dictionary)->void:
+    var count:int=0;var bytes:int=0
+    for id in _retained_cookies:
+        if active.has(id):continue
+        count+=1;bytes+=_retained_cookies[id].bytes
+    # Active source images remain required. Only inactive reuse is bounded;
+    # removal never changes a live light or silently skips its fresh readback.
+    while count>RETAINED_COOKIE_IMAGES or bytes>RETAINED_COOKIE_BYTES:
+        var oldest:RID;var use:int=9223372036854775807
+        for id in _retained_cookies:
+            if not active.has(id) and _retained_cookies[id].used<use:
+                oldest=id;use=_retained_cookies[id].used
+        bytes-=_retained_cookies[oldest].bytes;count-=1
+        _retained_cookies.erase(oldest)
 
 func _dominant(foot: Vector2) -> int:
     var selected := -1
@@ -244,25 +332,50 @@ static func _caster_point(snapshot: Dictionary,x: float,y: float,depth: float,gr
     var painted: Vector3=snapshot.basis*Vector3((x-snapshot.pivot.x)*snapshot.scale_x,snapshot.pivot.y-y,0)*units
     return painted+snapshot.basis.z*((height-painted.y)/snapshot.basis.z.y)
 
+func _caster_shape(snapshot:Dictionary,ground:float)->Dictionary:
+    # Local reconstructed bounds depend on source geometry and camera basis,
+    # not animation UVs, a moving light, or the actor's world contact.
+    var key:Array=[snapshot.basis,snapshot.component_cell_size,snapshot.component_depth_range,
+        snapshot.component_units,snapshot.component_elevation,snapshot.component_reconstruction_origin,
+        snapshot.pivot,snapshot.scale_x,ground]
+    var previous:Dictionary=_caster_shapes.get(snapshot.id,{})
+    if previous.get("key",[])==key:return previous
+    var points:Array=[]
+    for x in [0.0,snapshot.component_cell_size.x]:
+        for y in [0.0,snapshot.component_cell_size.y]:
+            for depth in [snapshot.component_depth_range.x,snapshot.component_depth_range.y]:
+                points.append(_caster_point(snapshot,x,y,depth,ground))
+    var bounds:=AABB(points[0],Vector3.ZERO)
+    for point in points:bounds=bounds.expand(point)
+    var shape:Dictionary={"key":key,"points":points,"bounds":bounds.grow(0.001)}
+    _caster_shapes[snapshot.id]=shape
+    return shape
+
 static func _bounds(snapshots: Array,origin: Vector3,ground: float,light: Vector3,camera: Camera3D) -> Dictionary:
     var first := true
     var rect := Rect2()
     for snapshot in snapshots:
-        for x in [0.0,snapshot.component_cell_size.x]:
-            for y in [0.0,snapshot.component_cell_size.y]:
-                for depth in [snapshot.component_depth_range.x,snapshot.component_depth_range.y]:
-                    var point: Vector3=_caster_point(snapshot,x,y,depth,ground)+snapshot.position-origin
-                    if point.y>=light.y-0.0001: return {"unbounded":true,"rect":rect}
-                    var target: Vector3=light+(point-light)*((ground-light.y)/(point.y-light.y))
-                    var projected := camera.unproject_position(origin+target)
-                    if first: rect=Rect2(projected,Vector2.ZERO); first=false
-                    else: rect=rect.expand(projected)
+        var points:Array=[]
+        if snapshot.has("caster_shape"):points=snapshot.caster_shape.points
+        else:
+            for x in [0.0,snapshot.component_cell_size.x]:
+                for y in [0.0,snapshot.component_cell_size.y]:
+                    for depth in [snapshot.component_depth_range.x,snapshot.component_depth_range.y]:
+                        points.append(_caster_point(snapshot,x,y,depth,ground))
+        for local in points:
+            var point:Vector3=local+snapshot.position-origin
+            if point.y>=light.y-0.0001:return {"unbounded":true,"rect":rect}
+            var target:Vector3=light+(point-light)*((ground-light.y)/(point.y-light.y))
+            var projected:=camera.unproject_position(origin+target)
+            if first:rect=Rect2(projected,Vector2.ZERO);first=false
+            else:rect=rect.expand(projected)
     return {"unbounded":false,"rect":rect}
 
 func _caster_mesh(cell: Vector2) -> QuadMesh:
     # One vertex grid per delivered native cell. No sprite resizing or padding.
     var size := Vector2i(cell)
     if not _meshes.has(size):
+        _last_counts.new_meshes=int(_last_counts.get("new_meshes",0))+1
         var mesh := QuadMesh.new()
         mesh.subdivide_width=size.x-1
         mesh.subdivide_depth=size.y-1
@@ -321,7 +434,7 @@ func _create(id: String) -> Dictionary:
     _parent.add_child(output)
     var entry: Dictionary={"id":id+":generatedShadow","placement":{},"role":"shadow","layer":-1,
         "source_role":-1,"node":output,"material":material,"mobile":true,"screen_rect":Rect2(),"generated_shadow":true}
-    return {"viewport":viewport,"root":root,"camera":camera,"ground":ground,"light":light,"casters":{},
+    return {"viewport":viewport,"root":root,"camera":camera,"ground":ground,"light":light,"casters":{},"caster_samples":{},
         "entry":entry,"key":[],"pending":false,"unbounded":false}
 
 func _update(state: Dictionary,snapshots: Array,camera: Camera3D,origin: Vector3,ground: float,projection: Dictionary,rect: Rect2,size: Vector2i,pixels_per_world: float) -> void:
@@ -329,6 +442,7 @@ func _update(state: Dictionary,snapshots: Array,camera: Camera3D,origin: Vector3
     for snapshot in snapshots:
         wanted[snapshot.id]=true
         if not state.casters.has(snapshot.id):
+            _last_counts.new_casters=int(_last_counts.get("new_casters",0))+1
             var node := MeshInstance3D.new()
             node.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY
             node.material_override=ShaderMaterial.new()
@@ -336,6 +450,12 @@ func _update(state: Dictionary,snapshots: Array,camera: Camera3D,origin: Vector3
             state.root.add_child(node)
             state.casters[snapshot.id]=node
         var caster: MeshInstance3D=state.casters[snapshot.id]
+        var parameters:Array=[]
+        for parameter in CASTER_PARAMETERS:parameters.append(snapshot[parameter])
+        var sample_key:Array=[parameters,snapshot.component_cell_size,camera.global_basis,snapshot.pivot,
+            snapshot.scale_x,ground,snapshot.position-origin]
+        if state.caster_samples.get(snapshot.id,[])==sample_key:continue
+        state.caster_samples[snapshot.id]=sample_key
         caster.mesh=_caster_mesh(snapshot.component_cell_size)
         caster.position=snapshot.position-origin
         for parameter in CASTER_PARAMETERS: caster.material_override.set_shader_parameter(parameter,snapshot[parameter])
@@ -344,14 +464,11 @@ func _update(state: Dictionary,snapshots: Array,camera: Camera3D,origin: Vector3
         caster.material_override.set_shader_parameter("sprite_pivot",snapshot.pivot)
         caster.material_override.set_shader_parameter("horizontal_scale",snapshot.scale_x)
         caster.material_override.set_shader_parameter("ground_height",ground)
-        var aabb := AABB(_caster_point(snapshot,0,0,snapshot.component_depth_range.x,ground),Vector3.ZERO)
-        for x in [0.0,snapshot.component_cell_size.x]:
-            for y in [0.0,snapshot.component_cell_size.y]:
-                for d in [snapshot.component_depth_range.x,snapshot.component_depth_range.y]: aabb=aabb.expand(_caster_point(snapshot,x,y,d,ground))
-        caster.custom_aabb=aabb.grow(0.001)
+        var shape:Dictionary=snapshot.caster_shape if snapshot.has("caster_shape") else _caster_shape(snapshot,ground)
+        caster.custom_aabb=shape.bounds
         RenderingServer.instance_set_custom_aabb(caster.get_instance(),caster.custom_aabb)
     for id in state.casters.keys():
-        if not wanted.has(id): state.casters[id].free(); state.casters.erase(id)
+        if not wanted.has(id): state.casters[id].free(); state.casters.erase(id);state.caster_samples.erase(id)
     state.viewport.size=size
     var center := _on_plane(camera,rect.get_center(),origin.y+ground)-origin
     var plane_bounds := AABB(center,Vector3.ZERO)
@@ -395,6 +512,7 @@ func _remove(id: String) -> void:
 
 func _clear_actors() -> void:
     for id in actors.keys(): _remove(id)
+    _caster_shapes.clear()
 
 func diagnostics() -> Dictionary:
     var casters := 0
@@ -414,7 +532,9 @@ func diagnostics() -> Dictionary:
         if state.unbounded: wide_bounds+=1
         selected[state.entry.placement.id]=state.source_id
     return {"actors":actors.size(),"casters":casters,"caster_triangles_before_native_shadow_passes":triangles,
-        "target_pixels":pixels,"last_render_gpu_ms":last_gpu_ms,"last_render_cpu_ms":last_cpu_ms,"sources":_sources.size(),"updates":_updates,"wide_depth_bounds":wide_bounds,"sync_cpu_ms":_last_cpu_ms,"selected_sources":selected}
+        "target_pixels":pixels,"last_render_gpu_ms":last_gpu_ms,"last_render_cpu_ms":last_cpu_ms,"sources":_sources.size(),"updates":_updates,"wide_depth_bounds":wide_bounds,"sync_cpu_ms":_last_cpu_ms,"selected_sources":selected,
+        "sync_phases_ms":_last_phases.duplicate(),"sync_counts":_last_counts.duplicate(),"cookie_cached_images":_retained_cookies.size(),
+        "phase_accounting":"Cookie read/pack/upload are nested inside sources; other named phases are disjoint."}
 
 func close() -> void:
     if RenderingServer.frame_post_draw.is_connected(_after_draw): RenderingServer.frame_post_draw.disconnect(_after_draw)
@@ -425,6 +545,7 @@ func close() -> void:
     _source_key.clear()
     _cookie_key.clear()
     _cookie_images.clear()
+    _retained_cookies.clear();_cookie_use=0
     _cookie_rects.clear()
     _cookie_texture=null
     _source_texture=null

@@ -59,6 +59,8 @@ var retained_components: Array = []
 var retained_directions: Dictionary = {}
 var resolved_impacts: Dictionary = {}
 var condition_owners: Dictionary = {}
+var spatial_effect_owners:Dictionary={}
+const NativePersistent=preload("res://presentation/native_persistent.gd")
 var crossed_audio: Array = []
 var component_sample_ms = -1.0
 var trace = EventTrace.create()
@@ -80,12 +82,13 @@ func accept(message: Dictionary) -> void:
         if not current.is_empty(): previous.push_front(current)
         current = {}; commit_index = 0; group_start_ms = display_ms
         retained_components=[]; retained_directions={}; resolved_impacts={}
-        condition_owners={}; crossed_audio=[];component_sample_ms=-1.0
+        condition_owners={}; spatial_effect_owners={}; crossed_audio=[];component_sample_ms=-1.0
         waiting_for_media = false
         if retire_group.is_valid():
             for group in previous: retire_group.call(group)
         state = message.state
         Conditions.observe(condition_owners,state.actors,display_ms,true)
+        NativePersistent.observe_spatial(spatial_effect_owners,state.senses.get("spatial_effects",{}),display_ms,true)
         sequence = int(message.sequence)
         revision += 1
         world_revision += 1
@@ -221,6 +224,7 @@ func _advance_immediate(delta_ms: float) -> void:
             var delta: Dictionary = commits[commit_index].delta
             Compiler.apply_delta(state,delta)
             Conditions.observe(condition_owners,delta.get("actors",{}),group_start_ms+commits[commit_index].at_ms)
+            if delta.get("set",{}).has("senses"):NativePersistent.observe_spatial(spatial_effect_owners,state.senses.get("spatial_effects",{}),group_start_ms+commits[commit_index].at_ms)
             if commits[commit_index].has("event_uuid"):
                 EventTrace.commit(trace,int(current.operation_sequence),commits[commit_index].event_uuid)
             EventTrace.append_logs(trace,commits[commit_index].get("trace_logs",[]))
@@ -420,10 +424,26 @@ func _world_candidate(plan: Dictionary) -> Dictionary:
     if not supports.is_empty():
         presented = snapshot.duplicate(); presented.tiles = snapshot.tiles.duplicate(); presented.tiles.merge(supports)
     changes.revision = next_world_revision
+    # Construction needs only the same temporary outfit/hand layers. Sample
+    # passive authored intervals; component_samples consumes audio/retention and
+    # must never run against a future boundary.
+    var actor_layers:Array=[]
+    var actor_layer_ids:Dictionary={}
+    var layer_candidates:Array=retained_components.duplicate()
+    for segment in plan.segments:
+        for component in segment.group.get("components",[]):
+            if component.kind=="sprite_layer":layer_candidates.append({"component":component,"group_start_ms":segment.start_ms})
+    for item in layer_candidates:
+        var component:Dictionary=item.component
+        if component.kind!="sprite_layer" or actor_layer_ids.has(component.id):continue
+        var age:float=plan.display_ms-item.group_start_ms-component.start_ms
+        if age>=0 and age<component.duration_ms:
+            actor_layers.append(component);actor_layer_ids[component.id]=true
     return {"key":[initialization_revision,revision,last.group.operation_sequence,last.group.id,last.start_ms,last.end_commit,last.local_ms,last.complete],
         "preparation_key":[initialization_revision,world_revision,_support_signature(),last.group.operation_sequence,last.group.id,last.end_commit,last.local_ms,last.complete],
         "source_group_id":last.group.id,
         "state":snapshot,"presentation_state":presented,"staged_tiles":supports,"staged_actors":_actors_for(group,last.local_ms),
+        "actor_samples":Tracks.samples(group.get("actor_tracks",[]),last.local_ms),"actor_layers":actor_layers,
         "changes":changes,"display_ms":plan.display_ms,"revision":next_revision,"world_revision":next_world_revision,
         "sequence":next_sequence,"group_id":group.get("id",""),"operation_sequence":int(last.group.operation_sequence)}
 
@@ -439,6 +459,7 @@ func _apply_world_plan(plan: Dictionary) -> void:
             var delta: Dictionary = commit.delta
             Compiler.apply_delta(state,delta)
             Conditions.observe(condition_owners,delta.get("actors",{}),group_start_ms+commit.at_ms)
+            if delta.get("set",{}).has("senses"):NativePersistent.observe_spatial(spatial_effect_owners,state.senses.get("spatial_effects",{}),group_start_ms+commit.at_ms)
             if commit.has("event_uuid"): EventTrace.commit(trace,int(current.operation_sequence),commit.event_uuid)
             EventTrace.append_logs(trace,commit.get("trace_logs",[]))
             if _world_delta(delta):
@@ -529,6 +550,7 @@ func component_samples(cache: Dictionary={}) -> Array:
     var bodies=actor_samples()
     for id in bodies:activities[id]=bodies[id].get("activity","idle")
     result.append_array(Conditions.samples(condition_owners,display_ms,cache,activities))
+    result.append_array(NativePersistent.spatial_samples(spatial_effect_owners,display_ms,cache))
     return result
 
 func staged_tiles() -> Dictionary:

@@ -40,6 +40,8 @@ async def run(args):
                 'worker_reported_ms': result[0].elapsed_ms}
             if request.kind == 'command':
                 row['command_number'] = request.request.command_number
+                row['actor_uuid'] = str(request.request.actor_uuid)
+                row['seat_id'] = request.seat_id
             output.write(json.dumps(row)+'\n')
             output.flush()
             return result

@@ -2,6 +2,7 @@ extends RefCounted
 ## Browse the plan's case families using the existing qualified capture inventory.
 const CAPABILITIES=["Move","Dash","Dodge","Disengage","Hide","Jump","Traverse window","Attack","Opportunity attack","Shove","Damage / life","Action economy","Conditions","Spell composition","Combined regression"]
 const CASES={
+    "gallery_sorcerer":["Spell composition","Large-map expedition","Sorcerer expedition · Lantern Gallery"],
     "movement-oa":["Opportunity attack","Movement interruption","Movement with opportunity attacks"],
     "walk":["Move","Cardinal route","Ordinary movement"],
     "walk_diagonal":["Move","Cardinal / diagonal","Diagonal route"],
@@ -34,7 +35,7 @@ const CASES={
 
 static func read()->Array:
     var path="res://generated/studio_case_inventory.json"
-    if not FileAccess.file_exists(path):return []
+    if not FileAccess.file_exists(path):return _spell_cases()
     var inventory:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(path))
     var result:Array=[]
     for item in inventory.get("cases",[]):
@@ -64,4 +65,23 @@ static func read()->Array:
         result.append({"id":item.name,"capability":fields[0],"interaction":fields[1],"label":label,
             "perspectives":perspectives,"interval":item.get("interval",{}),"descriptor":descriptor_path,
             "qualification":descriptor.get("qualification",""),"checks":item.get("checks",0)})
+    result.append_array(_spell_cases())
+    return result
+
+static func _spell_cases()->Array:
+    var path="res://generated/studio_spell_case_inventory.json"
+    if not FileAccess.file_exists(path):return []
+    var inventory:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(path))
+    var result:Array=[]
+    for item in inventory.get("cases",[]):
+        if not item.get("failures",[]).is_empty():continue
+        var perspectives:Array=[]
+        for perspective in item.get("perspectives",[]):
+            if FileAccess.file_exists(str(perspective.journal).path_join("0000000000000000.json")):
+                perspectives.append(perspective)
+        if perspectives.is_empty():continue
+        result.append({"id":item.id,"spell_id":item.spell_id,
+            "capability":item.capability,"interaction":item.interaction,"label":item.label,
+            "perspectives":perspectives,"interval":item.get("interval",{}),"descriptor":item.descriptor,
+            "qualification":item.qualification,"checks":item.get("checks",0),"inventory":path})
     return result

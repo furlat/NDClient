@@ -38,7 +38,7 @@ func _initialize() -> void:
         var packet: Dictionary = packets[i%packets.size()]
         var started = Time.get_ticks_usec()
         Media.demand(data,packet.paths,environment.required,environment.fixtures,packet.gpu_only,packet.cpu_required)
-        Media.release_cold_images(data); Media.prune(data)
+        Media.release_cold_images(data,-1); Media.prune(data) # Offline modeled residency.
         Media.preload_progress(data); Media.diagnostics(data); Media.diagnostics(data,true)
         if i>=5: samples.append((Time.get_ticks_usec()-started)/1000.0)
     samples.sort()

@@ -47,7 +47,8 @@ func run()->void:
             check(direct.has(row.id),"Raw scaffolding only remains when it owns a concrete component or missing requirement")
     for row in data.rows:
         if row.kind!="event":check(view.rows.any(func(item):return item.row.id==row.id),"Every source component / required omission survives metadata filtering: "+row.kind)
-    check(is_equal_approx(view._x(data.presentation_end_ms),view.size.x-24),"Fit uses the complete available timeline width")
+    view.fit()
+    check(is_equal_approx(view._x(data.presentation_end_ms),view.size.x-24),"Explicit Fit uses the complete available timeline width")
     view.size=Vector2(1920,540);await process_frame
     check(is_equal_approx(view._x(data.presentation_end_ms),view.size.x-24),"Fit responds to final layout width after resize")
     view.fit_enabled=false;view.pixels_per_second=123;view.size=Vector2(1280,400);await process_frame

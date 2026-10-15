@@ -1,0 +1,111 @@
+extends SceneTree
+## Native condition sampling preserves exact owner/lifecycle output while one
+## resolved phase description supplies fade timing and occurrence construction.
+const Conditions=preload("res://presentation/conditions.gd")
+const Recording=preload("res://studio/recording.gd")
+var checks=0
+var failures:Array=[]
+var cache:Dictionary={}
+var oracle:Script
+var oracle_cache:Dictionary={}
+var native_ids:Array=[]
+var timing:Dictionary={}
+
+func _initialize()->void:run.call_deferred()
+func check(value:bool,label:String)->void:
+    checks+=1
+    if not value:failures.append(label);printerr("CONDITION_RESOLUTION_FAIL ",label)
+
+func owner(behavior:String,id:String="one",initial:bool=false)->Dictionary:
+    return {"id":id,"actor_uuid":"actor","condition":{"condition_uuid":id,"behavior_id":behavior,"state":{}},
+        "start_ms":100.0,"end_ms":INF,"initial":initial,"life_state":"alive"}
+
+func sample_case(owners:Dictionary,at:float,label:String)->Array:
+    var actual_owners=owners.duplicate(true)
+    var actual=Conditions.samples(actual_owners,at,cache)
+    var native_owners=owners.duplicate(true)
+    var native=Conditions.native_samples(native_owners,at,cache)
+    check(native==actual.filter(func(row):return row.get("native_spell",false)),label+" preparation selects the exact native subset")
+    check(native_owners==actual_owners,label+" native-only sampling preserves retirement")
+    if oracle!=null:
+        var expected_owners=owners.duplicate(true)
+        var expected=oracle.samples(expected_owners,at,oracle_cache)
+        check(actual==expected,label+" exact original sampled rows")
+        check(actual_owners==expected_owners,label+" exact original owner retirement")
+    check(owners.values().all(func(value):return not value.has("native_cue")),label+" source owners remain data without visual cue mutation")
+    return actual
+
+func phase_isolation(behavior:String)->void:
+    var selected=Conditions.NativePersistent.Spells.condition(behavior,cache)
+    var phases=Conditions.NativePersistent.Spells.condition_phases(selected)
+    var original=phases.duplicate(true)
+    var common={"id":"condition:one","actor_uuid":"actor","start_ms":100.0,"absolute_start_ms":100.0,
+        "duration_ms":900.0,"age_ms":200.0,"initial":false}
+    var first=Conditions.NativePersistent.phase_samples(common,phases)
+    var later=common.duplicate();later.id="condition:two";later.actor_uuid="other";later.age_ms=500.0;later.initial=true
+    var second=Conditions.NativePersistent.phase_samples(later,phases)
+    check(not first.is_empty() and not second.is_empty(),behavior+" both owner lifetimes yield native phases")
+    check(phases==original,behavior+" occurrence construction leaves resolved phase descriptions unchanged")
+    if first.is_empty() or second.is_empty():return
+    check(first[0].id!=second[0].id and first[0].actor_uuid!=second[0].actor_uuid,behavior+" recipients retain independent occurrence identities")
+    first[0].native_cue.owner_end_seconds=123.0
+    check(second[0].native_cue.owner_end_seconds==.9 and phases==original,behavior+" cue mutation cannot alter another owner or phase description")
+
+func actual_shield()->void:
+    var index=Recording.read("res://.runtime/studio-spells-20261015/shield-seed3/blue/journal")
+    check(index.ok,"Actual Blue Shield journal admits")
+    if not index.ok:return
+    var owners:Dictionary={}
+    var witnessed=false
+    for item in index.groups:
+        for commit in item.group.get("commits",[]):
+            var at:float=item.start_ms+commit.at_ms
+            Conditions.observe(owners,commit.delta.get("actors",{}),at)
+            if not owners.values().any(func(value):return value.condition.behavior_id=="condition.spell.shield"):continue
+            var sampled=sample_case(owners,at,"Real Shield after-value at "+str(at))
+            witnessed=witnessed or sampled.any(func(value):return value.get("native_spell",false))
+    check(witnessed,"Real reaction condition supplies native output through application and removal")
+
+func compare_timing(owners:Dictionary)->void:
+    if oracle==null:return
+    var old:Array=[];var current:Array=[]
+    for iteration in 20:
+        var left=owners.duplicate(true);var right=owners.duplicate(true)
+        var began=Time.get_ticks_usec();oracle.samples(left,300.0,oracle_cache);old.append(Time.get_ticks_usec()-began)
+        began=Time.get_ticks_usec();Conditions.samples(right,300.0,cache);current.append(Time.get_ticks_usec()-began)
+    old.sort();current.sort()
+    timing={"owners":owners.size(),"iterations":20,"original_median_usec":old[10],"current_median_usec":current[10],
+        "scope":"Isolated headless sample construction only; not a native frame-time claim."}
+
+func run()->void:
+    for argument in OS.get_cmdline_user_args():
+        if argument.begins_with("--oracle="):oracle=load(argument.trim_prefix("--oracle="))
+    var index=Conditions.Authoring.load_data("native_effects/index.json",cache)
+    for entry in index.spells.values():
+        var lifecycle:Dictionary=entry.get("lifecycle",{})
+        if lifecycle.get("owner_kind")!="condition":continue
+        native_ids.append_array(lifecycle.owner_ids)
+    check(native_ids.size()==11,"All eleven authored native owner types covered, including three Command outcomes")
+    var mixed:Dictionary={}
+    for behavior in native_ids+["condition.poisoned","condition.paralyzed"]:
+        var base=owner(behavior)
+        var fade=Conditions.fade_ms(base.condition,cache)
+        if oracle!=null:check(fade==oracle.fade_ms(base.condition,oracle_cache),behavior+" exact original native/legacy removal duration")
+        for at in [100.0,300.0,1900.0]:sample_case({base.id:base},at,behavior+" active "+str(at))
+        var initial=base.duplicate(true);initial.initial=true
+        sample_case({initial.id:initial},300.0,behavior+" already active")
+        var hidden=base.duplicate(true);hidden.condition.state.suppression_provider_uuids=["actual-suppression-owner"]
+        check(sample_case({hidden.id:hidden},300.0,behavior+" suppressed").is_empty(),behavior+" suppression emits no condition visuals")
+        base.end_ms=1000.0
+        for at in [1000.0,1000.0+fade*.5,1000.0+fade]:sample_case({base.id:base},at,behavior+" removal "+str(at))
+        var replacement=owner(behavior,"replacement")
+        sample_case({base.id:base,replacement.id:replacement},1000.0,behavior+" replaced owner overlaps close")
+        mixed[behavior]=owner(behavior,behavior)
+        if behavior in native_ids:phase_isolation(behavior)
+    sample_case(mixed,300.0,"Mixed native and legacy condition composition")
+    compare_timing(mixed)
+    actual_shield()
+    var report={"checks":checks,"failures":failures,"native_conditions":native_ids,"original_oracle":oracle!=null,"timing":timing,
+        "scope":"Exact sampled rows/owner retirement, suppression, apply/hold/remove, replacement, independent native cues and real recorded Shield; no rendering claim."}
+    FileAccess.open("res://.runtime/condition-native-resolution-checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
+    print("CONDITION_NATIVE_RESOLUTION_CHECKS ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)

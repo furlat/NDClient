@@ -15,22 +15,18 @@ var world: Node3D
 var viewport: SubViewport
 var preview: TextureRect
 var preview_row:HBoxContainer
-var peer_preview:TextureRect
 var pane_label:Label
-var peer_label:Label
-var peer:Dictionary={}
-var comparison_enabled=true
-var candidate_peer:Dictionary={}
-var spare_peer:Dictionary={}
-var listening_perspective=""
+var fps_label:Label
+var fps_update_ms=0
 var replay_budget_bytes=0
-var pair_plans:Array=[]
-var pair_wait_frames=0
-var pair_publications=0
+var replay_plan:Dictionary={}
+var replay_wait_frames=0
+var replay_publications=0
 var split: VSplitContainer
 var tracks: Control
 var candidate_tracks:Control
 var candidate_preview_errors:Array=[]
+var candidate_preview_pending=0
 var timeline_split:HSplitContainer
 var status: Label
 var clock_label: Label
@@ -47,6 +43,7 @@ var active_perspective=""
 var case_bundle:Dictionary={}
 var pending_bundle:Dictionary={}
 var pending_perspective=""
+var pending_perspective_navigation:Dictionary={}
 var pending_case_request:Dictionary={}
 var pending_selected_id=""
 var retained_view_anchor:Dictionary={}
@@ -57,6 +54,7 @@ var study_capability:Dictionary={}
 var study_scenario:Dictionary={}
 var pending_study_selection:Dictionary={}
 var pending_autoplay=false
+var pending_authoring_reload=false
 var study_panel:VBoxContainer
 var study_tree:Tree
 var study_title:Label
@@ -76,15 +74,21 @@ var worker_generation = 0
 var installing = false
 var installation_generation = -1
 var resume_after_install = false
-var resume_when_tracks_ready=false
 var active_directory = ""
 var pending_directory = ""
 var selected_row: Dictionary = {}
 var loop_enabled = true
+var follow_tracks=true
+var follow_actor_id=""
+var initial_view_size=0.0
 var loop_button:CheckButton
+var follow_button:CheckButton
 var preparing_loop=false
 var prepared_loop_range=Vector2.ZERO
 var transport_measurements:Array=[]
+var startup_receipt:Dictionary={}
+var startup_setup:Dictionary={}
+var opened_usec=Time.get_ticks_usec()
 var preparation_measurement:Dictionary={}
 var frozen_candidate_viewports:Array=[]
 var spare_viewport:SubViewport
@@ -113,6 +117,7 @@ var light_levels_button:CheckButton
 var inspector_mode="row"
 var inspector_log_revision=-1
 const CONFIG="user://studio_layout.cfg"
+const WINDOW_TITLE="Neurodragon Studio · Presentation studies"
 
 class MarkerOverlay extends Control:
     var host: Node
@@ -129,7 +134,10 @@ class MarkerOverlay extends Control:
             draw_line(point-Vector2(0,15),point+Vector2(0,15),Color("f3be66"))
 
 func _ready() -> void:
-    DisplayServer.window_set_title("Neurodragon Studio · Presentation studies")
+    var ready_started=Time.get_ticks_usec()
+    # Paint controls after the single Play child has advanced its recorded frame.
+    process_priority=10
+    DisplayServer.window_set_title(WINDOW_TITLE)
     set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
     var backdrop = ColorRect.new(); backdrop.color=Color("101722"); backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); add_child(backdrop)
     var layout = VBoxContainer.new(); layout.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); layout.add_theme_constant_override("separation",2); add_child(layout)
@@ -141,7 +149,7 @@ func _ready() -> void:
     perspective_picker=_picker(header,"Recorded faction / audience",86);perspective_picker.disabled=true
     perspective_picker.item_selected.connect(func(i):select_perspective(str(perspective_picker.get_item_metadata(i))))
     _button(header,"Open",func():file_dialog.popup_centered_ratio(.7)).tooltip_text="Open a recorded journal"
-    _button(header,"Reload",func():_load(active_directory)).tooltip_text="Reload external authoring"
+    _button(header,"Reload",_reload_authoring).tooltip_text="Reload external authoring and freshly baked native sources"
     _button(header,"Q / E",func():_rotate(1)).tooltip_text="Rotate preview"
     var menu=MenuButton.new();menu.text="Inspect";header.add_child(menu)
     for label in ["Inspector","Displayed log","Coverage","Copy report","Maximize preview","Toggle markers"]:menu.get_popup().add_item(label)
@@ -152,8 +160,22 @@ func _ready() -> void:
     diagnostic_menu.add_item("Clear component diagnostics",9)
     diagnostic_menu.add_item("Authored sources / missing work",10)
     diagnostic_menu.add_item("Study sequence / expectations",11)
+    diagnostic_menu.add_check_item("Full spell hit material",12)
+    diagnostic_menu.add_check_item("Follow active track",13)
+    diagnostic_menu.add_check_item("Follow selected actor",14)
+    diagnostic_menu.add_check_item("Lighting tracks",15)
     diagnostic_menu.about_to_popup.connect(_diagnostic_menu_state)
     menu.get_popup().id_pressed.connect(func(id):
+        if id==13:
+            _set_follow_tracks(not follow_tracks)
+            return
+        if id==15:
+            tracks.show_lighting_tracks=not tracks.show_lighting_tracks;tracks.rebuild_rows()
+            menu.get_popup().set_item_checked(15,tracks.show_lighting_tracks)
+            return
+        if id==14:
+            follow_actor_id="" if not follow_actor_id.is_empty() else str(selected_row.get("actor_uuid",""))
+            return
         _menu_selected(id)
         if id==6:menu.get_popup().set_item_checked(6,tracks.show_metadata))
     split=VSplitContainer.new(); split.size_flags_vertical=Control.SIZE_EXPAND_FILL; layout.add_child(split)
@@ -161,15 +183,12 @@ func _ready() -> void:
     preview=TextureRect.new();preview.clip_contents=true;preview.expand_mode=TextureRect.EXPAND_IGNORE_SIZE;preview.stretch_mode=TextureRect.STRETCH_SCALE
     preview.custom_minimum_size=Vector2(240,160);preview.size_flags_vertical=Control.SIZE_EXPAND_FILL;preview.focus_mode=Control.FOCUS_ALL;preview.size_flags_horizontal=Control.SIZE_EXPAND_FILL;preview_row.add_child(preview)
     viewport=_viewport();add_child(viewport);preview.texture=viewport.get_texture();viewport.audio_listener_enable_3d=true
-    world=Play.new(); world.external_playback=true; viewport.add_child(world);_listener(world)
+    var play_started=Time.get_ticks_usec()
+    world=Play.new(); world.external_playback=true; world.native_startup_plan=[]; viewport.add_child(world);_listener(world)
+    startup_setup.play_ready_ms=(Time.get_ticks_usec()-play_started)/1000.0
     replay_budget_bytes=world.media_warmup.budget_bytes
     preview.gui_input.connect(_preview_input)
     pane_label=_pane_label(preview)
-    peer_preview=TextureRect.new();peer_preview.clip_contents=true;peer_preview.expand_mode=TextureRect.EXPAND_IGNORE_SIZE;peer_preview.stretch_mode=TextureRect.STRETCH_SCALE
-    peer_preview.size_flags_horizontal=Control.SIZE_EXPAND_FILL;peer_preview.size_flags_vertical=Control.SIZE_EXPAND_FILL
-    peer_preview.custom_minimum_size=Vector2(240,160);peer_preview.focus_mode=Control.FOCUS_ALL
-    preview_row.add_child(peer_preview);peer_preview.hide();peer_label=_pane_label(peer_preview)
-    peer_preview.gui_input.connect(_preview_input)
     light_levels=LightLevels.new();light_levels.host=self;light_levels.visible=false
     light_levels.level_source=_light_marker_level;light_levels.legend_label="Perceived light"
     preview.add_child(light_levels)
@@ -186,6 +205,7 @@ func _ready() -> void:
     for value in [.25,.5,1.0,2.0,4.0]:rate_picker.add_item(str(value)+"×")
     rate_picker.select(2);rate_picker.item_selected.connect(func(i):world.playback_speed=[.25,.5,1.0,2.0,4.0][i])
     loop_button=CheckButton.new();loop_button.text="Loop";loop_button.button_pressed=loop_enabled;transport.add_child(loop_button);loop_button.toggled.connect(func(value):loop_enabled=value)
+    _add_follow_control(transport)
     _button(transport,"In",func(): loop_start=world.timeline.display_ms)
     _button(transport,"Out",func(): loop_end=world.timeline.display_ms)
     clock_label=Label.new(); clock_label.custom_minimum_size.x=160; transport.add_child(clock_label)
@@ -207,7 +227,18 @@ func _ready() -> void:
     study_tree=Tree.new();study_tree.hide_root=true;study_tree.size_flags_vertical=Control.SIZE_EXPAND_FILL;study_panel.add_child(study_tree)
     study_tree.item_selected.connect(_inspect_study_expectation)
     _connect_tracks(tracks)
-    status=Label.new();status.clip_text=true; status.text="Choose a current SDK recording."; layout.add_child(status)
+    var status_row=HBoxContainer.new();layout.add_child(status_row)
+    status=Label.new();status.clip_text=true;status.size_flags_horizontal=Control.SIZE_EXPAND_FILL
+    status.text="Choose a current SDK recording.";status_row.add_child(status)
+    fps_label=Label.new();fps_label.name="FrameRate";fps_label.text="— FPS · — ms"
+    fps_label.mouse_filter=Control.MOUSE_FILTER_IGNORE;fps_label.horizontal_alignment=HORIZONTAL_ALIGNMENT_RIGHT
+    fps_label.add_theme_font_size_override("font_size",20)
+    fps_label.add_theme_color_override("font_color",Color.WHITE)
+    fps_label.add_theme_color_override("font_outline_color",Color(0,0,0,.95))
+    fps_label.add_theme_constant_override("outline_size",5)
+    preview.add_child(fps_label);fps_label.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
+    fps_label.offset_left=-235;fps_label.offset_right=-12;fps_label.offset_top=10;fps_label.offset_bottom=40
+    fps_label.z_index=10
     inspector=Window.new(); inspector.visible=false; inspector.title="Presentation inspector"; inspector.size=Vector2i(780,540); inspector.close_requested.connect(func(): inspector.hide()); add_child(inspector)
     inspector_text=TextEdit.new(); inspector_text.editable=false; inspector_text.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); inspector.add_child(inspector_text)
     file_dialog=FileDialog.new(); file_dialog.file_mode=FileDialog.FILE_MODE_OPEN_DIR; file_dialog.access=FileDialog.ACCESS_FILESYSTEM; add_child(file_dialog); file_dialog.dir_selected.connect(_load)
@@ -217,20 +248,48 @@ func _ready() -> void:
     var config=ConfigFile.new()
     if config.load(CONFIG)==OK:divider_ratio=clampf(config.get_value("layout","divider",.5),.15,.85)
     _apply_layout.call_deferred()
+    var discovery_started=Time.get_ticks_usec()
     _discover_cases()
+    startup_setup.case_discovery_ms=(Time.get_ticks_usec()-discovery_started)/1000.0
     var args=OS.get_cmdline_user_args()
-    if "--single-view" in args:comparison_enabled=false
+    if "--follow-tracks" in args:_set_follow_tracks(true)
     var directory=""
     for i in args.size():
         if args[i].begins_with("--recording="):directory=args[i].trim_prefix("--recording=")
         elif args[i]=="--recording" and i+1<args.size(): directory=args[i+1]
+        elif args[i].begins_with("--follow-actor="):follow_actor_id=args[i].trim_prefix("--follow-actor=")
+        elif args[i].begins_with("--view-size="):
+            var value=args[i].trim_prefix("--view-size=")
+            if value.is_valid_float():initial_view_size=clampf(value.to_float(),3,100)
     if directory.is_empty() and not case_paths.is_empty(): directory=case_paths[0]
     if not directory.is_empty():
         _select_browser_path(directory)
-        _load(directory)
+        _load(directory,{},"--autoplay" in args)
     if "--library" in args:_show_study_library.call_deferred()
+    startup_setup.ready_ms=(Time.get_ticks_usec()-ready_started)/1000.0
+    # The embedded Play scene sets its own title during _ready.
+    DisplayServer.window_set_title(WINDOW_TITLE)
+
+func _add_follow_control(transport:HBoxContainer)->void:
+    follow_button=CheckButton.new();follow_button.text="Follow"
+    follow_button.tooltip_text="Keep the active recorded track visible during playback"
+    transport.add_child(follow_button);follow_button.toggled.connect(_set_follow_tracks)
+    _set_follow_tracks(follow_tracks)
+
+func _set_follow_tracks(value:bool)->void:
+    follow_tracks=value
+    if follow_button!=null:follow_button.set_pressed_no_signal(value)
+    if diagnostic_menu!=null:diagnostic_menu.set_item_checked(diagnostic_menu.get_item_index(13),value)
+
+func _follow_displayed_track()->void:
+    if not follow_tracks or scrub_target>=0 or tracks.drag_playhead:return
+    # Preparing a hidden loop candidate does not stop the displayed world.
+    # Explicit seeks retain the selected row until their new frame publishes.
+    if installing and not preparing_loop and world.timeline.paused:return
+    tracks.follow_at(world.timeline.display_ms)
 
 func _connect_tracks(view:Control)->void:
+    view.process_priority=process_priority+1
     view.seek_requested.connect(_seek);view.selected.connect(_select_row)
     view.scrub_requested.connect(_scrub);view.clip_requested.connect(_play_clip)
     view.perspective_requested.connect(func(row):selected_row=row;select_perspective(str(row.source_perspective)))
@@ -244,6 +303,7 @@ func _stage_tracks(source:Dictionary)->void:
     timeline_split.add_child(candidate_tracks);candidate_tracks.size=tracks.size
     candidate_tracks.gutter=tracks.gutter;candidate_tracks.quarter=world.quarter
     candidate_tracks.filter=tracks.filter;candidate_tracks.show_metadata=tracks.show_metadata
+    candidate_tracks.show_lighting_tracks=tracks.show_lighting_tracks
     candidate_tracks.set_index(source)
     for row in source.rows:
         if row.id==pending_selected_id:candidate_tracks.reveal(row.id);break
@@ -277,10 +337,11 @@ func _menu_selected(id: int)->void:
             _diagnostic_menu_state()
         9:
             world.presentation_mutes.clear();world.presentation_solo.clear()
-            if not peer.is_empty():peer.world.presentation_mutes.clear();peer.world.presentation_solo.clear()
             _diagnostic_menu_state()
         10:_show_source_inventory()
         11:_show_study_library()
+        12:
+            world.set_native_spell_hit_material(not world.native_spell_hit_material)
 
 func _show_study_library()->void:
     if study_library==null:
@@ -329,8 +390,22 @@ func _diagnostic_menu_state()->void:
     diagnostic_menu.set_item_checked(7,not id.is_empty() and owner.presentation_mutes.has(id))
     diagnostic_menu.set_item_checked(8,not id.is_empty() and owner.presentation_solo.has(id))
     var cleared=world.presentation_mutes.is_empty() and world.presentation_solo.is_empty()
-    if not peer.is_empty():cleared=cleared and peer.world.presentation_mutes.is_empty() and peer.world.presentation_solo.is_empty()
     diagnostic_menu.set_item_disabled(9,cleared)
+    diagnostic_menu.set_item_checked(12,world.native_spell_hit_material)
+    diagnostic_menu.set_item_checked(15,tracks.show_lighting_tracks)
+    diagnostic_menu.set_item_checked(13,follow_tracks)
+    diagnostic_menu.set_item_checked(14,not follow_actor_id.is_empty())
+    diagnostic_menu.set_item_disabled(14,follow_actor_id.is_empty() and str(selected_row.get("actor_uuid","")).is_empty())
+
+func _follow_position(owner:Node3D,fallback:Vector3)->Vector3:
+    if follow_actor_id.is_empty():return fallback
+    var actor:Dictionary=owner.visual_actors.get(follow_actor_id,{})
+    # A retained actor can be undisclosed in this audience. Never track its
+    # remembered location or borrow a position from the other replay pane.
+    for entry in actor.get("entries",[]):
+        if entry.role!="shadow" and entry.node.visible:
+            return Play.Placement.contact(actor.row)
+    return fallback
 
 func _viewport() -> SubViewport:
     return ReplayPanes.viewport()
@@ -346,58 +421,41 @@ func _perspective_label(id:String)->String:
     return id
 
 func _sync_audio()->void:
-    var primary=peer.is_empty() or listening_perspective==active_perspective
-    viewport.audio_listener_enable_3d=primary
-    world.component_renderer.audio.set_enabled(primary)
-    if not peer.is_empty():
-        peer.viewport.audio_listener_enable_3d=not primary
-        peer.world.component_renderer.audio.set_enabled(not primary)
-    pane_label.text=_perspective_label(active_perspective)+(" · audio" if primary and not peer.is_empty() else "")
-    peer_label.text=_perspective_label(str(peer.get("perspective_id","")))+(" · audio" if not primary else "")
+    viewport.audio_listener_enable_3d=true
+    world.component_renderer.audio.set_enabled(true)
+    pane_label.text=_perspective_label(active_perspective)
 
-func _row_world(row:Dictionary)->Node3D:
-    if not peer.is_empty() and row.get("source_perspective",active_perspective)==peer.perspective_id:return peer.world
+func _row_world(_row:Dictionary)->Node3D:
     return world
 
-func _cancel_pair_advance()->void:
-    pair_plans=[]
+func _cancel_replay_advance()->void:
+    replay_plan={}
     world.timeline.replay_cancel_preparation()
-    if not peer.is_empty():peer.world.timeline.replay_cancel_preparation()
 
-func _advance_pair(delta:float)->void:
-    if peer.is_empty():return
-    var other:Node3D=peer.world
-    other.timeline.paused=world.timeline.paused
-    other.playback_speed=world.playback_speed;other.playback_end_ms=world.playback_end_ms
-    if world.timeline.paused:return
-    if not is_equal_approx(world.timeline.display_ms,other.timeline.display_ms):
-        world.timeline.paused=true;other.timeline.paused=true
-        status.text="Replay stopped: faction clocks disagree.";return
-    if pair_plans.is_empty():
-        var target=minf(world.playback_end_ms,world.timeline.display_ms+maxf(0,delta)*1000.0*world.playback_speed)
-        # The shared cut includes every due event in each independent stream.
-        # Readiness may hold this exact pair, but cannot publish only one side.
-        pair_plans=[world.timeline.replay_plan(target),other.timeline.replay_plan(target)]
-    var ready_a=world.timeline.replay_prepare(pair_plans[0])
-    var ready_b=other.timeline.replay_prepare(pair_plans[1])
-    if not ready_a or not ready_b:pair_wait_frames+=1;return
-    # No await or renderer work occurs between validation and publication.
-    if not world.can_publish_replay_advance(pair_plans[0]) or not other.can_publish_replay_advance(pair_plans[1]):
-        _cancel_pair_advance();return
-    world.publish_replay_advance(pair_plans[0]);other.publish_replay_advance(pair_plans[1])
-    pair_plans=[];pair_publications+=1
+func advance_review_to(target_ms:float)->bool:
+    # Offline capture prepares and publishes a bounded target through the
+    # recorded reducer; it cannot assign its display clock directly.
+    world.external_clock=true
+    world.timeline.paused=true
+    _advance_replay_owners(minf(target_ms,index.presentation_end_ms))
+    return is_equal_approx(world.timeline.display_ms,target_ms)
+
+func _advance_replay_owners(target:float)->void:
+    if replay_plan.is_empty():replay_plan=world.timeline.replay_plan(target)
+    if not world.timeline.replay_prepare(replay_plan):
+        replay_wait_frames+=1;return
+    if not world.can_publish_replay_advance(replay_plan):
+        _cancel_replay_advance();return
+    world.publish_replay_advance(replay_plan)
+    replay_plan={};replay_publications+=1
 
 func replay_diagnostics()->Dictionary:
-    var panes=[]
-    for owner in [{"world":world,"perspective_id":active_perspective}]+([peer] if not peer.is_empty() else []):
-        panes.append({"perspective_id":owner.perspective_id,"time_ms":owner.world.timeline.display_ms,
-            "sequence":owner.world.timeline.sequence,"world_revision":owner.world.timeline.world_revision,
-            "audio_enabled":owner.world.component_renderer.audio.enabled,"session_active":owner.world.session!=null,
-            "media_budget_bytes":owner.world.media_warmup.budget_bytes})
-    return {"comparison":not peer.is_empty(),"panes":panes,"listening_perspective":listening_perspective,
-        "waiting":not pair_plans.is_empty(),"wait_frames":pair_wait_frames,"publications":pair_publications,
-        "candidate_panes":(1 if candidate_world!=null else 0)+(1 if not candidate_peer.is_empty() else 0),
-        "spare_panes":(1 if spare_world!=null else 0)+(1 if not spare_peer.is_empty() else 0)}
+    return {"comparison":false,"panes":[{"perspective_id":active_perspective,"time_ms":world.timeline.display_ms,
+        "sequence":world.timeline.sequence,"world_revision":world.timeline.world_revision,
+        "audio_enabled":world.component_renderer.audio.enabled,"session_active":world.session!=null,
+        "media_budget_bytes":world.media_warmup.budget_bytes}],"listening_perspective":active_perspective,
+        "waiting":not replay_plan.is_empty(),"wait_frames":replay_wait_frames,"publications":replay_publications,
+        "candidate_panes":1 if candidate_world!=null else 0,"spare_panes":1 if spare_world!=null else 0}
 
 func _listener(owner: Node3D)->void:
     # Isometric camera distance controls framing, not listening distance.
@@ -481,9 +539,10 @@ func _cancel_case_selection()->void:
     # previously requested recording replace it after its worker completes.
     Recording.cancel(loader_token);Recording.cancel(seeker_token)
     _cancel_loop_preparation();_discard_candidate()
-    seek_generation+=1;requested_seek=-1;scrub_target=-1;resume_when_tracks_ready=false
-    pending_directory="";pending_case_request={};pending_index={};pending_bundle={}
+    seek_generation+=1;requested_seek=-1;scrub_target=-1
+    pending_directory="";pending_case_request={};pending_index={};pending_bundle={};pending_perspective_navigation={}
     pending_study_selection={};pending_perspective="";pending_selected_id="";pending_autoplay=false
+    pending_authoring_reload=false
     world.timeline.paused=true
     status.text="No recording for this interaction; current preview retained."
     _set_perspectives(active_perspective)
@@ -499,39 +558,57 @@ func select_case(record:Dictionary,perspective_id:String="",study:Dictionary={})
 
 func _set_perspectives(selected_id:String)->void:
     perspective_picker.clear();active_perspective=selected_id
-    if not peer.is_empty() and listening_perspective not in [selected_id,str(peer.perspective_id)]:listening_perspective=selected_id
-    var selected_listener=listening_perspective if not peer.is_empty() else selected_id
     for perspective in active_case.get("perspectives",[]):
         perspective_picker.add_item(perspective.label)
         var i=perspective_picker.item_count-1
         perspective_picker.set_item_metadata(i,str(perspective.id))
-        if str(perspective.id)==selected_listener:perspective_picker.select(i)
-    perspective_picker.tooltip_text="Listening faction" if not peer.is_empty() else "Recorded faction / audience"
+        if str(perspective.id)==selected_id:perspective_picker.select(i)
+    perspective_picker.tooltip_text="Recorded faction / audience"
     perspective_picker.disabled=case_bundle.is_empty() or perspective_picker.item_count<2 or loader!=null or (installing and not preparing_loop)
 
 func select_perspective(perspective_id:String)->void:
-    if not peer.is_empty() and perspective_id in [active_perspective,str(peer.perspective_id)]:
-        listening_perspective=perspective_id;_set_perspectives(active_perspective);_sync_audio();return
     if case_bundle.is_empty() or perspective_id==active_perspective or loader!=null:return
-    var target=Recording.view_index(case_bundle,perspective_id)
+    var anchor=_navigation_anchor(index,world.timeline.display_ms,selected_row,retained_view_anchor)
+    var resume=not world.timeline.paused
+    if not case_bundle.views.has(perspective_id):
+        for perspective in active_case.perspectives:
+            if str(perspective.id)!=perspective_id:continue
+            # Keep the current image until this independent journal and its
+            # exact media are admitted by the existing loader/seek workers.
+            _load(perspective.journal,{"capability":study_capability,"scenario":study_scenario})
+            pending_perspective_navigation={"anchor":anchor,"resume":resume}
+            return
+        status.text="Unknown recorded faction: "+perspective_id
+        return
+    var target=_inspection_index(case_bundle,perspective_id)
     if not target.get("ok",false):status.text=target.get("error","Unknown recorded faction");return
-    var anchor=Recording.navigation_anchor(index,world.timeline.display_ms,selected_row,retained_view_anchor)
+    pending_authoring_reload=false
     var at=Recording.anchor_time(target,anchor)
     anchor.mapped_time_ms=at;retained_view_anchor=anchor
-    var resume=not world.timeline.paused
     pending_bundle=case_bundle;pending_perspective=perspective_id
-    pending_selected_id=str(selected_row.get("source_row_id",selected_row.get("id","")))
+    pending_selected_id=_anchored_row(target,anchor)
     pending_index=target
     _discard_spare()
     _seek(at,resume,true)
     perspective_picker.disabled=true
+
+static func _navigation_anchor(source:Dictionary,time_ms:float,selected:Dictionary,previous:Dictionary)->Dictionary:
+    # An undisclosed audience may have no selectable counterpart. Returning
+    # without changing its held moment must retain the original causal anchor.
+    if selected.is_empty() and not previous.is_empty() and is_equal_approx(time_ms,previous.get("mapped_time_ms",-1.0)):
+        return previous.duplicate()
+    return Recording.navigation_anchor(source,time_ms,selected,previous)
+
+static func _anchored_row(source:Dictionary,anchor:Dictionary)->String:
+    for row in source.rows:
+        if Recording._row_key(row)==anchor.row_key:return row.id
+    return ""
 
 func _select_row(row:Dictionary)->void:
     selected_row=row
     if inspector.visible:_show_inspector(row)
 
 func _scrub(time_ms:float,finished:bool)->void:
-    resume_when_tracks_ready=false
     world.timeline.paused=true;_cancel_loop_preparation()
     scrub_target=time_ms
     # Mouse motion owns only the requested cursor. One final restore owns the
@@ -557,23 +634,54 @@ func _play_clip(row:Dictionary)->void:
     loop_start=row.start_ms;loop_end=end;loop_enabled=true;loop_button.set_pressed_no_signal(true)
     _seek(loop_start,true)
 
-static func _read_selection(directory:String,record:Dictionary,perspective_id:String,token:Dictionary,compare:bool=true)->Dictionary:
+static func _read_selection(directory:String,record:Dictionary,perspective_id:String,token:Dictionary)->Dictionary:
+    var started=Time.get_ticks_usec()
+    if not record.is_empty():
+        if perspective_id.is_empty():perspective_id=str(record.perspectives[0].id)
+        var matches=record.perspectives.filter(func(view):return str(view.id)==perspective_id)
+        if matches.is_empty():return {"ok":false,"error":"Unknown recorded faction: "+perspective_id}
+        directory=matches[0].journal
+    var selected=Recording.read(directory,token)
+    var stages={"selected_read_ms":(Time.get_ticks_usec()-started)/1000.0,"audiences_read":1,"comparison_ms":0.0}
+    if not selected.get("ok",false):return selected
+    var native_started=Time.get_ticks_usec()
+    selected.native_startup_plan=Play.NativeStartup.recording_plan(selected.rows)
+    stages.native_plan_ms=(Time.get_ticks_usec()-native_started)/1000.0
+    var media_started=Time.get_ticks_usec()
+    _prepare_recording_sources(selected)
+    stages.final_media_ms={perspective_id if not perspective_id.is_empty() else "recorded":(Time.get_ticks_usec()-media_started)/1000.0}
     if record.is_empty():
-        var selected=Recording.read(directory,token)
-        if selected.get("ok",false):_prepare_recording_sources(selected)
+        stages.total_ms=(Time.get_ticks_usec()-started)/1000.0;selected.loading_ms=stages
         return selected
-    var bundle=Recording.read_case(record,token)
-    if not bundle.get("ok",false):return bundle
-    for source in bundle.views.values():
-        if Recording.canceled(token):return {"ok":false,"canceled":true}
-        _prepare_recording_sources(source)
-    if perspective_id.is_empty():perspective_id=bundle.default_perspective_id
-    if compare:bundle=Recording.compare_case(bundle,token)
-    if not bundle.get("ok",false):return bundle
-    for source in bundle.views.values():
-        if not source.has("media_preload"):_prepare_recording_sources(source)
-    var selected=Recording.view_index(bundle,perspective_id)
-    return {"ok":true,"index":selected,"bundle":bundle,"perspective_id":perspective_id}
+    selected.perspective_id=perspective_id;selected.case_id=record.id
+    var bundle={"ok":true,"case_id":record.id,"perspectives":record.perspectives,
+        "views":{perspective_id:selected},"default_perspective_id":perspective_id,"comparison":false}
+    var inspection_started=Time.get_ticks_usec()
+    var inspected=_inspection_index(bundle,perspective_id)
+    stages.inspection_ms=(Time.get_ticks_usec()-inspection_started)/1000.0
+    stages.total_ms=(Time.get_ticks_usec()-started)/1000.0;inspected.loading_ms=stages
+    return {"ok":true,"index":inspected,"bundle":bundle,"perspective_id":perspective_id}
+
+static func _inspection_index(bundle:Dictionary,perspective_id:String)->Dictionary:
+    if not bundle.get("views",{}).has(perspective_id):return {"ok":false,"error":"Recorded faction has not been loaded: "+perspective_id}
+    # Studio has one independent renderer. Other original journals remain in
+    # its picker; no peer schedule or peer inspection rows retime this view.
+    var selected=bundle.duplicate();selected.comparison=false
+    selected.views={perspective_id:bundle.views[perspective_id]}
+    selected.perspectives=bundle.perspectives.filter(func(view):return str(view.id)==perspective_id)
+    return Recording.view_index(selected,perspective_id)
+
+static func _retain_recorded_views(result:Dictionary,previous:Dictionary)->Dictionary:
+    if previous.is_empty():return result
+    if result.bundle.case_id!=previous.case_id:return {"ok":false,"error":"Faction selection belongs to another recorded case"}
+    var expected:Dictionary=previous.views.values()[0].identity
+    var incoming:Dictionary=result.bundle.views[result.perspective_id].identity
+    if expected.game_id!=incoming.game_id or expected.game_epoch!=incoming.game_epoch:
+        return {"ok":false,"error":"Faction views must belong to the same recorded encounter epoch"}
+    var retained:Dictionary=result.bundle.duplicate()
+    retained.views=previous.views.duplicate();retained.views.merge(result.bundle.views,true)
+    var selected=result.duplicate();selected.bundle=retained
+    return selected
 
 static func _prepare_recording_sources(source:Dictionary)->void:
     source.media_preload=RecordingMedia.plan(source)
@@ -590,35 +698,31 @@ func _select_browser_path(path:String)->bool:
             case_picker.select(browser_cases.find(record)+1);active_case=record;_set_perspectives(str(perspective.id));return true
     return false
 
-static func _restore_selection(source:Dictionary,bundle:Dictionary,selected_id:String,target:float,token:Dictionary)->Dictionary:
+static func _restore_selection(source:Dictionary,target:float,token:Dictionary)->Dictionary:
     var restored=Recording.restore(source,target,token)
     if restored==null:return {}
     var result={"primary":restored}
-    if bundle.get("comparison",false):
-        for id in bundle.views:
-            if str(id)==selected_id:continue
-            var other=Recording.restore(bundle.views[id],target,token)
-            if other==null:return {}
-            result.peer={"timeline":other,"index":bundle.views[id],"perspective_id":str(id)}
-            break
     return result
 
 func _discard_spare()->void:
-    ReplayPanes.discard(spare_peer);spare_peer={}
     if spare_viewport!=null:spare_viewport.queue_free()
     spare_viewport=null;spare_world=null;spare_index={};frozen_spare_viewports=[]
 
 func _discard_candidate()->void:
-    ReplayPanes.discard(candidate_peer);candidate_peer={}
+    if world!=null:world.native_startup_background=true
     if candidate_tracks!=null:candidate_tracks.queue_free();candidate_tracks=null
     candidate_preview_errors=[]
     frozen_candidate_viewports=[]
     if candidate_viewport!=null:candidate_viewport.queue_free()
     candidate_viewport=null;candidate_world=null;candidate_index={};installing=false;tracks.thumbnails.suspended=false
 
-func _load(directory: String,study:Dictionary={},autoplay:bool=false) -> void:
+func _reload_authoring()->void:
+    _load(active_directory,{},false,true)
+
+func _load(directory: String,study:Dictionary={},autoplay:bool=false,reload_authoring:bool=false) -> void:
     if directory.is_empty():return
-    resume_when_tracks_ready=false
+    pending_authoring_reload=reload_authoring
+    pending_perspective_navigation={}
     study_panel.hide()
     scrub_target=-1.0
     _cancel_loop_preparation()
@@ -635,31 +739,29 @@ func _load(directory: String,study:Dictionary={},autoplay:bool=false) -> void:
     pending_bundle={};pending_perspective="";pending_selected_id=str(selected_row.get("id","")) if directory==active_directory else ""
     Recording.cancel(loader_token);Recording.cancel(seeker_token)
     seek_generation+=1;requested_seek=-1;_discard_candidate();pending_index={}
-    world.timeline.paused=true;_cancel_pair_advance()
-    if not peer.is_empty():peer.world.timeline.paused=true
+    world.timeline.paused=true;_cancel_replay_advance()
     status.text="Indexing exact SDK recording… current preview retained."
     if loader==null:_start_load()
 
 func _start_load()->void:
+    startup_setup.loader_started_ms=(Time.get_ticks_usec()-opened_usec)/1000.0
     loader_token=Recording.cancellation();loader=Thread.new()
-    loader.start(_read_selection.bind(pending_directory,pending_case_request.get("case",{}),pending_case_request.get("perspective_id",""),loader_token,comparison_enabled))
+    loader.start(_read_selection.bind(pending_directory,pending_case_request.get("case",{}),pending_case_request.get("perspective_id",""),loader_token))
     pending_directory="";pending_case_request={};perspective_picker.disabled=true
 
 func _seek(time_ms: float, resume: bool=false, keep_view_anchor:bool=false) -> void:
     var source:Dictionary=pending_index if not pending_index.is_empty() else index
     if source.is_empty() or loader!=null:return
     _cancel_loop_preparation()
-    resume_when_tracks_ready=false
     var target=clampf(time_ms,0,source.get("presentation_end_ms",source.duration_ms))
     if not tracks.drag_playhead and not is_equal_approx(target,scrub_target):scrub_target=-1.0
     if is_same(source,index) and not installing and seeker==null and requested_seek<0 and is_equal_approx(target,world.timeline.display_ms):
         scrub_target=-1.0
-        var prepared:Dictionary=tracks.prepare_visible(true)
-        resume_when_tracks_ready=resume and not prepared.settled
-        world.timeline.paused=not resume or resume_when_tracks_ready
+        tracks.prepare_visible()
+        world.timeline.paused=not resume
         return
     if not keep_view_anchor:retained_view_anchor={}
-    world.timeline.paused=true;_cancel_pair_advance();Recording.cancel(seeker_token)
+    world.timeline.paused=true;_cancel_replay_advance();Recording.cancel(seeker_token)
     seek_generation+=1;_discard_candidate()
     requested_seek=target
     preparation_measurement={"target_ms":target,"loop":false,"requested_usec":Time.get_ticks_usec()}
@@ -670,39 +772,44 @@ func _prepare_candidate(restored: Dictionary, source: Dictionary)->void:
     var started=Time.get_ticks_usec()
     preparation_measurement.restore_wait_ms=(started-int(preparation_measurement.get("requested_usec",started)))/1000.0
     candidate_index=source;_stage_tracks(source)
-    var paired=restored.has("peer")
-    candidate_budget=int(replay_budget_bytes/(2 if paired else 1))
+    candidate_budget=replay_budget_bytes
     var spare={"viewport":spare_viewport,"world":spare_world,"index":spare_index,"frozen":frozen_spare_viewports} if spare_world!=null else {}
     spare_viewport=null;spare_world=null;spare_index={};frozen_spare_viewports=[]
     var shared=is_same(source,index) or (not case_bundle.is_empty() and is_same(pending_bundle,case_bundle))
-    var prepared=ReplayPanes.prepare(self,restored.primary,source,world,spare,candidate_budget,paired,shared,not index.is_empty())
+    var prepared=ReplayPanes.prepare(self,restored.primary,source,world,spare,candidate_budget,shared,not index.is_empty())
     candidate_world=prepared.world;candidate_viewport=prepared.viewport
+    # The retained preview cannot spend the shared native warmup draw before
+    # this candidate admits its actual requested sources.
+    world.native_startup_background=false
+    candidate_world.native_startup_background=true
+    if pending_authoring_reload:
+        pending_authoring_reload=false
+        # Wait for the freshly indexed authoring before invalidating sources.
+        # Otherwise the retained old Play host could seed startup from its old
+        # cache while this recording is still loading. Existing instances keep
+        # their own resources until ordinary candidate publication retires them.
+        Play.NativeStartup.reset()
+        Play.NativeStartup.Factory.invalidate_authoring()
+        candidate_world._step_native_startup()
+    if index.is_empty() and initial_view_size>0:candidate_world.camera.size=initial_view_size
     if not prepared.reused:_listener(candidate_world)
     preparation_measurement.reused_spare=prepared.reused
-    if paired:
-        var other:Dictionary=restored.peer
-        var reference:Node3D=peer.world if not peer.is_empty() else world
-        var peer_shared=not peer.is_empty() and is_same(peer.index,other.index)
-        candidate_peer=ReplayPanes.prepare(self,other.timeline,other.index,reference,spare_peer,candidate_budget,true,peer_shared,not index.is_empty())
-        spare_peer={};candidate_peer.perspective_id=other.perspective_id
-        if not candidate_peer.reused:_listener(candidate_peer.world)
-    else:ReplayPanes.discard(spare_peer);spare_peer={}
     installing=true;installation_generation=worker_generation
     preparation_measurement.create_ms=(Time.get_ticks_usec()-started)/1000.0
     preparation_measurement.created_usec=Time.get_ticks_usec()
 
 func _publish_candidate()->void:
+    var first_publication=index.is_empty()
     _freeze_loop_candidate(false)
     preparation_measurement.publish_ms=(Time.get_ticks_usec()-int(preparation_measurement.get("requested_usec",Time.get_ticks_usec())))/1000.0
     transport_measurements.append(preparation_measurement.duplicate());preparation_measurement={}
     if transport_measurements.size()>32:transport_measurements.pop_front()
     var previous=viewport
     var previous_world=world
-    var previous_peer=peer
-    _cancel_pair_advance()
+    _cancel_replay_advance()
     var changed=not is_same(index,candidate_index)
     viewport=candidate_viewport;world=candidate_world
-    peer=candidate_peer;candidate_peer={}
+    world.native_startup_background=true
     if is_equal_approx(world.timeline.display_ms,scrub_target):scrub_target=-1.0
     viewport.render_target_update_mode=SubViewport.UPDATE_ALWAYS
     preparing_loop=false
@@ -712,16 +819,11 @@ func _publish_candidate()->void:
     # displayed texture changes; both viewport owners keep stable parents.
     previous.audio_listener_enable_3d=false;previous_world.component_renderer.audio.set_enabled(false)
     viewport.audio_listener_enable_3d=true
-    if not previous_peer.is_empty():previous_peer.viewport.audio_listener_enable_3d=false;previous_peer.world.component_renderer.audio.set_enabled(false)
-    peer_preview.visible=not peer.is_empty()
-    peer_preview.texture=peer.viewport.get_texture() if not peer.is_empty() else null
     preview.texture=viewport.get_texture()
-    if changed:previous.queue_free();ReplayPanes.discard(previous_peer);_discard_spare()
+    if changed:previous.queue_free();_discard_spare()
     else:
         _discard_spare()
         spare_viewport=previous;spare_world=previous_world;spare_index=index
-        spare_peer=previous_peer
-        if not spare_peer.is_empty():spare_peer.world.timeline.paused=true;ReplayPanes.freeze(spare_peer,true)
         spare_world.timeline.paused=true;spare_world.process_mode=Node.PROCESS_MODE_DISABLED
         var held:Array=[spare_viewport]
         held.append_array(spare_viewport.find_children("*","SubViewport",true,false))
@@ -752,8 +854,6 @@ func _publish_candidate()->void:
         interaction_picker.clear();interaction_picker.add_item("External recording");interaction_picker.disabled=true
         browser_cases.clear();case_picker.clear();case_picker.add_item(active_directory.get_base_dir().get_file());case_picker.disabled=true
     world.timeline.paused=not resume_after_install
-    if not peer.is_empty():peer.world.timeline.paused=world.timeline.paused
-    if listening_perspective not in [active_perspective,str(peer.get("perspective_id",""))]:listening_perspective=active_perspective
     _sync_audio()
     world.media_warmup.budget_bytes=candidate_budget
     world.media_plan_key=[] # normal optional demand may resume after publication
@@ -762,14 +862,13 @@ func _publish_candidate()->void:
         elif inspector_mode=="row":_refresh_row_inspector(selected_row)
     status.text="Ready · Q/E view · wheel zoom · middle-drag pan · Space play · G grid · Z walls" if candidate_preview_errors.is_empty() else "Source preview unavailable · Inspect for details"
     candidate_preview_errors=[]
+    _set_perspectives(active_perspective)
+    DisplayServer.window_set_title(WINDOW_TITLE)
+    _report_publication(first_publication)
     print("STUDIO_FRAME_READY: %.3f s, sequence %d, world %d"%[world.timeline.display_ms/1000,world.timeline.sequence,world.world_revision])
 
 func _sync_candidate_view()->bool:
     var changed=false
-    if not peer.is_empty() and not candidate_peer.is_empty() and is_same(peer.index,candidate_peer.index):
-        if candidate_peer.world.presentation_mutes!=peer.world.presentation_mutes or candidate_peer.world.presentation_solo!=peer.world.presentation_solo:
-            candidate_peer.world.presentation_mutes=peer.world.presentation_mutes.duplicate()
-            candidate_peer.world.presentation_solo=peer.world.presentation_solo.duplicate();changed=true
     if candidate_world.playback_speed!=world.playback_speed:
         candidate_world.playback_speed=world.playback_speed;changed=true
     if candidate_index.directory==active_directory:
@@ -784,52 +883,52 @@ func _sync_candidate_view()->bool:
     if candidate_world.grid_visible!=world.grid_visible:candidate_world.grid_visible=world.grid_visible;changed=true
     var extent=1 if world.camera.keep_aspect==Camera3D.KEEP_HEIGHT else 0
     var candidate_zoom=world.camera.size*float(candidate_viewport.size[extent])/maxi(1,viewport.size[extent])
-    if not index.is_empty() and (not is_equal_approx(candidate_world.camera.size,candidate_zoom) or candidate_world.camera_focus!=world.camera_focus):
-        candidate_world.camera.size=candidate_zoom;candidate_world.camera_focus=world.camera_focus;candidate_world.position_camera();changed=true
-    return changed
-
-func _sync_peer_view(other:Node3D,reference:Node3D)->bool:
-    var changed=false
-    var quarter=reference.requested_quarter if reference.rotation_pending() else reference.quarter
-    var other_quarter=other.requested_quarter if other.rotation_pending() else other.quarter
-    if quarter!=other_quarter:other.request_view(quarter);changed=true
-    if other.wall_mode!=reference.wall_mode:other.wall_mode=reference.wall_mode;other.update_wall_visibility();changed=true
-    if other.grid_visible!=reference.grid_visible:other.grid_visible=reference.grid_visible;changed=true
-    if other.camera.size!=reference.camera.size or other.camera_focus!=reference.camera_focus:
-        other.camera.size=reference.camera.size;other.camera_focus=reference.camera_focus;other.initial_focus=reference.initial_focus;other.position_camera();changed=true
-    other.playback_speed=reference.playback_speed
+    var desired_focus=_follow_position(candidate_world,world.camera_focus)
+    var zoom_changed=not index.is_empty() and not is_equal_approx(candidate_world.camera.size,candidate_zoom)
+    if (not index.is_empty() or not follow_actor_id.is_empty()) and (zoom_changed or candidate_world.camera_focus!=desired_focus):
+        if not index.is_empty():candidate_world.camera.size=candidate_zoom
+        candidate_world.camera_focus=desired_focus;candidate_world.initial_focus=true;candidate_world.position_camera();changed=true
     return changed
 
 func _process(_delta: float) -> void:
+    if Time.get_ticks_msec()>=fps_update_ms:
+        var fps=Engine.get_frames_per_second()
+        fps_label.text="%d FPS · %.1f ms"%[fps,1000.0/fps] if fps>0 else "— FPS · — ms"
+        fps_update_ms=Time.get_ticks_msec()+500
     # A seek's required world sources outrank optional thumbnail work. Visible
     # thumbnail requests remain active, including the staged candidate's rows.
     var preparing_sources=installing and not preparation_measurement.has("ready_ms")
-    tracks.thumbnails.prewarm_suspended=preparing_sources
-    if candidate_tracks!=null:candidate_tracks.thumbnails.prewarm_suspended=preparing_sources
-    if not peer.is_empty():
-        ViewportLayout.resize(peer.viewport,peer.world.camera,peer_preview.size)
-        _sync_peer_view(peer.world,world);_sync_listener(peer.world)
-        peer.world.timeline.paused=world.timeline.paused
-    if resume_when_tracks_ready and tracks.prepare_visible(true).settled:
-        resume_when_tracks_ready=false;world.timeline.paused=false
+    var desired_focus=_follow_position(world,world.camera_focus)
+    if world.camera_focus!=desired_focus:
+        world.camera_focus=desired_focus;world.position_camera()
     if preparing_loop and (not loop_enabled or world.timeline.paused or prepared_loop_range!=Vector2(loop_start,loop_end)):_cancel_loop_preparation()
     ViewportLayout.resize(viewport,world.camera,preview.size)
     _sync_listener(world)
     if loader!=null and not loader.is_alive():
         var result=loader.wait_to_finish();loader=null
+        if not pending_perspective_navigation.is_empty() and result is Dictionary and result.get("ok",false):
+            result=_retain_recorded_views(result,case_bundle)
         if not pending_directory.is_empty():_start_load()
         elif Recording.canceled(loader_token):_set_perspectives(active_perspective)
         elif result is Dictionary and result.get("ok",false):
             pending_index=result.get("index",result)
             pending_bundle=result.get("bundle",{});pending_perspective=result.get("perspective_id","")
-            # Explicit Library navigation starts the selected study at its
-            # beginning, even if another study uses this same recording.
-            var keep_clock=not pending_autoplay and active_directory==pending_index.directory
-            _seek(minf(world.timeline.display_ms,pending_index.get("presentation_end_ms",pending_index.duration_ms)) if keep_clock else 0,pending_autoplay)
-            print("STUDIO_INDEX_READY: %d operations, %d rows, %.3fs, %.1fms compile"%[pending_index.operations,pending_index.rows.size(),pending_index.duration_ms/1000,pending_index.compile_ms])
+            if not pending_perspective_navigation.is_empty():
+                var navigation:Dictionary=pending_perspective_navigation;pending_perspective_navigation={}
+                var at=Recording.anchor_time(pending_index,navigation.anchor)
+                navigation.anchor.mapped_time_ms=at;retained_view_anchor=navigation.anchor
+                pending_selected_id=_anchored_row(pending_index,navigation.anchor)
+                _seek(at,navigation.resume,true)
+            else:
+                # Explicit Library navigation starts the selected study at its
+                # beginning, even if another study uses this same recording.
+                var keep_clock=not pending_autoplay and active_directory==pending_index.directory
+                _seek(minf(world.timeline.display_ms,pending_index.get("presentation_end_ms",pending_index.duration_ms)) if keep_clock else 0,pending_autoplay)
+            if not pending_index.is_empty():print("STUDIO_INDEX_READY: %d operations, %d rows, %.3fs, %.1fms compile"%[pending_index.operations,pending_index.rows.size(),pending_index.duration_ms/1000,pending_index.compile_ms])
         elif not (result is Dictionary and result.get("canceled",false)):
             scrub_target=-1.0
             pending_study_selection={}
+            pending_authoring_reload=false;pending_perspective_navigation={}
             status.text="Recording rejected; previous preview kept: "+str(result.get("error","Invalid source") if result is Dictionary else "Authoring/recording compile failed")
             _set_perspectives(active_perspective)
     if seeker!=null and not seeker.is_alive():
@@ -839,49 +938,36 @@ func _process(_delta: float) -> void:
         worker_generation=seek_generation;seeker_token=Recording.cancellation()
         var target=requested_seek;requested_seek=-1
         var source=pending_index if not pending_index.is_empty() else index
-        var bundle=pending_bundle if not pending_bundle.is_empty() else case_bundle
-        var perspective=pending_perspective if not pending_perspective.is_empty() else active_perspective
-        seeker=Thread.new();seeker.start(_restore_selection.bind(source,bundle,perspective,target,seeker_token))
+        seeker=Thread.new();seeker.start(_restore_selection.bind(source,target,seeker_token))
     if installing and installation_generation==seek_generation:
-        var candidate_size=Vector2(maxf(1,(preview_row.size.x-3)/2),preview_row.size.y) if not candidate_peer.is_empty() else preview_row.size
+        var candidate_size=preview_row.size
         var size_changed=ViewportLayout.resize(candidate_viewport,candidate_world.camera,candidate_size)
         var view_changed=_sync_candidate_view() or size_changed
         _sync_listener(candidate_world)
-        var peer_ready=true
-        if not candidate_peer.is_empty():
-            # The candidate pair uses the future split geometry before publication.
-            ViewportLayout.resize(candidate_peer.viewport,candidate_peer.world.camera,candidate_size)
-            var peer_changed=_sync_peer_view(candidate_peer.world,candidate_world)
-            _sync_listener(candidate_peer.world)
-            peer_ready=not peer_changed and not candidate_peer.world.rotation_pending() and candidate_peer.world.playback_prepared() and _recording_sources_ready(candidate_peer.world)
-        var tracks_ready=true
         if candidate_tracks!=null:
             candidate_tracks.size=tracks.size
             candidate_tracks.quarter=candidate_world.quarter
             candidate_tracks.set_light_context({"light_strength":candidate_world.light_strength,"fire_light_flicker":candidate_world.fire_light_flicker},candidate_world.fixture_clips)
-            var prepared:Dictionary=candidate_tracks.prepare_visible(true)
+            var prepared:Dictionary=candidate_tracks.prepare_visible()
             candidate_tracks.thumbnails.seed_source_images(candidate_world.source_images)
-            tracks_ready=prepared.pending==0
-            if not candidate_peer.is_empty():candidate_tracks.thumbnails.seed_source_images(candidate_peer.world.source_images)
+            candidate_preview_pending=prepared.pending
             candidate_preview_errors=prepared.errors
         else:
             # A same-recording seek can follow a filter/expand selection. Keep
-            # its visible previews preparing too; scene readiness alone is not
-            # sufficient to publish that selection.
-            var prepared:Dictionary=tracks.prepare_visible(true)
+            # its visible previews preparing without holding the exact scene.
+            # Pending cells and source errors remain inspectable in the tracks.
+            var prepared:Dictionary=tracks.prepare_visible()
             tracks.thumbnails.seed_source_images(candidate_world.source_images)
-            tracks_ready=prepared.pending==0
+            candidate_preview_pending=prepared.pending
             candidate_preview_errors=prepared.errors
         if view_changed:_freeze_loop_candidate(false)
-        if not candidate_peer.is_empty() and (not candidate_peer.world.presentation_errors.is_empty() or not candidate_peer.world.media_issue.is_empty()):
-            candidate_world.presentation_errors.append("Peer: "+str(candidate_peer.world.presentation_errors)+candidate_peer.world.media_issue)
         if not candidate_world.presentation_errors.is_empty() or not candidate_world.media_issue.is_empty():
             scrub_target=-1.0
             pending_study_selection={}
             status.text="Candidate rejected; previous preview retained: "+str(candidate_world.presentation_errors)+candidate_world.media_issue
             if preparing_loop:_cancel_loop_preparation();world.timeline.paused=true
             _discard_candidate();pending_index={};pending_bundle={};pending_perspective="";_set_perspectives(active_perspective)
-        elif peer_ready and tracks_ready and not view_changed and not candidate_world.rotation_pending() and candidate_world.playback_prepared() and _recording_sources_ready(candidate_world):
+        elif _candidate_frame_ready(view_changed):
             if not preparation_measurement.has("ready_ms"):preparation_measurement.ready_ms=(Time.get_ticks_usec()-int(preparation_measurement.get("created_usec",Time.get_ticks_usec())))/1000.0
             if not preparing_loop or world.timeline.display_ms>=loop_end:_publish_candidate()
             else:_freeze_loop_candidate(true)
@@ -889,16 +975,23 @@ func _process(_delta: float) -> void:
         if not world.timeline.paused and not installing:
             if loop_enabled and loop_end>loop_start and world.timeline.display_ms>=loop_end and not preparing_loop:
                 _seek(loop_start,true)
-            elif world.timeline.display_ms>=index.get("presentation_end_ms",index.duration_ms) and not world.timeline.busy() and (peer.is_empty() or not peer.world.timeline.busy()):
+            elif world.timeline.display_ms>=index.get("presentation_end_ms",index.duration_ms) and not world.timeline.busy():
                 world.timeline.paused=true
         tracks.set_light_context({"light_strength":world.light_strength,"fire_light_flicker":world.fire_light_flicker},world.fixture_clips)
-        tracks.playhead_ms=scrub_target if scrub_target>=0 else world.timeline.display_ms;tracks.quarter=world.quarter;tracks.queue_redraw()
-        clock_label.text="%.3f / %.3f s%s"%[world.timeline.display_ms/1000,index.get("presentation_end_ms",index.duration_ms)/1000," · event end" if world.timeline.display_ms>=index.duration_ms else ""]
     play_button.text="Play" if world.timeline.paused else "Pause"
     if not index.is_empty():
         world.playback_end_ms=minf(loop_end,index.presentation_end_ms) if loop_enabled and loop_end>loop_start else index.presentation_end_ms
         _prepare_loop()
-    _advance_pair(_delta)
+    if not index.is_empty():
+        # Follow and paint the displayed recorded clock.
+        tracks.playhead_ms=scrub_target if scrub_target>=0 else world.timeline.display_ms;tracks.quarter=world.quarter;tracks.queue_redraw()
+        _follow_displayed_track()
+        clock_label.text="%.3f / %.3f s%s"%[world.timeline.display_ms/1000,index.get("presentation_end_ms",index.duration_ms)/1000," · event end" if world.timeline.display_ms>=index.duration_ms else ""]
+    # Optional swatches must not compete with actual recorded playback. The
+    # visible rows still request and publish through the ordinary cache path.
+    var suspend_optional=preparing_sources or not world.timeline.paused
+    tracks.thumbnails.prewarm_suspended=suspend_optional
+    if candidate_tracks!=null:candidate_tracks.thumbnails.prewarm_suspended=suspend_optional
     markers.queue_redraw()
     if inspector.visible and inspector_mode=="log" and inspector_log_revision!=world.timeline.revision:
         inspector_log_revision=world.timeline.revision
@@ -909,10 +1002,43 @@ func _process(_delta: float) -> void:
     if not world.presentation_errors.is_empty() and str(world.presentation_errors)!=last_status:
         last_status=str(world.presentation_errors);print("STUDIO_RENDER_ISSUES: "+last_status)
 
-func _recording_sources_ready(owner:Node3D)->bool:
-    # Prepare budget-selected assets from this recording once before showing
-    # the case. Each seek still proves its own exact current-frame readiness.
-    return Play.MediaWarmup.ready(owner.media_warmup,owner.media_warmup.preload_selected)
+func _candidate_frame_ready(view_changed:bool)->bool:
+    # Only the exact renderer frame gates publication. Recording-wide optional
+    # media and source thumbnails continue through their existing bounded work.
+    return not view_changed and not candidate_world.rotation_pending() and candidate_world.playback_prepared()
+
+func _report_publication(first:bool)->void:
+    var media:Dictionary=world.media_warmup
+    var required:Dictionary=world.media_plan.get("required",{}).duplicate()
+    required.merge(world.media_environment_required);required.merge(media.boot_paths)
+    var required_ready=0;var upcoming_count=0;var upcoming_ready=0;var optional_count=0;var optional_ready=0
+    for path in required:
+        if media.ready_paths.has(path) and not media.failed.has(path):required_ready+=1
+    for path in media.wanted:
+        if required.has(path):continue
+        upcoming_count+=1
+        if media.ready_paths.has(path) and not media.failed.has(path):upcoming_ready+=1
+    for path in media.preload_selected:
+        if media.wanted.has(path):continue
+        optional_count+=1
+        if media.ready_paths.has(path) and not media.failed.has(path):optional_ready+=1
+    var receipt={"first":first,"process_uptime_ms":Time.get_ticks_usec()/1000.0,
+        "studio_elapsed_ms":(Time.get_ticks_usec()-opened_usec)/1000.0,
+        "directory":active_directory,"display_ms":world.timeline.display_ms,
+        "studio_setup_ms":startup_setup.duplicate(),"recording_ms":index.get("loading_ms",{}),
+        "required_sources":required.size(),"required_ready":required_ready,
+        "upcoming_sources":upcoming_count,"upcoming_ready":upcoming_ready,
+        "optional_sources":optional_count,"optional_ready":optional_ready,
+        "thumbnail_pending":candidate_preview_pending,
+        "native_warmup_ms":world.native_startup.get("elapsed_ms",0.0),
+        "native_warmup_completed":world.native_startup.get("completed",0),
+        "native_warmup_total":world.native_startup.get("total",0),
+        "native_required_total":world.native_startup.get("required_total",0),
+        "native_required_pending":world.native_startup.get("pending",0),
+        "native_background_pending":world.native_startup.get("background_pending",0),
+        "transport":transport_measurements.back() if not transport_measurements.is_empty() else {}}
+    if first:startup_receipt=receipt
+    print("STUDIO_PUBLICATION: ",JSON.stringify(receipt))
 
 func _prepare_loop()->void:
     if not loop_enabled or loop_end<=loop_start or world.timeline.paused or preparing_loop:return
@@ -922,7 +1048,7 @@ func _prepare_loop()->void:
     preparing_loop=true;prepared_loop_range=Vector2(loop_start,loop_end)
     preparation_measurement={"target_ms":loop_start,"loop":true,"requested_usec":Time.get_ticks_usec()}
     seeker_token=Recording.cancellation();worker_generation=seek_generation;resume_after_install=true
-    seeker=Thread.new();seeker.start(_restore_selection.bind(index,case_bundle,active_perspective,loop_start,seeker_token))
+    seeker=Thread.new();seeker.start(_restore_selection.bind(index,loop_start,seeker_token))
 
 func _cancel_loop_preparation()->void:
     if not preparing_loop:return
@@ -930,7 +1056,7 @@ func _cancel_loop_preparation()->void:
 
 func _freeze_loop_candidate(freeze:bool)->void:
     if candidate_viewport==null:return
-    ReplayPanes.freeze(candidate_peer,freeze)
+    world.native_startup_background=freeze
     if freeze:
         if not frozen_candidate_viewports.is_empty():return
         var viewports:Array=[candidate_viewport]
@@ -947,17 +1073,13 @@ func _freeze_loop_candidate(freeze:bool)->void:
         frozen_candidate_viewports=[]
 
 func _toggle_play() -> void:
-    if resume_when_tracks_ready:
-        resume_when_tracks_ready=false
-        return
     if loader!=null or ((installing or seeker!=null) and not preparing_loop):return
     if world.timeline.paused and not index.is_empty() and world.timeline.display_ms>=index.get("presentation_end_ms",index.duration_ms):
         _seek(loop_start if loop_enabled else 0.0,true)
         return
     world.timeline.paused=not world.timeline.paused
     if world.timeline.paused:
-        _cancel_loop_preparation();_cancel_pair_advance()
-        if not peer.is_empty():peer.world.timeline.paused=true
+        _cancel_loop_preparation();_cancel_replay_advance()
 
 func _play_study()->void:
     if index.is_empty():return
@@ -978,6 +1100,7 @@ func _preview_input(event: InputEvent) -> void:
             world.camera.size=clampf(world.camera.size*(.9 if event.button_index==MOUSE_BUTTON_WHEEL_UP else 1.1),3,100)
             world.position_camera(); accept_event()
     elif event is InputEventMouseMotion and event.button_mask & MOUSE_BUTTON_MASK_MIDDLE:
+        follow_actor_id=""
         var factor=world.camera.size/maxf(1,preview.size.y)
         world.camera_focus -= (world.camera.basis.x*event.relative.x-world.camera.basis.y*event.relative.y)*factor
         world.position_camera(); accept_event()
@@ -1034,6 +1157,11 @@ static func provenance_lines(row:Dictionary)->Array[String]:
         elif row.get("kind")=="condition_restore":
             lines.append("Recorded removal restores the composed pose/material selected by the remaining state. This inspection track creates no additional effect.")
             lines.append("Before → after: "+JSON.stringify(row.get("transition",{})))
+        elif row.get("kind")=="native_light":
+            lines.append("Keys come from the selected native AnimationPlayer. Its source clock is mapped onto the parent spell phase; optical colour/strength overrides remain visible in the component.")
+        elif row.get("kind")=="native_material":
+            lines.append(str(data.get("preview_reason","")))
+            lines.append("Inspect → Full spell hit material switches between this source and Colour treatment.")
         else:
             lines.append("Resolved parameters: "+JSON.stringify(row.get("operations",{})))
             lines.append("Preview: composed actor. Mute/solo applies to the owning condition.")

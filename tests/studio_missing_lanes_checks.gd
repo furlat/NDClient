@@ -9,6 +9,10 @@ var evidence:Array=[]
 func check(value:bool,label:String)->void:
     checks+=1
     if not value:failures.append(label);print("STUDIO_MISSING_FAIL ",label)
+func exposed(view:Control,row:Dictionary)->bool:
+    if view.rows.any(func(item):return item.row.id==row.id):return true
+    var display:Dictionary=view._display_row(view._display_id(row.id))
+    return display.get("kind")=="missing_group" and display.members.any(func(member):return is_same(member,row))
 func _initialize()->void:
     var directories:Array=[]
     for argument in OS.get_cmdline_user_args():
@@ -31,7 +35,7 @@ func _initialize()->void:
                     if matches.size()!=1:continue
                     var row:Dictionary=matches[0];observed.requirements+=1
                     check(row.reason==requirement.reason and row.source==requirement.get("source_pointer",requirement.source),"Missing lane retains original reason and JSON pointer")
-                    check(view.rows.any(func(entry):return entry.row.id==row.id),"Missing lane is visible with metadata hidden by default")
+                    check(exposed(view,row),"Exact missing lane is retained by the compact missing-work summary")
                     check(row.coverage.implementation==requirement.get("implementation","missing") and row.coverage.rendered=="not_rendered","Missing lane retains declared implementation readiness without claiming rendering")
                     if requirement.has("gap_kind"):
                         check(row.gap_kind==requirement.gap_kind and row.coverage.inspection==requirement.get("inspection","missing" if requirement.gap_kind=="inspection" else "unassessed"),"Inspection and unassessed gaps remain distinct from absent renderer support")
@@ -53,7 +57,7 @@ func _initialize()->void:
         for row in index.rows:
             if row.kind=="requirement" and row.has("owner"):
                 check(by_id[row.parent].kind=="condition" and row.owner.id==by_id[row.parent].owner.id,"Missing condition lane retains actual lifetime owner")
-                check(view.rows.any(func(entry):return entry.row.id==row.id),"Missing condition mechanism is visible alongside implemented sustain")
+                check(exposed(view,row),"Missing condition mechanism remains exposed through its summary")
                 if row.reason=="persistent_visual_assignment_missing":
                     check(row.missing_category=="authoring" and row.source.ends_with("/persistent"),"Missing persistent assignment is an exact JSON-authoring gap, not a lost media file")
                 if row.source.ends_with("/application_asset_id") or row.source.ends_with("/removal_asset_id"):
@@ -61,7 +65,7 @@ func _initialize()->void:
                     check(row.timing_status=="unresolved" and row.end_ms==row.start_ms,"Uncompiled lifecycle gets an honest unscheduled expectation")
             if row.kind!="audio" or row.status!="missing":continue
             observed.missing_audio+=1
-            check(view.rows.any(func(entry):return entry.row.id==row.id) and not row.reason.is_empty() and not row.source.is_empty(),"Missing recorded bow audio remains a visible source lane with reason")
+            check(exposed(view,row) and not row.reason.is_empty() and not row.source.is_empty(),"Missing recorded bow audio remains inspectable with its reason")
             check(row.missing_category=="source" and row.coverage.implementation=="resolved" and row.coverage.source=="missing","Compiled audio distinguishes implemented mechanism from missing source")
         for owner_row in index.rows:
             if owner_row.kind!="condition":continue

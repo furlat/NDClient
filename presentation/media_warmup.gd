@@ -1,20 +1,22 @@
 extends RefCounted
 # Exact current/near-future character sheets, prepared off the scene thread.
-# Dictionaries are passive demand/residency records; only the scene uploads.
+# Workers own unpublished images/textures. Only scene publication makes them ready.
 const Characters = preload("res://presentation/characters.gd")
 const Conditions = preload("res://presentation/conditions.gd")
 const WorldRows = preload("res://presentation/world.gd")
 const EnvironmentMedia = preload("res://presentation/environment_media.gd")
 const EncounterMedia = preload("res://presentation/encounter_media.gd")
+const NativeSupport = preload("res://presentation/native_scene_support.gd")
 const BUDGET_BYTES = 16 * 1024 * 1024 * 1024
 const EVICTIONS_PER_FRAME = 2
+const CPU_RELEASES_PER_FRAME = 2
 const DECODE_WORKERS = 4
 const PUBLICATION_BUDGET_USEC = 2000
 const PUBLICATIONS_PER_FRAME = 8
 
 static func create() -> Dictionary:
     return {"pending":[],"queued":{},"wanted":{},"environment":{},"fixtures":{},"failed":{},"resident":{},
-        "decode_jobs":[],"decoded":0,"evicted":0,
+        "decode_jobs":[],"decoded":0,"evicted":0,"worker_upload":false,"maximum_texture_size":0,
         "plan_task":-1,"plan_pending":{},"optional_pending":{},"plan_result":{},"plan_cache":{},
         "required_plan":false,"metadata_phases":{},"publication":{},
         "gpu_only":{},"cpu_required":{},"metadata_ms":0.0,"decode_ms":0.0,"metadata_jobs":0,
@@ -22,10 +24,11 @@ static func create() -> Dictionary:
         "encounter":{},"encounter_override":{},"encounter_epoch":-1,"preload_selected":{},"preload_skipped":0,"preload_estimated_bytes":0,
         "required_estimated_bytes":0,"unknown_required":0,"boot_paths":{},"boot_started":false,"boot_complete":false,
         "prune_frame":-1,"pruned_this_frame":0,"stats":{},"cpu_release":{},
+        "cpu_release_frame":-1,"cpu_released_this_frame":0,"cpu_released_bytes_this_frame":0,
         "selection_revision":-1,"selection_budget":-1,"selection_required":{},"selection_extra":{},"selection_jobs":0,
         "ready_paths":{},"boot_waiting":{},"selected_ready":{},"selected_failed":{},
         "selection_roles":{},"demand_roles":{},"selection_summary":{},"selection_refreshed":0,
-        "demand_snapshot":{},"demand_runs":0,"demand_noops":0,"demand_phases":{},"demand_counts":{}}
+        "source_sizes":{},"demand_snapshot":{},"demand_runs":0,"demand_noops":0,"demand_phases":{},"demand_counts":{}}
 
 static func _snapshot(state: Dictionary) -> Dictionary:
     # Dictionary membership can change on the scene thread. The after-value
@@ -98,16 +101,20 @@ static func _plan_sources(request: Dictionary, result: Dictionary, cache: Dictio
     result.value.environment_required = environment.required
     result.value.environment_upcoming = environment.upcoming
     result.value.fixtures = environment.fixtures
+    var exact_paths: Dictionary = result.value.required.duplicate()
+    for paths in [result.value.upcoming,environment.required,environment.upcoming,result.value.get("optical_candidates",{})]: exact_paths.merge(paths)
+    result.value.source_sizes = EncounterMedia.source_sizes(exact_paths,cache)
+    var sizes_done = Time.get_ticks_usec()
     # The single metadata owner schedules optional families only after this
     # exact required packet has crossed the completed-task publication boundary.
     result.optional_request = {"key":request.key,"state":request.state,"groups":request.groups,"required":result.value}
     result.source_files = Characters.Catalog.source_snapshot(cache)
     result.phases = {"characters":(characters_done-started)/1000.0,
-        "environment":(environment_done-characters_done)/1000.0,"source_files":(Time.get_ticks_usec()-environment_done)/1000.0}
+        "environment":(environment_done-characters_done)/1000.0,"source_sizes":(sizes_done-environment_done)/1000.0,"source_files":(Time.get_ticks_usec()-sizes_done)/1000.0}
     for phase in environment.get("diagnostics",{}).get("phases",{}):
         result.phases["environment_"+phase] = environment.diagnostics.phases[phase]
     result.elapsed_ms = (Time.get_ticks_usec()-started)/1000.0
-    result.complete = true
+
 
 static func _plan_optional(request: Dictionary, result: Dictionary, cache: Dictionary) -> void:
     var started = Time.get_ticks_usec()
@@ -173,11 +180,19 @@ static func _adopt_epoch(data: Dictionary, epoch: int) -> void:
     data.encounter = data.encounter_override; data.required_plan = false
     data.boot_paths = {}; data.boot_waiting = {}; data.boot_started = false; data.boot_complete = false
     data.selection_revision = -2
+    data.source_sizes = {}
 
 static func adopt_required(data: Dictionary, epoch: int) -> void:
     # Exact readiness and its startup pins do not depend on optional estimates.
     _adopt_epoch(data,epoch)
     data.required_plan = true
+
+static func adopt_source_sizes(data: Dictionary, sizes: Dictionary, epoch: int) -> void:
+    _adopt_epoch(data,epoch)
+    for path in sizes:
+        if data.source_sizes.get(path,-1)!=sizes[path]:
+            data.source_sizes[path] = sizes[path]
+            data.demand_snapshot = {}
 
 static func adopt_encounter(data: Dictionary, encounter: Dictionary, epoch: int) -> void:
     # Called only for an accepted scene epoch, never on worker completion alone.
@@ -195,6 +210,8 @@ static func _fixture(data: Dictionary, path: String) -> bool:
 static func _estimate(data: Dictionary, path: String) -> int:
     var estimate: Dictionary = data.encounter.get("estimates",{}).get(path,{})
     if estimate.has("bytes"): return int(estimate.bytes)
+    if data.source_sizes.has(path):
+        return int(data.source_sizes[path])*(2 if _needs_cpu(data,path) else 1)
     if data.resident.has(path): return int(data.resident[path].bytes)
     return -1
 
@@ -237,17 +254,23 @@ static func _family_roles(encounter: Dictionary) -> Dictionary:
     return {"environment":encounter.get("environment",{}),"fixtures":encounter.get("fixtures",{}),
         "cpu_required":encounter.get("cpu_required",{}),"gpu_only":encounter.get("gpu_only",{})}
 
-static func _changed_roles(previous: Dictionary, current: Dictionary) -> Dictionary:
+static func _changed_roles(previous: Dictionary, current: Dictionary, family: Dictionary = {}) -> Dictionary:
     var changed = {}
     for role in current:
         var old: Dictionary = previous.get(role,{})
         var new: Dictionary = current[role]
         # Accepted family role owners are immutable and reused by the worker.
         if is_same(old,new) or old==new: continue
+        # Exact roles add to the accepted family roles. Removing/readding an
+        # already family-owned requirement cannot change source readiness.
+        var covered: Dictionary = family.get(role,{})
+        var cpu: Dictionary = family.get("cpu_required",{}) if role=="gpu_only" else {}
+        var environment: Dictionary = family.get("environment",{}) if role in ["cpu_required","gpu_only"] else {}
+        var fixtures: Dictionary = family.get("fixtures",{}) if role in ["cpu_required","gpu_only"] else {}
         for path in old:
-            if not new.has(path): changed[path] = true
+            if not new.has(path) and not covered.has(path) and not cpu.has(path) and not environment.has(path) and not fixtures.has(path): changed[path] = true
         for path in new:
-            if not old.has(path): changed[path] = true
+            if not old.has(path) and not covered.has(path) and not cpu.has(path) and not environment.has(path) and not fixtures.has(path): changed[path] = true
     return changed
 
 static func _selection_delta(data: Dictionary, previous: Dictionary, role_changes: Dictionary, new_boot: bool, membership_changes: Dictionary) -> Dictionary:
@@ -263,13 +286,17 @@ static func _selection_delta(data: Dictionary, previous: Dictionary, role_change
             membership_changes[path] = true
             refresh[path] = true
         elif new_boot: refresh[path] = true
-    for path in refresh:
-        _refresh_path(data,path)
-        data.selection_refreshed += 1
+    # The resident-role pass below updates this same set after category and CPU
+    # requirements are settled. Refreshing readiness here would do it twice.
+    data.selection_refreshed += refresh.size()
     return refresh
 
-static func _refresh_resident_role(data: Dictionary, path: String) -> void:
-    if not data.resident.has(path): return
+static func _refresh_resident_role(data: Dictionary, path: String, selected_refresh:bool=false) -> void:
+    if not data.resident.has(path):
+        # Selection changes also update missing/failed source readiness. Keep
+        # the original domain for unrelated nonresident role-only updates.
+        if selected_refresh:_refresh_path(data,path)
+        return
     var resident: Dictionary = data.resident[path]
     if resident.environment!=_environment(data,path):
         _resident_delta(data,path,resident,-1)
@@ -340,7 +367,7 @@ static func demand(data: Dictionary, paths: Dictionary, environment: Dictionary 
     var bytes_by_path: Dictionary = data.encounter.get("estimate_bytes",{})
     var estimates: Dictionary = data.encounter.get("estimates",{})
     for path in paths:
-        if not bytes_by_path.has(path) and not estimates.get(path,{}).has("bytes"): exact_estimates = false
+        if not bytes_by_path.has(path) and not estimates.get(path,{}).has("bytes") and not data.source_sizes.has(path): exact_estimates = false
         var size: int = bytes_by_path[path] if bytes_by_path.has(path) else _estimate(data,path)
         if size < 0: unknown += 1
         else: used += size
@@ -427,10 +454,12 @@ static func demand(data: Dictionary, paths: Dictionary, environment: Dictionary 
     # Reuse selection membership differences; mandatory-only transfers can
     # alter pins without changing any source's residency role or readiness.
     var affected: Dictionary = membership_changes
-    for path in previous_paths:
-        if not paths.has(path): affected[path] = true
-    for path in paths:
-        if not previous_paths.has(path): affected[path] = true
+    var paths_changed: bool = previous_paths!=paths
+    if paths_changed:
+        for path in previous_paths:
+            if not paths.has(path): affected[path] = true
+        for path in paths:
+            if not previous_paths.has(path): affected[path] = true
     # Membership changes affect pin accounting, not every resident texture.
     if not data.stats.is_empty():
         for path in affected:
@@ -441,14 +470,15 @@ static func demand(data: Dictionary, paths: Dictionary, environment: Dictionary 
                 var resident: Dictionary = data.resident[path]
                 data.stats[resident.environment].pinned_bytes += (int(current_pin)-int(prior_pin))*int(resident.bytes)
     var roles_now = {"environment":environment,"fixtures":fixtures,"gpu_only":gpu_only,"cpu_required":cpu_required}
-    var exact_changed = _changed_roles(data.demand_roles,roles_now)
+    var exact_changed = _changed_roles(data.demand_roles,roles_now,data.encounter if data.encounter.has("estimate_bytes") else {})
     var resident_refresh: Dictionary = refresh.duplicate()
     for path in exact_changed:
         # Match the original affected domain even for manual role maps that
         # mention an unchanged optional source outside both exact demands.
         if previous_paths.has(path) or paths.has(path) or membership_changes.has(path): resident_refresh[path] = true
-    for path in paths:
-        if not previous_paths.has(path): resident_refresh[path] = true
+    if paths_changed:
+        for path in paths:
+            if not previous_paths.has(path): resident_refresh[path] = true
     if not data.encounter.has("estimate_bytes"):
         # Legacy/manual metadata has no prepared-byte owner. Keep its original
         # exhaustive refresh domain and residency fallback behavior.
@@ -457,7 +487,7 @@ static func demand(data: Dictionary, paths: Dictionary, environment: Dictionary 
         resident_refresh.merge(membership_changes)
     data.demand_counts.affected = affected.size()
     data.demand_counts.resident_refreshed = resident_refresh.size()
-    for path in resident_refresh: _refresh_resident_role(data,path)
+    for path in resident_refresh: _refresh_resident_role(data,path,refresh.has(path))
     phases.resident_refresh = (Time.get_ticks_usec()-phase_started)/1000.0
     phase_started = Time.get_ticks_usec()
     # Promote mandatory sources ahead of unfinished background warmup. Once
@@ -467,7 +497,11 @@ static func demand(data: Dictionary, paths: Dictionary, environment: Dictionary 
         _pending_delta(data,request.path,-1)
         data.queued.erase(request.path)
     data.pending = []
-    for path in paths: enqueue(data,path,paths[path])
+    # Mandatory role changes and publications already refreshed ready_paths.
+    # Do not repeat those CPU/fixture residency checks for every warm sheet.
+    # Optional/manual roles retain enqueue's full check below.
+    for path in paths:
+        if not data.ready_paths.has(path): enqueue(data,path,paths[path])
     # Role refresh order and an older optional backlog must not move an admitted
     # outfit's authored rest/movement sources behind exhaustive pose families.
     for path in data.encounter.get("priority",{}):
@@ -530,8 +564,21 @@ static func _decode(request: Dictionary, result: Dictionary) -> void:
         result.emission_centroid = moment/weight if weight>0 else Vector2(decoded.get_width(),decoded.get_height())*.5
 
     result.elapsed_ms = (Time.get_ticks_usec()-started)/1000.0
+    var maximum:int=request.get("maximum_texture_size",0)
+    if maximum>0 and (decoded.get_width()>maximum or decoded.get_height()>maximum):
+        result.error="Authored image exceeds GPU texture limit (%d×%d > %d): %s"%[decoded.get_width(),decoded.get_height(),maximum,request.path]
+        return
+    if request.get("worker_upload",false):
+        # RenderingDevice permits asynchronous creation of a new texture. This
+        # resource is private until the completed task is joined; never mutate
+        # a published texture or touch the SceneTree from this worker.
+        var upload_started:int=Time.get_ticks_usec()
+        result.texture=ImageTexture.create_from_image(decoded)
+        result.worker_upload_ms=(Time.get_ticks_usec()-upload_started)/1000.0
+        if result.texture==null:result.error="Cannot create authored texture: "+request.path
+    result.complete = true
 
-static func poll(data: Dictionary, required_only: bool = false) -> Dictionary:
+static func poll(data: Dictionary, required_only: bool = false, publish:bool=true) -> Dictionary:
     var completed: Dictionary = {}
     # Completion order is independent of event playback: the exact required
     # set remains the readiness gate. Reclaim a completed optional job when no
@@ -543,8 +590,12 @@ static func poll(data: Dictionary, required_only: bool = false) -> Dictionary:
         if not WorkerThreadPool.is_task_completed(job.task): continue
         if data.wanted.has(job.path): next = i; break
         if optional<0: optional = i
-    if next<0 and not required_only: next = optional
-    if next>=0:
+    # A newly required request must not wait for optional GPU publication to
+    # free every worker slot. Reclaim one completed optional decode only when
+    # it actually blocks required work, under the caller's upload allowance.
+    var blocked_required:bool=required_only and data.decode_jobs.size()>=DECODE_WORKERS and data.pending.any(func(request):return data.wanted.has(request.path))
+    if next<0 and (not required_only or blocked_required): next = optional
+    if next>=0 and publish:
         var job: Dictionary = data.decode_jobs[next]
         data.decode_jobs.remove_at(next)
         WorkerThreadPool.wait_for_task_completion(job.task)
@@ -561,10 +612,22 @@ static func poll(data: Dictionary, required_only: bool = false) -> Dictionary:
             _refresh_path(data,completed.path)
     while not data.pending.is_empty() and data.decode_jobs.size()<DECODE_WORKERS:
         var request: Dictionary = data.pending.pop_front()
+        request.maximum_texture_size=data.maximum_texture_size
+        # A role upgrade may need emission metadata for an already resident
+        # image; it must not allocate a second copy of its unchanged texture.
+        request.worker_upload=data.worker_upload and not data.resident.has(request.path)
         var result: Dictionary = {}
         var task = WorkerThreadPool.add_task(_decode.bind(request,result),false,"Authored PNG preparation")
         data.decode_jobs.append({"task":task,"path":request.path,"result":result})
     return completed
+
+static func validate_upload_dimensions(data:Dictionary,loaded:Dictionary,maximum:int)->void:
+    if maximum<=0 or loaded.has("error"):return
+    var size:Vector2i=loaded.image.get_size()
+    if size.x<=maximum and size.y<=maximum:return
+    loaded.error="Authored image exceeds GPU texture limit (%d×%d > %d): %s"%[size.x,size.y,maximum,loaded.path]
+    data.failed[loaded.path]=loaded.error
+    _refresh_path(data,loaded.path)
 
 static func published(data: Dictionary, loaded: Dictionary) -> void:
     if data.resident.has(loaded.path): _resident_delta(data,loaded.path,data.resident[loaded.path],-1)
@@ -602,22 +665,36 @@ static func ready(data: Dictionary, paths: Dictionary) -> bool:
         if data.failed.has(path) or not data.ready_paths.has(path): return false
     return true
 
-static func release_cold_images(data: Dictionary) -> Array:
+static func release_cold_images(data: Dictionary, limit: int = CPU_RELEASES_PER_FRAME) -> Array:
     # Original alpha/picking pixels stay with their resident texture. Restoring
     # these on every action revisit would defeat encounter preloading. Exact
     # registered GPU-only companions still release their CPU copy immediately.
+    # Play erases the returned Image handles immediately. Bound the entire
+    # native frame, including maintenance called again during publication.
+    # Explicit negative limits are for offline bulk-accounting fixtures only.
+    var frame:int=Engine.get_process_frames()
+    if data.cpu_release_frame!=frame:
+        data.cpu_release_frame=frame;data.cpu_released_this_frame=0;data.cpu_released_bytes_this_frame=0
+    var remaining:int=limit-data.cpu_released_this_frame if limit>=0 else data.cpu_release.size()
+    if remaining<=0:return []
     var released: Array = []
+    var examined: Array = []
     for path in data.cpu_release:
+        if released.size()>=remaining:break
+        examined.append(path)
         if not data.resident.has(path): continue
         if int(data.resident[path].cpu_bytes) == 0: continue
         if _needs_cpu(data,path): continue
+        var bytes:int=data.resident[path].cpu_bytes
         _resident_delta(data,path,data.resident[path],-1)
-        data.resident[path].bytes -= int(data.resident[path].cpu_bytes)
+        data.resident[path].bytes -= bytes
         data.resident[path].cpu_bytes = 0
         _resident_delta(data,path,data.resident[path],1)
         _refresh_path(data,path)
+        data.cpu_released_bytes_this_frame+=bytes
         released.append(path)
-    data.cpu_release.clear()
+    for path in examined:data.cpu_release.erase(path)
+    data.cpu_released_this_frame+=released.size()
     return released
 
 static func touch(data: Dictionary, path: String) -> void:
@@ -631,14 +708,26 @@ static func prune(data: Dictionary, budget: int = -1) -> Array:
     var stats = _residency_stats(data)
     var bytes: int = stats[false].estimated_bytes + stats[true].estimated_bytes
     if bytes<=budget: return []
-    var cold: Array = []
-    var removed: Array = []
+    var pinned:int=stats[false].pinned_bytes+stats[true].pinned_bytes
+    if bytes<=pinned:return []
+    # Only the oldest remaining release allowance can be used this frame.
+    # Keep that bounded prefix while scanning, instead of sorting thousands
+    # of cached sheets to discard every result after the first one or two.
+    var limit:int=EVICTIONS_PER_FRAME-data.pruned_this_frame
+    var cold:Array=[]
+    var ages:Array=[]
     for path in data.resident:
-        if not _pinned(data,path): cold.append(path)
-    cold.sort_custom(func(a,b):return data.resident[a].used < data.resident[b].used)
+        if _pinned(data,path):continue
+        var used:int=data.resident[path].used
+        var at:int=cold.size()
+        while at>0 and used<int(ages[at-1]):at-=1
+        if at>=limit:continue
+        cold.insert(at,path);ages.insert(at,used)
+        if cold.size()>limit:cold.pop_back();ages.pop_back()
+    var removed:Array=[]
     for path in cold:
-        if bytes <= budget or removed.size()+data.pruned_this_frame>=EVICTIONS_PER_FRAME: break
-        bytes -= int(data.resident[path].bytes)
+        if bytes<=budget:break
+        bytes-=int(data.resident[path].bytes)
         removed.append(path)
     for path in removed:
         _resident_delta(data,path,data.resident[path],-1)
@@ -676,6 +765,7 @@ static func diagnostics(data: Dictionary, environment: bool = false) -> Dictiona
         "eviction_pending_bytes":maxi(0,total-maxi(pinned,int(data.budget_bytes))),
         "metadata_ms":data.metadata_ms,"metadata_jobs":data.metadata_jobs,"metadata_phases":data.metadata_phases.duplicate(),"publication":data.publication.duplicate(),"decode_ms":data.decode_ms,
         "decode_jobs":data.decode_jobs.size(),"decode_worker_limit":DECODE_WORKERS,
+        "cpu_release_pending":data.cpu_release.size(),"cpu_released_this_frame":data.cpu_released_this_frame,"cpu_released_bytes_this_frame":data.cpu_released_bytes_this_frame,
         "budget_bytes":data.budget_bytes,"demand_runs":data.demand_runs,"demand_noops":data.demand_noops,"demand_phases":data.demand_phases.duplicate(),"demand_counts":data.demand_counts.duplicate(),"selection_jobs":data.selection_jobs,"selection_refreshed":data.selection_refreshed,"decoded":data.decoded,"evicted":data.evicted,"failed":data.failed.duplicate(),
         "accounting":"Decoded CPU bytes plus conservative RGBA8 GPU estimate; not measured VRAM/RSS; combined environment and character budget."})
     return result
@@ -698,7 +788,7 @@ static func _drawable(actor: Dictionary) -> bool:
     return actor.get("present",true) and actor.get("last_visual_position") != null \
         and actor.get("spatial_disposition","present") == "present" and actor.get("remains_disposition","intact") != "disintegrated"
 
-static func _add_actor(paths: Dictionary, actor: Dictionary, clips: Array, cache: Dictionary, errors: Array, gpu_only: Dictionary, cpu_required: Dictionary) -> void:
+static func _add_actor(paths: Dictionary, actor: Dictionary, clips: Array, cache: Dictionary, errors: Array, gpu_only: Dictionary, cpu_required: Dictionary, native_optics:bool=false, optical_candidates:Dictionary={}) -> void:
     if not _drawable(actor): return
     var wanted = clips.duplicate()
     var index: Dictionary = Characters._read("catalog-index.json",cache)
@@ -721,6 +811,16 @@ static func _add_actor(paths: Dictionary, actor: Dictionary, clips: Array, cache
     paths.merge(resolved.value)
     gpu_only.merge(resolved.gpu_only)
     cpu_required.merge(resolved.cpu_required)
+    for path in resolved.geometry_slots:
+        if not native_optics and optical_candidates.has(path):continue
+        var optical:Dictionary=NativeSupport.required_paths(path,resolved.geometry_slots[path],cache)
+        for optical_path in optical.values():
+            # A native tail may overlap the next ordinary movement. Prepare
+            # metadata for that clip's support masks, without demanding/uploading
+            # them unless the real native renderer actually needs them.
+            optical_candidates[optical_path]=true
+            if native_optics:
+                paths[optical_path]=true;cpu_required[optical_path]=true
     var effects=Conditions.paths(actor,cache)
     paths.merge(effects);cpu_required.merge(effects)
 
@@ -760,8 +860,10 @@ static func plan(state: Dictionary, groups: Array, cache: Dictionary) -> Diction
     var actors: Dictionary = state.actors.duplicate()
     var senses: Variant = state.senses
     var audience: Dictionary = state.audience
+    var optical_candidates={}
+    var native_optics=groups.any(func(group):return group.get("components",[]).any(func(row):return row.get("native_spell",false)))
     for actor in actors.values():
-        if WorldRows.visible_actor(actor,state): _add_actor(required,actor,[],cache,errors,gpu_only,cpu_required)
+        if WorldRows.visible_actor(actor,state): _add_actor(required,actor,[],cache,errors,gpu_only,cpu_required,native_optics,optical_candidates)
     for group_index in range(groups.size()):
         var group: Dictionary = groups[group_index]
         var paths: Dictionary = required if group_index == 0 else upcoming
@@ -785,7 +887,7 @@ static func plan(state: Dictionary, groups: Array, cache: Dictionary) -> Diction
         # conservative preparation changes no state and exposes no actor early.
         for id in witnesses:
             if not visible.has(id): continue
-            for actor in witnesses[id]: _add_actor(paths,actor,[],cache,group_errors,gpu_only,cpu_required)
+            for actor in witnesses[id]: _add_actor(paths,actor,[],cache,group_errors,gpu_only,cpu_required,native_optics,optical_candidates)
         var requested = {}
         for track in group.get("actor_tracks",[]):
             var key: String = track.actor_uuid + ":" + track.rig + ":" + track.clip
@@ -799,9 +901,9 @@ static func plan(state: Dictionary, groups: Array, cache: Dictionary) -> Diction
                 shown.presentation_layers=track.get("effect_layers",[])
                 if track.has("visual_loadout"):
                     shown.visual_loadout = track.visual_loadout
-                _add_actor(paths,shown,[track.clip],cache,group_errors,gpu_only,cpu_required)
+                _add_actor(paths,shown,[track.clip],cache,group_errors,gpu_only,cpu_required,native_optics,optical_candidates)
     for path in cpu_required: gpu_only.erase(path)
-    return {"required":required,"upcoming":upcoming,"errors":errors,"upcoming_errors":upcoming_errors,"gpu_only":gpu_only,"cpu_required":cpu_required}
+    return {"required":required,"upcoming":upcoming,"errors":errors,"upcoming_errors":upcoming_errors,"gpu_only":gpu_only,"cpu_required":cpu_required,"optical_candidates":optical_candidates}
 
 static func close(data: Dictionary) -> void:
     data.demand_snapshot = {}

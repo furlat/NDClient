@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://sandbox/world.gd" id="1"]
+[ext_resource type="Resource" path="res://authoring/sandbox/fire_bolt.tres" id="2"]
+
+[node name="SpellSandbox" type="Node3D"]
+script = ExtResource("1")
+spells = Array[Resource]([ExtResource("2")])
+
+[node name="Caster" type="Marker3D" parent="."]
+position = Vector3(-2, 0, 0)
+
+[node name="Release" type="Marker3D" parent="Caster"]
+position = Vector3(0, 0.8, 0)
+
+[node name="Target" type="Marker3D" parent="."]
+position = Vector3(2, 0, 0)
+
+[node name="Impact" type="Marker3D" parent="Target"]
+position = Vector3(0, 0.7, 0)
+
+[node name="Target2" type="Marker3D" parent="."]
+position = Vector3(2, 0, 2)
+
+[node name="Effects" type="Node3D" parent="."]

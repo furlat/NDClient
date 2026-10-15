@@ -10,8 +10,11 @@ GDSchema extension evaluated during research is not installed in this project;
 no certificate or Windows security-policy changes are required.
 
 Schema 9 adds optical source observations to existing sensory after-values.
-The SDK retains source revisions and removal revisions, unions permitted
-footprints only at the newest revision, and coalesces disclosed optional anchors.
+Live source descriptors carry position, height, radii, appearance and permitted
+anchors, with an empty optional `affected_tiles` map. The renderer needs no
+per-source cell map. The SDK retains source and removal revisions and coalesces
+disclosed optional anchors; historical nonempty footprints retain their
+equal-revision union during archive replay.
 Equal-revision loss of one observer's view does not erase another observer's
 current source; a newer removal retires older retained observations. These are
 passive renderer inputs, not another light simulation or gameplay calculation.

@@ -1,0 +1,203 @@
+{
+  "scope": "Actual Studio Library selection, native source preview pixels, selected occurrence submission, reverse/reseek and exact selected interval loop through real Fireball, Mage Armor and Shield journals. Whole-condition lifetime and all30 scene qualification are separate.",
+  "renderer": "Windows Forward+ Vulkan, RTX5090,60FPS cap",
+  "accepted_cases": [
+    {
+      "at_ms": 3972.22222222222,
+      "case": "native-spell-fireball",
+      "condition_phase": "",
+      "journal": "res://.runtime/studio-spells-20261015/fireball-seed3/amber/journal",
+      "library_selection": {
+        "all_sources_ready_ms": 3808.956,
+        "candidate_observed_ms": 2000.796,
+        "case": "native-spell-fireball",
+        "first_draw_observed_ms": 4081.536,
+        "initial_preview_samples": 8,
+        "measurement": "Actual Library row pointer press to shared Studio publication in this fresh test process",
+        "native_descriptor_ms": 0.0,
+        "native_disk_loads": 0,
+        "native_jobs_at_publication": 0,
+        "native_resource_load_ms": 0.0,
+        "native_store_hits": 0,
+        "native_store_misses": 0,
+        "publication_ms": 3808.962,
+        "publication_observed_ms": 4054.306,
+        "requested_usec": 13504620,
+        "transport": {
+          "create_ms": 10.964,
+          "created_usec": 15496312,
+          "loop": false,
+          "publish_ms": 1844.869,
+          "ready_ms": 1817.264,
+          "requested_usec": 15468713,
+          "restore_wait_ms": 16.635,
+          "reused_spare": false,
+          "target_ms": 0.0
+        },
+        "within_200ms": false,
+        "world_ready_observed_ms": 3806.058
+      },
+      "loop_end_ms": 5972.22222222222,
+      "loop_start_ms": 1972.22222222222,
+      "loop_wrapped": true,
+      "maximum_observed_ms": 5972.22222222222,
+      "paired": false,
+      "preview_preparation": {
+        "elapsed_ms": 80,
+        "native_descriptor_ms": 16.494,
+        "native_disk_loads": 20,
+        "native_resource_load_ms": 73.817,
+        "native_store_hits": 44,
+        "native_store_issues": {},
+        "native_store_misses": 0,
+        "peak_native_previews": 0,
+        "samples": 52
+      },
+      "previews": {
+        "rgb_pixels": 280166,
+        "textures": 20
+      },
+      "row": "2:44435313-e27e-4b10-991b-62f7a3c00194:native_effect:0",
+      "source": "spells/fireball/fire/lifecycle",
+      "spell": "fireball",
+      "ui_screenshot": ".captures/native-spell-library/fireball-studio.png",
+      "source_screenshot": ".captures/native-spell-library/fireball-selected-source.png",
+      "qualification": "Actual source pixels, controls, reverse/reseek and selected interval loop passed; performance stages measured separately."
+    },
+    {
+      "at_ms": 1416.66666666667,
+      "case": "native-spell-mage_armor",
+      "condition_phase": "condition",
+      "journal": "res://.runtime/studio-spells-20261015/mage_armor-lifecycle-seed3/amber/journal",
+      "loop_end_ms": 1750.0,
+      "loop_start_ms": 1083.33333333333,
+      "loop_wrapped": true,
+      "maximum_observed_ms": 1750.0,
+      "paired": false,
+      "previews": {
+        "rgb_pixels": 30668,
+        "textures": 4
+      },
+      "row": "condition:015300f6-32e1-47b0-b998-6a34b7d0c73b:member:0:condition:015300f6-32e1-47b0-b998-6a34b7d0c73b:native:0",
+      "source": "spells/mage_armor/back/lifecycle",
+      "spell": "mage_armor",
+      "ui_screenshot": ".captures/native-spell-library/mage_armor-studio.png",
+      "source_screenshot": ".captures/native-spell-library/mage_armor-selected-source.png"
+    },
+    {
+      "at_ms": 1773.1884057971,
+      "case": "native-spell-shield",
+      "condition_phase": "condition",
+      "journal": "res://.runtime/studio-spells-20261015/shield-seed3/amber/journal",
+      "loop_end_ms": 2063.04347826087,
+      "loop_start_ms": 1483.33333333333,
+      "loop_wrapped": true,
+      "maximum_observed_ms": 2063.04347826087,
+      "paired": false,
+      "preview_preparation": {
+        "elapsed_ms": 791,
+        "peak_native_previews": 8,
+        "samples": 28
+      },
+      "previews": {
+        "rgb_pixels": 53590,
+        "textures": 8
+      },
+      "row": "condition:46f1467a-6c17-46f4-bbb9-8c4c0323ed20:member:0:condition:46f1467a-6c17-46f4-bbb9-8c4c0323ed20:native:0",
+      "source": "spells/shield/back/lifecycle",
+      "spell": "shield",
+      "ui_screenshot": ".captures/native-spell-library/shield-studio.png",
+      "source_screenshot": ".captures/native-spell-library/shield-selected-source.png"
+    }
+  ],
+  "runs": [
+    {
+      "id": "first_three_family_run",
+      "checks": 65,
+      "failures": [
+        "fireball: visible timeline source previews complete: [\"Native source did not become ready within 15 seconds: spell.fireball.native.cast\"]"
+      ],
+      "report": ".runtime/native-spell-library-first-run.json",
+      "exit_code": 1,
+      "note": "Mage Armor and Shield controls completed. Fireball failed because source metadata mistook hidden GPU trail storage lifetime for visible tail. The original failure is retained."
+    },
+    {
+      "id": "fireball_corrected_tail_serial",
+      "checks": 29,
+      "failures": [],
+      "report": ".runtime/native-spell-library-fireball-serial.json",
+      "exit_code": 0,
+      "note": "Actual controls and pixels passed, but serial cold preview preparation took about80seconds. One exit-time ObjectDB instance warning."
+    },
+    {
+      "id": "fireball_batch_harness_failure",
+      "report": ".runtime/native-spell-library-fireball-batch-harness-failure.json",
+      "log": ".runtime/native-spell-library-fireball-batched.log",
+      "accepted": false,
+      "note": "Test read SubViewport assigned world instead of the actual private Camera3D world and raised SCRIPT ERROR. Empty failures array/exit0 was invalid evidence. Harness now also requires every requested case to complete; logs are checked separately."
+    },
+    {
+      "id": "fireball_bounded_native_batch",
+      "checks": 35,
+      "failures": [],
+      "report": ".runtime/native-spell-library-checks-fireball.json",
+      "log": ".runtime/native-spell-library-fireball-batched-final.log",
+      "exit_code": 0,
+      "note": "All35 checks pass. One exit-time ObjectDB instance warning, also seen in the serial baseline; no script/render error."
+    },
+    {
+      "id": "shield_final_reaction_native_batch",
+      "checks": 35,
+      "failures": [],
+      "report": ".runtime/native-spell-library-checks-shield.json",
+      "log": ".runtime/native-spell-library-shield-console.log",
+      "exit_code": 0,
+      "note": "All35 checks pass after actual reaction body integration. No script/render error or ObjectDB instance leak. Verbose donor RGBFloat-to-RGBAFloat conversion warnings and orphan StringName notices remain."
+    },
+    {
+      "id": "fireball_persistent_resources_fresh_library",
+      "checks": 36,
+      "failures": [],
+      "report": ".runtime/native-spell-library-fireball-persisted.json",
+      "log": ".runtime/native-spell-library-persisted-fireball.log",
+      "exit_code": 0,
+      "note": "All36 actual UI/source-pixel/seek/loop checks pass. Selected phase previews80ms,44diskhits/0misses/0nativejobs. Full request-to-publication3.809seconds remains separate. One ObjectDB instance warning at exit, also present in earlier Fireball tests; no script/render error."
+    }
+  ],
+  "native_thumbnail_batch": {
+    "limit": 8,
+    "same_source_step_seconds": 0.016666666666666666,
+    "existing_source_timeout_seconds": 15,
+    "fireball_visible_samples": 52,
+    "serial_elapsed_ms_approx": 80000,
+    "batched_elapsed_ms": 20628,
+    "shield_visible_samples": 28,
+    "shield_batched_elapsed_ms": 791,
+    "cold_definition": "Empty per-Studio thumbnail cache; OS resource caches are not flushed. Serial baseline is approximate from10second progress observations, not a paired benchmark.",
+    "checks": [
+      "Independent World3D per active native job",
+      "Never advances a transient source by more than1/60 per sampled frame",
+      "Same actual selected source pixels/control behavior",
+      "Suspension advances no source history",
+      "Reset frees all four pending native previews and clears generation-owned publication"
+    ],
+    "qualification": "Historical native-batching checkpoint. Its20.628second Fireball source wait is superseded by the persistent-resource measurement below; it remains before-history, not current accepted performance.",
+    "status": "historical_before_persistent_resources"
+  },
+  "owned_native_processes_remaining": 0,
+  "failures": [],
+  "native_thumbnail_persistence": {
+    "format": "Godot Resource pages, exact recorded source ticks and four camera views",
+    "fireball_visible_samples": 52,
+    "fireball_selected_phase_preview_ms": 80,
+    "fireball_native_disk_hits": 44,
+    "fireball_native_disk_misses": 0,
+    "fireball_native_jobs": 0,
+    "fireball_library_request_to_publication_ms": 3808.962,
+    "fireball_library_first_draw_observed_ms": 4081.536,
+    "whole_library_within_200ms": false,
+    "cold_definition": "Fresh Godot process with persisted resources; OS filesystem/GPU driver caches were not flushed. Studio initializes its default recording before the actual Library pointer selection.",
+    "qualification": "Selected source previews now take80ms with no native simulation jobs. Whole Library navigation still takes3.809seconds for recording/world preparation; this is not an instant whole-Studio selection claim.",
+    "report": ".runtime/native-spell-library-fireball-persisted.json"
+  }
+}

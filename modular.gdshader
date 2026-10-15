@@ -32,8 +32,9 @@ void fragment() {
     if (colour.a <= 0.0) { discard; }
     // Ordinary authored layer tint multiplies every source shade exactly once.
     // Do this in encoded colour before the existing receiving-light boundary.
+    vec3 untinted = colour.rgb;
     colour.rgb *= tint;
-    if(!shadow) colour=character_material(colour,UV);
+    if(!shadow) colour=character_material(colour,UV,untinted);
     // Compatibility linearizes shader outputs itself; Forward+/Mobile require
     // linear values from this raw, unpremultiplied source sampler.
     if (!OUTPUT_IS_SRGB) { colour.rgb = linear_colour(colour.rgb); }

@@ -5,6 +5,7 @@ const Conditions=preload("res://presentation/condition_coverage.gd")
 const CONTENT="res://generated/studio_content_catalog.json"
 const MIGRATION="res://generated/native_migration_inventory.json"
 const SCENARIOS="res://authoring/studio/scenarios.json"
+const SPELL_CASES="res://generated/studio_spell_case_inventory.json"
 
 static func _read(path:String,cache:Dictionary,errors:Array)->Dictionary:
     var key="study:"+path
@@ -112,13 +113,30 @@ static func build(cache:Dictionary={},records:Array=[])->Dictionary:
     var counts={"capabilities":0,"actions":0,"spells":0,"conditions":0,"vfx":0,"mechanics":0,
         "scenarios":0,"recorded_scenarios":0,"partial_scenarios":0,"study_needed":0}
     var seen_scenarios={}
+    var scenario_inputs:Array=[]
     for n in studies.get("scenarios",[]).size():
-        var original:Dictionary=studies.scenarios[n]
+        var row:Dictionary=studies.scenarios[n].duplicate()
+        row.source=SCENARIOS+":/scenarios/"+str(n)
+        scenario_inputs.append(row)
+    var spell_cases=_read(SPELL_CASES,cache,errors)
+    for n in spell_cases.get("cases",[]).size():
+        var record:Dictionary=spell_cases.cases[n]
+        var source=SPELL_CASES+":/cases/"+str(n)
+        scenario_inputs.append({"id":record.id,"code":record.spell_id,"label":record.label+" · "+record.interaction,
+            "capability_ids":["spell."+record.spell_id],"source":source,
+            "purpose":record.qualification,"setup":"Normal encounter spell grants; independent Amber and Blue public SDK recordings.",
+            "sequence":record.get("sequence",[]),"participants":["caster","recipient"],
+            "expectations":[{"id":record.id+":authority","label":"Preserve the recorded spell, recipient and owner outcomes",
+                "phase":"Recorded sequence","participants":["caster","recipient"],"rule_sources":[source],
+                "authority":"server","description":"The original event IDs, damage/heal after-values, and condition/spatial lifetimes remain inspectable. This case is not evidence for every variant or artistic approval.","source":source}],
+            "recordings":[{"case_id":record.id,"evidence":"recorded","gaps":[],"reference":record.descriptor}],
+            "coverage":{"recording":"recorded","native_render":"not_assessed_by_this_catalog","audio":"not_assessed_by_this_catalog"}})
+    for original in scenario_inputs:
         if seen_scenarios.has(original.id):
             errors.append("Duplicate study scenario: "+str(original.id));continue
         seen_scenarios[original.id]=true
         var scenario:Dictionary=original.duplicate(true)
-        scenario.source=SCENARIOS+":/scenarios/"+str(n)
+        scenario.source=original.source
         scenario.recordings=[]
         var available_recorded=false;var available_partial=false
         for reference in original.get("recordings",[]):

@@ -12,7 +12,7 @@ func check(ok:bool,label:String)->void:
     checks+=1
     if not ok:failures.append(label);print("STUDIO_TRANSPORT_FAIL ",label)
 func ready(s:Control)->bool:
-    return not s.index.is_empty() and s.loader==null and (s.seeker==null or s.preparing_loop) and (not s.installing or s.preparing_loop) and s.requested_seek<0 and not s.resume_when_tracks_ready
+    return not s.index.is_empty() and s.loader==null and (s.seeker==null or s.preparing_loop) and (not s.installing or s.preparing_loop) and s.requested_seek<0
 func settle(s:Control)->bool:
     var deadline=Time.get_ticks_msec()+90000
     while not ready(s) and Time.get_ticks_msec()<deadline:await process_frame
@@ -55,7 +55,7 @@ func capture_ready(s:Control)->void:
     if not body_rows.is_empty():s.tracks.reveal(body_rows[0].id)
     await process_frame;await RenderingServer.frame_post_draw
     var started=Time.get_ticks_msec();var deadline=started+30000
-    while not s.tracks.prepare_visible(true).settled and Time.get_ticks_msec()<deadline:await process_frame
+    while not s.tracks.prepare_visible().settled and Time.get_ticks_msec()<deadline:await process_frame
     var keys:Array=s.tracks.preview_demand.keys()
     check(keys.all(func(key):return s.tracks.thumbnails.textures.has(key) or s.tracks.thumbnails.inactive.has(key)),"Visible actual sprite/effect previews finish without source errors before the usable UI capture")
     var body_count=0
@@ -78,18 +78,18 @@ func run()->void:
     s._seek(s.world.timeline.display_ms)
     check(s.world==world and s.seeker==null and not s.installing,"Selecting current time does not rebuild the displayed world")
     s.tracks.filter="TakeDamage";s.tracks.rebuild_rows()
-    var preparation:Dictionary=s.tracks.prepare_visible(true)
+    var preparation:Dictionary=s.tracks.prepare_visible()
     s._seek(s.world.timeline.display_ms,true)
     check(s.world==world and s.seeker==null and not s.installing,"Same-clock play after revealing different tracks retains the actual renderer")
-    check(preparation.settled or (s.world.timeline.paused and s.resume_when_tracks_ready),"Same-clock play waits for new source previews instead of starting with unfinished tracks")
+    check(not s.world.timeline.paused,"Same-clock play resumes while optional source previews finish")
     if not await settle(s):await finish(s);return
-    check(s.tracks.prepare_visible(true).settled and not s.world.timeline.paused,"Same-clock play resumes as soon as the exact source previews settle")
+    check(not s.world.timeline.paused,"Optional source previews do not pause recorded playback")
     s._toggle_play();s.tracks.filter="";s.tracks.rebuild_rows()
     var bodies=s.index.rows.filter(func(r):return r.kind=="body" and r.end_ms>r.start_ms)
     var body:Dictionary=bodies.filter(func(r):return r.track.clip=="TakeDamage")[0]
     s.tracks.reveal(body.id)
     var tracks_deadline=Time.get_ticks_msec()+30000
-    while not s.tracks.prepare_visible(true).settled and Time.get_ticks_msec()<tracks_deadline:await process_frame
+    while not s.tracks.prepare_visible().settled and Time.get_ticks_msec()<tracks_deadline:await process_frame
     var y=s.tracks.RULER-s.tracks.scroll_y
     for item in s.tracks.rows:
         if item.row.id==body.id:break

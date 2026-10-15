@@ -95,26 +95,40 @@ static func contribution_amount(value:Dictionary,ellipses:Array)->float:
         if contribution.ellipses==ellipses:return float(contribution.amount)
     return 0.0
 
-static func kernels(value:Dictionary,position:Array,active:Array,source:Dictionary)->Array:
-    var result:Array=[];var style:Dictionary=source.region
+static func kernels(value:Dictionary,position:Array,active:Array,source:Dictionary,cache:Dictionary={}) -> Array:
+    # Residue after-values are immutable. Each field keeps only its current
+    # value's exact particle shapes; a new value/source discards those shapes.
+    if not is_same(cache.get("value"),value) or cache.get("position")!=position or not is_same(cache.get("source"),source):
+        cache.clear();cache.merge({"value":value,"position":position.duplicate(),"source":source,"particles":{}})
+    var result:Array=[];var style:Dictionary=source.region;var ordinal:int=0
     for contribution in value.get("contributions",[]):
+        # Matching whole ellipse lists once per contribution is equivalent to
+        # repeating it for every particle in every receiving tile.
+        var changes:Array=[]
+        for reveal in active:
+            var after=contribution_amount(reveal.after,contribution.ellipses)
+            var before=contribution_amount(reveal.before,contribution.ellipses)
+            if after<=before or contribution.amount<after:continue
+            var family:Dictionary=style.families.get(reveal.pattern,{})
+            if not family.is_empty():changes.append({"family":family,"age":reveal.age_seconds,"amount":after-before})
         for ellipse in contribution.ellipses:
             var world=ellipse.duplicate();world.center=[ellipse.center[0]+position[0],ellipse.center[1]+position[1]]
             var selected=template(style,world)
             var ellipse_transform=Transform2D(Vector2(cos(ellipse.angle),sin(ellipse.angle))*ellipse.radius_x,
                 Vector2(-sin(ellipse.angle),cos(ellipse.angle))*ellipse.radius_y,Vector2(ellipse.center[0],ellipse.center[1]))
             for particle in selected.particles:
+                var index:int=ordinal;ordinal+=1
                 var units=float(contribution.amount)
-                for reveal in active:
-                    var after=contribution_amount(reveal.after,contribution.ellipses)
-                    var before=contribution_amount(reveal.before,contribution.ellipses)
-                    if after<=before or contribution.amount<after:continue
-                    var family:Dictionary=style.families.get(reveal.pattern,{})
-                    if family.is_empty():continue
-                    var times=schedule(particle,family)
-                    if reveal.age_seconds<times.x+times.y:units-=after-before
+                for change in changes:
+                    var times=schedule(particle,change.family)
+                    if change.age<times.x+times.y:units-=change.amount
                 var fraction=maxf(0,units)/float(value.max_amount)
                 if fraction<=0:continue
+                if not cache.particles.has(index):cache.particles[index]={}
+                var shapes:Dictionary=cache.particles[index]
+                if shapes.has(fraction):
+                    result.append_array(shapes[fraction]);continue
+                var landed:Array=[]
                 var scale=sqrt(fraction);var target=Vector2(particle.target[0],particle.target[1])
                 for kernel in particle.kernels:
                     var center=target+(Vector2(kernel.x,kernel.y)-target)*scale
@@ -123,7 +137,8 @@ static func kernels(value:Dictionary,position:Array,active:Array,source:Dictiona
                     var transformed=ellipse_transform*local
                     var extent=(transformed.x.abs()+transformed.y.abs())*sqrt(1.5)
                     if not Rect2(transformed.origin-extent,extent*2.).intersects(Rect2(Vector2(-.5,-.5),Vector2.ONE)):continue
-                    result.append({"transform":transformed,"mass":kernel.mass})
+                    landed.append({"transform":transformed,"mass":kernel.mass})
+                shapes[fraction]=landed;result.append_array(landed)
     return result
 
 static func landing_step(source:Dictionary,pattern:String,age:float)->int:

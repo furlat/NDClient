@@ -56,8 +56,8 @@ func check_layout_publication(view:Control)->void:
     var changed=view.prepare_visible(true)
     check(view.pixels_per_second!=displayed.pixels_per_second,"Native zoom input requests a different timeline scale")
     if not changed.settled:
-        check(is_same(view.published_layout,displayed),"Cold zoom retains the complete prior rows and sample geometry")
-        check(displayed.preview_keys.values().all(func(key):return view.thumbnails.textures.has(key) or view.thumbnails.inactive.has(key)),"Retained layout still contains its actual source images")
+        check(not is_same(view.published_layout,displayed) and view.published_layout.pixels_per_second==view.pixels_per_second,"Cold zoom publishes current row geometry while swatches prepare")
+        check(view.published_layout.preview_keys==view.preview_keys,"Published cells own the new source sample keys")
     var drawn:Dictionary=view.published_layout
     var at=Vector2(drawn.gutter+200,10)
     var expected:float=view._time(at.x,drawn)
@@ -75,9 +75,9 @@ func check_layout_publication(view:Control)->void:
     deadline=Time.get_ticks_msec()+30000
     var complete=true
     while not changed.settled and Time.get_ticks_msec()<deadline:
-        complete=complete and view.published_layout.preview_keys.values().all(func(key):return view.thumbnails.textures.has(key) or view.thumbnails.inactive.has(key) or view.thumbnails.errors.has(key))
+        complete=complete and view.published_layout.scroll_y==view.scroll_y
         await process_frame;changed=view.prepare_visible(true)
-    check(complete and changed.ready and view.published_layout.scroll_y==view.scroll_y,"Scrolling never publishes unfinished preview cells")
+    check(complete and changed.ready and view.published_layout.scroll_y==view.scroll_y,"Scrolling publishes current row positions independently of pending source cells")
 
 func finish()->void:
     var report={"checks":checks,"failures":failures,"evidence":evidence,"scope":"Real recorded hidden timeline preparation, visible-cell readiness, all four camera views and retained bounded native swatches. No new source/model behavior."}

@@ -134,6 +134,19 @@ static func estimates(paths: Dictionary, cpu_required: Dictionary, gpu_only: Dic
     cache.__encounter_headers = retained
     return result
 
+static func source_sizes(paths: Dictionary, cache: Dictionary) -> Dictionary:
+    # Required metadata must carry its sizes before optional family discovery.
+    # Keep this small header cache separate: estimating the next action must not
+    # replace the optional worker's much larger family header cache.
+    var headers: Dictionary = cache.get("__required_headers",{})
+    var result = {}
+    for path in paths:
+        if not headers.has(path): headers[path] = _png_size(Catalog.media_path(path))
+        var header: Dictionary = headers[path]
+        if not header.has("error"): result[path] = int(header.width)*int(header.height)*4
+    cache.__required_headers = headers
+    return result
+
 static func estimate_bytes(estimates: Dictionary) -> Dictionary:
     # Prepared with accepted header metadata; no scene-thread nested lookups for
     # the capped greedy walk. Missing headers retain resident/unknown fallback.

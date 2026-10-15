@@ -130,7 +130,7 @@ func compare_authored_demand(full: Dictionary, state: Dictionary, environment: D
                 var loaded = {"path":request.path,"cpu_bytes":size.cpu_bytes,"gpu_bytes":size.gpu_bytes}
                 if request.fixture: loaded.merge({"energy":.1,"emission_centroid":Vector2(32,40)})
                 Media.published(data,loaded)
-            Media.release_cold_images(data)
+            Media.release_cold_images(data,-1) # Model the complete acknowledged batch between demands.
             Media.boot_ready(data)
             Media.prune(data)
         check(fast.ready_paths==original.ready_paths and fast.resident.keys()==original.resident.keys(),

@@ -63,6 +63,30 @@ static func normal_paths(path: String, slot: String, cache: Dictionary) -> Dicti
     return {"ok":true,"value":result}
 
 static func source_paths(path: String, slot: String, cache: Dictionary) -> Dictionary:
+    # The catalog shell belongs to its reader. Store immutable results directly
+    # in that shell so a worker's shallow copy never fills a shared directory.
+    var key: Array = [&"__geometry_companions",path,slot]
+    var table: String = TABLE if path.begins_with("/media/smallscale/modular/") else CREATURE_TABLE
+    var retained: Dictionary = cache.get(key,{})
+    if not retained.is_empty() and is_same(retained.source,cache.get(table)) \
+        and is_same(retained.profiles,cache.get(PROFILE_TABLE)) \
+        and retained.character_root==ProjectSettings.get_setting("source_data/character_geometry_root") \
+        and retained.creature_root==ProjectSettings.get_setting("source_data/creature_geometry_root") \
+        and retained.normal_root==ProjectSettings.get_setting("source_data/normal_profiles_root"):
+        return retained.result
+    var result = _source_paths(path,slot,cache)
+    if result.ok:
+        result.value.make_read_only()
+        result.make_read_only()
+        var memo = {"source":cache.get(table),"profiles":cache.get(PROFILE_TABLE),
+            "character_root":ProjectSettings.get_setting("source_data/character_geometry_root"),
+            "creature_root":ProjectSettings.get_setting("source_data/creature_geometry_root"),
+            "normal_root":ProjectSettings.get_setting("source_data/normal_profiles_root"),"result":result}
+        memo.make_read_only()
+        cache[key] = memo
+    return result
+
+static func _source_paths(path: String, slot: String, cache: Dictionary) -> Dictionary:
     var source = record(path,slot,cache)
     if source.is_empty(): return {"ok":true,"value":{}}
     var profiles = normal_paths(path,slot,cache)

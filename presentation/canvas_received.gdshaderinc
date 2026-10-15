@@ -6,11 +6,15 @@ uniform float light_cap = 0.0;
 uniform vec2 source_quad_size = vec2(1.0);
 uniform float current_visibility = 1.0;
 uniform bool use_instance_visibility = false;
+#include "native_body_material.gdshaderinc"
+#include "body_surface.gdshaderinc"
 varying float source_visibility;
 varying vec3 source_world_origin;
 varying vec2 source_screen_origin;
 varying vec2 source_screen_axis_x;
 varying vec2 source_screen_axis_y;
+#include "native_scene_vertex.gdshaderinc"
+#include "source_atlas_uv.gdshaderinc"
 vec2 source_projected_uv(mat4 projection, vec3 at) {
     vec4 projected = projection * vec4(at,1.0);
     return projected.xy/projected.w*0.5+0.5;
@@ -29,6 +33,7 @@ void vertex() {
     atlas_origin = use_instance_atlas ? pixel/vec2(textureSize(received,0)) : atlas_region.xy;
     source_visibility = use_instance_visibility ? INSTANCE_CUSTOM.r : current_visibility;
     source_world_origin = MODEL_MATRIX[3].xyz;
+    native_scene_model_basis = mat3(MODEL_MATRIX);
     vec3 top_left = VERTEX - vec3(UV.x*source_quad_size.x,-UV.y*source_quad_size.y,0.0);
     source_screen_origin = source_projected_uv(PROJECTION_MATRIX * MODELVIEW_MATRIX,top_left);
     source_screen_axis_x = source_projected_uv(PROJECTION_MATRIX * MODELVIEW_MATRIX,top_left+vec3(source_quad_size.x,0.0,0.0))-source_screen_origin;
@@ -88,12 +93,11 @@ void fragment() {
             if(covered) discard;
         }
     }
-#ifdef CAPPED_RECEIVING
     // Address the SAME nearest atlas texel for colour reconstruction. Raw UV
     // can select an adjacent original texel at fractional zoom/crop boundaries.
     vec2 dimensions = vec2(textureSize(received,0));
-    vec2 selected_pixel = floor((atlas_origin+cell_uv*size)*dimensions);
-    vec2 selected_uv = source_crop.xy + (selected_pixel+vec2(0.5)-atlas_origin*dimensions)/(size*dimensions)*source_crop.zw;
+    vec2 selected_uv = source_atlas_uv(cell_uv,atlas_origin,size,dimensions,source_crop);
+#ifdef CAPPED_RECEIVING
     vec2 selected_screen = source_screen_origin+selected_uv.x*source_screen_axis_x+selected_uv.y*source_screen_axis_y;
     vec3 irradiance = max(colour.rgb,vec3(0.0));
     float peak = max(irradiance.r,max(irradiance.g,irradiance.b));
@@ -109,6 +113,29 @@ void fragment() {
     }
 #endif
     // Off retains the original native LDR texture/3D transfer path.
+    if (body_surface_enabled && body_surface_count>0 && has_component_geometry) {
+        vec3 surface_point;
+        vec2 normal_uv=frame_uv.xy+selected_uv*frame_uv.zw;
+        vec4 packet_normal=texture(component_normal,normal_uv);
+        if (packet_normal.a>.5 && texture(component_normal_valid,normal_uv).r>.5
+            && native_scene_receiver(selected_uv,VERTEX,VIEW_MATRIX,INV_VIEW_MATRIX,source_world_origin,surface_point)) {
+            vec3 n=packet_normal.rgb*2.0-1.0;
+            n=normalize(vec3(n.x/(abs(component_scale_x)>.00001?component_scale_x:1.0),n.y,n.z));
+            vec3 horizontal=normalize(vec3(INV_VIEW_MATRIX[2].x,0.0,INV_VIEW_MATRIX[2].z));
+            vec3 up=vec3(0.0,cos(component_elevation),0.0)-horizontal*sin(component_elevation);
+            vec3 toward=horizontal*cos(component_elevation)+vec3(0.0,sin(component_elevation),0.0);
+            vec3 normal_world=normalize(mat3(INV_VIEW_MATRIX[0].xyz,up,toward)*n);
+            vec3 relative=(INV_VIEW_MATRIX*vec4(surface_point,1.0)).xyz-source_world_origin;
+            colour.rgb=apply_body_surface(colour.rgb,relative,normal_world,normalize(mat3(VIEW_MATRIX)*normal_world));
+        }
+    }
+    colour.rgb=native_body_colour(colour.rgb,selected_uv);
     ALBEDO=OUTPUT_IS_SRGB ? canvas_encoded_for_spatial(colour.rgb) : colour.rgb;
     ALPHA=colour.a*wall_opacity;
+    if (native_scene_enabled) {
+        vec3 receiver;
+        if (native_scene_receiver(selected_uv, VERTEX, VIEW_MATRIX, INV_VIEW_MATRIX, source_world_origin, receiver)) {
+            LIGHT_VERTEX = receiver;
+        }
+    }
 }

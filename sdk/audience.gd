@@ -348,8 +348,11 @@ static func _light_sources_retained(perception: Dictionary) -> Dictionary:
                 sources[identity] = source
             else:
                 var merged: Dictionary = sources[identity].duplicate()
-                merged.affected_tiles = merged.affected_tiles.duplicate()
-                merged.affected_tiles.merge(source.affected_tiles, true)
+                # Live descriptors carry no cell map. Only archived nonempty
+                # footprints need the historical equal-revision union.
+                if not source.get("affected_tiles", {}).is_empty():
+                    merged.affected_tiles = merged.get("affected_tiles", {}).duplicate()
+                    merged.affected_tiles.merge(source.affected_tiles, true)
                 for field in ["anchor_entity_uuid", "anchor_item_uuid"]:
                     if merged.get(field) == null: merged[field] = source.get(field)
                 sources[identity] = merged

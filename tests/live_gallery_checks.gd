@@ -17,9 +17,31 @@ var choice_sizes: Dictionary = {}
 var largest_choices: Dictionary = {}
 var largest_choices_bytes = 0
 var largest_choices_request = -1
+var profile_view_size = 0.0
+var profile_stop_stage = ROUTE.size()
+var bounded_profile = false
 
 class CapturingPlayer extends "res://play.gd":
     var choices_observed: Callable
+    var profiling_configured:Dictionary
+    var capture_media_demand=false
+    var media_demand_trace:Array=[]
+    func _prepare_media(first:Dictionary={}) -> void:
+        var runs:int=media_warmup.demand_runs
+        super._prepare_media(first)
+        if not capture_media_demand or runs==media_warmup.demand_runs:return
+        var missing:Array=[]
+        if media_warmup.unknown_required>0:
+            for path in media_warmup.wanted:
+                if MediaWarmup._estimate(media_warmup,path)<0:missing.append(path)
+        media_demand_trace.append({"frame":Engine.get_process_frames(),"display_ms":timeline.display_ms,
+            "counts":media_warmup.demand_counts.duplicate(),"phases":media_warmup.demand_phases.duplicate(),
+            "unknown_paths":missing,"selected":media_warmup.preload_selected.size(),"size_headers":media_warmup.source_sizes.size()})
+    func _init()->void:
+        # Play creates a Session lazily in _ready. Supply that same real owner
+        # before its transport starts; profiling cannot be enabled afterward.
+        session=Session.new()
+        profiling_configured=session.transport.set_profiling(true)
     func _poll_actions() -> void:
         if action_request>=0 and pending_request.get("kind")=="choices" and session.responses.has(action_request):
             var result: Dictionary=session.responses[action_request]
@@ -121,6 +143,10 @@ func phase_value() -> Dictionary:
         "group":scene.timeline.current.get("id",""),"media_wait":scene.timeline.waiting_for_media,
         "world_wait":scene.timeline.waiting_for_world,"ready":ready()}
 
+func _subject_uuid(owner:Dictionary,option:Dictionary)->String:
+    var subject:Variant=Choices.binding_subject(owner,option)
+    return "" if subject==null else str(subject.uuid)
+
 func issue(selected: Dictionary) -> bool:
     var actor: String=scene.available_actions.entity_uuid
     var number: int=scene.session.status.next_command_number
@@ -130,6 +156,7 @@ func issue(selected: Dictionary) -> bool:
     scene.profile.label="command_%d_%s" % [number,label]
     collect_pipeline(true)
     var record={"number":number,"behavior":label,"stage":stage,"actor":actor,"from":scene.timeline.state.actors[actor].last_visual_position.duplicate(),"start_us":command_start,
+        "camera_size":scene.camera.size,"pipeline_before":FrameProfile.pipeline_compilations(),
         "first_movement_ms":null,"first_animation_ms":null,"published_packet_ms":null,"input":"admitted_action_handler",
         "start_frame":Engine.get_process_frames(),"phases":[],"samples":[],"frame_intervals":[],"phase_peaks":{},"slow_frames":[],
         "playback_complete_ms":null,"playback_complete_frame":null,"choices_applied_ms":null,"choices_applied_frame":null,
@@ -148,10 +175,16 @@ func issue(selected: Dictionary) -> bool:
             click_grid(target)
         else:scene._execute_admitted({"action":selected.action,"selection":scene.Interaction.selection(selected.action,[selected.target.index])})
     var previous={};var native_previous={}
+    var previous_compilations:Dictionary=record.pipeline_before
+    record.pipeline_changes=[]
     var deadline=Time.get_ticks_msec()+60000
     while healthy() and Time.get_ticks_msec()<deadline:
         await RenderingServer.frame_post_draw
         collect_pipeline()
+        var compilations=FrameProfile.pipeline_compilations()
+        if compilations!=previous_compilations:
+            record.pipeline_changes.append({"frame":Engine.get_process_frames(),"elapsed_ms":(Time.get_ticks_usec()-command_start)/1000.0,"counts":compilations})
+            previous_compilations=compilations
         var phase=phase_value()
         var elapsed=(Time.get_ticks_usec()-command_start)/1000.0
         if phase.group.is_empty() and phase.sequence>sequence and (previous.get("group","")!="" or previous.get("sequence",sequence)!=phase.sequence):
@@ -193,9 +226,16 @@ func issue(selected: Dictionary) -> bool:
         if scene.action_request<0 and not scene.command_busy and scene.session.status.next_command_number==number and not scene.selection_preview.is_empty() and not scene.selection_preview.can_confirm:
             var next: Array=Choices.next_options(scene.selection_preview)
             if not next.is_empty():
-                scene.target_selection.target_indices.append(next[0].index)
+                var target:Dictionary=next[0]
+                if selected.has("recipient_uuid"):
+                    var matching=next.filter(func(option):return _subject_uuid(scene.selection_preview,option)==selected.recipient_uuid)
+                    if matching.is_empty():
+                        check(false,"Real multi-target preview retains requested recipient");break
+                    target=matching[0]
+                scene.target_selection.target_indices.append(target.index)
                 scene._request_selection(true)
         if ready() and scene.timeline.sequence>sequence and scene.session.status.next_command_number>number:break
+    record.pipeline_after=FrameProfile.pipeline_compilations()
     record.elapsed_ms=(Time.get_ticks_usec()-command_start)/1000.0
     record.end_us=Time.get_ticks_usec()
     record.end_frame=Engine.get_process_frames()
@@ -223,10 +263,16 @@ func issue(selected: Dictionary) -> bool:
         if not scene.profile.frames.is_empty():
             var sampled: Dictionary=scene.profile.frames[posmod(scene.profile.cursor-1,scene.profile.frames.size())]
             record.post_ready_frames.append({"frame":sampled.frame,"frame_ms":sampled.frame_ms,"cpu_ms":sampled.cpu_ms.duplicate(),
-                "state":phase_value(),"media_metadata_pending":scene.media_warmup.plan_task>=0,"hud_pending":hud_pending})
+                "state":phase_value(),"media_metadata_pending":scene.media_warmup.plan_task>=0,"hud_pending":hud_pending,"pipeline_compilations":FrameProfile.pipeline_compilations()})
     scene.profile.label="receipt_validation_%d" % number
     record.validation_start_us=Time.get_ticks_usec()
     record.frame_ms=FrameProfile.distribution(record.frame_intervals)
+    record.frame_budget_counts={"total":record.frame_intervals.size(),"over_10_ms":0,"over_16_667_ms":0,"over_33_333_ms":0,"over_100_ms":0}
+    for interval in record.frame_intervals:
+        if interval>10.0:record.frame_budget_counts.over_10_ms+=1
+        if interval>16.667:record.frame_budget_counts.over_16_667_ms+=1
+        if interval>33.333:record.frame_budget_counts.over_33_333_ms+=1
+        if interval>100.0:record.frame_budget_counts.over_100_ms+=1
     record.erase("frame_intervals")
     record.to=scene.timeline.state.actors[actor].last_visual_position.duplicate()
     command_trace.append(record)
@@ -256,20 +302,37 @@ func issue(selected: Dictionary) -> bool:
 func _run() -> void:
     root.unfocusable=true;root.position=Vector2i(-16000,-16000)
     DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
+    for argument in OS.get_cmdline_user_args():
+        if argument.begins_with("--profile-view-size="):
+            profile_view_size=argument.trim_prefix("--profile-view-size=").to_float()
+            check(profile_view_size>=4.0 and profile_view_size<=80.0,"Profile camera size is within player limits")
+        elif argument.begins_with("--profile-stop-stage="):
+            profile_stop_stage=argument.trim_prefix("--profile-stop-stage=").to_int()
+            bounded_profile=true
+            check(profile_stop_stage>=9 and profile_stop_stage<=ROUTE.size(),"Bounded route includes Gallery entry and an interior move")
+    if not failures.is_empty():quit(1);return
+    if bounded_profile or profile_view_size>0.0:
+        root.size=Vector2i(1600,960)
+        Engine.max_fps=0
     scene=CapturingPlayer.new();scene.choices_observed=capture_choices;scene.profile.recording=true
     evidence.atlas_reference=""
     for argument in OS.get_cmdline_user_args():
         if argument.begins_with("--reference-atlas="):
             evidence.atlas_reference=argument.trim_prefix("--reference-atlas=")
             scene.native_light_atlas=preload("res://tests/atlas_reference.gd").instantiate(evidence.atlas_reference)
-    scene.session.transport.set_profiling(true)
     root.add_child(scene)
+    check(scene.profiling_configured.ok and scene.session.transport.profiling_enabled(),"Transport profiling configured before live start")
+    if profile_view_size>0.0:scene.camera.size=profile_view_size
     # Default to approved capped lighting; an explicit diagnostic run can
     # compare the same real movement/reveal route with the cap disabled.
     var profile_cap := not OS.get_cmdline_user_args().has("--profile-light-cap=off")
     scene.light_cap_enabled=profile_cap
     scene.native_light_atlas.set_light_cap(1.0 if profile_cap else 0.0)
     evidence.light_cap_enabled=profile_cap
+    evidence.profile_view_size=profile_view_size if profile_view_size>0.0 else null
+    evidence.profile_stop_stage=profile_stop_stage
+    evidence.bounded_profile=bounded_profile
+    evidence.window_size=[root.size.x,root.size.y]
     if not await until(ready,"Live Gallery initial choices",120000):await finish();return
     evidence.ready_frame=Engine.get_process_frames()
     evidence.ready_elapsed_ms=Time.get_ticks_msec()-started
@@ -290,9 +353,10 @@ func _run() -> void:
     click=click.duplicate();click.pressed=false;root.push_input(click,true)
     check(scene.grid_visible==grid_before,"Grid button toggles the live overlay")
     scene.grid_visible=false
-    while stage<ROUTE.size() and command_trace.size()<180 and healthy():
+    while stage<profile_stop_stage and command_trace.size()<180 and healthy():
         if not await until(ready,"Next client command is offered"):break
-        if stage>=8: scene.camera.size=28.0 if stage==9 else 16.0
+        if profile_view_size>0.0:scene.camera.size=profile_view_size
+        elif stage>=8: scene.camera.size=28.0 if stage==9 else 16.0
         var goal: Array=ROUTE[stage]
         if not goal[1] is String and scene.timeline.state.actors[leader].last_visual_position==goal[1]:
             print("LIVE_MILESTONE ",goal[0]," tiles=",scene.timeline.state.tiles.size());stage+=1;continue
@@ -301,9 +365,16 @@ func _run() -> void:
         var selected=select_route()
         if not await issue(selected):break
         if selected.get("opens_stage",false):stage+=1
-    check(stage==ROUTE.size(),"Actual player reaches far Gallery with client-issued commands")
+    check(stage==profile_stop_stage,"Actual player reaches the requested Gallery route endpoint with client-issued commands")
     evidence.gallery_viewport_clicks=command_trace.filter(func(record):return record.stage>=8 and record.behavior=="action.move" and record.input=="viewport_click").size()
-    check(evidence.gallery_viewport_clicks>=8,"Gallery route exercises at least eight real viewport movement clicks")
+    if bounded_profile:
+        check(command_trace.any(func(record):return record.stage==7 and record.behavior=="action.move" and record.actor==leader and record.to==ROUTE[7][1]),"Bounded profile includes committed leader movement into the Gallery")
+        check(command_trace.any(func(record):return record.stage==8 and record.behavior=="action.move" and record.actor==leader and record.to==ROUTE[8][1]),"Bounded profile includes committed leader movement across the Gallery nave")
+        check(evidence.gallery_viewport_clicks>=1,"Bounded Gallery route includes an actual interior viewport movement click")
+        check(ready() and not scene.timeline.busy() and scene.timeline.state==scene.session.journal.state,"Bounded profile ends at a drained canonical command boundary")
+    else:check(evidence.gallery_viewport_clicks>=8,"Gallery route exercises at least eight real viewport movement clicks")
+    if profile_view_size>0.0:
+        check(command_trace.all(func(record):return is_equal_approx(record.camera_size,profile_view_size)),"All client-issued commands use the requested fixed camera size")
     evidence.live_commands=command_trace.size()
     evidence.live_route_stage=stage
     evidence.command_trace=scene.game_config.test_result.get_base_dir().path_join("live-command-trace.json")
@@ -312,10 +383,12 @@ func _run() -> void:
     # Same disclosed live scene with no pending command: retain a steady-frame
     # control alongside real movement/reveal measurements, at the same zooms.
     var idle_sequence=scene.timeline.sequence
-    for cap in [false,true]:
+    var idle_caps:Array=[profile_cap] if bounded_profile else [false,true]
+    var idle_zooms:Array=[scene.camera.size] if bounded_profile else [8.137,16.0,28.0]
+    for cap in idle_caps:
         scene.light_cap_enabled=cap
         scene.native_light_atlas.set_light_cap(1.0 if cap else 0.0)
-        for zoom in [8.137,16.0,28.0]:
+        for zoom in idle_zooms:
             scene.profile.label="idle_settle"
             scene.camera.size=zoom
             for frame in 30: await scene.presentation_updated

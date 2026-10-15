@@ -1209,9 +1209,40 @@
       },
       "conditions": [],
       "initial_conditions": []
+    },
+    {
+      "name": "gallery-sorcerer-expedition",
+      "descriptor": "res://.runtime/gallery-sorcerer-20261015-seed3-door/capture-result.json",
+      "journal": "res://.runtime/gallery-sorcerer-20261015-seed3-door/amber/journal",
+      "checks": 10,
+      "failures": [],
+      "facts": {
+        "turn": 100,
+        "sensory": 37,
+        "spatial": 75,
+        "action": 2,
+        "step": 35,
+        "movement": 8,
+        "condition": 5,
+        "spell": 23,
+        "damage": 16,
+        "attack": 3,
+        "saving_throw": 3,
+        "object_destroyed": 4,
+        "object_damage": 4,
+        "area_reach": 1
+      },
+      "behaviors": {
+        "spell.magic_missile": 8,
+        "spell.ray_of_frost": 1,
+        "spell.scorching_ray": 4,
+        "spell.acid_splash": 2,
+        "spell.fireball": 7,
+        "spell.chill_touch": 1
+      }
     }
   ],
-  "checks": 1424,
+  "checks": 1434,
   "failures": [],
   "capture_route": "tools/studio_capture.py -> current ServerConfig recipe/test_host -> SDK choices/preview/commands -> original follower bytes; tests/studio_capture.gd strict replay/shared compiler",
   "scope": "29 local SDK-qualified cases. Dying uses actual lethal damage followed by failed death saves; source availability and native presentation qualification remain separate. Condition-owner/suppression cases qualify lifecycle mechanisms, not complete higher-level spell visuals.",

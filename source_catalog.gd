@@ -275,7 +275,66 @@ static func environment(row: Dictionary, quarter: int, cache: Dictionary, phase:
     # authored endpoint as native destruction playback. An explicit active
     # playback phase still selects its own intermediate samples.
     if phase==0 and row.get("destroyed",false): phase=2
-    return receiving_normal(_environment_source(row,quarter,cache,phase,time),cache)
+    return texture_layout(receiving_normal(_environment_source(row,quarter,cache,phase,time),cache),cache)
+
+static func _layout_region(region: Dictionary, layouts: Dictionary) -> Dictionary:
+    if not layouts.has(region.path): return region
+    var layout: Dictionary = layouts[region.path]
+    var rect: Array = region.rect
+    var cell: Array = layout.cell
+    var column = floori(float(rect[0])/cell[0])
+    var row = floori(float(rect[1])/cell[1])
+    var offset = Vector2i(int(rect[0])%int(cell[0]),int(rect[1])%int(cell[1]))
+    # A source rectangle must remain entirely inside one unchanged source cell.
+    # Reject invalid layouts instead of silently selecting the oversized source.
+    if rect[0]<0 or rect[1]<0 or rect[2]<=0 or rect[3]<=0 or \
+            offset.x+rect[2]>cell[0] or offset.y+rect[3]>cell[1] or \
+            rect[0]+rect[2]>layout.source_size[0] or rect[1]+rect[3]>layout.source_size[1]: return {}
+    var index: int = row*int(layout.source_columns)+column
+    var result = region.duplicate()
+    var local_index = index
+    if layout.has("pages"):
+        var per_page: int = layout.cells_per_page
+        if per_page<=0: return {}
+        var page = floori(float(index)/per_page)
+        if page>=layout.pages.size(): return {}
+        result.path = layout.pages[page]
+        local_index = index%per_page
+    else:
+        # Existing version-one monolithic layouts remain valid until rebaked.
+        result.path = layout.path
+    result.rect = [(local_index%int(layout.columns))*int(cell[0])+offset.x,
+        floori(float(local_index)/layout.columns)*int(cell[1])+offset.y,rect[2],rect[3]]
+    return result
+
+static func texture_layouts(cache: Dictionary) -> Dictionary:
+    # Immutable source document owned by this catalog cache. A fresh catalog on
+    # explicit Reload reads the new manifest; an existing world keeps its own.
+    var key = "res://generated/environment_texture_layouts.json"
+    if not cache.has(key): cache[key] = JSON.parse_string(FileAccess.get_file_as_string(key))
+    return cache[key].layouts
+
+static func texture_layout(record: Dictionary, cache: Dictionary) -> Dictionary:
+    if record.is_empty(): return record
+    var layouts: Dictionary = texture_layouts(cache)
+    var geometry: Dictionary = record.get("geometry_region",{})
+    var normal: Dictionary = record.get("normal",{}).get("region",{})
+    var remap_geometry = layouts.has(geometry.get("path",""))
+    var remap_normal = layouts.has(normal.get("path",""))
+    if not remap_geometry and not remap_normal: return record
+    var result = record.duplicate()
+    if remap_geometry:
+        result.geometry_region = _layout_region(geometry,layouts)
+        if result.geometry_region.is_empty():
+            push_error("Invalid environment texture layout region: "+str(geometry))
+            return {}
+    if remap_normal:
+        result.normal = record.normal.duplicate()
+        result.normal.region = _layout_region(normal,layouts)
+        if result.normal.region.is_empty():
+            push_error("Invalid environment texture layout region: "+str(normal))
+            return {}
+    return result
 
 static func _environment_source(row: Dictionary, quarter: int, cache: Dictionary, phase: int = 0, time: float = 0.0) -> Dictionary:
     if row.has("source_sprite"): return imported_record(row,quarter,cache,phase,time)

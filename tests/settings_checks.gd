@@ -15,6 +15,7 @@ class SettingsWorld extends FixtureWorld:
     var fire_light_flicker=Settings.DEFAULT_FIRE_LIGHT_FLICKER
     var light_strength=Settings.DEFAULT_LIGHT_STRENGTH
     var light_cap_enabled=Settings.DEFAULT_LIGHT_CAP_ENABLED
+    var native_spell_hit_material=true
     var settings_path=""
     var accepted=[]
     var media_issue=""
@@ -32,6 +33,9 @@ class SettingsWorld extends FixtureWorld:
     func set_light_cap_enabled(enabled:bool)->void:
         light_cap_enabled=enabled
         Settings.write_light_cap(enabled,settings_path)
+    func set_native_spell_hit_material(enabled:bool)->void:
+        native_spell_hit_material=enabled
+        Settings.write_spell_hit_material(enabled,settings_path)
     func close_storage()->void:
         loot_object_uuid=""
         if owner_hud!=null:owner_hud.loot_panel.hide()
@@ -59,7 +63,7 @@ func run()->void:
     root.size=Vector2i(1280,720)
     root.gui_embed_subwindows=true
     check(Settings.PROFILES.keys()==["original","gentle","reference"],"Only three delivered normal profiles are offered")
-    check(Settings.read(config_path)=={"profile":"reference","fire_light_flicker":false,"light_strength":1.0,"light_cap_enabled":true,"error":OK} and not FileAccess.file_exists(config_path),"Missing settings use Reference, static fire, full strength and overlap cap without writing a file")
+    check(Settings.read(config_path)=={"profile":"reference","fire_light_flicker":false,"light_strength":1.0,"light_cap_enabled":true,"native_spell_hit_material":true,"error":OK} and not FileAccess.file_exists(config_path),"Missing settings use Reference, static fire, full strength, overlap cap and native spell hits without writing a file")
     check(Settings.write("gentle",config_path)==OK and Settings.read(config_path).profile=="gentle","ConfigFile round trip preserves a selected profile")
     check(Settings.write("unregistered-profile",config_path)==ERR_INVALID_PARAMETER and Settings.read(config_path).profile=="gentle","Unknown profile cannot overwrite saved selection")
     var saved=ConfigFile.new();saved.load(config_path);saved.set_value("unrelated","keep",73);saved.save(config_path)
@@ -92,6 +96,10 @@ func run()->void:
     check(hud.settings_open() and hud.settings_panel.visible,"Escape opens the native settings menu")
     check(hud.settings_panel.profiles.get_item_metadata(hud.settings_panel.profiles.selected)=="reference","Menu reflects renderer's accepted profile")
     check(not hud.settings_panel.fire_flicker.button_pressed,"Fire light flicker defaults off")
+    check(hud.settings_panel.spell_hits.selected==1,"Native material choice reflects the renderer")
+    hud.settings_panel.spell_hits.grab_focus();key(KEY_SPACE);await process_frame
+    key(KEY_UP);key(KEY_ENTER);await process_frame
+    check(not world.native_spell_hit_material and not Settings.read(config_path).native_spell_hit_material,"Actual hit selector switches and persists Colour treatment")
     await process_frame;await process_frame
     click(hud.settings_panel.fire_flicker.get_global_rect().get_center());await process_frame
     check(world.fire_light_flicker and Settings.read(config_path).fire_light_flicker,"Checkbox enables and persists fire light flicker")

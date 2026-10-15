@@ -69,6 +69,17 @@ func run()->void:
         panel.show_selection(partial[0],partial[1]);var exact=panel.recording_options[0].record
         panel.open_selected_recording()
         check(signals.size()==1 and signals[0].study==partial[1].id and signals[0].record==exact,"Open emits exact available real recording and selected study independently")
+    var spell_records=Cases.read().filter(func(record):return record.has("spell_id"))
+    check(spell_records.size()==30,"The finite native spell batch is available through the real Library")
+    for record in spell_records:
+        var study=find_study(panel,record.id)
+        check(not study.is_empty(),"Library exposes the selected real spell sequence: "+record.spell_id)
+        if study.is_empty():continue
+        panel.show_selection(study[0],study[1])
+        check(not panel.open_button.disabled and panel.recording_options.size()==1,"Spell sequence has one exact openable recording: "+record.spell_id)
+        var previous=signals.size()
+        panel.open_selected_recording()
+        check(signals.size()==previous+1 and signals[-1].capability=="spell."+record.spell_id and signals[-1].study==record.id and signals[-1].record==record,"Spell Open recording emits its own server capture: "+record.spell_id)
     await finish(panel)
 func finish(panel:Window)->void:
     panel.queue_free();await process_frame;await process_frame

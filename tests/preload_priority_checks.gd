@@ -42,7 +42,7 @@ func acknowledge(data: Dictionary, family: Dictionary) -> void:
         var loaded = {"path":request.path,"cpu_bytes":size.cpu_bytes,"gpu_bytes":size.gpu_bytes}
         if request.fixture: loaded.merge({"energy":.1,"emission_centroid":Vector2(32,40)})
         Media.published(data,loaded)
-    Media.release_cold_images(data)
+    Media.release_cold_images(data,-1) # Offline whole-batch acknowledgement for queue ordering.
     Media.boot_ready(data)
 
 func run() -> void:

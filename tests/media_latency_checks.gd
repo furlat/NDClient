@@ -113,6 +113,10 @@ func staged_metadata(state: Dictionary, expected_environment: Dictionary) -> voi
     check(required.value.required==expected.required and required.value.environment_required==expected_environment.required,
         "First required packet preserves original source selection and snapshot membership")
     check(required.source_files.has("catalog-index.json") and required.source_files.has("environment/index.json"),"Required source JSON is available before scene binding")
+    var required_paths:Dictionary=required.value.required.duplicate()
+    for paths in [required.value.upcoming,required.value.environment_required,required.value.environment_upcoming,required.value.optical_candidates]:required_paths.merge(paths)
+    check(required_paths.keys().all(func(path):return required.value.source_sizes.get(path,0)>0),
+        "Required worker supplies PNG sizes for requested sources and optical masks before optional estimates")
     var player = Player.new()
     player.timeline.accept({"kind":"initialization","sequence":0,"state":state})
     key = [player.timeline.initialization_revision,[],player.timeline.revision]
@@ -124,15 +128,17 @@ func staged_metadata(state: Dictionary, expected_environment: Dictionary) -> voi
     player._prepare_media()
     var wanted: Dictionary = player.media_warmup.wanted.duplicate()
     check(not wanted.is_empty() and player.media_warmup.encounter.is_empty(),"Required paths are demanded without an optional family owner")
+    var candidates_only:Array=required.value.optical_candidates.keys().filter(func(path):return not wanted.has(path))
+    check(not candidates_only.is_empty() and candidates_only.all(func(path):return not player.media_warmup.queued.has(path)),"Ordinary animation optical metadata prepares native tails without decoding or demanding unused masks")
     check(player.media_warmup.boot_started and not Media.boot_ready(player.media_warmup),"Initial exact demand gates startup before publication")
     for path in wanted:
         var loaded = {"path":path,"cpu_bytes":16,"gpu_bytes":16}
         if player.media_warmup.fixtures.has(path): loaded.merge({"energy":.4,"emission_centroid":Vector2(2,3)})
         Media.published(player.media_warmup,loaded)
-    check(player._media_ready({}) and Media.boot_ready(player.media_warmup),"All required publications become ready before optional metadata adoption")
+    check(player.media_metadata_ready and Media.ready(player.media_warmup,player.media_plan.required) and player._environment_sources_ready() and Media.boot_ready(player.media_warmup),"All required publications become ready before optional metadata adoption")
     var missing: String = wanted.keys()[0]
     player.media_warmup.ready_paths.erase(missing)
-    check(not player._media_ready({}),"Required readiness still blocks missing resident bytes")
+    check(not Media.ready(player.media_warmup,player.media_plan.required),"Required readiness still blocks missing resident bytes")
     Media._refresh_path(player.media_warmup,missing)
     var original = player.media_empty_plan
     var optional = await poll_plan(data)

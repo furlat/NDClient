@@ -1,5 +1,345 @@
 # Godot Studio — first chunk: base mechanics, layers, conditions and sound
 
+## 15 October: current native authoring checkpoint
+
+User acceptance correction: **Aid, Bless, False Life and Sacred Flame are NOT
+accepted and still need work. Timing and positioning for ALL spells still need
+tuning.** Technical validation below is not artistic approval. Preserve these
+open items during client/Studio migration; see `NATIVE_VFX_FACTORY_HANDOFF.md`.
+
+The user's existing per-spell JSON assignments remain the default. Native VFX
+placement, orientation and registration can be tuned around those poses; this
+does not authorize automatically replacing their animation choices. The optional
+inspection selector is restricted to the five established spell poses: Attack1,
+Attack4, Attack5, Attack6 and Special1. The bow-like Attack3 and the newly proposed
+Attack2 adaptation are excluded. Authored preserves each original recipe exactly,
+including Burning Hands' corrected hand and True Strike's disabled cast.
+
+The offline library contains 34 capabilities and 78 native phases. Receiving
+feedback now offers the existing colour treatment and an actual selected native
+surface material. Twelve of the sixteen damaging spells have qualified native
+surface inputs; Burning Hands, Chill Touch, Poison Spray and Shocking Grasp retain
+explicit colour-treatment fallback because their native inputs depend on particle
+or geometry data not supplied by the body sampler. This is not an all-spells
+native-material completion claim.
+
+False Life preserves its native application, then projects the donor's animated
+noise/colours onto the measured actor surface instead of leaving an envelope mesh
+around the character. Source clocks and the authored hold/fade own its lifetime.
+This is a declared body-conforming adaptation, not arbitrary shader transplanting.
+Ordinary room lighting, authoritative state and event ordering are unchanged.
+
+The user's latest Bless feedback extends that same approved body-surface path:
+retain the native cast/application burst, then put the lingering treatment on the
+character instead of leaving a surrounding cage. Reuse the source material and
+shared depth/normal projection; no additional spell batch or independent effect
+system. Bless's body-surface conversion now passes native qualification.
+
+The shared actor material must also retain multiple active body surfaces rather
+than overwrite the previous one. Use ordered source-over in the existing pass,
+independent native clocks/textures, and the full-native transient hit last; existing condition
+composition remains the owner of selection/order. The explicit eight-surface GPU
+capacity reports overflow. Native overlap/removal tests pass.
+The separate Colour treatment retains its existing pre-lighting shader path.
+
+The user has assigned a separate source-coordinate audit of all34 existing spells
+so native placement does not depend on screenshot nudges. Record semantic source
+cores/axes, registration, uniform conversion and hand/body/ground attachments in
+`SANDBOX_POSITION_AUDIT.md`; correct confirmed offsets while preserving original
+JSON casting assignments. Plan-adherence/anti-slop review remains active; no
+additional spell batch or renderer framework is implied.
+The completed inventory is in `SANDBOX_POSITION_AUDIT.md`. Confirmed Magic Missile
+core offsets, Fireball's preparation axis, Ray's shared head registration and
+isolated-phase registration are corrected. Focused native checks pass226 across
+four views, with36 actual held/release/flight captures inspected; this qualifies
+placement continuity rather than final artistic approval.
+
+Current qualification:
+
+- 4,794 native receiver checks pass, including two actual 1× Fire Bolt playback
+  cycles, all 34 capability contact/exclusion paths, twelve nonblank native
+  materials, mode switching, pause/recast and expiry. Fireball's impact can obscure
+  its receiver completely; a separate source-hidden control verifies body output.
+- 2,123 headless casting checks pass for original defaults and the five alternatives
+  across all 34 spells. Corrected five-pose/four-view native validation passes 203
+  checks, including actual hand/core release and pose-only placement/zoom retention;
+  the earlier seven-pose run and its stale-floor captures are superseded.
+- False Life's 262 native body checks pass across four views, two actual Idle
+  frames and isolated sustain: changed pixels remain within painted coverage,
+  consume delivered depth/normals and clear on expiry, recast and source removal.
+- The final False Life/Bless/body-stack suite passes830 native checks: real source
+  clocks/material inputs, both application-to-film transitions, four views/two Idle
+  frames, isolated playback and loops, painted containment, exact layer removal,
+  unload/expiry/recast and explicit capacity handling. Sixteen pre/post-stack False
+  Life scene comparisons are byte-identical.
+- Support corrections pass 351 checks; utility feedback passes 792. The preceding
+  Bless 0.05-opacity cage passed 76 native checks, but does not qualify the newly
+  requested body-conforming sustain and is superseded as the intended appearance.
+
+Reports: `.runtime/sandbox-flash-playback-checks.json`,
+`.runtime/sandbox-casting-checks.json`, `.runtime/sandbox-casting-native-checks.json`,
+`.runtime/sandbox-body-surface-checks.json`,
+`.runtime/sandbox-body-surface-bless-stacking-830.json`,
+`.runtime/body-surface-single-layer-parity.json`,
+`.runtime/sandbox-position-checks.json`,
+`.runtime/sandbox-support-feedback-checks.json`,
+`.runtime/sandbox-utility-feedback-checks.json`, and
+`.runtime/sandbox-bless-opacity005-native-checks.json`. Framebuffer evidence and
+source review remain separate from final user artistic approval.
+
+The [Factory handoff](NATIVE_VFX_FACTORY_HANDOFF.md) documents current resource,
+clock, socket, material, light and selected-import ownership. The next authorized
+integration uses the existing main-client compiler/reducer and actual events;
+offline contacts and local follow-up attacks are not copied as gameplay truth.
+Production spell registration, persistent event lifetimes, faction/replay behavior
+and scenery integration still need their own qualification. No new spell batch
+or replacement rendering/rules framework is part of this checkpoint.
+
+## 14 October: receiver flash visibility follow-up
+
+Fire Bolt feedback needs verification during normal playback, not only paused
+contact frames. The boundary is the actual receiving character framebuffer in
+the existing sandbox, including its default-on toggle, contact timing and reset.
+Check all 16 damaging capabilities and retain the 18 non-damaging exclusions.
+Factory export quantization tables must not replace authored brightness ramps;
+explicit native ramps or the authored receiver ramp determine the treatment.
+Plan-adherence/anti-slop review and source-material review accompany this fix.
+Keep the user's running preview open during investigation.
+
+The user clarified that the existing palette/noise treatment is not the native
+spell material, then requested a choice between both looks. Add an explicit
+Colour treatment / Full spell material selector. Full material evaluates the
+actual selected Factory surface shader and textures in Godot, uses the displayed
+character's existing alpha for coverage, and restores its underlying material on
+expiry. Native vertex geometry is not transplanted onto the 2D character. Binding,
+clock and any body-specific surface parameters are data, not per-spell code.
+
+Additional feedback in this pass: distinguish application and persistent holds;
+reduce Mage Armor/Sanctuary sustained strength and decorative room light; show
+Shield reacting to an incoming hit; make False Life body-sized and lingering;
+reduce Sacred Flame and correct its black/flat ground presentation. Inspect old
+recipes and native sources first. Preserve room lighting and gameplay semantics.
+Qualify source timing, onset/hold/end and actual captures, with source and scope
+reviewers; artistic acceptance remains the user's.
+
+After those corrections, support the authored casting-animation variants. Each
+supported clip owns its release frame, playback speed and per-facing hand
+positions; changing the clip must update these together. Preserve existing spell
+choices and expose supported alternatives in the offline fixture. Validate release
+continuity, camera rotation and preparation/launch overlap from actual rig and
+socket data. Plan-adherence, anti-slop and anti-OOP review remains active.
+
+The user's False Life follow-up replaces the generic persistent envelope with a
+body-conforming surface treatment. Reuse the donor's noise and colours, the
+character's existing alpha and admitted depth/normal packet; keep application
+separate and introduce no gameplay light. Validate animation, rotation, expiry,
+and final pixels inside/outside the character. After this batch, document the
+actual Factory/client boundary for spell-by-spell author validation and subsequent
+main-client integration; do not expand into another spell batch.
+
+## 14 October: sandbox feedback corrections
+
+User feedback extends the same offline fixture: restore Chill's necrotic identity
+and reduce donor slam excess; make receiver material feedback visible; correct
+Ice Knife's unnatural trail and Web's solid donut; retain only Magic1/2/3 hand
+layers for casting. This does not alter game mechanics or approved room lighting.
+
+Chill now reuses its original Factory material transformation, original hand
+scale and a smaller world scale. The requested portal is retained; the original
+Chill exclusions for slam debris/cracks/decal and portal starbursts are restored.
+Ice's native ribbon records only released movement with its own elapsed clock;
+the selected .12-second history avoids the donor's four-tile tether at our speed.
+Web's donor torus now admits its authored texture/particle alpha.
+
+The shared character surface consumes spell palette/noise, gamma and untinted
+inputs. Sandbox feedback authoring explicitly selects screen blending and a
+300 ms envelope (100 ms hold, 200 ms fade). This is not arbitrary native shader
+transplantation or exact legacy assembled-row percentile parity. Isolated impact
+inspection also samples the receiving animation/material at authored contact.
+Final framebuffer comparisons, source checks and four-view visual review qualify
+these corrections; tests remain separate from user artistic approval. Source,
+anti-slop/anti-OOP and plan-adherence reviewers accompany this pass.
+
+Final correction checks pass: 150 receiver/policy tests and 109 Ice/Web tests in
+Windows Forward+/Vulkan, plus 25 actual-source Chill checks headless. Reports are
+listed in sandbox/README.md. Final-image comparisons include paused on/off,
+the late flash fade, original versus shortened native trail history, the old
+opaque versus corrected Web material, and the separate ground network. The
+ordinary room light pipeline is unchanged. Native replay remains the boundary.
+
+## 14 October: next twenty native sandbox spells (active)
+
+Human request: finish the current correction batch and add twenty more spells
+to the same fast offline sandbox. The selected batch is Aid, Bless, Bane,
+Command, Cure Wounds, Healing Word, Guidance, Resistance, Light, Thaumaturgy,
+True Strike, Mage Armor, Sanctuary, Shield, Shield of Faith, False Life,
+Sacred Flame, Shocking Grasp, Burning Hands and Thunderwave.
+
+Behavior/boundary: choosing any of these capabilities in the existing sandbox
+plays its authored character cast, native full composition at the appropriate
+recipient/ground/hand attachment, complete source lifetime and finite reset.
+Healing and protection do not invent projectiles or damage reactions. Native
+application/hold/release phases use explicit preview timings; these are not
+gameplay duration or server event claims. Existing fourteen spells, source-depth
+integration, room lighting and the default-on receiver flash control remain.
+
+Implementation: explicit batch authoring selects Factory recipes/phases and source
+corrections. Extend the existing cue records for recipient, attachment and trigger;
+no spell subclasses or parallel gameplay renderer. Reuse cast source sockets from
+current client JSON. Import only selected dependencies; originals remain unchanged
+and artwork stays ignored. Keep alternate native phases inspectable separately.
+
+Validation: real Forward+/Vulkan playback for all twenty, four camera views,
+phase isolation, recipient ownership, pause/recast/loop cleanup and old-batch
+regression. Capture temporal contact sheets and inspect them; passing structural
+checks is not artistic approval. Source/anti-slop, anti-OOP and plan-adherence
+reviewers track the batch and report incomplete components explicitly.
+
+### Additional twenty: implemented and natively checked
+
+At the initial batch checkpoint the offline sandbox exposed 34 capabilities and
+77 native phases; the current count above includes the added False Life sustain. Both batch
+JSONs retain selected Factory provenance, recipient, attachment, contact, source
+clock, native close and isolated-phase placement. Current support/combat review
+notes are in SANDBOX_SUPPORT_SOURCE_REVIEW.md and SANDBOX_COMBAT_SOURCE_REVIEW.md.
+No SDK/gameplay state was added. Artwork remains ignored.
+
+Completed native qualification: 1510 checks for 20 spells × 4 camera views and 31
+isolated phases; 90 further checks for Sacred Flame's final full-height framing;
+1368 old-batch choreography/regression checks;259 scene integration;34 colour
+compositing;64 optical lifecycle;60 native light-unit checks. All pass. Rendered
+cases use Windows Godot 4.7.2 Forward+/Vulkan, while the 64 optical checks are
+headless. Reports and temporal captures are listed in sandbox/README.md.
+
+Review corrections include native transparent-black clearing, scale-preserving
+billboards, actual current-pose hand anchors, Command glyph facing/fade, shared
+isolated-placement/close controls, and Light/Sanctuary geometry/light closure.
+The older Fireball/Poison preparation shutdown findings are also closed with
+release handoff/native End, preserving particle tails. Source art is retained:
+Sacred Flame's dark rim is authored, and legacy CIE pixel/glass finishing is not
+misrepresented as a native ordered palette. User art-direction approval and
+production event binding remain separate work.
+
+## 14 October: controlled native spell sandbox
+
+The user's next step is a small, hand-placed, offline Fire Bolt scene for rapid
+iteration before production VFX integration. This explicitly permits local
+presentation fixtures; they are not fabricated SDK events or gameplay results.
+Reuse the player renderer, approved lighting, character authoring and native
+source clock adapter. Expose caster/target/launch/impact markers and a small
+spell Resource in the ordinary Godot Inspector; offer immediate replay, pause,
+phase isolation, scale/speed and four-view controls without a backend.
+
+Boundary checks: the local scene renders the three original Factory phases in
+the main World3D, preserves actor appearance, and resets/loops without stale
+particles or repeated asset loading. Only selected dependencies are imported;
+artwork stays ignored. The initial checkpoint deferred sprite-depth occlusion and
+spell light projection; the explicit user clarification below now includes those
+for this fixture. Pixelation, sound authoring and production event binding remain
+separate work.
+Plan-adherence, anti-slop and anti-OOP review accompanies implementation. Do not
+turn this into a second Studio, game simulator or bulk spell migration.
+
+The user subsequently extended this sandbox step: after Fire Bolt works, bring
+the other projectile-based spells into the same local library, including native
+preparation/launch, trails, impact and available but previously unused components.
+Inventory Factory and client authoring together; expose source components and
+availability explicitly. This authorizes selected native dependency intake, not
+bulk exports or claiming production spell/event integration. Preserve the simple
+fixture and reuse its controls/resources. Anti-slop/anti-OOP review must check
+that component availability is not mistaken for complete gameplay coverage.
+
+### 14 October: native spell choreography correction (active)
+
+Requested behavior: inspect complete native spell staging in the offline lab:
+character hand-magic layer, charged projectile visibly held at the hand, release
+with preparation overlap, uninterrupted native tails, then correctly placed
+impact, receiving body reaction and spell-material flash. Travel speed has its
+own control. All placement uses native world units and explicit source axes;
+legacy sprite-export crops/scales do not constrain new artistic staging.
+
+The existing approved Fire Bolt is the baseline. Acid must visibly leave the
+hand; Chill restores its portal and a larger punch at the body; Eldritch/Guiding/
+Produce Flame must face and originate correctly; Fireball/Sleep/Web use real
+spell footprints with uniformly scaled 3D effects; Scorching preserves its
+complete layers. Ice Knife includes its delayed burst. Magic Missile exposes
+curved, multiple deliveries to one or multiple targets. These are local visual
+fixtures, not invented authoritative events or a production event migration.
+
+Implementation: small data-driven cue schedule beside existing spell Resources;
+source/contact/axis/size choices remain editable data. Reuse production cast
+layers and material/reaction presentation. Validate through rendered temporal
+samples, source lifetime/hand-contact/footprint evidence, four views, finite
+loops, and a native preview. Never mark a spell artistically approved because a
+pixel-count test passed. Plan-adherence, anti-slop and anti-OOP reviewers check
+whole-request coverage and source transformations during the work.
+
+User clarification during this pass: the foreground-only native VFX pass is
+insufficient. Before further spell tuning, integrate the current floor and modular
+character receiver depth with native effect occlusion/proximity, and route source
+light animation through the existing native 2D light system. Preserve the approved
+painted scene. Validate front/behind crossings, floor intersections and four camera
+views; distinguish depth, decals, optical lighting and particle physics rather than
+claiming one solves all four. Prefer native Forward+ rendering stages and existing
+authored geometry registration. The offline fixture does not authorize new game
+physics or undisclosed backend state.
+
+### Native scene integration checkpoint
+
+The sandbox now publishes actual floor support and the visible modular component's
+admitted optical depth into the Forward+ effect pass. Shared atlas addressing keeps
+colour and support aligned at fractional zoom. Covered outfit layers cannot win
+through their independently inferred depths; unsupported foreground pixels clear
+support instead of borrowing hidden geometry. Painted rendering remains opt-in and
+unchanged when this integration is disabled.
+
+Native depth tests/proximity sampling, decal albedo/emission receiving and source
+light animation are connected. Optical light colours and Chill's hand/flash ramp
+are explicit source-derived staging data. GPU particles use the native frame delta
+to advance the same source clock as animation keys, including paused/stepped play.
+Release sockets resolve their future cast pose; impacts drive the receiving actor.
+The library has 14 capabilities and 46 native phases, with Ice Knife's burst grouped
+under Ice Knife and complete restored Chill portal/decal lifetime.
+Native light range/size convert once to world units after source animation; their
+raw values remain available to replay and the optical bridge.
+
+Evidence and controls are documented in `sandbox/README.md`. Checks cover complete
+14-spell playback, four-view/fractional-zoom occlusion, rendered owner alignment,
+decal comparison, real socket data, optical lights and 30/120 FPS particle playback.
+These are behavioral checks, not final artistic approval. Current support covers
+opaque sandbox actors/floors; transparent-body compositing, production scenery,
+particle collision, refraction, production event binding and spell audio remain
+separate. The receiver/effect passes currently run without MSAA.
+
+Follow-up visual review corrected the reported Eldritch preparation/release
+registration, Guiding ribbon coordinates/export edge clipping, Ice Knife scale
+and bounded casting duration, and Produce Flame's duplicated mismatched charge.
+Native finishing now retains soft premultiplied coverage and smooth authored
+colour ramps. Spell optical lights use emitter-centred continuous falloff rather
+than the room light's gameplay bands; ordinary room-light calibration is retained.
+Ice's original wrapper light is recovered as a small native scene with explicitly
+retimed source keys. Four-view temporal contact sheets and actual source/socket
+measurements accompany the regression checks. This remains sandbox correction,
+not artistic approval or production event binding. Plan-adherence and source /
+anti-slop / anti-OOP review remain part of this checkpoint.
+
+The default-on Spell hit flash switch controls only receiver material feedback,
+including an immediate paused-frame update; TakeDamage and impact effects remain.
+Ray's opaque-alpha flare cards use native premultiplied additive blending, with
+zero-coverage radiance preserved by the composite. Source review also identified
+remaining explicit preparation-shutdown work for Fireball and Poison Spray;
+those endings are not qualified by the current duration checks (see sandbox README).
+
+Historical sandbox checkpoint (before current choreography/integration): the shared library contains15 existing projectile recipes
+and49 native source phases. Inspection uses explicit actor placement, original
+Factory colour profiles across stages, and recovered Chill Touch material/
+animation imports. Fire Bolt hand placement is checked against displayed sprite
+sockets across four views. The native scale test isolates Chill's mesh, not just
+its particles. Forward+/Vulkan validation:53 fixture checks,264 phase checks,34
+reported-regression checks and4 scale comparisons pass. Source artwork remains
+ignored and production spell bindings are unchanged. Native source verification
+is not final per-spell artistic approval.
+
 Date: 13 October 2026. Updated 14 October: Studio workspace, real-recording transport and source-derived worklist are implemented. Renderer coverage remains partial; the current requirements and remaining gaps are recorded below. Historical validation counts qualify only their stated cases.
 
 ## 1. Outcome and authority
