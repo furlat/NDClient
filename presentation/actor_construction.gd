@@ -60,26 +60,48 @@ static func layer(owner:Node,row:Dictionary,rig:Dictionary,source:Dictionary,ind
     owner.set_quad(entry,cell,pivot,128.0/owner.rig_config.TILE_W*row.scale)
     return entry
 
+static func prepare_binding(rig:Dictionary,layer:Dictionary,path:String,cache:Dictionary,depth:bool,normals:bool,profile:String,scale:float,scale_x:float)->Dictionary:
+    var header:Dictionary=CharacterGeometry.BodySources.header(path,cache)
+    return {"path":path,"sheet_size":Vector2(header.get("width",0),header.get("height",0)),
+        "geometry":CharacterGeometry.prepare_binding(path,layer.slot,cache,depth,normals,profile,scale,scale_x)}
+
+static func realize_binding(owner:Node,value:Dictionary)->Dictionary:
+    var result:Dictionary=value.duplicate();result.sheet=owner.textures.get(value.path)
+    var geometry:Dictionary=value.geometry.duplicate();geometry.parameters=value.geometry.parameters.duplicate()
+    for parameter in geometry.textures:
+        var path:String=geometry.textures[parameter]
+        if not owner.textures.has(path):return {}
+        geometry.parameters[parameter]=owner.textures[path]
+    if result.sheet==null:return {}
+    result.geometry=geometry
+    return result
+
 static func bind_source(owner:Node,entry:Dictionary,rig:Dictionary,path:String,layer_frame:int,layer_facing:String,parameters:Dictionary)->void:
     # One binding implementation for current actors and hidden candidate layers.
     # Pose selection, animation clocks, transforms and visibility remain in Play.
     var layer:Dictionary=entry.actor_layer
     var row:Dictionary=entry.placement
     var sheet: Texture2D = owner.textures[path]
+    var prepared:Dictionary=entry.get("prepared_source_binding",{})
+    var prepared_key:Array=[path,owner.source_depth,owner.source_normals,entry.scale,row.get("scale_x",1.0),owner.character_light_profile]
+    var source_prepared:bool=not prepared.is_empty() and prepared.geometry.key==prepared_key
+    if source_prepared:sheet=prepared.sheet
     var palette:Dictionary=layer.get("effect",{}).get("palette",{}) if layer.get("effect",{}).get("palette")!=null else {}
     var frame_key:Array=[sheet,layer_frame,layer_facing,owner.textures.get(owner.resources.get(palette.get("noiseSheet"),""))]
     entry.texture_path = path
     if entry.get("bound_frame_key",[])!=frame_key:
         entry.bound_frame_key=frame_key
-        SourceMaterial.set_parameter(entry,"sheet",sheet,true)
+        SourceMaterial.set_parameter(entry,"sheet",sheet)
         SourceMaterial.set_parameter(entry,"material_cell_size",Vector2(rig.cell_width,rig.cell_height))
-        SourceMaterial.set_parameter(entry,"frame_uv",Vector4(layer_frame*rig.cell_width/sheet.get_width(),rig.facing_rows[layer_facing]*rig.cell_height/sheet.get_height(),float(rig.cell_width)/sheet.get_width(),float(rig.cell_height)/sheet.get_height()))
+        var size:Vector2=prepared.sheet_size if source_prepared else Vector2(sheet.get_width(),sheet.get_height())
+        SourceMaterial.set_parameter(entry,"frame_uv",Vector4(layer_frame*rig.cell_width/size.x,rig.facing_rows[layer_facing]*rig.cell_height/size.y,float(rig.cell_width)/size.x,float(rig.cell_height)/size.y))
     var palette_parameters=Palette.parameters(layer,layer_facing,layer_frame,owner.textures,owner.resources)
     for name in palette_parameters:
-        SourceMaterial.set_parameter(entry,name,palette_parameters[name],name in ["effect_palette_enabled","effect_has_noise","effect_noise"])
+        SourceMaterial.set_parameter(entry,name,palette_parameters[name])
     # Play supplies an owned immutable operand value shared by this actor's
     # layers. Fixture/private callers may still supply mutable values.
     if not parameters.is_read_only() or not is_same(entry.get("bound_condition_parameters"),parameters):
         SourceMaterial.apply(entry,parameters)
         entry.bound_condition_parameters=parameters if parameters.is_read_only() else null
-    CharacterGeometry.bind(entry,path,owner.catalog_cache,owner.texture,owner.source_depth,owner.source_normals,owner.character_light_profile)
+    if source_prepared:CharacterGeometry.apply_binding(entry,prepared.geometry)
+    else:CharacterGeometry.bind(entry,path,owner.catalog_cache,owner.texture,owner.source_depth,owner.source_normals,owner.character_light_profile)

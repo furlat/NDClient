@@ -4,6 +4,9 @@ const AudioCues=preload("res://presentation/audio_cues.gd")
 ## prepare() loads selected originals; sample() never loads a stream from disk.
 var streams: Dictionary={}
 var voices: Dictionary={}
+var prepared_voices: Dictionary={}
+var loads: Dictionary={}
+var preparation_counts={"loads":0,"voices":0,"sample_constructors":0}
 var errors: Array=[]
 var last_ms: float=NAN
 var sampled_ms: float=NAN
@@ -59,33 +62,68 @@ func _key(row: Dictionary) -> String:
 func _error(message: String) -> void:
     if message not in errors: errors.append(message)
 
-func prepare(components: Array) -> Array:
+static func _read_stream(row:Dictionary,result:Dictionary)->void:
+    var path:String=row.clip
+    var stream:AudioStream
+    if not FileAccess.file_exists(path):result.error="Missing audio source: "+path;return
+    match path.get_extension().to_lower():
+        "ogg":stream=AudioStreamOggVorbis.load_from_file(path)
+        "wav":stream=AudioStreamWAV.load_from_file(path)
+        _:result.error="Unsupported audio source: "+path;return
+    if stream==null:result.error="Missing audio source: "+path;return
+    if row.get("loop",false):
+        if stream is AudioStreamOggVorbis:
+            stream.loop=true;stream.loop_offset=row.get("loop_start_s",0.0)
+        else:
+            stream.loop_mode=AudioStreamWAV.LOOP_FORWARD
+            stream.loop_begin=int(row.get("loop_start_s",0.0)*stream.mix_rate)
+            stream.loop_end=int(row.get("loop_end_s",stream.get_length())*stream.mix_rate)
+    result.stream=stream
+
+func ready(components:Array)->bool:
     for row in components:
-        if row.get("kind")!="audio" or row.get("status")!="available": continue
-        var key=_key(row)
-        if streams.has(key):
-            if not outcomes.has(row.id):_record(row,"ready")
-            continue
-        var path: String=row.clip
-        if not FileAccess.file_exists(path): _error("Missing audio source: "+path); continue
-        var stream: AudioStream
-        match path.get_extension().to_lower():
-            "ogg": stream=AudioStreamOggVorbis.load_from_file(path)
-            "wav": stream=AudioStreamWAV.load_from_file(path)
-            _: _error("Unsupported audio source: "+path); continue
-        if stream==null: _error("Missing audio source: "+path); continue
-        if row.get("loop",false):
-            if stream is AudioStreamOggVorbis:
-                stream.loop=true;stream.loop_offset=row.get("loop_start_s",0.0)
-            else:
-                stream.loop_mode=AudioStreamWAV.LOOP_FORWARD
-                stream.loop_begin=int(row.get("loop_start_s",0.0)*stream.mix_rate)
-                stream.loop_end=int(row.get("loop_end_s",stream.get_length())*stream.mix_rate)
-        streams[key]=stream
-        _record(row,"ready")
-        var bus: String=row.get("bus","Master")
+        if row.get("kind")=="audio" and row.get("status")=="available":
+            if not streams.has(_key(row)) or (not prepared_voices.has(row.id) and not voices.has(row.id)):return false
+    return true
+
+func prepare(components:Array,host:Node=null,budget:Dictionary={})->Array:
+    var started:int=Time.get_ticks_usec()
+    var wanted:Dictionary={}
+    for row in components:
+        if row.get("kind")!="audio" or row.get("status")!="available":continue
+        wanted[row.id]=true
+        var key:String=_key(row)
+        if not streams.has(key):
+            if not loads.has(key):
+                var output:Dictionary={}
+                loads[key]={"result":output,"task":WorkerThreadPool.add_task(_read_stream.bind(row,output),false,"Authored audio stream")}
+                preparation_counts.loads+=1
+            var job:Dictionary=loads[key]
+            if not WorkerThreadPool.is_task_completed(job.task):continue
+            WorkerThreadPool.wait_for_task_completion(job.task)
+            if job.result.has("error"):_error(job.result.error);continue
+            streams[key]=job.result.stream;loads.erase(key)
+        if not outcomes.has(row.id):_record(row,"ready")
+        if voices.has(row.id) or prepared_voices.has(row.id):continue
+        if not budget.is_empty() and budget.used_usec+Time.get_ticks_usec()-started>=budget.limit_usec:continue
+        var bus:String=row.get("bus","Master")
         if AudioServer.get_bus_index(bus)<0:
             AudioServer.add_bus();AudioServer.set_bus_name(AudioServer.bus_count-1,bus)
+        var node:Node
+        match row.get("attachment","body"):
+            "ui":node=AudioStreamPlayer.new()
+            "screen":node=AudioStreamPlayer2D.new()
+            _:node=AudioStreamPlayer3D.new()
+        node.stream=streams[key];node.bus=bus;node.autoplay=false
+        _gain(node,row.get("gain_db",0.0))
+        if host!=null:host.add_child(node)
+        prepared_voices[row.id]=node;preparation_counts.voices+=1
+    # Retire only unused quiet candidates; active voices keep their own lease.
+    for id in prepared_voices.keys():
+        if wanted.has(id):continue
+        if not budget.is_empty() and budget.used_usec+Time.get_ticks_usec()-started>=budget.limit_usec:break
+        prepared_voices[id].free();prepared_voices.erase(id)
+    if not budget.is_empty():budget.used_usec+=Time.get_ticks_usec()-started
     return errors
 
 func _gain(node: Node, gain_db: float) -> void:
@@ -122,14 +160,11 @@ func _start(host: Node, row: Dictionary, age_ms: float, speed: float, paused: bo
         if voice.row.cue_id==row.cue_id: same+=1
     if voices.size()>=int(row.get("total_voice_limit",24)) or same>=int(row.get("voice_limit",4)):
         counters.limited+=1;_record(row,"skipped","voice_limit");return
-    var node: Node
-    match row.get("attachment","body"):
-        "ui": node=AudioStreamPlayer.new()
-        "screen": node=AudioStreamPlayer2D.new()
-        _: node=AudioStreamPlayer3D.new()
-    node.stream=streams[key];node.bus=row.get("bus","Master")
+    if not prepared_voices.has(row.id):
+        counters.missing+=1;_record(row,"skipped","voice_not_prepared");_error("Audio voice not prepared: "+str(row.id));return
+    var node:Node=prepared_voices[row.id];prepared_voices.erase(row.id)
+    if node.get_parent()==null:host.add_child(node)
     _gain(node,row.get("gain_db",0.0));node.pitch_scale=maxf(.01,speed)
-    node.autoplay=false;host.add_child(node)
     if not _position(node,row):
         _record(row,"skipped","attachment_unresolved");node.free();return
     var offset=_offset(row,age_ms)
@@ -144,7 +179,7 @@ func _start(host: Node, row: Dictionary, age_ms: float, speed: float, paused: bo
 func _release(id: String) -> void:
     _record(voices[id].row,"finished")
     var node: Node=voices[id].node
-    node.stop();node.free();voices.erase(id)
+    node.stop();prepared_voices[id]=node;voices.erase(id)
 
 func sample(host: Node, components: Array, display_ms: float, speed: float, paused: bool, seek_epoch: int) -> void:
     sampled_ms=display_ms
@@ -218,4 +253,6 @@ func sample(host: Node, components: Array, display_ms: float, speed: float, paus
 
 func close() -> void:
     for id in voices.keys(): _release(id)
+    for node in prepared_voices.values():node.free()
+    prepared_voices.clear();loads.clear()
     streams.clear();consumed.clear();outcomes.clear();last_ms=NAN;sampled_ms=NAN;epoch=-1

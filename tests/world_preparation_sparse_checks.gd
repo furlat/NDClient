@@ -2,6 +2,8 @@ extends SceneTree
 const World = preload("res://presentation/world.gd")
 const Preparation = preload("res://presentation/world_preparation.gd")
 const Ground = preload("res://presentation/ground_data.gd")
+const Journal = preload("res://sdk/journal.gd")
+const NativeSources = preload("res://presentation/native_presentation_sources.gd")
 var checks = 0
 var failures: Array = []
 var cache = {"world.json":{"terrain":{"stone":{}},"props":{},"stone_wall_straight":{},"wall_corner_faces":{}},
@@ -11,6 +13,7 @@ func check(ok: bool, label: String) -> void:
     if not ok: failures.append(label); print("WORLD_PREPARATION_SPARSE_FAIL ",label)
 func _initialize() -> void:
     for count in [64,8192]: exercise(count)
+    actual_initial_residues()
     print(JSON.stringify({"checks":checks,"failures":failures,"scope":"Actual WorldPreparation worker with an unchanged unrelated floor; sparse routing, no live base mutation, cancelled worker completion and source adoption. No rendered-scene/timing acceptance."}))
     quit(0 if failures.is_empty() else 1)
 func exercise(count: int) -> void:
@@ -44,4 +47,89 @@ func exercise(count: int) -> void:
     check(is_same(prepared.visibility,visibility) and is_same(prepared.visible_cells,cells) and prepared.visibility_changes.is_empty(),"Unchanged sight borrows immutable owner sets")
     World.apply_changes(base,prepared.row_patch)
     check(base.result==World.rows(state,cache),"Completed projection matches exhaustive independent source rows")
+    var binding_input:Dictionary=input.duplicate()
+    binding_input.changes={"full":false,"tiles":{},"objects":{},"senses":false,"order":[]}
+    binding_input.world_changed=false
+    var binding_only=Preparation.new()
+    worker=WorkerThreadPool.add_task(binding_only._derive.bind(binding_input));WorkerThreadPool.wait_for_task_completion(worker)
+    check(binding_only.result.get("source_only",false),"Source-only unchanged world can publish without light/atlas preparation "+str(count))
+    check(binding_only.result.light_resolution.is_empty(),"Source-only cut does not resolve ordinary light/cookie preparation "+str(count))
+    binding_input.world_changed=true
+    var connector=Preparation.new()
+    worker=WorkerThreadPool.add_task(connector._derive.bind(binding_input));WorkerThreadPool.wait_for_task_completion(worker)
+    check(not connector.result.get("source_only",true),"Connector-only world revision retains normal ordered world publication "+str(count))
+    binding_only.free();connector.free()
+    task.free()
+
+func actual_initial_residues()->void:
+    var journal=Journal.new()
+    var opened:Dictionary=journal.open("res://.runtime/player-runs/20261016T110104.141262Z/journal",true,false)
+    check(opened.ok,"Actual Gallery recording opens for persistent-residue preparation")
+    if not opened.ok:return
+    var restored:Dictionary=journal.replay(5)
+    check(restored.ok,"Actual Fireball after-state reduces before renderer preparation")
+    if not restored.ok:return
+    var state:Dictionary=journal.state
+    check(state.tiles.values().any(func(tile):return tile.get("residues",[]).any(func(value):return value.residue_id=="residue.blood")),
+        "Actual Gallery after-state includes persistent blood without a new presentation component")
+    var sources:Dictionary=Preparation.Catalog.source_snapshot({})
+    check(Preparation.Catalog.prepared_asset("particles.region.blood",sources).is_empty(),"Fresh source owner has not admitted the blood asset")
+    var input={"state":state,"changes":{"full":true,"tiles":{},"objects":{},"senses":true,"order":[]},
+        "actor_state":state,"staged_actors":{},"actor_samples":{},"actor_loadouts":{},"existing_actors":{},
+        "cache":sources,"retained":{},"ground":{},"quarter":0,"basis":Basis.IDENTITY,
+        "background":true,"global_rows":true,"visibility":{},"visible_cells":{}}
+    var task=Preparation.new()
+    var worker=WorkerThreadPool.add_task(task._derive.bind(input))
+    WorkerThreadPool.wait_for_task_completion(worker)
+    check(task.result.get("complete",false),"Actual initial world finishes with its persistent residue source")
+    if task.result.get("complete",false):
+        var admitted:Dictionary=Preparation.Catalog.prepared_asset("particles.region.blood",task.result.source_files)
+        check(not admitted.is_empty() and is_same(admitted,Preparation.Catalog.prepared_asset("particles.region.blood",sources)),
+            "Existing world projection hands off the exact admitted blood source before any sampling")
+        check(not task.result.source_files.has("catalog/action_media_assets.json"),"Initial residue preparation does not parse the full legacy media catalog")
+        var actual_count:int=state.tiles.values().filter(func(tile):return not Preparation.Blood.residue(tile).is_empty()).size()
+        check(task.result.blood_rows.size()==actual_count and actual_count>0,"Initial worker prepares every actual residue including offscreen cells")
+        var future_solids:Dictionary={}
+        for actor in task.result.actors.values():
+            for layer in actor.layers:
+                if layer.slot=="shadow" or not layer.get("effect",{}).is_empty():continue
+                var binding:Dictionary=actor.source_bindings.get(layer.slot,{})
+                if binding.is_empty():continue
+                var optical:Dictionary=Preparation.ActorConstruction.CharacterGeometry.BodySources.descriptor(binding.path,layer.slot,task.result.source_files).get("optical_paths",{})
+                if not optical.is_empty():future_solids[optical.solid]=true
+        var source_record:Dictionary=task.result.required_source_record
+        check(source_record.get("roles",{}).size()==future_solids.size() and not future_solids.is_empty(),"Worker declares all and only exact selected ordinary body solid masks together")
+        for path in source_record.get("roles",{}):check(future_solids.has(path) and source_record.roles[path][1]==0,"Future mask record is an immutable GPU-only source role")
+        for prepared_blood in task.result.blood_rows.values():
+            check(is_same(prepared_blood.cache.value,prepared_blood.value) \
+                and prepared_blood.kernels==Preparation.Blood.kernels(prepared_blood.value,prepared_blood.tile.position,[],prepared_blood.source,prepared_blood.cache),
+                "Persistent field worker owns exact canonical kernels before native construction")
+        var source_files:Dictionary=Preparation.Catalog.source_snapshot(task.result.source_files)
+        var owner:Dictionary=source_files[NativeSources.CACHE_KEY]
+        var selected:Dictionary=owner.loaded.duplicate();selected.erase("asset:particles.region.blood")
+        source_files[NativeSources.CACHE_KEY]=NativeSources.make_admission(owner.index,selected)
+        var base:Dictionary={};World.update_rows(state,source_files,base,{"full":true})
+        var dirty:String=""
+        for key in state.tiles:
+            if state.tiles[key].get("residues",[]).any(func(value):return value.residue_id=="residue.blood"):dirty=key;break
+        var cells:Dictionary={};var visibility:Dictionary=World.current_ids(state,base.boundaries,cells)
+        input=input.duplicate();input.cache=source_files;input.retained=base
+        input.changes={"full":false,"tiles":{dirty:true},"objects":{},"senses":false,"order":[]}
+        input.global_rows=false;input.visibility=visibility;input.visible_cells=cells
+        var unchanged=Preparation.new()
+        worker=WorkerThreadPool.add_task(unchanged._derive.bind(input));WorkerThreadPool.wait_for_task_completion(worker)
+        check(unchanged.result.get("complete",false) and unchanged.result.row_patch.visual_changes.is_empty(),
+            "Actual blood tile requires no terrain projection change")
+        check(not Preparation.Catalog.prepared_asset("particles.region.blood",unchanged.result.get("source_files",{})).is_empty(),
+            "Dirty authoritative tile admits its residue source even with unchanged terrain geometry and no injury component")
+        check(unchanged.result.blood_rows.has(dirty),"Dirty residue without injury component has prepared field operands")
+        input.blood_existing={dirty:{"value":Preparation.Blood.residue(state.tiles[dirty]),"source":Preparation.Catalog.prepared_asset("particles.region.blood",unchanged.result.source_files)}}
+        var retained=Preparation.new();worker=WorkerThreadPool.add_task(retained._derive.bind(input));WorkerThreadPool.wait_for_task_completion(worker)
+        check(retained.result.blood_rows.is_empty(),"Same canonical residue and source do not rerun worker kernels")
+        var removed_input:Dictionary=input.duplicate();removed_input.state=state.duplicate();removed_input.state.tiles=state.tiles.duplicate();removed_input.state.tiles.erase(dirty)
+        removed_input.actor_state=removed_input.state;removed_input.changes={"full":true,"tiles":{},"objects":{},"senses":true,"order":[]};removed_input.global_rows=true
+        var removed=Preparation.new();worker=WorkerThreadPool.add_task(removed._derive.bind(removed_input));WorkerThreadPool.wait_for_task_completion(worker)
+        check(removed.result.blood_rows.get(dirty,{}).get("removed",false),"Full snapshot retires old fields whose tile disappeared")
+        retained.free();removed.free()
+        unchanged.free()
     task.free()

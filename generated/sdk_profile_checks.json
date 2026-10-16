@@ -1,5 +1,5 @@
 {
-  "checks": 28,
+  "checks": 29,
   "evidence": {
     "session": {
       "capacity": 4096,
@@ -11,12 +11,14 @@
           "operation": "bootstrap",
           "purpose": "bootstrap",
           "request_id": 0,
+          "reused_connected": false,
           "schema": "BootstrapResponse",
           "stage": "http_created",
-          "time_us": 739333
+          "time_us": 1147214
         },
         {
           "http_id": 1,
+          "native_error": 0,
           "ok": true,
           "operation": "bootstrap",
           "purpose": "bootstrap",
@@ -24,8 +26,8 @@
           "request_id": 0,
           "schema": "BootstrapResponse",
           "stage": "request_sent",
-          "started_us": 739721,
-          "time_us": 739744
+          "started_us": 1147583,
+          "time_us": 1147605
         },
         {
           "declared_bytes": 956,
@@ -36,7 +38,7 @@
           "schema": "BootstrapResponse",
           "stage": "response_headers",
           "status": 200,
-          "time_us": 745289
+          "time_us": 1153527
         },
         {
           "bytes": 956,
@@ -47,7 +49,7 @@
           "schema": "BootstrapResponse",
           "stage": "body_complete",
           "status": 200,
-          "time_us": 747144
+          "time_us": 1155503
         },
         {
           "bytes": 956,
@@ -58,55 +60,68 @@
           "request_id": 0,
           "schema": "BootstrapResponse",
           "stage": "http_admission",
-          "started_us": 747153,
-          "time_us": 747638
+          "started_us": 1155510,
+          "time_us": 1155968,
+          "validation": "full_schema"
         },
         {
           "bytes": 956,
+          "connection_replaced": false,
+          "failure_kind": "",
           "http_id": 1,
+          "native_error": 0,
+          "native_state": 0,
           "ok": true,
           "operation": "bootstrap",
+          "phase": "body",
           "purpose": "bootstrap",
+          "request_attempted": true,
           "request_id": 0,
+          "reused_connected": false,
           "schema": "BootstrapResponse",
+          "sent": true,
           "stage": "http_end",
           "status": 200,
-          "time_us": 747745
+          "time_us": 1156085,
+          "transport_reason": ""
         },
         {
           "operation": "attach",
           "request_id": 1,
           "stage": "request_enqueued",
-          "started_us": 750188,
-          "time_us": 750194
+          "started_us": 1158563,
+          "time_us": 1158566
         },
         {
           "operation": "status",
           "request_id": 2,
           "stage": "request_enqueued",
-          "started_us": 750203,
-          "time_us": 750205
+          "started_us": 1158571,
+          "time_us": 1158573
         },
         {
           "http_id": 2,
           "operation": "attach",
           "purpose": "endpoint",
           "request_id": 1,
+          "reused_connected": false,
           "schema": "AttachmentResponse",
           "stage": "http_created",
-          "time_us": 751791
+          "time_us": 1159599
         },
         {
           "http_id": 3,
           "operation": "status",
           "purpose": "endpoint",
           "request_id": 2,
+          "reused_connected": false,
           "schema": "StatusResponse",
           "stage": "http_created",
-          "time_us": 752195
+          "time_us": 1159927
         },
         {
           "http_id": 2,
+          "native_error": 0,
           "ok": true,
           "operation": "attach",
           "purpose": "endpoint",
@@ -114,11 +129,12 @@
           "request_id": 1,
           "schema": "AttachmentResponse",
           "stage": "request_sent",
-          "started_us": 752345,
-          "time_us": 752384
+          "started_us": 1160088,
+          "time_us": 1160123
         },
         {
           "http_id": 3,
+          "native_error": 0,
           "ok": true,
           "operation": "status",
           "purpose": "endpoint",
@@ -126,8 +142,8 @@
           "request_id": 2,
           "schema": "StatusResponse",
           "stage": "request_sent",
-          "started_us": 752393,
-          "time_us": 752409
+          "started_us": 1160132,
+          "time_us": 1160147
         },
         {
           "declared_bytes": 861,
@@ -138,7 +154,7 @@
           "schema": "AttachmentResponse",
           "stage": "response_headers",
           "status": 200,
-          "time_us": 757709
+          "time_us": 1166142
         },
         {
           "declared_bytes": 743,
@@ -149,7 +165,7 @@
           "schema": "StatusResponse",
           "stage": "response_headers",
           "status": 200,
-          "time_us": 757772
+          "time_us": 1166200
         },
         {
           "bytes": 861,
@@ -160,7 +176,7 @@
           "schema": "AttachmentResponse",
           "stage": "body_complete",
           "status": 200,
-          "time_us": 759658
+          "time_us": 1168101
         },
         {
           "bytes": 861,
@@ -171,8 +187,9 @@
           "request_id": 1,
           "schema": "AttachmentResponse",
           "stage": "http_admission",
-          "started_us": 759664,
-          "time_us": 760022
+          "started_us": 1168108,
+          "time_us": 1168404,
+          "validation": "full_schema"
         },
         {
           "http_id": 2,
@@ -182,28 +199,37 @@
           "request_id": 1,
           "schema": "AttachmentResponse",
           "stage": "reply_check",
-          "started_us": 760074,
-          "time_us": 760093
+          "started_us": 1168456,
+          "time_us": 1168471
         },
         {
           "ok": true,
           "operation": "attach",
           "request_id": 1,
           "stage": "response_published",
-          "started_us": 760098,
-          "time_us": 760106
+          "started_us": 1168476,
+          "time_us": 1168485
         },
         {
           "bytes": 861,
+          "connection_replaced": false,
+          "failure_kind": "",
           "http_id": 2,
+          "native_error": 0,
+          "native_state": 0,
           "ok": true,
           "operation": "attach",
+          "phase": "body",
           "purpose": "endpoint",
+          "request_attempted": true,
           "request_id": 1,
+          "reused_connected": false,
           "schema": "AttachmentResponse",
+          "sent": true,
           "stage": "http_end",
           "status": 200,
-          "time_us": 760111
+          "time_us": 1168493,
+          "transport_reason": ""
         },
         {
           "bytes": 743,
@@ -214,7 +240,7 @@
           "schema": "StatusResponse",
           "stage": "body_complete",
           "status": 200,
-          "time_us": 760119
+          "time_us": 1168502
         },
         {
           "bytes": 743,
@@ -225,8 +251,9 @@
           "request_id": 2,
           "schema": "StatusResponse",
           "stage": "http_admission",
-          "started_us": 760121,
-          "time_us": 760361
+          "started_us": 1168504,
+          "time_us": 1168709,
+          "validation": "full_schema"
         },
         {
           "http_id": 3,
@@ -236,55 +263,66 @@
           "request_id": 2,
           "schema": "StatusResponse",
           "stage": "reply_check",
-          "started_us": 760377,
-          "time_us": 760386
+          "started_us": 1168724,
+          "time_us": 1168732
         },
         {
           "ok": true,
           "operation": "status",
           "request_id": 2,
           "stage": "response_published",
-          "started_us": 760391,
-          "time_us": 760396
+          "started_us": 1168735,
+          "time_us": 1168741
         },
         {
           "bytes": 743,
+          "connection_replaced": false,
+          "failure_kind": "",
           "http_id": 3,
+          "native_error": 0,
+          "native_state": 0,
           "ok": true,
           "operation": "status",
+          "phase": "body",
           "purpose": "endpoint",
+          "request_attempted": true,
           "request_id": 2,
+          "reused_connected": false,
           "schema": "StatusResponse",
+          "sent": true,
           "stage": "http_end",
           "status": 200,
-          "time_us": 760398
+          "time_us": 1168745,
+          "transport_reason": ""
         },
         {
           "operation": "follow",
           "request_id": 3,
           "stage": "request_enqueued",
-          "started_us": 763900,
-          "time_us": 763904
+          "started_us": 1172345,
+          "time_us": 1172349
         },
         {
           "http_id": 4,
           "operation": "initialization",
           "purpose": "initialization",
           "request_id": 0,
+          "reused_connected": false,
           "schema": "InitializationResponse",
           "stage": "http_created",
-          "time_us": 764175
+          "time_us": 1174140
         },
         {
           "ok": true,
           "operation": "follow",
           "request_id": 3,
           "stage": "response_published",
-          "started_us": 764475,
-          "time_us": 764480
+          "started_us": 1174434,
+          "time_us": 1174440
         },
         {
           "http_id": 4,
+          "native_error": 0,
           "ok": true,
           "operation": "initialization",
           "purpose": "initialization",
@@ -292,8 +330,8 @@
           "request_id": 0,
           "schema": "InitializationResponse",
           "stage": "request_sent",
-          "started_us": 764491,
-          "time_us": 764522
+          "started_us": 1174454,
+          "time_us": 1174489
         },
         {
           "declared_bytes": 671,
@@ -304,7 +342,7 @@
           "schema": "InitializationResponse",
           "stage": "response_headers",
           "status": 200,
-          "time_us": 771104
+          "time_us": 1180155
         },
         {
           "bytes": 671,
@@ -315,7 +353,7 @@
           "schema": "InitializationResponse",
           "stage": "body_complete",
           "status": 200,
-          "time_us": 773053
+          "time_us": 1182095
         },
         {
           "bytes": 671,
@@ -326,50 +364,85 @@
           "request_id": 0,
           "schema": "InitializationResponse",
           "stage": "http_admission",
-          "started_us": 773061,
-          "time_us": 773470
+          "started_us": 1182103,
+          "time_us": 1182461,
+          "validation": "full_schema"
         },
         {
           "bytes": 671,
           "ok": true,
+          "phases": {
+            "phase_ms": {
+              "commit": 0.557,
+              "normalize": 0.116,
+              "reduce": 0.094,
+              "stage": 0.601
+            },
+            "reducer_ms": {},
+            "sequence": 0
+          },
           "sequence": 0,
           "stage": "canonical_consumer",
-          "started_us": 773562,
-          "time_us": 775314
+          "started_us": 1182542,
+          "time_us": 1184029
         },
         {
           "http_id": 5,
           "operation": "resume_ack",
           "purpose": "resume_ack",
           "request_id": 0,
+          "reused_connected": false,
           "schema": "AckResponse",
           "stage": "http_created",
-          "time_us": 775370
+          "time_us": 1184085
         },
         {
-          "compile_started_us": 775431,
-          "end_us": 775465,
+          "compile_ended_us": 1184176,
+          "compile_started_us": 1184138,
+          "end_us": 1184177,
           "from_disk": false,
           "ok": true,
-          "packet_started_us": 775427,
+          "packet_started_us": 1184133,
+          "phases": {
+            "compiler": {},
+            "metadata": {},
+            "packet_setup": {
+              "admitted_handoff": true,
+              "control": 0.001,
+              "decode_or_normalize": 0.001,
+              "normalized_handoff": true,
+              "references": 0.003
+            }
+          },
+          "required_media_ms": 0.0,
           "sequence": 0,
           "stage": "presentation_prepare",
-          "time_us": 775465
+          "time_us": 1184177
         },
         {
           "bytes": 671,
+          "connection_replaced": false,
+          "failure_kind": "",
           "http_id": 4,
+          "native_error": 0,
+          "native_state": 0,
           "ok": true,
           "operation": "initialization",
+          "phase": "body",
           "purpose": "initialization",
+          "request_attempted": true,
           "request_id": 0,
+          "reused_connected": false,
           "schema": "InitializationResponse",
+          "sent": true,
           "stage": "http_end",
           "status": 200,
-          "time_us": 775697
+          "time_us": 1184388,
+          "transport_reason": ""
         },
         {
           "http_id": 5,
+          "native_error": 0,
           "ok": true,
           "operation": "resume_ack",
           "purpose": "resume_ack",
@@ -377,8 +450,8 @@
           "request_id": 0,
           "schema": "AckResponse",
           "stage": "request_sent",
-          "started_us": 783579,
-          "time_us": 783628
+          "started_us": 1186136,
+          "time_us": 1186184
         },
         {
           "declared_bytes": 315,
@@ -389,7 +462,7 @@
           "schema": "AckResponse",
           "stage": "response_headers",
           "status": 200,
-          "time_us": 789658
+          "time_us": 1194154
         },
         {
           "bytes": 315,
@@ -400,7 +473,7 @@
           "schema": "AckResponse",
           "stage": "body_complete",
           "status": 200,
-          "time_us": 791613
+          "time_us": 1195488
         },
         {
           "bytes": 315,
@@ -411,32 +484,44 @@
           "request_id": 0,
           "schema": "AckResponse",
           "stage": "http_admission",
-          "started_us": 791620,
-          "time_us": 791846
+          "started_us": 1195496,
+          "time_us": 1195670,
+          "validation": "full_schema"
         },
         {
           "http_id": 6,
           "operation": "stream",
           "purpose": "stream",
           "request_id": 0,
+          "reused_connected": false,
           "schema": "",
           "stage": "http_created",
-          "time_us": 791936
+          "time_us": 1195771
         },
         {
           "bytes": 315,
+          "connection_replaced": false,
+          "failure_kind": "",
           "http_id": 5,
+          "native_error": 0,
+          "native_state": 0,
           "ok": true,
           "operation": "resume_ack",
+          "phase": "body",
           "purpose": "resume_ack",
+          "request_attempted": true,
           "request_id": 0,
+          "reused_connected": false,
           "schema": "AckResponse",
+          "sent": true,
           "stage": "http_end",
           "status": 200,
-          "time_us": 792251
+          "time_us": 1196085,
+          "transport_reason": ""
         },
         {
           "http_id": 6,
+          "native_error": 0,
           "ok": true,
           "operation": "stream",
           "purpose": "stream",
@@ -444,8 +529,8 @@
           "request_id": 0,
           "schema": "",
           "stage": "request_sent",
-          "started_us": 792263,
-          "time_us": 792295
+          "started_us": 1196098,
+          "time_us": 1196132
         },
         {
           "declared_bytes": -1,
@@ -456,7 +541,7 @@
           "schema": "",
           "stage": "response_headers",
           "status": 200,
-          "time_us": 803729
+          "time_us": 1201654
         },
         {
           "bytes": 6946,
@@ -466,7 +551,7 @@
           "request_id": 0,
           "schema": "",
           "stage": "sse_chunk",
-          "time_us": 803753
+          "time_us": 1201681
         },
         {
           "bytes": 6946,
@@ -478,116 +563,125 @@
           "request_id": 0,
           "schema": "",
           "stage": "sse_framing",
-          "started_us": 803758,
-          "time_us": 804290
+          "started_us": 1201686,
+          "time_us": 1201977
         },
         {
           "bytes": 1301,
           "event": "ready",
           "frame_id": 1,
+          "framing_started_us": 1201686,
           "http_id": 6,
           "operation": "stream",
           "purpose": "stream",
           "request_id": 0,
           "schema": "",
           "stage": "sse_record_ready",
-          "time_us": 804300
+          "time_us": 1201983
         },
         {
           "bytes": 672,
           "event": "operation",
           "frame_id": 2,
+          "framing_started_us": 1201686,
           "http_id": 6,
           "operation": "stream",
           "purpose": "stream",
           "request_id": 0,
           "schema": "",
           "stage": "sse_record_ready",
-          "time_us": 804364
+          "time_us": 1201988
         },
         {
           "bytes": 672,
           "event": "operation",
           "frame_id": 3,
+          "framing_started_us": 1201686,
           "http_id": 6,
           "operation": "stream",
           "purpose": "stream",
           "request_id": 0,
           "schema": "",
           "stage": "sse_record_ready",
-          "time_us": 804375
+          "time_us": 1201992
         },
         {
           "bytes": 672,
           "event": "operation",
           "frame_id": 4,
+          "framing_started_us": 1201686,
           "http_id": 6,
           "operation": "stream",
           "purpose": "stream",
           "request_id": 0,
           "schema": "",
           "stage": "sse_record_ready",
-          "time_us": 804384
+          "time_us": 1201995
         },
         {
           "bytes": 672,
           "event": "operation",
           "frame_id": 5,
+          "framing_started_us": 1201686,
           "http_id": 6,
           "operation": "stream",
           "purpose": "stream",
           "request_id": 0,
           "schema": "",
           "stage": "sse_record_ready",
-          "time_us": 804389
+          "time_us": 1201999
         },
         {
           "bytes": 672,
           "event": "operation",
           "frame_id": 6,
+          "framing_started_us": 1201686,
           "http_id": 6,
           "operation": "stream",
           "purpose": "stream",
           "request_id": 0,
           "schema": "",
           "stage": "sse_record_ready",
-          "time_us": 804393
+          "time_us": 1202003
         },
         {
           "bytes": 672,
           "event": "operation",
           "frame_id": 7,
+          "framing_started_us": 1201686,
           "http_id": 6,
           "operation": "stream",
           "purpose": "stream",
           "request_id": 0,
           "schema": "",
           "stage": "sse_record_ready",
-          "time_us": 804398
+          "time_us": 1202006
         },
         {
           "bytes": 672,
           "event": "operation",
           "frame_id": 8,
+          "framing_started_us": 1201686,
           "http_id": 6,
           "operation": "stream",
           "purpose": "stream",
           "request_id": 0,
           "schema": "",
           "stage": "sse_record_ready",
-          "time_us": 804403
+          "time_us": 1202010
         },
         {
           "bytes": 672,
           "event": "operation",
           "frame_id": 9,
+          "framing_started_us": 1201686,
           "http_id": 6,
           "operation": "stream",
           "purpose": "stream",
           "request_id": 0,
           "schema": "",
           "stage": "sse_record_ready",
-          "time_us": 804407
+          "time_us": 1202014
         },
         {
           "bytes": 1301,
@@ -596,13 +690,18 @@
           "http_id": 6,
           "ok": true,
           "operation": "stream",
+          "phases_ms": {
+            "json_parse": 0.191,
+            "schema": 0.206,
+            "text_decode": 0.001
+          },
           "purpose": "stream",
           "request_id": 0,
           "schema": "",
           "sequence": -1,
           "stage": "sse_admission",
-          "started_us": 804417,
-          "time_us": 805093
+          "started_us": 1202022,
+          "time_us": 1202432
         },
         {
           "bytes": 672,
@@ -611,43 +710,53 @@
           "http_id": 6,
           "ok": true,
           "operation": "stream",
+          "phases_ms": {
+            "json_parse": 0.113,
+            "schema": 0.128,
+            "text_decode": 0.001
+          },
           "purpose": "stream",
           "request_id": 0,
           "schema": "",
           "sequence": 1,
           "stage": "sse_admission",
-          "started_us": 807336,
-          "time_us": 807741
+          "started_us": 1203600,
+          "time_us": 1203850
         },
         {
           "bytes": 672,
           "ok": true,
+          "phases": {
+            "phase_ms": {
+              "commit": 0.526,
+              "normalize": 0.113,
+              "reduce": 0.048,
+              "stage": 0.639
+            },
+            "reducer_ms": {
+              "copy": 0.02,
+              "finalize": 0.007
+            },
+            "sequence": 1
+          },
           "sequence": 1,
           "stage": "canonical_consumer",
-          "started_us": 807785,
-          "time_us": 809539
+          "started_us": 1203886,
+          "time_us": 1205272
         },
         {
           "http_id": 7,
           "operation": "operation_ack",
           "purpose": "operation_ack",
           "request_id": 0,
+          "reused_connected": false,
           "schema": "AckResponse",
           "stage": "http_created",
-          "time_us": 809592
-        },
-        {
-          "compile_started_us": 809571,
-          "end_us": 809626,
-          "from_disk": false,
-          "ok": true,
-          "packet_started_us": 809561,
-          "sequence": 1,
-          "stage": "presentation_prepare",
-          "time_us": 809626
+          "time_us": 1205326
         },
         {
           "http_id": 7,
+          "native_error": 0,
           "ok": true,
           "operation": "operation_ack",
           "purpose": "operation_ack",
@@ -655,8 +764,8 @@
           "request_id": 0,
           "schema": "AckResponse",
           "stage": "request_sent",
-          "started_us": 811422,
-          "time_us": 811464
+          "started_us": 1207626,
+          "time_us": 1207667
         },
         {
           "declared_bytes": 315,
@@ -667,7 +776,7 @@
           "schema": "AckResponse",
           "stage": "response_headers",
           "status": 200,
-          "time_us": 828310
+          "time_us": 1215689
         },
         {
           "bytes": 315,
@@ -678,7 +787,7 @@
           "schema": "AckResponse",
           "stage": "body_complete",
           "status": 200,
-          "time_us": 829790
+          "time_us": 1217120
         },
         {
           "bytes": 315,
@@ -689,20 +798,30 @@
           "request_id": 0,
           "schema": "AckResponse",
           "stage": "http_admission",
-          "started_us": 829797,
-          "time_us": 829979
+          "started_us": 1217129,
+          "time_us": 1217330,
+          "validation": "full_schema"
         },
         {
           "bytes": 315,
+          "connection_replaced": false,
+          "failure_kind": "",
           "http_id": 7,
+          "native_error": 0,
+          "native_state": 0,
           "ok": true,
           "operation": "operation_ack",
+          "phase": "body",
           "purpose": "operation_ack",
+          "request_attempted": true,
           "request_id": 0,
+          "reused_connected": false,
           "schema": "AckResponse",
+          "sent": true,
           "stage": "http_end",
           "status": 200,
-          "time_us": 830030
+          "time_us": 1217403,
+          "transport_reason": ""
         },
         {
           "bytes": 672,
@@ -711,33 +830,53 @@
           "http_id": 6,
           "ok": true,
           "operation": "stream",
+          "phases_ms": {
+            "json_parse": 0.163,
+            "schema": 0.15,
+            "text_decode": 0.002
+          },
           "purpose": "stream",
           "request_id": 0,
           "schema": "",
           "sequence": 2,
           "stage": "sse_admission",
-          "started_us": 830038,
-          "time_us": 830406
+          "started_us": 1217419,
+          "time_us": 1217743
         },
         {
           "bytes": 672,
           "ok": true,
+          "phases": {
+            "phase_ms": {
+              "commit": 0.713,
+              "normalize": 0.15,
+              "reduce": 0.065,
+              "stage": 2.277
+            },
+            "reducer_ms": {
+              "copy": 0.025,
+              "finalize": 0.008
+            },
+            "sequence": 2
+          },
           "sequence": 2,
           "stage": "canonical_consumer",
-          "started_us": 830452,
-          "time_us": 833738
+          "started_us": 1217789,
+          "time_us": 1221070
         },
         {
           "http_id": 8,
           "operation": "operation_ack",
           "purpose": "operation_ack",
           "request_id": 0,
+          "reused_connected": false,
           "schema": "AckResponse",
           "stage": "http_created",
-          "time_us": 833784
+          "time_us": 1221147
         },
         {
           "http_id": 8,
+          "native_error": 0,
           "ok": true,
           "operation": "operation_ack",
           "purpose": "operation_ack",
@@ -745,8 +884,8 @@
           "request_id": 0,
           "schema": "AckResponse",
           "stage": "request_sent",
-          "started_us": 835491,
-          "time_us": 835529
+          "started_us": 1223462,
+          "time_us": 1223507
         },
         {
           "declared_bytes": 315,
@@ -757,7 +896,7 @@
           "schema": "AckResponse",
           "stage": "response_headers",
           "status": 200,
-          "time_us": 841097
+          "time_us": 1229488
         },
         {
           "bytes": 315,
@@ -768,7 +907,7 @@
           "schema": "AckResponse",
           "stage": "body_complete",
           "status": 200,
-          "time_us": 842569
+          "time_us": 1231458
         },
         {
           "bytes": 315,
@@ -779,20 +918,30 @@
           "request_id": 0,
           "schema": "AckResponse",
           "stage": "http_admission",
-          "started_us": 842580,
-          "time_us": 842756
+          "started_us": 1231471,
+          "time_us": 1231679,
+          "validation": "full_schema"
         },
         {
           "bytes": 315,
+          "connection_replaced": false,
+          "failure_kind": "",
           "http_id": 8,
+          "native_error": 0,
+          "native_state": 0,
           "ok": true,
           "operation": "operation_ack",
+          "phase": "body",
           "purpose": "operation_ack",
+          "request_attempted": true,
           "request_id": 0,
+          "reused_connected": false,
           "schema": "AckResponse",
+          "sent": true,
           "stage": "http_end",
           "status": 200,
-          "time_us": 842831
+          "time_us": 1231781,
+          "transport_reason": ""
         },
         {
           "bytes": 672,
@@ -801,33 +950,53 @@
           "http_id": 6,
           "ok": true,
           "operation": "stream",
+          "phases_ms": {
+            "json_parse": 0.119,
+            "schema": 0.124,
+            "text_decode": 0.001
+          },
           "purpose": "stream",
           "request_id": 0,
           "schema": "",
           "sequence": 3,
           "stage": "sse_admission",
-          "started_us": 842839,
-          "time_us": 843141
+          "started_us": 1231794,
+          "time_us": 1232047
         },
         {
           "bytes": 672,
           "ok": true,
+          "phases": {
+            "phase_ms": {
+              "commit": 0.647,
+              "normalize": 0.119,
+              "reduce": 0.052,
+              "stage": 0.638
+            },
+            "reducer_ms": {
+              "copy": 0.019,
+              "finalize": 0.011
+            },
+            "sequence": 3
+          },
           "sequence": 3,
           "stage": "canonical_consumer",
-          "started_us": 843189,
-          "time_us": 845013
+          "started_us": 1232086,
+          "time_us": 1233604
         },
         {
           "http_id": 9,
           "operation": "operation_ack",
           "purpose": "operation_ack",
           "request_id": 0,
+          "reused_connected": false,
           "schema": "AckResponse",
           "stage": "http_created",
-          "time_us": 845067
+          "time_us": 1233668
         },
         {
           "http_id": 9,
+          "native_error": 0,
           "ok": true,
           "operation": "operation_ack",
           "purpose": "operation_ack",
@@ -835,8 +1004,8 @@
           "request_id": 0,
           "schema": "AckResponse",
           "stage": "request_sent",
-          "started_us": 847629,
-          "time_us": 847665
+          "started_us": 1235962,
+          "time_us": 1236002
         },
         {
           "declared_bytes": 315,
@@ -847,7 +1016,7 @@
           "schema": "AckResponse",
           "stage": "response_headers",
           "status": 200,
-          "time_us": 855266
+          "time_us": 1241992
         },
         {
           "bytes": 315,
@@ -858,7 +1027,7 @@
           "schema": "AckResponse",
           "stage": "body_complete",
           "status": 200,
-          "time_us": 857175
+          "time_us": 1243949
         },
         {
           "bytes": 315,
@@ -869,20 +1038,30 @@
           "request_id": 0,
           "schema": "AckResponse",
           "stage": "http_admission",
-          "started_us": 857185,
-          "time_us": 857369
+          "started_us": 1243957,
+          "time_us": 1244134,
+          "validation": "full_schema"
         },
         {
           "bytes": 315,
+          "connection_replaced": false,
+          "failure_kind": "",
           "http_id": 9,
+          "native_error": 0,
+          "native_state": 0,
           "ok": true,
           "operation": "operation_ack",
+          "phase": "body",
           "purpose": "operation_ack",
+          "request_attempted": true,
           "request_id": 0,
+          "reused_connected": false,
           "schema": "AckResponse",
+          "sent": true,
           "stage": "http_end",
           "status": 200,
-          "time_us": 857444
+          "time_us": 1244217,
+          "transport_reason": ""
         },
         {
           "bytes": 672,
@@ -891,33 +1070,53 @@
           "http_id": 6,
           "ok": true,
           "operation": "stream",
+          "phases_ms": {
+            "json_parse": 0.111,
+            "schema": 0.13,
+            "text_decode": 0.002
+          },
           "purpose": "stream",
           "request_id": 0,
           "schema": "",
           "sequence": 4,
           "stage": "sse_admission",
-          "started_us": 857452,
-          "time_us": 857743
+          "started_us": 1244229,
+          "time_us": 1244482
         },
         {
           "bytes": 672,
           "ok": true,
+          "phases": {
+            "phase_ms": {
+              "commit": 0.868,
+              "normalize": 0.116,
+              "reduce": 0.048,
+              "stage": 0.745
+            },
+            "reducer_ms": {
+              "copy": 0.02,
+              "finalize": 0.008
+            },
+            "sequence": 4
+          },
           "sequence": 4,
           "stage": "canonical_consumer",
-          "started_us": 857776,
-          "time_us": 859380
+          "started_us": 1244526,
+          "time_us": 1246367
         },
         {
           "http_id": 10,
           "operation": "operation_ack",
           "purpose": "operation_ack",
           "request_id": 0,
+          "reused_connected": false,
           "schema": "AckResponse",
           "stage": "http_created",
-          "time_us": 859435
+          "time_us": 1246440
         },
         {
           "http_id": 10,
+          "native_error": 0,
           "ok": true,
           "operation": "operation_ack",
           "purpose": "operation_ack",
@@ -925,8 +1124,8 @@
           "request_id": 0,
           "schema": "AckResponse",
           "stage": "request_sent",
-          "started_us": 861710,
-          "time_us": 861755
+          "started_us": 1247979,
+          "time_us": 1248031
         },
         {
           "declared_bytes": 315,
@@ -937,7 +1136,7 @@
           "schema": "AckResponse",
           "stage": "response_headers",
           "status": 200,
-          "time_us": 869794
+          "time_us": 1255511
         },
         {
           "bytes": 315,
@@ -948,7 +1147,7 @@
           "schema": "AckResponse",
           "stage": "body_complete",
           "status": 200,
-          "time_us": 871198
+          "time_us": 1257449
         },
         {
           "bytes": 315,
@@ -959,20 +1158,30 @@
           "request_id": 0,
           "schema": "AckResponse",
           "stage": "http_admission",
-          "started_us": 871208,
-          "time_us": 871392
+          "started_us": 1257463,
+          "time_us": 1257655,
+          "validation": "full_schema"
         },
         {
           "bytes": 315,
+          "connection_replaced": false,
+          "failure_kind": "",
           "http_id": 10,
+          "native_error": 0,
+          "native_state": 0,
           "ok": true,
           "operation": "operation_ack",
+          "phase": "body",
           "purpose": "operation_ack",
+          "request_attempted": true,
           "request_id": 0,
+          "reused_connected": false,
           "schema": "AckResponse",
+          "sent": true,
           "stage": "http_end",
           "status": 200,
-          "time_us": 871465
+          "time_us": 1257740,
+          "transport_reason": ""
         },
         {
           "bytes": 672,
@@ -981,33 +1190,53 @@
           "http_id": 6,
           "ok": true,
           "operation": "stream",
+          "phases_ms": {
+            "json_parse": 0.115,
+            "schema": 0.134,
+            "text_decode": 0.001
+          },
           "purpose": "stream",
           "request_id": 0,
           "schema": "",
           "sequence": 5,
           "stage": "sse_admission",
-          "started_us": 871474,
-          "time_us": 871767
+          "started_us": 1257752,
+          "time_us": 1258012
         },
         {
           "bytes": 672,
           "ok": true,
+          "phases": {
+            "phase_ms": {
+              "commit": 0.706,
+              "normalize": 0.119,
+              "reduce": 0.05,
+              "stage": 0.668
+            },
+            "reducer_ms": {
+              "copy": 0.02,
+              "finalize": 0.008
+            },
+            "sequence": 5
+          },
           "sequence": 5,
           "stage": "canonical_consumer",
-          "started_us": 871802,
-          "time_us": 873468
+          "started_us": 1258050,
+          "time_us": 1259661
         },
         {
           "http_id": 11,
           "operation": "operation_ack",
           "purpose": "operation_ack",
           "request_id": 0,
+          "reused_connected": false,
           "schema": "AckResponse",
           "stage": "http_created",
-          "time_us": 873522
+          "time_us": 1259739
         },
         {
           "http_id": 11,
+          "native_error": 0,
           "ok": true,
           "operation": "operation_ack",
           "purpose": "operation_ack",
@@ -1015,8 +1244,8 @@
           "request_id": 0,
           "schema": "AckResponse",
           "stage": "request_sent",
-          "started_us": 875219,
-          "time_us": 875259
+          "started_us": 1261475,
+          "time_us": 1261521
         },
         {
           "declared_bytes": 315,
@@ -1027,7 +1256,7 @@
           "schema": "AckResponse",
           "stage": "response_headers",
           "status": 200,
-          "time_us": 883298
+          "time_us": 1269503
         },
         {
           "bytes": 315,
@@ -1038,7 +1267,7 @@
           "schema": "AckResponse",
           "stage": "body_complete",
           "status": 200,
-          "time_us": 885230
+          "time_us": 1271453
         },
         {
           "bytes": 315,
@@ -1049,20 +1278,30 @@
           "request_id": 0,
           "schema": "AckResponse",
           "stage": "http_admission",
-          "started_us": 885243,
-          "time_us": 885521
+          "started_us": 1271463,
+          "time_us": 1271640,
+          "validation": "full_schema"
         },
         {
           "bytes": 315,
+          "connection_replaced": false,
+          "failure_kind": "",
           "http_id": 11,
+          "native_error": 0,
+          "native_state": 0,
           "ok": true,
           "operation": "operation_ack",
+          "phase": "body",
           "purpose": "operation_ack",
+          "request_attempted": true,
           "request_id": 0,
+          "reused_connected": false,
           "schema": "AckResponse",
+          "sent": true,
           "stage": "http_end",
           "status": 200,
-          "time_us": 885613
+          "time_us": 1271704,
+          "transport_reason": ""
         },
         {
           "bytes": 672,
@@ -1071,33 +1310,53 @@
           "http_id": 6,
           "ok": true,
           "operation": "stream",
+          "phases_ms": {
+            "json_parse": 0.126,
+            "schema": 0.133,
+            "text_decode": 0.002
+          },
           "purpose": "stream",
           "request_id": 0,
           "schema": "",
           "sequence": 6,
           "stage": "sse_admission",
-          "started_us": 885627,
-          "time_us": 886046
+          "started_us": 1271715,
+          "time_us": 1271986
         },
         {
           "bytes": 672,
           "ok": true,
+          "phases": {
+            "phase_ms": {
+              "commit": 0.82,
+              "normalize": 0.12,
+              "reduce": 0.049,
+              "stage": 0.626
+            },
+            "reducer_ms": {
+              "copy": 0.02,
+              "finalize": 0.006
+            },
+            "sequence": 6
+          },
           "sequence": 6,
           "stage": "canonical_consumer",
-          "started_us": 886077,
-          "time_us": 887649
+          "started_us": 1272031,
+          "time_us": 1273706
         },
         {
           "http_id": 12,
           "operation": "operation_ack",
           "purpose": "operation_ack",
           "request_id": 0,
+          "reused_connected": false,
           "schema": "AckResponse",
           "stage": "http_created",
-          "time_us": 887718
+          "time_us": 1273761
         },
         {
           "http_id": 12,
+          "native_error": 0,
           "ok": true,
           "operation": "operation_ack",
           "purpose": "operation_ack",
@@ -1105,8 +1364,8 @@
           "request_id": 0,
           "schema": "AckResponse",
           "stage": "request_sent",
-          "started_us": 889734,
-          "time_us": 889779
+          "started_us": 1276011,
+          "time_us": 1276065
         },
         {
           "declared_bytes": 315,
@@ -1117,7 +1376,7 @@
           "schema": "AckResponse",
           "stage": "response_headers",
           "status": 200,
-          "time_us": 897358
+          "time_us": 1284006
         },
         {
           "bytes": 315,
@@ -1128,7 +1387,7 @@
           "schema": "AckResponse",
           "stage": "body_complete",
           "status": 200,
-          "time_us": 899271
+          "time_us": 1285966
         },
         {
           "bytes": 315,
@@ -1139,20 +1398,30 @@
           "request_id": 0,
           "schema": "AckResponse",
           "stage": "http_admission",
-          "started_us": 899282,
-          "time_us": 899466
+          "started_us": 1285981,
+          "time_us": 1286180,
+          "validation": "full_schema"
         },
         {
           "bytes": 315,
+          "connection_replaced": false,
+          "failure_kind": "",
           "http_id": 12,
+          "native_error": 0,
+          "native_state": 0,
           "ok": true,
           "operation": "operation_ack",
+          "phase": "body",
           "purpose": "operation_ack",
+          "request_attempted": true,
           "request_id": 0,
+          "reused_connected": false,
           "schema": "AckResponse",
+          "sent": true,
           "stage": "http_end",
           "status": 200,
-          "time_us": 899547
+          "time_us": 1286283,
+          "transport_reason": ""
         },
         {
           "bytes": 672,
@@ -1161,33 +1430,87 @@
           "http_id": 6,
           "ok": true,
           "operation": "stream",
+          "phases_ms": {
+            "json_parse": 0.115,
+            "schema": 0.124,
+            "text_decode": 0.001
+          },
           "purpose": "stream",
           "request_id": 0,
           "schema": "",
           "sequence": 7,
           "stage": "sse_admission",
-          "started_us": 899555,
-          "time_us": 899840
+          "started_us": 1286294,
+          "time_us": 1286543
         },
         {
           "bytes": 672,
           "ok": true,
+          "phases": {
+            "phase_ms": {
+              "commit": 0.722,
+              "normalize": 0.132,
+              "reduce": 0.041,
+              "stage": 0.672
+            },
+            "reducer_ms": {
+              "copy": 0.016,
+              "finalize": 0.005
+            },
+            "sequence": 7
+          },
           "sequence": 7,
           "stage": "canonical_consumer",
-          "started_us": 899876,
-          "time_us": 901606
+          "started_us": 1286580,
+          "time_us": 1288202
         },
         {
           "http_id": 13,
           "operation": "operation_ack",
           "purpose": "operation_ack",
           "request_id": 0,
+          "reused_connected": false,
           "schema": "AckResponse",
           "stage": "http_created",
-          "time_us": 901662
+          "time_us": 1288255
+        },
+        {
+          "compile_ended_us": 1205414,
+          "compile_started_us": 1205310,
+          "end_us": 1288813,
+          "from_disk": false,
+          "ok": true,
+          "packet_started_us": 1205306,
+          "phases": {
+            "compiler": {},
+            "metadata": {
+              "characters": 80.865,
+              "environment": 0.1,
+              "environment_all_paths": 0.004,
+              "environment_commit_updates": 0.008,
+              "environment_initial_update": 0.016,
+              "environment_tail": 0.002,
+              "roles": 0.023,
+              "source_files": 2.348,
+              "source_publications": 0.028,
+              "source_sizes": 0.003
+            },
+            "packet_setup": {
+              "admitted_handoff": true,
+              "control": 0.001,
+              "decode_or_normalize": 0.0,
+              "normalized_handoff": true,
+              "references": 0.003
+            }
+          },
+          "required_media_ms": 83.397,
+          "sequence": 1,
+          "stage": "presentation_prepare",
+          "time_us": 1288813
         },
         {
           "http_id": 13,
+          "native_error": 0,
           "ok": true,
           "operation": "operation_ack",
           "purpose": "operation_ack",
@@ -1195,8 +1518,8 @@
           "request_id": 0,
           "schema": "AckResponse",
           "stage": "request_sent",
-          "started_us": 903282,
-          "time_us": 903321
+          "started_us": 1289986,
+          "time_us": 1290026
         },
         {
           "declared_bytes": 315,
@@ -1207,7 +1530,7 @@
           "schema": "AckResponse",
           "stage": "response_headers",
           "status": 200,
-          "time_us": 910823
+          "time_us": 1298077
         },
         {
           "bytes": 315,
@@ -1218,7 +1541,7 @@
           "schema": "AckResponse",
           "stage": "body_complete",
           "status": 200,
-          "time_us": 912776
+          "time_us": 1300019
         },
         {
           "bytes": 315,
@@ -1229,20 +1552,30 @@
           "request_id": 0,
           "schema": "AckResponse",
           "stage": "http_admission",
-          "started_us": 912784,
-          "time_us": 912930
+          "started_us": 1300027,
+          "time_us": 1300208,
+          "validation": "full_schema"
         },
         {
           "bytes": 315,
+          "connection_replaced": false,
+          "failure_kind": "",
           "http_id": 13,
+          "native_error": 0,
+          "native_state": 0,
           "ok": true,
           "operation": "operation_ack",
+          "phase": "body",
           "purpose": "operation_ack",
+          "request_attempted": true,
           "request_id": 0,
+          "reused_connected": false,
           "schema": "AckResponse",
+          "sent": true,
           "stage": "http_end",
           "status": 200,
-          "time_us": 912984
+          "time_us": 1300293,
+          "transport_reason": ""
         },
         {
           "bytes": 672,
@@ -1251,33 +1584,53 @@
           "http_id": 6,
           "ok": true,
           "operation": "stream",
+          "phases_ms": {
+            "json_parse": 0.112,
+            "schema": 0.13,
+            "text_decode": 0.001
+          },
           "purpose": "stream",
           "request_id": 0,
           "schema": "",
           "sequence": 8,
           "stage": "sse_admission",
-          "started_us": 912991,
-          "time_us": 913245
+          "started_us": 1300307,
+          "time_us": 1300558
         },
         {
           "bytes": 672,
           "ok": true,
+          "phases": {
+            "phase_ms": {
+              "commit": 0.599,
+              "normalize": 0.127,
+              "reduce": 0.05,
+              "stage": 0.684
+            },
+            "reducer_ms": {
+              "copy": 0.022,
+              "finalize": 0.007
+            },
+            "sequence": 8
+          },
           "sequence": 8,
           "stage": "canonical_consumer",
-          "started_us": 913275,
-          "time_us": 914641
+          "started_us": 1300598,
+          "time_us": 1302123
         },
         {
           "http_id": 14,
           "operation": "operation_ack",
           "purpose": "operation_ack",
           "request_id": 0,
+          "reused_connected": false,
           "schema": "AckResponse",
           "stage": "http_created",
-          "time_us": 914683
+          "time_us": 1302190
         },
         {
           "http_id": 14,
+          "native_error": 0,
           "ok": true,
           "operation": "operation_ack",
           "purpose": "operation_ack",
@@ -1285,8 +1638,8 @@
           "request_id": 0,
           "schema": "AckResponse",
           "stage": "request_sent",
-          "started_us": 916807,
-          "time_us": 916851
+          "started_us": 1304033,
+          "time_us": 1304069
         },
         {
           "declared_bytes": 315,
@@ -1297,7 +1650,7 @@
           "schema": "AckResponse",
           "stage": "response_headers",
           "status": 200,
-          "time_us": 925416
+          "time_us": 1311613
         },
         {
           "bytes": 315,
@@ -1308,7 +1661,7 @@
           "schema": "AckResponse",
           "stage": "body_complete",
           "status": 200,
-          "time_us": 927310
+          "time_us": 1313551
         },
         {
           "bytes": 315,
@@ -1319,20 +1672,30 @@
           "request_id": 0,
           "schema": "AckResponse",
           "stage": "http_admission",
-          "started_us": 927322,
-          "time_us": 927510
+          "started_us": 1313564,
+          "time_us": 1313750,
+          "validation": "full_schema"
         },
         {
           "bytes": 315,
+          "connection_replaced": false,
+          "failure_kind": "",
           "http_id": 14,
+          "native_error": 0,
+          "native_state": 0,
           "ok": true,
           "operation": "operation_ack",
+          "phase": "body",
           "purpose": "operation_ack",
+          "request_attempted": true,
           "request_id": 0,
+          "reused_connected": false,
           "schema": "AckResponse",
+          "sent": true,
           "stage": "http_end",
           "status": 200,
-          "time_us": 927639
+          "time_us": 1313889,
+          "transport_reason": ""
         }
       ],
       "total": 120
@@ -1347,12 +1710,14 @@
           "operation": "bootstrap",
           "purpose": "bootstrap",
           "request_id": 0,
+          "reused_connected": false,
           "schema": "BootstrapResponse",
           "stage": "http_created",
-          "time_us": 385190
+          "time_us": 785203
         },
         {
           "http_id": 1,
+          "native_error": 0,
           "ok": true,
           "operation": "bootstrap",
           "purpose": "bootstrap",
@@ -1360,8 +1725,8 @@
           "request_id": 0,
           "schema": "BootstrapResponse",
           "stage": "request_sent",
-          "started_us": 385729,
-          "time_us": 385753
+          "started_us": 785683,
+          "time_us": 785709
         },
         {
           "declared_bytes": 956,
@@ -1372,7 +1737,7 @@
           "schema": "BootstrapResponse",
           "stage": "response_headers",
           "status": 200,
-          "time_us": 391479
+          "time_us": 790838
         },
         {
           "bytes": 956,
@@ -1383,7 +1748,7 @@
           "schema": "BootstrapResponse",
           "stage": "body_complete",
           "status": 200,
-          "time_us": 393427
+          "time_us": 792294
         },
         {
           "bytes": 956,
@@ -1394,39 +1759,51 @@
           "request_id": 0,
           "schema": "BootstrapResponse",
           "stage": "http_admission",
-          "started_us": 393434,
-          "time_us": 393961
+          "started_us": 792300,
+          "time_us": 792728,
+          "validation": "full_schema"
         },
         {
           "bytes": 956,
+          "connection_replaced": false,
+          "failure_kind": "",
           "http_id": 1,
+          "native_error": 0,
+          "native_state": 0,
           "ok": true,
           "operation": "bootstrap",
+          "phase": "body",
           "purpose": "bootstrap",
+          "request_attempted": true,
           "request_id": 0,
+          "reused_connected": false,
           "schema": "BootstrapResponse",
+          "sent": true,
           "stage": "http_end",
           "status": 200,
-          "time_us": 394068
+          "time_us": 792825,
+          "transport_reason": ""
         },
         {
           "operation": "attach",
           "request_id": 1,
           "stage": "request_enqueued",
-          "started_us": 397745,
-          "time_us": 397748
+          "started_us": 797213,
+          "time_us": 797216
         },
         {
           "http_id": 2,
           "operation": "attach",
           "purpose": "endpoint",
           "request_id": 1,
+          "reused_connected": false,
           "schema": "AttachmentResponse",
           "stage": "http_created",
-          "time_us": 399553
+          "time_us": 798386
         },
         {
           "http_id": 2,
+          "native_error": 0,
           "ok": true,
           "operation": "attach",
           "purpose": "endpoint",
@@ -1434,8 +1811,8 @@
           "request_id": 1,
           "schema": "AttachmentResponse",
           "stage": "request_sent",
-          "started_us": 399890,
-          "time_us": 399926
+          "started_us": 798670,
+          "time_us": 798703
         },
         {
           "declared_bytes": 861,
@@ -1446,7 +1823,7 @@
           "schema": "AttachmentResponse",
           "stage": "response_headers",
           "status": 200,
-          "time_us": 405964
+          "time_us": 805338
         },
         {
           "bytes": 861,
@@ -1457,7 +1834,7 @@
           "schema": "AttachmentResponse",
           "stage": "body_complete",
           "status": 200,
-          "time_us": 407935
+          "time_us": 807294
         },
         {
           "bytes": 861,
@@ -1468,8 +1845,9 @@
           "request_id": 1,
           "schema": "AttachmentResponse",
           "stage": "http_admission",
-          "started_us": 407941,
-          "time_us": 408320
+          "started_us": 807300,
+          "time_us": 807585,
+          "validation": "full_schema"
         },
         {
           "http_id": 2,
@@ -1479,47 +1857,58 @@
           "request_id": 1,
           "schema": "AttachmentResponse",
           "stage": "reply_check",
-          "started_us": 408380,
-          "time_us": 408398
+          "started_us": 807621,
+          "time_us": 807635
         },
         {
           "ok": true,
           "operation": "attach",
           "request_id": 1,
           "stage": "response_published",
-          "started_us": 408403,
-          "time_us": 408414
+          "started_us": 807640,
+          "time_us": 807647
         },
         {
           "bytes": 861,
+          "connection_replaced": false,
+          "failure_kind": "",
           "http_id": 2,
+          "native_error": 0,
+          "native_state": 0,
           "ok": true,
           "operation": "attach",
+          "phase": "body",
           "purpose": "endpoint",
+          "request_attempted": true,
           "request_id": 1,
+          "reused_connected": false,
           "schema": "AttachmentResponse",
+          "sent": true,
           "stage": "http_end",
           "status": 200,
-          "time_us": 408418
+          "time_us": 807654,
+          "transport_reason": ""
         },
         {
           "operation": "choices",
           "request_id": 2,
           "stage": "request_enqueued",
-          "started_us": 411570,
-          "time_us": 411576
+          "started_us": 811010,
+          "time_us": 811013
         },
         {
           "http_id": 3,
           "operation": "choices",
           "purpose": "endpoint",
           "request_id": 2,
+          "reused_connected": false,
           "schema": "ChoicesResponse",
           "stage": "http_created",
-          "time_us": 412526
+          "time_us": 812892
         },
         {
           "http_id": 3,
+          "native_error": 0,
           "ok": true,
           "operation": "choices",
           "purpose": "endpoint",
@@ -1527,11 +1916,11 @@
           "request_id": 2,
           "schema": "ChoicesResponse",
           "stage": "request_sent",
-          "started_us": 412840,
-          "time_us": 412878
+          "started_us": 813168,
+          "time_us": 813204
         },
         {
-          "declared_bytes": 286,
+          "declared_bytes": 311,
           "http_id": 3,
           "operation": "choices",
           "purpose": "endpoint",
@@ -1539,10 +1928,10 @@
           "schema": "ChoicesResponse",
           "stage": "response_headers",
           "status": 200,
-          "time_us": 419990
+          "time_us": 818599
         },
         {
-          "bytes": 286,
+          "bytes": 311,
           "http_id": 3,
           "operation": "choices",
           "purpose": "endpoint",
@@ -1550,10 +1939,10 @@
           "schema": "ChoicesResponse",
           "stage": "body_complete",
           "status": 200,
-          "time_us": 421955
+          "time_us": 819788
         },
         {
-          "bytes": 286,
+          "bytes": 311,
           "http_id": 3,
           "ok": true,
           "operation": "choices",
@@ -1561,8 +1950,9 @@
           "request_id": 2,
           "schema": "ChoicesResponse",
           "stage": "http_admission",
-          "started_us": 421964,
-          "time_us": 422117
+          "started_us": 819792,
+          "time_us": 819919,
+          "validation": "full_schema"
         },
         {
           "http_id": 3,
@@ -1572,65 +1962,66 @@
           "request_id": 2,
           "schema": "ChoicesResponse",
           "stage": "reply_check",
-          "started_us": 422171,
-          "time_us": 422184
-        },
-        {
-          "http_id": 3,
-          "operation": "choices",
-          "purpose": "endpoint",
-          "request_id": 2,
-          "schema": "ChoicesResponse",
-          "stage": "response_normalization",
-          "started_us": 422187,
-          "time_us": 422223
+          "started_us": 819952,
+          "time_us": 819963
         },
         {
           "ok": true,
           "operation": "choices",
           "request_id": 2,
           "stage": "response_published",
-          "started_us": 422227,
-          "time_us": 422296
+          "started_us": 819967,
+          "time_us": 819970
         },
         {
-          "bytes": 286,
+          "bytes": 311,
+          "connection_replaced": false,
+          "failure_kind": "",
           "http_id": 3,
+          "native_error": 0,
+          "native_state": 0,
           "ok": true,
           "operation": "choices",
+          "phase": "body",
           "purpose": "endpoint",
+          "request_attempted": true,
           "request_id": 2,
+          "reused_connected": false,
           "schema": "ChoicesResponse",
+          "sent": true,
           "stage": "http_end",
           "status": 200,
-          "time_us": 422301
+          "time_us": 819976,
+          "transport_reason": ""
         },
         {
           "operation": "follow",
           "request_id": 3,
           "stage": "request_enqueued",
-          "started_us": 425308,
-          "time_us": 425311
+          "started_us": 824792,
+          "time_us": 824795
         },
         {
           "http_id": 4,
           "operation": "initialization",
           "purpose": "initialization",
           "request_id": 0,
+          "reused_connected": false,
           "schema": "InitializationResponse",
           "stage": "http_created",
-          "time_us": 425969
+          "time_us": 825827
         },
         {
           "ok": true,
           "operation": "follow",
           "request_id": 3,
           "stage": "response_published",
-          "started_us": 426157,
-          "time_us": 426162
+          "started_us": 826069,
+          "time_us": 826074
         },
         {
           "http_id": 4,
+          "native_error": 0,
           "ok": true,
           "operation": "initialization",
           "purpose": "initialization",
@@ -1638,8 +2029,8 @@
           "request_id": 0,
           "schema": "InitializationResponse",
           "stage": "request_sent",
-          "started_us": 426173,
-          "time_us": 426201
+          "started_us": 826084,
+          "time_us": 826111
         },
         {
           "declared_bytes": 671,
@@ -1650,7 +2041,7 @@
           "schema": "InitializationResponse",
           "stage": "response_headers",
           "status": 200,
-          "time_us": 433507
+          "time_us": 833375
         },
         {
           "bytes": 671,
@@ -1661,7 +2052,7 @@
           "schema": "InitializationResponse",
           "stage": "body_complete",
           "status": 200,
-          "time_us": 435466
+          "time_us": 835317
         },
         {
           "bytes": 671,
@@ -1672,40 +2063,53 @@
           "request_id": 0,
           "schema": "InitializationResponse",
           "stage": "http_admission",
-          "started_us": 435476,
-          "time_us": 435875
+          "started_us": 835323,
+          "time_us": 835685,
+          "validation": "full_schema"
         },
         {
           "bytes": 671,
           "ok": true,
+          "phases": {},
           "sequence": 0,
           "stage": "canonical_consumer",
-          "started_us": 435962,
-          "time_us": 436119
+          "started_us": 835775,
+          "time_us": 835935
         },
         {
           "http_id": 5,
           "operation": "resume_ack",
           "purpose": "resume_ack",
           "request_id": 0,
+          "reused_connected": false,
           "schema": "AckResponse",
           "stage": "http_created",
-          "time_us": 436169
+          "time_us": 835989
         },
         {
           "bytes": 671,
+          "connection_replaced": false,
+          "failure_kind": "",
           "http_id": 4,
+          "native_error": 0,
+          "native_state": 0,
           "ok": true,
           "operation": "initialization",
+          "phase": "body",
           "purpose": "initialization",
+          "request_attempted": true,
           "request_id": 0,
+          "reused_connected": false,
           "schema": "InitializationResponse",
+          "sent": true,
           "stage": "http_end",
           "status": 200,
-          "time_us": 436471
+          "time_us": 836308,
+          "transport_reason": ""
         },
         {
           "http_id": 5,
+          "native_error": 0,
           "ok": true,
           "operation": "resume_ack",
           "purpose": "resume_ack",
@@ -1713,8 +2117,8 @@
           "request_id": 0,
           "schema": "AckResponse",
           "stage": "request_sent",
-          "started_us": 438473,
-          "time_us": 438515
+          "started_us": 838354,
+          "time_us": 838423
         },
         {
           "declared_bytes": 315,
@@ -1725,7 +2129,7 @@
           "schema": "AckResponse",
           "stage": "response_headers",
           "status": 200,
-          "time_us": 448009
+          "time_us": 846373
         },
         {
           "bytes": 315,
@@ -1736,7 +2140,7 @@
           "schema": "AckResponse",
           "stage": "body_complete",
           "status": 200,
-          "time_us": 449482
+          "time_us": 848351
         },
         {
           "bytes": 315,
@@ -1747,32 +2151,44 @@
           "request_id": 0,
           "schema": "AckResponse",
           "stage": "http_admission",
-          "started_us": 449490,
-          "time_us": 449657
+          "started_us": 848357,
+          "time_us": 848503,
+          "validation": "full_schema"
         },
         {
           "http_id": 6,
           "operation": "stream",
           "purpose": "stream",
           "request_id": 0,
+          "reused_connected": false,
           "schema": "",
           "stage": "http_created",
-          "time_us": 449737
+          "time_us": 848577
         },
         {
           "bytes": 315,
+          "connection_replaced": false,
+          "failure_kind": "",
           "http_id": 5,
+          "native_error": 0,
+          "native_state": 0,
           "ok": true,
           "operation": "resume_ack",
+          "phase": "body",
           "purpose": "resume_ack",
+          "request_attempted": true,
           "request_id": 0,
+          "reused_connected": false,
           "schema": "AckResponse",
+          "sent": true,
           "stage": "http_end",
           "status": 200,
-          "time_us": 449911
+          "time_us": 848854,
+          "transport_reason": ""
         },
         {
           "http_id": 6,
+          "native_error": 0,
           "ok": true,
           "operation": "stream",
           "purpose": "stream",
@@ -1780,8 +2196,8 @@
           "request_id": 0,
           "schema": "",
           "stage": "request_sent",
-          "started_us": 449921,
-          "time_us": 449946
+          "started_us": 848866,
+          "time_us": 848891
         },
         {
           "declared_bytes": -1,
@@ -1792,7 +2208,7 @@
           "schema": "",
           "stage": "response_headers",
           "status": 200,
-          "time_us": 453516
+          "time_us": 854417
         },
         {
           "bytes": 3431,
@@ -1802,7 +2218,7 @@
           "request_id": 0,
           "schema": "",
           "stage": "sse_chunk",
-          "time_us": 453540
+          "time_us": 854440
         },
         {
           "bytes": 3431,
@@ -1814,56 +2230,60 @@
           "request_id": 0,
           "schema": "",
           "stage": "sse_framing",
-          "started_us": 453545,
-          "time_us": 453698
+          "started_us": 854444,
+          "time_us": 854598
         },
         {
           "bytes": 1301,
           "event": "ready",
           "frame_id": 1,
+          "framing_started_us": 854444,
           "http_id": 6,
           "operation": "stream",
           "purpose": "stream",
           "request_id": 0,
           "schema": "",
           "stage": "sse_record_ready",
-          "time_us": 453706
+          "time_us": 854603
         },
         {
           "bytes": 672,
           "event": "operation",
           "frame_id": 2,
+          "framing_started_us": 854444,
           "http_id": 6,
           "operation": "stream",
           "purpose": "stream",
           "request_id": 0,
           "schema": "",
           "stage": "sse_record_ready",
-          "time_us": 453710
+          "time_us": 854607
         },
         {
           "bytes": 672,
           "event": "operation",
           "frame_id": 3,
+          "framing_started_us": 854444,
           "http_id": 6,
           "operation": "stream",
           "purpose": "stream",
           "request_id": 0,
           "schema": "",
           "stage": "sse_record_ready",
-          "time_us": 453714
+          "time_us": 854611
         },
         {
           "bytes": 672,
           "event": "operation",
           "frame_id": 4,
+          "framing_started_us": 854444,
           "http_id": 6,
           "operation": "stream",
           "purpose": "stream",
           "request_id": 0,
           "schema": "",
           "stage": "sse_record_ready",
-          "time_us": 453718
+          "time_us": 854615
         },
         {
           "bytes": 1301,
@@ -1872,13 +2292,18 @@
           "http_id": 6,
           "ok": true,
           "operation": "stream",
+          "phases_ms": {
+            "json_parse": 0.178,
+            "schema": 0.203,
+            "text_decode": 0.001
+          },
           "purpose": "stream",
           "request_id": 0,
           "schema": "",
           "sequence": -1,
           "stage": "sse_admission",
-          "started_us": 453726,
-          "time_us": 454233
+          "started_us": 854624,
+          "time_us": 855014
         },
         {
           "bytes": 672,
@@ -1887,33 +2312,41 @@
           "http_id": 6,
           "ok": true,
           "operation": "stream",
+          "phases_ms": {
+            "json_parse": 0.106,
+            "schema": 0.111,
+            "text_decode": 0.001
+          },
           "purpose": "stream",
           "request_id": 0,
           "schema": "",
           "sequence": 1,
           "stage": "sse_admission",
-          "started_us": 455469,
-          "time_us": 455772
+          "started_us": 856341,
+          "time_us": 856565
         },
         {
           "bytes": 672,
           "ok": true,
+          "phases": {},
           "sequence": 1,
           "stage": "canonical_consumer",
-          "started_us": 455810,
-          "time_us": 455943
+          "started_us": 856603,
+          "time_us": 856734
         },
         {
           "http_id": 7,
           "operation": "operation_ack",
           "purpose": "operation_ack",
           "request_id": 0,
+          "reused_connected": false,
           "schema": "AckResponse",
           "stage": "http_created",
-          "time_us": 455991
+          "time_us": 856773
         },
         {
           "http_id": 7,
+          "native_error": 0,
           "ok": true,
           "operation": "operation_ack",
           "purpose": "operation_ack",
@@ -1921,8 +2354,8 @@
           "request_id": 0,
           "schema": "AckResponse",
           "stage": "request_sent",
-          "started_us": 457476,
-          "time_us": 457514
+          "started_us": 858361,
+          "time_us": 858393
         },
         {
           "declared_bytes": 315,
@@ -1933,7 +2366,7 @@
           "schema": "AckResponse",
           "stage": "response_headers",
           "status": 200,
-          "time_us": 461023
+          "time_us": 866385
         },
         {
           "bytes": 315,
@@ -1944,7 +2377,7 @@
           "schema": "AckResponse",
           "stage": "body_complete",
           "status": 200,
-          "time_us": 462983
+          "time_us": 868864
         },
         {
           "bytes": 315,
@@ -1955,20 +2388,30 @@
           "request_id": 0,
           "schema": "AckResponse",
           "stage": "http_admission",
-          "started_us": 462993,
-          "time_us": 463247
+          "started_us": 868871,
+          "time_us": 869003,
+          "validation": "full_schema"
         },
         {
           "bytes": 315,
+          "connection_replaced": false,
+          "failure_kind": "",
           "http_id": 7,
+          "native_error": 0,
+          "native_state": 0,
           "ok": true,
           "operation": "operation_ack",
+          "phase": "body",
           "purpose": "operation_ack",
+          "request_attempted": true,
           "request_id": 0,
+          "reused_connected": false,
           "schema": "AckResponse",
+          "sent": true,
           "stage": "http_end",
           "status": 200,
-          "time_us": 463333
+          "time_us": 869057,
+          "transport_reason": ""
         },
         {
           "bytes": 672,
@@ -1977,13 +2420,18 @@
           "http_id": 6,
           "ok": true,
           "operation": "stream",
+          "phases_ms": {
+            "json_parse": 0.103,
+            "schema": 0.106,
+            "text_decode": 0.001
+          },
           "purpose": "stream",
           "request_id": 0,
           "schema": "",
           "sequence": 1,
           "stage": "sse_admission",
-          "started_us": 463344,
-          "time_us": 463819
+          "started_us": 869065,
+          "time_us": 869281
         },
         {
           "bytes": 672,
@@ -1992,33 +2440,41 @@
           "http_id": 6,
           "ok": true,
           "operation": "stream",
+          "phases_ms": {
+            "json_parse": 0.109,
+            "schema": 0.1,
+            "text_decode": 0.001
+          },
           "purpose": "stream",
           "request_id": 0,
           "schema": "",
           "sequence": 2,
           "stage": "sse_admission",
-          "started_us": 464977,
-          "time_us": 465478
+          "started_us": 870867,
+          "time_us": 871083
         },
         {
           "bytes": 672,
           "ok": true,
+          "phases": {},
           "sequence": 2,
           "stage": "canonical_consumer",
-          "started_us": 465538,
-          "time_us": 465794
+          "started_us": 871119,
+          "time_us": 871243
         },
         {
           "http_id": 8,
           "operation": "operation_ack",
           "purpose": "operation_ack",
           "request_id": 0,
+          "reused_connected": false,
           "schema": "AckResponse",
           "stage": "http_created",
-          "time_us": 465842
+          "time_us": 871285
         },
         {
           "http_id": 8,
+          "native_error": 0,
           "ok": true,
           "operation": "operation_ack",
           "purpose": "operation_ack",
@@ -2026,8 +2482,8 @@
           "request_id": 0,
           "schema": "AckResponse",
           "stage": "request_sent",
-          "started_us": 467989,
-          "time_us": 468028
+          "started_us": 872920,
+          "time_us": 872980
         },
         {
           "declared_bytes": 315,
@@ -2038,7 +2494,7 @@
           "schema": "AckResponse",
           "stage": "response_headers",
           "status": 200,
-          "time_us": 475539
+          "time_us": 880920
         },
         {
           "bytes": 315,
@@ -2049,7 +2505,7 @@
           "schema": "AckResponse",
           "stage": "body_complete",
           "status": 200,
-          "time_us": 477511
+          "time_us": 882861
         },
         {
           "bytes": 315,
@@ -2060,23 +2516,33 @@
           "request_id": 0,
           "schema": "AckResponse",
           "stage": "http_admission",
-          "started_us": 477522,
-          "time_us": 477793
+          "started_us": 882866,
+          "time_us": 882995,
+          "validation": "full_schema"
         },
         {
           "bytes": 315,
+          "connection_replaced": false,
+          "failure_kind": "",
           "http_id": 8,
+          "native_error": 0,
+          "native_state": 0,
           "ok": true,
           "operation": "operation_ack",
+          "phase": "body",
           "purpose": "operation_ack",
+          "request_attempted": true,
           "request_id": 0,
+          "reused_connected": false,
           "schema": "AckResponse",
+          "sent": true,
           "stage": "http_end",
           "status": 200,
-          "time_us": 477901
+          "time_us": 883080,
+          "transport_reason": ""
         }
       ],
-      "total": 67
+      "total": 66
     }
   },
   "failures": []

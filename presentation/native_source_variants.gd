@@ -36,20 +36,13 @@ const BASE_ADAPTERS=["clocked_source","selected_projectile","ice_projectile","ch
 const EXTRA_NODES={"cantrip_donor":["source"],"sacred_beam":["source"],"compact_flame":["root","asset"]}
 const EXTRA_NODE_ARRAYS={"protection":["particle_banks"],"protection_contact":["particle_banks"],"silk_area":["parts","animations"]}
 const EXTRA_MATERIALS={"compact_flame":["mats"],"silk_area":["mats","deploy_mats","net_mats"]}
-static var verified:Dictionary={}
-static var metadata_profile:Dictionary={}
-static var _generation:int=0
-static var _metadata_state:Dictionary={"manifest":{},"read":false,"stamps":{}}
-static var _metadata_job:Dictionary={}
-static var _queued:Dictionary={}
-static var _inflight:Dictionary={}
-
 static func supported(spec:Dictionary)->bool:
     var script:String=spec.get("script","")
     if script in [PREFIX+"native_scene_effect.gd",PREFIX+"projectile_formation.gd"]:return true
     return script.begins_with(PREFIX+"recipient/") and script.get_file().get_basename() in BASE_ADAPTERS
 
 static func component_spec(spec:Dictionary,clip:Dictionary)->Dictionary:
+    if clip.get("prepared_components",{}).has(spec.id):return clip.prepared_components[spec.id]
     var overrides:Array=[];var writes:Array=[]
     var prefix:String=str(spec.id)+"/"
     for value in clip.get("property_overrides",[]):
@@ -77,80 +70,26 @@ static func canonical(value:Variant)->Variant:
 
 static func specification(spec:Dictionary)->Dictionary:
     var value:Dictionary=spec.duplicate(true)
+    value.erase("prepared_variant_path")
     value.erase("id") # The name is supplied by the occurrence; it does not author resources.
     return canonical({"version":2,"component":value})
 
 static func key(spec:Dictionary)->String:
     return var_to_bytes(specification(spec)).hex_encode().sha256_text()
 
-static func path_for(spec:Dictionary)->String:return DIRECTORY.path_join(key(spec)+".res")
-
-static func reset()->void:
-    # An old metadata-only job can finish without blocking a new UI revision.
-    # Its private state/results are discarded when polled after completion.
-    _generation+=1;verified.clear();metadata_profile.clear();_queued.clear();_inflight.clear()
-    _metadata_state={"manifest":{},"read":false,"stamps":{}}
-
-static func _poll_metadata()->void:
-    if _metadata_job.is_empty():return
-    if not WorkerThreadPool.is_task_completed(_metadata_job.task):return
-    WorkerThreadPool.wait_for_task_completion(_metadata_job.task)
-    if _metadata_job.generation==_generation:
-        verified.merge(_metadata_job.results)
-        for identity in _metadata_job.requests:_inflight.erase(identity)
-        metadata_profile=_metadata_job.profile
-    _metadata_job={}
-
-static func _start_metadata()->void:
-    if not _metadata_job.is_empty() or _queued.is_empty():return
-    _metadata_job={"generation":_generation,"state":_metadata_state,"requests":_queued,"results":{},"profile":{},"task":-1}
-    for identity in _queued:_inflight[identity]=true
-    _queued={}
-    _metadata_job.task=WorkerThreadPool.add_task(_verify_metadata.bind(_metadata_job),false,"Prepared native source metadata")
-
-static func _verify_metadata(job:Dictionary)->void:
-    # Only passive paths/stat data live here: no ResourceLoader, Shader, mesh,
-    # Node or native renderer calls can overlap the source compiler admission.
-    var started:int=Time.get_ticks_usec();var stat_count:int=0
-    var state:Dictionary=job.state
-    if not state.read:
-        state.read=true
-        if FileAccess.file_exists(DIRECTORY.path_join("index.json")):
-            var data:Variant=JSON.parse_string(FileAccess.get_file_as_string(DIRECTORY.path_join("index.json")))
-            if data is Dictionary:state.manifest=data
-    for identity in job.requests:
-        var request:Dictionary=job.requests[identity]
-        var result:Dictionary={"supported":true,"pending":false,"path":request.path,"error":""}
-        if not state.manifest.has(identity) or not FileAccess.file_exists(request.path):
-            result.error="Prepared native source missing; run tools/bake_native_source_variants.gd: "+request.label
-        else:
-            for dependency in state.manifest[identity].dependencies:
-                if not state.stamps.has(dependency):state.stamps[dependency]=stamp(dependency);stat_count+=1
-                if state.stamps[dependency]!=state.manifest[identity].dependencies[dependency]:
-                    result.error="Prepared native source stale: "+dependency
-                    break
-        job.results[identity]=result
-    job.profile={"elapsed_ms":(Time.get_ticks_usec()-started)/1000.0,"new_dependency_stats":stat_count,"cached_dependency_stats":state.stamps.size(),"variants":job.requests.size()}
+static func path_for(spec:Dictionary)->String:
+    return spec.prepared_variant_path if spec.has("prepared_variant_path") else DIRECTORY.path_join(key(spec)+".res")
 
 static func admission(spec:Dictionary)->Dictionary:
-    if not supported(spec):return {"supported":false,"pending":false,"path":"","error":""}
-    _poll_metadata()
-    var identity:String=key(spec)
-    if verified.has(identity):return verified[identity]
-    if not _queued.has(identity) and not _inflight.has(identity):
-        _queued[identity]={"path":path_for(spec),"label":spec.script+" / "+str(spec.get("id",""))}
-    _start_metadata()
-    return {"supported":true,"pending":true,"path":path_for(spec),"error":""}
+    # Exported references are trusted. File loading and actual pipeline/draw
+    # readiness are owned by NativeSourceAdmission; no second metadata job.
+    return {"supported":supported(spec),"pending":false,"path":path_for(spec) if supported(spec) else "","error":""}
 
 static func instantiate(spec:Dictionary,admitted_packet:Resource=null)->Dictionary:
-    var admitted:Dictionary=admission(spec)
-    if admitted.pending:return {"component":null,"clocks":[],"error":"Prepared native source metadata admission is pending"}
-    if not admitted.error.is_empty():return {"component":null,"clocks":[],"error":admitted.error}
-    if admitted_packet==null and not ResourceLoader.has_cached(admitted.path):return {"component":null,"clocks":[],"error":"Prepared native source was not admitted before construction: "+admitted.path}
-    var packet:Resource=admitted_packet if admitted_packet!=null else load(admitted.path)
-    # CACHE_MODE_IGNORE_DEEP deliberately owns a fresh script Resource too.
-    if packet==null or packet.get_script().resource_path!=Packet.resource_path or packet.format_version!=2 or packet.specification!=specification(spec):
-        return {"component":null,"clocks":[],"error":"Invalid prepared native source: "+admitted.path}
+    var path:String=path_for(spec)
+    if admitted_packet==null and not ResourceLoader.has_cached(path):return {"component":null,"clocks":[],"error":"Prepared native source was not admitted before construction: "+path}
+    var packet:Resource=admitted_packet if admitted_packet!=null else load(path)
+    if packet==null:return {"component":null,"clocks":[],"error":"Cannot load prepared native source: "+path}
     var component:Node3D=packet.scene.instantiate()
     # Restore before _ready, with addresses resolved inside this new instance.
     for state in packet.adapters:

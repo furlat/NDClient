@@ -171,7 +171,7 @@ static func _actor_paths(actor: Dictionary, clips: Array, result: Dictionary, ca
 
 static func _responses(actor: Dictionary, result: Dictionary, cache: Dictionary) -> void:
     if actor.get("life_state")=="dead":return
-    var rig: Dictionary=Authoring.load_data("catalog/rigs.json",cache).get(Characters.rig_id(actor,cache),{})
+    var rig: Dictionary=Authoring.rigs(cache).get(Characters.rig_id(actor,cache),{})
     var clips=[]
     for role in ["damage","death"]:
         var body: Dictionary=Authoring.body(role,actor,{},cache).get("actor",{})
@@ -221,11 +221,12 @@ static func plan(request: Dictionary, cache: Dictionary, control: Dictionary) ->
             result.actors.append({"uuid":request.actor_uuid,"clips":clips.keys()})
             result.onset_paths=result.paths.duplicate()
         return _finish_plan(request,result,{},cache,control)
-    # Parse the same immutable feedback catalog before a damaging action is
-    # submitted. Its actual releases still come exclusively from received facts.
-    if recipe.get("damage")!=null: Catalog.read_file("catalog/action_media_assets.json",cache)
+    # Admit only the selected passive feedback operand. Its actual release
+    # remains exclusively driven by a received authoritative damage fact.
+    if recipe.get("damage")!=null and Catalog.asset("particles.region.blood",cache).is_empty():
+        result.errors.append("Cannot load selected asset metadata: particles.region.blood")
     result.native_selection=NativeSpells.selection(request.behavior,cache)
-    var rigs: Dictionary=Authoring.load_data("catalog/rigs.json",cache)
+    var rigs: Dictionary=Authoring.rigs(cache)
     var actor_order: Array=[request.actor_uuid]
     actor_order.append_array(state.actors.keys().filter(func(id):return id!=request.actor_uuid))
     for id in actor_order:
@@ -335,7 +336,7 @@ static func _finish_plan(request: Dictionary, result: Dictionary, bank_paths: Di
 
 static func _work(request: Dictionary, result: Dictionary, control: Dictionary, cache: Dictionary) -> void:
     var started=Time.get_ticks_usec()
-    cache.merge(request.source_files,true)
+    Catalog.adopt_snapshot(cache,request.source_files)
     var value=plan(request,cache,control)
     if _cancelled(control):return
     result.key=request.key;result.value=value;result.elapsed_ms=(Time.get_ticks_usec()-started)/1000.0;result.complete=true

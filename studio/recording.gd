@@ -73,8 +73,6 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
     var result = {"ok":true,"directory":directory,"initialization":{},"groups":[],"rows":[],"duration_ms":0.0,"operations":0,"cache":{},"bytes":0,"compile_ms":0.0}
     var read_profile={"decode_ms":0.0,"reduce_ms":0.0,"compile_ms":0.0,"index_ms":0.0,"packets":[]}
     if not projection.is_empty():result.cache=projection.cache.duplicate()
-    var native_errors=Compiler.Authoring.Catalog.validate_native(result.cache)
-    if not native_errors.is_empty():return {"ok":false,"error":"Invalid native authoring: "+"; ".join(native_errors)}
     # Inspection spacing is explicit display timing, not a server event or an
     # authored action duration. Compiler-owned group-local clocks stay intact.
     var offset = PREVIEW_LEAD_IN_MS
@@ -411,7 +409,7 @@ static func _condition_restoration_rows(index:Dictionary,owner:Dictionary,remova
             "operations":{field:current},"preview_scope":"composed_actor","diagnostic_scope":"state_inspection",
             "timing_source":"Actual removal commit and existing condition fade; the after-state interval ends at the next recorded presentation boundary.",
             "markers":[{"kind":"restored","at_ms":at,"source":"recorded condition removal + existing Conditions.fade_ms"}],
-            "source_fps":Compiler.Authoring.load_data("catalog/rigs.json",index.cache)[after.state.actor.rig].clips[after.pose.clip].fps})
+            "source_fps":Compiler.Authoring.rigs(index.cache)[after.state.actor.rig].clips[after.pose.clip].fps})
 
 static func read_case(case_record: Dictionary, token: Dictionary={}) -> Dictionary:
     # Each audience is admitted independently through the production SDK. A
@@ -970,7 +968,7 @@ static func _condition_rows(rows: Array, parent: Dictionary, owner: Dictionary, 
                 if selected_pose.get("condition_uuid")==owner.id:
                     var pose=common.duplicate();pose.merge({"id":prefix+"pose","kind":"condition_pose","label":pose_activity.capitalize()+" · "+selected_pose.clip,
                         "pose":selected_pose if selected_pose.legacy_source.contains("/activityPoses/") else persistent.get("frozenPose",persistent.get("bodyPose")),
-                        "selected_pose":selected_pose,"source_fps":Compiler.Authoring.load_data("catalog/rigs.json",cache)[pose_state.actor.rig].clips[selected_pose.clip].fps,"activity":pose_activity,"source":selected_pose.source,"legacy_source":selected_pose.legacy_source},true)
+                        "selected_pose":selected_pose,"source_fps":Compiler.Authoring.rigs(cache)[pose_state.actor.rig].clips[selected_pose.clip].fps,"activity":pose_activity,"source":selected_pose.source,"legacy_source":selected_pose.legacy_source},true)
                     rows.append(pose)
             else:
                 var component=common.duplicate()
@@ -1045,7 +1043,7 @@ static func _preview_states(output: Dictionary,state: Dictionary,actors: Diction
         var resolved=Characters.resolve(actor,state,cache)
         if not resolved.ok or resolved.value==null:continue
         var row: Dictionary=resolved.value
-        var rig:Dictionary=Compiler.Authoring.load_data("catalog/rigs.json",cache)[row.rig]
+        var rig:Dictionary=Compiler.Authoring.rigs(cache)[row.rig]
         var rest=Characters.rest_sample(actor,rig,cache)
         if not rest.ok:continue
         var pose={"rig":row.rig,"clip":rest.value.clip,"source_seconds":rest.value.source_seconds,
@@ -1129,7 +1127,7 @@ static func step_time(index: Dictionary, row: Dictionary, time_ms: float, direct
         return clampf(time_ms+direction*1000.0/60.0,0,limit)
     var fps: float=row.get("source_fps",0)
     if fps<=0:
-        fps=index.cache.get("catalog/rigs.json",{}).get(track.rig,{}).get("clips",{}).get(track.clip,{}).get("fps",0)
+        fps=Compiler.Authoring.rigs(index.cache).get(track.rig,{}).get("clips",{}).get(track.clip,{}).get("fps",0)
     if fps<=0 or track.duration_ms<=0: return clampf(time_ms,0,limit)
     var keys: Array=track.get("source_time_keys",[[0.0,track.source_start_seconds],[1.0,track.source_end_seconds]])
     var fraction=clampf((time_ms-row.start_ms)/track.duration_ms,0,1)

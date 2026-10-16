@@ -20,18 +20,20 @@ static func _component(kind: String, reason: String, source: String = "") -> Dic
         "timing":{"resolved":false,"reason":"authored_timing_not_resolved"}}
 
 static func _version_index(versions: Array) -> Dictionary:
-    var lineages = {}; var events = {}
+    var lineages = {}; var events = {};var first={}
     for version in versions:
         if not lineages.has(version.lineage_uuid): lineages[version.lineage_uuid] = []
         lineages[version.lineage_uuid].append(version)
         events[version.event_uuid] = int(version.source_index)
-    return {"lineages":lineages,"events":events}
+        first[version.lineage_uuid]=mini(first.get(version.lineage_uuid,version.source_index),version.source_index)
+    return {"lineages":lineages,"events":events,"first":first}
 
 static func _base(node: Dictionary, sequence: int, group: String, versions: Dictionary) -> Dictionary:
     var fact: Dictionary = node.fact if node.get("fact") != null else {}
-    var history: Array = []
+    # Accepted history is passive. Runtime owns the event/status shell; public
+    # snapshots detach the complete history before exposing it to a caller.
+    var history: Array = versions.lineages.get(node.lineage_uuid,[])
     var index: int = versions.events.get(node.uuid,-1)
-    for version in versions.lineages.get(node.lineage_uuid,[]): history.append(version.duplicate())
     return {"id":"%s:%s" % [sequence,node.uuid],"sequence":sequence,"group_id":group,
         "event_uuid":node.uuid,"lineage_uuid":node.lineage_uuid,"source_index":index,
         "parent_event":node.get("parent_event"),"parent_lineage":node.get("parent_lineage"),
@@ -46,11 +48,11 @@ static func _base(node: Dictionary, sequence: int, group: String, versions: Dict
 
 static func initialization(initial: Dictionary) -> Array:
     var result: Array = []
-    var native_logs = _node_logs(initial.nodes)
+    var native_logs:Dictionary=_log_index(_node_logs(initial.nodes))
     var versions = _version_index(initial.version_rows)
     for node in initial.nodes:
         var row = _base(node,0,"initialization",versions)
-        row._display_log = _unique_children(row._log,native_logs) if row._log != null else null
+        row._display_log = _unique_children_indexed(row._log,native_logs,{}) if row._log != null else null
         row.reasons = ["initial_snapshot_no_animation_claim"]
         row.completed = true
         result.append(row)
@@ -344,28 +346,39 @@ static func _operation_requirements(row:Dictionary,node:Dictionary,recipe:Dictio
         if row.kind=="spell":source="spells/"+str(node.fact.get("behavior_id",""))+".json:"
         elif row.kind in ["action","shove","attack"]:source="catalog/"+{"action":"body_action_recipes","shove":"shove_recipes","attack":"attack_recipes"}[row.kind]+".json:/"+str(node.fact.get("behavior_id",""))
         else:source="catalog/"+str(row.kind)+"_context.json:"
-    for expected in Requirements.occurrence(node.fact,recipe,source,cache):
+    var expectations:Array=Requirements.occurrence(node.fact,recipe,source,cache)
+    if expectations.is_empty():return
+    var tracked:Dictionary={};var tracked_assets:Dictionary={};var pointers:Dictionary={}
+    for component in row.components:
+        pointers[[component.get("source_pointer",component.source),component.kind]]=true
+        if component.trace_track_id.is_empty():continue
+        tracked[[component.source,component.kind]]=true
+        var authored:Variant=component.get("authored_id")
+        if not str(authored).is_empty():
+            for asset in component.get("asset_ids",[]):
+                if not str(asset).is_empty():tracked_assets[[asset,authored]]=true
+    for expected in expectations:
         if expected.status!="missing":continue
         # A shared cast's equipment/recovery belongs only to the cast owner.
         if expected.participant=="caster" and row.get("cast_owner_event",node.uuid)!=node.uuid:continue
-        var matched=false
-        for component in row.components:
-            if component.trace_track_id.is_empty():continue
-            if component.source==expected.source and component.kind==expected.kind:matched=true
+        var matched:bool=tracked.has([expected.source,expected.kind])
+        var authored:Variant=expected.get("authored_id","")
+        if not str(authored).is_empty():
             for asset in expected.get("asset_ids",[]):
-                if not str(asset).is_empty() and asset in component.get("asset_ids",[]) and not str(expected.get("authored_id","")).is_empty() and component.get("authored_id")==expected.authored_id:matched=true
+                if tracked_assets.has([asset,authored]):matched=true;break
         if matched:continue
-        if row.components.any(func(c):return c.get("source_pointer",c.source)==expected.source and c.kind==expected.kind):continue
+        if pointers.has([expected.source,expected.kind]):continue
         var required=_component(expected.kind,expected.reason,expected.source)
         required.merge(expected,true)
         required.trace_track_id=""
         row.components.append(required)
+        pointers[[required.get("source_pointer",required.source),required.kind]]=true
 
 static func compile_rows(lineage: Dictionary, group: Dictionary, graph: Dictionary, cache: Dictionary) -> Array:
     var result: Array = []
     var commits = {}
-    var native_logs = _node_logs(lineage.events)
-    var versions = _version_index(lineage.version_rows)
+    var native_logs:Dictionary=_log_index(_node_logs(lineage.events))
+    var versions:Dictionary=graph.version_index if graph.has("version_index") else _version_index(lineage.version_rows)
     var tracks = {}; var components = {}
     for track in group.actor_tracks:
         if int(track.priority) < 10: continue
@@ -378,7 +391,7 @@ static func compile_rows(lineage: Dictionary, group: Dictionary, graph: Dictiona
         if commit_row.has("event_uuid"): commits[commit_row.event_uuid] = float(commit_row.at_ms)
     for node in lineage.events:
         var row = _base(node,int(group.operation_sequence),group.id,versions)
-        row._display_log = _unique_children(row._log,native_logs) if row._log != null else null
+        row._display_log = _unique_children_indexed(row._log,native_logs,{}) if row._log != null else null
         row._end_ms = graph.ends.get(node.uuid,0.0)
         row._start_ms = graph.starts.get(node.uuid,0.0)
         row._group_duration_ms = group.duration_ms
@@ -436,7 +449,9 @@ static func _refresh(row: Dictionary) -> bool:
 
 static func _append_log(trace: Dictionary, id: String, event: Dictionary, entry: Dictionary, flatten: bool) -> void:
     if trace.log_ids.has(id): return
-    var copied = entry.duplicate(true)
+    # Diagnostic payloads are passive compiled/accepted data. Only the log
+    # wrapper and an explicit flattened child-list override are runtime-owned.
+    var copied = entry.duplicate() if flatten else entry
     if flatten: copied.sub_entries = []
     trace.logs.append({"id":id,"event_id":event.get("id",""),"sequence":event.sequence,
         "source_index":event.source_index,"first_source_index":event.get("first_source_index",event.source_index),
@@ -615,6 +630,7 @@ static func logs(trace: Dictionary, limit: int) -> Dictionary:
 static func _bind_parents(rows: Array) -> void:
     var by_lineage = {}
     var by_event = {}
+    var log_parents:Dictionary={}
     for row in rows:
         by_lineage[row.lineage_uuid] = row
         by_event[row.event_uuid] = row
@@ -628,7 +644,12 @@ static func _bind_parents(rows: Array) -> void:
             if parent.get("_log") != null:
                 row._log_parent_id = parent.id
                 break
+            var retained:String=log_parents.get(parent.id,"")
+            if log_parents.has(parent.id) and not seen.has(retained):
+                if not retained.is_empty():row._log_parent_id=retained
+                break
             parent = by_lineage.get(parent.parent_lineage,by_event.get(parent.parent_event,{}))
+        log_parents[row.id]=row.get("_log_parent_id","")
 
 static func _hierarchy(admitted: Dictionary, retained: Dictionary) -> Array:
     var children = {}
@@ -687,13 +708,14 @@ static func operation_logs(packet: Dictionary) -> Array:
     for lineage in packet.lineages:
         for node in lineage.events:
             if node.combat_log != null: available.append(node.combat_log)
-    var native_logs = available.duplicate()
+    var native_logs:Dictionary=_log_index(available)
+    var consumed:Dictionary={}
     var result: Array = []
     for append in packet.get("combat_log_appends",[]):
-        var index = available.find(append.entry)
-        if index >= 0: available.remove_at(index); continue
+        var index:int=_find_log(append.entry,native_logs,consumed,false)
+        if index>=0:consumed[index]=true;continue
         result.append({"id":"append:%s:%s" % [append.generation,append.encounter_log_index],"event_id":"",
-            "sequence":int(packet.cursor.sequence),"source_index":append.operation_end_cursor,"entry":_unique_children(append.entry,native_logs)})
+            "sequence":int(packet.cursor.sequence),"source_index":append.operation_end_cursor,"entry":_unique_children_indexed(append.entry,native_logs,{})})
     return result
 
 
@@ -704,21 +726,39 @@ static func _node_logs(nodes: Array) -> Array:
     return logs
 
 static func _unique_children(entry: Dictionary, native_logs: Array) -> Dictionary:
-    # Child trees are rebuilt below. Copying them here would duplicate every
-    # descendant before immediately discarding that copy at each ancestor.
+    return _unique_children_indexed(entry,_log_index(native_logs),{})
+
+static func _log_key(entry:Dictionary)->Array:
+    # Equal embedded logs necessarily share this small semantic selector,
+    # including the one allowed step path_index difference below. Keep exact
+    # matching inside each bucket; never hash/serialize the whole log tree.
+    return [entry.get("entry_type"),entry.get("source_uuid"),entry.get("target_uuid"),entry.get("compact")]
+
+static func _log_index(logs:Array)->Dictionary:
+    var result:Dictionary={}
+    for ordinal in logs.size():
+        var key:Array=_log_key(logs[ordinal])
+        if not result.has(key):result[key]=[]
+        result[key].append([ordinal,logs[ordinal]])
+    return result
+
+static func _find_log(entry:Dictionary,index:Dictionary,consumed:Dictionary,embedded:bool)->int:
+    for candidate in index.get(_log_key(entry),[]):
+        if consumed.has(candidate[0]):continue
+        var matches:bool=_same_embedded_log(entry,candidate[1]) if embedded else entry==candidate[1]
+        if matches:return candidate[0]
+    return -1
+
+static func _unique_children_indexed(entry:Dictionary,index:Dictionary,inherited:Dictionary)->Dictionary:
+    # Own only the pruned tree's shells/child lists. Non-child payloads remain
+    # passive accepted operands; logs()/snapshot() detach public results.
     var result = entry.duplicate()
-    for field in result:
-        if field=="sub_entries": continue
-        var value: Variant = result[field]
-        if value is Dictionary or value is Array: result[field]=value.duplicate(true)
     result.sub_entries = []
-    var unmatched: Array=native_logs.duplicate()
+    var consumed:Dictionary=inherited.duplicate()
     for child in entry.get("sub_entries",[]):
-        var match_index=-1
-        for index in range(unmatched.size()):
-            if _same_embedded_log(child,unmatched[index]): match_index=index; break
-        if match_index>=0: unmatched.remove_at(match_index)
-        else: result.sub_entries.append(_unique_children(child,unmatched))
+        var match_index:int=_find_log(child,index,consumed,true)
+        if match_index>=0:consumed[match_index]=true
+        else:result.sub_entries.append(_unique_children_indexed(child,index,consumed))
     return result
 
 static func _same_embedded_log(child: Dictionary, native: Dictionary) -> bool:

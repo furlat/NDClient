@@ -399,17 +399,23 @@ static func _view_retained(perception: Dictionary, observer: String) -> Variant:
 # Only an owned event fold that already composed a sensory view may reuse these
 # cell collections. Initial observer resets still recompute the full union.
 # Contacts/effects stay exhaustive; observations/spatial facts may alter them.
-static func _view_after(perception: Dictionary, observer: String, previous: Variant, event: Dictionary, cells: Dictionary = {}) -> Variant:
+static func _view_after(perception: Dictionary, observer: String, previous: Variant, event: Dictionary, cells: Dictionary = {}, retained:bool=false) -> Variant:
     if previous == null or event.initial or perception.members.is_empty():
         return _view_retained(perception, observer)
     var anchor: Dictionary = perception.members.get(observer, perception.members.values()[0])
     var result: Dictionary = anchor.duplicate()
     result.effective_light_levels = previous.effective_light_levels
     result.hazardous_cells = previous.hazardous_cells
-    var composed: Dictionary = cells.get("view",{})
-    if composed.is_empty() or not is_same(composed.source,previous):
-        composed = _indexed_senses(previous)
-        cells.view = composed
+    # The member fold already owns sorted, deduplicated cell collections.
+    # A retained one-member view has no union/winner work to repeat. Its raw
+    # light maps still pass through the visible-key projection below.
+    var direct:bool=retained and perception.members.size()==1
+    var composed:Dictionary={}
+    if not direct:
+        composed=cells.get("view",{})
+        if composed.is_empty() or not is_same(composed.source,previous):
+            composed = _indexed_senses(previous)
+            cells.view = composed
     var affected = {}
     for point in event.visible_cells_added + event.visible_cells_removed:
         affected[point_key(point)] = point
@@ -442,21 +448,37 @@ static func _view_after(perception: Dictionary, observer: String, previous: Vari
         result.effective_light_levels.erase(key)
         result.hazardous_cells.erase(key)
         if owner == null:
-            if _has_cell(composed.visible,point): removed.append(point)
+            if not direct and _has_cell(composed.visible,point): removed.append(point)
         else:
-            if not _has_cell(composed.visible,point): added.append(point)
+            if not direct and not _has_cell(composed.visible,point): added.append(point)
             var member: Dictionary = perception.members[owner]
             if member.effective_light_levels.has(key): result.effective_light_levels[key] = member.effective_light_levels[key]
             if member.hazardous_cells.has(key): result.hazardous_cells[key] = member.hazardous_cells[key]
-    result.visible = _update_cells(composed.visible, added, removed)
-    result.seen = _update_cells(composed.seen, event.seen_cells_added, [])
+    if direct:
+        result.visible=anchor.visible;result.seen=anchor.seen
+        # This is the transaction's forked context. A future multi-member
+        # projection builds its own composed index from its actual prior view.
+        cells.erase("view")
+    else:
+        result.visible = _update_cells(composed.visible, added, removed)
+        result.seen = _update_cells(composed.seen, event.seen_cells_added, [])
     result.paths_dirty = false
     for member in perception.members.values(): result.paths_dirty = result.paths_dirty or member.paths_dirty
-    result.entities = _contacts_retained(perception, false)
-    result.objects = _object_contacts_after(perception, previous.objects, event)
-    result.spatial_effects = effects(perception)
-    result.merge(_light_sources_retained(perception), true)
-    composed.source = result
+    result.entities=anchor.entities if direct else _contacts_retained(perception,false)
+    result.objects=anchor.objects if direct else _object_contacts_after(perception,previous.objects,event)
+    # These independent operands only change through their disclosed after-
+    # values (or a member reset). Contact-only events do not merge every optical
+    # source again, and effects need recomposition only when their witness set
+    # or their actual disclosed values can have changed.
+    var effects_changed:bool=not event.spatial_effects_changed.is_empty() or not event.spatial_effects_removed.is_empty() \
+        or not event.visible_cells_added.is_empty() or not event.visible_cells_removed.is_empty()
+    result.spatial_effects=effects(perception) if effects_changed else previous.spatial_effects
+    var optical_changed:bool=not event.get("light_sources_changed",{}).is_empty() or not event.get("light_sources_removed",{}).is_empty()
+    if not optical_changed and previous.has("light_sources"):
+        result.light_sources=previous.light_sources
+        result.light_source_removals=previous.get("light_source_removals",{})
+    else:result.merge(_light_sources_retained(perception),true)
+    if not direct:composed.source=result
     return result
 
 # Journal's last committed indexes are immutable. A candidate owns index shells

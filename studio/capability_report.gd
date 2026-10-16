@@ -38,7 +38,7 @@ static func _gap(row:Dictionary)->Dictionary:
 static func _body(row:Dictionary,cache:Dictionary)->Dictionary:
     var value=_row(row)
     var track:Dictionary=row.track
-    var rig:Dictionary=Catalog.read_file("catalog/rigs.json",cache).get(track.rig,{})
+    var rig:Dictionary=Characters.rigs(cache).get(track.rig,{})
     var clip:Dictionary=rig.get("clips",{}).get(track.clip,{})
     value.clip=track.clip;value.rig=track.rig
     value.source=clip.get("resource_source","catalog/rigs.json:/%s/clips/%s"%[track.rig,track.clip])

@@ -82,24 +82,28 @@ func decode(root_name: String, raw: PackedByteArray) -> Dictionary:
 	return _validate_schema(root_name, parsed.value)
 
 func _decode_framed_event(root_name: String, raw: PackedByteArray, profile: bool = false, trusted_operation: bool = false) -> Dictionary:
-	# Internal SSE handoff: framing already validates each complete UTF-8 line.
-	# Joining those lines with LF preserves validity. Keep strict JSON syntax,
+	# Internal SSE handoff: public framing validates each complete UTF-8 line;
+	# explicit live producer trust relies on its canonical UTF-8 serialization.
+	# Joining complete lines with LF preserves bytes. Keep exact JSON numbers,
 	# size and NUL admission without scanning every UTF-8 byte twice. Body schema
 	# admission changes only for the explicit current-producer operation option.
 	if raw.size() > MAX_BYTES: return failure("JSON exceeds 64 MiB")
 	if raw.has(0): return failure("Godot strings cannot represent NUL characters")
 	var started := Time.get_ticks_usec() if profile else 0
 	var text := raw.get_string_from_utf8().trim_prefix(char(0xfeff))
+	var text_at := Time.get_ticks_usec() if profile else 0
 	var parsed: Dictionary
 	if trusted_operation and root_name == "PlayerOperation" and _current_server_contract:
 		if _producer_json == null: _producer_json = ProducerJSON.new()
-		parsed = _producer_json.parse(text)
+		parsed = _producer_json.parse(text,profile)
 	else:
 		parsed = StrictJSON.new().parse(text)
 	if not parsed.ok: return parsed
 	var admitted_at := Time.get_ticks_usec() if profile else 0
 	var result := _validate_server_operation(parsed.value) if trusted_operation and root_name == "PlayerOperation" else _validate_schema(root_name, parsed.value)
-	if profile: result.phases_ms = {"strict_json":(admitted_at-started)/1000.0,"schema":(Time.get_ticks_usec()-admitted_at)/1000.0}
+	if profile:
+		result.phases_ms = {"text_decode":(text_at-started)/1000.0,"json_parse":(admitted_at-text_at)/1000.0,"schema":(Time.get_ticks_usec()-admitted_at)/1000.0}
+		for phase in parsed.get("parser_phases_ms",{}):result.phases_ms["json_"+phase]=parsed.parser_phases_ms[phase]
 	return result
 
 func _validate_server_operation(value: Variant) -> Dictionary:

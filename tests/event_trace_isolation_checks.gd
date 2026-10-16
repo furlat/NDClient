@@ -36,10 +36,29 @@ func run()->void:
         check(compiled.ok,"Actual recorded transitions compile: "+str(sequence))
         if not compiled.ok:break
         if sequence<5:state=reduced.value;continue
+        var accepted_bytes:PackedByteArray=var_to_bytes(normalized)
         var source_bytes=var_to_bytes(compiled.value.groups)
         var a=Trace.create();var b=Trace.create();var prior_a=old.create();var prior_b=old.create()
         var current_times=[];var previous_times=[]
         for group in compiled.value.groups:
+            var accepted_versions:Dictionary={};var native_logs:Dictionary={}
+            for lineage in normalized.lineages:
+                for version in lineage.version_rows:accepted_versions[version.event_uuid]=version
+                for node in lineage.events:
+                    if node.get("combat_log")!=null:native_logs[node.uuid]=node.combat_log
+            var history_count:int=0;var payload_count:int=0
+            for row in group.events:
+                for version in row.versions:
+                    history_count+=1
+                    check(is_same(version,accepted_versions[version.event_uuid]),"Historical version remains its exact passive accepted operand")
+                if row.get("_display_log")!=null and native_logs.has(row.event_uuid):
+                    for field in native_logs[row.event_uuid]:
+                        if field=="sub_entries":continue
+                        var value:Variant=native_logs[row.event_uuid][field]
+                        if value is Dictionary or value is Array:
+                            payload_count+=1
+                            check(is_same(row._display_log[field],value),"Pruned log retains its exact passive non-child payload")
+            check(history_count>0 and payload_count>0,"Real Fireball exercises borrowed complete histories and structured log data")
             Trace.activate(a,group.events,0);Trace.activate(b,group.events,0)
             old.activate(prior_a,group.events,0);old.activate(prior_b,group.events,0)
             check(a==prior_a and b==prior_b,"Exact old activated rows/track bindings/history: "+str(sequence))
@@ -64,7 +83,10 @@ func run()->void:
             var snapshot=Trace.snapshot(a,200,group.events[0].id,0)
             if not snapshot.selected.get("versions",[]).is_empty():snapshot.selected.versions[0].source_index+=1000
             var logs=Trace.logs(a,200)
-            if not logs.entries.is_empty():logs.entries[0].entry.sub_entries.clear()
+            if not logs.entries.is_empty():
+                logs.entries[0].entry.sub_entries.clear()
+                for log_row in logs.entries:
+                    if log_row.entry.get("data") is Dictionary:log_row.entry.data.clear()
             check(a==prior_a,"Public detailed snapshots/logs retain independent deep copies")
             for iteration in range(15):
                 var transient=Trace.create();var began=Time.get_ticks_usec();Trace.activate(transient,group.events,0);current_times.append((Time.get_ticks_usec()-began)/1000.0)
@@ -81,6 +103,7 @@ func run()->void:
         second.advance(duration)
         check(first.state==reduced.value and second.state==reduced.value and first.trace==second.trace,"Both independent timelines reach exact canonical state and same unsampled evidence")
         check(var_to_bytes(compiled.value.groups)==source_bytes,"Both timeline owners preserve the exact compiled source groups")
+        check(var_to_bytes(normalized)==accepted_bytes,"Sampling, commits and mutated public results preserve accepted log/version operands")
         timing.append({"sequence":sequence,"activate_ms":Profile.distribution(current_times),"original_activate_ms":Profile.distribution(previous_times)})
         state=reduced.value
     var result={"checks":checks,"failures":failures,"timing":timing,"scope":"Actual recorded Fireballs: independent trace/timeline state, frozen original activation/sample/commit/log evidence, source immutability and deep public snapshots; isolated CPU, not live frame-time claim"}

@@ -101,7 +101,7 @@ func value_checks(protocol: RefCounted) -> void:
             "extra": bad.extra = true
         check(not decode(protocol,JSON.stringify(bad).to_utf8_buffer()).ok,"Bounded operation admission rejects "+mode)
     for malformed in ["{", "null", "[]", JSON.stringify(source)+",", JSON.stringify(source).trim_suffix("}")+",}"]:
-        check(not decode(protocol,malformed.to_utf8_buffer()).ok,"Trusted operation retains strict JSON syntax")
+        check(not protocol.decode("PlayerOperation",malformed.to_utf8_buffer()).ok,"Public arbitrary input retains strict JSON syntax")
     var invalid := JSON.stringify(source).to_utf8_buffer(); invalid.append(255)
     check(not decode(protocol,invalid).ok,"SSE rejects invalid UTF-8 before trusted admission")
     invalid = JSON.stringify(source).to_utf8_buffer(); invalid.append(0)

@@ -2,6 +2,7 @@ extends RefCounted
 # Delivered per-source optical receivers, separate from environment encodings.
 # This table indexes existing media identities; it never chooses an outfit.
 const SourceMaterial=preload("res://presentation/source_material.gd")
+const BodySources=preload("res://presentation/body_sources.gd")
 const Placement = preload("res://placement.gd")
 const TABLE = "res://generated/character_geometry.json"
 const PROFILE_TABLE = "res://generated/normal_profiles.json"
@@ -10,22 +11,11 @@ const PROFILES = ["original","gentle","reference"]
 const PARAMETERS = {"depth":"component_depth", "normal":"component_normal",
     "support":"component_support", "normal_valid":"component_normal_valid"}
 
-static func record(path: String, slot: String, cache: Dictionary) -> Dictionary:
-    if slot == "shadow": return {}
-    var table = TABLE if path.begins_with("/media/smallscale/modular/") else CREATURE_TABLE
-    if table==CREATURE_TABLE and slot!="body": return {}
-    if not cache.has(table): cache[table] = JSON.parse_string(FileAccess.get_file_as_string(table))
-    var identity = path
-    if table==CREATURE_TABLE and not path.begins_with("/media/"):
-        var root: String = ProjectSettings.get_setting("source_data/creature_geometry_root")
-        if not path.begins_with(root+"/"): return {}
-        identity = cache[table].colour_sources.get(path.trim_prefix(root+"/"),"")
-    var source: Dictionary = cache[table].records.get(identity,{})
-    if not source.has("files") or slot not in source.slots: return {}
-    return source
+static func record(path:String,slot:String,cache:Dictionary)->Dictionary:
+    return BodySources.descriptor(path,slot,cache).get("geometry",{})
 
 static func _root(source: Dictionary) -> String:
-    return ProjectSettings.get_setting("source_data/creature_geometry_root" if source.has("normal_profiles") else "source_data/character_geometry_root")
+    return source.get("_source_root",ProjectSettings.get_setting("source_data/creature_geometry_root" if source.has("normal_profiles") else "source_data/character_geometry_root"))
 
 static func display_path(path: String, slot: String, cache: Dictionary) -> String:
     var source = record(path,slot,cache)
@@ -67,66 +57,58 @@ static func profile_normals(paths: Dictionary, normal_sets: Dictionary, profile:
 static func _error(message: String) -> Dictionary:
     return {"ok":false,"error":{"kind":"presentation","message":message}}
 
-static func normal_paths(path: String, slot: String, cache: Dictionary) -> Dictionary:
-    var source = record(path,slot,cache)
-    if source.is_empty(): return {"ok":true,"value":{}}
-    if source.has("normal_profiles"):
-        var result = {}
-        for profile in PROFILES:
-            if not source.normal_profiles.has(profile): return _error("Missing creature normal profile: "+path+"/"+profile)
-            result[profile] = _root(source).path_join(source.normal_profiles[profile])
-        return {"ok":true,"value":result}
-    if not cache.has(PROFILE_TABLE):
-        var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(PROFILE_TABLE))
-        if not parsed is Dictionary: return _error("Missing or invalid normal profile index: " + PROFILE_TABLE)
-        cache[PROFILE_TABLE] = parsed
-    var profiles: Dictionary = cache[PROFILE_TABLE].records.get(path,{})
-    if profiles.get("original","")!=source.files.normal: return _error("Missing or mismatched original normal profile registration: " + path)
-    var root: String = _root(source)
-    var derived_root: String = ProjectSettings.get_setting("source_data/normal_profiles_root",ProjectSettings.globalize_path("res://").path_join("../NDCharacterLight/.derived/normals").simplify_path())
-    var result = {"original":root.path_join(source.files.normal)}
-    for profile in ["gentle","reference"]:
-        if not profiles.has(profile) or str(profiles[profile]).is_empty(): return _error("Missing delivered " + profile + " normal profile: " + path)
-        result[profile] = derived_root.path_join(profiles[profile])
-    return {"ok":true,"value":result}
+static func normal_paths(path:String,slot:String,cache:Dictionary)->Dictionary:
+    return {"ok":true,"value":BodySources.descriptor(path,slot,cache).get("normal_paths",{})}
 
-static func source_paths(path: String, slot: String, cache: Dictionary) -> Dictionary:
-    # The catalog shell belongs to its reader. Store immutable results directly
-    # in that shell so a worker's shallow copy never fills a shared directory.
-    var key: Array = [&"__geometry_companions",path,slot]
-    var table: String = TABLE if path.begins_with("/media/smallscale/modular/") else CREATURE_TABLE
-    var retained: Dictionary = cache.get(key,{})
-    if not retained.is_empty() and is_same(retained.source,cache.get(table)) \
-        and is_same(retained.profiles,cache.get(PROFILE_TABLE)) \
-        and retained.character_root==ProjectSettings.get_setting("source_data/character_geometry_root") \
-        and retained.creature_root==ProjectSettings.get_setting("source_data/creature_geometry_root") \
-        and retained.normal_root==ProjectSettings.get_setting("source_data/normal_profiles_root"):
-        return retained.result
-    var result = _source_paths(path,slot,cache)
-    if result.ok:
-        result.value.make_read_only()
-        if result.has("normal_sets"):
-            for profiles in result.normal_sets.values():profiles.make_read_only()
-            result.normal_sets.make_read_only()
-        result.make_read_only()
-        var memo = {"source":cache.get(table),"profiles":cache.get(PROFILE_TABLE),
-            "character_root":ProjectSettings.get_setting("source_data/character_geometry_root"),
-            "creature_root":ProjectSettings.get_setting("source_data/creature_geometry_root"),
-            "normal_root":ProjectSettings.get_setting("source_data/normal_profiles_root"),"result":result}
-        memo.make_read_only()
-        cache[key] = memo
-    return result
+static func source_paths(path:String,slot:String,cache:Dictionary)->Dictionary:
+    var descriptor:Dictionary=BodySources.descriptor(path,slot,cache)
+    return {"ok":true,"value":descriptor.get("companions",{}),"normal_sets":descriptor.get("normal_sets",{})}
 
-static func _source_paths(path: String, slot: String, cache: Dictionary) -> Dictionary:
-    var source = record(path,slot,cache)
-    if source.is_empty(): return {"ok":true,"value":{}}
-    var profiles = normal_paths(path,slot,cache)
-    if not profiles.ok: return profiles
-    var root: String = _root(source)
-    var result = {}
-    for relative in source.files.values(): result[root.path_join(relative)] = true
-    for absolute in profiles.value.values(): result[absolute] = true
-    return {"ok":true,"value":result,"normal_sets":{path:profiles.value}}
+static func prepare_binding(path:String,slot:String,cache:Dictionary,depth:bool,normals:bool,profile:String,scale:float,scale_x:float)->Dictionary:
+    # Pure future operands. No displayed entry, native material or clock enters
+    # this worker result; actual textures are borrowed by the scene owner later.
+    var value:Dictionary={"key":[path,depth,normals,scale,scale_x,profile],"parameters":{},"textures":{},"paths":{},"bounds":PackedVector3Array()}
+    var source:Dictionary=record(path,slot,cache)
+    value.status="unsupported_source" if source.is_empty() else source.status
+    if source.is_empty():
+        value.parameters.has_component_geometry=false
+        for parameter in PARAMETERS.values():value.parameters[parameter]=null
+        return value
+    var profiles:Dictionary=normal_paths(path,slot,cache).value
+    if not profiles.has(profile):
+        value.status="incomplete_normal_profile";value.error="Unknown normal profile: "+profile
+        value.parameters.has_component_geometry=false
+        for parameter in PARAMETERS.values():value.parameters[parameter]=null
+        return value
+    var root:String=_root(source)
+    for field in PARAMETERS:
+        var absolute:String=profiles[profile] if field=="normal" else root.path_join(source.files[field])
+        value.textures[PARAMETERS[field]]=absolute;value.paths[absolute]=true
+    var optical:Dictionary=source.optical_camera
+    var cell:Array=source.get("cell_size",[128,128])
+    value.cell=Vector2(cell[0],cell[1]);value.ground=source.get("optical_ground_pixels",19.0)
+    value.parameters.merge({"component_depth_range":Vector2(source.depth_range[0],source.depth_range[1]),
+        "component_units":scale/Placement.PIXELS_PER_UNIT,"component_scale_x":scale_x,
+        "component_reconstruction_origin":Vector2(optical.origin[0],optical.origin[1]),"component_elevation":deg_to_rad(optical.elevation_degrees),
+        "use_component_depth":depth,"use_component_normals":normals,"has_component_geometry":true})
+    var relative:=Basis(Vector3.RIGHT,-(deg_to_rad(optical.elevation_degrees)-PI/6.0))
+    var units:float=scale/Placement.PIXELS_PER_UNIT
+    for x in [0.0,float(cell[0])]:
+        for y in [0.0,float(cell[1])]:
+            for d in source.depth_range:value.bounds.append(relative*Vector3(x-optical.origin[0],optical.origin[1]-y,d)*units)
+    return value
+
+static func apply_binding(entry:Dictionary,value:Dictionary)->void:
+    if entry.get("geometry_binding",[])==value.key:return
+    entry.geometry_binding=value.key;entry.geometry_status=value.status;entry.geometry_paths=value.paths
+    entry.erase("geometry_ground_pixels");entry.erase("geometry_error");entry.erase("geometry_cell_size")
+    if value.has("cell"):entry.geometry_cell_size=value.cell
+    if value.get("ground")!=null:entry.geometry_ground_pixels=value.ground
+    if value.has("error"):entry.geometry_error=value.error
+    SourceMaterial.apply(entry,value.parameters)
+    var bounds:AABB=entry.node.mesh.get_aabb()
+    for point in value.bounds:bounds=bounds.expand(point)
+    entry.node.custom_aabb=bounds
 
 static func clear(entry: Dictionary) -> void:
     SourceMaterial.set_parameter(entry,"has_component_geometry",false)
@@ -141,17 +123,27 @@ static func bind(entry: Dictionary, path: String, cache: Dictionary, loader: Cal
     var scale_x: float = entry.placement.get("scale_x",1.0)
     var key = [path,depth,normals,entry.scale,scale_x,profile]
     if entry.get("geometry_binding",[]) == key: return
-    clear(entry)
-    entry.geometry_binding = key
-    SourceMaterial.structural_change(entry)
     var source = record(path,entry.actor_layer.slot,cache)
-    entry.geometry_status = "unsupported_source" if source.is_empty() else source.status
-    if source.is_empty(): return
+    if source.is_empty():
+        clear(entry)
+        entry.geometry_binding=key
+        entry.geometry_status="unsupported_source"
+        entry.erase("geometry_error")
+        return
     var profiles = normal_paths(path,entry.actor_layer.slot,cache)
     if not profiles.ok or not profiles.value.has(profile):
+        clear(entry)
+        entry.geometry_binding=key
         entry.geometry_status = "incomplete_normal_profile"
         entry.geometry_error = profiles.error.message if not profiles.ok else "Unknown normal profile: " + profile
         return
+    # A clip/profile selects new operands for the same source shader and quad.
+    # Write their final values once; nulling and restoring them invalidates
+    # unchanged receivers and prevents the material ledger retaining only deltas.
+    entry.geometry_binding=key
+    entry.geometry_status=source.status
+    entry.geometry_paths={}
+    entry.erase("geometry_ground_pixels")
     entry.erase("geometry_error")
     var root: String = _root(source)
     for field in PARAMETERS:
@@ -163,7 +155,7 @@ static func bind(entry: Dictionary, path: String, cache: Dictionary, loader: Cal
     # pixel at the existing quad scale. This never changes its geometry/Z/order.
     SourceMaterial.set_parameter(entry,"component_units",entry.scale/Placement.PIXELS_PER_UNIT)
     SourceMaterial.set_parameter(entry,"component_scale_x",scale_x)
-    var optical: Dictionary = source.optical_camera if source.has("optical_camera") else cache[TABLE].optical_camera
+    var optical: Dictionary = source.get("optical_camera",{})
     var cell: Array = source.get("cell_size",[128,128])
     entry.geometry_cell_size = Vector2(cell[0],cell[1])
     # Only original registered creatures have an authored ground. Library-only

@@ -36,7 +36,7 @@ func make_world(script:Script)->Dictionary:
         var source_fields:Dictionary={"sheet":images.white,"frame_uv":Vector4(0,0,1,1),"component_depth":images.depth,"component_support":images.white,"component_depth_range":Vector2(0,1),"component_units":.06,"component_reconstruction_origin":Vector2(8,16),"component_elevation":PI/4,"condition_alpha":1.0,"has_component_geometry":true}
         for parameter in source_fields:material.set_shader_parameter(parameter,source_fields[parameter])
         output.set_shader_parameter("received",images.white);output.set_shader_parameter("source_crop",Vector4(0,0,1,1));output.set_shader_parameter("atlas_region",Vector4(0,0,1,1));output.set_shader_parameter("source_quad_size",node.mesh.size)
-        state.actors.body.entries.append({"id":"body"+str(i),"role":"body","source_version":0,"actor_layer":{"effect":{},"slot":"body"},"node":node,"material":material,"received_material":output,"texture_path":"body","cell":Vector2(16,16),"pivot":Vector2(8,16),"geometry_ground_pixels":0.0})
+        state.actors.body.entries.append({"id":"body"+str(i),"role":"body","source_version":0,"source_parameters":source_fields.duplicate(),"actor_layer":{"effect":{},"slot":"body"},"node":node,"material":material,"received_material":output,"texture_path":"body","cell":Vector2(16,16),"pivot":Vector2(8,16),"geometry_ground_pixels":0.0})
     support.solid_masks.body=images.white
     return state
 func camera_view(state:Dictionary,quarter:int,zoom:float)->void:
@@ -47,7 +47,12 @@ func camera_view(state:Dictionary,quarter:int,zoom:float)->void:
     for i in state.actors.body.entries.size():
         state.actors.body.entries[i].node.position=Vector3(float(i%3)-1,.7,float(i/3)-.5)
         state.actors.body.entries[i].node.basis=camera.basis
-func sync(state:Dictionary)->void:state.support.sync(state.floors,state.actors,state.host.camera)
+func sync(state:Dictionary)->void:
+    if state.support is Support:check(state.support.prepare_membership(state.floors,state.actors).ready,"Exact receiver membership prepares before sync")
+    state.support.sync(state.floors,state.actors,state.host.camera)
+static func set_source(entry:Dictionary,name:StringName,value:Variant)->void:
+    # The fixture produces the same explicit value and legacy-oracle uniform.
+    entry.source_parameters[name]=value;entry.material.set_shader_parameter(name,value)
 func floor_proxy(state:Dictionary,index:int)->MeshInstance3D:
     var entry:Dictionary=state.floors[index]
     var key:Variant=entry.node.get_instance_id()
@@ -114,18 +119,18 @@ func run()->void:
                 sync(state)
                 check(old_output.get_shader_parameter("native_scene_enabled")==false,"Replaced floor output disabled")
             check(not is_instance_valid(retained),"Actual source-node replacement retires old floor proxy despite same row ID")
-            check(a.support.last_sync_phases.floor_created==1 and a.support.last_sync_phases.floor_retired==1,"Actual source-node replacement creates and retires exactly one receiver")
+            check(a.support.last_sync_phases.floor_created==0 and a.support.last_sync_phases.floor_retired==0,"Actual source-node replacement is prepared before sampling without constructors")
             await draw();compare(a,b,"source_node_replacement_view%d_zoom%.0f"%[quarter,zoom])
     var states=[a,b,c]
     for label in ["unchanged","clock","geometry","atlas","opacity","restore","hidden","reveal","output_replace","output_recopy","stamped_recopy","same_count_replace","mask","pivot","ground","cell_size","solid_missing","solid_arrival","copy_proof","copy_stable","copy_overwrite","first_draw","removed","sleep","wake"]:
         for state in states:
             var entry:Dictionary=state.actors.body.entries[0]
             match label:
-                "clock":entry.material.set_shader_parameter("frame_uv",Vector4(.25,0,.5,1));entry.source_version+=1
-                "geometry":entry.erase("source_version");entry.material.set_shader_parameter("component_depth",images.changed);entry.material.set_shader_parameter("component_units",.075)
+                "clock":set_source(entry,"frame_uv",Vector4(.25,0,.5,1));entry.source_version+=1
+                "geometry":entry.erase("source_version");set_source(entry,"component_depth",images.changed);set_source(entry,"component_units",.075)
                 "atlas":entry.received_material.set_shader_parameter("atlas_region",Vector4(.1,.1,.8,.8));entry.received_material.set_shader_parameter("source_crop",Vector4(.1,.1,.8,.8))
-                "opacity":entry.material.set_shader_parameter("condition_alpha",.55)
-                "restore":entry.material.set_shader_parameter("condition_alpha",1.0)
+                "opacity":set_source(entry,"condition_alpha",.55)
+                "restore":set_source(entry,"condition_alpha",1.0)
                 "hidden":entry.node.hide();state.floors[0].node.hide()
                 "reveal":entry.node.show();state.floors[0].node.show()
                 "output_replace":entry.received_material=entry.received_material.duplicate();entry.node.material_override=entry.received_material

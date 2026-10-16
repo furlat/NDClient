@@ -25,7 +25,7 @@ static func weapon_trail(recipe: Dictionary,fact: Dictionary,actor: Dictionary,c
     var outcome: String={"Hit":"hit","Miss":"miss","Crit":"critical","Crit Miss":"critical_miss"}.get(fact.get("attack_outcome"),"")
     if fact.behavior_id not in trail.get("behaviorIds",[]) and outcome not in trail.get("outcomes",[]):return {}
     var rig_id=Authoring.rig_id(actor,cache)
-    var rig: Dictionary=Authoring.load_data("catalog/rigs.json",cache)[rig_id]
+    var rig: Dictionary=Authoring.rigs(cache)[rig_id]
     var outfit=Characters._select_layers(actor,rig,actor.get("appearance",{}).get("presentation_kind")=="layered",cache)
     if not outfit.ok:return {}
     var slot="offhand" if fact.weapon_slot=="MELEE_OFF" else "weapon"
@@ -47,7 +47,7 @@ static func attack_colors(fact: Dictionary,cache: Dictionary) -> Dictionary:
 static func attack_layers(recipe: Dictionary,fact: Dictionary,actor: Dictionary,cache: Dictionary) -> Array:
     var outcome="onCrit" if fact.attack_outcome=="Crit" else ("onHit" if fact.attack_outcome=="Hit" else "onMiss")
     var selected: Dictionary=recipe.get("attackVfx",{}).get(outcome,{})
-    var rig: Dictionary=Authoring.load_data("catalog/rigs.json",cache).get(Authoring.rig_id(actor,cache),{})
+    var rig: Dictionary=Authoring.rigs(cache).get(Authoring.rig_id(actor,cache),{})
     var colors=attack_colors(fact,cache)
     var result: Array=[]
     var tokens={"white":0xffffff,"$element":colors.primary,"$element.primary":colors.primary,"$element.secondary":colors.secondary,"$element.tertiary":colors.tertiary}
@@ -63,7 +63,7 @@ static func attack_layers(recipe: Dictionary,fact: Dictionary,actor: Dictionary,
 static func bolt(group: Dictionary,node: Dictionary,recipe: Dictionary,start: float,track: Dictionary,target: Dictionary,cache: Dictionary) -> float:
     var a: Array=track.from_position;var b: Array=track.target_position
     var config=Authoring.load_data("catalog/rig.json",cache)
-    var rig: Dictionary=Authoring.load_data("catalog/rigs.json",cache)[track.rig]
+    var rig: Dictionary=Authoring.rigs(cache)[track.rig]
     var appearance: Dictionary=track.presentation_actor.appearance
     var direction=Vector2(b[0]-a[0],b[1]-a[1])
     var cycle: Array=config.FACING_CYCLE
@@ -97,7 +97,7 @@ static func cast_layers(cast: Dictionary, actor: Dictionary, cache: Dictionary) 
         if layer.get("enabled",false) and not layer.get("hidden",false): layers.append(layer)
     for layer in cast.get("effects",[]):
         if layer.get("enabled",true) and not layer.get("hidden",false): layers.append(layer)
-    var rig: Dictionary=Authoring.load_data("catalog/rigs.json",cache).get(Authoring.rig_id(actor,cache),{})
+    var rig: Dictionary=Authoring.rigs(cache).get(Authoring.rig_id(actor,cache),{})
     if rig.is_empty(): return []
     return layers.map(func(layer): return Palette.prepare(layer,rig,cast.actionClip,cache))
 
@@ -201,7 +201,7 @@ static func _native_interceptions(group:Dictionary,lineage:Dictionary,graph:Dict
                 "start_ms":at+phase.start_ms},true)
             add(group,node,"native_effect",parameters.start_ms,phase.duration_ms,phase.source,parameters)
 
-static func compile(group: Dictionary,lineage: Dictionary,graph: Dictionary,cache: Dictionary) -> void:
+static func compile(group: Dictionary,lineage: Dictionary,graph: Dictionary,cache: Dictionary) -> Dictionary:
     _native_interceptions(group,lineage,graph,cache)
     var sounds: Dictionary=Authoring.load_data("audio/bindings.json",cache)
     var nodes: Dictionary={}
@@ -358,6 +358,8 @@ static func compile(group: Dictionary,lineage: Dictionary,graph: Dictionary,cach
                 var blood_start:float=graph.get("damage_timings",{}).get(node.uuid,{}).get("hp",start)
                 if not release.get("regions",[]).is_empty() and release.get("pattern")!=null:
                     var blood_asset=Blood.asset(cache)
+                    if blood_asset.is_empty():
+                        return {"ok":false,"error":{"kind":"authoring","message":"Cannot load selected asset metadata: particles.region.blood","retryable":false}}
                     var revealed=Blood.reveals(group,node,graph.get("initial_tiles",{}),blood_previous)
                     var blood_contact:Dictionary=graph.impact_contacts.get(node.uuid,{})
                     var source_height:Variant=blood_contact.get("from_elevation_feet")
@@ -368,7 +370,7 @@ static func compile(group: Dictionary,lineage: Dictionary,graph: Dictionary,cach
                                 if Blood.key(point)==Blood.key(release.position):source_height=region.elevation_steps
                     add(group,node,"residue_deposit",blood_start,Blood.duration(release,blood_asset),
                         "catalog/action_media_assets.json:/particles.region.blood",
-                        {"actor_uuid":fact.target_entity_uuid,"attachment":"ground","position":release.position,
+                        {"actor_uuid":fact.target_entity_uuid,"attachment":"ground","position":release.position,"asset_metadata":blood_asset,
                         "elevation_steps":source_height,"flight_enabled":source_height!=null,
                         "body_release":release.duplicate(true),"reveals":revealed,"residue_deposition":true,
                         "authority_source":"DamageResultFact.body_release.regions + WorldTileState.residues"})
@@ -413,6 +415,7 @@ static func compile(group: Dictionary,lineage: Dictionary,graph: Dictionary,cach
     for family in projectiles.values():
         family.sort_custom(func(a,b):return a.application.index<b.application.index)
         for i in family.size():family[i].same_target_index=i;family[i].same_target_count=family.size()
+    return {"ok":true}
 
 static func _movement_audio(group:Dictionary,node:Dictionary,track:Dictionary,sounds:Dictionary,cache:Dictionary)->void:
     if node.fact.get("movement_mode")!="walking" and not (node.fact.get("movement_mode")==null and track.trajectory=="connector_transfer"):return

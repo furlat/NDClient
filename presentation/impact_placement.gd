@@ -11,7 +11,7 @@ const REFERENCE_BASIS=Basis(Vector3(.7071067811865475,0,-.7071067811865475),Vect
 static func prepare(actor: Dictionary,tracks: Array,at_ms: float,contact: Dictionary,cache: Dictionary) -> Dictionary:
     if actor.is_empty() or actor.get("last_visual_position")==null:return {"status":"missing","reason":"impact_recipient_not_disclosed"}
     var rig_id=Authoring.rig_id(actor,cache)
-    var rig: Dictionary=Authoring.load_data("catalog/rigs.json",cache).get(rig_id,{})
+    var rig: Dictionary=Authoring.rigs(cache).get(rig_id,{})
     if rig.is_empty() or rig.get("body_anchor")==null:return {"status":"missing","reason":"impact_body_anchor_not_authored"}
     var sample: Dictionary=Tracks.samples(tracks,at_ms).get(actor.uuid,{})
     var position: Array=sample.get("position",actor.last_visual_position)
@@ -29,7 +29,7 @@ static func prepare(actor: Dictionary,tracks: Array,at_ms: float,contact: Dictio
 static func with_direction(receipt: Dictionary,points: Array,cache: Dictionary) -> Dictionary:
     if receipt.status=="missing":return receipt
     var result=receipt.duplicate()
-    var rig:Dictionary=Authoring.load_data("catalog/rigs.json",cache)[receipt.source_rig]
+    var rig:Dictionary=Authoring.rigs(cache)[receipt.source_rig]
     var config=Authoring.load_data("catalog/rig.json",cache)
     var facing="SW"
     if points.size()==2:

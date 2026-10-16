@@ -11,6 +11,9 @@ var specifications:Dictionary={}
 var file_digests:Dictionary={}
 var dependency_closures:Dictionary={}
 var retained:Dictionary={}
+var loading:Dictionary={}
+var retired_loading:Dictionary={}
+var absent:Dictionary={}
 var retained_bytes:int=0
 var hits:int=0
 var misses:int=0
@@ -115,9 +118,18 @@ func lookup(descriptor:Dictionary,tick:int,quarter:int)->Texture2D:
     var resource:Resource
     if retained.has(path):
         resource=retained[path];retained.erase(path);retained[path]=resource
-    elif FileAccess.file_exists(path):
+    elif not absent.has(path):
+        if not loading.has(path):
+            if not FileAccess.file_exists(path):absent[path]=true;misses+=1;return null
+            var status:Error=ResourceLoader.load_threaded_request(path,"",false,ResourceLoader.CACHE_MODE_IGNORE)
+            if status!=OK:issues[path]="Cannot queue native preview Resource: "+error_string(status);misses+=1;return null
+            loading[path]=true
+        var status:int=ResourceLoader.load_threaded_get_status(path)
+        if status==ResourceLoader.THREAD_LOAD_IN_PROGRESS:return null
+        loading.erase(path)
+        if status!=ResourceLoader.THREAD_LOAD_LOADED:issues[path]="Cannot load native preview Resource";misses+=1;return null
         var started:int=Time.get_ticks_usec()
-        resource=ResourceLoader.load(path,"",ResourceLoader.CACHE_MODE_IGNORE)
+        resource=ResourceLoader.load_threaded_get(path)
         disk_loads+=1;resource_load_usec+=Time.get_ticks_usec()-started
         if not resource is Packet or resource.format_version!=VERSION or resource.signature!=descriptor.signature or resource.quarter!=quarter or resource.hz!=descriptor.hz or resource.ticks.size()!=resource.textures.size() or resource.sizes.size()!=resource.ticks.size() or resource.ticks.size()>CHUNK_FRAMES:
             issues[path]="Invalid native preview Resource";misses+=1;return null
@@ -140,5 +152,17 @@ static func image(source:Image)->Image:
     if factor<1:output.resize(maxi(1,roundi(output.get_width()*factor)),maxi(1,roundi(output.get_height()*factor)),Image.INTERPOLATE_NEAREST)
     return output
 
+func pending(descriptor:Dictionary,tick:int,quarter:int)->bool:
+    return loading.has(resource_path(descriptor.signature,quarter,tick))
+
+func poll_retired()->void:
+    for path in retired_loading.keys():
+        var status:int=ResourceLoader.load_threaded_get_status(path)
+        if status==ResourceLoader.THREAD_LOAD_IN_PROGRESS:continue
+        if status==ResourceLoader.THREAD_LOAD_LOADED:ResourceLoader.load_threaded_get(path)
+        retired_loading.erase(path)
+
 func reset()->void:
+    retired_loading.merge(loading);loading={};absent.clear()
+    poll_retired()
     specifications.clear();file_digests.clear();dependency_closures.clear();retained.clear();retained_bytes=0;issues.clear()

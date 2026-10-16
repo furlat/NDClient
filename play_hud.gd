@@ -326,7 +326,7 @@ func _process(delta: float) -> void:
         _refresh_bar_state()
         world.FrameProfile.end_phase(world.profile,"hud_bar_controls",bar_phase)
     if resized or rebuild_bar: _layout()
-    _prepare_bar()
+    prepare_bar()
     last_revision = int(world.timeline.revision)
     last_ready = ready
     last_selection = selection
@@ -547,8 +547,11 @@ func _build_bar_button(index: int, plan: Array, local_index: int) -> void:
     var badge = _action_badge(chosen,family)
     if not badge.is_empty(): _badge(button,badge,true)
 
-func _prepare_bar() -> void:
+func prepare_bar() -> void:
+    var admission:Dictionary=world._preparation_budget()
+    if admission.used_usec>=admission.limit_usec:return
     var phase = Time.get_ticks_usec()
+    var allowance:int=mini(BAR_BUILD_USEC,admission.limit_usec-admission.used_usec)
     bar_build_units = 0
     _retire_bar_slice()
     if not bar_build.is_empty() and bar_build.key != _bar_request_key(): _cancel_bar_build()
@@ -574,7 +577,8 @@ func _prepare_bar() -> void:
                 bar_build.row_index = 0
                 bar_build.group_index += 1
         bar_build_units += 1
-        if Time.get_ticks_usec()-phase >= BAR_BUILD_USEC: break
+        if Time.get_ticks_usec()-phase>=allowance:break
+    admission.used_usec+=Time.get_ticks_usec()-phase
     world.FrameProfile.end_phase(world.profile,"hud_bar_build",phase)
 
 func _publish_bar() -> void:
@@ -1057,8 +1061,9 @@ func clear_hover_feedback() -> void:
     hover_object_key = []
 
 func _restore_object_highlights() -> void:
-    for material in hover_object_materials:
-        material.set_shader_parameter("highlighted",hover_object_materials[material])
+    for id in hover_object_materials:
+        var saved:Dictionary=hover_object_materials[id]
+        if is_instance_valid(saved.entry.node):world.SourceMaterial.set_parameter(saved.entry,"highlighted",saved.value)
     hover_object_materials.clear()
 
 func _refresh_hover_feedback() -> void:
@@ -1070,6 +1075,7 @@ func _refresh_hover_feedback() -> void:
     for id in hover_outline.owners.keys():
         if id != actor_id: hover_outline.erase(world,id)
     if not actor_id.is_empty():
+        if not hover_outline.prepare(world,actor_id,world._preparation_budget()).ready:return
         hover_outline.sample(world,actor_id,{"outline":{"color":0x70d6be,"pulseColor":0x70d6be,"opacity":.9,"pulseOpacity":0.0},"outline_age_ms":0.0,"outline_initial":true,"outline_alpha":1.0})
         if hover_outline.owners.has(actor_id): hover_outline.owners[actor_id].entry.id = actor_id+":hover_outline"
     var key = [alt,subject,ready,world.timeline.world_revision,world.world_generation,world.quarter]
@@ -1088,8 +1094,8 @@ func _refresh_hover_feedback() -> void:
     for entry in world.static_entries:
         if entry.role == "shadow" or not entry.node.visible or not objects.has(entry.placement.id): continue
         var material: ShaderMaterial = entry.material
-        hover_object_materials[material] = material.get_shader_parameter("highlighted")
-        material.set_shader_parameter("highlighted",true)
+        hover_object_materials[entry.node.get_instance_id()]={"entry":entry,"value":world.SourceMaterial.value(entry,"highlighted")}
+        world.SourceMaterial.set_parameter(entry,"highlighted",true)
 
 func _refresh_world_labels() -> void:
     var focus = get_viewport().gui_get_focus_owner()

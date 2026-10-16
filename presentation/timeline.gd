@@ -15,6 +15,7 @@ var commit_index = 0
 var sequence = -1
 var paused = false
 var revision = 0
+var resource_revision = 0
 var world_revision = 0
 var initialization_revision = 0
 var world_changes: Dictionary = {"full":true,"tiles":{},"objects":{},"senses":false,"order":[],"revision":0}
@@ -59,6 +60,7 @@ var media_ready: Callable
 var replay_media_ready: Callable
 var replay_media_release: Callable
 var world_ready: Callable
+var world_published:Callable
 var waiting_for_world = false
 var pending_world: Dictionary = {}
 var _world_plan: Dictionary = {}
@@ -106,6 +108,7 @@ func accept(message: Dictionary) -> void:
         NativePersistent.observe_spatial(spatial_effect_owners,state.senses.get("spatial_effects",{}),display_ms,true)
         sequence = int(message.sequence)
         revision += 1
+        resource_revision += 1
         world_revision += 1
         world_changes = {"full":true,"tiles":{},"objects":{},"senses":true,"order":[],"revision":world_revision}
         var initial_events: Array = message.get("events",[])
@@ -242,8 +245,7 @@ func _advance_immediate(delta_ms: float) -> void:
             var delta: Dictionary = commits[commit_index].delta
             _append_membership_order(world_changes.order,delta,state)
             Compiler.apply_delta(state,delta)
-            Conditions.observe(condition_owners,delta.get("actors",{}),group_start_ms+commits[commit_index].at_ms)
-            if delta.get("set",{}).has("senses"):NativePersistent.observe_spatial(spatial_effect_owners,state.senses.get("spatial_effects",{}),group_start_ms+commits[commit_index].at_ms)
+            _observe_resource_owners(delta,group_start_ms+commits[commit_index].at_ms)
             if commits[commit_index].has("event_uuid"):
                 EventTrace.commit(trace,int(current.operation_sequence),commits[commit_index].event_uuid)
             EventTrace.append_logs(trace,commits[commit_index].get("trace_logs",[]))
@@ -267,6 +269,15 @@ func _advance_immediate(delta_ms: float) -> void:
 
 func _world_delta(delta: Dictionary) -> bool:
     return not delta.get("tiles",{}).is_empty() or not delta.get("objects",{}).is_empty() or not delta.get("objects_removed",[]).is_empty() or delta.get("set",{}).has("senses") or delta.get("set",{}).has("connectors")
+
+func _observe_resource_owners(delta:Dictionary,at_ms:float)->void:
+    # These existing owner updates report actual resource-input changes. HP,
+    # logs and ordinary movement still commit without rebuilding presenters.
+    var changed:bool=Conditions.observe(condition_owners,delta.get("actors",{}),at_ms)
+    if delta.get("set",{}).has("senses"):
+        var spatial_changed:bool=NativePersistent.observe_spatial(spatial_effect_owners,state.senses.get("spatial_effects",{}),at_ms)
+        changed=changed or spatial_changed
+    if changed:resource_revision+=1
 
 func _advance_with_world_preparation(delta_ms: float) -> void:
     if paused or state.is_empty(): return
@@ -295,8 +306,11 @@ func _advance_with_world_preparation(delta_ms: float) -> void:
             waiting_for_world = true
             return
         _apply_world_plan(_world_plan)
+        var published:Dictionary=pending_world
         pending_world = {}; _world_plan = {}
-        # Even a zero-duration world boundary yields for atomic publication.
+        # A prepared source-only cut can install its passive bindings now.
+        # Real world/actor membership still yields for its atomic scene publish.
+        if world_published.is_valid() and world_published.call(published):continue
         return
 
 func _group_stage_times(group: Dictionary) -> Array:
@@ -356,12 +370,13 @@ func _plan_group_world(group: Dictionary, start: float, first_commit: int, curso
         var at = float(commits[i].at_ms)
         if at>local+0.000001: break
         if _world_delta(commits[i].delta): boundary_at = at; break
-    for at in group.get("actor_structure_times",[]):
-        if at>local:break
-        # A published cut is start+at on the display clock. Subtracting start
-        # can round below at and request that same constructor forever.
-        if start+float(at)>cursor or (activate and at<=0.0):
-            boundary_at=minf(boundary_at,float(at));break
+    for cuts in [group.get("actor_structure_times",[]),group.get("actor_source_times",[])]:
+        for at in cuts:
+            # Source changes use the existing private preparation owner too;
+            # no geometry rebuild or world revision is implied by a new clip.
+            if start+float(at)>target:break
+            if start+float(at)>cursor or (activate and at<=0.0):
+                boundary_at=minf(boundary_at,float(at));break
     for at in stage_times:
         # Match staged_tiles()'s exact >= admission test. Commit tolerance must
         # not erase a nearby but still unadmitted support boundary.
@@ -463,18 +478,11 @@ func _world_candidate(plan: Dictionary) -> Dictionary:
     # Construction needs only the same temporary outfit/hand layers. Sample
     # passive authored intervals; component_samples consumes audio/retention and
     # must never run against a future boundary.
-    var actor_layers:Array=[]
-    var actor_layer_ids:Dictionary={}
     var layer_candidates:Array=retained_components.duplicate()
     for segment in plan.segments:
         for component in segment.group.get("components",[]):
             if component.kind=="sprite_layer":layer_candidates.append({"component":component,"group_start_ms":segment.start_ms})
-    for item in layer_candidates:
-        var component:Dictionary=item.component
-        if component.kind!="sprite_layer" or actor_layer_ids.has(component.id):continue
-        var age:float=plan.display_ms-item.group_start_ms-component.start_ms
-        if age>=0 and age<component.duration_ms:
-            actor_layers.append(component);actor_layer_ids[component.id]=true
+    var actor_layers:Array=_actor_layers_at(layer_candidates,plan.display_ms)
     return {"key":[initialization_revision,revision,last.group.operation_sequence,last.group.id,last.start_ms,last.end_commit,last.local_ms,last.complete],
         "preparation_key":[initialization_revision,world_revision,_support_signature(),last.group.operation_sequence,last.group.id,last.end_commit,last.local_ms,last.complete],
         "source_group_id":last.group.id,"source_local_ms":last.local_ms,
@@ -495,8 +503,7 @@ func _apply_world_plan(plan: Dictionary) -> void:
             var delta: Dictionary = commit.delta
             _append_membership_order(world_changes.order,delta,state)
             Compiler.apply_delta(state,delta)
-            Conditions.observe(condition_owners,delta.get("actors",{}),group_start_ms+commit.at_ms)
-            if delta.get("set",{}).has("senses"):NativePersistent.observe_spatial(spatial_effect_owners,state.senses.get("spatial_effects",{}),group_start_ms+commit.at_ms)
+            _observe_resource_owners(delta,group_start_ms+commit.at_ms)
             if commit.has("event_uuid"): EventTrace.commit(trace,int(current.operation_sequence),commit.event_uuid)
             EventTrace.append_logs(trace,commit.get("trace_logs",[]))
             if _world_delta(delta):
@@ -553,6 +560,7 @@ func _retain_completed_presentation() -> void:
             var item={"component":component,"group_start_ms":group_start_ms}
             if component.has("impact"):item.impact_direction=component_direction(current,component,retained_directions)
             retained_components.append(item)
+            resource_revision+=1
     _directions(current.get("actor_tracks",[]),INF,retained_directions)
 
 func component_samples(cache: Dictionary={}) -> Array:
@@ -562,6 +570,7 @@ func component_samples(cache: Dictionary={}) -> Array:
         var component: Dictionary=item.component
         if item.group_start_ms+component.start_ms+component.duration_ms>display_ms:
             alive.append(item)
+    if alive.size()!=retained_components.size():resource_revision+=1
     retained_components=alive
     var candidates=alive.duplicate()
     candidates.append_array(crossed_audio);crossed_audio=[]
@@ -572,9 +581,10 @@ func component_samples(cache: Dictionary={}) -> Array:
         var component: Dictionary=item.component
         if seen.has(component.id): continue
         seen[component.id]=true
-        var age=display_ms-item.group_start_ms-component.start_ms
+        var begin:float=item.group_start_ms+component.start_ms
+        var age:float=display_ms-begin
         var crossed=component.kind=="audio" and item.group_start_ms+component.start_ms>=component_sample_ms
-        if age>=0 and (age<component.duration_ms or crossed):
+        if display_ms>=begin and (display_ms<begin+component.duration_ms or crossed):
             var sample=component.duplicate(); sample.age_ms=age; sample.absolute_start_ms=item.group_start_ms+component.start_ms
             if component.has("impact"):
                 active_impacts[component.id]=true
@@ -590,8 +600,10 @@ func component_samples(cache: Dictionary={}) -> Array:
     var activities={}
     var bodies=actor_samples()
     for id in bodies:activities[id]=bodies[id].get("activity","idle")
+    var condition_count:int=condition_owners.size();var spatial_count:int=spatial_effect_owners.size()
     result.append_array(Conditions.samples(condition_owners,display_ms,cache,activities))
     result.append_array(NativePersistent.spatial_samples(spatial_effect_owners,display_ms,cache))
+    if condition_count!=condition_owners.size() or spatial_count!=spatial_effect_owners.size():resource_revision+=1
     return result
 
 func staged_tiles() -> Dictionary:
@@ -615,6 +627,28 @@ func presentation_state() -> Dictionary:
 
 func actor_samples() -> Dictionary:
     return Tracks.samples(current.get("actor_tracks",[]),display_ms-group_start_ms)
+
+static func _actor_layers_at(candidates:Array,at_ms:float)->Array:
+    var result:Array=[]
+    var seen:Dictionary={}
+    for item in candidates:
+        var component:Dictionary=item.component
+        if component.kind!="sprite_layer" or seen.has(component.id):continue
+        var begin:float=item.group_start_ms+component.start_ms
+        # Constructor membership and displayed sampling share the exact
+        # absolute half-open interval. Subtraction can round an endpoint age
+        # below duration even when this cut has completed the component.
+        if at_ms>=begin and at_ms<begin+component.duration_ms:
+            result.append(component);seen[component.id]=true
+    return result
+
+func actor_layer_samples()->Array:
+    # Initial replay construction needs the current outfit without consuming
+    # audio crossings or mutating the retained presentation during preparation.
+    var candidates:Array=retained_components.duplicate()
+    for component in current.get("components",[]):
+        if component.kind=="sprite_layer":candidates.append({"component":component,"group_start_ms":group_start_ms})
+    return _actor_layers_at(candidates,display_ms)
 
 func diagnostics() -> Dictionary:
     return {"display_ms":display_ms,"sequence":sequence,"queued_groups":queue.size(),"active_group":current.get("id",""),

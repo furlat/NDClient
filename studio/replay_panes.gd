@@ -58,6 +58,10 @@ static func prepare(parent:Node,restored:RefCounted,source:Dictionary,reference:
         pane={"world":host,"viewport":view,"index":source,"frozen":[]}
     var owner:Node3D=pane.world
     owner.external_clock=false
+    # Host rendering allowance is shared even during an authoring reload, when
+    # source residency must deliberately remain independent.
+    owner.preparation_admission=reference.preparation_admission
+    Play.MediaWarmup.physical(owner.media_warmup).preparation_admission=reference.preparation_admission
     owner.native_startup_plan=source.native_startup_plan if source.has("native_startup_plan") else Play.NativeStartup.recording_plan(source.get("rows",[]))
     owner.native_startup_requested_ms=restored.display_ms
     owner.media_warmup.budget_bytes=budget

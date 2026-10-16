@@ -1,6 +1,7 @@
 extends RefCounted
 ## Pygame spell_palette.py's delivered row treatment, resolved on the compiler worker.
 const Catalog=preload("res://source_catalog.gd")
+const Sources=preload("res://presentation/body_sources.gd")
 
 static func _stats_file(path:String,rig:Dictionary)->String:
     if not path.begins_with("/media/"):return ""
@@ -44,10 +45,10 @@ static func prepare(layer: Dictionary, rig: Dictionary, clip: String, cache: Dic
     var result=layer.duplicate(true)
     var treatment: Dictionary=layer.get("palette",{}) if layer.get("palette")!=null else {}
     if treatment.is_empty(): return result
-    var resources=Catalog.read_file("catalog/resources.json",cache)
     var sheet: String=layer.get("sourceSheet",rig.clips[clip].sheets.get(layer.category,""))
-    if not resources.has(sheet): return result
-    var path: String=resources[sheet]
+    var admitted=Sources.index(cache)
+    var path:String="" if admitted==null else admitted.sheets.get(sheet,{}).get("default","")
+    if path.is_empty():return result
     var key="__palette_ranges:"+path+":"+str(rig.cell_height)
     if not cache.has(key):
         var file=_stats_file(path,rig)

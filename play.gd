@@ -17,8 +17,12 @@ const NativeLightAtlas = preload("res://presentation/native_light_atlas.gd")
 const GeneratedShadows = preload("res://presentation/canvas_shadows.gd")
 const NativeStartup = preload("res://presentation/native_source_startup.gd")
 var native_startup:Dictionary={"ready":false,"completed":0,"total":0,"elapsed_ms":0.0}
-# Null retains ordinary-client catalog startup; Studio supplies exact recorded sources.
-var native_startup_plan:Variant=null
+# Sources are scoped to actual disclosed interests; Studio supplies recorded cues.
+var native_startup_plan:Variant=[]
+var native_live_plan:Array=[]
+var native_live_owners:Array=[]
+var draw_fixed_order:Array=[]
+var draw_rank_updates:int=0
 var native_startup_requested_ms:float=0.0
 var native_startup_background:bool=true
 var native_light_atlas = NativeLightAtlas.new()
@@ -185,7 +189,10 @@ var media_initial_ready = false
 var media_gate: Dictionary = {}
 var media_metadata_ready = false
 var media_metadata_ms = 0.0
+var media_source_issue:String=""
 var media_group_plans: Dictionary = {}
+var media_interest:Dictionary={}
+var displayed_source_records:Array=[]
 var replay_media_groups: Array = []
 var media_received_owners: Dictionary = {}
 var media_empty_key: Array = []
@@ -196,8 +203,11 @@ var media_plan_epoch = -1
 var media_environment_required: Dictionary = {}
 var media_condition_key: Array = []
 var media_condition_paths: Dictionary = {}
+var media_condition_record:Dictionary={}
 var native_media_paths:Dictionary={}
 var native_media_cpu_paths:Dictionary={}
+var native_media_record:Dictionary={}
+var media_profile_record:Dictionary={}
 var native_spell_hit_material:bool=true
 var draw_order_dirty = true
 var wall_pick_order: Array = []
@@ -225,6 +235,7 @@ func install_playback(value: RefCounted) -> void:
     timeline.replay_media_ready = _replay_media_ready
     timeline.replay_media_release = _release_replay_media
     timeline.world_ready = _world_ready
+    timeline.world_published=_publish_source_cut
     actor_revision = -1
     light_revision = -1
     wall_visibility_revision = -1
@@ -310,13 +321,14 @@ func _ready() -> void:
     timeline.replay_media_ready = _replay_media_ready
     timeline.replay_media_release = _release_replay_media
     timeline.world_ready = _world_ready
+    timeline.world_published=_publish_source_cut
     if not external_playback: timeline.retire_group = session.retire_group
     RenderingServer.frame_post_draw.connect(_record_frame_evidence)
     if not external_playback: DisplayServer.window_set_title("NDClient · Live player · Wall composition & frame profiling")
     RenderingServer.viewport_set_measure_render_time(get_viewport().get_viewport_rid(),true)
     var catalog = Catalog.read_file("catalog-index.json",catalog_cache)
     rig_config = Catalog.read_file(catalog.rig,catalog_cache)
-    rigs = Catalog.read_file(catalog.rigs,catalog_cache)
+    rigs = Characters.rigs(catalog_cache)
     resources = Catalog.read_file(catalog.resources,catalog_cache)
     scenes = [{"id":"player"}]
     camera = Camera3D.new()
@@ -336,9 +348,8 @@ func _ready() -> void:
     add_child(environment)
     source_lighting.set_directionals(Catalog.read_file("world.json",catalog_cache).lighting)
     presentation_errors.append_array(source_lighting.issues)
-    presentation_errors.append_array(Catalog.validate_native(catalog_cache))
     # Every worker uses the host's admitted authoring revision. A Studio seek
-    # reuses its indexed snapshot; Reload supplies a separately validated one.
+    # reuses its indexed snapshot; Reload supplies a new source owner.
     # Seed before starting workers; never mutate their cache shells afterward.
     media_warmup.plan_cache = Catalog.source_snapshot(catalog_cache)
     if session != null: session.authoring_cache = Catalog.source_snapshot(catalog_cache)
@@ -451,25 +462,48 @@ func _charge_preparation(name:String,started:int,charged_before:int)->void:
     budget.phase_usec[name]=budget.phase_usec.get(name,0)+elapsed
 
 func _native_startup_request(at_ms:float,optional:bool=false)->Dictionary:
-    if native_startup_plan==null:return {}
-    return {"plan":native_startup_plan,"required":NativeStartup.requested(native_startup_plan,at_ms),
-        "priority":NativeStartup.requested(native_startup_plan,at_ms,ComponentRenderer.NATIVE_PREFETCH_MS),"optional":optional}
+    if external_playback:
+        return {"plan":native_startup_plan,"required":NativeStartup.requested(native_startup_plan,at_ms),
+            "priority":NativeStartup.requested(native_startup_plan,at_ms,ComponentRenderer.NATIVE_PREFETCH_MS),"optional":optional}
+    var selected:Dictionary=selection_media.get("value",{}).get("native_selection",{})
+    var owners:Array=[timeline.initialization_revision,timeline.current.get("id",""),timeline.queue.map(func(group):return group.id),selection_media.revision]
+    if owners!=native_live_owners:
+        native_live_owners=owners
+        var clips:Array=selected.get("clips",[]).duplicate()
+        var groups:Array=timeline.queue.duplicate()
+        if not timeline.current.is_empty():groups.push_front(timeline.current)
+        for group in groups:
+            for component in group.get("components",[])+group.get("native_requirements",[]):
+                if component.get("native_spell",false) and component.get("status")!="missing":clips.append(component.native_clip)
+                elif component.get("kind")=="material_flash" and component.get("native_hit",{}).get("definition",{}).get("status")=="available":clips.append(component.native_hit.clip)
+        native_live_plan=NativeStartup.source_plan(clips)
+    # Live occurrence readiness belongs to ComponentRenderer's exact cue. This
+    # optional program interest cannot gate unrelated idle/movement or late cues.
+    return {"plan":native_live_plan,"required":[],"priority":native_live_plan,"optional":optional}
 
 func _step_native_startup(optional:bool=false)->void:
     if optional and not native_startup_background:return
     var at_ms:float=maxf(timeline.display_ms,native_startup_requested_ms)
-    native_startup=NativeStartup.step(self,catalog_cache,_native_startup_request(at_ms,optional),
-        _preparation_budget() if native_startup_plan!=null else {})
+    native_startup=NativeStartup.step(self,catalog_cache,_native_startup_request(at_ms,optional),_preparation_budget())
 
 func _native_startup_ready(at_ms:float)->bool:
     native_startup_requested_ms=at_ms
-    if native_startup_plan!=null:native_startup=NativeStartup.status(_native_startup_request(at_ms))
+    native_startup=NativeStartup.status(_native_startup_request(at_ms))
     return native_startup.ready
 
 func _prepare_optional_work()->void:
     var budget:Dictionary=_preparation_budget()
+    # A producer may finish while this frame draws the retained display. Adopt
+    # its passive handoff now so native preparation need not start a frame late.
+    if _receive_prepared_operations():
+        _prepare_future_world()
+        _prepare_media()
+        _warm_media(true,budget,timeline.media_target_ms)
     var required_world:bool=timeline.waiting_for_world or _world_preparation_due(0.0)
     if required_world:_step_world_preparation()
+    # Visible pending controls share the host allowance ahead of speculative
+    # uploads. Otherwise a steady optional backlog can starve the bar forever.
+    if hud!=null and hud.bar_pending():hud.prepare_bar()
     # Rotate only the first existing owner. The queues and readiness contracts
     # stay where they were; empty owners leave their allowance to the next one.
     var first:int=preparation_turn;preparation_turn=(preparation_turn+1)%4
@@ -501,6 +535,37 @@ func _prepare_optional_work()->void:
     var pinned:int=stats[false].pinned_bytes+stats[true].pinned_bytes
     if bytes>maxi(pinned,MediaWarmup.physical(media_warmup).budget_bytes):_prune_character_media(budget,true)
 
+func _receive_prepared_operations()->bool:
+    if session==null:return false
+    var messages:Array=session.take_prepared()
+    for message in messages:
+        if message.get("stage","")!="media":
+            timeline.accept(message)
+            if message.get("stage","")=="compiled":
+                _reset_media_epoch()
+                Catalog.adopt_snapshot(catalog_cache,message.source_files)
+                for group in message.groups.slice(0,mini(2,message.groups.size())):media_received_owners[group.id]=group
+                media_plan_key=[]
+        _adopt_received_media(message)
+    return not messages.is_empty()
+
+func _advance_prepared(delta_ms:float)->void:
+    var target:float=timeline.display_ms+maxf(0.0,delta_ms)
+    timeline.advance(delta_ms)
+    if not timeline.waiting_for_world and not timeline.waiting_for_media:return
+    # A bounded second handoff drains work completed during the first readiness
+    # call. Never join an unfinished worker or accrue waiting time as animation.
+    var received:bool=_receive_prepared_operations()
+    var media:Dictionary=MediaWarmup.poll_plan(media_warmup)
+    if not media.is_empty():_adopt_media_plan(media)
+    if received or not media.is_empty():
+        _prepare_future_world()
+        _prepare_media()
+        _warm_media(true,_preparation_budget(),target)
+    if timeline.waiting_for_world:_step_world_preparation()
+    if received or not media.is_empty() or (pending_world!=null and pending_world.prepared):
+        timeline.advance(maxf(0.0,target-timeline.display_ms))
+
 func _process(delta: float) -> void:
     if publication_failed:return
     var budget:Dictionary=_preparation_budget()
@@ -509,31 +574,31 @@ func _process(delta: float) -> void:
     var started = Time.get_ticks_usec()
     var phase = Time.get_ticks_usec()
     var subphase = Time.get_ticks_usec()
-    _step_native_startup()
-    for issue in native_startup.errors:
+    if external_playback:_step_native_startup()
+    for issue in native_startup.get("errors",[]):
         if issue not in presentation_errors:presentation_errors.append(issue)
     FrameProfile.end_phase(profile,"native_startup",subphase)
-    subphase = Time.get_ticks_usec()
-    _warm_media(true,budget,timeline.display_ms+maxf(0,advance_ms))
-    FrameProfile.end_phase(profile,"media_publication",subphase)
     subphase = Time.get_ticks_usec()
     if not external_playback: session.poll()
     FrameProfile.end_phase(profile,"session_poll",subphase)
     subphase = Time.get_ticks_usec()
-    if session != null:
-        for message in session.take_prepared():
-            if message.get("stage","")!="media":
-                timeline.accept(message)
-                if message.get("stage","")=="compiled":
-                    _reset_media_epoch()
-                    catalog_cache.merge(message.source_files,false)
-                    # This is precisely the required worker's bounded window.
-                    # Later groups still request their ordinary source plan.
-                    for group in message.groups.slice(0,mini(2,message.groups.size())):
-                        media_received_owners[group.id]=group
-                    media_plan_key=[]
-            _adopt_received_media(message)
+    _receive_prepared_operations()
+    # Passive projection runs concurrently with source-role publication, not
+    # behind it. It borrows the already accepted compiler/source references.
+    _prepare_future_world()
+    _adopt_media_plan(MediaWarmup.poll_plan(media_warmup))
+    # Adopt completed projection (including its exact optical source pins)
+    # before publishing demand. A due world gets the same allowance here;
+    # required components cannot strand already-ready world work behind them.
+    if _world_preparation_due(advance_ms):_step_world_preparation()
     _prepare_media()
+    FrameProfile.end_phase(profile,"preparation_step",subphase)
+    # Receive the new source interests before spending this frame's allowance.
+    # An older optional/due set must not take priority over an arrived action.
+    subphase = Time.get_ticks_usec()
+    _warm_media(true,budget,timeline.display_ms+maxf(0,advance_ms))
+    FrameProfile.end_phase(profile,"media_publication",subphase)
+    subphase = Time.get_ticks_usec()
     _prepare_initial_world()
     _prepare_future_world()
     # Future received worlds share the rotating preparation allowance with
@@ -551,7 +616,7 @@ func _process(delta: float) -> void:
     if not external_playback: _poll_actions()
     FrameProfile.end_phase(profile,"action_responses",subphase)
     subphase = Time.get_ticks_usec()
-    if not external_clock and not global_draw_hold: timeline.advance(advance_ms)
+    if not external_clock and not global_draw_hold:_advance_prepared(advance_ms)
     FrameProfile.end_phase(profile,"timeline_advance",subphase)
     if session != null: session.set_displayed_sequence(timeline.sequence)
     FrameProfile.end_phase(profile,"session_timeline",phase)
@@ -625,6 +690,7 @@ func _process(delta: float) -> void:
         native_light_atlas.sync_output(self,[world_generation,quarter,scenery_revision,wall_mode,native_light_atlas.revision],true)
         component_renderer.native_spells.sync(self)
         component_renderer.ready=component_renderer.ready and component_renderer.native_spells.ready
+        _retain_displayed_sources()
         FrameProfile.end_phase(profile,"native_2d_output",subphase)
         FrameProfile.end_phase(profile,"draw_order",phase)
         phase = Time.get_ticks_usec()
@@ -640,7 +706,8 @@ func _process(delta: float) -> void:
             print("PLAYER_READY: initialized, acknowledged, and current choices available")
     if global_draw_hold and not external_playback:
         _discover();_poll_storage();_update_hover()
-    _prepare_optional_work()
+    if external_playback:_prepare_optional_work.call_deferred()
+    else:_prepare_optional_work()
     if not media_issue.is_empty():
         var preparing: Dictionary = timeline.current if not timeline.current.is_empty() else (timeline.queue[0] if not timeline.queue.is_empty() else {})
         if not preparing.is_empty(): timeline.record_preparation_issue(preparing.id,media_issue)
@@ -675,7 +742,11 @@ func _process(delta: float) -> void:
 func _detailed_frame_context(active_motion: bool) -> Dictionary:
     return {"media_gate":media_gate,"active_motion":active_motion,"motion_held":timeline.waiting_for_media or timeline.waiting_for_world or timeline.paused,"light_cap_enabled":light_cap_enabled,"scene":"live_player","zoom":camera.size,"quarter":quarter,
         "world_preparation":({"atlas_jobs":pending_world.atlas_jobs.size(),"upserts":pending_world.membership.get("upserts",[]).size(),"removals":pending_world.membership.get("removed",{}).size(),
-            "capture_stage":pending_world.atlas_prefix.get("stage",""),"capture_cursor":pending_world.atlas_prefix.get("cursor",0),"capture_total":pending_world.atlas_prefix.get("capture_ids",[]).size()} if pending_world!=null else {}),
+            "capture_stage":pending_world.atlas_prefix.get("stage",""),"capture_cursor":pending_world.atlas_prefix.get("cursor",0),"capture_total":pending_world.atlas_prefix.get("capture_ids",[]).size(),
+            "bind_cursor":pending_world.atlas_prefix.get("bind_cursor",0),"bind_total":pending_world.atlas_prefix.get("bind_ids",[]).size(),
+            "output_cursor":pending_world.atlas_prefix.get("output_cursor",0),"output_total":pending_world.atlas_prefix.get("output_ids",[]).size(),
+            "planning_lane":pending_world.atlas_prefix.get("planning_lane",""),
+            "retained_lights":pending_world.light_preparation.get("retained",false),"cookie_jobs":pending_world.cookie_jobs.size()} if pending_world!=null else {}),
         "native_startup":{"ready":native_startup.ready,"completed":native_startup.completed,"total":native_startup.total,"elapsed_ms":native_startup.elapsed_ms},
         "native_2d_repack_count":native_light_atlas.repack_count,"native_2d_receivers":native_light_atlas.live_receivers,"native_2d_atlas_pixels":native_light_atlas.packed_pixels,"generated_shadows":generated_shadows.diagnostics(),
         "native_2d_reconcile_ms":native_light_atlas.last_reconcile_ms,"native_2d_projection_ms":native_light_atlas.last_projection_ms,"native_2d_pack_ms":native_light_atlas.last_pack_ms,
@@ -700,6 +771,8 @@ func _prepare_initial_world() -> void:
     if world_revision>=0 or pending_world!=null or not _environment_sources_ready(): return
     var candidate = {"key":["initial",timeline.initialization_revision],"state":timeline.state,
         "presentation_state":timeline.presentation_state(),"world_revision":timeline.world_revision,
+        "display_ms":timeline.display_ms,"staged_actors":timeline.staged_actors(),
+        "actor_samples":timeline.actor_samples(),"actor_layers":timeline.actor_layer_samples(),
         "changes":{"full":true,"tiles":{},"objects":{},"senses":true}}
     pending_world = WorldPreparation.new(); add_child(pending_world)
     pending_world.configure(self,candidate,true)
@@ -735,14 +808,21 @@ func _world_preparation_due(advance_ms:float)->bool:
 
 func _step_world_preparation() -> void:
     if pending_world==null: return
-    if pending_world.epoch!=timeline.initialization_revision or pending_world.quarter!=quarter or pending_world.stale         or (pending_world.initial and pending_world.prepared and not pending_world.can_publish_membership(timeline.world_revision)):
+    var invalid_initial:bool=false
+    if pending_world.initial and pending_world.prepared:
+        invalid_initial=not pending_world.can_publish_membership(timeline.world_revision) and pending_world.prepared
+    if pending_world.epoch!=timeline.initialization_revision or pending_world.quarter!=quarter or pending_world.stale or invalid_initial:
         if pending_world.worker_finished(): _discard_world_preparation()
         return
     # Only passive projection runs ahead of texture residency. Godot resource
     # binding stays on the scene thread and uses this boundary's exact plan.
-    if not pending_world.initial and not _prepared_world_sources_ready(pending_world.boundary): return
     var budget:Dictionary=_preparation_budget()
     var started:int=Time.get_ticks_usec();var before:int=budget.used_usec
+    if not pending_world.initial and not _prepared_world_sources_ready(pending_world.boundary):
+        # Passive completion/adoption has no native residency dependency.
+        pending_world.step(0)
+        _charge_preparation("world",started,before)
+        return
     pending_world.step(maxi(0,budget.limit_usec-budget.used_usec))
     _charge_preparation("world",started,before)
     if not pending_world.media_issue.is_empty(): media_issue = pending_world.media_issue
@@ -766,18 +846,33 @@ func _world_ready(candidate: Dictionary) -> bool:
                     pending_world.admitted = true
                     if not pending_world.atlas_prefix.is_empty():pending_world.atlas_prefix.admitted=true
                 return true
+            if not pending_world.prepared:return false
             _discard_world_preparation()
         else: return false
     pending_world = WorldPreparation.new(); add_child(pending_world)
     pending_world.configure(self,candidate)
+    _step_world_preparation()
+    if pending_world.prepared and pending_world.can_publish_membership(int(candidate.world_revision)):
+        if not external_clock:
+            pending_world.admitted=true
+            if not pending_world.atlas_prefix.is_empty():pending_world.atlas_prefix.admitted=true
+        return true
     return false
+
+func _publish_source_cut(_candidate:Dictionary)->bool:
+    if pending_world==null or not pending_world.result.get("source_only",false):return false
+    pending_world.publish_actor_bindings()
+    world_prepare_worker_ms=pending_world.result.worker_ms
+    world_prepared_count+=1
+    _discard_world_preparation()
+    return true
 
 func _world_can_publish() -> bool:
     if pending_world==null:return true
     if pending_world.epoch!=timeline.initialization_revision or not pending_world.prepared:return false
     if pending_world.initial:
         if not pending_world.can_publish_membership(timeline.world_revision):
-            pending_world.stale=true
+            if pending_world.prepared:pending_world.stale=true
             return false
         if not pending_world.atlas_prefix.is_empty():pending_world.atlas_prefix.admitted=true
     return pending_world.admitted or pending_world.initial
@@ -789,6 +884,9 @@ func _discard_world_preparation() -> void:
 
 func _finish_world_preparation() -> void:
     if pending_world==null or not (pending_world.admitted or pending_world.initial): return
+    pending_world.publish_native_receivers()
+    pending_world.publish_actor_bindings()
+    component_renderer.invalidate_preparation()
     world_prepare_worker_ms = pending_world.result.worker_ms
     world_prepared_count += 1
     # All adopted native nodes have moved to the stable displayed parent.
@@ -840,7 +938,7 @@ func _sync_world() -> void:
         source_lighting.publish_prepared(pending_world.light_preparation)
         var senses:Variant=timeline.state.get("senses")
         var inputs:Variant=senses.get("light_sources") if senses!=null else null
-        light_source_inputs=inputs.duplicate(true) if inputs!=null else null
+        light_source_inputs=inputs
         light_source_epoch=timeline.initialization_revision
         light_revision=timeline.revision
     var supports: Dictionary = timeline.staged_tiles()
@@ -1026,7 +1124,10 @@ func _sync_world() -> void:
     static_order_dirty = static_order_dirty or entries_changed
     wall_visibility_revision = -1
     wall_mask_dirty = wall_mask_dirty or walls_changed
-    _publish_native_light_changes(light_upserts,removed.keys(),rotated or world_changes.get("full",false))
+    # An authoritative replay reset replaces state, but may retain every native
+    # lighting source. Only the physical view replacement is a full receipt;
+    # prepared membership already supplies ordinary source additions/removals.
+    _publish_native_light_changes(light_upserts,removed.keys(),rotated)
     _finish_world_preparation()
 
 func _publication_failure(message:String)->void:
@@ -1066,12 +1167,10 @@ func _retire_view(source: Node3D, mask: SubViewport, source_entries: Array = [],
     for entry in source_entries:
         if is_instance_valid(entry.node): held[entry.node.get_instance_id()] = entry
     if mask != null and not source.is_ancestor_of(mask) and not pending.has(mask): pending.append(mask)
-    var nodes: Array = []
-    while not pending.is_empty():
-        var node: Node = pending.pop_back()
-        nodes.append(node); pending.append_array(node.get_children())
-    retiring_views.append({"nodes":nodes,"entries":held,"atlas_cleanup":atlas_cleanup})
-    retiring_node_count += nodes.size()
+    # Descendant discovery belongs to the bounded retirement lane too.
+    # Retaining roots avoids an unbounded prewalk at publication.
+    retiring_views.append({"nodes":pending,"entries":held,"atlas_cleanup":atlas_cleanup})
+    retiring_node_count += pending.size()
 
 func _dispose_views(budget:Dictionary={},minimum:bool=false) -> void:
     # Native destruction can execute after our callback. Bound count as well as
@@ -1095,7 +1194,12 @@ func _dispose_views(budget:Dictionary={},minimum:bool=false) -> void:
             if progress.done:view.atlas_cleanup={}
             else:continue
         if view.nodes.is_empty():retiring_views.pop_front();continue
-        var node = view.nodes.pop_back()
+        var node:Node=view.nodes.back()
+        if is_instance_valid(node) and node.get_child_count()>0:
+            view.nodes.append(node.get_child(node.get_child_count()-1))
+            retiring_node_count+=1;metadata_steps+=1
+            continue
+        view.nodes.pop_back()
         if is_instance_valid(node):
             var id = node.get_instance_id()
             node.free()
@@ -1288,7 +1392,7 @@ func _sync_source_lighting() -> void:
     # Legacy inventory-derived sources retain their existing revision refresh.
     if light_revision<0 or light_source_epoch!=timeline.initialization_revision or sources==null or sources!=light_source_inputs:
         source_lighting.sync(timeline.state)
-        light_source_inputs=sources.duplicate(true) if sources!=null else null
+        light_source_inputs=sources
         light_source_epoch=timeline.initialization_revision
     light_revision=timeline.revision
 
@@ -1419,12 +1523,8 @@ func _sync_actor_membership() -> void:
                 entries.append(entry);actor_entries.append(entry)
             var retired_shadows:Array=generated_shadows.adopt_actor(prepared)
             if not retired_shadows.is_empty():
-                var retired_nodes:Array=[]
-                while not retired_shadows.is_empty():
-                    var retired_node:Node=retired_shadows.pop_back()
-                    retired_nodes.append(retired_node);retired_shadows.append_array(retired_node.get_children())
-                retiring_views.append({"nodes":retired_nodes,"entries":{},"atlas_cleanup":{}})
-                retiring_node_count+=retired_nodes.size()
+                retiring_views.append({"nodes":retired_shadows,"entries":{},"atlas_cleanup":{}})
+                retiring_node_count+=retired_shadows.size()
             FrameProfile.end_phase(profile,"actor_prepared_adopt",actor_stage)
             actor_prepared_layers+=prepared.new_entries.size()
         else:
@@ -1464,7 +1564,7 @@ func _reset_media_epoch() -> void:
     selection_media_demand_paths={}
     selection_media_preview={}
     media_normal_sets={}
-    media_group_plans.clear()
+    media_group_plans.clear();media_interest={}
     _release_replay_media()
     media_received_owners.clear()
     media_empty_key = []
@@ -1472,6 +1572,8 @@ func _reset_media_epoch() -> void:
     media_terminal_plan = {}
     media_condition_key = []
     media_condition_paths = {}
+    media_condition_record={};native_media_record={};media_profile_record={}
+    media_source_issue=""
 
 func _retained_condition_media() -> bool:
     # Removal banks outlive the canonical condition. Seek can start directly in
@@ -1486,6 +1588,7 @@ func _retained_condition_media() -> bool:
     if key==media_condition_key:return false
     media_condition_key=key
     media_condition_paths=Conditions.paths({"conditions":conditions},catalog_cache) if not conditions.is_empty() else {}
+    media_condition_record=MediaWarmup.source_record(media_condition_paths) if not media_condition_paths.is_empty() else {}
     return true
 
 func _media_group_owner(id: String) -> Dictionary:
@@ -1596,7 +1699,7 @@ func _refresh_selection_media() -> void:
     var adoption_started=Time.get_ticks_usec()
     if SelectionMedia.poll(selection_media) and not selection_media.value.is_empty():
         var accepted: Dictionary=selection_media.value
-        catalog_cache.merge(accepted.get("source_files",{}),false)
+        Catalog.adopt_snapshot(catalog_cache,accepted.get("source_files",{}))
         if session!=null:session.offer_prepared_sources(accepted.get("source_files",{}),accepted.get("source_headers",{}))
         MediaWarmup.adopt_source_sizes(media_warmup,accepted.get("source_sizes",{}),timeline.initialization_revision)
         if selection_media_hold_cursor==-1 and not selected_action.is_empty():
@@ -1618,6 +1721,7 @@ func _prepare_media(first: Dictionary = {}) -> void:
     if native_changed:
         native_media_paths=native_paths.duplicate()
         native_media_cpu_paths=native_cpu.duplicate()
+        native_media_record=MediaWarmup.source_record(native_media_paths,{},{},native_media_paths,native_media_cpu_paths) if not native_media_paths.is_empty() else {}
     var groups: Array = []
     if not timeline.current.is_empty(): groups.append(timeline.current)
     elif not first.is_empty(): groups.append(first)
@@ -1637,6 +1741,8 @@ func _prepare_media(first: Dictionary = {}) -> void:
         if ids.is_empty() or group.id != ids[0]: promoted_ids.append(group.id)
     var key: Array = [timeline.initialization_revision,ids,timeline.revision if ids.is_empty() else 0]
     if key == media_plan_key and promoted_ids == media_promoted_ids and not condition_changed and not native_changed:
+        _publish_media_interest(maxf(timeline.display_ms,timeline.media_target_ms))
+        _refresh_due_media_errors()
         # A completed older task may leave newer optional intent queued. The
         # displayed demand is already stable here; it must not wait for another
         # gameplay action merely because its media key did not change.
@@ -1715,79 +1821,152 @@ func _prepare_media(first: Dictionary = {}) -> void:
             media_normal_sets=required_normal_sets.duplicate();media_normal_sets.merge(next_normal_sets);media_normal_sets.make_read_only()
         var required_paths:Dictionary=CharacterGeometry.for_profile(ready.character,media_normal_sets,character_light_profile,catalog_cache,"required")
         var next_paths:Dictionary=CharacterGeometry.for_profile(upcoming.get("character",{}),media_normal_sets,character_light_profile,catalog_cache,"upcoming")
-        var environment_paths:Dictionary=ready.environment.duplicate();environment_paths.merge(upcoming.get("environment",{}))
-        var fixture_paths:Dictionary=ready.get("fixtures",{}).duplicate();fixture_paths.merge(upcoming.get("fixtures",{}))
-        var gpu_paths:Dictionary=CharacterGeometry.for_profile(ready.get("gpu_only",{}),media_normal_sets,character_light_profile,catalog_cache,"required_gpu").duplicate()
-        gpu_paths.merge(CharacterGeometry.for_profile(upcoming.get("gpu_only",{}),media_normal_sets,character_light_profile,catalog_cache,"upcoming_gpu"))
-        var cpu_paths:Dictionary=CharacterGeometry.for_profile(ready.get("cpu_required",{}),media_normal_sets,character_light_profile,catalog_cache,"required_cpu").duplicate()
-        cpu_paths.merge(CharacterGeometry.for_profile(upcoming.get("cpu_required",{}),media_normal_sets,character_light_profile,catalog_cache,"upcoming_cpu"))
-        var source_paths:Dictionary={}
-        for paths in [required_paths,next_paths,environment_paths]:
-            for path in paths:source_paths[path]=Catalog.media_path(path)
-        for paths in [environment_paths,fixture_paths,gpu_paths,cpu_paths,source_paths]:paths.make_read_only()
         projection={"epoch":timeline.initialization_revision,"profile":character_light_profile,"ready":ready,"upcoming":upcoming,
-            "required":required_paths,"next":next_paths,"environment":environment_paths,"fixtures":fixture_paths,
-            "gpu_only":gpu_paths,"cpu_required":cpu_paths,"wanted":source_paths}
+            "required":required_paths,"next":next_paths}
     var character_required:Dictionary=projection.required.duplicate()
     character_required.merge(media_condition_paths)
     character_required.merge(native_media_paths)
+    var error_start:float=timeline.group_start_ms if not timeline.current.is_empty() and not ids.is_empty() and ids[0]==timeline.current.id else timeline.display_ms
+    var due_errors:Array=MediaWarmup.errors_at(ready,maxf(timeline.display_ms,timeline.media_target_ms)-error_start)
     media_plan = {"projection":projection,"required":character_required,"upcoming":projection.next,
-        "errors":ready.errors,"upcoming_errors":upcoming.get("errors",[])}
+        "errors":due_errors,"upcoming_errors":upcoming.get("errors",[])}
     media_environment_required = ready.environment
-    var gpu_only:Dictionary=projection.gpu_only.duplicate()
-    var cpu_required:Dictionary=projection.cpu_required.duplicate()
-    cpu_required.merge(media_condition_paths)
-    cpu_required.merge(native_media_cpu_paths)
-    for path in native_media_paths:
-        if not cpu_required.has(path):gpu_only[path]=true
-    for path in media_condition_paths:gpu_only.erase(path)
-    var wanted:Dictionary=projection.wanted.duplicate()
-    for paths in [media_condition_paths,native_media_paths]:
-        for path in paths:
-            if not wanted.has(path):wanted[path]=Catalog.media_path(path)
     if not requested_character_light_profile.is_empty():
         character_profile_pending_paths=_requested_profile_normals(requested_character_light_profile)
-        for path in character_profile_pending_paths:
-            wanted[path]=Catalog.media_path(path);gpu_only[path]=true
+        var pending_key:Array=[requested_character_light_profile,projection.ready,projection.upcoming]
+        if media_profile_record.get("key",[])!=pending_key:
+            media_profile_record={"key":pending_key,"value":MediaWarmup.source_record(character_profile_pending_paths,{},{},character_profile_pending_paths)}
+    else:media_profile_record={}
     # Selection candidates use the same bounded source owner, after all received
     # authoritative paths. They never enter media_plan.required/readiness gates.
     if selection_media_hold_cursor>=0 and groups.any(func(group):return group.get("operation_sequence",-1)>=selection_media_hold_cursor and media_group_plans.has(group.id)):
         SelectionMedia.cancel(selection_media);selection_media_hold_cursor=-1
     var hints: Dictionary=selection_media.value
     selection_media_demand_paths=hints.get("paths",{})
-    for path in cpu_required:gpu_only.erase(path)
     FrameProfile.end_phase(profile,"media_plan_sets",sets_started)
-    var demand_started = Time.get_ticks_usec()
-    MediaWarmup.demand(media_warmup,wanted,projection.environment,projection.fixtures,gpu_only,cpu_required,hints)
+    _publish_media_interest(maxf(timeline.display_ms,timeline.media_target_ms))
     _prioritize_media(maxf(timeline.display_ms,timeline.media_target_ms))
-    FrameProfile.end_phase(profile,"media_plan_demand",demand_started)
-    for name in media_warmup.get("demand_phases",{}):
-        if name != "total":
-            var phase_name = "media_demand_"+name
-            profile.phases[phase_name] = profile.phases.get(phase_name,0.0)+media_warmup.demand_phases[name]
-    media_issue = ""
     for message in media_plan.errors+media_plan.upcoming_errors:
         if not message in presentation_errors: presentation_errors.append(message)
-    if not media_plan.errors.is_empty(): media_issue = media_plan.errors[0]
-    var required: Dictionary = media_plan.required.duplicate()
-    required.merge(media_environment_required)
-    for path in required:
-        if media_warmup.failed.has(path): media_issue = media_warmup.failed[path]
+    _refresh_due_media_errors()
     # The existing end-of-frame retirement lane owns eviction and CPU-image
     # release, including its explicit over-budget cleanup. Doing that here as
     # well bypasses the shared allowance before required effect preparation.
     FrameProfile.end_phase(profile,"media_plan",started)
+
+static func _same_source_refs(a:Array,b:Array)->bool:
+    if a.size()!=b.size():return false
+    for i in a.size():
+        if not is_same(a[i],b[i]):return false
+    return true
+
+func _publish_media_interest(at_ms:float)->void:
+    if not media_metadata_ready:return
+    var record_sets:Array=[];var families:Array=[]
+    var group:Dictionary=timeline.current if not timeline.current.is_empty() else timeline.queue[0] if not timeline.queue.is_empty() else {}
+    var current_plan:Dictionary=media_group_plans.get(group.get("id",""),media_empty_plan)
+    if group.is_empty():
+        # The terminal plan describes the previous operation's final sources;
+        # its initial cut is not the outfit currently on screen.
+        record_sets.append(current_plan.get("source_records",{}).get(character_light_profile,[]))
+    elif external_playback:
+        # Explicit seeks own their complete crossed prefix. The metadata loader
+        # already constructed these immutable contributions off the scene thread.
+        current_plan=media_plan.get("projection",{}).get("ready",current_plan)
+        record_sets.append(current_plan.get("source_records",{}).get(character_light_profile,[]))
+    else:
+        var start:float=timeline.group_start_ms if is_same(group,timeline.current) else timeline.display_ms
+        start=maxf(start,float(group.get("preview_start_ms",start)))
+        var local:float=maxf(0.0,at_ms-start)
+        record_sets.append(MediaWarmup.records_at(current_plan.get("source_cuts",{}).get(character_light_profile,{}),local,
+            current_plan.get("source_records",{}).get(character_light_profile,[])))
+    # A private candidate owns real resources too. Keep its exact cut pinned
+    # while it is prepared, even when that cut is later than displayed time.
+    for prepared_owner in [pending_world,prepared_actor_owner]:
+        if prepared_owner==null or prepared_owner.initial or prepared_owner.stale or prepared_owner.epoch!=timeline.initialization_revision:continue
+        var boundary:Dictionary=prepared_owner.boundary
+        if not boundary.get("replay",false):
+            var future:Dictionary=media_group_plans.get(boundary.source_group_id,{})
+            if not future.is_empty():record_sets.append(MediaWarmup.records_at(future.get("source_cuts",{}).get(character_light_profile,{}),boundary.source_local_ms,
+                future.get("source_records",{}).get(character_light_profile,[])))
+    if not displayed_source_records.is_empty():record_sets.append(displayed_source_records)
+    # Current, displayed and pending owners can borrow the same immutable cut.
+    # Keep all their leases above, but flatten each exact source set only once.
+    var unique_sets:Array=[]
+    for selected in record_sets:
+        if not unique_sets.any(func(previous):return is_same(previous,selected)):unique_sets.append(selected)
+    record_sets=unique_sets
+    for id in media_plan_key[1] if media_plan_key.size()>1 else []:
+        var family:Dictionary=media_group_plans.get(id,{}).get("source_families",{}).get(character_light_profile,{})
+        if not family.is_empty() and not families.any(func(value):return is_same(value,family)):families.append(family)
+    var extras:Array=[]
+    for record in [media_condition_record,native_media_record,media_profile_record.get("value",{})]:
+        if not record.is_empty():extras.append(record)
+    if component_renderer.native_spells.actor_bindings_needed():
+        for prepared_owner in [pending_world,prepared_actor_owner]:
+            if prepared_owner!=null and not prepared_owner.stale and prepared_owner.epoch==timeline.initialization_revision \
+                    and not prepared_owner.required_source_record.is_empty():extras.append(prepared_owner.required_source_record)
+    var hints:Dictionary=selection_media.value
+    var same_records:bool=not media_interest.is_empty() and _same_source_refs(media_interest.sets,record_sets) and _same_source_refs(media_interest.extras,extras)
+    if same_records and _same_source_refs(media_interest.families,families) and is_same(media_interest.hints,hints):return
+    var started:int=Time.get_ticks_usec();var budget:Dictionary=_preparation_budget();var before:int=budget.used_usec
+    var records:Array=media_interest.records if same_records else []
+    if not same_records:
+        var seen:Dictionary={}
+        for selected in record_sets:MediaWarmup.append_source_records(records,seen,selected)
+        MediaWarmup.append_source_records(records,seen,extras)
+        records.make_read_only()
+    MediaWarmup.demand_records(media_warmup,records,hints,families)
+    media_interest={"sets":record_sets,"extras":extras,"families":families,"hints":hints,"records":records}
+    for name in media_warmup.get("demand_phases",{}):
+        if name!="total":
+            var phase_name:String="media_demand_"+name
+            profile.phases[phase_name]=profile.phases.get(phase_name,0.0)+media_warmup.demand_phases[name]
+    _charge_preparation("source_publication",started,before)
+    FrameProfile.end_phase(profile,"media_plan_demand",started)
+
+func _retain_displayed_sources()->void:
+    var group:Dictionary=timeline.current if not timeline.current.is_empty() else timeline.queue[0] if not timeline.queue.is_empty() else {}
+    var selected:Dictionary=media_group_plans.get(group.get("id",""),media_empty_plan)
+    if group.is_empty() or external_playback:
+        displayed_source_records=selected.get("source_records",{}).get(character_light_profile,[])
+    else:
+        var local:float=timeline.display_ms-(timeline.group_start_ms if is_same(group,timeline.current) else timeline.display_ms)
+        displayed_source_records=MediaWarmup.records_at(selected.get("source_cuts",{}).get(character_light_profile,{}),local,
+            selected.get("source_records",{}).get(character_light_profile,[]))
+
+func _refresh_due_media_errors()->void:
+    if media_issue==media_source_issue:media_issue=""
+    media_source_issue=""
+    var group:Dictionary=timeline.current if not timeline.current.is_empty() else timeline.queue[0] if not timeline.queue.is_empty() else {}
+    var plan:Dictionary=media_group_plans.get(group.get("id",""),media_empty_plan)
+    var start:float=timeline.group_start_ms if is_same(group,timeline.current) else timeline.display_ms
+    var at:float=maxf(timeline.display_ms,timeline.media_target_ms)
+    if not external_playback:media_plan.errors=MediaWarmup.errors_at(plan,at-start)
+    if not media_plan.errors.is_empty():media_source_issue=media_plan.errors[0]
+    if not media_warmup.failed.is_empty():
+        var characters:Dictionary=_character_source_paths(group,at)
+        var environment:Dictionary=_environment_source_paths(group,at)
+        for path in media_warmup.failed:
+            if characters.has(path) or environment.has(path) or media_condition_paths.has(path) or native_media_paths.has(path):
+                media_source_issue=media_warmup.failed[path];break
+    if not media_source_issue.is_empty():media_issue=media_source_issue
 
 func _release_replay_media() -> void:
     if replay_media_groups.is_empty():return
     replay_media_groups=[]
 
 func _combined_media_plan(plans:Array)->Dictionary:
-    var result={"character":{},"environment":{},"fixtures":{},"gpu_only":{},"cpu_required":{},"normal_sets":{},"errors":[]}
+    var result={"character":{},"environment":{},"fixtures":{},"gpu_only":{},"cpu_required":{},"normal_sets":{},"errors":[],"source_records":{}}
+    var seen_records:Dictionary={}
     for plan in plans:
         for field in ["character","environment","fixtures","gpu_only","cpu_required","normal_sets"]:result[field].merge(plan.get(field,{}))
         for issue in plan.get("errors",[]):
             if issue not in result.errors:result.errors.append(issue)
+        for profile in plan.get("source_records",{}):
+            if not result.source_records.has(profile):
+                result.source_records[profile]=[];seen_records[profile]={}
+            MediaWarmup.append_source_records(result.source_records[profile],seen_records[profile],plan.source_records[profile])
     for path in result.cpu_required:result.gpu_only.erase(path)
     return result
 
@@ -1813,7 +1992,13 @@ func _replay_media_ready(plan:Dictionary)->bool:
         and not (pending_world!=null and pending_world.admitted)
 
 func _source_group_ready(group:Dictionary)->bool:
-    return group.is_empty() or not is_same(media_received_owners.get(group.id),group) or media_group_plans.has(group.id)
+    if group.is_empty() or not is_same(media_received_owners.get(group.id),group):return true
+    var plan:Dictionary=media_group_plans.get(group.id,{})
+    if plan.is_empty():return false
+    if not plan.has("coverage_until_ms"):return true
+    var start:float=timeline.group_start_ms if is_same(group,timeline.current) else timeline.display_ms
+    var local:float=maxf(timeline.display_ms,timeline.media_target_ms)-start
+    return local<float(plan.coverage_until_ms)-0.000001
 
 func _media_ready(group: Dictionary) -> bool:
     # Early compiler delivery grants only passive projection. Native resources
@@ -1883,6 +2068,7 @@ func _environment_sources_ready(group:Dictionary={},at_ms:float=-1.0) -> bool:
     return media_metadata_ready and media_plan.errors.is_empty() and MediaWarmup.ready(media_warmup,_environment_source_paths(group,at_ms))
 
 func _prioritize_media(at_ms:float)->Dictionary:
+    _publish_media_interest(at_ms)
     # Readiness and preparation use the same authored cut. Keeping a later cue
     # pinned does not let it displace the sources needed to start this one.
     var due:Dictionary=_character_source_paths({},at_ms).duplicate()
@@ -1903,14 +2089,14 @@ func _adopt_media_plan(completed: Dictionary, offer_to_session:bool=true) -> voi
         if completed.has("error"):
             if completed.error not in presentation_errors: presentation_errors.append(completed.error)
             return
-        catalog_cache.merge(completed.get("source_files",{}),false)
+        Catalog.adopt_snapshot(catalog_cache,completed.get("source_files",{}))
         if offer_to_session and session!=null:session.offer_prepared_sources(completed.get("source_files",{}),completed.get("source_headers",{}))
         MediaWarmup.adopt_encounter(media_warmup,completed.value.encounter,timeline.initialization_revision)
         media_plan_key = []
         return
     # Worker-published raw authoring is immutable; avoid synchronous JSON loads
     # when this exact prepared outfit/world first binds on the scene thread.
-    catalog_cache.merge(completed.get("source_files",{}),false)
+    Catalog.adopt_snapshot(catalog_cache,completed.get("source_files",{}))
     # A handoff from the session already belongs to its source cache. Return
     # only locally prepared metadata, not the session's entire cache each cast.
     if offer_to_session and session!=null:session.offer_prepared_sources(completed.get("source_files",{}),completed.get("source_headers",{}))
@@ -1937,7 +2123,12 @@ func _adopt_media_plan(completed: Dictionary, offer_to_session:bool=true) -> voi
     for path in value.fixtures:
         if value.environment_required.has(path): first_fixtures[path] = true
         if value.environment_upcoming.has(path): next_fixtures[path] = true
-    var first = {"character":value.required,"environment":value.environment_required,"errors":value.errors,"fixtures":first_fixtures}
+    var first = {"character":value.required,"environment":value.environment_required,"errors":value.errors,"fixtures":first_fixtures,
+        "source_records":value.get("source_records",{}).get(ids[0] if not ids.is_empty() else "",{}),
+        "source_cuts":value.get("source_cuts",{}).get(ids[0] if not ids.is_empty() else "",{}),
+        "source_families":value.get("source_families",{}).get(ids[0] if not ids.is_empty() else "",{})}
+    if completed.has("coverage_until_ms"):first.coverage_until_ms=completed.coverage_until_ms
+    if not ids.is_empty():first.error_timeline=value.get("character_error_timeline",{}).get(ids[0],[])
     first.merge(MediaWarmup.roles_for(value,value.required))
     if ids.is_empty():
         media_empty_key = completed.key
@@ -1945,11 +2136,15 @@ func _adopt_media_plan(completed: Dictionary, offer_to_session:bool=true) -> voi
     else:
         first.environment_timeline=value.get("environment_timeline",{}).get(ids[0],{})
         first.character_timeline=value.get("character_timeline",{}).get(ids[0],{})
-        if not media_group_plans.has(ids[0]): media_group_plans[ids[0]] = first
+        if not media_group_plans.has(ids[0]) or (media_group_plans[ids[0]].has("coverage_until_ms") and not first.has("coverage_until_ms")):media_group_plans[ids[0]]=first
         if ids.size()>1 and not media_group_plans.has(ids[1]):
-            media_group_plans[ids[1]] = {"character":value.upcoming,"environment":value.environment_upcoming,"errors":value.upcoming_errors,"fixtures":next_fixtures}
+            media_group_plans[ids[1]] = {"character":value.upcoming,"environment":value.environment_upcoming,"errors":value.upcoming_errors,"fixtures":next_fixtures,
+                "source_records":value.get("source_records",{}).get(ids[1],{}),
+                "source_cuts":value.get("source_cuts",{}).get(ids[1],{}),
+                "source_families":value.get("source_families",{}).get(ids[1],{})}
             media_group_plans[ids[1]].environment_timeline=value.get("environment_timeline",{}).get(ids[1],{})
             media_group_plans[ids[1]].character_timeline=value.get("character_timeline",{}).get(ids[1],{})
+            media_group_plans[ids[1]].error_timeline=value.get("character_error_timeline",{}).get(ids[1],[])
             media_group_plans[ids[1]].merge(MediaWarmup.roles_for(value,value.upcoming))
     media_plan_key = []
 
@@ -2006,7 +2201,12 @@ func _prune_character_media(budget:Dictionary={},minimum:bool=false) -> void:
         _charge_preparation("media_retirement",admission_started,charged_before)
 
 func _warm_media(required_only:bool=false,budget:Dictionary={},through_ms:float=-1.0) -> void:
-    _adopt_media_plan(MediaWarmup.poll_plan(media_warmup))
+    var completed:Dictionary=MediaWarmup.poll_plan(media_warmup)
+    if not completed.is_empty():
+        _adopt_media_plan(completed)
+        # A worker may finish after the early poll. Its demand projection must
+        # precede prioritization/publication, including in the optional lane.
+        _prepare_media()
     # Full received closures stay pinned, but future textures are not urgent
     # merely because they are in that closure. When the displayed sources are
     # ready, leave publication to the rotating optional lane so a received world
@@ -2039,7 +2239,9 @@ func _warm_media(required_only:bool=false,budget:Dictionary={},through_ms:float=
         if loaded.has("error"):
             var message: String = loaded.error
             if not message in presentation_errors: presentation_errors.append(message)
-            if media_plan.required.has(loaded.path) or media_environment_required.has(loaded.path): media_issue = message
+            # The failed source remains recorded by its owner. Only its actual
+            # authored cue may block display; optional/late failures cannot
+            # prevent an already prepared opening from starting.
             continue
         var started = Time.get_ticks_usec()
         source_images[loaded.path] = loaded.image
@@ -2069,16 +2271,18 @@ func _warm_media(required_only:bool=false,budget:Dictionary={},through_ms:float=
 
 func _sample_actors() -> void:
     var inputs_started:int=Time.get_ticks_usec()
-    var sampling_counts:Dictionary={"actors":0,"visible_layers":0,"source_changes":0,"uv_only_changes":0,"full_source_changes":0}
+    var sampling_counts:Dictionary={"actors":0,"visible_layers":0,"source_changes":0,"uv_only_changes":0,"full_source_changes":0,"retained_poses":0,"validated_outfits":0}
     profile.actor_sample_counts=sampling_counts
     var rendered_state = timeline.presentation_state()
     var staged: Dictionary = timeline.staged_actors()
     var directions: Dictionary = timeline.actor_directions()
     var layer_samples={}
+    var layer_sample_actors:Dictionary={}
     var condition_ages={}
     var material_samples:Dictionary={}
     for component in displayed_components:
-        if component.kind=="sprite_layer": layer_samples[component.id]=component
+        if component.kind=="sprite_layer":
+            layer_samples[component.id]=component;layer_sample_actors[component.actor_uuid]=true
         elif component.kind=="condition": condition_ages[component.condition_uuid]=component.age_ms
         if component.kind in ["condition","material_flash","body_surface"]:
             var actor_id:String=component.actor_uuid
@@ -2095,12 +2299,14 @@ func _sample_actors() -> void:
         elif external_playback: row.facing="SW"
         var actor: Dictionary = timeline.state.actors.get(id,staged.get(id,{}))
         if actor.is_empty() or not visual.valid or actor.get("last_visual_position") == null:
+            visual.erase("sampled_pose")
             for entry in visual.entries: entry.node.visible = false
             FrameProfile.end_phase(profile,"actor_sprite_setup",actor_setup_started)
             continue
         var show = WorldRows.visible_actor(actor,timeline.state,staged.has(id))
         show = show and actor.get("spatial_disposition","present") == "present" and actor.get("remains_disposition","intact") != "disintegrated"
         if not show:
+            visual.erase("sampled_pose")
             for entry in visual.entries: entry.node.visible = false
             FrameProfile.end_phase(profile,"actor_sprite_setup",actor_setup_started)
             continue
@@ -2122,6 +2328,7 @@ func _sample_actors() -> void:
         var material_parameters:Dictionary=visual.condition_parameters
         if not resting.ok:
             if not resting.error.message in presentation_errors: presentation_errors.append(resting.error.message)
+            visual.erase("sampled_pose")
             for entry in visual.entries: entry.node.visible = false
             FrameProfile.end_phase(profile,"actor_sprite_setup",actor_setup_started)
             continue
@@ -2156,6 +2363,7 @@ func _sample_actors() -> void:
         FrameProfile.end_phase(profile,"actor_sprite_graph",graph_started)
         if not sampled.ok:
             if not sampled.error.message in presentation_errors: presentation_errors.append(sampled.error.message)
+            visual.erase("sampled_pose")
             for entry in visual.entries: entry.node.visible = false
             continue
         sampling_counts.actors+=1
@@ -2165,18 +2373,37 @@ func _sample_actors() -> void:
         var cycle: Array = rig_config.FACING_CYCLE
         var facing: String = cycle[posmod(cycle.find(row.facing)+quarter*2,8)]
         var frame = mini(int(playback.sample_seconds*clip.fps),int(clip.frames)-1)
+        var pose_key:Array=[playback.clip,frame,facing,row.position,row.base_height_steps,row.visual_height,
+            row.get("scale_x",1.0),row.scale,camera.basis,quarter,source_depth,source_normals,character_light_profile,
+            sample.get("hidden_slots",[]),sample.get("passage_weight",0.0),
+            sample.get("passage",{}).get("passageSocket"),sample.get("passage",{}).get("passageBodyHeightPx"),
+            sample.get("passage",{}).get("passageScale"),world_generation,MediaWarmup.physical(media_warmup).source_revision]
+        # The published outfit already owns these resources. Identical physical
+        # poses and immutable material operands do not resample every layer.
+        var last_pose:Dictionary=visual.get("sampled_pose",{})
+        if not layer_sample_actors.has(id) and not last_pose.is_empty() and last_pose.key==pose_key and is_same(last_pose.parameters,material_parameters):
+            sampling_counts.retained_poses+=1
+            FrameProfile.end_phase(profile,"actor_sprite_outfit",outfit_started)
+            continue
+        visual.sampled_pose={"key":pose_key,"parameters":material_parameters}
+        var binding_key:Array=[playback.clip,character_light_profile,MediaWarmup.physical(media_warmup).source_revision]
+        var check_outfit:bool=layer_sample_actors.has(id) or visual.get("outfit_binding",[])!=binding_key
         var complete_outfit = true
-        for entry in visual.entries:
-            var layer: Dictionary = entry.actor_layer
-            var effect: Dictionary=layer_samples.get(layer.get("effect",{}).get("component_id"),{})
-            var layer_clip: String=effect.get("clip",playback.clip)
-            if not layer.paths.has(layer_clip) or layer.slot in sample.get("hidden_slots",[]): continue
-            var path: String = layer.paths[layer_clip]
-            if not textures.has(path) or not source_images.has(path): complete_outfit = false; break
-            for companion in CharacterGeometry.paths(path,layer.slot,catalog_cache,character_light_profile):
-                if not textures.has(companion): complete_outfit = false; break
+        if check_outfit:sampling_counts.validated_outfits+=1
+        if check_outfit:
+            for entry in visual.entries:
+                var layer: Dictionary = entry.actor_layer
+                var effect: Dictionary=layer_samples.get(layer.get("effect",{}).get("component_id"),{})
+                var layer_clip: String=effect.get("clip",playback.clip)
+                if not layer.paths.has(layer_clip) or layer.slot in sample.get("hidden_slots",[]): continue
+                var path: String = layer.paths[layer_clip]
+                if not textures.has(path) or not source_images.has(path): complete_outfit = false; break
+                for companion in CharacterGeometry.paths(path,layer.slot,catalog_cache,character_light_profile):
+                    if not textures.has(companion): complete_outfit = false; break
+            if complete_outfit:visual.outfit_binding=binding_key
         FrameProfile.end_phase(profile,"actor_sprite_outfit",outfit_started)
         if not complete_outfit:
+            visual.erase("sampled_pose")
             for entry in visual.entries: entry.node.visible = false
             if media_initial_ready:
                 var message = "Character media preparation missed displayed outfit: " + id + "/" + playback.clip
@@ -2319,7 +2546,7 @@ func _sort_draws() -> void:
         FrameProfile.end_phase(profile,"ground_overlay_merge",phase)
     # An explicit invalidation can include changed static transforms. Only
     # interpolation discovered below may reuse the unchanged static ranks.
-    var static_ranks_dirty: bool = draw_order_dirty
+    var static_ranks_dirty:bool=fixed_changed or ground_overlay.changed or not is_same(draw_fixed_order,ground_draw_order)
     for entry in actor_entries:
         var shown: bool = entry.node.visible
         if entry.get("sort_visible") != shown:
@@ -2345,7 +2572,20 @@ func _sort_draws() -> void:
         phase = Time.get_ticks_usec()
         if static_ranks_dirty or slots != draw_merge_slots:
             draw_order = _merge_draw_order(moving,insertions,ground_draw_order)
-            for i in range(draw_order.size()): _apply_draw_rank(draw_order[i],i,forward)
+            if static_ranks_dirty:
+                for i in range(ground_draw_order.size()):_apply_draw_rank(ground_draw_order[i],float(i),forward)
+                draw_fixed_order=ground_draw_order
+            # Static ranks remain stable when a moving actor crosses them.
+            # Fractional ranks preserve the exact merged painter order without
+            # renumbering every unrelated receiver in the room.
+            var first:int=0
+            while first<moving.size():
+                var stop:int=first+1
+                while stop<moving.size() and insertions[stop]==insertions[first]:stop+=1
+                for i in range(first,stop):
+                    var rank:float=float(insertions[first]-1)+float(i-first+1)/float(stop-first+1)
+                    _apply_draw_rank(moving[i],rank,forward)
+                first=stop
             draw_merge_slots = slots
         else:
             # The complete static subsequence, actor identities and insertion
@@ -2393,7 +2633,8 @@ func _merge_draw_order(moving: Array, insertions: PackedInt32Array = PackedInt32
 func _entry_before(a: Dictionary, b: Dictionary) -> bool:
     return Order.less(a.order_key,b.order_key) if a.order_key != b.order_key else a.id < b.id
 
-func _apply_draw_rank(entry: Dictionary, rank: int, forward: Vector3) -> void:
+func _apply_draw_rank(entry: Dictionary, rank: float, forward: Vector3) -> void:
+    draw_rank_updates+=1
     var position: Vector3 = entry.node.global_position
     if entry.placement.kind != "actor" and entry.get("draw_rank",-1)==rank and entry.get("draw_quarter",-1)==quarter and entry.get("draw_position")==position: return
     var offset: float = float(rank)*8.0+forward.dot(position)

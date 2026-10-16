@@ -19,6 +19,7 @@ func check(ok: bool, label: String) -> void:
 func _initialize() -> void: run.call_deferred()
 
 func group(id: String, duration: float, commits: Array = [], tracks: Array = []) -> Dictionary:
+    for track in tracks:track.start_ms=track.get("start_ms",0.0)
     return {"id":id,"duration_ms":duration,"commits":commits,"actor_tracks":tracks,"staged_actors":{},
         "staged_at_ms":{},"staged_tiles":{},"staged_tile_at_ms":{},"operation_sequence":1,"operation_end":true}
 
@@ -60,6 +61,7 @@ func run() -> void:
         family.paths[id]=slot_file;family.estimates[id]={"bytes":512}
     Media.adopt_encounter(slot_data,family,1)
     Media.demand(slot_data,{})
+    Media.prepare_optional(slot_data)
     Media.poll(slot_data,true,false)
     while not slot_data.decode_jobs.all(func(job):return WorkerThreadPool.is_task_completed(job.task)):await process_frame
     check(slot_data.decode_jobs.size()==Media.DECODE_WORKERS and Media.poll(slot_data,true).is_empty(),
@@ -145,14 +147,21 @@ func run() -> void:
             "Worker source plan is isolated from later scene dictionary membership changes")
     if not metadata_result.is_empty():
         var published_files: Dictionary = metadata_result.source_files
-        check(published_files.has("res://generated/character_geometry.json") and published_files.has("res://generated/normal_profiles.json") and published_files.has("catalog-index.json") and published_files.has("environment/index.json"),
-            "Completed worker publishes exact original actor/geometry/environment JSON before scene binding")
-        check(published_files.keys().all(func(path):return (path.ends_with(".json") and not path.begins_with("__")) or path in ["native_references_validated","native_authoring_errors"]) and not published_files.has("__environment_demand_index"),
-            "Published source revision contains documents and their validation result, excluding mutable planner indexes and selector caches")
+        var body_sources:Dictionary=published_files.get(Characters.BodySources.KEY,{})
+        check(published_files.has("catalog-index.json") and published_files.has("environment/index.json")
+            and body_sources.get("index")!=null and not body_sources.get("loaded",{}).is_empty(),
+            "Completed worker publishes original documents and admitted native body geometry before scene binding")
+        check(published_files.keys().all(func(path):return ((path is String and path.ends_with(".json") and not path.begins_with("__"))
+            or path in [Characters.BodySources.KEY,"__native_spell_admission","__environment_source_records","native_references_validated","native_authoring_errors"]))
+            and body_sources.is_read_only() and body_sources.loaded.is_read_only()
+            and not published_files.has("__environment_demand_index") and not published_files.has("__required_headers"),
+            "Published source revision shares immutable native admissions while excluding mutable planner indexes and selector caches")
         var scene_cache={}
         scene_cache.merge(published_files,false)
         var warmed=Media.plan(state,[],scene_cache)
         check(warmed.required==resting.required,"Transferred immutable source files resolve the same original character demand")
+        check(body_sources.loaded.keys().all(func(path):return is_same(body_sources.loaded[path],scene_cache[Characters.BodySources.KEY].loaded[path])),
+            "The scene borrows exact prepared body source Resources without another physical metadata owner")
     Media.close(metadata)
 
     var timeline = Timeline.new()
@@ -193,7 +202,7 @@ func run() -> void:
     while not WorkerThreadPool.is_task_completed(data.decode_jobs[0].task):await process_frame
     var completed_task:int=data.decode_jobs[0].task
     check(Media.poll(data,true,false).is_empty() and data.decode_jobs.size()==1 and data.decode_jobs[0].task==completed_task
-        and data.queued.has(path) and data.decoded==0 and not Media.ready(data,{path:true}),
+        and data.queued.has(path) and Media.physical(data).decoded==0 and not Media.ready(data,{path:true}),
         "Completed decode stays owned and pending until a later publication allowance; it cannot falsely satisfy readiness")
     var image = await loaded(data)
     check(not image.is_empty() and not image.has("error") and image.image.get_width()>0,"Native worker decodes original authored PNG")
@@ -208,9 +217,9 @@ func run() -> void:
     check(Media.prune(data,0).is_empty(),"Required source stays pinned even above soft byte budget")
     Media.demand(data,{})
     check(Media.release_cold_images(data).is_empty() and Media.ready(data,{path:true}),"Cold original picking pixels remain with their retained texture")
-    var original_decodes: int = data.decoded
+    var original_decodes: int = Media.physical(data).decoded
     Media.demand(data,{path:Catalog.media_path(path)})
-    check(data.pending.is_empty() and data.decoded==original_decodes,"Revisited resident original does not redecode its retained picking pixels")
+    check(data.pending.is_empty() and Media.physical(data).decoded==original_decodes,"Revisited resident original does not redecode its retained picking pixels")
     check(image.image.get_data()==original_pixels,"Retained colour includes unchanged original alpha for picking")
     Media.demand(data,{})
     check(Media.prune(data,0)==[path] and data.resident.is_empty(),"Unpinned whole-sheet eviction releases residency")
@@ -227,7 +236,7 @@ func run() -> void:
 
     # Use actual worker-resolved roles and authored images. Publication is the
     # upload boundary; the native scene check separately verifies GPU sampling.
-    var gpu_data: Dictionary = metadata
+    var gpu_data: Dictionary = Media.create()
     var companions: Array = resting.gpu_only.keys().slice(0,4)
     var companion_demand = {}
     var companion_images = {}
@@ -268,9 +277,9 @@ func run() -> void:
         if empty_result.is_empty(): await process_frame
     check(not empty_result.is_empty() and gpu_data.gpu_only.is_empty() and gpu_data.cpu_required.is_empty(),
         "Only current demand retains role metadata; worker results do not repopulate past paths")
-    var decoded_before: int = gpu_data.decoded
-    Media.demand(gpu_data,companion_demand)
-    check(Media.ready(gpu_data,companion_demand) and gpu_data.pending.is_empty() and Media.poll(gpu_data).is_empty() and gpu_data.decoded==decoded_before,
+    var decoded_before: int = Media.physical(gpu_data).decoded
+    Media.demand(gpu_data,companion_demand,{}, {},cached_roles.gpu_only,cached_roles.cpu_required)
+    check(Media.ready(gpu_data,companion_demand) and gpu_data.pending.is_empty() and Media.poll(gpu_data).is_empty() and Media.physical(gpu_data).decoded==decoded_before,
         "Revisited GPU-resident companions never decode merely to restore unused CPU pixels")
     Media.demand(gpu_data,{})
     check(Media.prune(gpu_data,0).size()==2 and not Media.ready(gpu_data,companion_demand),

@@ -2,6 +2,8 @@ extends RefCounted
 # Read the existing authoring owners; adapters return transient draw records.
 const Placement = preload("res://placement.gd")
 const NativeAuthoring = preload("res://presentation/native_authoring.gd")
+const NativePresentationSources = preload("res://presentation/native_presentation_sources.gd")
+const BodySources = preload("res://presentation/body_sources.gd")
 # Client original-rest selection policy, reusing the explicit chest pairs in
 # tools/build_unity_map.py. Source owner JSON binds reconstructed destruction
 # rests; retain those banks for destruction, and use the registered originals
@@ -29,22 +31,62 @@ static func read_file(relative_path: String, cache: Dictionary) -> Variant:
         cache[relative_path] = NativeAuthoring.overlay(relative_path, legacy, cache)
     return cache[relative_path]
 
+static func asset(asset_id:String,cache:Dictionary)->Dictionary:
+    var selected:Resource=NativePresentationSources.asset(asset_id,cache)
+    return {} if selected==null else selected.value
+
+static func prepared_asset(asset_id:String,cache:Dictionary)->Dictionary:
+    var selected:Resource=NativePresentationSources.prepared_asset(asset_id,cache)
+    return {} if selected==null else selected.value
+
 static func source_pointer(document: String, pointer: String, cache: Dictionary) -> String:
     return NativeAuthoring.source_pointer(document, pointer, read_file(document, cache))
 
 static func source_snapshot(cache: Dictionary) -> Dictionary:
     # Effective source documents are immutable after admission. Give each worker
     # its own cache shell, without reloading selected Resources or sharing derived
-    # caches. Validation belongs to this same source revision, including failures.
+    # caches. Qualification belongs to import tools and tests.
+    # Pin the source revision before dispatch. A later explicit reload may
+    # select another index, while this worker/display keeps these references.
+    NativePresentationSources.admission(cache)
+    BodySources.admission(cache)
     var snapshot = {}
     for path in cache:
         if path is String and path.ends_with(".json") and not path.begins_with("__"):
             snapshot[path] = cache[path]
+    if cache.has(NativePresentationSources.CACHE_KEY):
+        snapshot[NativePresentationSources.CACHE_KEY]=NativePresentationSources.snapshot(cache[NativePresentationSources.CACHE_KEY])
+    if cache.has("__body_source_admission"):
+        snapshot.__body_source_admission=cache.__body_source_admission
+    if cache.has("__environment_source_records"):
+        snapshot.__environment_source_records=cache.__environment_source_records
     if cache.has("native_references_validated"):
         snapshot.native_references_validated = cache.native_references_validated
     if cache.has("native_authoring_errors"):
         snapshot.native_authoring_errors = cache.native_authoring_errors.duplicate()
     return snapshot
+
+static func invalidate_source_indexes()->void:
+    NativePresentationSources.invalidate()
+    BodySources.invalidate()
+
+static func adopt_snapshot(cache:Dictionary,offered:Dictionary)->void:
+    # Documents belong to the admitted revision. Lazy source references can
+    # grow on either worker: merge their immutable shells without discarding
+    # already prepared references or allowing a different revision to take over.
+    for key in offered:
+        if not cache.has(key):cache[key]=offered[key]
+    for key in ["__body_source_admission",NativePresentationSources.CACHE_KEY]:
+        if not offered.has(key) or not cache.has(key) or is_same(cache[key],offered[key]):continue
+        var current:Dictionary=cache[key];var incoming:Dictionary=offered[key]
+        if current.index==null or incoming.index==null or current.index.revision!=incoming.index.revision:continue
+        var loaded:Dictionary=current.loaded.duplicate()
+        loaded.merge(incoming.loaded,false)
+        cache[key]=NativePresentationSources.make_admission(current.index,loaded)
+    if offered.has("__environment_source_records") and not is_same(cache.__environment_source_records,offered.__environment_source_records):
+        var records:Dictionary=cache.__environment_source_records.duplicate()
+        records.merge(offered.__environment_source_records,false);records.make_read_only()
+        cache.__environment_source_records=records
 
 static func validate_native(cache: Dictionary) -> Array:
     # Passive metadata only. No texture decoding, scene creation or shader upload.

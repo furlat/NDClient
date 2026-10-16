@@ -34,11 +34,9 @@ static func apply(entry:Dictionary,values:Dictionary,structural:bool=false)->voi
     for name in values:set_parameter(entry,name,values[name],structural)
 
 static func value(entry:Dictionary,name:StringName)->Variant:
-    assert(entry.has("source_parameters"),"Source material has no producer-owned operands")
     return entry.source_parameters.get(name)
 
 static func changes_since(entry:Dictionary,version:int)->Variant:
-    assert(entry.has("source_parameters"),"Source material has no producer-owned operands")
     if version==entry.source_version:return {}
     return entry.source_changes if version==entry.source_change_base else null
 

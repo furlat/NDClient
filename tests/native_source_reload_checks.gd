@@ -3,6 +3,7 @@ extends SceneTree
 ## become new instances, while a displayed old instance remains untouched.
 ## Isolated resource fixtures never replace the production variant manifest.
 const Factory=preload("res://presentation/native_factory_source.gd")
+const Verification=preload("res://tools/native_variant_verification.gd")
 const Variants=preload("res://presentation/native_source_variants.gd")
 const Admission=preload("res://presentation/native_source_admission.gd")
 const Packet=preload("res://presentation/native_source_variant.gd")
@@ -46,10 +47,9 @@ func inspect_metadata(manifest:Dictionary)->Dictionary:
     var identity:String=Variants.key(spec)
     var job={"state":{"manifest":manifest,"read":true,"stamps":{}},
         "requests":{identity:{"path":packet_path,"label":"isolated reload fixture"}},"results":{},"profile":{}}
-    Variants._verify_metadata(job)
-    # Feed the actual verifier result into the same admission cache. Only the
-    # manifest location is isolated; packet loading/validation is production.
-    Variants.verified[identity]=job.results[identity]
+    # Verification is explicit tooling; ordinary runtime preparation trusts the
+    # exported packet and never receives dependency-stamp certificates.
+    Verification._verify_metadata(job)
     return job.results[identity]
 
 func prepared(cache:Dictionary)->bool:
@@ -96,9 +96,7 @@ func run()->void:
     write_material(Color.BLUE,2)
     Factory.invalidate_authoring()
     check(not inspect_metadata(manifest).error.is_empty(),"Changed dependency with old bake is rejected after explicit reload")
-    var rejected:Dictionary=Factory.prepare([clip],cache)
-    check(not rejected.ready and not rejected.errors.is_empty() and Factory.admitted_packet(spec)==null,"Stale authoring cannot publish the old cached packet as ready")
-    check(old_core.material_override.albedo_color==Color.RED and old_core.mesh.size==Vector3.ONE,"Rejected replacement leaves the displayed instance unchanged")
+    check(old_core.material_override.albedo_color==Color.RED and old_core.mesh.size==Vector3.ONE,"Authoring edits and offline verification leave the displayed instance unchanged")
     manifest=write_packet(2.0)
     check(is_same(ResourceLoader.load(packet_path),first),"Fixture reproduces the stale ResourceLoader same-path cache")
     Factory.invalidate_authoring()
@@ -137,7 +135,7 @@ func finish()->void:
     for name in ["material.tres","authoring.txt","pending.tres"]:DirAccess.remove_absolute(directory.path_join(name))
     DirAccess.remove_absolute(directory)
     await process_frame
-    var report={"checks":checks,"failures":failures,"scope":"Same-path packet and external-material reload, stale metadata rejection, old-instance ownership, private new instances and in-flight old-owner isolation. Does not claim native framebuffer or interactive Studio timing."}
+    var report={"checks":checks,"failures":failures,"scope":"Same-path packet and external-material reload, offline dependency verification, old-instance ownership, private new instances and in-flight old-owner isolation. Does not claim native framebuffer or interactive Studio timing."}
     FileAccess.open("res://.runtime/native-source-reload-checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("NATIVE_SOURCE_RELOAD ",JSON.stringify(report))
     quit(0 if failures.is_empty() else 1)

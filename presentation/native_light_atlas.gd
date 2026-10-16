@@ -344,9 +344,9 @@ func _copy_output_source(entry: Dictionary) -> void:
     if not parameter_names.has(key):
         var accepted={}
         for row in output.shader.get_shader_uniform_list(): accepted[row.name]=true
-        var names=[]
+        var names:Dictionary={}
         for row in source.shader.get_shader_uniform_list():
-            if accepted.has(row.name) and not str(row.name).begins_with("wall_") and row.name!="use_instance_visibility": names.append(row.name)
+            if accepted.has(row.name) and not str(row.name).begins_with("wall_") and row.name!="use_instance_visibility": names[row.name]=true
         parameter_names[key]=names
     var mesh: QuadMesh=entry.node.multimesh.mesh if entry.has("batch_rows") else entry.node.mesh
     var changes:Variant=_parameter_changes(entry,previous.version) if same_owner and previous.get("quad_size")==mesh.size else null
@@ -375,9 +375,9 @@ func _copy_parameters(group: Dictionary) -> bool:
     if not parameter_names.has(key):
         var accepted = {}
         for row in group.material.shader.get_shader_uniform_list(): accepted[row.name]=true
-        var names: Array = []
+        var names: Dictionary = {}
         for row in source.shader.get_shader_uniform_list():
-            if accepted.has(row.name): names.append(row.name)
+            if accepted.has(row.name): names[row.name]=true
         parameter_names[key]=names
     var same_owner:bool=group.get("source_material")==source and group.source_shader==source.shader and group.get("target_material")==group.material and group.get("target_shader")==group.material.shader and group.get("binding_revision",-1)==group.entry.source_binding_revision
     var changes:Variant=_parameter_changes(group.entry,group.version) if same_owner else null

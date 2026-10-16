@@ -26,20 +26,23 @@ static func snapshot_actor(actor: Dictionary) -> Dictionary:
         result.controlled_items = items
     return result
 
-static func _captured_actor(target:Dictionary, identity:String, snapshots:Dictionary) -> Dictionary:
-    if not snapshots.has(identity):snapshots[identity] = snapshot_actor(target.actors[identity])
+static func _captured_actor(target:Dictionary, identity:String, snapshots:Dictionary,retained:bool=false) -> Dictionary:
+    # Retained canonical facts replace actor records before writing. The exact
+    # before/after record is already immutable; detached public folds keep their
+    # snapshot shells because they use the ordinary mutable transaction.
+    if not snapshots.has(identity):snapshots[identity] = target.actors[identity] if retained else snapshot_actor(target.actors[identity])
     return snapshots[identity]
 
-static func actor_inputs(target: Dictionary, node: Dictionary, snapshots:Dictionary={}) -> Dictionary:
+static func actor_inputs(target: Dictionary, node: Dictionary, snapshots:Dictionary={},retained:bool=false) -> Dictionary:
     var result = {}
     if node.fact != null:
         for field in ["entity_uuid", "source_entity_uuid", "target_entity_uuid", "observer_uuid"]:
             var identity: Variant = node.fact.get(field)
             if identity != null and target.actors.has(identity) and not result.has(identity):
-                result[identity] = _captured_actor(target,identity,snapshots)
+                result[identity] = _captured_actor(target,identity,snapshots,retained)
     return result
 
-static func capture_delta(target: Dictionary, node: Dictionary, observations: Array, update: Variant, snapshots:Dictionary={}) -> Dictionary:
+static func capture_delta(target: Dictionary, node: Dictionary, observations: Array, update: Variant, snapshots:Dictionary={},retained:bool=false) -> Dictionary:
     var delta = empty_delta()
     var actors = {}
     for observation in observations: actors[observation.actor.uuid] = true
@@ -52,17 +55,17 @@ static func capture_delta(target: Dictionary, node: Dictionary, observations: Ar
             # Audience folds return a new perception snapshot without changing
             # its predecessor. This private event-time record is already owned.
             delta.set.perception = target.perception
-        if fact.kind in ["sensory","spatial"]: delta.set.senses = snapshot_senses(target.senses)
+        if fact.kind in ["sensory","spatial"]: delta.set.senses = target.senses if retained else snapshot_senses(target.senses)
         if fact.kind == "turn":
             delta.set.current_actor_uuid = target.current_actor_uuid
             delta.set.round_number = target.round_number
         if fact.kind == "spatial" and fact.entity_uuid != null and target.spatial_commit_cursors.has(fact.entity_uuid):
             delta.spatial_commit_cursors[fact.entity_uuid] = target.spatial_commit_cursors[fact.entity_uuid]
     for identity in actors:
-        if target.actors.has(identity): delta.actors[identity] = _captured_actor(target,identity,snapshots)
+        if target.actors.has(identity): delta.actors[identity] = _captured_actor(target,identity,snapshots,retained)
     for observation in observations:
         if observation.contact != null:
-            delta.set.senses = snapshot_senses(target.senses)
+            delta.set.senses = target.senses if retained else snapshot_senses(target.senses)
     if update != null:
         for tile in update.tiles: delta.tiles[Audience.point_key(tile.position)] = target.tiles[Audience.point_key(tile.position)]
         for row in update.get("tile_changes",[]):

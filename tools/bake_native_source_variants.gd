@@ -1,6 +1,7 @@
 extends SceneTree
 ## Offline preparation of the selected native donor resources. Does not sample
 ## source time, change art, or store particle simulations.
+const Verification=preload("res://tools/native_variant_verification.gd")
 const Variants=preload("res://presentation/native_source_variants.gd")
 const Factory=preload("res://presentation/native_factory_source.gd")
 const Resources=preload("res://assets/native_effects/sandbox/projectiles/factory/core/resource_graph.gd")
@@ -31,10 +32,10 @@ func run()->void:
                 if not Variants.supported(spec):
                     rows.append({"source":clip.id,"script":spec.script,"status":"unsupported_original_adapter"});continue
                 if verify_only:
-                    var admitted:Dictionary=Variants.admission(spec)
+                    var admitted:Dictionary=Verification.verify(spec)
                     while admitted.pending:
                         await process_frame
-                        admitted=Variants.admission(spec)
+                        admitted=Verification.verify(spec)
                     rows.append({"source":clip.id,"status":"valid" if admitted.error.is_empty() else "invalid"})
                     if not admitted.error.is_empty():failures.append(admitted.error)
                     continue

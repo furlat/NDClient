@@ -9,7 +9,8 @@ const RegisteredMedia=preload("res://presentation/registered_media.gd")
 const ConditionPose=preload("res://presentation/condition_pose.gd")
 const BodySurfaces=preload("res://presentation/body_surfaces.gd")
 
-static func observe(owners: Dictionary, actors: Dictionary, at_ms: float, initial: bool=false) -> void:
+static func observe(owners: Dictionary, actors: Dictionary, at_ms: float, initial: bool=false) -> bool:
+    var changed:bool=false
     for actor_id in actors:
         var actor: Dictionary=actors[actor_id]
         var live={}
@@ -18,14 +19,19 @@ static func observe(owners: Dictionary, actors: Dictionary, at_ms: float, initia
             live[id]=true
             if not owners.has(id):
                 owners[id]={"id":id,"actor_uuid":actor_id,"start_ms":at_ms,"initial":initial,"condition":condition,"end_ms":INF}
+                changed=true
             else:
+                changed=changed or not is_same(owners[id].condition,condition) or not is_inf(owners[id].end_ms)
                 owners[id].condition=condition
                 owners[id].end_ms=INF
+            changed=changed or owners[id].get("life_state")!=actor.get("life_state","alive")
             owners[id].life_state=actor.get("life_state","alive")
         for owner in owners.values():
             if owner.actor_uuid!=actor_id:continue
+            changed=changed or owner.get("life_state")!=actor.get("life_state","alive")
             owner.life_state=actor.get("life_state","alive")
-            if not live.has(owner.id) and is_inf(owner.end_ms):owner.end_ms=at_ms
+            if not live.has(owner.id) and is_inf(owner.end_ms):owner.end_ms=at_ms;changed=true
+    return changed
 
 static func recipe(condition: Dictionary, cache: Dictionary) -> Dictionary:
     return Authoring.load_data("catalog/condition_recipes.json",cache).get(condition.get("behavior_id"),{})

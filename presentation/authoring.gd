@@ -9,9 +9,12 @@ static func load_data(path: String, cache: Dictionary) -> Dictionary:
 static func rig_id(actor: Dictionary, cache: Dictionary) -> String:
     return "" if actor.is_empty() else Characters.rig_id(actor,cache)
 
+static func rigs(cache:Dictionary)->Dictionary:
+    return Characters.rigs(cache)
+
 static func clip(actor: Dictionary, name: String, cache: Dictionary) -> Dictionary:
-    var rigs = load_data("catalog/rigs.json", cache)
-    return rigs.get(rig_id(actor, cache), {}).get("clips", {}).get(name, {})
+    var available:Dictionary=rigs(cache)
+    return available.get(rig_id(actor, cache), {}).get("clips", {}).get(name, {})
 
 static func movement_reference_speed(cache: Dictionary) -> float:
     # The exported catalog relies on this field's supplied schema default.
@@ -111,7 +114,7 @@ static func body(role: String, actor: Dictionary, fact: Dictionary, cache: Dicti
         var definition: Dictionary = pose.get("removalBody" if reverse else "applicationBody",{})
         if not definition.is_empty():
             result = {"actor":{"enabled":true,"clip":definition.bodyClip,"playbackSpeed":definition.get("playbackSpeed",1.0),"hiddenSlots":[]},"reversed":definition.get("reversed",false)}
-    var rig: Dictionary = load_data("catalog/rigs.json",cache).get(rig_id(actor,cache),{})
+    var rig: Dictionary = rigs(cache).get(rig_id(actor,cache),{})
     var selected = -1
     for row in rig.get("body_contexts",[]):
         if row.role != role: continue

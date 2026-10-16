@@ -211,6 +211,8 @@ async def run(args: argparse.Namespace) -> Path:
             native_args.extend(["--", "--config", windows_path(client_config)])
             if args.live_fireball_ui:
                 native_args.append("--live-fireball-ui")
+            if args.profile_root_player:
+                native_args.append("--profile-root-player")
             if args.test_atlas_reference:
                 native_args.append("--reference-atlas=" + args.test_atlas_reference)
             if args.test_light_cap is not None:
@@ -274,6 +276,7 @@ def main() -> None:
     parser.add_argument("--quit-after", type=int, default=0, metavar="FRAMES", help="Close after a bounded number of Godot frames")
     parser.add_argument("--test-script", choices=("res://tests/player_startup_checks.gd", "res://tests/live_idle_ui_checks.gd", "res://tests/live_gallery_checks.gd", "res://tests/live_spell_checks.gd", "res://tests/player_wait_checks.gd", "res://tests/player_live_checks.gd", "res://tests/player_interaction_checks.gd", "res://tests/lighting_live_checks.gd", "res://tests/chest_live_checks.gd"), help="Run a bounded production-scene acceptance test")
     parser.add_argument("--live-fireball-ui", action="store_true", help="Live spell profile: ordinary Gallery AI setup and native Fireball selection/hover/Confirm input")
+    parser.add_argument("--profile-root-player", action="store_true", help="Live spell control: ordinary root viewport and production admitted action handlers, without GUI gesture preparation")
     parser.add_argument("--test-command-delay-ms", type=int, default=0, help="Acceptance only: hold the first real command before forwarding it")
     parser.add_argument("--test-atlas-reference", default="", help="Gallery profiling only: load a frozen reference atlas script instead of the current atlas")
     parser.add_argument("--test-light-cap", choices=("on", "off"), help="Gallery profiling only: compare live movement with or without the light cap")

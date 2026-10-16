@@ -151,7 +151,10 @@ func _free_page(page: Dictionary) -> void:
 func begin_preparation(resolved: Dictionary) -> Dictionary:
     # Candidate nodes are parented to their eventual canvas but stay disabled
     # and outside page membership until the displayed cut adopts them.
-    return {"resolved":resolved,"pages":_pages.duplicate(),"nodes":[],"page":0,"source":0,"complete":false}
+    # A retained resolution already owns its cookies and nodes on these pages.
+    # Sampling still updates live positions/energy; no emitter was changed here.
+    return {"resolved":resolved,"pages":_pages.duplicate(),"nodes":[],"page":0,"source":0,
+        "complete":is_same(resolved.sources,sources),"retained":is_same(resolved.sources,sources)}
 
 func prepare_step(work: Dictionary) -> void:
     if work.complete:return
@@ -173,6 +176,7 @@ func preparation_valid(work: Dictionary) -> bool:
     return true
 
 func publish_prepared(work: Dictionary) -> void:
+    if work.get("retained",false):return
     for record in work.nodes:record.page.nodes[record.id]=record.node
     work.nodes=[]
     _sync_resolved(work.resolved)

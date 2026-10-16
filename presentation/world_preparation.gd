@@ -9,6 +9,8 @@ const WallReveal = preload("res://presentation/wall_reveal.gd")
 const AtlasDelta = preload("res://presentation/native_light_delta.gd")
 const GroundReceiving = preload("res://presentation/ground_receiving.gd")
 const SourceLighting = preload("res://presentation/lighting_2d.gd")
+const Blood=preload("res://presentation/blood.gd")
+const MediaWarmup=preload("res://presentation/media_warmup.gd")
 var host: Node
 var boundary: Dictionary = {}
 var epoch = -1
@@ -21,6 +23,12 @@ var actor_ids: Array = []
 var actor_cursor: int = 0
 var actor_catalog_owner: Dictionary = {}
 var actor_bases:Dictionary={}
+var actor_bindings:Array=[]
+var binding_cursor:int=0
+var blood_preparation:Dictionary={"handles":{},"retired":[]}
+var blood_renderer:RefCounted
+var required_source_record:Dictionary={}
+var optical_owner:RefCounted
 var light_preparation:Dictionary={}
 var cookie_source_cursor:int=0
 var cookie_image_cursor:int=0
@@ -53,6 +61,7 @@ var atlas_shells: Dictionary = {}
 var atlas_cursor = 0
 var atlas_row_cursor = 0
 var atlas_prefix: Dictionary = {}
+var native_receiver_boundary:Dictionary={}
 # Shared data ownership survives this Node's retirement until atlas publication
 # has either consumed or rejected the private prefix.
 var atlas_retirement: Dictionary = {"blocked":false,"payloads":[],"directories":[],"unused":[],"active":{}}
@@ -65,6 +74,7 @@ func _light_entry(entry: Dictionary) -> void: host._light_entry(entry)
 
 func configure(owner: Node, candidate: Dictionary, first: bool = false) -> void:
     host = owner; boundary = candidate; initial = first; quarter = host.quarter
+    blood_renderer=host.component_renderer.blood
     epoch = host.timeline.initialization_revision
     _capture_membership()
     visible = false; catalog_cache = host.catalog_cache; profile = host.profile
@@ -100,15 +110,23 @@ func configure(owner: Node, candidate: Dictionary, first: bool = false) -> void:
     var existing_actors:Dictionary={}
     for id in host.visual_actors:
         var row:Dictionary=host.visual_actors[id].row
-        var geometry:Dictionary={}
+        var geometry:Dictionary={};var layers:Array=[];var binding_keys:Dictionary={}
         for entry in host.visual_actors[id].entries:
+            layers.append(entry.actor_layer)
+            binding_keys[entry.actor_layer.slot]=entry.get("prepared_source_binding",{}).get("geometry",{}).get("key",[])
             geometry[entry.actor_layer.slot]={"present":bool(SourceMaterial.value(entry,"has_component_geometry")),
                 "cell":entry.get("geometry_cell_size",Vector2(128,128))}
-        existing_actors[id]={"rig":row.rig,"appearance":row.appearance,"equipment_layers":row.equipment_layers,"geometry":geometry}
+        existing_actors[id]={"rig":row.rig,"appearance":row.appearance,"equipment_layers":row.equipment_layers,"geometry":geometry,"layers":layers,"binding_keys":binding_keys}
         actor_bases[id]={"actor":host.visual_actors[id],"playback":host.playbacks[id]}
     var input = {"state":candidate.presentation_state,"changes":candidate.changes,
+        "initial":first,"world_changed":first or candidate.get("world_revision",-1)!=host.world_revision,
         "actor_state":candidate.state,"staged_actors":candidate.get("staged_actors",{}),
+        "light_inputs":host.light_source_inputs if host.light_source_epoch==epoch else null,
+        "light_resolution":{"sources":host.source_lighting.sources,"issues":[]},
         "actor_samples":candidate.get("actor_samples",{}),
+        "layer_clips":candidate.get("actor_layers",[]).reduce(func(values,row):values[row.id]=row.get("clip","");return values,{}),
+        "source_options":{"depth":host.source_depth,"normals":host.source_normals,"profile":host.character_light_profile,"tile_width":host.rig_config.TILE_W},
+        "blood_existing":blood_renderer.world_values(),
         "actor_loadouts":ActorConstruction.loadouts(candidate.get("actor_samples",{}),candidate.get("actor_layers",[])),"existing_actors":existing_actors,
         "cache":worker_cache,"retained":host.world_row_cache,
         "ground":ground_before,"quarter":quarter,"basis":camera.basis,"background":host.ground_is_background,
@@ -191,6 +209,13 @@ func _derive(input: Dictionary) -> void:
     var ground_changes = {}; var ground_removed = {}; var removed_wanted: Array = []
     var all_rows: Array = _all_visual(input.retained,patch) if full_membership else []
     var rows_to_route: Array = all_rows if full_membership else patch.visual_changes.values()
+    var residue_source_admitted:bool=not Catalog.prepared_asset("particles.region.blood",input.cache).is_empty()
+    var residue_source_needed:bool=false
+    if not full_membership and not residue_source_admitted:
+        for key in input.changes.get("tiles",{}):
+            var tile:Dictionary=input.state.tiles.get(key,{})
+            if tile.get("residues",[]).any(func(value):return value.residue_id=="residue.blood"):
+                residue_source_needed=true;break
     if not full_membership:
         for id in patch.visual_changes:
             var old: Dictionary = _old_visual(input.retained,id)
@@ -204,6 +229,9 @@ func _derive(input: Dictionary) -> void:
             elif row.is_empty() or _floor(row,background): removed_wanted.append(id)
     for row in rows_to_route:
         if row.is_empty(): continue
+        if row.kind=="terrain" and not residue_source_admitted and not residue_source_needed:
+            var source_tile:Dictionary=input.state.tiles.get(WorldRows.cell_key(row.position),{})
+            residue_source_needed=source_tile.get("residues",[]).any(func(value):return value.residue_id=="residue.blood")
         if _floor(row,background):
             if full_membership:
                 if not ground.has(row.material): ground[row.material] = []
@@ -220,6 +248,11 @@ func _derive(input: Dictionary) -> void:
                 var key = WorldRows.cell_key([point.x,point.y])
                 var tile: Dictionary = WorldRows.projected_row(input.retained,patch,"tiles",key)
                 if GroundReceiving.eligible(tile): supports[point] = float(tile.base_height_steps)
+    # A disclosed residue can change without changing its terrain geometry or
+    # disclosing an injury event. Its server tile after-value owns this source.
+    if residue_source_needed and Catalog.asset("particles.region.blood",input.cache).is_empty():
+        result={"complete":false,"error":"Cannot load selected asset metadata: particles.region.blood","worker_ms":(Time.get_ticks_usec()-started)/1000.0}
+        return
     var affected: Array = ground.keys() if full_membership else ground_changes.keys()
     for key in affected:
         var before: Dictionary = input.ground.get(key,{})
@@ -259,7 +292,7 @@ func _derive(input: Dictionary) -> void:
     # Full membership/view changes are explicit larger geometry jobs. Sparse
     # source changes use the existing owner-side wall bucket invalidations.
     var geometry = WallReveal.prepare_geometry(input.state.tiles,all_rows,input.quarter) if full_membership else {}
-    var actors:Dictionary={}
+    var actors:Dictionary={};var bindings:Dictionary={};var future_solid_paths:Dictionary={}
     var actor_members:Dictionary={}
     var actor_ids:Array=input.actor_state.actors.keys()
     for id in input.staged_actors:
@@ -269,17 +302,23 @@ func _derive(input: Dictionary) -> void:
         actor=ActorConstruction.actor_with_loadout(actor,input.actor_loadouts)
         if not WorldRows.visible_actor(actor,input.actor_state,input.staged_actors.has(id)):continue
         var resolved:Dictionary=Characters.resolve(actor,input.state,input.cache)
-        # The displayed path owns authoring diagnostics. A failed preparation
-        # cannot silently replace or suppress that current result.
-        if not resolved.ok or resolved.value==null:continue
+        if not resolved.ok:
+            result={"complete":false,"error":resolved.error.message,"worker_ms":(Time.get_ticks_usec()-started)/1000.0}
+            return
+        if resolved.value==null:continue
         var row:Dictionary=resolved.value
         actor_members[id]=row
         var before:Dictionary=input.existing_actors.get(id,{})
-        if ActorConstruction.matches(row,before):continue
-        var index:Dictionary=Characters._read("catalog-index.json",input.cache)
-        var rig:Dictionary=Characters._read(index.rigs,input.cache)[row.rig]
-        var resting:Dictionary=Characters.rest_sample(actor,rig,input.cache)
-        var source_sample:Dictionary=input.actor_samples.get(id,resting.get("value",{}))
+        var same_structure:bool=ActorConstruction.matches(row,before)
+        var rig:Dictionary=Characters.rigs(input.cache)[row.rig]
+        var source_sample:Dictionary=input.actor_samples.get(id,{})
+        if source_sample.is_empty():
+            var condition:Dictionary=ActorConstruction.Conditions.pose(actor,row.rig,input.cache)
+            var resting:Dictionary={"ok":true,"value":{"clip":condition.clip,"source_seconds":0.0}} if not condition.is_empty() and rig.clips.has(condition.clip) else Characters.rest_sample(actor,rig,input.cache)
+            if not resting.ok:
+                result={"complete":false,"error":resting.error.message,"worker_ms":(Time.get_ticks_usec()-started)/1000.0}
+                return
+            source_sample=resting.value
         var retained_slots:Dictionary={}
         var same_rig:bool=not before.is_empty() and row.rig==before.rig
         if same_rig and row.appearance==before.appearance:
@@ -287,7 +326,27 @@ func _derive(input: Dictionary) -> void:
             for layer in before.equipment_layers:selectors[layer.slot]=layer
             for layer in row.equipment_layers:
                 if selectors.get(layer.slot)==layer:retained_slots[layer.slot]=true
-        var layers:Array=Characters.layers(row,rig,input.cache)
+        var selected:Dictionary={"ok":true,"value":before.layers} if same_structure and before.has("layers") else Characters.prepare_layers(row,rig,input.cache)
+        if not selected.ok:
+            result={"complete":false,"error":selected.error.message,"worker_ms":(Time.get_ticks_usec()-started)/1000.0}
+            return
+        var layers:Array=selected.value
+        var source_bindings:Dictionary={}
+        var options:Dictionary=input.get("source_options",{})
+        for layer in layers:
+            var selected_clip:String=input.get("layer_clips",{}).get(layer.get("effect",{}).get("component_id",""),source_sample.get("clip",""))
+            if not layer.paths.has(selected_clip):continue
+            var source_key:Array=[layer.paths[selected_clip],options.get("depth",true),options.get("normals",true),
+                128.0/float(options.get("tile_width",128))*row.scale,row.get("scale_x",1.0),options.get("profile","original")]
+            if same_structure and before.get("binding_keys",{}).get(layer.slot)==source_key:continue
+            source_bindings[layer.slot]=ActorConstruction.prepare_binding(rig,layer,layer.paths[selected_clip],input.cache,
+                options.get("depth",true),options.get("normals",true),options.get("profile","original"),
+                128.0/float(options.get("tile_width",128))*row.scale,row.get("scale_x",1.0))
+            if layer.slot!="shadow" and layer.get("effect",{}).is_empty():
+                var optical:Dictionary=ActorConstruction.CharacterGeometry.BodySources.descriptor(layer.paths[selected_clip],layer.slot,input.cache).get("optical_paths",{})
+                if not optical.is_empty():future_solid_paths[optical.solid]=true
+        bindings[id]=source_bindings
+        if same_structure:continue
         for layer in layers:
             if not retained_slots.has(layer.slot):continue
             var source:Dictionary=ActorConstruction.CharacterGeometry.record(layer.paths.get(source_sample.get("clip",""),""),layer.slot,input.cache)
@@ -296,25 +355,68 @@ func _derive(input: Dictionary) -> void:
             if prior_geometry.present!=(not source.is_empty()) or (not source.is_empty() and prior_geometry.cell!=Vector2(cell[0],cell[1])):
                 retained_slots.erase(layer.slot)
         actors[id]={"row":row,"rig":rig,"layers":layers,"entries":[],"new_entries":[],"playback":null,
-            "reuse_actor":same_rig,"retained_slots":retained_slots,"source_sample":source_sample}
-    result = {"complete":true,"actors":actors,"actor_members":actor_members,"light_resolution":SourceLighting.resolve(input.actor_state),"geometry":geometry,
+            "reuse_actor":same_rig,"retained_slots":retained_slots,"source_sample":source_sample,"source_bindings":source_bindings}
+    # The existing sparse/full terrain walk supplies authoritative residue
+    # values, including remembered/offscreen cells. Camera motion cannot create
+    # an unprepared deposit later merely because a field was offscreen here.
+    var blood_rows:Dictionary={}
+    var blood_keys:Dictionary=input.changes.get("tiles",{}).duplicate()
+    if full_membership:
+        for row in rows_to_route:
+            if not row.is_empty() and row.kind=="terrain":blood_keys[WorldRows.cell_key(row.position)]=true
+        for key in input.get("blood_existing",{}):blood_keys[key]=true
+    for key in blood_keys:
+        var tile:Dictionary=input.state.tiles.get(key,{})
+        var residue:Dictionary=Blood.residue(tile)
+        if residue.is_empty():
+            if input.get("blood_existing",{}).has(key):blood_rows[key]={"removed":true}
+            continue
+        var source:Dictionary=Catalog.asset("particles.region.blood",input.cache)
+        if source.is_empty():result={"complete":false,"error":"Cannot prepare persistent blood source"};return
+        var prior:Dictionary=input.get("blood_existing",{}).get(key,{})
+        if is_same(prior.get("value"),residue) and is_same(prior.get("source"),source):continue
+        var kernel_cache:Dictionary={}
+        var kernels:Array=Blood.kernels(residue,tile.position,[],source,kernel_cache)
+        blood_rows[key]={"tile":tile,"value":residue,"source":source,"cache":kernel_cache,"kernels":kernels,"coverage":Blood.has_coverage(kernels)}
+    var source_only:bool=not input.get("initial",false) and not input.get("world_changed",true) and not input.global_rows and actors.is_empty() \
+        and not input.changes.get("full",false) and input.changes.get("tiles",{}).is_empty() \
+        and input.changes.get("objects",{}).is_empty() and not input.changes.get("senses",false) \
+        and input.changes.get("order",[]).is_empty() and actor_members.size()==input.existing_actors.size()
+    if source_only:
+        for id in input.existing_actors:
+            if not actor_members.has(id):source_only=false;break
+    var light_resolution:Dictionary={}
+    if not source_only:
+        var senses:Variant=input.actor_state.get("senses")
+        var optical:Variant=senses.get("light_sources") if senses!=null else null
+        # Optical observations are immutable canonical values. Sight/HP/source
+        # cuts may replace their container without changing any emitter. Compare
+        # once beside the passive producer and retain the published resolution.
+        if optical!=null and input.get("light_inputs")!=null and optical==input.light_inputs:
+            light_resolution=input.light_resolution
+        else:light_resolution=SourceLighting.resolve(input.actor_state)
+    result = {"complete":true,"source_only":source_only,"actors":actors,"actor_members":actor_members,"light_resolution":light_resolution,"geometry":geometry,
         "row_patch":patch,"wanted":wanted,"removed_wanted":removed_wanted,"ground":ground,"packets":packets,"supports":supports,
         "background":background,"full_membership":full_membership,"needs_order":full_membership,
         "visibility":sight.visibility,"visibility_sparse":sight.sparse,"visible_cells":sight.cells,
-        "visibility_base":input.visibility,"visibility_changes":sight.changes,"worker_ms":(Time.get_ticks_usec()-started)/1000.0}
+        "visibility_base":input.visibility,"visibility_changes":sight.changes,
+        "source_files":Catalog.source_snapshot(input.cache),"actor_bindings":bindings,"blood_rows":blood_rows,
+        "required_source_record":MediaWarmup.source_record(future_solid_paths,{},{},future_solid_paths) if not future_solid_paths.is_empty() else {},
+        "worker_ms":(Time.get_ticks_usec()-started)/1000.0}
 
 func step(budget_usec: int = 2000) -> void:
+    _refresh_actor_binding_owner()
     if prepared or stale or not media_issue.is_empty(): return
     var started = Time.get_ticks_usec()
-    while not prepared and Time.get_ticks_usec()-started<budget_usec:
-        # A worker poll spends no frame token. The caller may return after other
-        # required work, using the same remaining allowance, and observe its
-        # completed result without inserting another display-frame wait.
+    while not prepared:
+        # A completed passive result may hand off even after another owner has
+        # spent the allowance. The caller charges this real work; native scene
+        # construction below still requires time in the same frame allowance.
         if task>=0:
             if not WorkerThreadPool.is_task_completed(task): break
             WorkerThreadPool.wait_for_task_completion(task); task = -1
             if not result.get("complete",false):
-                media_issue = "World preparation failed before publishing its complete result."
+                media_issue = str(result.get("error","World preparation failed before publishing its complete result."))
                 phase = "failed"
                 if not media_issue in presentation_errors: presentation_errors.append(media_issue)
                 break
@@ -326,17 +428,36 @@ func step(budget_usec: int = 2000) -> void:
                     media_issue = "World preparation failed to sort its complete static membership."; phase = "failed"; break
                 phase = "order_publish"; cursor = 0
             else:
+                # Worker admission owns native body descriptors. Publish its
+                # immutable references before any scene-thread source binding;
+                # descriptor lookup during sampling never loads a Resource.
+                Catalog.adopt_snapshot(host.catalog_cache,result.source_files)
+                required_source_record=result.get("required_source_record",{})
                 wanted_ids = result.wanted.keys(); ground_keys = result.ground.keys()
                 for key in result.packets:
                     if key not in ground_keys: ground_keys.append(key)
-                light_preparation=host.source_lighting.begin_preparation(result.light_resolution)
-                actor_ids=result.actors.keys();phase="cookie_resources"
+                actor_ids=result.actors.keys()
+                if source_only():
+                    membership={"complete":true}
+                    phase="sampling"
+                else:
+                    light_preparation=host.source_lighting.begin_preparation(result.light_resolution)
+                    phase="actors" if light_preparation.complete else "cookie_resources"
+                for id in result.get("actor_bindings",{}):
+                    if result.actors.has(id):continue
+                    for entry in host.visual_actors.get(id,{}).get("entries",[]):
+                        var value:Dictionary=result.actor_bindings[id].get(entry.actor_layer.slot,{})
+                        if not value.is_empty():actor_bindings.append({"entry":entry,"value":value,"actor":id,"owner":actor_bases[id].actor})
             continue
+        if _advance_completed_phase():continue
+        # These existing owners enforce the remaining allowance at each actual
+        # constructor/upload. Polling their completed handles may settle now,
+        # including a field whose real post-draw fence finished this frame.
+        var polls_prepared:bool=phase=="native_receivers" or (phase=="sampling" and binding_cursor==actor_bindings.size())
+        if Time.get_ticks_usec()-started>=budget_usec and not polls_prepared:break
         if phase=="cookie_resources":
-            if cookie_source_cursor==result.light_resolution.sources.size():phase="light_nodes";continue
             _prepare_cookie_resource()
         elif phase=="cookie_images":
-            if cookie_image_cursor==cookie_jobs.size():prepared=true;phase="ready";continue
             var job:Dictionary=cookie_jobs[cookie_image_cursor]
             if not job.drawn:break
             var cookie_started:int=Time.get_ticks_usec()
@@ -347,17 +468,14 @@ func step(budget_usec: int = 2000) -> void:
                 phase="failed";return
             cookie_image_cursor+=1
         elif phase=="light_nodes":
-            if light_preparation.complete:phase="actors";continue
             host.source_lighting.prepare_step(light_preparation)
         elif phase=="actors":
-            if actor_cursor==actor_ids.size():phase="objects";continue
             _prepare_actor()
             if not media_issue.is_empty():
                 if media_issue not in presentation_errors:presentation_errors.append(media_issue)
                 break
             if actor_cursor<actor_ids.size() and result.actors[actor_ids[actor_cursor]].has("unbound_entry"):break
         elif phase=="objects":
-            if cursor==wanted_ids.size(): phase = "ground"; continue
             var id: String = wanted_ids[cursor]; cursor += 1
             var row: Dictionary = result.wanted[id]
             var old: Dictionary = membership_base.groups.get(id,{})
@@ -382,7 +500,6 @@ func step(budget_usec: int = 2000) -> void:
                 native_ground[key] = {"rows":result.ground[key],"entries":[ground_job.entry]}
                 ground_job = {}; ground_cursor += 1
         elif phase=="membership_objects":
-            if cursor==wanted_ids.size(): phase = "membership_ground"; ground_cursor = 0; continue
             var id: String = wanted_ids[cursor]; cursor += 1
             var group: Dictionary = native_groups.get(id,membership_base.groups.get(id,{}))
             if membership.full: membership.groups[id] = group; _collect_membership(group)
@@ -395,8 +512,6 @@ func step(budget_usec: int = 2000) -> void:
                 membership.entries_changed = true
                 membership.walls_changed = membership.walls_changed or group.row.kind in ["wall","cliff"]
         elif phase=="membership_ground":
-            if ground_cursor==ground_keys.size():
-                phase = "retire_objects"; cursor = 0; continue
             var key: String = ground_keys[ground_cursor]; ground_cursor += 1
             var group: Dictionary = native_ground.get(key,membership_base.ground.get(key,{}))
             var packet: Dictionary = result.packets.get(key,{})
@@ -421,7 +536,6 @@ func step(budget_usec: int = 2000) -> void:
                 membership.ground_group_updates[key] = group
                 _collect_replacement(membership_base.ground[key],group,representative)
         elif phase=="retire_objects":
-            if cursor==retired_ids.size(): phase = "retire_ground"; ground_cursor = 0; continue
             var id: String = retired_ids[cursor]; cursor += 1
             if not result.wanted.has(id) or native_groups.has(id):
                 var group: Dictionary = membership_base.groups[id]
@@ -448,7 +562,6 @@ func step(budget_usec: int = 2000) -> void:
             var representative: Dictionary = membership.representatives.get(entry.node.get_instance_id(),{})
             _collect_order([entry],representative); cursor += 1
         elif phase=="order_publish":
-            if cursor==sorted_indices.size(): phase = "order_release"; continue
             _prepare_order_record(sorted_indices[cursor]); cursor += 1
         elif phase=="order_release":
             if not order_records.is_empty(): order_records.pop_back()
@@ -464,14 +577,88 @@ func step(budget_usec: int = 2000) -> void:
             if AtlasDelta.capture_candidate(host.native_light_atlas,atlas_prefix,host):
                 if atlas_prefix.has("error"):
                     _prefix_failed();return
+                if Time.get_ticks_usec()-started>=budget_usec:break
+                # A single dynamic receiver has no floor/support expansion.
+                # Finish this bounded transaction with the same planner in
+                # the current allowance, avoiding a worker roundtrip. Larger
+                # layouts retain their passive worker and normal binding gate.
+                if atlas_prefix.capture_sparse and atlas_prefix.source_patches.size()==1 \
+                        and atlas_prefix.removed_sources.is_empty() and atlas_prefix.removed.is_empty() and atlas_prefix.floor_ids.is_empty() \
+                        and atlas_prefix.capture_cells.is_empty() and atlas_prefix.capture_ids.size()<=1 \
+                        and atlas_prefix.group_proofs.size()<=1:
+                    var source:Dictionary=atlas_prefix.source_patches.values()[0]
+                    if source.info.dynamic and not source.entry.has("batch_rows") and source.rows.size()==1:
+                        var planning_started:int=Time.get_ticks_usec()
+                        AtlasDelta.compute_candidate(atlas_prefix)
+                        FrameProfile.end_phase(profile,"world_prepare_atlas_plan",planning_started)
+                        atlas_prefix.planning_lane="scene_single_dynamic"
+                        phase="atlas_prefix_bind";continue
+                atlas_prefix.planning_lane="worker"
                 phase="atlas_prefix_wait"
                 task=WorkerThreadPool.add_task(AtlasDelta.compute_candidate.bind(atlas_prefix),false,"Plan prepared lighting addresses")
                 continue
+        elif phase=="native_receivers":
+            var receiver_budget:Dictionary={"used_usec":Time.get_ticks_usec()-started,"limit_usec":budget_usec}
+            var receiver_started:int=Time.get_ticks_usec()
+            var receiver_ready:bool=host.component_renderer.native_spells.prepare_boundary(self,atlas_jobs,native_receiver_boundary,receiver_budget)
+            FrameProfile.end_phase(profile,"world_prepare_native_receivers",receiver_started)
+            if receiver_ready:phase="sampling"
+            else:break
+        elif phase=="sampling":
+            if binding_cursor<actor_bindings.size():
+                var binding:Dictionary=actor_bindings[binding_cursor]
+                var value:Dictionary=binding.get("prepared",{})
+                if value.is_empty():value=ActorConstruction.realize_binding(host,binding.value)
+                if value.is_empty():break
+                var optical:Dictionary=host.component_renderer.native_spells.prepare_actor_binding(value.path,binding.entry.actor_layer.slot,host)
+                if not optical.ready:break
+                binding.optical=optical
+                binding.prepared=value;binding_cursor+=1
+                continue
+            if host.component_renderer.blood.prepare_world(host,self,result.get("blood_rows",{}),blood_preparation,_preparation_allowance(started,budget_usec)):
+                prepared=true;phase="ready"
+            else:break
         elif phase=="atlas_prefix_bind":
             if AtlasDelta.prepare_candidate_binding(host.native_light_atlas,atlas_prefix,atlas_shells):
                 if atlas_prefix.has("error"):_prefix_failed();return
                 _finish_preparation()
     FrameProfile.end_phase(profile,"world_prepare_native",started)
+
+func _advance_completed_phase()->bool:
+    # Finishing an empty/already-completed lane does not need another frame's
+    # construction allowance. Actual nodes, bindings, uploads and worker starts
+    # remain below the elapsed guard in step(). The caller charges all elapsed
+    # handoff work even when the shared allowance was already spent.
+    match phase:
+        "cookie_resources":
+            if cookie_source_cursor!=result.light_resolution.sources.size():return false
+            phase="light_nodes"
+        "light_nodes":
+            if not light_preparation.complete:return false
+            phase="actors"
+        "actors":
+            if actor_cursor!=actor_ids.size():return false
+            phase="objects"
+        "objects":
+            if cursor!=wanted_ids.size():return false
+            phase="ground"
+        "membership_objects":
+            if cursor!=wanted_ids.size():return false
+            phase="membership_ground";ground_cursor=0
+        "membership_ground":
+            if ground_cursor!=ground_keys.size():return false
+            phase="retire_objects";cursor=0
+        "retire_objects":
+            if cursor!=retired_ids.size():return false
+            phase="retire_ground";ground_cursor=0
+        "order_publish":
+            if cursor!=sorted_indices.size():return false
+            phase="order_release"
+        "cookie_images":
+            if cookie_image_cursor!=cookie_jobs.size():return false
+            phase="native_receivers"
+        _:return false
+    return true
 
 func _prefix_failed() -> void:
     var reason:String=str(atlas_prefix.get("error","incomplete_private_prefix"))
@@ -500,7 +687,7 @@ func _cookie_drawn() -> void:
 
 func _finish_preparation() -> void:
     if cookie_image_cursor<cookie_jobs.size():phase="cookie_images"
-    else:prepared=true;phase="ready"
+    else:phase="native_receivers"
 
 func _prepare_actor() -> void:
     var id:String=actor_ids[actor_cursor]
@@ -551,10 +738,20 @@ func _prepare_actor_source(prepared:Dictionary,entry:Dictionary,private:bool=tru
     for companion in ActorConstruction.CharacterGeometry.paths(path,layer.slot,host.catalog_cache,host.character_light_profile):
         if not host.textures.has(companion):
             admission.status="missing_companion";admission.missing_path=companion;return false
+    var source_binding:Dictionary=prepared.get("source_bindings",{}).get(layer.slot,{})
+    if private and not source_binding.is_empty():
+        var ready_binding:Dictionary=ActorConstruction.realize_binding(host,source_binding)
+        if ready_binding.is_empty():return false
+        var optical:Dictionary=host.component_renderer.native_spells.prepare_actor_binding(path,layer.slot,host)
+        if not optical.ready:return false
+        entry.prepared_source_binding=ready_binding
+        actor_bindings.append({"entry":entry,"value":source_binding,"prepared":ready_binding,"actor":prepared.row.id,"private":true,"optical":optical})
     # Retained sources already own their native receiving materials and shape.
     # Their exact next sheet/geometry resources are resident; normal displayed
     # sampling updates those operands without constructing another receiver.
-    if not private:return true
+    if not private:
+        if not source_binding.is_empty():actor_bindings.append({"entry":entry,"value":source_binding,"actor":prepared.row.id,"owner":prepared.actor_base})
+        return true
     var facing:String=prepared.row.facing
     if host.external_playback:facing="SW"
     var cycle:Array=host.rig_config.FACING_CYCLE
@@ -567,6 +764,29 @@ func _prepare_actor_source(prepared:Dictionary,entry:Dictionary,private:bool=tru
     ActorConstruction.bind_source(host,entry,prepared.rig,path,frame,facing,parameters)
     admission.status="source_bound"
     return true
+
+func _preparation_allowance(started:int,allowance:int)->Dictionary:
+    return {"used_usec":Time.get_ticks_usec()-started,"limit_usec":allowance}
+
+func publish_actor_bindings()->void:
+    # Installing immutable operands changes no visible material. The exact
+    # displayed frame/condition clock applies its small delta in bind_source.
+    for binding in actor_bindings:
+        binding.entry.prepared_source_binding=binding.prepared
+        host.component_renderer.native_spells.publish_actor_binding(binding.get("optical",{}))
+    if blood_renderer!=null:blood_renderer.publish_world(host,blood_preparation)
+
+func source_only()->bool:
+    return result.get("source_only",false)
+
+func _refresh_actor_binding_owner()->void:
+    if host==null:return
+    var current:RefCounted=host.component_renderer.native_spells.actor_binding_owner()
+    if is_same(current,optical_owner):return
+    optical_owner=current;binding_cursor=0
+    # Only the passive optical operands reopen. Retained source metadata,
+    # hidden actors, world geometry and prepared native fields stay owned.
+    if prepared:prepared=false;phase="sampling"
 
 func take_actor(id:String,row:Dictionary,rig:Dictionary)->Dictionary:
     var prepared:Dictionary=native_actors.get(id,{})
@@ -713,13 +933,17 @@ func _capture_membership() -> void:
         "light_serial":host.native_light_change_serial}
 
 func can_publish_membership(target_revision: int = -1) -> bool:
+    _refresh_actor_binding_owner()
     if not prepared or stale or not media_issue.is_empty() or not membership.get("complete",false):return false
+    for binding in actor_bindings:
+        if binding.get("private",false):continue
+        if not is_same(host.visual_actors.get(binding.actor),binding.owner):return false
     for id in native_actors:
         var actor:Dictionary=native_actors[id]
         if actor.get("reuse_actor",false):
             if not is_same(host.visual_actors.get(id),actor.actor_base) or host.playbacks.get(id)!=actor.playback:return false
             if actor.has("shadow_base") and not is_same(host.generated_shadows.actors.get(id),actor.shadow_base):return false
-    if not host.source_lighting.preparation_valid(light_preparation):return false
+    if not source_only() and not host.source_lighting.preparation_valid(light_preparation):return false
     if not atlas_prefix.is_empty():
         if not AtlasDelta.candidate_base_matches(host.native_light_atlas,atlas_prefix,host):return false
     var expected:int=host.timeline.world_revision if target_revision<0 else target_revision
@@ -800,7 +1024,11 @@ func _collect_replacement(old: Dictionary, group: Dictionary, representative: Di
         membership.order_replacements.append({"old":previous,"entry":entry,"placement":row,"id":id,"key":key})
         if not representative.is_empty(): membership.representatives[entry.node.get_instance_id()] = representative
 
+func publish_native_receivers() -> void:
+    host.component_renderer.native_spells.publish_boundary(native_receiver_boundary)
+
 func publish_membership() -> void:
+    publish_native_receivers()
     # The worker is complete and preflight has accepted this boundary. No
     # discovery/rejection occurs here; adopt maps or apply known native slots.
     if not membership.full:
@@ -878,6 +1106,10 @@ func join() -> void:
 func release_handles() -> Array:
     join()
     var held = entries.duplicate()
+    if blood_renderer!=null:held.append_array(blood_renderer.release_world(blood_preparation))
+    actor_bindings=[];blood_preparation={"handles":{},"retired":[]}
+    required_source_record={}
+    optical_owner=null
     for record in light_preparation.get("nodes",[]):held.append({"node":record.node,"retire_external":true})
     light_preparation={}
     for prepared in native_actors.values():
@@ -893,5 +1125,5 @@ func release_handles() -> Array:
     entries = []; static_entries = []; actor_entries = []; native_groups = {}; native_ground = {}; ground_job = {}
     order_records = []; order_keys = []; order_ids = []; sorted_indices = []
     membership_base = {}; membership = {}; complete_order = []; complete_nodes = {}; order_updates = []
-    retired_ids = []; retired_ground_keys = []; atlas_jobs=[]; atlas_shells={}; atlas_prefix={}
+    retired_ids = []; retired_ground_keys = []; atlas_jobs=[]; atlas_shells={}; atlas_prefix={};native_receiver_boundary={}
     return held

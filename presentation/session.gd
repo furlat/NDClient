@@ -202,7 +202,7 @@ func offer_prepared_sources(files:Dictionary,headers:Dictionary={})->void:
             if not record.is_read_only() or not record.get("valid",false):offered.erase(path)
     mutex.lock()
     if not cancelled:
-        source_files_pending.merge(offered,false)
+        Catalog.adopt_snapshot(source_files_pending,offered)
         source_headers_pending.merge(headers,false)
     mutex.unlock()
     wake.post()
@@ -215,7 +215,7 @@ func _merge_prepared_sources()->void:
     source_files_pending={}
     source_headers_pending={}
     mutex.unlock()
-    authoring_cache.merge(offered,false)
+    Catalog.adopt_snapshot(authoring_cache,offered)
     if not headers.is_empty():
         if not authoring_cache.has("__required_headers"):authoring_cache.__required_headers={}
         authoring_cache.__required_headers.merge(headers,false)
@@ -235,93 +235,114 @@ func _prepare_loop() -> void:
         if not allowed:
             wake.wait()
             continue
-        var root_name = "InitializationResponse" if next==0 else "PlayerOperation"
-        var started = Time.get_ticks_usec()
-        var packet_started = started
-        var result = {"ok":true,"value":null}
-        var packet: Dictionary = handoff.get("packet",{})
-        if handoff.is_empty():
-            var raw = FileAccess.get_file_as_bytes(journal._file(next))
-            result = protocol.decode(root_name,raw)
-            if result.ok and int(result.value.cursor.sequence)!=next:
-                result = {"ok":false,"error":{"kind":"recording","message":"Journal filename/cursor mismatch"}}
-            if result.ok:
-                var identity = protocol.check_identity(result.value.protocol)
-                if not identity.ok: result = identity
-            if result.ok and not preparation_cursor.is_empty():
-                for key in ["game_id","game_epoch","audience_id"]:
-                    if result.value.cursor[key] != preparation_cursor[key]:
-                        result = {"ok":false,"error":{"kind":"recording","message":"Recording audience/epoch mismatch"}}
-                        break
-            if result.ok and replay_thread != null:
-                result = journal._consume_admitted(result.value,raw,true)
-                if result.ok:
-                    packet = result.normalized
-                    handoff = {"packet":packet,"normalized":true,"final_state":journal.state,"transitions":result.get("transitions",{}),"from_disk":true}
-            elif result.ok: packet = protocol.normalize(root_name,result.value)
-        elif not handoff.normalized:
-            packet = protocol.normalize(root_name,packet)
-        var decode_ms = (Time.get_ticks_usec()-started)/1000.0
-        if _stopping(): break
-        var message: Dictionary = {}
-        var used_records = false
-        var before: Dictionary = preparation_state
-        started = Time.get_ticks_usec()
-        if result.ok and next==0:
-            var initial_state: Dictionary = handoff.get("final_state",{})
-            result = {"ok":true,"value":initial_state} if not initial_state.is_empty() else Reducer.reduce_initialization(packet.initialization,packet.content_additions)
-            if result.ok:
-                preparation_state = result.value
-                message = {"kind":"initialization","state":preparation_state.duplicate(true),"sequence":0,
-                    "cursor":packet.cursor.duplicate(true),"command_number":null,
-                    "events":Compiler.EventTrace.initialization(packet.initialization)}
-        elif result.ok:
-            var final_state: Dictionary = handoff.get("final_state",{})
-            var transitions: Dictionary = handoff.get("transitions",{})
-            if not final_state.is_empty() and not transitions.is_empty():
-                used_records = true
-                result = Compiler.compile_recorded(preparation_state,packet,authoring_cache,final_state,transitions)
-            else:
-                result = Compiler.compile(preparation_state,packet,authoring_cache)
-            if result.ok:
-                preparation_state = result.value.final_state
-                message = {"kind":"operation","groups":result.value.groups,"sequence":next,
-                    "cursor":packet.cursor.duplicate(true),"command_number":packet.command_number,
-                    "skipped":result.value.get("skipped",[])}
-        var compiled_at = Time.get_ticks_usec()
-        var media_ms = 0.0
-        if result.ok and next>0 and not _stopping():
-            if deliver_compiled_operations:
-                # Transfer immutable compiler output once. Never mutate this
-                # message after the scene can borrow it for passive projection.
-                message.stage="compiled"
-                message.source_files=Catalog.source_snapshot(authoring_cache)
-                mutex.lock()
-                prepared.append(message)
-                mutex.unlock()
-                message={"kind":"operation","stage":"media","sequence":next,
-                    "groups":result.value.groups}
-            message.media = MediaWarmup.prepare_handoff(before,result.value.groups,authoring_cache,result.value.final_state)
-            media_ms = (Time.get_ticks_usec()-compiled_at)/1000.0
-        if _stopping(): break
-        transport.profile_preparation(next,packet_started,started,Time.get_ticks_usec(),result.ok,handoff.is_empty() or handoff.get("from_disk",false),compiled_at,media_ms)
-        mutex.lock()
-        preparation_metrics.active = false
-        preparation_metrics.packet_prepare_ms += decode_ms
-        preparation_metrics.compile_ms += (compiled_at-started)/1000.0
-        preparation_metrics.required_media_ms += media_ms
-        preparation_metrics["disk_reloads" if handoff.is_empty() or handoff.get("from_disk",false) else "handoff_hits"] += 1
-        if not result.ok:
-            replay_error = result.error
-            mutex.unlock()
-            continue
-        prepared.append(message)
-        prepared_sequence = next
-        preparation_cursor = packet.cursor.duplicate(true)
-        preparation_metrics.compiled_operations += 1
-        if used_records: preparation_metrics.recorded_handoff_hits += 1
-        mutex.unlock()
+        _prepare_operation(next,handoff)
+        handoff={}
     _release_retired()
+
+func _prepare_operation(next:int,handoff:Dictionary)->void:
+    # Each received operation releases its local packet/compiler temporaries
+    # after its own handoff, before the preparer waits for another action.
+    var root_name = "InitializationResponse" if next==0 else "PlayerOperation"
+    var started = Time.get_ticks_usec()
+    var packet_started = started
+    var result = {"ok":true,"value":null}
+    var packet: Dictionary = handoff.get("packet",{})
+    var input_at:int=Time.get_ticks_usec() if journal.profile_enabled else 0
+    if handoff.is_empty():
+        var raw = FileAccess.get_file_as_bytes(journal._file(next))
+        result = protocol.decode(root_name,raw)
+        if result.ok and int(result.value.cursor.sequence)!=next:
+            result = {"ok":false,"error":{"kind":"recording","message":"Journal filename/cursor mismatch"}}
+        if result.ok:
+            var identity = protocol.check_identity(result.value.protocol)
+            if not identity.ok: result = identity
+        if result.ok and not preparation_cursor.is_empty():
+            for key in ["game_id","game_epoch","audience_id"]:
+                if result.value.cursor[key] != preparation_cursor[key]:
+                    result = {"ok":false,"error":{"kind":"recording","message":"Recording audience/epoch mismatch"}}
+                    break
+        if result.ok and replay_thread != null:
+            result = journal._consume_admitted(result.value,raw,true)
+            if result.ok:
+                packet = result.normalized
+                handoff = {"packet":packet,"normalized":true,"final_state":journal.state,"transitions":result.get("transitions",{}),"from_disk":true}
+        elif result.ok: packet = protocol.normalize(root_name,result.value)
+    elif not handoff.normalized:
+        packet = protocol.normalize(root_name,packet)
+    var decoded_at:int=Time.get_ticks_usec()
+    var decode_ms = (decoded_at-started)/1000.0
+    if _stopping(): return
+    var message: Dictionary = {}
+    var used_records = false
+    var before: Dictionary = preparation_state
+    started = Time.get_ticks_usec()
+    var packet_phases:Dictionary={"references":(input_at-packet_started)/1000.0,
+        "decode_or_normalize":(decoded_at-input_at)/1000.0,"control":(started-decoded_at)/1000.0,
+        "admitted_handoff":not handoff.is_empty(),"normalized_handoff":handoff.get("normalized",false)} if journal.profile_enabled else {}
+    if result.ok and next==0:
+        var initial_state: Dictionary = handoff.get("final_state",{})
+        result = {"ok":true,"value":initial_state} if not initial_state.is_empty() else Reducer.reduce_initialization(packet.initialization,packet.content_additions)
+        if result.ok:
+            preparation_state = result.value
+            message = {"kind":"initialization","state":preparation_state.duplicate(true),"sequence":0,
+                "cursor":packet.cursor.duplicate(true),"command_number":null,
+                "events":Compiler.EventTrace.initialization(packet.initialization)}
+    elif result.ok:
+        var final_state: Dictionary = handoff.get("final_state",{})
+        var transitions: Dictionary = handoff.get("transitions",{})
+        if not final_state.is_empty() and not transitions.is_empty():
+            used_records = true
+            result = Compiler.compile_recorded(preparation_state,packet,authoring_cache,final_state,transitions,journal.profile_enabled)
+        else:
+            result = Compiler.compile(preparation_state,packet,authoring_cache)
+        if result.ok:
+            preparation_state = result.value.final_state
+            message = {"kind":"operation","groups":result.value.groups,"sequence":next,
+                "cursor":packet.cursor.duplicate(true),"command_number":packet.command_number,
+                "skipped":result.value.get("skipped",[])}
+    var compiled_at = Time.get_ticks_usec()
+    var media_ms = 0.0
+    if result.ok and next>0 and not _stopping():
+        if deliver_compiled_operations:
+            # Transfer immutable compiler output once. Never mutate this
+            # message after the scene can borrow it for passive projection.
+            message.stage="compiled"
+            message.source_files=Catalog.source_snapshot(authoring_cache)
+            mutex.lock()
+            prepared.append(message)
+            mutex.unlock()
+            message={"kind":"operation","stage":"media","sequence":next,
+                "groups":result.value.groups}
+            if not result.value.groups.is_empty():
+                var opening:Dictionary=MediaWarmup.prepare_opening_handoff(before,result.value.groups[0],authoring_cache)
+                if not opening.is_empty() and not _stopping():
+                    var opening_at:int=Time.get_ticks_usec()
+                    transport.profile_preparation(next,packet_started,started,opening_at,true,handoff.is_empty() or handoff.get("from_disk",false),compiled_at,(opening_at-compiled_at)/1000.0,true,
+                        {"packet_setup":packet_phases,"compiler":result.get("compile_phases_ms",{}),"metadata":opening.get("phases",{})} if journal.profile_enabled else {})
+                    var first:Dictionary=message.duplicate()
+                    first.media=opening
+                    mutex.lock();prepared.append(first);mutex.unlock()
+        message.media = MediaWarmup.prepare_handoff(before,result.value.groups,authoring_cache,result.value.final_state)
+        media_ms = (Time.get_ticks_usec()-compiled_at)/1000.0
+    if _stopping(): return
+    transport.profile_preparation(next,packet_started,started,Time.get_ticks_usec(),result.ok,handoff.is_empty() or handoff.get("from_disk",false),compiled_at,media_ms,false,
+        {"packet_setup":packet_phases,"compiler":result.get("compile_phases_ms",{}),"metadata":message.get("media",{}).get("phases",{})} if journal.profile_enabled else {})
+    mutex.lock()
+    preparation_metrics.active = false
+    preparation_metrics.packet_prepare_ms += decode_ms
+    preparation_metrics.compile_ms += (compiled_at-started)/1000.0
+    preparation_metrics.required_media_ms += media_ms
+    preparation_metrics["disk_reloads" if handoff.is_empty() or handoff.get("from_disk",false) else "handoff_hits"] += 1
+    if not result.ok:
+        replay_error = result.error
+        mutex.unlock()
+        return
+    prepared.append(message)
+    prepared_sequence = next
+    preparation_cursor = packet.cursor.duplicate(true)
+    preparation_metrics.compiled_operations += 1
+    if used_records: preparation_metrics.recorded_handoff_hits += 1
+    mutex.unlock()
 
 func take_prepared() -> Array:
     mutex.lock()

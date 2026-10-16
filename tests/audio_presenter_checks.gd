@@ -13,6 +13,19 @@ func row(cue:String,id:String,start:float,duration:float=-1,ordinal:int=0)->Dict
     var value=Cues.resolve(cue,id,ordinal,start,duration,{"world_position":Vector3(1,2,3)})
     value.absolute_start_ms=start;value.age_ms=0.0
     return value
+func prepare_ready(presenter:RefCounted,components:Array,host:Node=null)->bool:
+    var deadline:int=Time.get_ticks_msec()+30000
+    while Time.get_ticks_msec()<deadline:
+        var errors:Array=presenter.prepare(components,host)
+        if not errors.is_empty():check(false,"Selected source preparation: "+str(errors));return false
+        if presenter.ready(components):return true
+        await process_frame
+    check(false,"Selected source/quiet voice preparation timed out")
+    return false
+
+func sample_ready(presenter:RefCounted,host:Node,components:Array,display_ms:float,speed:float,paused:bool,epoch:int)->void:
+    if await prepare_ready(presenter,components,host):presenter.sample(host,components,display_ms,speed,paused,epoch)
+
 func _initialize()->void:call_deferred("run")
 func run()->void:
     var directory=""
@@ -24,7 +37,7 @@ func run()->void:
     for cue in catalog.cues:
         for ordinal in catalog.cues[cue].clips.size():all.append(row(cue,cue+str(ordinal),100,20000,ordinal))
     var presenter=Presenter.new()
-    check(presenter.prepare(all).is_empty(),"Every selected real cue loads before sampling")
+    check(await prepare_ready(presenter,all),"Every selected real cue loads before sampling")
     for component in all:
         var stream:AudioStream=presenter.streams[presenter._key(component)]
         check(absf(stream.get_length()-component.clip_duration_s)<.001,"Native stream duration matches selected source "+component.clip)
@@ -63,82 +76,82 @@ func run()->void:
     var host=Node3D.new();root.add_child(host)
     var shot=row("footstep","shot",100)
     var saved=shot.duplicate(true)
-    presenter.sample(host,[],90,1,false,0)
-    presenter.sample(host,[shot],110,1,false,0)
+    await sample_ready(presenter,host,[],90,1,false,0)
+    await sample_ready(presenter,host,[shot],110,1,false,0)
     check(presenter.counters.shots==1 and presenter.voices.size()==1,"One forward marker crossing creates one native voice")
     var voice:Dictionary=presenter.voices[shot.id]
     check(voice.node is AudioStreamPlayer3D and voice.node.global_position==Vector3(1,2,3),"World cue uses exact resolved spatial attachment")
     check(is_equal_approx(voice.offset_s,.01),"Late frame begins at current source offset")
-    presenter.sample(host,[shot],110,1,false,0)
+    await sample_ready(presenter,host,[shot],110,1,false,0)
     check(presenter.counters.shots==1 and (voice.node.stream_paused or not voice.node.playing or voice.node.volume_linear==0),"Unchanged display time holds audio silently without replay")
-    presenter.sample(host,[shot],150,1,true,0)
+    await sample_ready(presenter,host,[shot],150,1,true,0)
     check(voice.node.stream_paused or not voice.node.playing or voice.node.volume_linear==0,"Paused display silences native voice even before physics registration")
-    presenter.sample(host,[shot],170,.5,false,0)
+    await sample_ready(presenter,host,[shot],170,.5,false,0)
     check(not voice.node.stream_paused and voice.node.pitch_scale==.5 and is_equal_approx(voice.offset_s,.07),"Resume seeks to shared age and uses per-voice rate")
     check(shot==saved,"Sampling never mutates passive component")
-    presenter.sample(host,[shot],210,1,false,0)
+    await sample_ready(presenter,host,[shot],210,1,false,0)
     check(presenter.voices.is_empty(),"Expired one-shot releases its native owner")
-    presenter.sample(host,[shot],170,1,false,1)
+    await sample_ready(presenter,host,[shot],170,1,false,1)
     check(presenter.counters.shots==1,"Seek epoch suppresses historical one-shot")
-    presenter.sample(host,[],90,1,false,2);presenter.sample(host,[shot],110,1,false,2)
+    await sample_ready(presenter,host,[],90,1,false,2);await sample_ready(presenter,host,[shot],110,1,false,2)
     check(presenter.counters.shots==2,"Explicit loop pass can cross the same marker again")
-    presenter.sample(host,[],0,1,false,3);presenter.sample(host,[shot],500,1,false,3)
+    await sample_ready(presenter,host,[],0,1,false,3);await sample_ready(presenter,host,[shot],500,1,false,3)
     check(presenter.counters.expired==1 and presenter.voices.is_empty(),"Fully crossed expired short clip is counted without accumulating late audio")
     var onset=row("footstep","exact-onset",100)
     var starts=int(presenter.counters.started)
-    presenter.sample(host,[onset],100,1,true,30)
+    await sample_ready(presenter,host,[onset],100,1,true,30)
     check(presenter.diagnostics(onset.id).rows[onset.id].state=="scheduled" and presenter.voices.is_empty(),"Silent exact-onset seek leaves cue scheduled")
-    presenter.sample(host,[onset],101,1,false,30)
+    await sample_ready(presenter,host,[onset],101,1,false,30)
     check(presenter.counters.started==starts+1 and presenter.diagnostics(onset.id).rows[onset.id].starts==1,"Play from exact selected onset starts the cue once")
     await physics_frame;await physics_frame
-    presenter.sample(host,[onset],102,1,true,30);presenter.sample(host,[onset],103,1,false,30)
+    await sample_ready(presenter,host,[onset],102,1,true,30);await sample_ready(presenter,host,[onset],103,1,false,30)
     check(presenter.counters.started==starts+1,"Pause/resume preserves the already-started native voice")
-    presenter.sample(host,[onset],110,1,true,31);presenter.sample(host,[onset],111,1,false,31)
+    await sample_ready(presenter,host,[onset],110,1,true,31);await sample_ready(presenter,host,[onset],111,1,false,31)
     check(presenter.counters.started==starts+1 and presenter.diagnostics(onset.id).rows[onset.id].reason=="seek_inside","Silent seek inside an old one-shot does not retrigger")
-    presenter.sample(host,[onset],100,1,true,32);presenter.sample(host,[onset],101,1,false,32)
+    await sample_ready(presenter,host,[onset],100,1,true,32);await sample_ready(presenter,host,[onset],101,1,false,32)
     check(presenter.counters.started==starts+2,"A new pass admits the selected onset once again")
     var admitted=row("footstep","admitted",1000)
-    presenter.sample(host,[],1000,1,false,3);presenter.sample(host,[admitted],1016,1,false,3)
+    await sample_ready(presenter,host,[],1000,1,false,3);await sample_ready(presenter,host,[admitted],1016,1,false,3)
     check(presenter.voices.has(admitted.id),"New local-zero occurrence at the previous idle clock is admitted once")
     var loop_a=row("condition_loop","owner-a",100,20000)
     var loop_b=row("condition_loop","owner-b",100,20000)
-    presenter.sample(host,[loop_a,loop_b],950,1,true,4)
+    await sample_ready(presenter,host,[loop_a,loop_b],950,1,true,4)
     check(presenter.voices.size()==2 and presenter.voices[loop_a.id].node!=presenter.voices[loop_b.id].node,"Two condition owners use independent voices for the same source")
     check(is_equal_approx(presenter.voices[loop_a.id].offset_s,.85) and not presenter.voices[loop_a.id].node.playing,"Paused nonzero seek restores active loop at exact offset")
-    presenter.sample(host,[loop_a,loop_b],9000,2,false,4)
+    await sample_ready(presenter,host,[loop_a,loop_b],9000,2,false,4)
     check(is_equal_approx(presenter.voices[loop_a.id].offset_s,fposmod(8.9,loop_a.clip_duration_s)),"Loop source offset wraps within the real clip")
     var removed=weakref(presenter.voices[loop_a.id].node)
-    presenter.sample(host,[loop_b],9000,2,true,4)
-    check(removed.get_ref()==null and presenter.voices.size()==1,"Owner removal while paused releases only that owner immediately")
-    presenter.sample(host,[],9100,1,false,4)
+    await sample_ready(presenter,host,[loop_b],9000,2,true,4)
+    check(removed.get_ref()!=null and not removed.get_ref().playing and presenter.voices.size()==1,"Owner removal while paused stops only that owner immediately and retains its quiet prepared handle")
+    await sample_ready(presenter,host,[],9100,1,false,4)
     check(presenter.voices.has(loop_b.id),"Playing loop removal begins authored fade")
-    presenter.sample(host,[],9160,1,false,4)
+    await sample_ready(presenter,host,[],9160,1,false,4)
     check(is_equal_approx(presenter.voices[loop_b.id].node.volume_db,loop_b.gain_db+linear_to_db(.5)),"Loop fade follows display-time amplitude")
-    presenter.sample(host,[],9220,1,false,4)
+    await sample_ready(presenter,host,[],9220,1,false,4)
     check(presenter.voices.is_empty(),"Fade completion releases native voice")
     var many:Array=[]
     for i in 8:many.append(row("footstep","limited"+str(i),100))
-    presenter.sample(host,[],0,1,false,5);presenter.sample(host,many,110,1,false,5)
+    await sample_ready(presenter,host,[],0,1,false,5);await sample_ready(presenter,host,many,110,1,false,5)
     check(presenter.voices.size()==4 and presenter.counters.limited==4,"Authored per-cue voice bound never delays events")
-    var separate=Presenter.new();separate.prepare([onset])
-    separate.sample(host,[],99,1,false,0);separate.sample(host,[onset],101,1,false,0)
+    var separate=Presenter.new();await prepare_ready(separate,[onset],host)
+    await sample_ready(separate,host,[],99,1,false,0);await sample_ready(separate,host,[onset],101,1,false,0)
     var peer_voice=separate.voices[onset.id].node
     presenter.set_enabled(false)
     check(presenter.voices.is_empty() and is_instance_valid(peer_voice),"Muting one presenter stops all its voices without touching the other pane")
-    presenter.close();presenter.prepare([onset,loop_a])
+    presenter.close();await prepare_ready(presenter,[onset,loop_a],host)
     check(not presenter.enabled,"Private presenter mute survives close/reprepare")
     for attachment in ["ui","screen","body"]:
         var muted=row("footstep","muted-"+attachment,100)
         muted.attachment=attachment;muted.screen_position=Vector2(4,6)
-        presenter.prepare([muted]);presenter.sample(host,[],99,1,false,40);presenter.sample(host,[muted],101,1,false,40)
+        await prepare_ready(presenter,[muted],host);await sample_ready(presenter,host,[],99,1,false,40);await sample_ready(presenter,host,[muted],101,1,false,40)
         check(presenter.voices.is_empty() and presenter.diagnostics(muted.id).rows[muted.id].reason=="muted","Muted "+attachment+" source creates no audible owner")
-    presenter.set_enabled(true);presenter.sample(host,[onset],120,1,false,40)
+    presenter.set_enabled(true);await sample_ready(presenter,host,[onset],120,1,false,40)
     check(presenter.voices.is_empty(),"Unmuting does not replay elapsed one-shots")
-    presenter.set_enabled(false);presenter.sample(host,[loop_a],950,1,false,41)
-    presenter.set_enabled(true);presenter.sample(host,[loop_a],960,1,false,41)
+    presenter.set_enabled(false);await sample_ready(presenter,host,[loop_a],950,1,false,41)
+    presenter.set_enabled(true);await sample_ready(presenter,host,[loop_a],960,1,false,41)
     check(presenter.voices.size()==1 and is_equal_approx(presenter.voices[loop_a.id].offset_s,.86),"Audible ownership admits an ongoing loop at its current source offset")
     var unavailable=loop_a.duplicate();unavailable.attachment_error="attachment_unavailable"
-    presenter.sample(host,[unavailable],970,1,false,41)
+    await sample_ready(presenter,host,[unavailable],970,1,false,41)
     check(presenter.voices.is_empty() and presenter.diagnostics(loop_a.id).rows[loop_a.id].reason=="attachment_unavailable","Losing an admitted attachment releases the voice instead of keeping a stale origin")
     separate.close()
     presenter.close()
@@ -153,18 +166,18 @@ func run()->void:
                     var sampled=component.duplicate();sampled.absolute_start_ms=item.start_ms+component.start_ms
                     sampled.world_position=Vector3.ZERO;recorded.append(sampled)
         check(not recorded.is_empty(),"Shared compiler produces actual audio components from real event occurrences")
-        check(presenter.prepare(recorded).is_empty(),"Recorded selected cue sources prepare without substitute clips")
+        check(await prepare_ready(presenter,recorded,host),"Recorded selected cue sources prepare without substitute clips")
         var unique={}
         for component in recorded:
             check(component.source_event_uuid!="" and not unique.has(component.id),"Recorded cue retains unique causal occurrence "+component.id)
             unique[component.id]=true
         if not recorded.is_empty():
             var first:Dictionary=recorded[0]
-            presenter.sample(host,[],first.absolute_start_ms-1,1,false,8)
-            presenter.sample(host,[first],first.absolute_start_ms+1,1,false,8)
+            await sample_ready(presenter,host,[],first.absolute_start_ms-1,1,false,8)
+            await sample_ready(presenter,host,[first],first.absolute_start_ms+1,1,false,8)
             check(presenter.voices.has(first.id),"Actual recorded component triggers its selected native audio owner")
             var count=presenter.counters.shots
-            presenter.sample(host,[first],first.absolute_start_ms+2,1,true,9)
+            await sample_ready(presenter,host,[first],first.absolute_start_ms+2,1,true,9)
             check(presenter.counters.shots==count,"Recording seek does not replay its historical shot")
     presenter.close();host.free()
     var report={"checks":checks,"failures":failures,"recording":directory,"recorded_audio":recorded.size(),

@@ -15,8 +15,10 @@ const HISTORY_STEP=1.0/60.0
 var handles:Dictionary={}
 var groups:Dictionary={}
 var spare_layers:Array=[]
+var prepared_layers:Dictionary={}
 var diagnostics:Dictionary={}
 var ready:bool=true
+var preparation_revision:int=0
 var issues:Array=[]
 var witnesses:Array=[]
 var required_images:Dictionary={}
@@ -105,6 +107,17 @@ func prepare(compiled_groups:Array,cache:Dictionary,world:Node=null,prefetch_gro
     if not budget.is_empty():budget.used_usec+=maxi(0,Time.get_ticks_usec()-admission_started-(budget.used_usec-charged_before))
     # Epoch reset owns all resources/instances, including required-image pins.
     _required_ids=optical
+    var appearance:Dictionary=_prepare_layers(world,wanted,budget,optional,allow_optional)
+    result.ready=result.ready and appearance.ready
+    result.errors.append_array(appearance.errors)
+    # Receiver membership is prepared before any effect can become due. Sync
+    # only samples published transforms/materials; it never constructs proxies.
+    var receivers:Dictionary={"ready":true,"pending":0}
+    if not wanted.is_empty() or not groups.is_empty():
+        receivers=_support.prepare_membership(world.static_entries,world.visual_actors,budget)
+    elif budget.is_empty() or budget.used_usec<budget.limit_usec:
+        _support.prepare_membership(world.static_entries,world.visual_actors,budget)
+    result.ready=result.ready and receivers.ready
     if result.ready:
         for id in wanted:
             if handles.has(id):continue
@@ -116,7 +129,9 @@ func prepare(compiled_groups:Array,cache:Dictionary,world:Node=null,prefetch_gro
             FrameProfile.end_phase(world.profile,"native_prepare_construct",started)
             if not error.is_empty():result.errors.append(error)
     result.pending=wanted.keys().filter(func(id):return not handles.has(id)).size()
-    result.ready=result.ready and result.pending==0 and result.errors.is_empty()
+    var prepared_optics:bool=world.source_lighting.prepare_native_handles(handles,budget)
+    var support_images:Dictionary=_support.adopt(world) if not wanted.is_empty() or not groups.is_empty() else {"ready":true}
+    result.ready=result.ready and result.pending==0 and result.errors.is_empty() and appearance.ready and receivers.ready and prepared_optics and support_images.ready
     if allow_optional and result.ready:
         for id in optional:
             if handles.has(id) or _prepare_failures.has(id):continue
@@ -161,7 +176,7 @@ func prepare(compiled_groups:Array,cache:Dictionary,world:Node=null,prefetch_gro
     return result
 
 func _construct(component:Dictionary)->String:
-    var clip:Dictionary=component.native_clip.duplicate(true)
+    var clip:Dictionary=component.native_clip.duplicate(false)
     if component.native_cue.has("opacity_uniform"):clip.opacity_uniform=component.native_cue.opacity_uniform
     var handle=Factory.make(_owner,clip,0)
     # Factory already measures its constructor stages. Preserve that breakdown
@@ -183,10 +198,50 @@ func _construct(component:Dictionary)->String:
     handles[component.id]=handle
     return ""
 
+func _prepare_layers(world:Node,wanted:Dictionary,budget:Dictionary,optional:Dictionary={},allow_optional:bool=false)->Dictionary:
+    var profiles:Dictionary={};var required:Dictionary={}
+    for component in wanted.values():
+        var key:String=_profile_key(component.get("finish_profile",{}))
+        profiles[key]=component.get("finish_profile",{});required[key]=true
+    for component in optional.values():
+        var key:String=_profile_key(component.get("finish_profile",{}))
+        if not profiles.has(key):profiles[key]=component.get("finish_profile",{})
+    # Required profiles retain first claim on finite appearance passes. Future
+    # accepted profiles may warm privately; they never block a current cue.
+    for key in prepared_layers.keys():
+        if profiles.has(key):continue
+        spare_layers.append(prepared_layers[key]);prepared_layers.erase(key)
+    var result:Dictionary={"ready":true,"pending":0,"errors":[]}
+    for key in profiles:
+        if groups.has(key) or prepared_layers.has(key):continue
+        var needed:bool=required.has(key)
+        if not needed and not allow_optional:continue
+        if not budget.is_empty() and budget.used_usec>=budget.limit_usec:
+            if needed:result.ready=false;result.pending+=1
+            continue
+        var started:int=Time.get_ticks_usec()
+        var layer:Dictionary
+        if spare_layers.is_empty():
+            var bit:int=_free_bit()
+            if bit<0:
+                if needed:
+                    result.ready=false;result.errors.append("Native spell appearance capacity exceeded by simultaneously required profiles")
+                continue
+            layer=Layer.make(world,1<<bit);layer.bit=bit;Layer.integrate(layer,_support)
+        else:layer=spare_layers.pop_back();Layer.sync(layer,world)
+        Layer.colours(layer,profiles[key],true);Layer.set_enabled(layer,false)
+        prepared_layers[key]=layer
+        if not budget.is_empty():budget.used_usec+=Time.get_ticks_usec()-started
+        FrameProfile.end_phase(world.profile,"native_prepare_appearance",started)
+    return result
+
 func sample(world:Node,components:Array,frame_seconds:float)->void:
     var sample_started:int=Time.get_ticks_usec()
-    _ensure(world)
     ready=true;issues.clear();witnesses.clear()
+    if not is_instance_valid(_owner) or _epoch!=world.timeline.initialization_revision:
+        for component in components:
+            if accepts(component):ready=false;_pending(component,"native_spell_owner_not_prepared")
+        return
     var frustum:Array[Plane]=world.camera.get_frustum()
     FrameProfile.end_phase(world.profile,"native_sample_setup",sample_started)
     var sample_phase:int=Time.get_ticks_usec()
@@ -198,34 +253,24 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
         if component.get("status")=="missing":
             _missing(component,component.get("reason","native_spell_source_missing"));continue
         group_profiles[_profile_key(component.get("finish_profile",{}))]=component.get("finish_profile",{})
-    # Retire obsolete appearance passes before assigning their finite layer bits.
+    # Publication activates prepared private passes. Recolouring/material and
+    # viewport construction happen only in prepare, never at the first sample.
     for key in groups.keys():
         if not group_profiles.has(key):
             Layer.set_enabled(groups[key],false)
-            spare_layers.append(groups[key]);groups.erase(key)
+            prepared_layers[key]=groups[key];groups.erase(key)
     for key in group_profiles:
         if groups.has(key):continue
-        if _support==null:
-            _support=Support.new();_support.attach_shared(world)
-        var layer:Dictionary
-        if spare_layers.is_empty():
-            var bit=_free_bit()
-            if bit<0:continue
-            layer=Layer.make(world,1<<bit);layer.bit=bit
-            Layer.integrate(layer,_support)
-        else:
-            layer=spare_layers.pop_back()
-            Layer.sync(layer,world)
-        Layer.colours(layer,group_profiles[key],true)
-        Layer.set_enabled(layer,true)
-        groups[key]=layer
+        if not prepared_layers.has(key):continue
+        var layer:Dictionary=prepared_layers[key];prepared_layers.erase(key)
+        Layer.set_enabled(layer,true);groups[key]=layer
     if _support!=null:_support.set_enabled(not groups.is_empty())
     FrameProfile.end_phase(world.profile,"native_sample_groups",sample_phase)
     sample_phase=Time.get_ticks_usec()
     var retained=_queued_ids(world)
     for id in active:retained[id]=true
     for id in handles.keys():
-        if not retained.has(id):Factory.close(handles[id]);handles.erase(id);diagnostics.erase(id)
+        if not retained.has(id):Factory.close(handles[id]);handles.erase(id);diagnostics.erase(id);preparation_revision+=1
         elif not active.has(id):handles[id].root.hide()
     FrameProfile.end_phase(world.profile,"native_sample_retention",sample_phase)
     sample_phase=Time.get_ticks_usec()
@@ -233,7 +278,7 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
         var component:Dictionary=active[id]
         if component.get("status")=="missing":continue
         var key=_profile_key(component.get("finish_profile",{}))
-        if not groups.has(key):_missing(component,"native_spell_appearance_capacity");continue
+        if not groups.has(key):ready=false;_pending(component,"native_spell_appearance_not_prepared");continue
         if not handles.has(id):
             ready=false;_pending(component,"native_spell_source_not_prepared");continue
         var handle:Dictionary=handles[id]
@@ -255,7 +300,7 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
         if age+0.000001<float(handle.sample_time):
             # Normal replay seeks use a fresh presentation epoch. An explicit
             # backwards sample still clears its own particles/trails honestly.
-            Factory.close(handle);handles.erase(id)
+            Factory.close(handle);handles.erase(id);preparation_revision+=1
             ready=false;_pending(component,"native_spell_source_reset_pending");continue
         Factory.set_layer(handle,int(groups[key].layer_mask))
         handle.group_key=key
@@ -312,6 +357,9 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
     for id in active:
         if handles.has(id) and handles[id].root.is_visible_in_tree():light_handles[id]=handles[id]
     world.source_lighting.sample_handles(light_handles)
+    if not world.source_lighting.native_preparation_ready:
+        ready=false
+        for id in active:_pending(active[id],"native_spell_optical_resources_not_prepared")
     FrameProfile.end_phase(world.profile,"native_sample_lights",sample_phase)
     sample_phase=Time.get_ticks_usec()
     _image_requirements(world)
@@ -342,23 +390,41 @@ static func submitted_geometry(handle:Dictionary,frustum:Array[Plane],layer_mask
         if intersects:return true
     return false
 
+func prepare_boundary(candidate:Node3D,jobs:Array,state:Dictionary,budget:Dictionary)->bool:
+    if groups.is_empty() and _required_ids.is_empty():return true
+    return _support==null or _support.prepare_boundary(candidate,jobs,state,budget)
+
+func publish_boundary(state:Dictionary)->void:
+    if _support!=null:_support.publish_boundary(state)
+
+func actor_bindings_needed()->bool:
+    return _support!=null and (not groups.is_empty() or not _required_ids.is_empty())
+
+func actor_binding_owner()->RefCounted:
+    return _support if actor_bindings_needed() else null
+
+func prepare_actor_binding(path:String,slot:String,world:Node)->Dictionary:
+    # Reuse the existing optical owner. A future clip contributes only its
+    # already-resident solid mask; it creates neither a proxy nor a pose.
+    if not actor_bindings_needed():return {"ready":true}
+    var paths:Dictionary=Support.required_paths(path,slot,world.catalog_cache)
+    if paths.is_empty():return {"ready":true}
+    var mask:Texture2D=world.textures.get(paths.solid)
+    if mask==null:return {"ready":false,"mask_path":paths.solid}
+    return {"ready":true,"owner":_support,"path":path,"mask_path":paths.solid,"mask":mask}
+
+func publish_actor_binding(value:Dictionary)->void:
+    if value.has("mask") and is_same(value.owner,_support):_support.solid_masks[value.path]=value.mask
+
 func sync(world:Node)->void:
     if _support==null:return
-    if groups.is_empty():
-        var preparation_started:int=Time.get_ticks_usec()
-        _support.prepare_hidden(world.static_entries,world.visual_actors)
-        FrameProfile.end_phase(world.profile,"native_support_prepare",preparation_started)
-        return
+    if groups.is_empty():return
     var started:int=Time.get_ticks_usec()
-    var adoption=_support.adopt(world)
-    FrameProfile.end_phase(world.profile,"native_support_adopt",started)
-    if not adoption.ready:
-        ready=false
-        for path in adoption.pending:
-            var issue="Native receiver support not prepared: "+str(path)
-            if issue not in issues:issues.append(issue)
-    started=Time.get_ticks_usec()
     _support.sync(world.static_entries,world.visual_actors,world.camera)
+    if not _support.ready:
+        ready=false
+        for issue in _support.issues:
+            if issue not in issues:issues.append(issue)
     FrameProfile.end_phase(world.profile,"native_support_sync",started)
     for phase in ["camera","floor","actors","retirement"]:
         var name:String="native_support_"+str(phase)
@@ -372,6 +438,9 @@ func _free_bit()->int:
         var used=false
         for layer in groups.values():
             if layer.bit==bit:used=true;break
+        if not used:
+            for layer in prepared_layers.values():
+                if layer.bit==bit:used=true;break
         if not used:
             for layer in spare_layers:
                 if layer.bit==bit:used=true;break
@@ -449,7 +518,8 @@ func close(world:Node=null)->void:
     handles.clear();diagnostics.clear();witnesses.clear();issues.clear();required_images.clear();required_cpu_images.clear()
     for layer in groups.values():Layer.close(layer)
     for layer in spare_layers:Layer.close(layer)
-    groups.clear();spare_layers.clear()
+    for layer in prepared_layers.values():Layer.close(layer)
+    groups.clear();spare_layers.clear();prepared_layers.clear()
     if _support!=null:_support.close();_support=null
     if is_instance_valid(_owner):_owner.free()
     _owner=null
@@ -457,7 +527,7 @@ func close(world:Node=null)->void:
         world.camera.cull_mask=_camera_mask
         world.source_lighting.sample_handles({})
     _image_key=[];_path_requirements.clear();_queued_key=[];_queued_cache.clear()
-    _epoch=-1;ready=true;_required_ids.clear();_prepare_failures.clear()
+    _epoch=-1;ready=true;_required_ids.clear();_prepare_failures.clear();preparation_revision+=1
 
 func _image_requirements(world:Node)->void:
     # Optical inputs depend on outfit paths and selected clips, not every source

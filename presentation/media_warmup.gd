@@ -7,6 +7,7 @@ const WorldRows = preload("res://presentation/world.gd")
 const EnvironmentMedia = preload("res://presentation/environment_media.gd")
 const EncounterMedia = preload("res://presentation/encounter_media.gd")
 const NativeSupport = preload("res://presentation/native_scene_support.gd")
+const CharacterGeometry = preload("res://presentation/character_geometry.gd")
 const BUDGET_BYTES = 16 * 1024 * 1024 * 1024
 const EVICTIONS_PER_FRAME = 2
 const CPU_RELEASES_PER_FRAME = 2
@@ -20,9 +21,9 @@ const OPTIONAL_UPDATES_PER_FRAME = 32
 # record owns source handles, decode jobs, accounting and aggregate pin roles.
 static func create() -> Dictionary:
     var budget=maxi(0,int(ProjectSettings.get_setting("source_data/encounter_cache_mib",16384)))*1024*1024
-    var owner={"pending":[],"queued":{},"wanted":{},"environment":{},"fixtures":{},"failed":{},"resident":{},
+    var owner={"pending":[],"queued":{},"wanted":{},"failed":{},"resident":{},
         "decode_jobs":[],"decoded":0,"evicted":0,"worker_upload":false,"maximum_texture_size":0,
-        "gpu_only":{},"cpu_required":{},"decode_ms":0.0,"publication":{},"budget_bytes":budget,
+        "decode_ms":0.0,"publication":{},"budget_bytes":budget,
         "encounter":{"paths":{},"estimates":{}},"preload_selected":{},"preload_skipped":0,"preload_estimated_bytes":0,
         "required_estimated_bytes":0,"unknown_required":0,"optional_estimated_bytes":0,"unknown_optional":0,
         "prune_frame":-1,"pruned_this_frame":0,"stats":{},"cpu_release":{},
@@ -72,7 +73,7 @@ static func _attach(data:Dictionary,owner:Dictionary)->void:
 static func _consumer_record(data:Dictionary)->Dictionary:
     # Aliases to the consumer's existing readiness, without retaining data and
     # creating a cycle back to the physical owner.
-    return {"paths":{},"environment":{},"fixtures":{},"gpu_only":{},"cpu_required":{},"family":{},"hint":{},"due_paths":{},"host":data.get("host"),
+    return {"paths":{},"environment":{},"fixtures":{},"gpu_only":{},"cpu_required":{},"records":[],"record_ids":{},"record_unkeyed":[],"record_roles":{},"family":{},"hint":{},"later_families":[],"due_paths":{},"host":data.get("host"),
         "ready_paths":data.ready_paths,"boot_paths":data.boot_paths,"boot_waiting":data.boot_waiting}
 
 static func share(data:Dictionary,reference:Dictionary)->void:
@@ -94,40 +95,59 @@ static func _account_interest(owner:Dictionary,counts:Array,amount:int)->void:
         owner.optional_estimated_bytes+=amount*maxi(0,counts[5])
         owner.unknown_optional+=amount*int(counts[5]<0)
 
-static func _change_interest(owner:Dictionary,path:String,absolute:String,before:Array,after:Array)->void:
+static func _change_interest(owner:Dictionary,path:String,absolute:String,before:Array,after:Array,defer_readiness:bool=false)->void:
     if before==after:return
-    var pinned_before:int=_pinned_bytes(owner,path,owner.resident[path]) if owner.resident.has(path) else 0
-    var environment_before=_environment(owner,path)
     var counts:Array=owner.interests.get(path,[0,0,0,0,0,-1])
+    var required_before:bool=counts[0]>0
+    var optional_before:bool=counts[1]>0
+    var cpu_before:bool=_needs_cpu(owner,path)
+    var fixture_before:bool=counts[3]>0
+    var environment_before:bool=counts[4]>0
+    var pinned_before:int=_pinned_bytes(owner,path,owner.resident[path]) if owner.resident.has(path) else 0
     var estimate_before:int=counts[5]
-    _account_interest(owner,counts,-1)
     for index in 5:counts[index]+=int(after[index])-int(before[index])
-    for pair in [["wanted",0],["cpu_required",2],["fixtures",3],["environment",4]]:
-        if counts[pair[1]]>0:owner[pair[0]][path]=absolute if pair[0]=="wanted" else true
-        else:owner[pair[0]].erase(path)
-    if counts[0]+counts[1]>0 and counts[2]==0:owner.gpu_only[path]=true
-    else:owner.gpu_only.erase(path)
-    if counts[1]>0:owner.encounter.paths[path]=absolute
-    else:owner.encounter.paths.erase(path)
-    counts[5]=_shared_estimate(owner,path)
+    var required_now:bool=counts[0]>0
+    var optional_now:bool=counts[1]>0
+    var environment_now:bool=counts[4]>0
+    var fixture_now:bool=counts[3]>0
     if counts[0]+counts[1]==0:owner.interests.erase(path)
     else:owner.interests[path]=counts
+    var cpu_now:bool=_needs_cpu(owner,path)
+    if required_before!=required_now:
+        if required_now:owner.wanted[path]=absolute
+        else:owner.wanted.erase(path)
+    if optional_before!=optional_now:
+        if optional_now:owner.encounter.paths[path]=absolute
+        else:owner.encounter.paths.erase(path)
+    if cpu_before!=cpu_now or estimate_before<0:counts[5]=_shared_estimate(owner,path)
+    # Physical counts are the only aggregate optical-role directory. Another
+    # consumer retaining the same role changes its count, not its readiness,
+    # resident classification or byte account.
+    if required_before==required_now and optional_before==optional_now and cpu_before==cpu_now \
+            and fixture_before==fixture_now and environment_before==environment_now and estimate_before==counts[5]:return
+    var old_account:Array=[int(required_before),int(optional_before),0,0,0,estimate_before]
+    _account_interest(owner,old_account,-1)
     _account_interest(owner,counts,1)
     owner.changed_paths[path]=true;owner.pending_paths[path]=true
-    if before[0]>0 or after[0]>0 or (counts[0]>0 and counts[5]!=estimate_before):owner.selection_revision+=1
-    if not owner.stats.is_empty() and owner.queued.has(path) and environment_before!=_environment(owner,path):
-        owner.stats[environment_before].pending-=1;owner.stats[_environment(owner,path)].pending+=1
+    if required_before!=required_now or optional_before!=optional_now or counts[5]!=estimate_before:owner.selection_revision+=1
+    if not owner.stats.is_empty() and owner.queued.has(path) and environment_before!=environment_now:
+        owner.stats[environment_before].pending-=1;owner.stats[environment_now].pending+=1
     if owner.resident.has(path):
         var resident:Dictionary=owner.resident[path]
         if not owner.stats.is_empty():
             owner.stats[resident.environment].pinned_bytes+=_pinned_bytes(owner,path,resident)-pinned_before
-        _refresh_resident_role(owner,path,true)
+        if environment_before!=environment_now or cpu_before!=cpu_now or required_before!=required_now:
+            _refresh_resident_role(owner,path,true,not defer_readiness)
+        elif not defer_readiness:_refresh_path(owner,path)
+    elif not defer_readiness:_refresh_path(owner,path)
 
 static func _family_interest(owner:Dictionary,family:Dictionary,amount:int,hint:bool=false)->void:
     if family.is_empty():return
     for row in owner.families:
         if not is_same(row.family,family):continue
-        row.users+=amount;owner.selection_revision+=1
+        var active:bool=row.users>0
+        row.users+=amount
+        if active!=(row.users>0):owner.selection_revision+=1
         return
     if amount<0:return
     # Registration is a reference handoff. Source-by-source accounting belongs
@@ -381,6 +401,7 @@ static func _withdraw(data:Dictionary)->void:
         _change_interest(owner,path,before.paths[path],_role_values(before.paths,before.environment,before.fixtures,before.gpu_only,before.cpu_required,path,true),[0,0,0,0,0])
     _family_interest(owner,before.family,-1)
     _family_interest(owner,before.hint,-1)
+    for family in before.later_families:_family_interest(owner,family,-1)
     owner.consumers.erase(data.consumer_id)
     _update_pending(owner)
 
@@ -408,10 +429,49 @@ static func prepare_handoff(state: Dictionary, groups: Array, cache: Dictionary,
     var selected: Array = groups.slice(0,mini(2,groups.size()))
     var result = {}
     _plan_sources({"key":[],"state":_snapshot(state),"groups":selected,
-        "origin_state":state,"final_state":final_state if groups.size()<=2 else {}},result,cache)
+        "origin_state":state,"final_state":final_state,"tail_groups":groups.slice(selected.size())},result,cache)
     result.generation = state.generation
     result.observer_uuid = state.observer_uuid
     result.groups = selected
+    return result
+
+static func prepare_opening_handoff(state:Dictionary,group:Dictionary,cache:Dictionary)->Dictionary:
+    # Resolve only the first authored source cut. Late hit/death, changed world
+    # rows and the following group are a separate completion of this same owner.
+    # The declared horizon prevents that partial metadata from admitting a later
+    # cue before its complete requirements have been delivered.
+    var opening:Dictionary=group.duplicate()
+    var until_ms:float=INF
+    for field in ["actor_tracks","components","commits","native_requirements"]:
+        var selected:Array=[]
+        for row in group.get(field,[]):
+            var at:float=float(row.get("preparation_at_ms",0.0) if field=="native_requirements" else row.get("at_ms",0.0) if field=="commits" else row.get("start_ms",0.0))
+            if at<=0.000001:selected.append(row)
+            else:until_ms=minf(until_ms,at)
+        opening[field]=selected
+    for pair in [["staged_actors","staged_at_ms"],["staged_tiles","staged_tile_at_ms"]]:
+        var selected:Dictionary={}
+        for id in group.get(pair[0],{}):
+            var at:float=float(group.get(pair[1],{}).get(id,0.0))
+            if at<=0.000001:selected[id]=group[pair[0]][id]
+            else:until_ms=minf(until_ms,at)
+        opening[pair[0]]=selected
+    if not is_finite(until_ms):return {}
+    var previous:Dictionary=cache.get("__required_actor_closures",{})
+    var result:Dictionary={}
+    _plan_sources({"key":[],"state":_snapshot(state),"groups":[opening],"origin_state":state,"partial":true},result,cache)
+    # A partial source cut borrows the previous complete selection. It cannot
+    # evict already resolved impact/death sources immediately before the full
+    # continuation needs them. Completion below replaces this bounded borrow.
+    var current:Dictionary=cache.get("__required_actor_closures",{})
+    if not previous.is_empty() and not current.is_empty() and is_same(previous.get("admission"),current.get("admission")):
+        var retained:Array=current.entries.duplicate()
+        for packet in previous.entries:
+            if not retained.any(func(entry):return is_same(entry,packet)):retained.append(packet)
+        current.entries=retained
+    result.generation=state.generation;result.observer_uuid=state.observer_uuid
+    result.groups=[group];result.coverage_until_ms=until_ms
+    result.erase("optional_request")
     return result
 
 static func receive_handoff(data: Dictionary, completed: Dictionary, key: Array) -> Dictionary:
@@ -419,10 +479,11 @@ static func receive_handoff(data: Dictionary, completed: Dictionary, key: Array)
     # Raw source files are immutable; only the optional worker merges its cache.
     var result: Dictionary = completed.duplicate()
     result.key = key
-    var optional: Dictionary = completed.optional_request.duplicate()
-    optional.key = key
-    optional.source_files = completed.source_files
-    data.optional_pending = optional
+    if completed.has("optional_request"):
+        var optional: Dictionary = completed.optional_request.duplicate()
+        optional.key = key
+        optional.source_files = completed.source_files
+        data.optional_pending = optional
     data.metadata_ms += completed.elapsed_ms
     data.metadata_jobs += 1
     data.metadata_phases.required = completed.phases
@@ -446,29 +507,256 @@ static func _start_plan(data: Dictionary, allow_optional:bool=false) -> void:
     var work = _plan_optional.bind(request,data.plan_result,data.plan_cache) if optional else _plan_sources.bind(request,data.plan_result,data.plan_cache)
     data.plan_task = WorkerThreadPool.add_task(work,false,"Optional authored families" if optional else "Required authored media")
 
+static func source_records(character:Dictionary,environment:Dictionary,groups:Array,cache:Dictionary,partial:bool=false)->Dictionary:
+    var result:Dictionary={}
+    var previous:Dictionary=cache.get("__source_record_sets",{})
+    var reuse:Dictionary={"previous":previous.get("opening",[])+previous.get("complete",[]),"current":[]}
+    for index in maxi(1,groups.size()):
+        var group:Dictionary=groups[index] if not groups.is_empty() else {}
+        var environment_records:Array=environment.required_records if index==0 else environment.upcoming_records
+        var profiles:Dictionary={}
+        for profile in CharacterGeometry.PROFILES:
+            var sets:Array=[environment_records]
+            var families:Array=[environment.get("required_family",{}) if index==0 else environment.get("upcoming_family",{})]
+            for packet in character.get("actor_records",{}).get(group.get("id",""),[]):
+                sets.append(packet.source_records[profile])
+                families.append(packet.source_families[profile])
+            profiles[profile]=_source_record_union(sets,reuse,families)
+        profiles.make_read_only();result[group.get("id","")]=profiles
+    cache.__source_record_sets={"opening":reuse.current if partial else previous.get("opening",[]),
+        "complete":previous.get("complete",[]) if partial else reuse.current,"sizes":previous.get("sizes",{})}
+    return result
+
+static func _source_record_union(sets:Array,reuse:Dictionary,families:Array=[])->Array:
+    for rows in [reuse.current,reuse.previous]:
+        for row in rows:
+            if row.sets.size()!=sets.size():continue
+            var same:bool=true
+            for index in sets.size():
+                if not is_same(row.sets[index],sets[index]):same=false;break
+            if same:
+                if not reuse.current.any(func(current):return is_same(current,row)):reuse.current.append(row)
+                return row.records
+    var records:Array=[];var seen:Dictionary={}
+    for selected in sets:append_source_records(records,seen,selected)
+    records.make_read_only();sets.make_read_only();families.make_read_only()
+    reuse.current.append({"sets":sets,"records":records,"families":families})
+    return records
+
+static func _source_size_union(character:Dictionary,environment:Dictionary,cache:Dictionary,partial:bool)->Dictionary:
+    # Header facts belong to the selected immutable source packets. Repeated
+    # actors/groups borrow those contributions; operation clocks do not create
+    # another copy of every shared sheet's size.
+    var parts:Array=[environment.source_sizes]
+    var header_parts:Array=[environment.get("source_headers",{})]
+    for packets in character.get("actor_records",{}).values():
+        for packet in packets:
+            var sizes:Dictionary=packet.source_sizes
+            if not parts.any(func(part):return is_same(part,sizes)):
+                parts.append(sizes);header_parts.append(packet.get("source_headers",{}))
+    var owner:Dictionary=cache.get("__source_record_sets",{})
+    var previous:Dictionary=owner.get("sizes",{})
+    for kind in ["opening","complete"]:
+        var row:Dictionary=previous.get(kind,{})
+        if row.is_empty() or row.parts.size()!=parts.size():continue
+        var same:bool=true
+        for index in parts.size():
+            if not is_same(row.parts[index],parts[index]):same=false;break
+        if same:return row.value
+    var value:Dictionary={}
+    for part in parts:value.merge(part)
+    var headers:Dictionary={}
+    for part in header_parts:headers.merge(part)
+    headers.make_read_only()
+    value.make_read_only();parts.make_read_only()
+    var retained:Dictionary=previous.duplicate()
+    retained["opening" if partial else "complete"]={"parts":parts,"value":value,"headers":headers}
+    owner.sizes=retained
+    return value
+
+static func _source_size_headers(sizes:Dictionary,cache:Dictionary)->Dictionary:
+    for row in cache.get("__source_record_sets",{}).get("sizes",{}).values():
+        if is_same(row.value,sizes):return row.headers
+    return {}
+
+static func append_source_records(records:Array,seen:Dictionary,incoming:Array)->void:
+    # Imported sources own a stable identity. Their ordered union visits each
+    # source once; custom tooling records without an identity retain ref equality.
+    for record in incoming:
+        if record.has("source_id"):
+            if seen.has(record.source_id):continue
+            seen[record.source_id]=true;records.append(record)
+        else:
+            # A passive source without an ID cannot be identical to a keyed
+            # source. Compare only the few unkeyed partitions already seen,
+            # rather than walking the entire keyed room for each partition.
+            if not seen.has(null):seen[null]=[]
+            var unkeyed:Array=seen[null]
+            if unkeyed.any(func(current):return is_same(current,record)):continue
+            unkeyed.append(record);records.append(record)
+
+static func _source_first_use(schedule:Dictionary)->Dictionary:
+    var times:Dictionary={}
+    for path in schedule.get("initial",{}):times[path]=0.0
+    for change in schedule.get("changes",[]):
+        for path in change.paths:
+            if not times.has(path):times[path]=float(change.at_ms)
+    return times
+
+static func _source_partition(record:Dictionary,roles:Dictionary,reuse:Dictionary)->Dictionary:
+    for entries in [reuse.current,reuse.previous]:
+        for prior in entries:
+            if is_same(prior.source,record) and prior.roles==roles:
+                if not reuse.current.has(prior):reuse.current.append(prior)
+                return prior.value
+    roles.make_read_only()
+    var selected:Dictionary={"roles":roles};selected.make_read_only()
+    reuse.current.append({"source":record,"roles":roles,"value":selected})
+    return selected
+
+static func _source_cut_schedule(records:Array,character_times:Dictionary,environment_times:Dictionary,reuse:Dictionary)->Dictionary:
+    var by_time:Dictionary={}
+    for record in records:
+        var partitions:Dictionary={}
+        for path in record.roles:
+            var role:Array=record.roles[path]
+            var times:Dictionary=environment_times if role[3]>0 else character_times
+            var at:float=float(times.get(path,0.0))
+            if not partitions.has(at):partitions[at]={}
+            partitions[at][path]=role
+        for at in partitions:
+            if not by_time.has(at):by_time[at]=[]
+            if partitions.size()==1:
+                by_time[at].append(record)
+            else:
+                # A source operand can be needed before another role in the
+                # same imported descriptor. Split only that actual cut; keep
+                # its immutable role rows, without inventing a physical ID.
+                by_time[at].append(_source_partition(record,partitions[at],reuse))
+    var initial:Array=by_time.get(0.0,[]);initial.make_read_only()
+    var changes:Array=[]
+    var keys:Array=by_time.keys();keys.sort()
+    var cumulative:Array=initial
+    for at in keys:
+        if at<=0:continue
+        cumulative=cumulative.duplicate();cumulative.append_array(by_time[at]);cumulative.make_read_only()
+        var change:Dictionary={"at_ms":at,"records":cumulative};change.make_read_only();changes.append(change)
+    changes.make_read_only()
+    var schedule:Dictionary={"initial":initial,"changes":changes};schedule.make_read_only()
+    return schedule
+
+static func _source_family(records:Array,sizes:Dictionary)->Dictionary:
+    var paths:Dictionary={};var environment:Dictionary={};var fixtures:Dictionary={};var cpu:Dictionary={};var gpu:Dictionary={}
+    for record in records:
+        for path in record.roles:
+            var role:Array=record.roles[path]
+            paths[path]=role[0]
+            if role[1]>0:cpu[path]=true
+            if role[2]>0:fixtures[path]=true
+            if role[3]>0:environment[path]=true
+    for path in paths:
+        if not cpu.has(path):gpu[path]=true
+    var ordered:Array=paths.keys();ordered.make_read_only()
+    for values in [paths,environment,fixtures,cpu,gpu]:values.make_read_only()
+    var family:Dictionary={"paths":paths,"environment":environment,"fixtures":fixtures,"cpu_required":cpu,"gpu_only":gpu,
+        "ordered_paths":ordered,"source_sizes":sizes};family.make_read_only()
+    return family
+
+static func _retained_source_family(records:Array,sizes:Dictionary,cache:Dictionary)->Dictionary:
+    var owner:Dictionary=cache.get("__source_record_sets",{})
+    for kind in ["opening","complete"]:
+        for row in owner.get(kind,[]):
+            if not is_same(row.records,records):continue
+            if not row.has("family"):
+                row.family=_combine_source_families(row.families) if not row.get("families",[]).is_empty() else _source_family(records,sizes)
+            return row.family
+    return _source_family(records,sizes)
+
+static func _combine_source_families(parts:Array)->Dictionary:
+    # Imported actor/environment packets already own role projections. Compose
+    # their native maps only for a new selection, instead of re-walking every
+    # descriptor and header once per profile on every operation.
+    var paths:Dictionary={};var environment:Dictionary={};var fixtures:Dictionary={}
+    var cpu:Dictionary={};var gpu:Dictionary={};var sizes:Dictionary={}
+    for part in parts:
+        if part.is_empty():continue
+        paths.merge(part.paths,false);environment.merge(part.environment);fixtures.merge(part.fixtures)
+        cpu.merge(part.cpu_required);gpu.merge(part.gpu_only);sizes.merge(part.source_sizes)
+    for path in cpu:gpu.erase(path)
+    var ordered:Array=paths.keys();ordered.make_read_only()
+    for values in [paths,environment,fixtures,cpu,gpu,sizes]:values.make_read_only()
+    var family:Dictionary={"paths":paths,"environment":environment,"fixtures":fixtures,"cpu_required":cpu,
+        "gpu_only":gpu,"ordered_paths":ordered,"source_sizes":sizes};family.make_read_only()
+    return family
+
+static func _source_publications(plan:Dictionary,cache:Dictionary,initial_only:bool=false)->void:
+    # The metadata producer computes cuts once. The scene thread selects an
+    # already-owned array and hands later work to the existing bounded lane.
+    var cuts:Dictionary={};var families:Dictionary={}
+    var reuse:Dictionary={"previous":cache.get("__source_cut_partitions",[]),"current":[]}
+    var sizes:Dictionary=plan.source_sizes;sizes.make_read_only()
+    for id in plan.source_records:
+        var character_times:Dictionary={} if initial_only else _source_first_use(plan.get("character_timeline",{}).get(id,{}))
+        var environment_times:Dictionary={} if initial_only else _source_first_use(plan.get("environment_timeline",{}).get(id,{}))
+        var profile_cuts:Dictionary={};var profile_families:Dictionary={}
+        for profile in plan.source_records[id]:
+            var records:Array=plan.source_records[id][profile]
+            if initial_only:
+                var changes:Array=[];changes.make_read_only()
+                var opening:Dictionary={"initial":records,"changes":changes};opening.make_read_only()
+                profile_cuts[profile]=opening
+            else:profile_cuts[profile]=_source_cut_schedule(records,character_times,environment_times,reuse)
+            profile_families[profile]=_retained_source_family(records,sizes,cache)
+        profile_cuts.make_read_only();profile_families.make_read_only()
+        cuts[id]=profile_cuts;families[id]=profile_families
+    cuts.make_read_only();families.make_read_only()
+    plan.source_cuts=cuts;plan.source_families=families
+    # Opening has no late partition work. Its empty local list cannot retire
+    # the previous complete source owner before this operation's continuation
+    # has reused/replaced those real immutable partition refs.
+    if not initial_only:cache.__source_cut_partitions=reuse.current
+
+static func records_at(schedule:Dictionary,local_ms:float,fallback:Array=[])->Array:
+    if not schedule.has("initial"):return fallback
+    var records:Array=schedule.initial
+    for change in schedule.changes:
+        if float(change.at_ms)>local_ms+0.000001:break
+        records=change.records
+    return records
+
 static func _plan_sources(request: Dictionary, result: Dictionary, cache: Dictionary) -> void:
     var started = Time.get_ticks_usec()
     result.key = request.key
     result.stage = "required"
     result.value = plan(request.state,request.groups,cache)
     var characters_done = Time.get_ticks_usec()
-    var environment = EnvironmentMedia.plan(request.state,request.groups,cache,request.get("origin_state",{}),request.get("final_state",{}))
+    var tail:Array=request.get("tail_groups",[])
+    var environment = EnvironmentMedia.plan(request.state,request.groups,cache,request.get("origin_state",{}),
+        request.get("final_state",{}) if tail.is_empty() else {},request.get("partial",false))
     var environment_done = Time.get_ticks_usec()
     result.value.environment_required = environment.required
     result.value.environment_upcoming = environment.upcoming
     result.value.environment_timeline = environment.environment_timeline
     result.value.fixtures = environment.fixtures
-    var exact_paths: Dictionary = result.value.required.duplicate()
-    for paths in [result.value.upcoming,environment.required,environment.upcoming,result.value.get("optical_candidates",{})]: exact_paths.merge(paths)
-    result.value.source_sizes = EncounterMedia.source_sizes(exact_paths,cache)
-    result.source_headers = cache.get("__required_headers",{}).duplicate()
+    result.value.source_records=source_records(result.value,environment,request.groups,cache,request.get("partial",false))
+    var roles_done:int=Time.get_ticks_usec()
+    result.value.source_sizes = _source_size_union(result.value,environment,cache,request.get("partial",false))
+    result.source_headers = _source_size_headers(result.value.source_sizes,cache)
     var sizes_done = Time.get_ticks_usec()
+    _source_publications(result.value,cache,request.get("partial",false))
+    var publications_done:int=Time.get_ticks_usec()
+    EnvironmentMedia.finish_handoff(tail,request.get("final_state",{}),cache)
+    var tail_done:int=Time.get_ticks_usec()
     # The single metadata owner schedules optional families only after this
     # exact required packet has crossed the completed-task publication boundary.
     result.optional_request = {"key":request.key,"state":request.state,"groups":request.groups,"required":result.value}
     result.source_files = Characters.Catalog.source_snapshot(cache)
     result.phases = {"characters":(characters_done-started)/1000.0,
-        "environment":(environment_done-characters_done)/1000.0,"source_sizes":(sizes_done-environment_done)/1000.0,"source_files":(Time.get_ticks_usec()-sizes_done)/1000.0}
+        "environment":(environment_done-characters_done)/1000.0,"roles":(roles_done-environment_done)/1000.0,
+        "source_sizes":(sizes_done-roles_done)/1000.0,"source_publications":(publications_done-sizes_done)/1000.0,
+        "environment_tail":(tail_done-publications_done)/1000.0,"source_files":(Time.get_ticks_usec()-tail_done)/1000.0}
+    result.phases.source_headers_cached_count=cache.get("__required_headers",{}).size()
+    result.phases.source_headers_selected_count=result.source_headers.size()
     for phase in environment.get("diagnostics",{}).get("phases",{}):
         result.phases["environment_"+phase] = environment.diagnostics.phases[phase]
     result.elapsed_ms = (Time.get_ticks_usec()-started)/1000.0
@@ -476,7 +764,7 @@ static func _plan_sources(request: Dictionary, result: Dictionary, cache: Dictio
 
 static func _plan_optional(request: Dictionary, result: Dictionary, cache: Dictionary) -> void:
     var started = Time.get_ticks_usec()
-    cache.merge(request.get("source_files",{}),false)
+    Characters.Catalog.adopt_snapshot(cache,request.get("source_files",{}))
     result.key = request.key
     result.stage = "optional"
     var required: Dictionary = request.required
@@ -573,10 +861,12 @@ static func _hint_roles(data:Dictionary,path:String)->Dictionary:
     return hint if hint.get("paths",{}).has(path) else {}
 
 static func _environment(data: Dictionary, path: String) -> bool:
-    return data.environment.has(path) or _hint_roles(data,path).get("environment",{}).has(path) or (not data.has("physical") and data.encounter.get("environment",{}).has(path))
+    if not data.has("physical"):return data.interests.has(path) and data.interests[path][4]>0
+    return data.environment.has(path) or _hint_roles(data,path).get("environment",{}).has(path)
 
 static func _fixture(data: Dictionary, path: String) -> bool:
-    return data.fixtures.has(path) or _hint_roles(data,path).get("fixtures",{}).has(path) or (not data.has("physical") and data.encounter.get("fixtures",{}).has(path))
+    if not data.has("physical"):return data.interests.has(path) and data.interests[path][3]>0
+    return data.fixtures.has(path) or _hint_roles(data,path).get("fixtures",{}).has(path)
 
 static func _estimate(data: Dictionary, path: String) -> int:
     var estimate: Dictionary = data.encounter.get("estimates",{}).get(path,{})
@@ -633,7 +923,10 @@ static func _refresh_path(data: Dictionary, path: String) -> void:
     for consumer in data.consumers.values():_refresh_consumer(data,consumer,path)
 
 static func _consumer_requirements(consumer:Dictionary,path:String,resident:Dictionary)->int:
-    var hint:Dictionary=consumer.hint if not consumer.paths.has(path) and consumer.hint.get("paths",{}).has(path) else {}
+    return _consumer_requirements_with_hint(consumer,path,resident,consumer.hint)
+
+static func _consumer_requirements_with_hint(consumer:Dictionary,path:String,resident:Dictionary,offered:Dictionary)->int:
+    var hint:Dictionary=offered if not consumer.paths.has(path) and offered.get("paths",{}).has(path) else {}
     var roles:Dictionary=consumer if hint.is_empty() else hint
     var fixture:bool=roles.get("fixtures",{}).has(path)
     var cpu:bool=fixture or roles.get("environment",{}).has(path) or roles.get("cpu_required",{}).has(path)
@@ -642,17 +935,19 @@ static func _consumer_requirements(consumer:Dictionary,path:String,resident:Dict
     return int(cpu)|(int(fixture)<<1)
 
 static func _refresh_consumer(owner:Dictionary,consumer:Dictionary,path:String)->void:
-    var resident:Dictionary=owner.resident.get(path,{})
-    var available:bool=not owner.failed.has(path) and not resident.is_empty()
-    if available:
-        var requirements:int=_consumer_requirements(consumer,path,resident)
-        available=int(resident.gpu_bytes)>0 and ((requirements&1)==0 or int(resident.cpu_bytes)>0) \
-            and ((requirements&2)==0 or resident.get("fixture_ready",false))
+    var available:bool=_consumer_available(owner,consumer,path)
     if available:consumer.ready_paths[path]=true
     else:consumer.ready_paths.erase(path)
     if consumer.boot_paths.has(path):
         if available or owner.failed.has(path):consumer.boot_waiting.erase(path)
         else:consumer.boot_waiting[path]=true
+
+static func _consumer_available(owner:Dictionary,consumer:Dictionary,path:String)->bool:
+    var resident:Dictionary=owner.resident.get(path,{})
+    if owner.failed.has(path) or resident.is_empty():return false
+    var requirements:int=_consumer_requirements(consumer,path,resident)
+    return int(resident.gpu_bytes)>0 and ((requirements&1)==0 or int(resident.cpu_bytes)>0) \
+        and ((requirements&2)==0 or resident.get("fixture_ready",false))
 
 static func _refresh_readiness(data:Dictionary,path:String,available:bool)->void:
     if available: data.ready_paths[path] = true
@@ -666,11 +961,11 @@ static func _refresh_readiness(data:Dictionary,path:String,available:bool)->void
         if data.failed.has(path): data.selected_failed[path] = data.failed[path]
         else: data.selected_failed.erase(path)
 
-static func _refresh_resident_role(data: Dictionary, path: String, selected_refresh:bool=false) -> void:
+static func _refresh_resident_role(data: Dictionary, path: String, selected_refresh:bool=false,refresh_readiness:bool=true) -> void:
     if not data.resident.has(path):
         # Selection changes also update missing/failed source readiness. Keep
         # the original domain for unrelated nonresident role-only updates.
-        if selected_refresh:_refresh_path(data,path)
+        if selected_refresh and refresh_readiness:_refresh_path(data,path)
         return
     var resident: Dictionary = data.resident[path]
     if resident.environment!=_environment(data,path):
@@ -680,38 +975,111 @@ static func _refresh_resident_role(data: Dictionary, path: String, selected_refr
     if _cpu_pinned(data,path):resident.cpu_required=true
     if int(resident.cpu_bytes)>0 and not _needs_cpu(data,path) and not resident.cpu_required:data.cpu_release[path]=true
     else:data.cpu_release.erase(path)
-    _refresh_path(data,path)
+    if refresh_readiness:_refresh_path(data,path)
 
-static func demand(data: Dictionary, paths: Dictionary, environment: Dictionary = {}, fixtures: Dictionary = {}, gpu_only: Dictionary = {}, cpu_required: Dictionary = {}, hint: Dictionary = {}) -> void:
+static func source_record(paths:Dictionary,environment:Dictionary={},fixtures:Dictionary={},gpu_only:Dictionary={},cpu_required:Dictionary={})->Dictionary:
+    # The source selector owns this immutable contribution. A consumer retains
+    # its reference until that selection changes, rather than comparing five
+    # flattened maps again whenever another action arrives.
+    var roles:Dictionary={}
+    for path in paths:
+        var cpu:bool=environment.has(path) or fixtures.has(path) or cpu_required.has(path) or not gpu_only.has(path)
+        var row:Array=[paths[path] if paths[path] is String else Characters.Catalog.media_path(path),int(cpu),int(fixtures.has(path)),int(environment.has(path))]
+        row.make_read_only();roles[path]=row
+    roles.make_read_only()
+    var result:Dictionary={"roles":roles};result.make_read_only()
+    return result
+
+static func _record_changes(changes:Dictionary,record:Dictionary,amount:int)->void:
+    for path in record.roles:
+        var role:Array=record.roles[path]
+        if not changes.has(path):changes[path]=[role[0],0,0,0,0]
+        var delta:Array=changes[path]
+        delta[1]+=amount
+        for index in range(1,4):delta[index+1]+=amount*int(role[index])
+
+static func _consumer_role_mask(counts:Array)->int:
+    return int(counts[0]>0)|(int(counts[1]>0)<<1)|(int(counts[2]>0)<<2)|(int(counts[3]>0)<<3)
+
+static func demand_records(data:Dictionary,records:Array,hint:Dictionary={},later_families:Array=[])->void:
     var started=Time.get_ticks_usec()
     var owner=physical(data)
     assert(not data.closed,"Closed source consumer cannot publish demand")
     var before:Dictionary=owner.consumers[data.consumer_id]
     var changed:Dictionary={}
-    if not is_same(before.hint,hint):
-        for candidate in [before.hint.get("paths",{}),hint.get("paths",{})]:
-            for path in candidate:
-                if not paths.has(path) and owner.resident.has(path):changed[path]=true
-    var same:bool=before.paths==paths and before.environment==environment and before.fixtures==fixtures \
-        and before.gpu_only==gpu_only and before.cpu_required==cpu_required
-    if not same:
-        var candidates:Dictionary=before.paths.duplicate();candidates.merge(paths)
-        for path in candidates:
-            var previous:Array=_role_values(before.paths,before.environment,before.fixtures,before.gpu_only,before.cpu_required,path,true)
-            var current:Array=_role_values(paths,environment,fixtures,gpu_only,cpu_required,path,true)
-            if previous==current:continue
-            _change_interest(owner,path,paths.get(path,before.paths.get(path,"")),previous,current)
-            changed[path]=true
+    var hint_changed:Dictionary={}
+    var changes:Dictionary={}
+    var added:int=0;var removed:int=0;var retained:int=0;var role_entries_visited:int=0
+    if is_same(before.records,records):retained=records.size()
+    else:
+        var next_ids:Dictionary={};var next_unkeyed:Array=[]
+        var previous_ids:Dictionary=before.record_ids
+        var previous_unkeyed:Array=before.record_unkeyed
+        var additions:Array=[]
+        for record in records:
+            var kept:bool
+            if record.has("source_id"):
+                next_ids[record.source_id]=record
+                kept=is_same(previous_ids.get(record.source_id),record)
+            else:
+                next_unkeyed.append(record)
+                kept=previous_unkeyed.any(func(previous):return is_same(previous,record))
+            if kept:retained+=1
+            else:additions.append(record)
+        for record in before.records:
+            var kept:bool=is_same(next_ids.get(record.source_id),record) if record.has("source_id") else next_unkeyed.any(func(current):return is_same(current,record))
+            if not kept:_record_changes(changes,record,-1);removed+=1;role_entries_visited+=record.roles.size()
+        for record in additions:
+            _record_changes(changes,record,1);added+=1;role_entries_visited+=record.roles.size()
+        before.record_ids=next_ids
+        before.record_unkeyed=next_unkeyed
+    var record_delta_done:int=Time.get_ticks_usec()
+    for path in changes:
+        var delta:Array=changes[path]
+        if delta[1]==0 and delta[2]==0 and delta[3]==0 and delta[4]==0:continue
+        var counts:Array=before.record_roles.get(path,[0,0,0,0])
+        var previous:int=_consumer_role_mask(counts)
+        counts[0]+=int(delta[1]);counts[1]+=int(delta[2]);counts[2]+=int(delta[3]);counts[3]+=int(delta[4])
+        var current:int=_consumer_role_mask(counts)
+        # Contribution counts still balance every owner. Retained Boolean
+        # roles already publish exactly this physical/consumer contract.
+        if previous==current:continue
+        if counts[0]>0:
+            before.record_roles[path]=counts;before.paths[path]=delta[0]
+            if counts[1]>0:before.cpu_required[path]=true
+            else:before.cpu_required.erase(path)
+            if counts[2]>0:before.fixtures[path]=true
+            else:before.fixtures.erase(path)
+            if counts[3]>0:before.environment[path]=true
+            else:before.environment.erase(path)
+            if counts[1]==0:before.gpu_only[path]=true
+            else:before.gpu_only.erase(path)
+        else:
+            before.record_roles.erase(path)
+            for field in ["paths","environment","fixtures","gpu_only","cpu_required"]:before[field].erase(path)
+        _change_interest(owner,path,delta[0],[previous&1,0,(previous>>1)&1,(previous>>2)&1,(previous>>3)&1],
+            [current&1,0,(current>>1)&1,(current>>2)&1,(current>>3)&1],true)
+        changed[path]=true
+    before.records=records
+    if not is_same(before.hint,hint) and (not before.hint.get("paths",{}).is_empty() or not hint.get("paths",{}).is_empty()):
+        # Optional readiness belongs to its queried path, not the whole hint
+        # catalog. Only explicit startup gates also retain eager readiness.
+        for path in before.boot_paths:
+            if before.paths.has(path) or changed.has(path) or not owner.resident.has(path):continue
+            var resident:Dictionary=owner.resident[path]
+            if _consumer_requirements_with_hint(before,path,resident,before.hint)!=_consumer_requirements_with_hint(before,path,resident,hint):hint_changed[path]=true
     var required_done=Time.get_ticks_usec()
     if not is_same(before.family,data.encounter):
         _family_interest(owner,before.family,-1);_family_interest(owner,data.encounter,1)
     if not is_same(before.hint,hint):
         _family_interest(owner,before.hint,-1);_family_interest(owner,hint,1,true)
-    if not same:
-        before.paths=paths.duplicate();before.environment=environment.duplicate();before.fixtures=fixtures.duplicate()
-        before.gpu_only=gpu_only.duplicate();before.cpu_required=cpu_required.duplicate()
+    for family in before.later_families:
+        if not later_families.any(func(current):return is_same(current,family)):_family_interest(owner,family,-1)
+    for family in later_families:
+        if not before.later_families.any(func(previous):return is_same(previous,family)):_family_interest(owner,family,1)
     before.family=data.encounter;before.hint=hint;before.host=data.get("host")
-    data.wanted=paths;data.environment=environment;data.fixtures=fixtures;data.gpu_only=gpu_only;data.cpu_required=cpu_required
+    before.later_families=later_families.duplicate()
+    data.wanted=before.paths;data.environment=before.environment;data.fixtures=before.fixtures;data.gpu_only=before.gpu_only;data.cpu_required=before.cpu_required
     if owner.consumers.size()==1 and owner.budget_bytes!=data.budget_bytes:
         owner.budget_bytes=data.budget_bytes;owner.selection_revision+=1
     var families_done=Time.get_ticks_usec()
@@ -719,15 +1087,25 @@ static func demand(data: Dictionary, paths: Dictionary, environment: Dictionary 
     var pending_done=Time.get_ticks_usec()
     data.preload_selected=owner.preload_selected
     if (data.required_plan or not data.encounter.is_empty()) and not data.boot_started:
-        data.boot_started=true;data.boot_paths.merge(paths)
-        changed.merge(paths)
-    for path in changed:_refresh_path(data,path)
+        data.boot_started=true;data.boot_paths.merge(before.paths)
+        changed.merge(before.paths)
+    for path in changed:_refresh_path(owner,path)
+    # A hint changes only this consumer's readiness operands. Physical role
+    # accounting follows its retained family in the existing optional lane.
+    for path in hint_changed:
+        if not changed.has(path):_refresh_consumer(owner,before,path)
     data.demand_runs+=1
-    if same:data.demand_noops+=1
-    data.demand_counts={"required":paths.size(),"affected":changed.size(),"consumers":owner.consumers.size()}
-    data.demand_phases={"required":(required_done-started)/1000.0,"family_handoff":(families_done-required_done)/1000.0,
+    if changed.is_empty() and hint_changed.is_empty():data.demand_noops+=1
+    data.demand_counts={"required":before.paths.size(),"affected":changed.size()+hint_changed.size(),"consumers":owner.consumers.size(),
+        "records_added":added,"records_removed":removed,"records_retained":retained,"source_roles_visited":changes.size(),"source_role_entries_visited":role_entries_visited}
+    data.demand_phases={"required":(required_done-started)/1000.0,"record_delta":(record_delta_done-started)/1000.0,"interest_updates":(required_done-record_delta_done)/1000.0,"family_handoff":(families_done-required_done)/1000.0,
         "pending":(pending_done-families_done)/1000.0,"readiness":(Time.get_ticks_usec()-pending_done)/1000.0,"total":(Time.get_ticks_usec()-started)/1000.0}
     if not data.optional_pending.is_empty():_start_plan(data,true)
+
+static func demand(data: Dictionary, paths: Dictionary, environment: Dictionary = {}, fixtures: Dictionary = {}, gpu_only: Dictionary = {}, cpu_required: Dictionary = {}, hint: Dictionary = {}) -> void:
+    # Compatibility for metadata fixtures and direct source-owner consumers.
+    # Production Play publishes selector-owned contribution references.
+    demand_records(data,[source_record(paths,environment,fixtures,gpu_only,cpu_required)] if not paths.is_empty() else [],hint)
 
 static func _decode(request: Dictionary, result: Dictionary) -> void:
     var started = Time.get_ticks_usec()
@@ -921,14 +1299,17 @@ static func _needs_cpu(data: Dictionary, path: String) -> bool:
     # retains its existing CPU contract. Only exact registered companions opt out.
     if data.has("physical"):
         return (_consumer_requirements(data.physical.consumers[data.consumer_id],path,data.resident.get(path,{}))&1)!=0
-    if _environment(data,path) or _fixture(data,path) or data.cpu_required.has(path) or (not data.has("physical") and data.encounter.get("cpu_required",{}).has(path)): return true
-    if data.gpu_only.has(path) or (not data.has("physical") and data.encounter.get("gpu_only",{}).has(path)): return false
+    if data.interests.has(path):return data.interests[path][2]>0
     return data.resident.get(path,{}).get("cpu_required",true)
 
 static func ready(data: Dictionary, paths: Dictionary) -> bool:
     if data.get("closed",false):return false
+    var owner:Dictionary=physical(data)
+    var consumer:Dictionary=owner.consumers[data.consumer_id] if data.has("physical") else {}
     for path in paths:
-        if not data.ready_paths.has(path): return false
+        if not consumer.is_empty() and not consumer.paths.has(path):
+            if not _consumer_available(owner,consumer,path):return false
+        elif not data.ready_paths.has(path):return false
     return true
 
 static func release_cold_images(data: Dictionary, limit: int = CPU_RELEASES_PER_FRAME) -> Array:
@@ -1080,8 +1461,7 @@ static func _drawable(actor: Dictionary) -> bool:
 static func _actor_base(actor: Dictionary, clips: Array, cache: Dictionary, errors: Array) -> Dictionary:
     if not _drawable(actor): return {}
     var wanted = clips.duplicate()
-    var index: Dictionary = Characters._read("catalog-index.json",cache)
-    var rigs: Dictionary = Characters._read(index.rigs,cache)
+    var rigs: Dictionary = Characters.rigs(cache)
     var rig = Characters.rig_id(actor,cache)
     if not rigs.has(rig):
         errors.append("No authored rig for actor " + str(actor.get("uuid")))
@@ -1103,7 +1483,14 @@ static func _actor_base(actor: Dictionary, clips: Array, cache: Dictionary, erro
     for field in ["value","gpu_only","cpu_required","geometry_slots","normal_sets"]:
         resolved[field].make_read_only()
     resolved.make_read_only();effects.make_read_only()
-    var base={"resolved":resolved,"effects":effects};base.make_read_only()
+    var records:Dictionary={}
+    var effect_record:Dictionary=source_record(effects) if not effects.is_empty() else {}
+    for profile in CharacterGeometry.PROFILES:
+        var selected:Array=resolved.source_records[profile].duplicate()
+        if not effect_record.is_empty():selected.append(effect_record)
+        selected.make_read_only();records[profile]=selected
+    records.make_read_only()
+    var base={"resolved":resolved,"effects":effects,"source_records":records};base.make_read_only()
     return base
 
 static func _add_actor_base(paths: Dictionary, base: Dictionary, cache: Dictionary,
@@ -1144,13 +1531,23 @@ static func _witness(witnesses: Dictionary, id: String, actor: Dictionary) -> vo
             and prior.life_state == actor.life_state and prior.get("conditions",[])==actor.get("conditions",[]) and _drawable(prior) == _drawable(actor): return
     witnesses[id].append(actor)
 
-static func _actor_selector(actor: Dictionary) -> Array:
-    # Complete inputs consumed by _add_actor: source rig/layers, lifecycle and
-    # condition poses/effects, and drawability. HP/position values select no PNG.
-    var loadout: Dictionary = actor.visual_loadout
-    return [actor.get("creature_content_ref"),actor.appearance,loadout.layers,
-        loadout.active_weapon_set,actor.life_state,_drawable(actor),
-        actor.get("conditions",[]),actor.get("presentation_layers",[])]
+static func _actor_selector(actor:Dictionary,cache:Dictionary={})->Array:
+    # Physical source identity belongs to admitted layer Resources. UUID, tint,
+    # portrait and transform never distinguish a sheet or its optical metadata.
+    var id:String=Characters.rig_id(actor,cache)
+    var rigs:Dictionary=Characters.rigs(cache)
+    if not rigs.has(id):return [id,_drawable(actor)]
+    var selected:Dictionary=Characters._select_layers(actor,rigs[id],id==Characters.BodySources.index(cache).root_rig,cache)
+    var references:Array=[]
+    if selected.ok:
+        for layer in selected.value:
+            var effect:Dictionary=layer.get("effect",{})
+            references.append([layer.source_path,layer.slot,effect.get("sourceSheet"),effect.get("palette",{}).get("noiseSheet")])
+    var poses:Array=[]
+    for activity in ["idle","move"]:
+        var pose:Dictionary=Conditions.ConditionPose.select(actor,id,activity,cache)
+        poses.append(pose.get("clip",""))
+    return [id,references,actor.life_state,_drawable(actor),poses,Conditions.paths(actor,cache).keys()]
 
 static func _same_actor_selector(a: Array, b: Array) -> bool:
     # Canonical after-values may independently decode the same outfit. These
@@ -1161,39 +1558,65 @@ static func _same_actor_selector(a: Array, b: Array) -> bool:
         if not is_same(a[index],b[index]) and a[index]!=b[index]:return false
     return true
 
-static func _actor_source_roots() -> Array:
-    return [ProjectSettings.get_setting("source_data/authoring_root"),ProjectSettings.get_setting("source_data/media_root"),
-        ProjectSettings.get_setting("source_data/character_geometry_root"),ProjectSettings.get_setting("source_data/creature_geometry_root"),
-        ProjectSettings.get_setting("source_data/normal_profiles_root")]
+static func _same_actor_source_inputs(a:Dictionary,b:Dictionary)->bool:
+    # Canonical HP/position after-values retain their immutable source operands.
+    # Resolve actual layer paths only when one of those operands changes. This
+    # deliberately excludes tint/scale, which cannot select another sheet.
+    if a.is_empty() or a.life_state!=b.life_state or _drawable(a)!=_drawable(b) \
+        or a.get("creature_content_ref")!=b.get("creature_content_ref"):return false
+    var left:Dictionary=a.appearance;var right:Dictionary=b.appearance
+    for field in ["presentation_kind","body_category","head_category","has_beard"]:
+        if left.get(field)!=right.get(field):return false
+    for field in ["visual_loadout","conditions","presentation_layers"]:
+        if not a.has(field) and not b.has(field):continue
+        if not is_same(a.get(field),b.get(field)):return false
+    return true
 
-static func _actor_reuse(cache: Dictionary) -> Dictionary:
-    var previous: Dictionary = cache.get("__required_actor_closures",{})
-    var entries: Array = []
-    if not previous.is_empty() and previous.roots==_actor_source_roots():
-        var current = true
-        for path in previous.sources:
-            if not cache.has(path) or not is_same(previous.sources[path],cache[path]): current=false; break
-        if current: entries=previous.entries
-    return {"previous":entries,"current":[],"hits":0,"misses":0}
+static func _actor_reuse(cache:Dictionary)->Dictionary:
+    var previous:Dictionary=cache.get("__required_actor_closures",{})
+    var admitted=Characters.BodySources.index(cache)
+    var entries:Array=previous.get("entries",[]) if is_same(previous.get("admission"),admitted) else []
+    return {"previous":entries,"current":[],"hits":0,"misses":0,
+        "selectors":previous.get("selectors",{}) if is_same(previous.get("admission"),admitted) else {},"selected_actors":{}}
 
-static func _retain_actor_closures(cache: Dictionary, reuse: Dictionary) -> void:
-    var sources = {}
-    for path in cache:
-        if path is String and path.ends_with(".json") and not path.begins_with("__"): sources[path]=cache[path]
-    # Replace the previous plan, rather than retaining an outfit/clip history.
-    cache.__required_actor_closures={"sources":sources,"roots":_actor_source_roots(),"entries":reuse.current,"hits":reuse.hits,"misses":reuse.misses,"promotions":reuse.get("promotions",0)}
+static func _retain_actor_closures(cache:Dictionary,reuse:Dictionary)->void:
+    # The immutable admitted revision owns all source selection metadata. No
+    # per-action document/root proof or retained whole-catalog scan is needed.
+    var entries:Array=reuse.current.duplicate()
+    for prior in reuse.previous:
+        var base:Dictionary=prior.get("base",{})
+        if base.is_empty():continue
+        var selected:bool=false
+        for current in reuse.current:
+            if is_same(current.base,base):selected=true;break
+        if not selected:continue
+        var retained:bool=false
+        for current in entries:
+            if is_same(current.base,base) and current.native_optics==prior.native_optics:retained=true;break
+        # Native receiver demand changes the optical role, not the selected
+        # physical sheets or their immutable metadata. Keep its two finite
+        # views while that same base remains selected; no outfit/clip history.
+        if not retained:entries.append(prior)
+    cache.__required_actor_closures={"admission":Characters.BodySources.index(cache),"entries":entries,
+        "selectors":reuse.selected_actors,"hits":reuse.hits,"misses":reuse.misses,"promotions":reuse.get("promotions",0)}
 
 static func _add_actor_once(paths: Dictionary, actor: Dictionary, clips: Array, cache: Dictionary,
         errors: Array, gpu_only: Dictionary, cpu_required: Dictionary, native_optics: bool,
         optical_candidates: Dictionary, normal_sets: Dictionary, requested: Array, reuse: Dictionary = {}) -> void:
+    var selector:Array=[]
     for prior in requested:
-        if is_same(prior.paths,paths) and is_same(prior.actor,actor) and prior.clips==clips: return
-    var selector = _actor_selector(actor)
+        if not is_same(prior.actor,actor):continue
+        if is_same(prior.paths,paths) and prior.clips==clips:return
+        selector=prior.get("selector",[])
+    if selector.is_empty():
+        var prior:Dictionary=reuse.get("selected_actors",{}).get(actor.uuid,reuse.get("selectors",{}).get(actor.uuid,{}))
+        selector=prior.selector if _same_actor_source_inputs(prior.get("actor",{}),actor) else _actor_selector(actor,cache)
+    if not reuse.is_empty():reuse.selected_actors[actor.uuid]={"actor":actor,"selector":selector}
     var packet = {}
     var base:Dictionary={}
     for entries in [reuse.get("current",[]),reuse.get("previous",[])]:
         for prior in entries:
-            if prior.id==actor.uuid and prior.clips==clips and _same_actor_selector(prior.selector,selector):
+            if prior.clips==clips and _same_actor_selector(prior.selector,selector):
                 if prior.native_optics==native_optics:
                     packet=prior; break
                 if base.is_empty():base=prior.get("base",{})
@@ -1205,7 +1628,21 @@ static func _add_actor_once(paths: Dictionary, actor: Dictionary, clips: Array, 
         if base.is_empty():base=_actor_base(actor,clips,cache,errors)
         elif not reuse.is_empty():reuse.promotions=int(reuse.get("promotions",0))+1
         _add_actor_base(packet.paths,base,cache,packet.gpu_only,packet.cpu_required,native_optics,packet.optical_candidates,packet.normal_sets)
+        var size_paths:Dictionary=packet.paths.duplicate();size_paths.merge(packet.optical_candidates)
+        packet.source_sizes=EncounterMedia.source_sizes(size_paths,cache);packet.source_sizes.make_read_only()
+        packet.source_headers=EncounterMedia.source_headers(size_paths,cache)
         packet.base=base
+        var records:Dictionary={}
+        for profile in CharacterGeometry.PROFILES:
+            var contributions:Array=base.get("source_records",{}).get(profile,[]).duplicate()
+            if native_optics:
+                for reference in base.get("resolved",{}).get("native_records",[]):
+                    contributions.append(reference)
+            contributions.make_read_only();records[profile]=contributions
+        records.make_read_only();packet.source_records=records
+        var families:Dictionary={}
+        for profile in records:families[profile]=_source_family(records[profile],packet.source_sizes)
+        families.make_read_only();packet.source_families=families
         if not reuse.is_empty(): reuse.misses+=1
         if errors.size()!=previous_errors:
             paths.merge(packet.paths);gpu_only.merge(packet.gpu_only);cpu_required.merge(packet.cpu_required)
@@ -1214,7 +1651,7 @@ static func _add_actor_once(paths: Dictionary, actor: Dictionary, clips: Array, 
     elif not reuse.is_empty(): reuse.hits+=1
     paths.merge(packet.paths);gpu_only.merge(packet.gpu_only);cpu_required.merge(packet.cpu_required)
     optical_candidates.merge(packet.optical_candidates);normal_sets.merge(packet.normal_sets)
-    requested.append({"paths":paths,"actor":actor,"clips":clips.duplicate()})
+    requested.append({"paths":paths,"actor":actor,"clips":clips.duplicate(),"packet":packet,"selector":selector})
     if not reuse.is_empty() and not reuse.current.any(func(entry):return is_same(entry,packet)): reuse.current.append(packet)
 
 static func _visible_ids(visible: Dictionary, senses: Variant, audience: Dictionary) -> void:
@@ -1235,12 +1672,39 @@ static func required_at(schedule:Dictionary,local_ms:float,fallback:Dictionary={
     # The timeline remains the only owner of the proposed display clock.
     return EnvironmentMedia.required_at(schedule,local_ms,fallback)
 
+static func errors_at(plan:Dictionary,local_ms:float)->Array:
+    if not plan.has("error_timeline"):return plan.get("errors",[])
+    var errors:Array=[]
+    for row in plan.error_timeline:
+        if float(row.at_ms)<=local_ms+0.000001:errors.append(row.message)
+    return errors
+
 static func _actor_first_use(times:Dictionary,actor:Dictionary,clips:Array,at_ms:float,
         cache:Dictionary,errors:Array,gpu_only:Dictionary,cpu_required:Dictionary,native_optics:bool,
-        optical_candidates:Dictionary,normal_sets:Dictionary,requested:Array,reuse:Dictionary)->void:
+        optical_candidates:Dictionary,normal_sets:Dictionary,requested:Array,reuse:Dictionary,error_times:Dictionary={})->void:
+    # This exact source occurrence was already selected earlier in the same
+    # plan. Its role projections are already composed; first-use needs only
+    # its immutable path owner, not another set of scratch role/path maps.
+    var borrowed:Dictionary={}
+    for request in requested:
+        if is_same(request.actor,actor) and request.clips==clips and request.packet.native_optics==native_optics:
+            borrowed=request;break
+    if not borrowed.is_empty():
+        var occurrence:Dictionary=borrowed.duplicate();occurrence.paths={}
+        requested.append(occurrence)
+        EnvironmentMedia._first_use({},times,borrowed.packet.paths,at_ms)
+        return
     var paths:Dictionary={}
+    var before:int=errors.size()
     _add_actor_once(paths,actor,clips,cache,errors,gpu_only,cpu_required,native_optics,optical_candidates,normal_sets,requested,reuse)
+    for index in range(before,errors.size()):error_times[errors[index]]=minf(float(error_times.get(errors[index],at_ms)),at_ms)
     EnvironmentMedia._first_use({},times,paths,at_ms)
+
+static func _native_optics(group:Dictionary)->bool:
+    # Constructor requirements also include audio and 2D outline helpers. Those
+    # do not acquire 3D optical receiver inputs for the room's actors.
+    return group.get("components",[]).any(func(row):return row.get("native_spell",false)) \
+        or group.get("native_requirements",[]).any(func(row):return row.get("native_spell",false))
 
 static func plan(state: Dictionary, groups: Array, cache: Dictionary) -> Dictionary:
     var required = {}
@@ -1251,33 +1715,39 @@ static func plan(state: Dictionary, groups: Array, cache: Dictionary) -> Diction
     var cpu_required = {}
     var normal_sets = {}
     var character_timeline:Dictionary={}
+    var character_error_timeline:Dictionary={}
+    var actor_records:Dictionary={}
     var requested_sources: Array = []
     var actor_reuse = _actor_reuse(cache)
-    errors.append_array(Characters.Catalog.validate_native(cache))
     if state.is_empty(): return {"required":required,"upcoming":upcoming,"errors":errors,"upcoming_errors":upcoming_errors,"gpu_only":gpu_only,"cpu_required":cpu_required,"normal_sets":normal_sets,"character_timeline":character_timeline}
     var actors: Dictionary = state.actors.duplicate()
     var senses: Variant = state.senses
     var audience: Dictionary = state.audience
     var optical_candidates={}
-    var native_optics=groups.any(func(group):return group.get("components",[]).any(func(row):return row.get("native_spell",false)) or not group.get("native_requirements",[]).is_empty())
+    var native_optics=not groups.is_empty() and _native_optics(groups[0])
     for actor in actors.values():
         if WorldRows.visible_actor(actor,state): _add_actor_once(required,actor,[],cache,errors,gpu_only,cpu_required,native_optics,optical_candidates,normal_sets,requested_sources,actor_reuse)
     for group_index in range(groups.size()):
         var group: Dictionary = groups[group_index]
+        var first_request:int=0 if group_index==0 else requested_sources.size()
+        native_optics=_native_optics(group)
         var paths: Dictionary = required if group_index == 0 else upcoming
         var group_errors: Array = errors if group_index == 0 else upcoming_errors
+        var error_times:Dictionary={}
+        if group_index==0:
+            for message in group_errors:error_times[message]=0.0
         var first_use:Dictionary={}
         var current_visible:Dictionary={}
         _visible_ids(current_visible,senses,audience)
         for id in current_visible:
-            if actors.has(id):_actor_first_use(first_use,actors[id],[],0.0,cache,group_errors,gpu_only,cpu_required,native_optics,optical_candidates,normal_sets,requested_sources,actor_reuse)
+            if actors.has(id):_actor_first_use(first_use,actors[id],[],0.0,cache,group_errors,gpu_only,cpu_required,native_optics,optical_candidates,normal_sets,requested_sources,actor_reuse,error_times)
         var witnesses = {}
         var visible = {}
         for id in actors: _witness(witnesses,id,actors[id])
         for id in group.get("staged_actors",{}):
             _witness(witnesses,id,group.staged_actors[id])
             visible[id] = true
-            _actor_first_use(first_use,group.staged_actors[id],[],float(group.get("staged_at_ms",{}).get(id,0.0)),cache,group_errors,gpu_only,cpu_required,native_optics,optical_candidates,normal_sets,requested_sources,actor_reuse)
+            _actor_first_use(first_use,group.staged_actors[id],[],float(group.get("staged_at_ms",{}).get(id,0.0)),cache,group_errors,gpu_only,cpu_required,native_optics,optical_candidates,normal_sets,requested_sources,actor_reuse,error_times)
         _visible_ids(visible,senses,audience)
         for commit in group.get("commits",[]):
             var delta: Dictionary = commit.delta
@@ -1291,7 +1761,7 @@ static func plan(state: Dictionary, groups: Array, cache: Dictionary) -> Diction
             _visible_ids(after_visible,senses,audience)
             for id in after_visible:
                 if actors.has(id) and (not current_visible.has(id) or delta.get("actors",{}).has(id)):
-                    _actor_first_use(first_use,actors[id],[],float(commit.get("at_ms",0.0)),cache,group_errors,gpu_only,cpu_required,native_optics,optical_candidates,normal_sets,requested_sources,actor_reuse)
+                    _actor_first_use(first_use,actors[id],[],float(commit.get("at_ms",0.0)),cache,group_errors,gpu_only,cpu_required,native_optics,optical_candidates,normal_sets,requested_sources,actor_reuse,error_times)
             current_visible=after_visible
         # Union exact observed/committed outfits within this one group. This
         # conservative preparation changes no state and exposes no actor early.
@@ -1310,7 +1780,7 @@ static func plan(state: Dictionary, groups: Array, cache: Dictionary) -> Diction
                 var shown:Dictionary=actor.duplicate()
                 shown.presentation_layers=track.get("effect_layers",[])
                 if track.has("visual_loadout"):shown.visual_loadout=track.visual_loadout
-                _actor_first_use(first_use,shown,[track.clip],float(track.start_ms),cache,group_errors,gpu_only,cpu_required,native_optics,optical_candidates,normal_sets,requested_sources,actor_reuse)
+                _actor_first_use(first_use,shown,[track.clip],float(track.start_ms),cache,group_errors,gpu_only,cpu_required,native_optics,optical_candidates,normal_sets,requested_sources,actor_reuse,error_times)
             var key: String = track.actor_uuid + ":" + track.rig + ":" + track.clip
             if not requested.has(key): requested[key] = []
             var loadout: Variant = [track.get("visual_loadout"),track.get("effect_layers",[])]
@@ -1325,12 +1795,28 @@ static func plan(state: Dictionary, groups: Array, cache: Dictionary) -> Diction
                 _add_actor_once(paths,shown,[track.clip],cache,group_errors,gpu_only,cpu_required,native_optics,optical_candidates,normal_sets,requested_sources,actor_reuse)
         if group.has("id"):
             character_timeline[group.id]=EnvironmentMedia._timeline({},first_use)
+            var error_rows:Array=[]
+            var seen_errors:Dictionary={}
+            for message in group_errors:
+                if seen_errors.has(message):continue
+                seen_errors[message]=true
+                error_rows.append({"at_ms":float(error_times.get(message,0.0)),"message":message})
+            character_error_timeline[group.id]=error_rows
+            var records:Array=[]
+            for request in requested_sources.slice(first_request):
+                if not records.any(func(packet):return is_same(packet,request.packet)):records.append(request.packet)
+            records.make_read_only();actor_records[group.id]=records
             # Exact occurrence snapshots can select a source absent from the
             # conservative endpoint witnesses. They still belong to demand.
             for path in first_use:paths[path]=true
+    if groups.is_empty():
+        var records:Array=[]
+        for request in requested_sources:
+            if not records.any(func(packet):return is_same(packet,request.packet)):records.append(request.packet)
+        records.make_read_only();actor_records[""]=records
     for path in cpu_required: gpu_only.erase(path)
     _retain_actor_closures(cache,actor_reuse)
-    return {"required":required,"upcoming":upcoming,"errors":errors,"upcoming_errors":upcoming_errors,"gpu_only":gpu_only,"cpu_required":cpu_required,"optical_candidates":optical_candidates,"normal_sets":normal_sets,"character_timeline":character_timeline}
+    return {"required":required,"upcoming":upcoming,"errors":errors,"upcoming_errors":upcoming_errors,"gpu_only":gpu_only,"cpu_required":cpu_required,"optical_candidates":optical_candidates,"normal_sets":normal_sets,"character_timeline":character_timeline,"character_error_timeline":character_error_timeline,"actor_records":actor_records}
 
 static func close(data: Dictionary) -> void:
     if data.get("closed",false):return

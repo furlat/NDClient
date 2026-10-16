@@ -6,7 +6,7 @@ const Catalog=preload("res://source_catalog.gd")
 const Placement=preload("res://placement.gd")
 
 static func asset(cache:Dictionary)->Dictionary:
-    return Catalog.read_file("catalog/action_media_assets.json",cache).get("particles.region.blood",{})
+    return Catalog.asset("particles.region.blood",cache)
 
 static func key(point:Array)->String:return "%d,%d"%point
 
@@ -94,6 +94,17 @@ static func contribution_amount(value:Dictionary,ellipses:Array)->float:
     for contribution in value.get("contributions",[]):
         if contribution.ellipses==ellipses:return float(contribution.amount)
     return 0.0
+
+static func affects_residue(value:Dictionary,reveal:Dictionary,pattern:String,source:Dictionary)->bool:
+    # A future release cannot change a field that still contains only its
+    # authoritative before-value. Use the same amount/ellipse rule as kernels;
+    # age and authored landing thresholds are deliberately unchanged.
+    if source.region.families.get(pattern,{}).is_empty():return false
+    for contribution in value.get("contributions",[]):
+        var after:float=contribution_amount(reveal.after,contribution.ellipses)
+        var before:float=contribution_amount(reveal.before,contribution.ellipses)
+        if after>before and contribution.amount>=after:return true
+    return false
 
 static func prepare_landing(cache:Dictionary,reveal:Dictionary,pattern:String)->void:
     # Both finite amounts have already been prepared by the received-shape

@@ -14,7 +14,6 @@ static var _prepared_packets:Dictionary={}
 static func invalidate_authoring()->void:
     source_revision+=1
     _prepared_packets={}
-    Variants.reset()
 
 static func admitted_packet(spec:Dictionary,clip:Dictionary={})->Resource:
     return _prepared_packets.get(Variants.path_for(Variants.component_spec(spec,clip)))
@@ -39,7 +38,7 @@ static func make(parent: Node3D, clip: Dictionary, layer_mask:int=DEFAULT_LAYER,
     var make_started:int=Time.get_ticks_usec()
     var make_phases:Dictionary={}
     var handle = {"root":Node3D.new(),"components":{},"players":[],"emitters":[],
-        "scripts":[],"carriers":[],"clocks":[],"geometry":[],"opacity_bindings":[],"particle_units":[],"emitter_speeds":{},"light_units":{},"motion_trails":{},"motion_age":0.0,"native_animation_end":0.0,"initialized":false,"age":0.0,"error":"","clip":clip,"layer_mask":layer_mask}
+        "scripts":[],"carriers":[],"clocks":[],"geometry":[],"opacity_bindings":[],"particle_units":[],"emitter_speeds":{},"light_units":{},"motion_trails":{},"motion_age":0.0,"native_animation_end":0.0,"initialized":false,"age":0.0,"error":"","clip":clip.duplicate(false),"layer_mask":layer_mask}
     if not Admission.begin_mutation():
         handle.error="Native construction admission is pending"
         return handle
@@ -331,6 +330,7 @@ static func _light_layer(light:Light3D,mask:int)->void:
     light.visible=shown
 
 static func resource_paths(clip:Dictionary)->Array:
+    if clip.has("source_resource_paths"):return clip.source_resource_paths
     var result:Dictionary={}
     _resource_values(clip.get("components",[]),result)
     return result.keys()
@@ -372,9 +372,7 @@ static func prepare(clips:Array,cache:Dictionary)->Dictionary:
     if pending==0 and errors.is_empty():
         for path in prepared_paths:
             var packet:Resource=cache[path]
-            if packet.get_script().resource_path!=Variants.Packet.resource_path or packet.format_version!=2:
-                errors.append("Invalid prepared native source program inventory: "+path)
-            elif not Admission.prepare_materials(packet,packet.program_materials,cache):
+            if not Admission.prepare_materials(packet,packet.program_materials,cache):
                 program_pending+=1
             else:_prepared_packets[path]=packet
         pending+=program_pending

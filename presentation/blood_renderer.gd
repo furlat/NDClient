@@ -85,25 +85,26 @@ func _page(world:Node,name:String)->SubViewport:
     RenderingServer.frame_post_draw.connect(func():page.ready=true,CONNECT_ONE_SHOT)
     return view
 
-func _entry(world:Node,id:String,mesh:Mesh,role:String,position:Array,height:float,layer:int,shader:Shader)->Dictionary:
+func _entry(world:Node,id:String,mesh:Mesh,role:String,position:Array,height:float,layer:int,shader:Shader,parent:Node=null,registered:bool=true)->Dictionary:
     var node=MeshInstance3D.new();node.mesh=mesh;node.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-    var material=ShaderMaterial.new();material.shader=shader;node.material_override=material;world.add_child(node)
+    var material=ShaderMaterial.new();material.shader=shader;node.material_override=material
+    (world if parent==null else parent).add_child(node)
     var row={"id":id,"position":position,"base_height_steps":height,"kind":"effect","layer":1}
     var entry={"id":id,"node":node,"material":material,"placement":row,"role":role,"layer":layer}
-    world.actor_entries.append(entry);world.draw_order_dirty=true
+    if registered:world.actor_entries.append(entry);world.draw_order_dirty=true
     return entry
 
-func _deposit(world:Node,key:String,tile:Dictionary)->Dictionary:
+func _deposit(world:Node,key:String,tile:Dictionary,parent:Node=null,registered:bool=true)->Dictionary:
     var phase:int=Time.get_ticks_usec()
     last_allocations+=1
     var field=SubViewport.new();field.size=Vector2i(64,64);field.disable_3d=true;field.transparent_bg=true;field.use_hdr_2d=true
-    field.render_target_update_mode=SubViewport.UPDATE_ONCE;world.add_child(field)
+    field.render_target_update_mode=SubViewport.UPDATE_ONCE;(world if parent==null else parent).add_child(field)
     var mesh=QuadMesh.new();mesh.size=Vector2(2,2)
     var multimesh=MultiMesh.new();multimesh.transform_format=MultiMesh.TRANSFORM_2D;multimesh.use_custom_data=true;multimesh.mesh=mesh
     var kernels=MultiMeshInstance2D.new();kernels.multimesh=multimesh
     kernels.material=ShaderMaterial.new();kernels.material.shader=Kernel;field.add_child(kernels)
     var plane=PlaneMesh.new();plane.size=Vector2.ONE
-    var entry=_entry(world,"blood:tile:"+key,plane,"covering",tile.position,tile.get("elevation_steps",0),1,Surface)
+    var entry=_entry(world,"blood:tile:"+key,plane,"covering",tile.position,tile.get("elevation_steps",0),1,Surface,parent,registered)
     entry.node.position=Placement.contact(entry.placement)
     entry.material.set_shader_parameter("field_texture",field.get_texture())
     entry.material.set_shader_parameter("tile_position",Vector2(tile.position[0],tile.position[1]))
@@ -112,9 +113,74 @@ func _deposit(world:Node,key:String,tile:Dictionary)->Dictionary:
     entry.material.set_shader_parameter("illumination",_page(world,"floor").get_texture())
     light_page_create_usec+=Time.get_ticks_usec()-phase
     entry.node.visible=false
-    var handle={"entry":entry,"field":field,"kernels":kernels,"value":{},"phase":[],"updates":0,"ready":false,"kernel_cache":{}}
+    var handle={"entry":entry,"field":field,"kernels":kernels,"value":{},"phase":[],"updates":0,"ready":false,"kernel_cache":{},"registered":registered,"world_users":0}
     RenderingServer.frame_post_draw.connect(func():handle.ready=true,CONNECT_ONE_SHOT)
     return handle
+
+func world_values()->Dictionary:
+    # Canonical residue values are immutable; the world worker borrows values,
+    # never mutable native handles or kernel caches owned by this renderer.
+    var values:Dictionary={}
+    for key in deposits:values[key]={"value":deposits[key].value,"source":deposits[key].kernel_cache.get("source")}
+    return values
+
+func prepare_world(world:Node,owner:Node,rows:Dictionary,preparation:Dictionary,budget:Dictionary)->bool:
+    if rows.is_empty():return true
+    if rows.values().any(func(row):return not row.get("removed",false)) and not prepare_resources(world,budget):return false
+    var complete:bool=true
+    for key in rows:
+        var row:Dictionary=rows[key]
+        if row.get("removed",false):preparation.handles[key]={"removed":true};continue
+        if deposits.has(key) and is_same(deposits[key].value,row.value) and is_same(deposits[key].kernel_cache.get("source"),row.source):continue
+        if not preparation.handles.has(key):
+            if budget.used_usec>=budget.limit_usec or not Admission.begin_mutation():return false
+            var began:int=Time.get_ticks_usec()
+            # A pending event field can be borrowed only before this tile has a
+            # displayed residue. Changing an existing published field early
+            # would expose a future after-value before the ordered world cue.
+            var borrowed:bool=pending_deposits.has(key) and not tiles.has(key)
+            var handle:Dictionary=pending_deposits[key] if borrowed else _deposit(world,key,row.tile,owner,false)
+            if borrowed:handle.world_users=handle.get("world_users",0)+1
+            handle.value=row.value;handle.phase=[];handle.coverage=row.coverage
+            handle.kernel_cache=row.cache
+            _upload(handle,row.kernels)
+            handle.ready=false
+            RenderingServer.frame_post_draw.connect(func():handle.ready=true,CONNECT_ONE_SHOT)
+            preparation.handles[key]={"handle":handle,"borrowed":borrowed}
+            budget.used_usec+=Time.get_ticks_usec()-began
+        complete=complete and preparation.handles[key].handle.ready and pages.floor.ready
+    return complete
+
+func publish_world(world:Node,preparation:Dictionary)->void:
+    for key in preparation.handles:
+        var record:Dictionary=preparation.handles[key]
+        var handle:Dictionary=record.get("handle",{})
+        if record.get("borrowed",false):handle.world_users-=1
+        if not handle.is_empty() and pending_deposits.has(key) and is_same(pending_deposits[key],handle):pending_deposits.erase(key)
+        if deposits.has(key) and not is_same(deposits[key],handle):
+            var old:Dictionary=deposits[key]
+            old.entry.node.visible=false;old.field.render_target_update_mode=SubViewport.UPDATE_DISABLED
+            world.actor_entries.erase(old.entry);preparation.retired.append(old)
+        if record.get("removed",false):deposits.erase(key);world.draw_order_dirty=true;continue
+        if handle.entry.node.get_parent()!=world:handle.entry.node.reparent(world)
+        if handle.field.get_parent()!=world:handle.field.reparent(world)
+        if not handle.registered:world.actor_entries.append(handle.entry);handle.registered=true
+        source=handle.kernel_cache.source
+        deposits[key]=handle;world.draw_order_dirty=true
+    preparation.handles={}
+
+func release_world(preparation:Dictionary)->Array:
+    var held:Array=[]
+    for record in preparation.handles.values():
+        if record.get("removed",false):continue
+        if record.borrowed:record.handle.world_users-=1
+        else:preparation.retired.append(record.handle)
+    for handle in preparation.retired:
+        handle.entry.retire_external=true
+        held.append(handle.entry)
+        held.append({"node":handle.field,"retire_external":true})
+    preparation.handles={};preparation.retired=[]
+    return held
 
 func _upload(handle:Dictionary,kernels:Array)->void:
     var multimesh:MultiMesh=handle.kernels.multimesh
@@ -179,8 +245,8 @@ func _prepare_kernels(key:String,reveal:Dictionary,pattern:String,group_id:Strin
     kernel_preparations.append({"key":key,"value":reveal.after,"source":source,"groups":{group_id:true},"input":input,"output":output,"task":-2})
     return false
 
-func _adopt_kernel_cache(handle:Dictionary,key:String,value:Dictionary)->void:
-    if is_same(handle.kernel_cache.get("value"),value):return
+func _adopt_kernel_cache(handle:Dictionary,key:String,value:Dictionary,prefer_landing:bool=false)->void:
+    if is_same(handle.kernel_cache.get("value"),value) and (not prefer_landing or handle.kernel_cache.has("landing")):return
     for prepared in kernel_preparations:
         if prepared.key==key and prepared.task==-1 and not prepared.groups.is_empty() and is_same(prepared.source,source) and prepared.value==value and prepared.output.get("cache",{}).get("value")==value:
             handle.kernel_cache=prepared.output.cache
@@ -202,7 +268,18 @@ func prepare(world:Node,groups:Array,budget:Dictionary={})->bool:
         prepare_usec+=Time.get_ticks_usec()-began
         if not budget.is_empty():budget.used_usec+=maxi(0,Time.get_ticks_usec()-began-(budget.used_usec-charged_before))
         return false
-    if source.is_empty():source=Blood.asset(world.catalog_cache)
+    if source.is_empty():source=Blood.Catalog.prepared_asset("particles.region.blood",world.catalog_cache)
+    if source.is_empty():
+        # A real release carries its worker-admitted source. No source loading
+        # may be hidden in the scene preparation or sampling path.
+        for group in groups:
+            for component in group.get("components",[]):
+                if component.kind=="residue_deposit":source=component.get("asset_metadata",{});break
+            if not source.is_empty():break
+    if source.is_empty():
+        for group in groups:
+            if group.get("components",[]).any(func(component):return component.kind=="residue_deposit"):return false
+        return true
     for group in groups:
         for component in group.get("components",[]):
             if component.kind!="residue_deposit":continue
@@ -248,7 +325,7 @@ func _prune_pending(world:Node)->void:
         var keep=false
         for id in pending_deposits[key].groups:
             if ids.has(id):keep=true;break
-        if not keep:
+        if not keep and pending_deposits[key].get("world_users",0)==0:
             _free_deposit(world,pending_deposits[key]);pending_deposits.erase(key)
 
 func _active(world:Node,samples:Array)->Array:
@@ -283,18 +360,23 @@ func sample(world:Node,samples:Array,changes:Dictionary={})->void:
     sample_phases={}
     var stage_started:int=began
     ready=true;last_allocations=0
-    if source.is_empty():source=Blood.asset(world.catalog_cache)
+    if source.is_empty():source=Blood.Catalog.prepared_asset("particles.region.blood",world.catalog_cache)
     _prune_pending(world)
     _phase("pending",stage_started);stage_started=Time.get_ticks_usec()
     var state:Dictionary=world.timeline.state
     sync_tiles(state.get("tiles",{}),world.timeline.world_revision,changes)
     _phase("tile_index",stage_started);stage_started=Time.get_ticks_usec()
     var active=_active(world,samples);var by_tile={};var live_flights={}
+    if source.is_empty():
+        ready=tiles.is_empty() and active.is_empty()
+        return
     for component in active:
         var age:float=component.age_ms/1000.
-        var step=Blood.landing_step(source,component.body_release.pattern,age)
+        var step:int=-1
         for reveal in component.reveals:
             var cell=Blood.key(reveal.position)
+            if not tiles.has(cell) or not Blood.affects_residue(Blood.residue(tiles[cell]),reveal,component.body_release.pattern,source):continue
+            if step<0:step=Blood.landing_step(source,component.body_release.pattern,age)
             if not by_tile.has(cell):by_tile[cell]=[]
             var row=reveal.duplicate();row.pattern=component.body_release.pattern;row.age_seconds=age;row.id=component.id
             row.step=step;by_tile[cell].append(row)
@@ -312,7 +394,10 @@ func sample(world:Node,samples:Array,changes:Dictionary={})->void:
         if not deposits.has(key):
             if pending_deposits.has(key):
                 deposits[key]=pending_deposits[key];pending_deposits.erase(key)
-            else:deposits[key]=_deposit(world,key,tile)
+            else:
+                # Initial, dirty and remembered tile after-values all receive
+                # private fields in WorldPreparation before publication.
+                ready=false;continue
         var handle:Dictionary=deposits[key]
         handle.entry.node.visible=on_screen and handle.ready and pages.floor.ready
         if not on_screen:continue
@@ -320,7 +405,7 @@ func sample(world:Node,samples:Array,changes:Dictionary={})->void:
         var reveals:Array=by_tile.get(key,[]);var phase=reveals.map(func(row):return [row.id,row.step])
         if not is_same(handle.value,value) or handle.phase!=phase:
             var kernel_started:int=Time.get_ticks_usec()
-            _adopt_kernel_cache(handle,key,value)
+            _adopt_kernel_cache(handle,key,value,not reveals.is_empty())
             var kernels=Blood.kernels(value,tile.position,reveals,source,handle.kernel_cache)
             _phase("kernels",kernel_started)
             var upload_started:int=Time.get_ticks_usec()
@@ -335,7 +420,7 @@ func sample(world:Node,samples:Array,changes:Dictionary={})->void:
         entry.material.set_shader_parameter("normals_visible",world.normals_visible)
     _phase("fields",stage_started);stage_started=Time.get_ticks_usec()
     for key in deposits.keys():
-        if not tiles.has(key):_erase_deposit(world,key)
+        if not tiles.has(key):deposits[key].entry.node.visible=false
     for key in flights.keys():
         if not live_flights.has(key):_erase_flight(world,key)
     var normal=world.camera.global_basis.inverse()*Vector3.UP;normal.y=-normal.y

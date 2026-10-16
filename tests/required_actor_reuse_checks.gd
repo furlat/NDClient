@@ -61,31 +61,27 @@ func run()->void:
     check(actual_hits>0,"Actual retained canonical operation sequence exercises selector reuse")
     var retained:Dictionary=cache.__required_actor_closures
     check(not Media._actor_reuse(cache).previous.is_empty(),"Current static owners prove retained closures")
-    for path in retained.sources:
-        var value:Variant=cache[path]
-        if not value is Dictionary and not value is Array:continue
-        cache[path]=value.duplicate()
-        check(Media._actor_reuse(cache).previous.is_empty(),"Replacement of any captured source document invalidates reuse: "+path)
-        cache[path]=value
-    for setting in ["source_data/authoring_root","source_data/media_root","source_data/character_geometry_root","source_data/creature_geometry_root","source_data/normal_profiles_root"]:
-        var value=ProjectSettings.get_setting(setting)
-        ProjectSettings.set_setting(setting,str(value)+"-test-replacement")
-        check(Media._actor_reuse(cache).previous.is_empty(),"Changed path root invalidates all source closures: "+setting)
-        ProjectSettings.set_setting(setting,value)
+    var sources=Media.Characters.BodySources
+    var admitted:Dictionary=cache[sources.KEY]
+    var replacement:Dictionary={"index":admitted.index.duplicate(),"loaded":admitted.loaded}
+    replacement.make_read_only();cache[sources.KEY]=replacement
+    check(Media._actor_reuse(cache).previous.is_empty(),"Explicit replacement admission invalidates previous source closure owner")
+    cache[sources.KEY]=admitted
+    check(not Media._actor_reuse(cache).previous.is_empty(),"Original immutable admission remains valid for displayed sources")
     var witness:Dictionary=final_before.actors.values()[0]
-    var base=Media._actor_selector(witness)
+    var base=Media._actor_selector(witness,cache)
     var position_only=witness.duplicate();position_only.last_visual_position=[999,998,0]
-    check(Media._same_actor_selector(base,Media._actor_selector(position_only)),"Position changes keep exact source selectors")
+    check(Media._same_actor_selector(base,Media._actor_selector(position_only,cache)),"Position changes keep exact source selectors")
     var leaf=witness.duplicate();leaf.appearance=witness.appearance.duplicate()
-    check(Media._same_actor_selector(base,Media._actor_selector(leaf)),"Equal decoded appearance preserves source selection")
+    check(Media._same_actor_selector(base,Media._actor_selector(leaf,cache)),"Equal decoded appearance preserves source selection")
     leaf=witness.duplicate();leaf.visual_loadout=witness.visual_loadout.duplicate();leaf.visual_loadout.layers=witness.visual_loadout.layers.duplicate()
-    check(Media._same_actor_selector(base,Media._actor_selector(leaf)),"Equal decoded equipment layers preserve source selection")
+    check(Media._same_actor_selector(base,Media._actor_selector(leaf,cache)),"Equal decoded equipment layers preserve source selection")
     leaf=witness.duplicate();leaf.visual_loadout=witness.visual_loadout.duplicate();leaf.visual_loadout.active_weapon_set="ranged" if witness.visual_loadout.active_weapon_set=="melee" else "melee"
-    check(not Media._same_actor_selector(base,Media._actor_selector(leaf)),"Changed active equipment selector invalidates")
+    check(not Media._same_actor_selector(base,Media._actor_selector(leaf,cache)),"Changed active equipment selector invalidates")
     leaf=witness.duplicate();leaf.life_state="dying" if witness.life_state=="alive" else "alive"
-    check(not Media._same_actor_selector(base,Media._actor_selector(leaf)),"Changed authored lifecycle selector invalidates")
+    check(not Media._same_actor_selector(base,Media._actor_selector(leaf,cache)),"Changed authored lifecycle selector invalidates")
     leaf=witness.duplicate();leaf.present=not witness.get("present",true)
-    check(not Media._same_actor_selector(base,Media._actor_selector(leaf)),"Changed drawability invalidates")
+    check(not Media._same_actor_selector(base,Media._actor_selector(leaf,cache)),"Changed drawability invalidates")
     var failed_actor=witness.duplicate();failed_actor.creature_content_ref="__test_unregistered_rig__"
     var reuse={"current":[],"previous":[],"hits":0,"misses":0};var requested=[];var errors=[]
     for attempt in range(2):Media._add_actor_once({},failed_actor,[],cache,errors,{},{},true,{},{},requested,reuse)
@@ -93,6 +89,6 @@ func run()->void:
     var cleared=Media.plan(state,[],cache)
     check(cache.__required_actor_closures.entries.size()<retained.entries.size(),"Next plan drops previous action-clip history")
     same(cleared,original.plan(state,[],old_cache),"Final current-only plan closure")
-    var result={"checks":checks,"failures":failures,"timing":timing,"actual_hits":actual_hits,"scope":"Actual retained canonical six-operation requests; exact complete ordered paths/roles/normal/optical results, immutable inputs, source replacement and all roots, selector boundaries, no failed caching and previous/current bound; isolated CPU only"}
+    var result={"checks":checks,"failures":failures,"timing":timing,"actual_hits":actual_hits,"scope":"Actual retained canonical six-operation requests; exact complete ordered paths/roles/normal/optical results, immutable inputs and explicit admission replacement, selector boundaries, no failed caching and previous/current bound; isolated CPU only"}
     FileAccess.open("res://.runtime/required-actor-reuse-checks.json",FileAccess.WRITE).store_string(JSON.stringify(result,"  "))
     print("REQUIRED_ACTOR_REUSE_CHECKS ",JSON.stringify(result));quit(0 if failures.is_empty() else 1)

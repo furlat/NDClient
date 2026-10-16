@@ -13,6 +13,7 @@ static func _memory()->Dictionary:
         "video_mib":Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED)/1048576.0}
 
 static func _key(clip:Dictionary)->String:
+    if clip.has("source_identity"):return clip.source_identity+"|"+str(clip.get("opacity_uniform",""))
     return var_to_bytes(Factory.Variants.canonical(clip)).hex_encode().sha256_text()
 
 static func recording_plan(rows:Array)->Array:
@@ -23,10 +24,10 @@ static func recording_plan(rows:Array)->Array:
         var component:Dictionary=row.get("component",{})
         var clip:Dictionary={}
         if component.get("native_spell",false) and component.get("status")!="missing":
-            clip=component.get("native_clip",{}).duplicate(true)
+            clip=component.get("native_clip",{}).duplicate(false)
             if component.get("native_cue",{}).has("opacity_uniform"):clip.opacity_uniform=component.native_cue.opacity_uniform
         elif component.get("kind")=="material_flash" and component.get("native_hit",{}).get("definition",{}).get("status")=="available":
-            clip=component.native_hit.get("clip",{}).duplicate(true)
+            clip=component.native_hit.get("clip",{}).duplicate(false)
         if clip.is_empty():continue
         var key:String=_key(clip)
         if not by_key.has(key):
@@ -37,12 +38,23 @@ static func recording_plan(rows:Array)->Array:
     result.sort_custom(func(a,b):return a.intervals[0].x<b.intervals[0].x)
     return result
 
+static func source_plan(clips:Array)->Array:
+    var result:Array=[];var seen:Dictionary={}
+    for clip in clips:
+        if clip.is_empty():continue
+        var key:String=_key(clip)
+        if seen.has(key):continue
+        seen[key]=true;result.append({"key":key,"clip":clip})
+    return result
+
 static func requested(plan:Array,at_ms:float,horizon_ms:float=0.0)->Array:
     return plan.filter(func(item):return item.intervals.any(func(span):return span.x<=at_ms+horizon_ms and span.y>at_ms))
 
 static func _plan(cache:Dictionary)->Array:
     var result:Array=[];var seen:Dictionary={}
-    var entries:Dictionary=Authoring.Authoring.load_data("native_effects/index.json",cache).get("spells",{})
+    var index:Resource=Authoring.Sources.admission(cache).index
+    if index==null:return result
+    var entries:Dictionary=index.spells
     for behavior in entries:
         var selected:Dictionary=Authoring.selection(behavior,cache)
         for clip in selected.get("clips",[]):

@@ -446,31 +446,67 @@ static func _native_requirements(before: Dictionary, groups: Array, cache: Dicti
     # once on this compiler worker; never replay these commits during readiness.
     var owners: Dictionary = {}; var areas: Dictionary = {}
     Conditions.observe(owners,before.actors,0.0,true)
-    Conditions.NativePersistent.observe_spatial(areas,before.senses.get("spatial_effects",{}),0.0,true)
+    var condition_inputs:Dictionary={}
+    for id in before.actors:
+        condition_inputs[id]=[before.actors[id].get("conditions",[]),before.actors[id].get("life_state","alive")]
+    var spatial_inputs:Dictionary={} if before.senses==null else before.senses.get("spatial_effects",{})
+    if before.senses!=null:
+        Conditions.NativePersistent.observe_spatial(areas,before.senses.get("spatial_effects",{}),0.0,true)
     var start = 0.0
     for group in groups:
         group.native_requirements = []
         var previous: Dictionary = {}
         _native_requirement_cut(group,previous,owners,areas,start,0.0,cache)
+        var sampled_at:float=start
         for commit in group.get("commits",[]):
             var delta: Dictionary = commit.delta
             if delta.get("actors",{}).is_empty() and not delta.get("set",{}).has("senses"): continue
             var at: float = start+commit.at_ms
+            var changed:bool=false
+            for id in delta.get("actors",{}):
+                var actor:Dictionary=delta.actors[id]
+                var selected:Array=[actor.get("conditions",[]),actor.get("life_state","alive")]
+                changed=changed or condition_inputs.get(id,[])!=selected
+                condition_inputs[id]=selected
             Conditions.observe(owners,delta.get("actors",{}),at)
             if delta.get("set",{}).has("senses"):
-                Conditions.NativePersistent.observe_spatial(areas,delta.set.senses.get("spatial_effects",{}),at)
+                var spatial:Dictionary=delta.set.senses.get("spatial_effects",{}) if delta.set.senses!=null else {}
+                Conditions.NativePersistent.observe_spatial(areas,spatial,at)
+                changed=changed or spatial_inputs!=spatial
+                spatial_inputs=spatial
+            # Several HP/position after-values can share one effect contact.
+            # They change no persistent constructor operand. Keep all distinct
+            # clocks and real condition/life/spatial changes, in source order.
+            if not changed and at==sampled_at:continue
             _native_requirement_cut(group,previous,owners,areas,at,commit.at_ms,cache)
+            sampled_at=at
         start += float(group.duration_ms)
 
 static func _native_requirement_cut(group: Dictionary, previous: Dictionary, owners: Dictionary,
         areas: Dictionary, at_ms: float, local_ms: float, cache: Dictionary) -> void:
-    var samples: Array = Conditions.native_samples(owners,at_ms,cache,true)
+    var samples: Array = Conditions.samples(owners,at_ms,cache,{},false)
     samples.append_array(Conditions.NativePersistent.spatial_samples(areas,at_ms,cache))
+    var outlined:Dictionary={}
+    var actor_ids:Dictionary={}
+    for sample in samples:
+        if sample.kind=="condition":actor_ids[sample.actor_uuid]=true
+    for actor_id in actor_ids:
+        for selected in Conditions.select_recipes(actor_id,samples):
+            if selected.recipe.get("persistent",{}).has("bodyOutline"):outlined[selected.condition_uuid]=true
     for sample in samples:
         # Only constructor/source/shape operands cross this boundary. Runtime
         # owner age, removal, initial state and material sampling stay private.
         var row: Dictionary = sample.duplicate()
-        for field in ["age_ms","start_ms","absolute_start_ms","duration_ms","initial","removal_age_ms","alpha","source_age_ms","selection_alpha","condition","recipe"]:
+        if row.kind=="condition":
+            if not outlined.has(row.condition_uuid):continue
+            row={"id":str(row.id)+":outline","kind":"condition_outline","actor_uuid":row.actor_uuid,
+                "condition_uuid":row.condition_uuid,"status":"available"}
+        elif row.kind not in ["native_effect","registered_media","audio"]:continue
+        if row.kind=="registered_media" and row.has("media_samples"):
+            row.media_samples=row.media_samples.map(func(phase):return {"part_id":phase.part_id,"media":phase.media})
+        var runtime_fields:Array=["age_ms","initial","removal_age_ms","alpha","source_age_ms","selection_alpha","condition","recipe"]
+        if row.kind!="audio":runtime_fields.append_array(["start_ms","absolute_start_ms","duration_ms"])
+        for field in runtime_fields:
             row.erase(field)
         if sample.has("native_cue"):
             row.native_cue = sample.native_cue.duplicate()
@@ -497,6 +533,15 @@ static func _actor_structure_value(actor:Dictionary,loadouts:Dictionary,inputs:A
     var selected=Authoring.Characters.structure(ActorConstruction.actor_with_loadout(actor,loadouts),cache)
     return selected.value if selected.ok else {"error":selected.error}
 
+static func _actor_source_clip(actor:Dictionary,structure:Dictionary,sample:Dictionary,cache:Dictionary)->String:
+    if structure.is_empty() or structure.has("error"):return ""
+    if not sample.is_empty():return sample.clip
+    var rig:Dictionary=Authoring.rigs(cache)[structure.rig]
+    var pose:Dictionary=Conditions.pose(actor,structure.rig,cache)
+    if not pose.is_empty() and rig.clips.has(pose.clip):return pose.clip
+    var resting:Dictionary=Authoring.Characters.rest_sample(actor,rig,cache)
+    return resting.value.clip if resting.ok else ""
+
 static func _actor_structure_requirements(before:Dictionary,groups:Array,cache:Dictionary)->void:
     # Sparse after-value overlay: the admitted base stays read-only. Inspect only
     # touched actors and authored selector edges, never all actors at every cut.
@@ -506,11 +551,8 @@ static func _actor_structure_requirements(before:Dictionary,groups:Array,cache:D
     var start=0.0
     for group in groups:
         var duration:float=group.duration_ms
-        var cuts:Dictionary={};var affected:Dictionary={};var loadout_actors:Dictionary={}
+        var cuts:Dictionary={};var affected:Dictionary={}
         for track in group.get("actor_tracks",[]):
-            if track.has("visual_loadout"):loadout_actors[track.actor_uuid]=true
-        for track in group.get("actor_tracks",[]):
-            if not loadout_actors.has(track.actor_uuid):continue
             _actor_cut(cuts,track.start_ms,track.actor_uuid,duration)
             _actor_cut(cuts,track.start_ms+track.duration_ms,track.actor_uuid,duration)
             _actor_cut(cuts,duration,track.actor_uuid,duration)
@@ -532,15 +574,16 @@ static func _actor_structure_requirements(before:Dictionary,groups:Array,cache:D
         for commit in group.get("commits",[]):
             if commit.delta.get("set",{}).has("senses"):
                 for id in affected:_actor_cut(cuts,commit.at_ms,id,duration)
-        var previous_inputs:Dictionary={};var previous:Dictionary={}
+        var previous_inputs:Dictionary={};var previous:Dictionary={};var previous_clips:Dictionary={}
         var initial_layers:Array=retained.filter(func(item):return item.start_ms<=start and start<item.start_ms+item.component.duration_ms).map(func(item):return item.component)
         var initial_loadouts=ActorConstruction.loadouts({},initial_layers)
         for id in affected:
             var actor:Dictionary=actors.get(id,before.actors.get(id,{}))
             previous_inputs[id]=_actor_structure_inputs(actor,state,false,initial_loadouts)
             previous[id]=_actor_structure_value(actor,initial_loadouts,previous_inputs[id],cache)
+            previous_clips[id]=_actor_source_clip(actor,previous[id],{},cache)
         var times:Array=cuts.keys();times.sort()
-        var boundaries:Dictionary={};var cursor=0
+        var boundaries:Dictionary={};var source_boundaries:Dictionary={};var cursor=0
         for at in times:
             while cursor<group.commits.size() and group.commits[cursor].at_ms<=at:
                 var commit:Dictionary=group.commits[cursor]
@@ -556,33 +599,43 @@ static func _actor_structure_requirements(before:Dictionary,groups:Array,cache:D
                 var staged:bool=at<duration and group.get("staged_actors",{}).has(id) and at>=float(group.get("staged_at_ms",{}).get(id,0.0))
                 var actor:Dictionary=actors.get(id,before.actors.get(id,group.get("staged_actors",{}).get(id,{}) if staged else {}))
                 var inputs=_actor_structure_inputs(actor,state,staged,loadouts)
-                if previous_inputs[id]==inputs:continue
-                var value=_actor_structure_value(actor,loadouts,inputs,cache)
-                if previous[id]!=value:boundaries[float(at)]=true
-                previous_inputs[id]=inputs;previous[id]=value
+                if previous_inputs[id]!=inputs:
+                    var value=_actor_structure_value(actor,loadouts,inputs,cache)
+                    if previous[id]!=value:boundaries[float(at)]=true
+                    previous_inputs[id]=inputs;previous[id]=value
+                var clip:String=_actor_source_clip(actor,previous[id],samples.get(id,{}),cache)
+                if previous_clips[id]!=clip:source_boundaries[float(at)]=true
+                previous_clips[id]=clip
         # Commits with no actor selector edge still carry the next sensory view.
         while cursor<group.commits.size():
             var commit:Dictionary=group.commits[cursor]
             if commit.delta.get("set",{}).has("senses"):state.senses=commit.delta.set.senses
             cursor+=1
         group.actor_structure_times=boundaries.keys();group.actor_structure_times.sort()
+        group.actor_source_times=source_boundaries.keys();group.actor_source_times.sort()
         start+=duration
         retained=layers.filter(func(item):return item.start_ms+item.component.duration_ms>start)
 
+static func _profile_phase(phases:Dictionary,name:String,started:int)->int:
+    var now:int=Time.get_ticks_usec()
+    phases[name]=phases.get(name,0.0)+(now-started)/1000.0
+    return now
+
 static func compile_recorded(before: Dictionary, packet: Dictionary, cache: Dictionary,
-        final_state: Dictionary, transitions: Dictionary) -> Dictionary:
-    var authoring_errors = Authoring.Catalog.validate_native(cache)
-    if not authoring_errors.is_empty():
-        return Reducer.failure("Invalid native presentation authoring: "+"; ".join(authoring_errors))
+        final_state: Dictionary, transitions: Dictionary, profile_enabled:bool=false) -> Dictionary:
     # Private records belong to this exact admitted operation. Applying their
     # immutable after-values advances a local presentation view without folding
     # observations, world updates or sensory facts for a second time.
+    var compile_phases:Variant={} if profile_enabled else null
+    var compile_started:int=Time.get_ticks_usec() if profile_enabled else 0
+    var stage_started:int=compile_started
     if transitions.get("lineages",[]).size()!=packet.lineages.size():
         return Reducer.failure("Recorded transition lineage count differs from operation")
     var target = before.duplicate()
     for field in ["actors","tiles","objects","spatial_commit_cursors","combat_log_appends"]:
         target[field] = before[field].duplicate()
     var groups: Array = []
+    if profile_enabled:stage_started=_profile_phase(compile_phases,"input_shell",stage_started)
     for lineage_index in packet.lineages.size():
         var lineage: Dictionary = packet.lineages[lineage_index]
         var recorded: Dictionary = transitions.lineages[lineage_index]
@@ -620,10 +673,9 @@ static func compile_recorded(before: Dictionary, packet: Dictionary, cache: Dict
                 var tile: Dictionary = target.tiles.get(Reducer.Audience.point_key(actor.last_visual_position),group.staged_tiles.get(Reducer.Audience.point_key(actor.last_visual_position),{}))
                 graph.contacts[actor.uuid] = {"from_elevation_feet":tile.get("elevation_steps",0)*5.0,
                     "to_elevation_feet":tile.get("elevation_steps",0)*5.0}
-        var cursors = {}
-        for row in lineage.version_rows:
-            cursors[row.event_uuid] = row.source_index
-            graph.first[row.lineage_uuid] = mini(graph.first.get(row.lineage_uuid,row.source_index),row.source_index)
+        graph.version_index=EventTrace._version_index(lineage.version_rows)
+        graph.first=graph.version_index.first
+        var cursors:Dictionary=graph.version_index.events
         for node in lineage.events: graph.nodes[node.lineage_uuid] = node
         for event_index in lineage.events.size():
             var node: Dictionary = lineage.events[event_index]
@@ -640,6 +692,7 @@ static func compile_recorded(before: Dictionary, packet: Dictionary, cache: Dict
         if trailing.set.get("reducer_cursor")!=lineage.end_cursor:
             return Reducer.failure("Recorded trailing cursor differs from lineage")
         apply_delta(target,trailing)
+        if profile_enabled:stage_started=_profile_phase(compile_phases,"lineage_inputs",stage_started)
         if lineage.root != null: group.duration_ms = _schedule(lineage.root,0.0,target,group,graph,cache)
         for node in lineage.events:
             if not graph.visited.has(node.lineage_uuid):
@@ -650,6 +703,7 @@ static func compile_recorded(before: Dictionary, packet: Dictionary, cache: Dict
             commit.at_ms = at
         group.duration_ms = maxf(group.duration_ms,at)
         _reaction_casts(lineage,target,group,graph,cache)
+        if profile_enabled:stage_started=_profile_phase(compile_phases,"schedule_delivery",stage_started)
         for identity in group.staged_actors:
             var admitted_at = group.duration_ms
             for commit in group.commits:
@@ -669,8 +723,12 @@ static func compile_recorded(before: Dictionary, packet: Dictionary, cache: Dict
                     if track.get(field) != null and Reducer.Audience.point_key(track[field]) == key: visible_at = minf(visible_at,track.start_ms)
             group.staged_tile_at_ms[key] = visible_at
         group.commits.append({"at_ms":group.duration_ms,"source_index":lineage.end_cursor,"delta":trailing})
-        Components.compile(group,lineage,graph,cache)
+        if profile_enabled:stage_started=_profile_phase(compile_phases,"disclosure_times",stage_started)
+        var components:Dictionary=Components.compile(group,lineage,graph,cache)
+        if not components.ok:return components
+        if profile_enabled:stage_started=_profile_phase(compile_phases,"components",stage_started)
         group.events = EventTrace.compile_rows(lineage,group,graph,cache)
+        if profile_enabled:stage_started=_profile_phase(compile_phases,"event_trace",stage_started)
         groups.append(group)
     if target.reducer_cursor!=final_state.reducer_cursor:
         return Reducer.failure("Recorded transitions do not reach the admitted final cursor")
@@ -693,8 +751,15 @@ static func compile_recorded(before: Dictionary, packet: Dictionary, cache: Dict
     if not packet.combat_log_appends.is_empty(): ending.log_appends = packet.combat_log_appends.duplicate(true)
     last.commits.append({"at_ms":last.duration_ms,"source_index":final_state.reducer_cursor,"delta":ending,
         "trace_logs":EventTrace.operation_logs(packet)})
+    if profile_enabled:stage_started=_profile_phase(compile_phases,"ending",stage_started)
     _native_requirements(before,groups,cache)
+    if profile_enabled:stage_started=_profile_phase(compile_phases,"native_requirements",stage_started)
     _actor_structure_requirements(before,groups,cache)
+    if profile_enabled:stage_started=_profile_phase(compile_phases,"actor_cuts",stage_started)
     var skipped: Array = []
     for group in groups: skipped.append_array(group.skipped)
-    return Reducer.success({"groups":groups,"final_state":final_state,"skipped":skipped})
+    var compiled:Dictionary=Reducer.success({"groups":groups,"final_state":final_state,"skipped":skipped})
+    if profile_enabled:
+        compile_phases.total=(Time.get_ticks_usec()-compile_started)/1000.0
+        compiled.compile_phases_ms=compile_phases
+    return compiled

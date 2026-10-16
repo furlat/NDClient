@@ -145,12 +145,12 @@ func _profile_job(job: Dictionary, stage: String, extra: Dictionary = {}) -> voi
     record.merge(extra,true)
     _profile_record(record)
 
-func profile_preparation(sequence: int, packet_started_us: int, compile_started_us: int, end_us: int, ok: bool, from_disk: bool, compile_ended_us: int = -1, required_media_ms: float = 0.0) -> void:
+func profile_preparation(sequence: int, packet_started_us: int, compile_started_us: int, end_us: int, ok: bool, from_disk: bool, compile_ended_us: int = -1, required_media_ms: float = 0.0,opening:bool=false,phases:Dictionary={}) -> void:
     if not _profile_enabled: return
-    _profile_record({"stage":"presentation_prepare","time_us":end_us,"sequence":sequence,
+    _profile_record({"stage":"presentation_opening" if opening else "presentation_prepare","time_us":end_us,"sequence":sequence,
         "packet_started_us":packet_started_us,"compile_started_us":compile_started_us,"end_us":end_us,
         "compile_ended_us":end_us if compile_ended_us<0 else compile_ended_us,"required_media_ms":required_media_ms,
-        "ok":ok,"from_disk":from_disk})
+        "ok":ok,"from_disk":from_disk,"phases":phases})
 
 func request(operation: String, arguments: Dictionary = {}) -> int:
     var started_us = Time.get_ticks_usec() if _profile_enabled else 0
@@ -559,7 +559,7 @@ func _close_stream() -> void:
 
 func _open_stream() -> void:
     _close_stream()
-    _parser = SSE.new(_protocol)
+    _parser = SSE.new(_protocol,Protocol.MAX_BYTES,_options.trusted_operations)
     _stream = _new_job(HTTPClient.METHOD_GET,_route("events")+"?after="+str(int(_follower.consumed.sequence)),"",null,"stream")
     _follower.phase = "stream"
 
@@ -768,7 +768,7 @@ func _run() -> void:
                                 for record in completed:
                                     _profile_frame_serial += 1
                                     record.profile_frame_id = _profile_frame_serial
-                                    _profile_job(_stream,"sse_record_ready",{"frame_id":_profile_frame_serial,"event":record.event if record.event in ["ready","status","operation","error"] else "unknown","bytes":record.raw.size()})
+                                    _profile_job(_stream,"sse_record_ready",{"frame_id":_profile_frame_serial,"framing_started_us":framing_started,"event":record.event if record.event in ["ready","status","operation","error"] else "unknown","bytes":record.raw.size()})
                             _events.append_array(framed.value if framed.ok else framed.get("records",[]))
                             if not framed.ok: _framing_failure = {"ok":false,"error":framed.error}
                         elif result.has("ok"):

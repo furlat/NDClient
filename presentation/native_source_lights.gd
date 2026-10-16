@@ -7,6 +7,52 @@ var _effect_issues: Array = []
 const RETAINED_EFFECT_COOKIES=8
 var _effect_cookies: Dictionary = {}
 var _effect_cookie_use:int=0
+var _prepared_effect_ids:Dictionary={}
+var _pending_attenuations:Dictionary={}
+var native_preparation_ready:bool=true
+var preparation_counts={"roots":0,"cookies":0,"nodes":0,"sample_constructors":0}
+
+func prepare_native_handles(handles:Dictionary,budget:Dictionary={})->bool:
+    var started:int=Time.get_ticks_usec()
+    var wanted:Dictionary={}
+    var retained:Dictionary={}
+    var ready:bool=true
+    for handle_id in handles:
+        var root:Node3D=handles[handle_id].get("root")
+        if not is_instance_valid(root):continue
+        var instance:int=root.get_instance_id();retained[instance]=true
+        if not _effect_roots.has(instance):
+            if not budget.is_empty() and budget.used_usec+Time.get_ticks_usec()-started>=budget.limit_usec:ready=false;continue
+            var lights:Array=[]
+            for node in root.find_children("*","Light3D",true,false):lights.append({"node":node,"path":str(root.get_path_to(node))})
+            _effect_roots[instance]=lights;preparation_counts.roots+=1
+        for entry in _effect_roots[instance]:
+            if not is_instance_valid(entry.node):continue
+            var id:String="native-effect/"+str(handle_id)+"/"+str(entry.path)
+            wanted[id]=true
+            var attenuation:float=entry.node.omni_attenuation if entry.node is OmniLight3D else 0.0
+            _pending_attenuations[attenuation]=true
+            for page in _pages:
+                if not is_instance_valid(page.parent):continue
+                if not page.has("effect_nodes"):page.effect_nodes={}
+                if page.effect_nodes.has(id):continue
+                if not budget.is_empty() and budget.used_usec+Time.get_ticks_usec()-started>=budget.limit_usec:ready=false;continue
+                var light=PointLight2D.new();light.name=("EffectLight2D_"+id).validate_node_name()
+                light.enabled=false;light.texture_filter=CanvasItem.TEXTURE_FILTER_LINEAR;light.shadow_enabled=false
+                page.parent.add_child(light);page.effect_nodes[id]=light;preparation_counts.nodes+=1
+    for attenuation in _pending_attenuations.keys():
+        if _effect_cookies.has(attenuation):_pending_attenuations.erase(attenuation);continue
+        if not budget.is_empty() and budget.used_usec+Time.get_ticks_usec()-started>=budget.limit_usec:ready=false;continue
+        _effect_cookie("",attenuation);preparation_counts.cookies+=1;_pending_attenuations.erase(attenuation)
+    for instance in _effect_roots.keys():
+        if not retained.has(instance):_effect_roots.erase(instance)
+    for page in _pages:
+        for id in page.get("effect_nodes",{}).keys():
+            if wanted.has(id):continue
+            _release_effect_node(page.effect_nodes[id]);page.effect_nodes.erase(id)
+    _prepared_effect_ids=wanted;native_preparation_ready=ready
+    if not budget.is_empty():budget.used_usec+=Time.get_ticks_usec()-started
+    return ready
 
 func effect_was_submitted(id:String)->bool:
     for page in _pages:
@@ -33,12 +79,7 @@ func sample_handles(handles: Dictionary, support_y: float = 0.0, optical: Dictio
         # explicit conversion once, just like native particle distances.
         var unit_scale := absf(root.global_basis.get_scale().x)
         if not _effect_roots.has(instance):
-            # Factory constructs these nodes once; only their authored values
-            # and ancestor visibility change during the manual source clock.
-            var lights: Array = []
-            for node in root.find_children("*", "Light3D", true, false):
-                lights.append({"node":node, "path":str(root.get_path_to(node))})
-            _effect_roots[instance] = lights
+            native_preparation_ready=false;_effect_issues.append("Native effect lights awaiting preparation: "+str(handle_id));continue
         for entry in _effect_roots[instance]:
             var id := "native-effect/" + str(handle_id) + "/" + str(entry.path)
             if not is_instance_valid(entry.node):
@@ -73,9 +114,6 @@ func sample_handles(handles: Dictionary, support_y: float = 0.0, optical: Dictio
                 "source_range":source_range, "world_range":radius, "unit_scale":unit_scale,
                 "color":colour, "native_color":light.light_color, "visible":light.is_visible_in_tree(),
                 "native_attenuation":light.omni_attenuation})
-    for instance in _effect_roots.keys():
-        if not retained.has(instance): _effect_roots.erase(instance)
-    _trim_effect_cookies()
     effect_sources.sort_custom(func(a, b): return a.id < b.id)
     _update_issues()
 
@@ -121,7 +159,7 @@ func _trim_effect_cookies()->void:
 
 func clear_pages()->void:
     super.clear_pages()
-    _effect_cookies.clear();_effect_cookie_use=0
+    _effect_cookies.clear();_effect_cookie_use=0;_prepared_effect_ids.clear();_pending_attenuations.clear();native_preparation_ready=true
 
 func project(camera: Camera3D, source_scale: float = 2.0) -> void:
     super.project(camera, source_scale)
@@ -141,14 +179,17 @@ func project(camera: Camera3D, source_scale: float = 2.0) -> void:
     for page in _pages:
         if not is_instance_valid(page.parent): continue
         if not page.has("effect_nodes"): page.effect_nodes = {}
-        for id in page.effect_nodes.keys():
-            if wanted.has(id): continue
-            _release_effect_node(page.effect_nodes[id])
-            page.effect_nodes.erase(id)
+        for id in page.effect_nodes:
+            if not wanted.has(id):page.effect_nodes[id].enabled=false
     for source in effect_sources:
         var position: Vector3 = source.world_position
         var screen := camera.unproject_position(position)
-        var texture := _effect_cookie(source.id, source.native_attenuation)
+        var cookie:Dictionary=_effect_cookies.get(source.native_attenuation,{})
+        var texture:GradientTexture2D=cookie.get("texture")
+        if texture==null:
+            _pending_attenuations[source.native_attenuation]=true;native_preparation_ready=false
+            _effect_issues.append("Native light attenuation awaiting preparation: "+source.id)
+            continue
         var radius: float = source.radius
         var energy: float = source.energy * light_strength
         # PointLight2D height is depth towards the camera in canvas pixels.
@@ -168,13 +209,7 @@ func project(camera: Camera3D, source_scale: float = 2.0) -> void:
         for page in _pages:
             if not is_instance_valid(page.parent): continue
             if not page.effect_nodes.has(source.id):
-                var light := PointLight2D.new()
-                light.name = ("EffectLight2D_" + source.id).validate_node_name()
-                light.enabled = false
-                light.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
-                light.shadow_enabled = false
-                page.parent.add_child(light)
-                page.effect_nodes[source.id] = light
+                native_preparation_ready=false;_effect_issues.append("Native light page awaiting preparation: "+source.id);continue
             var light: PointLight2D = page.effect_nodes[source.id]
             light.texture = texture
             light.position = screen
@@ -186,7 +221,6 @@ func project(camera: Camera3D, source_scale: float = 2.0) -> void:
             light.color = source.color
             light.enabled = active
     _update_issues()
-    _trim_effect_cookies()
 
 func _update_issues() -> void:
     super._update_issues()

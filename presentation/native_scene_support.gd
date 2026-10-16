@@ -21,6 +21,7 @@ var camera:Camera3D
 var depth_copy:MeshInstance3D
 var solid_masks:Dictionary={}
 var issues:Array=[]
+var ready:bool=true
 var _outputs:Array=[]
 var _source_bindings:Dictionary={}
 var clear_effect:CompositorEffect
@@ -28,26 +29,17 @@ var enabled:bool=true
 var last_sync_phases:Dictionary={}
 
 static func required_paths(path:String,slot:String,cache:Dictionary)->Dictionary:
-    var record=Geometry.record(path,slot,cache)
-    if record.is_empty() or not record.has("reference"):return {}
-    var root:String=Geometry._root(record)
-    var reference:String=root.path_join(record.reference)
-    # The delivered reference owns the mask directory; no guessed asset ID.
-    return {"colour":path,"depth":root.path_join(record.files.depth),
-        "support":root.path_join(record.files.support),
-        "solid":reference.get_base_dir().path_join("solid-valid.png")}
+    return Geometry.BodySources.descriptor(path,slot,cache).get("optical_paths",{})
 
 static func socket_samples_ready(path:String,slot:String,cache:Dictionary)->bool:
-    var record=Geometry.record(path,slot,cache)
-    return not record.is_empty() and SocketSamples.ready(path,record,cache)
+    return Geometry.BodySources.descriptor(path,slot,cache).get("sockets",{}).get("valid",false)
 
-static func cpu_required_paths(path:String,slot:String,cache:Dictionary,prepare_samples:bool=false)->Dictionary:
-    var paths=required_paths(path,slot,cache)
+static func cpu_required_paths(path:String,slot:String,cache:Dictionary,_prepare_samples:bool=false)->Dictionary:
+    var descriptor:Dictionary=Geometry.BodySources.descriptor(path,slot,cache)
+    var paths:Dictionary=descriptor.get("optical_paths",{})
     if paths.is_empty():return {}
-    var record=Geometry.record(path,slot,cache)
-    var compact:bool=SocketSamples.prepare(path,record,Geometry._root(record),cache) if prepare_samples else SocketSamples.ready(path,record,cache)
-    var result={paths.colour:true}
-    if not compact:
+    var result:Dictionary={paths.colour:true}
+    if not descriptor.get("sockets",{}).get("valid",false):
         for value in paths.values():result[value]=true
     return result
 
@@ -116,7 +108,7 @@ func set_enabled(value:bool)->void:
 
 func _floor(id:int)->MeshInstance3D:
     if not floors.has(id):
-        var node=MeshInstance3D.new();node.mesh=_plane;node.material_override=_floor_material
+        var node=MeshInstance3D.new();node.visible=false;node.mesh=_plane;node.material_override=_floor_material
         node.layers=LAYER;node.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
         owner.add_child(node);floors[id]=node
     return floors[id]
@@ -124,7 +116,7 @@ func _floor(id:int)->MeshInstance3D:
 func _batch_floor(entry:Dictionary)->MultiMeshInstance3D:
     var id:int=entry.node.get_instance_id()
     if not floors.has(id):
-        var node=MultiMeshInstance3D.new()
+        var node=MultiMeshInstance3D.new();node.visible=false
         node.multimesh=MultiMesh.new();node.multimesh.transform_format=MultiMesh.TRANSFORM_3D
         node.multimesh.mesh=_plane;node.material_override=_floor_material
         node.layers=LAYER;node.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
@@ -142,46 +134,103 @@ func _batch_floor(entry:Dictionary)->MultiMeshInstance3D:
 
 func _actor(id:String)->MeshInstance3D:
     if not actors.has(id):
-        var node=MeshInstance3D.new();node.material_override=ShaderMaterial.new()
+        var node=MeshInstance3D.new();node.visible=false;node.material_override=ShaderMaterial.new()
         node.material_override.shader=CharacterDepth
         node.layers=LAYER;node.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
         owner.add_child(node);actors[id]=node
     return actors[id]
 
-func prepare_hidden(static_entries:Array,visual_actors:Dictionary)->void:
-    # Only already-displayed receiver geometry, under a hidden owner and a
-    # disabled viewport. No output uniforms, future state or texture pins.
-    if enabled:return
-    var started:int=Time.get_ticks_usec()
-    var created:int=0
+func prepare_membership(static_entries:Array,visual_actors:Dictionary,budget:Dictionary={})->Dictionary:
+    # Membership/geometry allocation belongs to the existing cue preparation
+    # account. New proxies stay hidden until sync publishes the displayed cut.
+    var result:Dictionary={"ready":true,"pending":0}
     var retained_floors:Dictionary={}
     for entry in static_entries:
         if entry.role!="terrain" or not entry.node.visible:continue
-        var id:int=entry.node.get_instance_id()
-        retained_floors[id]=true
-        if floors.has(id):continue
+        var id:int=entry.node.get_instance_id();retained_floors[id]=true
+        var changed:bool=not floors.has(id) or (entry.has("batch_rows") and (not entry.has("ground_version") or floors[id].get_meta("ground_version",-1)!=entry.ground_version))
+        if not changed:continue
+        if not budget.is_empty() and budget.used_usec>=budget.limit_usec:
+            result.ready=false;result.pending+=1;continue
+        var started:int=Time.get_ticks_usec()
         if entry.has("batch_rows"):_batch_floor(entry)
         else:_floor(id).position=Placement.contact(entry.placement)
-        created+=1
-        if created>=2 or Time.get_ticks_usec()-started>=500:return
+        if not budget.is_empty():budget.used_usec+=Time.get_ticks_usec()-started
     var retained_actors:Dictionary={}
     for visual in visual_actors.values():
         for source in visual.entries:
-            if source.role=="shadow" or not source.actor_layer.get("effect",{}).is_empty() \
-                    or not source.node.visible:continue
+            if source.role=="shadow" or not source.actor_layer.get("effect",{}).is_empty() or not source.node.visible or not source.has("received_material"):continue
+            var alpha:Variant=SourceMaterial.value(source,"condition_alpha")
+            if alpha!=null and float(alpha)<1.0:continue
             retained_actors[source.id]=true
             if actors.has(source.id):continue
+            if not budget.is_empty() and budget.used_usec>=budget.limit_usec:
+                result.ready=false;result.pending+=1;continue
+            var started:int=Time.get_ticks_usec()
             _actor(source.id).mesh=source.node.mesh
-            created+=1
-            if created>=2 or Time.get_ticks_usec()-started>=500:return
+            if not budget.is_empty():budget.used_usec+=Time.get_ticks_usec()-started
     for pair in [[floors,retained_floors],[actors,retained_actors]]:
         for id in pair[0].keys():
             if pair[1].has(id):continue
-            pair[0][id].free();pair[0].erase(id)
-            created+=1
-            if created>=2 or Time.get_ticks_usec()-started>=500:return
+            pair[0][id].visible=false
+            if not budget.is_empty() and budget.used_usec>=budget.limit_usec:continue
+            var started:int=Time.get_ticks_usec()
+            pair[0][id].free();pair[0].erase(id);_source_bindings.erase(id)
+            if not budget.is_empty():budget.used_usec+=Time.get_ticks_usec()-started
+    return result
+
+func prepare_boundary(candidate:Node3D,jobs:Array,state:Dictionary,budget:Dictionary)->bool:
+    if state.is_empty():state.merge({"cursor":0,"floors":{},"actors":{},"published":false})
+    while state.cursor<jobs.size():
+        if budget.used_usec>=budget.limit_usec:return false
+        var started:int=Time.get_ticks_usec()
+        var job:Dictionary=jobs[state.cursor];var entry:Dictionary=job.entry
+        var snapshot:Dictionary=job.get("prepared",{}).get("snapshot",entry)
+        if entry.role=="terrain":
+            var id:int=entry.node.get_instance_id()
+            var same:bool=floors.has(id) and (not snapshot.has("batch_rows") or (snapshot.has("ground_version") and floors[id].get_meta("ground_version",-1)==snapshot.ground_version))
+            if not same:
+                var node:GeometryInstance3D
+                if snapshot.has("batch_rows"):
+                    var batch=MultiMeshInstance3D.new();batch.multimesh=MultiMesh.new()
+                    batch.multimesh.transform_format=MultiMesh.TRANSFORM_3D;batch.multimesh.mesh=_plane
+                    var rows:Array=snapshot.batch_rows
+                    batch.multimesh.instance_count=rows.size()
+                    for index in rows.size():
+                        var row:Dictionary=snapshot.get("ground_row_changes",{}).get(str(rows[index].id),rows[index])
+                        batch.multimesh.set_instance_transform(index,Transform3D(Basis.IDENTITY,Placement.contact(row)))
+                    if snapshot.has("ground_version"):batch.set_meta("ground_version",snapshot.ground_version)
+                    node=batch
+                else:
+                    var floor_node=MeshInstance3D.new();floor_node.mesh=_plane
+                    floor_node.position=Placement.contact(snapshot.placement);node=floor_node
+                node.visible=false;node.material_override=_floor_material;node.layers=LAYER
+                node.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+                candidate.add_child(node);state.floors[id]=node
+        elif entry.has("actor_layer") and entry.role!="shadow" and entry.actor_layer.get("effect",{}).is_empty() and not actors.has(entry.id):
+            var node=MeshInstance3D.new();node.visible=false;node.mesh=entry.node.mesh
+            node.material_override=ShaderMaterial.new();node.material_override.shader=CharacterDepth
+            node.layers=LAYER;node.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+            candidate.add_child(node);state.actors[entry.id]=node
+        state.cursor+=1;budget.used_usec+=Time.get_ticks_usec()-started
+    return true
+
+func publish_boundary(state:Dictionary)->void:
+    if state.is_empty() or state.published:return
+    for pair in [[floors,state.floors],[actors,state.actors]]:
+        for id in pair[1]:
+            var node:GeometryInstance3D=pair[1][id]
+            if pair[0].has(id):pair[0][id].visible=false;pair[0][id].queue_free()
+            node.reparent(owner,false);pair[0][id]=node
+    state.floors={};state.actors={};state.published=true
+
+func prepare_hidden(static_entries:Array,visual_actors:Dictionary)->void:
+    # Retained for fixture/prewarm callers; ordinary sampling never invokes it.
+    if enabled:return
+    prepare_membership(static_entries,visual_actors,{"used_usec":0,"limit_usec":500})
 
 func sync(static_entries:Array,visual_actors:Dictionary,view_camera:Camera3D)->void:
+    ready=true;issues.clear()
     var phase_started:int=Time.get_ticks_usec()
     var previous_outputs:Array=_outputs
     _outputs=[]
@@ -202,14 +251,17 @@ func sync(static_entries:Array,visual_actors:Dictionary,view_camera:Camera3D)->v
         # geometry owner remains the same. Follow that owner, not its row ID.
         var id:int=entry.node.get_instance_id();retained[id]=true
         floor_sources.append([entry.id,id])
-        if not floors.has(id):floor_created+=1
+        if not floors.has(id):
+            ready=false;issues.append("Native floor receiver not prepared: "+str(entry.id));continue
         if entry.has("batch_rows"):
-            _batch_floor(entry)
+            if entry.has("ground_version") and floors[id].get_meta("ground_version",-1)!=entry.ground_version:
+                ready=false;issues.append("Native floor receiver membership not prepared: "+str(entry.id));continue
         else:
-            var floor_node:MeshInstance3D=_floor(id)
+            var floor_node:MeshInstance3D=floors[id]
             var contact:Vector3=Placement.contact(entry.placement)
             if floor_node.position!=contact:floor_repositioned+=1
             floor_node.position=contact
+        floors[id].visible=true
         if entry.has("received_material"):
             _outputs.append(entry.received_material)
             live_outputs[entry.received_material]=true
@@ -218,7 +270,7 @@ func sync(static_entries:Array,visual_actors:Dictionary,view_camera:Camera3D)->v
         floor_binding_usec+=Time.get_ticks_usec()-binding_started
     var floor_retirement_started:int=Time.get_ticks_usec()
     for id in floors.keys():
-        if not retained.has(id):floors[id].free();floors.erase(id);floor_retired+=1
+        if not retained.has(id):floors[id].visible=false
     var floor_retirement_usec:int=Time.get_ticks_usec()-floor_retirement_started
     last_sync_phases.floor=(Time.get_ticks_usec()-phase_started)/1000.0
     last_sync_phases.floor_binding=floor_binding_usec/1000.0
@@ -252,7 +304,9 @@ func sync(static_entries:Array,visual_actors:Dictionary,view_camera:Camera3D)->v
             var solid:Texture2D=solid_masks.get(source.texture_path)
             var id:String=source.id
             retained[id]=true
-            var node:MeshInstance3D=_actor(id)
+            if not actors.has(id):
+                ready=false;issues.append("Native actor receiver not prepared: "+str(id));continue
+            var node:MeshInstance3D=actors[id];node.visible=true
             node.mesh=source.node.mesh;node.global_transform=source.node.global_transform
             node.sorting_use_aabb_center=false;node.sorting_offset=source.node.sorting_offset
             var material:ShaderMaterial=node.material_override
@@ -273,7 +327,7 @@ func sync(static_entries:Array,visual_actors:Dictionary,view_camera:Camera3D)->v
             material.set_shader_parameter("sprite_pivot",source.pivot)
             if has_geometry:material.set_shader_parameter("ground_height",source.get("geometry_ground_pixels",19.0)*SourceMaterial.value(source,"component_units"))
     for id in actors.keys():
-        if not retained.has(id):actors[id].free();actors.erase(id);_source_bindings.erase(id)
+        if not retained.has(id):actors[id].visible=false
     last_sync_phases.actors=(Time.get_ticks_usec()-phase_started)/1000.0
     last_sync_phases.actor_receivers=retained.size()
     phase_started=Time.get_ticks_usec()

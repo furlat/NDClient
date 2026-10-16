@@ -39,7 +39,9 @@ func view(value:Dictionary,quarter:int,zoom:float)->void:
     var camera:Camera3D=value.host.camera
     camera.basis=Basis(Vector3.UP,quarter*PI*.5)*Basis.from_euler(Vector3(-atan(sqrt(.5)),PI/4,0))
     camera.position=Vector3(1.5,0,0)+camera.basis.z*10;camera.size=zoom
-func sync(value:Dictionary)->void:value.support.sync(value.entries,{},value.host.camera)
+func sync(value:Dictionary)->void:
+    check(value.support.prepare_membership(value.entries,{}).ready,"Exact receiver membership prepares before sync")
+    value.support.sync(value.entries,{},value.host.camera)
 func draw()->void:
     await process_frame;await RenderingServer.frame_post_draw
     await process_frame;await RenderingServer.frame_post_draw
@@ -51,6 +53,31 @@ func compare(batch:Dictionary,single:Dictionary,rows:Array,visible:bool,label:St
         var at:Vector2=batch.support.camera.unproject_position(Placement.contact(row))
         var alpha=actual.get_pixelv(Vector2i(at)).a
         check((alpha>0.0)==visible,label+" admitted contact coverage "+row.id)
+func private_boundary(batch:Dictionary,single:Dictionary,original:Array)->void:
+    publish(batch,original,true);publish(single,original,false)
+    for value in [batch,single]:view(value,0,5.0);sync(value)
+    await draw()
+    var before:PackedByteArray=batch.support.viewport.get_texture().get_image().get_data()
+    var source:Dictionary=batch.entries[0]
+    var raised:Array=original.duplicate(true);raised[1].base_height_steps=1
+    var snapshot:Dictionary=source.duplicate();snapshot.batch_rows=raised;snapshot.ground_version=source.ground_version+1
+    var candidate=Node3D.new();candidate.visible=false;batch.host.add_child(candidate)
+    var state:Dictionary={}
+    check(batch.support.prepare_boundary(candidate,[{"entry":source,"prepared":{"snapshot":snapshot}}],state,{"used_usec":0,"limit_usec":1000000}),"Future receiver prepares privately")
+    await draw()
+    check(batch.support.viewport.get_texture().get_image().get_data()==before,"Unpublished future receiver leaves displayed depth unchanged")
+    candidate.free();state.clear()
+    await draw()
+    check(batch.support.viewport.get_texture().get_image().get_data()==before,"Cancelled receiver leaves displayed depth unchanged")
+    candidate=Node3D.new();candidate.visible=false;batch.host.add_child(candidate)
+    check(batch.support.prepare_boundary(candidate,[{"entry":source,"prepared":{"snapshot":snapshot}}],state,{"used_usec":0,"limit_usec":1000000}),"Replacement receiver prepares privately")
+    publish(batch,raised,true);publish(single,raised,false)
+    batch.support.publish_boundary(state)
+    batch.support.sync(batch.entries,{},batch.host.camera)
+    check(batch.support.ready,"Publication needs no receiver constructor")
+    sync(single);candidate.free();await draw()
+    compare(batch,single,raised,true,"Private raised receiver publication")
+
 func run()->void:
     root.unfocusable=true;root.position=Vector2i(-16000,-16000);root.size=Vector2i(64,64)
     create_timer(30).timeout.connect(func():printerr("Floor batch check deadline");quit(2))
@@ -74,6 +101,7 @@ func run()->void:
             batch.support.set_enabled(false);batch.support.prepare_hidden(batch.entries,{})
             batch.support.set_enabled(true);sync(batch);await draw()
             compare(batch,single,rows,true,"q%d hidden preparation"%quarter)
+    await private_boundary(batch,single,original)
     for value in [batch,single]:value.support.close();value.view.queue_free()
     await process_frame
     var report={"checks":checks,"failures":failures,"scope":"Native packed receiver pixels against equivalent unbatched cells across four quarters/two zooms, elevation, representative reorder, member removal, hide/reveal and hidden preparation. No gameplay or frame-time claim."}

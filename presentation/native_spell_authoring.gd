@@ -1,45 +1,25 @@
 extends RefCounted
 ## Selected native phase data. Event ordering/count/recipients stay in Compiler.
 const Authoring=preload("res://presentation/authoring.gd")
-const Feedback=preload("res://presentation/spell_feedback.gd")
+const Sources=preload("res://presentation/native_presentation_sources.gd")
 
 static func recipe(fact:Dictionary,cache:Dictionary)->Dictionary:
-    var raw:=Authoring.spell(fact,cache)
-    var selected:=selection(str(fact.get("behavior_id","")),cache)
-    if raw.is_empty() or selected.is_empty():return raw
-    var treatment=Feedback.prepare(raw,selected.palette,selected.staging,Authoring.load_data("sandbox/feedback.json",cache))
-    var result=raw.duplicate(true)
-    result.cast=treatment.cast
-    if result.get("damage")!=null and not treatment.flash.is_empty():result.damage.hitFlash=treatment.flash
-    return result
+    var behavior:String=str(fact.get("behavior_id",""))
+    var index:Resource=Sources.admission(cache).index
+    if index==null:return {}
+    if not index.spells.has(behavior):return Authoring.spell(fact,cache)
+    var record:Resource=Sources.find(behavior,cache)
+    return record.recipe if record!=null else {}
 
 static func selection(behavior_id:String,cache:Dictionary)->Dictionary:
-    var entry:Dictionary=Authoring.load_data("native_effects/index.json",cache).get("spells",{}).get(behavior_id,{})
-    if entry.is_empty():return {}
-    var manifest:Dictionary=Authoring.load_data(entry.manifest,cache)
-    var authored:Dictionary=Authoring.load_data(entry.staging,cache).spells[entry.id]
-    var nested:bool=authored.has("staging")
-    var original:Dictionary=authored.staging if nested else authored
-    # Offline targets, probe attacks and finite demo holds are not game facts.
-    var staging:Dictionary={}
-    for field in ["cues","bends","light_color","light_color_source","decorative_light_multiplier","feedback_palette"]:
-        if original.has(field):staging[field]=original[field].duplicate(true) if original[field] is Array or original[field] is Dictionary else original[field]
-    for i in staging.get("cues",[]).size():staging.cues[i].source_index=i
-    for spell in manifest.spells:
-        if spell.id==entry.id:
-            return {"id":entry.id,"clips":spell.clips,"palette":spell.get("palette",{}),
-                "source_bounds":entry.get("source_bounds",{}),"lifecycle":entry.get("lifecycle",{}),
-                "delivery":entry.get("delivery",{"scope":"single"}),
-                "event_cue_indices":entry.get("event_cue_indices",[]).map(func(value):return int(value)),"explicit_event_cues":entry.has("event_cue_indices"),
-                "excluded_cue_indices":entry.get("excluded_cue_indices",[]).map(func(value):return int(value)),
-                "staging":staging,"source":entry.staging+":/spells/"+entry.id+("/staging" if nested else "")}
-    return {}
+    var record:Resource=Sources.find(behavior_id,cache)
+    return record.selection if record!=null else {}
 
 static func phases(selected:Dictionary,owner:Dictionary,launch_ms:float,travel_ms:float,application_index:int,include_cast:bool)->Array:
     var rows:Array=[]
     var persistent:Array=selected.get("lifecycle",{}).get("cue_ids",[]).map(func(value):return int(value))
     for choice in selected.staging.cues:
-        var source_index:int=choice.get("source_index",selected.staging.cues.find(choice))
+        var source_index:int=choice.source_index
         if source_index in selected.get("excluded_cue_indices",[]):continue
         if selected.get("explicit_event_cues",false) and source_index not in selected.event_cue_indices:continue
         if source_index in persistent:continue
@@ -52,14 +32,13 @@ static func _phase(selected:Dictionary,choice:Dictionary,owner:Dictionary,launch
     var launch:float=launch_ms/1000.0
     var contact:float=(launch_ms+travel_ms)/1000.0
     var preparation:float=owner.get("prepare",owner.get("start",launch_ms))/1000.0
-    var source_index:int=choice.get("source_index",staging.cues.find(choice))
+    var source_index:int=choice.get("source_index",choice.source_index)
     var source:String=selected.source+"/cues/"+str(source_index)
-    var found:Array=selected.clips.filter(func(clip):return clip.id==choice.clip)
-    if found.is_empty():
+    var clip:Dictionary=selected.clip_by_id.get(choice.clip,{})
+    if clip.is_empty():
         return {"start_ms":launch_ms,"duration_ms":maxf(1.0,travel_ms),"status":"missing",
             "reason":"native_source_not_imported","native_cue":choice,"native_clip":{},
             "spell_id":selected.id,"source_id":choice.clip,"source":source}
-    var clip:Dictionary=found[0]
     var cue:Dictionary=choice.duplicate(true)
     var rate:float=float(cue.get("source_rate",1.0))
     var native_end:float=cue.get("source_end",clip.seconds)
@@ -133,22 +112,8 @@ static func condition(behavior_id:String,cache:Dictionary)->Dictionary:
     return selection(owners[behavior_id],cache) if owners.has(behavior_id) else {}
 
 static func _condition_owners(cache:Dictionary)->Dictionary:
-    # Admitted authoring documents are immutable. Reload replaces the source
-    # document; workers receive private cache shells. Publish a complete index
-    # once, preserving the original first-match order for duplicate owner IDs.
-    var document:Dictionary=Authoring.load_data("native_effects/index.json",cache)
-    var spells:Dictionary=document.get("spells",{})
-    var held:Dictionary=cache.get("__native_spell_owners",{})
-    if not held.is_empty() and is_same(held.document,document) and is_same(held.spells,spells):return held.conditions
-    var conditions:Dictionary={}
-    for spell_id in spells:
-        var lifecycle:Dictionary=spells[spell_id].get("lifecycle",{})
-        if lifecycle.get("owner_kind","")!="condition":continue
-        for id in lifecycle.get("owner_ids",[]):
-            if not conditions.has(id):conditions[id]=spell_id
-    held={"document":document,"spells":spells,"conditions":conditions}
-    cache.__native_spell_owners=held
-    return conditions
+    var index:Resource=Sources.admission(cache).index
+    return index.conditions if index!=null else {}
 
 static func condition_phases(selected:Dictionary)->Array:
     var result:Array=[]
@@ -179,11 +144,5 @@ static func contact_phases(selected:Dictionary)->Array:
     return result
 
 static func hit(behavior_id:String,cache:Dictionary)->Dictionary:
-    var selected:=selection(behavior_id,cache)
-    if selected.is_empty():return {}
-    var definition:Dictionary=Authoring.load_data("sandbox/body_materials.json",cache).spells.get(selected.id,{})
-    var result={"spell_id":selected.id,"definition":definition,"finish_profile":selected.palette}
-    if definition.get("status")!="available":return result
-    for clip in selected.clips:
-        if clip.id==definition.clip:result.clip=clip;break
-    return result
+    var record:Resource=Sources.find(behavior_id,cache)
+    return record.hit if record!=null else {}

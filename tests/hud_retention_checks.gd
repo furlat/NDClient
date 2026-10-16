@@ -26,7 +26,7 @@ func check_fresh(label: String) -> void:
     fresh.pages=hud.pages.duplicate()
     fresh._rebuild_bar()
     for _frame in range(80):
-        fresh._prepare_bar()
+        fresh.prepare_bar()
         await process_frame
         if not fresh.bar_pending(): break
     check(not fresh.bar_pending(),label+": fresh native build completes")

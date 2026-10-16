@@ -26,6 +26,49 @@ var audio=AudioPresenter.new()
 var handles: Dictionary={}
 var numbers: Dictionary={}
 var media_handles: Dictionary={}
+var _registration_parts:Dictionary={}
+var _prepared_resource_scope:Array=[]
+var _prepared_resource_groups:Array=[]
+var _prepared_resource_result:Dictionary={}
+var _next_resource_cue_ms:float=-INF
+var _resource_membership_revision:int=0
+
+func invalidate_preparation()->void:
+    # The display owner calls this after installing actor/world membership.
+    # Source clocks and ordinary poses do not invalidate allocated resources.
+    _resource_membership_revision+=1
+
+func _resource_scope(world:Node)->Array:
+    var timeline:RefCounted=world.timeline
+    var tail:String=str(timeline.queue.back().get("id","")) if not timeline.queue.is_empty() else ""
+    return [timeline.initialization_revision,timeline.resource_revision,timeline.group_start_ms,
+        timeline.queue.size(),tail,world.quarter,world.get_viewport().get_visible_rect().size,
+        world.native_spell_hit_material,_resource_membership_revision,native_spells.preparation_revision]
+
+func _same_resource_groups(groups:Array)->bool:
+    if groups.size()!=_prepared_resource_groups.size():return false
+    for index in groups.size():
+        if not is_same(groups[index],_prepared_resource_groups[index]):return false
+    return true
+
+func _next_resource_cue(groups:Array,world:Node,through_ms:float)->float:
+    if is_inf(through_ms):return INF
+    var next:float=INF
+    var start:float=world.timeline.group_start_ms if not world.timeline.current.is_empty() else world.timeline.display_ms
+    for group in groups:
+        start=maxf(start,float(group.get("preview_start_ms",start)))
+        if not group.get("preparation_always_due",false):
+            for component in group.get("components",[]):
+                var at:float=start+float(component.preparation_at_ms) if component.has("preparation_at_ms") else float(component.get("absolute_start_ms",start+float(component.get("start_ms",0.0))))
+                if at>through_ms+0.000001:next=minf(next,at)
+        start+=float(group.get("duration_ms",0.0))
+    start=world.timeline.group_start_ms+float(world.timeline.current.get("duration_ms",0.0))
+    for group in world.timeline.queue:
+        start=maxf(start,float(group.get("preview_start_ms",start)))
+        var admission:float=start-NATIVE_PREFETCH_MS
+        if admission>through_ms+0.000001:next=minf(next,admission);break
+        start+=float(group.get("duration_ms",0.0))
+    return next
 var epoch=-1
 var ready=true
 var readiness:Dictionary={}
@@ -77,7 +120,7 @@ func prepare_choice_resources(world:Node,admission:Dictionary={})->void:
         if not WorkerThreadPool.is_task_completed(_choice_job.task):return
         WorkerThreadPool.wait_for_task_completion(_choice_job.task);_choice_job.task=-1
         if _choice_job.ids!=_choice_ids:_start_choice_resources(world.catalog_cache);return
-        world.catalog_cache.merge(_choice_job.cache,false)
+        Catalog.adopt_snapshot(world.catalog_cache,_choice_job.cache)
     if budget.frame!=Engine.get_process_frames():
         budget.frame=Engine.get_process_frames();budget.used_usec=0
     while _choice_job.cursor<_choice_job.clips.size() and budget.used_usec<budget.limit_usec:
@@ -154,12 +197,20 @@ func prepare(groups: Array,cache: Dictionary,world: Node=null,admission:Dictiona
     if budget.frame!=Engine.get_process_frames():budget.frame=Engine.get_process_frames();budget.used_usec=0
     var charged_before:int=budget.used_usec
     var prepare_started:int=Time.get_ticks_usec()
-    if world!=null:ensure_epoch(world)
+    if world!=null:
+        ensure_epoch(world)
+        if not _prepared_resource_result.is_empty() and _prepared_resource_scope==_resource_scope(world) and _same_resource_groups(groups) \
+                and (is_inf(through_ms) and is_inf(_next_resource_cue_ms) or through_ms<_next_resource_cue_ms-0.000001) \
+                and world.source_lighting.native_preparation_ready:
+            if allow_optional:prepare_optional(world,cache,budget)
+            budget.used_usec+=maxi(0,Time.get_ticks_usec()-prepare_started-(budget.used_usec-charged_before))
+            FrameProfile.end_phase(world.profile,"component_prepare_reuse",prepare_started)
+            FrameProfile.end_phase(world.profile,"component_prepare",prepare_started)
+            return _prepared_resource_result
     var stage_started:int=Time.get_ticks_usec()
     var sources: Array=[]
     for group in groups:
         if group.is_empty() or is_same(prepared_groups.get(group.get("id")),group):continue
-        audio.prepare(group.get("components",[]))
         for component in group.get("components",[]):
             if component.kind=="native_effect" and not component.get("native_spell",false) and component.status=="available" and component.source_id not in sources:sources.append(component.source_id)
     var result:Dictionary
@@ -190,13 +241,14 @@ func prepare(groups: Array,cache: Dictionary,world: Node=null,admission:Dictiona
         world.profile.phases["blood_light_page_create"]=world.profile.phases.get("blood_light_page_create",0.0)+(blood.light_page_create_usec-page_before)/1000.0
         FrameProfile.end_phase(world.profile,"component_prepare_blood",stage_started)
         stage_started=Time.get_ticks_usec()
+        var persistent_charged_before:int=budget.used_usec
         var required_groups:Array=groups.filter(func(group):return not group.is_empty())
         if not world.timeline.current.is_empty() and not required_groups.any(func(item):return item.get("id")==world.timeline.current.id):required_groups.push_front(world.timeline.current)
         var retained_components:Array=world.timeline.retained_components.map(func(item):return item.component)
         if not retained_components.is_empty():required_groups.append({"components":retained_components,"preparation_always_due":true})
         # Sampling may prune expired membership, so lend private shallow map
         # shells. Owner after-values and actual clocks remain Timeline-owned.
-        var persistent:Array=Conditions.native_samples(world.timeline.condition_owners.duplicate(),world.timeline.display_ms,cache,true)
+        var persistent:Array=Conditions.samples(world.timeline.condition_owners.duplicate(),world.timeline.display_ms,cache,{},false)
         persistent.append_array(Conditions.NativePersistent.spatial_samples(world.timeline.spatial_effect_owners.duplicate(),world.timeline.display_ms,cache))
         var future:Array=preparation_groups(_native_prefetch(required_groups,world),persistent)
         var required:Array=preparation_groups(required_groups,persistent)
@@ -204,6 +256,19 @@ func prepare(groups: Array,cache: Dictionary,world: Node=null,admission:Dictiona
         var due_components:Array=[]
         for group in due:due_components.append_array(group.components)
         _native_prepare_groups=due;_native_prepare_components=due_components;_native_optical_groups=required
+        var audio_errors:Array=audio.prepare(due_components,world,budget)
+        var audio_ready:bool=audio.ready(due_components)
+        var presentation_ready:bool=_prepare_presenters(world,due_components,budget)
+        var outline_ready:bool=true
+        var outline_actors:Dictionary={}
+        for component in due_components:
+            if component.get("kind")=="condition_outline":outline_actors[component.actor_uuid]=true
+            elif component.get("kind")=="condition" and component.get("recipe",{}).get("persistent",{}).has("bodyOutline"):outline_actors[component.actor_uuid]=true
+        for actor_id in outline_actors:
+            if not outlines.prepare(world,actor_id,budget).ready:outline_ready=false
+        readiness.audio=audio_ready;readiness.presenters=presentation_ready;readiness.outlines=outline_ready
+        result.ready=result.ready and audio_ready and presentation_ready and outline_ready
+        result.errors.append_array(audio_errors)
         var required_ids:Dictionary={}
         for component in due_components:required_ids[component.get("preparation_key",component.id)]=true
         var optional:Array=[];var seen:Dictionary={}
@@ -211,11 +276,16 @@ func prepare(groups: Array,cache: Dictionary,world: Node=null,admission:Dictiona
             for component in future_group.get("components",[]):
                 var key:String=component.get("preparation_key",component.id)
                 if required_ids.has(key) or seen.has(key):continue
-                if not component.get("native_spell",false) and component.get("native_hit",{}).is_empty():continue
+                if not component.get("native_spell",false) and component.get("native_hit",{}).is_empty() and component.get("kind") not in ["condition_outline","registered_media","geometry_projectile","damage_number","feedback_text","audio"]:continue
                 optional.append(component);seen[key]=true
         _optional_components=optional
-        _optional_owner=[world.timeline.initialization_revision,world.timeline.revision,world.timeline.group_start_ms,world.timeline.current,world.timeline.queue.duplicate()]
-        budget.used_usec+=Time.get_ticks_usec()-stage_started
+        _optional_owner=[world.timeline.initialization_revision,world.timeline.resource_revision,world.timeline.group_start_ms,world.timeline.current,world.timeline.queue.duplicate()]
+        var retained_presenters:Dictionary={}
+        for group in future:
+            for component in group.get("components",[]):retained_presenters[component.id]=true
+        for component in world.displayed_components:retained_presenters[component.id]=true
+        _retire_presenters(world,retained_presenters,budget)
+        budget.used_usec+=maxi(0,Time.get_ticks_usec()-stage_started-(budget.used_usec-persistent_charged_before))
         FrameProfile.end_phase(world.profile,"component_prepare_persistent",stage_started)
         stage_started=Time.get_ticks_usec()
         # Required owners always get the shared frame budget first. Optional
@@ -239,9 +309,93 @@ func prepare(groups: Array,cache: Dictionary,world: Node=null,admission:Dictiona
         result.errors.append_array(native.errors)
         for issue in hits.issues:
             if issue.get("status")=="missing":result.errors.append(str(issue))
+        if result.ready and result.errors.is_empty():
+            _prepared_resource_scope=_resource_scope(world)
+            _prepared_resource_groups=groups.duplicate()
+            _prepared_resource_result=result
+            _next_resource_cue_ms=_next_resource_cue(required,world,through_ms)
     budget.used_usec+=maxi(0,Time.get_ticks_usec()-prepare_started-(budget.used_usec-charged_before))
     if world!=null:FrameProfile.end_phase(world.profile,"component_prepare",prepare_started)
     return result
+
+func _prepare_presenters(world:Node,components:Array,budget:Dictionary)->bool:
+    var complete:bool=true
+    for component in components:
+        if component.get("status")=="missing":continue
+        if component.get("kind") in ["damage_number","feedback_text"]:
+            if numbers.has(component.id):continue
+            if budget.used_usec>=budget.limit_usec:complete=false;continue
+            var started:int=Time.get_ticks_usec()
+            var label=Label3D.new();label.visible=false;label.text=component.text;label.font_size=component.style.fontSizePx
+            label.pixel_size=128.0/float(world.rig_config.TILE_W)/Placement.PIXELS_PER_UNIT
+            var font=SystemFont.new();font.font_names=PackedStringArray([component.style.fontFamily]);font.font_weight=700;label.font=font
+            label.outline_size=component.style.strokeWidthPx;label.outline_modulate=Color.hex(int(component.style.strokeColor)*256+255)
+            label.billboard=BaseMaterial3D.BILLBOARD_ENABLED;label.no_depth_test=true;label.modulate=Color.hex(int(component.color)*256+255)
+            label.render_priority=127;label.outline_render_priority=126
+            world.add_child(label);numbers[component.id]=label
+            budget.used_usec+=Time.get_ticks_usec()-started
+        elif component.get("kind")=="geometry_projectile":
+            if not _prepare_media_entry(world,component.id,component,BoltShader,budget):complete=false
+        elif component.get("kind")=="registered_media":
+            var phases:Array=component.get("media_samples",[{"part_id":"sustain","media":component.media}])
+            for phase in phases:
+                if phase.media.get("status")!="available":continue
+                var count:int=_registered_part_count(phase.media)
+                for index in count:
+                    var id:String=component.id+":"+str(phase.part_id)+":"+str(index)
+                    if not _prepare_media_entry(world,id,component,MediaShader,budget):complete=false
+    return complete
+
+func _registered_part_count(media:Dictionary)->int:
+    var key:String=media.get("asset_id","")
+    var retained:Dictionary=_registration_parts.get(key,{})
+    if is_same(retained.get("media"),media):return retained.count
+    var count:int=0
+    # Resolve immutable registration shape once; every future frame/facing uses
+    # prepared part slots without rescanning this source registration.
+    for media_phase in media.storage.phases.values():
+        var total:int=0
+        for layer in media_phase.layers:
+            var largest:int=0
+            var collections:Array=layer.get("partsByFacing",{}).values() if layer.has("partsByFacing") else [layer.get("parts",[])]
+            for frames in collections:
+                for parts in frames:largest=maxi(largest,parts.size())
+            total+=largest
+        count=maxi(count,total)
+    _registration_parts[key]={"media":media,"count":count}
+    return count
+
+func _prepare_media_entry(world:Node,id:String,component:Dictionary,shader:Shader,budget:Dictionary)->bool:
+    if media_handles.has(id):return true
+    if budget.used_usec>=budget.limit_usec:return false
+    var started:int=Time.get_ticks_usec()
+    var node=MeshInstance3D.new();node.visible=false;node.mesh=QuadMesh.new();node.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+    var material=ShaderMaterial.new();material.shader=shader;node.material_override=material;world.add_child(node)
+    var row:Dictionary={"id":component.id,"position":[0,0],"base_height_steps":0.0,"kind":"effect","facing":"SW"}
+    media_handles[id]={"id":id,"node":node,"material":material,"placement":row,"role":"native_effect","layer":100 if component.kind=="geometry_projectile" else -10 if component.get("layer",{}).get("drawOrder")=="behind_body" else 101,"published":false,"component_id":component.id}
+    budget.used_usec+=Time.get_ticks_usec()-started
+    return true
+
+func _retire_presenters(world:Node,retained:Dictionary,budget:Dictionary)->void:
+    for id in media_handles.keys():
+        var entry:Dictionary=media_handles[id]
+        if retained.has(entry.component_id) or entry.node.visible:continue
+        if budget.used_usec>=budget.limit_usec:return
+        var started:int=Time.get_ticks_usec()
+        if entry.published:world.actor_entries.erase(entry);world.draw_order_dirty=true
+        entry.node.queue_free();media_handles.erase(id)
+        budget.used_usec+=Time.get_ticks_usec()-started
+    for id in numbers.keys():
+        if retained.has(id) or numbers[id].visible:continue
+        if budget.used_usec>=budget.limit_usec:return
+        var started:int=Time.get_ticks_usec()
+        numbers[id].queue_free();numbers.erase(id)
+        budget.used_usec+=Time.get_ticks_usec()-started
+
+static func _publish_media(world:Node,entry:Dictionary)->void:
+    if not entry.published:
+        world.actor_entries.append(entry);world.draw_order_dirty=true;entry.published=true
+    entry.node.visible=true
 
 func _prepare_legacy(world:Node,components:Array,cache:Dictionary,budget:Dictionary,construct:bool)->Dictionary:
     var wanted:Dictionary={}
@@ -280,10 +434,14 @@ func prepare_optional(world:Node,cache:Dictionary,admission:Dictionary={})->void
     var budget:Dictionary=_native_budget if admission.is_empty() else admission
     if budget.frame!=Engine.get_process_frames():budget.frame=Engine.get_process_frames();budget.used_usec=0
     if budget.used_usec>=budget.limit_usec:return
-    if _optional_owner.is_empty() or _optional_owner!=[world.timeline.initialization_revision,world.timeline.revision,world.timeline.group_start_ms,world.timeline.current,world.timeline.queue]:return
+    if _optional_owner.is_empty() or _optional_owner!=[world.timeline.initialization_revision,world.timeline.resource_revision,world.timeline.group_start_ms,world.timeline.current,world.timeline.queue]:return
     var started:int=Time.get_ticks_usec();var charged_before:int=budget.used_usec
     if not _optional_blood_groups.is_empty():blood.prepare(world,_optional_blood_groups,budget)
     if not _optional_components.is_empty() and budget.used_usec<budget.limit_usec:
+        _prepare_presenters(world,_optional_components,budget)
+        audio.prepare(_native_prepare_components+_optional_components,world,budget)
+        for component in _optional_components:
+            if component.get("kind")=="condition_outline":outlines.prepare(world,component.actor_uuid,budget)
         native_spells.prepare(_native_prepare_groups,cache,world,[{"components":_optional_components}],budget,true,_native_optical_groups)
         native_hits.prepare(world,_native_prepare_components,cache,_optional_components,budget)
     budget.used_usec+=maxi(0,Time.get_ticks_usec()-started-(budget.used_usec-charged_before))
@@ -454,11 +612,8 @@ func sample(world: Node, samples: Array,frame_seconds: float=1.0/60.0,budget:Dic
                     var part: Dictionary=parts[i]
                     var id: String=component.id+":"+str(phase.part_id)+":"+str(i);live_media[id]=true
                     if not world.textures.has(part.file): ready=false;continue
-                    if not media_handles.has(id):
-                        var node=MeshInstance3D.new();node.mesh=QuadMesh.new();node.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-                        var material=ShaderMaterial.new();material.shader=MediaShader;node.material_override=material;world.add_child(node)
-                        var entry={"id":id,"node":node,"material":material,"placement":row,"role":"native_effect","layer":-10 if component.layer.get("drawOrder")=="behind_body" else 101}
-                        media_handles[id]=entry;world.actor_entries.append(entry);world.draw_order_dirty=true
+                    if not media_handles.has(id):ready=false;continue
+                    _publish_media(world,media_handles[id])
                     var entry: Dictionary=media_handles[id]
                     entry.placement=row
                     var rect: Array=part.rect
@@ -475,12 +630,10 @@ func sample(world: Node, samples: Array,frame_seconds: float=1.0/60.0,budget:Dic
             _witness(world,component,drawn)
         elif component.kind=="geometry_projectile":
             live_media[component.id]=true
-            if not media_handles.has(component.id):
-                var node=MeshInstance3D.new();node.mesh=QuadMesh.new();node.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-                var material=ShaderMaterial.new();material.shader=BoltShader;node.material_override=material;world.add_child(node)
-                var entry={"id":component.id,"node":node,"material":material,"placement":row.duplicate(),"role":"native_effect","layer":100}
-                media_handles[component.id]=entry;world.actor_entries.append(entry);world.draw_order_dirty=true
-            var entry: Dictionary=media_handles[component.id]
+            if not media_handles.has(component.id):ready=false;continue
+            var entry:Dictionary=media_handles[component.id]
+            if not entry.published:entry.placement=row.duplicate()
+            _publish_media(world,entry)
             var a=_projectile_point(world,component,0);var b=_projectile_point(world,component,1)
             var fraction=clampf(component.age_ms/maxf(.001,component.duration_ms),0,1)
             var point=a.lerp(b,fraction);var forward=(b-a).normalized()
@@ -501,16 +654,8 @@ func sample(world: Node, samples: Array,frame_seconds: float=1.0/60.0,budget:Dic
             _witness(world,component,_entry_visible(world,entry))
         elif component.kind in ["damage_number","feedback_text"]:
             live_numbers[component.id]=true
-            if not numbers.has(component.id):
-                var label=Label3D.new();label.text=component.text;label.font_size=component.style.fontSizePx
-                label.pixel_size=128.0/float(world.rig_config.TILE_W)/Placement.PIXELS_PER_UNIT
-                var font=SystemFont.new();font.font_names=PackedStringArray([component.style.fontFamily]);font.font_weight=700;label.font=font
-                label.outline_size=component.style.strokeWidthPx;label.outline_modulate=Color.hex(int(component.style.strokeColor)*256+255)
-                label.billboard=BaseMaterial3D.BILLBOARD_ENABLED;label.no_depth_test=true;label.modulate=Color.hex(int(component.color)*256+255)
-                # Feedback is a foreground overlay; depth-disabled sprites still
-                # participate in the transparent pass and can otherwise cover it.
-                label.render_priority=127;label.outline_render_priority=126
-                world.add_child(label);numbers[component.id]=label
+            if not numbers.has(component.id):ready=false;continue
+            numbers[component.id].visible=true
             var progress=clampf(component.age_ms/maxf(.001,component.duration_ms),0,1)
             var rig: Dictionary=world.rigs[row.rig]
             var lift=(component.style.anchorLiftPx-rig.origin_y_from_ground)*row.scale+component.style.risePx*progress+component.style.fontSizePx*.5
@@ -520,12 +665,10 @@ func sample(world: Node, samples: Array,frame_seconds: float=1.0/60.0,budget:Dic
         elif component.kind=="material_flash": _witness(world,component,_actor_visible(world,component.actor_uuid))
     for id in handles.keys():
         if handles[id].published and not alive.has(id): _release(world,id)
-    for id in numbers.keys():
-        if not live_numbers.has(id): numbers[id].queue_free(); numbers.erase(id)
-    for id in media_handles.keys():
-        if not live_media.has(id):
-            world.actor_entries.erase(media_handles[id]);media_handles[id].node.queue_free();media_handles.erase(id);world.draw_order_dirty=true
-    audio.prepare(sounds)
+    for id in numbers:
+        if not live_numbers.has(id):numbers[id].visible=false
+    for id in media_handles:
+        if not live_media.has(id):media_handles[id].node.visible=false
     audio.sample(world,sounds,world.timeline.display_ms,world.playback_speed,world.timeline.paused or world.timeline.waiting_for_media or world.timeline.waiting_for_world,epoch)
     for voice in audio.voices.values():
         if voice.started and not voice.paused:_witness(world,voice.row,true)
@@ -652,6 +795,9 @@ func close(world: Node) -> void:
     native_hits.close()
     blood.close(world)
     outlines.close(world)
+    _registration_parts.clear()
+    _prepared_resource_scope=[];_prepared_resource_groups=[];_prepared_resource_result={};_next_resource_cue_ms=-INF
+    _resource_membership_revision+=1
     for id in handles.keys(): _release(world,id)
     for label in numbers.values(): label.queue_free()
     numbers.clear()

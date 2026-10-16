@@ -3,6 +3,8 @@ const Protocol=preload("res://sdk/protocol.gd")
 const Reducer=preload("res://sdk/reducer.gd")
 const Selection=preload("res://presentation/selection_media.gd")
 const NativeSpells=preload("res://presentation/native_spell_authoring.gd")
+const Sources=preload("res://presentation/native_presentation_sources.gd")
+const Catalog=preload("res://source_catalog.gd")
 var checks=0
 var failures=[]
 func check(ok:bool,label:String)->void:
@@ -31,18 +33,22 @@ func run()->void:
         var expected:Dictionary=oracle.plan(request,old_cache,control)
         var damage:bool=NativeSpells.recipe({"behavior_id":behavior},current_cache).get("damage")!=null
         check(damage==(behavior=="spell.fireball"),"Delivered authoring selects damaging/non-damaging branches")
-        check(current_cache.has("catalog/action_media_assets.json")==damage,"Only damaging selection warms static feedback document")
-        check(actual.source_files.has("catalog/action_media_assets.json")==damage,"Same immutable document uses existing source handoff")
+        check(not current_cache.has("catalog/action_media_assets.json"),"Selection never reads the full legacy asset document")
+        check(not Catalog.prepared_asset("particles.region.blood",actual.source_files).is_empty()==damage,"Only damaging selection hands off its admitted feedback operand")
         var current_fields=actual.duplicate();var old_fields=expected.duplicate()
         current_fields.erase("source_files");old_fields.erase("source_files")
         check(current_fields==old_fields,"All final paths/roles/sizes/native metadata/budget/errors remain exactly equal: "+behavior)
         for field in ["paths","cpu_required","gpu_only","environment","source_sizes","source_headers","normal_sets"]:
             check(actual[field].keys()==expected[field].keys(),"Exact field insertion order "+behavior+"/"+field)
         var current_sources:Dictionary=actual.source_files.duplicate()
-        current_sources.erase("catalog/action_media_assets.json")
-        check(current_sources==expected.source_files,"No unrelated source file changes: "+behavior)
+        var expected_sources:Dictionary=expected.source_files.duplicate()
+        expected_sources.erase("catalog/action_media_assets.json")
+        var native_owner:Dictionary=current_sources[Sources.CACHE_KEY]
+        var native_loaded:Dictionary=native_owner.loaded.duplicate();native_loaded.erase("asset:particles.region.blood")
+        current_sources[Sources.CACHE_KEY]=Sources.make_admission(native_owner.index,native_loaded)
+        check(current_sources==expected_sources,"No unrelated source file changes: "+behavior)
         check(var_to_bytes(state)==source,"Canonical disclosed input remains immutable")
-        evidence.append({"behavior":behavior,"damage":damage,"paths":actual.paths.size(),"extra_feedback_document":actual.source_files.has("catalog/action_media_assets.json")})
+        evidence.append({"behavior":behavior,"damage":damage,"paths":actual.paths.size(),"prepared_feedback_asset":not Catalog.prepared_asset("particles.region.blood",actual.source_files).is_empty()})
     var result={"checks":checks,"failures":failures,"evidence":evidence,"scope":"Real admitted initial actor and delivered damaging/non-damaging authoring: same complete selection metadata, exact source path/role order, feedback-only document prewarm and immutable state; no submitted action/outcome prediction/GPU"}
     FileAccess.open("res://.runtime/selection-feedback-metadata-checks.json",FileAccess.WRITE).store_string(JSON.stringify(result,"  "))
     print("SELECTION_FEEDBACK_METADATA_CHECKS ",JSON.stringify(result));quit(0 if failures.is_empty() else 1)

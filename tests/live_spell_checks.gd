@@ -25,7 +25,7 @@ func _gesture_frame(record:Dictionary)->void:
         record.gesture_frames.append({"frame":frame.frame,"time_us":Time.get_ticks_usec(),"frame_ms":frame.frame_ms,"cpu_ms":frame.cpu_ms.duplicate(),"phase":phase_value(),"pointer":[scene.get_viewport().get_mouse_position().x,scene.get_viewport().get_mouse_position().y],"hover_position":scene.hover_hit.get("position"),"hover_request":scene.hover_request})
 
 func _issue_input(selected:Dictionary,record:Dictionary)->void:
-    if not scene.game_config.get("live_fireball_ui",false) or selected.is_empty() or selected.action.behavior_id!="spell.fireball":
+    if "--profile-root-player" in OS.get_cmdline_user_args() or not scene.game_config.get("live_fireball_ui",false) or selected.is_empty() or selected.action.behavior_id!="spell.fireball":
         await super._issue_input(selected,record)
         return
     record.input="native_family_target"
@@ -186,7 +186,7 @@ func _run()->void:
     for argument in OS.get_cmdline_user_args():
         if argument.begins_with("--profile-view-size="):profile_view_size=argument.trim_prefix("--profile-view-size=").to_float()
     scene=CapturingPlayer.new();scene.choices_observed=capture_choices;scene.profile.recording=true;scene.capture_media_demand=true
-    if "--live-fireball-ui" in OS.get_cmdline_user_args():
+    if "--live-fireball-ui" in OS.get_cmdline_user_args() and "--profile-root-player" not in OS.get_cmdline_user_args():
         # A native Window polls the physical desktop pointer even for pushed
         # mouse events. The displayed full-size viewport owns this live GUI's
         # local pointer and forwards no input to the user's other window.
@@ -202,12 +202,15 @@ func _run()->void:
         root.add_child(display)
         viewport.add_child(scene)
         viewport.notify_mouse_entered()
-        evidence.render_host="1600x960 native SubViewport, own World3D, one root display blit; user preview remains open/shared GPU"
-    else:root.add_child(scene)
+        evidence.render_host="1600x960 native SubViewport, own World3D, one root display blit; scoped native GUI input"
+    else:
+        root.add_child(scene)
+        evidence.render_host="Ordinary root viewport; production admitted action handlers; no extra display blit"
     check(scene.profiling_configured.ok and scene.session.transport.profiling_enabled(),"Transport profiling configured before live start")
     scene.camera.size=profile_view_size;scene.grid_visible=false
     evidence.profile_view_size=profile_view_size;evidence.window_size=[root.size.x,root.size.y]
     evidence.source="Unchanged interactive Gallery sorcerer with ordinary AI; actual Fireball native family/level/ground/Confirm events and original live packets." if scene.game_config.get("live_fireball_ui",false) else "Unchanged Gallery sorcerer recipe; actual Play commands for Amber, independent nonrendering SDK Blue; original packets only."
+    if "--profile-root-player" in OS.get_cmdline_user_args():evidence.source="Unchanged interactive Gallery sorcerer with ordinary AI; production admitted action handlers and original live packets, without GUI selection dwell."
     if not await until(ready,"Sorcerer actual initial choices",120000):await finish();return
     evidence.ready_frame=Engine.get_process_frames();evidence.ready_elapsed_ms=Time.get_ticks_msec()-started
     for id in scene.timeline.state.audience.controlled:
@@ -260,6 +263,6 @@ func _run()->void:
     FileAccess.open(scene.game_config.test_result.get_base_dir().path_join("media-gate-trace.json"),FileAccess.WRITE).store_string(JSON.stringify(scene.media_gate_trace))
     evidence.full_profile=FrameProfile.save(scene.profile,root,"gallery-live-spells",true)
     if scene.game_config.get("live_fireball_ui",false):
-        check(spell_occurrences.get("spell.fireball",0)==2,"Both original Fireball requests complete through native GUI")
+        check(spell_occurrences.get("spell.fireball",0)==2,"Both original Fireball requests complete through production Play")
     else:_journal_spell_evidence()
     await finish()

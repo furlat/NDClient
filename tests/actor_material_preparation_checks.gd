@@ -7,6 +7,8 @@ const Sources=preload("res://presentation/sprite_sources.gd")
 const Atlas=preload("res://presentation/native_light_atlas.gd")
 const Preparation=preload("res://presentation/world_preparation.gd")
 const PATH="/media/smallscale/modular/material-preparation-fixture.png"
+const ALT_PATH="/media/smallscale/modular/material-preparation-damage.png"
+const MISSING_PATH="/media/smallscale/modular/material-preparation-unsupported.png"
 var checks:int=0
 var failures:Array=[]
 class Host extends Node3D:
@@ -18,6 +20,7 @@ class Host extends Node3D:
     var source_depth:bool=true
     var source_normals:bool=true
     var character_light_profile:String="original"
+    var component_renderer:Dictionary={}
     func texture(path:String)->Texture2D:return textures.get(path)
 var host:Host
 var atlas:RefCounted
@@ -28,10 +31,110 @@ func _initialize()->void:run.call_deferred()
 func check(value:bool,label:String)->void:
     checks+=1
     if not value:failures.append(label);printerr("ACTOR_MATERIAL_FAIL ",label)
-func bind(frame:int=0,facing:String="SW",alpha:float=1.0)->void:
+func bind(frame:int=0,facing:String="SW",alpha:float=1.0,path:String=PATH)->void:
     var state:Dictionary=Construction.Conditions.material("actor",[])
     state.alpha=alpha
-    Construction.bind_source(host,entry,rig,PATH,frame,facing,Construction.Conditions.parameters(state,host.textures,host.resources))
+    Construction.bind_source(host,entry,rig,path,frame,facing,Construction.Conditions.parameters(state,host.textures,host.resources))
+func geometry_fixture()->void:
+    var body=Construction.CharacterGeometry.BodySources
+    var index=body.Index.new();var layer=body.Layer.new()
+    var records:Dictionary={}
+    for path in [PATH,ALT_PATH]:
+        var name:String="Idle" if path==PATH else "TakeDamage"
+        var files:Dictionary={};var profiles:Dictionary={}
+        for field in ["depth","normal","support","normal_valid"]:
+            files[field]=name+"-"+field
+            host.textures["/fixture/"+files[field]]=ImageTexture.create_from_image(host.source_images[PATH])
+        for profile in ["original","gentle","reference"]:profiles[profile]="/fixture/"+files.normal
+        var source={"_source_root":"/fixture","status":"complete","files":files,"cell_size":[64,64],
+            "depth_range":[-8,16],"optical_camera":{"origin":[32,48],"elevation_degrees":45},
+            "optical_ground_pixels":19.0 if path==PATH else null}
+        records[name]={"body":{"geometry":source,"normal_paths":profiles}}
+        index.source_owners[path]=["fixture-layer",name]
+    layer.clips=records
+    for path in [PATH,ALT_PATH,MISSING_PATH]:layer.headers[path]={"width":192,"height":128}
+    index.source_owners[MISSING_PATH]=["fixture-layer","Missing"]
+    host.catalog_cache[body.KEY]={"index":index,"loaded":{"fixture-layer":layer}}
+
+func future_binding_checks()->void:
+    for target in [ALT_PATH,MISSING_PATH]:
+        for flags in [[true,true,"original",1.0],[false,true,"gentle",-1.0],[true,false,"reference",1.0],[true,true,"missing-profile",1.0]]:
+            host.source_depth=flags[0];host.source_normals=flags[1];host.character_light_profile=flags[2];reset()
+            entry.placement.scale_x=flags[3]
+            var old_parameters:Dictionary=entry.source_parameters.duplicate()
+            var old_bounds:AABB=entry.node.custom_aabb
+            var future:Dictionary=Construction.prepare_binding(rig,entry.actor_layer,target,host.catalog_cache,
+                host.source_depth,host.source_normals,host.character_light_profile,entry.scale,entry.placement.scale_x)
+            var ready:Dictionary=Construction.realize_binding(host,future)
+            check(not ready.is_empty(),"Future clip borrows resident texture operands "+str([target,flags]))
+            check(entry.source_parameters==old_parameters and entry.node.custom_aabb==old_bounds,"Preparing future clip never changes displayed uniforms/bounds")
+            # Existing synchronous binder is an independent exact operand oracle.
+            bind(1,"NE",.4,target)
+            var expected:Dictionary=entry.source_parameters.duplicate()
+            var bounds:AABB=entry.node.custom_aabb
+            var status:String=entry.geometry_status
+            reset();entry.placement.scale_x=flags[3]
+            var binding_revision:int=entry.source_binding_revision
+            entry.prepared_source_binding=ready
+            bind(1,"NE",.4,target)
+            check(entry.source_parameters==expected,"Future packet applies exact original final source/UV/condition values "+str([target,flags]))
+            check(entry.node.custom_aabb==bounds and entry.geometry_status==status,"Future packet preserves original optical bounds/status")
+            check(entry.source_binding_revision==binding_revision,"Future clip packet does not replace private material ownership")
+            compare_destinations("Prepared future clip "+str([target,flags]))
+    host.source_depth=true;host.source_normals=true;host.character_light_profile="original"
+
+func future_support_checks()->void:
+    var Renderer=preload("res://presentation/native_spell_renderer.gd")
+    var renderer=Renderer.new();renderer._support=Renderer.Support.new();renderer._required_ids={"real-spell":true}
+    var paths:Dictionary=host.catalog_cache[Construction.CharacterGeometry.BodySources.KEY].loaded["fixture-layer"].clips.TakeDamage.body
+    paths.optical_paths={"solid":"/fixture/future-solid"}
+    var absent:Dictionary=renderer.prepare_actor_binding(ALT_PATH,"body",host)
+    check(not absent.ready and renderer._support.solid_masks.is_empty(),"Future native solid binding waits for its actual resident mask")
+    host.textures["/fixture/future-solid"]=host.textures[ALT_PATH]
+    var prepared_mask:Dictionary=renderer.prepare_actor_binding(ALT_PATH,"body",host)
+    check(prepared_mask.ready and renderer._support.solid_masks.is_empty(),"Preparing future optical mask does not publish future actor pose or binding")
+    renderer.publish_actor_binding(prepared_mask)
+    check(renderer._support.solid_masks.get(ALT_PATH)==host.textures[ALT_PATH] and renderer._support.actors.is_empty(),"Cue publishes exact mask into existing support owner without proxy allocation")
+    renderer._support=Renderer.Support.new();renderer.publish_actor_binding(prepared_mask)
+    check(renderer._support.solid_masks.is_empty(),"Old source packet cannot mutate replacement optical owner")
+    renderer._support=null
+
+func future_support_transition_checks()->void:
+    var Renderer=preload("res://presentation/native_spell_renderer.gd")
+    var Media=preload("res://presentation/media_warmup.gd")
+    var renderer=Renderer.new();renderer._support=Renderer.Support.new()
+    host.component_renderer={"native_spells":renderer,"blood":preload("res://presentation/blood_renderer.gd").new()}
+    var solid:String="/fixture/future-solid";host.textures.erase(solid)
+    reset()
+    var candidate=Preparation.new();host.add_child(candidate);candidate.host=host;candidate.phase="sampling"
+    candidate.result={"blood_rows":{}}
+    candidate.required_source_record=Media.source_record({solid:true},{},{},{solid:true})
+    var value:Dictionary=Construction.prepare_binding(rig,entry.actor_layer,ALT_PATH,host.catalog_cache,true,true,"original",entry.scale,1.0)
+    candidate.actor_bindings=[{"entry":entry,"value":value,"actor":"actor","owner":{}}]
+    candidate.step(100000)
+    check(candidate.prepared and not renderer.actor_bindings_needed(),"Ordinary cold clip completes while native support is not needed")
+    check(not candidate.actor_bindings[0].optical.has("mask"),"Inactive optical support does not demand or pretend to prepare a future mask")
+    var media:Dictionary=Media.create();Media.adopt_required(media,1)
+    Media.demand_records(media,[])
+    renderer.groups={"prior-native-tail":{}}
+    if renderer.actor_bindings_needed():Media.demand_records(media,[candidate.required_source_record])
+    check(media.wanted.has(solid) and not media.cpu_required.has(solid),"A prior native tail promotes the exact future cold mask as GPU-only required source")
+    candidate.step(100000)
+    check(not candidate.prepared and candidate.phase=="sampling" and is_same(candidate.actor_bindings[0].value,value),"Late optical activation reopens only retained binding work before admission")
+    check(renderer._support.solid_masks.is_empty(),"Waiting on a cold future mask never changes current support bindings")
+    host.textures[solid]=host.textures[ALT_PATH]
+    Media.published(media,{"path":solid,"cpu_bytes":0,"gpu_bytes":64})
+    candidate.step(100000)
+    check(candidate.prepared and Media.ready(media,{solid:true}),"Exact future-mask publication completes the held candidate")
+    candidate.publish_actor_bindings()
+    check(renderer._support.solid_masks.get(ALT_PATH)==host.textures[solid],"Cue adopts the now-resident future mask into the existing tail support")
+    var previous:RefCounted=renderer._support;renderer._support=Renderer.Support.new()
+    candidate.step(100000);candidate.publish_actor_bindings()
+    check(candidate.prepared and renderer._support.solid_masks.get(ALT_PATH)==host.textures[solid] and renderer._support!=previous,"Replacement support owner refreshes actual mask operands without source metadata derivation")
+    Media.demand_records(media,[])
+    check(not media.wanted.has(solid),"Withdrawing the candidate releases its exact mask contribution")
+    candidate.release_handles();candidate.free();Media.close(media)
+    renderer.groups.clear();renderer._support=null;host.component_renderer={}
 func reset()->void:
     atlas.prepared_source_bindings.clear();prepared={}
     if not entry.is_empty():entry.node.free()
@@ -120,10 +223,15 @@ func water_clock_ownership()->void:
 func run()->void:
     host=Host.new();root.add_child(host)
     host.camera=Camera3D.new();host.add_child(host.camera)
-    host.catalog_cache[Construction.CharacterGeometry.TABLE]={"records":{}}
     var image=Image.create(192,128,false,Image.FORMAT_RGBA8);image.fill(Color.WHITE)
     host.textures[PATH]=ImageTexture.create_from_image(image);host.source_images[PATH]=image
+    host.textures[ALT_PATH]=ImageTexture.create_from_image(image)
+    host.textures[MISSING_PATH]=host.textures[PATH]
+    geometry_fixture()
     atlas=Atlas.new();atlas.attach(host);atlas.set_light_cap(1.0)
+    future_binding_checks()
+    future_support_checks()
+    future_support_transition_checks()
     reset();check(admitted(),"Identical source version admits exact material owners");compare_destinations("Unchanged source")
     reset();SourceMaterial.acknowledge(entry);bind(1,"NE",.4)
     entry.received_material=prepared.output.received_material
@@ -143,20 +251,42 @@ func run()->void:
     reset();bind(1,"SW",.4);bind(2,"SW",1.0);bind(0)
     check(admitted(),"Opacity change-and-return retains prepared geometry");compare_destinations("Opacity change and return")
     reset();host.source_depth=false;bind(1);host.source_depth=true;bind(2);bind(0)
-    check(not admitted(),"Optical change-and-return invalidates structural admission")
+    check(admitted(),"Optical uniform change-and-return retains the same receiving layout");compare_destinations("Optical change and return")
     reset();entry.actor_layer.effect={"palette":{"colors":[0xffffff,0x4488aa]}};bind(1)
     entry.actor_layer.effect={};bind(2);bind(0)
-    check(not admitted(),"Palette family change-and-return invalidates structural admission")
+    check(admitted(),"Palette uniform change-and-return retains the same receiving layout");compare_destinations("Palette change and return")
     reset();bind(1);SourceMaterial.acknowledge(entry);bind(2)
     check(admitted(),"A destination that missed an acknowledged sample remains structurally valid");compare_destinations("Missed delivery")
-    reset();host.source_depth=false;bind(1);check(not admitted(),"Changed optical flags reject old material proof");host.source_depth=true
-    reset();entry.placement.scale_x=-1.0;bind(1);check(not admitted(),"Changed optical scale rejects old geometry proof")
+    reset();host.source_depth=false;bind(1);check(admitted(),"Changed optical flags use the same prepared receiver");compare_destinations("Depth disabled");host.source_depth=true
+    reset();entry.placement.scale_x=-1.0;bind(1);check(admitted(),"Changed optical scale updates receiver operands");compare_destinations("Mirrored optical reconstruction")
     reset();entry.node.mesh.size=Vector2(2,1);check(not admitted(),"Changed quad dimensions reject old material proof")
     reset();host.camera.rotate_y(.5);check(not admitted(),"Changed view basis rejects old receiving copies");host.camera.basis=Basis.IDENTITY
     reset();prepared.output.received_material.shader=Atlas.Output;check(not admitted(),"Changed output shader rejects old destination identity")
     reset();prepared.groups.values()[0].material.shader=Atlas.ShadowReceiver;check(not admitted(),"Changed receiving shader rejects old destination identity")
     reset();entry.material=entry.material.duplicate();SourceMaterial.initialize(entry);check(not admitted(),"Replacement source material cannot inherit old copied owners")
-    reset();host.textures[PATH]=ImageTexture.create_from_image(image);bind();check(not admitted(),"Replacement resident texture rejects old source snapshot")
+    reset();host.textures[PATH]=ImageTexture.create_from_image(image);bind();check(admitted(),"Replacement resident texture retains the compatible receiving layout");compare_destinations("Replacement texture")
+    reset();SourceMaterial.acknowledge(entry)
+    var binding_revision:int=entry.source_binding_revision
+    bind(1,"NE",1.0,ALT_PATH)
+    check(entry.source_binding_revision==binding_revision and admitted(),"Another clip keeps its prepared source and receiver identities")
+    check(not entry.source_changes.has(&"has_component_geometry"),"Supported clip change never clears and restores geometry")
+    check(not entry.has("geometry_ground_pixels"),"A clip without optical ground releases the previous optional value")
+    check(entry.geometry_paths.size()==4 and not entry.geometry_paths.has("/fixture/Idle-depth"),"Clip binding replaces old optical path ownership")
+    entry.received_material=prepared.output.received_material;entry.received_source_key=prepared.output.received_source_key
+    atlas.last_reconcile_phases={}
+    atlas._copy_parameters(prepared.groups.values()[0]);atlas._copy_output_source(entry)
+    check(atlas.last_reconcile_phases.get("material_full_copies",0)==0,"A changed clip delivers map/frame deltas without full receiver/output copies")
+    compare_destinations("Changed clip with supported geometry")
+    SourceMaterial.acknowledge(entry);bind();SourceMaterial.acknowledge(entry);bind(1,"NE",1.0,ALT_PATH)
+    compare_destinations("Changed clip after a missed consumer acknowledgement")
+    reset();bind(0,"SW",1.0,MISSING_PATH)
+    check(not SourceMaterial.value(entry,"has_component_geometry") and entry.geometry_paths.is_empty() and not entry.has("geometry_ground_pixels"),"Unsupported source clears geometry and optional metadata")
+    for name in Construction.CharacterGeometry.PARAMETERS.values():check(SourceMaterial.value(entry,name)==null,"Unsupported source clears "+name)
+    compare_destinations("Unsupported source")
+    reset();host.character_light_profile="missing-profile";bind()
+    check(entry.geometry_status=="incomplete_normal_profile" and not SourceMaterial.value(entry,"has_component_geometry"),"Incomplete normal profile clears the previous supported geometry")
+    for name in Construction.CharacterGeometry.PARAMETERS.values():check(SourceMaterial.value(entry,name)==null,"Incomplete profile clears "+name)
+    host.character_light_profile="original";bind();compare_destinations("Recovery from incomplete profile")
     reset();atlas.set_light_cap(.8);check(not admitted(),"Changed light mode rejects prepared copy");atlas.set_light_cap(1.0)
     reset();prepared.screen_size+=Vector2.ONE;check(not admitted(),"Changed receiving viewport size rejects prepared copy")
     reset()

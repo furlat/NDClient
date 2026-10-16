@@ -152,7 +152,7 @@ func run()->void:
             Before.close(original);After.close(revised);After.close(peer)
             await process_frame;await RenderingServer.frame_post_draw
     owner.queue_free();await process_frame;await RenderingServer.frame_post_draw
-    var report={"checks":checks,"failures":failures,"resource_load_ms":load_ms,"preparation_call_ms":preparation_calls,"metadata_worker":Variants.metadata_profile,"sources":rows,"all_sources":all_sources,"source_count":clips.size(),"transform_roundoff":transform_roundoff,"scope":"Selected real source state and ownership; CPU creation excludes preloading. Hidden source layers do not qualify visible surface pipeline stalls."}
+    var report={"checks":checks,"failures":failures,"resource_load_ms":load_ms,"preparation_call_ms":preparation_calls,"scope_metadata":"Exported native source references are trusted; optional dependency verification is an offline tool","sources":rows,"all_sources":all_sources,"source_count":clips.size(),"transform_roundoff":transform_roundoff,"scope":"Selected real source state and ownership; CPU creation excludes preloading. Hidden source layers do not qualify visible surface pipeline stalls."}
     FileAccess.open("res://.runtime/native-source-variant"+("-all" if all_sources else "")+"-checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("NATIVE_VARIANT_CHECK_COMPLETE ",checks," failures=",failures.size())
     for value in failures.slice(0,25):printerr(value)

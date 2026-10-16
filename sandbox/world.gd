@@ -487,11 +487,13 @@ func _sample_frame(delta: float) -> void:
     var optical:Dictionary={}
     if spell_colours and staging_spec.has("light_color"):optical.color=Color(staging_spec.light_color)
     optical.energy_multiplier=float(staging_spec.get("decorative_light_multiplier",1.0))
+    source_lighting.prepare_native_handles(handles,{})
     source_lighting.sample_handles(handles,0.0,optical)
     EffectLayer.sync(effect_layer,self)
     _sync_native_lighting()
     _sort_draws()
     native_light_atlas.sync_output(self,[world_generation,quarter,scenery_revision,wall_mode,native_light_atlas.revision],true)
+    native_support.prepare_membership(static_entries,visual_actors)
     native_support.sync(static_entries,visual_actors,camera)
 
 func _sample_effects(delta:float)->void:

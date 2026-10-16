@@ -92,7 +92,7 @@ func cancelled(mode:String)->void:
         host.quarter=(host.quarter+1)%4;host._step_world_preparation()
     else:host._discard_world_preparation()
     check(host.pending_world==null,mode+" discards the candidate through the real Play boundary")
-    check(host.retiring_node_count==83,mode+" owns all forty-one source nodes, forty-one external receivers and candidate")
+    check(host.retiring_node_count==42,mode+" retains the candidate root and forty-one external receivers before bounded descendant discovery")
     check(fixture.receivers.all(func(ref):return ref.get_ref()!=null and not ref.get_ref().visible),mode+" cancellation does not synchronously free or show future receivers")
     await drain(host,mode)
     check(fixture.receivers.all(func(ref):return ref.get_ref()==null) and fixture.sources.all(func(ref):return ref.get_ref()==null),mode+" source and external receiver nodes are actually destroyed")
@@ -183,8 +183,9 @@ func future_visibility()->void:
         "future native address buffer and row packet retain exactly the prepared visibility")
     check(floor.scenery_values==[0.0,0.0] and floor.ground_buffer[16]==0.0 and floor.ground_packets["floor-0"].data[16]==0.0,
         "future visibility never mutates the unpublished source buffer or shared packet")
-    check(candidate.atlas_shells[original.node.get_instance_id()].snapshot.scenery_value==0.0 and not original.has("scenery_value"),
-        "remembered single source captures zero visibility without mutating its source entry")
+    check(candidate.atlas_shells[original.node.get_instance_id()].snapshot.scenery_value==0.0
+        and original.scenery_value==0.0 and not original.node.is_visible_in_tree() and original not in host.entries,
+        "Remembered private source and receiving snapshot agree before publication without touching a displayed entry")
     # A complete replacement may have native shells only for its changed
     # subset. Retained rows still require exact passive source metadata.
     candidate.atlas_shells[node.get_instance_id()].specs.erase("floor-1")
@@ -254,9 +255,36 @@ func flame_ownership(mode:String)->void:
     check(material_refs.all(func(ref):return ref.get_ref()==null),"Flame "+mode+" releases every unconsumed private material without an owner cycle")
     await dispose(host)
 
+func single_dynamic_preparation()->void:
+    var host=make_host();var fixture=prepare(host,1,false,true)
+    var candidate:Node=fixture.candidate
+    candidate.phase="atlas_receivers";candidate.membership={"removed":{}}
+    candidate.step(0)
+    check(candidate.atlas_prefix.is_empty() and not candidate.prepared,
+        "A spent allowance cannot begin even a single dynamic atlas transaction")
+    candidate.step(100000)
+    check(candidate.prepared and candidate.task<0 and candidate.atlas_prefix.get("planning_lane")=="scene_single_dynamic",
+        "One prepared dynamic receiver completes planning/binding without a worker scheduling frame")
+    if not candidate.prepared:
+        host._discard_world_preparation();await drain(host,"failed single dynamic");await dispose(host);return
+    check(host.native_light_atlas.receivers.is_empty() and host.native_light_atlas.entry_specs.is_empty()
+        and not fixture.receivers[0].get_ref().visible,
+        "Scene-thread private planning publishes no future receiver, source or pixels")
+    # Compare the complete transaction against the unchanged worker planner,
+    # including its real future address, support state and receiver ordering.
+    var reference:Dictionary=Preparation.AtlasDelta.begin_candidate(host.native_light_atlas,candidate.atlas_jobs,{},host)
+    while not Preparation.AtlasDelta.capture_candidate(host.native_light_atlas,reference,host):pass
+    var task:int=WorkerThreadPool.add_task(Preparation.AtlasDelta.compute_candidate.bind(reference))
+    WorkerThreadPool.wait_for_task_completion(task)
+    for key in ["owners","supports","specs","positions","cursor","next_height","growing"]:
+        check(candidate.atlas_prefix.plan[key]==reference.plan[key],
+            "Single dynamic transaction matches the original worker planner's "+key)
+    host._discard_world_preparation();await drain(host,"single dynamic");await dispose(host)
+
 func run()->void:
     for mode in ["cancel","epoch","quarter"]:await cancelled(mode)
     for mode in ["cancel","replaced","unused"]:await flame_ownership(mode)
+    await single_dynamic_preparation()
     await accepted();await rejected(false);await rejected(true);await worker_cancelled();await future_visibility()
     var report={"checks":checks,"failures":failures,
         "scope":"Actual WorldPreparation source receiver creation and Play retirement: hidden final parenting, ownership transfer, cancellation, epoch/quarter rejection, atlas replacement/deletion, sixteen-node frame bound. No GPU pixel or timing claim."}

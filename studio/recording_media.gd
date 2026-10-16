@@ -33,6 +33,15 @@ static func plan(index:Dictionary)->Dictionary:
         var exact={"character":character.required,"environment":surroundings.required,
             "fixtures":surroundings.fixtures,"errors":character.errors}
         exact.merge(MediaWarmup.roles_for(character,character.required))
+        var publication:Dictionary={"source_records":MediaWarmup.source_records(character,surroundings,[group],cache),
+            "character_timeline":character.character_timeline,"environment_timeline":surroundings.environment_timeline,
+            "source_sizes":{}}
+        MediaWarmup._source_publications(publication,cache)
+        exact.source_records=publication.source_records[group.id]
+        exact.source_cuts=publication.source_cuts[group.id]
+        exact.source_families=publication.source_families[group.id]
+        exact.character_timeline=character.character_timeline[group.id]
+        exact.environment_timeline=surroundings.environment_timeline[group.id]
         exact.cpu_required.merge(surroundings.required)
         for path in exact.cpu_required:exact.gpu_only.erase(path)
         group_plans[group.id]=exact

@@ -199,7 +199,7 @@ static func _recorded(entry: Dictionary,rows: Array) -> void:
 static func build(cache: Dictionary={},recorded_rows: Array=[],condition_ids: Dictionary={}) -> Dictionary:
     var recipes:Dictionary=Authoring.load_data("catalog/condition_recipes.json",cache)
     var resources:Dictionary=Authoring.load_data("catalog/resources.json",cache)
-    var rigs:Dictionary=Authoring.load_data("catalog/rigs.json",cache)
+    var rigs:Dictionary=Authoring.rigs(cache)
     var entries:Array=[]
     var availability={}
     var totals={"entries":0,"requirements":0,"implemented":0,"unexercised":0,"missing":0,"state_only":0,"authoring_assignments":0}

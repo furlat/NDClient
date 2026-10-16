@@ -20,6 +20,7 @@ const OutlineShader=preload("res://studio/condition_outline_preview.gdshader")
 const BoltShader=preload("res://studio/geometry_projectile_preview.gdshader")
 var source_lights=Lighting.new()
 var native_store=NativePreviewStore.new()
+var baked_requests:Dictionary={}
 var native_descriptors:Dictionary={}
 var outline_source=ConditionOutline.new()
 var host: Node
@@ -141,6 +142,10 @@ func request(row: Dictionary,sample_ms: float,quarter: int,prepare_views: bool=t
         if baked!=null:
             _publish_texture(key,baked,native_store.last_texture_bytes)
             return key
+        if native_store.pending(native_descriptors[descriptor_key],tick,quarter):
+            baked_requests[key]={"descriptor":native_descriptors[descriptor_key],"tick":tick,"quarter":quarter,
+                "row":row,"sample_ms":sample_ms}
+            return key
     var job={"key":key,"row":row,"age_ms":age,"sample_ms":sample_ms,"quarter":quarter,"generation":generation,"component":component}
     # Capture this generation's immutable source tables before worker dispatch.
     # A thumbnail must not select on-disk authoring edited after this index.
@@ -151,7 +156,7 @@ func request(row: Dictionary,sample_ms: float,quarter: int,prepare_views: bool=t
         job.native_context={}
         if NativeSources.source_record(component.source_id,cache).get("weapon_path",false):
             var native_actor:Dictionary=row.get("actor",{})
-            var native_rig:Dictionary=Catalog.read_file("catalog/rigs.json",cache).get(native_actor.get("rig",""),{})
+            var native_rig:Dictionary=Characters.rigs(cache).get(native_actor.get("rig",""),{})
             var weapon=NativeSources.weapon_context(component,native_actor,native_rig,job.facing_cycle,quarter)
             if not weapon.error.is_empty():errors[key]=weapon.error;return key
             job.native_context=weapon.context
@@ -172,7 +177,7 @@ func request(row: Dictionary,sample_ms: float,quarter: int,prepare_views: bool=t
         sampled=state.get("sampled_pose",row.get("sampled_pose",{})).duplicate()
         if sampled.get("clock")=="display":sampled.source_seconds=sample_ms/1000.0
     if sampled.is_empty():errors[key]="No disclosed source pose";return key
-    var rig: Dictionary=Catalog.read_file("catalog/rigs.json",cache)[actor.rig]
+    var rig: Dictionary=Characters.rigs(cache)[actor.rig]
     var clip_name: String=sampled.clip
     var clip: Dictionary=rig.clips[clip_name]
     var seconds=float(sampled.source_seconds)
@@ -333,6 +338,15 @@ func _ordinary(job:Dictionary)->bool:
     return job.row.kind not in ["audio","feedback_text","damage_number","geometry_projectile","residue_deposit","native_effect"]
 
 func poll() -> bool:
+    native_store.poll_retired()
+    for key in baked_requests.keys():
+        var job:Dictionary=baked_requests[key]
+        var baked:Texture2D=native_store.lookup(job.descriptor,job.tick,job.quarter)
+        if baked!=null:
+            baked_requests.erase(key);_publish_texture(key,baked,native_store.last_texture_bytes);return true
+        if not native_store.pending(job.descriptor,job.tick,job.quarter):
+            baked_requests.erase(key);request(job.row,job.sample_ms,job.quarter,false)
+        break
     if not is_instance_valid(host): return false
     if suspended:
         if active.get("kind")=="native_effect":active.started_ms=Time.get_ticks_msec()
@@ -362,6 +376,12 @@ func poll() -> bool:
         if active.kind=="native_effect":
             if _sample_native(active):_clear_active();changed=true
         elif active.kind=="blood":
+            if not active.get("configured",false):
+                if active.node.renderer.prepare(active.node,active.node.timeline.queue):
+                    active.node.configure(active.job.component,cache,active.job.age_ms,active.job.quarter,source_lights)
+                    active.configured=true;active.draws=0;active.drawn=false
+                    RenderingServer.frame_post_draw.connect(_drawn.bind(active.job.key,active.job.generation),CONNECT_ONE_SHOT)
+                return changed
             active.node.sample()
             if active.drawn and active.draws>2 and active.node.renderer.ready:
                 _publish(active.job,active.viewport.get_texture().get_image());_clear_active();changed=true
@@ -398,9 +418,9 @@ func poll() -> bool:
             var view=SubViewport.new();view.size=Vector2i(256,256);view.transparent_bg=true;view.own_world_3d=true
             view.render_target_update_mode=SubViewport.UPDATE_ALWAYS
             host.add_child(view)
-            var node=BloodPreview.new();view.add_child(node);node.configure(job.component,cache,job.age_ms,job.quarter,source_lights)
-            active={"kind":"blood","job":job,"node":node,"viewport":view,"draws":0,"drawn":false}
-            RenderingServer.frame_post_draw.connect(_drawn.bind(job.key,job.generation),CONNECT_ONE_SHOT)
+            var node=BloodPreview.new();view.add_child(node);node.catalog_cache=cache;node.source_lighting=source_lights
+            node.timeline.queue=[{"id":job.key,"components":[job.component]}]
+            active={"kind":"blood","job":job,"node":node,"viewport":view,"draws":0,"drawn":false,"configured":false}
         elif job.row.kind=="native_effect":
             active=_start_native(job)
     return changed
@@ -541,7 +561,7 @@ func reset() -> void:
     generation+=1;pending.clear();warm_pending.clear();warm_requested.clear();requested.clear();pinned.clear();textures.clear();texture_sizes.clear();texture_bytes=0;errors.clear();inactive.clear();cache.clear();_clear_active()
     for composite in native_composites:_close_native(composite)
     native_composites.clear()
-    native_descriptors.clear();native_store.reset()
+    native_descriptors.clear();baked_requests.clear();native_store.reset()
     if RenderingServer.frame_post_draw.is_connected(_composites_drawn):RenderingServer.frame_post_draw.disconnect(_composites_drawn)
     for composite in composites:composite.viewport.queue_free()
     composites.clear()

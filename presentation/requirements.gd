@@ -2,6 +2,7 @@ extends RefCounted
 ## Passive expectations from the received fact contract and selected authoring.
 ## This does not compile, schedule, select outcomes, or certify rendered pixels.
 const Authoring=preload("res://presentation/authoring.gd")
+const Sources=preload("res://presentation/native_presentation_sources.gd")
 const SCHEMA="res://sdk/player-api-v1.schema.json"
 const REFERENCE="dnd_engine/game_obsolete/"
 const STATE_ONLY=["temporary_hit_points","spatial","turn","sensory","item_charge","faction"]
@@ -59,7 +60,11 @@ static func row(kind:String,label:String,source:String,implementation:String="mi
         "availability":"not_examined","rendered":false,"reference_source":REFERENCE+REFERENCES.get(kind,"presentation_coverage.py::presentation_inventory"),
         "timing":{"resolved":false,"reason":"No source-backed schedule resolved for this operation."}}
 
-static func fact(kind:String)->Dictionary:
+static func fact(kind:String,cache:Dictionary={})->Dictionary:
+    # This is lookup only: compilation has already admitted its source owner.
+    # Unknown/custom contract kinds keep their explicit extraction below.
+    var index:Resource=cache.get(Sources.CACHE_KEY,{}).get("index")
+    if index!=null and index.fact_requirements.has(kind):return index.fact_requirements[kind]
     var source=SCHEMA+":/$defs/PlayerNode/properties/fact/anyOf/0/discriminator/mapping/"+pointer(kind)
     if kind in STATE_ONLY:
         return row("fact:"+kind,"State publication · "+kind,source,"not_applicable","projected",[kind],"state","Canonical publication; no separate actor animation is required. State changes can still affect lights, visibility, or other retained owners.")
@@ -76,7 +81,7 @@ static func facts(cache:Dictionary)->Array:
         var schema:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(SCHEMA))
         cache[KEY]=schema["$defs"].PlayerNode.properties.fact.anyOf[0].discriminator.mapping.keys()
     var result:Array=[]
-    for kind in cache[KEY]:result.append(fact(kind))
+    for kind in cache[KEY]:result.append(fact(kind,cache))
     return result
 
 static func _active(value:Variant)->bool:
@@ -198,18 +203,31 @@ static func owner(kind:String,id:String,source:String,value:Variant)->Dictionary
         result.implementation="not_applicable";result.gap_kind="explicit_none";result.status="explicit_none"
     return result
 
+static func _prepared_recipe(selected:Dictionary,source:String,kind:String,behavior:String,cache:Dictionary)->Array:
+    # The Resource identity qualifies both the selected value and its source
+    # revision. A behavior name alone cannot qualify a changed/custom recipe.
+    if kind=="spell":
+        var record:Resource=cache.get(Sources.CACHE_KEY,{}).get("loaded",{}).get(behavior)
+        if record!=null and is_same(record.recipe,selected) and record.requirement_source==source:
+            return record.requirements.duplicate()
+    return recipe(selected,source,[kind],cache)
+
 static func occurrence(fact_value:Dictionary,selected:Dictionary,source:String,cache:Dictionary)->Array:
     var kind:String=fact_value.get("kind","")
-    var result=recipe(selected,source,[kind],cache)
-    for requirement in result:
+    var result=_prepared_recipe(selected,source,kind,fact_value.get("behavior_id",""),cache)
+    for i in result.size():
+        var requirement:Dictionary=result[i]
         if requirement.status!="missing":continue
         if not requirement.get("outcome_selectors",{}).is_empty() or requirement.kind in ["cancellationMedia","childAttack"]:
+            # Only this occurrence's applicability fields are mutable. Other
+            # static diagnostic rows remain borrowed from the admitted source.
+            requirement=requirement.duplicate();result[i]=requirement
             requirement.renderer_support=requirement.implementation
             requirement.implementation="unassessed";requirement.gap_kind="unassessed"
             requirement.applicability="unassessed"
             requirement.reason="Authored conditional operation; its original outcome/child binding has not been resolved for this occurrence. Do not assume mutually exclusive variants executed together."
             requirement.next_step="Bind the declared selectors to actual causal outcomes before classifying this occurrence as required or omitted."
-    var declared=fact(kind)
+    var declared=fact(kind,cache)
     if declared.status=="missing":result.append(declared)
     if kind=="action":
         for binding in [["action_materials","action_material"],["action_intakes","action_intake"]]:

@@ -21,12 +21,21 @@ func records_for(rows: Array, request_id: int) -> Dictionary:
         if row.get("request_id",0)==request_id:result[row.stage]=row
     return result
 
+func numeric_phases(value:Variant)->bool:
+    if value is Dictionary:
+        for key in value:
+            if not key is String or not numeric_phases(value[key]):return false
+        return true
+    return typeof(value) in [TYPE_INT,TYPE_FLOAT,TYPE_BOOL]
+
 func profile_privacy(rows: Array) -> void:
-    var allowed=["stage","time_us","started_us","http_id","request_id","operation","purpose","schema","bytes","request_bytes","declared_bytes","status","ok","sequence","frame_id","event","records","packet_started_us","compile_started_us","end_us","from_disk"]
+    var allowed=["stage","time_us","started_us","http_id","request_id","operation","purpose","schema","bytes","request_bytes","declared_bytes","status","ok","sequence","frame_id","event","records","packet_started_us","compile_started_us","end_us","from_disk","compile_ended_us","required_media_ms","framing_started_us","phases","phases_ms","reused_connected","native_error","validation","transport_reason","failure_kind","connection_replaced","native_state","sent","request_attempted","phase","reason"]
     var safe=true
     for row in rows:
         for key in row:
-            if not key in allowed or typeof(row[key]) in [TYPE_DICTIONARY,TYPE_ARRAY,TYPE_PACKED_BYTE_ARRAY]:safe=false
+            if key in ["phases","phases_ms"]:
+                if not numeric_phases(row[key]):safe=false
+            elif not key in allowed or typeof(row[key]) in [TYPE_DICTIONARY,TYPE_ARRAY,TYPE_PACKED_BYTE_ARRAY]:safe=false
     var text=JSON.stringify(rows)
     check(safe and not "PROFILE_SECRET_TOKEN" in text and not Peer.UUID in text and not "http://" in text,"Profile exports only flat timing/size/label fields, no credentials, URLs, IDs from payload or source bodies")
 
@@ -47,7 +56,7 @@ func _run() -> void:
     var id=transport.request("choices",{"actor_uuid":Peer.UUID,"state_revision":"r","force_attack":false,"correlation_id":Peer.UUID})
     await _until("response",id)
     var response:Dictionary=responses[id]
-    check(response.ok and not response.value.has("kind") and response.normalized.kind=="choices" and response.value.choices.entity_uuid==Peer.UUID,"Profiled choices preserve exact admitted and separate normalized values")
+    check(response.ok and not response.value.has("kind") and not response.has("normalized") and response.value.choices.entity_uuid==Peer.UUID,"Profiled choices preserve the current sparse admitted response without a duplicate normalized tree")
     check((await _request("follow")).ok,"Profiled follower begins")
     await _until("terminal")
     check(terminal!=null and terminal.kind=="completed" and peer.acks==[0,1,2] and consumer.seen==[0,1,2],"Profiled SSE preserves duplicate handling, canonical consumption and ACK order")
@@ -56,11 +65,12 @@ func _run() -> void:
     var phases=records_for(report.records,id)
     var previous=0
     var ordered=true
-    for phase in ["request_enqueued","http_created","request_sent","response_headers","body_complete","http_admission","reply_check","response_normalization","response_published","http_end"]:
+    for phase in ["request_enqueued","http_created","request_sent","response_headers","body_complete","http_admission","reply_check","response_published","http_end"]:
         if not phases.has(phase):ordered=false;continue
         if phases[phase].time_us<previous:ordered=false
         previous=phases[phase].time_us
     check(ordered,"Choices record a monotonic enqueue→send→headers→body→admission→normalization→publication→end chain")
+    check(not phases.has("response_normalization"),"Sparse choices do not report a normalization phase that no longer runs")
     check(phases.has("body_complete") and phases.body_complete.bytes>0 and phases.request_sent.request_bytes>0,"HTTP records report received and transmitted sizes without bodies")
     var canonical=[];var framed={};var sse_ok=true;var chunks=0
     for row in report.records:
@@ -68,7 +78,9 @@ func _run() -> void:
             canonical.append(row.sequence)
             if row.time_us<row.started_us or not row.ok:sse_ok=false
         if row.stage=="sse_chunk":chunks+=1
-        if row.stage=="sse_record_ready":framed[row.frame_id]=row.time_us
+        if row.stage=="sse_record_ready":
+            framed[row.frame_id]=row.time_us
+            if row.get("framing_started_us",row.time_us)>row.time_us:sse_ok=false
         if row.stage=="sse_admission":
             if not framed.has(row.frame_id) or framed[row.frame_id]>row.started_us or row.started_us>row.time_us:sse_ok=false
     check(canonical==[0,1,2] and chunks>0 and framed.size()>0 and sse_ok,"SSE raw-chunk/framing/admission and exactly-once canonical-consumer timings are correlated")

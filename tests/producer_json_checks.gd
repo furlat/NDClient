@@ -9,15 +9,23 @@ const Producer=preload("res://sdk/producer_json.gd")
 func _initialize()->void:run.call_deferred()
 func run()->void:
     var old=Strict.new();var candidate=Producer.new();var checks=0;var failures=[]
-    var texts=['{"a":1,"a":2}','{"n":999999999999999999}','{"n":1000000000000000000}','{"s":"a\\u0000b"}','{"s":"a\\nb"}','{"s":"\\uD83D\\uDE00"}','{"s":"slash\\/"}','{"s":"back\\\\end"}','{"s":"café😀"}','{"n":0.5}','{"n":999999999999999.5}','{"n":-0.0}','{"n":-0}','{"n":01}','{"n":1,}','{"n":1} {}','{"n":Vector2(1,2)}','{"n":Object()}','[1,]','{1:2}']
+    var texts=['{"a":1,"a":2}','{"n":999999999999999999}','{"n":1000000000000000000}','{"s":"a\\u0000b"}','{"s":"a\\nb"}','{"s":"\\uD83D\\uDE00"}','{"s":"slash\\/"}','{"s":"back\\\\end"}','{"s":"literal\\\\u1234 and 1.234e-9"}','{"s":"café😀"}','{"n":0.5}','{"n":999999999999999.5}','{"n":-0.0}','{"n":-0}']
+    # Only arbitrary/offline decoding owns a syntax contract. The private
+    # producer path accepts the backend's already serialized JSON grammar.
+    for malformed in ['{"n":01}','{"n":1,}','{"n":1} {}','{"n":Vector2(1,2)}','{"n":Object()}','[1,]','{1:2}']:
+        checks+=1
+        if old.parse(malformed).ok:failures.append("Strict arbitrary input accepted "+malformed)
     for row in JSON.parse_string(FileAccess.get_file_as_string("res://tests/sdk_decimal_cases.json")):texts.append('{"n":'+row.token+'}')
-    for depth in [510,512,513]:texts.append('['.repeat(depth)+'0'+']'.repeat(depth))
+    for depth in [510,512]:texts.append('['.repeat(depth)+'0'+']'.repeat(depth))
+    checks+=1
+    if old.parse('['.repeat(513)+'0'+']'.repeat(513)).ok:failures.append("Strict arbitrary input lost its depth limit")
     for text in texts:
         var a=old.parse(text);var b=candidate.parse(text);checks+=1
         if a.ok!=b.ok or (a.ok and var_to_bytes(a.value)!=var_to_bytes(b.value)):failures.append(text.left(200))
-    var recording=""
+    var recording="";var previous:RefCounted=null
     for arg in OS.get_cmdline_user_args():
         if arg.begins_with("--recording="):recording=arg.trim_prefix("--recording=")
+        if arg.begins_with("--producer-oracle="):previous=load(arg.trim_prefix("--producer-oracle=")).new()
     if recording.is_empty():printerr("Pass actual --recording=<journal>");quit(2);return
     var protocol=Protocol.new();var state={};var admitted_state={};var cache={};var native_cache={};var timings=[]
     var files=DirAccess.get_files_at(recording);files.sort()
@@ -43,12 +51,12 @@ func run()->void:
             checks+=1
             if var_to_bytes(state)!=var_to_bytes(admitted_state) or var_to_bytes(a.state)!=var_to_bytes(b.state):failures.append("Actual canonical/timeline state "+file)
             var text=raw.get_string_from_utf8();var costs=[]
-            for parser in [old,candidate]:
+            for parser in [old,candidate]+([previous] if previous!=null else []):
                 var samples=[]
                 for repeat in 3:
                     var started=Time.get_ticks_usec();parser.parse(text);samples.append((Time.get_ticks_usec()-started)/1000.)
                 costs.append(samples)
-            timings.append({"file":file,"bytes":raw.size(),"strict_ms":costs[0],"producer_ms":costs[1]})
+            timings.append({"file":file,"bytes":raw.size(),"strict_ms":costs[0],"producer_ms":costs[1],"previous_producer_ms":costs[2] if previous!=null else []})
     var report={"checks":checks,"failures":failures,"recording":recording,"timings":timings,"scope":"Exact Variant types/decimal bits, unchanged strict fallback, actual normalized/reduced state and compiled timeline groups. Native Godot headless CPU timings; no full-game latency claim."}
     FileAccess.open("res://.runtime/producer-json-checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("PRODUCER_JSON_CHECKS ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)

@@ -16,103 +16,80 @@ static func _include(actors: Dictionary, actor: Dictionary) -> void:
         if _outfit(prior)==signature: return
     actors[id].append(actor)
 
-static func _priority_paths(actor: Dictionary, rig: Dictionary, index: Dictionary, cache: Dictionary) -> Dictionary:
-    # These are authored resting/movement sources for this actual outfit, not
-    # predicted actions or a second interpretation of movement events.
-    var clips = {}
-    var rest = Characters.rest_sample(actor,rig,cache)
-    if rest.ok: clips[rest.value.clip] = true
-    var movement: Dictionary = Characters._read(index.movement_context,cache)
+static func _priority_clips(actor:Dictionary,rig:Dictionary,index:Dictionary,cache:Dictionary)->Array:
+    var clips:Dictionary={}
+    var rest:Dictionary=Characters.rest_sample(actor,rig,cache)
+    if rest.ok:clips[rest.value.clip]=true
+    var movement:Dictionary=Characters._read(index.movement_context,cache)
     for field in ["walkClip","jumpClip"]:
-        if movement.has(field): clips[movement[field]] = true
-    var flight: Dictionary = movement.get("flight",{}).get("body",{}).get("actor",{})
-    if flight.get("enabled",false): clips[flight.clip] = true
+        if movement.has(field):clips[movement[field]]=true
+    var flight:Dictionary=movement.get("flight",{}).get("body",{}).get("actor",{})
+    if flight.get("enabled",false):clips[flight.clip]=true
     for connector in movement.get("connectorProfiles",{}).values():
-        if connector.has("bodyClip"): clips[connector.bodyClip] = true
+        if connector.has("bodyClip"):clips[connector.bodyClip]=true
     for context in rig.get("body_contexts",[]):
-        var body: Dictionary = context.get("body",{}).get("actor",{})
-        if context.role=="movement" and body.get("enabled",false): clips[body.clip] = true
-    var available: Array = clips.keys().filter(func(clip):return rig.clips.has(clip))
-    var source = Characters.sheet_paths(actor,available,cache)
-    return source.value if source.ok else {}
+        var body:Dictionary=context.get("body",{}).get("actor",{})
+        if context.role=="movement" and body.get("enabled",false):clips[body.clip]=true
+    return clips.keys().filter(func(clip):return rig.clips.has(clip))
 
-static func plan(state: Dictionary, environment: Dictionary, fixtures: Dictionary, cache: Dictionary, groups: Array = []) -> Dictionary:
-    var paths = environment.duplicate()
-    var cpu_required = environment.duplicate()
-    var gpu_only = {}
-    var priority = {}
-    var errors: Array = []
-    var actors = {}
-    var previous: Dictionary = cache.get("__encounter_outfits",{})
-    var witnesses = {}
-    for actor in state.get("actors",{}).values(): _include(witnesses,actor)
-    # These packets have already been admitted by the SDK. Preparing their
-    # source families does not publish their actors or advance a display clock.
+static func plan(state:Dictionary,environment:Dictionary,fixtures:Dictionary,cache:Dictionary,groups:Array=[])->Dictionary:
+    var paths:Dictionary=environment.duplicate();var cpu_required:Dictionary=environment.duplicate()
+    var gpu_only:Dictionary={};var priority:Dictionary={};var errors:Array=[];var witnesses:Dictionary={}
+    for actor in state.get("actors",{}).values():_include(witnesses,actor)
     for group in groups:
-        for actor in group.get("staged_actors",{}).values(): _include(witnesses,actor)
+        for actor in group.get("staged_actors",{}).values():_include(witnesses,actor)
         for commit in group.get("commits",[]):
-            for actor in commit.delta.get("actors",{}).values(): _include(witnesses,actor)
+            for actor in commit.delta.get("actors",{}).values():_include(witnesses,actor)
         for track in group.get("actor_tracks",[]):
-            if not track.has("visual_loadout"): continue
+            if not track.has("visual_loadout"):continue
             for actor in witnesses.get(track.actor_uuid,[]).duplicate():
-                var variant: Dictionary = actor.duplicate()
-                variant.visual_loadout = track.visual_loadout
+                var variant:Dictionary=actor.duplicate();variant.visual_loadout=track.visual_loadout
                 _include(witnesses,variant)
-    if not witnesses.is_empty():
-        var index: Dictionary = Characters._read("catalog-index.json",cache)
-        var rigs: Dictionary = Characters._read(index.rigs,cache)
-        for id in witnesses:
-            actors[id] = []
-            for actor in witnesses[id]:
-                var signature = _outfit(actor)
-                var packet = {}
-                for prior in previous.get(id,[]):
-                    if prior.signature==signature: packet = prior; break
-                if packet.is_empty():
-                    packet = {"signature":signature,"paths":{},"priority":{},"cpu_required":{},"gpu_only":{},"errors":[]}
-                    var rig: String = Characters.rig_id(actor,cache)
-                    if not rigs.has(rig):
-                        packet.errors.append("No authored rig for admitted actor " + str(id))
-                    else:
-                        packet.priority = _priority_paths(actor,rigs[rig],index,cache)
-                        var variants: Array = [actor]
-                        if actor.get("visual_loadout") != null:
-                            for weapon_set in ["melee","ranged"]:
-                                var variant: Dictionary = actor.duplicate()
-                                variant.visual_loadout = actor.visual_loadout.duplicate()
-                                variant.visual_loadout.active_weapon_set = weapon_set
-                                variants.append(variant)
-                        for variant in variants:
-                            var resolved = Characters.sheet_paths(variant,rigs[rig].clips.keys(),cache)
-                            if not resolved.ok:
-                                packet.errors.append(resolved.error.message)
-                                continue
-                            packet.paths.merge(resolved.value)
-                            packet.cpu_required.merge(resolved.cpu_required)
-                            packet.gpu_only.merge(resolved.gpu_only)
-                actors[id].append(packet)
-                priority.merge(packet.priority)
-                paths.merge(packet.paths)
-                cpu_required.merge(packet.cpu_required)
-                gpu_only.merge(packet.gpu_only)
-                errors.append_array(packet.errors)
-    cache.__encounter_outfits = actors
-    for path in cpu_required: gpu_only.erase(path)
-    # Every witnessed active outfit gets its rest/movement closure before any
-    # actor's exhaustive poses and alternate equipment variants consume budget.
-    var ordered: Dictionary = priority.duplicate()
-    ordered.merge(paths)
-    paths = ordered
-    var retained: Dictionary = cache.get("__encounter_closure",{})
-    if not retained.is_empty() and retained.paths.keys()==paths.keys() and retained.get("priority",{}).keys()==priority.keys() and retained.cpu_required==cpu_required and retained.gpu_only==gpu_only and retained.environment==environment and retained.fixtures==fixtures and retained.errors==errors:
-        return retained
-    var absolute = {}
-    for path in paths: absolute[path] = Catalog.media_path(path)
-    var priority_absolute = {}
-    for path in priority: priority_absolute[path] = absolute[path]
-    var result = {"revision":int(retained.get("revision",0))+1,"paths":absolute,"priority":priority_absolute,"environment":environment,"fixtures":fixtures,
-        "cpu_required":cpu_required,"gpu_only":gpu_only,"errors":errors}
-    cache.__encounter_closure = result
+    # Compose each actual immutable layer/slot once. Four actors in the same
+    # outfit share these entries; neither actor nor equipped-item UUID keys a
+    # family, and no actor×all-clips resource/geometry resolution is repeated.
+    var selected_sources:Dictionary={}
+    var index:Dictionary=Characters._read("catalog-index.json",cache)
+    var rigs:Dictionary=Characters.rigs(cache)
+    for actors in witnesses.values():
+        for actor in actors:
+            var id:String=Characters.rig_id(actor,cache)
+            if not rigs.has(id):errors.append("No authored rig for admitted actor "+str(actor.uuid));continue
+            var priority_clips:Array=_priority_clips(actor,rigs[id],index,cache)
+            var variants:Array=[actor]
+            if actor.get("visual_loadout")!=null:
+                for weapon_set in ["melee","ranged"]:
+                    var variant:Dictionary=actor.duplicate();variant.visual_loadout=actor.visual_loadout.duplicate()
+                    variant.visual_loadout.active_weapon_set=weapon_set;variants.append(variant)
+            for variant in variants:
+                var selected:Dictionary=Characters._select_layers(variant,rigs[id],id==Characters.BodySources.index(cache).root_rig,cache)
+                if not selected.ok:errors.append(selected.error.message);continue
+                for layer in selected.value:
+                    var resource=Characters.BodySources.prepare_layer(layer.source_path,cache)
+                    if resource==null:errors.append("Cannot admit body category: "+layer.source_path);continue
+                    var key:Array=[layer.source_path,layer.slot]
+                    if not selected_sources.has(key):selected_sources[key]={"resource":resource,"slot":layer.slot,"priority":{}}
+                    if is_same(variant,actor):
+                        for clip in priority_clips:selected_sources[key].priority[clip]=true
+    for selected in selected_sources.values():
+        for clip in selected.resource.clips:
+            var descriptor:Dictionary=selected.resource.clips[clip].get(selected.slot,{})
+            if descriptor.is_empty():continue
+            paths[descriptor.path]=true;cpu_required[descriptor.path]=true
+            paths.merge(descriptor.companions);gpu_only.merge(descriptor.companions)
+            if selected.priority.has(clip):
+                priority[descriptor.path]=true;priority.merge(descriptor.companions)
+    for path in cpu_required:gpu_only.erase(path)
+    var ordered:Dictionary=priority.duplicate();ordered.merge(paths);paths=ordered
+    var retained:Dictionary=cache.get("__encounter_closure",{})
+    if not retained.is_empty() and retained.paths.keys()==paths.keys() and retained.get("priority",{}).keys()==priority.keys() and retained.cpu_required==cpu_required and retained.gpu_only==gpu_only and retained.environment==environment and retained.fixtures==fixtures and retained.errors==errors:return retained
+    var absolute:Dictionary={};var priority_absolute:Dictionary={}
+    for path in paths:absolute[path]=Catalog.media_path(path)
+    for path in priority:priority_absolute[path]=absolute[path]
+    var result:Dictionary={"revision":int(retained.get("revision",0))+1,"paths":absolute,"priority":priority_absolute,
+        "environment":environment,"fixtures":fixtures,"cpu_required":cpu_required,"gpu_only":gpu_only,"errors":errors,
+        "source_layers":selected_sources.size()}
+    cache.__encounter_closure=result
     return result
 
 static func estimates(paths: Dictionary, cpu_required: Dictionary, gpu_only: Dictionary, cache: Dictionary) -> Dictionary:
@@ -121,7 +98,8 @@ static func estimates(paths: Dictionary, cpu_required: Dictionary, gpu_only: Dic
     var result = {}
     for path in paths:
         var size: Dictionary = previous.get(path,{})
-        if size.is_empty(): size = _png_size(Catalog.media_path(path))
+        if size.is_empty(): size=Characters.BodySources.header(path,cache)
+        if size.is_empty():size=_png_size(Catalog.media_path(path))
         retained[path] = size
         if size.has("error"):
             result[path] = size
@@ -142,10 +120,22 @@ static func source_sizes(paths: Dictionary, cache: Dictionary) -> Dictionary:
     var available: Dictionary = cache.get("__encounter_headers",{})
     var result = {}
     for path in paths:
-        if not headers.has(path): headers[path] = available[path] if available.has(path) else _png_size(Catalog.media_path(path))
+        if not headers.has(path):
+            var imported:Dictionary=Characters.BodySources.header(path,cache)
+            headers[path]=imported if not imported.is_empty() else (available[path] if available.has(path) else _png_size(Catalog.media_path(path)))
         var header: Dictionary = headers[path]
         if not header.has("error"): result[path] = int(header.width)*int(header.height)*4
     cache.__required_headers = headers
+    return result
+
+static func source_headers(paths:Dictionary,cache:Dictionary)->Dictionary:
+    # These paths have already crossed source_sizes admission. Publish only
+    # their immutable facts, never the optional catalog's whole header table.
+    var known:Dictionary=cache.get("__required_headers",{})
+    var result:Dictionary={}
+    for path in paths:
+        if known.has(path):result[path]=known[path]
+    result.make_read_only()
     return result
 
 static func estimate_bytes(estimates: Dictionary) -> Dictionary:

@@ -2,6 +2,12 @@ extends Node3D
 # Boundary harness, not a gameplay simulator. State comes from an actual SDK recording.
 const FrameProfile = preload("res://frame_profile.gd")
 var profile = FrameProfile.create()
+var preparation_budget:Dictionary={"frame":-1,"used_usec":0,"limit_usec":2000}
+func _preparation_budget()->Dictionary:
+    var frame:int=Engine.get_process_frames()
+    if preparation_budget.frame!=frame:
+        preparation_budget.frame=frame;preparation_budget.used_usec=0
+    return preparation_budget
 var timeline = preload("res://presentation/timeline.gd").new()
 var session = preload("res://presentation/session.gd").new()
 var loot_object_uuid = ""

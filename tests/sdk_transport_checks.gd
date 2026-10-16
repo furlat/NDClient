@@ -97,6 +97,12 @@ func _parser_checks() -> void:
         check(result.ok,"Byte-split UTF-8/CRLF accepted")
         if result.ok: records.append_array(result.value)
     check(records.size()==1 and records[0].event=="operation" and records[0].id=="1" and records[0].raw.get_string_from_utf8()=="{\"name\":\n\"é😀\"}","SSE exact multiline record")
+    var trusted=SSE.new(null,SSE.MAX_BYTES,true)
+    var trusted_records:Array=[]
+    for byte in (": comment\r\nevent: operation\r\nid: 1\r\ndata: {\"name\":\r\ndata: \"é😀\"}\r\n\r\ndata: unfinished").to_utf8_buffer():
+        var result:Dictionary=trusted.feed(PackedByteArray([byte]))
+        if result.ok:trusted_records.append_array(result.value)
+    check(trusted_records==records,"Trusted producer retains exact bytes/order with split UTF-8 and multiline framing")
     check(parser.finish().value.is_empty(),"Unterminated EOF discarded")
     parser = SSE.new()
     check(parser.feed("event: operation\rid: 1\rdata: {}\r\r".to_utf8_buffer()).value.size()==1,"CR-only blank delimiter")

@@ -9,6 +9,7 @@ const Compact = preload("res://studio/timeline_compact.gd")
 const LightTracks = preload("res://studio/light_tracks.gd")
 const AudioCues=preload("res://presentation/audio_cues.gd")
 var thumbnails = Thumbnails.new()
+var preparation_admission:Dictionary={}
 var light_settings:Dictionary={}
 var fixture_curves:Dictionary={}
 var light_plots:Dictionary={}
@@ -356,12 +357,31 @@ func _process(_delta: float) -> void:
     var started=Time.get_ticks_usec()
     prepare_visible()
     var prepared=Time.get_ticks_usec()
-    _prepare_other_rows()
+    if _preparation_available():
+        var optional_started:int=Time.get_ticks_usec()
+        _prepare_other_rows()
+        _charge_preparation(optional_started)
     var optional=Time.get_ticks_usec()
-    if thumbnails.poll(): queue_redraw()
+    if _preparation_available():
+        var poll_started:int=Time.get_ticks_usec()
+        if thumbnails.poll():queue_redraw()
+        _charge_preparation(poll_started)
     var finished=Time.get_ticks_usec()
     frame_cpu_ms={"visible":(prepared-started)/1000.0,"optional":(optional-prepared)/1000.0,
         "poll":(finished-optional)/1000.0,"total":(finished-started)/1000.0,"frame":Engine.get_process_frames()}
+
+func _preparation_available()->bool:
+    if preparation_admission.is_empty():return true
+    if preparation_admission.frame!=Engine.get_process_frames():
+        preparation_admission.frame=Engine.get_process_frames();preparation_admission.used_usec=0
+        preparation_admission.phase_usec={};preparation_admission.optional_order=[];preparation_admission.minimum_cleanup=0
+    return preparation_admission.used_usec<preparation_admission.limit_usec
+
+func _charge_preparation(started:int)->void:
+    if preparation_admission.is_empty():return
+    var elapsed:int=Time.get_ticks_usec()-started
+    preparation_admission.used_usec+=elapsed
+    preparation_admission.phase_usec.studio_thumbnails=preparation_admission.phase_usec.get("studio_thumbnails",0)+elapsed
 
 func _prepare_other_rows()->void:
     if thumbnails.prewarm_suspended or index.is_empty():return
@@ -445,6 +465,8 @@ func _visible_rows()->Array:
     return result
 
 func prepare_visible(all_quarters:bool=false)->Dictionary:
+    if not _preparation_available():return {"ready":false,"settled":false,"pending":preview_demand.size(),"errors":[],"samples":preview_demand.size()}
+    var started:int=Time.get_ticks_usec()
     # Staging works while this Control is invisible. Both demand and drawing
     # use _sample_cells, so readiness never depends on a hidden _draw callback.
     var signature=[thumbnails.generation,thumbnails.suspended,rows_revision,size,scroll_y,origin_ms,pixels_per_second,gutter,quarter,all_quarters]
@@ -487,6 +509,7 @@ func prepare_visible(all_quarters:bool=false)->Dictionary:
         published_layout={"signature":preview_signature.duplicate(),"rows":rows.duplicate(),"visible_rows":preview_visible_rows,"collapsed":collapsed.duplicate(),"scroll_y":scroll_y,"origin_ms":origin_ms,"pixels_per_second":pixels_per_second,"gutter":gutter,"quarter":quarter,"preview_keys":preview_keys.duplicate(),"extent":size}
         thumbnails.set_demand(preview_demand)
         queue_redraw()
+    _charge_preparation(started)
     return {"ready":remaining==0 and issues.is_empty(),"settled":remaining==0,"pending":remaining,"errors":issues,"samples":preview_demand.size()}
 
 func _band_height(row:Dictionary)->float:

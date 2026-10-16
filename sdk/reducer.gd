@@ -23,16 +23,29 @@ static func copy_target(target: Dictionary) -> Dictionary:
 
 static func _retained_target(target: Dictionary) -> Dictionary:
     # Journal-only transaction: previous published states/captures are read-only.
-    # Every container edited by the fold is private; installed record leaves are
-    # immutable or copied at insertion. Public reducer calls still deep-detach.
+    # Collection shells are private; an actor/senses record forks only at its
+    # actual write. Installed record leaves are immutable or copied at insertion.
+    # Public reducer calls still deep-detach.
     var result: Dictionary = target.duplicate()
     for key in ["actors", "tiles", "objects", "spatial_commit_cursors"]:
         result[key] = target[key].duplicate()
-    for identity in result.actors:
-        result.actors[identity] = Transitions.snapshot_actor(result.actors[identity])
-    result.senses = Transitions.snapshot_senses(target.senses)
-    result.combat_log_appends = target.combat_log_appends.duplicate()
     return result
+
+static func _actor_for_write(target:Dictionary,identity:Variant,retained:bool,loadout:bool=false)->Variant:
+    var actor:Variant=target.actors.get(identity)
+    if actor==null or not retained:return actor
+    actor=actor.duplicate()
+    if loadout:actor.visual_loadout=actor.visual_loadout.duplicate()
+    target.actors[identity]=actor
+    return actor
+
+static func _senses_for_write(target:Dictionary,cells:Dictionary)->void:
+    if target.senses==null:return
+    var previous:Dictionary=target.senses
+    target.senses=Transitions.snapshot_senses(previous)
+    # Spatial/contact writes do not edit cell arrays. Keep the private derived
+    # cell owner bound to the replacement shell instead of rebuilding its sets.
+    if cells.has("view") and is_same(cells.view.source,previous):cells.view.source=target.senses
 
 static func _ordered_rows(rows: Array, cursors: Dictionary, identity_field: String) -> Array:
     # Python's sort is stable; Godot's is not. Equal cursors retain wire order.
@@ -60,11 +73,12 @@ static func apply_world_update(target: Dictionary, update: Dictionary) -> Dictio
     target.connectors = update.connectors.duplicate(true)
     return success(target)
 
-static func _observe(target: Dictionary, observation: Dictionary) -> void:
+static func _observe(target: Dictionary, observation: Dictionary, retained:bool=false,cells:Dictionary={}) -> void:
     var identity: String = observation.actor.uuid
     if target.actors.has(identity) and not target.actors[identity].present: return
     target.actors[identity] = observation.actor.duplicate(true)
     if observation.contact != null and target.senses != null:
+        if retained:_senses_for_write(target,cells)
         target.senses.entities[identity] = observation.contact.duplicate(true)
 
 static func stage_actors(target: Dictionary, observations: Array) -> Dictionary:
@@ -108,33 +122,38 @@ static func stage_lineage(target: Dictionary, lineage: Dictionary) -> Dictionary
 static func apply_player_fact(target: Dictionary, fact: Dictionary, source_cursor: Variant = null) -> Dictionary:
     return _apply_player_fact_owned(target, fact, source_cursor, false)
 
-static func _apply_player_fact_owned(target: Dictionary, fact: Dictionary, source_cursor: Variant, composed_senses: bool, cells: Dictionary = {}, actor_snapshots:Dictionary={}) -> Dictionary:
+static func _apply_player_fact_owned(target: Dictionary, fact: Dictionary, source_cursor: Variant, composed_senses: bool, cells: Dictionary = {}, actor_snapshots:Dictionary={},retained:bool=false) -> Dictionary:
     var identity: Variant
     var actor: Variant
     match fact.kind:
         "faction":
             actor_snapshots.clear()
-            if target.actors.has(fact.entity_uuid): target.actors[fact.entity_uuid].faction = fact.faction_after
+            actor=_actor_for_write(target,fact.entity_uuid,retained)
+            if actor!=null:actor.faction=fact.faction_after
         "spatial":
             actor_snapshots.clear()
             identity = fact.entity_uuid
-            actor = target.actors.get(identity)
+            actor = _actor_for_write(target,identity,retained)
             if fact.terminal_departure and actor != null:
                 actor.present = false; actor.last_visual_position = null; actor.occupancy_layer = null
-                if target.senses != null: target.senses.entities.erase(identity)
+                if target.senses != null:
+                    if retained:_senses_for_write(target,cells)
+                    target.senses.entities.erase(identity)
                 return success(target)
             if actor != null and fact.change_type == "entity_entered": actor.spatial_disposition = "present"
             if actor != null and fact.occupancy_layer != null: actor.occupancy_layer = fact.occupancy_layer
             var audience = Audience.resolve(target.observer_uuid, target.audience)
             if not audience.ok: return audience
             if identity in audience.value.controlled and fact.change_type == "entity_entered":
-                if target.senses != null and identity == target.observer_uuid: target.senses.position = fact.position.duplicate()
+                if target.senses != null and identity == target.observer_uuid:
+                    if retained:_senses_for_write(target,cells)
+                    target.senses.position = fact.position.duplicate()
                 if actor != null: actor.last_visual_position = fact.position.duplicate()
         "item_charge":
             actor_snapshots.clear()
             identity = fact.source_entity_uuid
             if not target.actors.has(identity): return failure("Missing actor: " + identity)
-            actor = target.actors[identity]
+            actor = _actor_for_write(target,identity,retained,true)
             var audience = Audience.resolve(target.observer_uuid, target.audience)
             if not audience.ok: return audience
             if actor.controlled_items == null or identity not in audience.value.controlled:
@@ -143,6 +162,7 @@ static func _apply_player_fact_owned(target: Dictionary, fact: Dictionary, sourc
             for item in actor.controlled_items:
                 if fact.item_destroyed and item.item_uuid == fact.item_uuid: continue
                 if item.item_uuid == fact.item_uuid:
+                    if retained:item=item.duplicate()
                     item.charges = fact.charges_after; item.stack_count = fact.stack_count_after
                 items.append(item)
             actor.controlled_items = items
@@ -157,18 +177,22 @@ static func _apply_player_fact_owned(target: Dictionary, fact: Dictionary, sourc
             var observed = Audience._observe_retained(target.perception, audience.value, fact, int(target.reducer_cursor if source_cursor == null else source_cursor), cells)
             if not observed.ok: return observed
             target.perception = observed.value
-            target.senses = Audience._view_after(target.perception, target.observer_uuid, target.senses, fact, cells) if composed_senses else Audience._view_retained(target.perception, target.observer_uuid)
+            target.senses = Audience._view_after(target.perception, target.observer_uuid, target.senses, fact, cells,retained) if composed_senses else Audience._view_retained(target.perception, target.observer_uuid)
             if fact.observer_position_changed and target.actors.has(fact.observer_uuid):
-                target.actors[fact.observer_uuid].last_visual_position = fact.observer_position.duplicate()
+                actor=_actor_for_write(target,fact.observer_uuid,retained)
+                actor.last_visual_position = fact.observer_position.duplicate()
             for member in fact.entity_contacts_changed:
                 var contact: Dictionary = fact.entity_contacts_changed[member]
                 if contact.visual and target.actors.has(member) and target.actors[member].present:
-                    target.actors[member].last_visual_position = contact.position.duplicate()
+                    if target.actors[member].last_visual_position!=contact.position:
+                        actor=_actor_for_write(target,member,retained)
+                        actor.last_visual_position = contact.position.duplicate()
         "attack":
             actor_snapshots.clear()
             if target.actors.has(fact.source_entity_uuid):
                 var stance = "none" if fact.attack_source_kind != "equipped" else ("ranged" if fact.weapon_slot in ["RANGED_MAIN", "RANGED_OFF"] else "melee")
-                target.actors[fact.source_entity_uuid].visual_loadout.active_weapon_set = stance
+                actor=_actor_for_write(target,fact.source_entity_uuid,retained,true)
+                actor.visual_loadout.active_weapon_set = stance
         "damage", "heal":
             if fact.kind == "damage" and fact.stage != "applied": return success(target)
             if fact.kind == "heal" and fact.was_blocked: return success(target)
@@ -177,25 +201,26 @@ static func _apply_player_fact_owned(target: Dictionary, fact: Dictionary, sourc
             if not target.actors.has(identity): return failure("Missing actor: " + identity)
             if fact.resulting_normal_hp == null or fact.resulting_temporary_hp == null:
                 return failure("applied damage requires exact committed HP" if fact.kind == "damage" else "healing requires exact committed HP")
-            actor = target.actors[identity]
+            actor = _actor_for_write(target,identity,retained)
             actor.normal_hp = fact.resulting_normal_hp; actor.temporary_hp = fact.resulting_temporary_hp
             if fact.resulting_temporary_hp <= 0: actor.temporary_hp_grant = null
         "temporary_hit_points":
             actor_snapshots.clear()
             identity = fact.entity_uuid
             if not target.actors.has(identity): return failure("Missing actor: " + identity)
-            target.actors[identity].temporary_hp = fact.resulting_temporary_hp
-            target.actors[identity].temporary_hp_grant = fact.grant.duplicate(true) if fact.grant != null else null
+            actor=_actor_for_write(target,identity,retained)
+            actor.temporary_hp = fact.resulting_temporary_hp
+            actor.temporary_hp_grant = fact.grant.duplicate(true) if fact.grant != null else null
         "life":
             actor_snapshots.clear()
             identity = fact.entity_uuid
             if not target.actors.has(identity): return failure("Missing actor: " + identity)
-            actor = target.actors[identity]
+            actor = _actor_for_write(target,identity,retained)
             actor.life_state = fact.new_state; actor.normal_hp = fact.normal_hit_points
             actor.remains_disposition = fact.remains_disposition
         "equipment":
             actor_snapshots.clear()
-            actor = target.actors.get(fact.source_entity_uuid)
+            actor = _actor_for_write(target,fact.source_entity_uuid,retained)
             if actor != null:
                 actor.visual_loadout = fact.visual_loadout.duplicate(true)
                 actor.armor_class = fact.armor_class
@@ -204,7 +229,7 @@ static func _apply_player_fact_owned(target: Dictionary, fact: Dictionary, sourc
             actor_snapshots.clear()
             identity = fact.target_entity_uuid
             if not target.actors.has(identity): return failure("Missing actor: " + identity)
-            actor = target.actors[identity]
+            actor = _actor_for_write(target,identity,retained)
             var condition: Dictionary = fact.condition
             var members = {}
             for row in actor.conditions: members[row.condition_uuid] = row
@@ -230,7 +255,7 @@ static func _apply_player_fact_owned(target: Dictionary, fact: Dictionary, sourc
 static func apply_committed_player_fact(target: Dictionary, fact: Dictionary, source_cursor: int, version_cursors: Dictionary) -> Dictionary:
     return _apply_committed_player_fact_owned(target, fact, source_cursor, version_cursors, false)
 
-static func _apply_committed_player_fact_owned(target: Dictionary, fact: Dictionary, source_cursor: int, version_cursors: Dictionary, composed_senses: bool, cells: Dictionary = {}, actor_snapshots:Dictionary={}) -> Dictionary:
+static func _apply_committed_player_fact_owned(target: Dictionary, fact: Dictionary, source_cursor: int, version_cursors: Dictionary, composed_senses: bool, cells: Dictionary = {}, actor_snapshots:Dictionary={},retained:bool=false) -> Dictionary:
     if fact.kind == "spatial" and fact.entity_uuid != null and fact.change_type in ["entity_entered", "entity_left"]:
         if fact.commit_event_uuid == null or not version_cursors.has(fact.commit_event_uuid):
             return failure("Spatial change at cursor %d lacks its recorded commit version" % source_cursor)
@@ -238,14 +263,14 @@ static func _apply_committed_player_fact_owned(target: Dictionary, fact: Diction
         var previous: int = target.spatial_commit_cursors.get(fact.entity_uuid, -1)
         if committed_at < previous and previous < source_cursor: return success(target)
         target.spatial_commit_cursors[fact.entity_uuid] = committed_at
-    return _apply_player_fact_owned(target, fact, source_cursor, composed_senses, cells, actor_snapshots)
+    return _apply_player_fact_owned(target, fact, source_cursor, composed_senses, cells, actor_snapshots,retained)
 
 static func reduce_nodes(target: Dictionary, nodes: Array, versions: Array, observations: Array, updates: Array) -> Dictionary:
     return _reduce_nodes_owned(copy_target(target), nodes, versions, observations, updates)
 
 # Only a private transaction enters this fold. Intermediate failures discard
 # its mutable containers without touching a previously published state.
-static func _reduce_nodes_owned(result: Dictionary, nodes: Array, versions: Array, observations: Array, updates: Array, recorded: Variant = null, profile: Variant = null, cells: Dictionary = {}) -> Dictionary:
+static func _reduce_nodes_owned(result: Dictionary, nodes: Array, versions: Array, observations: Array, updates: Array, recorded: Variant = null, profile: Variant = null, cells: Dictionary = {},retained:bool=false) -> Dictionary:
     # Arbitrary public inputs first compose exhaustively. Only a context bound
     # to this exact committed state can carry that proof across operations.
     var composed_senses: bool = cells.get("composed",false)
@@ -266,11 +291,11 @@ static func _reduce_nodes_owned(result: Dictionary, nodes: Array, versions: Arra
         var admitted: Array = []
         while next < pending.size() and indexes[pending[next].event_uuid] <= indexes[node.uuid]:
             actor_snapshots.clear()
-            _observe(result, pending[next])
+            _observe(result, pending[next],retained,cells)
             if recorded != null: admitted.append(pending[next])
             next += 1
         var started: int = Time.get_ticks_usec() if profile != null else 0
-        var inputs: Dictionary = Transitions.actor_inputs(result,node,actor_snapshots) if recorded != null else {}
+        var inputs: Dictionary = Transitions.actor_inputs(result,node,actor_snapshots,retained) if recorded != null else {}
         if profile != null: _profile_elapsed(profile, "actor_inputs", started)
         started = Time.get_ticks_usec() if profile != null else 0
         var update: Variant = world_updates.get(node.uuid)
@@ -280,7 +305,7 @@ static func _reduce_nodes_owned(result: Dictionary, nodes: Array, versions: Arra
         if profile != null: _profile_elapsed(profile, "world", started)
         started = Time.get_ticks_usec() if profile != null else 0
         if not node.canceled and node.fact != null:
-            var folded = _apply_committed_player_fact_owned(result, node.fact, int(indexes[node.uuid]), indexes, composed_senses, cells, actor_snapshots)
+            var folded = _apply_committed_player_fact_owned(result, node.fact, int(indexes[node.uuid]), indexes, composed_senses, cells, actor_snapshots,retained)
             if not folded.ok: return folded
             if node.fact.kind == "sensory":
                 composed_senses = true
@@ -291,14 +316,14 @@ static func _reduce_nodes_owned(result: Dictionary, nodes: Array, versions: Arra
         started = Time.get_ticks_usec() if profile != null else 0
         if recorded != null:
             recorded.events.append({"event_uuid":node.uuid, "source_index":indexes[node.uuid],
-                "actor_inputs":inputs, "delta":Transitions.capture_delta(result,node,admitted,update,actor_snapshots)})
+                "actor_inputs":inputs, "delta":Transitions.capture_delta(result,node,admitted,update,actor_snapshots,retained)})
         if profile != null: _profile_elapsed(profile, "captures", started)
     while next < pending.size():
         var observation: Dictionary = pending[next]
-        _observe(result, observation)
+        _observe(result, observation,retained,cells)
         if recorded != null:
-            recorded.trailing.actors[observation.actor.uuid] = Transitions.snapshot_actor(result.actors[observation.actor.uuid])
-            if observation.contact != null: recorded.trailing.set.senses = Transitions.snapshot_senses(result.senses)
+            recorded.trailing.actors[observation.actor.uuid] = result.actors[observation.actor.uuid] if retained else Transitions.snapshot_actor(result.actors[observation.actor.uuid])
+            if observation.contact != null: recorded.trailing.set.senses = result.senses if retained else Transitions.snapshot_senses(result.senses)
         next += 1
     return success(result)
 
@@ -326,12 +351,12 @@ static func reduce_initialization(initialization: Dictionary, content_additions:
 static func reduce_lineage(target: Dictionary, lineage: Dictionary) -> Dictionary:
     return _reduce_lineage_owned(copy_target(target), lineage)
 
-static func _reduce_lineage_owned(target: Dictionary, lineage: Dictionary, recorded: Variant = null, profile: Variant = null, cells: Dictionary = {}) -> Dictionary:
+static func _reduce_lineage_owned(target: Dictionary, lineage: Dictionary, recorded: Variant = null, profile: Variant = null, cells: Dictionary = {},retained:bool=false) -> Dictionary:
     var audience = _lineage_audience(target, lineage)
     if not audience.ok: return audience
     if lineage.end_cursor <= target.reducer_cursor:
         return failure("player lineage precedes this reduction position")
-    var folded = _reduce_nodes_owned(target, lineage.events, lineage.version_rows, lineage.observations, lineage.world_updates, recorded, profile, cells)
+    var folded = _reduce_nodes_owned(target, lineage.events, lineage.version_rows, lineage.observations, lineage.world_updates, recorded, profile, cells,retained)
     if not folded.ok: return folded
     var result: Dictionary = folded.value
     result.reducer_cursor = lineage.end_cursor
@@ -369,10 +394,6 @@ static func _reduce_operation(target: Dictionary, update: Dictionary, record_eve
     var cells = {}
     if retained and is_same(sensory_context.get("state"),target) and is_same(sensory_context.get("perception"),target.perception) and is_same(sensory_context.get("senses"),target.senses):
         cells = Audience._fork_cells(sensory_context.get("cells",{}))
-        # _retained_target copied the mutable senses shell, retaining its cell
-        # arrays. Rebind only after the committed source ownership proof above.
-        if cells.has("view") and is_same(cells.view.source,target.senses):
-            cells.view.source = result.senses
     if profile != null: _profile_elapsed(profile, "copy", started)
     if not update.content_additions.is_empty():
         var content = {}
@@ -390,7 +411,7 @@ static func _reduce_operation(target: Dictionary, update: Dictionary, record_eve
             return failure("Operation occurrence sequence has a gap")
         var recorded: Variant = {"lineage_uuid":lineage.lineage_uuid, "start_cursor":lineage.start_cursor,
             "end_cursor":lineage.end_cursor, "events":[], "trailing":Transitions.empty_delta()} if record_events else null
-        var folded = _reduce_lineage_owned(result, lineage, recorded, profile, cells if retained else {})
+        var folded = _reduce_lineage_owned(result, lineage, recorded, profile, cells if retained else {},retained)
         if not folded.ok: return folded
         result = folded.value
         if record_events: records.lineages.append(recorded)
@@ -405,13 +426,15 @@ static func _reduce_operation(target: Dictionary, update: Dictionary, record_eve
         var row: Dictionary = update.combat_log_appends[i]
         if row.generation != result.generation or row.observer_uuid != result.observer_uuid or row.operation_end_cursor > result.reducer_cursor or row.encounter_log_index != first + i:
             return failure("Standalone log append is out of order or belongs to another audience")
-    result.combat_log_appends.append_array(update.combat_log_appends.duplicate(true))
+    if not update.combat_log_appends.is_empty():
+        if retained:result.combat_log_appends=result.combat_log_appends.duplicate()
+        result.combat_log_appends.append_array(update.combat_log_appends.duplicate(true))
     var accepted = success(result)
     if record_events: accepted.transitions = records
     if retained:
-        # A first sensory event or observer reset takes the exhaustive view path.
-        # Retain its final indexes now so the next accepted operation starts warm.
-        if cells.get("composed",false) and result.senses != null:
+        # Only a multi-member projection needs a second composed cell index.
+        # A retained one-member view borrows its member's canonical collections.
+        if cells.get("composed",false) and result.senses != null and result.perception.members.size()!=1:
             if not cells.has("view") or not is_same(cells.view.source,result.senses):
                 cells.view = Audience._indexed_senses(result.senses)
         accepted.sensory_context = {"state":result, "perception":result.perception,

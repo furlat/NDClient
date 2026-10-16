@@ -4,6 +4,7 @@ const Protocol = preload("res://sdk/protocol.gd")
 const MAX_BYTES = 64 * 1024 * 1024
 var protocol: RefCounted
 var limit: int
+var current_producer_stream: bool
 var buffer = PackedByteArray()
 var scan = 0
 var skip_lf = false
@@ -14,9 +15,12 @@ var event = "message"
 var event_id: Variant = null
 var failure: Dictionary = {}
 
-func _init(admission: RefCounted = null, byte_limit: int = MAX_BYTES) -> void:
+func _init(admission: RefCounted = null, byte_limit: int = MAX_BYTES, trusted_current_producer: bool = false) -> void:
     protocol = admission if admission != null else Protocol.new()
     limit = byte_limit
+    # Explicit live trust covers the typed producer's whole stream, including
+    # ready/status lines. Arbitrary/offline framing retains strict UTF-8 checks.
+    current_producer_stream = trusted_current_producer
 
 func _bad(message: String, emitted: Array = []) -> Dictionary:
     failure = {"ok":false,"error":{"kind":"protocol","message":message,"retryable":false},"records":emitted}
@@ -50,8 +54,9 @@ func feed(chunk: PackedByteArray) -> Dictionary:
         if first_line:
             if line.size() >= 3 and line.slice(0,3) == PackedByteArray([239,187,191]): line = line.slice(3)
             first_line = false
-        var decoded: Dictionary = protocol.validate_utf8(line)
-        if not decoded.ok: return _bad("Invalid SSE UTF-8",emitted)
+        if not current_producer_stream:
+            var decoded: Dictionary = protocol.validate_utf8(line)
+            if not decoded.ok: return _bad("Invalid SSE UTF-8",emitted)
         if line.is_empty():
             if not data.is_empty():
                 var raw = PackedByteArray()

@@ -289,6 +289,7 @@ func _follow_displayed_track()->void:
     tracks.follow_at(world.timeline.display_ms)
 
 func _connect_tracks(view:Control)->void:
+    view.preparation_admission=world.preparation_admission
     view.process_priority=process_priority+1
     view.seek_requested.connect(_seek);view.selected.connect(_select_row)
     view.scrub_requested.connect(_scrub);view.clip_requested.connect(_play_clip)
@@ -297,7 +298,7 @@ func _connect_tracks(view:Control)->void:
 func _stage_tracks(source:Dictionary)->void:
     if is_same(source,index):return
     candidate_preview_errors=[]
-    candidate_tracks=TimelineView.new();candidate_tracks.hide()
+    candidate_tracks=TimelineView.new();candidate_tracks.preparation_admission=world.preparation_admission;candidate_tracks.hide()
     candidate_tracks.size_flags_vertical=Control.SIZE_EXPAND_FILL
     candidate_tracks.size_flags_horizontal=Control.SIZE_EXPAND_FILL
     timeline_split.add_child(candidate_tracks);candidate_tracks.size=tracks.size
@@ -685,7 +686,7 @@ static func _retain_recorded_views(result:Dictionary,previous:Dictionary)->Dicti
 
 static func _prepare_recording_sources(source:Dictionary)->void:
     source.media_preload=RecordingMedia.plan(source)
-    source.cache.merge(source.media_preload.source_files,false)
+    Play.Catalog.adopt_snapshot(source.cache,source.media_preload.source_files)
 
 func _select_browser_path(path:String)->bool:
     var absolute=ProjectSettings.globalize_path(path).replace("\\","/")
@@ -720,6 +721,7 @@ func _reload_authoring()->void:
     _load(active_directory,{},false,true)
 
 func _load(directory: String,study:Dictionary={},autoplay:bool=false,reload_authoring:bool=false) -> void:
+    if reload_authoring:Play.Catalog.invalidate_source_indexes()
     if directory.is_empty():return
     pending_authoring_reload=reload_authoring
     pending_perspective_navigation={}

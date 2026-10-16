@@ -51,12 +51,18 @@ static func spatial_selection(effect:Dictionary,cache:Dictionary)->Dictionary:
         if identity in lifecycle.get("owner_ids",[]) or "spatial_effect."+identity in lifecycle.get("owner_ids",[]):return Spells.selection(spell_id,cache)
     return {}
 
-static func observe_spatial(owners:Dictionary,effects:Dictionary,at_ms:float,initial:bool=false)->void:
+static func observe_spatial(owners:Dictionary,effects:Dictionary,at_ms:float,initial:bool=false)->bool:
+    var changed:bool=false
     for id in effects:
-        if not owners.has(id):owners[id]={"id":id,"start_ms":at_ms,"end_ms":INF,"initial":initial,"effect":effects[id]}
-        else:owners[id].effect=effects[id];owners[id].end_ms=INF
+        if not owners.has(id):
+            owners[id]={"id":id,"start_ms":at_ms,"end_ms":INF,"initial":initial,"effect":effects[id]}
+            changed=true
+        else:
+            changed=changed or not is_same(owners[id].effect,effects[id]) or not is_inf(owners[id].end_ms)
+            owners[id].effect=effects[id];owners[id].end_ms=INF
     for id in owners:
-        if not effects.has(id) and is_inf(owners[id].end_ms):owners[id].end_ms=at_ms
+        if not effects.has(id) and is_inf(owners[id].end_ms):owners[id].end_ms=at_ms;changed=true
+    return changed
 
 static func spatial_samples(owners:Dictionary,at_ms:float,cache:Dictionary)->Array:
     var result:Array=[]

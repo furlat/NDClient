@@ -1,6 +1,7 @@
 extends RefCounted
 const CharacterGeometry = preload("res://presentation/character_geometry.gd")
 const Catalog = preload("res://source_catalog.gd")
+const BodySources=preload("res://presentation/body_sources.gd")
 # Passive adapter from canonical player data to the existing authoring owners.
 # The caller owns the cache; keep it on the same thread as its reader.
 const VISUAL_SLOT = {"MELEE_MAIN":"weapon_melee_main", "MELEE_OFF":"weapon_melee_off",
@@ -17,11 +18,14 @@ static func _error(message: String) -> Dictionary:
     return {"ok":false, "error":{"kind":"authoring", "message":message, "retryable":false}}
 
 static func rig_id(actor: Dictionary, cache: Dictionary) -> String:
-    var index: Dictionary = _read("catalog-index.json", cache)
-    var creature: Variant = actor.get("creature_content_ref")
-    if creature == null: return _read(index.root_rig, cache)
-    var owners: Dictionary = _read(index.creature_rigs, cache)
-    return owners.get(creature, "")
+    var admitted=BodySources.index(cache)
+    if admitted==null:return ""
+    var creature:Variant=actor.get("creature_content_ref")
+    return admitted.root_rig if creature==null else admitted.creature_rigs.get(creature,"")
+
+static func rigs(cache:Dictionary)->Dictionary:
+    var admitted=BodySources.index(cache)
+    return {} if admitted==null else admitted.rigs
 
 static func resolve(actor: Dictionary, state: Dictionary, cache: Dictionary) -> Dictionary:
     if not actor.get("present", true) or actor.get("last_visual_position") == null \
@@ -45,10 +49,9 @@ static func structure(actor:Dictionary,cache:Dictionary)->Dictionary:
     # The compiler compares these same constructor operands without inventing
     # a support tile or resolving position on every ordinary actor after-value.
     var id=rig_id(actor,cache)
-    var index:Dictionary=_read("catalog-index.json",cache)
-    var rigs:Dictionary=_read(index.rigs,cache)
-    if id.is_empty() or not rigs.has(id):return _error("No authored rig for actor "+str(actor.get("uuid")))
-    var selected=_select_layers(actor,rigs[id],id==_read(index.root_rig,cache),cache)
+    var available:Dictionary=rigs(cache)
+    if id.is_empty() or not available.has(id):return _error("No authored rig for actor "+str(actor.get("uuid")))
+    var selected=_select_layers(actor,available[id],id==BodySources.index(cache).root_rig,cache)
     if not selected.ok:return selected
     return {"ok":true,"value":{"rig":id,"appearance":actor.appearance,"equipment_layers":selected.value}}
 
@@ -76,14 +79,11 @@ static func _select_layers(actor: Dictionary, rig: Dictionary, modular: bool, ca
         if appearance.head_category != null: selected.head = _layer(appearance.head_category, int(appearance.hair_tint))
         if appearance.has_beard: selected.beard = _layer("Head2", int(appearance.beard_tint))
         var loadout: Dictionary = actor.visual_loadout
-        var items: Dictionary = _read("items/index.json", cache)
-        var visuals: Dictionary = _read(items.item_visuals, cache)
-        var appearances: Dictionary = _read(items.item_appearances, cache)
         for item in loadout.layers:
             if not VISUAL_SLOT.has(item.slot): continue
             if WEAPON_SET.has(item.slot) and WEAPON_SET[item.slot] != loadout.active_weapon_set: continue
             if item.equipped_visual_policy == "hidden": continue
-            var authored = _equipment(item, VISUAL_SLOT[item.slot], visuals, appearances, cache)
+            var authored = BodySources.equipment(item,VISUAL_SLOT[item.slot],cache)
             if not authored.ok: return authored
             for layer in authored.value:
                 if layer.render_layer in EFFECT_SLOTS: continue
@@ -103,120 +103,108 @@ static func _select_layers(actor: Dictionary, rig: Dictionary, modular: bool, ca
     for slot in rig.slot_order:
         if selected.has(slot):
             selected[slot].slot = slot
+            selected[slot].source_path=BodySources.layer_path(rig_id(actor,cache),selected[slot].category,cache)
+            if selected[slot].source_path.is_empty():return _error("No imported body category: "+selected[slot].category)
             result.append(selected[slot])
     return {"ok":true, "value":result}
 
-static func _equipment_index(visuals: Dictionary, appearances: Dictionary, cache: Dictionary) -> Dictionary:
-    var previous:Dictionary=cache.get("__equipment_index",{})
-    if not previous.is_empty() and is_same(previous.visuals,visuals) and is_same(previous.appearances,appearances) \
-        and is_same(previous.categories,visuals.categories) and is_same(previous.hands,appearances.hands):return previous
-    # Build once from immutable admitted documents. Only this cache shell is
-    # changed; completed indexes and their original source arrays are read-only.
-    var result={"visuals":visuals,"appearances":appearances,"categories":visuals.categories,"hands":appearances.hands,
-        "roots":{},"bindings":{},"hand_layers":{}}
-    for category in visuals.categories:
-        if not result.roots.has(category.base_category):result.roots[category.base_category]=category
-        for binding in category.factory_presentation_bindings:
-            var key:Array=[binding.factory_identity,binding.equipment_slot]
-            if not result.bindings.has(key):result.bindings[key]=[]
-            if category not in result.bindings[key]:result.bindings[key].append(category)
-    for hand in appearances.hands:
-        var key:Array=[hand.category,hand.variant,hand.slot]
-        if not result.hand_layers.has(key):result.hand_layers[key]=hand.layers
-    cache.__equipment_index=result
-    return result
+static func _equipment(item: Dictionary, slot: String, _visuals: Dictionary, _appearances: Dictionary, cache: Dictionary={}) -> Dictionary:
+    return BodySources.equipment(item,slot,cache)
 
-static func _equipment(item: Dictionary, slot: String, visuals: Dictionary, appearances: Dictionary, cache: Dictionary={}) -> Dictionary:
-    var index:Dictionary=_equipment_index(visuals,appearances,cache)
-    var root:Dictionary=index.roots.get(item.visual_item_name,{})
-    if root.is_empty() or root.mechanical_factory_identity == null:
-        return _error("No authored item visual " + item.visual_item_name)
-    var hand:Array=[item.visual_item_name,item.visual_variant_id,slot]
-    if index.hand_layers.has(hand):return {"ok":true,"value":index.hand_layers[hand]}
-    var matches:Array=index.bindings.get([root.mechanical_factory_identity,slot],[])
-    if matches.size() != 1: return _error("No unique authored equipment binding " + item.visual_item_name + "/" + slot)
-    var category: Dictionary = matches[0]
-    if item.visual_variant_id == null: return {"ok":true, "value":category.base_presentation.equipment_layers}
-    for variant in category.variants:
-        if variant.visual_variant_id == item.visual_variant_id: return {"ok":true, "value":variant.equipment_layers}
-    return _error("No authored item variant " + item.visual_item_name + "/" + str(item.visual_variant_id) + "/" + slot)
+static func _generated_creature_shadow(actor:Dictionary,rig:Dictionary,cache:Dictionary)->bool:
+    return rigs(cache).get(rig_id(actor,cache),rig).get("generated_shadow",false)
 
-static func _generated_creature_shadow(actor: Dictionary, rig: Dictionary, cache: Dictionary) -> bool:
-    if not cache.has("__creature_shadow_rigs"): cache.__creature_shadow_rigs = {}
-    var id = rig_id(actor,cache)
-    if cache.__creature_shadow_rigs.has(id): return cache.__creature_shadow_rigs[id]
-    var index: Dictionary = _read("catalog-index.json",cache)
-    var resources: Dictionary = _read(index.resources,cache)
-    var components: Dictionary = _read(index.sheet_components,cache)
-    var categories: Array = rig.slot_categories.get("body",[])
-    var covered = not categories.is_empty()
-    for clip in rig.clips.values():
-        for category in categories:
-            if not clip.sheets.has(category): continue
-            var path = _sheet_path("body",clip.sheets[category],resources,components,cache)
-            var source = CharacterGeometry.record(path,"body",cache)
-            if source.is_empty() or source.get("optical_ground_pixels")==null: covered = false
-    cache.__creature_shadow_rigs[id] = covered
-    return covered
+static func _sheet_path(slot:String,sheet:String,_resources:Dictionary,_components:Dictionary,cache:Dictionary)->String:
+    var admitted=BodySources.index(cache)
+    if admitted==null:return ""
+    var source:Dictionary=admitted.sheets.get(sheet,{})
+    return source.get(slot,source.get("default",""))
 
-static func _sheet_path(slot: String, sheet: String, resources: Dictionary, components: Dictionary, cache: Dictionary) -> String:
-    var path: String = resources[sheet]
-    # Fixed-creature combined sheets can contain effects and a second shadow.
-    if slot == "body":
-        path = components.get(path, {}).get("source_layers", {}).get("body", path)
-        return CharacterGeometry.display_path(path,slot,cache)
-    return path
-
-static func layers(row: Dictionary, rig: Dictionary, cache: Dictionary) -> Array:
-    var result: Array = row.equipment_layers.duplicate(true)
-    var index: Dictionary = _read("catalog-index.json", cache)
-    var resources: Dictionary = _read(index.resources, cache)
-    var components: Dictionary = _read(index.sheet_components, cache)
+static func prepare_layers(row:Dictionary,rig:Dictionary,cache:Dictionary)->Dictionary:
+    # The world worker owns full category admission. Constructor rows stay
+    # scalar selectors; only this private visual output owns Resource refs.
+    var result:Array=row.equipment_layers.duplicate(true)
     for layer in result:
-        layer.paths = {}
-        for clip in rig.clips:
-            var sheet: String = layer.get("effect",{}).get("sourceSheet",rig.clips[clip].sheets.get(layer.category, ""))
-            if sheet.is_empty(): continue
-            layer.paths[clip] = _sheet_path(layer.slot,sheet,resources,components,cache)
-    return result
+        var resource=BodySources.prepare_layer(layer.source_path,cache)
+        if resource==null:return _error("Cannot admit body category: "+layer.source_path)
+        layer.source_ref=resource;layer.paths={}
+        var effect:Dictionary=layer.get("effect",{})
+        var noise:Variant=effect.get("palette",{}).get("noiseSheet")
+        if noise!=null:
+            var noise_path:String=_sheet_path(layer.slot,str(noise),{},{},cache)
+            if BodySources.prepare_descriptor(noise_path,layer.slot,cache).is_empty():return _error("Cannot admit body noise source: "+str(noise))
+        if effect.has("sourceSheet"):
+            var path:String=_sheet_path(layer.slot,effect.sourceSheet,{},{},cache)
+            if BodySources.prepare_descriptor(path,layer.slot,cache).is_empty():return _error("Cannot admit body sourceSheet: "+effect.sourceSheet)
+            for clip in rig.clips:layer.paths[clip]=path
+        else:
+            for clip in resource.clips:
+                var descriptor:Dictionary=resource.clips[clip].get(layer.slot,{})
+                if not descriptor.is_empty():layer.paths[clip]=descriptor.path
+        if layer.paths.is_empty():return _error("No admitted body clips for selected category: "+layer.category)
+    return {"ok":true,"value":result}
 
-static func sheet_paths(actor: Dictionary, clips: Array, cache: Dictionary) -> Dictionary:
-    # Media preparation uses the same outfit and separated-body owners as the
-    # draw adapter, without inventing a future support tile just to find a PNG.
-    var index: Dictionary = _read("catalog-index.json", cache)
-    var id = rig_id(actor, cache)
-    var rigs: Dictionary = _read(index.rigs, cache)
-    if not rigs.has(id): return _error("No authored rig for actor " + str(actor.get("uuid")))
-    var rig: Dictionary = rigs[id]
-    var selected = _select_layers(actor, rig, id == _read(index.root_rig, cache), cache)
-    if not selected.ok: return selected
-    var paths = {}
-    var colour_paths = {}
-    var geometry_slots = {}
-    var normal_sets = {}
-    var gpu_only = {}
-    var resources: Dictionary = _read(index.resources, cache)
-    var components: Dictionary = _read(index.sheet_components, cache)
+static func layers(row:Dictionary,rig:Dictionary,cache:Dictionary)->Array:
+    # Standalone fixtures and the pre-prepared startup compatibility path use
+    # this wrapper. Ordinary publication consumes the explicit worker result.
+    var prepared:Dictionary=prepare_layers(row,rig,cache)
+    if not prepared.ok:push_error(prepared.error.message);return []
+    return prepared.value
+
+static func sheet_paths(actor:Dictionary,clips:Array,cache:Dictionary)->Dictionary:
+    var id:String=rig_id(actor,cache)
+    var available:Dictionary=rigs(cache)
+    if not available.has(id):return _error("No authored rig for actor "+str(actor.get("uuid")))
+    var rig:Dictionary=available[id]
+    var selected:Dictionary=_select_layers(actor,rig,id==BodySources.index(cache).root_rig,cache)
+    if not selected.ok:return selected
+    for layer in selected.value:
+        layer.source_ref=BodySources.prepare_layer(layer.source_path,cache)
+        if layer.source_ref==null:return _error("Cannot admit body category: "+layer.source_path)
+    var paths:Dictionary={};var colours:Dictionary={};var geometry_slots:Dictionary={}
+    var normal_sets:Dictionary={};var gpu_only:Dictionary={}
+    var source_refs:Dictionary={"original":[],"gentle":[],"reference":[]};var native_refs:Array=[]
+    var source_seen:Dictionary={"original":{},"gentle":{},"reference":{}};var native_seen:Dictionary={}
     for clip in clips:
-        if not rig.clips.has(clip): return _error("Rig has no authored clip " + id + "/" + clip)
+        if not rig.clips.has(clip):return _error("Rig has no authored clip "+id+"/"+clip)
         for layer in selected.value:
-            var effect: Dictionary=layer.get("effect",{})
-            var noise: Variant=effect.get("palette",{}).get("noiseSheet")
-            if noise!=null and resources.has(noise): paths[resources[noise]]=true; colour_paths[resources[noise]]=true
-            var sheet: String = effect.get("sourceSheet",rig.clips[clip].sheets.get(layer.category, ""))
-            if not sheet.is_empty():
-                var path = _sheet_path(layer.slot,sheet,resources,components,cache)
-                paths[path] = true
-                colour_paths[path] = true
-                var companions = CharacterGeometry.source_paths(path,layer.slot,cache)
-                if not companions.ok: return companions
-                paths.merge(companions.value)
-                gpu_only.merge(companions.value)
-                normal_sets.merge(companions.get("normal_sets",{}))
-                if effect.is_empty() and not companions.value.is_empty():geometry_slots[path]=layer.slot
-    for path in colour_paths: gpu_only.erase(path)
+            var effect:Dictionary=layer.get("effect",{})
+            var noise:Variant=effect.get("palette",{}).get("noiseSheet")
+            if noise!=null:
+                var noise_path:String=_sheet_path(layer.slot,str(noise),{},{},cache)
+                if noise_path.is_empty():return _error("No imported body noise source: "+str(noise))
+                if not noise_path.is_empty():
+                    paths[noise_path]=true;colours[noise_path]=true
+                    var noise_descriptor:Dictionary=BodySources.prepare_descriptor(noise_path,layer.slot,cache)
+                    if noise_descriptor.is_empty():return _error("Cannot admit body noise source: "+str(noise))
+                    for profile in source_refs:
+                        var reference:Dictionary=noise_descriptor.get("source_records",{}).get(profile,{})
+                        if not reference.is_empty() and not source_seen[profile].has(reference.source_id):
+                            source_seen[profile][reference.source_id]=true;source_refs[profile].append(reference)
+            var descriptor:Dictionary=layer.source_ref.clips.get(clip,{}).get(layer.slot,{})
+            if effect.has("sourceSheet"):
+                var colour:String=_sheet_path(layer.slot,effect.sourceSheet,{},{},cache)
+                descriptor=BodySources.prepare_descriptor(colour,layer.slot,cache)
+                if descriptor.is_empty():return _error("Cannot admit body sourceSheet: "+effect.sourceSheet)
+            if descriptor.is_empty():continue
+            for profile in source_refs:
+                var reference:Dictionary=descriptor.source_records[profile]
+                if not source_seen[profile].has(reference.source_id):
+                    source_seen[profile][reference.source_id]=true;source_refs[profile].append(reference)
+            var native_reference:Dictionary=descriptor.native_record
+            if not native_reference.roles.is_empty() and not native_seen.has(native_reference.source_id):
+                native_seen[native_reference.source_id]=true;native_refs.append(native_reference)
+            var path:String=descriptor.path
+            paths[path]=true;colours[path]=true
+            paths.merge(descriptor.companions);gpu_only.merge(descriptor.companions)
+            normal_sets.merge(descriptor.normal_sets)
+            if effect.is_empty() and not descriptor.companions.is_empty():geometry_slots[path]=layer.slot
+    for path in colours:gpu_only.erase(path)
     normal_sets.make_read_only()
-    return {"ok":true,"value":paths,"gpu_only":gpu_only,"cpu_required":colour_paths,"geometry_slots":geometry_slots,"normal_sets":normal_sets}
+    for records in source_refs.values():records.make_read_only()
+    source_refs.make_read_only();native_refs.make_read_only()
+    return {"ok":true,"value":paths,"gpu_only":gpu_only,"cpu_required":colours,"geometry_slots":geometry_slots,
+        "normal_sets":normal_sets,"source_records":source_refs,"native_records":native_refs}
 
 static func rest_sample(actor: Dictionary, rig: Dictionary, cache: Dictionary) -> Dictionary:
     var index: Dictionary = _read("catalog-index.json", cache)

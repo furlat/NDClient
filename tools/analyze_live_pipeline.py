@@ -2,7 +2,7 @@
 import argparse
 from collections import Counter
 import json
-from pathlib import Path
+from pathlib import Path, PureWindowsPath
 from statistics import median
 
 
@@ -28,10 +28,54 @@ def packet_shape(directory, sequence):
         'tile_changes': sum(len(update.get('tile_changes',[])) for update in updates)}
 
 
+def opening_frames(frames, prepared_us, visible_us):
+    """Disjoint wall-clock intervals with inclusive CPU/context samples attached."""
+    result = []
+    cursor = prepared_us
+    for frame in frames:
+        if frame['interval_end_us'] > visible_us:
+            break
+        end = frame['interval_end_us']
+        begin = max(cursor, frame['interval_start_us'])
+        if end <= begin:
+            continue
+        if begin > cursor:
+            result.append({'kind':'outside_recorded_interval', 'elapsed_ms':(begin-cursor)/1000})
+        view = frame['view']
+        result.append({'kind':'process_interval', 'frame':frame['frame'],
+            'elapsed_ms':(end-begin)/1000,
+            'interval_frame_ms':frame['frame_ms'],
+            'world_phase_at_sample':view.get('world_prepare_phase'),
+            'waiting_for_world_at_sample':view.get('world_waiting'),
+            'preparation_at_sample':view.get('preparation_admission',{}),
+            'inclusive_cpu_ms_at_sample':frame['cpu_ms']})
+        cursor = end
+        if cursor >= visible_us:
+            break
+    if cursor < visible_us:
+        result.append({'kind':'after_last_process_sample', 'elapsed_ms':(visible_us-cursor)/1000})
+    return result
+
+
+def recorded_frames(directory):
+    checks = directory/'player-live-checks.json'
+    if not checks.exists():
+        return []
+    name = read_json(checks).get('evidence',{}).get('full_profile')
+    if not name:
+        return []
+    profile = Path(name)
+    if not profile.exists() and PureWindowsPath(name).drive and Path('/mnt').is_dir():
+        path = PureWindowsPath(name)
+        profile = Path('/mnt',path.drive[0].lower(),*path.parts[1:])
+    return read_json(profile)['frames'] if profile.exists() else []
+
+
 def summarize(directory):
     commands = read_json(directory/'live-command-trace.json')
     trace = read_json(directory/'client-pipeline-trace.json')
     records = trace['records']
+    frames = recorded_frames(directory)
     worker = [json.loads(line) for line in (directory/'worker-dispatch.jsonl').read_text().splitlines()]
     exchanges = [json.loads(line) for line in (directory/'server-exchanges.jsonl').read_text().splitlines()]
     worker_by_command = {(row.get('actor_uuid'),row['command_number']):row for row in worker if row['kind']=='command'}
@@ -46,6 +90,10 @@ def summarize(directory):
         packet = ready_by_frame.get(decode['frame_id']) if decode else None
         consumer = next((row for row in records if row['stage']=='canonical_consumer' and row['sequence']==sequence), None)
         prepare = next((row for row in records if row['stage']=='presentation_prepare' and row['sequence']==sequence), None)
+        opening = next((row for row in records if row['stage']=='presentation_opening' and row['sequence']==sequence), prepare)
+        framing = max((row for row in records if packet and row['stage']=='sse_framing'
+            and row.get('http_id')==packet.get('http_id') and row.get('records',0)>0
+            and row['time_us']<=packet['time_us']),key=lambda row:row['time_us'],default=None)
         events = [row for row in records if start<=row['time_us']<=command['end_us']]
         command_worker = worker_by_command.get((command['actor'],number),worker_by_command.get((None,number)))
         exchange = exchange_by_command.get((command['actor'],number),exchange_by_command.get((None,number)))
@@ -53,6 +101,8 @@ def summarize(directory):
             raise ValueError('No exact actor/command timing for '+str((command['actor'],number)))
         first = command['first_movement_ms']
         packet_ms = (packet['time_us']-start)/1000 if packet else None
+        framing_start = packet.get('framing_started_us',framing['started_us'] if framing else packet['time_us']) if packet else None
+        framing_ms = (framing_start-start)/1000 if framing_start is not None else None
         first_group = next((phase['ms'] for phase in command['phases'] if phase['state']['group']), None)
         row = {'number':number, 'actor':command['actor'], 'behavior':command['behavior'], 'stage':command['stage'],
             'input':command['input'], 'from':command['from'], 'to':command['to'],
@@ -67,6 +117,8 @@ def summarize(directory):
             'first_movement_ms':first, 'first_animation_ms':command['first_animation_ms'],
             'first_group_ms':first_group,
             'complete_sse_frame_ms':packet_ms,
+            'final_sse_framing_start_ms':framing_ms,
+            'final_sse_framing_cpu_ms':duration(framing),
             'operation_bytes':decode['bytes'] if decode else None,
             'packet_shape':packet_shape(directory, sequence),
             'server_dispatch_ms':command_worker['dispatch_ms'],
@@ -80,11 +132,16 @@ def summarize(directory):
             'presentation_packet_ms':(prepare['compile_started_us']-prepare['packet_started_us'])/1000 if prepare else None,
             'presentation_compile_ms':(prepare.get('compile_ended_us',prepare['time_us'])-prepare['compile_started_us'])/1000 if prepare else None,
             'presentation_required_media_ms':prepare.get('required_media_ms',0) if prepare else None,
+            'presentation_opening_media_ms':opening.get('required_media_ms',0) if opening else None,
+            'presentation_opening_phases_ms':opening.get('phases',{}) if opening else {},
+            'opening_preparation_stage':opening['stage'] if opening else None,
             'client_to_prepared_ms':(prepare['time_us']-packet['time_us'])/1000 if prepare and packet else None,
+            'client_to_opening_prepared_ms':(opening['time_us']-framing_start)/1000 if opening and framing_start is not None else None,
             'prepared_to_first_movement_ms':first-(prepare['time_us']-start)/1000 if first is not None and prepare else None,
             'client_after_complete_sse_ms':first-packet_ms if first is not None and packet_ms is not None else None,
-            'prepared_to_first_animation_ms':command['first_animation_ms']-(prepare['time_us']-start)/1000 if command['first_animation_ms'] is not None and prepare else None,
-            'client_packet_to_first_animation_ms':command['first_animation_ms']-packet_ms if command['first_animation_ms'] is not None and packet_ms is not None else None,
+            'prepared_to_first_animation_ms':command['first_animation_ms']-(opening['time_us']-start)/1000 if command['first_animation_ms'] is not None and opening else None,
+            'client_after_record_ready_to_first_animation_ms':command['first_animation_ms']-packet_ms if command['first_animation_ms'] is not None and packet_ms is not None else None,
+            'client_packet_to_first_animation_ms':command['first_animation_ms']-framing_ms if command['first_animation_ms'] is not None and framing_ms is not None else None,
             'frame_ms':command['frame_ms'], 'client_phase_peaks_ms':command['phase_peaks'],
             'sse_framing_cpu_ms':sum(duration(item) for item in events if item['stage']=='sse_framing')}
         request_stages = []
@@ -94,6 +151,9 @@ def summarize(directory):
                 'enqueued_ms':(enqueue['time_us']-start)/1000,
                 'worker_reply_ms':(reply['time_us']-start)/1000 if reply else None})
         row['requests']=request_stages
+        if opening and command['first_animation_ms'] is not None and frames:
+            row['opening_to_visible_intervals']=opening_frames(
+                frames,opening['time_us'],start+command['first_animation_ms']*1000)
         rows.append(row)
     metrics = ['first_movement_ms','server_dispatch_ms','server_exchange_ms','operation_bytes',
         'sse_schema_ms','canonical_consumer_ms','presentation_compile_ms','presentation_required_media_ms','client_to_prepared_ms','client_after_complete_sse_ms','prepared_to_first_animation_ms','client_packet_to_first_animation_ms',
@@ -112,8 +172,11 @@ def summarize(directory):
         'notes':[
             'Actual production player actions. Input records distinguish native viewport clicks from action handlers.',
             'Client timestamps use one Godot monotonic clock. Complete SSE frame is a client availability observation, not a server send timestamp.',
+            'Packet-to-first-animation begins before final SSE feed/framing, including its UTF-8 validation. Older traces infer that start from the matching framing record; no server time is inferred from it.',
+            'presentation_opening is the first partial source cut; presentation_prepare completes later requirements. Prepared-to-first-animation uses the opening when present. Full continuation may finish after the animation begins.',
             'Server exchange includes worker/IPC/record staging; dispatch is inside the actual worker. No subtraction of unsynchronized Windows/WSL clocks.',
             'Client post-packet stages may overlap. Nested engine phases overlap and must not be added together.',
+            'opening_to_visible_intervals partitions elapsed wall time. CPU/context values are inclusive samples at each process interval end, not exclusive causes of its clipped duration. Time after the last process sample is kept separate from later samples.',
             'CPU-profiled commands are excluded from latency aggregates. Nested phase hooks, when enabled, are diagnostic overhead.',
             'First movement is an observed changed actor position at frame_post_draw. Ready includes intended animation and following choices.',
             'Post-ready samples precede canonical-state test comparisons. input_ready_after_samples distinguishes first readiness from sustained input readiness; older runs lack this field.',

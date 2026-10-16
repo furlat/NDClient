@@ -9,6 +9,13 @@ func check(ok:bool,label:String)->void:
     checks+=1
     if not ok:failures.append(label);print("BASE_AUDIO_NATIVE_FAIL ",label)
 func _initialize()->void:run.call_deferred()
+func prepare_ready(presenter:RefCounted,components:Array,host:Node)->bool:
+    var deadline:int=Time.get_ticks_msec()+30000
+    while Time.get_ticks_msec()<deadline:
+        if not presenter.prepare(components,host).is_empty():return false
+        if presenter.ready(components):return true
+        await process_frame
+    return false
 func mixed_frames(probe:AudioEffectCapture,count:int)->Dictionary:
     var frames=0;var peak=0.0;var deadline=Time.get_ticks_msec()+3000
     while frames<count and Time.get_ticks_msec()<deadline:
@@ -35,7 +42,7 @@ func run()->void:
     var listener=AudioListener3D.new();host.add_child(listener);listener.position=Vector3(0,0,1);listener.make_current()
     await physics_frame;await physics_frame
     var presenter=Presenter.new()
-    check(presenter.prepare(selected.values()).is_empty(),"All original selected sources prepare")
+    check(await prepare_ready(presenter,selected.values(),host),"All original selected sources prepare")
     var bus=AudioServer.get_bus_index("SFX")
     var probe=AudioEffectCapture.new();probe.buffer_length=3.0
     AudioServer.add_bus_effect(bus,probe)
@@ -49,10 +56,10 @@ func run()->void:
     presenter.sample(host,[pending],pending.absolute_start_ms+2,1,false,100)
     var resumed=await mixed_frames(probe,4096)
     check(resumed.peak>.00001 and presenter.diagnostics(pending.id).rows[pending.id].starts==1,"Pending spatial voice resumes audibly with one native play dispatch")
-    presenter.close();presenter.prepare(selected.values())
+    presenter.close();check(await prepare_ready(presenter,selected.values(),host),"Reopened original source/quiet voices prepare")
     for attachment in ["ui","screen","body"]:
         var muted=pending.duplicate();muted.id="muted:"+attachment;muted.attachment=attachment;muted.screen_position=Vector2.ZERO
-        presenter.set_enabled(false);presenter.prepare([muted]);probe.clear_buffer()
+        presenter.set_enabled(false);check(await prepare_ready(presenter,[muted],host),"Muted occurrence prepares silently");probe.clear_buffer()
         presenter.sample(host,[],muted.absolute_start_ms-1,1,false,101)
         presenter.sample(host,[muted],muted.absolute_start_ms+1,1,false,101)
         var silent=await mixed_frames(probe,4096)
@@ -62,6 +69,7 @@ func run()->void:
     for id in selected:
         var cue:Dictionary=selected[id]
         epoch+=1
+        check(await prepare_ready(presenter,[cue],host),"Selected occurrence has a prepared silent native owner: "+id)
         presenter.sample(host,[],cue.absolute_start_ms-1,1,false,epoch)
         probe.clear_buffer()
         presenter.sample(host,[cue],cue.absolute_start_ms+1,1,false,epoch)

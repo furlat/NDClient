@@ -57,7 +57,7 @@ static func resolve(world: Node, actor_id: String, clip: String, frame: int,
         var table: String = Geometry.TABLE if source_path.begins_with("/media/smallscale/modular/") else Geometry.CREATURE_TABLE
         # Geometry.record normally admits metadata lazily. This playback helper
         # may use only the catalog already prepared by the sandbox media pass.
-        if not world.catalog_cache.has(table):
+        if not world.catalog_cache.has(Geometry.BodySources.KEY):
             return _missing(result, "source_geometry_catalog_not_prepared")
         var source := Geometry.record(source_path, slot, world.catalog_cache)
         if source.is_empty() or not source.has("reference"):
@@ -94,7 +94,7 @@ static func resolve(world: Node, actor_id: String, clip: String, frame: int,
             return _missing(result, "unsupported_source_pixel")
         if not solid:
             return _missing(result, "source_pixel_not_solid")
-        var optical: Dictionary = source.get("optical_camera", world.catalog_cache[table].get("optical_camera", {}))
+        var optical: Dictionary = source.get("optical_camera", {})
         if optical.is_empty(): return _missing(result, "source_optical_registration_missing")
         var ground: Variant = source.get("optical_ground_pixels", 19.0 if table == Geometry.TABLE else null)
         if ground == null: return _missing(result, "source_ground_registration_missing")
