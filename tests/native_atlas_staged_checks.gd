@@ -51,9 +51,9 @@ func empty_static_case(source:Image)->void:
         candidate.membership={"upserts":[],"removed":{},"ground_updates":[]}
         var before:Dictionary=positions(a.atlas)
         candidate._begin_atlas_preparation()
-        check(candidate.prepared and candidate.phase=="ready" and candidate.atlas_prefix.is_empty()
+        check(not candidate.prepared and candidate.phase=="native_receivers" and candidate.atlas_prefix.is_empty()
             and candidate.atlas_jobs.is_empty() and candidate.task==-1,
-            "Empty static receipt finishes without a receiver/support capture or worker")
+            "Empty static receipt reaches ordinary native readiness without an atlas capture or worker")
         candidate.publish_atlas_receivers()
         check(positions(a.atlas)==before and a.atlas.prepared_delta.is_empty(),
             "Empty static preparation does not publish or replace lighting geometry")
@@ -127,7 +127,11 @@ func prepare_future(side:Dictionary,entries:Array,packet:Dictionary,label:String
         for field in ["specs_ms","reservations_ms"]:plan.erase(field);expected.erase(field)
         check(plan==expected and prefix.bind_ids==reference.bind_ids,label+" effective supports/specs/reservations/order equal frozen complete capture")
         for id in prefix.floor_ids:
-            check(prefix.source_patches[id].prepared_addresses==reference.source_patches[id].prepared_addresses,label+" complete future floor addresses equal frozen complete capture")
+            var expected_addresses:Dictionary=reference.source_patches[id].prepared_addresses.duplicate()
+            # The frozen producer also carried an eager per-receiver slot
+            # repair list. Current consumers resolve the one floor directory.
+            expected_addresses.erase("indices")
+            check(prefix.source_patches[id].prepared_addresses==expected_addresses,label+" complete future floor addresses equal frozen complete capture")
     while not Atlas.Delta.prepare_candidate_binding(side.atlas,prefix,bindings):pass
     check(not prefix.has("error"),label+" private binding completes for every exact source")
     return {"prefix":prefix,"bindings":bindings}

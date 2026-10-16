@@ -934,6 +934,7 @@ func _sync_world() -> void:
         _publication_failure("Unexpected full replacement after prepared world admission.")
         return
     world_revision = timeline.world_revision
+    var detail_started:int=Time.get_ticks_usec()
     if not prepared.is_empty():
         source_lighting.publish_prepared(pending_world.light_preparation)
         var senses:Variant=timeline.state.get("senses")
@@ -941,17 +942,24 @@ func _sync_world() -> void:
         light_source_inputs=inputs
         light_source_epoch=timeline.initialization_revision
         light_revision=timeline.revision
+    FrameProfile.end_phase(profile,"world_light_publication",detail_started)
+    detail_started=Time.get_ticks_usec()
     var supports: Dictionary = timeline.staged_tiles()
     for key in supports:
         if not sampled_supports.has(key) or sampled_supports[key]!=supports[key]: world_changes.tiles[key] = true
     for key in sampled_supports:
         if not supports.has(key): world_changes.tiles[key] = true
     sampled_supports = supports
+    FrameProfile.end_phase(profile,"world_support_changes",detail_started)
+    detail_started=Time.get_ticks_usec()
     var derived: Dictionary
     if not prepared.is_empty():
         derived=WorldRows.apply_changes(world_row_cache,prepared.row_patch)
     else: derived = WorldRows.update_rows(timeline.presentation_state(),catalog_cache,world_row_cache,world_changes)
+    FrameProfile.end_phase(profile,"world_row_adoption",detail_started)
+    detail_started=Time.get_ticks_usec()
     _queue_wall_geometry_changes(world_changes)
+    FrameProfile.end_phase(profile,"world_wall_geometry_changes",detail_started)
     FrameProfile.end_phase(profile,"world_rows",phase)
     unresolved = derived.unresolved
     var rotated = world_quarter != quarter
@@ -960,6 +968,12 @@ func _sync_world() -> void:
     ground_is_background = background
     world_visual_rows = derived.visual_rows
     if changed: world_generation += 1
+    if prepared.has("ground_support"):
+        detail_started=Time.get_ticks_usec()
+        ground_overlay.publish_support(prepared.ground_support,
+            [timeline.initialization_revision,timeline.world_revision,world_generation,timeline._support_signature()],
+            world_row_cache,[timeline.initialization_revision],timeline.world_revision)
+        FrameProfile.end_phase(profile,"world_ground_support_publish",detail_started)
     if not prepared.get("geometry",{}).is_empty():
         prepared.geometry.generation = world_generation
         wall_geometry_views[quarter] = prepared.geometry
@@ -1013,21 +1027,24 @@ func _sync_world() -> void:
         entries_changed = membership.entries_changed; walls_changed = membership.walls_changed
         phase = Time.get_ticks_usec()
         for group in membership.retired_groups:
-            _scenery_remove(group.entries)
             for entry in group.entries: entry.node.queue_free()
         # Preserve the combined entries' historical insertion order. Rebuilding
         # it static-first would change native atlas reservation order.
         for group in membership.new_groups:
             for entry in group.entries: entry.node.reparent(sprite_parent,false)
             entries.append_array(group.entries)
-            _scenery_add(group.entries)
         FrameProfile.end_phase(profile,"world_objects",phase)
         phase = Time.get_ticks_usec()
         for update in membership.ground_updates: _ground_publish(update.entry,update.packet)
         FrameProfile.end_phase(profile,"world_ground",phase)
         if not removed.is_empty():
             entries = entries.filter(func(entry):return not removed.has(entry.node.get_instance_id()))
+        detail_started=Time.get_ticks_usec()
+        _publish_scenery_membership(membership.scenery)
+        FrameProfile.end_phase(profile,"world_scenery_membership",detail_started)
+        detail_started=Time.get_ticks_usec()
         pending_world.publish_membership()
+        FrameProfile.end_phase(profile,"world_membership_publish",detail_started)
     else:
         phase = Time.get_ticks_usec()
         for id in world_groups:
@@ -1111,8 +1128,12 @@ func _sync_world() -> void:
     # A rotated view rebuilds/adopts a different node membership. Its order
     # cannot reuse the pre-rotation preparation, even with the same row count.
     if not prepared.is_empty() and (not rotated or pending_world.initial):
+        detail_started=Time.get_ticks_usec()
         pending_world.publish_order()
+        FrameProfile.end_phase(profile,"world_order_publish",detail_started)
+        detail_started=Time.get_ticks_usec()
         pending_world.publish_atlas_receivers()
+        FrameProfile.end_phase(profile,"world_atlas_publish",detail_started)
     # New floor instances start remembered; current grants are applied through
     # their direct packed index without rebuilding one consumer per known tile.
     for key in world_row_cache.changed_tiles:
@@ -1128,7 +1149,9 @@ func _sync_world() -> void:
     # lighting source. Only the physical view replacement is a full receipt;
     # prepared membership already supplies ordinary source additions/removals.
     _publish_native_light_changes(light_upserts,removed.keys(),rotated)
+    detail_started=Time.get_ticks_usec()
     _finish_world_preparation()
+    FrameProfile.end_phase(profile,"world_finish_publish",detail_started)
 
 func _publication_failure(message:String)->void:
     # This signals an invariant fault after admission; it never fabricates a
@@ -1288,10 +1311,11 @@ func _sample_fixtures() -> void:
 
 func _scenery_remove(group_entries: Array) -> void:
     for entry in group_entries:
-        var id: String = entry.placement.id
-        if scenery_consumers.has(id):
-            scenery_consumers[id] = scenery_consumers[id].filter(func(value):return not is_same(value.entry,entry))
-            if scenery_consumers[id].is_empty(): scenery_consumers.erase(id)
+        var ids:Array=[] if entry.has("batch_rows") else [entry.placement.id]
+        for id in ids:
+            if scenery_consumers.has(id):
+                scenery_consumers[id] = scenery_consumers[id].filter(func(value):return not is_same(value.entry,entry))
+                if scenery_consumers[id].is_empty(): scenery_consumers.erase(id)
         water_entries.erase(entry); scenery_batches.erase(entry)
         if entry.has("wall_source"):
             wall_entries.erase(entry); scenery_wall_sources.erase(entry.wall_source.id)
@@ -1305,13 +1329,53 @@ func _scenery_add(group_entries: Array) -> void:
         if entry.material.shader not in [ENVIRONMENT_SHADER,WATER_SHADER]: continue
         if entry.has("batch_rows"):
             scenery_batches.append(entry)
-            for row in entry.batch_rows: scenery_new_consumers[row.id] = true
             continue
         var id: String = entry.placement.id
         if not scenery_consumers.has(id): scenery_consumers[id] = []
         scenery_consumers[id].append({"entry":entry,"index":-1})
         scenery_new_consumers[id] = true
     wall_sources = scenery_wall_sources.values()
+
+func _publish_scenery_membership(delta:Dictionary)->void:
+    # The candidate enumerated only its added/retired targets before admission.
+    # Ground consumers resolve their current packed index directly by ID; a
+    # changed sight cell never searches every floor batch again.
+    for id in delta.remove:
+        if not scenery_consumers.has(id):continue
+        var removed:Dictionary=delta.remove[id]
+        scenery_consumers[id]=scenery_consumers[id].filter(func(value):return not removed.has(value.entry.node.get_instance_id()))
+        if scenery_consumers[id].is_empty():scenery_consumers.erase(id)
+    for id in delta.add:
+        if not scenery_consumers.has(id):scenery_consumers[id]=[]
+        scenery_consumers[id].append_array(delta.add[id])
+    var walls_changed:bool=false
+    for entry in delta.entry_remove:
+        water_entries.erase(entry);scenery_batches.erase(entry)
+        if entry.has("wall_source"):
+            wall_entries.erase(entry);scenery_wall_sources.erase(entry.wall_source.id);walls_changed=true
+    for entry in delta.entry_add:
+        if entry.has("wall_source"):
+            wall_entries.append(entry);scenery_wall_sources[entry.wall_source.id]=entry.wall_source;walls_changed=true
+        if entry.material.shader==WATER_SHADER:water_entries.append(entry)
+        if entry.has("batch_rows"):scenery_batches.append(entry)
+    if walls_changed:wall_sources=scenery_wall_sources.values()
+    scenery_new_consumers.merge(delta.new_consumers)
+    scenery_index_dirty=false
+
+func _scenery_ground_entry(id:String)->Dictionary:
+    var slot:int=world_row_cache.get("visual_slots",{}).get(id,-1)
+    if slot>=0:
+        var row:Dictionary=world_visual_rows[slot]
+        if row.kind=="terrain" and ground_groups.has(row.material):
+            var entry:Dictionary=ground_groups[row.material].entries[0]
+            if entry.ground_indices.has(id):return entry
+        return {}
+    # Standalone source/pixel fixtures omit the prepared canonical row owner.
+    # Runtime uses its admitted row/material/batch references above.
+    if world_prepare_epoch!=timeline.initialization_revision:
+        for entry in scenery_batches:
+            if entry.ground_indices.has(id):return entry
+    return {}
 
 func _sync_scenery(force: bool = false, refresh_sight: bool = false) -> void:
     var rebuild = force or scenery_index_dirty or scenery_index_count!=static_entries.size() or scenery_quarter!=world_quarter
@@ -1349,19 +1413,29 @@ func _sync_scenery(force: bool = false, refresh_sight: bool = false) -> void:
         var batches = {}
         for id in changed:
             var value = 1.0 if changed[id] else 0.0
-            for entry in scenery_batches:
-                var index: int = entry.ground_indices.get(id,-1)
-                if index>=0: native_light_atlas.style_changed(entry,str(id))
-                if index>=0 and entry.scenery_values[index]!=value:
-                    _ground_visibility(entry,index,value)
-                    var key: int = entry.node.get_instance_id()
-                    if not batches.has(key): batches[key] = {"entry":entry,"indices":[]}
+            var ground_entry:Dictionary=_scenery_ground_entry(str(id))
+            if not ground_entry.is_empty():
+                var index:int=ground_entry.ground_indices[id]
+                if ground_entry.scenery_values[index]!=value:
+                    native_light_atlas.style_changed(ground_entry,str(id))
+                    _ground_visibility(ground_entry,index,value)
+                    var key:int=ground_entry.node.get_instance_id()
+                    if not batches.has(key):batches[key]={"entry":ground_entry,"indices":[]}
                     batches[key].indices.append(index)
             for consumer in scenery_consumers.get(id,[]):
-                if consumer.index>=0: continue # Older prepared snapshots may retain floor lookups.
                 var entry: Dictionary = consumer.entry
-                native_light_atlas.style_changed(entry)
+                if consumer.index>=0:
+                    var index:int=entry.ground_indices.get(id,-1)
+                    if index<0:continue
+                    if entry.scenery_values[index]!=value:
+                        native_light_atlas.style_changed(entry,str(id))
+                        _ground_visibility(entry,index,value)
+                        var key:int=entry.node.get_instance_id()
+                        if not batches.has(key):batches[key]={"entry":entry,"indices":[]}
+                        batches[key].indices.append(index)
+                    continue
                 if entry.get("scenery_value",-1.0) != value:
+                    native_light_atlas.style_changed(entry)
                     SourceMaterial.set_parameter(entry,"current_visibility",value)
                     entry.scenery_value = value
         for batch in batches.values(): _ground_flush_visibility(batch.entry,batch.indices)
@@ -1755,17 +1829,7 @@ func _prepare_media(first: Dictionary = {}) -> void:
     media_plan_key = key
     media_promoted_ids = promoted_ids
     _reset_media_epoch()
-    if ids.is_empty() and not media_terminal_plan.is_empty():
-        # A successfully prepared group includes every terminal resting outfit
-        # and world source. Reuse it only at that group's exact admitted end;
-        # idle does not need another asynchronous metadata pass for those bytes.
-        var terminal: Dictionary = media_terminal_plan
-        if terminal.epoch == timeline.initialization_revision and is_same(terminal.state,timeline.state) \
-            and terminal.revision == timeline.revision and terminal.completed == timeline.completed_group_count \
-            and not timeline.completed_groups.is_empty() and timeline.completed_groups.back().id == terminal.id:
-            media_empty_key = key
-            media_empty_plan = terminal.plan
-        media_terminal_plan = {}
+    if ids.is_empty():_adopt_terminal_media()
     if external_playback:
         var recorded:Dictionary=media_warmup.encounter_override.get("group_plans",{})
         for id in ids:
@@ -1925,8 +1989,22 @@ func _publish_media_interest(at_ms:float)->void:
     _charge_preparation("source_publication",started,before)
     FrameProfile.end_phase(profile,"media_plan_demand",started)
 
+func _adopt_terminal_media()->void:
+    if media_terminal_plan.is_empty():return
+    # The completed group's latest plan owns its terminal sources, including a
+    # continuation that replaced the early opening plan. Transfer that lease
+    # before the same-frame optional lane can withdraw its old requirements.
+    var terminal:Dictionary=media_terminal_plan
+    if terminal.epoch==timeline.initialization_revision and is_same(terminal.state,timeline.state) \
+            and terminal.revision==timeline.revision and terminal.completed==timeline.completed_group_count \
+            and not timeline.completed_groups.is_empty() and timeline.completed_groups.back().id==terminal.id:
+        media_empty_key=[timeline.initialization_revision,[],timeline.revision]
+        media_empty_plan=media_group_plans[terminal.id]
+    media_terminal_plan={}
+
 func _retain_displayed_sources()->void:
     var group:Dictionary=timeline.current if not timeline.current.is_empty() else timeline.queue[0] if not timeline.queue.is_empty() else {}
+    if group.is_empty():_adopt_terminal_media()
     var selected:Dictionary=media_group_plans.get(group.get("id",""),media_empty_plan)
     if group.is_empty() or external_playback:
         displayed_source_records=selected.get("source_records",{}).get(character_light_profile,[])
@@ -2028,7 +2106,7 @@ func _media_ready(group: Dictionary) -> bool:
             var committed: int = timeline.commit_index if is_same(timeline.current,group) else 0
             media_terminal_plan = {"id":group.id,"epoch":timeline.initialization_revision,"state":timeline.state,
                 "revision":timeline.revision+group.commits.size()-committed,
-                "completed":timeline.completed_group_count+1,"plan":media_group_plans[group.id]}
+                "completed":timeline.completed_group_count+1}
     return ready
 
 func _environment_media_ready() -> bool:

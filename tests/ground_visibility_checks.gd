@@ -1,4 +1,5 @@
 extends SceneTree
+const Quarter=preload("res://presentation/quarter_view.gd")
 # Original authored floor pixels: production MultiMesh versus independent single
 # draws in exactly the original per-material source order, in all four views.
 class Probe extends "res://play.gd":
@@ -49,6 +50,13 @@ func run()->void:
     for quarter in range(4):
         scene.quarter=quarter;scene.world_quarter=quarter;scene.position_camera()
         scene._ground_batch(rows.duplicate(true));var batch:Dictionary=scene.static_entries.back()
+        scene.world_visual_rows=rows
+        var prepared=Quarter.new();scene.add_child(prepared);prepared.configure(scene,quarter)
+        var preparation_steps:int=0
+        while not prepared.is_prepared and preparation_steps<1000:
+            prepared.step(2000);preparation_steps+=1
+        check(prepared.is_prepared and prepared.scenery_consumers.is_empty(),"q%d prepared rotation retains floor ownership in row/material/batch instead of duplicate per-tile consumers"%quarter)
+        prepared.queue_free()
         var singles=[]
         for row in batch.batch_rows:
             scene._environment_row(row.duplicate(true));singles.append(scene.static_entries.back())

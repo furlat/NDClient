@@ -302,10 +302,6 @@ static func prepare_changes(state: Dictionary, cache: Dictionary, base: Dictiona
         if old==row: continue
         patch.visual_changes[id] = row
         if old.is_empty() or row.is_empty(): patch.rebuild_visual = true
-    if patch.has("order_reset"):
-        patch.prepared_tile_rows = {}; patch.prepared_object_rows = {}
-        for key in patch.order_reset.tiles: patch.prepared_tile_rows[key] = projected_row(base,patch,"tiles",key)
-        for id in patch.order_reset.objects: patch.prepared_object_rows[id] = projected_row(base,patch,"objects",id)
     if patch.rebuild_rows or patch.rebuild_visual or patch.missing_changed:
         _prepare_result(base,patch)
     return patch
@@ -329,6 +325,11 @@ static func _prepare_result(base: Dictionary, patch: Dictionary) -> void:
     # Publication only installs these completed arrays and their slot indexes.
     var tile_order: Array = _projected_order(base,patch,"tiles")
     var object_order: Array = _projected_order(base,patch,"objects")
+    # Keep displaced outer values until the existing candidate retirement.
+    # The result shell is separate because publication edits its fields.
+    patch.retired=base.duplicate()
+    if base.has("result"):patch.retired.result=base.result.duplicate()
+    if patch.rebuild_rows:_prepare_indexes(base,patch,tile_order,object_order)
     var result: Array = []
     if patch.rebuild_rows:
         var slots = {}
@@ -356,32 +357,44 @@ static func _prepare_result(base: Dictionary, patch: Dictionary) -> void:
             for id in object_order: missing.append_array(projected_index(base,patch,"missing","objects:"+id,[]))
         patch.prepared_missing = missing
 
+static func _prepare_indexes(base:Dictionary,patch:Dictionary,tile_order:Array,object_order:Array)->void:
+    # Membership/order already requires a new canonical row owner. Complete
+    # touched indexes here, beside those arrays, so adoption never replays the
+    # accepted mutation log or inserts hundreds of records on the draw frame.
+    patch.prepared_indexes={}
+    var ordered:Dictionary={}
+    for operation in patch.order:ordered[operation.kind]=true
+    for index in ROW_INDEXES:
+        var kind:String="tiles" if index=="tile_rows" else "objects" if index=="object_rows" else ""
+        var reorder:bool=not kind.is_empty() and (ordered.has(kind) or patch.has("order_reset"))
+        if not patch.full and patch.writes[index].is_empty() and patch.removes[index].is_empty() and not reorder:continue
+        var values:Dictionary
+        if not kind.is_empty():
+            values={}
+            for id in (tile_order if kind=="tiles" else object_order):
+                # Empty rows still own canonical insertion positions and
+                # missing-art metadata, even though render arrays omit them.
+                values[id]=projected_row(base,patch,kind,id)
+        else:
+            values=patch.writes[index] if patch.full else base[index].duplicate()
+            if not patch.full:
+                for key in patch.removes[index]:values.erase(key)
+                values.merge(patch.writes[index],true)
+        patch.prepared_indexes[index]=values
+
 static func apply_changes(base: Dictionary, patch: Dictionary) -> Dictionary:
     # Owner-only, after the borrowing task has completed. The caller validates
     # its displayed revision before this handoff; this function cannot reject.
     if patch.full:
         base.clear()
-        for index in ROW_INDEXES: base[index] = patch.writes[index]
         base.result = {"rows":[],"visual_rows":[],"unresolved":[]}
         base.row_slots = {}; base.visual_slots = {}
+    if patch.rebuild_rows:
+        for index in patch.prepared_indexes:base[index]=patch.prepared_indexes[index]
     else:
         for index in ROW_INDEXES:
             for key in patch.removes[index]: base[index].erase(key)
-            for key in patch.writes[index]: base[index][key] = patch.writes[index][key]
-    # Hold final values only for touched IDs while replaying their order changes.
-    var final_rows = {"tiles":{},"objects":{}}
-    for operation in patch.order:
-        var records: Dictionary = base.tile_rows if operation.kind=="tiles" else base.object_rows
-        if records.has(operation.id): final_rows[operation.kind][operation.id] = records[operation.id]
-    for operation in patch.order:
-        var records: Dictionary = base.tile_rows if operation.kind=="tiles" else base.object_rows
-        records.erase(operation.id)
-        if not operation.remove and final_rows[operation.kind].has(operation.id):
-            records[operation.id] = final_rows[operation.kind][operation.id]
-    if patch.has("order_reset"):
-        # Compatibility callers have no sparse order log. Their full maps are
-        # already built by prepare_changes, never reconstructed during adoption.
-        base.tile_rows = patch.prepared_tile_rows; base.object_rows = patch.prepared_object_rows
+            base[index].merge(patch.writes[index],true)
     if patch.rebuild_rows:
         base.result.rows = patch.prepared_rows; base.row_slots = patch.prepared_row_slots
         base.tile_order = patch.tile_order; base.object_order = patch.object_order

@@ -907,3 +907,162 @@ checks with zero errors or warnings in `.runtime/publication-tail-studio.log`.
 All owned validation processes exited; the final Windows process inspection
 finds zero NDClientGodot Godot processes. The legacy broad SDK snapshot harness
 was not rerun or newly qualified by this renderer/source batch.
+
+### Shared reveal-publication completion — authorized 16 October
+
+User requested a checkpoint and a common-cause fix for door, movement and spell
+aftermath spikes. Starting checkpoint is `e138fc9`; source art remains ignored.
+This continues operations 2/3 above, without a different renderer or backend.
+
+Boundary: given the same accepted operation and published base, preparation
+produces the exact next scene/atlas membership, materials, support contacts and
+ordering operands privately. Publication adopts those prepared values once;
+sampling consumes actual current actor poses/hover/time. No partial reveal,
+future trace/audio, hidden-source exposure or visual retuning is allowed.
+
+1. Finish atlas registration inside the existing bounded binding lane: prepare
+   final new receiver/partition arrays and indices, group/source registration
+   deltas and counts, and output/source sampling operands. Publish native array
+   appends/map deltas rather than replaying GDScript row/group derivation. Avoid
+   cloning the whole retained scene for ordinary sparse updates. Keep actual
+   retained-node replacement commands and real capacity-growth normalization.
+   Detach transferred arrays/maps from the old private retirement payload.
+2. Finish scene-derived indexes in WorldPreparation: direct scenery ground
+   targets and consumer deltas; prepared support-contact updates for the ground
+   overlay; exact fixed order/subsequence/rank operands where that cut owns
+   them. Remove the corresponding publication-time joins/reconstruction. Keep
+   changing actor order and wall member selection under their existing owners.
+3. Prepared static materials retain their actual prepared SourceMaterial sample
+   values. Remove cross-group/material recertification at publication; ordinary
+   scalar source-version/hover/visibility sampling still updates anything that
+   actually changed since preparation. Dynamic/water sampling remains live.
+
+Root owns native_light_delta; the anti-slop reviewer owns the matching atlas
+source sampling change; correctness owns Play/WorldPreparation/ground overlay.
+The independent plan guard also performs the anti-OOP review and checks the
+whole ownership/order boundary. Native tests/profile runs are serialized.
+
+Qualification: exact prepared-vs-original atlas addresses/group counts/order,
+source changes during preparation, cancellation/retirement, support changes,
+native recorded prefix/seek/loop cases, then the SAME real action route (door,
+move, Haste, two Fireballs). Report per-parent phase breakdown and actual work
+counts, all slow frames and idle separately. In particular, `addresses_ms`
+at checkpoint included output_materials_ms; preserved-row diagnostics alone do not
+prove a runtime row walk. Door actual address publication was .015 ms, while
+Fireball's 1.184 ms needs its real index/buffer/upload branch distinguished.
+Targets and full elapsed accounting remain unchanged; no warm-FPS or no-spike
+claim follows merely from green functional tests.
+
+### Shared reveal owner result and limits — 16 October
+
+Checkpoint requested by the user was committed first as `e138fc9`. The new
+batch completes prepared values inside the existing owners, without backend,
+Factory, artwork, shader math, light tuning or event-clock changes:
+
+- Atlas binding prepares final receiver/partition append arrays, indexes and
+  output samples. Publication uses native array/map operations and ordered
+  retained/group commands; zero-user/drop/reappear group identity is preserved.
+- A packed floor's current row directory is its only slot authority. Removed
+  eager per-receiver slot repair and duplicate per-tile scenery consumers,
+  including their rotation producer. Actual projection/style/capture resolves
+  the directory when needed. No every-floor search in production scenery sync.
+- Actual canonical membership/order rebuilds prepare touched WorldRows indexes
+  and GroundOverlay maps alongside their already prepared arrays. Publication
+  adopts references. Ordinary same-membership edits remain sparse; native map
+  merge replaces interpreted per-key after-value insertion. Displaced maps and
+  passive completed preparation data remain under existing budgeted retirement.
+- Existing light preparation now also owns colour/cookie updates and removals.
+  Publication does not resynchronize every page or sample empty actor anchors.
+  Actual displayed actor/fixture sampling still precedes native projection.
+- Static material sample ownership replaces cross-group recertification.
+  Explicit style/output fields no longer trigger empty generic uniform copying.
+  Current hover/frame/water/source/binding changes keep their real consumers.
+- Fixed a real prepared-to-displayed lease hole: completing movement withdrew
+  152 immutable source records, then reacquired them next frame (7.031 ms plus
+  5.784 ms). Terminal promotion now precedes displayed-source replacement and
+  same-frame optional work, taking the latest full continuation rather than a
+  cached opening-plan pointer. Exact readiness/accounting is unchanged.
+
+The first attempted scenery/support delta still did wholesale retained-floor
+registration at the cue and regressed the live route. It was rejected and
+deleted, rather than accepted because isolated checks passed. The rows above
+describe the corrected final ownership.
+
+Matched real GUI route: door, move to `[26,6]`, Haste potion, Fireball `[32,8]`,
+Fireball `[33,7]`; Forward+/Vulkan RTX 5090, 1600x960, view size 18, full-size
+native viewport plus root display blit. Owned Godot runs were serialized. Two
+final runs, with no production changes between them, each passed 81 checks:
+
+| Action playback maximum | Earlier checkpoint route | Final run A | Unchanged repeat B |
+| --- | ---: | ---: | ---: |
+| Door | 47.556 ms | 69.515 ms | 44.145 ms |
+| Move | 37.678 ms | 38.792 ms | 31.018 ms |
+| Haste | 20.101 ms | 36.999 ms | 22.260 ms |
+| First Fireball | 26.192 ms | 30.416 ms | 24.577 ms |
+| Second Fireball | 35.305 ms | 38.229 ms | 29.408 ms |
+
+These ranges do **not** establish consistent whole-frame improvement. They do
+show removed work at the measured ownership boundary:
+
+| Actual component | Instrumented during this batch, before its correction | Final repeat B |
+| --- | ---: | ---: |
+| Door canonical row adoption | 3.461 ms | 0.021 ms |
+| Door support publication | 2.329 ms | 0.140 ms |
+| Fireball scenery membership | 4.054 ms | 0.036 ms |
+| Fireball floor address publication | 1.101 ms / 1,179 index writes | 0.128 ms / zero index writes |
+| Door generic parameter-copy operations | 185 | 11 |
+| Movement generic parameter-copy operations | 214 | 10 |
+
+In repeat B the remaining 44.145 ms door frame has 42.103 ms player callback:
+17.322 ms native lighting, 5.848 ms session/timeline, 4.131 ms world publication,
+3.933 ms actor sampling, 3.317 ms ordering/output, plus source lighting, actor
+membership, wall selection and optional preparation. Native lighting includes
+the atlas, shadows and projection; its atlas includes resize, registry, binding,
+output, material sample and culling. Do not add these children to their parents.
+The door still admits 279 sources / 1,156 receiving specs, including genuine
+native viewport growth and 1,098 cull checks. It is still a spike.
+
+Repeat B has two post-action-start intervals above 33.33 ms: that door frame
+and a 37.985 ms Fireball targeting interval (aim marker, before cast playback).
+The targeting interval has only 12.449 ms inside the measured player callback,
+unchanged pipeline counts and no world publication. Its remaining interval is
+not attributed to a particular input/native/OS cause by this instrumentation.
+Run A additionally has 57.597 ms during targeting, 38.792 ms movement,
+36.999 ms Haste, and 38.229 ms Fireball aftermath. No no-spike or 100-FPS claim.
+
+Packet-to-first-visible Fireball is 70.002/60.019 ms in A and 67.398/61.186 ms in
+B (first/repeated). B's opening preparation is 26.008/22.183 ms; the remaining
+41.390/39.003 ms includes actual process intervals, prepared-world gates and the
+draw observation. Server dispatch remains separate: 713.336/446.097 ms in A,
+624.248/422.646 ms in B. This batch does not solve those server times or claim
+an improvement in repeated-cast onset.
+
+Evidence: `.runtime/player-runs/20261016T154109.508036Z` and
+`20261016T154406.286364Z`; `.runtime/shared-reveal-final-live-analysis.json` and
+`shared-reveal-final-repeat-live-analysis.json`; complete frame profiles
+`generated/profiles/2026-10-16T17-41-40-gallery-live-spells.json` and
+`2026-10-16T17-44-35-gallery-live-spells.json`. Raw CPU/context diagnostics retain
+the actual work counts and nested stage decomposition, not only an FPS summary.
+
+Correctness qualification: source output samples 159 headless / 204 native;
+staged atlas 1,987; native lifecycle 221; prepared emitters 69 headless / 79
+native plus 17 ownership checks; ground support 67; scenery 10; prepared
+admission 28; sparse preparation 69; actor material/retirement 3,726; world
+projection 147; native floor/rotation 28; native HUD grid 241; terminal lease
+handoff 8; final native WorldPreparation/atlas 150 (nine cases). Output, staged, emitter and terrain suites include at least 85 exact
+native framebuffer comparisons. Final full native Studio passes 8,647 checks
+covering seek/loop/faction selection and exact ordered prefixes. Its count varies
+with sampled playback frames; it is not a fixed test inventory count.
+
+The old `media_completion_checks` fixture was attempted but has stale null-sense
+and missing native-render-owner assumptions before reaching the new regression;
+it was restored unchanged, not reported green. The new narrow terminal handoff
+fixture proves CPU registration continuity; real playback remains qualified by
+the live and Studio runs. Sparse preparation retains 26 ObjectDB exit warnings;
+final live runs retain 30/31 leaked-instance warnings and one resource-at-exit
+diagnostic, plus the missing generic-caster portrait warning. Native Studio and
+the focused native output suites are clean. No clean-live-teardown claim.
+
+The anti-slop/correctness reviewers and independent plan/anti-OOP guard found no
+remaining blocker in these saved ownership changes. Broader latency/frame
+targets remain open. All owned client Godot processes were closed after testing.

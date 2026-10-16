@@ -23,7 +23,8 @@ static func apply_delta(target: Dictionary, delta: Dictionary) -> void:
         target.combat_log_appends.append_array(delta.log_appends)
     for key in delta.get("objects_removed", []): target.objects.erase(key)
     for field in ["actors", "tiles", "objects", "spatial_commit_cursors"]:
-        for key in delta.get(field, {}): target[field][key] = delta[field][key]
+        var values:Dictionary=delta.get(field,{})
+        if not values.is_empty():target[field].merge(values,true)
 
 static func _actor(state: Dictionary, group: Dictionary, identity: Variant, node: Dictionary, graph: Dictionary) -> Dictionary:
     var observed: Dictionary = graph.actor_inputs.get(node.uuid,{})

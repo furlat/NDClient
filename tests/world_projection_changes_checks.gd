@@ -20,15 +20,22 @@ func compare(state: Dictionary, base: Dictionary, label: String) -> void:
     check(base.result==World.rows(state,cache),label+": rows and original wall assembly")
     check(base.boundaries==World.boundary_index(state),label+": incident-cell membership and order")
     check(base.negative.is_empty()==World.ground_background(state),label+": negative support eligibility")
+    check(base.tile_rows.keys()==state.tiles.keys() and base.object_rows.keys()==state.objects.keys(),label+": canonical dictionary order includes unsupported rows")
+    if base.tile_rows.keys()!=state.tiles.keys() or base.object_rows.keys()!=state.objects.keys():
+        print("WORLD_ORDER_DIFF ",label," ",base.tile_rows.keys()," / ",state.tiles.keys()," objects ",base.object_rows.keys()," / ",state.objects.keys())
 func adopt(state: Dictionary, base: Dictionary, changes: Dictionary, label: String) -> Dictionary:
     var before = var_to_bytes(base)
     var patch = World.prepare_changes(state,cache,base,changes)
     check(var_to_bytes(base)==before,label+": preparation leaves base and nested cells untouched")
     World.apply_changes(base,patch)
+    if patch.rebuild_rows:
+        check(patch.prepared_indexes.keys().all(func(index):return is_same(base[index],patch.prepared_indexes[index])),label+": complete index ownership is adopted by reference")
+        check(var_to_bytes(patch.retired)==before,label+": replaced row/index values remain owned and unmodified for retirement")
     compare(state,base,label)
     return patch
 func _initialize() -> void:
     for size in [64,8192]: scaling(size)
+    unsupported_order()
     var state = {"tiles":{"0,0":tile("floor",0)},"objects":{"b":wall("b","east"),"a":wall("a","north"),"c":wall("c","east",5)},"senses":{}}
     var base = {}
     adopt(state,base,{"full":true},"initial joined wall")
@@ -83,7 +90,27 @@ func scaling(size: int) -> void:
     var writes = 0
     for values in patch.writes.values(): writes += values.size()
     check(writes==1 and not patch.rebuild_rows and not patch.rebuild_visual,"One changed index entry with stable row slots at size "+str(size))
+    check(not patch.has("prepared_indexes"),"Same-membership sparse edit constructs no complete map owners at size "+str(size))
     check(World.projected_row(base,patch,"tiles","0,0").base_height_steps==1 and base.tile_rows["0,0"].base_height_steps==0,"Candidate read and published read stay separate")
     World.apply_changes(base,patch)
     check(is_same(result_rows,base.result.rows) and is_same(visual_rows,base.result.visual_rows) and is_same(unrelated,base.tile_rows["1,0"]),"Adoption keeps existing arrays and unrelated row ownership at size "+str(size))
     compare(state,base,"one-row adoption "+str(size))
+
+func unsupported_order()->void:
+    var bad=tile("no-art",3);bad.surface.base_material="unavailable"
+    var object=wall("no-art","north");object.item.boundary_structure=null
+    var state={"tiles":{"0,0":tile("first",0),"3,0":bad,"1,0":tile("last",1)},
+        "objects":{"a":wall("a","east"),"unknown":object,"b":wall("b","north")},"senses":{}}
+    var base={}
+    adopt(state,base,{"full":true},"unsupported ordered base")
+    check(base.tile_rows.has("3,0") and base.tile_rows["3,0"].is_empty() and base.object_rows.has("unknown") and base.object_rows.unknown.is_empty(),"Unsupported source keys remain in canonical indexes while render arrays omit them")
+    state.tiles.erase("3,0");state.tiles["3,0"]=bad
+    var patch=adopt(state,base,{"tiles":{"3,0":true},"order":[{"kind":"tiles","id":"3,0","remove":true},{"kind":"tiles","id":"3,0","remove":false}]},"unsupported tile remove/readd")
+    check(patch.writes.tile_rows.is_empty() and patch.removes.tile_rows.is_empty() and base.tile_rows.keys().back()=="3,0","Equal empty projection still publishes accepted tile insertion order")
+    state.objects.erase("unknown");state.objects["unknown"]=object
+    patch=adopt(state,base,{"objects":{"unknown":true},"order":[{"kind":"objects","id":"unknown","remove":true},{"kind":"objects","id":"unknown","remove":false}]},"unsupported object remove/readd")
+    check(patch.writes.object_rows.is_empty() and patch.removes.object_rows.is_empty() and base.object_rows.keys().back()=="unknown","Equal empty projection still publishes accepted object insertion order")
+    state.tiles.erase("0,0");state.tiles["0,0"]=tile("first",0)
+    World.update_rows(state,cache,base,{"tiles":{}})
+    compare(state,base,"compatibility order reset with equal unsupported projections")
+    adopt(state,base,{"full":true},"full replacement retains old map references until retirement")

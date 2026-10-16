@@ -96,6 +96,40 @@ func run()->void:
     compare(published,published_oracle,owner,canonical,22,departed,"Published staged removal")
     check(published.support_checked_tiles==1 and not published.support_positions.has("40,0"),"Same-revision stage retirement consumes its exact cell removal")
     published.close(); published_oracle.close()
+    # Production receives contacts and exact support changes from the existing
+    # passive world worker. Resolving a candidate cannot edit the current view.
+    var prepared=Overlay.new();var prepared_oracle=Overlay.new()
+    var prepared_owner={}
+    var initial_packet=Overlay.prepare_support(canonical,{"full":true},{})
+    prepared.publish_support(initial_packet,30,prepared_owner,[4],30)
+    var prepared_proof=proof(29,30,{},[4],true);prepared_proof.owner=prepared_owner
+    compare(prepared,prepared_oracle,owner,canonical,30,prepared_proof,"Prepared initial support")
+    check(prepared.support_checked_tiles==0,"Prepared initial contacts need no render-time tile scan")
+    var future=canonical.duplicate()
+    future["41,0"]={"position":[41,0],"elevation_steps":0}
+    future["42,0"]={"position":[42,0],"elevation_steps":3}
+    var future_changes={"full":false,"tiles":{"41,0":true,"42,0":true}}
+    var old_support=var_to_bytes(prepared.capture_support())
+    var packet=Overlay.prepare_support(future,future_changes,prepared.capture_support(),true)
+    check(packet.changes.size()==2 and var_to_bytes(prepared.capture_support())==old_support,"Worker prepares exactly two contacts without modifying displayed support")
+    prepared.publish_support(packet,31,prepared_owner,[4],31)
+    check(packet.full and is_same(prepared.support_rows,packet.rows) and is_same(prepared.support_positions,packet.positions),"Actual canonical membership publication adopts completed support directories by reference")
+    var future_proof=proof(30,31,future_changes.tiles,[4]);future_proof.owner=prepared_owner
+    compare(prepared,prepared_oracle,owner,future,31,future_proof,"Prepared flat and raised insertion")
+    check(prepared.support_checked_tiles==0 and prepared.support_contact_updates==0,"Published contacts are adopted without repeating contact derivation")
+    var unchanged_order=prepared.ordered;var unchanged_writes=prepared.transform_writes
+    var no_geometry=Overlay.prepare_support(future,{"full":false,"tiles":{"41,0":true}},prepared.capture_support())
+    check(no_geometry.changes.is_empty(),"Non-geometric dirty row produces no support work")
+    prepared.publish_support(no_geometry,32,prepared_owner,[4],32)
+    var steady_proof=proof(31,32,{"41,0":true},[4]);steady_proof.owner=prepared_owner
+    compare(prepared,prepared_oracle,owner,future,32,steady_proof,"Prepared non-geometric update")
+    check(is_same(unchanged_order,prepared.ordered) and prepared.transform_writes==unchanged_writes,"Prepared no-op preserves complete native grid and painter owners")
+    var removal=Overlay.prepare_support(canonical,future_changes,prepared.capture_support())
+    prepared.publish_support(removal,33,prepared_owner,[4],33)
+    var removal_proof=proof(32,33,future_changes.tiles,[4]);removal_proof.owner=prepared_owner
+    compare(prepared,prepared_oracle,owner,canonical,33,removal_proof,"Prepared staged support retirement")
+    check(not prepared.support_positions.has("41,0") and not prepared.support_positions.has("42,0") and prepared.support_checked_tiles==0,"Prepared retirement removes exact supports without scanning retained cells")
+    prepared.close();prepared_oracle.close()
     var before_path="res://.runtime/ground-overlay-before-support-ledger.gd"
     var samples=[];var prior=[];var checks_per_update=0
     var insert_support=[];var insert_marks=[];var insert_total=[];var insert_before=[]

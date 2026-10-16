@@ -153,18 +153,47 @@ func begin_preparation(resolved: Dictionary) -> Dictionary:
     # and outside page membership until the displayed cut adopts them.
     # A retained resolution already owns its cookies and nodes on these pages.
     # Sampling still updates live positions/energy; no emitter was changed here.
-    return {"resolved":resolved,"pages":_pages.duplicate(),"nodes":[],"page":0,"source":0,
+    return {"resolved":resolved,"pages":_pages.duplicate(),"nodes":[],"updates":[],"removals":[],
+        "colours":{},"wanted":{},"phase":"colours","removal_ids":[],"removal":0,"page":0,"source":0,
         "complete":is_same(resolved.sources,sources),"retained":is_same(resolved.sources,sources)}
 
 func prepare_step(work: Dictionary) -> void:
     if work.complete:return
+    var selected:Array=work.resolved.sources
+    if work.phase=="colours":
+        if work.source<selected.size():
+            var source:Dictionary=selected[work.source];work.source+=1
+            work.colours[source.item_uuid]=TORCH_COLOUR if source.item_id in TORCH_ITEM_IDS else Color.WHITE
+            work.wanted[source.item_uuid]=true
+            return
+        work.colours.make_read_only()
+        work.phase="nodes";work.source=0
     if work.page>=work.pages.size():work.complete=true;return
     var page:Dictionary=work.pages[work.page]
-    var sources:Array=work.resolved.sources
-    if work.source>=sources.size():work.page+=1;work.source=0;return
-    var source:Dictionary=sources[work.source];work.source+=1
-    if page.nodes.has(source.item_uuid):return
+    if work.phase=="removals":
+        if work.removal<work.removal_ids.size():
+            var id:String=work.removal_ids[work.removal];work.removal+=1
+            if not work.wanted.has(id):work.removals.append({"page":page,"id":id,"node":page.nodes[id]})
+            return
+        work.page+=1;work.source=0;work.phase="nodes"
+        work.removal_ids=[];work.removal=0
+        return
+    if work.source>=selected.size():
+        work.phase="removals";work.removal_ids=page.nodes.keys()
+        return
+    var source:Dictionary=selected[work.source];work.source+=1
+    var colour:Color=work.colours[source.item_uuid]
+    if page.nodes.has(source.item_uuid):
+        var node:PointLight2D=page.nodes[source.item_uuid]
+        var texture:Texture2D=_source_cookie(source)
+        var colour_changed:bool=node.color!=colour
+        var texture_changed:bool=node.texture!=texture
+        if colour_changed or texture_changed:
+            work.updates.append({"node":node,"colour":colour,"texture":texture,
+                "colour_changed":colour_changed,"texture_changed":texture_changed})
+        return
     var node:PointLight2D=_make_point(page.parent,source)
+    node.color=colour
     work.nodes.append({"page":page,"id":source.item_uuid,"node":node})
 
 func preparation_valid(work: Dictionary) -> bool:
@@ -178,8 +207,21 @@ func preparation_valid(work: Dictionary) -> bool:
 func publish_prepared(work: Dictionary) -> void:
     if work.get("retained",false):return
     for record in work.nodes:record.page.nodes[record.id]=record.node
+    for record in work.updates:
+        if record.colour_changed:record.node.color=record.colour
+        if record.texture_changed:record.node.texture=record.texture
+    for record in work.removals:
+        record.node.enabled=false;record.node.queue_free()
+        record.page.nodes.erase(record.id)
     work.nodes=[]
-    _sync_resolved(work.resolved)
+    work.updates=[];work.removals=[];work.retained=true
+    _canvas_sources.clear()
+    sources=work.resolved.sources
+    _resolver.sources=sources;_resolver.issues=work.resolved.issues
+    _source_colours=work.colours
+    # Play samples the actual displayed actor/fixture anchors before project().
+    # Publication only adopts the prepared optical membership and native deltas.
+    _update_issues()
 
 func _make_point(parent:Node,source:Dictionary) -> PointLight2D:
     var node=PointLight2D.new()
@@ -236,7 +278,7 @@ func _sync_resolved(resolved: Dictionary) -> void:
     sources=resolved.sources
     _resolver.sources=sources
     _resolver.issues=resolved.issues
-    _source_colours.clear()
+    _source_colours={}
     for source in sources:
         _source_colours[source.item_uuid]=TORCH_COLOUR if source.item_id in TORCH_ITEM_IDS else Color.WHITE
     _sync_pages()

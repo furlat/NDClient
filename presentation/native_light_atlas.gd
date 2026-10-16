@@ -17,6 +17,10 @@ const FlameReceiver = preload("res://presentation/canvas_fixture_flame.gdshader"
 const FlameSource = preload("res://presentation/fixture_flame.gdshader")
 const MAX_SIZE = 8192
 const AMBIENT_INTENSITY = 0.30
+# These parameters have explicit style/output owners below. They do not change
+# the generic source uniforms already delivered to a receiving material.
+const SAMPLE_PARAMETERS={&"current_visibility":true,&"highlighted":true,&"wall_opacity":true,
+    &"wall_mask_enabled":true,&"wall_mask_id":true,&"wall_mask_texture":true}
 var light_cap: float = 0.0
 var ambient: CanvasModulate
 var viewport: SubViewport
@@ -329,10 +333,9 @@ func _candidate_specs(entries: Array, information: Dictionary, geometry: Diction
     return {"ok":true,"specs":specs,"members":members,"entries":caches,"indices":indices,"supports":supports,"reused":reused}
 
 func _parameter_changes(entry:Dictionary,previous_version:int)->Variant:
-    var changes:Variant=SourceMaterial.changes_since(entry,previous_version)
-    return null if changes==null else changes.keys()
+    return SourceMaterial.changes_since(entry,previous_version)
 
-func _copy_output_source(entry: Dictionary) -> void:
+func _copy_output_source(entry: Dictionary,source_shader:Shader=null,sample_base:int=-1) -> void:
     if not entry.has("received_material"): return
     var output: ShaderMaterial=entry.received_material
     var source: ShaderMaterial=entry.material
@@ -340,21 +343,26 @@ func _copy_output_source(entry: Dictionary) -> void:
     var previous: Dictionary=entry.received_source_key if entry.has("received_source_key") else {}
     var same_owner=not previous.is_empty() and previous.output==output and previous.output_shader==output.shader and previous.binding_revision==entry.source_binding_revision
     if same_owner and previous.version==version:return
-    var key=[source.shader.get_instance_id(),output.shader.get_instance_id()]
+    var mesh: QuadMesh=entry.node.multimesh.mesh if entry.has("batch_rows") else entry.node.mesh
+    if same_owner and sample_base>=0 and previous.version>=sample_base and previous.get("quad_size")==mesh.size:
+        var next:Dictionary=previous.duplicate();next.version=version
+        entry.received_source_key=next
+        return
+    var shader:Shader=source.shader if source_shader==null else source_shader
+    var key=[shader.get_instance_id(),output.shader.get_instance_id()]
     if not parameter_names.has(key):
         var accepted={}
         for row in output.shader.get_shader_uniform_list(): accepted[row.name]=true
         var names:Dictionary={}
-        for row in source.shader.get_shader_uniform_list():
-            if accepted.has(row.name) and not str(row.name).begins_with("wall_") and row.name!="use_instance_visibility": names[row.name]=true
+        for row in shader.get_shader_uniform_list():
+            if accepted.has(row.name) and not str(row.name).begins_with("wall_") and row.name not in ["use_instance_visibility","current_visibility","highlighted"]: names[row.name]=true
         parameter_names[key]=names
-    var mesh: QuadMesh=entry.node.multimesh.mesh if entry.has("batch_rows") else entry.node.mesh
     var changes:Variant=_parameter_changes(entry,previous.version) if same_owner and previous.get("quad_size")==mesh.size else null
     if changes!=null:
         var copied:int=0
         for name in changes:
             if name in parameter_names[key]:output.set_shader_parameter(name,SourceMaterial.value(entry,name));copied+=1
-        if changes.size()==1 and changes[0]==&"frame_uv":last_reconcile_phases.material_frame_copies=last_reconcile_phases.get("material_frame_copies",0)+1
+        if changes.size()==1 and changes.has(&"frame_uv"):last_reconcile_phases.material_frame_copies=last_reconcile_phases.get("material_frame_copies",0)+1
         else:last_reconcile_phases.material_parameter_copies=last_reconcile_phases.get("material_parameter_copies",0)+1
         last_reconcile_phases.material_parameter_uniforms=last_reconcile_phases.get("material_parameter_uniforms",0)+copied
     else:
@@ -367,25 +375,26 @@ func _copy_output_source(entry: Dictionary) -> void:
         last_reconcile_phases[field]=last_reconcile_phases.get(field,0)+1
     entry.received_source_key={"binding_revision":entry.source_binding_revision,"version":version,"output":output,"output_shader":output.shader,"quad_size":mesh.size}
 
-func _copy_parameters(group: Dictionary) -> bool:
+func _copy_parameters(group: Dictionary,source_shader:Shader=null,binding:Variant=null) -> bool:
     # Return whether shared non-frame uniforms were recopied. Projection/style
     # owners need no redundant writes for an admitted UV-only animation frame.
     var source: ShaderMaterial = group.entry.material
-    var key = [source.shader.get_instance_id(),group.material.shader.get_instance_id()]
+    var shader:Shader=source.shader if source_shader==null else source_shader
+    var key = [shader.get_instance_id(),group.material.shader.get_instance_id()]
     if not parameter_names.has(key):
         var accepted = {}
         for row in group.material.shader.get_shader_uniform_list(): accepted[row.name]=true
         var names: Dictionary = {}
-        for row in source.shader.get_shader_uniform_list():
-            if accepted.has(row.name): names[row.name]=true
+        for row in shader.get_shader_uniform_list():
+            if accepted.has(row.name) and row.name not in ["current_visibility","highlighted"]: names[row.name]=true
         parameter_names[key]=names
-    var same_owner:bool=group.get("source_material")==source and group.source_shader==source.shader and group.get("target_material")==group.material and group.get("target_shader")==group.material.shader and group.get("binding_revision",-1)==group.entry.source_binding_revision
+    var same_owner:bool=bool(binding) if binding!=null else group.get("source_material")==source and group.source_shader==shader and group.get("target_material")==group.material and group.get("target_shader")==group.material.shader and group.get("binding_revision",-1)==group.entry.source_binding_revision
     var changes:Variant=_parameter_changes(group.entry,group.version) if same_owner else null
     if changes!=null:
         var copied:int=0
         for name in changes:
             if name in parameter_names[key]:group.material.set_shader_parameter(name,SourceMaterial.value(group.entry,name));copied+=1
-        if changes.size()==1 and changes[0]==&"frame_uv":last_reconcile_phases.material_frame_copies=last_reconcile_phases.get("material_frame_copies",0)+1
+        if changes.size()==1 and changes.has(&"frame_uv"):last_reconcile_phases.material_frame_copies=last_reconcile_phases.get("material_frame_copies",0)+1
         else:last_reconcile_phases.material_parameter_copies=last_reconcile_phases.get("material_parameter_copies",0)+1
         last_reconcile_phases.material_parameter_uniforms=last_reconcile_phases.get("material_parameter_uniforms",0)+copied
     else:
@@ -402,9 +411,10 @@ func _copy_parameters(group: Dictionary) -> bool:
         var field:String="material_receiver_full_dynamic" if group.info.dynamic else "material_receiver_full_static"
         last_reconcile_phases[field]=last_reconcile_phases.get(field,0)+1
     group.version = group.entry.get("source_version",0)
-    group.source_shader = source.shader
-    group.source_material=source;group.target_material=group.material;group.target_shader=group.material.shader
-    group.binding_revision=group.entry.source_binding_revision
+    if not same_owner:
+        group.source_shader=shader
+        group.source_material=source;group.target_material=group.material;group.target_shader=group.material.shader
+        group.binding_revision=group.entry.source_binding_revision
     return changes==null
 
 func _group(entry: Dictionary, crop: Dictionary, visibility: float, receiver_id: String, info: Dictionary = {}, join_mask: int = 0) -> Dictionary:
@@ -449,7 +459,17 @@ func prepare_source_binding(entry:Dictionary,snapshot:Dictionary,world:Node,dyna
     if source.info.dynamic and (not dynamic_materials or not (actor or flame)):return {}
     var sampled:Dictionary=entry.duplicate() if snapshot.is_empty() else snapshot.duplicate()
     sampled.erase("received_source_key");sampled.erase("received_style")
-    var output:Dictionary={}
+    # Publication consumes the sample that produced these private materials.
+    # Actual source/hover/visibility changes after preparation remain distinct
+    # and reach receiving materials through the ordinary scalar sync path.
+    var highlighted=SourceMaterial.value(entry,"highlighted")
+    var seconds=SourceMaterial.value(entry,"displayed_time_seconds") if source.info.water else null
+    var visibility:float=sampled.get("scenery_value",1.0)
+    var sample={"version":sampled.get("source_version",0),"highlighted":highlighted,
+        "material":entry.material,"shader":entry.material.shader,"binding_revision":entry.source_binding_revision,
+        "seconds":seconds,"visibility":visibility}
+    sample.make_read_only()
+    var output:Dictionary={"sample":sample}
     sampled.received_material=ShaderMaterial.new();sampled.received_material.shader=source.info.output
     if source.info.capped:_copy_output_source(sampled)
     output.received_material=sampled.received_material
@@ -461,9 +481,6 @@ func prepare_source_binding(entry:Dictionary,snapshot:Dictionary,world:Node,dyna
     material.set_shader_parameter("light_cap",source.info.light_cap)
     output.binding=[viewport.get_instance_id(),encoded,source.info.light_cap]
     if source.info.capped:
-        var highlighted=SourceMaterial.value(entry,"highlighted")
-        var seconds=SourceMaterial.value(entry,"displayed_time_seconds") if source.info.water else null
-        var visibility:float=sampled.get("scenery_value",1.0)
         material.set_shader_parameter("current_visibility",visibility)
         material.set_shader_parameter("highlighted",highlighted)
         if source.info.water:material.set_shader_parameter("displayed_time_seconds",seconds)
@@ -657,6 +674,7 @@ func _publish_addresses(floor_receivers: Dictionary, changed_outputs: Array) -> 
         output.set_shader_parameter("atlas_region",Vector4(origin.x,origin.y,size.x,size.y))
     var rewritten=0
     var packet_reads=0; var packet_reads_skipped=0; var rows_checked=0; var rows_preserved=0
+    var prepared_compare_usec:int=0;var prepared_upload_usec:int=0;var prepared_uploads:int=0
     for floor in floor_receivers.values():
         var entry: Dictionary=floor.entry
         var output: ShaderMaterial=entry.received_material
@@ -667,12 +685,15 @@ func _publish_addresses(floor_receivers: Dictionary, changed_outputs: Array) -> 
         rows_preserved+=int(floor.get("preserved_rows",0))
         if floor.has("prepared"):
             var prepared:Dictionary=floor.prepared
-            for row_id in prepared.indices:
-                entry_specs[entry.node.get_instance_id()].receivers[row_id].index=prepared.indices[row_id]
             entry.ground_packets=prepared.packets
             entry_specs[entry.node.get_instance_id()].packets=prepared.snapshots
-            if entry.ground_buffer!=prepared.buffer:
+            var compare_started:int=Time.get_ticks_usec()
+            var changed:bool=entry.ground_buffer!=prepared.buffer
+            prepared_compare_usec+=Time.get_ticks_usec()-compare_started
+            if changed:
+                var upload_started:int=Time.get_ticks_usec()
                 entry.ground_buffer=prepared.buffer;entry.node.multimesh.buffer=prepared.buffer
+                prepared_upload_usec+=Time.get_ticks_usec()-upload_started;prepared_uploads+=1
             rows_preserved+=prepared.count
             last_reconcile_phases.prepared_address_rows=last_reconcile_phases.get("prepared_address_rows",0)+prepared.count
             continue
@@ -719,6 +740,10 @@ func _publish_addresses(floor_receivers: Dictionary, changed_outputs: Array) -> 
     last_reconcile_phases.address_batches=floor_receivers.size()
     last_reconcile_phases.address_packet_reads=packet_reads
     last_reconcile_phases.address_packet_reads_skipped=packet_reads_skipped
+    last_reconcile_phases.prepared_address_index_updates=0
+    last_reconcile_phases.prepared_address_buffer_compare_ms=prepared_compare_usec/1000.0
+    last_reconcile_phases.prepared_address_buffer_upload_ms=prepared_upload_usec/1000.0
+    last_reconcile_phases.prepared_address_buffer_uploads=prepared_uploads
 
 
 func prepare_output_region(output:Dictionary,source:Dictionary,positions:Dictionary,target:Vector2)->void:
@@ -935,13 +960,13 @@ func _reconcile(world: Node) -> bool:
 
 func _project(receiver: Dictionary, force: bool) -> void:
     var entry: Dictionary = receiver.entry
-    if receiver.index>=0: receiver.index=entry.ground_indices[receiver.row_id]
     var mesh: QuadMesh = entry.node.multimesh.mesh if receiver.index>=0 else entry.node.mesh
     var identity: Array = [entry.get("ground_version",0),entry.node.global_transform,mesh.size,mesh.center_offset] if receiver.index>=0 else [entry.node.global_transform,mesh.size,mesh.center_offset]
     if not force and identity==receiver.projection: return
     _project_entry(receiver,entry,plane_basis)
 
 func _project_entry(receiver:Dictionary,entry:Dictionary,basis:Basis)->void:
+    if receiver.index>=0:receiver.index=entry.ground_indices[receiver.row_id]
     var mesh:QuadMesh=entry.node.multimesh.mesh if receiver.index>=0 else entry.node.mesh
     receiver.projection=[entry.get("ground_version",0),entry.node.global_transform,mesh.size,mesh.center_offset] if receiver.index>=0 else [entry.node.global_transform,mesh.size,mesh.center_offset]
     var transform: Transform3D
@@ -1109,6 +1134,7 @@ func sync(world: Node, published: Array = [], styles: Array = [], changes: Dicti
         for receiver in dynamic_receivers: material_sources[receiver.spec.source_id]=true
     var material_sources_updated=0
     var material_sources_unchanged=0
+    var material_sample_versions=0
     for id in material_sources:
         if not entry_specs.has(id) or source_groups[id].is_empty(): continue
         var source: Dictionary=entry_specs[id]
@@ -1130,10 +1156,29 @@ func sync(world: Node, published: Array = [], styles: Array = [], changes: Dicti
             material_sources_unchanged+=1
             continue
         material_sources_updated+=1
+        var shader:Shader=material.shader
+        # One source interval owns all receiving/output consumers. Sight/hover
+        # and wall output changes are already delivered by their explicit
+        # owners; advance that interval without reconstructing empty generic
+        # parameter copies for every material group and the capped output.
+        var sample_only:bool=false
+        if source.get("synced",false) and source.get("sync_material")==material \
+                and source.get("sync_shader")==shader and source.get("sync_binding_revision",-1)==entry.source_binding_revision:
+            var sample_changes:Variant=SourceMaterial.changes_since(entry,source.sync_version)
+            if sample_changes!=null:
+                sample_only=true
+                for name in sample_changes:
+                    if not SAMPLE_PARAMETERS.has(name):sample_only=false;break
         for group in source_groups[id].values():
             group.info=source.info
-            var copied: bool=group.version!=version or group.get("binding_revision",-1)!=entry.source_binding_revision or group.source_shader!=material.shader or group.get("source_material")!=material or group.get("target_material")!=group.material or group.get("target_shader")!=group.material.shader
-            var full_copy:bool=_copy_parameters(group) if copied else false
+            var binding_matches:bool=group.get("binding_revision",-1)==entry.source_binding_revision \
+                and group.source_shader==shader and group.get("source_material")==material \
+                and group.get("target_material")==group.material and group.get("target_shader")==group.material.shader
+            var full_copy:bool=false
+            if sample_only and binding_matches and group.version>=source.sync_version:
+                group.version=version;material_sample_versions+=1
+            elif group.version!=version or not binding_matches:
+                full_copy=_copy_parameters(group,shader,binding_matches)
             if highlighted!=group.highlighted:
                 group.material.set_shader_parameter("highlighted",highlighted); group.highlighted=highlighted
             if basis_changed or full_copy: group.material.set_shader_parameter("world_to_canvas",basis)
@@ -1142,7 +1187,7 @@ func sync(world: Node, published: Array = [], styles: Array = [], changes: Dicti
                 group.material.set_shader_parameter("displayed_time_seconds",seconds); group.seconds=seconds
         var output: ShaderMaterial=entry.get("received_material") if source.info.capped else null
         if output!=null:
-            _copy_output_source(entry)
+            _copy_output_source(entry,shader,int(source.sync_version) if sample_only else -1)
             var style: Dictionary=entry.received_style if entry.has("received_style") else {}
             if style.is_empty() or style.output!=output or style.visibility!=visibility or style.highlighted!=highlighted or style.seconds!=seconds:
                 output.set_shader_parameter("current_visibility",visibility)
@@ -1152,11 +1197,13 @@ func sync(world: Node, published: Array = [], styles: Array = [], changes: Dicti
         source.synced=true
         source.sync_version=version; source.sync_highlighted=highlighted; source.sync_seconds=seconds
         source.sync_visibility=visibility
+        source.sync_material=material;source.sync_shader=shader;source.sync_binding_revision=entry.source_binding_revision
         SourceMaterial.acknowledge(entry)
     material_dirty.clear()
     last_reconcile_phases.material_sources_checked=material_sources_updated+material_sources_unchanged
     last_reconcile_phases.material_sources_updated=material_sources_updated
     last_reconcile_phases.material_sources_unchanged=material_sources_unchanged
+    last_reconcile_phases.material_sample_versions=material_sample_versions
     last_reconcile_phases.material_sync_ms=(Time.get_ticks_usec()-phase)/1000.0
     phase=Time.get_ticks_usec()
     var screen=Rect2(Vector2.ZERO,screen_size)

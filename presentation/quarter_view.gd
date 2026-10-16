@@ -181,9 +181,6 @@ func step(budget_usec: int = 3000) -> void:
                     for i in range(batch_cursor,end):
                         var value = 1.0 if current_visibility.get(entry.batch_rows[i].id,false) else 0.0
                         _ground_visibility(entry,i,value)
-                        var id: String = entry.batch_rows[i].id
-                        if not scenery_consumers.has(id): scenery_consumers[id] = []
-                        scenery_consumers[id].append({"entry":entry,"index":i})
                     entry.scenery_values = values; batch_cursor = end
                     if end < entry.batch_rows.size(): continue
                     _ground_flush_visibility(entry,range(entry.batch_rows.size()))

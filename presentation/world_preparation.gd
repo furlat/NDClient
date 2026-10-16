@@ -11,6 +11,7 @@ const GroundReceiving = preload("res://presentation/ground_receiving.gd")
 const SourceLighting = preload("res://presentation/lighting_2d.gd")
 const Blood=preload("res://presentation/blood.gd")
 const MediaWarmup=preload("res://presentation/media_warmup.gd")
+const GroundOverlay=preload("res://presentation/ground_overlay.gd")
 var host: Node
 var boundary: Dictionary = {}
 var epoch = -1
@@ -40,6 +41,7 @@ var cursor = 0
 var ground_cursor = 0
 var ground_job: Dictionary = {}
 var prepared = false
+var handles_released:bool=false
 var admitted = false
 var stale = false
 var initial = false
@@ -56,6 +58,8 @@ var retired_ground_keys: Array = []
 var complete_order: Array = []
 var complete_nodes: Dictionary = {}
 var order_updates: Array = []
+var scenery_jobs:Array=[]
+var scenery_cursor:int=0
 var atlas_jobs: Array = []
 var atlas_shells: Dictionary = {}
 var atlas_cursor = 0
@@ -130,7 +134,8 @@ func configure(owner: Node, candidate: Dictionary, first: bool = false) -> void:
         "actor_loadouts":ActorConstruction.loadouts(candidate.get("actor_samples",{}),candidate.get("actor_layers",[])),"existing_actors":existing_actors,
         "cache":worker_cache,"retained":host.world_row_cache,
         "ground":ground_before,"quarter":quarter,"basis":camera.basis,"background":host.ground_is_background,
-        "global_rows":global_rows,"visibility":host.scenery_visibility,"visible_cells":host.scenery_visible_cells}
+        "global_rows":global_rows,"visibility":host.scenery_visibility,"visible_cells":host.scenery_visible_cells,
+        "ground_support":host.ground_overlay.capture_support()}
     task = WorkerThreadPool.add_task(_derive.bind(input),false,"Prepare displayed world")
 
 static func _background_for(state: Dictionary, base: Dictionary, changes: Dictionary) -> bool:
@@ -195,6 +200,7 @@ func candidate_visible(id: String) -> bool:
 func _derive(input: Dictionary) -> void:
     var started = Time.get_ticks_usec()
     var patch = WorldRows.prepare_changes(input.state,input.cache,input.retained,input.changes)
+    var ground_support:Dictionary=GroundOverlay.prepare_support(input.state.tiles,input.changes,input.get("ground_support",{}),patch.rebuild_rows)
     var sight = _candidate_visibility(input,patch)
     var background: bool = _background_for(input.state,input.retained,input.changes)
     var full_membership: bool = input.global_rows or patch.rebuild_visual
@@ -398,7 +404,7 @@ func _derive(input: Dictionary) -> void:
     result = {"complete":true,"source_only":source_only,"actors":actors,"actor_members":actor_members,"light_resolution":light_resolution,"geometry":geometry,
         "row_patch":patch,"wanted":wanted,"removed_wanted":removed_wanted,"ground":ground,"packets":packets,"supports":supports,
         "background":background,"full_membership":full_membership,"needs_order":full_membership,
-        "visibility":sight.visibility,"visibility_sparse":sight.sparse,"visible_cells":sight.cells,
+        "visibility":sight.visibility,"visibility_sparse":sight.sparse,"visible_cells":sight.cells,"ground_support":ground_support,
         "visibility_base":input.visibility,"visibility_changes":sight.changes,
         "source_files":Catalog.source_snapshot(input.cache),"actor_bindings":bindings,"blood_rows":blood_rows,
         "required_source_record":MediaWarmup.source_record(future_solid_paths,{},{},future_solid_paths) if not future_solid_paths.is_empty() else {},
@@ -508,6 +514,7 @@ func step(budget_usec: int = 2000) -> void:
                 _collect_replacement(membership_base.groups[id],group)
             if native_groups.has(id):
                 membership.new_groups.append(group)
+                _queue_scenery(group.entries,true)
                 membership.upserts.append_array(group.entries)
                 membership.entries_changed = true
                 membership.walls_changed = membership.walls_changed or group.row.kind in ["wall","cliff"]
@@ -520,12 +527,12 @@ func step(budget_usec: int = 2000) -> void:
                 representative = packet.get("row_changes",{}).get(packet.rows[0].id,packet.rows[0])
             if native_ground.has(key):
                 membership.new_groups.append(group)
+                _queue_scenery(group.entries,true)
                 membership.upserts.append_array(group.entries)
                 membership.entries_changed = true
             elif not representative.is_empty():
                 membership.ground_updates.append({"entry":group.entries[0],"packet":packet})
                 membership.upserts.append(group.entries[0])
-                membership.entries_changed = membership.entries_changed or group.entries[0].placement!=representative
                 if packet.get("sparse",false):
                     membership.ground_row_updates.append({"group":group,"rows":packet.row_changes})
                 else: group = {"rows":result.ground[key],"entries":group.entries}
@@ -544,15 +551,12 @@ func step(budget_usec: int = 2000) -> void:
         elif phase=="retire_ground":
             if ground_cursor==retired_ground_keys.size():
                 membership.complete = true
-                if not result.needs_order: _begin_atlas_preparation()
-                elif not membership.full:
-                    phase = "order_collect"; cursor = 0
-                else:
-                    phase = "sort_wait"
-                    task = WorkerThreadPool.add_task(_sort_order,false,"Sort prepared world")
+                phase="scenery";scenery_cursor=0
                 continue
             var key: String = retired_ground_keys[ground_cursor]; ground_cursor += 1
             if not result.ground.has(key): _collect_retired(membership_base.ground[key])
+        elif phase=="scenery":
+            _prepare_scenery_step()
         elif phase=="order_collect":
             if cursor==membership.entries.size():
                 phase = "sort_wait"
@@ -654,6 +658,13 @@ func _advance_completed_phase()->bool:
         "order_publish":
             if cursor!=sorted_indices.size():return false
             phase="order_release"
+        "scenery":
+            if scenery_cursor!=scenery_jobs.size():return false
+            if not result.needs_order:_begin_atlas_preparation()
+            elif not membership.full:phase="order_collect";cursor=0
+            else:
+                phase="sort_wait"
+                task=WorkerThreadPool.add_task(_sort_order,false,"Sort prepared world")
         "cookie_images":
             if cookie_image_cursor!=cookie_jobs.size():return false
             phase="native_receivers"
@@ -993,6 +1004,7 @@ func _begin_membership() -> void:
         "removed":{},"upserts":[],"entries_changed":false,"walls_changed":false,"group_updates":{},
         "ground_group_updates":{},"ground_row_updates":[],"entry_replacements":{},"fixture_replacements":{},
         "slot_updates":[],"order_replacements":[],"representatives":{}}
+    membership.scenery={"add":{},"remove":{},"new_consumers":{},"entry_add":[],"entry_remove":[]}
     retired_ids = membership_base.groups.keys() if full else native_groups.keys()
     retired_ground_keys = membership_base.ground.keys() if full else []
     result.needs_order = result.needs_order or full
@@ -1021,6 +1033,7 @@ func _collect_replacement(old: Dictionary, group: Dictionary, representative: Di
         var key = Order.key(row,entry.role,entry.layer,quarter,result.background)
         if not previous.has("order_slot") or previous.get("order_key",[])!=key or previous.id!=id:
             result.needs_order = true
+            membership.entries_changed=true
         membership.order_replacements.append({"old":previous,"entry":entry,"placement":row,"id":id,"key":key})
         if not representative.is_empty(): membership.representatives[entry.node.get_instance_id()] = representative
 
@@ -1050,7 +1063,32 @@ func publish_membership() -> void:
 
 func _collect_retired(group: Dictionary) -> void:
     membership.retired_groups.append(group); membership.entries_changed = true
+    _queue_scenery(group.entries,false)
     for entry in group.entries: membership.removed[entry.node.get_instance_id()] = true
+
+func _queue_scenery(group:Array,add:bool)->void:
+    for entry in group:
+        scenery_jobs.append({"entry":entry,"add":add})
+
+func _prepare_scenery_step()->void:
+    var job:Dictionary=scenery_jobs[scenery_cursor]
+    scenery_cursor+=1
+    var entry:Dictionary=job.entry
+    var delta:Dictionary=membership.scenery
+    if job.add:delta.entry_add.append(entry)
+    else:delta.entry_remove.append(entry)
+    if entry.material.shader not in [ENVIRONMENT_SHADER,WATER_SHADER] or entry.has("batch_rows"):return
+    _prepare_scenery_target(str(entry.placement.id),entry,-1,job.add)
+
+func _prepare_scenery_target(id:String,entry:Dictionary,index:int,add:bool)->void:
+    var delta:Dictionary=membership.scenery
+    var values:Dictionary=delta.add if add else delta.remove
+    if not values.has(id):values[id]=[] if add else {}
+    if add:values[id].append({"entry":entry,"index":index})
+    else:values[id][entry.node.get_instance_id()]=true
+    # Prepared floor packets already contain this boundary's exact visibility.
+    # Reindexing retained rows does not make each row a changed style operand.
+    if add and index<0:delta.new_consumers[id]=true
 
 func _collect_order(group: Array, representative: Dictionary = {}) -> void:
     for entry in group:
@@ -1104,26 +1142,25 @@ func join() -> void:
     if task>=0: WorkerThreadPool.wait_for_task_completion(task); task = -1
 
 func release_handles() -> Array:
+    if handles_released:return []
     join()
+    handles_released=true
     var held = entries.duplicate()
     if blood_renderer!=null:held.append_array(blood_renderer.release_world(blood_preparation))
-    actor_bindings=[];blood_preparation={"handles":{},"retired":[]}
-    required_source_record={}
-    optical_owner=null
+    blood_preparation={"handles":{},"retired":[]}
     for record in light_preparation.get("nodes",[]):held.append({"node":record.node,"retire_external":true})
     light_preparation={}
     for prepared in native_actors.values():
         held.append_array(prepared.get("new_entries",prepared.entries))
-    native_actors={};actor_ids=[];actor_catalog_owner={};actor_bases={}
-    cookie_jobs=[];cookie_seen={}
     for prepared in atlas_shells.values():
         for receiver in prepared.receivers.values():
             receiver.retire_external=true
             held.append(receiver)
     if not atlas_prefix.is_empty() or not atlas_shells.is_empty():
         AtlasDelta.retire_candidate(atlas_retirement,atlas_prefix,atlas_shells,false)
-    entries = []; static_entries = []; actor_entries = []; native_groups = {}; native_ground = {}; ground_job = {}
-    order_records = []; order_keys = []; order_ids = []; sorted_indices = []
-    membership_base = {}; membership = {}; complete_order = []; complete_nodes = {}; order_updates = []
-    retired_ids = []; retired_ground_keys = []; atlas_jobs=[]; atlas_shells={}; atlas_prefix={};native_receiver_boundary={}
+    # Transfer native cleanup handles now. Passive completed projection,
+    # membership and support values stay on this already-retiring owner until
+    # its budgeted free; eagerly clearing them here made publication pay their
+    # large Dictionary/Array destruction cost.
+    entries=[];atlas_shells={};atlas_prefix={};native_receiver_boundary={}
     return held

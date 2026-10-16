@@ -34,6 +34,13 @@ var support_owner: Dictionary = {}
 var support_scope: Variant = null
 var support_revision = -1
 var support_rows: Dictionary = {}
+var support_slots:Dictionary={}
+var background_slots:Dictionary={}
+var background_keys:Array=[]
+var pending_support_change:bool=false
+var pending_grid_changes:bool=false
+var pending_grid_removed:Array=[]
+var pending_grid_added:Array=[]
 var support_checked_tiles = 0
 var support_check_us = 0
 var mark_update_us = 0
@@ -187,21 +194,101 @@ static func _row(key: String, tile: Dictionary) -> Dictionary:
     return {"id":"ground-overlay:"+key,"kind":"terrain","position":tile.position,
         "base_height_steps":tile.elevation_steps,"layer":0,"boundaries":[]}
 
-func _update_support(key: String, tile: Dictionary, row: Array) -> void:
+func capture_support()->Dictionary:
+    # Only passive immutable row values cross the existing world worker seam.
+    return {"rows":support_rows,"positions":support_positions,"geometry":support_geometry,"raised":raised_supports,
+        "background":background_positions,"slots":support_slots,"background_slots":background_slots,"background_keys":background_keys}
+
+static func prepare_support(tiles:Dictionary,changes:Dictionary,previous:Dictionary,rebuild_rows:bool=false)->Dictionary:
+    var rows:Dictionary=previous.get("rows",{})
+    var full:bool=changes.get("full",false) or rows.is_empty()
+    var packet:Dictionary={"full":full,"changes":{},"changed":full and (not rows.is_empty() or not tiles.is_empty())}
+    var removed:Array=[];var added:Array=[]
+    for key in (changes.get("tiles",{}) if not full else []):
+        var tile:Dictionary=tiles.get(key,{})
+        var row:Array=[] if tile.is_empty() else [tile.position[0],tile.position[1],tile.elevation_steps]
+        var old:Array=rows.get(key,[])
+        if row==old:continue
+        var position:Vector3=Vector3.ZERO if row.is_empty() else Placement.contact(_row(key,tile))
+        packet.changes[key]={"row":row,"position":position}
+        if not old.is_empty() and old[2]==0:removed.append(previous.positions[key])
+        if not row.is_empty() and row[2]==0:added.append(position)
+        packet.changed=true
+    packet.grid_removed=removed;packet.grid_added=added
+    # A new canonical row-array owner is already an explicit membership
+    # preparation. Finish its support directories here too, instead of doing
+    # hundreds of dictionary/array mutations at the visible reveal. Ordinary
+    # same-membership edits keep their exact sparse operations.
+    if full or (rebuild_rows and packet.changed):
+        packet.full=true;packet.grid_delta=not full
+        # The existing retiring world candidate retains replaced directories;
+        # adopting new references must not destroy the old maps on the cue.
+        packet.retired=previous
+        packet.rows={};packet.geometry=[];packet.positions={};packet.raised={};packet.background=[]
+        packet.slots={};packet.background_slots={};packet.background_keys=[]
+        for key in tiles:
+            var tile:Dictionary=tiles[key]
+            var row:Array=[tile.position[0],tile.position[1],tile.elevation_steps]
+            var position:Vector3
+            if row==rows.get(key,[]):position=previous.positions[key];row=rows[key]
+            else:position=Placement.contact(_row(key,tile))
+            packet.slots[key]=packet.geometry.size();packet.geometry.append([key]+row)
+            packet.rows[key]=row;packet.positions[key]=position
+            if row[2]==0:
+                packet.background_slots[key]=packet.background.size();packet.background.append(position);packet.background_keys.append(key)
+            else:packet.raised[key]=true
+    return packet
+
+func publish_support(packet:Dictionary,world_revision:Variant,owner:Dictionary,scope:Variant,owner_revision:int)->void:
+    # The candidate already resolved contacts and exact changed support IDs.
+    # Publication installs its values; drawing never re-derives this boundary.
+    if packet.full:
+        support_rows=packet.rows;support_geometry=packet.geometry;support_positions=packet.positions
+        raised_supports=packet.raised;background_positions=packet.background
+        support_slots=packet.slots;background_slots=packet.background_slots;background_keys=packet.background_keys
+        pending_grid_changes=packet.get("grid_delta",false)
+        pending_grid_removed=packet.get("grid_removed",[]);pending_grid_added=packet.get("grid_added",[])
+    else:
+        for key in packet.changes:
+            var record:Dictionary=packet.changes[key]
+            var old:Array=support_rows.get(key,[])
+            if not old.is_empty() and old[2]==0:pending_grid_removed.append(support_positions[key])
+            if not record.row.is_empty() and record.row[2]==0:pending_grid_added.append(record.position)
+            _update_support(key,{},record.row,record.position)
+        pending_grid_changes=pending_grid_changes or not packet.changes.is_empty()
+    if packet.changed:support_geometry_revision+=1
+    pending_support_change=pending_support_change or packet.changed
+    revision=world_revision;support_owner=owner;support_scope=scope;support_revision=owner_revision
+
+func _update_support(key: String, tile: Dictionary, row: Array, prepared_position:Variant=null) -> void:
     var previous: Array = support_rows.get(key,[])
     if previous == row: return
     if not previous.is_empty():
-        support_geometry.erase([key]+previous)
-        if previous[2] == 0: background_positions.erase(support_positions[key])
+        var slot:int=support_slots[key]
+        var tail:Array=support_geometry.pop_back()
+        support_slots.erase(key)
+        if slot<support_geometry.size():support_geometry[slot]=tail;support_slots[tail[0]]=slot
+        if previous[2] == 0:
+            slot=background_slots[key]
+            var last:Vector3=background_positions.pop_back()
+            background_slots.erase(key)
+            if slot<background_positions.size():
+                background_positions[slot]=last
+                # A moved tail has a known support key; no map-wide reverse join.
+                var last_key:String=background_keys.pop_back()
+                background_keys[slot]=last_key;background_slots[last_key]=slot
+            else:background_keys.pop_back()
     if row.is_empty():
         support_rows.erase(key); support_positions.erase(key); raised_supports.erase(key)
         return
     support_rows[key] = row
+    support_slots[key]=support_geometry.size()
     support_geometry.append([key]+row)
-    var position = Placement.contact(_row(key,tile))
+    var position:Vector3=Placement.contact(_row(key,tile)) if prepared_position==null else prepared_position
     support_contact_updates += 1
     support_positions[key] = position
-    if tile.elevation_steps == 0:
+    if row[2] == 0:
+        background_slots[key]=background_positions.size();background_keys.append(key)
         background_positions.append(position)
         raised_supports.erase(key)
     else: raised_supports[key] = true
@@ -219,7 +306,8 @@ func sync(world: Node, tiles: Dictionary, world_revision: Variant, grid_visible:
         mesh = PlaneMesh.new()
         mesh.size = Vector2.ONE
         route_mesh = QuadMesh.new()
-    var geometry_changed = false
+    var geometry_changed = pending_support_change
+    pending_support_change=false
     # The published row owner survives Timeline's temporary staged tile views.
     # Standalone snapshot callers continue to use their actual tile ownership.
     var source_owner: Dictionary = proof.get("owner",tiles)
@@ -248,17 +336,20 @@ func sync(world: Node, tiles: Dictionary, world_revision: Variant, grid_visible:
             geometry_changed = geometry != support_geometry
         if geometry_changed and not sparse:
             support_geometry = []
-            support_rows = {}
+            support_rows = {};support_slots={};background_slots={};background_keys=[]
             support_positions = {}; raised_supports = {}; background_positions = []
             for key in tiles:
                 var tile: Dictionary = tiles[key]
                 var row = [tile.position[0],tile.position[1],tile.elevation_steps]
                 support_rows[key] = row
+                support_slots[key]=support_geometry.size()
                 support_geometry.append([key]+row)
                 var position = Placement.contact(_row(key,tile))
                 support_contact_updates += 1
                 support_positions[key] = position
-                if tile.elevation_steps == 0: background_positions.append(position)
+                if tile.elevation_steps == 0:
+                    background_slots[key]=background_positions.size();background_keys.append(key)
+                    background_positions.append(position)
                 else: raised_supports[key] = true
         if geometry_changed: support_geometry_revision += 1
         revision = world_revision
@@ -276,7 +367,10 @@ func sync(world: Node, tiles: Dictionary, world_revision: Variant, grid_visible:
         changed_marks.clear(); stamp = next_stamp
         mark_update_us = Time.get_ticks_usec()-mark_began
         return ordered
-    var order_changed = geometry_changed or stamp.is_empty() or stamp.slice(0,3)!=next_stamp.slice(0,3)
+    # Editing instances in the retained background grid changes its contents,
+    # not its one painter entry. Raised cells/routes below report actual order
+    # membership or key changes explicitly.
+    var order_changed = stamp.is_empty() or stamp.slice(0,3)!=next_stamp.slice(0,3)
     var wanted = {}
     var ground: Array = background_positions if grid_visible and background else []
     var marked: Dictionary = {}
@@ -344,14 +438,20 @@ func sync(world: Node, tiles: Dictionary, world_revision: Variant, grid_visible:
             order_changed = true
         var geometry_stamp = [support_geometry_revision,background]
         if grid_geometry_stamp != geometry_stamp:
-            _batch_positions(batch,ground)
+            if pending_grid_changes and not grid_geometry_stamp.is_empty() and stamp.slice(0,3)==next_stamp.slice(0,3):
+                _batch_changes(batch,pending_grid_removed,pending_grid_added)
+            else:_batch_positions(batch,ground)
             grid_geometry_stamp = geometry_stamp
+        if not batch.node.visible:order_changed=true
         batch.node.visible = true
-    elif not batch.is_empty(): batch.node.visible = false
+    elif not batch.is_empty():
+        if batch.node.visible:order_changed=true
+        batch.node.visible = false
     order_changed = _routes(tiles,background) or order_changed
     if order_changed:
         _order(quarter,background)
     changed = order_changed
+    pending_grid_changes=false;pending_grid_removed=[];pending_grid_added=[]
     changed_marks.clear()
     stamp = next_stamp
     mark_update_us = Time.get_ticks_usec()-mark_began
@@ -418,6 +518,8 @@ func close() -> void:
     changed_marks.clear()
     support_geometry.clear(); grid_geometry_stamp.clear(); stamp.clear()
     support_positions.clear(); raised_supports.clear(); background_positions.clear()
-    support_rows.clear(); support_owner = {}; support_scope = null; support_revision = -1
+    support_rows.clear();support_slots.clear();background_slots.clear();background_keys.clear()
+    pending_support_change=false;pending_grid_changes=false;pending_grid_removed=[];pending_grid_added=[]
+    support_owner = {}; support_scope = null; support_revision = -1
     support_geometry_revision = 0
     revision = null
