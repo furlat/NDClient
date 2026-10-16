@@ -97,7 +97,7 @@ func growth_case(source:Image,label:String,cap:bool,normals:bool)->void:
     var old_positions=positions(a.atlas);var old_buffer:PackedFloat32Array=a.floor.node.multimesh.buffer
     var old_packets:Array=[a.floor.ground_packets["0"].data.duplicate(),a.floor.ground_packets["1"].data.duplicate()]
     var old_nodes={}
-    for receiver in a.atlas.receivers:old_nodes[receiver.id]=receiver.node
+    for receiver in a.atlas.receivers:old_nodes[receiver.id]=Atlas.receiver_handle(receiver)
     var token:Array=a.atlas.floor_address_token(a.floor)
     var add_a=[];var add_b=[]
     for index in range(14,16):
@@ -113,7 +113,7 @@ func growth_case(source:Image,label:String,cap:bool,normals:bool)->void:
     var next_positions=positions(a.atlas)
     for id in old_positions:retained=retained and old_positions[id]==next_positions[id]
     for receiver in a.atlas.receivers:
-        if old_nodes.has(receiver.id):retained=retained and receiver.node==old_nodes[receiver.id]
+        if old_nodes.has(receiver.id):retained=retained and Atlas.receiver_handle(receiver)==old_nodes[receiver.id]
     check(retained,label+" old pixel reservations and native receiver nodes stay retained")
     check(old_buffer==a.floor.node.multimesh.buffer and old_packets==[a.floor.ground_packets["0"].data,a.floor.ground_packets["1"].data],label+" retained integer floor addresses stay unchanged in native and source packets")
     check(a.atlas.floor_address_token(a.floor)!=token,label+" growth invalidates earlier prepared-address token")

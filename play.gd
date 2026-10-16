@@ -51,6 +51,7 @@ const Tracks = preload("res://presentation/tracks.gd")
 var component_renderer = ComponentRenderer.new()
 var displayed_components: Array = []
 var pending_world: Variant
+var static_forecast:Dictionary={}
 var prepared_actor_owner: Variant
 var world_prepare_epoch = -1
 var world_prepare_worker_phases:Dictionary={}
@@ -453,6 +454,7 @@ func _preparation_budget()->Dictionary:
     if preparation_admission.frame!=Engine.get_process_frames():
         preparation_admission.frame=Engine.get_process_frames()
         preparation_admission.used_usec=0;preparation_admission.phase_usec={}
+        preparation_admission.background_source_handoffs=0
         preparation_admission.optional_order=[];preparation_admission.minimum_cleanup=0
         preparation_admission.required_legacy_constructors=0
     return preparation_admission
@@ -503,10 +505,13 @@ func _prepare_optional_work()->void:
         _prepare_media()
         _warm_media(true,budget,timeline.media_target_ms)
     var required_world:bool=timeline.waiting_for_world or _world_preparation_due(0.0)
-    if required_world:_step_world_preparation()
     # Visible pending controls share the host allowance ahead of speculative
     # uploads. Otherwise a steady optional backlog can starve the bar forever.
     if hud!=null and hud.bar_pending():hud.prepare_bar()
+    # The next received world cut is a real future consumer, not unrelated
+    # speculative work. Current required effects and uploads ran above; spend
+    # their remainder on this cut before optional later effects/retirement.
+    _step_world_preparation()
     # Rotate only the first existing owner. The queues and readiness contracts
     # stay where they were; empty owners leave their allowance to the next one.
     var first:int=preparation_turn;preparation_turn=(preparation_turn+1)%4
@@ -515,7 +520,7 @@ func _prepare_optional_work()->void:
         var owner:int=(first+offset)%4
         budget.optional_order.append(owner)
         match owner:
-            0:_step_world_preparation()
+            0:continue # The existing world owner already used its remainder.
             1:
                 # A due world owns this allowance ahead of future effect
                 # constructors, including while its passive worker is running.
@@ -624,7 +629,7 @@ func _process(delta: float) -> void:
     if session != null: session.set_displayed_sequence(timeline.sequence)
     FrameProfile.end_phase(profile,"session_timeline",phase)
     var world_available:bool=not timeline.state.is_empty() and world_prepare_epoch==timeline.initialization_revision and (world_revision>=0 or (pending_world!=null and pending_world.epoch==timeline.initialization_revision and pending_world.initial and pending_world.prepared))
-    var can_publish_world:bool=world_available and _environment_sources_ready() and _world_can_publish()
+    var can_publish_world:bool=world_available and _playback_environment_ready() and _world_can_publish()
     # A rejected initial candidate has no displayed actor owner yet. Keep
     # preparation and UI running, but do not sample its private world.
     if not global_draw_hold and world_available and (world_revision>=0 or can_publish_world):
@@ -747,14 +752,26 @@ func _process(delta: float) -> void:
     presentation_updated.emit()
 
 func _detailed_frame_context(active_motion: bool) -> Dictionary:
+    # The atlas prefix is worker-private during planning. Report the main-owned
+    # stage then; inspect its result containers only after the worker joins.
+    var atlas_profile:Dictionary=pending_world.atlas_prefix if pending_world!=null and pending_world.atlas_task<0 else {}
     return {"media_gate":media_gate,"active_motion":active_motion,"motion_held":timeline.waiting_for_media or timeline.waiting_for_world or timeline.paused,"light_cap_enabled":light_cap_enabled,"scene":"live_player","zoom":camera.size,"quarter":quarter,
+        "static_forecast":({"task_pending":static_forecast.task>=0,"target_ms":static_forecast.boundary.display_ms,
+            "worker_ms":static_forecast.output.get("worker_ms",0.0) if static_forecast.task<0 else 0.0} if not static_forecast.is_empty() else {}),
         "world_preparation":({"atlas_jobs":pending_world.atlas_jobs.size(),"upserts":pending_world.membership.get("upserts",[]).size(),"removals":pending_world.membership.get("removed",{}).size(),
-            "capture_stage":pending_world.atlas_prefix.get("stage",""),"capture_cursor":pending_world.atlas_prefix.get("cursor",0),"capture_total":pending_world.atlas_prefix.get("capture_ids",[]).size(),
-            "bind_cursor":pending_world.atlas_prefix.get("bind_cursor",0),"bind_total":pending_world.atlas_prefix.get("bind_ids",[]).size(),
-            "output_cursor":pending_world.atlas_prefix.get("output_cursor",0),"output_total":pending_world.atlas_prefix.get("output_ids",[]).size(),
-            "planning_lane":pending_world.atlas_prefix.get("planning_lane",""),
+            "atlas_stage":pending_world.atlas_stage,"atlas_task_pending":pending_world.atlas_task>=0,
+            "environment_batches":pending_world.environment_output.get("batches",0),"environment_submitted":pending_world.environment_capture_cursor,
+            "environment_ready_rows":pending_world.environment_output.get("rows",{}).size(),"environment_task_pending":pending_world.environment_task>=0,
+            "actor_worker_profile":pending_world.result.get("actor_worker_profile",{}),
+            "capture_stage":atlas_profile.get("stage",""),"capture_cursor":atlas_profile.get("cursor",0),"capture_total":atlas_profile.get("capture_ids",[]).size(),
+            "bind_cursor":atlas_profile.get("bind_cursor",0),"bind_total":atlas_profile.get("bind_ids",[]).size(),
+            "source_bind_cursor":atlas_profile.get("source_bind_cursor",0),"source_bind_total":atlas_profile.get("source_bind_ids",[]).size(),
+            "output_cursor":atlas_profile.get("output_cursor",0),"output_total":atlas_profile.get("output_ids",[]).size(),
+            "planning_lane":atlas_profile.get("planning_lane",""),
             "blocked_actor":pending_world.blocked_actor.duplicate(),"blocked_source":pending_world.blocked_source.duplicate(),
             "worker_phases":pending_world.result.get("worker_phases",{}).duplicate(),
+            "object_work":pending_world.object_work_counts.duplicate(),
+            "environment_paths":pending_world.result.get("environment_paths",{}).keys(),
             "native_phase_usec":pending_world.phase_usec.duplicate(),
             "actor_binding_cursor":pending_world.binding_cursor,"actor_binding_total":pending_world.actor_bindings.size(),
             "actor_binding_path":pending_world.actor_bindings[pending_world.binding_cursor].value.get("path","") if pending_world.binding_cursor<pending_world.actor_bindings.size() else "",
@@ -778,7 +795,9 @@ func _detailed_frame_context(active_motion: bool) -> Dictionary:
 
 func _prepare_initial_world() -> void:
     if timeline.state.is_empty(): return
+    _poll_static_forecast()
     if world_prepare_epoch!=timeline.initialization_revision:
+        if not static_forecast.is_empty() and static_forecast.task>=0:return
         if pending_world!=null:
             if not pending_world.worker_finished(): return
             _discard_world_preparation()
@@ -794,11 +813,14 @@ func _prepare_initial_world() -> void:
     pending_world.configure(self,candidate,true)
 
 func _prepare_future_world() -> void:
+    _poll_static_forecast()
     if world_revision<0 or world_prepare_epoch!=timeline.initialization_revision: return
     if pending_world!=null and (pending_world.initial or pending_world.admitted): return
     var candidate: Dictionary = timeline.preview_world()
     if pending_world!=null:
-        if not candidate.is_empty() and pending_world.epoch==timeline.initialization_revision and pending_world.quarter==quarter and pending_world.boundary.preparation_key==candidate.preparation_key: return
+        if not candidate.is_empty() and pending_world.epoch==timeline.initialization_revision and pending_world.quarter==quarter and pending_world.boundary.preparation_key==candidate.preparation_key:
+            _forecast_static_world()
+            return
         if not pending_world.worker_finished(): return
         _discard_world_preparation()
     if candidate.is_empty(): return
@@ -806,8 +828,45 @@ func _prepare_future_world() -> void:
     # Exact media still gates native construction and visible publication.
     if not media_group_plans.has(candidate.source_group_id) and not is_same(
             media_received_owners.get(candidate.source_group_id),_media_group_owner(candidate.source_group_id)):return
+    if not static_forecast.is_empty() and static_forecast.task>=0 and static_forecast.boundary.preparation_key==candidate.preparation_key:return
     pending_world = WorldPreparation.new(); add_child(pending_world)
-    pending_world.configure(self,candidate)
+    pending_world.configure(self,candidate,false,_take_static_forecast(candidate))
+
+func _static_forecast_base_matches()->bool:
+    if static_forecast.is_empty():return false
+    var base:Dictionary=static_forecast.input.base
+    return base.epoch==timeline.initialization_revision and base.world_revision==world_revision and base.quarter==quarter \
+        and base.source_depth==source_depth and base.source_normals==source_normals \
+        and base.world_generation==world_generation and is_same(base.row_owner,world_row_cache) \
+        and is_same(base.groups,world_groups) and is_same(base.ground,ground_groups) and is_same(base.entries,static_entries) \
+        and is_same(base.support_owner,ground_overlay.support_owner)
+
+func _poll_static_forecast()->void:
+    if static_forecast.is_empty():return
+    if static_forecast.task>=0 and WorkerThreadPool.is_task_completed(static_forecast.task):
+        WorkerThreadPool.wait_for_task_completion(static_forecast.task);static_forecast.task=-1
+    if static_forecast.task<0 and not _static_forecast_base_matches():static_forecast={}
+
+func _forecast_static_world()->void:
+    if external_playback or not static_forecast.is_empty() or pending_world==null \
+        or not pending_world.worker_finished() or not pending_world.result.get("source_only",false):return
+    var candidate:Dictionary=timeline.preview_world(false)
+    if candidate.is_empty() or candidate.preparation_key==pending_world.boundary.preparation_key:return
+    if not media_group_plans.has(candidate.source_group_id) and not is_same(
+            media_received_owners.get(candidate.source_group_id),_media_group_owner(candidate.source_group_id)):return
+    var input:Dictionary=WorldPreparation.capture_static(self,candidate)
+    var output:Dictionary={}
+    var task:int=WorkerThreadPool.add_task(WorldPreparation.derive_static.bind(input,output),false,"Prepare received static world")
+    static_forecast={"task":task,"input":input,"output":output,"boundary":candidate}
+
+func _take_static_forecast(candidate:Dictionary)->Dictionary:
+    _poll_static_forecast()
+    if static_forecast.is_empty() or static_forecast.task>=0:return {}
+    var output:Dictionary={}
+    if _static_forecast_base_matches() and static_forecast.boundary.preparation_key==candidate.preparation_key:
+        output=static_forecast.output
+    static_forecast={}
+    return output
 
 func _prepared_world_sources_ready(candidate: Dictionary) -> bool:
     if candidate.get("replay",false):
@@ -816,8 +875,13 @@ func _prepared_world_sources_ready(candidate: Dictionary) -> bool:
             if exact.is_empty() or not exact.errors.is_empty() or not MediaWarmup.ready(media_warmup,exact.environment):return false
         return true
     var plan: Dictionary = media_group_plans.get(candidate.source_group_id,{})
-    return not plan.is_empty() and plan.errors.is_empty() and MediaWarmup.ready(media_warmup,
-        EnvironmentMedia.required_at(plan.get("environment_timeline",{}),float(candidate.get("source_local_ms",INF)),plan.environment))
+    # Retained environment resources keep their displayed leases. The matching
+    # prepared owner proves every new/changed current-view constructor, including
+    # CPU images and fixture facts; other camera views are a later consumer.
+    return not plan.is_empty() and plan.errors.is_empty() and pending_world!=null and pending_world.prepared \
+        and pending_world.epoch==timeline.initialization_revision and pending_world.quarter==quarter \
+        and pending_world.boundary.preparation_key==candidate.preparation_key \
+        and MediaWarmup.ready(media_warmup,pending_world.result.get("environment_paths",{}))
 
 func _world_preparation_due(advance_ms:float)->bool:
     return pending_world!=null and (pending_world.initial or float(pending_world.boundary.display_ms)<=timeline.display_ms+maxf(0,advance_ms))
@@ -835,11 +899,15 @@ func _step_world_preparation(poll_only:bool=false) -> void:
     var budget:Dictionary=_preparation_budget()
     var started:int=Time.get_ticks_usec();var before:int=budget.used_usec
     pending_world.step(0 if poll_only else maxi(0,budget.limit_usec-budget.used_usec))
+    _forecast_static_world()
     _charge_preparation("world",started,before)
     if not pending_world.media_issue.is_empty(): media_issue = pending_world.media_issue
 
 func _world_ready(candidate: Dictionary) -> bool:
     if world_revision<0: return false
+    _poll_static_forecast()
+    if pending_world==null and not static_forecast.is_empty() and static_forecast.task>=0 \
+        and static_forecast.boundary.preparation_key==candidate.preparation_key:return false
     # Required media preparation may have completed our worker since the early
     # poll. Reuse the remaining shared allowance before holding this boundary.
     if pending_world!=null and not pending_world.admitted and pending_world.boundary.preparation_key==candidate.preparation_key:
@@ -851,6 +919,9 @@ func _world_ready(candidate: Dictionary) -> bool:
             _discard_world_preparation()
         elif pending_world.prepared:
             if not _prepared_world_sources_ready(candidate):return false
+            # Static preparation borrows the published row indexes. A different
+            # publication cannot mutate them until this one finite task ends.
+            if not pending_world.source_only() and not static_forecast.is_empty() and static_forecast.task>=0:return false
             # Validate the borrowed base before Timeline changes state, clocks,
             # trace or audio. A stale candidate owns nothing displayed.
             if pending_world.can_publish_membership(int(candidate.world_revision)):
@@ -862,9 +933,10 @@ func _world_ready(candidate: Dictionary) -> bool:
             _discard_world_preparation()
         else: return false
     pending_world = WorldPreparation.new(); add_child(pending_world)
-    pending_world.configure(self,candidate)
+    pending_world.configure(self,candidate,false,_take_static_forecast(candidate))
     _step_world_preparation()
     if pending_world.prepared and _prepared_world_sources_ready(candidate) and pending_world.can_publish_membership(int(candidate.world_revision)):
+        if not pending_world.source_only() and not static_forecast.is_empty() and static_forecast.task>=0:return false
         if not external_clock:
             pending_world.admitted=true
             if not pending_world.atlas_prefix.is_empty():pending_world.atlas_prefix.admitted=true
@@ -1230,9 +1302,12 @@ func _dispose_views(budget:Dictionary={},minimum:bool=false) -> void:
         var view: Dictionary = retiring_views[0]
         var cleanup:Dictionary=view.get("atlas_cleanup",{})
         if not cleanup.is_empty():
+            # The final static child also releases its private batch parent.
+            # Reserve both native frees before this indivisible cleanup unit.
+            if released+2>16:break
             var progress:Dictionary=NativeLightAtlas.Delta.retire_candidate_step(cleanup)
             if progress.get("blocked",false):break
-            if progress.get("node",false):released+=1
+            if progress.get("node",false):released+=int(progress.get("native_units",1))
             metadata_steps+=1
             if progress.done:view.atlas_cleanup={}
             else:continue
@@ -1485,9 +1560,7 @@ func _publish_scenery_writes(writes:Array)->void:
     for batch in batches.values():_ground_flush_visibility(batch.entry,batch.indices)
 
 func _light_entry(entry: Dictionary) -> void:
-    SourceMaterial.set_parameter(entry,"authored_base_light",0.0)
-    if entry.placement.kind in ["wall","door"] and entry.role != "shadow":
-        SourceMaterial.set_parameter(entry,"two_sided_receiver",true)
+    SourceMaterial.apply(entry,SourceMaterial.environment_policy(entry.placement.kind,entry.role))
 
 func _sync_actors() -> void:
     _sync_actor_membership()
@@ -2000,6 +2073,11 @@ func _publish_media_interest(at_ms:float)->void:
             var future:Dictionary=media_group_plans.get(boundary.source_group_id,{})
             if not future.is_empty():record_sets.append(MediaWarmup.records_at(future.get("source_cuts",{}).get(character_light_profile,{}),boundary.source_local_ms,
                 future.get("source_records",{}).get(character_light_profile,[])))
+    if _static_forecast_base_matches():
+        var boundary:Dictionary=static_forecast.boundary
+        var future:Dictionary=media_group_plans.get(boundary.source_group_id,{})
+        if not future.is_empty():record_sets.append(MediaWarmup.records_at(future.get("source_cuts",{}).get(character_light_profile,{}),boundary.source_local_ms,
+            future.get("source_records",{}).get(character_light_profile,[])))
     if not displayed_source_records.is_empty():record_sets.append(displayed_source_records)
     # Current, displayed and pending owners can borrow the same immutable cut.
     # Keep all their leases above, but flatten each exact source set only once.
@@ -2012,6 +2090,12 @@ func _publish_media_interest(at_ms:float)->void:
         if not family.is_empty() and not families.any(func(value):return is_same(value,family)):families.append(family)
     var extras:Array=[]
     for record in [media_condition_record,native_media_record,media_profile_record.get("value",{})]:
+        if not record.is_empty():extras.append(record)
+    for prepared_owner in [pending_world,prepared_actor_owner]:
+        if prepared_owner!=null and not prepared_owner.stale and prepared_owner.epoch==timeline.initialization_revision \
+                and not prepared_owner.environment_source_record.is_empty():extras.append(prepared_owner.environment_source_record)
+    if _static_forecast_base_matches() and static_forecast.task<0 and static_forecast.output.get("complete",false):
+        var record:Dictionary=static_forecast.output.static_result.environment_source_record
         if not record.is_empty():extras.append(record)
     if component_renderer.native_spells.actor_bindings_needed():
         for prepared_owner in [pending_world,prepared_actor_owner]:
@@ -2142,7 +2226,7 @@ func _media_ready(group: Dictionary) -> bool:
     for issue in native.errors:
         if issue not in presentation_errors:presentation_errors.append(issue)
     media_gate={"native":native.ready,"components":component_renderer.readiness.duplicate(),
-        "sources":_character_sources_ready(group,timeline.media_target_ms),"environment":_environment_sources_ready(group,timeline.media_target_ms),
+        "sources":_character_sources_ready(group,timeline.media_target_ms),"environment":_playback_environment_ready(group,timeline.media_target_ms),
         "metadata":media_metadata_ready,"boot":MediaWarmup.boot_ready(media_warmup),
         "admitted_world_pending":pending_world!=null and pending_world.admitted}
     media_initial_ready = _native_startup_ready(timeline.display_ms) and media_gate.metadata and not timeline.state.is_empty() and media_issue.is_empty() and media_plan.errors.is_empty() and media_gate.sources and media_gate.environment and media_gate.boot
@@ -2192,16 +2276,49 @@ func _environment_source_paths(group:Dictionary={},at_ms:float=-1.0)->Dictionary
 func _environment_sources_ready(group:Dictionary={},at_ms:float=-1.0) -> bool:
     return media_metadata_ready and media_plan.errors.is_empty() and MediaWarmup.ready(media_warmup,_environment_source_paths(group,at_ms))
 
+func _playback_environment_ready(group:Dictionary={},at_ms:float=-1.0)->bool:
+    # Initial loading and replay keep their exhaustive source contracts. In a
+    # live displayed world, selectors change only at world cuts; _world_ready
+    # owns their complete constructor/CPU/fixture proof before clock/state can
+    # cross them. Do not make that same cut wait for unused camera views here.
+    if external_playback or world_revision<0:return _environment_sources_ready(group,at_ms)
+    return world_prepare_epoch==timeline.initialization_revision and media_metadata_ready and media_plan.errors.is_empty()
+
 func _prioritize_media(at_ms:float)->Dictionary:
     _publish_media_interest(at_ms)
     # Readiness and preparation use the same authored cut. Keeping a later cue
     # pinned does not let it displace the sources needed to start this one.
     var due:Dictionary=_character_source_paths({},at_ms).duplicate()
-    due.merge(_environment_source_paths({},at_ms))
+    if external_playback or world_revision<0:due.merge(_environment_source_paths({},at_ms))
     due.merge(media_condition_paths)
     due.merge(native_media_paths)
-    if not external_playback and timeline.current.is_empty() and timeline.queue.is_empty():
-        due.merge(selection_media.value.get("onset_paths",{}))
+    if not external_playback and timeline.current.is_empty() and timeline.queue.is_empty():due.merge(selection_media.value.get("onset_paths",{}))
+    # Current source/CPU/fixture requirements have strict priority. Future
+    # resources keep their existing pins, but cannot fill urgent decode slots
+    # while a newly selected animation still lacks one of its own operands.
+    var prepare_future:bool=not external_playback and world_revision>=0 and MediaWarmup.ready(media_warmup,due)
+    var future_environment:Dictionary={}
+    if prepare_future and pending_world!=null and not pending_world.stale and pending_world.epoch==timeline.initialization_revision and pending_world.quarter==quarter:
+        future_environment.merge(pending_world.result.get("environment_paths",{}))
+        # These actors are already in the received cut being prepared. Their
+        # exact selected sheets must publish ahead of constructors that depend
+        # on them, rather than wait until the displayed clock hits the reveal.
+        var boundary:Dictionary=pending_world.boundary
+        var future:Dictionary=media_group_plans.get(boundary.get("source_group_id",""),{})
+        if not future.is_empty():
+            var paths:Dictionary=MediaWarmup.required_at(future.get("character_timeline",{}),float(boundary.get("source_local_ms",0)),future.get("character",{}))
+            due.merge(CharacterGeometry.for_profile(paths,media_normal_sets,character_light_profile,catalog_cache,"prepared_character_due"))
+    if prepare_future and _static_forecast_base_matches():
+        var boundary:Dictionary=static_forecast.boundary
+        if static_forecast.task<0 and static_forecast.output.get("complete",false):future_environment.merge(static_forecast.output.static_result.environment_paths)
+        var future:Dictionary=media_group_plans.get(boundary.source_group_id,{})
+        if not future.is_empty():
+            var paths:Dictionary=MediaWarmup.required_at(future.get("character_timeline",{}),float(boundary.source_local_ms),future.get("character",{}))
+            due.merge(CharacterGeometry.for_profile(paths,media_normal_sets,character_light_profile,catalog_cache,"forecast_character_due"))
+    # The displayed/onset cut above keeps strict priority. Once it is ready,
+    # the next cut's actor and environment producers are independent: missing
+    # future actor pixels must not hold unrelated room resources behind them.
+    if not future_environment.is_empty():due.merge(future_environment)
     MediaWarmup.prioritize(media_warmup,due)
     return due
 
@@ -2338,9 +2455,22 @@ func _warm_media(required_only:bool=false,budget:Dictionary={},through_ms:float=
     # boundary can be prepared during its preceding animation.
     var required_at:float=maxf(timeline.display_ms,timeline.media_target_ms) if through_ms<0 else through_ms
     var due:Dictionary=_prioritize_media(required_at)
+    var background_handoff:bool=false
     if required_only and media_metadata_ready and MediaWarmup.ready(media_warmup,due):
-        _poll_character_light_profile()
-        return
+        # Completed private textures release finite decode slots independently
+        # of optional library selection. Receipts use the existing per-frame
+        # image/time limits; a ready future source is not a reason to run the
+        # optional family planner before mandatory native construction.
+        background_handoff=MediaWarmup.physical(media_warmup).worker_upload and pending_world!=null and not pending_world.prepared \
+            and budget.get("background_source_handoffs",0)<MediaWarmup.PUBLICATIONS_PER_FRAME
+        if not background_handoff:
+            _poll_character_light_profile()
+            return
+    if not required_only:
+        var maintenance_started:int=Time.get_ticks_usec();var maintenance_before:int=budget.get("used_usec",0)
+        MediaWarmup.prepare_optional(media_warmup)
+        if not budget.is_empty():_charge_preparation("media_optional_maintenance",maintenance_started,maintenance_before)
+        FrameProfile.end_phase(profile,"media_optional_maintenance",maintenance_started)
     var tick = Time.get_ticks_usec()
     var charged_before:int=budget.get("used_usec",0)
     var owner:Dictionary=MediaWarmup.physical(media_warmup)
@@ -2353,12 +2483,13 @@ func _warm_media(required_only:bool=false,budget:Dictionary={},through_ms:float=
     # most one publication and never consumes a required backlog's turn.
     while count < MediaWarmup.PUBLICATIONS_PER_FRAME:
         if not budget.is_empty() and budget.used_usec>=budget.limit_usec:
-            MediaWarmup.poll(media_warmup,true,false) # Dispatch decode jobs without harvesting an upload.
+            MediaWarmup.poll_sources(media_warmup,true,false) # Dispatch without optional maintenance or receipt.
             break
         if count>0 and previous.get("elapsed_ms",0.0)*1000.0+Time.get_ticks_usec()-tick>=MediaWarmup.PUBLICATION_BUDGET_USEC: break
-        var loaded = MediaWarmup.poll(media_warmup,required_only or count>0)
+        var loaded = MediaWarmup.poll_sources(media_warmup,required_only or count>0)
         if loaded.is_empty(): break
         count += 1
+        if background_handoff:budget.background_source_handoffs=int(budget.get("background_source_handoffs",0))+1
         if media_warmup.wanted.has(loaded.path): required += 1
         MediaWarmup.validate_upload_dimensions(media_warmup,loaded,maximum_texture_size_2d)
         if loaded.has("error"):
@@ -2959,6 +3090,8 @@ func _prepare_rotation() -> void:
     if rotation_publication_frame < 0:
         rotation_publication_frame = Engine.get_process_frames(); return
     if Engine.get_process_frames() <= rotation_publication_frame: return
+    _poll_static_forecast()
+    if not static_forecast.is_empty() and static_forecast.task>=0:return
     # The target view owns its exact static sources. Existing actors keep their
     # published occurrence/clock while receiving target-basis bindings.
     var target_sources:Array=pending_global_atlas.get("entries",[])
@@ -3769,6 +3902,8 @@ func _exit_tree() -> void:
     # Shutdown joins workers before destroying the native owners they borrowed.
     # During playback cancellation stays incremental in _dispose_views.
     if pending_world!=null: pending_world.join()
+    if not static_forecast.is_empty() and static_forecast.task>=0:WorkerThreadPool.wait_for_task_completion(static_forecast.task)
+    static_forecast={}
     _cancel_global_atlas()
     for retired in retiring_views:
         var cleanup:Dictionary=retired.get("atlas_cleanup",{})

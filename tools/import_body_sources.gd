@@ -4,6 +4,7 @@ extends SceneTree
 const Catalog=preload("res://source_catalog.gd")
 const Index=preload("res://presentation/resources/body_source_index.gd")
 const Layer=preload("res://presentation/resources/body_source_layer.gd")
+const Clip=preload("res://presentation/resources/body_source_clip.gd")
 var cache:Dictionary={}
 var geometry:Dictionary={}
 var creatures:Dictionary={}
@@ -168,13 +169,18 @@ func run()->void:
                 var source_sheet:String=rig.clips[clip].sheets.get(category,"")
                 if source_sheet.is_empty():continue
                 resource.clips[clip]={}
+                var selected_clip=Clip.new()
+                var clip_path:String=directory.path_join(rig_id+"--"+category+"--"+clip+".res")
                 for slot in categories[category]:
                     var raw:String=resources[source_sheet]
                     var colour:String=_display(raw,slot,components)
                     var descriptor:Dictionary=_descriptor(colour,slot)
                     for profile in descriptor.source_records:descriptor.source_records[profile].source_id=StringName(path+"::"+clip+"/"+slot+"/"+profile)
                     descriptor.native_record.source_id=StringName(path+"::"+clip+"/"+slot+"/native")
-                    resource.clips[clip][slot]=descriptor;descriptors+=1
+                    selected_clip.descriptors[slot]=descriptor;descriptors+=1
+                    resource.clips[clip][slot]={"path":descriptor.path,"companions":descriptor.companions}
+                    if not resource.paths_by_slot.has(slot):resource.paths_by_slot[slot]={}
+                    resource.paths_by_slot[slot][clip]=descriptor.path
                     if slot=="body" and descriptor.geometry.get("optical_ground_pixels")==null:imported.generated_shadow=false
                     var all:Dictionary={colour:true};all.merge(descriptor.companions)
                     for value in descriptor.optical_paths.values():all[value]=true
@@ -185,6 +191,8 @@ func run()->void:
                     if not index.sheets.has(source_sheet):index.sheets[source_sheet]={}
                     index.sheets[source_sheet][slot]=colour
                     index.sheets[source_sheet].default=raw
+                if ResourceSaver.save(selected_clip,clip_path)!=OK:errors.append("Cannot save body clip: "+clip_path)
+                resource.clip_sources[clip]=clip_path
             var saved:int=ResourceSaver.save(resource,path)
             if saved!=OK:errors.append("Cannot save body layer: "+path)
             index.layers[rig_id][category]=path;layers+=1
@@ -198,11 +206,17 @@ func run()->void:
         index.sheets[sheet]={"default":colour}
         if not colour.to_lower().ends_with(".png") or index.source_owners.has(colour):continue
         var resource=Layer.new();resource.category=sheet
+        var selected_clip=Clip.new()
         var descriptor:Dictionary=_descriptor(colour,"accent")
         var path:String=directory.path_join("accent--%04d.res"%loose)
         for profile in descriptor.source_records:descriptor.source_records[profile].source_id=StringName(path+"/"+profile)
         descriptor.native_record.source_id=StringName(path+"/native")
-        resource.clips={"source":{"*":descriptor}};resource.headers[colour]=_header(colour)
+        var clip_path:String=path.get_basename()+"--source.res"
+        selected_clip.descriptors={"*":descriptor}
+        resource.clips={"source":{"*":{"path":colour,"companions":descriptor.companions}}}
+        resource.clip_sources={"source":clip_path};resource.paths_by_slot={"*":{"source":colour}}
+        resource.headers[colour]=_header(colour)
+        if ResourceSaver.save(selected_clip,clip_path)!=OK:errors.append("Cannot save sprite accent clip: "+sheet)
         if ResourceSaver.save(resource,path)!=OK:errors.append("Cannot save sprite accent: "+sheet)
         index.source_owners[colour]=[path,"source"];loose+=1
     if not errors.is_empty():printerr(errors);quit(1);return

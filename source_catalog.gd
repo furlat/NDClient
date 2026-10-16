@@ -4,6 +4,9 @@ const Placement = preload("res://placement.gd")
 const NativeAuthoring = preload("res://presentation/native_authoring.gd")
 const NativePresentationSources = preload("res://presentation/native_presentation_sources.gd")
 const BodySources = preload("res://presentation/body_sources.gd")
+const UNITY_SOURCES="res://generated/unity_sources.json"
+const LIBRARY_SEQUENCES="res://generated/library_sequences.json"
+const IMPORTED_RECORDS="__imported_source_records"
 # Client original-rest selection policy, reusing the explicit chest pairs in
 # tools/build_unity_map.py. Source owner JSON binds reconstructed destruction
 # rests; retain those banks for destruction, and use the registered originals
@@ -42,6 +45,45 @@ static func prepared_asset(asset_id:String,cache:Dictionary)->Dictionary:
 static func source_pointer(document: String, pointer: String, cache: Dictionary) -> String:
     return NativeAuthoring.source_pointer(document, pointer, read_file(document, cache))
 
+static func _generated_table(path:String,cache:Dictionary)->Dictionary:
+    if not cache.has(path):
+        var measured:bool=cache.has("__actor_source_profile")
+        var started:int=Time.get_ticks_usec() if measured else 0
+        var text:String=FileAccess.get_file_as_string(path)
+        cache[path]=JSON.parse_string(text)
+        if measured:
+            var elapsed:int=Time.get_ticks_usec()-started
+            var metrics:Dictionary=cache.__actor_source_profile
+            metrics.generated_table_load_calls=int(metrics.get("generated_table_load_calls",0))+1
+            metrics.generated_table_load_usec=int(metrics.get("generated_table_load_usec",0))+elapsed
+            metrics.generated_table_load_characters=int(metrics.get("generated_table_load_characters",0))+text.length()
+            if not metrics.has("generated_table_load_paths"):metrics.generated_table_load_paths={}
+            var row:Dictionary=metrics.generated_table_load_paths.get(path,{"calls":0,"usec":0,"characters":0})
+            row.calls+=1;row.usec+=elapsed;row.characters+=text.length()
+            metrics.generated_table_load_paths[path]=row
+    return cache[path]
+
+static func seal_environment_sources(cache:Dictionary)->void:
+    # Only this explicitly admitted source owner is shared. Other mutable
+    # selector/consumer caches keep their existing private ownership rules.
+    if not cache.has(IMPORTED_RECORDS):return
+    var owner:Dictionary=cache[IMPORTED_RECORDS]
+    if not owner.records.is_read_only():owner.records.make_read_only()
+    if not owner.is_read_only():owner.make_read_only()
+
+static func _imported_records(cache:Dictionary,table:Dictionary)->Dictionary:
+    var owner:Dictionary=cache.get(IMPORTED_RECORDS,{})
+    if owner.is_empty() or not is_same(owner.table,table):
+        owner={"table":table,"records":{}};cache[IMPORTED_RECORDS]=owner
+    return owner
+
+static func _store_imported_record(cache:Dictionary,owner:Dictionary,key:Array,value:Dictionary)->void:
+    if owner.records.is_read_only():
+        # Fork once on the worker's first new selection. Further additions stay
+        # private until source_snapshot seals this completed map for publication.
+        owner={"table":owner.table,"records":owner.records.duplicate()};cache[IMPORTED_RECORDS]=owner
+    owner.records[key]=value
+
 static func source_snapshot(cache: Dictionary) -> Dictionary:
     # Effective source documents are immutable after admission. Give each worker
     # its own cache shell, without reloading selected Resources or sharing derived
@@ -50,6 +92,7 @@ static func source_snapshot(cache: Dictionary) -> Dictionary:
     # select another index, while this worker/display keeps these references.
     NativePresentationSources.admission(cache)
     BodySources.admission(cache)
+    seal_environment_sources(cache)
     var snapshot = {}
     for path in cache:
         if path is String and path.ends_with(".json") and not path.begins_with("__"):
@@ -60,6 +103,7 @@ static func source_snapshot(cache: Dictionary) -> Dictionary:
         snapshot.__body_source_admission=cache.__body_source_admission
     if cache.has("__environment_source_records"):
         snapshot.__environment_source_records=cache.__environment_source_records
+    if cache.has(IMPORTED_RECORDS):snapshot[IMPORTED_RECORDS]=cache[IMPORTED_RECORDS]
     if cache.has("native_references_validated"):
         snapshot.native_references_validated = cache.native_references_validated
     if cache.has("native_authoring_errors"):
@@ -75,7 +119,7 @@ static func adopt_snapshot(cache:Dictionary,offered:Dictionary)->void:
     # grow on either worker: merge their immutable shells without discarding
     # already prepared references or allowing a different revision to take over.
     for key in offered:
-        if not cache.has(key):cache[key]=offered[key]
+        if key!=IMPORTED_RECORDS and not cache.has(key):cache[key]=offered[key]
     for key in ["__body_source_admission",NativePresentationSources.CACHE_KEY]:
         if not offered.has(key) or not cache.has(key) or is_same(cache[key],offered[key]):continue
         var current:Dictionary=cache[key];var incoming:Dictionary=offered[key]
@@ -87,6 +131,16 @@ static func adopt_snapshot(cache:Dictionary,offered:Dictionary)->void:
         var records:Dictionary=cache.__environment_source_records.duplicate()
         records.merge(offered.__environment_source_records,false);records.make_read_only()
         cache.__environment_source_records=records
+
+    if offered.has(IMPORTED_RECORDS):
+        var incoming:Dictionary=offered[IMPORTED_RECORDS]
+        var admitted:Variant=cache.get(UNITY_SOURCES)
+        if is_same(incoming.table,admitted):
+            var current:Dictionary=cache.get(IMPORTED_RECORDS,{})
+            if current.is_empty() or not is_same(current.table,admitted):cache[IMPORTED_RECORDS]=incoming
+            elif not is_same(current,incoming):
+                var records:Dictionary=current.records.duplicate();records.merge(incoming.records,false);records.make_read_only()
+                var owner:Dictionary={"table":admitted,"records":records};owner.make_read_only();cache[IMPORTED_RECORDS]=owner
 
 static func validate_native(cache: Dictionary) -> Array:
     # Passive metadata only. No texture decoding, scene creation or shader upload.
@@ -169,9 +223,7 @@ static func local_ray(geometry: Dictionary) -> Vector3:
         rows[1][0]*ray[0]+rows[1][1]*ray[1]+rows[1][2]*ray[2], rows[2][0]*ray[0]+rows[2][1]*ray[1]+rows[2][2]*ray[2])
 
 static func sequences(row: Dictionary, cache: Dictionary) -> Array:
-    if not cache.has("library_sequences"):
-        cache.library_sequences = JSON.parse_string(FileAccess.get_file_as_string("res://generated/library_sequences.json"))
-    return cache.library_sequences.get(row.asset,[])
+    return _generated_table(LIBRARY_SEQUENCES,cache).get(row.asset,[])
 
 static func library_sequence(row: Dictionary, cache: Dictionary, broken: bool = false) -> int:
     var options = sequences(row,cache)
@@ -269,9 +321,8 @@ static func door_frame(row: Dictionary, quarter: int, cache: Dictionary) -> Dict
     return result
 
 static func imported_record(row: Dictionary, quarter: int, cache: Dictionary, phase: int, time: float) -> Dictionary:
-    if not cache.has("unity_sources"):
-        cache.unity_sources = JSON.parse_string(FileAccess.get_file_as_string("res://generated/unity_sources.json"))
-    var source: Dictionary = cache.unity_sources[row.source_sprite]
+    var table:Dictionary=_generated_table(UNITY_SOURCES,cache)
+    var source: Dictionary = table[row.source_sprite]
     if source.has("records"): return source.records[quarter]
     if phase > 0:
         if row.has("break_owner"):
@@ -280,8 +331,13 @@ static func imported_record(row: Dictionary, quarter: int, cache: Dictionary, ph
             effective.merge(row.break_owner,true)
             return environment(effective,quarter,cache,phase,time)
         return library_record(row,quarter,cache,phase,time)
-    var key = "unity_record:"+row.source_sprite+":"+str(quarter)
-    if not cache.has(key):
+    var key:Array=[row.source_sprite,quarter]
+    var records_owner:Dictionary=_imported_records(cache,table)
+    if cache.has("__actor_source_profile"):
+        var metrics:Dictionary=cache.__actor_source_profile
+        var field:String="imported_record_hits" if records_owner.records.has(key) else "imported_record_builds"
+        metrics[field]=int(metrics.get(field,0))+1
+    if not records_owner.records.has(key):
         var index = read_file("environment/index.json",cache)
         var owner = read_file(index.library[source.asset],cache)
         var sample: Dictionary = owner.samples[int(source.samples[quarter])]
@@ -290,8 +346,9 @@ static func imported_record(row: Dictionary, quarter: int, cache: Dictionary, ph
         result.merge({"path":sample.colour.path,"rect":rect,"native_size":[rect[2],rect[3]],
             "pivot":source.contact_override[quarter] if source.has("contact_override") else sample.get("physical_source_contact_px",sample.get("pivot",source.pivot)),"scale":source.scale,
             "source_sample":source.samples[quarter],"frame":sample.frame_index})
-        cache[key] = result
-    return cache[key]
+        _store_imported_record(cache,records_owner,key,result)
+        return result
+    return records_owner.records[key]
 
 static func receiving_normal(record: Dictionary, cache: Dictionary) -> Dictionary:
     if not record.has("normal"): return record

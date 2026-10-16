@@ -1,6 +1,7 @@
 extends RefCounted
 const GroundReceiving = preload("res://presentation/ground_receiving.gd")
 const Delta = preload("res://presentation/native_light_delta.gd")
+const CanvasDraw = preload("res://presentation/canvas_draw.gd")
 const SourceMaterial = preload("res://presentation/source_material.gd")
 # Native Canvas lights receive into isolated straight-RGBA cells. Original 3D
 # quads, source materials, painter order and picking remain their original owners.
@@ -200,6 +201,13 @@ func _crop(entry: Dictionary, world: Node, info: Dictionary = {}) -> Dictionary:
     if not Rect2i(Vector2i.ZERO,image.get_size()).encloses(region) or not region.has_area() or cell.x<1 or cell.y<1:
         _issue("Native light atlas original region is outside its prepared image: "+path)
         return {}
+    var result:Dictionary=static_crop(image,region,cell)
+    crop_cache[key] = result
+    return result
+
+static func static_crop(image:Image,region:Rect2i,cell:Vector2i)->Dictionary:
+    # The admitted original Image is immutable. Both ordinary source binding
+    # and the private environment worker use this exact nonzero-alpha rule.
     var used: Rect2i = image.get_region(region).get_used_rect()
     var pixels = Rect2i(Vector2i.ZERO,Vector2i.ONE)
     if used.has_area():
@@ -209,9 +217,7 @@ func _crop(entry: Dictionary, world: Node, info: Dictionary = {}) -> Dictionary:
         pixels = Rect2i(Vector2i(start),Vector2i(end-start))
     var uv = Vector4(float(pixels.position.x)/cell.x,float(pixels.position.y)/cell.y,
         float(pixels.size.x)/cell.x,float(pixels.size.y)/cell.y)
-    var result = {"pixels":pixels,"uv":uv}
-    crop_cache[key] = result
-    return result
+    return {"pixels":pixels,"uv":uv}
 
 static func plan_layout(specs: Array, minimum: Vector2i, limit: int = MAX_SIZE) -> Dictionary:
     # Pure planning: an overflow cannot mutate the last published atlas, nodes,
@@ -336,6 +342,16 @@ func _candidate_specs(entries: Array, information: Dictionary, geometry: Diction
 func _parameter_changes(entry:Dictionary,previous_version:int)->Variant:
     return SourceMaterial.changes_since(entry,previous_version)
 
+func _output_parameter_names(shader:Shader,target:Shader)->Dictionary:
+    var key:Array=[shader.get_instance_id(),target.get_instance_id()]
+    if not parameter_names.has(key):
+        var accepted:Dictionary={};var names:Dictionary={}
+        for row in target.get_shader_uniform_list():accepted[row.name]=true
+        for row in shader.get_shader_uniform_list():
+            if accepted.has(row.name) and not str(row.name).begins_with("wall_") and row.name not in ["use_instance_visibility","current_visibility","highlighted"]:names[row.name]=true
+        parameter_names[key]=names
+    return parameter_names[key]
+
 func _copy_output_source(entry: Dictionary,source_shader:Shader=null,sample_base:int=-1) -> void:
     if not entry.has("received_material"): return
     var output: ShaderMaterial=entry.received_material
@@ -350,24 +366,17 @@ func _copy_output_source(entry: Dictionary,source_shader:Shader=null,sample_base
         entry.received_source_key=next
         return
     var shader:Shader=source.shader if source_shader==null else source_shader
-    var key=[shader.get_instance_id(),output.shader.get_instance_id()]
-    if not parameter_names.has(key):
-        var accepted={}
-        for row in output.shader.get_shader_uniform_list(): accepted[row.name]=true
-        var names:Dictionary={}
-        for row in shader.get_shader_uniform_list():
-            if accepted.has(row.name) and not str(row.name).begins_with("wall_") and row.name not in ["use_instance_visibility","current_visibility","highlighted"]: names[row.name]=true
-        parameter_names[key]=names
+    var names:Dictionary=_output_parameter_names(shader,output.shader)
     var changes:Variant=_parameter_changes(entry,previous.version) if same_owner and previous.get("quad_size")==mesh.size else null
     if changes!=null:
         var copied:int=0
         for name in changes:
-            if name in parameter_names[key]:output.set_shader_parameter(name,SourceMaterial.value(entry,name));copied+=1
+            if name in names:output.set_shader_parameter(name,SourceMaterial.value(entry,name));copied+=1
         if changes.size()==1 and changes.has(&"frame_uv"):last_reconcile_phases.material_frame_copies=last_reconcile_phases.get("material_frame_copies",0)+1
         else:last_reconcile_phases.material_parameter_copies=last_reconcile_phases.get("material_parameter_copies",0)+1
         last_reconcile_phases.material_parameter_uniforms=last_reconcile_phases.get("material_parameter_uniforms",0)+copied
     else:
-        for name in parameter_names[key]: output.set_shader_parameter(name,SourceMaterial.value(entry,name))
+        for name in names: output.set_shader_parameter(name,SourceMaterial.value(entry,name))
         output.set_shader_parameter("use_instance_visibility",entry.has("batch_rows"))
         output.set_shader_parameter("source_quad_size",mesh.size)
         entry.erase("received_style")
@@ -446,13 +455,216 @@ func _group(entry: Dictionary, crop: Dictionary, visibility: float, receiver_id:
     return group
 
 func _new_group(entry:Dictionary,crop:Dictionary,visibility:float,id:Array,info:Dictionary,join_mask:int)->Dictionary:
-    var material=ShaderMaterial.new();material.shader=info.shader
-    return {"id":id,"entry":entry,"info":info,"material":material,"crop":crop,"version":-1,"source_shader":null,
-        "highlighted":null,"visibility":visibility,"join_mask":join_mask,"rank":0,"water":info.water}
+    return Delta.new_group(entry,crop,visibility,id,info,join_mask)
 
-func prepare_source_binding(entry:Dictionary,snapshot:Dictionary,world:Node,dynamic_materials:bool=false,target_options:Dictionary={})->Dictionary:
+static func selected_parameters(ledger:Dictionary,names:Dictionary)->Dictionary:
+    var selected:Dictionary={}
+    for name in names:selected[name]=ledger.get(name)
+    return selected
+
+func _receiver_parameter_names(shader:Shader,target:Shader)->Dictionary:
+    var key:Array=[shader.get_instance_id(),target.get_instance_id()]
+    if not parameter_names.has(key):
+        var accepted:Dictionary={};var names:Dictionary={}
+        for row in target.get_shader_uniform_list():accepted[row.name]=true
+        for row in shader.get_shader_uniform_list():
+            if accepted.has(row.name) and row.name not in ["current_visibility","highlighted"]:names[row.name]=true
+        parameter_names[key]=names
+    return parameter_names[key]
+
+func capture_group_input(entry:Dictionary,info:Dictionary,crop:Dictionary,basis:Basis,screen:Vector2)->Dictionary:
+    # Capture only actual source values. The worker never reads the original
+    # material, a Node, a texture, or a mutable source-parameter dictionary.
+    var shader:Shader=entry.material.shader
+    var parameters:Dictionary=selected_parameters(entry.source_parameters,_receiver_parameter_names(shader,info.shader))
+    parameters.make_read_only()
+    var input:Dictionary={"entry":entry,"info":info,"crop":crop,"parameters":parameters,
+        "basis":basis,"screen":screen,"source_shader":shader,"source_material":entry.material,
+        "version":entry.source_version,"binding_revision":entry.source_binding_revision,
+        "highlighted":SourceMaterial.value(entry,"highlighted")}
+    input.make_read_only()
+    return input
+
+func static_environment_options(world:Node,packets:Dictionary={},images:Dictionary={})->Dictionary:
+    var shader:Shader=preload("res://environment.gdshader")
+    var roles:Dictionary={}
+    for role in ["body","wall","cliff","terrain","shadow"]:
+        var info:Dictionary=_entry_info({"material":{"shader":shader},"role":role,"placement":{"kind":"prop"}})
+        roles[role]={"info":info,"receiver_names":_receiver_parameter_names(shader,info.shader),
+            "output_names":_output_parameter_names(shader,info.output)}
+    var crops:Dictionary={}
+    for packet in packets.values():
+        for selected in packet.entries:
+            var value:Dictionary=selected.descriptor
+            if value.get("empty",false):continue
+            var record:Dictionary=value.record;var path:String=record.path
+            if not images.has(path):continue
+            var cell:=Vector2i(value.cell);var r:Array=record.get("rect",[0,0,cell.x,cell.y])
+            var key:Array=[images[path].get_instance_id(),Rect2i(int(r[0]),int(r[1]),int(r[2]),int(r[3])),cell]
+            if crop_cache.has(key):crops[key]=crop_cache[key]
+    return {"roles":roles,"basis":Basis(world.camera.global_basis.x,-world.camera.global_basis.y,world.camera.global_basis.z).transposed(),
+        "screen_size":world.get_viewport().get_visible_rect().size,"parent_transform":world.global_transform,
+        "received":viewport.get_texture(),"transport":[viewport.get_instance_id(),_uses_hdr(),light_cap],"cached_crops":crops}
+
+static func _binding_shell(entry:Dictionary,sampled:Dictionary,source:Dictionary,output:Dictionary,group_input:Dictionary,basis:Basis,screen:Vector2)->Dictionary:
+    return {"entry":entry,"snapshot":sampled,"source":source,"signature":source.signature,"info":source.info,
+        "ground_version":source.ground_version,"version":entry.get("source_version",0),"binding_revision":entry.source_binding_revision,
+        "specs":{},"groups":{},"receivers":{},"output":output,"accepted":false,"phase_usec":{},
+        "profile_preparation":false,"created_rows":0,"projected_packet_rows":0,"group_input":group_input,"basis":basis,"screen_size":screen}
+
+static func private_environment_binding(entry:Dictionary,value:Dictionary,options:Dictionary,crop:Dictionary,crop_key:Array)->Dictionary:
+    var selected:Dictionary=options.roles.get(entry.role,options.roles.body)
+    var info:Dictionary=selected.info.duplicate();info.kind=entry.placement.kind;info.role=entry.role
+    var geometry:Array=[options.get("source_parent_transform",options.parent_transform)*Transform3D(value.basis,value.position),value.mesh_size,value.mesh_center]
+    var signature:Array=[value.cell,value.record.get("path",""),value.record.get("rect",[]),info.shader,entry.material.get_instance_id(),geometry]
+    var source:Dictionary={"info":info,"signature":signature,"geometry":geometry,"crop":crop,"same":false,
+        "ground_version":0,"row_indices":{},"packets":{},"by_row":{},"receivers":{},"addresses":{}}
+    var sampled:Dictionary=entry.duplicate()
+    sampled.erase("prepared_source");sampled.erase("mesh")
+    sampled.merge({"cell":value.cell,"pivot":value.pivot,"scale":value.scale,"screen_rect":value.screen_rect,
+        "record":value.record,"floor_group":value.floor_group,"scenery_value":float(entry.source_parameters.current_visibility) if entry.source_parameters.get("current_visibility")!=null else 1.0})
+    var group_input:Dictionary={"parameters":selected_parameters(entry.source_parameters,selected.receiver_names),"info":info,"crop":crop,
+        "basis":options.basis,"screen":options.screen_size,"source_shader":options.roles.body.info.source,"source_material":entry.material,
+        "version":entry.source_version,"binding_revision":entry.source_binding_revision,"highlighted":entry.source_parameters.get("highlighted")}
+    var parameters:Dictionary=selected_parameters(entry.source_parameters,selected.output_names) if info.capped else {}
+    if info.capped:
+        parameters.use_instance_visibility=false;parameters.source_quad_size=value.mesh_size
+        parameters.current_visibility=sampled.scenery_value;parameters.highlighted=group_input.highlighted
+    parameters.received=options.received;parameters.received_is_encoded_hdr=options.transport[1]
+    parameters.use_instance_atlas=false;parameters.light_cap=info.light_cap
+    var sample:Dictionary={"version":entry.source_version,"highlighted":group_input.highlighted,"material":entry.material,
+        "shader":entry.material.shader,"binding_revision":entry.source_binding_revision,"seconds":null,"visibility":sampled.scenery_value}
+    sample.make_read_only()
+    var output:Dictionary={"sample":sample,"input":{"shader":info.output,"parameters":parameters,"binding":options.transport,
+        "capped":info.capped,"quad_size":value.mesh_size}}
+    var prepared:Dictionary=_binding_shell(entry,sampled,source,output,group_input,options.basis,options.screen_size)
+    prepared.erase("entry") # Installed only after removing the owning entry's packet field.
+    prepared.private_static=true;prepared.crop_key=crop_key
+    group_input.parameters.make_read_only()
+    prepared.capture=Delta.private_source_capture(prepared)
+    return prepared
+
+func adopt_private_environment_binding(entry:Dictionary,packet:Dictionary,world:Node)->Dictionary:
+    if packet.is_empty():return {}
+    entry.erase("static_atlas_packet")
+    var sampled:Dictionary=packet.snapshot;sampled.node=entry.node
+    entry.scenery_value=sampled.scenery_value
+    var source:Dictionary=packet.source;source.entry=entry;source.snapshot=sampled
+    # This is the sole actual native identity capture. The descriptor already
+    # owns quad, crop, uniforms and geometry; no source readback is required.
+    source.geometry[0]=entry.node.global_transform
+    packet.entry=entry
+    var input:Dictionary=packet.group_input;input.entry=entry
+    var output:Dictionary=packet.output
+    input.make_read_only()
+    packet.receiver_parent=projection_root;output.private_node=true
+    crop_cache[packet.crop_key]=source.crop
+    _link_private_source(packet,entry)
+    return packet
+
+static func _link_private_source(prepared:Dictionary,entry:Dictionary)->void:
+    if not prepared.has("capture"):return
+    var source:Dictionary=prepared.capture
+    source.entry=entry;source.proof.entry=entry
+    # Late actor texture operands change only this private source's delivery
+    # version. They have already been written to its receiving/output material.
+    source.proof.version=entry.source_version
+    source.proof.binding_revision=entry.source_binding_revision
+
+func actor_resource_options(world:Node)->Dictionary:
+    # Scene-owner shader/transport capture; the worker receives only selected
+    # immutable values and strong resources, never an atlas or live Node.
+    var shader:Shader=preload("res://modular.gdshader")
+    var roles:Dictionary={}
+    for role in ["body","shadow"]:
+        var info:Dictionary=_entry_info({"material":{"shader":shader},"role":role,"placement":{"kind":"actor"}})
+        roles[role]={"info":info,"receiver_names":_receiver_parameter_names(shader,info.shader),
+            "output_names":_output_parameter_names(shader,info.output)}
+    return {"roles":roles,"basis":Basis(world.camera.global_basis.x,-world.camera.global_basis.y,world.camera.global_basis.z).transposed(),
+        "screen_size":world.get_viewport().get_visible_rect().size,"received":viewport.get_texture(),
+        "transport":[viewport.get_instance_id(),_uses_hdr(),light_cap]}
+
+static func private_actor_binding(entry:Dictionary,mesh:QuadMesh,options:Dictionary)->Dictionary:
+    # Dynamics prepare material resources only. Actual receiver geometry,
+    # projection, layout, actor pose and clocks remain the current sampler's.
+    var selected:Dictionary=options.roles[entry.role];var info:Dictionary=selected.info
+    var crop:Dictionary={"pixels":Rect2i(Vector2i.ZERO,Vector2i(entry.cell)),"uv":Vector4(0,0,1,1)}
+    var signature:Array=[entry.cell,"",[],info.shader,entry.material.get_instance_id(),[]]
+    var source:Dictionary={"info":info,"signature":signature,"geometry":[],"crop":crop,"same":false,
+        "ground_version":0,"row_indices":{},"packets":{},"by_row":{},"receivers":{},"addresses":{}}
+    var sampled:Dictionary=entry.duplicate()
+    var output_material:=ShaderMaterial.new();output_material.shader=info.output
+    if info.capped:
+        for name in selected.output_names:output_material.set_shader_parameter(name,entry.source_parameters.get(name))
+        output_material.set_shader_parameter("use_instance_visibility",false)
+        output_material.set_shader_parameter("source_quad_size",mesh.size)
+        output_material.set_shader_parameter("current_visibility",1.0)
+        output_material.set_shader_parameter("highlighted",entry.source_parameters.get("highlighted"))
+    output_material.set_shader_parameter("received",options.received)
+    output_material.set_shader_parameter("received_is_encoded_hdr",options.transport[1])
+    output_material.set_shader_parameter("use_instance_atlas",false)
+    output_material.set_shader_parameter("light_cap",info.light_cap)
+    output_material.get_rid()
+    var output:Dictionary={"received_material":output_material,"binding":options.transport,"private_node":true}
+    var prepared:Dictionary=_binding_shell(entry,sampled,source,output,{},options.basis,options.screen_size)
+    prepared.erase("entry")
+    prepared.material_only=true;prepared.private_actor=true
+    prepared.receiver_names=selected.receiver_names;prepared.output_names=selected.output_names
+    var key:Array=[entry.material.get_instance_id(),1.0,"",0]
+    var group:Dictionary=Delta.new_group({},crop,1.0,key,info,0)
+    var material:ShaderMaterial=group.material
+    for name in selected.receiver_names:material.set_shader_parameter(name,entry.source_parameters.get(name))
+    material.set_shader_parameter("use_instance_visibility",false)
+    material.set_shader_parameter("source_crop",crop.uv)
+    material.set_shader_parameter("atlas_cell_size",Vector2(crop.pixels.size))
+    material.set_shader_parameter("receiver_visibility",1.0)
+    material.set_shader_parameter("ground_join_mask",0)
+    material.set_shader_parameter("store_irradiance",info.capped)
+    material.set_shader_parameter("world_to_canvas",options.basis)
+    material.set_shader_parameter("actual_scene_viewport_size",options.screen_size)
+    material.set_shader_parameter("highlighted",entry.source_parameters.get("highlighted"))
+    material.get_rid()
+    group.merge({"version":entry.source_version,"source_shader":info.source,"source_material":entry.material,
+        "target_material":material,"target_shader":info.shader,"binding_revision":entry.source_binding_revision,
+        "capped":info.capped,"seconds":null,"highlighted":entry.source_parameters.get("highlighted")},true)
+    prepared.groups[key]=group
+    prepared.capture=Delta.private_source_capture(prepared)
+    return prepared
+
+func adopt_private_actor_binding(entry:Dictionary,prepared:Dictionary,world:Node,filled_textures:Array=[])->Dictionary:
+    # Only the installed native identities and late-arriving texture operands
+    # are adopted. The worker's full material initialization is never replayed.
+    prepared.entry=entry;prepared.snapshot.node=entry.node
+    prepared.source.entry=entry;prepared.source.snapshot=prepared.snapshot
+    prepared.version=entry.source_version;prepared.binding_revision=entry.source_binding_revision
+    var highlighted=SourceMaterial.value(entry,"highlighted")
+    for group in prepared.groups.values():
+        group.entry=entry;group.source_id=entry.node.get_instance_id()
+        for name in filled_textures:
+            if prepared.receiver_names.has(name):group.material.set_shader_parameter(name,SourceMaterial.value(entry,name))
+        group.version=entry.source_version;group.binding_revision=entry.source_binding_revision
+    var output:Dictionary=prepared.output;var material:ShaderMaterial=output.received_material
+    if prepared.info.capped:
+        for name in filled_textures:
+            if prepared.output_names.has(name):material.set_shader_parameter(name,SourceMaterial.value(entry,name))
+        output.received_source_key={"binding_revision":entry.source_binding_revision,"version":entry.source_version,
+            "output":material,"output_shader":material.shader,"quad_size":entry.node.mesh.size}
+        output.received_style={"output":material,"visibility":1.0,"highlighted":highlighted,"seconds":null}
+    var sample:Dictionary={"version":entry.source_version,"highlighted":highlighted,"material":entry.material,
+        "shader":entry.material.shader,"binding_revision":entry.source_binding_revision,"seconds":null,"visibility":1.0}
+    sample.make_read_only();output.sample=sample
+    prepared.snapshot.source_version=entry.source_version;prepared.snapshot.source_binding_revision=entry.source_binding_revision
+    prepared.receiver_parent=projection_root
+    prepared.material_proof={"binding_revision":entry.source_binding_revision,
+        "quad":[entry.node.mesh,entry.node.mesh.size,entry.node.mesh.center_offset],"output":material,"output_shader":material.shader,
+        "transport":output.binding}
+    _link_private_source(prepared,entry)
+    return prepared
+
+func prepare_source_binding(entry:Dictionary,snapshot:Dictionary,world:Node,dynamic_materials:bool=false,target_options:Dictionary={},profile_preparation:bool=false)->Dictionary:
     # The snapshot has only private future floor arrays. Native materials/nodes
     # are read here; all receiving resources created below remain candidate-owned.
+    var setup_started:int=Time.get_ticks_usec() if profile_preparation else 0
     var source:Dictionary=Delta._source(self,entry,world,snapshot,target_options)
     if source.crop.is_empty():return {}
     var actor:bool=entry.placement.kind=="actor" and entry.has("actor_layer")
@@ -470,27 +682,47 @@ func prepare_source_binding(entry:Dictionary,snapshot:Dictionary,world:Node,dyna
         "material":entry.material,"shader":entry.material.shader,"binding_revision":entry.source_binding_revision,
         "seconds":seconds,"visibility":visibility}
     sample.make_read_only()
+    var group_capture_started:int=Time.get_ticks_usec() if profile_preparation else 0
+    var group_input:Dictionary={} if source.info.dynamic else capture_group_input(entry,source.info,source.crop,
+        Basis(world.camera.global_basis.x,-world.camera.global_basis.y,world.camera.global_basis.z).transposed(),world.get_viewport().get_visible_rect().size)
+    var group_capture_usec:int=Time.get_ticks_usec()-group_capture_started if profile_preparation else 0
     var output:Dictionary={"sample":sample}
-    sampled.received_material=ShaderMaterial.new();sampled.received_material.shader=source.info.output
-    if source.info.capped:_copy_output_source(sampled)
-    output.received_material=sampled.received_material
-    var material:ShaderMaterial=sampled.received_material
+    var output_started:int=Time.get_ticks_usec() if profile_preparation else 0
+    var deferred_output:bool=not source.info.dynamic and target_options.get("defer_static_output",false)
     var encoded:bool=source.info.light_cap>0.0 and not source.info.normals_visible
-    material.set_shader_parameter("received",viewport.get_texture())
-    material.set_shader_parameter("received_is_encoded_hdr",encoded)
-    material.set_shader_parameter("use_instance_atlas",entry.has("batch_rows"))
-    material.set_shader_parameter("light_cap",source.info.light_cap)
-    output.binding=[viewport.get_instance_id(),encoded,source.info.light_cap]
-    if source.info.capped:
-        material.set_shader_parameter("current_visibility",visibility)
-        material.set_shader_parameter("highlighted",highlighted)
-        if source.info.water:material.set_shader_parameter("displayed_time_seconds",seconds)
-        output.received_style={"output":material,"visibility":visibility,"highlighted":highlighted,"seconds":seconds}
-    if sampled.has("received_source_key"):output.received_source_key=sampled.received_source_key
-    var prepared={"entry":entry,"snapshot":sampled,"source":source,"signature":source.signature,"info":source.info,
-        "ground_version":source.ground_version,"version":entry.get("source_version",0),"binding_revision":entry.source_binding_revision,"specs":{},"groups":{},"receivers":{},"output":output,"accepted":false,
-        "basis":Basis(world.camera.global_basis.x,-world.camera.global_basis.y,world.camera.global_basis.z).transposed(),
-        "screen_size":world.get_viewport().get_visible_rect().size}
+    var material:ShaderMaterial
+    if deferred_output:
+        var parameters:Dictionary={}
+        var mesh:QuadMesh=entry.node.multimesh.mesh if entry.has("batch_rows") else entry.node.mesh
+        if source.info.capped:
+            parameters=selected_parameters(entry.source_parameters,_output_parameter_names(entry.material.shader,source.info.output))
+            parameters.use_instance_visibility=entry.has("batch_rows");parameters.source_quad_size=mesh.size
+            parameters.current_visibility=visibility;parameters.highlighted=highlighted
+        parameters.received=viewport.get_texture();parameters.received_is_encoded_hdr=encoded
+        parameters.use_instance_atlas=entry.has("batch_rows");parameters.light_cap=source.info.light_cap
+        output.input={"shader":source.info.output,"parameters":parameters,"binding":[viewport.get_instance_id(),encoded,source.info.light_cap],
+            "capped":source.info.capped,"quad_size":mesh.size}
+    else:
+        sampled.received_material=ShaderMaterial.new();sampled.received_material.shader=source.info.output
+        if source.info.capped:_copy_output_source(sampled)
+        output.received_material=sampled.received_material;material=sampled.received_material
+        material.set_shader_parameter("received",viewport.get_texture())
+        material.set_shader_parameter("received_is_encoded_hdr",encoded)
+        material.set_shader_parameter("use_instance_atlas",entry.has("batch_rows"))
+        material.set_shader_parameter("light_cap",source.info.light_cap)
+        output.binding=[viewport.get_instance_id(),encoded,source.info.light_cap]
+        if source.info.capped:
+            material.set_shader_parameter("current_visibility",visibility)
+            material.set_shader_parameter("highlighted",highlighted)
+            if source.info.water:material.set_shader_parameter("displayed_time_seconds",seconds)
+            output.received_style={"output":material,"visibility":visibility,"highlighted":highlighted,"seconds":seconds}
+        if sampled.has("received_source_key"):output.received_source_key=sampled.received_source_key
+    var prepared:Dictionary=_binding_shell(entry,sampled,source,output,group_input,
+        Basis(world.camera.global_basis.x,-world.camera.global_basis.y,world.camera.global_basis.z).transposed(),world.get_viewport().get_visible_rect().size)
+    prepared.profile_preparation=profile_preparation
+    prepared.phase_usec={"source_setup":output_started-setup_started-group_capture_usec,"receiver_capture":group_capture_usec,
+        "output_materials":Time.get_ticks_usec()-output_started} if profile_preparation else {}
+
     if source.info.dynamic:
         # No receiver, geometry, region or address is prepared for dynamics.
         # Only private copies of its exact already-bound material are retained.
@@ -544,6 +776,7 @@ func _prepare_source_group(prepared:Dictionary,visibility:float,receiver_id:Stri
     var info:Dictionary=prepared.info
     var key:Array=[entry.material.get_instance_id(),visibility,receiver_id if info.water else "",join_mask]
     if not prepared.groups.has(key):
+        var phase_started:int=Time.get_ticks_usec() if prepared.profile_preparation else 0
         var group:Dictionary=_new_group(prepared.snapshot,prepared.source.crop,visibility,key,info,join_mask)
         _copy_parameters(group)
         group.material.set_shader_parameter("world_to_canvas",prepared.basis)
@@ -552,30 +785,46 @@ func _prepare_source_group(prepared:Dictionary,visibility:float,receiver_id:Stri
         group.material.set_shader_parameter("highlighted",group.highlighted)
         group.entry=entry
         prepared.groups[key]=group
+        if prepared.profile_preparation:prepared.phase_usec.group_materials=prepared.phase_usec.get("group_materials",0)+Time.get_ticks_usec()-phase_started
     return prepared.groups[key]
 
-func prepare_source_row(prepared:Dictionary,row:Dictionary,parent:Node,supports:Dictionary,visibility:float)->void:
+func prepare_source_row(prepared:Dictionary,row:Dictionary,parent:Node,supports:Dictionary,visibility:float,final_spec:Dictionary={},projection_packet:Dictionary={},selected_group:Dictionary={},private_draw:CanvasDraw=null)->void:
     var entry:Dictionary=prepared.entry
-    var spec:Dictionary=Delta._spec(prepared.source,row)
-    spec.join_mask=GroundReceiving.mask(row,supports)
+    var spec:Dictionary=final_spec
+    if spec.is_empty():
+        spec=Delta._spec(prepared.source,row)
+        spec.join_mask=GroundReceiving.mask(row,supports)
     prepared.specs[spec.row_id]=spec
     var info:Dictionary=prepared.info
-    var group:Dictionary=_prepare_source_group(prepared,visibility,spec.id,spec.join_mask)
+    var group:Dictionary=selected_group if not selected_group.is_empty() else _prepare_source_group(prepared,visibility,spec.id,spec.join_mask)
+    var row_started:int=Time.get_ticks_usec() if prepared.profile_preparation else 0
     # Retained rows also receive private geometry. Publication replaces their
     # record in place; it never constructs or projects a missing receiver.
     if prepared.receivers.has(spec.id):
-        prepared.receivers[spec.id].node.queue_free()
-    var node:Sprite2D=prepare_receiver_node(parent)
-    node.material=group.material
+        dispose_receiver(prepared.receivers[spec.id])
     var index:int=prepared.snapshot.ground_indices[spec.row_id] if entry.has("batch_rows") else -1
-    var receiver:Dictionary={"id":spec.id,"entry":entry,"index":index,"node":node,"group":group,
+    var receiver:Dictionary={"id":spec.id,"entry":entry,"index":index,"group":group,
         "crop":spec.crop,"position":Vector2i.ZERO,"projection":[],"visibility":visibility,"bounds":Rect2(),
         "row_id":spec.row_id,"row":row,"water":info.water,"source_geometry":spec.source_geometry,
         "source_material":spec.material_id,"receiving_shader":info.shader,"join_mask":spec.join_mask,
         "dynamic":info.dynamic,"spec":spec}
-    # Orthographic receiving geometry depends on the source and view basis,
-    # never on its eventual atlas address or the current camera translation.
-    _project_entry(receiver,prepared.snapshot,prepared.basis)
+    if info.dynamic:
+        receiver.node=prepare_receiver_node(parent);receiver.node.material=group.material
+    else:
+        receiver.draw=private_draw if private_draw!=null else new_static_draw(group.material)
+        receiver.draw.attach(projection_root.get_canvas_item())
+    if prepared.profile_preparation:prepared.phase_usec.row_creation=prepared.phase_usec.get("row_creation",0)+Time.get_ticks_usec()-row_started
+    var projection_started:int=Time.get_ticks_usec() if prepared.profile_preparation else 0
+    if not projection_packet.is_empty():
+        receiver.projection=projection_packet.identity;set_receiver_transform(receiver,projection_packet.transform)
+        receiver.world_origin=projection_packet.world_origin;receiver.bounds=projection_packet.bounds
+        if receiver.water and selected_group.is_empty():receiver.group.material.set_shader_parameter("receiver_world_origin",receiver.world_origin)
+        prepared.projected_packet_rows+=1
+    else:
+        # Dynamic/explicit isolated callers retain their current scene sample.
+        _project_entry(receiver,prepared.snapshot,prepared.basis)
+    if prepared.profile_preparation:prepared.phase_usec.projection_apply=prepared.phase_usec.get("projection_apply",0)+Time.get_ticks_usec()-projection_started
+    prepared.created_rows+=1
     prepared.receivers[spec.id]=receiver
 
 func adopt_source_binding(prepared:Dictionary)->bool:
@@ -584,7 +833,10 @@ func adopt_source_binding(prepared:Dictionary)->bool:
             return false
     else:
         # Existing callers can still prepare under their own hidden parent.
-        for receiver in prepared.receivers.values():receiver.node.reparent(projection_root,false)
+        for receiver in prepared.receivers.values():
+            if receiver.has("draw"):
+                if receiver.draw.batch==null:receiver.draw.attach(projection_root.get_canvas_item())
+            else:receiver.node.reparent(projection_root,false)
     var entry:Dictionary=prepared.entry
     prepared_source_bindings[entry.node.get_instance_id()]=prepared
     # Direct-parent receivers need no native tree mutation at publication.
@@ -600,6 +852,62 @@ func prepare_receiver_node(parent: Node) -> Sprite2D:
     node.texture_filter=CanvasItem.TEXTURE_FILTER_NEAREST; node.visible=false
     parent.add_child(node)
     return node
+
+func new_static_draw(material:ShaderMaterial)->CanvasDraw:
+    var draw=CanvasDraw.new()
+    draw.initialize(white,white.get_rid(),material,material.get_rid(),Transform2D.IDENTITY,Rect2(),0)
+    draw.attach(projection_root.get_canvas_item())
+    return draw
+
+func receiver_kind(receiver:Dictionary,dynamic:bool,material:ShaderMaterial)->void:
+    # The explicit complete planner can recycle a retired cell for a source of
+    # another kind. Recycle its cell, never a static RID as a dynamic Node.
+    if dynamic and receiver.has("draw"):
+        dispose_receiver(receiver);receiver.erase("draw")
+        receiver.node=prepare_receiver_node(projection_root);receiver.node.material=material
+    elif not dynamic and receiver.has("node"):
+        dispose_receiver(receiver);receiver.erase("node");receiver.draw=new_static_draw(material)
+
+static func receiver_handle(receiver:Dictionary):
+    return receiver.draw if receiver.has("draw") else receiver.node
+
+static func receiver_material(receiver:Dictionary)->ShaderMaterial:
+    return receiver.draw.material if receiver.has("draw") else receiver.node.material
+
+static func set_receiver_material(receiver:Dictionary,value:ShaderMaterial)->void:
+    if receiver.has("draw"):receiver.draw.set_material(value)
+    elif receiver.node.material!=value:receiver.node.material=value
+
+static func receiver_transform(receiver:Dictionary)->Transform2D:
+    return receiver.draw.transform if receiver.has("draw") else receiver.node.transform
+
+func receiver_global_transform(receiver:Dictionary)->Transform2D:
+    return projection_root.global_transform*receiver.draw.transform if receiver.has("draw") else receiver.node.global_transform
+
+static func set_receiver_transform(receiver:Dictionary,value:Transform2D)->void:
+    if receiver.has("draw"):receiver.draw.set_transform(value)
+    else:receiver.node.transform=value
+
+static func set_receiver_region(receiver:Dictionary,value:Rect2)->void:
+    if receiver.has("draw"):receiver.draw.set_region(value)
+    else:receiver.node.region_rect=value
+
+static func set_receiver_rank(receiver:Dictionary,value:int)->void:
+    if receiver.has("draw"):receiver.draw.set_rank(value)
+    else:receiver.node.z_index=value
+
+static func receiver_visible(receiver:Dictionary)->bool:
+    return receiver.draw.visible if receiver.has("draw") else receiver.node.visible
+
+static func set_receiver_visible(receiver:Dictionary,value:bool)->void:
+    if receiver.has("draw"):receiver.draw.set_visible(value)
+    else:receiver.node.visible=value
+
+static func dispose_receiver(receiver:Dictionary,immediate:bool=false)->void:
+    if receiver.has("draw"):receiver.draw.dispose()
+    elif is_instance_valid(receiver.get("node")):
+        if immediate:receiver.node.free()
+        else:receiver.node.queue_free()
 
 func adopt_prepared_receivers(entry: Dictionary, nodes: Array, prepared_parent: Node = null) -> bool:
     if not is_instance_valid(entry.node):return false
@@ -631,7 +939,7 @@ func _release_prepared_receivers() -> void:
         prepared_delta={}
         for prepared in prepared_source_bindings.values():
             for receiver in prepared.receivers.values():
-                if is_instance_valid(receiver.node):receiver.node.queue_free()
+                dispose_receiver(receiver)
         prepared_source_bindings.clear()
 
 func _make_receiver(spec: Dictionary, group: Dictionary, index: int) -> Dictionary:
@@ -640,21 +948,22 @@ func _make_receiver(spec: Dictionary, group: Dictionary, index: int) -> Dictiona
         var receiver:Dictionary=prepared.receivers[spec.id]
         prepared.receivers.erase(spec.id)
         receiver.group=group;receiver.index=index
-        if receiver.node.material!=group.material:receiver.node.material=group.material
+        set_receiver_material(receiver,group.material)
         last_reconcile_phases.prepared_receiver_bindings=last_reconcile_phases.get("prepared_receiver_bindings",0)+1
         return receiver
     var shells: Array=spec.entry.get("atlas_receiver_shells",[])
-    var node: Sprite2D
-    if shells.is_empty(): node=prepare_receiver_node(projection_root)
-    else:
-        node=shells.pop_back()
-        last_reconcile_phases.prepared_receiver_nodes=last_reconcile_phases.get("prepared_receiver_nodes",0)+1
-    node.material=group.material
-    # Cells never overlap. This only groups native draw calls, within lights
-    # default Z range; it has no relation to original 3D painter/game elevation.
-    node.z_index=group.rank%1024
-    return {"id":spec.id,"entry":spec.entry,"index":index,"node":node,"group":group,
+    var receiver:Dictionary={"id":spec.id,"entry":spec.entry,"index":index,"group":group,
         "crop":spec.crop,"position":Vector2i.ZERO,"projection":[],"visibility":-1.0,"bounds":Rect2()}
+    if spec.info.dynamic or not shells.is_empty():
+        if shells.is_empty():receiver.node=prepare_receiver_node(projection_root)
+        else:
+            receiver.node=shells.pop_back()
+            last_reconcile_phases.prepared_receiver_nodes=last_reconcile_phases.get("prepared_receiver_nodes",0)+1
+        receiver.node.material=group.material
+    else:receiver.draw=new_static_draw(group.material)
+    # Cells never overlap. This groups canvas calls within the same light range.
+    set_receiver_rank(receiver,group.rank%1024)
+    return receiver
 
 func floor_address_token(entry: Dictionary) -> Array:
     # Capture on the scene thread only after this exact floor version has been
@@ -748,18 +1057,24 @@ func _publish_addresses(floor_receivers: Dictionary, changed_outputs: Array) -> 
 
 
 func prepare_output_region(output:Dictionary,source:Dictionary,positions:Dictionary,target:Vector2)->void:
-    # Only the candidate-owned output is changed. Integer floor addresses stay
-    # in their existing prepared packet; a growth changes normalized UVs only.
-    var material:ShaderMaterial=output.received_material
     var entry:Dictionary=source.entry
-    material.set_shader_parameter("source_crop",source.crop.uv)
-    if entry.has("batch_rows"):
-        material.set_shader_parameter("atlas_cell_size",Vector2(source.crop.pixels.size)/target)
-    else:
+    var floor:bool=entry.has("batch_rows")
+    var position:Vector2i=Vector2i.ZERO
+    if not floor:
         var id:String=str(entry.node.get_instance_id())+":source"
-        var position:Vector2i=positions[id] if positions.has(id) else source.receivers["source"].position
+        position=positions[id] if positions.has(id) else source.receivers["source"].position
+    prepare_output_region_values(output,floor,source.crop,position,target)
+
+static func prepare_output_region_values(output:Dictionary,floor:bool,crop:Dictionary,position:Vector2i,target:Vector2)->void:
+    # Explicit numeric operands and a private output material only. Integer
+    # floor addresses retain their prepared packet; growth changes UVs only.
+    var material:ShaderMaterial=output.received_material
+    material.set_shader_parameter("source_crop",crop.uv)
+    if floor:
+        material.set_shader_parameter("atlas_cell_size",Vector2(crop.pixels.size)/target)
+    else:
         var origin:Vector2=Vector2(position)/target
-        var size:Vector2=Vector2(source.crop.pixels.size)/target
+        var size:Vector2=Vector2(crop.pixels.size)/target
         material.set_shader_parameter("atlas_region",Vector4(origin.x,origin.y,size.x,size.y))
     output.region_target=target
 
@@ -879,9 +1194,10 @@ func _reconcile(world: Node) -> bool:
                     receiver=reusable.pop_back(); kept.erase(receiver.id); receiver.id=spec.id
             else: kept.erase(spec.id)
             receiver.entry=spec.entry; receiver.index=index; receiver.crop=spec.crop; receiver.group=group
+            if receiver.get("dynamic",spec.info.dynamic)!=spec.info.dynamic:receiver_kind(receiver,spec.info.dynamic,group.material)
             receiver.dynamic=spec.info.dynamic; receiver.water=spec.info.water
             receiver.source_material=spec.material_id; receiver.receiving_shader=spec.info.shader
-            if receiver.node.material!=group.material: receiver.node.material=group.material
+            set_receiver_material(receiver,group.material)
             receiver.visibility=visibility
             receiver.join_mask=spec.join_mask
         if receiver.get("source_geometry",[])!=spec.source_geometry or receiver.projection.is_empty():
@@ -892,7 +1208,7 @@ func _reconcile(world: Node) -> bool:
             var next_position: Vector2i = plan.positions[spec.id]
             var region=Rect2(Vector2(next_position),Vector2(receiver.crop.pixels.size))
             if receiver.get("region",Rect2())!=region:
-                receiver.node.region_rect=region; receiver.region=region
+                set_receiver_region(receiver,region); receiver.region=region
             receiver.position=next_position
         receiver.spec=spec
         if index>=0:
@@ -904,14 +1220,14 @@ func _reconcile(world: Node) -> bool:
             changed_outputs.append(receiver)
         next.append(receiver)
     # All dimensions were validated before any published state changed.
-    for receiver in kept.values(): receiver.node.visible=false; receiver.node.queue_free()
+    for receiver in kept.values(): dispose_receiver(receiver)
     for id in groups.keys():
         if not used_groups.has(id): groups.erase(id)
     var rank = 0
     for group in groups.values(): group.rank=rank; rank+=1
     for receiver in next:
         var z: int = receiver.group.rank%1024
-        if receiver.get("rank",-1)!=z: receiver.node.z_index=z; receiver.rank=z
+        if receiver.get("rank",-1)!=z: set_receiver_rank(receiver,z); receiver.rank=z
     receivers=next; membership=key; layout_members=next_members
     entry_specs=candidate.entries; published_supports=candidate.supports
     static_receivers=[]; dynamic_receivers=[]
@@ -986,7 +1302,7 @@ func _project_entry(receiver:Dictionary,entry:Dictionary,basis:Basis)->void:
     var crop: Vector4 = receiver.crop.uv
     origin+=axis_x*crop.x+axis_y*crop.y
     axis_x*=crop.z; axis_y*=crop.w
-    receiver.node.transform=Transform2D(axis_x/receiver.crop.pixels.size.x,axis_y/receiver.crop.pixels.size.y,origin)
+    set_receiver_transform(receiver,Transform2D(axis_x/receiver.crop.pixels.size.x,axis_y/receiver.crop.pixels.size.y,origin))
     if receiver.water:
         receiver.group.material.set_shader_parameter("receiver_world_origin",transform.origin)
     receiver.world_origin=transform.origin
@@ -1022,13 +1338,22 @@ func _visibility(receiver: Dictionary, screen: Rect2) -> bool:
         # visibility and camera were matched once at this publication; known
         # hidden rows need no native getter/intersection or visibility write.
         var prepared_shown:bool=receiver.cull_shown
-        if prepared_shown:receiver.node.visible=true
+        if prepared_shown:
+            _activate_receiver_batch(receiver)
+            set_receiver_visible(receiver,true)
         receiver.view_visible=prepared_shown
         return prepared_shown
     var shown: bool = receiver.entry.node.is_visible_in_tree() and (plane_to_screen*receiver.bounds).intersects(screen)
-    if receiver.node.visible!=shown: receiver.node.visible=shown
+    if shown:_activate_receiver_batch(receiver)
+    if receiver_visible(receiver)!=shown: set_receiver_visible(receiver,shown)
     receiver.view_visible=shown
     return shown
+
+func _activate_receiver_batch(receiver:Dictionary)->void:
+    if receiver.has("draw") and receiver.draw.batch!=null and not receiver.draw.batch.adopted:
+        # Only the admitted scene sampler can expose a private parent. This
+        # also covers the ordinary delta fallback and camera-cull repair.
+        receiver.draw.batch.adopt(projection_root.get_canvas_item())
 
 func _style(receiver: Dictionary) -> void:
     var entry: Dictionary = receiver.entry
@@ -1041,9 +1366,9 @@ func _style(receiver: Dictionary) -> void:
         if not receiver.group.has("users"): receiver.group.users=0
         receiver.group.users+=1
         Delta.drop_group(self,previous)
-    receiver.node.material=receiver.group.material
+    set_receiver_material(receiver,receiver.group.material)
     receiver.rank=receiver.group.rank%1024
-    receiver.node.z_index=receiver.rank
+    set_receiver_rank(receiver,receiver.rank)
     receiver.visibility=visibility
     if receiver.water:
         receiver.group.material.set_shader_parameter("receiver_world_origin",receiver.get("world_origin",Vector3.ZERO))
@@ -1309,6 +1634,7 @@ func close() -> void:
     output_dirty.clear(); output_tracked=false; output_full=false; output_admission_failed=false
     var restored = {}
     for receiver in receivers:
+        dispose_receiver(receiver)
         var entry: Dictionary = receiver.entry
         if not is_instance_valid(entry.node): continue
         var id: int = entry.node.get_instance_id()

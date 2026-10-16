@@ -19,7 +19,7 @@ func lighting(world:Node)->Dictionary:
     var atlas=world.native_light_atlas
     return {"source_serial":world.native_light_change_serial,"atlas_serial":atlas.delta_serial,
         "sources":atlas.entry_specs.size(),"receivers":atlas.receivers.size(),
-        "nodes":atlas.receivers.map(func(receiver):return receiver.node.get_instance_id()),
+        "nodes":atlas.receivers.map(func(receiver):return atlas.receiver_handle(receiver).get_instance_id()),
         "groups":atlas.groups.keys(),"errors":world.presentation_errors.duplicate()}
 func run()->void:
     root.unfocusable=true;root.position=Vector2i(-16000,-16000);root.size=Vector2i(1440,430)

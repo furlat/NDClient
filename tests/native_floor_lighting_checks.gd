@@ -33,10 +33,10 @@ func run()->void:
         if not receiver.entry.node.visible:continue
         if receiver.index<0:
             if receiver.entry.has("record"):
-                var p:Transform2D=receiver.node.get_global_transform()
+                var p:Transform2D=scene.native_light_atlas.receiver_global_transform(receiver)
                 props.append({"id":receiver.id,"record":receiver.entry.record,"placement":receiver.entry.get("placement",{}),"role":receiver.entry.get("source_role",-1),"rank":receiver.entry.get("draw_rank",0),"crop":[receiver.crop.pixels.position.x,receiver.crop.pixels.position.y,receiver.crop.pixels.size.x,receiver.crop.pixels.size.y],"screen_transform":[p.x.x,p.x.y,p.y.x,p.y.y,p.origin.x,p.origin.y],"atlas":[receiver.position.x,receiver.position.y]})
             continue
-        var t:Transform2D=receiver.node.get_global_transform()
+        var t:Transform2D=scene.native_light_atlas.receiver_global_transform(receiver)
         rows.append({"id":receiver.id,"source":receiver.entry.record.path,"crop":[receiver.crop.pixels.position.x,receiver.crop.pixels.position.y,receiver.crop.pixels.size.x,receiver.crop.pixels.size.y],"screen_transform":[t.x.x,t.x.y,t.y.x,t.y.y,t.origin.x,t.origin.y],"index":receiver.index,"rank":receiver.entry.draw_rank,"atlas":[receiver.position.x,receiver.position.y]})
     var report={"checks":checks,"failures":failures,"sequence":scene.timeline.sequence,"renderer":RenderingServer.get_current_rendering_method(),"driver":RenderingServer.get_current_rendering_driver_name(),"floor_sources":rows,"prop_sources":props}
     DirAccess.make_dir_recursive_absolute("res://.runtime/graphics-quality")

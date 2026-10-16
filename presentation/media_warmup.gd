@@ -8,13 +8,15 @@ const EnvironmentMedia = preload("res://presentation/environment_media.gd")
 const EncounterMedia = preload("res://presentation/encounter_media.gd")
 const NativeSupport = preload("res://presentation/native_scene_support.gd")
 const CharacterGeometry = preload("res://presentation/character_geometry.gd")
+const FIXTURE_OPTICS=preload("res://generated/fixture_optical_facts.res")
 const BUDGET_BYTES = 16 * 1024 * 1024 * 1024
 const EVICTIONS_PER_FRAME = 2
 const CPU_RELEASES_PER_FRAME = 2
-const DECODE_WORKERS = 4
-const DECODE_BATCH_IMAGES = 4
+const DECODE_WORKERS = 8
+const OPTIONAL_DECODE_WORKERS = 4
+const DECODE_BATCH_IMAGES = 2
 const PUBLICATION_BUDGET_USEC = 2000
-const PUBLICATIONS_PER_FRAME = 8
+const PUBLICATIONS_PER_FRAME = DECODE_WORKERS * DECODE_BATCH_IMAGES
 const OPTIONAL_UPDATES_PER_FRAME = 32
 
 # A consumer owns metadata plans and its displayed/boot readiness. The physical
@@ -95,7 +97,7 @@ static func _account_interest(owner:Dictionary,counts:Array,amount:int)->void:
         owner.optional_estimated_bytes+=amount*maxi(0,counts[5])
         owner.unknown_optional+=amount*int(counts[5]<0)
 
-static func _change_interest(owner:Dictionary,path:String,absolute:String,before:Array,after:Array,defer_readiness:bool=false)->void:
+static func _change_interest(owner:Dictionary,path:String,absolute:String,before:Array,after:Array,defer_readiness:bool=false,family_accounting:bool=false)->void:
     if before==after:return
     var counts:Array=owner.interests.get(path,[0,0,0,0,0,-1])
     var required_before:bool=counts[0]>0
@@ -129,7 +131,12 @@ static func _change_interest(owner:Dictionary,path:String,absolute:String,before
     _account_interest(owner,old_account,-1)
     _account_interest(owner,counts,1)
     owner.changed_paths[path]=true;owner.pending_paths[path]=true
-    if required_before!=required_now or optional_before!=optional_now or counts[5]!=estimate_before:owner.selection_revision+=1
+    # Immutable family activation already owns its whole optional selection.
+    # Moving that family's accounting cursor is not another selector input.
+    # Actual required pins/bytes still change the worker's captured budget.
+    if required_before!=required_now or (required_now and counts[5]!=estimate_before) \
+            or (not family_accounting and (optional_before!=optional_now or counts[5]!=estimate_before)):
+        owner.selection_revision+=1
     if not owner.stats.is_empty() and owner.queued.has(path) and environment_before!=environment_now:
         owner.stats[environment_before].pending-=1;owner.stats[environment_now].pending+=1
     if owner.resident.has(path):
@@ -173,7 +180,7 @@ static func _step_families(owner:Dictionary,limit:int,hints_only:bool=false)->in
                 if family.get("estimates",{}).has(path):owner.encounter.estimates[path]=family.estimates[path]
                 elif family.get("estimate_bytes",{}).has(path):owner.encounter.estimates[path]={"bytes":family.estimate_bytes[path]}
             var roles=_role_values(paths,family.get("environment",{}),family.get("fixtures",{}),family.get("gpu_only",{}),family.get("cpu_required",{}),path,false)
-            _change_interest(owner,path,paths[path],[0,0,0,0,0] if adding else roles,roles if adding else [0,0,0,0,0])
+            _change_interest(owner,path,paths[path],[0,0,0,0,0] if adding else roles,roles if adding else [0,0,0,0,0],false,true)
             if adding:row.cursor+=1
             used+=1
         if not adding and row.cursor==0:completed.append(row)
@@ -821,7 +828,7 @@ static func enqueue(data: Dictionary, path: String, absolute: String) -> void:
     if data.queued.has(path) or data.failed.has(path): return
     if data.resident.has(path) and int(data.resident[path].gpu_bytes)>0 and (not _needs_cpu(data,path) or int(data.resident[path].cpu_bytes) > 0) \
         and (not _fixture(data,path) or data.resident[path].get("fixture_ready",false)): return
-    var request={"path":path,"absolute":absolute,"fixture":_fixture(data,path),"pending":true,"required":data.wanted.has(path)}
+    var request={"path":path,"absolute":absolute,"fixture":_fixture(data,path),"pending":true,"required":data.wanted.has(path),"queued_us":Time.get_ticks_usec()}
     data.queued[path]=request
     data.pending.append(request);data.pending_order_dirty=true
     _pending_delta(data,path,1)
@@ -1107,9 +1114,25 @@ static func demand(data: Dictionary, paths: Dictionary, environment: Dictionary 
     # Production Play publishes selector-owned contribution references.
     demand_records(data,[source_record(paths,environment,fixtures,gpu_only,cpu_required)] if not paths.is_empty() else [],hint)
 
+static func fixture_facts(decoded:Image)->Dictionary:
+    var reduced:Image=decoded.duplicate()
+    reduced.srgb_to_linear()
+    reduced.premultiply_alpha()
+    reduced.convert(Image.FORMAT_RGBAF)
+    reduced.resize(1,1,Image.INTERPOLATE_TRILINEAR)
+    var weight:float=0.0
+    var moment:Vector2=Vector2.ZERO
+    for y in range(decoded.get_height()):
+        for x in range(decoded.get_width()):
+            var colour:Color=decoded.get_pixel(x,y)
+            var amount:float=colour.srgb_to_linear().get_luminance()*colour.a
+            weight+=amount;moment+=Vector2(x+.5,y+.5)*amount
+    return {"energy":reduced.get_pixel(0,0).get_luminance(),
+        "emission_centroid":moment/weight if weight>0 else Vector2(decoded.get_width(),decoded.get_height())*.5}
+
 static func _decode(request: Dictionary, result: Dictionary) -> void:
     var started = Time.get_ticks_usec()
-    result.worker_clock_us={"started":started}
+    result.worker_clock_us={"queued":request.get("queued_us",started),"dispatched":request.get("dispatched_us",started),"started":started}
     result.path = request.path
     if not FileAccess.file_exists(request.absolute):
         result.error = "Missing authored image: " + request.path
@@ -1127,25 +1150,11 @@ static func _decode(request: Dictionary, result: Dictionary) -> void:
     result.gpu_bytes = decoded.get_width() * decoded.get_height() * 4
     var accounted:int=Time.get_ticks_usec()
     if request.get("fixture",false):
-        # Exact previous native reduction, now on the source worker. The
-        # original decoded pixels remain unchanged for upload and picking.
-        var reduced: Image = decoded.duplicate()
-        reduced.srgb_to_linear()
-        reduced.premultiply_alpha()
-        reduced.convert(Image.FORMAT_RGBAF)
-        reduced.resize(1,1,Image.INTERPOLATE_TRILINEAR)
-        result.energy = reduced.get_pixel(0,0).get_luminance()
-        # One original-frame moment on the decoding worker, never a scene-frame
-        # pixel scan. Alpha-weighted linear emission excludes invisible RGB.
-        var weight = 0.0
-        var moment = Vector2.ZERO
-        for y in range(decoded.get_height()):
-            for x in range(decoded.get_width()):
-                var colour = decoded.get_pixel(x,y)
-                var amount = colour.srgb_to_linear().get_luminance()*colour.a
-                weight += amount
-                moment += Vector2(x+.5,y+.5)*amount
-        result.emission_centroid = moment/weight if weight>0 else Vector2(decoded.get_width(),decoded.get_height())*.5
+        # Stable authored frames carry their exact offline measurements. New
+        # fixture sources retain the same worker reduction until the next bake.
+        var facts:Dictionary=request.get("fixture_facts",{})
+        if facts.is_empty():facts=fixture_facts(decoded)
+        result.energy=facts.energy;result.emission_centroid=facts.emission_centroid
 
     var reduced:int=Time.get_ticks_usec()
     result.elapsed_ms = (reduced-started)/1000.0
@@ -1156,8 +1165,8 @@ static func _decode(request: Dictionary, result: Dictionary) -> void:
         return
     if request.get("worker_upload",false):
         # RenderingDevice permits asynchronous creation of a new texture. This
-        # resource is private until the completed task is joined; never mutate
-        # a published texture or touch the SceneTree from this worker.
+        # resource is private until its completed image crosses the batch
+        # mailbox; never mutate a published texture or touch the SceneTree.
         var upload_started:int=Time.get_ticks_usec()
         result.worker_clock_us.upload_started=upload_started
         result.texture=ImageTexture.create_from_image(decoded)
@@ -1168,54 +1177,101 @@ static func _decode(request: Dictionary, result: Dictionary) -> void:
 
 static func _decode_batch(requests:Array, result:Dictionary)->void:
     # One finite task keeps its existing worker busy between scene frames.
-    # At most four workers each own four unpublished images; optional work
-    # remains single-image so a new required demand cannot trail a long batch.
-    var images:Array=[]
+    # Eight required workers each own at most two unpublished images: the
+    # original sixteen-image bound. Optional work stays four single-image jobs
+    # so idle reuse cannot occupy more CPU or queue a long speculative batch.
     for request in requests:
         var image:Dictionary={}
         _decode(request,image)
-        images.append(image)
-    result.images=images
+        # Each image is complete and immutable after this handoff. A fast
+        # urgent source need not wait for the remaining PNGs in its batch.
+        result.mutex.lock()
+        result.images.append(image)
+        result.mutex.unlock()
 
 static func poll(data: Dictionary, required_only: bool = false, publish:bool=true) -> Dictionary:
     if data.get("closed",false):return {}
-    data=physical(data)
     if not required_only:prepare_optional(data)
-    elif not data.due_paths.is_empty() and data.families.any(func(row):return row.hint and row.users>0 and row.cursor<row.paths.size()):
-        prepare_optional(data,true)
+    elif not physical(data).due_paths.is_empty() and physical(data).families.any(func(row):return row.hint and row.users>0 and row.cursor<row.paths.size()):prepare_optional(data,true)
+    return poll_sources(data,required_only,publish)
+
+static func poll_sources(data: Dictionary, required_only: bool = false, publish:bool=true) -> Dictionary:
+    # Receipt of an already prepared source has no dependency on optional
+    # library selection. Play services that existing maintenance owner in its
+    # optional lane; the legacy poll entry point above keeps tool semantics.
+    if data.get("closed",false):return {}
+    data=physical(data)
     var completed: Dictionary = {}
     var next = -1
     var next_priority=3
+    var next_image=-1
+    # An unfinished finite batch still owns its worker slot, even when every
+    # completed member has already been consumed. Only join completed tasks.
+    for i in range(data.decode_jobs.size()-1,-1,-1):
+        var job:Dictionary=data.decode_jobs[i]
+        if not job.result.has("mutex"):continue
+        if not job.get("joined",false) and WorkerThreadPool.is_task_completed(job.task):
+            WorkerThreadPool.wait_for_task_completion(job.task);job.joined=true
+        if job.get("joined",false) and job.result.images.is_empty():data.decode_jobs.remove_at(i)
     for i in data.decode_jobs.size():
         var job: Dictionary = data.decode_jobs[i]
+        if job.result.has("mutex"):
+            job.result.mutex.lock()
+            for member in job.result.images.size():
+                var priority:int=_decode_priority(data,job.result.images[member].path)
+                if priority<next_priority:next=i;next_image=member;next_priority=priority
+                if priority==0:break
+            job.result.mutex.unlock()
+            if next_priority==0:break
+            continue
         if not job.get("joined",false) and not WorkerThreadPool.is_task_completed(job.task): continue
         var priority=2
         for path in job.get("paths",[job.path]):priority=mini(priority,_decode_priority(data,path))
-        if priority<next_priority:next=i;next_priority=priority
+        if priority<next_priority:next=i;next_image=-1;next_priority=priority
         if priority==0:break
-    var blocked_required:bool=required_only and data.decode_jobs.size()>=DECODE_WORKERS and data.pending.any(func(request):return _decode_priority(data,request.path)<2)
+    _order_pending(data)
+    var cancelled:int=0
+    var pending_priority:int=2
+    while not data.pending.is_empty():
+        var request:Dictionary=data.pending[0]
+        pending_priority=_decode_priority(data,request.path)
+        if pending_priority==2 or _requested(data,request.path):break
+        # Withdrawn optional intent can retain a bounded accounting lease. It
+        # cannot claim an urgent worker slot after its actual caller is gone.
+        data.pending.pop_front();data.queued.erase(request.path);_pending_delta(data,request.path,-1)
+        cancelled+=1
+        if cancelled>=OPTIONAL_UPDATES_PER_FRAME:pending_priority=2;break
+    var blocked_required:bool=required_only and data.decode_jobs.size()>=DECODE_WORKERS and not data.pending.is_empty() and pending_priority<2
     if next_priority==2 and required_only and not blocked_required:next=-1
     if next>=0 and publish:
         var job: Dictionary = data.decode_jobs[next]
-        if not job.get("joined",false):
-            WorkerThreadPool.wait_for_task_completion(job.task)
-            job.joined=true
-        if job.result.has("images"):
-            # A newly due member wins even inside an already completed batch.
-            var index:int=0
-            var image_priority=3
-            for i in job.result.images.size():
-                var priority:int=_decode_priority(data,job.result.images[i].path)
-                if priority<image_priority:index=i;image_priority=priority
-                if priority==0:break
-            completed=job.result.images.pop_at(index)
+        if job.result.has("mutex"):
+            job.result.mutex.lock()
+            completed=job.result.images.pop_at(next_image)
+            job.result.mutex.unlock()
             job.paths.erase(completed.path)
-            if job.result.images.is_empty():data.decode_jobs.remove_at(next)
-            else:job.path=job.paths[0]
+            if not job.paths.is_empty():job.path=job.paths[0]
+            if job.get("joined",false) and job.paths.is_empty():data.decode_jobs.remove_at(next)
         else:
-            # Existing single-image jobs use the same publication contract.
-            completed=job.result
-            data.decode_jobs.remove_at(next)
+            if not job.get("joined",false):
+                WorkerThreadPool.wait_for_task_completion(job.task)
+                job.joined=true
+            if job.result.has("images"):
+                # A newly due member wins even inside an already completed batch.
+                var index:int=0
+                var image_priority=3
+                for i in job.result.images.size():
+                    var priority:int=_decode_priority(data,job.result.images[i].path)
+                    if priority<image_priority:index=i;image_priority=priority
+                    if priority==0:break
+                completed=job.result.images.pop_at(index)
+                job.paths.erase(completed.path)
+                if job.result.images.is_empty():data.decode_jobs.remove_at(next)
+                else:job.path=job.paths[0]
+            else:
+                # Existing single-image jobs use the same publication contract.
+                completed=job.result
+                data.decode_jobs.remove_at(next)
         _pending_delta(data,completed.path,-1)
         data.queued.erase(completed.path)
         data.decoded += 1
@@ -1226,13 +1282,13 @@ static func poll(data: Dictionary, required_only: bool = false, publish:bool=tru
         elif completed.has("error"):
             data.failed[completed.path] = completed.error
             _refresh_path(data,completed.path)
-    _order_pending(data)
-    var cancelled=0
-    while not data.pending.is_empty() and data.decode_jobs.size()<DECODE_WORKERS:
-        var remaining_workers:int=DECODE_WORKERS-data.decode_jobs.size()
+    while not data.pending.is_empty() and data.decode_jobs.size()<DECODE_WORKERS and cancelled<OPTIONAL_UPDATES_PER_FRAME:
+        var batch_priority:int=_decode_priority(data,data.pending[0].path)
+        var worker_limit:int=DECODE_WORKERS if batch_priority<2 else OPTIONAL_DECODE_WORKERS
+        if data.decode_jobs.size()>=worker_limit:break
+        var remaining_workers:int=worker_limit-data.decode_jobs.size()
         var batch_limit:int=mini(DECODE_BATCH_IMAGES,maxi(1,int(ceil(float(data.pending.size())/remaining_workers))))
         var requests:Array=[]
-        var batch_priority:int=_decode_priority(data,data.pending[0].path)
         while not data.pending.is_empty() and requests.size()<batch_limit:
             var request:Dictionary=data.pending[0]
             if not _requested(data,request.path):
@@ -1243,11 +1299,13 @@ static func poll(data: Dictionary, required_only: bool = false, publish:bool=tru
             if not requests.is_empty() and _decode_priority(data,request.path)!=batch_priority:break
             data.pending.pop_front();request.pending=false
             request.maximum_texture_size=data.maximum_texture_size
+            request.dispatched_us=Time.get_ticks_usec()
+            if request.fixture:request.fixture_facts=FIXTURE_OPTICS.frames.get(request.path,{})
             request.worker_upload=data.worker_upload and not data.resident.has(request.path)
             requests.append(request)
             if batch_priority==2:break
         if requests.is_empty():break
-        var result: Dictionary = {}
+        var result: Dictionary = {"images":[],"mutex":Mutex.new()}
         var task = WorkerThreadPool.add_task(_decode_batch.bind(requests,result),false,"Authored PNG preparation")
         data.decode_jobs.append({"task":task,"path":requests[0].path,"paths":requests.map(func(request):return request.path),"result":result})
         if cancelled>=OPTIONAL_UPDATES_PER_FRAME:break
@@ -1306,6 +1364,12 @@ static func ready(data: Dictionary, paths: Dictionary) -> bool:
     if data.get("closed",false):return false
     var owner:Dictionary=physical(data)
     var consumer:Dictionary=owner.consumers[data.consumer_id] if data.has("physical") else {}
+    var keys:Array=paths.keys()
+    # The consumer's published roles already maintain this exact ready set.
+    # Use the native set operation for admitted demand, rather than revisiting
+    # every CPU/fixture operand in GDScript on each frame. Unowned hint queries
+    # still need their separate role projection below.
+    if consumer.is_empty() or consumer.paths.has_all(keys):return data.ready_paths.has_all(keys)
     for path in paths:
         if not consumer.is_empty() and not consumer.paths.has(path):
             if not _consumer_available(owner,consumer,path):return false

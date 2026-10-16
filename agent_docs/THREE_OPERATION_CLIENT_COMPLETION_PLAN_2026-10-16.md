@@ -2,6 +2,12 @@
 
 Status: user authorized planning, independent review and implementation on 16 October 2026. Initial plan independently approved; implementation incomplete. Subsequent user constraints below govern continued design and implementation. Starting checkpoint: `e920efb`.
 
+User requested a tested stopping point, comprehensive spike/attempt handoff and
+commit on 16 October. The checkpoint is documented in
+[CLIENT_PREPARATION_PERFORMANCE_HANDOFF_2026-10-16.md](CLIENT_PREPARATION_PERFORMANCE_HANDOFF_2026-10-16.md),
+with committed compact timing data. This is a bounded implementation checkpoint,
+not acceptance of the remaining door latency or frame-time goals.
+
 This is the completion/removal ledger for the unmet requirements in
 [the existing preparation/publication plan](PREPARATION_PUBLICATION_OWNERSHIP_PLAN_2026-10-15.md),
 especially §§5.1, 5.4, 7 and 11. It introduces no parallel framework or new
@@ -1379,3 +1385,309 @@ that timing variation. Final analysis is
 generic-caster portrait warning, 30 leaked ObjectDB instances and one resource
 still in use at exit; the native Studio suite has zero failures. Final read-only
 plan/ownership/correctness review found no actionable blocker.
+
+### Reveal latency continuation — 16 October, target below 50 ms
+
+The user explicitly rejected the remaining 706 ms door and 400 ms movement
+readiness waits. Target each below 50 ms, with below 100 ms the minimum; do not
+trade these for worse Fireball, scene frame times, event ordering or pixels.
+The current four-operation commit is `461bd07`. The unchanged previous commit
+has a 943 ms door wait but a smaller 304 ms movement wait; therefore the last
+change improved the door but does not qualify as a general latency improvement.
+Both saved Fireball readiness holds also increased. All are acceptance paths.
+
+Boundary/input/output: the same actual GUI Gallery door, movement to `[26,6]`,
+Haste and two Fireballs; all client readiness holds and native frames are
+observed independently from server execution and authored animation duration.
+The complete decomposition is `.runtime/reveal_wait_decomposition.md/.json`.
+Door media/world holds are 306.073/399.536 ms; movement 76.259/324.186 ms.
+After construction, atlas receiver/capture/bind lanes cost respectively
+73.242/11.365/28.318 ms for the door and 40.948/9.575/15.554 ms for movement.
+These are actual scene-thread elapsed totals spread across 53/32 frames with
+effectively no remaining shared allowance. Worker derivation and frame wall
+times overlap and must not be added to those CPU totals.
+
+Implementation order within existing owners:
+
+1. Remove provisional per-row atlas construction before the planner. Capture
+   each source once, compute the final static spec/support mask and numeric
+   projection from immutable source/geometry operands in the existing planner
+   worker, then create each hidden native receiver exactly once from that
+   final packet. Dynamic sampling remains under its scene-thread owner. Keep
+   exact group/rank/row order, stale-base rejection, cancellation and final
+   all-or-nothing publication. Measure real source/material/node/projection
+   leaf work; do not call every old millisecond deleted.
+2. Give the next already-received cut's existing preparation owner useful
+   preceding-animation time after current required effects and source uploads.
+   Inspect missing-source retries and full-set scans before adding work to
+   this priority. Keep one shared allowance; do not increase it to hide waits.
+   Do not prepare later world cuts against an uncommitted predecessor's base.
+3. Audit the exact selected-view source closure. The all-four-view environment
+   metadata is known, but the saved trace cannot prove which paths were unused
+   because different object orientations share those paths. Record exact
+   current-view dependencies from existing worker results. Remove unused-view
+   readiness only if the selected world/rotation owner proves the complete
+   required closure; do not weaken the gate using filename heuristics.
+4. Decompose and delete the remaining critical work identified by those
+   measurements until both readiness targets are qualified. Preserve source
+   sharing by actual sheet/binding identity, current-frame required effect
+   priority, bounded retirement and existing worker/scene ownership. No new
+   broad scheduler, runtime validators, graphics, backend or Factory changes.
+
+Material cloning was measured and rejected before production: on actual shader
+pairs `ShaderMaterial.duplicate(false)` plus shader reassignment is slower than
+the existing explicit copy and has a flame texture operand mismatch. It is not
+an assumed optimization. Anti-slop/correctness and the independent plan/anti-OOP
+guard stay involved. Qualification requires focused value/pixel/cancellation
+checks, seek/loop checks for changed ownership, repeated live complete routes,
+and explicit reporting of every known uncovered or regressed path. Do not stop
+at a fast final publication frame while playback still waits hundreds of ms.
+
+The next measured implementation within operation 4 is bounded by the same
+owners. Finite PNG batches may hand off each completed private image through a
+mutex mailbox while retaining their worker slot until task completion; caller
+publication and exact CPU/fixture roles remain the readiness boundary. Static
+native receivers may use explicit RenderingServer canvas RID ownership instead
+of Sprite2D Nodes, with worker-created items hidden and unparented until the
+scene thread adopts them. The installed Safe threading mode and Forward+/Vulkan
+API were verified without changing renderer settings. The isolated native
+probe passes 78 checks and 21 byte-exact received-cell/final-3D pixel pairs,
+including cancellation and a parent closed before adoption. This proves
+correctness and a small measured construction saving, not the entire latency
+target.
+
+One passive static forecast may cross an already-proven source-only boundary.
+It stops at the next world, actor-structure or staged-support boundary and may
+derive only static operands against the unchanged published static base. Actor
+membership, bindings, geometry and optical owners must be recaptured at normal
+eligibility after the source cut. No second scene preparation graph or general
+queue is introduced. Epoch/view/base changes discard the forecast after its
+worker completes; unfinished tasks are never joined in the rendering callback.
+
+The completed-image queue clocks then identified 221–237 ms dispatch waits for
+revealed actor sheets behind scenery, with only 3.5–14 ms actual decode/upload.
+Keep current source requirements urgent first; after those are ready, promote
+the earliest received actor closure, then its environment closure. All keep
+their existing strong leases and required priority. This is the existing media
+owner's priority rule, not another queue or weaker readiness gate.
+
+The next trace also measures 35–36 ms per torch animation frame recomputing
+immutable optical moments, across sixteen originals. Bake those exact energy
+and emission-centroid values with the original reducer into a metadata-only
+native binary Resource and pass its matching record with the decode request.
+Unknown/new fixture paths keep the original worker calculation. Source rebuild
+refreshes the resource; no runtime freshness/hash scan. Binary serialization
+is required here because the text resource rounds normalized optical values.
+Qualification compares all original pixels, moments, animated heights and
+normalized energy values after a fresh saved-resource load.
+
+Current door data leaves the construction boundary explicit: source Nodes were
+entering the hidden active tree before their uniforms/geometry were ready, but
+the isolated delayed-attach/material experiment saved only about 0.5–1.2 ms per
+200 draws. Do not ship that as the solution. Extract the shared authored
+environment descriptor (selected record, quad, numeric bounds/transforms and
+uniform operands) into passive worker preparation. One finite existing world
+resource task creates private materials/meshes from captured Texture references;
+the scene owner creates/adopts rendering Nodes. Water/flame clock registration
+stays with its scene owner. Do not instantiate rendering Nodes on workers under
+the installed Safe threading mode. Preserve the shared constructor algorithm,
+not a parallel renderer-specific copy of it.
+
+Completed source handles also need bounded progress during native construction:
+when current requirements are ready and the native worker-upload path has a
+pending world, permit one completed texture/facts adoption before construction
+using the same frame allowance. Otherwise four completed decode batches can
+hold all producer slots until the optional publication lane gets time. No new
+queue, readiness shortcut or extra allowance is introduced.
+
+Static output materials likewise use the existing atlas planner worker. Its
+scene capture supplies the exact compatible source uniforms, quad size, native
+target shader and strong receiving-texture reference. The worker creates only
+that private material; dynamic actor/flame treatment and final output-region
+binding retain their existing owners. The shared source/output compatibility
+selection remains one helper, and first-draw pixel comparisons qualify this
+deferred path before gameplay measurement.
+
+### Final render packet continuation — 16 October
+
+The latest actual route, `20261016T191624.664159Z`, regressed to about 664 ms
+door readiness and 286 ms movement readiness. The door preparation window
+(frames 11594–11709) spans 833 ms and charges 253 ms to the shared account:
+129 ms in world preparation and 106 ms in media handoff. These are observed
+scene-thread phase totals, not worker CPU or extra latency to add to the holds.
+Small setter changes cannot close this gap. Keep the 2 ms shared allowance;
+remove accidental work and serial dependencies from that account.
+
+1. The existing authored environment descriptor produces the final static draw
+   operands: source, receiver and capped-output parameters, numeric geometry,
+   transforms, bounds and texture paths. The existing atlas planner completes
+   support masks, layout and ordered group commands from those operands. Do
+   not construct a source material and enumerate its uniforms back into two
+   target copies. The existing WorldPreparation owner retains this one final
+   render packet; no additional renderer, scheduler or registry is introduced.
+2. Physical source admission owns shared immutable originals and optical facts
+   once. Descriptor/layout preparation starts before all textures are resident;
+   private resource realization receives the exact strong Texture references
+   as they become available. Missing texture residency must not postpone the
+   independent numeric work. Actor layer/clip facts may be shared, while each
+   occurrence's mutable material, clocks and native outputs remain private.
+3. Completed media-handle receipt is independent of optional-library family
+   enumeration and selection maintenance. Keep the existing bounded producer
+   slots, roles, pins, priority and actual publication boundary. Current required
+   work remains first; optional maintenance cannot repeatedly consume the same
+   allowance merely to expose an already completed handle.
+4. The scene thread supplies actual IDs and parents, creates/adopts Nodes and
+   animation graphs, and publishes the already prepared packet at its ordered
+   cue. Private resources and passive commands are prepared under their existing
+   owners. Live Node/Resource mutation never crosses into a worker. Epoch,
+   quarter, static-base, support and source ownership gates remain; canceled
+   private work retires through the existing bounded lifetime path.
+
+Charge every handoff, constructor and indivisible overrun to the actual account;
+do not replace the limit with a larger fixed allowance. Qualification must show
+where the old source/capture/constructor work disappeared, which work remains
+on the scene thread, and the received-packet-to-ready critical path. The target
+remains below 50 ms, with below 100 ms the minimum, for both door and movement
+without Fireball or whole-scene regressions. Frozen descriptor/uniform and native
+pixel comparisons, cancellation/source-role tests, Studio seeking/looping and
+repeated complete live routes qualify the change. No guaranteed 10× claim,
+graphics/backend change, runtime validator or new approval step is implied.
+Anti-slop, correctness and the independent plan/anti-OOP reviewers remain active.
+
+The combined actor breakdown now measures 47.977 ms in actor derivation, of
+which four actual category `ResourceLoader.CACHE_REUSE` calls consume 44.068 ms.
+That duration may include native cache/load contention; it is not attributed to
+disk alone. The remaining actor derivation is below 4 ms. Implement the next
+whole source boundary: a thin category Resource owns shared clip paths, headers
+and optional-library source summaries; a lazy native Resource per selected clip
+owns its exact geometry, optical/socket and role facts. Both stay in the existing
+revision-qualified body package, index, COW admission shell and atomic current
+marker. Required media/world workers admit the selected clip; sampling performs
+lookup only. Optional all-clip discovery reads summaries without admitting heavy
+clip records. Actor IDs do not select or duplicate these physical facts, and
+actor layer path maps borrow the shared category value. Preserve every existing
+source selection, role, header, geometry and socket value; qualify all imported
+clips/components, retained old revisions and actual live/Studio behavior before
+claiming the readiness target. No permanent second format, runtime schema/hash
+validation or artwork change is introduced. Correctness and anti-slop review
+remain active while the independent guard implements this bounded source seam.
+
+Static receiver adoption may group the planner's private canvas RIDs beneath
+one hidden identity-transform canvas RID. Each draw retains the batch owner;
+the batch retains no child directory. Workers never borrow the live parent.
+The scene owner attaches that single parent and publishes its visibility at the
+ordered cue; individual ranks, visibility/culling and changed-camera fallback
+remain exact. Existing source-directory adoption runs once per source, while
+only real dynamic Nodes retain the per-receiver constructor lane. The last draw
+owns batch lifetime and cancellation uses existing retirement. This changes the
+actual main-thread unit rather than adding a queue or increasing its allowance;
+mixed static/dynamic, group-order and first-draw pixel tests must qualify it.
+
+Thin body metadata is generated at revision `1792180196-344028`; artwork is
+unchanged. Frozen previous native Resources versus all new clip facts pass
+70,213 checks (269 categories including accents, 3,333 clips, 3,461 slot records).
+The actual six-record legacy body comparison passes 14,419 checks; source
+ownership 203, actor material/geometry 3,726 and overlap 16 also pass without
+script errors or warnings. NakedBody category metadata is 53,691 bytes plus
+37,017 for selected Idle, versus the previous 590,590-byte whole category;
+Head10 is 73,656 plus 73,372 versus 1,144,516. These are serialized size and
+semantic results, not a live timing or framebuffer claim. The next combined
+route must distinguish category and clip native-load time and retain all
+Fireball, scene and Studio qualification requirements above.
+
+The combined route `20261016T200318.764194Z` still fails acceptance: door
+421.703 ms (27.273 media, 394.430 world); movement 109.345 ms media with zero
+world hold. Thin actor derivation is now 3.353 ms, while actual actor scene work
+is 30.179 ms, including 10.556 ms atlas source setup, 5.938 ms source binding,
+5.642 ms layer creation, 3.099 ms graph and 2.537 ms shadow preparation. The next
+bounded packet seam builds private actor materials/quad/receiving/output Resources
+under one finite WorldPreparation task, independent of the environment PNG
+closure. The shared source/geometry algorithms remain the sole value owners.
+Scene Nodes, graphs, live pose/UV/condition deltas, optical support and shadows
+stay on main. Missing selected texture uniforms finalize once before admission;
+retained layers remain binding-only. Same epoch/cancellation/retirement owner;
+no additional producer queue or runtime validator. Anti-slop and the independent
+plan/anti-OOP guard review the implementation; first visible changed-UV and
+actual-condition pixels must qualify it before another combined live route.
+
+The same movement trace identifies Head22 Run normals queued only 156 ms after
+click, then 32 ms dispatch wait, 21 ms intra-batch wait and 14 ms decode/upload.
+Selection hints currently consult body-action recipes, while locomotion is
+authored through movement contexts. Reuse the existing finite encounter movement
+clip closure plus the selected condition movement pose when an actual movement
+choice is offered. These remain optional disclosed-source candidates with the
+existing budget/roles and onset priority; no predicted event or state is created.
+Real recorded walking/normal source coverage fails before this correction and
+passes afterward. This does not itself establish the live latency target.
+
+### Complete the dependency chain, rather than isolated counters
+
+The 20:27 actual route still fails: door 427.927 ms, movement 16.316 ms.
+The door charges 99.645 ms of world preparation and 13.125 ms of source receipt
+across 60 frames. Its atlas worker starts only after object construction,
+membership, scenery and order complete. That serial chain, and source admission
+waits over 200 ms for roughly 1 ms PNG work, must change; faster individual
+constructors are not the acceptance criterion.
+
+- Rebalance the existing maximum 16 private images from four required jobs of
+  four images to eight required jobs of two. Optional-only work remains at most
+  four single-image jobs. Partly consumed unfinished jobs retain their slots.
+  Receipt may consume up to 16 already prepared pointers rather than the former
+  eight-upload count, but both real 2 ms guards remain. This changes producer
+  granularity, not capacity or the host allowance. Mixed saturation, cancellation,
+  role and exact-image checks qualify it; no speedup is inferred from constants.
+- The one environment resource task consumes finite batches of resident rows.
+  An unrelated missing image cannot block another row's resources. Each task
+  has private input/result dictionaries, joins before transferring a complete
+  row, and finishes before the next task starts. Completed rows may adopt while
+  a later batch is running. Original canonical membership and atlas job order,
+  full source pins and the final all-row publication gate remain unchanged.
+- Keep missing currently displayed/onset sources strictly first. After that
+  actual closure is ready, the exact next-cut actor and environment producers
+  share urgency. Delete the second actor-readiness fence that withheld room
+  source priority until all future actor CPU/GPU roles were published: those
+  producers are independent. Equal-urgency source FIFO and every existing role,
+  pin, cancellation and final publication gate remain. Neither a later animation
+  nor another camera view becomes urgent merely by existing in the operation.
+- Complete private atlas source directories, output uniforms and region values
+  on the existing planner worker using captured scalar identities and numeric
+  operands. The scene thread still owns Nodes, dynamic receiver attachment,
+  live output installation/acknowledgement and uncaptured retained-source
+  fallbacks. Private shells belong exclusively to the worker until it joins.
+- Decouple atlas input readiness from unrelated final graph/shadow/membership
+  construction. Reuse one atlas candidate and the exact canonical source/row
+  sequence; completion order or native IDs must never select painter/group
+  order. Only actual source identity/material/crop/visibility/support operands
+  delay capture. Scene resources, optical roles and atlas must all be complete
+  before the existing authoritative cue publishes. Cancellation retains every
+  private identity/resource until its worker has ended.
+
+The anti-slop implementer, correctness implementer and independent plan/anti-OOP
+guard review these ownership changes. Native first-frame pixels, retained and
+initial floor/actor/sight cases, cancellation, Studio seeking/looping and the full
+door→movement→Haste→two Fireballs route remain required. Both readiness holds
+must be below 50 ms (100 ms minimum); frame regressions remain unacceptable.
+Do not count reduced work or overlap as achieved latency before the live result.
+
+### Tested checkpoint requested by the user
+
+The final construction lane uses one finite five-turn cursor over cookie,
+light, actor, object and ground within the same2 ms account. Actor resource
+work can begin before unrelated cookie/light completion; ready objects progress
+even while actor work continues. Membership and exact canonical seal still
+precede the authoritative world publication. Private source capture/style/output
+finishes on the existing planner, with Nodes and live bindings on main. The
+discarded wait-suppression cache is absent. The final actor metadata merge
+overwrites the initial null shader stamp, avoiding redundant first-frame copies;
+strict zero-copy assertions remain and actual live full copies fall47→0.
+
+Final route `20261016T212402.703340Z` passes81 checks: door310.550 ms hold,
+movement19.828, Fireballs53.740/36.895. Door target and no-spike objectives are
+not achieved; movement publication52.273 ms and pre-onset draw sorting remain.
+Full native Studio passes8,686 checks, actor305 headless/341 native with12
+exact pairs; independent anti-slop/correctness/plan/anti-OOP reviewers found no
+checkpoint ownership blocker. Known shutdown warnings and source-fixture limits
+remain in the linked comprehensive handoff. At the user's explicit request,
+stop after this tested coherent batch, preserve all failed/regressed timing
+evidence, and commit. This does not mark the three-operation performance
+objective complete or authorize another renderer/backend redesign.

@@ -37,6 +37,18 @@ func prepared_dynamic_actor(side:Dictionary,prepare_copy:bool)->Dictionary:
 class EmptyPreparationHost extends Node3D:
     var native_light_atlas
     var camera:Camera3D
+    var visual_actors:Dictionary={}
+    var scenery_consumers:Dictionary={}
+    var scenery_batches:Array=[]
+    var profile:Dictionary={}
+
+func empty_membership(candidate:Node)->void:
+    # Completed empty constructor lanes, before the real prefix phase. The
+    # overlap owner now derives removals from the same passive membership base.
+    candidate.membership_base={"groups":{},"ground":{}}
+    candidate.result={"wanted":{},"ground":{},"actors":{},"packets":{},
+        "full_membership":false,"worker_ms":0.0}
+    candidate.membership={"upserts":[],"removed":{},"ground_updates":[]}
 
 func empty_static_case(source:Image)->void:
     var a=make_side(source,true,false);var b=make_side(source,true,false)
@@ -46,22 +58,26 @@ func empty_static_case(source:Image)->void:
         publish(side,true,side.world.entries)
     await first_draw(a,b,"empty-static-initial")
     for step in 2:
-        var host=EmptyPreparationHost.new();host.native_light_atlas=a.atlas;a.world.add_child(host)
+        var host=EmptyPreparationHost.new();host.native_light_atlas=a.atlas;host.camera=a.world.camera;a.world.add_child(host)
         var candidate=Preparation.new();host.add_child(candidate);candidate.host=host
-        candidate.membership={"upserts":[],"removed":{},"ground_updates":[]}
+        empty_membership(candidate)
         var before:Dictionary=positions(a.atlas)
         candidate._begin_atlas_preparation()
+        while candidate.atlas_stage=="sources":candidate._step_atlas_overlap()
         check(not candidate.prepared and candidate.phase=="native_receivers" and candidate.atlas_prefix.is_empty()
-            and candidate.atlas_jobs.is_empty() and candidate.task==-1,
+            and candidate.atlas_jobs.is_empty() and candidate.task==-1 and candidate.atlas_task==-1,
             "Empty static receipt reaches ordinary native readiness without an atlas capture or worker")
         candidate.publish_atlas_receivers()
         check(positions(a.atlas)==before and a.atlas.prepared_delta.is_empty(),
             "Empty static preparation does not publish or replace lighting geometry")
         if step==0:
             var removal=Preparation.new();host.add_child(removal);removal.host=host
-            removal.membership={"upserts":[],"removed":{a.floor.node.get_instance_id():true},"ground_updates":[]}
+            empty_membership(removal)
+            removal.membership_base.ground={"floor":{"rows":a.floor.batch_rows,"entries":[a.floor]}}
+            removal.result.ground={"floor":[]}
             removal._begin_atlas_preparation()
-            check(not removal.prepared and removal.phase=="atlas_receivers",
+            check(not removal.prepared and removal.phase=="atlas_overlap"
+                and removal.atlas_prefix.removed_sources.has(a.floor.node.get_instance_id()),
                 "A real static removal still enters exact atlas preparation")
         for side in [a,b]:
             if step==0:
@@ -86,9 +102,11 @@ func retire_private(work:Dictionary)->void:
     Atlas.Delta.retire_candidate(retirement,work.prefix,work.bindings,true)
     while not Atlas.Delta.retire_candidate_step(retirement).get("done",false):pass
 
-func prepare_future(side:Dictionary,entries:Array,packet:Dictionary,label:String,missing_shell:bool=false)->Dictionary:
+func prepare_future(side:Dictionary,entries:Array,packet:Dictionary,label:String,missing_shell:bool=false,early_capture:bool=false)->Dictionary:
     var bindings:Dictionary={};var jobs:Array=[]
+    var node_materials:Dictionary={}
     for entry in entries:
+        node_materials[entry.node.get_instance_id()]=entry.node.material_override
         var snapshot:Dictionary=entry.duplicate()
         var future:Dictionary=packet if entry==side.floor else {}
         if not future.is_empty():
@@ -105,17 +123,47 @@ func prepare_future(side:Dictionary,entries:Array,packet:Dictionary,label:String
         var value:Dictionary=bindings[entries[0].node.get_instance_id()]
         side.atlas.prepare_source_row(value,entries[0].placement,value.receiver_parent,side.atlas.published_supports,1.0)
         var id:String=value.receivers.keys()[0]
-        value.receivers[id].node.queue_free();value.receivers.erase(id)
+        side.atlas.dispose_receiver(value.receivers[id]);value.receivers.erase(id)
     var reference:Dictionary=FullCapture.begin_candidate(side.atlas,jobs,{},side.world)
     while not FullCapture.capture_candidate(side.atlas,reference,side.world):pass
     FullCapture.compute_candidate(reference)
-    var prefix:Dictionary=Atlas.Delta.begin_candidate(side.atlas,jobs,{},side.world)
+    var prefix:Dictionary=Atlas.Delta.begin_candidate(side.atlas,[] if early_capture else jobs,{},side.world)
+    check(prefix.output_region.get_object()!=side.atlas,
+        label+" private worker helper does not retain its live atlas owner")
+    if early_capture:
+        # The first canonical source is deliberately still pending while later
+        # actual sources arrive backwards. No synthetic identity is introduced.
+        for index in range(jobs.size()-1,0,-1):
+            check(Atlas.Delta.capture_source_job(side.atlas,prefix,side.world,jobs[index]),
+                label+" ready source capture can overlap an earlier unfinished scene source")
+        check(not prefix.get("complete",false) and not prefix.get("bound",false),
+            label+" partial source arrival cannot compute or publish a future atlas")
+        Atlas.Delta.seal_candidate_jobs(side.atlas,prefix,jobs)
     while not Atlas.Delta.capture_candidate(side.atlas,prefix,side.world):pass
     var task:int=WorkerThreadPool.add_task(Atlas.Delta.compute_candidate.bind(prefix),false,"Qualify private atlas plan")
     while not WorkerThreadPool.is_task_completed(task):await process_frame
     WorkerThreadPool.wait_for_task_completion(task)
     check(prefix.get("error","")==reference.get("error",""),label+" sparse capture has the frozen complete-prefix outcome")
     if prefix.get("complete",false) and reference.get("complete",false):
+        if early_capture:
+            check(prefix.source_patches.keys()==jobs.map(func(job):return job.entry.node.get_instance_id())
+                and prefix.next_order==reference.next_order,
+                label+" canonical sealing restores exact source traversal and final next-source order")
+        var captured:int=0
+        var target:Vector2=Vector2(side.atlas.MAX_SIZE,prefix.plan.next_height)
+        for id in bindings:
+            if not prefix.bulk_sources.has(id):continue
+            captured+=1
+            check(is_same(bindings[id].receivers,prefix.bulk_sources[id].binding_receivers)
+                and is_same(bindings[id].specs,prefix.bulk_sources[id].binding_specs),
+                label+" worker completes the private source directories before scene binding")
+            var output:Dictionary=prefix.outputs[id]
+            check(output.region_target==target and output.received_material.get_shader_parameter("source_crop")==prefix.source_patches[id].crop.uv,
+                label+" private output owns the final planned region and exact crop before scene binding")
+            check(bindings[id].entry.node.material_override==node_materials[id],
+                label+" worker output finalization never changes the live or hidden source Node material")
+        check(prefix.worker_source_directories==captured and prefix.source_bind_ids.all(func(id):return not bindings.has(id)),
+            label+" scene source construction contains only uncaptured incident fallback sources")
         var plan:Dictionary=prefix.plan.duplicate();var expected:Dictionary=reference.plan.duplicate()
         # Sparse capture owns only incident cells. Compare its effective result
         # over the untouched published base against the frozen complete map.
@@ -136,7 +184,7 @@ func prepare_future(side:Dictionary,entries:Array,packet:Dictionary,label:String
     check(not prefix.has("error"),label+" private binding completes for every exact source")
     return {"prefix":prefix,"bindings":bindings}
 
-func staged_case(source:Image,label:String,cap:bool,normals:bool,stale:bool=false,view_change:String="",changed_visibility:bool=false,extra_mode:String="")->void:
+func staged_case(source:Image,label:String,cap:bool,normals:bool,stale:bool=false,view_change:String="",changed_visibility:bool=false,extra_mode:String="",early_capture:bool=false)->void:
     var a=make_side(source,cap,normals);var b=make_side(source,cap,normals)
     if extra_mode=="dynamic_replace":
         for side in [a,b]:
@@ -194,7 +242,7 @@ func staged_case(source:Image,label:String,cap:bool,normals:bool,stale:bool=fals
             var actor:Dictionary=side.world.actor_entries[0].duplicate()
             side.next_actor=actor
         job_entries.append(a.next_actor)
-    var work:Dictionary=await prepare_future(a,job_entries,packet_a,label,extra_mode=="missing_shell")
+    var work:Dictionary=await prepare_future(a,job_entries,packet_a,label,extra_mode=="missing_shell",early_capture)
     var prefix:Dictionary=work.prefix;var bindings:Dictionary=work.bindings
     await process_frame;await RenderingServer.frame_post_draw
     check(before.get_data()==a.view.get_texture().get_image().get_data(),label+" private preparation exposes no pixels")
@@ -206,7 +254,7 @@ func staged_case(source:Image,label:String,cap:bool,normals:bool,stale:bool=fals
             var group:Dictionary=row_receiver(side.atlas,side.floor,str(side.floor.batch_rows[0].id)).group
             group.material=group.material.duplicate(true)
             for receiver in side.atlas.receivers:
-                if is_same(receiver.group,group):receiver.node.material=group.material
+                if is_same(receiver.group,group):side.atlas.set_receiver_material(receiver,group.material)
     if extra_mode=="changed_base":
         for side in [a,b]:
             var actor:Dictionary=prepared_dynamic_actor(side,false);actor.node.show()
@@ -245,7 +293,7 @@ func staged_case(source:Image,label:String,cap:bool,normals:bool,stale:bool=fals
         prefix=work.prefix;bindings=work.bindings
     check(Atlas.Delta.candidate_base_matches(a.atlas,prefix,a.world),label+" exact private work passes preflight")
     var prepared_nodes:Dictionary={};var prepared_outputs:Dictionary={}
-    for receiver in prefix.ready_list+prefix.ready_retained:prepared_nodes[receiver.id]=receiver.node
+    for receiver in prefix.ready_list+prefix.ready_retained:prepared_nodes[receiver.id]=Atlas.receiver_handle(receiver)
     for id in prefix.outputs:prepared_outputs[id]=prefix.outputs[id].get("received_material")
     prefix.admitted=true
     for value in bindings.values():check(a.atlas.adopt_source_binding(value),label+" exact private source transfers ownership once")
@@ -265,7 +313,7 @@ func staged_case(source:Image,label:String,cap:bool,normals:bool,stale:bool=fals
     check(a.atlas.last_reconcile_phases.get("prepared_prefix_specs",0)>0
         and a.atlas.last_reconcile_phases.get("delta_fallback","").is_empty(),label+" accepted cut publishes the prepared plan without recovery planning")
     check(a.atlas.prepared_source_bindings.is_empty(),label+" publication releases temporary preparation ownership")
-    for id in prepared_nodes:check(a.atlas.receiver_index[id].node==prepared_nodes[id],label+" publication adopts the exact prepared receiver node")
+    for id in prepared_nodes:check(Atlas.receiver_handle(a.atlas.receiver_index[id])==prepared_nodes[id],label+" publication adopts the exact prepared receiver node")
     for id in prepared_outputs:
         check(a.atlas.entry_specs[id].entry.received_material==prepared_outputs[id],label+" publication adopts the exact prepared output material")
     if extra_mode=="hover_after_prepare":
@@ -291,7 +339,7 @@ func staged_case(source:Image,label:String,cap:bool,normals:bool,stale:bool=fals
     var unused:Dictionary=single(a.world,a.texture,18);unused.node.reparent(cancelled,false)
     var discarded:Dictionary=a.atlas.prepare_source_binding(unused,unused.duplicate(),a.world)
     a.atlas.prepare_source_row(discarded,unused.placement,cancelled,a.atlas.published_supports,1.0)
-    var node_ref:WeakRef=weakref(discarded.receivers.values()[0].node)
+    var node_ref:WeakRef=weakref(Atlas.receiver_handle(discarded.receivers.values()[0]))
     var count:int=a.atlas.receivers.size()
     cancelled.queue_free();discarded={};await process_frame;await process_frame
     check(node_ref.get_ref()==null and a.atlas.receivers.size()==count,label+" cancellation releases private nodes without publishing membership")
@@ -377,6 +425,9 @@ func run()->void:
     await staged_case(source,"staged-current-hover",true,false,false,"",false,"hover_after_prepare")
     await staged_case(source,"staged-prepared-actor-extra",true,false,false,"",false,"prepared_dynamic_append")
     await staged_case(source,"staged-retained-output-changed",true,false,false,"",false,"retained_output_changed")
+    await staged_case(source,"staged-early-row-visibility",true,false,false,"",true,"",true)
+    await staged_case(source,"staged-early-ground-removal",true,false,false,"",false,"removed_floor",true)
+    await staged_case(source,"staged-early-dynamic-append",true,false,false,"",false,"append",true)
     var report={"renderer":RenderingServer.get_current_rendering_method(),"checks":checks,"failures":failures,"cases":cases,
         "scope":"Private future source/spec/material/receiver preparation; exact source-version admission; changed ground packets; growth, cancellation and first-draw byte parity against complete original planning. No gameplay latency claim."}
     FileAccess.open("res://generated/native_atlas_staged_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))

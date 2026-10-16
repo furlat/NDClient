@@ -23,7 +23,7 @@ func planned(side:Dictionary,entries:Array,packet:Dictionary={})->Dictionary:
             snapshot.ground_version=entry.ground_version+1;snapshot.batch_rows=future.rows
             snapshot.ground_indices=future.indices;snapshot.ground_packets=future.packets
             snapshot.ground_buffer=future.buffer;snapshot.scenery_values=future.values;snapshot.placement=future.rows[0]
-        var binding:Dictionary=side.atlas.prepare_source_binding(entry,snapshot,side.world,true)
+        var binding:Dictionary=side.atlas.prepare_source_binding(entry,snapshot,side.world,true,{"defer_static_output":true},true)
         check(not binding.is_empty(),"Selected source has its private native binding")
         binding.receiver_parent=side.atlas.projection_root
         bindings[entry.node.get_instance_id()]=binding
@@ -32,13 +32,52 @@ func planned(side:Dictionary,entries:Array,packet:Dictionary={})->Dictionary:
             "source_visible":entry.node.visible})
     var prefix:Dictionary=Atlas.Delta.begin_candidate(side.atlas,jobs,{},side.world)
     while not Atlas.Delta.capture_candidate(side.atlas,prefix,side.world):pass
-    Atlas.Delta.compute_candidate(prefix)
+    var task:int=WorkerThreadPool.add_task(Atlas.Delta.compute_candidate.bind(prefix),false,"Prepare private final atlas resources")
+    while not WorkerThreadPool.is_task_completed(task):await process_frame
+    WorkerThreadPool.wait_for_task_completion(task)
     check(prefix.get("complete",false) and not prefix.has("error"),"Existing planner completes the passive candidate")
+    check(bindings.values().all(func(binding):return binding.receivers.is_empty() and binding.created_rows==0),
+        "Passive final projection planning allocates no receiving node or provisional material group")
+    check(prefix.private_draws.size()==prefix.projection_packets.size() and prefix.private_draws.values().all(
+        func(draw):return draw.rid.is_valid() and not draw.parent.is_valid() and not draw.visible),
+        "Worker owns exactly the final static canvas items, hidden and unparented without a SceneTree Node")
+    check(prefix.ready_style.size()==prefix.bind_ids.size() and prefix.bulk_sources.values().all(
+        func(owner):return owner.prepared.is_empty() and owner.binding_receivers.size()>=owner.created_rows),
+        "Worker completes actual receiver records, source directories and ordered leases before scene attachment")
+    check(prefix.group_proofs.values().all(func(proof):return proof[0].rank==proof[4] and proof[0].users==proof[5]),
+        "Private receiver assembly does not mutate displayed group ranks or user counts")
     return {"prefix":prefix,"bindings":bindings}
 
 func bind_private(side:Dictionary,work:Dictionary)->void:
     while not Atlas.Delta.prepare_candidate_binding(side.atlas,work.prefix,work.bindings):pass
     check(work.prefix.get("bound",false) and not work.prefix.has("error"),"Candidate binds exact selected receivers and outputs")
+    var expected:int=work.prefix.ready_list.size()+work.prefix.ready_retained.size()
+    check(work.prefix.prepared_created_rows==expected,"Final scene binding creates each selected receiver exactly once")
+    var compared:int=0;var exact:bool=true
+    for receiver in work.prefix.ready_list+work.prefix.ready_retained:
+        if receiver.dynamic:continue
+        check(receiver.has("draw") and not receiver.has("node") and receiver.draw.parent==side.atlas.projection_root.get_canvas_item(),
+            "Scene binding attaches the exact private static RID without constructing a Sprite2D")
+        var prepared:Dictionary=work.bindings[receiver.spec.source_id]
+        var reference:Dictionary=receiver.duplicate();reference.erase("draw");reference.node=Sprite2D.new()
+        # Independent original scene arithmetic, including native quad/ground
+        # operand reads, remains the qualification oracle for worker packets.
+        side.atlas._project_entry(reference,prepared.snapshot,prepared.basis)
+        exact=exact and Atlas.receiver_transform(receiver)==reference.node.transform and receiver.bounds==reference.bounds \
+            and receiver.world_origin==reference.world_origin and receiver.projection==reference.projection
+        reference.node.free();compared+=1
+    check(exact and compared==work.prefix.prepared_packet_rows,
+        "Final numeric static projections exactly match original scene projection arithmetic")
+    var private_groups:int=0
+    for groups in work.prefix.private_groups.values():
+        for group in groups.values():
+            private_groups+=1
+            check(group.material.get_rid().is_valid() and group.target_material==group.material,
+                "Only the new worker-owned receiving material reaches native attachment")
+    check(private_groups==work.prefix.worker_group_materials,"Final binding retains every exact private material produced by its worker")
+    check(work.prefix.preparation_usec.has("source_setup") and work.prefix.preparation_usec.has("output_materials") \
+        and work.prefix.preparation_usec.has("row_creation") and work.prefix.preparation_usec.has("projection_apply"),
+        "Profiled native preparation separates source setup, output, row allocation and projection application")
 
 func admit(side:Dictionary,work:Dictionary)->void:
     check(Atlas.Delta.candidate_base_matches(side.atlas,work.prefix,side.world),"Candidate retains its exact live base at publication")
@@ -66,8 +105,8 @@ func capacity_case(source:Image,label:String,normals:bool,cancel:bool)->void:
         var entry:Dictionary=single(a.world,a.texture,index)
         entry.node.reparent(candidate,false);add_a.append(entry)
         var reference:Dictionary=single(b.world,b.texture,index);reference.node.hide();add_b.append(reference)
-    var work:Dictionary=planned(a,add_a)
-    var stale:Dictionary=planned(a,[a.world.entries[1]])
+    var work:Dictionary=await planned(a,add_a)
+    var stale:Dictionary=await planned(a,[a.world.entries[1]])
     bind_private(a,stale)
     check(Atlas.Delta.candidate_base_matches(a.atlas,stale.prefix,a.world),label+" another prepared candidate starts valid")
     var old_token:Array=work.prefix.token.duplicate()
@@ -119,7 +158,7 @@ func cull_case(source:Image,mode:String)->void:
         ea.node.position=Vector3(0,0,0) if index==0 else Vector3(200,200,0)
         eb.node.position=ea.node.position
         ea.node.reparent(candidate,false);eb.node.hide();add_a.append(ea);add_b.append(eb)
-    var work:Dictionary=planned(a,add_a);bind_private(a,work)
+    var work:Dictionary=await planned(a,add_a);bind_private(a,work)
     check(not work.prefix.plan.growing,label+" does not need capacity growth")
     if mode=="camera":
         for side in [a,b]:side.world.camera.position.x+=.75;side.world.camera.size+=.5
@@ -132,18 +171,18 @@ func cull_case(source:Image,mode:String)->void:
     publish(a,false,add_a);publish(b,true,b.world.entries)
     var near_row:Dictionary=row_receiver(a.atlas,add_a[0])
     var far_row:Dictionary=row_receiver(a.atlas,add_a[1])
-    check(not far_row.node.visible and not far_row.get("view_visible",false),label+" offscreen source remains admitted but not rendered")
+    check(not Atlas.receiver_visible(far_row) and not far_row.get("view_visible",false),label+" offscreen source remains admitted but not rendered")
     if mode=="stable":
         check(a.atlas.last_reconcile_phases.get("prepared_cull_rows",0)==2
             and a.atlas.last_reconcile_phases.get("prepared_cull_hidden",0)==1,
             label+" captured camera and published ancestry admit both decisions including the hidden row")
-        check(near_row.cull_owner.frame==a.atlas.sample_serial and near_row.node.visible,
+        check(near_row.cull_owner.frame==a.atlas.sample_serial and Atlas.receiver_visible(near_row),
             label+" visible source uses the prepared decision on its first sample")
     elif mode=="camera":
         check(a.atlas.last_reconcile_phases.get("prepared_cull_rows",0)==0
             and near_row.cull_owner.frame!=a.atlas.sample_serial,label+" changed camera uses ordinary current projection and culling")
     else:
-        check(near_row.cull_owner.frame!=a.atlas.sample_serial and not near_row.node.visible,
+        check(near_row.cull_owner.frame!=a.atlas.sample_serial and not Atlas.receiver_visible(near_row),
             label+" changed published ancestry rejects its stale prepared visibility")
     await draw_pair(a,b,label+"-published")
     # The one-publication decision must not mask subsequent current camera work.
@@ -183,7 +222,7 @@ func group_case(source:Image)->void:
         packet_visibility(packet,"new-1",0.0)
         packet_visibility(packet,"new-2",.75)
         packet_visibility(packet,"new-3",1.0)
-    var work:Dictionary=planned(a,[a.floor],pa);bind_private(a,work)
+    var work:Dictionary=await planned(a,[a.floor],pa);bind_private(a,work)
     check(work.prefix.plan.specs.values().all(func(spec):return spec.join_mask==0),
         "All selected test rows share the actual exposed-face group identity")
     var alternating:bool=false

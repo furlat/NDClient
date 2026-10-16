@@ -98,17 +98,25 @@ static func prepare_binding(path:String,slot:String,cache:Dictionary,depth:bool,
             for d in source.depth_range:value.bounds.append(relative*Vector3(x-optical.origin[0],optical.origin[1]-y,d)*units)
     return value
 
-static func apply_binding(entry:Dictionary,value:Dictionary)->void:
-    if entry.get("geometry_binding",[])==value.key:return
+static func apply_binding_values(entry:Dictionary,value:Dictionary)->bool:
+    # Source values are independent of the current scene/pose. A private
+    # resource worker and the ordinary binder share the exact same ledger.
+    if entry.get("geometry_binding",[])==value.key:return false
     entry.geometry_binding=value.key;entry.geometry_status=value.status;entry.geometry_paths=value.paths
     entry.erase("geometry_ground_pixels");entry.erase("geometry_error");entry.erase("geometry_cell_size")
     if value.has("cell"):entry.geometry_cell_size=value.cell
     if value.get("ground")!=null:entry.geometry_ground_pixels=value.ground
     if value.has("error"):entry.geometry_error=value.error
     SourceMaterial.apply(entry,value.parameters)
-    var bounds:AABB=entry.node.mesh.get_aabb()
-    for point in value.bounds:bounds=bounds.expand(point)
-    entry.node.custom_aabb=bounds
+    return true
+
+static func binding_bounds(bounds:AABB,points:PackedVector3Array)->AABB:
+    for point in points:bounds=bounds.expand(point)
+    return bounds
+
+static func apply_binding(entry:Dictionary,value:Dictionary)->void:
+    if not apply_binding_values(entry,value):return
+    entry.node.custom_aabb=binding_bounds(entry.node.mesh.get_aabb(),value.bounds)
 
 static func clear(entry: Dictionary) -> void:
     SourceMaterial.set_parameter(entry,"has_component_geometry",false)

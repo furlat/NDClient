@@ -3,7 +3,7 @@ extends "res://tests/native_atlas_growth_checks.gd"
 # displayed atlas. Direct mathematical/reference owners retain full planning.
 
 func retained(atlas:RefCounted,entry:Dictionary)->Dictionary:
-    return {"nodes":atlas.receivers.map(func(r):return r.node),
+    return {"nodes":atlas.receivers.map(func(r):return Atlas.receiver_handle(r)),
         "materials":atlas.receivers.map(func(r):return r.group.material),
         "positions":positions(atlas),"groups":atlas.groups.values().duplicate(),
         "size":atlas.viewport.size,"repacks":atlas.repack_count,"serial":atlas.delta_serial,
@@ -68,10 +68,10 @@ func run()->void:
     var actor:Dictionary=single(moving.world,moving.texture,18,Vector2(512,512),true)
     moving.world.entries.append(actor);moving.world.actor_entries=[actor]
     publish(moving,true,moving.world.entries);moving.atlas.require_prepared_publication=true
-    var nodes:Array=moving.atlas.receivers.map(func(r):return r.node)
+    var nodes:Array=moving.atlas.receivers.map(func(r):return Atlas.receiver_handle(r))
     actor.node.position.x+=.25;SourceMaterial.set_parameter(actor,"source_tint",Color(.5,1,1,1))
     publish(moving,false,[])
-    check(not moving.atlas.output_admission_failed and moving.atlas.receivers.map(func(r):return r.node)==nodes,
+    check(not moving.atlas.output_admission_failed and moving.atlas.receivers.map(func(r):return Atlas.receiver_handle(r))==nodes,
         "Continuous actor motion and source tint retain admitted resources without preparation")
     check(row_receiver(moving.atlas,actor).group.material.get_shader_parameter("source_tint")==Color(.5,1,1,1),
         "Continuous source values still reach receiving materials")

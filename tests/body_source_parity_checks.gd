@@ -49,7 +49,10 @@ func compare(actor:Dictionary)->void:
             check(resource!=null,actor.name+" explicitly admits selected category")
             if resource==null:continue
             for clip in resource.clips:
-                var descriptor:Dictionary=resource.clips[clip].get(layer.slot,{})
+                var selected_clip=Sources.prepare_clip(resource,clip,cache)
+                check(selected_clip!=null,actor.name+" explicitly admits selected clip "+clip)
+                if selected_clip==null:continue
+                var descriptor:Dictionary=selected_clip.descriptors.get(layer.slot,{})
                 if descriptor.is_empty():continue
                 var source:Dictionary=descriptor.geometry
                 var oldgeometry:Dictionary=Legacy.CharacterGeometry.record(descriptor.path,layer.slot,legacy).duplicate()

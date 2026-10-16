@@ -3,6 +3,12 @@ extends RefCounted
 ## Changes are retained until all atlas targets acknowledge the same sample.
 static var declared_parameters:Dictionary={}
 
+static func environment_policy(kind:String,role:String,visibility:Variant=null)->Dictionary:
+    var values:Dictionary={"authored_base_light":0.0}
+    if kind in ["wall","door"] and role!="shadow":values.two_sided_receiver=true
+    if visibility!=null:values.current_visibility=visibility
+    return values
+
 static func initialize(entry:Dictionary)->void:
     entry.erase("bound_condition_parameters")
     var shader:Shader=entry.material.shader

@@ -4,6 +4,13 @@ extends RefCounted
 # atlas planner. The world and its event clock remain owned by Play.
 const SourceMaterial=preload("res://presentation/source_material.gd")
 const GroundReceiving=preload("res://presentation/ground_receiving.gd")
+const CanvasDraw=preload("res://presentation/canvas_draw.gd")
+const CanvasBatch=preload("res://presentation/canvas_batch.gd")
+
+static func new_group(entry:Dictionary,crop:Dictionary,visibility:float,id:Array,info:Dictionary,join_mask:int)->Dictionary:
+    var material=ShaderMaterial.new();material.shader=info.shader
+    return {"id":id,"entry":entry,"info":info,"material":material,"crop":crop,"version":-1,"source_shader":null,
+        "highlighted":null,"visibility":visibility,"join_mask":join_mask,"rank":0,"water":info.water}
 
 static func _row(entry: Dictionary, row_id: String) -> Dictionary:
     return entry.batch_rows[entry.ground_indices[row_id]] if entry.has("batch_rows") else entry.placement
@@ -141,7 +148,7 @@ static func _remove(atlas, receiver: Dictionary) -> void:
     var source: Dictionary=atlas.entry_specs[receiver.spec.source_id]
     source.receivers.erase(receiver.row_id); source.by_row.erase(receiver.row_id); source.packets.erase(receiver.row_id)
     drop_group(atlas,receiver.group)
-    receiver.node.visible=false; receiver.node.queue_free()
+    atlas.dispose_receiver(receiver)
 
 static func _bind(atlas, spec: Dictionary, position: Vector2i) -> Dictionary:
     var entry: Dictionary=spec.entry
@@ -191,15 +198,15 @@ static func _bind(atlas, spec: Dictionary, position: Vector2i) -> Dictionary:
             receiver.projection=[]
             if not receiver.dynamic: atlas.projection_dirty.append(receiver)
         receiver.source_geometry=spec.source_geometry; receiver.spec=spec
-    if receiver.node.material!=group.material: receiver.node.material=group.material
+    atlas.set_receiver_material(receiver,group.material)
     if receiver.water and not receiver.projection.is_empty():
         receiver.group.material.set_shader_parameter("receiver_world_origin",receiver.world_origin)
     var region=Rect2(Vector2(position),Vector2(receiver.crop.pixels.size))
     if receiver.get("region",Rect2())!=region:
-        receiver.node.region_rect=region; receiver.region=region
+        atlas.set_receiver_region(receiver,region); receiver.region=region
     receiver.position=position
     var rank: int=group.rank%1024
-    if receiver.get("rank",-1)!=rank: receiver.node.z_index=rank; receiver.rank=rank
+    if receiver.get("rank",-1)!=rank: atlas.set_receiver_rank(receiver,rank); receiver.rank=rank
     var source: Dictionary=atlas.entry_specs[spec.source_id]
     source.receivers[spec.row_id]=receiver; source.by_row[spec.row_id]=spec
     if not receiver.dynamic: atlas.cull_dirty[receiver.id]=true
@@ -308,7 +315,10 @@ static func begin_candidate(atlas,jobs:Array,removed:Dictionary,world,target_opt
         "needed_receivers":{},"needed_cells":{},"removed_ids":{},"next_order":atlas.next_source_order,"ranks":{},"bind_cursor":0,
         "ready_new":{},"ready_members":{},"ready_cull":{},"ready_style":{},"ready_pixels":0,
         "ready_list":[],"ready_static":[],"ready_dynamic":[],"ready_retained":[],"bulk_commands":[],"bulk_sources":{},"bulk_retained":[],"bulk_possible":true,
-        "source_sync_versions":{},"cull_sample":atlas.capture_projection(world),
+        "binding_sources":{},"obsolete_private_receivers":{},
+        "source_sync_versions":{},"source_ground_versions":{},"projection_packets":{},"group_inputs":{},"private_groups":{},"private_draws":{},
+        "white":atlas.white,"white_rid":atlas.white.get_rid(),"cull_sample":atlas.capture_projection(world),
+        "output_region":atlas.get_script().prepare_output_region_values,
         "base_lists":[atlas.receivers.size(),atlas.static_receivers.size(),atlas.groups.size()],"group_proofs":{},
         "basis":world.camera.global_basis,"base_basis":world.camera.global_basis if base_world==null else base_world.camera.global_basis,
         "target_options":target_options,"screen":world.get_viewport().get_visible_rect().size,
@@ -429,14 +439,26 @@ static func _capture_receiver(atlas,work:Dictionary,id:String)->void:
     var spec:Dictionary=receiver.spec.duplicate()
     var index:int=row_index(receiver)
     spec.row=receiver.row;spec.row_id=receiver.row_id;spec.row_rank=maxi(index,0)
+    if not work.source_ground_versions.has(spec.source_id):
+        work.source_ground_versions[spec.source_id]=receiver.entry.get("ground_version",0)
+    if not spec.info.dynamic and not work.group_inputs.has(spec.source_id):
+        work.group_inputs[spec.source_id]=atlas.capture_group_input(receiver.entry,spec.info,spec.crop,
+            Basis(work.basis.x,-work.basis.y,work.basis.z).transposed(),work.screen)
     work.passive.receiver_index[id]={"id":id,"row":receiver.row,"row_id":receiver.row_id,"index":index,
-        "join_mask":receiver.join_mask,"crop":receiver.crop,"position":receiver.position,"group_id":receiver.group.id,"spec":spec}
+        "join_mask":receiver.join_mask,"crop":receiver.crop,"position":receiver.position,"group_id":receiver.group.id,
+        "visibility":receiver.visibility,"spec":spec,"receiver":receiver,"group":receiver.group,
+        "binding_revision":receiver.entry.get("source_binding_revision",0),
+        "source_visible":receiver.entry.node.is_visible_in_tree()}
     work.passive.entry_specs[spec.source_id]={"order":atlas.entry_specs[spec.source_id].order}
     if work.removed_sources.has(spec.source_id) or work.removed_ids.has(id):work.removed[id]=work.passive.receiver_index[id]
 
 static func _capture_groups(atlas,work:Dictionary)->void:
     # Only groups incident to changed sources/support receivers can be consumed
     # by this candidate. Unrelated source materials are not a preparation input.
+    if work.get("canonical_capture",false):
+        var ordered:Dictionary={}
+        for job in work.jobs:ordered[job.source_id]=work.source_patches[job.source_id]
+        work.source_patches=ordered
     var sources:Dictionary={}
     for id in work.source_patches:sources[id]=true
     for receiver in work.passive.receiver_index.values():sources[receiver.spec.source_id]=true
@@ -444,26 +466,111 @@ static func _capture_groups(atlas,work:Dictionary)->void:
         for key in atlas.source_groups.get(id,{}):
             var group:Dictionary=atlas.source_groups[id][key]
             work.ranks[key]=group.rank
-            work.group_proofs[key]=[group,group.material,group.material.shader,group.crop,group.rank,group.get("users",0)]
+            work.group_proofs[key]=[group,group.material,group.material.shader,group.crop,group.rank,group.get("users",0),group.material.get_rid(),group.version]
             work.source_sync_versions[id]=mini(int(work.source_sync_versions.get(id,group.version)),int(group.version))
     work.stage="captured"
 
 static func _capture_source(atlas,work:Dictionary,world)->bool:
     var job:Dictionary=work.jobs[work.cursor];work.cursor+=1
+    if work.source_patches.has(job.entry.node.get_instance_id()):return false
+    return _capture_source_value(atlas,work,world,job)
+
+static func capture_source_job(atlas,work:Dictionary,world,job:Dictionary)->bool:
+    # World preparation may hand off ready operands before its scene adoption
+    # finishes. This is the same source owner/capture, not another work queue.
+    if work.token!=token(atlas):work.error="atlas_changed_during_capture";return false
+    var id:int=job.entry.node.get_instance_id()
+    if work.source_patches.has(id):return true
+    var selected:Dictionary=job.duplicate()
+    work.jobs.append(selected)
+    _capture_source_value(atlas,work,world,selected)
+    return not work.has("error")
+
+static func seal_candidate_jobs(atlas,work:Dictionary,canonical_jobs:Array)->void:
+    # Arrival order must never become painter/group order. Actual source IDs
+    # remain unchanged; only this prefix's private job shells are reordered.
+    var jobs:Array=[];var order:int=int(work.token[5])
+    for original in canonical_jobs:
+        var job:Dictionary=original.duplicate()
+        var id:int=job.entry.node.get_instance_id()
+        var before:Dictionary=atlas.entry_specs.get(id,{})
+        job.source_id=id;job.source_order=order if before.is_empty() else before.order
+        if before.is_empty():order+=1
+        if work.source_patches.has(id):work.source_patches[id].order=job.source_order
+        jobs.append(job)
+    work.jobs=jobs;work.cursor=0;work.next_order=order;work.canonical_capture=true
+
+static func private_source_capture(prepared:Dictionary)->Dictionary:
+    # The resource producer owns every value here. This is a separate outer
+    # directory from prepared.source: the displayed atlas may retain it after
+    # the constructor shell retires. Native identity is linked on admission.
+    var snapshot:Dictionary=prepared.snapshot
+    var source:Dictionary=prepared.source.duplicate()
+    source.complete=true
+    source.prepared_specs=prepared.specs;source.prepared_output=prepared.output
+    source.private_receivers=prepared.receivers.duplicate()
+    source.private_specs=prepared.specs.duplicate();source.private_groups=prepared.groups.duplicate()
+    source.proof={"cell":snapshot.cell,"material":snapshot.material,"material_id":snapshot.material.get_instance_id(),
+        "version":snapshot.source_version,"binding_revision":snapshot.source_binding_revision,
+        "base_ground_version":0,"ground_version":0,"scenery":snapshot.get("scenery_value",1.0),
+        "geometry":source.geometry,"info":source.info,"record_path":snapshot.get("record",{}).get("path",""),
+        "record_rect":snapshot.get("record",{}).get("rect",[]).duplicate()}
+    source.rows=[snapshot.placement];source.snapshot=snapshot;source.is_floor=false
+    return source
+
+static func _capture_source_value(atlas,work:Dictionary,world,job:Dictionary)->bool:
     var entry:Dictionary=job.entry
     var prepared:Dictionary=job.get("prepared",{})
+    var id:int=entry.node.get_instance_id()
+    # Actual new native identity proves there is no retained atlas base to
+    # snapshot. Its private constructor already completed the passive source.
+    if prepared.has("capture") and not atlas.entry_specs.has(id):
+        var source:Dictionary=prepared.capture
+        if (prepared.binding_revision!=entry.source_binding_revision
+            or source.info.light_cap!=work.target_options.get("light_cap",atlas.light_cap)
+            or source.info.normals_visible!=work.target_options.get("normals_visible",atlas.normals_visible)
+            or prepared.basis!=Basis(world.camera.global_basis.x,-world.camera.global_basis.y,world.camera.global_basis.z).transposed()
+            or prepared.screen_size!=world.get_viewport().get_visible_rect().size):
+            work.error="source_changed_before_prefix_capture";return true
+        prepared.erase("capture")
+        source.source_id=id;source.order=job.get("source_order",work.next_order)
+        if not job.has("source_order"):work.next_order+=1
+        source.future_visible=job.get("source_visible",entry.node.visible)
+        job.source_id=id
+        work.binding_sources[id]=prepared;work.source_ground_versions[id]=0
+        if not source.info.dynamic:work.group_inputs[id]=prepared.group_input
+        if work.capture_sparse:
+            _need_receiver(atlas,work,str(id)+":source")
+            _need_support(work,source.rows[0])
+        work.source_patches[id]=source
+        return false
     var snapshot:Dictionary=prepared.snapshot if not prepared.is_empty() else entry.duplicate()
-    var source:Dictionary=_source(atlas,entry,world,snapshot,work.target_options)
+    # New private static Nodes already carry the exact source operands produced
+    # before they existed. Re-reading those Nodes here merely reconstructed the
+    # same crop/signature/geometry and copied the same uniform maps again.
+    var direct:bool=prepared.get("private_static",false)
+    var source:Dictionary=prepared.source.duplicate() if direct else _source(atlas,entry,world,snapshot,work.target_options)
     if source.crop.is_empty():work.error="missing_crop";return true
     if not prepared.is_empty() and (prepared.get("binding_revision",0)!=entry.get("source_binding_revision",0)
-        or prepared.signature!=source.signature or prepared.info!=source.info
+        or (not direct and (prepared.signature!=source.signature or prepared.info!=source.info))
+        or (direct and (source.info.light_cap!=work.target_options.get("light_cap",atlas.light_cap) or source.info.normals_visible!=work.target_options.get("normals_visible",atlas.normals_visible)))
         or prepared.basis!=Basis(world.camera.global_basis.x,-world.camera.global_basis.y,world.camera.global_basis.z).transposed()
         or prepared.screen_size!=world.get_viewport().get_visible_rect().size):
         work.error="source_changed_before_prefix_capture";return true
-    var id:int=entry.node.get_instance_id()
+    job.source_id=id
+    source.source_id=id;source.is_floor=entry.has("batch_rows")
+    # The candidate lends this exclusive shell to its planner until completion.
+    # Its entry/Node remains opaque; only private directories/output may change.
+    if not prepared.is_empty():source.prepared_binding=prepared
+    work.source_ground_versions[id]=snapshot.get("ground_version",0)
+    if not source.info.dynamic:
+        work.group_inputs[id]=prepared.group_input if not prepared.is_empty() else atlas.capture_group_input(entry,source.info,source.crop,
+            Basis(work.basis.x,-work.basis.y,work.basis.z).transposed(),work.screen)
     var before:Dictionary=atlas.entry_specs.get(id,{})
-    source.order=work.next_order if before.is_empty() else before.order
-    if before.is_empty():work.next_order+=1
+    if job.has("source_order"):source.order=job.source_order
+    else:
+        source.order=work.next_order if before.is_empty() else before.order
+        if before.is_empty():work.next_order+=1
     source.receivers=before.get("receivers",{}).duplicate();source.by_row=before.get("by_row",{}).duplicate()
     source.packets=before.get("packets",{}).duplicate()
     source.complete=before.is_empty() or not source.same or work.removed_sources.has(id)
@@ -479,6 +586,11 @@ static func _capture_source(atlas,work:Dictionary,world)->bool:
                 _capture_removal(atlas,work,receiver_id)
     source.prepared_specs=prepared.get("specs",{})
     source.prepared_output=prepared.get("output",{})
+    if source.info.dynamic and not prepared.is_empty():
+        atlas._prepare_source_group(prepared,float(snapshot.get("scenery_value",1.0)),"",0)
+    source.private_receivers=prepared.get("receivers",{}).duplicate()
+    source.private_specs=source.prepared_specs.duplicate()
+    source.private_groups=prepared.get("groups",{}).duplicate()
     source.future_visible=job.get("source_visible",entry.node.visible)
     source.proof={"entry":entry,"cell":entry.cell,"material":entry.material,"material_id":entry.material.get_instance_id(),"version":entry.get("source_version",0),"binding_revision":entry.get("source_binding_revision",0),
         "base_ground_version":entry.get("ground_version",0),"ground_version":snapshot.get("ground_version",0),"scenery":snapshot.ground_visibility.duplicate() if snapshot.has("ground_visibility") else snapshot.scenery_values.duplicate() if snapshot.has("scenery_values") else snapshot.get("scenery_value",1.0),
@@ -601,9 +713,20 @@ static func compute_candidate(work:Dictionary)->void:
         work.error=work.plan.error;work.worker_ms=(Time.get_ticks_usec()-started)/1000.0;return
     if not _candidate_addresses(work):
         work.worker_ms=(Time.get_ticks_usec()-started)/1000.0;return
+    # Native source/mesh values were captured once per source. Project final
+    # static rows here, after support expansion, without reading live Nodes or
+    # Resources. Scene binding consumes these numeric operands exactly once.
+    var projection_started:int=Time.get_ticks_usec()
+    var projection_basis:Basis=Basis(work.basis.x,-work.basis.y,work.basis.z).transposed()
+    for id in work.plan.specs:
+        var spec:Dictionary=work.plan.specs[id]
+        if spec.info.dynamic:continue
+        work.projection_packets[id]=_projection_packet(spec.source_geometry,spec.crop,projection_basis,
+            int(work.source_ground_versions.get(spec.source_id,0)))
+    work.projection_worker_ms=(Time.get_ticks_usec()-projection_started)/1000.0
     work.worker_ms=(Time.get_ticks_usec()-started)/1000.0
     work.bind_ids=work.plan.specs.keys();work.bind_cursor=0
-    work.output_ids=work.source_patches.keys();work.output_cursor=0
+    work.output_ids=[];work.output_cursor=0
     work.outputs={};work.source_proofs={}
     # The exact planned removals run before any new bind. Prepare final list
     # offsets and initial group ranks against that same post-removal prefix.
@@ -622,7 +745,239 @@ static func compute_candidate(work:Dictionary)->void:
         var count:int=work.group_proofs[key][5]-int(removed_groups.get(key,0))
         if count>0:
             work.group_users[key]=count;work.planned_groups[key]=work.group_proofs[key][0]
-    work.rank_count=work.base_lists[2]-work.dropped_groups.size();work.bulk_reason="";work.complete=true
+    work.rank_count=work.base_lists[2]-work.dropped_groups.size();work.bulk_reason=""
+    _prepare_group_resources(work)
+    var output_started:int=Time.get_ticks_usec();var output_count:int=0
+    var target:Vector2=Vector2(work.passive.MAX_SIZE,work.plan.next_height)
+    var region_count:int=0
+    for id in work.source_patches:
+        var source:Dictionary=work.source_patches[id]
+        var output:Dictionary=source.get("prepared_output",{})
+        if output.has("input"):
+            var input:Dictionary=output.input
+            var material:ShaderMaterial=ShaderMaterial.new();material.shader=input.shader
+            for name in input.parameters:material.set_shader_parameter(name,input.parameters[name])
+            material.get_rid()
+            output.received_material=material;output.binding=input.binding
+            if input.capped:
+                var sample:Dictionary=output.sample
+                output.received_source_key={"binding_revision":sample.binding_revision,"version":sample.version,
+                    "output":material,"output_shader":input.shader,"quad_size":input.quad_size}
+                output.received_style={"output":material,"visibility":sample.visibility,"highlighted":sample.highlighted,"seconds":sample.seconds}
+            output.erase("input");output_count+=1
+        if not output.is_empty():
+            var position:Vector2i=Vector2i.ZERO
+            if not source.is_floor:
+                var row_id:String=str(source.source_id)+":source"
+                position=work.plan.positions[row_id] if work.plan.positions.has(row_id) else source.receivers["source"].position
+            work.output_region.call(output,source.is_floor,source.crop,position,target)
+            region_count+=1
+            source.output=output.received_material
+        if not source.info.dynamic and not source.info.water and output.has("sample"):
+            var sample:Dictionary=output.sample
+            source.synced=true
+            source.sync_version=mini(int(sample.version),int(work.source_sync_versions.get(id,sample.version)))
+            source.sync_highlighted=sample.highlighted;source.sync_seconds=sample.seconds;source.sync_visibility=sample.visibility
+            source.sync_material=sample.material;source.sync_shader=sample.shader;source.sync_binding_revision=sample.binding_revision
+        work.outputs[id]=output;work.source_proofs[id]=source.proof
+        if output.get("private_node",false) or not work.binding_sources.has(id):work.output_ids.append(id)
+        # Fallback source construction still needs its captured snapshot on
+        # main. Every captured shell already owns the same snapshot privately.
+        if work.binding_sources.has(id):_finish_source_capture(source)
+    work.worker_output_regions=region_count
+    work.output_worker_ms=(Time.get_ticks_usec()-output_started)/1000.0;work.worker_output_materials=output_count
+    work.worker_ms=(Time.get_ticks_usec()-started)/1000.0
+    work.complete=true
+
+static func _prepare_group_resources(work:Dictionary)->void:
+    var started:int=Time.get_ticks_usec();var counts:Dictionary=work.group_users.duplicate()
+    var created:int=0;var uniforms:int=0;var rid_usec:int=0
+    var ranks:Dictionary=work.ranks.duplicate();var rank_count:int=work.rank_count
+    var selected_groups:Dictionary=work.planned_groups.duplicate();var material_rids:Dictionary={}
+    var materials:Dictionary={};var versions:Dictionary={};var introductions:Dictionary={}
+    for key in selected_groups:
+        material_rids[key]=work.group_proofs[key][6];materials[key]=work.group_proofs[key][1];versions[key]=work.group_proofs[key][7]
+    var canvas_usec:int=0;var record_usec:int=0
+    work.static_batch=null
+    work.dynamic_bind_ids=[]
+    for id in work.bind_ids:
+        var spec:Dictionary=work.plan.specs[id]
+        var source:Dictionary=work.source_patches.get(spec.source_id,{})
+        var previous:Dictionary=work.passive.receiver_index.get(id,{}) if not work.removed.has(id) else {}
+        var visibility:float=sampled_visibility(source.snapshot,spec.row_id,spec.row_rank) if not source.is_empty() else float(previous.visibility)
+        var key:Array=[spec.material_id,visibility,id if spec.info.water else "",spec.join_mask]
+        if not counts.has(key):
+            counts[key]=0
+            ranks[key]=rank_count;rank_count+=1
+            if not spec.info.dynamic:
+                if not work.private_groups.has(spec.source_id):work.private_groups[spec.source_id]={}
+                var groups:Dictionary=work.private_groups[spec.source_id]
+                if not groups.has(key):
+                    var input:Dictionary=work.group_inputs[spec.source_id]
+                    var group:Dictionary=new_group(input.entry,input.crop,visibility,key,input.info,spec.join_mask)
+                    var material:ShaderMaterial=group.material
+                    for name in input.parameters:material.set_shader_parameter(name,input.parameters[name]);uniforms+=1
+                    material.set_shader_parameter("use_instance_visibility",false)
+                    material.set_shader_parameter("source_crop",input.crop.uv)
+                    material.set_shader_parameter("atlas_cell_size",Vector2(input.crop.pixels.size))
+                    material.set_shader_parameter("receiver_visibility",visibility)
+                    material.set_shader_parameter("ground_join_mask",spec.join_mask)
+                    material.set_shader_parameter("store_irradiance",input.info.capped)
+                    material.set_shader_parameter("world_to_canvas",input.basis)
+                    material.set_shader_parameter("actual_scene_viewport_size",input.screen)
+                    material.set_shader_parameter("highlighted",input.highlighted)
+                    if input.info.water:material.set_shader_parameter("receiver_world_origin",work.projection_packets[id].world_origin)
+                    group.version=input.version;group.source_shader=input.source_shader;group.source_material=input.source_material
+                    group.target_material=material;group.target_shader=input.info.shader;group.binding_revision=input.binding_revision
+                    group.capped=input.info.capped;group.seconds=null;group.highlighted=input.highlighted
+                    # Only this newly constructed private resource is realized.
+                    # The scene owner later attaches its ready native RID; no
+                    # displayed material/Node/texture is mutated by the worker.
+                    var rid_started:int=Time.get_ticks_usec()
+                    material.get_rid()
+                    rid_usec+=Time.get_ticks_usec()-rid_started
+                    groups[key]=group;created+=1
+                selected_groups[key]=groups[key]
+                material_rids[key]=groups[key].material.get_rid()
+                materials[key]=groups[key].material;versions[key]=groups[key].version
+                groups[key].rank=int(ranks[key])
+            else:
+                var group:Dictionary=source.get("private_groups",{}).get(key,{})
+                if group.is_empty():work.error="unprepared_dynamic_group:"+id;return
+                selected_groups[key]=group;materials[key]=group.material;versions[key]=group.version
+                group.rank=int(ranks[key])
+        var selected:Dictionary=selected_groups[key]
+        var draw:CanvasDraw=null
+        if not spec.info.dynamic:
+            var canvas_started:int=Time.get_ticks_usec()
+            if work.static_batch==null:work.static_batch=CanvasBatch.new()
+            draw=CanvasDraw.new()
+            draw.initialize(work.white,work.white_rid,materials[key],material_rids[key],work.projection_packets[id].transform,
+                Rect2(Vector2(work.plan.positions[id]),Vector2(spec.crop.pixels.size)),int(ranks[key])%1024)
+            draw.attach_private(work.static_batch)
+            work.private_draws[id]=draw
+            canvas_usec+=Time.get_ticks_usec()-canvas_started
+        var previous_key:Array=previous.group_id if not previous.is_empty() else []
+        if previous.is_empty() or previous_key!=key:
+            counts[key]+=1
+            if not previous.is_empty():
+                counts[previous_key]-=1
+                if counts[previous_key]==0:
+                    counts.erase(previous_key);selected_groups.erase(previous_key);material_rids.erase(previous_key)
+                    materials.erase(previous_key);versions.erase(previous_key)
+                    ranks.erase(previous_key);rank_count-=1
+        var record_started:int=Time.get_ticks_usec()
+        work.source_sync_versions[spec.source_id]=mini(int(work.source_sync_versions.get(spec.source_id,versions[key])),int(versions[key]))
+        _prepare_receiver_record(work,spec,source,previous,selected,materials[key],visibility,int(ranks[key])%1024,draw,introductions)
+        if spec.info.dynamic:work.dynamic_bind_ids.append(id)
+        record_usec+=Time.get_ticks_usec()-record_started
+    work.group_worker_ms=(Time.get_ticks_usec()-started)/1000.0
+    work.group_worker_rid_ms=rid_usec/1000.0
+    work.worker_group_materials=created;work.worker_group_uniforms=uniforms
+    work.canvas_worker_ms=canvas_usec/1000.0;work.worker_canvas_items=work.private_draws.size()
+    work.receiver_record_worker_ms=record_usec/1000.0
+    work.source_bind_ids=[];work.source_bind_cursor=0
+    work.worker_source_directories=0
+    for id in work.bulk_sources:
+        var prepared:Dictionary=work.binding_sources.get(id,work.source_patches.get(id,{}).get("prepared_binding",{}))
+        if prepared.is_empty():work.source_bind_ids.append(id)
+        else:
+            _finalize_candidate_source(work,id,prepared)
+            work.worker_source_directories+=1
+    work.bindings_transferred=false
+    work.dynamic_bind_cursor=0;work.static_bindings_ready=false
+
+static func _prepare_receiver_record(work:Dictionary,spec:Dictionary,source:Dictionary,previous:Dictionary,
+        selected:Dictionary,material:ShaderMaterial,visibility:float,rank:int,draw:CanvasDraw,introductions:Dictionary)->void:
+    # All per-row records, list offsets and ordered group leases belong to this
+    # private prefix. Live entry/group/receiver references are opaque operands;
+    # their current fields are checked only by the existing publication proof.
+    var id:String=spec.id;var key:Array=[spec.material_id,visibility,id if spec.info.water else "",spec.join_mask]
+    var index:int=spec.row_rank if (source.snapshot.has("batch_rows") if not source.is_empty() else previous.index>=0) else -1
+    var receiver:Dictionary={"id":id,"entry":spec.entry,"index":index,"group":selected,
+        "crop":spec.crop,"position":work.plan.positions[id],"projection":[],"visibility":visibility,"bounds":Rect2(),
+        "row_id":spec.row_id,"row":spec.row,"water":spec.info.water,"source_geometry":spec.source_geometry,
+        "source_material":spec.material_id,"receiving_shader":spec.info.shader,"join_mask":spec.join_mask,
+        "dynamic":spec.info.dynamic,"spec":spec,"region":Rect2(Vector2(work.plan.positions[id]),Vector2(spec.crop.pixels.size)),"rank":rank}
+    if not spec.info.dynamic:
+        var projection:Dictionary=work.projection_packets[id]
+        receiver.draw=draw;receiver.projection=projection.identity
+        receiver.world_origin=projection.world_origin;receiver.bounds=projection.bounds
+    if not work.bulk_sources.has(spec.source_id):
+        var old:Dictionary=source.get("private_receivers",{})
+        work.bulk_sources[spec.source_id]={"prepared":{},"first_spec":spec,"binding_receivers":old.duplicate(),
+            "binding_specs":source.get("private_specs",{}).duplicate(),"remaining":old.duplicate(),
+            "source_visible":source.future_visible if not source.is_empty() else previous.source_visible,
+            "cull_all":{},"cull_shown":{},"cull_owner":{"frame":-1},"created_rows":0,"static_rows":0}
+    var owner:Dictionary=work.bulk_sources[spec.source_id]
+    if owner.binding_receivers.has(id):work.obsolete_private_receivers[id]=owner.binding_receivers[id]
+    owner.binding_receivers[id]=receiver;owner.binding_specs[spec.row_id]=spec;owner.remaining.erase(id)
+    owner.created_rows+=1
+    if not source.is_empty():source.receivers[spec.row_id]=receiver;source.by_row[spec.row_id]=spec
+    if not receiver.dynamic:
+        owner.static_rows+=1;receiver.cull_owner=owner.cull_owner
+        receiver.cull_shown=owner.source_visible and (work.cull_sample.transform*receiver.bounds).intersects(work.cull_sample.screen)
+        draw.set_visible(receiver.cull_shown)
+        owner.cull_all[id]=true
+        if receiver.cull_shown:owner.cull_shown[id]=true
+    work.ready_style[id]=receiver
+    var private_group:bool=not work.group_proofs.has(key) or not is_same(selected,work.group_proofs[key][0])
+    if not previous.is_empty():
+        if private_group and not introductions.has(key):introductions[key]=true;selected.prepared_introduction=-1
+        work.bulk_retained.append([previous.receiver,previous.group,previous.index,previous.visibility,previous.binding_revision])
+        work.bulk_commands.append({"replace":previous.receiver,"receiver":receiver,"group":selected})
+        work.ready_retained.append(receiver)
+        return
+    work.ready_new[id]=receiver;work.ready_members[id]=spec.crop;work.ready_cull[id]=true
+    work.ready_pixels+=spec.crop.pixels.size.x*spec.crop.pixels.size.y
+    if work.bulk_commands.is_empty() or not work.bulk_commands.back().has("groups"):
+        work.bulk_commands.append({"groups":{},"group_spans":[]})
+    var command:Dictionary=work.bulk_commands.back();var run:Dictionary=command.groups
+    if not run.has(key):
+        var registration:bool=private_group and not introductions.has(key)
+        run[key]={"group":selected,"spec":spec,"visibility":visibility,"rows":[],"rank":rank,
+            "material":material,"prepared_registration":registration}
+        if command.group_spans.is_empty() or command.group_spans.back().prepared!=registration:
+            command.group_spans.append({"prepared":registration,"groups":{},"sources":{},"records":[]})
+        var span:Dictionary=command.group_spans.back()
+        if registration:
+            introductions[key]=true;selected.prepared_introduction=work.bulk_commands.size()-1
+            selected.entry=spec.entry;selected.source_id=spec.source_id;selected.users=0
+            span.groups[key]=selected
+            if not span.sources.has(spec.source_id):span.sources[spec.source_id]={}
+            span.sources[spec.source_id][key]=selected
+        else:span.records.append(run[key])
+    var record:Dictionary=run[key];record.rows.append(receiver)
+    if record.prepared_registration:record.group.users+=1
+    receiver.list_index=work.bulk_base_lists[0]+work.ready_list.size()
+    var partition:Array=work.ready_dynamic if receiver.dynamic else work.ready_static
+    receiver.partition_index=work.bulk_base_lists[2 if receiver.dynamic else 1]+partition.size()
+    partition.append(receiver);work.ready_list.append(receiver)
+
+static func _projection_packet(geometry:Array,crop:Dictionary,basis:Basis,ground_version:int)->Dictionary:
+    # Same arithmetic and PackedFloat32 transform values as Atlas._project_entry.
+    var source:Array=geometry[0]
+    var global_transform:Transform3D=source[0]
+    var size:Vector2=source[1];var center:Vector3=source[2]
+    var data:PackedFloat32Array=geometry[2]
+    var transform:Transform3D=global_transform
+    var identity:Array=[global_transform,size,center]
+    if not data.is_empty():
+        transform=global_transform*Transform3D(Basis(Vector3(data[0],data[4],data[8]),Vector3(data[1],data[5],data[9]),
+            Vector3(data[2],data[6],data[10])),Vector3(data[3],data[7],data[11]))
+        identity=[ground_version,global_transform,size,center]
+    var local:Vector3=center+Vector3(-size.x*.5,size.y*.5,0)
+    var projected_origin:Vector3=basis*(transform*local)
+    var projected_x:Vector3=basis*(transform.basis*Vector3(size.x,0,0))
+    var projected_y:Vector3=basis*(transform.basis*Vector3(0,-size.y,0))
+    var origin:Vector2=Vector2(projected_origin.x,projected_origin.y)
+    var axis_x:Vector2=Vector2(projected_x.x,projected_x.y)
+    var axis_y:Vector2=Vector2(projected_y.x,projected_y.y)
+    var uv:Vector4=crop.uv
+    origin+=axis_x*uv.x+axis_y*uv.y;axis_x*=uv.z;axis_y*=uv.w
+    return {"identity":identity,"transform":Transform2D(axis_x/crop.pixels.size.x,axis_y/crop.pixels.size.y,origin),
+        "world_origin":transform.origin,
+        "bounds":Rect2(origin,Vector2.ZERO).expand(origin+axis_x).expand(origin+axis_y).expand(origin+axis_x+axis_y)}
 
 static func reserve_candidate_capacity(atlas,work:Dictionary)->bool:
     # A completed append plan already owns exact integer addresses. Reserve
@@ -668,24 +1023,53 @@ static func _candidate_addresses(work:Dictionary)->bool:
         source.prepared_addresses={"buffer":buffer,"packets":packets,"snapshots":snapshots,"count":snapshot.batch_rows.size()}
     return true
 
+static func _finalize_candidate_source(work:Dictionary,id:int,prepared:Dictionary)->void:
+    var owner:Dictionary=work.bulk_sources[id]
+    # The full private outer directory is NOT the displayed source map.
+    # Keep it on the existing per-key retirement lane after selected rows
+    # transfer; dropping it at publication would synchronously unref K rows.
+    prepared.retired_receivers=owner.binding_receivers
+    prepared.receivers=owner.binding_receivers;prepared.specs=owner.binding_specs
+    prepared.created_rows+=owner.created_rows;prepared.projected_packet_rows+=owner.static_rows
+    owner.prepared=prepared;work.binding_sources[id]=prepared
+
+static func _finish_source_capture(source:Dictionary)->void:
+    for field in ["prepared_specs","prepared_output","snapshot","proof","rows","complete","prepared_binding","source_id","is_floor"]:source.erase(field)
+
+static func _prepare_candidate_source(atlas,work:Dictionary,bindings:Dictionary,id:int)->void:
+    var owner:Dictionary=work.bulk_sources[id]
+    var spec:Dictionary=owner.first_spec
+    var prepared:Dictionary=bindings.get(id,{})
+    if prepared.is_empty():
+        var source:Dictionary=work.source_patches.get(id,{})
+        prepared=atlas.prepare_source_binding(spec.entry,source.snapshot if not source.is_empty() else spec.entry,work.world,true)
+        if prepared.is_empty():work.error="unprepared_source:"+str(id);return
+        prepared.receiver_parent=atlas.projection_root;bindings[id]=prepared
+    _finalize_candidate_source(work,id,prepared)
+
 static func prepare_candidate_binding(atlas,work:Dictionary,bindings:Dictionary)->bool:
     if work.get("error","")!="":return true
     if not work.get("complete",false):
         work.error="incomplete_private_prefix";return true
-    if work.bind_cursor==work.bind_ids.size():
+    if not work.bindings_transferred:
+        # One native reference handoff; the worker already completed every
+        # captured source directory. Only uncaptured incident sources fall back.
+        bindings.merge(work.binding_sources,true);work.bindings_transferred=true
+    if work.source_bind_cursor<work.source_bind_ids.size():
+        var source_id:int=work.source_bind_ids[work.source_bind_cursor];work.source_bind_cursor+=1
+        _prepare_candidate_source(atlas,work,bindings,source_id)
+        return false
+    # All static rows already belong to the private batch. Their source
+    # directories retain every handle for cancellation or ordered publication.
+    if not work.static_bindings_ready:
+        work.private_draws.clear();work.static_bindings_ready=true
+        work.bind_cursor=work.bind_ids.size()-work.dynamic_bind_ids.size()
+    if work.dynamic_bind_cursor==work.dynamic_bind_ids.size():
         if work.output_cursor<work.output_ids.size():
             var id:int=work.output_ids[work.output_cursor];work.output_cursor+=1
             var source:Dictionary=work.source_patches[id]
-            var output:Dictionary=source.get("prepared_output",{})
+            var output:Dictionary=work.outputs[id]
             if not output.is_empty():
-                atlas.prepare_output_region(output,source,work.plan.positions,Vector2(atlas.MAX_SIZE,work.plan.next_height))
-                source.output=output.received_material
-                if not source.info.dynamic and not source.info.water and output.has("sample"):
-                    var sample:Dictionary=output.sample
-                    source.synced=true
-                    source.sync_version=mini(int(sample.version),int(work.source_sync_versions.get(id,sample.version)))
-                    source.sync_highlighted=sample.highlighted;source.sync_seconds=sample.seconds;source.sync_visibility=sample.visibility
-                    source.sync_material=sample.material;source.sync_shader=sample.shader;source.sync_binding_revision=sample.binding_revision
                 if output.get("private_node",false):
                     _install_output(source.entry,output)
                     source.entry.node.material_override=output.received_material
@@ -693,10 +1077,9 @@ static func prepare_candidate_binding(atlas,work:Dictionary,bindings:Dictionary)
                     # All receivers and the output have consumed this private
                     # source. Its first visible sample now starts a new delivery.
                     SourceMaterial.acknowledge(source.entry)
-            work.outputs[id]=output;work.source_proofs[id]=source.proof
             # These fields belong to capture/planning only. Detach them beside
             # the hidden owner, not for hundreds of sources at publication.
-            for field in ["prepared_specs","prepared_output","snapshot","proof","rows","complete"]:source.erase(field)
+            if source.has("snapshot"):_finish_source_capture(source)
             return false
         for job in work.jobs:
             if job.packet.is_empty():continue
@@ -704,99 +1087,31 @@ static func prepare_candidate_binding(atlas,work:Dictionary,bindings:Dictionary)
             if source.has("prepared_addresses"):
                 job.packet.buffer=source.prepared_addresses.buffer
                 job.packet.packets=source.prepared_addresses.packets
+        work.preparation_usec={};work.prepared_created_rows=0;work.prepared_packet_rows=0
+        for prepared in bindings.values():
+            work.prepared_created_rows+=int(prepared.get("created_rows",0))
+            work.prepared_packet_rows+=int(prepared.get("projected_packet_rows",0))
+            for name in prepared.get("phase_usec",{}):
+                work.preparation_usec[name]=work.preparation_usec.get(name,0)+prepared.phase_usec[name]
         work.bound=true
         return true
-    var id:String=work.bind_ids[work.bind_cursor];work.bind_cursor+=1
-    var spec:Dictionary=work.plan.specs[id]
-    if not work.plan.positions.has(id):work.error="unreserved_receiver:"+id;return true
-    var prepared:Dictionary=bindings.get(spec.source_id,{})
-    var source:Dictionary=work.source_patches.get(spec.source_id,{})
-    var snapshot:Dictionary=source.snapshot if not source.is_empty() else spec.entry
-    var visibility:float=sampled_visibility(snapshot,spec.row_id,spec.row_rank)
-    if prepared.is_empty():
-        prepared=atlas.prepare_source_binding(spec.entry,snapshot,work.world,true)
-        if prepared.is_empty():work.error="unprepared_source:"+id;return true
-        prepared.receiver_parent=atlas.projection_root;bindings[spec.source_id]=prepared
-    var receiver:Dictionary=prepared.receivers.get(id,{})
-    if receiver.is_empty() or receiver.visibility!=visibility or receiver.join_mask!=spec.join_mask:
-        atlas.prepare_source_row(prepared,spec.row,atlas.projection_root,work.plan.supports,visibility)
-        receiver=prepared.receivers[id]
-    var previous:Dictionary=atlas.receiver_index.get(id,{}) if not work.removed.has(id) else {}
-    var key:Array=[spec.material_id,visibility,id if spec.info.water else "",spec.join_mask]
-    var selected:Dictionary=work.planned_groups.get(key,{})
-    if selected.is_empty():
-        selected=receiver.group;selected.rank=work.rank_count;work.rank_count+=1
-        work.planned_groups[key]=selected;work.group_users[key]=0;work.ranks[key]=selected.rank
-    var previous_key:Array=previous.group.id if not previous.is_empty() else []
-    if previous.is_empty() or previous_key!=key:
-        work.group_users[key]+=1
-        if not previous.is_empty():
-            work.group_users[previous_key]-=1
-            if work.group_users[previous_key]==0:
-                work.planned_groups.erase(previous_key);work.ranks.erase(previous_key);work.rank_count-=1
-    receiver.group=selected
-    work.source_sync_versions[spec.source_id]=mini(int(work.source_sync_versions.get(spec.source_id,selected.version)),int(selected.version))
-    if receiver.node.material!=selected.material:receiver.node.material=selected.material
-    var position:Vector2i=work.plan.positions[id]
-    receiver.region=Rect2(Vector2(position),Vector2(receiver.crop.pixels.size));receiver.node.region_rect=receiver.region
-    receiver.rank=int(work.ranks[key])%1024;receiver.node.z_index=receiver.rank
-    receiver.position=position;receiver.spec=spec
-    if not source.is_empty():
-        source.receivers[spec.row_id]=receiver;source.by_row[spec.row_id]=spec
-    if not work.bulk_sources.has(spec.source_id):
-        # Keep the replaced outer directory on this existing retirement owner.
-        # Its adopted rows stay referenced by the live atlas; dropping hundreds
-        # of directory entries is not part of the publication transaction.
-        prepared.retired_receivers=prepared.receivers
-        work.bulk_sources[spec.source_id]={"prepared":prepared,"remaining":prepared.receivers.duplicate(),
-            "source_visible":source.future_visible if source.has("future_visible") else spec.entry.node.is_visible_in_tree(),
-            "cull_all":{},"cull_shown":{},"cull_owner":{"frame":-1}}
-    var owner:Dictionary=work.bulk_sources[spec.source_id]
-    if not receiver.dynamic:
-        receiver.cull_owner=owner.cull_owner
-        receiver.cull_shown=owner.source_visible and (work.cull_sample.transform*receiver.bounds).intersects(work.cull_sample.screen)
-        owner.cull_all[id]=true
-        if receiver.cull_shown:owner.cull_shown[id]=true
-    work.bulk_sources[spec.source_id].remaining.erase(id)
-    if not previous.is_empty():
-        if not selected.has("users") and not selected.has("prepared_introduction"):
-            selected.prepared_introduction=-1
-        work.bulk_retained.append([previous,previous.group,row_index(previous),previous.visibility,spec.entry.get("source_binding_revision",0)])
-        work.bulk_commands.append({"replace":previous,"receiver":receiver,"group":selected})
-        work.ready_retained.append(receiver)
-        work.ready_style[id]=receiver
-        return false
-    work.ready_new[id]=receiver;work.ready_members[id]=spec.crop;work.ready_cull[id]=true
-    work.ready_pixels+=spec.crop.pixels.size.x*spec.crop.pixels.size.y
-    if work.bulk_commands.is_empty() or not work.bulk_commands.back().has("groups"):
-        work.bulk_commands.append({"groups":{},"group_spans":[]})
-    var command:Dictionary=work.bulk_commands.back()
-    var run:Dictionary=command.groups
-    if not run.has(key):
-        var registration:bool=not selected.has("users") and not selected.has("prepared_introduction")
-        run[key]={"group":selected,"spec":spec,"visibility":visibility,"rows":[],"rank":receiver.get("rank",-1),
-            "material":selected.material,"prepared_registration":registration}
-        if command.group_spans.is_empty() or command.group_spans.back().prepared!=registration:
-            command.group_spans.append({"prepared":registration,"groups":{},"sources":{},"records":[]})
-        var span:Dictionary=command.group_spans.back()
-        if registration:
-            selected.prepared_introduction=work.bulk_commands.size()-1
-            selected.entry=spec.entry;selected.source_id=spec.source_id;selected.users=0
-            span.groups[key]=selected
-            if not span.sources.has(spec.source_id):span.sources[spec.source_id]={}
-            span.sources[spec.source_id][key]=selected
-        else:span.records.append(run[key])
-    var record:Dictionary=run[key]
-    record.rows.append(receiver);receiver.group=record.group
-    if record.prepared_registration:record.group.users+=1
-    if receiver.node.material!=record.group.material:receiver.node.material=record.group.material
-    receiver.list_index=work.bulk_base_lists[0]+work.ready_list.size()
-    var partition:Array=work.ready_dynamic if receiver.dynamic else work.ready_static
-    receiver.partition_index=work.bulk_base_lists[2 if receiver.dynamic else 1]+partition.size()
-    partition.append(receiver)
-    work.ready_list.append(receiver)
-    work.ready_style[id]=receiver
-    work.bulk_sources[spec.source_id].remaining.erase(id)
+    var id:String=work.dynamic_bind_ids[work.dynamic_bind_cursor]
+    work.dynamic_bind_cursor+=1;work.bind_cursor+=1
+    var receiver:Dictionary=work.ready_style[id]
+    var spec:Dictionary=receiver.spec
+    var prepared:Dictionary=work.bulk_sources[spec.source_id].prepared
+    var started:int=Time.get_ticks_usec() if prepared.profile_preparation else 0
+    # Static children are already complete under their private batch. Only
+    # actual live-pose nodes need individual scene attachment and sampling.
+    receiver.node=atlas.prepare_receiver_node(atlas.projection_root)
+    receiver.node.material=receiver.group.material
+    receiver.node.region_rect=receiver.region;receiver.node.z_index=receiver.rank
+    if prepared.profile_preparation:
+        prepared.phase_usec.row_creation=prepared.phase_usec.get("row_creation",0)+Time.get_ticks_usec()-started
+    var projection_started:int=Time.get_ticks_usec() if prepared.profile_preparation else 0
+    atlas._project_entry(receiver,prepared.snapshot,prepared.basis)
+    if prepared.profile_preparation:
+        prepared.phase_usec.projection_apply=prepared.phase_usec.get("projection_apply",0)+Time.get_ticks_usec()-projection_started
     return false
 
 static func _bulk_matches(atlas,work:Dictionary,removed:Dictionary)->bool:
@@ -849,7 +1164,7 @@ static func _publish_bulk(atlas,work:Dictionary,positions:Dictionary,world:Node)
             atlas.entry_specs[receiver.spec.source_id].receivers[receiver.row_id]=receiver
             atlas.entry_specs[receiver.spec.source_id].by_row[receiver.row_id]=receiver.spec
             atlas.cull_dirty[receiver.id]=true;atlas.prepared_style_receivers[receiver.id]=receiver
-            old.node.hide();old.node.queue_free()
+            atlas.dispose_receiver(old)
             bind_count+=1
             continue
         var group_started:int=Time.get_ticks_usec()
@@ -896,6 +1211,24 @@ static func _publish_bulk(atlas,work:Dictionary,positions:Dictionary,world:Node)
     atlas.last_reconcile_phases.prepared_bulk_transfers=work.bulk_sources.size()
     atlas.last_reconcile_phases.prepared_cull_rows=culled_prepared
     atlas.last_reconcile_phases.prepared_cull_hidden=hidden_prepared
+    atlas.last_reconcile_phases.prepared_row_created=work.prepared_created_rows
+    atlas.last_reconcile_phases.prepared_row_numeric_projection=work.prepared_packet_rows
+    atlas.last_reconcile_phases.prepared_projection_worker_ms=work.get("projection_worker_ms",0.0)
+    atlas.last_reconcile_phases.prepared_group_worker_ms=work.get("group_worker_ms",0.0)
+    atlas.last_reconcile_phases.prepared_output_worker_ms=work.get("output_worker_ms",0.0)
+    atlas.last_reconcile_phases.prepared_worker_output_materials=work.get("worker_output_materials",0)
+    atlas.last_reconcile_phases.prepared_group_worker_rid_ms=work.get("group_worker_rid_ms",0.0)
+    atlas.last_reconcile_phases.prepared_worker_group_materials=work.get("worker_group_materials",0)
+    atlas.last_reconcile_phases.prepared_worker_group_uniforms=work.get("worker_group_uniforms",0)
+    atlas.last_reconcile_phases.prepared_canvas_worker_ms=work.get("canvas_worker_ms",0.0)
+    atlas.last_reconcile_phases.prepared_worker_canvas_items=work.get("worker_canvas_items",0)
+    atlas.last_reconcile_phases.prepared_static_batches=int(work.get("static_batch")!=null)
+    atlas.last_reconcile_phases.prepared_source_directory_binds=work.get("source_bind_ids",[]).size()
+    atlas.last_reconcile_phases.prepared_worker_source_directories=work.get("worker_source_directories",0)
+    atlas.last_reconcile_phases.prepared_worker_output_regions=work.get("worker_output_regions",0)
+    atlas.last_reconcile_phases.prepared_dynamic_node_binds=work.get("dynamic_bind_ids",[]).size()
+    atlas.last_reconcile_phases.prepared_receiver_record_worker_ms=work.get("receiver_record_worker_ms",0.0)
+    for name in work.preparation_usec:atlas.last_reconcile_phases["preparation_"+name+"_ms"]=work.preparation_usec[name]/1000.0
     atlas.last_reconcile_phases.prepared_bulk_group_ms=(Time.get_ticks_usec()-started)/1000.0
     started=Time.get_ticks_usec()
     # Binding owns exact post-removal indices and partition order already.
@@ -929,15 +1262,27 @@ static func retire_candidate_step(record:Dictionary)->Dictionary:
         WorkerThreadPool.wait_for_task_completion(record.task);record.task=-1
     if not record.get("unused",[]).is_empty():
         var receiver:Dictionary=record.unused.pop_back()
-        if is_instance_valid(receiver.node):receiver.node.free()
-        return {"done":false,"node":true}
+        var native_units:int=0
+        if receiver.has("draw"):native_units=receiver.draw.dispose()
+        elif is_instance_valid(receiver.get("node")):receiver.node.free();native_units=1
+        return {"done":false,"node":native_units>0,"native_units":native_units}
     if not record.get("directories",[]).is_empty():
         var selected:Dictionary=record.directories.back()
+        var native_units:int=0
         if selected.keys.is_empty():selected.keys=selected.values.keys()
         if selected.cursor<selected.keys.size():
-            selected.values.erase(selected.keys[selected.cursor]);selected.cursor+=1
+            var key=selected.keys[selected.cursor]
+            if selected.get("dispose_draws",false):
+                native_units=selected.values[key].dispose()
+            elif selected.get("dispose_receivers",false):
+                var receiver:Dictionary=selected.values[key]
+                if receiver.has("draw"):
+                    native_units=receiver.draw.dispose()
+                elif is_instance_valid(receiver.get("node")):
+                    native_units=1;receiver.node.free()
+            selected.values.erase(key);selected.cursor+=1
         if selected.cursor==selected.keys.size():record.directories.pop_back()
-        return {"done":false}
+        return {"done":false,"node":native_units>0,"native_units":native_units}
     if not record.get("arrays",[]).is_empty():
         var values:Array=record.arrays.back()
         if not values.is_empty():values.pop_back()
@@ -965,10 +1310,14 @@ static func retire_candidate_step(record:Dictionary)->Dictionary:
         var active:Dictionary=record.payloads.pop_back()
         active.keys=active.bindings.keys();active.cursor=0;record.active=active
         var prefix:Dictionary=active.prefix
+        var private_draws:Dictionary=prefix.get("private_draws",{})
+        if not private_draws.is_empty():record.directories.append({"values":private_draws,"keys":[],"cursor":0,"dispose_draws":true})
+        var obsolete:Dictionary=prefix.get("obsolete_private_receivers",{})
+        if not obsolete.is_empty():record.directories.append({"values":obsolete,"keys":[],"cursor":0,"dispose_receivers":true})
         for field in ["receiver_index","support_owners","published_supports","entry_specs"]:
             _retire_directory(record,prefix.get("passive",{}).get(field,{}))
         for field in ["positions","owners","specs"]:_retire_directory(record,prefix.get("plan",{}).get(field,{}))
-        for field in ["specs","removed","source_patches","ready_new","ready_members","ready_cull","bulk_sources","group_proofs","outputs","source_proofs"]:
+        for field in ["specs","removed","source_patches","ready_new","ready_members","ready_cull","bulk_sources","binding_sources","group_proofs","outputs","source_proofs","projection_packets","source_ground_versions","group_inputs","private_groups"]:
             _retire_directory(record,prefix.get(field,{}))
         return {"done":false}
     return {"done":true}
@@ -1216,9 +1565,9 @@ static func reconcile(atlas, world, changes: Dictionary) -> bool:
                 admitted_groups[key]=group
             if not group.has("users"):group.users=0
             group.users+=1;ready.group=group
-            if ready.node.material!=group.material:ready.node.material=group.material
+            atlas.set_receiver_material(ready,group.material)
             var rank:int=group.rank%1024
-            if ready.get("rank",-1)!=rank:ready.node.z_index=rank;ready.rank=rank
+            if ready.get("rank",-1)!=rank:atlas.set_receiver_rank(ready,rank);ready.rank=rank
             atlas.prepared_source_bindings[spec.source_id].receivers.erase(spec.id)
             new_receivers.append(ready)
         else:

@@ -216,6 +216,16 @@ static func plan(request: Dictionary, cache: Dictionary, control: Dictionary) ->
         for behavior in behaviors:
             var body: Dictionary=Authoring.action({"kind":"action","behavior_id":behavior},cache,caster).get("actor",{})
             if body.get("enabled",true) and body.has("clip"):clips[body.clip]=true
+            if behavior=="action.move":
+                # Locomotion is authored through movement/rig contexts rather
+                # than a body-action recipe. Reuse the encounter source owner's
+                # finite closure before the first click, including connectors
+                # and condition poses, without predicting any movement outcome.
+                var index:Dictionary=Catalog.read_file("catalog-index.json",cache)
+                var rig:Dictionary=Characters.rigs(cache)[Characters.rig_id(caster,cache)]
+                for clip in EncounterMedia._priority_clips(caster,rig,index,cache):clips[clip]=true
+                var pose:Dictionary=Authoring.ConditionPose.select(caster,Characters.rig_id(caster,cache),"move",cache)
+                if not pose.is_empty():clips[pose.clip]=true
         if not clips.is_empty():
             _actor_paths(caster,clips.keys(),result,cache)
             result.actors.append({"uuid":request.actor_uuid,"clips":clips.keys()})

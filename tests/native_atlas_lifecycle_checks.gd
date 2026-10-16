@@ -147,7 +147,7 @@ func pixel_oracle(atlas:RefCounted,world:World,source:Image,label:String)->void:
     var reference=native_page(Vector2i(world.get_viewport().get_visible_rect().size))
     var one_to_one=true
     for receiver in atlas.receivers:
-        var basis:Transform2D=receiver.node.global_transform
+        var basis:Transform2D=atlas.receiver_global_transform(receiver)
         one_to_one=one_to_one and is_equal_approx(basis.x.length(),1.0) and is_equal_approx(basis.y.length(),1.0)
     check(one_to_one,"Independent texel oracle uses one screen pixel per source pixel: "+label)
     for receiver in atlas.receivers:
@@ -175,7 +175,7 @@ func pixel_oracle(atlas:RefCounted,world:World,source:Image,label:String)->void:
         var errors=0;var alpha_errors=0;var maximum=0;var compared=0
         for y in receiver.crop.pixels.size.y:
             for x in receiver.crop.pixels.size.x:
-                var actual=receiver.node.global_transform*(Vector2(x,y)+Vector2(.5,.5))
+                var actual=atlas.receiver_global_transform(receiver)*(Vector2(x,y)+Vector2(.5,.5))
                 if not Rect2(Vector2.ZERO,Vector2(original.get_size())).has_point(actual):continue
                 var pixel=packed.get_pixel(receiver.position.x+x,receiver.position.y+y)
                 var expected=original.get_pixelv(Vector2i(actual.floor()))
@@ -321,17 +321,17 @@ func run()->void:
     check(atlas.receivers.size()==2 and atlas.groups.size()==2,"Mixed current and remembered floor instances use two shared native source materials")
     check(row_receiver(atlas,entry,"0").crop.pixels==Rect2i(6,12,52,32),"Crop preserves every nonzero source alpha including 1/255")
     check(atlas.packed_pixels==2*52*32,"Allocation is exact static colour bbox rather than full64-square cells")
-    check(row_receiver(atlas,entry,"0").node.texture==row_receiver(atlas,entry,"1").node.texture,"Floor receivers share white texture; binary memory style is a material group")
+    check(Atlas.receiver_handle(row_receiver(atlas,entry,"0")).texture==Atlas.receiver_handle(row_receiver(atlas,entry,"1")).texture,"Floor receivers share white texture; binary memory style is a material group")
     check(entry.material==entry.node.material_override or entry.node.material_override==entry.received_material,"Received override keeps original source material owned by entry")
     check(entry.node.material_override==entry.received_material and entry.received_material!=entry.material,"Only output override changes; source material remains distinct")
-    check(row_receiver(atlas,entry,"0").node.material.get_shader_parameter("receiver_visibility")==1.0 and row_receiver(atlas,entry,"1").node.material.get_shader_parameter("receiver_visibility")==0.0,"Mixed current and remembered instances remain distinct")
+    check(Atlas.receiver_handle(row_receiver(atlas,entry,"0")).material.get_shader_parameter("receiver_visibility")==1.0 and Atlas.receiver_handle(row_receiver(atlas,entry,"1")).material.get_shader_parameter("receiver_visibility")==0.0,"Mixed current and remembered instances remain distinct")
     var repacks=atlas.repack_count;world.actor_revision+=20;sync_scene(atlas,world)
     check(atlas.repack_count==repacks,"Actor revisions cannot repack unchanged receiver membership")
     check(atlas.last_reconcile_phases.get("projected_receivers",0)==0,"Unchanged receiver admission does not reproject the whole static map")
-    var unchanged_transform=row_receiver(atlas,entry,"1").node.transform
+    var unchanged_transform=Atlas.receiver_handle(row_receiver(atlas,entry,"1")).transform
     entry.ground_packets["0"].data[3]+=.25;entry.ground_buffer[3]+=.25;entry.ground_version+=1
     entry.node.multimesh.buffer=entry.ground_buffer;sync_scene(atlas,world,true)
-    check(atlas.last_reconcile_phases.projected_receivers==1 and row_receiver(atlas,entry,"1").node.transform==unchanged_transform,"Exact changed floor transform projects only its receiver, even with unchanged row IDs")
+    check(atlas.last_reconcile_phases.projected_receivers==1 and Atlas.receiver_handle(row_receiver(atlas,entry,"1")).transform==unchanged_transform,"Exact changed floor transform projects only its receiver, even with unchanged row IDs")
     entry.ground_packets["0"].data[3]-=.25;entry.ground_buffer[3]-=.25;entry.ground_version+=1;entry.node.multimesh.buffer=entry.ground_buffer;sync_scene(atlas,world,true)
     check(atlas.last_reconcile_phases.projected_receivers==1,"Restored native floor transform is detected independently of source colour")
     var before=entry.ground_buffer.duplicate()
@@ -362,7 +362,7 @@ func run()->void:
     SourceMaterial.set_parameter(entry,"source_tint",Color.WHITE);sync_scene(atlas,world)
     check(entry.ground_packets["0"].data[17]==before[17],"Retained packet stores addresses for later visibility-only uploads")
     SourceMaterial.set_parameter(entry,"current_visibility",0.0);sync_scene(atlas,world)
-    check(row_receiver(atlas,entry,"0").node.material.get_shader_parameter("receiver_visibility")==1.0,"Parameter recopy cannot overwrite per-instance current visibility")
+    check(Atlas.receiver_handle(row_receiver(atlas,entry,"0")).material.get_shader_parameter("receiver_visibility")==1.0,"Parameter recopy cannot overwrite per-instance current visibility")
     await pixel_oracle(atlas,world,source,"initial")
     # Sight-only after-values keep the same source material, row IDs and native
     # floor packets. The style stamp must still update the receiving result.
@@ -380,12 +380,12 @@ func run()->void:
     check(atlas.last_reconcile_phases.style_receivers_checked==2 and atlas.last_reconcile_phases.cull_receivers_checked==0,"Sight-only update visits changed styles without reculling fixed geometry")
     await pixel_oracle(atlas,world,source,"tracked-sight")
     entry.node.visible=false;atlas.visibility_changed(entry);sync_scene(atlas,world)
-    check(atlas.static_live_receivers==0 and atlas.static_receivers.all(func(r):return not r.node.visible),"Tracked native node hiding removes every owned floor receiver from visible count")
+    check(atlas.static_live_receivers==0 and atlas.static_receivers.all(func(r):return not Atlas.receiver_visible(r)),"Tracked native node hiding removes every owned floor receiver from visible count")
     await pixel_oracle(atlas,world,source,"tracked-hidden")
     entry.node.visible=true;atlas.visibility_changed(entry)
     entry.node.visible=false;atlas.visibility_changed(entry)
     entry.node.visible=true;atlas.visibility_changed(entry);sync_scene(atlas,world)
-    check(atlas.static_live_receivers==2 and atlas.static_receivers.all(func(r):return r.node.visible),"Hide/show before one sync uses final admitted visibility once")
+    check(atlas.static_live_receivers==2 and atlas.static_receivers.all(func(r):return Atlas.receiver_visible(r)),"Hide/show before one sync uses final admitted visibility once")
     await pixel_oracle(atlas,world,source,"tracked-shown")
     reverse_floor(entry);floor_receipt(entry);set_visibility(entry,[0.0,1.0])
     atlas.style_changed(entry,"0");atlas.style_changed(entry,"1")
@@ -509,12 +509,12 @@ func run()->void:
     check_transport(atlas,entry,"Restored floor order")
     # A missing producer receipt invalidates the sparse proof. Full admission
     # must recover a transform absent from the supplied upsert list.
-    var before_missed=row_receiver(atlas,entry,"0").node.transform
+    var before_missed=Atlas.receiver_handle(row_receiver(atlas,entry,"0")).transform
     entry.ground_packets["0"].data[3]+=.125;entry.ground_buffer[3]+=.125;entry.ground_version+=1
     entry.node.multimesh.buffer=entry.ground_buffer;floor_receipt(entry)
     var missed=sparse();missed.base=publication_serial-1
     sync_scene(atlas,world,true,false,missed)
-    check(row_receiver(atlas,entry,"0").node.transform!=before_missed,"Missed publication serial recovers undisclosed delta through full source fallback")
+    check(Atlas.receiver_handle(row_receiver(atlas,entry,"0")).transform!=before_missed,"Missed publication serial recovers undisclosed delta through full source fallback")
     check_transport(atlas,entry,"Missed publication fallback")
     await pixel_oracle(atlas,world,source,"missed-publication")
     entry.ground_packets["0"].data[3]-=.125;entry.ground_buffer[3]-=.125;entry.ground_version+=1
@@ -564,7 +564,7 @@ func run()->void:
             for point in [Vector2(.5,.5),Vector2(25.5,15.5),Vector2(51.5,31.5)]:
                 var full=point+Vector2(receiver.crop.pixels.position)
                 var reference=camera.unproject_position(Vector3(-1.1+receiver.index*2.2+(full.x-32)/32.0,(32-full.y)/32.0,0))
-                var projected=receiver.node.global_transform*point
+                var projected=atlas.receiver_global_transform(receiver)*point
                 if projected.distance_to(reference)>.0001:projection_errors+=1
     check(projection_errors==0,"Native parent pan/zoom preserves independent original3D camera projection at source pixels")
     check(atlas.repack_count==fast_pack,"Pan and fractional zoom never repack source cells")

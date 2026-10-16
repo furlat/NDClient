@@ -49,16 +49,17 @@ func run()->void:
     var index=Body.Index.new();var layer=Body.Layer.new()
     for path in [A,B]:index.source_owners[path]=["fixture","Idle"];layer.headers[path]={"width":2,"height":2}
     layer.clips={"Idle":{}}
-    host.catalog_cache[Body.KEY]={"index":index,"loaded":{"fixture":layer}}
-    host.catalog_cache.unity_sources={}
+    var clip=Body.Clip.new();layer.clip_sources.Idle="fixture-clip"
+    host.catalog_cache[Body.KEY]={"index":index,"loaded":{"fixture":layer,"fixture-clip":clip}}
+    host.catalog_cache["res://generated/unity_sources.json"]={}
     host.catalog_cache["res://generated/environment_texture_layouts.json"]={"layouts":{}}
     for pair in [["ready",ENV],["late",LATE_ENV]]:
         var record={"path":pair[1],"native_size":[2,2],"pivot":[1,2],"scale":1.0,"roles":[]}
-        host.catalog_cache.unity_sources[pair[0]]={"records":[record,record,record,record]}
+        host.catalog_cache["res://generated/unity_sources.json"][pair[0]]={"records":[record,record,record,record]}
     var image=Image.create(2,2,false,Image.FORMAT_RGBA8);image.fill(Color.WHITE)
     var texture=ImageTexture.create_from_image(image)
     for path in [B,ENV]:host.textures[path]=texture;host.source_images[path]=image
-    var candidate=Preparation.new();host.add_child(candidate);candidate.host=host;candidate.hide()
+    var candidate=Preparation.new();host.add_child(candidate);candidate.host=host;candidate.initial=true;candidate.hide()
     candidate.membership_base={"groups":{},"ground":{}}
     candidate.catalog_cache=host.catalog_cache;candidate.rig_config=host.rig_config;candidate.rigs=host.rigs
     candidate.camera=Camera3D.new();candidate.add_child(candidate.camera)
@@ -86,7 +87,14 @@ func run()->void:
         candidate._prepare_actor()
     check(first.get("complete",false) and candidate.actor_cursor==2 and first.entries.map(func(entry):return entry.node)==blocked_nodes,"Arriving exact source finishes retained original layers without recreation")
     check(first.outfit_clip=="Idle" and first.outfit_profile=="original" and first.condition_parameters.is_read_only(),"Complete chosen sources publish actual outfit and shared immutable neutral operands")
-    check(candidate._prepare_object(Time.get_ticks_usec()+100000) and candidate.objects_complete.size()==2,"Previously deferred environment source completes its exact original row")
+    for attempt in 20:
+        if not candidate._prepare_object(Time.get_ticks_usec()+100000):break
+    check(not candidate.native_groups.has("late"),"GPU-only arrival does not bypass required original environment CPU image")
+    host.source_images[LATE_ENV]=image
+    for attempt in 20:
+        if candidate.objects_complete.size()==2:break
+        candidate._prepare_object(Time.get_ticks_usec()+100000)
+    check(candidate.objects_complete.size()==2,"Previously deferred environment source completes its exact original row")
     check(not candidate._prepare_object(Time.get_ticks_usec()+100000) and not candidate._prepare_ground(Time.get_ticks_usec()+100000),"Completed construction lanes return without rescanning unrelated entries")
     # A retained packed row may need a sight change even when a sparse geometry
     # packet touches it; full replacement packets already own exact styles.

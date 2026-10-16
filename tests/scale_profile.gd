@@ -107,7 +107,7 @@ func run() -> void:
     for source in scene.source_lighting.canvas_sources():
         if source.enabled: source_rects.append(Rect2(source.screen_position-source.span*0.5,source.span))
     for receiver in scene.native_light_atlas.receivers:
-        if not receiver.node.visible: continue
+        if not scene.native_light_atlas.receiver_visible(receiver): continue
         var bounds: Rect2 = scene.native_light_atlas.plane_to_screen*receiver.bounds
         var count = 0
         for rect in source_rects:

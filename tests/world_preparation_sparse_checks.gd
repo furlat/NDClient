@@ -36,6 +36,7 @@ func exercise(count: int) -> void:
     var input = {"state":state,"changes":{"full":false,"tiles":{},"objects":{"wall":true},"senses":false,"order":[]},
         "actor_state":state,"staged_actors":{},"actor_samples":{},"actor_loadouts":{},"existing_actors":{},
         "cache":cache.duplicate(),"retained":base,"ground":{},"quarter":0,"basis":Basis.IDENTITY,
+        "environment_options":{"depth":true,"normals":true},
         "background":true,"global_rows":false,"visibility":visibility,"visible_cells":cells}
     var task = Preparation.new()
     var worker = WorkerThreadPool.add_task(task._derive.bind(input))
@@ -81,6 +82,7 @@ func actual_initial_residues()->void:
     var input={"state":state,"changes":{"full":true,"tiles":{},"objects":{},"senses":true,"order":[]},
         "actor_state":state,"staged_actors":{},"actor_samples":{},"actor_loadouts":{},"existing_actors":{},
         "cache":sources,"retained":{},"ground":{},"quarter":0,"basis":Basis.IDENTITY,
+        "environment_options":{"depth":true,"normals":true},
         "background":true,"global_rows":true,"visibility":{},"visible_cells":{}}
     var task=Preparation.new()
     var worker=WorkerThreadPool.add_task(task._derive.bind(input))

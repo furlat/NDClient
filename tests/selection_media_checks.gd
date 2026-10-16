@@ -44,6 +44,25 @@ func run() -> void:
     var immutable=var_to_bytes(state)
     var action: Dictionary=Choices.all_actions(evidence.choices).filter(func(row):return row.behavior_id=="spell.fireball")[0]
     var actor_uuid: String=evidence.choices.entity_uuid
+    # Available choices must warm their real authored body path even when a
+    # mechanic uses a movement context rather than a body-action recipe.
+    var move_hint=Selection.create()
+    var before_move=var_to_bytes(state)
+    Selection.request(move_hint,[1,"available movement"],actor_uuid,"",state,16*1024*1024*1024,
+        {},{},[],{},"reference",["action.move"])
+    await settle(move_hint)
+    var move_cache={}
+    var movement=Authoring.body("movement",state.actors[actor_uuid],{"trajectory":"path","movement_mode":"walking"},move_cache)
+    var movement_sources=Characters.sheet_paths(state.actors[actor_uuid],[movement.actor.clip],move_cache)
+    var selected_movement=Characters.CharacterGeometry.for_profile(movement_sources.value,movement_sources.normal_sets,"reference")
+    check(movement_sources.ok and not selected_movement.is_empty()
+        and selected_movement.keys().all(func(path):return move_hint.value.paths.has(path)),
+        "Available movement prepares the actual walking context and its selected normal companions before a command")
+    check(selected_movement.keys().all(func(path):return move_hint.value.onset_paths.has(path)),
+        "The offered movement's authored sheets receive onset priority without an authoritative event")
+    check(var_to_bytes(state)==before_move and move_hint.value.errors.is_empty(),
+        "Available movement only prepares disclosed source operands; canonical state and conditions stay unchanged")
+    Selection.close(move_hint)
     var owner=Selection.create()
     Selection.request(owner,[1,"fireball"],actor_uuid,action.behavior_id,state,16*1024*1024*1024)
     var first_task: int=owner.task

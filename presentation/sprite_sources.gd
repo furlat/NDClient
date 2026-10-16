@@ -6,6 +6,7 @@ const FrameProfile = preload("res://frame_profile.gd")
 const Placement = preload("res://placement.gd")
 const Catalog = preload("res://source_catalog.gd")
 const GroundGeometry = preload("res://presentation/ground_data.gd")
+const EnvironmentSource=preload("res://presentation/environment_source.gd")
 const Graphs = preload("res://animation/graphs.gd")
 const ENVIRONMENT_SHADER = preload("res://environment.gdshader")
 const WATER_SHADER = preload("res://water.gdshader")
@@ -136,35 +137,40 @@ func _release_water_clock(entry:Dictionary)->void:
     water_materials.erase(entry)
     entry.erase("water_clock_registered")
 
-func set_environment(entry: Dictionary, rotation: Basis) -> void:
+func _environment_quad(entry:Dictionary,value:Dictionary)->void:
+    entry.node.mesh.size=value.mesh_size
+    entry.node.mesh.center_offset=value.mesh_center
+    entry.node.custom_aabb=value.aabb
+    entry.cell=value.cell;entry.pivot=value.pivot;entry.scale=value.scale
+    entry.screen_rect=value.screen_rect
+    if entry.placement.has("affine"):entry.node.basis=value.basis
+
+func _apply_environment_descriptor(entry:Dictionary,value:Dictionary)->void:
+    entry.record=value.record
+    if value.get("empty",false):entry.node.visible=false;return
+    _environment_quad(entry,value)
+    entry.node.visible=value.visible;entry.floor_group=value.floor_group
+    SourceMaterial.set_parameter(entry,"door_leaf_partition",0)
+    SourceMaterial.apply(entry,value.parameters)
+    for name in value.texture_parameters:
+        SourceMaterial.set_parameter(entry,name,texture(value.texture_parameters[name]))
+    if value.record.has("hit_mask"):texture(value.record.hit_mask.path)
+
+func set_environment(entry: Dictionary, _rotation: Basis) -> void:
     SourceMaterial.structural_change(entry)
     var row: Dictionary = entry.placement
     var record = Catalog.door_frame(row,quarter,catalog_cache) if entry.source_role == 2 else record_for(row)
     if record.is_empty(): entry.node.visible = false; return
-    entry.record = record
-    var mat: ShaderMaterial = entry.material
-    var cell = v2(record.native_size)
-    set_quad(entry, cell, v2(record.pivot), record.scale)
-    SourceMaterial.set_parameter(entry,"source_tint",v4(row.get("tint",[1,1,1,1])))
-    if row.has("affine"):
-        var affine: Array = row.affine
-        var a = Vector2(affine[0],affine[1])
-        var b = Vector2(affine[2],affine[3])
-        if row.get("ground_projection",false):
-            a = Placement.project(Placement.rotate_grid(Vector2(a.x/128+a.y/64,a.y/64-a.x/128),quarter),0,0)
-            b = Placement.project(Placement.rotate_grid(Vector2(b.x/128+b.y/64,b.y/64-b.x/128),quarter),0,0)
-        entry.node.basis = camera.basis * Basis(Vector3(a.x,-a.y,0),Vector3(-b.x,b.y,0),Vector3(0,0,1))
-        var bounds = Rect2()
-        var origin = Placement.project(v2(row.position),row.base_height_steps,quarter)
-        for corner in [Vector2.ZERO,Vector2(cell.x,0),cell,Vector2(0,cell.y)]:
-            var p = (corner-v2(record.pivot))*record.scale
-            var point = origin+a*p.x+b*p.y
-            bounds = Rect2(point,Vector2.ZERO) if corner==Vector2.ZERO else bounds.expand(point)
-        entry.screen_rect = bounds
     if row.get("water_surface",false):
-        record = record.duplicate()
-        record.water = Catalog.read_file("assets.json",catalog_cache).water
-        entry.record = record
+        record=record.duplicate();record.water=Catalog.read_file("assets.json",catalog_cache).water
+    if not record.has("water"):
+        _apply_environment_descriptor(entry,EnvironmentSource.describe(row,record,entry.source_role,quarter,camera.basis,source_depth,source_normals))
+        return
+    entry.record=record
+    var mat:ShaderMaterial=entry.material
+    var cell:Vector2=v2(record.native_size)
+    _environment_quad(entry,EnvironmentSource.quad(row,record,quarter,camera.basis))
+    SourceMaterial.set_parameter(entry,"source_tint",v4(row.get("tint",[1,1,1,1])))
     if record.has("water"):
         entry.node.visible = entry.source_role == 1
         if mat.shader != WATER_SHADER:
@@ -196,94 +202,40 @@ func set_environment(entry: Dictionary, rotation: Basis) -> void:
         for mapping in [["uv_scale","uvScale"],["depth_strength","depthBlendStrength"],["ripple_tiling","rippleTilingMultiplier"],["ripple_amount","rippleAmount"],["sheen_strength","sheenStrength"],["sheen_sharpness","sheenSharpness"],["alpha_strength","alphaDepthStrength"],["overall_alpha","overallAlpha"],["alpha_cutoff","alphaCutoff"]]:
             SourceMaterial.set_parameter(entry,mapping[0],water[mapping[1]])
         return
-    SourceMaterial.set_parameter(entry,"colour_texture", texture(record.path))
-    SourceMaterial.set_parameter(entry,"colour_size", cell)
-    SourceMaterial.set_parameter(entry,"colour_rect", v4(record.get("rect", [0, 0, cell.x, cell.y])))
-    entry.node.visible = not record.get("hidden", false)
-    SourceMaterial.set_parameter(entry,"door_leaf_partition",0)
-    if entry.source_role == 3 or (entry.source_role == 1 and row.kind == "door"):
-        var partition: Dictionary = record.get("door_partition",{})
-        if partition.is_empty():
-            # Banks without this authored registration, including destruction,
-            # retain the ordinary single leaf draw rather than duplicate alpha.
-            if entry.source_role == 3: entry.node.visible = false
-        else:
-            SourceMaterial.set_parameter(entry,"door_leaf_partition",-1 if entry.source_role == 3 else 1)
-            SourceMaterial.set_parameter(entry,"door_depth_texture",texture(partition.path))
-            SourceMaterial.set_parameter(entry,"door_depth_rect",v4(partition.rect))
-            SourceMaterial.set_parameter(entry,"door_depth_cell",v2(partition.cell))
-            SourceMaterial.set_parameter(entry,"door_depth_range",v2(partition.range))
-            SourceMaterial.set_parameter(entry,"door_depth_scale",partition.scale)
-            SourceMaterial.set_parameter(entry,"door_depth_offset",partition.offset)
-            var origin = Placement.project(v2(row.position),0,quarter)
-            SourceMaterial.set_parameter(entry,"door_frame_depth",Placement.sort_contact(row,quarter).y-origin.y)
-    var shadow_selection: Dictionary = {}
-    for source_role in record.get("roles", []):
-        if source_role.role == "ground_shadow": shadow_selection = source_role.selection; break
-    var shadow_pass: bool = entry.source_role == 0
-    if shadow_pass and shadow_selection.is_empty(): entry.node.visible = false
-    entry.floor_group = record.get("flat_ground", false)
-    SourceMaterial.set_parameter(entry,"source_unlit", shadow_pass)
-    # Private preparation can outlive a key press. Interaction belongs to the
-    # scene owner (the workshop updates Alt highlighting explicitly).
-    SourceMaterial.set_parameter(entry,"highlighted", false)
-    if record.has("hit_mask"): texture(record.hit_mask.path)
-    SourceMaterial.set_parameter(entry,"use_selection", not shadow_selection.is_empty())
-    SourceMaterial.set_parameter(entry,"invert_selection", not shadow_pass)
-    if not shadow_selection.is_empty():
-        var selection = shadow_selection
-        SourceMaterial.set_parameter(entry,"selection_kind", 1 if selection.kind == "source_rgba" else 0)
-        if selection.kind == "source_rgba":
-            SourceMaterial.set_parameter(entry,"rgba_min", v4(selection.bounds.minimum))
-            SourceMaterial.set_parameter(entry,"rgba_max", v4(selection.bounds.maximum))
-        elif selection.kind == "mask":
-            var mask: Dictionary = selection.mask
-            SourceMaterial.set_parameter(entry,"selection_mask", texture(mask.region.path))
-            SourceMaterial.set_parameter(entry,"selection_rect", v4(mask.region.rect))
-            SourceMaterial.set_parameter(entry,"selection_scale", v2(mask.sampling.scale))
-            SourceMaterial.set_parameter(entry,"selection_offset", v2(mask.sampling.offset))
-            var values = [-1.0, -1.0, -1.0, -1.0]
-            for i in range(mini(4, selection.values.size())): values[i] = selection.values[i]
-            SourceMaterial.set_parameter(entry,"selection_values", v4(values))
-    SourceMaterial.set_parameter(entry,"has_geometry", record.has("geometry"))
-    if not record.has("geometry"): return
-    var g: Dictionary = record.geometry
-    var sampling: Dictionary = record.geometry_sampling
-    SourceMaterial.set_parameter(entry,"geometry_texture", texture(record.geometry_region.path))
-    SourceMaterial.set_parameter(entry,"normal_texture", texture(record.normal.region.path))
-    SourceMaterial.set_parameter(entry,"geometry_rect", v4(record.geometry_region.rect))
-    SourceMaterial.set_parameter(entry,"normal_rect", v4(record.normal.region.rect))
-    SourceMaterial.set_parameter(entry,"sample_scale", v2(sampling.scale))
-    SourceMaterial.set_parameter(entry,"sample_offset", v2(sampling.offset))
-    SourceMaterial.set_parameter(entry,"sample_center", v2(sampling.pixel_center))
-    SourceMaterial.set_parameter(entry,"normal_scale", v2(record.normal.sampling.scale))
-    SourceMaterial.set_parameter(entry,"normal_offset", v2(record.normal.sampling.offset))
-    SourceMaterial.set_parameter(entry,"pixel_to_ray", matrix3(g.pixelToRayOrigin))
-    SourceMaterial.set_parameter(entry,"ray_direction", Vector3(g.rayDirection[0], g.rayDirection[1], g.rayDirection[2]))
-    SourceMaterial.set_parameter(entry,"depth_range", v2(g.depthRange))
-    SourceMaterial.set_parameter(entry,"source_to_local", matrix4(g.sourceToLocal))
-    SourceMaterial.set_parameter(entry,"normal_to_local", matrix3(record.normal.normalToLocal))
-    var world_basis = rotation * Basis.from_scale(Vector3(1, Placement.HEIGHT_UNIT, 1))
-    if g.basis == "object_local":
-        var orientation: String = row.get("orientation", "east")
-        world_basis = Basis(Vector3.UP, -["east", "north", "west", "south"].find(orientation) * PI / 2) * Basis.from_scale(Vector3(1, Placement.HEIGHT_UNIT, 1))
-    SourceMaterial.set_parameter(entry,"local_to_world", Transform3D(world_basis, Placement.contact(row)))
-    SourceMaterial.set_parameter(entry,"local_normal_to_world", world_basis.inverse().transposed())
-    SourceMaterial.set_parameter(entry,"use_source_depth", source_depth)
-    SourceMaterial.set_parameter(entry,"use_source_normals", source_normals)
-    # LIGHT_VERTEX changes light reception without moving painted vertices.
-    # Native culling needs the union of both volumes. The authored affine packet
-    # reaches its extrema at these eight corners; no per-texel CPU scan is needed.
-    var receiver_to_quad: Transform3D = Transform3D(entry.node.basis.inverse()*world_basis,Vector3.ZERO)*matrix4(g.sourceToLocal)
-    var pixel_ray: Basis = matrix3(g.pixelToRayOrigin)
-    var ray := Vector3(g.rayDirection[0],g.rayDirection[1],g.rayDirection[2])
-    var bounds: AABB = entry.node.mesh.get_aabb()
-    for x in [0.0,float(record.geometry_region.rect[2])]:
-        for y in [0.0,float(record.geometry_region.rect[3])]:
-            for depth in g.depthRange:
-                var point: Vector3 = pixel_ray*Vector3(x+sampling.pixel_center[0],y+sampling.pixel_center[1],1)+ray*float(depth)
-                bounds = bounds.expand(receiver_to_quad*point)
-    entry.node.custom_aabb = bounds
+
+static func environment_parameter_names()->Dictionary:
+    # Called on the scene owner before a finite private-resource task starts.
+    if not SourceMaterial.declared_parameters.has(ENVIRONMENT_SHADER):
+        var names:Dictionary={}
+        for row in ENVIRONMENT_SHADER.get_shader_uniform_list():names[StringName(row.name)]=null
+        SourceMaterial.declared_parameters[ENVIRONMENT_SHADER]=names
+    return SourceMaterial.declared_parameters[ENVIRONMENT_SHADER]
+
+func adopt_environment_row(_row:Dictionary,prepared_entries:Array)->void:
+    var measured:bool=bool(profile.get("recording",false))
+    for entry in prepared_entries:
+        var value:Dictionary=entry.prepared_source
+        var started:int=Time.get_ticks_usec() if measured else 0
+        var node:=MeshInstance3D.new()
+        if measured:FrameProfile.end_phase(profile,"world_environment_node_create",started);started=Time.get_ticks_usec()
+        node.mesh=entry.mesh;entry.erase("mesh")
+        node.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+        node.sorting_use_aabb_center=false
+        node.position=value.position;node.basis=value.basis;node.visible=value.visible
+        node.material_override=entry.material
+        entry.node=node;entry.screen_rect=Rect2()
+        entry.record=value.record
+        if not value.get("empty",false):
+            node.custom_aabb=value.aabb
+            entry.cell=value.cell;entry.pivot=value.pivot;entry.scale=value.scale
+            entry.screen_rect=value.screen_rect;entry.floor_group=value.floor_group
+        entry.erase("prepared_source")
+        if measured:FrameProfile.end_phase(profile,"world_environment_node_configure",started);started=Time.get_ticks_usec()
+        (sprite_parent if sprite_parent!=null else self).add_child(node)
+        if measured:FrameProfile.end_phase(profile,"world_environment_node_attach",started);started=Time.get_ticks_usec()
+        entries.append(entry);static_entries.append(entry)
+        _light_entry(entry)
+        if measured:FrameProfile.end_phase(profile,"world_environment_register",started)
 
 func _ground_sort(rows: Array, packets: Dictionary) -> void:
     preload("res://presentation/ground_data.gd").sort_rows(rows,packets,quarter)

@@ -72,6 +72,8 @@ static func plan(state:Dictionary,environment:Dictionary,fixtures:Dictionary,cac
                     if is_same(variant,actor):
                         for clip in priority_clips:selected_sources[key].priority[clip]=true
     for selected in selected_sources.values():
+        # Thin source summaries cover the optional library without admitting
+        # any clip's geometry, sockets or native optical metadata.
         for clip in selected.resource.clips:
             var descriptor:Dictionary=selected.resource.clips[clip].get(selected.slot,{})
             if descriptor.is_empty():continue

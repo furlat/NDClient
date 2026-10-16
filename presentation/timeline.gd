@@ -69,6 +69,8 @@ var _world_plan: Dictionary = {}
 var _replay_prepared_plan: Dictionary = {}
 var _preview_world: Dictionary = {}
 var _preview_signature: Array = []
+var _static_preview_world:Dictionary={}
+var _static_preview_signature:Array=[]
 var _scheduled_group: Dictionary = {}
 var _staged_world_times: Array = []
 var retire_group: Callable
@@ -92,6 +94,7 @@ func accept(message: Dictionary) -> void:
         pending_world = {}; _world_plan = {}; waiting_for_world = false
         _replay_prepared_plan={}
         _preview_world = {}; _preview_signature = []
+        _static_preview_world={};_static_preview_signature=[]
         _scheduled_group = {}; _staged_world_times = []
         # A new admitted initialization replaces the pending presentation epoch.
         # Retire immutable old groups through the existing worker owner; none may
@@ -369,7 +372,7 @@ func _plan_world_advance(target: float, ready_group: Dictionary = {}, ready_targ
     return _plan_group_world(group,start,first_commit,cursor,target,activate,_group_stage_times(group))
 
 func _plan_group_world(group: Dictionary, start: float, first_commit: int, cursor: float,
-        target: float, activate: bool, stage_times: Array, stop_at_boundary: bool=true) -> Dictionary:
+        target: float, activate: bool, stage_times: Array, stop_at_boundary: bool=true,source_cuts:bool=true) -> Dictionary:
     var segments: Array = []
     var duration = float(group.duration_ms)
     var before = cursor-start
@@ -382,7 +385,7 @@ func _plan_group_world(group: Dictionary, start: float, first_commit: int, curso
         var at = float(commits[i].at_ms)
         if at>local+0.000001: break
         if _world_delta(commits[i].delta): boundary_at = at; break
-    for cuts in [group.get("actor_structure_times",[]),group.get("actor_source_times",[])]:
+    for cuts in [group.get("actor_structure_times",[]),group.get("actor_source_times",[]) if source_cuts else []]:
         for at in cuts:
             # Source changes use the existing private preparation owner too;
             # no geometry rebuild or world revision is implied by a new clip.
@@ -422,20 +425,23 @@ func _support_signature() -> Array:
     # Immutable stage values belong to this occurrence, not merely to a cell.
     return [current.operation_sequence,current.id,supports.keys()]
 
-func preview_world() -> Dictionary:
+func preview_world(source_cuts:bool=true) -> Dictionary:
     # Read only already received groups. No media callback, trace activation,
     # clock advance or staging admission occurs here. One cached snapshot spans
     # ordinary actor/log commits and animation samples before its world boundary.
     if state.is_empty(): return {}
-    if not pending_world.is_empty(): return pending_world
+    if source_cuts and not pending_world.is_empty(): return pending_world
     var groups: Array = []
     if not current.is_empty(): groups.append(current)
     for i in range(mini(2-groups.size(),queue.size())): groups.append(queue[i])
     var signature: Array = [initialization_revision,world_revision,_support_signature()]
     for group in groups: signature.append([group.operation_sequence,group.id])
-    if signature==_preview_signature: return _preview_world
-    _preview_signature = signature
-    _preview_world = {}
+    if source_cuts:
+        if signature==_preview_signature:return _preview_world
+        _preview_signature=signature;_preview_world={}
+    else:
+        if signature==_static_preview_signature:return _static_preview_world
+        _static_preview_signature=signature;_static_preview_world={}
     var segments: Array = []
     var cursor = display_ms
     for group in groups:
@@ -446,12 +452,14 @@ func preview_world() -> Dictionary:
         for key in group.get("staged_tiles",{}):
             times[float(group.get("staged_tile_at_ms",{}).get(key,0.0))] = true
         var ordered: Array = times.keys(); ordered.sort()
-        var plan = _plan_group_world(group,start,first,cursor,INF,not active,ordered)
+        var plan = _plan_group_world(group,start,first,cursor,INF,not active,ordered,true,source_cuts)
         segments.append_array(plan.segments)
         if plan.boundary:
             plan.segments = segments
-            _preview_world = _world_candidate(plan)
-            return _preview_world
+            var candidate:Dictionary=_world_candidate(plan)
+            if source_cuts:_preview_world=candidate
+            else:_static_preview_world=candidate
+            return candidate
         cursor = plan.display_ms
     return {}
 
@@ -544,6 +552,7 @@ func _apply_world_plan(plan: Dictionary) -> void:
     # consumed preview must still yield to the next authored constructor edge.
     if plan.get("boundary",false):
         _preview_world={};_preview_signature=[]
+        _static_preview_world={};_static_preview_signature=[]
     FrameProfile.end_phase(profile,"timeline_apply",apply_started)
 
 func staged_actors() -> Dictionary:

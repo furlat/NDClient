@@ -121,26 +121,25 @@ static func _sheet_path(slot:String,sheet:String,_resources:Dictionary,_componen
     return source.get(slot,source.get("default",""))
 
 static func prepare_layers(row:Dictionary,rig:Dictionary,cache:Dictionary)->Dictionary:
-    # The world worker owns full category admission. Constructor rows stay
-    # scalar selectors; only this private visual output owns Resource refs.
+    # Category selection is thin. Exact clip geometry is admitted by its own
+    # preparation consumer; every actor borrows the same path map.
     var result:Array=row.equipment_layers.duplicate(true)
     for layer in result:
         var resource=BodySources.prepare_layer(layer.source_path,cache)
         if resource==null:return _error("Cannot admit body category: "+layer.source_path)
-        layer.source_ref=resource;layer.paths={}
+        layer.source_ref=resource
         var effect:Dictionary=layer.get("effect",{})
         var noise:Variant=effect.get("palette",{}).get("noiseSheet")
         if noise!=null:
             var noise_path:String=_sheet_path(layer.slot,str(noise),{},{},cache)
             if BodySources.prepare_descriptor(noise_path,layer.slot,cache).is_empty():return _error("Cannot admit body noise source: "+str(noise))
         if effect.has("sourceSheet"):
+            layer.paths={}
             var path:String=_sheet_path(layer.slot,effect.sourceSheet,{},{},cache)
             if BodySources.prepare_descriptor(path,layer.slot,cache).is_empty():return _error("Cannot admit body sourceSheet: "+effect.sourceSheet)
             for clip in rig.clips:layer.paths[clip]=path
         else:
-            for clip in resource.clips:
-                var descriptor:Dictionary=resource.clips[clip].get(layer.slot,{})
-                if not descriptor.is_empty():layer.paths[clip]=descriptor.path
+            layer.paths=resource.paths_by_slot.get(layer.slot,{})
         if layer.paths.is_empty():return _error("No admitted body clips for selected category: "+layer.category)
     return {"ok":true,"value":result}
 
@@ -181,11 +180,16 @@ static func sheet_paths(actor:Dictionary,clips:Array,cache:Dictionary)->Dictiona
                         var reference:Dictionary=noise_descriptor.get("source_records",{}).get(profile,{})
                         if not reference.is_empty() and not source_seen[profile].has(reference.source_id):
                             source_seen[profile][reference.source_id]=true;source_refs[profile].append(reference)
-            var descriptor:Dictionary=layer.source_ref.clips.get(clip,{}).get(layer.slot,{})
+            var descriptor:Dictionary={}
             if effect.has("sourceSheet"):
                 var colour:String=_sheet_path(layer.slot,effect.sourceSheet,{},{},cache)
                 descriptor=BodySources.prepare_descriptor(colour,layer.slot,cache)
                 if descriptor.is_empty():return _error("Cannot admit body sourceSheet: "+effect.sourceSheet)
+            else:
+                if not layer.source_ref.clip_sources.has(clip):continue
+                var source=BodySources.prepare_clip(layer.source_ref,clip,cache)
+                if source==null:return _error("Cannot admit body clip: "+layer.category+"/"+clip)
+                descriptor=source.descriptors.get(layer.slot,{})
             if descriptor.is_empty():continue
             for profile in source_refs:
                 var reference:Dictionary=descriptor.source_records[profile]

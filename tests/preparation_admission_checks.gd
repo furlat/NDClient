@@ -40,7 +40,7 @@ static func blocked_projection(result:Dictionary,gate:Semaphore)->void:
     complete_projection(result)
 
 func passive_worker_handoffs(host:Host)->void:
-    for stage in ["sort_wait","atlas_prefix_wait","failed_projection"]:
+    for stage in ["sort_wait","failed_projection"]:
         var candidate=Preparation.new();host.add_child(candidate);candidate.host=host
         candidate.phase=stage
         candidate.atlas_prefix={"worker_ms":3.0}
@@ -49,14 +49,23 @@ func passive_worker_handoffs(host:Host)->void:
         candidate.task=WorkerThreadPool.add_task(work.bind(candidate.result))
         while not WorkerThreadPool.is_task_completed(candidate.task):await process_frame
         candidate.step(0)
-        var expected:String="failed" if stage=="failed_projection" else "order_release" if stage=="sort_wait" else "atlas_prefix_reserve"
+        var expected:String="failed" if stage=="failed_projection" else "order_release"
         check(candidate.task<0 and candidate.phase==expected and not candidate.prepared
             and candidate.native_actors.is_empty() and candidate.entries.is_empty(),
             "Spent allowance acknowledges completed "+stage+" without scene construction or publication")
-        if stage=="atlas_prefix_wait":check(candidate.result.worker_ms==3.0,"Completed atlas work retains its measured worker time")
         if stage=="failed_projection":check(candidate.media_issue=="Authored actor source is unavailable."
             and candidate.presentation_errors==[candidate.media_issue],"Spent allowance exposes the worker's real preparation error")
         candidate.free()
+    var atlas=Preparation.new();host.add_child(atlas);atlas.host=host
+    atlas.phase="atlas_overlap";atlas.atlas_stage="wait";atlas.atlas_prefix={"worker_ms":3.0}
+    atlas.atlas_task=WorkerThreadPool.add_task(complete_projection.bind(atlas.result))
+    while not WorkerThreadPool.is_task_completed(atlas.atlas_task):await process_frame
+    atlas.step(0)
+    check(atlas.atlas_task<0 and atlas.atlas_stage=="reserve" and atlas.phase=="atlas_overlap" and not atlas.prepared
+        and atlas.entries.is_empty() and atlas.native_actors.is_empty(),
+        "Spent allowance acknowledges the completed atlas worker without reserving capacity, binding Nodes or publishing")
+    check(atlas.atlas_prefix.worker_ms==3.0,"Completed atlas packet retains its measured worker time until admission")
+    atlas.free()
     var blocked=Preparation.new();host.add_child(blocked);blocked.host=host
     var gate=Semaphore.new()
     blocked.task=WorkerThreadPool.add_task(blocked_projection.bind(blocked.result,gate))
@@ -67,14 +76,14 @@ func passive_worker_handoffs(host:Host)->void:
 
 func completed_lanes(host:Host)->void:
     var candidate=Preparation.new();host.add_child(candidate);candidate.host=host
-    candidate.phase="cookie_resources";candidate.result={"light_resolution":{"sources":[{}]}}
+    candidate.phase="construction";candidate.result={"light_resolution":{"sources":[{}]}}
     candidate.light_preparation={"complete":true}
     candidate.step(0)
-    check(candidate.phase=="cookie_resources" and candidate.cookie_source_cursor==0,
+    check(candidate.phase=="construction" and candidate.cookie_source_cursor==0,
         "Spent allowance cannot start a real cookie operation")
     candidate.cookie_source_cursor=1
     candidate.step(0)
-    check(candidate.phase=="ground" and candidate.entries.is_empty() and candidate.membership.is_empty(),
+    check(candidate.phase=="membership_begin" and candidate.entries.is_empty() and candidate.membership.is_empty(),
         "Completed cookie/light/actor/object lanes hand off without constructing world membership at zero allowance")
     candidate.phase="sampling";candidate.result={"blood_rows":{}}
     candidate.step(0)
@@ -166,7 +175,7 @@ func run()->void:
     check(host._world_preparation_due(16.0),"World due within this playback step keeps priority before its authoritative boundary")
     candidate.initial=true;host.timeline.display_ms=0.0
     host._step_world_preparation()
-    check(candidate.task<0 and candidate.phase=="light_nodes" and not candidate.prepared
+    check(candidate.task<0 and candidate.phase=="construction" and not candidate.prepared
         and candidate.native_actors.is_empty() and candidate.entries.is_empty(),
         "Zero allowance still acknowledges completed passive projection without constructing or publishing native state")
     host.pending_world=null;candidate.free()

@@ -52,9 +52,14 @@ func geometry_fixture()->void:
         records[name]={"body":{"geometry":source,"normal_paths":profiles}}
         index.source_owners[path]=["fixture-layer",name]
     layer.clips=records
+    var loaded:Dictionary={"fixture-layer":layer}
+    for name in records:
+        var clip=body.Clip.new();clip.descriptors=records[name]
+        var clip_path:String="fixture-layer::"+name
+        layer.clip_sources[name]=clip_path;loaded[clip_path]=clip
     for path in [PATH,ALT_PATH,MISSING_PATH]:layer.headers[path]={"width":192,"height":128}
     index.source_owners[MISSING_PATH]=["fixture-layer","Missing"]
-    host.catalog_cache[body.KEY]={"index":index,"loaded":{"fixture-layer":layer}}
+    host.catalog_cache[body.KEY]={"index":index,"loaded":loaded}
 
 func future_binding_checks()->void:
     for target in [ALT_PATH,MISSING_PATH]:
@@ -86,7 +91,7 @@ func future_binding_checks()->void:
 func future_support_checks()->void:
     var Renderer=preload("res://presentation/native_spell_renderer.gd")
     var renderer=Renderer.new();renderer._support=Renderer.Support.new();renderer._required_ids={"real-spell":true}
-    var paths:Dictionary=host.catalog_cache[Construction.CharacterGeometry.BodySources.KEY].loaded["fixture-layer"].clips.TakeDamage.body
+    var paths:Dictionary=Construction.CharacterGeometry.BodySources.descriptor(ALT_PATH,"body",host.catalog_cache)
     paths.optical_paths={"solid":"/fixture/future-solid"}
     var absent:Dictionary=renderer.prepare_actor_binding(ALT_PATH,"body",host)
     check(not absent.ready and renderer._support.solid_masks.is_empty(),"Future native solid binding waits for its actual resident mask")

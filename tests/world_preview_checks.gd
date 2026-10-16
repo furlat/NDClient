@@ -47,6 +47,7 @@ func run()->void:
     for name in ["oa-walk-3","oa-jump-hit","oa-jump-late-lethal"]:
         run_recording("C:/Users/tommaso/AppData/Local/Temp/ndclient-presentation-"+name+"/amber/journal",name,3)
     received_window()
+    static_window()
     reset_epoch()
     check(early_previews>0 and matching_due>0,"Real received movement offers world preparation before causal arrival")
     var report={"checks":checks,"failures":failures,"recordings":records,"early_previews":early_previews,"matched_due_boundaries":matching_due,
@@ -72,7 +73,7 @@ func received_window()->void:
     check(actual.display_ms==6.0 and actual.revision>1 and calls.world==0,"Ordinary actor commit proceeds while future world is only prepared")
     check(is_same(actual.preview_world(),early),"Actor-only revision does not copy or invalidate earliest received world")
     actual.advance(14.0)
-    check(actual.display_ms==20.0 and actual.current.is_empty(),"Prior group completion remains a separate media ownership boundary")
+    check(actual.display_ms==20.0 and (actual.current.is_empty() or actual.current.id==second.id),"Prior group completion retains its authored boundary before the next received world")
     var next=actual.preview_world()
     check(next.preparation_key==early.preparation_key and next.display_ms==30.0,"Cross-group traversal keeps stable preparation key and chronology")
     actual.advance(10.0)
@@ -94,6 +95,29 @@ func received_window()->void:
     actual.advance(5)
     next=actual.preview_world()
     check(next.display_ms==20.0 and next.preparation_key!=early.preparation_key and not next.presentation_state.tiles.has(key),"Admitted support changes baseline and prepares independent end removal")
+
+func static_window()->void:
+    var actual=pair()[0]
+    var key:String=fixture_state.tiles.keys()[0]
+    var delta:Dictionary=Compiler.empty_delta();delta.tiles[key]=fixture_state.tiles[key]
+    var group:Dictionary=make_group("source-before-static",[{"at_ms":12.0,"delta":delta}],20)
+    group.actor_source_times=[0.0,5.0,9.0]
+    actual.accept({"kind":"operation","groups":[group]})
+    var clock:float=actual.display_ms;var revision:int=actual.revision;var trace:int=actual.trace_revision
+    var ordinary:Dictionary=actual.preview_world();var passive:Dictionary=actual.preview_world(false)
+    check(ordinary.source_local_ms==0.0 and passive.source_local_ms==12.0,"Static forecast skips source-only timestamps and stops at the first actual world delta")
+    check(actual.display_ms==clock and actual.revision==revision and actual.trace_revision==trace and actual.current.is_empty(),"Static forecast does not activate, advance or publish any event")
+    check(is_same(passive,actual.preview_world(false)) and is_same(ordinary,actual.preview_world()),"Normal and passive static forecasts retain independent cached owners")
+    actual.world_ready=func(_candidate):return true
+    actual.advance(0)
+    check(actual.preview_world().source_local_ms==5.0 and actual.preview_world(false).preparation_key==passive.preparation_key,"Static target remains stable across an admitted source-only cut")
+    actual=pair()[0];group=group.duplicate();group.actor_structure_times=[6.0]
+    actual.accept({"kind":"operation","groups":[group]})
+    check(actual.preview_world(false).source_local_ms==6.0,"Static forecast cannot cross an actor-structure boundary")
+    actual=pair()[0];actual.state.tiles.erase(key)
+    group=group.duplicate();group.actor_structure_times=[];group.staged_tiles={key:fixture_state.tiles[key]};group.staged_tile_at_ms={key:8.0}
+    actual.accept({"kind":"operation","groups":[group]})
+    check(actual.preview_world(false).source_local_ms==8.0 and not actual.presentation_state().tiles.has(key),"Static forecast stops at temporary support admission without disclosing it")
 func reset_epoch()->void:
     var sample=pair();var actual=sample[0]
     var key:String=fixture_state.tiles.keys()[0]
