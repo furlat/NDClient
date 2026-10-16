@@ -85,6 +85,7 @@ var prepared_source_bindings: Dictionary = {}
 var prepared_delta: Dictionary = {}
 var prepared_style_receivers: Dictionary = {}
 var prepared_cleanup: Dictionary = {}
+var sample_serial:int=0
 
 func attach(parent: Node3D) -> void:
     owner = parent
@@ -999,12 +1000,31 @@ func style_changed(entry: Dictionary, row_id: String = "source") -> void:
 func visibility_changed(entry: Dictionary) -> void:
     visibility_dirty[entry.node.get_instance_id()]=true
 
+func capture_projection(world:Node)->Dictionary:
+    var camera:Camera3D=world.camera
+    var screen:Vector2=world.get_viewport().get_visible_rect().size
+    var zero:Vector2=camera.unproject_position(Vector3.ZERO)
+    return {"key":[camera.global_transform,camera.size,screen],"screen":Rect2(Vector2.ZERO,screen),
+        "transform":Transform2D(camera.unproject_position(camera.global_basis.x)-zero,
+            camera.unproject_position(-camera.global_basis.y)-zero,zero)}
+
+func projection_key(world:Node)->Array:
+    return [world.camera.global_transform,world.camera.size,world.get_viewport().get_visible_rect().size]
+
 func output_changed(entry: Dictionary) -> void:
     # These final3D fields are owned by wall selection/coverage and output
     # creation, not Canvas receiving. Consume only after painter/mask publication.
     if is_instance_valid(entry.node): output_dirty[entry.node.get_instance_id()]=entry
 
 func _visibility(receiver: Dictionary, screen: Rect2) -> bool:
+    if receiver.get("cull_owner",{}).get("frame",-1)==sample_serial:
+        # Candidate receivers stayed disabled while private. The source's live
+        # visibility and camera were matched once at this publication; known
+        # hidden rows need no native getter/intersection or visibility write.
+        var prepared_shown:bool=receiver.cull_shown
+        if prepared_shown:receiver.node.visible=true
+        receiver.view_visible=prepared_shown
+        return prepared_shown
     var shown: bool = receiver.entry.node.is_visible_in_tree() and (plane_to_screen*receiver.bounds).intersects(screen)
     if receiver.node.visible!=shown: receiver.node.visible=shown
     receiver.view_visible=shown
@@ -1029,6 +1049,7 @@ func _style(receiver: Dictionary) -> void:
         receiver.group.material.set_shader_parameter("receiver_world_origin",receiver.get("world_origin",Vector3.ZERO))
 
 func sync(world: Node, published: Array = [], styles: Array = [], changes: Dictionary = {}, tracked_receivers: bool = false) -> void:
+    sample_serial+=1
     var started = Time.get_ticks_usec()
     projection_dirty=[]
     last_reconcile_phases={}

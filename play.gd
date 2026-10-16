@@ -53,6 +53,7 @@ var displayed_components: Array = []
 var pending_world: Variant
 var prepared_actor_owner: Variant
 var world_prepare_epoch = -1
+var world_prepare_worker_phases:Dictionary={}
 var world_prepared_count = 0
 var actor_prepared_layers = 0
 var world_prepare_worker_ms = 0.0
@@ -231,6 +232,7 @@ func install_playback(value: RefCounted) -> void:
     value.initialization_revision = timeline.initialization_revision + 1
     _release_replay_media()
     timeline = value
+    timeline.profile = profile
     timeline.media_ready = _media_ready
     timeline.replay_media_ready = _replay_media_ready
     timeline.replay_media_release = _release_replay_media
@@ -317,6 +319,7 @@ func _ready() -> void:
     native_light_atlas.set_light_cap(1.0 if light_cap_enabled else 0.0)
     source_lighting.attach(native_light_atlas.viewport)
     generated_shadows.attach(self)
+    timeline.profile = profile
     timeline.media_ready = _media_ready
     timeline.replay_media_ready = _replay_media_ready
     timeline.replay_media_release = _release_replay_media
@@ -587,10 +590,10 @@ func _process(delta: float) -> void:
     # behind it. It borrows the already accepted compiler/source references.
     _prepare_future_world()
     _adopt_media_plan(MediaWarmup.poll_plan(media_warmup))
-    # Adopt completed projection (including its exact optical source pins)
-    # before publishing demand. A due world gets the same allowance here;
-    # required components cannot strand already-ready world work behind them.
-    if _world_preparation_due(advance_ms):_step_world_preparation()
+    # Adopt finished projection and its exact pins before publishing demand.
+    # Required uploads get first use of the shared allowance; hidden native
+    # construction uses its remainder below, including source-decode waits.
+    if _world_preparation_due(advance_ms):_step_world_preparation(true)
     _prepare_media()
     FrameProfile.end_phase(profile,"preparation_step",subphase)
     # Receive the new source interests before spending this frame's allowance.
@@ -637,8 +640,10 @@ func _process(delta: float) -> void:
             phase = Time.get_ticks_usec()
             _sync_source_lighting()
             FrameProfile.end_phase(profile,"source_lighting_resolve",phase)
+        subphase = Time.get_ticks_usec()
         displayed_samples = timeline.actor_samples()
         displayed_components=timeline.component_samples(catalog_cache).filter(func(component):return not presentation_mutes.has(component.id) and (presentation_solo.is_empty() or presentation_solo.has(component.id)))
+        FrameProfile.end_phase(profile,"displayed_samples",subphase)
         phase = Time.get_ticks_usec()
         _sync_actors()
         if publication_failed:return
@@ -706,8 +711,10 @@ func _process(delta: float) -> void:
             print("PLAYER_READY: initialized, acknowledged, and current choices available")
     if global_draw_hold and not external_playback:
         _discover();_poll_storage();_update_hover()
+    phase = Time.get_ticks_usec()
     if external_playback:_prepare_optional_work.call_deferred()
     else:_prepare_optional_work()
+    FrameProfile.end_phase(profile,"optional_preparation",phase)
     if not media_issue.is_empty():
         var preparing: Dictionary = timeline.current if not timeline.current.is_empty() else (timeline.queue[0] if not timeline.queue.is_empty() else {})
         if not preparing.is_empty(): timeline.record_preparation_issue(preparing.id,media_issue)
@@ -746,6 +753,12 @@ func _detailed_frame_context(active_motion: bool) -> Dictionary:
             "bind_cursor":pending_world.atlas_prefix.get("bind_cursor",0),"bind_total":pending_world.atlas_prefix.get("bind_ids",[]).size(),
             "output_cursor":pending_world.atlas_prefix.get("output_cursor",0),"output_total":pending_world.atlas_prefix.get("output_ids",[]).size(),
             "planning_lane":pending_world.atlas_prefix.get("planning_lane",""),
+            "blocked_actor":pending_world.blocked_actor.duplicate(),"blocked_source":pending_world.blocked_source.duplicate(),
+            "worker_phases":pending_world.result.get("worker_phases",{}).duplicate(),
+            "native_phase_usec":pending_world.phase_usec.duplicate(),
+            "actor_binding_cursor":pending_world.binding_cursor,"actor_binding_total":pending_world.actor_bindings.size(),
+            "actor_binding_path":pending_world.actor_bindings[pending_world.binding_cursor].value.get("path","") if pending_world.binding_cursor<pending_world.actor_bindings.size() else "",
+            "blood_rows":pending_world.result.get("blood_rows",{}).size(),"blood_handles":pending_world.blood_preparation.handles.size(),
             "retained_lights":pending_world.light_preparation.get("retained",false),"cookie_jobs":pending_world.cookie_jobs.size()} if pending_world!=null else {}),
         "native_startup":{"ready":native_startup.ready,"completed":native_startup.completed,"total":native_startup.total,"elapsed_ms":native_startup.elapsed_ms},
         "native_2d_repack_count":native_light_atlas.repack_count,"native_2d_receivers":native_light_atlas.live_receivers,"native_2d_atlas_pixels":native_light_atlas.packed_pixels,"generated_shadows":generated_shadows.diagnostics(),
@@ -755,6 +768,9 @@ func _detailed_frame_context(active_motion: bool) -> Dictionary:
         "native_spell_render_ms":component_renderer.native_spells.render_timings(),
         "native_support_sync":component_renderer.native_spells._support.last_sync_phases if component_renderer.native_spells._support!=null else {},
         "actor_sample_counts":profile.get("actor_sample_counts",{}),
+        "actor_membership_counts":profile.get("actor_membership_counts",{}),
+        "scenery_sample_counts":profile.get("scenery_sample_counts",{}),
+        "world_prepare_worker_phases":world_prepare_worker_phases,
         "rotation_pending":rotation_pending(),"requested_quarter":requested_quarter,"cached_quarters":static_views.size(),"retiring_views":retiring_views.size(),"retiring_nodes":retiring_node_count,"world_generation":world_generation,"world_preparing":pending_world!=null,"world_prepare_phase":pending_world.phase if pending_world!=null else "idle","world_prepared_count":world_prepared_count,"actor_prepared_layers":actor_prepared_layers,"world_prepare_worker_ms":world_prepare_worker_ms,"world_waiting":timeline.waiting_for_world,"preparation_admission":preparation_admission.duplicate(true),"session_execution":session.diagnostics() if session != null else {},"displayed_sequence":timeline.sequence,"consumed_sequence":session.latest_sequence if session != null else -1,"queued_groups":timeline.queue.size(),
         "profile_stage":profile.label,"wall_mode":wall_mode,"wall_support_candidates":wall_support_candidates,"wall_max_member_candidates":wall_max_member_candidates,
         "wall_mask_gpu_ms":RenderingServer.viewport_get_measured_render_time_gpu(wall_mask_viewport.get_viewport_rid()) if wall_mask_viewport!=null and wall_mode=="translucent" else 0.0,
@@ -806,7 +822,7 @@ func _prepared_world_sources_ready(candidate: Dictionary) -> bool:
 func _world_preparation_due(advance_ms:float)->bool:
     return pending_world!=null and (pending_world.initial or float(pending_world.boundary.display_ms)<=timeline.display_ms+maxf(0,advance_ms))
 
-func _step_world_preparation() -> void:
+func _step_world_preparation(poll_only:bool=false) -> void:
     if pending_world==null: return
     var invalid_initial:bool=false
     if pending_world.initial and pending_world.prepared:
@@ -814,16 +830,11 @@ func _step_world_preparation() -> void:
     if pending_world.epoch!=timeline.initialization_revision or pending_world.quarter!=quarter or pending_world.stale or invalid_initial:
         if pending_world.worker_finished(): _discard_world_preparation()
         return
-    # Only passive projection runs ahead of texture residency. Godot resource
-    # binding stays on the scene thread and uses this boundary's exact plan.
+    # Each hidden native phase waits for its own source operands. The exact
+    # complete media/world gate still precedes any displayed state change.
     var budget:Dictionary=_preparation_budget()
     var started:int=Time.get_ticks_usec();var before:int=budget.used_usec
-    if not pending_world.initial and not _prepared_world_sources_ready(pending_world.boundary):
-        # Passive completion/adoption has no native residency dependency.
-        pending_world.step(0)
-        _charge_preparation("world",started,before)
-        return
-    pending_world.step(maxi(0,budget.limit_usec-budget.used_usec))
+    pending_world.step(0 if poll_only else maxi(0,budget.limit_usec-budget.used_usec))
     _charge_preparation("world",started,before)
     if not pending_world.media_issue.is_empty(): media_issue = pending_world.media_issue
 
@@ -839,6 +850,7 @@ func _world_ready(candidate: Dictionary) -> bool:
             if not pending_world.worker_finished(): return false
             _discard_world_preparation()
         elif pending_world.prepared:
+            if not _prepared_world_sources_ready(candidate):return false
             # Validate the borrowed base before Timeline changes state, clocks,
             # trace or audio. A stale candidate owns nothing displayed.
             if pending_world.can_publish_membership(int(candidate.world_revision)):
@@ -852,7 +864,7 @@ func _world_ready(candidate: Dictionary) -> bool:
     pending_world = WorldPreparation.new(); add_child(pending_world)
     pending_world.configure(self,candidate)
     _step_world_preparation()
-    if pending_world.prepared and pending_world.can_publish_membership(int(candidate.world_revision)):
+    if pending_world.prepared and _prepared_world_sources_ready(candidate) and pending_world.can_publish_membership(int(candidate.world_revision)):
         if not external_clock:
             pending_world.admitted=true
             if not pending_world.atlas_prefix.is_empty():pending_world.atlas_prefix.admitted=true
@@ -863,6 +875,7 @@ func _publish_source_cut(_candidate:Dictionary)->bool:
     if pending_world==null or not pending_world.result.get("source_only",false):return false
     pending_world.publish_actor_bindings()
     world_prepare_worker_ms=pending_world.result.worker_ms
+    world_prepare_worker_phases=pending_world.result.get("worker_phases",{})
     world_prepared_count+=1
     _discard_world_preparation()
     return true
@@ -888,11 +901,12 @@ func _finish_world_preparation() -> void:
     pending_world.publish_actor_bindings()
     component_renderer.invalidate_preparation()
     world_prepare_worker_ms = pending_world.result.worker_ms
+    world_prepare_worker_phases=pending_world.result.get("worker_phases",{})
     world_prepared_count += 1
     # All adopted native nodes have moved to the stable displayed parent.
     pending_world.entries = []; pending_world.static_entries = []
     pending_world.native_groups = {}; pending_world.native_ground = {}
-    if not pending_world.native_actors.is_empty():
+    if pending_world.result.has("actor_members"):
         # Static publication precedes actor synchronization. Keep the hidden
         # owner alive until exact current outfits can take their own nodes.
         _finish_actor_preparation()
@@ -984,6 +998,12 @@ func _sync_world() -> void:
             "base":prepared.visibility_base,"changes":prepared.visibility_changes,
             "revision":timeline.world_revision,"generation":world_generation,
             "quarter":quarter,"epoch":timeline.initialization_revision}
+        if pending_world.membership.scenery.has("writes"):
+            prepared_scenery.writes = pending_world.membership.scenery.writes
+    if prepared.has("blood_index"):
+        detail_started=Time.get_ticks_usec()
+        component_renderer.blood.publish_tile_index(timeline.state.tiles,timeline.world_revision,prepared.blood_index)
+        FrameProfile.end_phase(profile,"world_blood_index_publish",detail_started)
     if not changed and not rotated:
         if not prepared.is_empty():
             pending_world.publish_membership()
@@ -1378,6 +1398,8 @@ func _scenery_ground_entry(id:String)->Dictionary:
     return {}
 
 func _sync_scenery(force: bool = false, refresh_sight: bool = false) -> void:
+    var counts:Dictionary={"resolved_ids":0,"prepared_writes":0,"native_writes":0}
+    profile.scenery_sample_counts=counts
     var rebuild = force or scenery_index_dirty or scenery_index_count!=static_entries.size() or scenery_quarter!=world_quarter
     if rebuild:
         scenery_consumers = {}; water_entries = []; wall_sources = []; wall_entries = []; scenery_wall_sources = {}; scenery_batches = []
@@ -1391,10 +1413,13 @@ func _sync_scenery(force: bool = false, refresh_sight: bool = false) -> void:
         var reuse: bool = not force and not refresh_sight and not prepared_scenery.is_empty() and prepared_scenery.epoch==timeline.initialization_revision and prepared_scenery.revision==timeline.world_revision and prepared_scenery.generation==world_generation and prepared_scenery.quarter==world_quarter and is_same(prepared_scenery.base,scenery_visibility)
         var current: Dictionary
         var changed: Dictionary
+        var writes:Array=[]
+        var prepared_writes:bool=reuse and prepared_scenery.has("writes")
         if reuse:
             current = prepared_scenery.visibility
             scenery_visible_cells = prepared_scenery.visible_cells
-            changed = prepared_scenery.changes.duplicate()
+            changed = prepared_scenery.changes
+            if prepared_writes:writes=prepared_scenery.writes
         else:
             var state: Dictionary = timeline.presentation_state()
             var boundaries: Dictionary = WorldRows.boundary_index(state) if force or world_row_cache.is_empty() else world_row_cache.boundaries
@@ -1406,39 +1431,32 @@ func _sync_scenery(force: bool = false, refresh_sight: bool = false) -> void:
                 if not current.has(id): changed[id] = false
         prepared_scenery = {}
         var sight_changed: bool = not changed.is_empty()
-        for id in scenery_new_consumers: changed[id] = current.has(id)
+        if not prepared_writes:
+            changed=changed.duplicate()
+            for id in scenery_new_consumers: changed[id] = current.has(id)
         scenery_new_consumers = {}
         if sight_changed: wall_visibility_revision = -1
         scenery_visibility = current
-        var batches = {}
-        for id in changed:
-            var value = 1.0 if changed[id] else 0.0
-            var ground_entry:Dictionary=_scenery_ground_entry(str(id))
-            if not ground_entry.is_empty():
-                var index:int=ground_entry.ground_indices[id]
-                if ground_entry.scenery_values[index]!=value:
-                    native_light_atlas.style_changed(ground_entry,str(id))
-                    _ground_visibility(ground_entry,index,value)
-                    var key:int=ground_entry.node.get_instance_id()
-                    if not batches.has(key):batches[key]={"entry":ground_entry,"indices":[]}
-                    batches[key].indices.append(index)
-            for consumer in scenery_consumers.get(id,[]):
-                var entry: Dictionary = consumer.entry
-                if consumer.index>=0:
-                    var index:int=entry.ground_indices.get(id,-1)
-                    if index<0:continue
-                    if entry.scenery_values[index]!=value:
-                        native_light_atlas.style_changed(entry,str(id))
-                        _ground_visibility(entry,index,value)
-                        var key:int=entry.node.get_instance_id()
-                        if not batches.has(key):batches[key]={"entry":entry,"indices":[]}
-                        batches[key].indices.append(index)
-                    continue
-                if entry.get("scenery_value",-1.0) != value:
-                    native_light_atlas.style_changed(entry)
-                    SourceMaterial.set_parameter(entry,"current_visibility",value)
-                    entry.scenery_value = value
-        for batch in batches.values(): _ground_flush_visibility(batch.entry,batch.indices)
+        if not prepared_writes:
+            for id in changed:
+                counts.resolved_ids+=1
+                var value:float = 1.0 if changed[id] else 0.0
+                var ground_entry:Dictionary=_scenery_ground_entry(str(id))
+                if not ground_entry.is_empty():
+                    var index:int=ground_entry.ground_indices[id]
+                    if ground_entry.scenery_values[index]!=value:
+                        writes.append({"entry":ground_entry,"index":index,"id":str(id),"value":value})
+                for consumer in scenery_consumers.get(id,[]):
+                    var entry: Dictionary = consumer.entry
+                    var index:int=entry.ground_indices.get(id,-1) if consumer.index>=0 else -1
+                    if consumer.index>=0:
+                        if index>=0 and entry.scenery_values[index]!=value:
+                            writes.append({"entry":entry,"index":index,"id":str(id),"value":value})
+                    elif entry.get("scenery_value",-1.0)!=value:
+                        writes.append({"entry":entry,"index":-1,"id":str(id),"value":value})
+        if prepared_writes:counts.prepared_writes=writes.size()
+        counts.native_writes=writes.size()
+        _publish_scenery_writes(writes)
         scenery_revision = timeline.world_revision
         scenery_world_revision = world_revision
         scenery_generation = world_generation
@@ -1449,6 +1467,22 @@ func _sync_scenery(force: bool = false, refresh_sight: bool = false) -> void:
             SourceMaterial.set_parameter(entry,"displayed_time_seconds",seconds)
             native_light_atlas.style_changed(entry)
         water_display_seconds = seconds
+
+func _publish_scenery_writes(writes:Array)->void:
+    var batches:Dictionary={}
+    for write in writes:
+        var entry:Dictionary=write.entry
+        if write.index>=0:
+            native_light_atlas.style_changed(entry,write.id)
+            _ground_visibility(entry,write.index,write.value)
+            var key:int=entry.node.get_instance_id()
+            if not batches.has(key):batches[key]={"entry":entry,"indices":[]}
+            batches[key].indices.append(write.index)
+        else:
+            native_light_atlas.style_changed(entry)
+            SourceMaterial.set_parameter(entry,"current_visibility",write.value)
+            entry.scenery_value=write.value
+    for batch in batches.values():_ground_flush_visibility(batch.entry,batch.indices)
 
 func _light_entry(entry: Dictionary) -> void:
     SourceMaterial.set_parameter(entry,"authored_base_light",0.0)
@@ -1512,6 +1546,8 @@ func _reconcile_actor_layers(id:String,row:Dictionary)->bool:
     return true
 
 func _sync_actor_membership() -> void:
+    var counts:Dictionary={"prepared_rows":0,"resolved_rows":0}
+    profile.actor_membership_counts=counts
     # Initial raw state can arrive before its worker-prepared source catalog.
     # Do not fall back to synchronous JSON parsing while that job is running.
     if not media_metadata_ready: return
@@ -1537,7 +1573,14 @@ func _sync_actor_membership() -> void:
             _retire_actor(id)
             continue
         var actor_stage:int=Time.get_ticks_usec()
-        var resolved = Characters.resolve(actor,rendered_state,catalog_cache)
+        var resolved:Dictionary
+        if prepared_actor_owner!=null:
+            var prepared_row:Variant=prepared_actor_owner.result.actor_members.get(id)
+            resolved={"ok":true,"value":prepared_row.duplicate() if prepared_row!=null else null}
+            counts.prepared_rows+=1
+        else:
+            resolved=Characters.resolve(actor,rendered_state,catalog_cache)
+            counts.resolved_rows+=1
         FrameProfile.end_phase(profile,"actor_resolve",actor_stage)
         if not resolved.ok:
             if not resolved.error.message in presentation_errors: presentation_errors.append(resolved.error.message)
@@ -1612,7 +1655,11 @@ func _sync_actor_membership() -> void:
             for i in range(layers.size()):created.append(ActorConstruction.layer(self,row,rig,layers[i],i))
             FrameProfile.end_phase(profile,"actor_layers_create",actor_stage)
         if not retain_actor:actor_rows.append(row)
-        visual_actors[id] = {"row":row,"entries":created,"valid":true}
+        var visual:Dictionary={"row":row,"entries":created,"valid":true}
+        if prepared.has("condition_parameters"):visual.condition_parameters=prepared.condition_parameters
+        if prepared.get("outfit_profile","")==character_light_profile and prepared.has("outfit_clip"):
+            visual.outfit_binding=[prepared.outfit_clip,character_light_profile,MediaWarmup.physical(media_warmup).source_revision]
+        visual_actors[id] = visual
     actor_revision = timeline.revision
 
 func _retire_actor(id: String) -> void:

@@ -12,13 +12,25 @@ func check(value:bool,label:String)->void:
     checks+=1
     if not value:failures.append(label);print("REPLAY_NATIVE_FAIL ",label)
 func settle(studio:Control,requested_time:float=-1.0,requested_directory:String="")->bool:
+    var diagnostic_at:int=Time.get_ticks_msec()+3000
+    var diagnostic_emitted:bool=false
     var deadline=Time.get_ticks_msec()+90000
-    while (studio.index.is_empty() or studio.loader!=null or (not studio.preparing_loop and (studio.seeker!=null or studio.installing or studio.requested_seek>=0))) and Time.get_ticks_msec()<deadline:await process_frame
+    while (studio.index.is_empty() or studio.loader!=null or (not studio.preparing_loop and (studio.seeker!=null or studio.installing or studio.requested_seek>=0))) and Time.get_ticks_msec()<deadline:
+        if not diagnostic_emitted and Time.get_ticks_msec()>=diagnostic_at:
+            diagnostic_emitted=true
+            if studio.candidate_world!=null:print("STUDIO_WAIT_DIAGNOSTIC ",JSON.stringify({"requested_ms":requested_time,"candidate":studio.candidate_world._detailed_frame_context(false)}))
+        await process_frame
     var ready=not studio.index.is_empty() and studio.loader==null and (studio.preparing_loop or (studio.seeker==null and not studio.installing and studio.requested_seek<0))
     ready=ready and not studio.status.text.begins_with("Candidate rejected") and not studio.status.text.begins_with("Recording rejected")
     ready=ready and studio.world.presentation_errors.is_empty() and studio.world.media_issue.is_empty()
     if ready and requested_time>=0:ready=is_equal_approx(studio.world.timeline.display_ms,requested_time)
     if ready and not requested_directory.is_empty():ready=studio.active_directory==requested_directory
+    if not ready:
+        var details:Dictionary={"requested_ms":requested_time,"status":studio.status.text,"replay":studio.replay_diagnostics()}
+        if studio.candidate_world!=null:
+            details.candidate=studio.candidate_world._detailed_frame_context(false)
+        evidence.append({"installation_failure":details})
+        print("STUDIO_INSTALLATION_DIAGNOSTIC ",JSON.stringify(details))
     check(ready,"Single preview installation ready: "+studio.status.text)
     return ready
 func prefix_shape(timeline)->Dictionary:

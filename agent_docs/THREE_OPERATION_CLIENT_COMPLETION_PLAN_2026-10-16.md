@@ -1066,3 +1066,316 @@ the focused native output suites are clean. No clean-live-teardown claim.
 The anti-slop/correctness reviewers and independent plan/anti-OOP guard found no
 remaining blocker in these saved ownership changes. Broader latency/frame
 targets remain open. All owned client Godot processes were closed after testing.
+
+### Door reveal investigation and next operations — 16 October
+
+User requested the door reveal's nested breakdown and which work can move off
+its critical path. This section records read-only investigation of the two
+already qualified live runs above. No new production changes, Godot runs or
+performance qualification are implied. Anti-slop, correctness and the independent
+plan/anti-OOP guard participated in this investigation. The anti-slop and
+plan/anti-OOP reviewers approved the execution order below, with the capacity
+atomicity and intended published visibility requirements recorded explicitly.
+
+The door changes 21 to 1,003 placements, 38 to 317 draw entries, and one to six
+actors. Both repeats perform the same work: 279 atlas sources, 1,156 receiver
+specifications, 292 group commands and 1,098 static cull checks. These are work
+counts, not counts of independently loaded character sheets. Slower repeat A
+takes longer across most CPU stages, rather than exposing a different large
+operation. Use repeat B frame 7720 for the following disjoint accounting:
+
+| Player callback phase | CPU ms |
+| --- | ---: |
+| Session/timeline | 5.848 |
+| World publication | 4.131 |
+| Actor membership | 1.519 |
+| Actor/component sampling | 3.933 |
+| Scenery/fixture/source-light sampling | 3.037 |
+| Wall visibility | 1.162 |
+| Native lighting | 17.322 |
+| Draw order/output | 3.317 |
+| Interaction | 0.090 |
+| Outside the named callback stages | 1.744 |
+| **Player callback** | **42.103** |
+| **Whole process interval** | **44.145** |
+
+The other 2.042 ms of the interval is outside this callback, not established
+server or GPU time. Ordinary post-reveal median player CPU is 6.801 ms. Repeat A
+has 67.187 ms player CPU / 69.515 ms interval. Neither is an achieved frame target.
+
+Native lighting's 17.322 ms contains atlas 13.916, modular shadows 3.105,
+source projection .292 and .009 wrapper overhead. The atlas contains reconcile
+8.635, material sampling 2.502, projection/culling 2.559, style .074 and .146
+setup/other. Reconcile contains capacity growth 2.188, source/support registry
+1.327, bulk binding 3.212, output adoption/transport 1.237, address normalization
+.206, and .465 specification/setup/other. Children are not additional costs.
+Bulk binding includes native directory/array publication 1.026, ordered group
+registration 1.233 and source-directory transfer .580; its remaining .373 is
+style merge, ordered replacements and overhead. The material pass contains 108
+actual actor UV copies and 119 uniform writes; its full cost is not redundant.
+
+Readiness is a separate problem from the publication frame. In repeat B the
+packet completes 143.272 ms after click; first door-action animation is observed
+at 227.522 ms. Media readiness becomes true at 794.975 ms, then the world gate
+holds until the 1,393.921 ms observation: about 599 ms. The reveal frame's ending
+stamp is 1,379.919 ms after click; the next observation sees the released gate.
+These clocks describe scheduling/observation, not 599 ms of continuous CPU work.
+
+The actor-preparation phase spans 65 sampled frames / 453.019 ms, but consumes
+29.014 ms charged world CPU, including 19.808 ms native preparation. For 31 of
+those frames, Play._step_world_preparation rejects all native preparation because
+the whole environment cut is not resident, although actor construction can have
+different dependencies. Those frames leave 36.619 ms of the existing shared
+allowance unused. There is no per-layer or per-actor draw fence in these actor
+and disabled shadow constructors. Once attempted, a missing actor layer becomes
+unbound_entry and prevents later actors from being attempted. Existing profiling
+does not identify the exact blocking actor/slot/source in every waiting frame.
+
+Implement in this order within the existing owners and 2 ms shared budget:
+
+1. **Overlap ready construction with source residency.** Replace the blanket
+   environment prerequisite for all native phases with each phase's actual
+   required operands. Let ready actor graphs/layers/shadow structures and other
+   independent work proceed; defer only the entries whose sources are absent.
+   Reuse the existing preparation cursors/work ownership, not a second scheduler.
+   Keep the complete media/world publication gate and the currently displayed
+   event prefix. Add only diagnostic actor/slot/missing-source status to identify
+   the remaining producer stall. The measured unused allowance is an overlap
+   opportunity, not a promised 453 ms or 599 ms saving.
+2. **Adopt remaining prepared indexes and constants.** Prepare actual retained
+   scenery style writes instead of revisiting newly private sprites/full floor
+   packets whose visibility is already correct (the current scenery pass is
+   2.616 ms). Carry the residue-index delta with worker-produced tile results
+   instead of scanning canonical tiles during BloodRenderer sampling (.839 ms
+   despite no active blood). Adopt resolved actor member rows rather than six
+   Characters.resolve calls (.496 ms). Retain prepared clip/source/material
+   constants instead of revalidating five outfits (.551 ms); actual frame,
+   facing, pose, hover and condition-clock changes still sample normally.
+   These are measured candidate scopes, not a claim that every parent phase
+   disappears. Ordinary sparse updates must remain proportional to changes.
+3. **Reserve exact atlas capacity before final binding.** The worker already
+   computes next_height. At the existing post-plan/pre-bind owner boundary,
+   reserve that exact append-only height and coherently normalize CURRENT output
+   regions in one non-yielding step after the existing stale-base check, leaving
+   integer addresses/membership/source order
+   and event clocks unchanged. Explicitly rebase this candidate's capacity token;
+   other prepared candidates remain invalidated normally. Cancellation retains
+   the reserved physical capacity, not the old height. This is a capacity-only
+   exception to private preparation, requiring exact old-frame pixel equality.
+   It moves about 2.188 + .187 ms earlier, rather than deleting the work. Report
+   the native indivisible overrun and any effect on readiness; do not increase
+   the budget or reserve a blanket maximum.
+4. **Finish static atlas publication operands.** Prepare screen intersections
+   for the captured camera/visibility, and skip redundant visibility rechecks
+   for known-hidden new receivers while preserving their admitted membership;
+   at least 763 of the 1,098 static cull visits end hidden. Retain the existing
+   fallback when camera/ancestor visibility changes. Use intended published
+   ancestor visibility, not the deliberately hidden preparation parent. The
+   2.559 ms phase includes
+   dynamic projection and native visibility writes, so it is only a ceiling.
+   Batch new-group registration within the existing ordered runs, retaining
+   zero-user/drop/reappear identity and retained-node operations. Keep displaced
+   preparation directories in existing budgeted retirement to avoid destroying
+   them during source-directory transfer. Native array/map appends already cost
+   1.026 ms and are real publication work; a worker cannot mutate live ownership
+   to make them free. Do not introduce an O(N) clone for ordinary K changes.
+
+Prepare passive derivation on workers; prepare native resources earlier under
+their scene-thread owner. Active SceneTree/material/viewport changes must not be
+moved to arbitrary workers. Shadows already create zero new actors/casters/meshes
+at this cue, but still sample 55 casters and 25 lights: their 3.105 ms includes
+snapshots .482, layout .742, sources .441, updates 1.249 and other .191. Stable
+operands may be retained; current source/pose/light updates remain live.
+
+Before attributing remaining costs, split the existing timeline_advance timer
+(3.968 ms, including readiness callbacks and ordered commit/trace work), and the
+1.744 ms outside named callback stages. No additional runtime asset/schema
+validation or broad instrumentation framework is required.
+
+The worker diagnostic is cumulative 141.305 ms, including the 18.748 ms atlas
+planner and initial world derivation/static sorting. It is not a decomposition
+of the 599 ms scheduling hold and is not added to the publication frame. Initial
+derivation still lacks separate row/support/visibility/geometry/actor-binding
+timers; collect these existing-worker phase timings with the next live route
+before attributing or attempting to optimize the remainder.
+
+Qualification for this continuation: unchanged event hierarchy/prefix and actual
+animation clocks; prepared versus displayed scenery/residue/actor membership;
+exact atlas address/group/order values; old pixels during capacity reservation,
+cancellation and rejection of other stale candidates; camera change during
+preparation; all four views; existing seek/loop coverage; then the same real door,
+move, Haste and two-Fireball route. Report preparation CPU, unused allowance,
+time held at each gate and the actual publication-frame subphases separately.
+Preserve the approved shaders, light cap, art and final framebuffer. No new
+performance result has been measured for these proposed operations.
+
+### Door preparation/publication implementation — 16 October
+
+The user authorized all four operations, reviewers and a fresh complete live
+route. The saved implementation stays in Play, Timeline diagnostics,
+WorldPreparation, BloodRenderer and the existing native atlas/delta owners.
+No backend, Factory, shader, light tuning, asset or UI change was made.
+
+- Native construction now checks the actual operands of each actor layer,
+  object or ground batch. Missing sources remain owned, while other actors,
+  layers and environment rows progress through existing cursors. Completed-lane
+  counts and deadlines bound retries. Actors cannot be taken before their exact
+  sources and prepared shadows complete. The final complete media/world gate is
+  retained before any event/clock/state publication.
+- Scene publication adopts resolved actor rows and exact prepared outfit and
+  immutable neutral material operands. Live facing, frame, condition material
+  and pose still sample the actual displayed clock. Scenery applies prepared
+  retained style writes, while private/full floor buffers and CPU visibility
+  values transfer together. Sparse geometry retains explicit visibility writes.
+  The canonical blood index transfers with its exact tile owner/revision.
+- The post-plan/pre-bind capacity step reserves only the proven required atlas
+  height, atomically normalizes current outputs and rebases only that candidate.
+  Cancellation keeps reserved capacity. Other old candidates remain stale.
+- Static receiving rows prepare camera intersections using intended published
+  ancestry. Cue-time camera/source-visibility changes take the ordinary current
+  path. Known-hidden rows remain admitted but skip redundant cull visits.
+  Ordered private-group spans use native directory merges; retained replacement
+  barriers preserve zero-user/drop/reappear semantics. Replaced private receiver
+  directories remain under existing budgeted retirement.
+
+Review found and closed two production issues before final qualification:
+completed construction lanes must return without full empty rescans, and sparse
+ground geometry packets do not own visibility channels. Focused fixture setup
+also initially omitted actual source/membership operands and a group join-mask
+and changed-row precondition; those fixtures were corrected, not covered with
+production defaults or accepted with ScriptErrors.
+
+The first complete live run exposed an actual priority inversion: ready decoded
+required images waited while hidden constructors took almost the whole 2 ms
+allowance. There were 19 such frames versus one in the baseline. The final order
+is passive worker adoption/exact source pins, demand publication, required media
+uploads, then native preparation using the remaining SAME allowance. A separate
+zero-budget correction keeps membership construction below the elapsed guard.
+Neither change introduces another queue, owner, allowance or publication path.
+
+Functional/graphics evidence before that final scheduling-only correction:
+Timeline precision 5 and delayed world/event-prefix comparisons 6,812; scenery
+10; overlap 15; sparse preparation/residue index 78; staged atlas 1,987 with 53
+exact native pairs; WorldPreparation/atlas 150 with 9 exact native pairs; focused
+capacity/cull/group tests 105 headless / 144 native with 13 exact native pairs;
+native Studio seek/loop/faction/event-prefix checks 8,830. Thus at least 75 native
+framebuffer pairs are byte-exact, including current old-frame pixels during
+reservation and cancellation. After the final scheduling correction, admission
+35 and another complete real GUI route 81 pass. Sparse preparation retains its
+26 pre-existing ObjectDB exit warnings; live teardown still reports leaked
+instances and one resource at exit. No clean-live-teardown claim.
+
+Final matched live route remains door, move `[26,6]`, Haste, Fireball `[32,8]`,
+Fireball `[33,7]`, using Forward+/Vulkan 1600x960/view 18 and the same full-size
+native viewport/display blit. Both final runs pass 81 checks. The Factory's own
+preview was present; no GPU isolation or cause for general timing variation is
+claimed. Owned native runs were serialized. Compare the faster saved baseline B
+with both final runs, rather than selecting only the fastest new result:
+
+| Metric | Baseline B | Final A | Unchanged final B |
+| --- | ---: | ---: | ---: |
+| Door media hold | 344.108 ms | 357.605 ms | 321.182 ms |
+| Door world hold | 598.946 ms | 402.020 ms | 427.948 ms |
+| Door combined observed holds | 943.054 ms | 759.625 ms | 749.130 ms |
+| Door publication interval | 44.145 ms | 30.455 ms | 32.484 ms |
+| Door player CPU | 42.103 ms | 28.718 ms | 30.741 ms |
+| Door publication after click | 1379.919 ms | 1224.497 ms | 1181.029 ms |
+| Movement playback maximum | 31.018 ms | 28.367 ms | 31.962 ms |
+| Movement combined observed holds | 304.363 ms | 334.183 ms | 316.080 ms |
+| Haste playback maximum | 22.260 ms | 23.504 ms | 22.196 ms |
+| First Fireball playback maximum | 24.577 ms | 24.643 ms | 30.475 ms |
+| Second Fireball playback maximum | 29.408 ms | 31.364 ms | 34.006 ms |
+| First Fireball packet-to-animation | 67.398 ms | 60.200 ms | 72.855 ms |
+| Second Fireball packet-to-animation | 61.186 ms | 56.829 ms | 82.252 ms |
+| Idle same-view interval median | 11.324 ms | 8.730 ms | 12.026 ms |
+| Idle same-view interval p95 | 15.470 ms | 15.005 ms | 17.809 ms |
+
+The door wins hold across both final repeats: combined observed holds improve
+19-21%, and its publication interval improves 26-31%. Media/world holds are
+sampled phase transitions, not CPU durations. This does NOT establish improved
+movement readiness, Fireball response or steady scene FPS: those remain mixed.
+The earlier unchanged baseline A had a 69.515 ms door frame and larger other
+action maxima; it remains evidence of variation, not a denominator for a larger
+claimed gain.
+
+Final A door carries the same 1,003 placements / 317 draws / 6 actors, 279 atlas sources,
+1,156 specs and 54 actual UV changes. Scenery 2.616->.058 ms, actor resolution .496->.028,
+outfit residency .551->.037 and blood index .839->.001. Atlas 13.916->8.302 ms;
+growth and old-output normalization leave the cue, while their earlier native
+step is charged (the initial implementation run measured 1.632 ms capacity work,
+2.051 ms total shared allowance used, a .051 ms indivisible overrun). Static live
+cull checks 1,098->261: 1,098 prepared decisions include 837 hidden rows. Their admitted
+membership remains intact. Registry/output/material/current UV work remains real.
+
+Do not hide the other spikes behind the door result. Final A has a 39.479 ms
+first-Fireball targeting interval BEFORE submission; its player callback is
+only part of that interval and the remaining input/native time is not attributed
+by this instrumentation. Final B has a 34.006 ms repeated-Fireball aftermath.
+An earlier new run's 32.940 ms aftermath decomposes mostly to shadow target
+resize: 1.309->4.264 ms with unchanged caster counts/target pixels; the final
+runs' same leaf is .866/1.007 ms, so it is not the cause of every later frame.
+Final B's repeated onset 82.252 ms is 22.801 ms opening preparation plus 59.451 ms
+tail (process intervals 3.283+17.406+16.348+18.679, then 3.735 ms observation gap).
+Those intervals include real native preparation/sampling waits and slower
+ordinary frames; no new server delay is hidden inside that client metric.
+Server Fireball dispatch is separately 553.181/401.681 ms in final A and
+615.507/442.546 ms in final B. No no-spike or 100+fps claim; this completes the
+four scoped door operations, not every performance target in the parent plan.
+
+Evidence: final runs `.runtime/player-runs/20261016T163627.778509Z` and
+`20261016T163953.360043Z`, analyses `.runtime/door-four-priority-live-analysis.json`
+and `.runtime/door-four-final-repeat-analysis.json`, compact comparison
+`.runtime/door-four-results.json`. The first two implementation runs
+`20261016T162932.670629Z` and `20261016T163112.743822Z` also pass 81 checks and expose
+the upload priority inversion. Run `20261016T163822.246103Z` is not used for timing
+comparison because a concurrent owned CPU-analysis loop occupied a core; that
+analysis was stopped and the clean final repeat collected afterward.
+
+Final seek qualification found and fixed a zero-budget polling deadlock in the
+blood resource owner. A passive `prepare_resources(0)` poll marked the frame's
+page-constructor allowance as consumed before doing any construction; the later
+funded call in that same frame then refused to run. A reused replay installation
+could repeat this forever despite all source assets being ready. The owner now
+sets that marker only after budget and constructor admission succeed. No clock,
+event, shader or publication gate was changed. The new real Forward+ regression
+passes 20 checks, including same-frame zero-to-positive allowance, one actual
+page per frame and real post-draw readiness. The fresh complete native Studio
+suite passes 8,878 checks with zero failures after this correction. The timing
+table above precedes this final stamp-only liveness fix; a final live route is
+recorded below separately.
+
+Final qualified route `20261016T165408.501605Z` passes all 81 checks with the
+stamp correction in place. Door media/world holds are 306.073/399.536 ms,
+705.609 ms combined (25.2% below baseline B); publication is 30.292 ms with
+28.527 ms player CPU (31.4% below the baseline frame interval), 1114.253 ms
+after click. This supports the repeatable door improvement without selecting
+only this fastest wait result. The Factory preview was present during earlier
+captures; no Godot process remained at the final process audit.
+
+Later live measurements from that same final route:
+
+| Metric | Baseline B | Final qualified route |
+| --- | ---: | ---: |
+| Movement combined observed holds | 304.363 ms | 400.445 ms |
+| Movement playback maximum | 31.018 ms | 28.907 ms |
+| Haste playback maximum | 22.260 ms | 23.458 ms |
+| First Fireball playback maximum | 24.577 ms | 25.332 ms |
+| Second Fireball playback maximum | 29.408 ms | 27.704 ms |
+| First Fireball packet-to-animation | 67.398 ms | 63.941 ms |
+| Second Fireball packet-to-animation | 61.186 ms | 77.449 ms |
+| Idle same-view interval median | 11.324 ms | 9.696 ms |
+| Idle same-view interval p95 | 15.470 ms | 15.360 ms |
+
+First/repeated Fireball server execution is separately 635.296/442.760 ms.
+First Fireball observed media/world holds are 39.305/44.762 ms; repeated holds
+16.449/23.496 ms. These occur across playback cuts and are not added to the
+packet-to-first-animation metric. Movement's larger final wait and the variable
+spell results remain open limits; the four door operations are complete, but
+this is not evidence that the parent plan's whole-scene frame/latency targets
+have all been met. No additional production changes were made in response to
+that timing variation. Final analysis is
+`.runtime/door-four-final-qualified-analysis.json`, also included in
+`.runtime/door-four-results.json`. The live route retains the existing missing
+generic-caster portrait warning, 30 leaked ObjectDB instances and one resource
+still in use at exit; the native Studio suite has zero failures. Final read-only
+plan/ownership/correctness review found no actionable blocker.

@@ -49,7 +49,7 @@ func passive_worker_handoffs(host:Host)->void:
         candidate.task=WorkerThreadPool.add_task(work.bind(candidate.result))
         while not WorkerThreadPool.is_task_completed(candidate.task):await process_frame
         candidate.step(0)
-        var expected:String="failed" if stage=="failed_projection" else "order_release" if stage=="sort_wait" else "atlas_prefix_bind"
+        var expected:String="failed" if stage=="failed_projection" else "order_release" if stage=="sort_wait" else "atlas_prefix_reserve"
         check(candidate.task<0 and candidate.phase==expected and not candidate.prepared
             and candidate.native_actors.is_empty() and candidate.entries.is_empty(),
             "Spent allowance acknowledges completed "+stage+" without scene construction or publication")

@@ -5,6 +5,8 @@ const Compiler = preload("res://presentation/compiler.gd")
 const EventTrace = preload("res://presentation/event_trace.gd")
 const Conditions = preload("res://presentation/conditions.gd")
 const ImpactPlacement = preload("res://presentation/impact_placement.gd")
+const FrameProfile = preload("res://frame_profile.gd")
+var profile:Dictionary={"phases":{}}
 var state: Dictionary = {}
 var queue: Array = []
 var current: Dictionary = {}
@@ -285,11 +287,16 @@ func _advance_with_world_preparation(delta_ms: float) -> void:
     var target: float = display_ms+maxf(0,delta_ms)
     while true:
         var first: Dictionary = current if not current.is_empty() else (queue[0] if not queue.is_empty() else {})
-        if media_ready.is_valid() and not media_ready.call(first):
+        var started:int=Time.get_ticks_usec()
+        var ready:bool=not media_ready.is_valid() or media_ready.call(first)
+        FrameProfile.end_phase(profile,"timeline_media_ready",started)
+        if not ready:
             waiting_for_media = true
             return
         if pending_world.is_empty():
+            started=Time.get_ticks_usec()
             var plan = _plan_world_advance(target,first,target)
+            FrameProfile.end_phase(profile,"timeline_plan",started)
             waiting_for_media = plan.media_wait
             if not plan.boundary:
                 _apply_world_plan(plan)
@@ -299,10 +306,15 @@ func _advance_with_world_preparation(delta_ms: float) -> void:
                 # group prove readiness, using this call's original target.
                 continue
             _world_plan = plan
+            started=Time.get_ticks_usec()
             pending_world = _world_candidate(plan)
+            FrameProfile.end_phase(profile,"timeline_candidate",started)
         # Reuse this exact passive candidate across waits. The elapsed wait is
         # never appended to display time, and this cut has not published yet.
-        if not world_ready.call(pending_world):
+        started=Time.get_ticks_usec()
+        ready=world_ready.call(pending_world)
+        FrameProfile.end_phase(profile,"timeline_world_ready",started)
+        if not ready:
             waiting_for_world = true
             return
         _apply_world_plan(_world_plan)
@@ -492,6 +504,7 @@ func _world_candidate(plan: Dictionary) -> Dictionary:
         "sequence":next_sequence,"group_id":group.get("id",""),"operation_sequence":int(last.group.operation_sequence)}
 
 func _apply_world_plan(plan: Dictionary) -> void:
+    var apply_started:int=Time.get_ticks_usec()
     for segment in plan.segments:
         if segment.activate:
             current = queue.pop_front()
@@ -501,14 +514,20 @@ func _apply_world_plan(plan: Dictionary) -> void:
         for i in range(segment.first_commit,segment.end_commit):
             var commit: Dictionary = current.commits[i]
             var delta: Dictionary = commit.delta
+            var started:int=Time.get_ticks_usec()
             _append_membership_order(world_changes.order,delta,state)
             Compiler.apply_delta(state,delta)
+            FrameProfile.end_phase(profile,"timeline_apply_state",started)
+            started=Time.get_ticks_usec()
             _observe_resource_owners(delta,group_start_ms+commit.at_ms)
+            FrameProfile.end_phase(profile,"timeline_apply_owners",started)
+            started=Time.get_ticks_usec()
             if commit.has("event_uuid"): EventTrace.commit(trace,int(current.operation_sequence),commit.event_uuid)
             EventTrace.append_logs(trace,commit.get("trace_logs",[]))
             if _world_delta(delta):
                 world_revision += 1; _record_world_changes(delta)
             commit_index += 1; revision += 1
+            FrameProfile.end_phase(profile,"timeline_apply_trace_changes",started)
         EventTrace.tick(trace,current.get("events",[]),segment.local_ms)
         display_ms = segment.start_ms+segment.local_ms
         if segment.complete:
@@ -525,6 +544,7 @@ func _apply_world_plan(plan: Dictionary) -> void:
     # consumed preview must still yield to the next authored constructor edge.
     if plan.get("boundary",false):
         _preview_world={};_preview_signature=[]
+    FrameProfile.end_phase(profile,"timeline_apply",apply_started)
 
 func staged_actors() -> Dictionary:
     var admitted = {}

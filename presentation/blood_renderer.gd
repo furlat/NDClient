@@ -58,10 +58,10 @@ func prepare_resources(world:Node,budget:Dictionary={})->bool:
     # Their first native canvas draw must finish during loading: otherwise the
     # following SubViewport constructor pays its cold render-server work.
     if resource_frame==frame:return false
-    resource_frame=frame
     for name in ["floor","air"]:
         if not pages.has(name):
             if (not budget.is_empty() and budget.used_usec>=budget.limit_usec) or not Admission.begin_mutation():return false
+            resource_frame=frame
             var began:int=Time.get_ticks_usec()
             _page(world,name)
             light_page_create_usec+=Time.get_ticks_usec()-began
@@ -340,6 +340,17 @@ func _active(world:Node,samples:Array)->Array:
             var copy=component.duplicate();copy.age_ms=world.timeline.display_ms-world.timeline.group_start_ms-component.start_ms
             if copy.age_ms<0:result.append(copy)
     return result
+
+func publish_tile_index(owner:Dictionary,revision:int,index:Dictionary)->void:
+    # Classification belongs to the same prepared canonical tile after-values
+    # as the private fields. Publication only adopts/applies those exact rows.
+    if index.full:
+        index.retired=tiles
+        tiles=index.updates
+    else:
+        for key in index.removed:tiles.erase(key)
+        tiles.merge(index.updates,true)
+    tiles_owner=owner;tiles_revision=revision
 
 func sync_tiles(owner:Dictionary,revision:int,changes:Dictionary={})->void:
     if tiles_revision==revision and is_same(tiles_owner,owner):return

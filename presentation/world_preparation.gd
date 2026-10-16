@@ -12,6 +12,7 @@ const SourceLighting = preload("res://presentation/lighting_2d.gd")
 const Blood=preload("res://presentation/blood.gd")
 const MediaWarmup=preload("res://presentation/media_warmup.gd")
 const GroundOverlay=preload("res://presentation/ground_overlay.gd")
+const EnvironmentMedia=preload("res://presentation/environment_media.gd")
 var host: Node
 var boundary: Dictionary = {}
 var epoch = -1
@@ -22,6 +23,13 @@ var native_ground: Dictionary = {}
 var native_actors: Dictionary = {}
 var actor_ids: Array = []
 var actor_cursor: int = 0
+var actor_scan_cursor:int=0
+var object_cursor:int=0
+var objects_complete:Dictionary={}
+var ground_complete:Dictionary={}
+var blocked_actor:Dictionary={}
+var blocked_source:Dictionary={}
+var phase_usec:Dictionary={}
 var actor_catalog_owner: Dictionary = {}
 var actor_bases:Dictionary={}
 var actor_bindings:Array=[]
@@ -60,6 +68,9 @@ var complete_nodes: Dictionary = {}
 var order_updates: Array = []
 var scenery_jobs:Array=[]
 var scenery_cursor:int=0
+var scenery_style_ids:Array=[]
+var scenery_style_cursor:int=0
+var scenery_packet_entries:Dictionary={}
 var atlas_jobs: Array = []
 var atlas_shells: Dictionary = {}
 var atlas_cursor = 0
@@ -131,6 +142,7 @@ func configure(owner: Node, candidate: Dictionary, first: bool = false) -> void:
         "layer_clips":candidate.get("actor_layers",[]).reduce(func(values,row):values[row.id]=row.get("clip","");return values,{}),
         "source_options":{"depth":host.source_depth,"normals":host.source_normals,"profile":host.character_light_profile,"tile_width":host.rig_config.TILE_W},
         "blood_existing":blood_renderer.world_values(),
+        "blood_index_full":first or candidate.changes.get("full",false) or blood_renderer.tiles_revision<0,
         "actor_loadouts":ActorConstruction.loadouts(candidate.get("actor_samples",{}),candidate.get("actor_layers",[])),"existing_actors":existing_actors,
         "cache":worker_cache,"retained":host.world_row_cache,
         "ground":ground_before,"quarter":quarter,"basis":camera.basis,"background":host.ground_is_background,
@@ -197,11 +209,35 @@ static func _candidate_visibility(input: Dictionary, patch: Dictionary) -> Dicti
 func candidate_visible(id: String) -> bool:
     return bool(result.visibility_changes.get(id,result.visibility.has(id)))
 
+static func _row_sources(row:Dictionary,quarter:int,cache:Dictionary)->Dictionary:
+    var paths:Dictionary={};var fixtures:Dictionary={}
+    var variants:Array=[row]
+    variants.append_array(row.get("wall_members",[]))
+    for value in variants:
+        var source:Dictionary=value
+        if value.has("views"):
+            source=value.duplicate();source.asset=source.views[Placement.pose(source.orientation,quarter)]
+        EnvironmentMedia.record_paths(Catalog.environment(source,quarter,cache),paths,cache)
+        if source.kind=="door":EnvironmentMedia.record_paths(Catalog.door_frame(source,quarter,cache),paths,cache)
+        if source.get("water_surface",false):
+            var assets:Dictionary=Catalog.read_file("assets.json",cache)
+            paths[assets.resources[assets.water.ripple].path]=true
+    if row.has("lit_animation"):
+        var assets:Dictionary=Catalog.read_file("assets.json",cache)
+        for frame in assets.animations[row.lit_animation].frames:
+            var path:String=assets.resources[frame].path
+            paths[path]=true;fixtures[path]=true
+    return {"paths":paths,"fixtures":fixtures}
+
 func _derive(input: Dictionary) -> void:
     var started = Time.get_ticks_usec()
+    var worker_phases:Dictionary={};var phase_started:int=started
     var patch = WorldRows.prepare_changes(input.state,input.cache,input.retained,input.changes)
+    worker_phases.rows=(Time.get_ticks_usec()-phase_started)/1000.0;phase_started=Time.get_ticks_usec()
     var ground_support:Dictionary=GroundOverlay.prepare_support(input.state.tiles,input.changes,input.get("ground_support",{}),patch.rebuild_rows)
+    worker_phases.support=(Time.get_ticks_usec()-phase_started)/1000.0;phase_started=Time.get_ticks_usec()
     var sight = _candidate_visibility(input,patch)
+    worker_phases.visibility=(Time.get_ticks_usec()-phase_started)/1000.0;phase_started=Time.get_ticks_usec()
     var background: bool = _background_for(input.state,input.retained,input.changes)
     var full_membership: bool = input.global_rows or patch.rebuild_visual
     # Moving between a native source and a batch is a real membership change.
@@ -259,6 +295,7 @@ func _derive(input: Dictionary) -> void:
     if residue_source_needed and Catalog.asset("particles.region.blood",input.cache).is_empty():
         result={"complete":false,"error":"Cannot load selected asset metadata: particles.region.blood","worker_ms":(Time.get_ticks_usec()-started)/1000.0}
         return
+    worker_phases.routing=(Time.get_ticks_usec()-phase_started)/1000.0;phase_started=Time.get_ticks_usec()
     var affected: Array = ground.keys() if full_membership else ground_changes.keys()
     for key in affected:
         var before: Dictionary = input.ground.get(key,{})
@@ -295,9 +332,17 @@ func _derive(input: Dictionary) -> void:
             for row in rows:
                 if sight.changes.get(row.id,sight.visibility.has(row.id)): visible[row.id] = true
             packets[key] = GroundData.prepare(rows,before,input.quarter,input.basis,visible)
+    worker_phases.ground=(Time.get_ticks_usec()-phase_started)/1000.0;phase_started=Time.get_ticks_usec()
+    var object_sources:Dictionary={};var ground_sources:Dictionary={}
+    for id in wanted:
+        object_sources[id]=_row_sources(wanted[id],input.quarter,input.cache)
+    for key in ground:
+        if not ground[key].is_empty() and not input.ground.has(key):ground_sources[key]=_row_sources(ground[key][0],input.quarter,input.cache)
+    worker_phases.sources=(Time.get_ticks_usec()-phase_started)/1000.0;phase_started=Time.get_ticks_usec()
     # Full membership/view changes are explicit larger geometry jobs. Sparse
     # source changes use the existing owner-side wall bucket invalidations.
     var geometry = WallReveal.prepare_geometry(input.state.tiles,all_rows,input.quarter) if full_membership else {}
+    worker_phases.walls=(Time.get_ticks_usec()-phase_started)/1000.0;phase_started=Time.get_ticks_usec()
     var actors:Dictionary={};var bindings:Dictionary={};var future_solid_paths:Dictionary={}
     var actor_members:Dictionary={}
     var actor_ids:Array=input.actor_state.actors.keys()
@@ -361,12 +406,17 @@ func _derive(input: Dictionary) -> void:
             if prior_geometry.present!=(not source.is_empty()) or (not source.is_empty() and prior_geometry.cell!=Vector2(cell[0],cell[1])):
                 retained_slots.erase(layer.slot)
         actors[id]={"row":row,"rig":rig,"layers":layers,"entries":[],"new_entries":[],"playback":null,
-            "reuse_actor":same_rig,"retained_slots":retained_slots,"source_sample":source_sample,"source_bindings":source_bindings}
+            "reuse_actor":same_rig,"retained_slots":retained_slots,"source_sample":source_sample,"source_bindings":source_bindings,
+            "layer_clips":input.get("layer_clips",{}),"source_ready":{},"source_cursor":0}
+    worker_phases.actors=(Time.get_ticks_usec()-phase_started)/1000.0;phase_started=Time.get_ticks_usec()
     # The existing sparse/full terrain walk supplies authoritative residue
     # values, including remembered/offscreen cells. Camera motion cannot create
     # an unprepared deposit later merely because a field was offscreen here.
     var blood_rows:Dictionary={}
+    var blood_index:Dictionary={"full":input.get("blood_index_full",input.changes.get("full",false)),"updates":{},"removed":{}}
     var blood_keys:Dictionary=input.changes.get("tiles",{}).duplicate()
+    if blood_index.full:
+        for key in input.actor_state.tiles:blood_keys[key]=true
     if full_membership:
         for row in rows_to_route:
             if not row.is_empty() and row.kind=="terrain":blood_keys[WorldRows.cell_key(row.position)]=true
@@ -374,6 +424,10 @@ func _derive(input: Dictionary) -> void:
     for key in blood_keys:
         var tile:Dictionary=input.state.tiles.get(key,{})
         var residue:Dictionary=Blood.residue(tile)
+        var canonical:Dictionary=input.actor_state.tiles.get(key,{})
+        var canonical_residue:Dictionary=residue if is_same(tile,canonical) else Blood.residue(canonical)
+        if not canonical_residue.is_empty():blood_index.updates[key]=canonical
+        elif not blood_index.full:blood_index.removed[key]=true
         if residue.is_empty():
             if input.get("blood_existing",{}).has(key):blood_rows[key]={"removed":true}
             continue
@@ -384,6 +438,7 @@ func _derive(input: Dictionary) -> void:
         var kernel_cache:Dictionary={}
         var kernels:Array=Blood.kernels(residue,tile.position,[],source,kernel_cache)
         blood_rows[key]={"tile":tile,"value":residue,"source":source,"cache":kernel_cache,"kernels":kernels,"coverage":Blood.has_coverage(kernels)}
+    worker_phases.blood=(Time.get_ticks_usec()-phase_started)/1000.0;phase_started=Time.get_ticks_usec()
     var source_only:bool=not input.get("initial",false) and not input.get("world_changed",true) and not input.global_rows and actors.is_empty() \
         and not input.changes.get("full",false) and input.changes.get("tiles",{}).is_empty() \
         and input.changes.get("objects",{}).is_empty() and not input.changes.get("senses",false) \
@@ -401,12 +456,17 @@ func _derive(input: Dictionary) -> void:
         if optical!=null and input.get("light_inputs")!=null and optical==input.light_inputs:
             light_resolution=input.light_resolution
         else:light_resolution=SourceLighting.resolve(input.actor_state)
+    worker_phases.lights=(Time.get_ticks_usec()-phase_started)/1000.0
+    phase_started=Time.get_ticks_usec()
+    var source_files:Dictionary=Catalog.source_snapshot(input.cache)
+    worker_phases.source_snapshot=(Time.get_ticks_usec()-phase_started)/1000.0
     result = {"complete":true,"source_only":source_only,"actors":actors,"actor_members":actor_members,"light_resolution":light_resolution,"geometry":geometry,
         "row_patch":patch,"wanted":wanted,"removed_wanted":removed_wanted,"ground":ground,"packets":packets,"supports":supports,
         "background":background,"full_membership":full_membership,"needs_order":full_membership,
         "visibility":sight.visibility,"visibility_sparse":sight.sparse,"visible_cells":sight.cells,"ground_support":ground_support,
         "visibility_base":input.visibility,"visibility_changes":sight.changes,
-        "source_files":Catalog.source_snapshot(input.cache),"actor_bindings":bindings,"blood_rows":blood_rows,
+        "source_files":source_files,"actor_bindings":bindings,"blood_rows":blood_rows,"blood_index":blood_index,
+        "object_sources":object_sources,"ground_sources":ground_sources,"worker_phases":worker_phases,
         "required_source_record":MediaWarmup.source_record(future_solid_paths,{},{},future_solid_paths) if not future_solid_paths.is_empty() else {},
         "worker_ms":(Time.get_ticks_usec()-started)/1000.0}
 
@@ -428,7 +488,7 @@ func step(budget_usec: int = 2000) -> void:
                 break
             if phase=="atlas_prefix_wait":
                 result.worker_ms+=float(atlas_prefix.get("worker_ms",0.0))
-                phase="atlas_prefix_bind"
+                phase="atlas_prefix_reserve"
             elif phase=="sort_wait":
                 if sorted_indices.size()!=order_records.size():
                     media_issue = "World preparation failed to sort its complete static membership."; phase = "failed"; break
@@ -476,35 +536,24 @@ func step(budget_usec: int = 2000) -> void:
         elif phase=="light_nodes":
             host.source_lighting.prepare_step(light_preparation)
         elif phase=="actors":
-            _prepare_actor()
+            var progressed:bool=_prepare_actor(started+budget_usec)
+            if not progressed:progressed=_prepare_object(started+budget_usec)
+            if not progressed:progressed=_prepare_ground(started+budget_usec)
             if not media_issue.is_empty():
                 if media_issue not in presentation_errors:presentation_errors.append(media_issue)
                 break
-            if actor_cursor<actor_ids.size() and result.actors[actor_ids[actor_cursor]].has("unbound_entry"):break
+            if not progressed:break
         elif phase=="objects":
-            var id: String = wanted_ids[cursor]; cursor += 1
-            var row: Dictionary = result.wanted[id]
-            var old: Dictionary = membership_base.groups.get(id,{})
-            if not old.is_empty() and old.row==row: continue
-            var first = static_entries.size()
-            _environment_row(row.duplicate(true))
-            native_groups[id] = {"row":row,"entries":static_entries.slice(first)}
-            created_count += static_entries.size()-first
+            var progressed:bool=_prepare_object(started+budget_usec)
+            if not progressed:progressed=_prepare_ground(started+budget_usec)
             if not media_issue.is_empty(): phase = "failed"; return
+            if not progressed:break
         elif phase=="ground":
-            if ground_cursor==ground_keys.size():
+            if ground_complete.size()==ground_keys.size():
                 _begin_membership()
                 continue
-            var key: String = ground_keys[ground_cursor]
-            if membership_base.ground.has(key): ground_cursor += 1; continue
-            if ground_job.is_empty():
-                var packet: Dictionary = result.packets[key]
-                ground_job = _ground_begin(packet.new_rows,packet.new_packets,packet.get("source_ranks",{}))
-                if not media_issue.is_empty(): phase = "failed"; return
-            elif _ground_fill(ground_job):
-                _ground_finish(ground_job)
-                native_ground[key] = {"rows":result.ground[key],"entries":[ground_job.entry]}
-                ground_job = {}; ground_cursor += 1
+            if not _prepare_ground(started+budget_usec):break
+            if not media_issue.is_empty(): phase = "failed"; return
         elif phase=="membership_objects":
             var id: String = wanted_ids[cursor]; cursor += 1
             var group: Dictionary = native_groups.get(id,membership_base.groups.get(id,{}))
@@ -557,6 +606,8 @@ func step(budget_usec: int = 2000) -> void:
             if not result.ground.has(key): _collect_retired(membership_base.ground[key])
         elif phase=="scenery":
             _prepare_scenery_step()
+        elif phase=="scenery_styles":
+            _prepare_scenery_style()
         elif phase=="order_collect":
             if cursor==membership.entries.size():
                 phase = "sort_wait"
@@ -596,7 +647,7 @@ func step(budget_usec: int = 2000) -> void:
                         AtlasDelta.compute_candidate(atlas_prefix)
                         FrameProfile.end_phase(profile,"world_prepare_atlas_plan",planning_started)
                         atlas_prefix.planning_lane="scene_single_dynamic"
-                        phase="atlas_prefix_bind";continue
+                        phase="atlas_prefix_reserve";continue
                 atlas_prefix.planning_lane="worker"
                 phase="atlas_prefix_wait"
                 task=WorkerThreadPool.add_task(AtlasDelta.compute_candidate.bind(atlas_prefix),false,"Plan prepared lighting addresses")
@@ -626,6 +677,12 @@ func step(budget_usec: int = 2000) -> void:
             if AtlasDelta.prepare_candidate_binding(host.native_light_atlas,atlas_prefix,atlas_shells):
                 if atlas_prefix.has("error"):_prefix_failed();return
                 _finish_preparation()
+        elif phase=="atlas_prefix_reserve":
+            var reserve_started:int=Time.get_ticks_usec()
+            var reserved:bool=AtlasDelta.reserve_candidate_capacity(host.native_light_atlas,atlas_prefix)
+            FrameProfile.end_phase(profile,"world_prepare_atlas_capacity",reserve_started)
+            if not reserved:_prefix_failed();return
+            phase="atlas_prefix_bind"
     FrameProfile.end_phase(profile,"world_prepare_native",started)
 
 func _advance_completed_phase()->bool:
@@ -642,9 +699,10 @@ func _advance_completed_phase()->bool:
             phase="actors"
         "actors":
             if actor_cursor!=actor_ids.size():return false
+            blocked_actor={}
             phase="objects"
         "objects":
-            if cursor!=wanted_ids.size():return false
+            if objects_complete.size()!=wanted_ids.size():return false
             phase="ground"
         "membership_objects":
             if cursor!=wanted_ids.size():return false
@@ -660,6 +718,11 @@ func _advance_completed_phase()->bool:
             phase="order_release"
         "scenery":
             if scenery_cursor!=scenery_jobs.size():return false
+            scenery_style_ids=result.get("visibility_changes",{}).keys();scenery_style_cursor=0
+            for update in membership.ground_updates:scenery_packet_entries[update.entry.node.get_instance_id()]=update.packet
+            phase="scenery_styles"
+        "scenery_styles":
+            if scenery_style_cursor!=scenery_style_ids.size():return false
             if not result.needs_order:_begin_atlas_preparation()
             elif not membership.full:phase="order_collect";cursor=0
             else:
@@ -700,22 +763,37 @@ func _finish_preparation() -> void:
     if cookie_image_cursor<cookie_jobs.size():phase="cookie_images"
     else:phase="native_receivers"
 
-func _prepare_actor() -> void:
-    var id:String=actor_ids[actor_cursor]
-    var prepared:Dictionary=result.actors[id]
+func _prepare_actor(deadline:int=9223372036854775807)->bool:
+    # Native entries remain in canonical layer order. A missing source defers
+    # that entry's binding, not the graph/layers of another ready actor.
+    if actor_cursor==actor_ids.size():return false
+    var checked:int=0
+    while checked<actor_ids.size() and Time.get_ticks_usec()<deadline:
+        var id:String=actor_ids[actor_scan_cursor]
+        actor_scan_cursor=(actor_scan_cursor+1)%actor_ids.size();checked+=1
+        var actor:Dictionary=result.actors[id]
+        if actor.get("complete",false):continue
+        var began:int=Time.get_ticks_usec()
+        var progress:bool=_prepare_actor_step(actor,deadline)
+        phase_usec.actors=phase_usec.get("actors",0)+Time.get_ticks_usec()-began
+        if progress:return true
+    return false
+
+func _prepare_actor_step(prepared:Dictionary,deadline:int)->bool:
     if prepared.playback==null:
+        prepared.source_ready={};prepared.source_cursor=0
         if prepared.reuse_actor:
-            var base:Dictionary=actor_bases[id]
+            var base:Dictionary=actor_bases[prepared.row.id]
             prepared.actor_base=base.actor;prepared.playback=base.playback
             prepared.retained_entries={}
             for entry in base.actor.entries:
                 if prepared.retained_slots.has(entry.actor_layer.slot):prepared.retained_entries[entry.actor_layer.slot]=entry
         else:prepared.playback=ActorConstruction.graph(self,prepared.rig,host.animation_templates)
-        native_actors[id]=prepared
-        return
-    if prepared.has("unbound_entry"):
-        if _prepare_actor_source(prepared,prepared.unbound_entry,prepared.unbound_private):prepared.erase("unbound_entry")
-        return
+        var neutral:Dictionary=ActorConstruction.Conditions.material(prepared.row.id,[])
+        prepared.condition_parameters=ActorConstruction.Conditions.parameters(neutral,host.textures,host.resources)
+        prepared.condition_parameters.make_read_only()
+        native_actors[prepared.row.id]=prepared
+        return true
     var index:int=prepared.entries.size()
     if index<prepared.layers.size():
         var layer:Dictionary=prepared.layers[index]
@@ -723,19 +801,104 @@ func _prepare_actor() -> void:
         var owned:bool=entry.is_empty()
         if owned:
             entry=ActorConstruction.layer(self,prepared.row,prepared.rig,layer,index)
-            ActorConstruction.prepare_neutral(entry,host.textures,host.resources)
+            SourceMaterial.apply(entry,prepared.condition_parameters)
+            entry.bound_condition_parameters=prepared.condition_parameters
             prepared.new_entries.append(entry);created_count+=1
-        if not _prepare_actor_source(prepared,entry,owned):
-            prepared.unbound_entry=entry;prepared.unbound_private=owned
         prepared.entries.append(entry)
-    elif host.generated_shadows.prepare_actor_step(self,prepared):actor_cursor+=1
+        if _prepare_actor_source(prepared,entry,owned):prepared.source_ready[index]=true
+        return true
+    var checked:int=0
+    while checked<prepared.entries.size() and Time.get_ticks_usec()<deadline:
+        index=prepared.source_cursor
+        prepared.source_cursor=(index+1)%prepared.entries.size();checked+=1
+        if prepared.source_ready.has(index):continue
+        var entry:Dictionary=prepared.entries[index]
+        var owned:bool=not is_same(prepared.get("retained_entries",{}).get(entry.actor_layer.slot),entry)
+        if _prepare_actor_source(prepared,entry,owned):
+            prepared.source_ready[index]=true
+            return true
+    if prepared.source_ready.size()!=prepared.entries.size():return false
+    # All selected source operands are resident. Shadow snapshots may now copy
+    # real bound geometry; retained live materials have never been mutated.
+    if Time.get_ticks_usec()>=deadline:return false
+    if host.generated_shadows.prepare_actor_step(self,prepared):
+        prepared.complete=true;actor_cursor+=1
+        prepared.outfit_clip=prepared.source_sample.get("clip","")
+        prepared.outfit_profile=host.character_light_profile
+    return true
+
+func _sources_ready(sources:Dictionary,id:String)->bool:
+    for path in sources.get("paths",{}):
+        if not host.textures.has(path):
+            blocked_source={"id":id,"path":path,"status":"missing_texture"};return false
+    for path in sources.get("fixtures",{}):
+        if not host.source_images.has(path) or not host.fixture_frame_energy.has(path) or not host.fixture_frame_centroids.has(path):
+            blocked_source={"id":id,"path":path,"status":"missing_fixture_facts"};return false
+    return true
+
+func _prepare_object(deadline:int)->bool:
+    if objects_complete.size()==wanted_ids.size():return false
+    var checked:int=0
+    while checked<wanted_ids.size() and Time.get_ticks_usec()<deadline:
+        var id:String=wanted_ids[object_cursor]
+        object_cursor=(object_cursor+1)%wanted_ids.size();checked+=1
+        if objects_complete.has(id):continue
+        var row:Dictionary=result.wanted[id]
+        var old:Dictionary=membership_base.groups.get(id,{})
+        if not old.is_empty() and old.row==row:
+            objects_complete[id]=true;return true
+        if not _sources_ready(result.object_sources.get(id,{}),id):continue
+        var began:int=Time.get_ticks_usec()
+        var first:int=static_entries.size()
+        _environment_row(row.duplicate(true))
+        if not media_issue.is_empty():return false
+        native_groups[id]={"row":row,"entries":static_entries.slice(first)}
+        created_count+=static_entries.size()-first;objects_complete[id]=true
+        phase_usec.objects=phase_usec.get("objects",0)+Time.get_ticks_usec()-began
+        return true
+    return false
+
+func _prepare_ground(deadline:int)->bool:
+    if ground_job.is_empty() and ground_complete.size()==ground_keys.size():return false
+    var checked:int=0
+    while checked<ground_keys.size() and Time.get_ticks_usec()<deadline:
+        var key:String=ground_keys[ground_cursor]
+        if ground_job.is_empty():
+            ground_cursor=(ground_cursor+1)%ground_keys.size();checked+=1
+            if ground_complete.has(key):continue
+            if membership_base.ground.has(key):ground_complete[key]=true;return true
+            if not _sources_ready(result.ground_sources.get(key,{}),key):continue
+            var packet:Dictionary=result.packets[key]
+            var began:int=Time.get_ticks_usec()
+            ground_job=_ground_begin(packet.new_rows,packet.new_packets,packet.get("source_ranks",{}))
+            ground_job.key=key;ground_job.values=[]
+            phase_usec.ground=phase_usec.get("ground",0)+Time.get_ticks_usec()-began
+            return true
+        var began:int=Time.get_ticks_usec()
+        key=ground_job.key
+        var first:int=ground_job.index
+        var done:bool=_ground_fill(ground_job)
+        for i in range(first,ground_job.index):
+            var row_id:String=ground_job.rows[i].id
+            var value:float=1.0 if candidate_visible(row_id) else 0.0
+            ground_job.values.append(value)
+            ground_job.packets[row_id].data[16]=value;ground_job.buffer[i*20+16]=value
+        if done:
+            _ground_finish(ground_job)
+            ground_job.entry.scenery_values=ground_job.values
+            native_ground[key]={"rows":result.ground[key],"entries":[ground_job.entry]}
+            ground_complete[key]=true;ground_job={}
+        phase_usec.ground=phase_usec.get("ground",0)+Time.get_ticks_usec()-began
+        return true
+    return false
 
 func _prepare_actor_source(prepared:Dictionary,entry:Dictionary,private:bool=true)->bool:
     var selected:Dictionary=prepared.get("source_sample",{})
-    var clip:String=selected.get("clip","")
     var layer:Dictionary=entry.actor_layer
+    var clip:String=prepared.get("layer_clips",{}).get(layer.get("effect",{}).get("component_id",""),selected.get("clip",""))
     var admission:Dictionary={"status":"no_selected_clip","clip":clip}
     if private:entry.atlas_preparation=admission
+    blocked_actor={"actor":prepared.row.id,"slot":layer.slot,"clip":clip,"status":"checking"}
     if not layer.paths.has(clip) or not prepared.rig.clips.has(clip):
         media_issue="Prepared actor has no authored source for "+str(prepared.row.id)+" / "+layer.slot+" / "+clip
         phase="failed"
@@ -744,17 +907,20 @@ func _prepare_actor_source(prepared:Dictionary,entry:Dictionary,private:bool=tru
     # This only initializes hidden material resources. It never requests media
     # or samples a graph; the displayed actor still chooses its current pose.
     admission.path=path
-    if not host.textures.has(path):admission.status="missing_colour_texture";return false
-    if not host.source_images.has(path):admission.status="missing_colour_image";return false
+    if not host.textures.has(path):
+        admission.status="missing_colour_texture";blocked_actor.merge({"status":admission.status,"path":path});return false
+    if not host.source_images.has(path):
+        admission.status="missing_colour_image";blocked_actor.merge({"status":admission.status,"path":path});return false
     for companion in ActorConstruction.CharacterGeometry.paths(path,layer.slot,host.catalog_cache,host.character_light_profile):
         if not host.textures.has(companion):
-            admission.status="missing_companion";admission.missing_path=companion;return false
+            admission.status="missing_companion";admission.missing_path=companion
+            blocked_actor.merge({"status":admission.status,"path":companion});return false
     var source_binding:Dictionary=prepared.get("source_bindings",{}).get(layer.slot,{})
     if private and not source_binding.is_empty():
         var ready_binding:Dictionary=ActorConstruction.realize_binding(host,source_binding)
-        if ready_binding.is_empty():return false
+        if ready_binding.is_empty():blocked_actor.status="missing_binding_texture";return false
         var optical:Dictionary=host.component_renderer.native_spells.prepare_actor_binding(path,layer.slot,host)
-        if not optical.ready:return false
+        if not optical.ready:blocked_actor.merge({"status":"missing_optical_mask","path":optical.get("mask_path",path)});return false
         entry.prepared_source_binding=ready_binding
         actor_bindings.append({"entry":entry,"value":source_binding,"prepared":ready_binding,"actor":prepared.row.id,"private":true,"optical":optical})
     # Retained sources already own their native receiving materials and shape.
@@ -770,9 +936,7 @@ func _prepare_actor_source(prepared:Dictionary,entry:Dictionary,private:bool=tru
     # A valid source frame is enough to prepare all non-frame bindings. The
     # actual first sample either certifies the adjacent UV change or fully binds.
     var frame:int=clampi(int(float(selected.get("source_seconds",0.0))*prepared.rig.clips[clip].fps),0,int(prepared.rig.clips[clip].frames)-1)
-    var neutral:Dictionary=ActorConstruction.Conditions.material(entry.placement.id,[])
-    var parameters:Dictionary=ActorConstruction.Conditions.parameters(neutral,host.textures,host.resources)
-    ActorConstruction.bind_source(host,entry,prepared.rig,path,frame,facing,parameters)
+    ActorConstruction.bind_source(host,entry,prepared.rig,path,frame,facing,prepared.condition_parameters)
     admission.status="source_bound"
     return true
 
@@ -804,7 +968,7 @@ func take_actor(id:String,row:Dictionary,rig:Dictionary)->Dictionary:
     if prepared.is_empty() or epoch!=host.timeline.initialization_revision or quarter!=host.quarter \
         or not is_same(actor_catalog_owner,host.catalog_cache) or not is_same(prepared.rig,rig) \
         or not ActorConstruction.matches(row,prepared.row):return {}
-    if prepared.entries.size()!=prepared.layers.size() or prepared.playback==null:return {}
+    if not prepared.get("complete",false) or prepared.entries.size()!=prepared.layers.size() or prepared.playback==null:return {}
     native_actors.erase(id)
     return prepared
 
@@ -855,7 +1019,9 @@ func _begin_atlas_preparation() -> void:
             if not sources.has(id):sources[id]=entry;source_rows[id]={};membership.upserts.append(entry)
             if not source_rows[id].has(row_id):source_rows[id][row_id]=str(row_id)
     for id in sources:
-        atlas_jobs.append({"entry":sources[id],"rows":source_rows[id].values(),"packet":updated.get(id,{})})
+        var entry:Dictionary=sources[id]
+        var published_visibility:bool=entry.node.visible and host.is_visible_in_tree() if is_ancestor_of(entry.node) else entry.node.is_visible_in_tree()
+        atlas_jobs.append({"entry":entry,"rows":source_rows[id].values(),"packet":updated.get(id,{}),"source_visible":published_visibility})
     # State/sight boundaries can leave static atlas membership unchanged.
     # Current actor, fixture, visibility and camera samples still use normal
     # atlas synchronization; there is no future static layout to capture here.
@@ -1004,7 +1170,7 @@ func _begin_membership() -> void:
         "removed":{},"upserts":[],"entries_changed":false,"walls_changed":false,"group_updates":{},
         "ground_group_updates":{},"ground_row_updates":[],"entry_replacements":{},"fixture_replacements":{},
         "slot_updates":[],"order_replacements":[],"representatives":{}}
-    membership.scenery={"add":{},"remove":{},"new_consumers":{},"entry_add":[],"entry_remove":[]}
+    membership.scenery={"add":{},"remove":{},"new_consumers":{},"entry_add":[],"entry_remove":[],"writes":[]}
     retired_ids = membership_base.groups.keys() if full else native_groups.keys()
     retired_ground_keys = membership_base.ground.keys() if full else []
     result.needs_order = result.needs_order or full
@@ -1078,6 +1244,9 @@ func _prepare_scenery_step()->void:
     if job.add:delta.entry_add.append(entry)
     else:delta.entry_remove.append(entry)
     if entry.material.shader not in [ENVIRONMENT_SHADER,WATER_SHADER] or entry.has("batch_rows"):return
+    if job.add and is_ancestor_of(entry.node):
+        var value:float=1.0 if candidate_visible(str(entry.placement.id)) else 0.0
+        SourceMaterial.set_parameter(entry,"current_visibility",value);entry.scenery_value=value
     _prepare_scenery_target(str(entry.placement.id),entry,-1,job.add)
 
 func _prepare_scenery_target(id:String,entry:Dictionary,index:int,add:bool)->void:
@@ -1088,7 +1257,30 @@ func _prepare_scenery_target(id:String,entry:Dictionary,index:int,add:bool)->voi
     else:values[id][entry.node.get_instance_id()]=true
     # Prepared floor packets already contain this boundary's exact visibility.
     # Reindexing retained rows does not make each row a changed style operand.
-    if add and index<0:delta.new_consumers[id]=true
+    if add and index<0 and not is_ancestor_of(entry.node):delta.new_consumers[id]=true
+
+func _prepare_scenery_style()->void:
+    var id:String=scenery_style_ids[scenery_style_cursor];scenery_style_cursor+=1
+    var value:float=1.0 if result.visibility_changes[id] else 0.0
+    var ground_entry:Dictionary=host._scenery_ground_entry(id)
+    if not ground_entry.is_empty():_prepare_scenery_write(id,ground_entry,ground_entry.ground_indices[id],value)
+    for consumer in host.scenery_consumers.get(id,[]):
+        var entry:Dictionary=consumer.entry
+        var index:int=entry.ground_indices.get(id,-1) if consumer.index>=0 else -1
+        if consumer.index>=0 and index<0:continue
+        _prepare_scenery_write(id,entry,index,value)
+
+func _prepare_scenery_write(id:String,entry:Dictionary,index:int,value:float)->void:
+    var key:int=entry.node.get_instance_id()
+    if membership.removed.has(key) or is_ancestor_of(entry.node):return
+    if index>=0:
+        var packet:Dictionary=scenery_packet_entries.get(key,{})
+        # Full packets adopt every style. Sparse geometry publication preserves
+        # live custom channels, so its changed rows still need the sight write.
+        if not packet.is_empty() and not packet.get("sparse",false):return
+        if entry.scenery_values[index]==value:return
+    elif entry.get("scenery_value",-1.0)==value:return
+    membership.scenery.writes.append({"entry":entry,"index":index,"id":id,"value":value})
 
 func _collect_order(group: Array, representative: Dictionary = {}) -> void:
     for entry in group:

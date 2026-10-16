@@ -308,7 +308,7 @@ static func begin_candidate(atlas,jobs:Array,removed:Dictionary,world,target_opt
         "needed_receivers":{},"needed_cells":{},"removed_ids":{},"next_order":atlas.next_source_order,"ranks":{},"bind_cursor":0,
         "ready_new":{},"ready_members":{},"ready_cull":{},"ready_style":{},"ready_pixels":0,
         "ready_list":[],"ready_static":[],"ready_dynamic":[],"ready_retained":[],"bulk_commands":[],"bulk_sources":{},"bulk_retained":[],"bulk_possible":true,
-        "source_sync_versions":{},
+        "source_sync_versions":{},"cull_sample":atlas.capture_projection(world),
         "base_lists":[atlas.receivers.size(),atlas.static_receivers.size(),atlas.groups.size()],"group_proofs":{},
         "basis":world.camera.global_basis,"base_basis":world.camera.global_basis if base_world==null else base_world.camera.global_basis,
         "target_options":target_options,"screen":world.get_viewport().get_visible_rect().size,
@@ -382,6 +382,10 @@ static func step_global(atlas,work:Dictionary,budget_usec:int)->void:
                 if not WorkerThreadPool.is_task_completed(work.task):return
                 WorkerThreadPool.wait_for_task_completion(work.task);work.task=-1
                 if work.prefix.has("error"):work.error=work.prefix.error;work.phase="failed";return
+                work.phase="reserve"
+            "reserve":
+                if not reserve_candidate_capacity(atlas,work.prefix):work.error=work.prefix.error;work.phase="failed";return
+                work.token=work.prefix.token
                 work.phase="bind"
             "bind":
                 if not prepare_candidate_binding(atlas,work.prefix,work.bindings):continue
@@ -475,6 +479,7 @@ static func _capture_source(atlas,work:Dictionary,world)->bool:
                 _capture_removal(atlas,work,receiver_id)
     source.prepared_specs=prepared.get("specs",{})
     source.prepared_output=prepared.get("output",{})
+    source.future_visible=job.get("source_visible",entry.node.visible)
     source.proof={"entry":entry,"cell":entry.cell,"material":entry.material,"material_id":entry.material.get_instance_id(),"version":entry.get("source_version",0),"binding_revision":entry.get("source_binding_revision",0),
         "base_ground_version":entry.get("ground_version",0),"ground_version":snapshot.get("ground_version",0),"scenery":snapshot.ground_visibility.duplicate() if snapshot.has("ground_visibility") else snapshot.scenery_values.duplicate() if snapshot.has("scenery_values") else snapshot.get("scenery_value",1.0),
         "geometry":source.geometry,"info":source.info,"record_path":entry.get("record",{}).get("path",""),
@@ -619,6 +624,22 @@ static func compute_candidate(work:Dictionary)->void:
             work.group_users[key]=count;work.planned_groups[key]=work.group_proofs[key][0]
     work.rank_count=work.base_lists[2]-work.dropped_groups.size();work.bulk_reason="";work.complete=true
 
+static func reserve_candidate_capacity(atlas,work:Dictionary)->bool:
+    # A completed append plan already owns exact integer addresses. Reserve
+    # only its physical height before final output regions are bound; no future
+    # receiver, source, shelf position or event becomes displayed by this step.
+    if not work.plan.growing or work.get("rebased",false):return true
+    if work.token!=token(atlas):work.error="atlas_changed_before_capacity_reservation";return false
+    var height:int=work.plan.next_height
+    atlas.viewport.size=Vector2i(atlas.MAX_SIZE,height)
+    atlas.repack_count+=1
+    atlas._refresh_normalized_addresses()
+    work.token=token(atlas)
+    work.passive.viewport.size=atlas.viewport.size
+    work.plan.growing=false
+    work.capacity_reserved=true
+    return true
+
 static func _candidate_addresses(work:Dictionary)->bool:
     for id in work.floor_ids:
         var source:Dictionary=work.source_patches[id]
@@ -723,9 +744,23 @@ static func prepare_candidate_binding(atlas,work:Dictionary,bindings:Dictionary)
     if not source.is_empty():
         source.receivers[spec.row_id]=receiver;source.by_row[spec.row_id]=spec
     if not work.bulk_sources.has(spec.source_id):
-        work.bulk_sources[spec.source_id]={"prepared":prepared,"remaining":prepared.receivers.duplicate()}
+        # Keep the replaced outer directory on this existing retirement owner.
+        # Its adopted rows stay referenced by the live atlas; dropping hundreds
+        # of directory entries is not part of the publication transaction.
+        prepared.retired_receivers=prepared.receivers
+        work.bulk_sources[spec.source_id]={"prepared":prepared,"remaining":prepared.receivers.duplicate(),
+            "source_visible":source.future_visible if source.has("future_visible") else spec.entry.node.is_visible_in_tree(),
+            "cull_all":{},"cull_shown":{},"cull_owner":{"frame":-1}}
+    var owner:Dictionary=work.bulk_sources[spec.source_id]
+    if not receiver.dynamic:
+        receiver.cull_owner=owner.cull_owner
+        receiver.cull_shown=owner.source_visible and (work.cull_sample.transform*receiver.bounds).intersects(work.cull_sample.screen)
+        owner.cull_all[id]=true
+        if receiver.cull_shown:owner.cull_shown[id]=true
     work.bulk_sources[spec.source_id].remaining.erase(id)
     if not previous.is_empty():
+        if not selected.has("users") and not selected.has("prepared_introduction"):
+            selected.prepared_introduction=-1
         work.bulk_retained.append([previous,previous.group,row_index(previous),previous.visibility,spec.entry.get("source_binding_revision",0)])
         work.bulk_commands.append({"replace":previous,"receiver":receiver,"group":selected})
         work.ready_retained.append(receiver)
@@ -734,12 +769,26 @@ static func prepare_candidate_binding(atlas,work:Dictionary,bindings:Dictionary)
     work.ready_new[id]=receiver;work.ready_members[id]=spec.crop;work.ready_cull[id]=true
     work.ready_pixels+=spec.crop.pixels.size.x*spec.crop.pixels.size.y
     if work.bulk_commands.is_empty() or not work.bulk_commands.back().has("groups"):
-        work.bulk_commands.append({"groups":{}})
-    var run:Dictionary=work.bulk_commands.back().groups
+        work.bulk_commands.append({"groups":{},"group_spans":[]})
+    var command:Dictionary=work.bulk_commands.back()
+    var run:Dictionary=command.groups
     if not run.has(key):
-        run[key]={"group":selected,"spec":spec,"visibility":visibility,"rows":[],"rank":receiver.get("rank",-1),"material":selected.material}
+        var registration:bool=not selected.has("users") and not selected.has("prepared_introduction")
+        run[key]={"group":selected,"spec":spec,"visibility":visibility,"rows":[],"rank":receiver.get("rank",-1),
+            "material":selected.material,"prepared_registration":registration}
+        if command.group_spans.is_empty() or command.group_spans.back().prepared!=registration:
+            command.group_spans.append({"prepared":registration,"groups":{},"sources":{},"records":[]})
+        var span:Dictionary=command.group_spans.back()
+        if registration:
+            selected.prepared_introduction=work.bulk_commands.size()-1
+            selected.entry=spec.entry;selected.source_id=spec.source_id;selected.users=0
+            span.groups[key]=selected
+            if not span.sources.has(spec.source_id):span.sources[spec.source_id]={}
+            span.sources[spec.source_id][key]=selected
+        else:span.records.append(run[key])
     var record:Dictionary=run[key]
     record.rows.append(receiver);receiver.group=record.group
+    if record.prepared_registration:record.group.users+=1
     if receiver.node.material!=record.group.material:receiver.node.material=record.group.material
     receiver.list_index=work.bulk_base_lists[0]+work.ready_list.size()
     var partition:Array=work.ready_dynamic if receiver.dynamic else work.ready_static
@@ -747,8 +796,6 @@ static func prepare_candidate_binding(atlas,work:Dictionary,bindings:Dictionary)
     partition.append(receiver)
     work.ready_list.append(receiver)
     work.ready_style[id]=receiver
-    if not work.bulk_sources.has(spec.source_id):
-        work.bulk_sources[spec.source_id]={"prepared":prepared,"remaining":prepared.receivers.duplicate()}
     work.bulk_sources[spec.source_id].remaining.erase(id)
     return false
 
@@ -781,7 +828,7 @@ static func _adopt_group(atlas,group:Dictionary,spec:Dictionary)->void:
     if not atlas.source_groups.has(spec.source_id):atlas.source_groups[spec.source_id]={}
     atlas.source_groups[spec.source_id][group.id]=group
 
-static func _publish_bulk(atlas,work:Dictionary,positions:Dictionary)->void:
+static func _publish_bulk(atlas,work:Dictionary,positions:Dictionary,world:Node)->void:
     # Keep retained binds in order; within each intervening new-row run only
     # group registration can differ. Most prepared nodes already have exactly
     # that native material/rank, so no per-row commit work remains for them.
@@ -806,15 +853,39 @@ static func _publish_bulk(atlas,work:Dictionary,positions:Dictionary)->void:
             bind_count+=1
             continue
         var group_started:int=Time.get_ticks_usec()
-        for record in command.groups.values():
-            var spec:Dictionary=record.spec
-            var group:Dictionary=record.group
-            _adopt_group(atlas,group,spec)
-            group.users=group.get("users",0)+record.rows.size()
-            group_count+=1
+        for span in command.group_spans:
+            if span.prepared:
+                # New private groups already own their entry, rank and first
+                # user count. Native merges preserve first-seen registration
+                # within this run; no zero-user transition crosses a span.
+                atlas.groups.merge(span.groups)
+                for source_id in span.sources:
+                    if not atlas.source_groups.has(source_id):atlas.source_groups[source_id]={}
+                    atlas.source_groups[source_id].merge(span.sources[source_id],true)
+                atlas.last_reconcile_phases.prepared_receiver_materials=atlas.last_reconcile_phases.get("prepared_receiver_materials",0)+span.groups.size()
+            else:
+                for record in span.records:
+                    var spec:Dictionary=record.spec
+                    var group:Dictionary=record.group
+                    _adopt_group(atlas,group,spec)
+                    group.users=group.get("users",0)+record.rows.size()
+        group_count+=command.groups.size()
         group_usec+=Time.get_ticks_usec()-group_started
     var transfer_started:int=Time.get_ticks_usec()
-    for record in work.bulk_sources.values():record.prepared.receivers=record.remaining
+    var camera_matches:bool=work.cull_sample.key==atlas.projection_key(world)
+    var culled_prepared:int=0;var hidden_prepared:int=0
+    for record in work.bulk_sources.values():
+        record.prepared.receivers=record.remaining
+        if record.cull_all.is_empty():continue
+        if camera_matches and record.prepared.entry.node.is_visible_in_tree()==record.source_visible:
+            record.cull_owner.frame=atlas.sample_serial
+            atlas.cull_dirty.merge(record.cull_shown)
+            culled_prepared+=record.cull_all.size()
+            hidden_prepared+=record.cull_all.size()-record.cull_shown.size()
+        else:atlas.cull_dirty.merge(record.cull_all)
+    for receiver in work.ready_retained:
+        if not receiver.dynamic and receiver.cull_owner.frame==atlas.sample_serial and not receiver.cull_shown:
+            atlas.cull_dirty.erase(receiver.id)
     atlas.last_reconcile_phases.prepared_bulk_transfer_ms=(Time.get_ticks_usec()-transfer_started)/1000.0
     atlas.last_reconcile_phases.prepared_bulk_ordered_bind_ms=bind_usec/1000.0
     atlas.last_reconcile_phases.prepared_bulk_group_register_ms=group_usec/1000.0
@@ -823,6 +894,8 @@ static func _publish_bulk(atlas,work:Dictionary,positions:Dictionary)->void:
     atlas.last_reconcile_phases.prepared_bulk_new_binds=0
     atlas.last_reconcile_phases.prepared_bulk_groups=group_count
     atlas.last_reconcile_phases.prepared_bulk_transfers=work.bulk_sources.size()
+    atlas.last_reconcile_phases.prepared_cull_rows=culled_prepared
+    atlas.last_reconcile_phases.prepared_cull_hidden=hidden_prepared
     atlas.last_reconcile_phases.prepared_bulk_group_ms=(Time.get_ticks_usec()-started)/1000.0
     started=Time.get_ticks_usec()
     # Binding owns exact post-removal indices and partition order already.
@@ -832,7 +905,6 @@ static func _publish_bulk(atlas,work:Dictionary,positions:Dictionary)->void:
     atlas.static_receivers.append_array(work.ready_static)
     atlas.dynamic_receivers.append_array(work.ready_dynamic)
     atlas.receiver_index.merge(work.ready_new);atlas.layout_members.merge(work.ready_members)
-    atlas.cull_dirty.merge(work.ready_cull)
     atlas.packed_pixels+=work.ready_pixels
     atlas.last_reconcile_phases.prepared_registry_publish_ms=(Time.get_ticks_usec()-started)/1000.0
     var count:int=work.ready_list.size()
@@ -876,7 +948,7 @@ static func retire_candidate_step(record:Dictionary)->Dictionary:
         if active.cursor<active.keys.size():
             var binding:Dictionary=active.bindings[active.keys[active.cursor]];active.cursor+=1
             if active.retire_nodes:record.unused.append_array(binding.get("receivers",{}).values())
-            for field in ["receivers","specs","groups","snapshot","source","output"]:_retire_directory(record,binding.get(field,{}))
+            for field in ["receivers","retired_receivers","specs","groups","snapshot","source","output"]:_retire_directory(record,binding.get(field,{}))
             _retire_directory(record,binding)
             return {"done":false}
         if not active.get("detached",false):
@@ -1130,7 +1202,7 @@ static func reconcile(atlas, world, changes: Dictionary) -> bool:
     var new_receivers:Array=[];var admitted_groups:Dictionary={}
     var bindings:Array
     if bulk:
-        _publish_bulk(atlas,candidate,positions)
+        _publish_bulk(atlas,candidate,positions,world)
         atlas.last_reconcile_phases.prepared_bulk_ms=(Time.get_ticks_usec()-binding_phase)/1000.0
         bindings=extra_specs
     else:bindings=specs.values()

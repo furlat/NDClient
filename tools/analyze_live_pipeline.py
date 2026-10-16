@@ -71,6 +71,64 @@ def recorded_frames(directory):
     return read_json(profile)['frames'] if profile.exists() else []
 
 
+def distribution(values):
+    values = sorted(values)
+    if not values:
+        return None
+    return {'count':len(values), 'mean':sum(values)/len(values),
+        **{name:values[int((len(values)-1)*quantile)]
+           for name,quantile in [('p50',.5),('p95',.95),('p99',.99)]}, 'max':values[-1]}
+
+
+def rendering_summary(samples):
+    return {'frame_ms':distribution([frame['frame_ms'] for frame in samples]),
+        'player_cpu_ms':distribution([frame['cpu_ms'].get('player_process',0) for frame in samples]),
+        'intervals_above_10ms':sum(frame['frame_ms']>10 for frame in samples),
+        'intervals_above_16_67ms':sum(frame['frame_ms']>1000/60 for frame in samples),
+        'intervals_above_33_33ms':sum(frame['frame_ms']>1000/30 for frame in samples)}
+
+
+def reveal_summary(command, frames):
+    selected = [frame for frame in frames
+        if command['start_us']<=frame['interval_end_us']<=command['end_us']]
+    waits = {'media_wait':[], 'world_wait':[]}
+    phases = command['phases']
+    for index,phase in enumerate(phases):
+        end = phases[index+1]['ms'] if index+1<len(phases) else command['elapsed_ms']
+        for kind in waits:
+            if phase['state'][kind]:
+                waits[kind].append({'start_ms':phase['ms'], 'end_ms':end,
+                    'elapsed_ms':end-phase['ms']})
+    publication = max((frame for frame in selected if frame['cpu_ms'].get('world_sync',0)>0),
+        key=lambda frame:frame['cpu_ms']['world_sync'], default=None)
+    onset = command.get('first_animation_ms')
+    result = {'observed_wait_intervals':waits,
+        'observed_wait_ms':{kind:sum(item['elapsed_ms'] for item in intervals)
+            for kind,intervals in waits.items()},
+        'all_command_frames':rendering_summary(selected),
+        'post_onset_frames':rendering_summary([frame for frame in selected
+            if onset is not None and frame['interval_end_us']>=command['start_us']+onset*1000])}
+    markers = command.get('submit_markers',[])
+    submitted_us = markers[0]['time_us'] if markers else command['start_us']
+    pre_submit = [frame for frame in selected if frame['interval_end_us']<submitted_us]
+    result['pre_submit_targeting_frames']=rendering_summary(pre_submit)
+    result['slow_pre_submit_frames']=[{'frame':frame['frame'], 'frame_ms':frame['frame_ms'],
+        'before_submit_ms':(submitted_us-frame['interval_end_us'])/1000, 'cpu_ms':frame['cpu_ms']}
+        for frame in pre_submit if frame['frame_ms']>1000/60]
+    if publication:
+        result['largest_world_publication']={'frame':publication['frame'],
+            'after_click_ms':(publication['interval_end_us']-command['start_us'])/1000,
+            'frame_ms':publication['frame_ms'], 'cpu_ms':publication['cpu_ms'],
+            'preparation':publication['view'].get('preparation_admission',{}),
+            'atlas':publication['view'].get('native_2d_reconcile_phases',{}),
+            'worker_ms':publication['view'].get('world_prepare_worker_ms')}
+    result['slow_frames']=[{'frame':frame['frame'], 'frame_ms':frame['frame_ms'],
+        'after_click_ms':(frame['interval_end_us']-command['start_us'])/1000,
+        'phase':frame['view'].get('world_prepare_phase'), 'cpu_ms':frame['cpu_ms']}
+        for frame in selected if frame['frame_ms']>1000/60]
+    return result
+
+
 def summarize(directory):
     commands = read_json(directory/'live-command-trace.json')
     trace = read_json(directory/'client-pipeline-trace.json')
@@ -151,6 +209,8 @@ def summarize(directory):
                 'enqueued_ms':(enqueue['time_us']-start)/1000,
                 'worker_reply_ms':(reply['time_us']-start)/1000 if reply else None})
         row['requests']=request_stages
+        if frames:
+            row['rendering']=reveal_summary(command,frames)
         if opening and command['first_animation_ms'] is not None and frames:
             row['opening_to_visible_intervals']=opening_frames(
                 frames,opening['time_us'],start+command['first_animation_ms']*1000)
@@ -166,9 +226,10 @@ def summarize(directory):
             values = [row[metric] for row in selected if row[metric] is not None]
             if values:sections[label][metric]={'median':median(values),'min':min(values),'max':max(values)}
     context = directory/'source-context.json'
+    idle = [frame for frame in frames if frame['view'].get('profile_stage')=='spell_profile_idle_same_view']
     return {'run':str(directory.resolve()), 'source_context':read_json(context) if context.exists() else None,
         'dropped_client_trace_records':trace['dropped'],
-        'sections':sections, 'commands':rows,
+        'sections':sections, 'commands':rows, 'idle_same_view':rendering_summary(idle),
         'notes':[
             'Actual production player actions. Input records distinguish native viewport clicks from action handlers.',
             'Client timestamps use one Godot monotonic clock. Complete SSE frame is a client availability observation, not a server send timestamp.',
@@ -181,7 +242,8 @@ def summarize(directory):
             'First movement is an observed changed actor position at frame_post_draw. Ready includes intended animation and following choices.',
             'Post-ready samples precede canonical-state test comparisons. input_ready_after_samples distinguishes first readiness from sustained input readiness; older runs lack this field.',
             'Post-packet first-movement time may include required reactions before entry. Client-to-prepared covers admission, reduction, compilation and required media metadata, before timeline playback.',
-            'These are process-attributed measurements. The trace alone does not establish GPU isolation; record whether other previews or native tests were running.'
+            'These are process-attributed measurements. The trace alone does not establish GPU isolation; record whether other previews or native tests were running.',
+            'Observed wait intervals are sampled phase transitions; they describe wall-clock holds, not CPU durations. The largest_world_publication is selected by world_sync CPU within each command, not by maximum whole-frame interval. Slow-frame lists retain every command interval above 60-Hz budget; receipt-validation and boot frames are outside command cohorts. Pre-submit targeting is reported separately from the first native submit marker; the command timer starts before selection/hover/Confirm input.'
         ]}
 
 
