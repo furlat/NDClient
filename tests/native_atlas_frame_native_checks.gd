@@ -15,11 +15,11 @@ class FrameHost extends Node3D:
 func bind_frame(host:FrameHost,actor:Dictionary,frame:int,alpha:float=.9)->void:
     var state:Dictionary=Construction.Conditions.material("actor",[]);state.alpha=alpha
     Construction.bind_source(host,actor,{"cell_width":64,"cell_height":64,"facing_rows":{"SW":0}},
-        "/fixture/frame-range.png",frame,"SW",state,Construction.material_key(state,host.textures,host.resources),[])
+        "/fixture/frame-range.png",frame,"SW",Construction.Conditions.parameters(state,host.textures,host.resources))
 
 func producer_range_pixels(atlas:RefCounted,world:World,actor:Dictionary)->void:
     var host=FrameHost.new();world.add_child(host);host.camera=world.camera
-    host.textures["/fixture/frame-range.png"]=actor.material.get_shader_parameter("sheet")
+    host.textures["/fixture/frame-range.png"]=SourceMaterial.value(actor,"sheet")
     host.catalog_cache[Construction.CharacterGeometry.TABLE]={"records":{}}
     actor.actor_layer={"slot":"body","paths":{"Idle":"/fixture/frame-range.png"}}
     actor.scale=1.0;actor.placement.scale_x=1.0
@@ -44,15 +44,15 @@ func producer_range_pixels(atlas:RefCounted,world:World,actor:Dictionary)->void:
                     host.source_depth=true;bind_frame(host,actor,1)
                     host.source_depth=false;bind_frame(host,actor,0)
                 "quad_changed":actor.node.mesh.size=quad_size*1.2
-                "highlight":actor.material.set_shader_parameter("highlighted",true)
+                "highlight":SourceMaterial.set_parameter(actor,"highlighted",true)
                 "output_replaced":prepared.output.received_material=prepared.output.received_material.duplicate()
             bind_frame(host,actor,1);bind_frame(host,actor,0);bind_frame(host,actor,1)
             var accepted:bool=atlas.prepared_dynamic_materials_match(prepared,actor)
-            check(accepted==(mode in ["range","highlight"]),"Quarter"+str(quarter)+" exact producer range/full-owner proof "+mode)
+            check(accepted==(mode in ["range","highlight","opacity_return"]),"Quarter"+str(quarter)+" exact producer range/full-owner proof "+mode)
             atlas.adopt_source_binding(prepared)
             sync_scene(atlas,world,true,false,sparse([actor]))
             await native_frame_oracle(atlas,world,actor,"producer-range-q"+str(quarter)+"-"+mode,null)
-            actor.material.set_shader_parameter("highlighted",false)
+            SourceMaterial.set_parameter(actor,"highlighted",false)
     actor.node.mesh.size=quad_size
     world.camera.position=Vector3(0,0,10);world.camera.look_at(Vector3.ZERO,Vector3.UP)
     actor.node.basis=world.camera.global_basis
@@ -69,29 +69,26 @@ func tracked_material_checks(atlas:RefCounted,world:World,entry:Dictionary,sourc
     var node=MeshInstance3D.new();node.mesh=QuadMesh.new();node.mesh.size=Vector2(2,2)
     node.position=Vector3(0,2.1,0);world.add_child(node)
     var material=ShaderMaterial.new();material.shader=ActorSource
-    material.set_shader_parameter("sheet",ImageTexture.create_from_image(sheet))
-    material.set_shader_parameter("frame_uv",Vector4(0,0,.5,1))
-    material.set_shader_parameter("material_cell_size",Vector2(64,64))
-    material.set_shader_parameter("condition_alpha",.65)
-    material.set_shader_parameter("tint",Vector3(.8,1,.7))
     node.material_override=material
     var actor={"node":node,"material":material,"cell":Vector2(64,64),"placement":{"id":"modular-frame-fixture","kind":"actor"},"role":"body","source_version":1}
+    SourceMaterial.set_parameter(actor,"sheet",ImageTexture.create_from_image(sheet))
+    SourceMaterial.set_parameter(actor,"frame_uv",Vector4(0,0,.5,1))
+    SourceMaterial.set_parameter(actor,"material_cell_size",Vector2(64,64))
+    SourceMaterial.set_parameter(actor,"condition_alpha",.65)
+    SourceMaterial.set_parameter(actor,"tint",Vector3(.8,1,.7))
     world.entries.append(actor);world.actor_entries=[actor]
     sync_scene(atlas,world,true,false,sparse([actor]))
     for cap in [0.0,1.0]:
         atlas.set_light_cap(cap);sync_scene(atlas,world)
         var before=await capture(world.get_viewport())
-        var previous:int=actor.source_version;actor.source_version+=1
-        actor.source_frame_change={"base_version":previous,"version":actor.source_version,"source":material,"shader":material.shader}
-        material.set_shader_parameter("frame_uv",Vector4(.5 if cap==0 else 0,0,.5,1))
+        SourceMaterial.set_parameter(actor,"frame_uv",Vector4(.5 if cap==0 else 0,0,.5,1))
         sync_scene(atlas,world)
         check(atlas.last_reconcile_phases.get("material_frame_copies",0)==(1 if cap==0 else 2),"Actual modular frame uses only UV copies with cap="+str(cap))
         await native_frame_oracle(atlas,world,actor,"modular-frame-cap-"+str(cap),before)
     # Drop one sampled version while condition data also changes: only a full
     # copy can restore all state when this receiver next becomes current.
-    actor.source_version+=2
-    actor.source_frame_change={"base_version":actor.source_version-1,"version":actor.source_version,"source":material,"shader":material.shader}
-    material.set_shader_parameter("frame_uv",Vector4(.5,0,.5,1));material.set_shader_parameter("condition_alpha",.9)
+    SourceMaterial.set_parameter(actor,"condition_alpha",.8);SourceMaterial.acknowledge(actor)
+    SourceMaterial.set_parameter(actor,"frame_uv",Vector4(.5,0,.5,1));SourceMaterial.set_parameter(actor,"condition_alpha",.9)
     sync_scene(atlas,world)
     check(atlas.last_reconcile_phases.get("material_frame_copies",0)==0,"Skipped native frame version never accepts a partial copy")
     await native_frame_oracle(atlas,world,actor,"modular-missed-version",null)
@@ -104,11 +101,19 @@ func native_frame_oracle(atlas:RefCounted,world:World,actor:Dictionary,label:Str
     var receiver:Dictionary=row_receiver(atlas,actor)
     var crop=Rect2i(receiver.position,receiver.crop.pixels.size)
     var first_cell=atlas.viewport.get_texture().get_image().get_region(crop).get_data()
+    var operands:Dictionary={}
+    for name in receiver.group.material.shader.get_shader_uniform_list():operands[name.name]=receiver.group.material.get_shader_parameter(name.name)
     var id:int=actor.node.get_instance_id()
     for group in atlas.source_groups[id].values():group.version=-1
     actor.erase("received_source_key");atlas.material_dirty[id]=true
     sync_scene(atlas,world)
     var complete=await capture(world.get_viewport())
+    if first_cell!=atlas.viewport.get_texture().get_image().get_region(crop).get_data():
+        var changed:Dictionary={}
+        for name in operands:
+            var current:Variant=receiver.group.material.get_shader_parameter(name)
+            if operands[name]!=current:changed[name]=[str(operands[name]),str(current)]
+        print("FRAME_MATERIAL_DIFFERENCE ",JSON.stringify({"case":label,"changes":changed,"source_version":actor.source_version,"binding_revision":actor.source_binding_revision}))
     check(first.get_data()==complete.get_data(),label+": first fast-path final framebuffer equals forced complete copy exactly")
     check(first_cell==atlas.viewport.get_texture().get_image().get_region(crop).get_data(),label+": first fast-path receiving pixels equal forced complete copy exactly")
     if before!=null:check(before.get_data()!=first.get_data(),label+": actual frame changes visible pixels")

@@ -17,7 +17,7 @@ var paused = false
 var revision = 0
 var world_revision = 0
 var initialization_revision = 0
-var world_changes: Dictionary = {"full":true,"tiles":{},"objects":{},"senses":false,"revision":0}
+var world_changes: Dictionary = {"full":true,"tiles":{},"objects":{},"senses":false,"order":[],"revision":0}
 var world_changes_consumed = -1
 
 func take_world_changes(previous_revision: int) -> Dictionary:
@@ -27,7 +27,7 @@ func take_world_changes(previous_revision: int) -> Dictionary:
     if previous_revision != world_changes_consumed or int(result.revision) != world_revision:
         result.full = true
     result.revision = world_revision
-    world_changes = {"full":false,"tiles":{},"objects":{},"senses":false,"revision":world_revision}
+    world_changes = {"full":false,"tiles":{},"objects":{},"senses":false,"order":[],"revision":world_revision}
     world_changes_consumed = world_revision
     return result
 
@@ -37,6 +37,19 @@ func _record_world_changes(delta: Dictionary) -> void:
     for key in delta.get("objects_removed",[]): world_changes.objects[key] = true
     world_changes.senses = world_changes.senses or delta.get("set",{}).has("senses")
     world_changes.revision = world_revision
+
+static func _append_membership_order(order: Array, delta: Dictionary, before: Dictionary) -> void:
+    # Match Compiler.apply_delta's dictionary insertion/removal order. Dirty
+    # keys alone cannot distinguish a replacement from a remove-and-reappend.
+    var removed: Dictionary = {}
+    for id in delta.get("objects_removed",[]):
+        if before.objects.has(id) and not removed.has(id):
+            order.append({"kind":"objects","id":id,"remove":true})
+            removed[id] = true
+    for id in delta.get("tiles",{}):
+        if not before.tiles.has(id): order.append({"kind":"tiles","id":id,"remove":false})
+    for id in delta.get("objects",{}):
+        if removed.has(id) or not before.objects.has(id): order.append({"kind":"objects","id":id,"remove":false})
 const DIAGNOSTIC_LIMIT = 2000
 var completed_group_count = 0
 var skipped_count = 0
@@ -94,7 +107,7 @@ func accept(message: Dictionary) -> void:
         sequence = int(message.sequence)
         revision += 1
         world_revision += 1
-        world_changes = {"full":true,"tiles":{},"objects":{},"senses":true,"revision":world_revision}
+        world_changes = {"full":true,"tiles":{},"objects":{},"senses":true,"order":[],"revision":world_revision}
         var initial_events: Array = message.get("events",[])
         EventTrace.activate(trace,initial_events,display_ms)
         for event in initial_events: EventTrace.commit(trace,int(message.sequence),event.event_uuid)
@@ -227,6 +240,7 @@ func _advance_immediate(delta_ms: float) -> void:
         var commits: Array = current.commits
         while commit_index < commits.size() and float(commits[commit_index].at_ms) <= local + 0.000001:
             var delta: Dictionary = commits[commit_index].delta
+            _append_membership_order(world_changes.order,delta,state)
             Compiler.apply_delta(state,delta)
             Conditions.observe(condition_owners,delta.get("actors",{}),group_start_ms+commits[commit_index].at_ms)
             if delta.get("set",{}).has("senses"):NativePersistent.observe_spatial(spatial_effect_owners,state.senses.get("spatial_effects",{}),group_start_ms+commits[commit_index].at_ms)
@@ -257,27 +271,33 @@ func _world_delta(delta: Dictionary) -> bool:
 func _advance_with_world_preparation(delta_ms: float) -> void:
     if paused or state.is_empty(): return
     waiting_for_world = false; waiting_for_media = false
-    var first: Dictionary = current if not current.is_empty() else (queue[0] if not queue.is_empty() else {})
-    var proved_target: float = display_ms+maxf(0,delta_ms)
-    if media_ready.is_valid() and not media_ready.call(first):
-        waiting_for_media = true
-        return
-    if pending_world.is_empty():
-        var plan = _plan_world_advance(display_ms+maxf(0,delta_ms),first,proved_target)
-        waiting_for_media = plan.media_wait
-        if not plan.boundary:
-            _apply_world_plan(plan)
+    var target: float = display_ms+maxf(0,delta_ms)
+    while true:
+        var first: Dictionary = current if not current.is_empty() else (queue[0] if not queue.is_empty() else {})
+        if media_ready.is_valid() and not media_ready.call(first):
+            waiting_for_media = true
             return
-        _world_plan = plan
-        pending_world = _world_candidate(plan)
-    # Reuse this exact passive candidate across waits. The elapsed wait is never
-    # appended to display time, and no trace activation/commit has occurred yet.
-    if not world_ready.call(pending_world):
-        waiting_for_world = true
+        if pending_world.is_empty():
+            var plan = _plan_world_advance(target,first,target)
+            waiting_for_media = plan.media_wait
+            if not plan.boundary:
+                _apply_world_plan(plan)
+                if plan.media_wait or plan.segments.is_empty() or not plan.segments.back().complete:
+                    return
+                # Completion changes source ownership. Only now may the next
+                # group prove readiness, using this call's original target.
+                continue
+            _world_plan = plan
+            pending_world = _world_candidate(plan)
+        # Reuse this exact passive candidate across waits. The elapsed wait is
+        # never appended to display time, and this cut has not published yet.
+        if not world_ready.call(pending_world):
+            waiting_for_world = true
+            return
+        _apply_world_plan(_world_plan)
+        pending_world = {}; _world_plan = {}
+        # Even a zero-duration world boundary yields for atomic publication.
         return
-    _apply_world_plan(_world_plan)
-    pending_world = {}; _world_plan = {}
-    # Even a zero-duration boundary yields to the scene for atomic publication.
 
 func _group_stage_times(group: Dictionary) -> Array:
     if is_same(_scheduled_group,group): return _staged_world_times
@@ -336,6 +356,12 @@ func _plan_group_world(group: Dictionary, start: float, first_commit: int, curso
         var at = float(commits[i].at_ms)
         if at>local+0.000001: break
         if _world_delta(commits[i].delta): boundary_at = at; break
+    for at in group.get("actor_structure_times",[]):
+        if at>local:break
+        # A published cut is start+at on the display clock. Subtracting start
+        # can round below at and request that same constructor forever.
+        if start+float(at)>cursor or (activate and at<=0.0):
+            boundary_at=minf(boundary_at,float(at));break
     for at in stage_times:
         # Match staged_tiles()'s exact >= admission test. Commit tolerance must
         # not erase a nearby but still unadmitted support boundary.
@@ -408,11 +434,12 @@ func _world_candidate(plan: Dictionary) -> Dictionary:
     # after-values remain shared; collection ownership never aliases live state.
     for field in ["actors","tiles","objects","spatial_commit_cursors","combat_log_appends"]:
         if state.has(field): snapshot[field] = state[field].duplicate()
-    var changes = {"full":false,"tiles":{},"objects":{},"senses":false}
+    var changes = {"full":false,"tiles":{},"objects":{},"senses":false,"order":[]}
     var next_revision = revision; var next_world_revision = world_revision; var next_sequence = sequence
     for segment in plan.segments:
         for i in range(segment.first_commit,segment.end_commit):
             var delta: Dictionary = segment.group.commits[i].delta
+            _append_membership_order(changes.order,delta,snapshot)
             Compiler.apply_delta(snapshot,delta)
             for key in delta.get("tiles",{}): changes.tiles[key] = true
             for id in delta.get("objects",{}): changes.objects[id] = true
@@ -466,6 +493,7 @@ func _apply_world_plan(plan: Dictionary) -> void:
         for i in range(segment.first_commit,segment.end_commit):
             var commit: Dictionary = current.commits[i]
             var delta: Dictionary = commit.delta
+            _append_membership_order(world_changes.order,delta,state)
             Compiler.apply_delta(state,delta)
             Conditions.observe(condition_owners,delta.get("actors",{}),group_start_ms+commit.at_ms)
             if delta.get("set",{}).has("senses"):NativePersistent.observe_spatial(spatial_effect_owners,state.senses.get("spatial_effects",{}),group_start_ms+commit.at_ms)
@@ -486,6 +514,10 @@ func _apply_world_plan(plan: Dictionary) -> void:
             if retire_group.is_valid(): retire_group.call(current)
             current = {}
     display_ms = plan.display_ms
+    # Structural actor cuts can keep the same group/world revision. Their
+    # consumed preview must still yield to the next authored constructor edge.
+    if plan.get("boundary",false):
+        _preview_world={};_preview_signature=[]
 
 func staged_actors() -> Dictionary:
     var admitted = {}

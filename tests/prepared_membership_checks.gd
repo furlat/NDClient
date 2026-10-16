@@ -2,6 +2,7 @@ extends "res://tests/prepared_admission_checks.gd"
 # Native-data admission fixtures: explicit projected rows, not gameplay or an
 # artwork oracle. Exercise hidden membership, actual MultiMesh publication and
 # independent total ordering; recorded-source pixel acceptance is separate.
+const WorldRows = preload("res://presentation/world.gd")
 const GroundData = preload("res://presentation/ground_data.gd")
 const Quarter = preload("res://presentation/quarter_view.gd")
 
@@ -22,7 +23,7 @@ func batch(scene: Node, rows: Array) -> Dictionary:
     var material=ShaderMaterial.new(); material.shader=scene.ENVIRONMENT_SHADER; node.material_override=material
     var value={"id":"","placement":rows[0],"node":node,"material":material,"role":"terrain","layer":0,
         "cell":Vector2(128,128),"pivot":Vector2(64,64),"scale":1.0,"ground_receiver_bounds":multi.mesh.get_aabb()}
-    var packet=GroundData.prepare(rows,{"packets":{},"receiver_bounds":value.ground_receiver_bounds,"capacity":256},0,Basis.IDENTITY,{})
+    var packet=GroundData.prepare(rows,{"receiver_bounds":value.ground_receiver_bounds,"capacity":256},0,Basis.IDENTITY,{})
     scene._ground_publish(value,packet)
     return value
 
@@ -37,21 +38,25 @@ func base_scene() -> Node:
     scene.ground_is_background=true
     # Empty canonical fallback needs no art. Named projected entries below
     # deliberately test native ownership rather than authored source selection.
-    scene.catalog_cache={"world.json":{"terrain":{},"props":{}},"environment/index.json":{}}
-    scene.world_row_cache={"negative":{},"changed":false,"changed_tiles":{},"tile_rows":{},"boundaries":{}}
+    scene.catalog_cache={"world.json":{"terrain":{},"props":{}},"environment/index.json":{"doors":{},"props":{},"traps":{}}}
+    scene.world_row_cache={}
+    WorldRows.apply_changes(scene.world_row_cache,WorldRows.prepare_changes(scene.timeline.state,scene.catalog_cache,scene.world_row_cache,{"full":true}))
     return scene
 
 func prepare(scene: Node, wanted: Dictionary, ground: Dictionary, packets: Dictionary = {}) -> Node:
     var job=Preparation.new(); scene.add_child(job)
     job.host=scene; job.epoch=1; job.quarter=0; job.visible=false
     job.boundary={"world_revision":8}; job._capture_membership()
+    job.light_preparation=scene.source_lighting.begin_preparation({"sources":[],"issues":[]})
+    while not job.light_preparation.complete:scene.source_lighting.prepare_step(job.light_preparation)
     var rows: Array=[]
     rows.append_array(wanted.values())
     for values in ground.values(): rows.append_array(values)
     job.result={"complete":true,"wanted":wanted,"ground":ground,"packets":packets,
         "needs_order":true,"background":true,"worker_ms":0.0,"geometry":{},
-        "derived":{"rows":rows,"visual_rows":rows,"unresolved":[]},
-        "retained":{"negative":{},"changed":true,"changed_tiles":{},"tile_rows":{},"boundaries":{}},
+        # Native rows above are deliberate constructor fixtures; canonical state
+        # remains the actual empty SDK-shaped state projected by the real owner.
+        "row_patch":WorldRows.prepare_changes(scene.timeline.state,scene.catalog_cache,{}, {"full":true}),
         "visibility":{},"visible_cells":{},"visibility_base":scene.scenery_visibility,"visibility_changes":{}}
     job.wanted_ids=wanted.keys(); job.ground_keys=ground.keys()
     return job
@@ -83,8 +88,8 @@ func run() -> void:
     var new_row=old.placement.duplicate(); new_row.position=[8,0]
     var added_row={"id":"added","kind":"resource","position":[9,0],"base_height_steps":0}
     var rows=[tile("floor-retained",2),tile("floor-new",3)]
-    var packet=GroundData.prepare(rows,{"packets":floor.ground_packets,"receiver_bounds":floor.ground_receiver_bounds,
-        "capacity":256,"ground_version":floor.ground_version},0,Basis.IDENTITY,{"floor-new":true})
+    var packet=GroundData.prepare(rows,GroundData.capture_previous({"packets":floor.ground_packets,"receiver_bounds":floor.ground_receiver_bounds,
+        "capacity":256,"ground_version":floor.ground_version},0,Basis.IDENTITY),0,Basis.IDENTITY,{"floor-new":true})
     var job=prepare(scene,{"keep":keep.placement,"replace":new_row,"added":added_row},{"stone":rows},{"stone":packet})
     var replacement=source(scene,job,"replace",8,true); replacement.placement=new_row
     var added=source(scene,job,"added",9); added.placement=added_row
@@ -142,6 +147,7 @@ func run() -> void:
     check(scene.native_light_changes.upserts==[replacement,added,floor] and scene.native_light_changes.removed.size()==2,"Lighting admission receives exactly new/replaced/updated native sources")
     assert_order(scene,"prepared membership")
     check(scene.timeline.state==before,"Native admission never mutates canonical state")
+    await sparse_replacement_case(scene)
     # A prepared but stale target must be discarded before any of its entries
     # can appear. The actual canonical empty world drives exhaustive fallback.
     var stale=prepare(scene,{},{}); await finish_hidden(stale)
@@ -164,3 +170,30 @@ func run() -> void:
     print("PREPARED_MEMBERSHIP_CHECKS ",JSON.stringify(report))
     scene.queue_free(); await process_frame
     quit(0 if failures.is_empty() else 1)
+
+func sparse_replacement_case(scene: Node) -> void:
+    var previous: Dictionary=scene.world_groups["replace"].entries[0]
+    var row: Dictionary=previous.placement.duplicate()
+    row["source_revision"]=2
+    var job=prepare(scene,{"replace":row},{})
+    job.result.full_membership=false; job.result.needs_order=false
+    job.boundary.world_revision=9
+    var next=source(scene,job,"replace",8,true); next.placement=row
+    job.native_groups={"replace":{"row":row,"entries":[next]}}
+    job.entries=[next];job.static_entries=job.entries
+    var held_entries: Array=scene.static_entries
+    var held_fixtures: Array=scene.fixture_entries
+    var held_order: Array=scene.static_complete_order
+    var slot: int=previous.static_slot
+    var order_slot: int=previous.order_slot
+    await finish_hidden(job)
+    check(not job.membership.full and job.membership.entry_replacements.size()==1 and not job.result.needs_order,"One same-order native source replacement prepares one slot without whole membership/order rebuild")
+    check(scene.static_entries[slot]==previous and not previous.node.is_queued_for_deletion(),"Sparse native preparation leaves current borrowed slot unchanged")
+    scene.timeline.world_revision=9
+    scene.timeline.world_changes={"full":false,"tiles":{},"objects":{},"senses":false,"revision":9}
+    job.admitted=true;scene.pending_world=job
+    scene._sync_world();scene._sort_draws()
+    check(is_same(scene.static_entries,held_entries) and is_same(scene.fixture_entries,held_fixtures) and is_same(scene.static_complete_order,held_order),"Sparse adoption retains static, fixture and sorted array owners")
+    check(scene.static_entries[slot]==next and scene.static_complete_order[order_slot]==next and scene.world_groups["replace"].entries==[next],"Sparse membership and native order change at the same publication")
+    check(previous.node.is_queued_for_deletion() and next.node.get_parent()==scene.sprite_parent,"Sparse replacement retires only the old source and adopts the prepared node")
+    assert_order(scene,"sparse replacement")

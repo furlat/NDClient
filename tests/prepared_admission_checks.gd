@@ -3,6 +3,7 @@ extends SceneTree
 # state and full ordering. Pixel acceptance remains the recorded-world GPU lane.
 const Preparation = preload("res://presentation/world_preparation.gd")
 const Order = preload("res://grid_order.gd")
+const SourceMaterial=preload("res://presentation/source_material.gd")
 class Probe extends "res://play.gd":
     func _ready() -> void:
         set_process(false); set_process_unhandled_input(false)
@@ -30,7 +31,7 @@ func reset_sight(scene: Node) -> void:
     scene.scenery_revision = -1; scene.scenery_new_consumers = {}
     for value in scene.static_entries:
         value.scenery_value = 1.0 if value.placement.id=="a" else 0.0
-        value.material.set_shader_parameter("current_visibility",value.scenery_value)
+        SourceMaterial.set_parameter(value,"current_visibility",value.scenery_value)
 func assert_sight(scene: Node, label: String) -> void:
     check(scene.scenery_visibility=={"b":true} and scene.scenery_visible_cells=={"1,0":true},label+" exact admitted sight")
     check(scene.static_entries.all(func(value):return value.material.get_shader_parameter("current_visibility")== (1.0 if value.placement.id=="b" else 0.0)),label+" native consumer styles")
@@ -49,6 +50,7 @@ func publish_order(scene: Node) -> void:
     var prepared = Preparation.new()
     prepared.host=scene; prepared.epoch=scene.timeline.initialization_revision; prepared.quarter=scene.quarter
     prepared.result={"needs_order":true,"background":scene.ground_is_background,"worker_ms":0.0}
+    prepared.membership={"entries":scene.static_entries}
     prepared._collect_order(scene.static_entries); prepared._sort_order()
     for index in prepared.sorted_indices: prepared._prepare_order_record(index)
     prepared.publish_order()
@@ -58,7 +60,7 @@ func run() -> void:
     scene.timeline.initialization_revision=1; scene.timeline.world_revision=7
     scene.world_revision=7; scene.world_generation=3; scene.world_quarter=0; scene.quarter=0
     scene.ground_is_background=false
-    scene.timeline.state={"tiles":{"0,0":{"tile_uuid":"a","position":[0,0]},"1,0":{"tile_uuid":"b","position":[1,0]}},
+    scene.timeline.state={"tiles":{"0,0":{"tile_uuid":"a","position":[0,0],"elevation_steps":0},"1,0":{"tile_uuid":"b","position":[1,0],"elevation_steps":0}},
         "objects":{},"senses":{"visible":[[1,0]],"objects":{}}}
     var canonical: Dictionary = scene.timeline.state.duplicate(true)
     scene.world_row_cache={"boundaries":{}}
@@ -81,7 +83,7 @@ func run() -> void:
     # Replacing a native consumer needs its current grant even with no change
     # in the admitted visibility set (for example a tile material replacement).
     var replacement: Dictionary = scene.static_entries[1]
-    replacement.scenery_value=0.0; replacement.material.set_shader_parameter("current_visibility",0.0)
+    replacement.scenery_value=0.0; SourceMaterial.set_parameter(replacement,"current_visibility",0.0)
     scene.scenery_new_consumers={"b":true}; scene.prepared_scenery=receipt(scene,{"b":true},{})
     scene._sync_scenery(); assert_sight(scene,"same-ID replacement")
     scene.static_entries[1].node.visible=false

@@ -1,4 +1,5 @@
 extends RefCounted
+const SourceMaterial=preload("res://presentation/source_material.gd")
 ## Optical surface attachment for the offline fixture, with an explicit pose.
 ## Unresolved samples retain the authored painted point; no nearby-depth search.
 const Geometry = preload("res://presentation/character_geometry.gd")
@@ -50,7 +51,7 @@ static func resolve(world: Node, actor_id: String, clip: String, frame: int,
         result.source = source_path
         if not is_equal_approx(alpha, 1.0) or not is_equal_approx(float(layer.get("alpha", 1.0)), 1.0):
             return _missing(result, "translucent_source_owner")
-        var condition_alpha: Variant = entry.material.get_shader_parameter("condition_alpha")
+        var condition_alpha: Variant = SourceMaterial.value(entry,"condition_alpha")
         if condition_alpha != null and not is_equal_approx(float(condition_alpha), 1.0):
             return _missing(result, "translucent_display_owner")
         var table: String = Geometry.TABLE if source_path.begins_with("/media/smallscale/modular/") else Geometry.CREATURE_TABLE

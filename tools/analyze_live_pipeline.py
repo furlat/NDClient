@@ -83,6 +83,8 @@ def summarize(directory):
             'client_to_prepared_ms':(prepare['time_us']-packet['time_us'])/1000 if prepare and packet else None,
             'prepared_to_first_movement_ms':first-(prepare['time_us']-start)/1000 if first is not None and prepare else None,
             'client_after_complete_sse_ms':first-packet_ms if first is not None and packet_ms is not None else None,
+            'prepared_to_first_animation_ms':command['first_animation_ms']-(prepare['time_us']-start)/1000 if command['first_animation_ms'] is not None and prepare else None,
+            'client_packet_to_first_animation_ms':command['first_animation_ms']-packet_ms if command['first_animation_ms'] is not None and packet_ms is not None else None,
             'frame_ms':command['frame_ms'], 'client_phase_peaks_ms':command['phase_peaks'],
             'sse_framing_cpu_ms':sum(duration(item) for item in events if item['stage']=='sse_framing')}
         request_stages = []
@@ -94,7 +96,7 @@ def summarize(directory):
         row['requests']=request_stages
         rows.append(row)
     metrics = ['first_movement_ms','server_dispatch_ms','server_exchange_ms','operation_bytes',
-        'sse_schema_ms','canonical_consumer_ms','presentation_compile_ms','presentation_required_media_ms','client_to_prepared_ms','client_after_complete_sse_ms',
+        'sse_schema_ms','canonical_consumer_ms','presentation_compile_ms','presentation_required_media_ms','client_to_prepared_ms','client_after_complete_sse_ms','prepared_to_first_animation_ms','client_packet_to_first_animation_ms',
         'end_to_ready_ms','post_ready_frame_peak_ms','post_ready_hud_peak_ms','post_ready_bar_build_peak_ms']
     sections = {}
     for label, lower, upper in [('before_gallery',0,6),('gallery_entry',7,7),('inside_gallery',8,10)]:

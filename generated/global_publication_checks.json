@@ -1,0 +1,75 @@
+{
+  "checks": 104,
+  "comparisons": [
+    {
+      "case": "cap",
+      "different_pixels": 0,
+      "maximum_error": 0.0
+    },
+    {
+      "case": "normals",
+      "different_pixels": 0,
+      "maximum_error": 0.0
+    },
+    {
+      "case": "quarter-one",
+      "different_pixels": 0,
+      "maximum_error": 0.0
+    },
+    {
+      "case": "quarter-two",
+      "different_pixels": 0,
+      "maximum_error": 0.0
+    },
+    {
+      "case": "restore",
+      "different_pixels": 0,
+      "maximum_error": 0.0
+    },
+    {
+      "case": "resize",
+      "different_pixels": 0,
+      "maximum_error": 0.0
+    }
+  ],
+  "failures": [],
+  "scope": "Actual frozen recording through strict Play quarter/cap/Normals preparation; independent full lighting reference on first published frame. CPU slices include sampling and draw synchronization; no live latency acceptance or constant-time commit claim.",
+  "timings": [
+    {
+      "case": "cap",
+      "frames": 8,
+      "last_publication_cpu_ms": 4.276,
+      "max_step_cpu_ms": 4.276
+    },
+    {
+      "case": "normals",
+      "frames": 12,
+      "last_publication_cpu_ms": 4.072,
+      "max_step_cpu_ms": 8.298
+    },
+    {
+      "case": "quarter-one",
+      "frames": 13,
+      "last_publication_cpu_ms": 5.569,
+      "max_step_cpu_ms": 5.569
+    },
+    {
+      "case": "quarter-two",
+      "frames": 11,
+      "last_publication_cpu_ms": 5.53,
+      "max_step_cpu_ms": 5.53
+    },
+    {
+      "case": "restore",
+      "frames": 20,
+      "last_publication_cpu_ms": 4.358,
+      "max_step_cpu_ms": 4.453
+    },
+    {
+      "case": "resize",
+      "held_frames": 15,
+      "last_publication_cpu_ms": 14.988,
+      "max_step_cpu_ms": 19.415
+    }
+  ]
+}

@@ -8,6 +8,9 @@ const EventTrace = preload("res://presentation/event_trace.gd")
 const Components = preload("res://presentation/components.gd")
 const SpellDelivery=preload("res://presentation/spell_delivery.gd")
 const DamageTiming = preload("res://presentation/damage_timing.gd")
+const Conditions = preload("res://presentation/conditions.gd")
+const ActorConstruction = preload("res://presentation/actor_construction.gd")
+const WorldRows = preload("res://presentation/world.gd")
 
 static func empty_delta() -> Dictionary:
     return Transitions.empty_delta()
@@ -438,6 +441,134 @@ static func compile_admitted(before: Dictionary, packet: Dictionary, cache: Dict
     if not recorded.ok: return recorded
     return compile_recorded(before,packet,cache,final_state,recorded.transitions)
 
+static func _native_requirements(before: Dictionary, groups: Array, cache: Dictionary) -> void:
+    # Commit clocks are known only after scheduling. Project persistent owners
+    # once on this compiler worker; never replay these commits during readiness.
+    var owners: Dictionary = {}; var areas: Dictionary = {}
+    Conditions.observe(owners,before.actors,0.0,true)
+    Conditions.NativePersistent.observe_spatial(areas,before.senses.get("spatial_effects",{}),0.0,true)
+    var start = 0.0
+    for group in groups:
+        group.native_requirements = []
+        var previous: Dictionary = {}
+        _native_requirement_cut(group,previous,owners,areas,start,0.0,cache)
+        for commit in group.get("commits",[]):
+            var delta: Dictionary = commit.delta
+            if delta.get("actors",{}).is_empty() and not delta.get("set",{}).has("senses"): continue
+            var at: float = start+commit.at_ms
+            Conditions.observe(owners,delta.get("actors",{}),at)
+            if delta.get("set",{}).has("senses"):
+                Conditions.NativePersistent.observe_spatial(areas,delta.set.senses.get("spatial_effects",{}),at)
+            _native_requirement_cut(group,previous,owners,areas,at,commit.at_ms,cache)
+        start += float(group.duration_ms)
+
+static func _native_requirement_cut(group: Dictionary, previous: Dictionary, owners: Dictionary,
+        areas: Dictionary, at_ms: float, local_ms: float, cache: Dictionary) -> void:
+    var samples: Array = Conditions.native_samples(owners,at_ms,cache,true)
+    samples.append_array(Conditions.NativePersistent.spatial_samples(areas,at_ms,cache))
+    for sample in samples:
+        # Only constructor/source/shape operands cross this boundary. Runtime
+        # owner age, removal, initial state and material sampling stay private.
+        var row: Dictionary = sample.duplicate()
+        for field in ["age_ms","start_ms","absolute_start_ms","duration_ms","initial","removal_age_ms","alpha","source_age_ms","selection_alpha","condition","recipe"]:
+            row.erase(field)
+        if sample.has("native_cue"):
+            row.native_cue = sample.native_cue.duplicate()
+            row.native_cue.erase("initial"); row.native_cue.erase("owner_end_seconds")
+        if previous.get(row.id,{}) == row: continue
+        previous[row.id] = row
+        var requirement = row.duplicate()
+        requirement.preparation_at_ms = local_ms
+        requirement.preparation_key = str(group.id)+":native_requirement:"+str(group.native_requirements.size())
+        group.native_requirements.append(requirement)
+
+static func _actor_cut(cuts:Dictionary,at:float,id:String,duration:float)->void:
+    if at<0.0 or at>duration:return
+    if not cuts.has(at):cuts[at]={}
+    cuts[at][id]=true
+
+static func _actor_structure_inputs(actor:Dictionary,state:Dictionary,staged:bool,loadouts:Dictionary)->Array:
+    if actor.is_empty() or not WorldRows.visible_actor(actor,state,staged):return []
+    var selected=ActorConstruction.actor_with_loadout(actor,loadouts)
+    return [selected.get("creature_content_ref"),selected.appearance,selected.visual_loadout,selected.get("presentation_layers",[])]
+
+static func _actor_structure_value(actor:Dictionary,loadouts:Dictionary,inputs:Array,cache:Dictionary)->Dictionary:
+    if inputs.is_empty():return {}
+    var selected=Authoring.Characters.structure(ActorConstruction.actor_with_loadout(actor,loadouts),cache)
+    return selected.value if selected.ok else {"error":selected.error}
+
+static func _actor_structure_requirements(before:Dictionary,groups:Array,cache:Dictionary)->void:
+    # Sparse after-value overlay: the admitted base stays read-only. Inspect only
+    # touched actors and authored selector edges, never all actors at every cut.
+    var actors:Dictionary={}
+    var state={"senses":before.senses,"audience":before.audience}
+    var retained:Array=[]
+    var start=0.0
+    for group in groups:
+        var duration:float=group.duration_ms
+        var cuts:Dictionary={};var affected:Dictionary={};var loadout_actors:Dictionary={}
+        for track in group.get("actor_tracks",[]):
+            if track.has("visual_loadout"):loadout_actors[track.actor_uuid]=true
+        for track in group.get("actor_tracks",[]):
+            if not loadout_actors.has(track.actor_uuid):continue
+            _actor_cut(cuts,track.start_ms,track.actor_uuid,duration)
+            _actor_cut(cuts,track.start_ms+track.duration_ms,track.actor_uuid,duration)
+            _actor_cut(cuts,duration,track.actor_uuid,duration)
+        var layers:Array=retained.duplicate()
+        for component in group.get("components",[]):
+            if component.kind!="sprite_layer":continue
+            layers.append({"component":component,"start_ms":start+component.start_ms})
+        for item in layers:
+            _actor_cut(cuts,item.start_ms-start,item.component.actor_uuid,duration)
+            _actor_cut(cuts,item.start_ms+item.component.duration_ms-start,item.component.actor_uuid,duration)
+        for id in group.get("staged_actors",{}):
+            _actor_cut(cuts,float(group.get("staged_at_ms",{}).get(id,0.0)),id,duration)
+            _actor_cut(cuts,duration,id,duration)
+        for commit in group.get("commits",[]):
+            for id in commit.delta.get("actors",{}):_actor_cut(cuts,commit.at_ms,id,duration)
+        for ids in cuts.values():affected.merge(ids)
+        # Sensory cuts already require world publication. Updating these cached
+        # signatures there keeps a later actor-only cut relative to that view.
+        for commit in group.get("commits",[]):
+            if commit.delta.get("set",{}).has("senses"):
+                for id in affected:_actor_cut(cuts,commit.at_ms,id,duration)
+        var previous_inputs:Dictionary={};var previous:Dictionary={}
+        var initial_layers:Array=retained.filter(func(item):return item.start_ms<=start and start<item.start_ms+item.component.duration_ms).map(func(item):return item.component)
+        var initial_loadouts=ActorConstruction.loadouts({},initial_layers)
+        for id in affected:
+            var actor:Dictionary=actors.get(id,before.actors.get(id,{}))
+            previous_inputs[id]=_actor_structure_inputs(actor,state,false,initial_loadouts)
+            previous[id]=_actor_structure_value(actor,initial_loadouts,previous_inputs[id],cache)
+        var times:Array=cuts.keys();times.sort()
+        var boundaries:Dictionary={};var cursor=0
+        for at in times:
+            while cursor<group.commits.size() and group.commits[cursor].at_ms<=at:
+                var commit:Dictionary=group.commits[cursor]
+                for id in commit.delta.get("actors",{}):
+                    var actor:Dictionary=commit.delta.actors[id]
+                    actors[id]=actor
+                if commit.delta.get("set",{}).has("senses"):state.senses=commit.delta.set.senses
+                cursor+=1
+            var active_layers:Array=layers.filter(func(item):return item.start_ms<=start+at and start+at<item.start_ms+item.component.duration_ms).map(func(item):return item.component)
+            var samples:Dictionary=Tracks.samples(group.get("actor_tracks",[]),at) if at<duration else {}
+            var loadouts=ActorConstruction.loadouts(samples,active_layers)
+            for id in cuts[at]:
+                var staged:bool=at<duration and group.get("staged_actors",{}).has(id) and at>=float(group.get("staged_at_ms",{}).get(id,0.0))
+                var actor:Dictionary=actors.get(id,before.actors.get(id,group.get("staged_actors",{}).get(id,{}) if staged else {}))
+                var inputs=_actor_structure_inputs(actor,state,staged,loadouts)
+                if previous_inputs[id]==inputs:continue
+                var value=_actor_structure_value(actor,loadouts,inputs,cache)
+                if previous[id]!=value:boundaries[float(at)]=true
+                previous_inputs[id]=inputs;previous[id]=value
+        # Commits with no actor selector edge still carry the next sensory view.
+        while cursor<group.commits.size():
+            var commit:Dictionary=group.commits[cursor]
+            if commit.delta.get("set",{}).has("senses"):state.senses=commit.delta.set.senses
+            cursor+=1
+        group.actor_structure_times=boundaries.keys();group.actor_structure_times.sort()
+        start+=duration
+        retained=layers.filter(func(item):return item.start_ms+item.component.duration_ms>start)
+
 static func compile_recorded(before: Dictionary, packet: Dictionary, cache: Dictionary,
         final_state: Dictionary, transitions: Dictionary) -> Dictionary:
     var authoring_errors = Authoring.Catalog.validate_native(cache)
@@ -562,6 +693,8 @@ static func compile_recorded(before: Dictionary, packet: Dictionary, cache: Dict
     if not packet.combat_log_appends.is_empty(): ending.log_appends = packet.combat_log_appends.duplicate(true)
     last.commits.append({"at_ms":last.duration_ms,"source_index":final_state.reducer_cursor,"delta":ending,
         "trace_logs":EventTrace.operation_logs(packet)})
+    _native_requirements(before,groups,cache)
+    _actor_structure_requirements(before,groups,cache)
     var skipped: Array = []
     for group in groups: skipped.append_array(group.skipped)
     return Reducer.success({"groups":groups,"final_state":final_state,"skipped":skipped})

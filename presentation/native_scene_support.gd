@@ -1,4 +1,5 @@
 extends RefCounted
+const SourceMaterial=preload("res://presentation/source_material.gd")
 ## Receiver geometry for native VFX, sourced from the same displayed records as
 ## the sprite renderer. No inferred walls, physics bodies or CPU pixel meshes.
 const Placement=preload("res://placement.gd")
@@ -120,6 +121,25 @@ func _floor(id:int)->MeshInstance3D:
         owner.add_child(node);floors[id]=node
     return floors[id]
 
+func _batch_floor(entry:Dictionary)->MultiMeshInstance3D:
+    var id:int=entry.node.get_instance_id()
+    if not floors.has(id):
+        var node=MultiMeshInstance3D.new()
+        node.multimesh=MultiMesh.new();node.multimesh.transform_format=MultiMesh.TRANSFORM_3D
+        node.multimesh.mesh=_plane;node.material_override=_floor_material
+        node.layers=LAYER;node.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+        owner.add_child(node);floors[id]=node
+    var receiver:MultiMeshInstance3D=floors[id]
+    # Ground publication owns this version. Camera and lighting updates do not
+    # rebuild unchanged world-space contact planes. Unversioned callers refresh.
+    if entry.has("ground_version") and receiver.get_meta("ground_version",-1)==entry.ground_version:return receiver
+    var rows:Array=entry.batch_rows
+    receiver.multimesh.instance_count=rows.size()
+    for index in rows.size():
+        receiver.multimesh.set_instance_transform(index,Transform3D(Basis.IDENTITY,Placement.contact(rows[index])))
+    if entry.has("ground_version"):receiver.set_meta("ground_version",entry.ground_version)
+    return receiver
+
 func _actor(id:String)->MeshInstance3D:
     if not actors.has(id):
         var node=MeshInstance3D.new();node.material_override=ShaderMaterial.new()
@@ -140,7 +160,8 @@ func prepare_hidden(static_entries:Array,visual_actors:Dictionary)->void:
         var id:int=entry.node.get_instance_id()
         retained_floors[id]=true
         if floors.has(id):continue
-        _floor(id).position=Placement.contact(entry.placement)
+        if entry.has("batch_rows"):_batch_floor(entry)
+        else:_floor(id).position=Placement.contact(entry.placement)
         created+=1
         if created>=2 or Time.get_ticks_usec()-started>=500:return
     var retained_actors:Dictionary={}
@@ -182,10 +203,13 @@ func sync(static_entries:Array,visual_actors:Dictionary,view_camera:Camera3D)->v
         var id:int=entry.node.get_instance_id();retained[id]=true
         floor_sources.append([entry.id,id])
         if not floors.has(id):floor_created+=1
-        var floor_node:MeshInstance3D=_floor(id)
-        var contact:Vector3=Placement.contact(entry.placement)
-        if floor_node.position!=contact:floor_repositioned+=1
-        floor_node.position=contact
+        if entry.has("batch_rows"):
+            _batch_floor(entry)
+        else:
+            var floor_node:MeshInstance3D=_floor(id)
+            var contact:Vector3=Placement.contact(entry.placement)
+            if floor_node.position!=contact:floor_repositioned+=1
+            floor_node.position=contact
         if entry.has("received_material"):
             _outputs.append(entry.received_material)
             live_outputs[entry.received_material]=true
@@ -211,7 +235,7 @@ func sync(static_entries:Array,visual_actors:Dictionary,view_camera:Camera3D)->v
     for visual in visual_actors.values():
         for source in visual.entries:
             if source.role=="shadow" or not source.actor_layer.get("effect",{}).is_empty():continue
-            var has_geometry:bool=source.material.get_shader_parameter("has_component_geometry")==true
+            var has_geometry:bool=SourceMaterial.value(source,"has_component_geometry")==true
             if source.has("received_material"):
                 var output:ShaderMaterial=source.received_material
                 _outputs.append(output)
@@ -219,11 +243,11 @@ func sync(static_entries:Array,visual_actors:Dictionary,view_camera:Camera3D)->v
                 output.set_shader_parameter("native_scene_enabled",has_geometry and source.node.visible)
                 output.set_shader_parameter("native_scene_plane",false)
                 output.set_shader_parameter("native_scene_pivot",source.pivot)
-                if has_geometry:output.set_shader_parameter("native_scene_ground_height",source.get("geometry_ground_pixels",19.0)*source.material.get_shader_parameter("component_units"))
+                if has_geometry:output.set_shader_parameter("native_scene_ground_height",source.get("geometry_ground_pixels",19.0)*SourceMaterial.value(source,"component_units"))
             if not source.node.visible or not source.has("received_material"):continue
             # Translucent bodies require transparent compositing, not an
             # invisible opaque blocker. This bridge admits solid surfaces only.
-            var condition_alpha:Variant=source.material.get_shader_parameter("condition_alpha")
+            var condition_alpha:Variant=SourceMaterial.value(source,"condition_alpha")
             if condition_alpha!=null and float(condition_alpha)<1.0:continue
             var solid:Texture2D=solid_masks.get(source.texture_path)
             var id:String=source.id
@@ -240,14 +264,14 @@ func sync(static_entries:Array,visual_actors:Dictionary,view_camera:Camera3D)->v
             # the exhaustive path; moving the proxy still updates every frame.
             var binding:Array=[source.material,source.material.shader,source.get("source_version")]
             if not source.has("source_version") or _source_bindings.get(id)!=binding:
-                for parameter in Shadows.CASTER_PARAMETERS:material.set_shader_parameter(parameter,source.material.get_shader_parameter(parameter))
+                for parameter in Shadows.CASTER_PARAMETERS:material.set_shader_parameter(parameter,SourceMaterial.value(source,parameter))
                 _source_bindings[id]=binding
             material.set_shader_parameter("has_geometry",has_geometry and solid!=null)
             material.set_shader_parameter("component_solid",solid)
             material.set_shader_parameter("component_cell_size",source.get("geometry_cell_size",source.cell))
             material.set_shader_parameter("display_basis",view_camera.global_basis)
             material.set_shader_parameter("sprite_pivot",source.pivot)
-            if has_geometry:material.set_shader_parameter("ground_height",source.get("geometry_ground_pixels",19.0)*source.material.get_shader_parameter("component_units"))
+            if has_geometry:material.set_shader_parameter("ground_height",source.get("geometry_ground_pixels",19.0)*SourceMaterial.value(source,"component_units"))
     for id in actors.keys():
         if not retained.has(id):actors[id].free();actors.erase(id);_source_bindings.erase(id)
     last_sync_phases.actors=(Time.get_ticks_usec()-phase_started)/1000.0

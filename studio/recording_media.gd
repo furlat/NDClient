@@ -55,5 +55,6 @@ static func plan(index:Dictionary)->Dictionary:
     result.estimate_summary=EncounterMedia.estimate_summary(result)
     for estimate in result.estimates.values():
         if estimate.has("error"):errors.append(estimate.error)
+    result.ordered_paths=paths.keys();result.ordered_paths.make_read_only()
     result.source_files=Catalog.source_snapshot(cache)
     return result

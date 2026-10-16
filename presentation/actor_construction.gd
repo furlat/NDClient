@@ -1,6 +1,7 @@
 extends RefCounted
 ## Native actor construction shared by displayed and unpublished world owners.
 ## Source selection is passive; this file owns no timeline or visibility gate.
+const SourceMaterial=preload("res://presentation/source_material.gd")
 const Graphs=preload("res://animation/graphs.gd")
 const Conditions=preload("res://presentation/conditions.gd")
 const Palette=preload("res://presentation/palette.gd")
@@ -37,16 +38,11 @@ static func actor_with_loadout(actor:Dictionary,loadouts:Dictionary)->Dictionary
     result.presentation_layers=selected.effects
     return result
 
-static func material_key(value:Dictionary,textures:Dictionary,resources:Dictionary)->Array:
-    return [Conditions.parameters(value,textures,resources)]
-
 static func prepare_neutral(entry:Dictionary,textures:Dictionary,resources:Dictionary)->void:
     # Only unpublished new layers call this. Current sampling compares the full
     # value and replaces every binding if a condition or hit is active at admission.
     var value:Dictionary=Conditions.material(entry.placement.id,[])
-    var key:Array=material_key(value,textures,resources)
-    Conditions.bind_parameters(entry.material,key[0])
-    entry.bound_condition_key=key.duplicate(true)
+    SourceMaterial.apply(entry,Conditions.parameters(value,textures,resources))
 
 static func graph(owner:Node,rig:Dictionary,templates:Array)->Node:
     return Graphs.character(owner,rig,true,templates)
@@ -55,16 +51,16 @@ static func layer(owner:Node,row:Dictionary,rig:Dictionary,source:Dictionary,ind
     owner.add_entry(row,"shadow" if source.slot=="shadow" else "body",index,MODULAR_SHADER)
     var entry:Dictionary=owner.entries.back()
     entry.actor_layer=source
-    entry.material.set_shader_parameter("layer_alpha",source.alpha)
-    entry.material.set_shader_parameter("shadow",source.slot=="shadow")
+    SourceMaterial.set_parameter(entry,"layer_alpha",source.alpha)
+    SourceMaterial.set_parameter(entry,"shadow",source.slot=="shadow")
     owner._light_entry(entry)
-    entry.material.set_shader_parameter("tint",Modular.rgb(source.tint))
+    SourceMaterial.set_parameter(entry,"tint",Modular.rgb(source.tint))
     var cell=Vector2(rig.cell_width,rig.cell_height)
     var pivot=Vector2(cell.x*.5,cell.y-rig.origin_y_from_ground)
     owner.set_quad(entry,cell,pivot,128.0/owner.rig_config.TILE_W*row.scale)
     return entry
 
-static func bind_source(owner:Node,entry:Dictionary,rig:Dictionary,path:String,layer_frame:int,layer_facing:String,material_state:Dictionary,material_key:Array,material_snapshot:Array)->Array:
+static func bind_source(owner:Node,entry:Dictionary,rig:Dictionary,path:String,layer_frame:int,layer_facing:String,parameters:Dictionary)->void:
     # One binding implementation for current actors and hidden candidate layers.
     # Pose selection, animation clocks, transforms and visibility remain in Play.
     var layer:Dictionary=entry.actor_layer
@@ -72,52 +68,18 @@ static func bind_source(owner:Node,entry:Dictionary,rig:Dictionary,path:String,l
     var sheet: Texture2D = owner.textures[path]
     var palette:Dictionary=layer.get("effect",{}).get("palette",{}) if layer.get("effect",{}).get("palette")!=null else {}
     var frame_key:Array=[sheet,layer_frame,layer_facing,owner.textures.get(owner.resources.get(palette.get("noiseSheet"),""))]
-    var source_key = [path,frame_key,owner.character_light_profile,owner.source_depth,owner.source_normals,row.get("scale_x",1.0),material_key]
-    var previous_source:Array=entry.get("sampled_source_key",[])
-    if previous_source != source_key:
-        # Same-sheet ordinary layers can change UV and exact condition
-        # operands. Palette, sheet or geometry changes still require full copies.
-        var previous_condition:Array=entry.get("bound_condition_key",[])
-        var partial=palette.is_empty() and entry.get("sampled_source_palette_empty",false) and previous_source.size()==source_key.size()
-        if partial:
-            partial=previous_source[0]==path and previous_source[1][0]==sheet and previous_source[1][3]==frame_key[3]
-            for at in range(2,source_key.size()-1):
-                if previous_source[at]!=source_key[at]:partial=false;break
-            partial=partial and previous_condition.size()==1 and previous_condition[0].has("condition_alpha") \
-                and previous_source[-1]==previous_condition and entry.get("geometry_binding",[])==[path,owner.source_depth,owner.source_normals,entry.scale,entry.placement.get("scale_x",1.0),owner.character_light_profile]
-        var base_version:int=entry.get("source_version",0)
-        if material_snapshot.is_empty():material_snapshot=material_key.duplicate(true)
-        source_key[-1]=material_snapshot
-        entry.sampled_source_key = source_key
-        entry.sampled_source_palette_empty=palette.is_empty()
-        entry.source_version = base_version+1
-        if partial:
-            var previous_change:Dictionary=entry.get("source_frame_change",{})
-            var full_version:int=base_version
-            var parameters:Dictionary={}
-            # This remains one bounded producer certificate, not a history.
-            # Last-change versions let each receiver skip already-copied fields.
-            if previous_change.get("version",-1)==base_version and previous_change.get("source")==entry.material \
-                    and previous_change.get("shader")==entry.material.shader \
-                    and previous_change.get("base_version",-1)==base_version-1:
-                full_version=int(previous_change.get("full_version",previous_change.base_version))
-                parameters=previous_change.parameters.duplicate() if previous_change.has("parameters") else {&"frame_uv":base_version}
-            if entry.get("bound_frame_key",[])!=frame_key:parameters[&"frame_uv"]=base_version+1
-            for field in material_key[0]:
-                if not previous_condition[0].has(field) or previous_condition[0][field]!=material_key[0][field]:parameters[field]=base_version+1
-            entry.source_frame_change={"base_version":base_version,"full_version":full_version,
-                "version":base_version+1,"source":entry.material,"shader":entry.material.shader,"parameters":parameters}
-        else:entry.erase("source_frame_change")
     entry.texture_path = path
     if entry.get("bound_frame_key",[])!=frame_key:
         entry.bound_frame_key=frame_key
-        entry.material.set_shader_parameter("sheet",sheet)
-        Palette.bind(entry.material,layer,layer_facing,layer_frame,owner.textures,owner.resources)
-        entry.material.set_shader_parameter("material_cell_size",Vector2(rig.cell_width,rig.cell_height))
-        entry.material.set_shader_parameter("frame_uv",Vector4(layer_frame*rig.cell_width/sheet.get_width(),rig.facing_rows[layer_facing]*rig.cell_height/sheet.get_height(),float(rig.cell_width)/sheet.get_width(),float(rig.cell_height)/sheet.get_height()))
-    if entry.get("bound_condition_key",[])!=material_key:
-        if material_snapshot.is_empty():material_snapshot=material_key.duplicate(true)
-        entry.bound_condition_key=material_snapshot
-        Conditions.bind_parameters(entry.material,material_key[0])
+        SourceMaterial.set_parameter(entry,"sheet",sheet,true)
+        SourceMaterial.set_parameter(entry,"material_cell_size",Vector2(rig.cell_width,rig.cell_height))
+        SourceMaterial.set_parameter(entry,"frame_uv",Vector4(layer_frame*rig.cell_width/sheet.get_width(),rig.facing_rows[layer_facing]*rig.cell_height/sheet.get_height(),float(rig.cell_width)/sheet.get_width(),float(rig.cell_height)/sheet.get_height()))
+    var palette_parameters=Palette.parameters(layer,layer_facing,layer_frame,owner.textures,owner.resources)
+    for name in palette_parameters:
+        SourceMaterial.set_parameter(entry,name,palette_parameters[name],name in ["effect_palette_enabled","effect_has_noise","effect_noise"])
+    # Play supplies an owned immutable operand value shared by this actor's
+    # layers. Fixture/private callers may still supply mutable values.
+    if not parameters.is_read_only() or not is_same(entry.get("bound_condition_parameters"),parameters):
+        SourceMaterial.apply(entry,parameters)
+        entry.bound_condition_parameters=parameters if parameters.is_read_only() else null
     CharacterGeometry.bind(entry,path,owner.catalog_cache,owner.texture,owner.source_depth,owner.source_normals,owner.character_light_profile)
-    return material_snapshot

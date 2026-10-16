@@ -40,8 +40,8 @@ class CapturingPlayer extends "res://play.gd":
         for path in media_environment_required:
             if not media_warmup.ready_paths.has(path):missing_environment.append(path)
         var snapshot={"group":group.id,"ready":result,"display_ms":timeline.display_ms,"media_target_ms":timeline.media_target_ms,"group_start_ms":timeline.group_start_ms,"current":timeline.current.get("id",""),"gate":media_gate.duplicate(true),"missing":missing,"environment_missing":missing_environment,
-            "pending":media_warmup.pending.size(),"jobs":media_warmup.decode_jobs.size(),"decoded":media_warmup.decoded,
-            "required_count":media_plan.required.size(),"optical_required":component_renderer.native_spells.required_images.size(),"worker_decode_ms":media_warmup.decode_ms,"publication":media_warmup.publication.duplicate(true)}
+            "pending":media_warmup.pending.size(),"jobs":media_warmup.decode_jobs.size(),"decoded":MediaWarmup.physical(media_warmup).decoded,
+            "required_count":media_plan.required.size(),"optical_required":component_renderer.native_spells.required_images.size(),"worker_decode_ms":MediaWarmup.physical(media_warmup).decode_ms,"publication":MediaWarmup.physical(media_warmup).publication.duplicate(true)}
         if snapshot!=last_gate_snapshot:
             last_gate_snapshot=snapshot
             media_gate_trace.append({"time_us":Time.get_ticks_usec(),"frame":Engine.get_process_frames(),"snapshot":snapshot})
@@ -53,7 +53,7 @@ class CapturingPlayer extends "res://play.gd":
         super._prepare_media(first)
         if not capture_media_demand or runs==media_warmup.demand_runs:return
         var missing:Array=[]
-        if media_warmup.unknown_required>0:
+        if MediaWarmup.physical(media_warmup).unknown_required>0:
             for path in media_warmup.wanted:
                 if MediaWarmup._estimate(media_warmup,path)<0:missing.append(path)
         media_demand_trace.append({"frame":Engine.get_process_frames(),"display_ms":timeline.display_ms,
@@ -94,7 +94,7 @@ func collect_pipeline(force: bool = false) -> void:
     pipeline_dropped=maxi(pipeline_dropped,stream.dropped)
 
 func healthy() -> bool:
-    return scene.session.issue.is_empty() and scene.presentation_errors.is_empty() and Time.get_ticks_msec()-started<1200000
+    return scene.session.issue.is_empty() and scene.presentation_errors.is_empty() and scene.media_issue.is_empty() and Time.get_ticks_msec()-started<1200000
 
 func rows() -> Array:
     var result = []

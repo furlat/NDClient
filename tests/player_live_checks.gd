@@ -27,7 +27,7 @@ func ready() -> bool:
 
 func until(predicate: Callable, label: String, timeout: int = 60000) -> bool:
     var deadline = Time.get_ticks_msec()+timeout
-    while not predicate.call() and healthy() and Time.get_ticks_msec() < deadline: await scene.presentation_updated
+    while not predicate.call() and healthy() and Time.get_ticks_msec() < deadline: await process_frame
     var success: bool = predicate.call() and healthy()
     check(success, label + ("; notice="+scene.notice_text+" issue="+str(scene.session.issue)+" presentation="+str(scene.presentation_errors) if not success else ""))
     return success

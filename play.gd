@@ -29,8 +29,6 @@ var character_light_profile = RenderSettings.DEFAULT_PROFILE
 var requested_character_light_profile = ""
 var character_profile_pending_paths: Dictionary = {}
 var media_normal_sets: Dictionary = {}
-var media_normal_required_source: Dictionary = {}
-var media_normal_upcoming_source: Dictionary = {}
 var character_profile_notice = ""
 var fire_light_flicker = RenderSettings.DEFAULT_FIRE_LIGHT_FLICKER
 var light_strength = RenderSettings.DEFAULT_LIGHT_STRENGTH
@@ -57,6 +55,7 @@ var world_prepare_worker_ms = 0.0
 var world_generation = 0
 var native_light_changes: Dictionary = {}
 var native_light_change_serial = 0
+var publication_failed:bool=false
 var world_visual_rows: Array = []
 var world_row_cache: Dictionary = {}
 var world_changes: Dictionary = {}
@@ -75,6 +74,7 @@ var scenery_generation := -1
 var requested_quarter = -1
 var pending_view: Variant
 var rotation_publication_frame = -1
+var pending_global_atlas: Dictionary = {}
 signal presentation_updated
 var session: RefCounted
 var timeline = Timeline.new()
@@ -146,6 +146,7 @@ var hover_cursor = Input.CURSOR_ARROW
 var hover_key: Array = []
 var hover_due = 0
 var normals_visible = false
+var requested_normals_visible = false
 var source_lighting = Lighting.new()
 var light_revision = -1
 var light_source_epoch = -1
@@ -216,6 +217,7 @@ var playback_speed = 1.0
 var playback_end_ms = INF
 
 func install_playback(value: RefCounted) -> void:
+    publication_failed=false
     value.initialization_revision = timeline.initialization_revision + 1
     _release_replay_media()
     timeline = value
@@ -262,18 +264,31 @@ func can_publish_replay_advance(plan:Dictionary)->bool:
 
 func publish_replay_advance(plan:Dictionary)->bool:
     if not can_publish_replay_advance(plan):return false
-    if plan.boundary:pending_world.admitted=true
+    if plan.boundary:
+        if not pending_world.can_publish_membership(int(pending_world.boundary.world_revision)):return false
+        pending_world.admitted=true
+        if not pending_world.atlas_prefix.is_empty():pending_world.atlas_prefix.admitted=true
     return timeline.replay_publish(plan)
 
 func playback_prepared() -> bool:
     var group: Dictionary = timeline.current if not timeline.current.is_empty() else (timeline.queue[0] if not timeline.queue.is_empty() else {})
     return not timeline.state.is_empty() and world_prepare_epoch == timeline.initialization_revision and world_revision == timeline.world_revision and _media_ready(group) and not timeline.waiting_for_world and component_renderer.ready
 
+func attach_media_sources() -> void:
+    var owner:Dictionary=MediaWarmup.bind_host(media_warmup,self)
+    textures=owner.textures;source_images=owner.source_images
+    texture_last_use=owner.texture_last_use
+    fixture_frame_energy=owner.fixture_frame_energy;fixture_frame_centroids=owner.fixture_frame_centroids
+    if not owner.has("preparation_admission"):owner.preparation_admission=preparation_admission
+    preparation_admission=owner.preparation_admission
+
 func _ready() -> void:
+    attach_media_sources()
+    var owner:Dictionary=MediaWarmup.physical(media_warmup)
     var device=RenderingServer.get_rendering_device()
     if device!=null:maximum_texture_size_2d=device.limit_get(RenderingDevice.LIMIT_MAX_TEXTURE_SIZE_2D)
-    media_warmup.maximum_texture_size=maximum_texture_size_2d
-    media_warmup.worker_upload=device!=null and DisplayServer.get_name()!="headless"
+    owner.maximum_texture_size=maximum_texture_size_2d
+    owner.worker_upload=device!=null and DisplayServer.get_name()!="headless"
     # Studio installs an already admitted Timeline. It has no live connection,
     # journal or protocol admission work to initialize for each hidden host.
     if not external_playback and session == null: session = Session.new()
@@ -285,6 +300,7 @@ func _ready() -> void:
     light_strength = settings.light_strength
     source_lighting.light_strength = light_strength
     if settings.error != OK: presentation_errors.append("Cannot read local rendering settings: "+error_string(settings.error))
+    native_light_atlas.require_prepared_publication=true
     native_light_atlas.attach(self)
     light_cap_enabled = settings.light_cap_enabled
     native_light_atlas.set_light_cap(1.0 if light_cap_enabled else 0.0)
@@ -334,6 +350,8 @@ func _ready() -> void:
         canvas.add_child(hud)
     grid_visible = true
     if external_playback: return
+    session.deliver_compiled_operations=true
+    component_renderer.source_group_ready=_source_group_ready
     var args = OS.get_cmdline_user_args()
     for i in range(args.size()-1):
         if args[i] == "--config": game_config = JSON.parse_string(FileAccess.get_file_as_string(args[i+1]))
@@ -412,7 +430,8 @@ func set_light_strength(value: float, persist: bool = true) -> void:
 
 func set_light_cap_enabled(enabled: bool) -> void:
     light_cap_enabled = enabled
-    native_light_atlas.set_light_cap(1.0 if enabled else 0.0)
+    if entries.is_empty() or world_prepare_epoch!=timeline.initialization_revision:
+        native_light_atlas.set_light_cap(1.0 if enabled else 0.0)
     var error = RenderSettings.write_light_cap(enabled)
     if error != OK: notice_text = "Setting applied; cannot save it: "+error_string(error)
 
@@ -449,6 +468,8 @@ func _native_startup_ready(at_ms:float)->bool:
 
 func _prepare_optional_work()->void:
     var budget:Dictionary=_preparation_budget()
+    var required_world:bool=timeline.waiting_for_world or _world_preparation_due(0.0)
+    if required_world:_step_world_preparation()
     # Rotate only the first existing owner. The queues and readiness contracts
     # stay where they were; empty owners leave their allowance to the next one.
     var first:int=preparation_turn;preparation_turn=(preparation_turn+1)%4
@@ -459,6 +480,9 @@ func _prepare_optional_work()->void:
         match owner:
             0:_step_world_preparation()
             1:
+                # A due world owns this allowance ahead of future effect
+                # constructors, including while its passive worker is running.
+                if required_world and pending_world!=null and not pending_world.prepared:continue
                 var started:int=Time.get_ticks_usec();var before:int=budget.used_usec
                 if native_startup_plan!=null:_step_native_startup(true)
                 component_renderer.prepare_optional(self,catalog_cache,budget)
@@ -475,9 +499,10 @@ func _prepare_optional_work()->void:
     var stats:Dictionary=MediaWarmup._residency_stats(media_warmup)
     var bytes:int=stats[false].estimated_bytes+stats[true].estimated_bytes
     var pinned:int=stats[false].pinned_bytes+stats[true].pinned_bytes
-    if bytes>maxi(pinned,media_warmup.budget_bytes):_prune_character_media(budget,true)
+    if bytes>maxi(pinned,MediaWarmup.physical(media_warmup).budget_bytes):_prune_character_media(budget,true)
 
 func _process(delta: float) -> void:
+    if publication_failed:return
     var budget:Dictionary=_preparation_budget()
     var advance_ms=delta*1000*playback_speed
     if external_playback:advance_ms=minf(advance_ms,maxf(0,playback_end_ms-timeline.display_ms))
@@ -497,7 +522,16 @@ func _process(delta: float) -> void:
     subphase = Time.get_ticks_usec()
     if session != null:
         for message in session.take_prepared():
-            timeline.accept(message)
+            if message.get("stage","")!="media":
+                timeline.accept(message)
+                if message.get("stage","")=="compiled":
+                    _reset_media_epoch()
+                    catalog_cache.merge(message.source_files,false)
+                    # This is precisely the required worker's bounded window.
+                    # Later groups still request their ordinary source plan.
+                    for group in message.groups.slice(0,mini(2,message.groups.size())):
+                        media_received_owners[group.id]=group
+                    media_plan_key=[]
             _adopt_received_media(message)
     _prepare_media()
     _prepare_initial_world()
@@ -506,31 +540,43 @@ func _process(delta: float) -> void:
     # effects. Only an initial/due world gets priority before playback; taking
     # every frame for a later impact starves the earlier windup constructor.
     if _world_preparation_due(advance_ms) and (not timeline.waiting_for_media or media_gate.get("native",true)):_step_world_preparation()
+    _prepare_render_options()
+    # Resizing the outer window can require a larger native receiving target.
+    # Keep the displayed source/light sample while preparing that target, then
+    # consume its admitted prefix in the ordinary render body below.
+    if world_revision>=0 and _atlas_needs_viewport_growth() and rotation_pending():_prepare_rotation()
+    var global_draw_hold:bool=world_revision>=0 and _atlas_needs_viewport_growth() and not native_light_atlas.prepared_delta.get("admitted",false)
     FrameProfile.end_phase(profile,"preparation_step",subphase)
     subphase = Time.get_ticks_usec()
     if not external_playback: _poll_actions()
     FrameProfile.end_phase(profile,"action_responses",subphase)
     subphase = Time.get_ticks_usec()
-    if not external_clock: timeline.advance(advance_ms)
+    if not external_clock and not global_draw_hold: timeline.advance(advance_ms)
     FrameProfile.end_phase(profile,"timeline_advance",subphase)
     if session != null: session.set_displayed_sequence(timeline.sequence)
     FrameProfile.end_phase(profile,"session_timeline",phase)
-    if not timeline.state.is_empty() and world_prepare_epoch==timeline.initialization_revision and (world_revision>=0 or (pending_world!=null and pending_world.epoch==timeline.initialization_revision and pending_world.initial and pending_world.prepared)):
+    var world_available:bool=not timeline.state.is_empty() and world_prepare_epoch==timeline.initialization_revision and (world_revision>=0 or (pending_world!=null and pending_world.epoch==timeline.initialization_revision and pending_world.initial and pending_world.prepared))
+    var can_publish_world:bool=world_available and _environment_sources_ready() and _world_can_publish()
+    # A rejected initial candidate has no displayed actor owner yet. Keep
+    # preparation and UI running, but do not sample its private world.
+    if not global_draw_hold and world_available and (world_revision>=0 or can_publish_world):
+        var supports = timeline.staged_tiles().keys()
+        if can_publish_world and (timeline.world_revision != world_revision or sampled_support_ids != supports or (pending_world!=null and pending_world.admitted)):
+            phase = Time.get_ticks_usec()
+            _sync_world()
+            FrameProfile.end_phase(profile,"world_sync",phase)
+            if publication_failed:return
+            world_revision = timeline.world_revision
+            sampled_support_ids = supports
         if light_revision != timeline.revision:
             phase = Time.get_ticks_usec()
             _sync_source_lighting()
             FrameProfile.end_phase(profile,"source_lighting_resolve",phase)
-        var supports = timeline.staged_tiles().keys()
-        if _environment_sources_ready() and _world_can_publish() and (timeline.world_revision != world_revision or sampled_support_ids != supports):
-            phase = Time.get_ticks_usec()
-            _sync_world()
-            FrameProfile.end_phase(profile,"world_sync",phase)
-            world_revision = timeline.world_revision
-            sampled_support_ids = supports
         displayed_samples = timeline.actor_samples()
         displayed_components=timeline.component_samples(catalog_cache).filter(func(component):return not presentation_mutes.has(component.id) and (presentation_solo.is_empty() or presentation_solo.has(component.id)))
         phase = Time.get_ticks_usec()
         _sync_actors()
+        if publication_failed:return
         FrameProfile.end_phase(profile,"actor_sync",phase)
         phase = Time.get_ticks_usec()
         component_renderer.pending_evidence.clear()
@@ -567,6 +613,9 @@ func _process(delta: float) -> void:
         phase = Time.get_ticks_usec()
         _sync_native_lighting()
         FrameProfile.end_phase(profile,"native_2d_lighting",phase)
+        if native_light_atlas.output_admission_failed:
+            _publication_failure("; ".join(native_light_atlas.errors))
+            return
         # Wall member selection precedes the final painter order and coverage mask.
         phase = Time.get_ticks_usec()
         subphase = Time.get_ticks_usec()
@@ -589,6 +638,8 @@ func _process(delta: float) -> void:
         if not external_playback and not announced_ready and command_ready():
             announced_ready = true
             print("PLAYER_READY: initialized, acknowledged, and current choices available")
+    if global_draw_hold and not external_playback:
+        _discover();_poll_storage();_update_hover()
     _prepare_optional_work()
     if not media_issue.is_empty():
         var preparing: Dictionary = timeline.current if not timeline.current.is_empty() else (timeline.queue[0] if not timeline.queue.is_empty() else {})
@@ -610,7 +661,19 @@ func _process(delta: float) -> void:
     for sample in displayed_samples.values():
         if sample.get("from_position")!=null and sample.get("to_position")!=null and sample.get("position")!=sample.to_position:
             active_motion=true; break
-    FrameProfile.frame(profile,get_viewport(),{"media_gate":media_gate,"active_motion":active_motion,"motion_held":timeline.waiting_for_media or timeline.waiting_for_world or timeline.paused,"light_cap_enabled":light_cap_enabled,"scene":"live_player","zoom":camera.size,"quarter":quarter,
+    var frame_context = {"scene":"live_player","active_motion":active_motion,
+        "motion_held":timeline.waiting_for_media or timeline.waiting_for_world or timeline.paused,
+        "displayed_sequence":timeline.sequence,"profile_stage":profile.label}
+    if profile.recording:
+        var diagnostics_started = Time.get_ticks_usec()
+        frame_context = _detailed_frame_context(active_motion)
+        FrameProfile.end_phase(profile,"diagnostics",diagnostics_started)
+    FrameProfile.frame(profile,get_viewport(),frame_context)
+    if hud != null: hud.queue_redraw()
+    presentation_updated.emit()
+
+func _detailed_frame_context(active_motion: bool) -> Dictionary:
+    return {"media_gate":media_gate,"active_motion":active_motion,"motion_held":timeline.waiting_for_media or timeline.waiting_for_world or timeline.paused,"light_cap_enabled":light_cap_enabled,"scene":"live_player","zoom":camera.size,"quarter":quarter,
         "world_preparation":({"atlas_jobs":pending_world.atlas_jobs.size(),"upserts":pending_world.membership.get("upserts",[]).size(),"removals":pending_world.membership.get("removed",{}).size(),
             "capture_stage":pending_world.atlas_prefix.get("stage",""),"capture_cursor":pending_world.atlas_prefix.get("cursor",0),"capture_total":pending_world.atlas_prefix.get("capture_ids",[]).size()} if pending_world!=null else {}),
         "native_startup":{"ready":native_startup.ready,"completed":native_startup.completed,"total":native_startup.total,"elapsed_ms":native_startup.elapsed_ms},
@@ -624,9 +687,7 @@ func _process(delta: float) -> void:
         "rotation_pending":rotation_pending(),"requested_quarter":requested_quarter,"cached_quarters":static_views.size(),"retiring_views":retiring_views.size(),"retiring_nodes":retiring_node_count,"world_generation":world_generation,"world_preparing":pending_world!=null,"world_prepare_phase":pending_world.phase if pending_world!=null else "idle","world_prepared_count":world_prepared_count,"actor_prepared_layers":actor_prepared_layers,"world_prepare_worker_ms":world_prepare_worker_ms,"world_waiting":timeline.waiting_for_world,"preparation_admission":preparation_admission.duplicate(true),"session_execution":session.diagnostics() if session != null else {},"displayed_sequence":timeline.sequence,"consumed_sequence":session.latest_sequence if session != null else -1,"queued_groups":timeline.queue.size(),
         "profile_stage":profile.label,"wall_mode":wall_mode,"wall_support_candidates":wall_support_candidates,"wall_max_member_candidates":wall_max_member_candidates,
         "wall_mask_gpu_ms":RenderingServer.viewport_get_measured_render_time_gpu(wall_mask_viewport.get_viewport_rid()) if wall_mask_viewport!=null and wall_mode=="translucent" else 0.0,
-        "wall_mask_cpu_ms":RenderingServer.viewport_get_measured_render_time_cpu(wall_mask_viewport.get_viewport_rid()) if wall_mask_viewport!=null and wall_mode=="translucent" else 0.0,"textures":textures.size(),"media_pending":media_warmup.pending.size(),"encounter_preload":MediaWarmup.preload_progress(media_warmup),"preload_ready":media_warmup.boot_complete,"character_media":MediaWarmup.diagnostics(media_warmup),"environment_media":MediaWarmup.diagnostics(media_warmup,true),"media_metadata_ms":media_metadata_ms,"media_metadata_pending":media_warmup.plan_task>=0,"media_waiting":timeline.waiting_for_media,"actors":actor_rows.size(),"placements":placements.size(),"draws":static_entries.size()+actor_entries.size()})
-    if hud != null: hud.queue_redraw()
-    presentation_updated.emit()
+        "wall_mask_cpu_ms":RenderingServer.viewport_get_measured_render_time_cpu(wall_mask_viewport.get_viewport_rid()) if wall_mask_viewport!=null and wall_mode=="translucent" else 0.0,"textures":textures.size(),"media_pending":media_warmup.pending.size(),"encounter_preload":MediaWarmup.preload_progress(media_warmup),"preload_ready":media_warmup.boot_complete,"character_media":MediaWarmup.diagnostics(media_warmup),"environment_media":MediaWarmup.diagnostics(media_warmup,true),"media_metadata_ms":media_metadata_ms,"media_metadata_pending":media_warmup.plan_task>=0,"media_waiting":timeline.waiting_for_media,"actors":actor_rows.size(),"placements":placements.size(),"draws":static_entries.size()+actor_entries.size()}
 
 func _prepare_initial_world() -> void:
     if timeline.state.is_empty(): return
@@ -652,9 +713,10 @@ func _prepare_future_world() -> void:
         if not pending_world.worker_finished(): return
         _discard_world_preparation()
     if candidate.is_empty(): return
-    # The accepted group plan publishes immutable authoring before projection.
-    # Texture decode/upload can continue while its passive world is derived.
-    if not media_group_plans.has(candidate.source_group_id): return
+    # Compiler delivery admits immutable authoring for passive projection.
+    # Exact media still gates native construction and visible publication.
+    if not media_group_plans.has(candidate.source_group_id) and not is_same(
+            media_received_owners.get(candidate.source_group_id),_media_group_owner(candidate.source_group_id)):return
     pending_world = WorldPreparation.new(); add_child(pending_world)
     pending_world.configure(self,candidate)
 
@@ -673,7 +735,7 @@ func _world_preparation_due(advance_ms:float)->bool:
 
 func _step_world_preparation() -> void:
     if pending_world==null: return
-    if pending_world.epoch!=timeline.initialization_revision or pending_world.quarter!=quarter:
+    if pending_world.epoch!=timeline.initialization_revision or pending_world.quarter!=quarter or pending_world.stale         or (pending_world.initial and pending_world.prepared and not pending_world.can_publish_membership(timeline.world_revision)):
         if pending_world.worker_finished(): _discard_world_preparation()
         return
     # Only passive projection runs ahead of texture residency. Godot resource
@@ -687,21 +749,38 @@ func _step_world_preparation() -> void:
 
 func _world_ready(candidate: Dictionary) -> bool:
     if world_revision<0: return false
+    # Required media preparation may have completed our worker since the early
+    # poll. Reuse the remaining shared allowance before holding this boundary.
+    if pending_world!=null and not pending_world.admitted and pending_world.boundary.preparation_key==candidate.preparation_key:
+        _step_world_preparation()
     if pending_world!=null:
         if pending_world.admitted: return false # Publish before accepting another boundary.
         if pending_world.epoch!=timeline.initialization_revision or pending_world.quarter!=quarter or pending_world.boundary.preparation_key!=candidate.preparation_key:
             if not pending_world.worker_finished(): return false
             _discard_world_preparation()
         elif pending_world.prepared:
-            if not external_clock: pending_world.admitted = true
-            return true
+            # Validate the borrowed base before Timeline changes state, clocks,
+            # trace or audio. A stale candidate owns nothing displayed.
+            if pending_world.can_publish_membership(int(candidate.world_revision)):
+                if not external_clock:
+                    pending_world.admitted = true
+                    if not pending_world.atlas_prefix.is_empty():pending_world.atlas_prefix.admitted=true
+                return true
+            _discard_world_preparation()
         else: return false
     pending_world = WorldPreparation.new(); add_child(pending_world)
     pending_world.configure(self,candidate)
     return false
 
 func _world_can_publish() -> bool:
-    return pending_world==null or (pending_world.epoch==timeline.initialization_revision and pending_world.prepared and (pending_world.admitted or pending_world.initial))
+    if pending_world==null:return true
+    if pending_world.epoch!=timeline.initialization_revision or not pending_world.prepared:return false
+    if pending_world.initial:
+        if not pending_world.can_publish_membership(timeline.world_revision):
+            pending_world.stale=true
+            return false
+        if not pending_world.atlas_prefix.is_empty():pending_world.atlas_prefix.admitted=true
+    return pending_world.admitted or pending_world.initial
 
 func _discard_world_preparation() -> void:
     if pending_world==null: return
@@ -738,16 +817,32 @@ func _publish_native_light_changes(upserts: Array, removed: Array, full: bool = 
 
 func _sync_world() -> void:
     prepared_scenery = {}; prepared_static_order = {}
-    var prepared: Dictionary = pending_world.result if pending_world!=null and pending_world.epoch==timeline.initialization_revision and pending_world.prepared and (pending_world.admitted or pending_world.initial) and pending_world.can_publish_membership() else {}
-    # Explicit renderer fixtures may replace a state while preparation is pending.
+    var prepared: Dictionary = pending_world.result if pending_world!=null and pending_world.epoch==timeline.initialization_revision and pending_world.prepared and (pending_world.admitted or pending_world.initial) else {}
+    # Runtime cuts must already own their resources. Direct isolated renderer
+    # fixtures may still use synchronous projection without installing the gate.
+    if world_prepare_epoch==timeline.initialization_revision and prepared.is_empty():
+        var detail:Dictionary={"display_revision":timeline.world_revision,"base_revision":world_revision,"pending":pending_world!=null}
+        if pending_world!=null:
+            detail.merge({"phase":pending_world.phase,"initial":pending_world.initial,"admitted":pending_world.admitted,
+                "boundary_revision":pending_world.boundary.get("world_revision",-1),"lights_valid":source_lighting.preparation_valid(pending_world.light_preparation),
+                "atlas_valid":pending_world.atlas_prefix.is_empty() or WorldPreparation.AtlasDelta.candidate_base_matches(native_light_atlas,pending_world.atlas_prefix,self)})
+        _publication_failure("Displayed world boundary has no valid prepared owner: "+JSON.stringify(detail))
+        return
     if prepared.is_empty() and pending_world!=null: _discard_world_preparation()
     var phase = Time.get_ticks_usec()
     world_changes = timeline.take_world_changes(world_revision)
     world_changes.base_revision = world_revision
     if not prepared.is_empty() and world_changes.get("full",false) and not pending_world.initial:
-        # Manual/full replacement has no sparse ownership proof.
-        prepared = {}; _discard_world_preparation()
+        _publication_failure("Unexpected full replacement after prepared world admission.")
+        return
     world_revision = timeline.world_revision
+    if not prepared.is_empty():
+        source_lighting.publish_prepared(pending_world.light_preparation)
+        var senses:Variant=timeline.state.get("senses")
+        var inputs:Variant=senses.get("light_sources") if senses!=null else null
+        light_source_inputs=inputs.duplicate(true) if inputs!=null else null
+        light_source_epoch=timeline.initialization_revision
+        light_revision=timeline.revision
     var supports: Dictionary = timeline.staged_tiles()
     for key in supports:
         if not sampled_supports.has(key) or sampled_supports[key]!=supports[key]: world_changes.tiles[key] = true
@@ -756,9 +851,7 @@ func _sync_world() -> void:
     sampled_supports = supports
     var derived: Dictionary
     if not prepared.is_empty():
-        if session != null: session.retire_group(world_row_cache)
-        world_row_cache = prepared.retained
-        derived = prepared.derived
+        derived=WorldRows.apply_changes(world_row_cache,prepared.row_patch)
     else: derived = WorldRows.update_rows(timeline.presentation_state(),catalog_cache,world_row_cache,world_changes)
     _queue_wall_geometry_changes(world_changes)
     FrameProfile.end_phase(profile,"world_rows",phase)
@@ -780,6 +873,10 @@ func _sync_world() -> void:
             "revision":timeline.world_revision,"generation":world_generation,
             "quarter":quarter,"epoch":timeline.initialization_revision}
     if not changed and not rotated:
+        if not prepared.is_empty():
+            pending_world.publish_membership()
+            pending_world.publish_atlas_receivers()
+            _publish_native_light_changes(pending_world.membership.upserts,pending_world.membership.removed.keys())
         _finish_world_preparation()
         return
     # Inactive views belong to one canonical world, not a state revision: HP,
@@ -812,7 +909,7 @@ func _sync_world() -> void:
     var light_upserts: Array = []
     var entries_changed = rotated
     var walls_changed = rotated
-    if not prepared.is_empty() and not rotated:
+    if not prepared.is_empty() and (not rotated or pending_world.initial):
         var membership: Dictionary = pending_world.membership
         removed = membership.removed; light_upserts = membership.upserts
         entries_changed = membership.entries_changed; walls_changed = membership.walls_changed
@@ -832,8 +929,7 @@ func _sync_world() -> void:
         FrameProfile.end_phase(profile,"world_ground",phase)
         if not removed.is_empty():
             entries = entries.filter(func(entry):return not removed.has(entry.node.get_instance_id()))
-        static_entries = membership.entries; fixture_entries = membership.fixtures
-        world_groups = membership.groups; ground_groups = membership.ground
+        pending_world.publish_membership()
     else:
         phase = Time.get_ticks_usec()
         for id in world_groups:
@@ -916,7 +1012,7 @@ func _sync_world() -> void:
         ground_groups = fresh_ground
     # A rotated view rebuilds/adopts a different node membership. Its order
     # cannot reuse the pre-rotation preparation, even with the same row count.
-    if not prepared.is_empty() and not rotated:
+    if not prepared.is_empty() and (not rotated or pending_world.initial):
         pending_world.publish_order()
         pending_world.publish_atlas_receivers()
     # New floor instances start remembered; current grants are applied through
@@ -932,6 +1028,17 @@ func _sync_world() -> void:
     wall_mask_dirty = wall_mask_dirty or walls_changed
     _publish_native_light_changes(light_upserts,removed.keys(),rotated or world_changes.get("full",false))
     _finish_world_preparation()
+
+func _publication_failure(message:String)->void:
+    # This signals an invariant fault after admission; it never fabricates a
+    # rollback or rebuilds a second state while the accepted cut is advancing.
+    publication_failed=true
+    timeline.paused=true
+    media_issue=message
+    notice_text=message
+    if message not in presentation_errors:presentation_errors.append(message)
+    push_error(message)
+    presentation_updated.emit()
 
 func _clear_static_view_cache() -> void:
     _cancel_rotation()
@@ -1023,7 +1130,7 @@ func _deactivate_static_view(retain: bool) -> void:
     static_order_count = -1; static_order_dirty = true
     wall_mask_viewport = null; wall_mask_nodes = []; wall_mask_sources = []; wall_mask_view = []
 
-func _activate_static_view(view_quarter: int) -> void:
+func _activate_static_view(view_quarter: int, publish_lighting: bool = true) -> void:
     var view: Dictionary = static_views[view_quarter]
     static_views.erase(view_quarter)
     sprite_parent = view.root; sprite_parent.visible = true
@@ -1049,7 +1156,7 @@ func _activate_static_view(view_quarter: int) -> void:
     scenery_quarter = view_quarter; scenery_world_revision = world_revision; scenery_revision = timeline.world_revision
     water_entries = static_entries.filter(func(entry):return entry.material.shader==WATER_SHADER)
     water_display_seconds = -1.0
-    _publish_native_light_changes([],[],true)
+    if publish_lighting: _publish_native_light_changes([],[],true)
 
 func _sample_fixtures() -> void:
     fixture_energy.clear()
@@ -1073,8 +1180,7 @@ func _sample_fixtures() -> void:
         if entry.get("flame_frame",-1) != clip.index:
             entry.flame_frame = clip.index
             entry.record = assets.resources[clip.authored.frames[clip.index]]
-            entry.material.set_shader_parameter("frame_index",clip.index)
-            entry.source_version = entry.get("source_version",0)+1
+            SourceMaterial.set_parameter(entry,"frame_index",clip.index)
 
 func _scenery_remove(group_entries: Array) -> void:
     for entry in group_entries:
@@ -1152,7 +1258,7 @@ func _sync_scenery(force: bool = false, refresh_sight: bool = false) -> void:
                 var entry: Dictionary = consumer.entry
                 native_light_atlas.style_changed(entry)
                 if entry.get("scenery_value",-1.0) != value:
-                    entry.material.set_shader_parameter("current_visibility",value)
+                    SourceMaterial.set_parameter(entry,"current_visibility",value)
                     entry.scenery_value = value
         for batch in batches.values(): _ground_flush_visibility(batch.entry,batch.indices)
         scenery_revision = timeline.world_revision
@@ -1162,14 +1268,14 @@ func _sync_scenery(force: bool = false, refresh_sight: bool = false) -> void:
     var seconds: float = timeline.display_ms / 1000.0
     if water_display_seconds != seconds:
         for entry in water_entries:
-            entry.material.set_shader_parameter("displayed_time_seconds",seconds)
+            SourceMaterial.set_parameter(entry,"displayed_time_seconds",seconds)
             native_light_atlas.style_changed(entry)
         water_display_seconds = seconds
 
 func _light_entry(entry: Dictionary) -> void:
-    source_lighting.apply(entry.material)
+    SourceMaterial.set_parameter(entry,"authored_base_light",0.0)
     if entry.placement.kind in ["wall","door"] and entry.role != "shadow":
-        entry.material.set_shader_parameter("two_sided_receiver",true)
+        SourceMaterial.set_parameter(entry,"two_sided_receiver",true)
 
 func _sync_actors() -> void:
     _sync_actor_membership()
@@ -1271,25 +1377,56 @@ func _sync_actor_membership() -> void:
                 old.row.merge(row,true)
                 old.valid = true
                 continue
-            if _reconcile_actor_layers(id,row):continue
-            _retire_actor(id)
+            if world_prepare_epoch!=timeline.initialization_revision and _reconcile_actor_layers(id,row):continue
+            # Exact replacement comes from the admitted structural boundary.
+            # Keep old ownership until its complete replacement is available.
         draw_order_dirty = true
         var rig: Dictionary = rigs[row.rig]
         var prepared:Dictionary=prepared_actor_owner.take_actor(id,row,rig) if prepared_actor_owner!=null else {}
+        if prepared.is_empty() and world_prepare_epoch==timeline.initialization_revision:
+            var detail:Dictionary={"actor":id,"prepared_owner":prepared_actor_owner!=null}
+            if prepared_actor_owner!=null:
+                var candidate:Dictionary=prepared_actor_owner.native_actors.get(id,{})
+                detail.merge({"candidate":not candidate.is_empty(),"epoch":prepared_actor_owner.epoch,
+                    "display_epoch":timeline.initialization_revision,"quarter":prepared_actor_owner.quarter,
+                    "catalog_owner_matches":is_same(prepared_actor_owner.actor_catalog_owner,catalog_cache)})
+                if not candidate.is_empty():detail.merge({"rig_matches":is_same(candidate.rig,rig),
+                    "structure_matches":ActorConstruction.matches(row,candidate.row),
+                    "layers":candidate.layers.size(),"entries":candidate.entries.size(),"graph_ready":candidate.playback!=null})
+            _publication_failure("Actor structure was not prepared before display: "+JSON.stringify(detail))
+            return
+        var retain_actor:bool=not prepared.is_empty() and prepared.get("reuse_actor",false)
+        if visual_actors.has(id) and not retain_actor:_retire_actor(id)
         var created:Array=[]
         if not prepared.is_empty():
             actor_stage=Time.get_ticks_usec()
-            prepared.row.merge(row,true);row=prepared.row
-            playbacks[id]=prepared.playback;playbacks[id].reparent(self,false)
+            if retain_actor:
+                var old:Dictionary=visual_actors[id]
+                old.row.merge(row,true);row=old.row;prepared.row=row
+                for entry in old.entries:
+                    if entry in prepared.entries:continue
+                    entry.node.hide();entry.node.queue_free()
+                    entries.erase(entry);actor_entries.erase(entry)
+            else:prepared.row.merge(row,true);row=prepared.row
+            playbacks[id]=prepared.playback
+            if playbacks[id].get_parent()!=self:playbacks[id].reparent(self,false)
             created=prepared.entries
-            for entry in created:
-                entry.node.visible=false;entry.node.reparent(self,false)
-                _light_entry(entry)
-                var materials:Dictionary=prepared.get("materials",{}).get(entry.node.get_instance_id(),{})
-                if not materials.is_empty():native_light_atlas.adopt_source_binding(materials)
-            entries.append_array(created);actor_entries.append_array(created)
+            for index in created.size():
+                var entry:Dictionary=created[index]
+                entry.layer=index;entry.id=id+":"+str(index)+":"+entry.role;entry.placement=row
+                if entry.node.get_parent()==self:continue
+                entry.node.visible=false;entry.node.reparent(self,false);_light_entry(entry)
+                entries.append(entry);actor_entries.append(entry)
+            var retired_shadows:Array=generated_shadows.adopt_actor(prepared)
+            if not retired_shadows.is_empty():
+                var retired_nodes:Array=[]
+                while not retired_shadows.is_empty():
+                    var retired_node:Node=retired_shadows.pop_back()
+                    retired_nodes.append(retired_node);retired_shadows.append_array(retired_node.get_children())
+                retiring_views.append({"nodes":retired_nodes,"entries":{},"atlas_cleanup":{}})
+                retiring_node_count+=retired_nodes.size()
             FrameProfile.end_phase(profile,"actor_prepared_adopt",actor_stage)
-            actor_prepared_layers+=created.size()
+            actor_prepared_layers+=prepared.new_entries.size()
         else:
             actor_stage=Time.get_ticks_usec()
             playbacks[id] = ActorConstruction.graph(self,rig,animation_templates)
@@ -1300,7 +1437,7 @@ func _sync_actor_membership() -> void:
             actor_stage=Time.get_ticks_usec()
             for i in range(layers.size()):created.append(ActorConstruction.layer(self,row,rig,layers[i],i))
             FrameProfile.end_phase(profile,"actor_layers_create",actor_stage)
-        actor_rows.append(row)
+        if not retain_actor:actor_rows.append(row)
         visual_actors[id] = {"row":row,"entries":created,"valid":true}
     actor_revision = timeline.revision
 
@@ -1327,7 +1464,6 @@ func _reset_media_epoch() -> void:
     selection_media_demand_paths={}
     selection_media_preview={}
     media_normal_sets={}
-    media_normal_required_source={};media_normal_upcoming_source={}
     media_group_plans.clear()
     _release_replay_media()
     media_received_owners.clear()
@@ -1380,10 +1516,32 @@ func _adopt_received_media(message: Dictionary) -> void:
     # Pins/readiness are still selected by _prepare_media's displayed window.
     media_plan_key = []
 
+func _selection_media_budget() -> int:
+    var started=Time.get_ticks_usec()
+    var reserved=0
+    var exact: Dictionary=media_plan.get("required",{}).duplicate()
+    exact.merge(media_environment_required)
+    for path in media_warmup.wanted:
+        if not selection_media_demand_paths.has(path) or exact.has(path):
+            reserved+=maxi(0,MediaWarmup._estimate(media_warmup,path))
+    FrameProfile.end_phase(profile,"selection_media_budget",started)
+    return maxi(0,int(MediaWarmup.physical(media_warmup).budget_bytes)-reserved)
+
+func _body_action_choices() -> Dictionary:
+    if external_playback or session==null:return {}
+    # Choices may already describe the accepted post-action boundary while its
+    # preceding animation is still displayed. Only source hints consume them.
+    if not pending_choices.is_empty() and pending_choices.force_attack==force_attack \
+            and session.matches_choice_boundary(pending_choices.boundary):return pending_choices.value.choices
+    if action_revision==session.status.get("boundary",{}).get("state_revision") \
+            and session.matches_choice_boundary(choices_boundary):return available_actions
+    return {}
+
 func _refresh_selection_media() -> void:
     var started=Time.get_ticks_usec()
     var revision: int=selection_media.revision
     var boundary: Dictionary=session.status.get("boundary",{}) if session!=null else {}
+    var body_choices: Dictionary=_body_action_choices()
     if selection_media_hold_cursor!=-1:
         if selection_media.key.is_empty() or selection_media.key[0]!=timeline.initialization_revision:
             SelectionMedia.cancel(selection_media);selection_media_hold_cursor=-1
@@ -1405,14 +1563,7 @@ func _refresh_selection_media() -> void:
             # Only an area/recipient refinement may retain the accepted base.
             # A new source epoch, outfit revision or action owns fresh candidates.
             if selection_media.key.slice(0,7)!=key.slice(0,7):SelectionMedia.cancel(selection_media)
-            var budget_started=Time.get_ticks_usec()
-            var reserved=0
-            var exact: Dictionary=media_plan.get("required",{}).duplicate()
-            exact.merge(media_environment_required)
-            for path in media_warmup.wanted:
-                if not selection_media_demand_paths.has(path) or exact.has(path):
-                    reserved+=maxi(0,MediaWarmup._estimate(media_warmup,path))
-            FrameProfile.end_phase(profile,"selection_media_budget",budget_started)
+            var budget_bytes=_selection_media_budget()
             var snapshot_started=Time.get_ticks_usec()
             var eligible=[]
             for option in Choices.action_options(available_actions,selected_action):
@@ -1422,8 +1573,25 @@ func _refresh_selection_media() -> void:
             FrameProfile.end_phase(profile,"selection_media_snapshot",snapshot_started)
             var request_started=Time.get_ticks_usec()
             SelectionMedia.request(selection_media,key,available_actions.entity_uuid,selected_action.behavior_id,
-                timeline.state,maxi(0,int(media_warmup.budget_bytes)-reserved),sources,preview,eligible,owners,character_light_profile)
+                timeline.state,budget_bytes,sources,preview,eligible,owners,character_light_profile)
             FrameProfile.end_phase(profile,"selection_media_request",request_started)
+    elif selected_action.is_empty() and not body_choices.is_empty() \
+            and timeline.state.get("actors",{}).has(body_choices.get("entity_uuid")):
+        # Current disclosed outfit is an optional hint even if later accepted
+        # events will replace it; exact received sources still own every gate.
+        var actor_uuid: String=body_choices.entity_uuid
+        var actor: Dictionary=timeline.state.actors[actor_uuid]
+        var key=[timeline.initialization_revision,SelectionMedia._outfit(actor),boundary.get("state_revision"),
+            actor_uuid,body_choices.discovery_generation,"available_body_actions",character_light_profile]
+        if key!=selection_media.key:
+            SelectionMedia.cancel(selection_media)
+            var behaviors={}
+            for action in Choices.all_actions(body_choices):behaviors[action.behavior_id]=true
+            var state={"actors":{actor_uuid:actor},"objects":{},
+                "senses":timeline.state.senses,"audience":timeline.state.audience}
+            var owners={"objects":[],"recipients":[],"object_resources":[],"response_resources":[],"exact":false}
+            SelectionMedia.request(selection_media,key,actor_uuid,"",state,_selection_media_budget(),
+                Catalog.source_snapshot(catalog_cache),{},[],owners,character_light_profile,behaviors.keys())
     else: SelectionMedia.cancel(selection_media)
     var adoption_started=Time.get_ticks_usec()
     if SelectionMedia.poll(selection_media) and not selection_media.value.is_empty():
@@ -1447,8 +1615,9 @@ func _prepare_media(first: Dictionary = {}) -> void:
     var native_paths:Dictionary=component_renderer.native_spells.required_images
     var native_cpu:Dictionary=component_renderer.native_spells.required_cpu_images
     var native_changed:bool=native_paths!=native_media_paths or native_cpu!=native_media_cpu_paths
-    native_media_paths=native_paths.duplicate()
-    native_media_cpu_paths=native_cpu.duplicate()
+    if native_changed:
+        native_media_paths=native_paths.duplicate()
+        native_media_cpu_paths=native_cpu.duplicate()
     var groups: Array = []
     if not timeline.current.is_empty(): groups.append(timeline.current)
     elif not first.is_empty(): groups.append(first)
@@ -1517,7 +1686,11 @@ func _prepare_media(first: Dictionary = {}) -> void:
         if not ready.is_empty():crossed.push_front(ready)
         ready=_combined_media_plan(crossed)
     var needs_plan = ready.is_empty() or (ids.size()>1 and upcoming.is_empty())
-    if needs_plan and media_requested_key != key:
+    var session_owns_missing:bool=not ids.is_empty()
+    for group in groups.slice(0,mini(2,groups.size())):
+        if not media_group_plans.has(group.id) and not is_same(media_received_owners.get(group.id),group):
+            session_owns_missing=false;break
+    if needs_plan and not session_owns_missing and media_requested_key != key:
         var request_started = Time.get_ticks_usec()
         media_requested_key = key
         MediaWarmup.request_plan(media_warmup,key,timeline.state,groups)
@@ -1528,37 +1701,50 @@ func _prepare_media(first: Dictionary = {}) -> void:
         return
     if external_playback:MediaWarmup.adopt_required(media_warmup,timeline.initialization_revision)
     var sets_started = Time.get_ticks_usec()
-    var required_normal_sets: Dictionary=ready.get("normal_sets",{})
-    var next_normal_sets: Dictionary=upcoming.get("normal_sets",{})
-    if not is_same(required_normal_sets,media_normal_required_source) or not is_same(next_normal_sets,media_normal_upcoming_source):
-        media_normal_required_source=required_normal_sets;media_normal_upcoming_source=next_normal_sets
+    # Accepted group metadata owns this one immutable projected window. Changes
+    # in selection hints or current optical samples do not rebuild its source
+    # paths, normal-profile projection, or environment/fixture role unions.
+    var projection:Dictionary=media_plan.get("projection",{})
+    if projection.is_empty() or projection.epoch!=timeline.initialization_revision or projection.profile!=character_light_profile \
+            or not is_same(projection.ready,ready) or (not upcoming.is_empty() and not is_same(projection.upcoming,upcoming)) \
+            or projection.upcoming.is_empty()!=upcoming.is_empty():
+        var required_normal_sets:Dictionary=ready.get("normal_sets",{})
+        var next_normal_sets:Dictionary=upcoming.get("normal_sets",{})
         media_normal_sets=required_normal_sets
         if not next_normal_sets.is_empty() and not is_same(required_normal_sets,next_normal_sets):
             media_normal_sets=required_normal_sets.duplicate();media_normal_sets.merge(next_normal_sets);media_normal_sets.make_read_only()
-    var projected: Dictionary=CharacterGeometry.for_profile(ready.character,media_normal_sets,character_light_profile,catalog_cache,"required")
-    var projected_next: Dictionary=CharacterGeometry.for_profile(upcoming.get("character",{}),media_normal_sets,character_light_profile,catalog_cache,"upcoming")
-    var character_required:Dictionary=projected.duplicate()
+        var required_paths:Dictionary=CharacterGeometry.for_profile(ready.character,media_normal_sets,character_light_profile,catalog_cache,"required")
+        var next_paths:Dictionary=CharacterGeometry.for_profile(upcoming.get("character",{}),media_normal_sets,character_light_profile,catalog_cache,"upcoming")
+        var environment_paths:Dictionary=ready.environment.duplicate();environment_paths.merge(upcoming.get("environment",{}))
+        var fixture_paths:Dictionary=ready.get("fixtures",{}).duplicate();fixture_paths.merge(upcoming.get("fixtures",{}))
+        var gpu_paths:Dictionary=CharacterGeometry.for_profile(ready.get("gpu_only",{}),media_normal_sets,character_light_profile,catalog_cache,"required_gpu").duplicate()
+        gpu_paths.merge(CharacterGeometry.for_profile(upcoming.get("gpu_only",{}),media_normal_sets,character_light_profile,catalog_cache,"upcoming_gpu"))
+        var cpu_paths:Dictionary=CharacterGeometry.for_profile(ready.get("cpu_required",{}),media_normal_sets,character_light_profile,catalog_cache,"required_cpu").duplicate()
+        cpu_paths.merge(CharacterGeometry.for_profile(upcoming.get("cpu_required",{}),media_normal_sets,character_light_profile,catalog_cache,"upcoming_cpu"))
+        var source_paths:Dictionary={}
+        for paths in [required_paths,next_paths,environment_paths]:
+            for path in paths:source_paths[path]=Catalog.media_path(path)
+        for paths in [environment_paths,fixture_paths,gpu_paths,cpu_paths,source_paths]:paths.make_read_only()
+        projection={"epoch":timeline.initialization_revision,"profile":character_light_profile,"ready":ready,"upcoming":upcoming,
+            "required":required_paths,"next":next_paths,"environment":environment_paths,"fixtures":fixture_paths,
+            "gpu_only":gpu_paths,"cpu_required":cpu_paths,"wanted":source_paths}
+    var character_required:Dictionary=projection.required.duplicate()
     character_required.merge(media_condition_paths)
     character_required.merge(native_media_paths)
-    media_plan = {"required":character_required,"upcoming":projected_next,
+    media_plan = {"projection":projection,"required":character_required,"upcoming":projection.next,
         "errors":ready.errors,"upcoming_errors":upcoming.get("errors",[])}
     media_environment_required = ready.environment
-    var environment: Dictionary = ready.environment.duplicate()
-    environment.merge(upcoming.get("environment",{}))
-    var fixtures: Dictionary = ready.get("fixtures",{}).duplicate()
-    fixtures.merge(upcoming.get("fixtures",{}))
-    var gpu_only: Dictionary = CharacterGeometry.for_profile(ready.get("gpu_only",{}),media_normal_sets,character_light_profile,catalog_cache,"required_gpu").duplicate()
-    gpu_only.merge(CharacterGeometry.for_profile(upcoming.get("gpu_only",{}),media_normal_sets,character_light_profile,catalog_cache,"upcoming_gpu"))
-    var cpu_required: Dictionary = CharacterGeometry.for_profile(ready.get("cpu_required",{}),media_normal_sets,character_light_profile,catalog_cache,"required_cpu").duplicate()
-    cpu_required.merge(CharacterGeometry.for_profile(upcoming.get("cpu_required",{}),media_normal_sets,character_light_profile,catalog_cache,"upcoming_cpu"))
+    var gpu_only:Dictionary=projection.gpu_only.duplicate()
+    var cpu_required:Dictionary=projection.cpu_required.duplicate()
     cpu_required.merge(media_condition_paths)
     cpu_required.merge(native_media_cpu_paths)
     for path in native_media_paths:
         if not cpu_required.has(path):gpu_only[path]=true
     for path in media_condition_paths:gpu_only.erase(path)
-    var wanted = {}
-    for paths in [media_plan.required,media_environment_required,media_plan.upcoming,upcoming.get("environment",{})]:
-        for path in paths: wanted[path] = Catalog.media_path(path)
+    var wanted:Dictionary=projection.wanted.duplicate()
+    for paths in [media_condition_paths,native_media_paths]:
+        for path in paths:
+            if not wanted.has(path):wanted[path]=Catalog.media_path(path)
     if not requested_character_light_profile.is_empty():
         character_profile_pending_paths=_requested_profile_normals(requested_character_light_profile)
         for path in character_profile_pending_paths:
@@ -1569,18 +1755,11 @@ func _prepare_media(first: Dictionary = {}) -> void:
         SelectionMedia.cancel(selection_media);selection_media_hold_cursor=-1
     var hints: Dictionary=selection_media.value
     selection_media_demand_paths=hints.get("paths",{})
-    wanted.merge(selection_media_demand_paths)
-    environment.merge(hints.get("environment",{}))
-    gpu_only.merge(hints.get("gpu_only",{}));cpu_required.merge(hints.get("cpu_required",{}))
     for path in cpu_required:gpu_only.erase(path)
     FrameProfile.end_phase(profile,"media_plan_sets",sets_started)
     var demand_started = Time.get_ticks_usec()
-    # The previous proof can be the last owner of a replaced catalog's large
-    # passive directories. Use the session's existing deferred record release
-    # so replacing it does not recursively destroy those directories here.
-    if session!=null and not media_warmup.demand_snapshot.is_empty():
-        session.retire_record(media_warmup.demand_snapshot)
-    MediaWarmup.demand(media_warmup,wanted,environment,fixtures,gpu_only,cpu_required)
+    MediaWarmup.demand(media_warmup,wanted,projection.environment,projection.fixtures,gpu_only,cpu_required,hints)
+    _prioritize_media(maxf(timeline.display_ms,timeline.media_target_ms))
     FrameProfile.end_phase(profile,"media_plan_demand",demand_started)
     for name in media_warmup.get("demand_phases",{}):
         if name != "total":
@@ -1633,7 +1812,17 @@ func _replay_media_ready(plan:Dictionary)->bool:
         and MediaWarmup.boot_ready(media_warmup) and native.ready and world_revision>=0 \
         and not (pending_world!=null and pending_world.admitted)
 
+func _source_group_ready(group:Dictionary)->bool:
+    return group.is_empty() or not is_same(media_received_owners.get(group.id),group) or media_group_plans.has(group.id)
+
 func _media_ready(group: Dictionary) -> bool:
+    # Early compiler delivery grants only passive projection. Native resources
+    # consume the complete source catalog and exact media plan, never a prefix.
+    if not _source_group_ready(group):
+        media_gate={"metadata":false,"native":false,"sources":false,"environment":false,
+            "boot":MediaWarmup.boot_ready(media_warmup),"admitted_world_pending":false}
+        media_initial_ready=false
+        return false
     component_renderer.ensure_epoch(self)
     var budget:Dictionary=_preparation_budget()
     var started:int=Time.get_ticks_usec();var before:int=budget.used_usec
@@ -1643,7 +1832,7 @@ func _media_ready(group: Dictionary) -> bool:
     for issue in native.errors:
         if issue not in presentation_errors:presentation_errors.append(issue)
     media_gate={"native":native.ready,"components":component_renderer.readiness.duplicate(),
-        "sources":MediaWarmup.ready(media_warmup,media_plan.required),"environment":_environment_sources_ready(group,timeline.media_target_ms),
+        "sources":_character_sources_ready(group,timeline.media_target_ms),"environment":_environment_sources_ready(group,timeline.media_target_ms),
         "metadata":media_metadata_ready,"boot":MediaWarmup.boot_ready(media_warmup),
         "admitted_world_pending":pending_world!=null and pending_world.admitted}
     media_initial_ready = _native_startup_ready(timeline.display_ms) and media_gate.metadata and not timeline.state.is_empty() and media_issue.is_empty() and media_plan.errors.is_empty() and media_gate.sources and media_gate.environment and media_gate.boot
@@ -1660,33 +1849,53 @@ func _media_ready(group: Dictionary) -> bool:
 func _environment_media_ready() -> bool:
     return world_revision>=0 and _environment_sources_ready()
 
-func _environment_sources_ready(group:Dictionary={},at_ms:float=-1.0) -> bool:
+func _character_source_paths(group:Dictionary={},at_ms:float=-1.0)->Dictionary:
+    var paths:Dictionary=media_plan.required
+    if not external_playback:
+        if group.is_empty():group=timeline.current
+        if group.is_empty() and not timeline.queue.is_empty():group=timeline.queue[0]
+        if not group.is_empty():
+            var plan:Dictionary=media_group_plans.get(group.id,{})
+            var start_ms:float=timeline.group_start_ms if is_same(group,timeline.current) else timeline.display_ms
+            start_ms=maxf(start_ms,float(group.get("preview_start_ms",start_ms)))
+            var local_ms:float=(timeline.display_ms if at_ms<0 else at_ms)-start_ms
+            var due:Dictionary=MediaWarmup.required_at(plan.get("character_timeline",{}),local_ms,plan.get("character",paths))
+            paths=CharacterGeometry.for_profile(due,media_normal_sets,character_light_profile,catalog_cache,"character_due")
+    return paths
+
+func _character_sources_ready(group:Dictionary={},at_ms:float=-1.0)->bool:
+    return MediaWarmup.ready(media_warmup,_character_source_paths(group,at_ms)) and MediaWarmup.ready(media_warmup,media_condition_paths) and MediaWarmup.ready(media_warmup,native_media_paths)
+
+func _environment_source_paths(group:Dictionary={},at_ms:float=-1.0)->Dictionary:
     var paths:Dictionary=media_environment_required
     if not external_playback:
         if group.is_empty():group=timeline.current
+        if group.is_empty() and not timeline.queue.is_empty():group=timeline.queue[0]
         if not group.is_empty():
             var plan:Dictionary=media_group_plans.get(group.id,{})
             var start_ms:float=timeline.group_start_ms if is_same(group,timeline.current) else timeline.display_ms
             start_ms=maxf(start_ms,float(group.get("preview_start_ms",start_ms)))
             var local_ms:float=(timeline.display_ms if at_ms<0 else at_ms)-start_ms
             paths=EnvironmentMedia.required_at(plan.get("environment_timeline",{}),local_ms,paths)
-    return media_metadata_ready and media_plan.errors.is_empty() and MediaWarmup.ready(media_warmup,paths)
+    return paths
+
+func _environment_sources_ready(group:Dictionary={},at_ms:float=-1.0) -> bool:
+    return media_metadata_ready and media_plan.errors.is_empty() and MediaWarmup.ready(media_warmup,_environment_source_paths(group,at_ms))
+
+func _prioritize_media(at_ms:float)->Dictionary:
+    # Readiness and preparation use the same authored cut. Keeping a later cue
+    # pinned does not let it displace the sources needed to start this one.
+    var due:Dictionary=_character_source_paths({},at_ms).duplicate()
+    due.merge(_environment_source_paths({},at_ms))
+    due.merge(media_condition_paths)
+    due.merge(native_media_paths)
+    if not external_playback and timeline.current.is_empty() and timeline.queue.is_empty():
+        due.merge(selection_media.value.get("onset_paths",{}))
+    MediaWarmup.prioritize(media_warmup,due)
+    return due
 
 func _adopt_media_plan(completed: Dictionary, offer_to_session:bool=true) -> void:
     if completed.is_empty() or completed.key[0] != timeline.initialization_revision: return
-    if completed.get("selection_only",false):
-        # Pure optional refill belongs to its immutable accepted family, not a
-        # group plan. Exact paths/roles/budget are still checked by demand.
-        if not is_same(completed.value.encounter,media_warmup.encounter):return
-        var prepared:Dictionary=completed.value.get("demand_precomputation",{})
-        if completed.has("error") or prepared.is_empty():
-            # Temporary retained pins must not become a permanent no-op after
-            # their worker failed. Retry only the original scene demand path.
-            media_warmup.demand_snapshot={}
-            prepared={}
-        media_warmup.demand_precomputation=prepared
-        media_plan_key=[]
-        return
     if completed.get("stage","")=="optional":
         # Optional families may finish after the requested group/window changed.
         # They never replace required plans or re-open their readiness boundary.
@@ -1696,7 +1905,7 @@ func _adopt_media_plan(completed: Dictionary, offer_to_session:bool=true) -> voi
             return
         catalog_cache.merge(completed.get("source_files",{}),false)
         if offer_to_session and session!=null:session.offer_prepared_sources(completed.get("source_files",{}),completed.get("source_headers",{}))
-        MediaWarmup.adopt_encounter(media_warmup,completed.value.encounter,timeline.initialization_revision,completed.value.get("demand_precomputation",{}))
+        MediaWarmup.adopt_encounter(media_warmup,completed.value.encounter,timeline.initialization_revision)
         media_plan_key = []
         return
     # Worker-published raw authoring is immutable; avoid synchronous JSON loads
@@ -1721,7 +1930,7 @@ func _adopt_media_plan(completed: Dictionary, offer_to_session:bool=true) -> voi
     var value: Dictionary = completed.value
     MediaWarmup.adopt_required(media_warmup,timeline.initialization_revision)
     MediaWarmup.adopt_source_sizes(media_warmup,value.get("source_sizes",{}),timeline.initialization_revision)
-    if value.has("encounter"): MediaWarmup.adopt_encounter(media_warmup,value.encounter,timeline.initialization_revision,value.get("demand_precomputation",{}))
+    if value.has("encounter"): MediaWarmup.adopt_encounter(media_warmup,value.encounter,timeline.initialization_revision)
     var ids: Array = completed.key[1]
     var first_fixtures = {}
     var next_fixtures = {}
@@ -1735,17 +1944,24 @@ func _adopt_media_plan(completed: Dictionary, offer_to_session:bool=true) -> voi
         media_empty_plan = first
     else:
         first.environment_timeline=value.get("environment_timeline",{}).get(ids[0],{})
+        first.character_timeline=value.get("character_timeline",{}).get(ids[0],{})
         if not media_group_plans.has(ids[0]): media_group_plans[ids[0]] = first
         if ids.size()>1 and not media_group_plans.has(ids[1]):
             media_group_plans[ids[1]] = {"character":value.upcoming,"environment":value.environment_upcoming,"errors":value.upcoming_errors,"fixtures":next_fixtures}
             media_group_plans[ids[1]].environment_timeline=value.get("environment_timeline",{}).get(ids[1],{})
+            media_group_plans[ids[1]].character_timeline=value.get("character_timeline",{}).get(ids[1],{})
             media_group_plans[ids[1]].merge(MediaWarmup.roles_for(value,value.upcoming))
     media_plan_key = []
 
 func set_normals_visible(value: bool) -> void:
+    requested_normals_visible = value
+    if not entries.is_empty() and world_prepare_epoch==timeline.initialization_revision: return
+    _publish_normals(value)
+    native_light_atlas.set_normals_visible(value)
+
+func _publish_normals(value: bool) -> void:
     if normals_visible == value: return
     normals_visible = value
-    native_light_atlas.set_normals_visible(value)
     for entry in actor_entries:
         if entry.get("generated_shadow",false): entry.node.visible = not value
     draw_order_dirty = true
@@ -1759,6 +1975,15 @@ func texture(path: String) -> Texture2D:
     media_issue = message
     return null
 
+func _release_actor_source(path:String) -> void:
+    for visual in visual_actors.values():
+        for entry in visual.entries:
+            if entry.get("texture_path","")==path:
+                SourceMaterial.set_parameter(entry,"sheet",null)
+                entry.erase("bound_frame_key");entry.erase("texture_path")
+                entry.node.visible=false
+            if entry.get("geometry_paths",{}).has(path):CharacterGeometry.clear(entry)
+
 func _prune_character_media(budget:Dictionary={},minimum:bool=false) -> void:
     if not budget.is_empty() and budget.used_usec>=budget.limit_usec and not minimum:return
     var charged_before:int=budget.get("used_usec",0)
@@ -1771,16 +1996,7 @@ func _prune_character_media(budget:Dictionary={},minimum:bool=false) -> void:
     FrameProfile.end_phase(profile,"media_prune_select",started)
     started=Time.get_ticks_usec()
     for path in retired_paths:
-        # Hidden actors can retain material references long after disclosure.
-        # Release those handles as well as the CPU/GPU cache dictionaries.
-        for visual in visual_actors.values():
-            for entry in visual.entries:
-                if entry.get("texture_path","") == path:
-                    entry.material.set_shader_parameter("sheet",null)
-                    entry.erase("bound_frame_key")
-                    entry.erase("texture_path")
-                    entry.node.visible = false
-                if entry.get("geometry_paths",{}).has(path): CharacterGeometry.clear(entry)
+        for owner in MediaWarmup.hosts(media_warmup):owner._release_actor_source(path)
         textures.erase(path)
         source_images.erase(path)
         texture_last_use.erase(path)
@@ -1796,12 +2012,14 @@ func _warm_media(required_only:bool=false,budget:Dictionary={},through_ms:float=
     # ready, leave publication to the rotating optional lane so a received world
     # boundary can be prepared during its preceding animation.
     var required_at:float=maxf(timeline.display_ms,timeline.media_target_ms) if through_ms<0 else through_ms
-    if required_only and media_metadata_ready and MediaWarmup.ready(media_warmup,media_plan.required) and _environment_sources_ready({},required_at):
+    var due:Dictionary=_prioritize_media(required_at)
+    if required_only and media_metadata_ready and MediaWarmup.ready(media_warmup,due):
         _poll_character_light_profile()
         return
     var tick = Time.get_ticks_usec()
     var charged_before:int=budget.get("used_usec",0)
-    var previous:Dictionary=media_warmup.publication if media_warmup.publication.get("frame",-1)==Engine.get_process_frames() else {}
+    var owner:Dictionary=MediaWarmup.physical(media_warmup)
+    var previous:Dictionary=owner.publication if owner.publication.get("frame",-1)==Engine.get_process_frames() else {}
     var count:int=previous.get("count",0)
     var required:int=previous.get("required",0)
     var uploads:Array=previous.get("uploads",[]).duplicate()
@@ -1812,7 +2030,7 @@ func _warm_media(required_only:bool=false,budget:Dictionary={},through_ms:float=
         if not budget.is_empty() and budget.used_usec>=budget.limit_usec:
             MediaWarmup.poll(media_warmup,true,false) # Dispatch decode jobs without harvesting an upload.
             break
-        if count>0 and Time.get_ticks_usec()-tick>=MediaWarmup.PUBLICATION_BUDGET_USEC: break
+        if count>0 and previous.get("elapsed_ms",0.0)*1000.0+Time.get_ticks_usec()-tick>=MediaWarmup.PUBLICATION_BUDGET_USEC: break
         var loaded = MediaWarmup.poll(media_warmup,required_only or count>0)
         if loaded.is_empty(): break
         count += 1
@@ -1845,7 +2063,7 @@ func _warm_media(required_only:bool=false,budget:Dictionary={},through_ms:float=
         FrameProfile.end_phase(profile,"media_upload",started)
         if not budget.is_empty():budget.used_usec+=maxi(0,Time.get_ticks_usec()-tick-(budget.used_usec-charged_before))
     if not budget.is_empty():_charge_preparation("media_upload",tick,charged_before)
-    media_warmup.publication = {"frame":Engine.get_process_frames(),"count":count,"required":required,"optional":count-required,"uploads":uploads,
+    owner.publication = {"frame":Engine.get_process_frames(),"count":count,"required":required,"optional":count-required,"uploads":uploads,
         "elapsed_ms":previous.get("elapsed_ms",0.0)+(Time.get_ticks_usec()-tick)/1000.0,"budget_ms":MediaWarmup.PUBLICATION_BUDGET_USEC/1000.0}
     _poll_character_light_profile()
 
@@ -1858,9 +2076,14 @@ func _sample_actors() -> void:
     var directions: Dictionary = timeline.actor_directions()
     var layer_samples={}
     var condition_ages={}
+    var material_samples:Dictionary={}
     for component in displayed_components:
         if component.kind=="sprite_layer": layer_samples[component.id]=component
         elif component.kind=="condition": condition_ages[component.condition_uuid]=component.age_ms
+        if component.kind in ["condition","material_flash","body_surface"]:
+            var actor_id:String=component.actor_uuid
+            if not material_samples.has(actor_id):material_samples[actor_id]=[]
+            material_samples[actor_id].append(component)
     FrameProfile.end_phase(profile,"actor_sprite_inputs",inputs_started)
     for id in visual_actors:
         var actor_setup_started:int=Time.get_ticks_usec()
@@ -1886,12 +2109,17 @@ func _sample_actors() -> void:
         var rig: Dictionary = rigs[row.rig]
         var resting = Characters.rest_sample(actor,rig,catalog_cache)
         var condition_pose=Conditions.pose(actor,row.rig,catalog_cache)
-        var material_state=Conditions.material(id,displayed_components)
+        var material_state=Conditions.material(id,material_samples.get(id,[]))
         # Material values are independently clocked from the sprite frame. In
         # particular, damage/body surfaces must keep sampling between frames,
         # while an unchanged resting body need not resend every shader uniform.
-        var material_key:Array=ActorConstruction.material_key(material_state,textures,resources)
-        var material_snapshot:Array=[]
+        var projected:Dictionary=Conditions.parameters(material_state,textures,resources)
+        # Each actor owns one immutable set of actual shader operands. All its
+        # layers consume that same value; clocks still change it when sampled.
+        if visual.get("condition_parameters",{})!=projected:
+            visual.condition_parameters=projected.duplicate(true)
+            visual.condition_parameters.make_read_only()
+        var material_parameters:Dictionary=visual.condition_parameters
         if not resting.ok:
             if not resting.error.message in presentation_errors: presentation_errors.append(resting.error.message)
             for entry in visual.entries: entry.node.visible = false
@@ -1987,11 +2215,12 @@ func _sample_actors() -> void:
             sampling_counts.visible_layers+=1
             var source_version_before:int=entry.get("source_version",0)
             var bind_started:int=Time.get_ticks_usec()
-            material_snapshot=ActorConstruction.bind_source(self,entry,rig,path,layer_frame,layer_facing,material_state,material_key,material_snapshot)
+            ActorConstruction.bind_source(self,entry,rig,path,layer_frame,layer_facing,material_parameters)
             FrameProfile.end_phase(profile,"actor_sprite_binding",bind_started)
             if source_version_before!=int(entry.get("source_version",0)):
                 sampling_counts.source_changes+=1
-                if entry.get("source_frame_change",{}).get("version",-1)==entry.source_version:sampling_counts.uv_only_changes+=1
+                var changes:Variant=SourceMaterial.changes_since(entry,source_version_before)
+                if changes!=null and changes.size()==1 and changes.has(&"frame_uv"):sampling_counts.uv_only_changes+=1
                 else:sampling_counts.full_source_changes+=1
             var transform_started:int=Time.get_ticks_usec()
             entry.node.basis = camera.basis.scaled_local(Vector3(row.get("scale_x",1.0),1,1))
@@ -2048,7 +2277,7 @@ func _sort_draws() -> void:
     var phase = Time.get_ticks_usec()
     var overlay_revision = [timeline.initialization_revision,timeline.world_revision,world_generation,timeline._support_signature()]
     ground_overlay.sync(self,timeline.presentation_state().get("tiles",{}),overlay_revision,grid_visible,quarter,ground_is_background,
-        {"changes":world_changes,"revision":timeline.world_revision,"scope":[timeline.initialization_revision,overlay_revision[3]]})
+        {"changes":world_changes,"revision":timeline.world_revision,"scope":[timeline.initialization_revision],"owner":world_row_cache})
     FrameProfile.end_phase(profile,"ground_overlay_sync",phase)
     profile.phases.ground_overlay_support_check = profile.phases.get("ground_overlay_support_check",0.0)+ground_overlay.support_check_us/1000.0
     profile.phases.ground_overlay_mark_update = profile.phases.get("ground_overlay_mark_update",0.0)+ground_overlay.mark_update_us/1000.0
@@ -2219,13 +2448,13 @@ func _sync_wall_mask() -> void:
             if material.get_meta("coverage_source",[]) != source_key:
                 for parameter in ["colour_texture","colour_size","colour_rect","use_selection","invert_selection","selection_kind",
                         "rgba_min","rgba_max","selection_mask","selection_rect","selection_scale","selection_offset","selection_values"]:
-                    material.set_shader_parameter(parameter,entry.material.get_shader_parameter(parameter))
+                    material.set_shader_parameter(parameter,SourceMaterial.value(entry,parameter))
                 material.set_meta("coverage_source",source_key)
             material.set_shader_parameter("wall_mask_id",index)
             wall_mask_sources.append(entry)
-            entry.material.set_shader_parameter("wall_mask_id",index)
-            entry.material.set_shader_parameter("wall_mask_texture",wall_mask_viewport.get_texture())
-            entry.material.set_shader_parameter("wall_mask_enabled",wall_mode=="translucent")
+            SourceMaterial.set_parameter(entry,"wall_mask_id",index)
+            SourceMaterial.set_parameter(entry,"wall_mask_texture",wall_mask_viewport.get_texture())
+            SourceMaterial.set_parameter(entry,"wall_mask_enabled",wall_mode=="translucent")
             native_light_atlas.output_changed(entry)
         while wall_mask_nodes.size()>index:
             var retired: ColorRect = wall_mask_nodes.pop_back()
@@ -2269,10 +2498,63 @@ func _rotate_view() -> void:
     request_view(target)
 
 func _cancel_rotation() -> void:
+    _cancel_global_atlas()
     if pending_view == null: return
     _retire_view(pending_view,pending_view.mask_viewport)
     pending_view = null
     rotation_publication_frame = -1
+
+func _cancel_global_atlas() -> void:
+    if pending_global_atlas.is_empty(): return
+    var cleanup={"blocked":false,"payloads":[],"directories":[],"unused":[],"active":{}}
+    NativeLightAtlas.Delta.retire_global(pending_global_atlas,cleanup)
+    retiring_views.append({"nodes":[],"entries":{},"atlas_cleanup":cleanup})
+    pending_global_atlas={}
+
+func _global_atlas_ready(target: Node, sources: Array, options: Dictionary) -> bool:
+    var atlas = native_light_atlas
+    if not pending_global_atlas.is_empty():
+        if pending_global_atlas.target!=target or pending_global_atlas.options!=options \
+                or not NativeLightAtlas.Delta.global_base_matches(atlas,pending_global_atlas):
+            _cancel_global_atlas(); return false
+    # Finish the already admitted boundary before borrowing its atlas base.
+    if not atlas.delta_ready or atlas.delta_serial!=native_light_change_serial or not atlas.prepared_delta.is_empty(): return false
+    var budget:Dictionary=_preparation_budget()
+    if budget.used_usec>=budget.limit_usec: return false
+    if pending_global_atlas.is_empty():
+        if not retiring_views.is_empty(): return false
+        pending_global_atlas=NativeLightAtlas.Delta.begin_global(atlas,self,target,sources,options)
+    var started:int=Time.get_ticks_usec();var charged_before:int=budget.used_usec
+    NativeLightAtlas.Delta.step_global(atlas,pending_global_atlas,maxi(0,budget.limit_usec-budget.used_usec))
+    _charge_preparation("global_lighting",started,charged_before)
+    if pending_global_atlas.phase=="failed":
+        if pending_global_atlas.error in ["atlas_changed_during_capture","source_changed_before_prefix_capture"]:
+            _cancel_global_atlas()
+        else:media_issue="Render preparation failed: "+str(pending_global_atlas.error)
+        return false
+    return pending_global_atlas.phase=="ready" and NativeLightAtlas.Delta.global_base_matches(atlas,pending_global_atlas)
+
+func _publish_global_atlas() -> void:
+    var work:Dictionary=pending_global_atlas
+    var cleanup={"blocked":false,"payloads":[],"directories":[],"unused":[],"active":{}}
+    native_light_atlas.publish_render_options(work.options)
+    _publish_normals(work.options.normals_visible)
+    NativeLightAtlas.Delta.publish_global(native_light_atlas,work,cleanup)
+    _publish_native_light_changes(work.upserts,work.removed.keys(),true)
+    retiring_views.append({"nodes":[],"entries":{},"atlas_cleanup":cleanup})
+    pending_global_atlas={}
+
+func _prepare_render_options() -> void:
+    if rotation_pending() or world_revision<0 or entries.is_empty(): return
+    var options={"light_cap":1.0 if light_cap_enabled else 0.0,"normals_visible":requested_normals_visible}
+    if not _atlas_needs_viewport_growth() and options.light_cap==native_light_atlas.light_cap and options.normals_visible==native_light_atlas.normals_visible:
+        if not pending_global_atlas.is_empty() and pending_global_atlas.target==self:_cancel_global_atlas()
+        return
+    if _global_atlas_ready(self,entries,options): _publish_global_atlas()
+
+func _atlas_needs_viewport_growth()->bool:
+    var size:Vector2=get_viewport().get_visible_rect().size
+    return size.x>native_light_atlas.viewport.size.x or size.y>native_light_atlas.viewport.size.y
 
 func _prepare_rotation() -> void:
     var budget:Dictionary=_preparation_budget()
@@ -2302,20 +2584,32 @@ func _prepare_rotation() -> void:
         _charge_preparation("rotation",started,before)
         return
     if not pending_view.style_is_current():
+        _cancel_global_atlas()
         pending_view.is_prepared = false; pending_view.begin_style(); rotation_publication_frame = -1; return
     if not pending_view.projection_is_current():
+        _cancel_global_atlas()
         pending_view.refresh_projection(); rotation_publication_frame = -1; return
     # Let prepared mask textures complete a native frame before publication.
     if rotation_publication_frame < 0:
         rotation_publication_frame = Engine.get_process_frames(); return
     if Engine.get_process_frames() <= rotation_publication_frame: return
+    # The target view owns its exact static sources. Existing actors keep their
+    # published occurrence/clock while receiving target-basis bindings.
+    var target_sources:Array=pending_global_atlas.get("entries",[])
+    if pending_global_atlas.is_empty():
+        for entry in entries:
+            if entry.placement.kind=="actor":target_sources.append(entry)
+        target_sources.append_array(pending_view.static_entries)
+    var options={"light_cap":native_light_atlas.light_cap,"normals_visible":normals_visible}
+    if not _global_atlas_ready(pending_view,target_sources,options): return
     var started = Time.get_ticks_usec()
     var target: int = pending_view.quarter
     var prepared: Dictionary = pending_view.snapshot()
     pending_view = null; rotation_publication_frame = -1
     _deactivate_static_view(true)
     static_views[target] = prepared
-    quarter = target; position_camera(); _activate_static_view(target)
+    quarter = target; position_camera(); _activate_static_view(target,false)
+    _publish_global_atlas()
     _sample_actors(); _sample_fixtures(); _sync_scenery()
     _sort_draws()
     hover_key = []; hover_hit = {}; hover_preview = {}
@@ -2336,7 +2630,9 @@ func _discover() -> void:
                 or timeline.state.get("current_actor_uuid") != boundary.actor_uuid: return
         var value: Dictionary = pending_choices.value
         session.retire_record(available_actions)
-        cancel_selection(false)
+        var body_hint_current:bool=selection_media.key.size()>=7 and selection_media.key[5]=="available_body_actions" \
+            and selection_media.key[4]==value.choices.discovery_generation
+        cancel_selection(false,body_hint_current)
         available_actions = value.choices
         choices_boundary = pending_choices.boundary
         action_revision = boundary.state_revision
@@ -2829,12 +3125,12 @@ func update_wall_visibility(refresh_sight: bool = true, finish_draw_order: bool 
             wall_mask_dirty = true
         if entry.get("wall_opacity",-1.0) != alpha:
             entry.wall_opacity = alpha
-            entry.material.set_shader_parameter("wall_opacity",alpha)
+            SourceMaterial.set_parameter(entry,"wall_opacity",alpha)
             native_light_atlas.output_changed(entry)
         var masked = wall_mode=="translucent" and entry.role!="shadow"
         if entry.get("wall_mask_enabled") != masked:
             entry.wall_mask_enabled = masked
-            entry.material.set_shader_parameter("wall_mask_enabled",masked)
+            SourceMaterial.set_parameter(entry,"wall_mask_enabled",masked)
             native_light_atlas.output_changed(entry)
     FrameProfile.end_phase(profile,"wall_candidates",candidates_started)
     wall_visibility_revision = timeline.revision
@@ -2924,7 +3220,7 @@ func _entry_contains(entry: Dictionary, screen: Vector2) -> bool:
     var uv = Vector2((local.x-mesh.center_offset.x)/mesh.size.x+0.5,0.5-(local.y-mesh.center_offset.y)/mesh.size.y)
     if uv.x < 0 or uv.y < 0 or uv.x >= 1 or uv.y >= 1: return false
     if entry.placement.kind == "actor":
-        var frame: Vector4 = entry.material.get_shader_parameter("frame_uv")
+        var frame: Vector4 = SourceMaterial.value(entry,"frame_uv")
         var source: Image = source_images[entry.texture_path]
         var pixel = Vector2i((frame.x+uv.x*frame.z)*source.get_width(),(frame.y+uv.y*frame.w)*source.get_height())
         if source.get_pixelv(pixel).a <= 0.05: return false
@@ -3104,12 +3400,19 @@ func pick_actor(screen: Vector2) -> String:
     return ""
 
 func _exit_tree() -> void:
+    # Shutdown joins workers before destroying the native owners they borrowed.
+    # During playback cancellation stays incremental in _dispose_views.
+    if pending_world!=null: pending_world.join()
+    _cancel_global_atlas()
+    for retired in retiring_views:
+        var cleanup:Dictionary=retired.get("atlas_cleanup",{})
+        if cleanup.get("task",-1)>=0:
+            WorkerThreadPool.wait_for_task_completion(cleanup.task);cleanup.task=-1
     ground_overlay.close()
     component_renderer.close(self)
     generated_shadows.close()
     source_lighting.clear_pages()
     native_light_atlas.close()
-    if pending_world!=null: pending_world.join()
     if session != null: session.close()
     SelectionMedia.close(selection_media)
     MediaWarmup.close(media_warmup)

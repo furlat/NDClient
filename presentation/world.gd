@@ -124,137 +124,288 @@ static func cached_rows(state: Dictionary, cache: Dictionary, retained: Dictiona
     retained.changed = changed
     return retained.result
 
-static func update_rows(state: Dictionary, cache: Dictionary, retained: Dictionary, changes: Dictionary) -> Dictionary:
-    # Only admitted dirty identities enter source projection. Keep the exhaustive
-    # rows() adapter independent so recorded-world parity can check this lifetime.
-    var full: bool = changes.get("full",false) or not retained.has("tile_rows")
-    if full:
-        retained.clear()
-        retained.merge({"tile_rows":{},"object_rows":{},"missing":{},"wall_cells":{},"assembly":{},
-            "boundaries":{},"boundary_cells":{},"lit_candidates":{},"negative":{},"terrain_materials":{}})
+# These indexes and result arrays belong to the publication owner. A preparation
+# task may borrow them read-only until it finishes, including after cancellation.
+# Patches own only changed records/cells. apply_changes is the ownership handoff;
+# no presenter may mutate source rows or keep a result array as a private snapshot.
+const ROW_INDEXES = ["tile_rows","object_rows","missing","wall_cells","assembly",
+    "boundaries","boundary_cells","lit_candidates","negative","terrain_materials","object_ranks"]
+
+static func projected_index(base: Dictionary, patch: Dictionary, index: String, key: String, fallback: Variant = null) -> Variant:
+    if patch.writes[index].has(key): return patch.writes[index][key]
+    if patch.full or patch.removes[index].has(key): return fallback
+    return base.get(index,{}).get(key,fallback)
+
+static func projected_row(base: Dictionary, patch: Dictionary, kind: String, id: String) -> Dictionary:
+    return projected_index(base,patch,"tile_rows" if kind=="tiles" else "object_rows",id,{})
+
+static func _write_index(base: Dictionary, patch: Dictionary, index: String, key: String, value: Variant) -> void:
+    patch.removes[index].erase(key)
+    if not patch.full and base.get(index,{}).has(key) and base[index][key]==value:
+        patch.writes[index].erase(key)
+    else: patch.writes[index][key] = value
+
+static func _erase_index(base: Dictionary, patch: Dictionary, index: String, key: String) -> void:
+    patch.writes[index].erase(key)
+    if not patch.full and base.get(index,{}).has(key): patch.removes[index][key] = true
+
+static func _private_cell(base: Dictionary, patch: Dictionary, index: String, key: String, fallback: Variant) -> Variant:
+    if not patch.writes[index].has(key):
+        patch.writes[index][key] = projected_index(base,patch,index,key,fallback).duplicate()
+        patch.removes[index].erase(key)
+    return patch.writes[index][key]
+
+static func _wall_cell(row: Dictionary) -> String:
+    return JSON.stringify([row.position,row.material,row.base_height_steps,row.top_height_steps])
+
+static func _projected_visual(base: Dictionary, patch: Dictionary, id: String) -> Dictionary:
+    var row: Dictionary = projected_index(base,patch,"object_rows",id,{})
+    return projected_index(base,patch,"assembly",id,row) if not row.is_empty() else {}
+
+static func prepare_changes(state: Dictionary, cache: Dictionary, base: Dictionary, changes: Dictionary) -> Dictionary:
+    # Pure projection against immutable accepted after-values and the borrowed
+    # published base. The source cache is owned by this one preparation task.
+    var full: bool = changes.get("full",false) or not base.has("row_slots")
+    var patch = {"full":full,"writes":{},"removes":{},"order":changes.get("order",[]),
+        "canonical_changes":{},"visual_changes":{},"changed_tiles":{},"changed_objects":{},
+        "resolved":0,"changed":full,"rebuild_rows":full,"rebuild_visual":full,"missing_changed":full,
+        "next_object_rank":0 if full else base.get("next_object_rank",0)}
+    for index in ROW_INDEXES: patch.writes[index] = {}; patch.removes[index] = {}
     var tile_keys: Dictionary = changes.get("tiles",{}).duplicate()
     var object_keys: Dictionary = changes.get("objects",{}).duplicate()
     if full:
         for key in state.tiles: tile_keys[key] = true
         for id in state.objects: object_keys[id] = true
+    # Order operations are an accepted mutation log, including remove/re-add
+    # with an equal final row. Content equality cannot recover this fact.
+    for operation in patch.order:
+        if operation.kind=="tiles": tile_keys[operation.id] = true
+        else: object_keys[operation.id] = true
     var senses: Dictionary = state.get("senses",{}) if state.get("senses")!=null else {}
-    if changes.get("senses",false):
-        # Only original fixture resources can change their source row on sight.
-        for id in retained.lit_candidates:
-            if bool(retained.lit_candidates[id]) != bool(senses.get("objects",{}).get(id,{}).get("visual",false)):
+    if changes.get("senses",false) and not full:
+        for id in base.lit_candidates:
+            if bool(base.lit_candidates[id])!=bool(senses.get("objects",{}).get(id,{}).get("visual",false)):
                 object_keys[id] = true
-    var world = Catalog.read_file("world.json",cache)
-    var changed = full
-    var affected_walls = {}; var affected_boundaries = {}
-    retained.changed_tiles = {}; retained.changed_objects = {}
-    retained.resolved = 0
+    var world: Dictionary = Catalog.read_file("world.json",cache)
+    var affected_walls = {}; var affected_boundaries = {}; var visual_objects = {}
     for key in tile_keys:
-        var old: Dictionary = retained.tile_rows.get(key,{})
-        var row = {}
-        var token: String = "tiles:"+key
-        var old_missing: Array = retained.missing.get(token,[])
-        if not old.is_empty(): retained.terrain_materials.erase(old.id)
-        retained.missing.erase(token); retained.negative.erase(token)
+        var old: Dictionary = {} if full else base.tile_rows.get(key,{})
+        var row = {}; var token: String = "tiles:"+key
+        var old_missing: Array = [] if full else base.missing.get(token,[])
+        var missing: Array = []
+        _erase_index(base,patch,"missing",token); _erase_index(base,patch,"negative",token)
+        if not old.is_empty(): _erase_index(base,patch,"terrain_materials",old.id)
         if state.tiles.has(key):
             var tile: Dictionary = state.tiles[key]
             var material: String = tile.surface.base_material
-            if tile.elevation_steps<0: retained.negative[token] = true
+            if tile.elevation_steps<0: _write_index(base,patch,"negative",token,true)
             if world.terrain.has(material):
                 row = {"id":tile.tile_uuid,"kind":"terrain","material":material,"position":tile.position,
                     "base_height_steps":tile.elevation_steps,"layer":0,"orientation":"east","boundaries":[]}
-            else: retained.missing[token] = ["terrain:"+material]
-            retained.tile_rows[key] = old if old==row else row
-            if not row.is_empty(): retained.terrain_materials[row.id] = material
-        else: retained.tile_rows.erase(key)
-        if old!=row or old_missing!=retained.missing.get(token,[]):
-            changed = true; retained.changed_tiles[key] = true
-        retained.resolved += 1
+            else: missing = ["terrain:"+material]
+            if row==old: row = old
+            _write_index(base,patch,"tile_rows",key,row)
+            if not row.is_empty(): _write_index(base,patch,"terrain_materials",row.id,material)
+        else: _erase_index(base,patch,"tile_rows",key)
+        if not missing.is_empty(): _write_index(base,patch,"missing",token,missing)
+        if old!=row:
+            patch.canonical_changes[token] = row
+            if not old.is_empty(): patch.visual_changes[old.id] = {}
+            if not row.is_empty(): patch.visual_changes[row.id] = row
+            if old.is_empty() or row.is_empty() or old.id!=row.id:
+                patch.rebuild_rows = true; patch.rebuild_visual = true
+        if old!=row or old_missing!=missing:
+            patch.changed = true; patch.changed_tiles[key] = true
+        if old_missing!=missing: patch.missing_changed = true
+        patch.resolved += 1
     for id in object_keys:
-        var old: Dictionary = retained.object_rows.get(id,{})
-        var row = {}
-        var token: String = "objects:"+id
-        var old_missing: Array = retained.missing.get(token,[])
-        retained.missing.erase(token); retained.negative.erase(token)
-        retained.lit_candidates.erase(id)
+        var old: Dictionary = {} if full else base.object_rows.get(id,{})
+        var row = {}; var token: String = "objects:"+id
+        var old_missing: Array = [] if full else base.missing.get(token,[])
+        var missing: Array = []
+        _erase_index(base,patch,"missing",token); _erase_index(base,patch,"negative",token)
+        _erase_index(base,patch,"lit_candidates",id)
         if state.objects.has(id):
             var object: Dictionary = state.objects[id]
             var derived = rows({"tiles":{},"objects":{id:object},"senses":senses},cache)
             if not derived.rows.is_empty(): row = derived.rows[0]
-            if not derived.unresolved.is_empty(): retained.missing[token] = derived.unresolved
-            if object.placement.base_height_steps<0: retained.negative[token] = true
+            missing = derived.unresolved
+            if object.placement.base_height_steps<0: _write_index(base,patch,"negative",token,true)
             if world.props.has(object.item.item_id) and world.props[object.item.item_id].has("lit_animation"):
-                retained.lit_candidates[id] = senses.get("objects",{}).get(id,{}).get("visual",false)
-            retained.object_rows[id] = old if old==row else row
-        else: retained.object_rows.erase(id)
-        if old!=row or old_missing!=retained.missing.get(token,[]):
-            changed = true; retained.changed_objects[id] = true
+                _write_index(base,patch,"lit_candidates",id,senses.get("objects",{}).get(id,{}).get("visual",false))
+            if old==row: row = old
+            _write_index(base,patch,"object_rows",id,row)
+            if full:
+                _write_index(base,patch,"object_ranks",id,patch.next_object_rank)
+                patch.next_object_rank += 1
+        else:
+            _erase_index(base,patch,"object_rows",id); _erase_index(base,patch,"object_ranks",id)
+        if not missing.is_empty(): _write_index(base,patch,"missing",token,missing)
+        if old!=row:
+            patch.canonical_changes[token] = row; visual_objects[id] = true
+            if old.is_empty() or row.is_empty(): patch.rebuild_rows = true
             for value in [old,row]:
                 if value.get("kind")!="wall": continue
-                var cell = JSON.stringify([value.position,value.material,value.base_height_steps,value.top_height_steps])
+                var cell = _wall_cell(value)
                 affected_walls[cell] = true
-                if not retained.wall_cells.has(cell): retained.wall_cells[cell] = {}
-                retained.wall_cells[cell].erase(id)
+                _private_cell(base,patch,"wall_cells",cell,{}).erase(id)
             if row.get("kind")=="wall":
-                var cell = JSON.stringify([row.position,row.material,row.base_height_steps,row.top_height_steps])
-                retained.wall_cells[cell][id] = row
-            retained.assembly.erase(id)
-        # Boundary grants are indexed separately from painted source geometry.
+                _private_cell(base,patch,"wall_cells",_wall_cell(row),{})[id] = row
+            _erase_index(base,patch,"assembly",id)
+        if old!=row or old_missing!=missing:
+            patch.changed = true; patch.changed_objects[id] = true
+        if old_missing!=missing: patch.missing_changed = true
+        # Incident-cell arrays are copied only when this object's membership or
+        # order can affect them. No nested array in the borrowed base is edited.
         var cells: Array = _boundary_cells(state.objects[id]) if state.objects.has(id) else []
-        var previous: Array = retained.boundary_cells.get(id,[])
+        var previous: Array = [] if full else base.boundary_cells.get(id,[])
         for cell in previous: affected_boundaries[cell] = true
         for cell in cells: affected_boundaries[cell] = true
         if cells!=previous:
-            for cell in previous:
-                retained.boundaries[cell].erase(id); affected_boundaries[cell] = true
-                if retained.boundaries[cell].is_empty(): retained.boundaries.erase(cell)
-            for cell in cells:
-                if not retained.boundaries.has(cell): retained.boundaries[cell] = []
-                retained.boundaries[cell].append(id); affected_boundaries[cell] = true
-            if cells.is_empty(): retained.boundary_cells.erase(id)
-            else: retained.boundary_cells[id] = cells
-        retained.resolved += 1
-    # Canonical insertion order remains observable through equal-Y floor ties.
-    # In particular remove/re-add in one consumed interval moves that ID last.
-    var tile_order: Array = state.tiles.keys(); var object_order: Array = state.objects.keys()
-    if retained.get("tile_order",[])!=tile_order:
-        if retained.tile_rows.keys()!=tile_order: retained.tile_rows = _ordered_records(retained.tile_rows,tile_order)
-        changed = true
-    if retained.get("object_order",[])!=object_order:
-        if retained.object_rows.keys()!=object_order: retained.object_rows = _ordered_records(retained.object_rows,object_order)
-        changed = true
-        var ranks = {}
-        for i in range(object_order.size()): ranks[object_order[i]] = i
-        # Usually one or two IDs share an incident cell. Native order matters
-        # to the exhaustive index oracle even when current visibility is a set.
-        for cell in affected_boundaries:
-            if retained.boundaries.has(cell): retained.boundaries[cell].sort_custom(func(a,b):return ranks[a]<ranks[b])
-    retained.tile_order = tile_order; retained.object_order = object_order
+            for cell in previous: _private_cell(base,patch,"boundaries",cell,[]).erase(id)
+            for cell in cells: _private_cell(base,patch,"boundaries",cell,[]).append(id)
+            if cells.is_empty(): _erase_index(base,patch,"boundary_cells",id)
+            else: _write_index(base,patch,"boundary_cells",id,cells)
+        patch.resolved += 1
+    if not full:
+        for operation in patch.order:
+            if operation.kind!="objects": continue
+            if operation.remove: _erase_index(base,patch,"object_ranks",operation.id)
+            elif state.objects.has(operation.id):
+                _write_index(base,patch,"object_ranks",operation.id,patch.next_object_rank)
+                patch.next_object_rank += 1
+    if changes.has("order_reset"):
+        # Exhaustive order discovery is confined to the compatibility wrapper.
+        patch.order_reset = changes.order_reset
+        patch.next_object_rank = 0
+        for id in patch.order_reset.objects:
+            _write_index(base,patch,"object_ranks",id,patch.next_object_rank)
+            patch.next_object_rank += 1
+    if not patch.order.is_empty() or patch.has("order_reset"):
+        patch.changed = true; patch.rebuild_rows = true; patch.rebuild_visual = true
+        patch.missing_changed = true
+    for cell in affected_boundaries:
+        var members: Array = _private_cell(base,patch,"boundaries",cell,[])
+        members.sort_custom(func(a,b):return projected_index(base,patch,"object_ranks",a,0)<projected_index(base,patch,"object_ranks",b,0))
+        if members.is_empty(): _erase_index(base,patch,"boundaries",cell)
     for cell in affected_walls:
-        var members: Dictionary = retained.wall_cells[cell]
-        if members.is_empty(): retained.wall_cells.erase(cell); continue
-        for id in members: retained.assembly[id] = {}
-        for row in join_walls(members.values(),world): retained.assembly[row.id] = row
-    if changed or not retained.has("result"):
-        var result: Array = retained.tile_rows.values(); var visual: Array = result.duplicate()
-        if not retained.missing.is_empty():
-            result = result.filter(func(row):return not row.is_empty()); visual = result.duplicate()
-        for row in retained.object_rows.values():
-            if row.is_empty(): continue
-            result.append(row)
-            var assembled: Dictionary = retained.assembly.get(row.id,row)
-            if not assembled.is_empty(): visual.append(assembled)
-        var missing: Array = []
-        if not retained.missing.is_empty():
-            for key in tile_order: missing.append_array(retained.missing.get("tiles:"+key,[]))
-            for id in object_order: missing.append_array(retained.missing.get("objects:"+id,[]))
-        retained.result = {"rows":result,"visual_rows":visual,"unresolved":missing}
-    retained.changed = changed
-    return retained.result
+        var members: Dictionary = projected_index(base,patch,"wall_cells",cell,{})
+        if not full:
+            for id in base.wall_cells.get(cell,{}): visual_objects[id] = true
+        if members.is_empty(): _erase_index(base,patch,"wall_cells",cell); continue
+        for id in members:
+            visual_objects[id] = true; _write_index(base,patch,"assembly",id,{})
+        for row in join_walls(members.values(),world): _write_index(base,patch,"assembly",row.id,row)
+    for id in visual_objects:
+        var old: Dictionary = {} if full else base.assembly.get(id,base.object_rows.get(id,{}))
+        var row: Dictionary = _projected_visual(base,patch,id)
+        if old==row: continue
+        patch.visual_changes[id] = row
+        if old.is_empty() or row.is_empty(): patch.rebuild_visual = true
+    if patch.has("order_reset"):
+        patch.prepared_tile_rows = {}; patch.prepared_object_rows = {}
+        for key in patch.order_reset.tiles: patch.prepared_tile_rows[key] = projected_row(base,patch,"tiles",key)
+        for id in patch.order_reset.objects: patch.prepared_object_rows[id] = projected_row(base,patch,"objects",id)
+    if patch.rebuild_rows or patch.rebuild_visual or patch.missing_changed:
+        _prepare_result(base,patch)
+    return patch
 
-static func _ordered_records(records: Dictionary, keys: Array) -> Dictionary:
-    var result = {}
-    for key in keys: result[key] = records[key]
-    return result
+static func _projected_order(base: Dictionary, patch: Dictionary, kind: String) -> Array:
+    if patch.has("order_reset"): return patch.order_reset[kind]
+    var index: String = "tile_rows" if kind=="tiles" else "object_rows"
+    var ordered = {}
+    if not patch.full:
+        for id in base[index]:
+            if not patch.removes[index].has(id): ordered[id] = true
+    for id in patch.writes[index]: ordered[id] = true
+    for operation in patch.order:
+        if operation.kind!=kind: continue
+        ordered.erase(operation.id)
+        if not operation.remove and projected_index(base,patch,index,operation.id)!=null: ordered[operation.id] = true
+    return ordered.keys()
+
+static func _prepare_result(base: Dictionary, patch: Dictionary) -> void:
+    # An actual membership/order change has an explicit larger preparation job.
+    # Publication only installs these completed arrays and their slot indexes.
+    var tile_order: Array = _projected_order(base,patch,"tiles")
+    var object_order: Array = _projected_order(base,patch,"objects")
+    var result: Array = []
+    if patch.rebuild_rows:
+        var slots = {}
+        for kind in ["tiles","objects"]:
+            for id in (tile_order if kind=="tiles" else object_order):
+                var row: Dictionary = projected_row(base,patch,kind,id)
+                if row.is_empty(): continue
+                slots[kind+":"+id] = result.size(); result.append(row)
+        patch.prepared_rows = result; patch.prepared_row_slots = slots
+        patch.tile_order = tile_order; patch.object_order = object_order
+    if patch.rebuild_visual:
+        var visual: Array = []; var slots = {}
+        # Assembly-only membership changes can leave canonical row slots intact.
+        for kind in ["tiles","objects"]:
+            for id in (tile_order if kind=="tiles" else object_order):
+                var row: Dictionary = projected_row(base,patch,kind,id) if kind=="tiles" else _projected_visual(base,patch,id)
+                if row.is_empty(): continue
+                slots[row.id] = visual.size(); visual.append(row)
+        patch.prepared_visual = visual; patch.prepared_visual_slots = slots
+    if patch.missing_changed:
+        var missing: Array = []
+        var has_missing: bool = not patch.writes.missing.is_empty() or (not patch.full and not base.missing.is_empty())
+        if has_missing:
+            for key in tile_order: missing.append_array(projected_index(base,patch,"missing","tiles:"+key,[]))
+            for id in object_order: missing.append_array(projected_index(base,patch,"missing","objects:"+id,[]))
+        patch.prepared_missing = missing
+
+static func apply_changes(base: Dictionary, patch: Dictionary) -> Dictionary:
+    # Owner-only, after the borrowing task has completed. The caller validates
+    # its displayed revision before this handoff; this function cannot reject.
+    if patch.full:
+        base.clear()
+        for index in ROW_INDEXES: base[index] = patch.writes[index]
+        base.result = {"rows":[],"visual_rows":[],"unresolved":[]}
+        base.row_slots = {}; base.visual_slots = {}
+    else:
+        for index in ROW_INDEXES:
+            for key in patch.removes[index]: base[index].erase(key)
+            for key in patch.writes[index]: base[index][key] = patch.writes[index][key]
+    # Hold final values only for touched IDs while replaying their order changes.
+    var final_rows = {"tiles":{},"objects":{}}
+    for operation in patch.order:
+        var records: Dictionary = base.tile_rows if operation.kind=="tiles" else base.object_rows
+        if records.has(operation.id): final_rows[operation.kind][operation.id] = records[operation.id]
+    for operation in patch.order:
+        var records: Dictionary = base.tile_rows if operation.kind=="tiles" else base.object_rows
+        records.erase(operation.id)
+        if not operation.remove and final_rows[operation.kind].has(operation.id):
+            records[operation.id] = final_rows[operation.kind][operation.id]
+    if patch.has("order_reset"):
+        # Compatibility callers have no sparse order log. Their full maps are
+        # already built by prepare_changes, never reconstructed during adoption.
+        base.tile_rows = patch.prepared_tile_rows; base.object_rows = patch.prepared_object_rows
+    if patch.rebuild_rows:
+        base.result.rows = patch.prepared_rows; base.row_slots = patch.prepared_row_slots
+        base.tile_order = patch.tile_order; base.object_order = patch.object_order
+    else:
+        for token in patch.canonical_changes: base.result.rows[base.row_slots[token]] = patch.canonical_changes[token]
+    if patch.rebuild_visual:
+        base.result.visual_rows = patch.prepared_visual; base.visual_slots = patch.prepared_visual_slots
+    else:
+        for id in patch.visual_changes: base.result.visual_rows[base.visual_slots[id]] = patch.visual_changes[id]
+    if patch.missing_changed: base.result.unresolved = patch.prepared_missing
+    base.next_object_rank = patch.next_object_rank
+    base.changed = patch.changed; base.changed_tiles = patch.changed_tiles; base.changed_objects = patch.changed_objects
+    base.resolved = patch.resolved
+    return base.result
+
+static func update_rows(state: Dictionary, cache: Dictionary, retained: Dictionary, changes: Dictionary) -> Dictionary:
+    # Compatibility/source-oracle entry point. Normal preparation supplies exact
+    # order operations and uses prepare_changes/apply_changes at the handoff.
+    changes = changes.duplicate()
+    if retained.has("tile_rows") and not changes.get("full",false):
+        var tile_order: Array = state.tiles.keys(); var object_order: Array = state.objects.keys()
+        if retained.get("tile_order",[])!=tile_order or retained.get("object_order",[])!=object_order:
+            changes.order_reset = {"tiles":tile_order,"objects":object_order}
+    return apply_changes(retained,prepare_changes(state,cache,retained,changes))
 
 static func _boundary_cells(object: Dictionary) -> Array:
     var direction: Variant = object.placement.get("boundary_direction")
@@ -277,7 +428,7 @@ static func boundary_index(state: Dictionary) -> Dictionary:
             result[cell].append(id)
     return result
 
-static func current_ids(state: Dictionary, boundaries: Dictionary, visible_cells: Dictionary = {}) -> Dictionary:
+static func current_ids(state: Dictionary, boundaries: Dictionary, visible_cells: Dictionary = {}, patch: Dictionary = {}) -> Dictionary:
     # Sparse form of visibility(): only already-disclosed, currently observed
     # identities. Missing IDs mean remembered, never newly invented scenery.
     var senses: Dictionary = state.get("senses",{}) if state.get("senses")!=null else {}
@@ -287,7 +438,8 @@ static func current_ids(state: Dictionary, boundaries: Dictionary, visible_cells
         var cell = cell_key(position)
         visible_cells[cell] = true
         if state.tiles.has(cell): result[state.tiles[cell].tile_uuid] = true
-        for id in boundaries.get(cell,[]):
+        var incident: Array = boundaries.get(cell,[]) if patch.is_empty() else projected_index({"boundaries":boundaries},patch,"boundaries",cell,[])
+        for id in incident:
             if state.objects.has(id): result[id] = true
     for id in senses.get("objects",{}):
         if state.objects.has(id) and senses.objects[id].get("visual",false): result[id] = true

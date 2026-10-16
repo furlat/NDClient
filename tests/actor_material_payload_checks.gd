@@ -18,6 +18,8 @@ func check(value:bool,label:String)->void:
 func compare(a:ShaderMaterial,b:ShaderMaterial,label:String)->void:
     for field in a.shader.get_shader_uniform_list():check(a.get_shader_parameter(field.name)==b.get_shader_parameter(field.name),label+" "+str(field.name))
 func _initialize()->void:run.call_deferred()
+func material_key(value:Dictionary,textures:Dictionary,resources:Dictionary)->Array:
+    return [Conditions.parameters(value,textures,resources)]
 func material()->ShaderMaterial:
     var result=ShaderMaterial.new();result.shader=Actors.MODULAR_SHADER
     return result
@@ -41,9 +43,9 @@ func operand_transitions(item:Dictionary,cache:Dictionary)->void:
         "parameters":{"body_surface_enabled":true,"body_surface_count":1,"body_surface_strength":PackedFloat32Array([.25,0,0,0,0,0,0,0])}}
     for value in [neutral,flash,film,surface,neutral]:
         old.bind(a,value,textures,resources)
-        var key=Actors.material_key(value,textures,resources)
+        var key=material_key(value,textures,resources)
         Conditions.bind_parameters(b,key[0]);compare(a,b,"Finite native/film/surface/neutral operand transition")
-    var key=Actors.material_key(surface,textures,resources).duplicate(true)
+    var key=material_key(surface,textures,resources).duplicate(true)
     surface.body_surfaces.parameters.body_surface_strength[0]=.75
     check(key[0].body_surface_strength[0]==.25,"Owned compact key isolates mutable packed surface operands")
     surface.body_surfaces.layers[0].provenance="changed"
@@ -54,7 +56,7 @@ func benchmark(cases:Array)->Dictionary:
         for mode in ([0,1] if iteration%2==0 else [1,0]):
             var began:int=Time.get_ticks_usec()
             for item in cases:
-                var key:Array=old_actors.material_key(item.value,{},{}) if mode==0 else Actors.material_key(item.value,{},{})
+                var key:Array=old_actors.material_key(item.value,{},{}) if mode==0 else material_key(item.value,{},{})
                 var snapshot:Array=key.duplicate(true)
                 var previous:Array=item.previous[mode]
                 for target in item.materials[mode]:
@@ -155,21 +157,21 @@ func run()->void:
             var rig:Dictionary=rigs[selected.value.rig]
             var layers=Characters.layers(selected.value,rig,cache);layer_count+=layers.size()
             var value=Conditions.material(id,current);var prior=Conditions.material(id,previous)
-            var new_key=Actors.material_key(value,{},{});var old_key=old_actors.material_key(value,{},{})
+            var new_key=material_key(value,{},{});var old_key=old_actors.material_key(value,{},{})
             var materials:Array=[[],[]]
             for layer in layers:
                 var a=material();var b=material()
                 old.bind(a,value,{},{});Conditions.bind_parameters(b,new_key[0]);compare(a,b,"Actual recipient full uniform parity")
                 materials[0].append(a);materials[1].append(b)
             cases.append({"id":id,"value":value,"layers":layers,"rig":rig,"clip":"TakeDamage" if rig.clips.has("TakeDamage") else "Idle",
-                "samples":sources,"materials":materials,"previous":[old_actors.material_key(prior,{},{}).duplicate(true),Actors.material_key(prior,{},{}).duplicate(true)]})
+                "samples":sources,"materials":materials,"previous":[old_actors.material_key(prior,{},{}).duplicate(true),material_key(prior,{},{}).duplicate(true)]})
             var snapshot=new_key.duplicate(true);value.flash.age_ms+=10
-            check(snapshot!=Actors.material_key(value,{},{}),"Age-dependent actual uniforms invalidate compact snapshot")
+            check(snapshot!=material_key(value,{},{}),"Age-dependent actual uniforms invalidate compact snapshot")
             value.flash.age_ms-=10
             var decorated:Dictionary=value.flash
             var original:Variant=decorated.get("native_hit")
             decorated.native_hit={"unconsumed_metadata":true}
-            check(snapshot==Actors.material_key(value,{},{}),"Unconsumed native-hit authoring metadata stays outside condition key")
+            check(snapshot==material_key(value,{},{}),"Unconsumed native-hit authoring metadata stays outside condition key")
             if original==null:decorated.erase("native_hit")
             else:decorated.native_hit=original
             check(var_to_bytes(snapshot).size()<var_to_bytes(old_key).size(),"Compact key excludes authored provenance")

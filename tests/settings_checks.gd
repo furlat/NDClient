@@ -10,17 +10,18 @@ var hud:Control
 var underlay:Button
 var hits=0
 var config_path="user://settings-checks-%s.cfg" % Time.get_ticks_usec()
+var state_path=""
 class SettingsWorld extends FixtureWorld:
-    var character_light_profile=Settings.DEFAULT_PROFILE
-    var fire_light_flicker=Settings.DEFAULT_FIRE_LIGHT_FLICKER
-    var light_strength=Settings.DEFAULT_LIGHT_STRENGTH
-    var light_cap_enabled=Settings.DEFAULT_LIGHT_CAP_ENABLED
-    var native_spell_hit_material=true
     var settings_path=""
     var accepted=[]
-    var media_issue=""
     var owner_hud:Control
     var unhandled=[]
+    func _init()->void:
+        character_light_profile=Settings.DEFAULT_PROFILE
+        fire_light_flicker=Settings.DEFAULT_FIRE_LIGHT_FLICKER
+        light_strength=Settings.DEFAULT_LIGHT_STRENGTH
+        light_cap_enabled=Settings.DEFAULT_LIGHT_CAP_ENABLED
+        native_spell_hit_material=true
     func set_character_light_profile(profile:String)->void:
         if Settings.write(profile,settings_path)!=OK:return
         character_light_profile=profile;accepted.append(profile)
@@ -60,6 +61,14 @@ func click(point:Vector2,button:MouseButton=MOUSE_BUTTON_LEFT)->void:
         var event=InputEventMouseButton.new();event.position=point;event.global_position=point;event.button_index=button;event.pressed=pressed
         root.push_input(event)
 func run()->void:
+    for arg in OS.get_cmdline_user_args():
+        if arg.begins_with("--state="):state_path=arg.trim_prefix("--state=")
+    if state_path.is_empty() or not FileAccess.file_exists(state_path):
+        check(false,"Usage: --state=<recorded canonical state.json>")
+        finish();return
+    var state:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(state_path))
+    check(not state.is_empty() and state.has("actors"),"Explicit recorded player state loads")
+    if state.is_empty() or not state.has("actors"):finish();return
     root.size=Vector2i(1280,720)
     root.gui_embed_subwindows=true
     check(Settings.PROFILES.keys()==["original","gentle","reference"],"Only three delivered normal profiles are offered")
@@ -74,7 +83,6 @@ func run()->void:
     check(Settings.read(config_path).profile==Settings.DEFAULT_PROFILE,"Unsupported saved value uses declared current default")
     Settings.write("reference",config_path)
     world=SettingsWorld.new();world.settings_path=config_path;root.add_child(world)
-    var state:Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://.runtime/player-runs/20261011T223103.996259Z/state.json"))
     world.timeline.state=state
     underlay=Button.new();underlay.text="";root.add_child(underlay);underlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
     underlay.pressed.connect(func():hits+=1)
@@ -87,7 +95,10 @@ func run()->void:
     hud.toggle_inventory();hud.search.grab_focus();key(KEY_ESCAPE);await process_frame
     check(not hud.panel.visible and not hud.settings_open() and not hud.search.has_focus(),"Escape closes focused inventory and releases text focus first")
     hud.toggle_history();key(KEY_ESCAPE);await process_frame
-    check(not hud.history_panel.visible and not hud.settings_open(),"Escape closes history first")
+    check(hud.history_panel.visible and hud.settings_open(),"Escape opens settings while retaining the combat log")
+    key(KEY_ESCAPE);await process_frame
+    check(hud.history_panel.visible and not hud.settings_open(),"Closing settings with Escape retains the combat log")
+    hud.toggle_history()
     hud.loot_panel.show();key(KEY_ESCAPE);await process_frame
     check(not hud.loot_panel.visible and not hud.settings_open(),"Escape closes disclosed storage first")
     world.selected_action={"discovery_index":7};key(KEY_ESCAPE);await process_frame
@@ -158,6 +169,8 @@ func run()->void:
     hud.close_settings()
     root.remove_child(hud);hud.free();root.remove_child(world);world.free();root.remove_child(underlay);underlay.free()
     DirAccess.remove_absolute(config_path)
+    finish()
+func finish()->void:
     var report={"checks":checks,"failures":failures,"scope":"Native Control push_input, focus/foreground Escape order, three fixed profiles, pointer/keyboard blocking, continuing display clock and temporary ConfigFile round trips. Rendering profile pixels and real SDK delivery remain integration tests."}
     FileAccess.open("res://generated/settings_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("SETTINGS_CHECKS ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)

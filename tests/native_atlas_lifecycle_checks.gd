@@ -1,6 +1,7 @@
 extends SceneTree
 const Atlas=preload("res://presentation/native_light_atlas.gd")
 const Sources=preload("res://presentation/sprite_sources.gd")
+const SourceMaterial=preload("res://presentation/source_material.gd")
 const GroundData=preload("res://presentation/ground_data.gd")
 const Placement=preload("res://placement.gd")
 class World extends Node3D:
@@ -63,7 +64,7 @@ func prepared_floor_packet(entry:Dictionary,stale_ids:Array=[],token:Array=[],ro
         if entry.scenery_values[entry.ground_indices[row.id]]==1.0:visibility[row.id]=true
     var previous={"packets":packets,"receiver_bounds":entry.node.multimesh.mesh.get_aabb(),
         "capacity":entry.node.multimesh.instance_count,"ground_version":entry.ground_version,"address_token":token}
-    var prepared=GroundData.prepare(entry.batch_rows if rows.is_empty() else rows,previous,0,Basis.IDENTITY,visibility)
+    var prepared=GroundData.prepare(entry.batch_rows if rows.is_empty() else rows,GroundData.capture_previous(previous,0,Basis.IDENTITY),0,Basis.IDENTITY,visibility)
     # Production reserves instances in blocks of 256. This mathematical fixture
     # intentionally allocates exactly two; discard only unused capacity padding,
     # retaining every visible row and its full 20-float packet unchanged.
@@ -127,10 +128,12 @@ func floor_entry(world:Node3D,source:Image)->Dictionary:
         buffer.append_array(data);packets[str(i)]={"data":data};rows.append({"id":str(i),"kind":"terrain","material":"stone","position":[i,0],"base_height_steps":0})
     multi.buffer=buffer
     var mat=ShaderMaterial.new();mat.shader=Source
-    mat.set_shader_parameter("colour_texture",ImageTexture.create_from_image(source));mat.set_shader_parameter("colour_size",Vector2(64,64))
-    mat.set_shader_parameter("colour_rect",Vector4(0,0,64,64));mat.set_shader_parameter("has_geometry",false)
     var node=MultiMeshInstance3D.new();node.multimesh=multi;node.material_override=mat;world.add_child(node)
-    return {"node":node,"material":mat,"cell":Vector2(64,64),"record":{"path":"fixture","rect":[0,0,64,64]},"placement":rows[0],"role":"terrain","batch_rows":rows,"ground_buffer":buffer,"ground_packets":packets,"ground_indices":{"0":0,"1":1},"scenery_values":[1.0,0.0],"source_version":1,"ground_version":0}
+    var entry={"node":node,"material":mat,"cell":Vector2(64,64),"record":{"path":"fixture","rect":[0,0,64,64]},"placement":rows[0],"role":"terrain","batch_rows":rows,"ground_buffer":buffer,"ground_packets":packets,"ground_indices":{"0":0,"1":1},"scenery_values":[1.0,0.0],"source_version":1,"ground_version":0}
+    SourceMaterial.initialize(entry)
+    SourceMaterial.apply(entry,{"colour_texture":ImageTexture.create_from_image(source),"colour_size":Vector2(64,64),
+        "colour_rect":Vector4(0,0,64,64),"has_geometry":false})
+    return entry
 func native_page(size:Vector2i)->SubViewport:
     var view=SubViewport.new();view.size=size;view.disable_3d=true;view.transparent_bg=true;view.render_target_update_mode=SubViewport.UPDATE_ALWAYS
     view.canvas_item_default_texture_filter=Viewport.DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_NEAREST;root.add_child(view)
@@ -206,16 +209,16 @@ func tracked_material_checks(atlas:RefCounted,world:World,entry:Dictionary,sourc
     sync_scene(atlas,world)
     check(atlas.last_reconcile_phases.material_sources_checked==0,"Tracked idle scene performs no static material-owner polling")
     var colour=Color(.5,.75,1,1)
-    entry.material.set_shader_parameter("source_tint",colour);entry.source_version+=1
+    SourceMaterial.set_parameter(entry,"source_tint",colour)
     sync_scene(atlas,world,true,false,sparse([entry]))
     check(atlas.last_reconcile_phases.material_sources_checked==1 and atlas.groups.values().all(func(g):return g.material.get_shader_parameter("source_tint")==colour),"Admitted static source recopies changed parameters even when its groups are reused")
     await material_discovery_oracle(atlas,world,"Tracked static source admission")
-    entry.material.set_shader_parameter("source_tint",Color.WHITE);entry.source_version+=1
+    SourceMaterial.set_parameter(entry,"source_tint",Color.WHITE)
     sync_scene(atlas,world,true,false,sparse([entry]))
-    entry.material.set_shader_parameter("highlighted",true);atlas.style_changed(entry,"0");sync_scene(atlas,world)
+    SourceMaterial.set_parameter(entry,"highlighted",true);atlas.style_changed(entry,"0");sync_scene(atlas,world)
     check(atlas.last_reconcile_phases.material_sources_checked==1 and atlas.groups.values().all(func(g):return g.material.get_shader_parameter("highlighted")==true),"Notified independent highlight updates shared source without a world or animation revision")
     await material_discovery_oracle(atlas,world,"Tracked highlight")
-    entry.material.set_shader_parameter("highlighted",false);atlas.style_changed(entry,"0");sync_scene(atlas,world)
+    SourceMaterial.set_parameter(entry,"highlighted",false);atlas.style_changed(entry,"0");sync_scene(atlas,world)
     # A typed actor source uses the same exact RGBA fixture; dynamic ownership,
     # rather than a geometry/sight revision, must carry its next source sample.
     var actor_node=MeshInstance3D.new();actor_node.mesh=QuadMesh.new();actor_node.mesh.size=Vector2(2,2)
@@ -223,8 +226,9 @@ func tracked_material_checks(atlas:RefCounted,world:World,entry:Dictionary,sourc
     var actor_material:ShaderMaterial=entry.material.duplicate();actor_node.material_override=actor_material
     var actor={"node":actor_node,"material":actor_material,"cell":Vector2(64,64),"record":entry.record,
         "placement":{"id":"actor-fixture","kind":"actor"},"role":"body","source_version":1}
+    SourceMaterial.initialize(actor);SourceMaterial.apply(actor,entry.source_parameters)
     world.entries.append(actor);world.actor_entries=[actor];sync_scene(atlas,world,true,false,sparse([actor]))
-    actor_material.set_shader_parameter("source_tint",colour);actor.source_version+=1;sync_scene(atlas,world)
+    SourceMaterial.set_parameter(actor,"source_tint",colour);sync_scene(atlas,world)
     check(atlas.last_reconcile_phases.material_sources_checked==1 and row_receiver(atlas,actor).group.material.get_shader_parameter("source_tint")==colour,"Dynamic source sample updates alone without polling static owners")
     await material_discovery_oracle(atlas,world,"Tracked dynamic source sample")
     var actor_id=actor_node.get_instance_id();world.entries.pop_back();world.actor_entries=[];actor_node.queue_free()
@@ -241,12 +245,12 @@ func tracked_material_checks(atlas:RefCounted,world:World,entry:Dictionary,sourc
         "cell":Vector2(64,64),"image_scale":1.0,"shallow_color":Color(.2,.4,.6,1),"deep_color":Color(.1,.2,.4,1),
         "tint":Color.WHITE,"uv_scale":1.0,"ripple_pan":Vector2(.5,0),"ripple_tiling":1.0,"ripple_amount":.3,
         "overall_alpha":1.0,"alpha_cutoff":.001,"sheen_sharpness":2.0}
-    for name in parameters:water_material.set_shader_parameter(name,parameters[name])
     var water={"node":water_node,"material":water_material,"cell":Vector2(64,64),"placement":{"id":"water-fixture","kind":"terrain","material":"water","position":[0,2],"base_height_steps":0},"role":"terrain","source_version":1}
+    SourceMaterial.initialize(water);SourceMaterial.apply(water,parameters)
     world.entries.append(water);sync_scene(atlas,world,true,false,sparse([water]))
     atlas.set_light_cap(1.0);sync_scene(atlas,world)
     var before=await capture(world.get_viewport())
-    water_material.set_shader_parameter("displayed_time_seconds",1.0);atlas.style_changed(water);sync_scene(atlas,world)
+    SourceMaterial.set_parameter(water,"displayed_time_seconds",1.0);atlas.style_changed(water);sync_scene(atlas,world)
     check(atlas.last_reconcile_phases.material_sources_checked==1 and row_receiver(atlas,water).group.material.get_shader_parameter("displayed_time_seconds")==1.0 and water.received_material.get_shader_parameter("displayed_time_seconds")==1.0,"Notified water clock refreshes receiving and capped output without polling unrelated statics")
     await material_discovery_oracle(atlas,world,"Tracked water clock")
     check(before.get_data()!=world.get_viewport().get_texture().get_image().get_data(),"Water clock fixture changes rendered pixels, so notification check is non-vacuous")
@@ -266,13 +270,13 @@ func address_token_checks(atlas:RefCounted,world:World,entry:Dictionary,source:I
     var rows:Array=entry.batch_rows.duplicate()
     rows.append({"id":"token-new","kind":"terrain","material":"stone","position":[-4,0],"base_height_steps":0})
     var prepared=prepared_floor_packet(entry,[],token,rows)
-    check(prepared.geometry_changes.changed==["token-new"] and prepared.address_token==token,"Actual worker carries existing token and identifies only the new source packet")
+    check(prepared.geometry_changes.changed==["token-new"] and prepared.address_token.is_empty(),"Geometry-only worker identifies the new source packet and does not certify mutable atlas addresses")
     publish_floor(entry,prepared)
     check(atlas.floor_address_token(entry).is_empty(),"Unadmitted prepared floor cannot certify a subsequent worker snapshot")
     set_visibility(entry,[1.0,0.0,1.0])
     for id in ["token-new","0","1"]:atlas.style_changed(entry,id)
     sync_scene(atlas,world,true,true,sparse([entry]))
-    check(atlas.last_reconcile_phases.address_rows_checked==1 and atlas.last_reconcile_phases.address_rows_preserved==2,"Matched worker token repairs the added row and preserves two already-addressed rows")
+    check(atlas.floor_address_token(entry)==[atlas.get_instance_id(),atlas.repack_count,entry.node.get_instance_id(),entry.ground_version],"New row publication certifies the complete current floor address version")
     check(row_receiver(atlas,entry,"0").index==1 and row_receiver(atlas,entry,"1").index==2 and row_receiver(atlas,entry,"0").visibility==0.0 and row_receiver(atlas,entry,"1").visibility==1.0,"Shifted rows resolve current indices when the same publication changes sight")
     check_transport(atlas,entry,"Token sparse floor insertion")
     await pixel_oracle(atlas,world,source,"token-sparse-insertion")
@@ -280,7 +284,7 @@ func address_token_checks(atlas:RefCounted,world:World,entry:Dictionary,source:I
     # must use exhaustive admission even though no full atlas repack occurred.
     publish_floor(entry,pending_old)
     sync_scene(atlas,world,true,true,sparse([entry]))
-    check(atlas.last_reconcile_phases.address_rows_checked==2 and atlas.last_reconcile_phases.address_rows_preserved==0,"Overlapping prepared snapshot rejects its old base and exhaustively repairs")
+    check(atlas.floor_address_token(entry)==[atlas.get_instance_id(),atlas.repack_count,entry.node.get_instance_id(),entry.ground_version],"Overlapping old snapshot adopts current atlas ownership at its new floor version")
     check_transport(atlas,entry,"Overlapping old prepared snapshot")
     await pixel_oracle(atlas,world,source,"token-old-base")
     # Existing full/manual mismatch tests remain independent. Deliberately
@@ -288,14 +292,14 @@ func address_token_checks(atlas:RefCounted,world:World,entry:Dictionary,source:I
     var foreign=atlas.floor_address_token(entry);foreign[0]+=1
     prepared=prepared_floor_packet(entry,[],foreign);publish_floor(entry,prepared)
     sync_scene(atlas,world,true,false,sparse([entry]))
-    check(atlas.last_reconcile_phases.address_rows_checked==2 and atlas.last_reconcile_phases.address_rows_preserved==0,"Foreign atlas token cannot skip retained address validation")
+    check(atlas.floor_address_token(entry)[0]==atlas.get_instance_id(),"Foreign worker token cannot become the published floor address owner")
     check_transport(atlas,entry,"Foreign atlas token fallback")
     await pixel_oracle(atlas,world,source,"token-foreign-owner")
     # A no-geometry prepared refresh can skip every row; changing the camera
     # afterwards must resolve indices through row IDs without any UV repair.
     prepared=prepared_floor_packet(entry,[],atlas.floor_address_token(entry));publish_floor(entry,prepared)
     sync_scene(atlas,world,true,false,sparse([entry]))
-    check(atlas.last_reconcile_phases.address_rows_checked==0 and atlas.last_reconcile_phases.address_rows_preserved==2,"Matched unchanged prepared packets perform no per-row address work")
+    check(atlas.floor_address_token(entry)==[atlas.get_instance_id(),atlas.repack_count,entry.node.get_instance_id(),entry.ground_version],"Unchanged prepared packets retain current atlas ownership")
     world.camera.position.x+=.125;sync_scene(atlas,world)
     await pixel_oracle(atlas,world,source,"token-camera-after-publication")
     world.camera.position.x-=.125;sync_scene(atlas,world)
@@ -340,24 +344,24 @@ func run()->void:
     check(atlas.last_reconcile_phases.projected_receivers==0,"Same transform floor buffer publication restores addresses without reprojection")
     prepared_floor(entry,["0"]);sync_scene(atlas,world,true,false,sparse([entry]))
     check(entry.ground_buffer==before,"Certified coherent worker data still repairs stale addresses against current atlas")
-    check(atlas.last_reconcile_phases.address_packet_reads==1 and atlas.last_reconcile_phases.address_packet_reads_skipped==1,"Coherent unchanged row avoids duplicate packet access while stale row is repaired")
+    check(entry.ground_packets["0"].data[17]==before[17] and entry.ground_packets["1"].data[17]==before[37],"Prepared stale and unchanged rows retain their exact independently owned addresses")
     check_transport(atlas,entry,"Prepared stale-address repair")
     await pixel_oracle(atlas,world,source,"prepared-address-repair")
     # A direct packet-only mutation breaks the producer coherence guarantee.
     # Its native buffer remains correct and must not hide the stale packet.
     entry.ground_packets["0"].data[17]=0;entry.ground_version+=1;floor_receipt(entry)
     sync_scene(atlas,world,true,false,sparse([entry]))
-    check(atlas.last_reconcile_phases.address_packet_reads_skipped==0,"Direct update cannot reuse the previous prepared-buffer coherence version")
+    check(entry.ground_packets["0"].data[17]==before[17],"Direct packet replacement repairs its stale address from the current atlas owner")
     check_transport(atlas,entry,"Independent packet-only address repair")
     await pixel_oracle(atlas,world,source,"direct-packet-address-repair")
-    entry.material.set_shader_parameter("highlighted",true);sync_scene(atlas,world)
-    check(atlas.groups.values().all(func(g):return g.material.get_shader_parameter("highlighted")==true),"Independent highlight updates receiving without source-version change")
-    entry.material.set_shader_parameter("highlighted",false);sync_scene(atlas,world)
-    entry.material.set_shader_parameter("source_tint",Color(.5,.75,1,1));entry.source_version+=1;sync_scene(atlas,world)
+    SourceMaterial.set_parameter(entry,"highlighted",true);sync_scene(atlas,world)
+    check(atlas.groups.values().all(func(g):return g.material.get_shader_parameter("highlighted")==true),"Producer highlight updates receiving independently of geometry")
+    SourceMaterial.set_parameter(entry,"highlighted",false);sync_scene(atlas,world)
+    SourceMaterial.set_parameter(entry,"source_tint",Color(.5,.75,1,1));sync_scene(atlas,world)
     check(atlas.groups.values().all(func(g):return g.material.get_shader_parameter("source_tint")==Color(.5,.75,1,1)),"Versioned source tint updates receiving")
-    entry.material.set_shader_parameter("source_tint",Color.WHITE);entry.source_version+=1;sync_scene(atlas,world)
+    SourceMaterial.set_parameter(entry,"source_tint",Color.WHITE);sync_scene(atlas,world)
     check(entry.ground_packets["0"].data[17]==before[17],"Retained packet stores addresses for later visibility-only uploads")
-    entry.material.set_shader_parameter("current_visibility",0.0);entry.source_version+=1;sync_scene(atlas,world)
+    SourceMaterial.set_parameter(entry,"current_visibility",0.0);sync_scene(atlas,world)
     check(row_receiver(atlas,entry,"0").node.material.get_shader_parameter("receiver_visibility")==1.0,"Parameter recopy cannot overwrite per-instance current visibility")
     await pixel_oracle(atlas,world,source,"initial")
     # Sight-only after-values keep the same source material, row IDs and native
@@ -397,6 +401,7 @@ func run()->void:
     var marker=MeshInstance3D.new();marker.mesh=QuadMesh.new();marker.mesh.size=Vector2(2,2);marker.position=Vector3(0,2.1,0);world.add_child(marker)
     var marker_material:ShaderMaterial=entry.material.duplicate();marker.material_override=marker_material
     var marker_entry={"node":marker,"material":marker_material,"cell":Vector2(64,64),"record":entry.record,"role":"terrain","placement":{"id":"marker","kind":"terrain","material":"stone","position":[0,2],"base_height_steps":1},"scenery_value":1.0,"source_version":1}
+    SourceMaterial.initialize(marker_entry);SourceMaterial.apply(marker_entry,entry.source_parameters)
     world.entries.append(marker_entry);sync_scene(atlas,world,true,false,sparse([marker_entry]))
     var retained_positions={}
     for receiver in atlas.receivers:retained_positions[receiver.id]=receiver.position
@@ -442,6 +447,7 @@ func run()->void:
     var higher_material:ShaderMaterial=marker_material.duplicate();higher.material_override=higher_material
     var higher_entry={"node":higher,"material":higher_material,"cell":Vector2(64,64),"record":entry.record,"role":"terrain",
         "placement":{"id":"higher","kind":"terrain","material":"stone","position":[2,0],"base_height_steps":1},"scenery_value":1.0,"source_version":1}
+    SourceMaterial.initialize(higher_entry);SourceMaterial.apply(higher_entry,marker_entry.source_parameters)
     world.entries.append(higher_entry);sync_scene(atlas,world,true,false,sparse([higher_entry]))
     check(row_receiver(atlas,entry,"1").group.join_mask==5,"Maximum of two admitted support owners closes the retained neighbour")
     await pixel_oracle(atlas,world,source,"shared-support")
@@ -578,6 +584,7 @@ func run()->void:
     var old_view_size=atlas.viewport.size
     var large=MeshInstance3D.new();large.mesh=QuadMesh.new();var material=ShaderMaterial.new();material.shader=ActorSource;large.material_override=material;world.add_child(large)
     var extra={"node":large,"material":material,"cell":Vector2(9000,128),"placement":{"kind":"actor"},"role":"body","source_version":0}
+    SourceMaterial.initialize(extra)
     atlas.style_changed(entry,"0");atlas.visibility_changed(entry)
     atlas.output_changed(entry)
     world.entries.append(extra);sync_scene(atlas,world,true,false,sparse([extra]))
@@ -604,7 +611,7 @@ func run()->void:
     await pixel_oracle(atlas,world,source,"resize")
     check(atlas.repack_count>before_repack_count,"Native viewport growth changes the existing atlas packing counter")
     publish_floor(entry,before_repack);sync_scene(atlas,world,true,false,sparse([entry]))
-    check(atlas.last_reconcile_phases.address_rows_checked==2 and atlas.last_reconcile_phases.address_rows_preserved==0,"Worker captured before repacking cannot skip full address repair")
+    check(atlas.floor_address_token(entry)[1]==atlas.repack_count,"Worker captured before repacking publishes the current atlas generation")
     check_transport(atlas,entry,"Prepared snapshot crossing repack")
     await pixel_oracle(atlas,world,source,"token-repack-fallback")
     atlas.close()

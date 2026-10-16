@@ -157,7 +157,7 @@ func _ready() -> void:
     normals_button.tooltip_text = "Preview the receiving surface normals"
     normals_button.toggle_mode = true
     normals_button.focus_mode = Control.FOCUS_NONE
-    normals_button.set_pressed_no_signal(world.normals_visible)
+    normals_button.set_pressed_no_signal(world.requested_normals_visible)
     normals_button.toggled.connect(world.set_normals_visible)
     add_child(normals_button)
     popup.visible = false
@@ -341,8 +341,8 @@ func _process(delta: float) -> void:
     if metrics.text != metric_text: metrics.text = metric_text
     if grid_button.button_pressed != world.grid_visible:
         grid_button.set_pressed_no_signal(world.grid_visible)
-    if normals_button.button_pressed != world.normals_visible:
-        normals_button.set_pressed_no_signal(world.normals_visible)
+    if normals_button.button_pressed != world.requested_normals_visible:
+        normals_button.set_pressed_no_signal(world.requested_normals_visible)
     end_button.disabled = not ready
     confirm_button.visible = not world.selected_action.is_empty() and world.selected_action.get("target_type") != "self"
     cancel_button.visible = confirm_button.visible

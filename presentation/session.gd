@@ -18,6 +18,9 @@ var source_files_pending: Dictionary = {}
 var source_headers_pending: Dictionary = {}
 var mutex = Mutex.new()
 var prepared: Array = []
+# A scene consumer may prepare passive world data as soon as compilation ends.
+# Non-scene callers keep their single complete operation/media handoff.
+var deliver_compiled_operations: bool = false
 var prepared_sequence = -1
 var preparation_state: Dictionary = {}
 var latest_sequence = -1
@@ -288,6 +291,16 @@ func _prepare_loop() -> void:
         var compiled_at = Time.get_ticks_usec()
         var media_ms = 0.0
         if result.ok and next>0 and not _stopping():
+            if deliver_compiled_operations:
+                # Transfer immutable compiler output once. Never mutate this
+                # message after the scene can borrow it for passive projection.
+                message.stage="compiled"
+                message.source_files=Catalog.source_snapshot(authoring_cache)
+                mutex.lock()
+                prepared.append(message)
+                mutex.unlock()
+                message={"kind":"operation","stage":"media","sequence":next,
+                    "groups":result.value.groups}
             message.media = MediaWarmup.prepare_handoff(before,result.value.groups,authoring_cache,result.value.final_state)
             media_ms = (Time.get_ticks_usec()-compiled_at)/1000.0
         if _stopping(): break

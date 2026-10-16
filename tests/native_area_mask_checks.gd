@@ -11,9 +11,19 @@ func run()->void:
     var manifest:Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://authoring/sandbox/projectiles.json"))
     var spell:Dictionary=manifest.spells.filter(func(value):return value.id=="web")[0]
     var clip:Dictionary=spell.clips.filter(func(value):return value.id=="spells/web/ground/lifecycle")[0]
+    var cache:Dictionary={}
+    var admission:Dictionary=Factory.prepare([clip],cache)
+    var deadline:int=Time.get_ticks_msec()+20000
+    while not admission.ready and admission.errors.is_empty() and Time.get_ticks_msec()<deadline:
+        await process_frame
+        admission=Factory.prepare([clip],cache)
+    check(admission.ready,"Actual native source admitted through production preparation")
+    if not admission.ready:print(admission);quit(1);return
     var owner=Node3D.new();root.add_child(owner)
     var source=Factory.make(owner,clip.duplicate(true));var peer=Factory.make(owner,clip.duplicate(true))
     check(source.error.is_empty() and peer.error.is_empty(),"The actual imported native Web source constructs in both owners")
+    if not source.error.is_empty() or not peer.error.is_empty():
+        print(source.error,peer.error);Factory.close(source);Factory.close(peer);owner.free();quit(1);return
     var preserved:Dictionary={}
     for piece in source.geometry:
         if piece.node is MeshInstance3D:
@@ -39,8 +49,32 @@ func run()->void:
     check(not Mask.update(source,positions).changed and state.texture==texture,"Unchanged disclosure performs no texture replacement")
     var peer_result=Mask.configure(peer,[[7,9]])
     check(peer_result.ready and peer.area_mask.texture!=texture,"Another source occurrence has a private spatial mask")
-    Mask.update(source,[[-2,-1]])
+    var material:ShaderMaterial=state.materials[0]
+    var old_bound:Texture2D=material.get_shader_parameter("native_area_cells")
+    var pending=Mask.prepare(source,[[-2,-1]])
+    check(pending.ready and state.texture==texture and material.get_shader_parameter("native_area_cells")==old_bound,
+        "Preparing later suppression leaves the displayed mask and material unchanged")
+    var absent=Mask.publish(source,[[99,99]])
+    check(not absent.ready and state.texture==texture,"An unprepared cut is rejected without changing current coverage")
+    var prepared_texture:Texture2D=state.prepared[0].texture
+    Mask.publish(source,[[-2,-1]])
+    check(state.texture==prepared_texture and material.get_shader_parameter("native_area_cells")==prepared_texture,
+        "Publication adopts the exact prepared texture without allocating a replacement")
     check(peer.area_mask.positions==[[7,9]] and peer.area_mask.origin==Vector2(7,9),"A suppression update does not alter another occurrence")
+    var future:Array=[[8,8]]
+    var returning:Array=positions
+    Mask.prepare(source,future)
+    Mask.prepare(source,returning)
+    Mask.publish(source,returning)
+    check(Mask.prepared(source,future),"Publishing a returning shape preserves a later cue prepared earlier")
+    var future_texture:Texture2D=state.prepared[0].texture
+    Mask.retain(source,[future])
+    check(state.prepared.size()==1 and state.texture!=future_texture,"Current coverage and named future interest have independent ownership")
+    Mask.prepare(source,[[77,77]])
+    Mask.retain(source,[future])
+    check(not Mask.prepared(source,[[77,77]]) and Mask.prepared(source,future),"Cancelled shape releases only its own future interest")
+    Mask.publish(source,future)
+    check(state.texture==future_texture,"Later cue reuses its original prepared image after returning footprint")
     Mask.update(source,[])
     check(source.area_mask.image.get_pixel(0,0).r==0,"No disclosed cells yields zero native coverage")
     Factory.close(source)

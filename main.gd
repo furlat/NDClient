@@ -493,7 +493,7 @@ func update_highlight() -> void:
     for entry in entries:
         var row: Dictionary = entry.placement
         if row.kind == "actor": continue
-        entry.material.set_shader_parameter("highlighted", Input.is_physical_key_pressed(KEY_ALT) and Catalog.break_duration(row,catalog_cache) > 0 and not destruction.has(row.id) and entry.source_role != 2)
+        SourceMaterial.set_parameter(entry,"highlighted", Input.is_physical_key_pressed(KEY_ALT) and Catalog.break_duration(row,catalog_cache) > 0 and not destruction.has(row.id) and entry.source_role != 2)
 
 func add_modular_entries(row: Dictionary) -> void:
     var rig: Dictionary = rigs[row.rig]
@@ -503,9 +503,9 @@ func add_modular_entries(row: Dictionary) -> void:
         add_entry(row, "shadow" if layer.slot == "shadow" else "body", i, MODULAR_SHADER)
         var entry: Dictionary = entries.back()
         entry.actor_layer = layer
-        entry.material.set_shader_parameter("layer_alpha", layer.alpha)
-        entry.material.set_shader_parameter("shadow", layer.slot == "shadow")
-        entry.material.set_shader_parameter("tint", Modular.rgb(layer.tint))
+        SourceMaterial.set_parameter(entry,"layer_alpha", layer.alpha)
+        SourceMaterial.set_parameter(entry,"shadow", layer.slot == "shadow")
+        SourceMaterial.set_parameter(entry,"tint", Modular.rgb(layer.tint))
 
 func update_actor_frames() -> void:
     var phase_started = Time.get_ticks_usec()
@@ -528,8 +528,8 @@ func update_actor_frames() -> void:
         if entry.get("texture_path","") != resources[clip.sheets[category]]:texture_gc_dirty = true
         entry.texture_path = resources[clip.sheets[category]]
         var size = sheet.get_size()
-        entry.material.set_shader_parameter("sheet", sheet)
-        entry.material.set_shader_parameter("frame_uv", Vector4(frame * rig.cell_width / size.x,
+        SourceMaterial.set_parameter(entry,"sheet", sheet,true)
+        SourceMaterial.set_parameter(entry,"frame_uv", Vector4(frame * rig.cell_width / size.x,
             rig.facing_rows[direction] * rig.cell_height / size.y, rig.cell_width / size.x, rig.cell_height / size.y))
         CharacterGeometry.bind(entry,entry.texture_path,catalog_cache,texture,source_depth,source_normals)
         entry.node.position = Placement.contact(row)
@@ -638,10 +638,9 @@ func _process(delta: float) -> void:
         FrameProfile.end_phase(profile,"process",process_started)
         return
     water_clock_seconds += delta
-    for reference in water_materials:
-        var material: ShaderMaterial = reference.get_ref()
-        if material != null: material.set_shader_parameter("displayed_time_seconds",water_clock_seconds)
-    water_materials = water_materials.filter(func(reference):return reference.get_ref() != null)
+    for entry in water_materials:
+        if is_instance_valid(entry.node): SourceMaterial.set_parameter(entry,"displayed_time_seconds",water_clock_seconds)
+    water_materials = water_materials.filter(func(entry):return is_instance_valid(entry.node))
     var walking_started = Time.get_ticks_usec()
     var direction = Vector2(float(Input.is_physical_key_pressed(KEY_D)) - float(Input.is_physical_key_pressed(KEY_A)),
         float(Input.is_physical_key_pressed(KEY_S)) - float(Input.is_physical_key_pressed(KEY_W)))

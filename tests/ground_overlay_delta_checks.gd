@@ -35,6 +35,15 @@ func run()->void:
     check(not overlay.changed and is_same(overlay.ordered,original_order),"Changing positions within existing styles preserves painter order")
     check(overlay.buffer_allocations==original_allocations,"Moving49affectedcells reuses native buffers")
     check(overlay.transform_writes-writes<=28,"Moving a seven-cell edge writes at most28transforms, not1200")
+    for entry in overlay.mark_batches.values():
+        var expected = {}
+        var filled:bool = entry.material.get_shader_parameter("fill_colour").a>0
+        for x in range(40):
+            for y in range(30):
+                if (x>=11 and x<18 and y>=10 and y<17)==filled: expected[Vector3(x,0,y)] = true
+        var positions = {}
+        for position in entry.positions: positions[position] = true
+        check(positions==expected and entry.positions.size()==expected.size(),"Published style membership exactly matches disclosed legal and affected cells")
     for entry in overlay.mark_batches.values() if DisplayServer.get_name()!="headless" else []:
         var positions=actual_positions(entry)
         check(positions.size()==entry.node.multimesh.visible_instance_count,"No stale or duplicate native instances are drawn")
@@ -51,14 +60,20 @@ func run()->void:
     check(overlay.mark_batches.values().any(func(entry):return entry.node.multimesh.visible_instance_count==0),"Empty retained style draws zero native instances")
     overlay.set_preview(marks(0));overlay.sync(owner,tiles,1,false,0,true)
     check(not overlay.changed and overlay.buffer_allocations==original_allocations,"Restored affected style reuses reserved slot and capacity")
-    var samples=[]
+    writes=overlay.transform_writes
+    overlay.set_preview(marks(1));overlay.set_preview(marks(0));overlay.sync(owner,tiles,1,false,0,true)
+    check(overlay.transform_writes==writes and is_same(overlay.ordered,original_order),"Superseded preview changes before a draw leave the displayed membership untouched")
+    var samples=[]; var preview_samples=[]; var total_samples=[]
     var before_writes=overlay.transform_writes
     for i in range(100):
         var value=marks(i%2)
+        var preview_began=Time.get_ticks_usec()
         overlay.set_preview(value)
+        preview_samples.append((Time.get_ticks_usec()-preview_began)/1000.)
         var began=Time.get_ticks_usec();overlay.sync(owner,tiles,1,false,0,true)
         samples.append((Time.get_ticks_usec()-began)/1000.)
-    var prior=[]
+        total_samples.append((Time.get_ticks_usec()-preview_began)/1000.)
+    var prior=[]; var prior_preview=[]; var prior_total=[]
     var oracle=""
     for argument in OS.get_cmdline_user_args():
         if argument.begins_with("--before="):oracle=argument.trim_prefix("--before=")
@@ -66,13 +81,31 @@ func run()->void:
         var previous=load(oracle).new()
         previous.set_preview(marks(0));previous.sync(owner,tiles,1,false,0,true)
         for i in range(100):
-            previous.set_preview(marks(i%2))
+            var value=marks(i%2)
+            var preview_began=Time.get_ticks_usec()
+            previous.set_preview(value)
+            prior_preview.append((Time.get_ticks_usec()-preview_began)/1000.)
             var began=Time.get_ticks_usec();previous.sync(owner,tiles,1,false,0,true)
             prior.append((Time.get_ticks_usec()-began)/1000.)
+            prior_total.append((Time.get_ticks_usec()-preview_began)/1000.)
         previous.close()
+    overlay.sync(owner,tiles,1,false,1,true)
+    var retained_count = 0
+    for entry in overlay.mark_batches.values(): retained_count += entry.positions.size()
+    check(retained_count==1200,"Camera quarter change retains the current preview without another setter")
+    tiles["0,0"].elevation_steps=2
+    overlay.sync(owner,tiles,2,false,1,true)
+    retained_count=0
+    for entry in overlay.mark_batches.values(): retained_count += entry.positions.size()
+    check(retained_count==1199 and overlay.cells.has("0,0"),"Support elevation change moves the retained mark from its flat batch into painter order")
+    tiles["0,0"].elevation_steps=0
+    overlay.sync(owner,tiles,3,false,1,true)
+    retained_count=0
+    for entry in overlay.mark_batches.values(): retained_count += entry.positions.size()
+    check(retained_count==1200 and not overlay.cells.has("0,0"),"Lowering support restores every retained mark without another setter")
     overlay.set_preview({});overlay.sync(owner,tiles,1,false,0,true)
     check(overlay.mark_batches.is_empty() and overlay.ordered.is_empty(),"Clearing all marks retires retained style slots")
-    var report={"checks":checks,"failures":failures,"native":DisplayServer.get_name()!="headless","changed_transforms":overlay.transform_writes-before_writes,"full_rewrite_transforms":99*1200,"sync_ms":Profile.distribution(samples),"before_sync_ms":Profile.distribution(prior),"scope":"Isolated1200cell/49affected-cell synchronization; exact visible native transforms and bounded writes; not live FPS"}
+    var report={"checks":checks,"failures":failures,"native":DisplayServer.get_name()!="headless","changed_transforms":overlay.transform_writes-before_writes,"full_rewrite_transforms":99*1200,"sync_ms":Profile.distribution(samples),"before_sync_ms":Profile.distribution(prior),"set_preview_ms":Profile.distribution(preview_samples),"before_set_preview_ms":Profile.distribution(prior_preview),"total_ms":Profile.distribution(total_samples),"before_total_ms":Profile.distribution(prior_total),"scope":"Isolated1200cell/49affected-cell synchronization; exact visible native transforms and bounded writes; not live FPS"}
     overlay.close();owner.free()
     FileAccess.open("res://.runtime/ground-overlay-delta-checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("GROUND_OVERLAY_DELTA_CHECKS ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)

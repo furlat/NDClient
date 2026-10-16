@@ -775,7 +775,7 @@ func _prepare_candidate(restored: Dictionary, source: Dictionary)->void:
     candidate_budget=replay_budget_bytes
     var spare={"viewport":spare_viewport,"world":spare_world,"index":spare_index,"frozen":frozen_spare_viewports} if spare_world!=null else {}
     spare_viewport=null;spare_world=null;spare_index={};frozen_spare_viewports=[]
-    var shared=is_same(source,index) or (not case_bundle.is_empty() and is_same(pending_bundle,case_bundle))
+    var shared=not pending_authoring_reload and (is_same(source,index) or (not case_bundle.is_empty() and is_same(pending_bundle,case_bundle)))
     var prepared=ReplayPanes.prepare(self,restored.primary,source,world,spare,candidate_budget,shared,not index.is_empty())
     candidate_world=prepared.world;candidate_viewport=prepared.viewport
     # The retained preview cannot spend the shared native warmup draw before
@@ -869,6 +869,10 @@ func _publish_candidate()->void:
 
 func _sync_candidate_view()->bool:
     var changed=false
+    if candidate_world.native_spell_hit_material!=world.native_spell_hit_material:
+        # This is already the user's accepted preference. Do not persist it
+        # again; invalidate the candidate frame so it draws before publication.
+        candidate_world.native_spell_hit_material=world.native_spell_hit_material;changed=true
     if candidate_world.playback_speed!=world.playback_speed:
         candidate_world.playback_speed=world.playback_speed;changed=true
     if candidate_index.directory==active_directory:
@@ -1018,10 +1022,11 @@ func _report_publication(first:bool)->void:
         if required.has(path):continue
         upcoming_count+=1
         if media.ready_paths.has(path) and not media.failed.has(path):upcoming_ready+=1
-    for path in media.preload_selected:
+    var sources:Dictionary=Play.MediaWarmup.physical(media)
+    for path in sources.preload_selected:
         if media.wanted.has(path):continue
         optional_count+=1
-        if media.ready_paths.has(path) and not media.failed.has(path):optional_ready+=1
+        if sources.selected_ready.has(path) and not sources.failed.has(path):optional_ready+=1
     var receipt={"first":first,"process_uptime_ms":Time.get_ticks_usec()/1000.0,
         "studio_elapsed_ms":(Time.get_ticks_usec()-opened_usec)/1000.0,
         "directory":active_directory,"display_ms":world.timeline.display_ms,

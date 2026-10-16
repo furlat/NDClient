@@ -1,4 +1,5 @@
 extends RefCounted
+const SourceMaterial=preload("res://presentation/source_material.gd")
 ## One assembled-alpha contour, shared by all physical outfit layers.
 const ShaderSource=preload("res://presentation/condition_outline.gdshader")
 const Characters=preload("res://presentation/characters.gd")
@@ -42,13 +43,13 @@ func sample(world: Node,actor_id: String,material: Dictionary) -> bool:
         world.actor_entries.append(entry);world.draw_order_dirty=true
         owners[actor_id]={"view":view,"entry":entry,"key":[],"drawn":false}
     var owner: Dictionary=owners[actor_id]
-    var key: Array=parts.map(func(entry):return [entry.texture_path,entry.material.get_shader_parameter("frame_uv"),entry.actor_layer.alpha])
+    var key: Array=parts.map(func(entry):return [entry.texture_path,SourceMaterial.value(entry,"frame_uv"),entry.actor_layer.alpha])
     if owner.key!=key:
         owner.key=key;owner.drawn=false
         for child in owner.view.get_children():child.free()
         for part in parts:
-            var sprite=Sprite2D.new();sprite.centered=false;sprite.texture=part.material.get_shader_parameter("sheet")
-            var uv: Vector4=part.material.get_shader_parameter("frame_uv")
+            var sprite=Sprite2D.new();sprite.centered=false;sprite.texture=SourceMaterial.value(part,"sheet")
+            var uv: Vector4=SourceMaterial.value(part,"frame_uv")
             sprite.region_enabled=true;sprite.region_rect=Rect2(uv.x*sprite.texture.get_width(),uv.y*sprite.texture.get_height(),uv.z*sprite.texture.get_width(),uv.w*sprite.texture.get_height())
             sprite.texture_filter=CanvasItem.TEXTURE_FILTER_NEAREST;sprite.modulate.a=part.actor_layer.alpha;owner.view.add_child(sprite)
         owner.view.render_target_update_mode=SubViewport.UPDATE_ONCE

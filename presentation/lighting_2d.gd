@@ -148,6 +148,45 @@ func _free_page(page: Dictionary) -> void:
                 node.queue_free()
         collection.clear()
 
+func begin_preparation(resolved: Dictionary) -> Dictionary:
+    # Candidate nodes are parented to their eventual canvas but stay disabled
+    # and outside page membership until the displayed cut adopts them.
+    return {"resolved":resolved,"pages":_pages.duplicate(),"nodes":[],"page":0,"source":0,"complete":false}
+
+func prepare_step(work: Dictionary) -> void:
+    if work.complete:return
+    if work.page>=work.pages.size():work.complete=true;return
+    var page:Dictionary=work.pages[work.page]
+    var sources:Array=work.resolved.sources
+    if work.source>=sources.size():work.page+=1;work.source=0;return
+    var source:Dictionary=sources[work.source];work.source+=1
+    if page.nodes.has(source.item_uuid):return
+    var node:PointLight2D=_make_point(page.parent,source)
+    work.nodes.append({"page":page,"id":source.item_uuid,"node":node})
+
+func preparation_valid(work: Dictionary) -> bool:
+    if not work.get("complete",false) or work.pages.size()!=_pages.size():return false
+    for i in _pages.size():
+        if not is_same(work.pages[i],_pages[i]) or not is_instance_valid(_pages[i].parent):return false
+    for record in work.nodes:
+        if not is_instance_valid(record.node) or record.page.nodes.has(record.id):return false
+    return true
+
+func publish_prepared(work: Dictionary) -> void:
+    for record in work.nodes:record.page.nodes[record.id]=record.node
+    work.nodes=[]
+    _sync_resolved(work.resolved)
+
+func _make_point(parent:Node,source:Dictionary) -> PointLight2D:
+    var node=PointLight2D.new()
+    node.name=("Emitter2D_"+str(source.item_uuid)).validate_node_name()
+    node.texture=_source_cookie(source)
+    node.texture_filter=CanvasItem.TEXTURE_FILTER_LINEAR
+    node.shadow_enabled=false
+    node.enabled=false
+    parent.add_child(node)
+    return node
+
 func _sync_page(page: Dictionary) -> void:
     if not is_instance_valid(page.parent): return
     var wanted = {}
@@ -160,14 +199,7 @@ func _sync_page(page: Dictionary) -> void:
     for source in sources:
         var id: String=source.item_uuid
         if not page.nodes.has(id):
-            var node=PointLight2D.new()
-            node.name=("Emitter2D_"+id).validate_node_name()
-            node.texture=_source_cookie(source)
-            node.texture_filter=CanvasItem.TEXTURE_FILTER_LINEAR
-            node.shadow_enabled=false
-            node.enabled=false # project() publishes the matching camera position.
-            page.parent.add_child(node)
-            page.nodes[id]=node
+            page.nodes[id]=_make_point(page.parent,source)
         page.nodes[id].color=_source_colours.get(id,Color.WHITE)
         page.nodes[id].texture=_source_cookie(source)
     wanted.clear()
@@ -193,8 +225,10 @@ func _sync_pages() -> void:
     for page in _pages: _sync_page(page)
 
 func sync(state: Dictionary) -> void:
+    _sync_resolved(resolve(state))
+
+func _sync_resolved(resolved: Dictionary) -> void:
     _canvas_sources.clear()
-    var resolved=resolve(state)
     sources=resolved.sources
     _resolver.sources=sources
     _resolver.issues=resolved.issues

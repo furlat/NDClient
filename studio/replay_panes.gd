@@ -38,7 +38,7 @@ static func prepare(parent:Node,restored:RefCounted,source:Dictionary,reference:
         spare:Dictionary,budget:int,share_sources:bool,retain_view:bool)->Dictionary:
     var pane={}
     if not spare.is_empty():
-        if is_same(spare.index,source):
+        if share_sources and is_same(spare.index,source):
             freeze(spare,false)
             spare.viewport.audio_listener_enable_3d=false
             spare.world.component_renderer.audio.set_enabled(false)
@@ -52,15 +52,9 @@ static func prepare(parent:Node,restored:RefCounted,source:Dictionary,reference:
         host.component_renderer.audio.set_enabled(false)
         host.catalog_cache=Play.Catalog.source_snapshot(source.cache)
         host.media_warmup.budget_bytes=budget
-        if share_sources:
-            # GPU/source values are immutable; queues, pins and budgets remain private.
-            host.textures=reference.textures.duplicate()
-            host.source_images=reference.source_images.duplicate()
-            host.texture_last_use=reference.texture_last_use.duplicate()
-            host.fixture_frame_energy=reference.fixture_frame_energy.duplicate()
-            host.fixture_frame_centroids=reference.fixture_frame_centroids.duplicate()
-            for path in reference.media_warmup.resident:
-                host.media_warmup.resident[path]=reference.media_warmup.resident[path].duplicate()
+        if share_sources:Play.MediaWarmup.share(host.media_warmup,reference.media_warmup)
+        else:Play.MediaWarmup.physical(host.media_warmup).source_revision=Play.MediaWarmup.physical(reference.media_warmup).source_revision+1
+        host.attach_media_sources()
         pane={"world":host,"viewport":view,"index":source,"frozen":[]}
     var owner:Node3D=pane.world
     owner.external_clock=false

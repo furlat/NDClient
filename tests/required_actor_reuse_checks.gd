@@ -77,9 +77,9 @@ func run()->void:
     var position_only=witness.duplicate();position_only.last_visual_position=[999,998,0]
     check(Media._same_actor_selector(base,Media._actor_selector(position_only)),"Position changes keep exact source selectors")
     var leaf=witness.duplicate();leaf.appearance=witness.appearance.duplicate()
-    check(not Media._same_actor_selector(base,Media._actor_selector(leaf)),"New appearance owner invalidates selectors")
+    check(Media._same_actor_selector(base,Media._actor_selector(leaf)),"Equal decoded appearance preserves source selection")
     leaf=witness.duplicate();leaf.visual_loadout=witness.visual_loadout.duplicate();leaf.visual_loadout.layers=witness.visual_loadout.layers.duplicate()
-    check(not Media._same_actor_selector(base,Media._actor_selector(leaf)),"New nonempty equipment-layer owner invalidates selectors")
+    check(Media._same_actor_selector(base,Media._actor_selector(leaf)),"Equal decoded equipment layers preserve source selection")
     leaf=witness.duplicate();leaf.visual_loadout=witness.visual_loadout.duplicate();leaf.visual_loadout.active_weapon_set="ranged" if witness.visual_loadout.active_weapon_set=="melee" else "melee"
     check(not Media._same_actor_selector(base,Media._actor_selector(leaf)),"Changed active equipment selector invalidates")
     leaf=witness.duplicate();leaf.life_state="dying" if witness.life_state=="alive" else "alive"

@@ -1,6 +1,7 @@
 # Preparation, publication and ownership
 
-Status: planning only; implementation has not started. Requested 15 October 2026.
+Status: implementation authorized and in progress. Requested 15 October 2026.
+Checkpoint: `0cbb592`. Fresh native live baseline: `.runtime/player-runs/20261015T213323.878907Z` (81 checks, no failures; latency/frame targets not yet met).
 This document supersedes the incremental performance continuation in
 [the native spell migration plan](NATIVE_SPELL_CLIENT_MIGRATION_PLAN_2026-10-15.md).
 Its event semantics, accepted artwork and outstanding artistic deferrals remain.
@@ -514,3 +515,112 @@ the source review.
 This qualifies the plan's stated design and scope only. No runtime implementation
 or performance acceptance has been completed by writing it. The reviewer roles in
 §12 remain part of implementation and final qualification.
+
+## 14. Implementation evidence (16 October, still in progress)
+
+Checkpoint before implementation: `0cbb592`. Backend, factory assets, rendering
+quality and source art remain outside this change. This section records actual
+implementation and measurements; it does not mark the performance objectives met.
+
+Implemented boundaries:
+
+- Timeline advancement retains the unused duration across ready groups, preserving
+  source commit order and the existing waits at real publication boundaries.
+- Compiled requirements distinguish the opening displayed cut from later damage,
+  death and destruction sources. The whole received operation remains pinned;
+  later sources no longer displace the opening sources in decode/publication order.
+- Source residency has one physical owner and consumer roles. Optional action
+  selection and disclosed body-action clips use the same bounded owner. These
+  hints never publish a fact, condition, recipient, animation clock or audio cue.
+- World/ground projection carries sparse changes into private actor, receiver,
+  atlas and output preparation. Publication preflights the exact candidate and
+  does not fall back to synchronous full reconciliation. Rotation, settings and
+  viewport growth use the same prepared boundary.
+- Actor layer changes retain exact unchanged layers, their graph occurrence and
+  shadow ownership. Adding a casting layer no longer replaces the entire outfit.
+  An actual second-Fireball comparison required one upsert and no removals and
+  matched the full-replacement framebuffer exactly in its tested case.
+- SourceMaterial owns shader operands and explicit changes consumed by atlas
+  bindings. Terrain batches supply every member's native depth. Studio candidates
+  receive current render preferences before publication.
+- Compact surface-socket tables depend on their sampling inputs, not on unrelated
+  runtime geometry-binding code. Refresh reused all 2,147 existing tables and
+  750,885 samples, writing no new sample tables.
+
+Already-run focused qualification includes ordered timeline/audio/replay-prefix
+checks; shared media residency and promotion; sparse world and initial/visibility
+receiver preparation; native staged atlas pixel comparisons; four-quarter shadow
+parity; and global rotation/settings/resize publication. These qualify their stated
+cases, not the complete Factory host or every gameplay animation. The later user
+instruction narrows further validation to changed boundaries and the actual live
+Gallery route; no broad suite is being expanded to defer that route.
+
+The actual player-input route opens the Lantern Gallery door, walks into the large
+room, drinks Haste, selects Fireball through the action bar/level modal, aims at
+several cells, then casts twice. It uses native Windows Forward+/Vulkan on the
+RTX 5090, 1600×960, view size 18, with no Studio timeline. Deliberate aiming and
+normal animation duration are excluded from the latency columns below.
+
+| Live run | Fireball 1: prepared → first animation | Fireball 2: prepared → first animation | Haste: prepared → first animation |
+| --- | ---: | ---: | ---: |
+| `20261015T225135.673056Z` | 421.37 ms | 158.49 ms | — |
+| `20261015T230533.982272Z` | 143.74 ms | 126.26 ms | 30.75 ms |
+| `20261015T231454.559327Z` | 72.40 ms | 78.53 ms | 174.71 ms |
+| `20261015T233017.276674Z` | 64.58 ms | 72.96 ms | 75.11 ms |
+| `20261015T233618.751130Z` | 62.86 ms | 84.60 ms | 98.77 ms |
+| `20261015T235258.543938Z` | 45.56 ms | 60.21 ms | 21.74 ms |
+| `20261015T235855.075072Z` | 53.23 ms | 54.84 ms | 32.09 ms |
+
+The latest run passed 81 existing live checks. The run still emitted four
+ObjectDB exit warnings; this is not called a clean shutdown. Fireball opening
+sources were already ready. Haste's optional body-source preparation now starts
+from already received pending choices during the preceding animation, retaining
+that work when the buttons become usable. The earlier fast Haste depended on
+incidental warming during the door action, so it was not a reliable cold-action
+result.
+
+Further ownership corrections in the tested working state:
+
+- Existing consumer readiness directories are updated by publication, role/hint
+  changes, failure, CPU release, eviction and epoch admission. Reads no longer
+  reconstruct source roles. The existing shared-source test passed 44 checks.
+- One actor owns the immutable projected condition/material operands shared by
+  its layers. Changes still compare actual clocks, textures and values; mutable
+  private callers always bind, and material initialization clears the shortcut.
+  Actor sampling partitions material components in their original order once.
+- Play receives the immutable compiled operation and its complete media handoff
+  through the existing Session queue as separate stages. Passive world projection
+  overlaps media resolution. Native preparation, optional queued effects and
+  publication still wait for the exact complete plan. Session's prepared cursor
+  advances only after that plan; non-scene Session consumers keep one handoff.
+- A live run exposed repeated admission of a 250 ms actor boundary on a fractional
+  display clock, freezing the door action. Compare the boundary on the absolute
+  clock instead of subtracting the group start. The existing structural-cut test
+  now covers that reproduction and passes 66 checks. Failed run
+  `20261015T234759.109536Z` remains evidence of the bug, not an accepted result.
+
+Performance is not accepted: latest complete-packet → Fireball animation remains
+91.82 / 89.63 ms. Client admission/reduction/compilation/required-media work
+consumes 38.59 / 34.79 ms, including 13.06 / 12.93 ms of resource metadata work.
+Prepared → animation still consumes 53.23 / 54.84 ms. Fireball frame distributions:
+
+| Cast | Mean | p50 | p95 | p99 | Maximum |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| First | 15.02 ms | 15.24 ms | 21.55 ms | 25.69 ms | 27.95 ms |
+| Second | 16.48 ms | 16.07 ms | 21.45 ms | 28.78 ms | 37.76 ms |
+
+The previous equivalent run measured 13.05 / 13.98 ms mean frames and 82.73 /
+94.94 ms packet → animation. The overlap is qualified for ordered behavior; these
+runs do not establish a consistent Fireball timing win from that change alone.
+Required metadata and native preparation/publication remain on the onset path.
+The larger reveal/lighting work also remains after the action-onset blocker, as
+directed by the user. The 100+ FPS/no-spike and 30 ms onset targets remain unmet.
+
+A further source-selector reuse experiment passed the existing real-recording
+closure oracle but did not establish a speed improvement. It was removed; no
+extra source-selector directory or proof is retained from that experiment.
+
+Raw evidence is under `.runtime/player-runs/<run>/`; latest analysis is
+`.runtime/fireball-overlapped-preparation-pipeline.json` and native frame data is
+`generated/profiles/2026-10-16T01-59-26-gallery-live-spells.json`. These runtime
+artifacts are ignored; their numerical limits are recorded here for review.

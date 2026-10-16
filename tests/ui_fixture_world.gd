@@ -23,7 +23,10 @@ var command_busy = false
 var camera: Camera3D
 var grid_visible = false
 var normals_visible = false
-func set_normals_visible(enabled: bool) -> void: normals_visible = enabled
+var requested_normals_visible = false
+func set_normals_visible(enabled: bool) -> void:
+    requested_normals_visible = enabled
+    normals_visible = enabled
 var wall_mode = "solid"
 var visual_actors = {}
 var ground_overlay = preload("res://presentation/ground_overlay.gd").new()

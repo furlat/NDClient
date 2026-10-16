@@ -56,7 +56,7 @@ func changed_condition_control(before:Image)->void:
     candidate.camera=Camera3D.new();candidate.add_child(candidate.camera)
     var row:Dictionary=world.visual_actors[id].row.duplicate(true);var rig:Dictionary=world.rigs[row.rig]
     candidate.result={"worker_ms":0.0,"actors":{id:{"row":row,"rig":rig,
-        "layers":world.Characters.layers(row,rig,world.catalog_cache),"entries":[],"playback":null,
+        "layers":world.Characters.layers(row,rig,world.catalog_cache),"entries":[],"new_entries":[],"playback":null,"reuse_actor":false,"retained_slots":{},
         "source_sample":{"clip":world.playbacks[id].clip,"source_seconds":world.playbacks[id].sample_seconds}}}}
     candidate.actor_ids=[id]
     while candidate.actor_cursor<candidate.actor_ids.size():candidate._prepare_actor()

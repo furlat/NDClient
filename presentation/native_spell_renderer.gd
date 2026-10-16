@@ -132,6 +132,28 @@ func prepare(compiled_groups:Array,cache:Dictionary,world:Node=null,prefetch_gro
             _construct(optional[id])
             if not budget.is_empty():budget.used_usec+=Time.get_ticks_usec()-started
             FrameProfile.end_phase(world.profile,"native_prepare_construct",started)
+    # Footprint resources belong to the received cut, not per-frame sampling.
+    # Keep each accepted shape even when several cuts share an occurrence ID.
+    var mask_interests:Dictionary={}
+    for pair in [[compiled_groups,true],[prefetch_groups,false]]:
+        for group in pair[0]:
+            for component in group.get("components",[]):
+                if not accepts(component) or not component.get("spatial_owner",false) or component.get("status")=="missing":continue
+                var positions:Array=component.get("resolved_area_positions",[])
+                if not mask_interests.has(component.id):mask_interests[component.id]=[]
+                if positions not in mask_interests[component.id]:mask_interests[component.id].append(positions)
+                if not handles.has(component.id):continue
+                var handle:Dictionary=handles[component.id]
+                if AreaMask.prepared(handle,positions):continue
+                if not budget.is_empty() and budget.used_usec>=budget.limit_usec:
+                    if pair[1]:result.ready=false;result.pending+=1
+                    continue
+                started=Time.get_ticks_usec()
+                var mask:Dictionary=AreaMask.prepare(handle,positions)
+                if not budget.is_empty():budget.used_usec+=Time.get_ticks_usec()-started
+                FrameProfile.end_phase(world.profile,"native_prepare_area",started)
+                if pair[1] and not mask.ready:result.ready=false;result.errors.append_array(mask.errors)
+    for id in handles:AreaMask.retain(handles[id],mask_interests.get(id,[]))
     started=Time.get_ticks_usec()
     _image_requirements(world)
     FrameProfile.end_phase(world.profile,"native_prepare_images",started)
@@ -239,9 +261,9 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
         handle.group_key=key
         handle.optical=_optical(component.get("optical",{}))
         if component.get("spatial_owner",false):
-            var mask=AreaMask.update(handle,component.get("resolved_area_positions",[]))
+            var mask=AreaMask.publish(handle,component.get("resolved_area_positions",[]))
             if not mask.ready:
-                handle.root.hide();_missing(component,"; ".join(mask.errors));continue
+                handle.root.hide();ready=false;_missing(component,"; ".join(mask.errors));continue
         # The bounded pass is only for a cold/seek history. Ordinary live
         # samples must follow the requested component clock at any frame rate.
         var expected_step:float=maxf(HISTORY_STEP,frame_seconds*maxf(1.0,float(world.playback_speed)))

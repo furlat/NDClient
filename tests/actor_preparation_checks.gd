@@ -70,7 +70,7 @@ func candidate_for(host:Probe,selected:Dictionary)->Node:
     var row:Dictionary=selected.row.duplicate(true)
     var id:String=row.id
     candidate.result={"worker_ms":0.0,"actors":{id:{"row":row,"rig":selected.rig,
-        "layers":Characters.layers(row,selected.rig,host.catalog_cache),"entries":[],"playback":null}}}
+        "layers":Characters.layers(row,selected.rig,host.catalog_cache),"entries":[],"new_entries":[],"playback":null,"reuse_actor":false,"retained_slots":{}}}}
     candidate.actor_ids=[id]
     return candidate
 func drain(host:Probe)->void:
@@ -122,8 +122,8 @@ func construction_ownership(index:Dictionary)->void:
     var original_cache:Dictionary=host.catalog_cache;host.catalog_cache=original_cache.duplicate()
     check(candidate.take_actor(id,selection.row,selection.rig).is_empty(),"Authoring reload invalidates source ownership");host.catalog_cache=original_cache
     var neutral:Dictionary=Construction.Conditions.material(id,[])
-    var neutral_key:Array=Construction.material_key(neutral,host.textures,host.resources)
-    check(prepared.entries.all(func(entry):return entry.get("bound_condition_key",[])==neutral_key),"Hidden new layers carry the exact current neutral condition key")
+    var neutral_parameters:Dictionary=Construction.Conditions.parameters(neutral,host.textures,host.resources)
+    check(prepared.entries.all(func(entry):return neutral_parameters.keys().all(func(name):return entry.source_parameters[name]==neutral_parameters[name])),"Hidden new layers carry the exact current neutral condition key")
     for entry in prepared.entries:
         var expected=ShaderMaterial.new();expected.shader=entry.material.shader
         Construction.Conditions.bind(expected,neutral,host.textures,host.resources)
@@ -133,7 +133,7 @@ func construction_ownership(index:Dictionary)->void:
             if value!=null:check(entry.material.get_shader_parameter(name)==value,"Hidden neutral initialization equals original binder: "+name)
     # The key owns a passive value snapshot, not a mutable frame sample.
     neutral.alpha=.25
-    check(prepared.entries.all(func(entry):return entry.bound_condition_key[0].condition_alpha==1.0),"A later sampled material value cannot mutate prepared condition keys")
+    check(prepared.entries.all(func(entry):return entry.source_parameters.condition_alpha==1.0),"A later sampled material value cannot mutate prepared condition keys")
     var original_entries:Array=prepared.entries.duplicate()
     # Compare with the exact shared original constructor, under an independent owner.
     var reference=host_for(index)

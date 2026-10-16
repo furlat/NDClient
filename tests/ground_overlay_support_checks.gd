@@ -78,6 +78,24 @@ func run()->void:
     canonical["3,0"].elevation_steps=0
     compare(overlay,oracle,owner,canonical,11,proof(8,9,{"3,0":true},[2,[]]),"Raised to background")
     check(overlay.support_contact_updates==1 and not overlay.raised_supports.has("3,0"),"Raised-to-zero updates only its contact and background membership")
+    # Timeline creates a temporary tile directory while staged support is
+    # present. The published world owner and its complete change set remain
+    # authoritative across those views, including same-revision stage cuts.
+    var published_owner = {}
+    var published = Overlay.new(); var published_oracle = Overlay.new()
+    var initial = proof(-1,20,{},[3],true); initial.owner = published_owner
+    compare(published,published_oracle,owner,canonical,20,initial,"Published support base")
+    var transient = canonical.duplicate()
+    transient["40,0"] = {"position":[40,0],"elevation_steps":2}
+    var admitted = proof(20,20,{"40,0":true},[3]); admitted.owner = published_owner
+    compare(published,published_oracle,owner,transient,21,admitted,"Published staged insertion")
+    check(published.support_checked_tiles==1 and published.support_positions.has("40,0"),"Complete published stage change processes one cell despite temporary source ownership")
+    published.sync(owner,transient.duplicate(),21,true,0,true,admitted)
+    check(published.support_checked_tiles==0,"Another temporary staged view does not rescan an already published boundary")
+    var departed = proof(20,20,{"40,0":true},[3]); departed.owner = published_owner
+    compare(published,published_oracle,owner,canonical,22,departed,"Published staged removal")
+    check(published.support_checked_tiles==1 and not published.support_positions.has("40,0"),"Same-revision stage retirement consumes its exact cell removal")
+    published.close(); published_oracle.close()
     var before_path="res://.runtime/ground-overlay-before-support-ledger.gd"
     var samples=[];var prior=[];var checks_per_update=0
     var insert_support=[];var insert_marks=[];var insert_total=[];var insert_before=[]

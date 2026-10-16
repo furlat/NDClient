@@ -1,6 +1,7 @@
 extends RefCounted
 # Delivered per-source optical receivers, separate from environment encodings.
 # This table indexes existing media identities; it never chooses an outfit.
+const SourceMaterial=preload("res://presentation/source_material.gd")
 const Placement = preload("res://placement.gd")
 const TABLE = "res://generated/character_geometry.json"
 const PROFILE_TABLE = "res://generated/normal_profiles.json"
@@ -128,8 +129,8 @@ static func _source_paths(path: String, slot: String, cache: Dictionary) -> Dict
     return {"ok":true,"value":result,"normal_sets":{path:profiles.value}}
 
 static func clear(entry: Dictionary) -> void:
-    entry.material.set_shader_parameter("has_component_geometry",false)
-    for parameter in PARAMETERS.values(): entry.material.set_shader_parameter(parameter,null)
+    SourceMaterial.set_parameter(entry,"has_component_geometry",false)
+    for parameter in PARAMETERS.values(): SourceMaterial.set_parameter(entry,parameter,null)
     entry.geometry_paths = {}
     entry.erase("geometry_cell_size")
     entry.erase("geometry_ground_pixels")
@@ -142,6 +143,7 @@ static func bind(entry: Dictionary, path: String, cache: Dictionary, loader: Cal
     if entry.get("geometry_binding",[]) == key: return
     clear(entry)
     entry.geometry_binding = key
+    SourceMaterial.structural_change(entry)
     var source = record(path,entry.actor_layer.slot,cache)
     entry.geometry_status = "unsupported_source" if source.is_empty() else source.status
     if source.is_empty(): return
@@ -154,13 +156,13 @@ static func bind(entry: Dictionary, path: String, cache: Dictionary, loader: Cal
     var root: String = _root(source)
     for field in PARAMETERS:
         var absolute: String = profiles.value[profile] if field=="normal" else root.path_join(source.files[field])
-        entry.material.set_shader_parameter(PARAMETERS[field],loader.call(absolute))
+        SourceMaterial.set_parameter(entry,PARAMETERS[field],loader.call(absolute))
         entry.geometry_paths[absolute] = true
-    entry.material.set_shader_parameter("component_depth_range",Vector2(source.depth_range[0],source.depth_range[1]))
+    SourceMaterial.set_parameter(entry,"component_depth_range",Vector2(source.depth_range[0],source.depth_range[1]))
     # Provisional optical convention: one reconstruction unit is one source
     # pixel at the existing quad scale. This never changes its geometry/Z/order.
-    entry.material.set_shader_parameter("component_units",entry.scale/Placement.PIXELS_PER_UNIT)
-    entry.material.set_shader_parameter("component_scale_x",scale_x)
+    SourceMaterial.set_parameter(entry,"component_units",entry.scale/Placement.PIXELS_PER_UNIT)
+    SourceMaterial.set_parameter(entry,"component_scale_x",scale_x)
     var optical: Dictionary = source.optical_camera if source.has("optical_camera") else cache[TABLE].optical_camera
     var cell: Array = source.get("cell_size",[128,128])
     entry.geometry_cell_size = Vector2(cell[0],cell[1])
@@ -168,11 +170,11 @@ static func bind(entry: Dictionary, path: String, cache: Dictionary, loader: Cal
     # packet availability never invents a gameplay placement.
     var ground: Variant = source.get("optical_ground_pixels",19.0)
     if ground!=null: entry.geometry_ground_pixels = float(ground)
-    entry.material.set_shader_parameter("component_reconstruction_origin",Vector2(optical.origin[0],optical.origin[1]))
-    entry.material.set_shader_parameter("component_elevation",deg_to_rad(optical.elevation_degrees))
-    entry.material.set_shader_parameter("use_component_depth",depth)
-    entry.material.set_shader_parameter("use_component_normals",normals)
-    entry.material.set_shader_parameter("has_component_geometry",true)
+    SourceMaterial.set_parameter(entry,"component_reconstruction_origin",Vector2(optical.origin[0],optical.origin[1]))
+    SourceMaterial.set_parameter(entry,"component_elevation",deg_to_rad(optical.elevation_degrees))
+    SourceMaterial.set_parameter(entry,"use_component_depth",depth)
+    SourceMaterial.set_parameter(entry,"use_component_normals",normals)
+    SourceMaterial.set_parameter(entry,"has_component_geometry",true)
 
     # Reconstructed points can lie outside the painted quad. Expand the native
     # light-culling box from the packet extrema, preserving the quad/pivot itself.

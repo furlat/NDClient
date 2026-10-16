@@ -1,4 +1,5 @@
 extends RefCounted
+const SourceMaterial=preload("res://presentation/source_material.gd")
 ## Native depth casters are isolated measurement helpers. Painted receivers and
 ## all real lights remain owned by the production native Canvas light path.
 const Placement = preload("res://placement.gd")
@@ -50,10 +51,19 @@ func sync(visual_actors: Array, camera: Camera3D, canvas_sources: Array) -> Arra
     var result: Array = []
     var retained := {}
     if not is_instance_valid(_parent): _last_cpu_ms=0.0;return result
+    # Visibility and light selection do not end the actor's resource lifetime.
+    # Keep prepared helpers disabled between casts instead of recreating them
+    # when the camera or a light returns.
+    for actor in visual_actors:
+        if actor.get("valid",true):retained[str(actor.row.id)]=true
+    for id in actors.keys():
+        if not retained.has(id):_remove(id);_last_counts.removed_actors+=1
+        else:
+            actors[id].entry.node.hide()
+            actors[id].viewport.render_target_update_mode=SubViewport.UPDATE_DISABLED
     var phase_started:=Time.get_ticks_usec()
     if not enabled or not _prepare_sources(canvas_sources):
         _timed("sources",phase_started);phase_started=Time.get_ticks_usec()
-        _clear_actors()
         _timed("retire",phase_started);_last_cpu_ms=float(Time.get_ticks_usec()-started)/1000.0
         return result
     _timed("sources",phase_started)
@@ -88,7 +98,6 @@ func sync(visual_actors: Array, camera: Camera3D, canvas_sources: Array) -> Arra
         rect=_sampling_rect(rect,sample_scale)
         var size := Vector2i((rect.size/sample_scale).round())
         var id: String=row.id
-        retained[id]=true
         _timed("layout",phase_started)
         if not actors.has(id):
             phase_started=Time.get_ticks_usec();actors[id]=_create(id)
@@ -113,8 +122,6 @@ func sync(visual_actors: Array, camera: Camera3D, canvas_sources: Array) -> Arra
         state.entry.node.visible=true
         result.append(state.entry)
     phase_started=Time.get_ticks_usec()
-    for id in actors.keys():
-        if not retained.has(id): _remove(id);_last_counts.removed_actors+=1
     var retained_shapes:Dictionary={}
     for state in actors.values():
         for id in state.casters:retained_shapes[id]=true
@@ -312,14 +319,14 @@ static func _projection(camera: Camera3D,origin: Vector3,ground: float,units: fl
 static func _snapshots(entries: Array,camera: Camera3D) -> Array:
     var result: Array=[]
     for entry in entries:
-        if entry.role=="shadow" or not entry.node.visible or not entry.material.get_shader_parameter("has_component_geometry"): continue
+        if entry.role=="shadow" or not entry.node.visible or not SourceMaterial.value(entry,"has_component_geometry"): continue
         var snapshot: Dictionary={"id":entry.id,"pivot":entry.pivot,"position":entry.node.global_position,
             "scale_x":entry.placement.get("scale_x",1.0),"basis":camera.global_basis,
             "component_cell_size":Vector2(entry.get("geometry_cell_size",Vector2(128,128))),
             "ground_pixels":float(entry.get("geometry_ground_pixels",19.0))}
         var complete := true
         for parameter in CASTER_PARAMETERS:
-            snapshot[parameter]=entry.material.get_shader_parameter(parameter)
+            snapshot[parameter]=SourceMaterial.value(entry,parameter)
             if snapshot[parameter]==null: complete=false
         if complete: result.append(snapshot)
     return result
@@ -382,7 +389,88 @@ func _caster_mesh(cell: Vector2) -> QuadMesh:
         _meshes[size]=mesh
     return _meshes[size]
 
-func _create(id: String) -> Dictionary:
+func prepare_actor_step(owner:Node3D,prepared:Dictionary)->bool:
+    # The accepted actor boundary owns these disabled native objects until
+    # publication. Light selection and animation remain displayed sampling.
+    var index:int=prepared.get("shadow_cursor",0)
+    if index==0 and prepared.get("reuse_actor",false) and actors.has(prepared.row.id) and not prepared.has("shadow_base"):
+        prepared.shadow_base=actors[prepared.row.id]
+        prepared.shadow_rekeys=[];prepared.shadow_new={}
+    if index>=prepared.entries.size():return true
+    var entry:Dictionary=prepared.entries[index]
+    if entry.role=="shadow" or not SourceMaterial.value(entry,"has_component_geometry"):
+        prepared.shadow_cursor=index+1
+        return false
+    if prepared.has("shadow_base"):
+        var target_id:String=prepared.row.id+":"+str(index)+":"+entry.role
+        var before:Dictionary=prepared.shadow_base
+        if is_same(prepared.get("retained_entries",{}).get(entry.actor_layer.slot),entry) and before.casters.has(entry.id):
+            prepared.shadow_rekeys.append({"before":entry.id,"after":target_id})
+        else:
+            # Only added/replaced caster resources belong to the hidden owner.
+            # The displayed viewport and its existing casters stay untouched.
+            var private:Dictionary={"root":owner,"casters":prepared.shadow_new}
+            var caster:MeshInstance3D=_create_caster(private,target_id,Vector2(entry.get("geometry_cell_size",Vector2(128,128))))
+            for parameter in CASTER_PARAMETERS:caster.material_override.set_shader_parameter(parameter,SourceMaterial.value(entry,parameter))
+        prepared.shadow_cursor=index+1
+        return false
+    if not prepared.has("shadow_state"):
+        prepared.shadow_state=_create(prepared.row.id,owner)
+        prepared.shadow_state.entry.node.hide()
+        return false
+    var state:Dictionary=prepared.shadow_state
+    var caster:MeshInstance3D=_create_caster(state,entry.id,Vector2(entry.get("geometry_cell_size",Vector2(128,128))))
+    for parameter in CASTER_PARAMETERS:caster.material_override.set_shader_parameter(parameter,SourceMaterial.value(entry,parameter))
+    prepared.shadow_cursor=index+1
+    return false
+
+func adopt_actor(prepared:Dictionary)->Array:
+    var retired:Array=[]
+    if prepared.has("shadow_base"):
+        var state:Dictionary=prepared.shadow_base
+        var casters:Dictionary={};var samples:Dictionary={};var shapes:Dictionary={}
+        for change in prepared.shadow_rekeys:
+            casters[change.after]=state.casters[change.before]
+            if state.caster_samples.has(change.before):samples[change.after]=state.caster_samples[change.before]
+            if _caster_shapes.has(change.before):shapes[change.after]=_caster_shapes[change.before]
+        for id in state.casters:
+            _caster_shapes.erase(id)
+            if state.casters[id] not in casters.values():
+                state.casters[id].hide();retired.append(state.casters[id])
+        for id in prepared.shadow_new:
+            var caster:MeshInstance3D=prepared.shadow_new[id]
+            caster.reparent(state.root,false);casters[id]=caster
+        _caster_shapes.merge(shapes)
+        state.casters=casters;state.caster_samples=samples;state.entry.placement=prepared.row;state.key=[]
+        prepared.erase("shadow_base");prepared.erase("shadow_new");prepared.erase("shadow_rekeys")
+        return retired
+    if not prepared.has("shadow_state"):return retired
+    var id:String=prepared.row.id
+    if actors.has(id):
+        var old:Dictionary=actors[id]
+        old.entry.node.hide()
+        old.viewport.render_target_update_mode=SubViewport.UPDATE_DISABLED
+        retired=[old.viewport,old.entry.node]
+    var state:Dictionary=prepared.shadow_state
+    state.viewport.reparent(_parent,false)
+    state.entry.node.reparent(_parent,false)
+    state.entry.placement=prepared.row
+    actors[id]=state
+    prepared.erase("shadow_state")
+    return retired
+
+func _create_caster(state:Dictionary,id:String,cell:Vector2)->MeshInstance3D:
+    var node:=MeshInstance3D.new()
+    node.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY
+    node.material_override=ShaderMaterial.new()
+    node.material_override.shader=CASTER
+    node.mesh=_caster_mesh(cell)
+    state.root.add_child(node)
+    state.casters[id]=node
+    return node
+
+func _create(id: String,owner:Node3D=null) -> Dictionary:
+    if owner==null:owner=_parent
     var viewport := SubViewport.new()
     viewport.name=("ShadowMeasure_"+id).validate_node_name()
     viewport.size=Vector2i(2,2)
@@ -394,7 +482,7 @@ func _create(id: String) -> Dictionary:
     # RD Omni shadows need two adjacent atlas slots; a one-slot quadrant can
     # never allocate the pair and silently produces an entirely unshadowed map.
     for quadrant in range(4): viewport.set_positional_shadow_atlas_quadrant_subdiv(quadrant,Viewport.SHADOW_ATLAS_QUADRANT_SUBDIV_4)
-    _parent.add_child(viewport)
+    owner.add_child(viewport)
     RenderingServer.viewport_set_measure_render_time(viewport.get_viewport_rid(),true)
     var root := Node3D.new()
     viewport.add_child(root)
@@ -431,7 +519,7 @@ func _create(id: String) -> Dictionary:
     material.shader=COMPOSITE
     material.set_shader_parameter("visibility_map",viewport.get_texture())
     output.material_override=material
-    _parent.add_child(output)
+    owner.add_child(output)
     var entry: Dictionary={"id":id+":generatedShadow","placement":{},"role":"shadow","layer":-1,
         "source_role":-1,"node":output,"material":material,"mobile":true,"screen_rect":Rect2(),"generated_shadow":true}
     return {"viewport":viewport,"root":root,"camera":camera,"ground":ground,"light":light,"casters":{},"caster_samples":{},
@@ -444,13 +532,9 @@ func _update(state: Dictionary,snapshots: Array,camera: Camera3D,origin: Vector3
         wanted[snapshot.id]=true
         if not state.casters.has(snapshot.id):
             _last_counts.new_casters=int(_last_counts.get("new_casters",0))+1
-            var node := MeshInstance3D.new()
-            node.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY
-            node.material_override=ShaderMaterial.new()
-            node.material_override.shader=CASTER
-            state.root.add_child(node)
-            state.casters[snapshot.id]=node
+            _create_caster(state,snapshot.id,snapshot.component_cell_size)
         var caster: MeshInstance3D=state.casters[snapshot.id]
+        caster.visible=true
         var parameters:Array=[]
         for parameter in CASTER_PARAMETERS:parameters.append(snapshot[parameter])
         var sample_key:Array=[parameters,snapshot.component_cell_size,camera.global_basis,snapshot.pivot,
@@ -483,8 +567,8 @@ func _update(state: Dictionary,snapshots: Array,camera: Camera3D,origin: Vector3
         var shape:Dictionary=snapshot.caster_shape if snapshot.has("caster_shape") else _caster_shape(snapshot,ground)
         caster.custom_aabb=shape.bounds
         RenderingServer.instance_set_custom_aabb(caster.get_instance(),caster.custom_aabb)
-    for id in state.casters.keys():
-        if not wanted.has(id): state.casters[id].free(); state.casters.erase(id);state.caster_samples.erase(id)
+    for id in state.casters:
+        if not wanted.has(id):state.casters[id].hide()
     _timed("update_casters",update_started);update_started=Time.get_ticks_usec()
     state.viewport.size=size
     _timed("update_target",update_started);update_started=Time.get_ticks_usec()

@@ -87,18 +87,25 @@ static func rgb(value: int) -> Vector3:
     return Vector3((value>>16)&255,(value>>8)&255,value&255)/255.0
 
 static func bind(material: ShaderMaterial, layer: Dictionary, facing: String, frame: int, textures: Dictionary, resources: Dictionary) -> void:
+    var values=parameters(layer,facing,frame,textures,resources)
+    for name in values:material.set_shader_parameter(name,values[name])
+
+static func parameters(layer: Dictionary, facing: String, frame: int, textures: Dictionary, resources: Dictionary) -> Dictionary:
+    var result={}
     var effect: Dictionary=layer.get("effect",{})
     var palette: Dictionary=effect.get("palette",{}) if effect.get("palette")!=null else {}
-    material.set_shader_parameter("effect_palette_enabled",not palette.is_empty())
-    if palette.is_empty(): return
+    result["effect_palette_enabled"]=not palette.is_empty()
+    if palette.is_empty(): return result
     var colors=PackedVector3Array()
     for value in palette.colors: colors.append(rgb(int(value)))
     colors.resize(32)
-    material.set_shader_parameter("effect_palette",colors)
-    material.set_shader_parameter("effect_palette_count",mini(32,palette.colors.size()))
-    material.set_shader_parameter("effect_range",effect.get("palette_ranges",{}).get(facing,Vector2(0,1)))
-    material.set_shader_parameter("effect_gamma",palette.get("gamma",1.0))
-    material.set_shader_parameter("effect_frame",frame)
+    result["effect_palette"]=colors
+    result["effect_palette_count"]=mini(32,palette.colors.size())
+    result["effect_range"]=effect.get("palette_ranges",{}).get(facing,Vector2(0,1))
+    result["effect_gamma"]=palette.get("gamma",1.0)
+    result["effect_frame"]=frame
     var noise=resources.get(palette.get("noiseSheet"),"")
-    material.set_shader_parameter("effect_has_noise",textures.has(noise))
-    if textures.has(noise): material.set_shader_parameter("effect_noise",textures[noise])
+    result["effect_has_noise"]=textures.has(noise)
+    if textures.has(noise): result["effect_noise"]=textures[noise]
+
+    return result

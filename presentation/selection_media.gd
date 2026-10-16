@@ -1,5 +1,5 @@
 extends RefCounted
-## Optional resource candidates from an owned selection and displayed records.
+## Optional resource candidates from disclosed choices, selection and displayed records.
 ## No synthetic facts, outcome prediction, scene creation or texture decoding.
 const Authoring = preload("res://presentation/authoring.gd")
 const NativeSpells = preload("res://presentation/native_spell_authoring.gd")
@@ -80,7 +80,7 @@ static func cancel(data: Dictionary) -> void:
     if not data.value.is_empty(): data.value={}; data.revision+=1
 
 static func request(data: Dictionary, key: Array, actor_uuid: String, behavior: String,
-        state: Dictionary, budget_bytes: int, source_files: Dictionary = {}, preview: Dictionary = {}, eligible: Array = [], hints: Dictionary = {}, profile: String = "") -> void:
+        state: Dictionary, budget_bytes: int, source_files: Dictionary = {}, preview: Dictionary = {}, eligible: Array = [], hints: Dictionary = {}, profile: String = "", behaviors: Array = []) -> void:
     if data.closed or key==data.key: return
     # A hover refinement replaces only unpublished work. Keep the accepted base
     # closure while the replacement metadata job prepares its exact candidates.
@@ -107,7 +107,7 @@ static func request(data: Dictionary, key: Array, actor_uuid: String, behavior: 
     cancel(data)
     data.value=retained
     data.key=key.duplicate(true)
-    if behavior.is_empty() or budget_bytes<=0: return
+    if (behavior.is_empty() and behaviors.is_empty()) or budget_bytes<=0: return
     # Canonical after-values are immutable. Copy only membership indexes, as the
     # existing MediaWarmup snapshot does; no inventory or senses graph copying.
     var actors={}; var objects={}
@@ -120,7 +120,7 @@ static func request(data: Dictionary, key: Array, actor_uuid: String, behavior: 
     data.pending={"key":data.key.duplicate(true),"actor_uuid":actor_uuid,"behavior":behavior,
         "state":{"actors":actors,"objects":objects,"tiles":{},"senses":senses},
         "budget_bytes":budget_bytes,"source_files":source_files.duplicate(),"recipients":recipients,"eligible":eligible.duplicate(),"exact_recipients":hints.exact,
-        "disclosed_objects":data.disclosed_objects.duplicate(),"profile":profile}
+        "disclosed_objects":data.disclosed_objects.duplicate(),"profile":profile,"behaviors":behaviors.duplicate()}
     _start(data)
 
 static func _start(data: Dictionary) -> void:
@@ -201,12 +201,26 @@ static func _break_banks(row: Dictionary, cache: Dictionary) -> Array:
 
 static func plan(request: Dictionary, cache: Dictionary, control: Dictionary) -> Dictionary:
     var result={"paths":{},"cpu_required":{},"gpu_only":{},"environment":{},"source_sizes":{},"source_files":{},
-        "errors":[],"skipped":0,"bytes":0,"actors":[],"banks":[],"object_paths":{},"bank_paths":{},"native_selection":{},"actor_sources":{},"object_sources":{},"normal_sets":{}}
+        "errors":[],"skipped":0,"bytes":0,"actors":[],"banks":[],"object_paths":{},"bank_paths":{},"onset_paths":{},"native_selection":{},"actor_sources":{},"object_sources":{},"normal_sets":{}}
     var state: Dictionary=request.state
     var caster: Dictionary=state.actors.get(request.actor_uuid,{})
     if caster.is_empty() or _cancelled(control):return result
     var recipe: Dictionary=NativeSpells.recipe({"behavior_id":request.behavior},cache)
-    if recipe.is_empty() or _cancelled(control):return result
+    if _cancelled(control):return result
+    if recipe.is_empty():
+        # A choice names resources, not a received fact. Resolve only its authored
+        # body clip; never infer conditions, recipients or gameplay outcomes.
+        var clips={}
+        var behaviors: Array=request.get("behaviors",[])
+        if behaviors.is_empty():behaviors=[request.behavior]
+        for behavior in behaviors:
+            var body: Dictionary=Authoring.action({"kind":"action","behavior_id":behavior},cache,caster).get("actor",{})
+            if body.get("enabled",true) and body.has("clip"):clips[body.clip]=true
+        if not clips.is_empty():
+            _actor_paths(caster,clips.keys(),result,cache)
+            result.actors.append({"uuid":request.actor_uuid,"clips":clips.keys()})
+            result.onset_paths=result.paths.duplicate()
+        return _finish_plan(request,result,{},cache,control)
     # Parse the same immutable feedback catalog before a damaging action is
     # submitted. Its actual releases still come exclusively from received facts.
     if recipe.get("damage")!=null: Catalog.read_file("catalog/action_media_assets.json",cache)
@@ -239,6 +253,9 @@ static func plan(request: Dictionary, cache: Dictionary, control: Dictionary) ->
         var available: Array=clips.keys().filter(func(clip):return rig.clips.has(clip))
         _actor_paths(actor,available,result,cache)
         result.actors.append({"uuid":id,"clips":available})
+    # These sources are needed for the opening cast and current occluders.
+    # Response/death/destruction candidates below remain useful later work.
+    result.onset_paths=result.paths.duplicate()
     for id in request.get("recipients",[]):
         if _cancelled(control):return result
         if recipe.get("damage")!=null and state.actors.has(id):_responses(state.actors[id],result,cache)
@@ -275,10 +292,14 @@ static func plan(request: Dictionary, cache: Dictionary, control: Dictionary) ->
         if _cancelled(control):return result
         if recipe.get("damage")!=null and not request.get("exact_recipients",false) and id not in request.get("recipients",[]) and (request.get("eligible",[]).is_empty() or id in request.eligible):
             _responses(state.actors[id],result,cache)
+    return _finish_plan(request,result,bank_paths,cache,control)
+
+static func _finish_plan(request: Dictionary, result: Dictionary, bank_paths: Dictionary, cache: Dictionary, control: Dictionary) -> Dictionary:
     for path in result.cpu_required:result.gpu_only.erase(path)
     var profile: String=request.get("profile","")
     result.normal_sets.make_read_only()
     result.paths=Characters.CharacterGeometry.for_profile(result.paths,result.normal_sets,profile,cache,"selection_paths")
+    result.onset_paths=Characters.CharacterGeometry.for_profile(result.onset_paths,result.normal_sets,profile,cache,"selection_onset")
     result.cpu_required=Characters.CharacterGeometry.for_profile(result.cpu_required,result.normal_sets,profile,cache,"selection_cpu")
     result.gpu_only=Characters.CharacterGeometry.for_profile(result.gpu_only,result.normal_sets,profile,cache,"selection_gpu")
     var estimates=EncounterMedia.estimates(result.paths,result.cpu_required,result.gpu_only,cache)
@@ -295,6 +316,10 @@ static func plan(request: Dictionary, cache: Dictionary, control: Dictionary) ->
         if result.gpu_only.has(path):gpu[path]=true
         if result.environment.has(path):environment[path]=true
     result.paths=accepted;result.cpu_required=cpu;result.gpu_only=gpu;result.environment=environment
+    var onset:Dictionary={}
+    for path in result.onset_paths:
+        if accepted.has(path):onset[path]=true
+    result.onset_paths=onset
     for id in result.object_paths:
         var retained_paths={}
         for path in result.object_paths[id]:

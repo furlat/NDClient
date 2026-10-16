@@ -2,6 +2,7 @@ extends SceneTree
 ## Real candidate preparation/publication/retirement with small mathematical
 ## source images. This qualifies ownership and bounded cleanup, not pixels/FPS.
 const Preparation=preload("res://presentation/world_preparation.gd")
+const SourceMaterial=preload("res://presentation/source_material.gd")
 var checks=0
 var failures:Array=[]
 
@@ -29,18 +30,21 @@ func prepare(host:Probe,count:int,remember_first:bool=false,flames:bool=false)->
     var candidate=Preparation.new();host.add_child(candidate);host.pending_world=candidate
     candidate.host=host;candidate.visible=false;candidate.epoch=host.timeline.initialization_revision
     candidate.quarter=host.quarter
-    candidate.result={"visibility":{},"supports":{},"worker_ms":0.0}
+    candidate.result={"visibility":{},"visibility_changes":{},"supports":{},"worker_ms":0.0}
     var source_refs:Array=[]
     for index in count:
         var node=MeshInstance3D.new();node.mesh=QuadMesh.new();candidate.add_child(node)
         var material=ShaderMaterial.new();material.shader=host.FIXTURE_FLAME_SHADER if flames else host.ENVIRONMENT_SHADER
-        material.set_shader_parameter("colour_texture",host.native_light_atlas.white)
-        material.set_shader_parameter("colour_size",Vector2(4,4))
-        material.set_shader_parameter("colour_rect",Vector4(0,0,4,4))
         node.material_override=material
         var row={"id":"fixture-"+str(index),"kind":"wall","position":[index,0],"base_height_steps":0}
         var entry={"id":row.id,"node":node,"material":material,"cell":Vector2(4,4),
             "record":{"path":"fixture","rect":[0,0,4,4]},"placement":row,"role":"wall","source_version":1}
+        SourceMaterial.initialize(entry)
+        if flames:
+            var frames=Texture2DArray.new();var images:Array[Image]=[host.source_images.fixture]
+            check(frames.create_from_images(images)==OK,"Fixture flame uses an explicit native source frame")
+            SourceMaterial.apply(entry,{"frames":frames,"frame_index":0})
+        else:SourceMaterial.apply(entry,{"colour_texture":host.native_light_atlas.white,"colour_size":Vector2(4,4),"colour_rect":Vector4(0,0,4,4)})
         candidate.entries.append(entry)
         if not remember_first or index>0:candidate.result.visibility[row.id]=true
         candidate.atlas_jobs.append({"entry":entry,"rows":[row],"packet":{}})
@@ -49,8 +53,6 @@ func prepare(host:Probe,count:int,remember_first:bool=false,flames:bool=false)->
     var refs:Array=[]
     for binding in candidate.atlas_shells.values():
         for receiver in binding.receivers.values():refs.append(weakref(receiver.node))
-    for fixture in candidate.atlas_fixture_shells.values():
-        for node in fixture.nodes:refs.append(weakref(node))
     check(refs.size()==count,"real source preparation creates one receiver per source")
     check(refs.all(func(ref):return ref.get_ref().get_parent()==host.native_light_atlas.projection_root and not ref.get_ref().visible),
         "prepared receivers have their final canvas parent but remain hidden")
@@ -171,6 +173,7 @@ func future_visibility()->void:
     var floor={"id":"new-floor","node":node,"material":material,"cell":Vector2(4,4),"record":original.record,
         "placement":rows[0],"role":"terrain","source_version":1,"batch_rows":rows,"ground_packets":packets,
         "ground_indices":indices,"ground_buffer":buffer,"scenery_values":[0.0,0.0]}
+    SourceMaterial.initialize(floor);SourceMaterial.apply(floor,original.source_parameters)
     candidate.entries.append(floor);candidate.result.visibility["floor-0"]=true
     candidate.atlas_jobs.append({"entry":floor,"rows":rows,"packet":{}})
     while candidate.atlas_cursor<candidate.atlas_jobs.size():candidate._prepare_atlas_receiver()
@@ -204,23 +207,25 @@ func future_visibility()->void:
     floor.scenery_values=[0.0,0.0]
     check(not Preparation.AtlasDelta.candidate_matches(host.native_light_atlas,prefix,host,upserts,{}),
         "different actual sight still rejects the private prefix")
+    candidate.atlas_prefix=prefix
     host._discard_world_preparation();await drain(host,"future visibility");await dispose(host)
 
 func flame_material_refs(candidate:Node,mode:String)->Array:
     var refs:Array=[]
-    for prepared in candidate.atlas_fixture_shells.values():
-        check(prepared.materials.receivers.is_empty() and prepared.materials.specs.is_empty(),mode+" private fixture materials do not own future geometry/address")
-        refs.append(weakref(prepared.materials.output.received_material))
-        for group in prepared.materials.groups.values():refs.append(weakref(group.material))
+    for prepared in candidate.atlas_shells.values():
+        check(prepared.receivers.size()==1 and prepared.specs.size()==1,
+            mode+" each private flame source owns its exact hidden receiver and source specification")
+        refs.append(weakref(prepared.output.received_material))
+        for group in prepared.groups.values():refs.append(weakref(group.material))
     return refs
 
 func flame_ownership(mode:String)->void:
     var host=make_host();var fixture=prepare(host,11,false,true)
     var candidate:Node=fixture.candidate
-    check(candidate.atlas_shells.is_empty() and candidate.atlas_fixture_shells.size()==11,
-        mode+" flame preparation owns shells and private material copies without geometry snapshots or sampled frames")
-    check(fixture.receivers.all(func(ref):return ref.get_ref().material==null),
-        mode+" prepared flame receiver nodes remain unassigned")
+    check(candidate.atlas_shells.size()==11 and host.native_light_atlas.prepared_source_bindings.is_empty(),
+        mode+" flame preparation exclusively owns complete source bindings")
+    check(fixture.receivers.all(func(ref):return ref.get_ref().material!=null and not ref.get_ref().visible),
+        mode+" prepared flame receivers have private receiving materials but remain hidden")
     var material_refs:Array=flame_material_refs(candidate,mode)
     var old_parent:Node=host.native_light_atlas.projection_root
     if mode=="replaced":
@@ -229,10 +234,10 @@ func flame_ownership(mode:String)->void:
     if mode!="cancel":
         candidate.publish_atlas_receivers()
         if mode=="replaced":
-            check(candidate.atlas_fixture_shells.size()==11 and host.native_light_atlas.prepared_receiver_sources.is_empty(),
+            check(candidate.atlas_shells.size()==11 and host.native_light_atlas.prepared_source_bindings.is_empty(),
                 "Replaced atlas refuses stale flame shells without moving them to its new parent")
         else:
-            check(candidate.atlas_fixture_shells.is_empty() and host.native_light_atlas.prepared_receiver_sources.size()==11,
+            check(candidate.atlas_shells.is_empty() and host.native_light_atlas.prepared_source_bindings.size()==11,
                 "Flame adoption transfers the existing shells once")
             check(fixture.receivers.all(func(ref):return ref.get_ref().get_parent()==old_parent and not ref.get_ref().visible),
                 "Flame adoption preserves their exact final parent and hidden state")

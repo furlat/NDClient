@@ -13,18 +13,16 @@ func pair_source()->Image:
 
 func single(world:World,texture:Texture2D,index:int,cell:Vector2=Vector2(512,512),dynamic:bool=false)->Dictionary:
     var material=ShaderMaterial.new();material.shader=Source
-    material.set_shader_parameter("colour_texture",texture)
-    material.set_shader_parameter("colour_size",Vector2(512,512))
-    material.set_shader_parameter("colour_rect",Vector4(0,0,512,512))
-    material.set_shader_parameter("has_geometry",false)
-    material.set_shader_parameter("wall_opacity",.28 if index==0 else 1.0)
-    material.set_shader_parameter("wall_mask_enabled",false)
     var node=MeshInstance3D.new();node.mesh=QuadMesh.new();node.mesh.size=Vector2(1.6,1.6)
     node.position=Vector3(-3.0+(index%4)*2.0,2.5-(index/4)*2.0,0)
     node.material_override=material;world.add_child(node)
-    return {"node":node,"material":material,"cell":cell,"record":{"path":"large","rect":[0,0,512,512]},
+    var entry={"node":node,"material":material,"cell":cell,"record":{"path":"large","rect":[0,0,512,512]},
         "placement":{"id":"single-"+str(index),"kind":"actor" if dynamic else "wall"},
         "role":"body" if dynamic else "wall","scenery_value":0.0 if index==1 else 1.0,"source_version":1}
+    SourceMaterial.initialize(entry)
+    SourceMaterial.apply(entry,{"colour_texture":texture,"colour_size":Vector2(512,512),"colour_rect":Vector4(0,0,512,512),
+        "has_geometry":false,"wall_opacity":.28 if index==0 else 1.0,"wall_mask_enabled":false})
+    return entry
 
 func make_side(source:Image,cap:bool,normals:bool)->Dictionary:
     var view=SubViewport.new();view.size=Vector2i(480,400);view.own_world_3d=true

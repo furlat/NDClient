@@ -31,11 +31,9 @@ var ready=true
 var readiness:Dictionary={}
 var prepared_groups: Dictionary={}
 var pending_evidence: Array=[]
-var _native_prepare_key:Array=[]
 var _native_prepare_groups:Array=[]
 var _native_optical_groups:Array=[]
 var _native_prepare_components:Array=[]
-var _native_prepare_records:Array=[]
 const NATIVE_PREFETCH_MS=4000.0
 const NATIVE_CONSTRUCTION_USEC=2000
 var _native_budget:Dictionary={"frame":-1,"used_usec":0,"limit_usec":NATIVE_CONSTRUCTION_USEC}
@@ -97,39 +95,25 @@ func _notification(what:int)->void:
     if what==NOTIFICATION_PREDELETE and not _choice_job.is_empty() and _choice_job.get("task",-1)>=0:
         WorkerThreadPool.wait_for_task_completion(_choice_job.task)
 
-func _native_closure(groups:Array,world:Node,cache:Dictionary)->Dictionary:
-    # Movement/world commits change the canonical revision without changing
-    # these resources. Compare the actual owner values (including suppression,
-    # removal clocks and spatial footprints), not just UUIDs or global revision.
-    # Deep snapshots prevent a later in-place owner update changing an old key.
-    var start:float=world.timeline.group_start_ms
-    if world.timeline.current.is_empty() and groups.any(func(group):return group.has("id")):start=world.timeline.display_ms
-    var key:Array=[start,world.timeline.condition_owners.duplicate(true),world.timeline.spatial_effect_owners.duplicate(true)]
-    for group in groups:key.append(group.id if group.has("id") else group.get("components",[]).map(func(item):return item.id))
-    for record in _native_prepare_records:
-        if record.key==key:return record
-    var owners:Dictionary={};var areas:Dictionary={}
-    for id in world.timeline.condition_owners:owners[id]=world.timeline.condition_owners[id].duplicate()
-    for id in world.timeline.spatial_effect_owners:areas[id]=world.timeline.spatial_effect_owners[id].duplicate()
-    var persistent:Array=Conditions.native_samples(owners,world.timeline.display_ms,cache)
-    persistent.append_array(Conditions.NativePersistent.spatial_samples(areas,world.timeline.display_ms,cache))
-    var at:float=start
+static func preparation_groups(groups:Array,persistent:Array)->Array:
+    # Compiler-owned requirements contain no live occurrence clocks. Join them
+    # with the current displayed owners without copying owner history or replaying
+    # future commits on the scene thread.
+    var result:Array=[]
     for group in groups:
-        at=maxf(at,float(group.get("preview_start_ms",at)))
-        for commit in group.get("commits",[]):
-            Conditions.observe(owners,commit.delta.get("actors",{}),at+commit.at_ms)
-            if commit.delta.get("set",{}).has("senses"):
-                Conditions.NativePersistent.observe_spatial(areas,commit.delta.set.senses.get("spatial_effects",{}),at+commit.at_ms)
-            persistent.append_array(Conditions.native_samples(owners,at+commit.at_ms,cache))
-            persistent.append_array(Conditions.NativePersistent.spatial_samples(areas,at+commit.at_ms,cache))
-        at+=group.get("duration_ms",0.0)
-    var native_groups=groups.duplicate();native_groups.append({"components":persistent})
-    var components:Array=[]
-    for group in native_groups:components.append_array(group.get("components",[]))
-    var record={"key":key,"groups":native_groups,"components":components}
-    _native_prepare_records.append(record)
-    if _native_prepare_records.size()>4:_native_prepare_records.pop_front()
-    return record
+        var requirements:Array=group.get("native_requirements",[])
+        if requirements.is_empty():
+            result.append(group);continue
+        var prepared:Dictionary=group.duplicate()
+        prepared.components=group.get("components",[]).duplicate()
+        prepared.components.append_array(requirements)
+        result.append(prepared)
+    if not persistent.is_empty():result.append({"components":persistent,"preparation_always_due":true})
+    return result
+
+# Scene owner supplies metadata admission; passive fixture callers have no
+# pending Session handoff and need no additional gate or ownership directory.
+var source_group_ready:Callable
 
 func _native_prefetch(groups:Array,world:Node)->Array:
     # Future reduced groups are already authoritative. This horizon admits
@@ -140,7 +124,8 @@ func _native_prefetch(groups:Array,world:Node)->Array:
     for group in world.timeline.queue:
         at=maxf(at,float(group.get("preview_start_ms",at)))
         if at-world.timeline.display_ms>NATIVE_PREFETCH_MS:break
-        if not result.any(func(item):return item.get("id")==group.id):result.append(group)
+        if (not source_group_ready.is_valid() or source_group_ready.call(group)) \
+                and not result.any(func(item):return item.get("id")==group.id):result.append(group)
         at+=float(group.duration_ms)
     return result
 
@@ -156,7 +141,7 @@ static func due_groups(groups:Array,world:Node,through_ms:float)->Array:
         start=maxf(start,float(group.get("preview_start_ms",start)))
         var components:Array=[]
         for component in group.get("components",[]):
-            var at:float=float(component.get("absolute_start_ms",start+float(component.get("start_ms",0.0))))
+            var at:float=start+float(component.preparation_at_ms) if component.has("preparation_at_ms") else float(component.get("absolute_start_ms",start+float(component.get("start_ms",0.0))))
             if group.get("preparation_always_due",false) or at<=through_ms+0.000001:components.append(component)
         # Preserve the original group owner for blood preparation/retirement.
         # Only this preparation view is narrowed; timeline records stay intact.
@@ -209,19 +194,25 @@ func prepare(groups: Array,cache: Dictionary,world: Node=null,admission:Dictiona
         if not world.timeline.current.is_empty() and not required_groups.any(func(item):return item.get("id")==world.timeline.current.id):required_groups.push_front(world.timeline.current)
         var retained_components:Array=world.timeline.retained_components.map(func(item):return item.component)
         if not retained_components.is_empty():required_groups.append({"components":retained_components,"preparation_always_due":true})
-        var required=_native_closure(required_groups,world,cache)
-        var future=_native_closure(_native_prefetch(required_groups,world),world,cache)
-        var due:Array=due_groups(required.groups,world,through_ms)
+        # Sampling may prune expired membership, so lend private shallow map
+        # shells. Owner after-values and actual clocks remain Timeline-owned.
+        var persistent:Array=Conditions.native_samples(world.timeline.condition_owners.duplicate(),world.timeline.display_ms,cache,true)
+        persistent.append_array(Conditions.NativePersistent.spatial_samples(world.timeline.spatial_effect_owners.duplicate(),world.timeline.display_ms,cache))
+        var future:Array=preparation_groups(_native_prefetch(required_groups,world),persistent)
+        var required:Array=preparation_groups(required_groups,persistent)
+        var due:Array=due_groups(required,world,through_ms)
         var due_components:Array=[]
         for group in due:due_components.append_array(group.components)
-        _native_prepare_key=required.key;_native_prepare_groups=due;_native_prepare_components=due_components;_native_optical_groups=required.groups
+        _native_prepare_groups=due;_native_prepare_components=due_components;_native_optical_groups=required
         var required_ids:Dictionary={}
-        for component in due_components:required_ids[component.id]=true
+        for component in due_components:required_ids[component.get("preparation_key",component.id)]=true
         var optional:Array=[];var seen:Dictionary={}
-        for component in future.components:
-            if required_ids.has(component.id) or seen.has(component.id):continue
-            if not component.get("native_spell",false) and component.get("native_hit",{}).is_empty():continue
-            optional.append(component);seen[component.id]=true
+        for future_group in future:
+            for component in future_group.get("components",[]):
+                var key:String=component.get("preparation_key",component.id)
+                if required_ids.has(key) or seen.has(key):continue
+                if not component.get("native_spell",false) and component.get("native_hit",{}).is_empty():continue
+                optional.append(component);seen[key]=true
         _optional_components=optional
         _optional_owner=[world.timeline.initialization_revision,world.timeline.revision,world.timeline.group_start_ms,world.timeline.current,world.timeline.queue.duplicate()]
         budget.used_usec+=Time.get_ticks_usec()-stage_started
@@ -229,24 +220,20 @@ func prepare(groups: Array,cache: Dictionary,world: Node=null,admission:Dictiona
         stage_started=Time.get_ticks_usec()
         # Required owners always get the shared frame budget first. Optional
         # queries have independent readiness and cannot pause current playback.
-        var native=native_spells.prepare(due,cache,world,[{"components":optional}],budget,false,required.groups)
+        var native=native_spells.prepare(due,cache,world,[{"components":optional}],budget,false,required)
         FrameProfile.end_phase(world.profile,"component_prepare_sources",stage_started)
         stage_started=Time.get_ticks_usec()
         var hits=native_hits.prepare(world,due_components,cache,optional,budget,false)
         readiness.native_sources=native.ready;readiness.native_hits=hits.ready
         FrameProfile.end_phase(world.profile,"component_prepare_hits",stage_started)
         result.ready=result.ready and native.ready and hits.ready
-        if result.ready:
-            # Do not reserve a later class cue ahead of required spell loads.
-            # Only an active missing presenter can construct in sample() below.
-            # Legacy first-visible presenters are required atomic work: the
-            # existing owner constructs after Timeline admission. Charge them
-            # below, but never drop an admitted effect to fit optional work.
-            var current:Dictionary=world.timeline.current
-            if current.is_empty() and not groups.is_empty():current=groups[0]
-            var current_age:float=maxf(0.0,world.timeline.display_ms-world.timeline.group_start_ms)
-            var needs_native_constructor:bool=current.get("components",[]).any(func(component):return component.get("kind")=="native_effect" and not component.get("native_spell",false) and component.get("status")=="available" and not handles.has(component.id) and current_age>=float(component.get("start_ms",0.0)) and current_age<float(component.get("start_ms",0.0))+float(component.get("duration_ms",0.0)))
-            if needs_native_constructor:result.ready=NativeSources.Admission.begin_mutation()
+        # A required spell load owns admission before legacy constructors. The
+        # latter build private hidden presenters, never permission to allocate
+        # later inside sample(). No source clock runs during preparation.
+        var legacy=_prepare_legacy(world,due_components,cache,budget,result.ready)
+        readiness.legacy_instances=legacy.ready
+        result.ready=result.ready and legacy.ready
+        result.errors.append_array(legacy.errors)
         budget.used_usec+=maxi(0,Time.get_ticks_usec()-prepare_started-(budget.used_usec-charged_before))
         if result.ready and allow_optional:prepare_optional(world,cache,budget)
         result.errors.append_array(native.errors)
@@ -254,6 +241,39 @@ func prepare(groups: Array,cache: Dictionary,world: Node=null,admission:Dictiona
             if issue.get("status")=="missing":result.errors.append(str(issue))
     budget.used_usec+=maxi(0,Time.get_ticks_usec()-prepare_started-(budget.used_usec-charged_before))
     if world!=null:FrameProfile.end_phase(world.profile,"component_prepare",prepare_started)
+    return result
+
+func _prepare_legacy(world:Node,components:Array,cache:Dictionary,budget:Dictionary,construct:bool)->Dictionary:
+    var wanted:Dictionary={}
+    for component in components:
+        if component.get("kind")=="native_effect" and not component.get("native_spell",false) and component.get("status")=="available":wanted[component.id]=component
+    # A cancelled candidate has no draw membership to retire. Published owners
+    # stay alive until sampling the new displayed cut releases them.
+    for id in handles.keys():
+        if not handles[id].get("published",false) and not wanted.has(id):_release(world,id)
+    var result={"ready":true,"errors":[]}
+    for id in wanted:
+        if handles.has(id):continue
+        result.ready=false
+        if not construct or budget.used_usec>=budget.limit_usec:continue
+        var started:int=Time.get_ticks_usec()
+        var loading=NativeSources.prepare([wanted[id].source_id],cache)
+        budget.used_usec+=Time.get_ticks_usec()-started
+        result.errors.append_array(loading.errors)
+        if not loading.ready or budget.used_usec>=budget.limit_usec or not NativeSources.Admission.begin_mutation():continue
+        started=Time.get_ticks_usec()
+        var component:Dictionary=wanted[id]
+        var presenter=NativePreview.new();presenter.visible=false;world.add_child(presenter)
+        var issue=presenter.configure(component.source_id,cache,Components.effect_seed(component),component.get("palette",[]))
+        if issue.is_empty():issue=presenter.bind_receiving(world.source_lighting)
+        if not issue.is_empty():
+            result.errors.append(issue);presenter.close();presenter.queue_free()
+        else:
+            var placement={"id":id,"position":[0,0],"base_height_steps":0.0,"kind":"effect","facing":"SW"}
+            handles[id]={"node":presenter,"draws":presenter.draw_entries(id,placement,-10,100),"placement":placement,"component":component,"published":false}
+            budget["required_legacy_constructors"]=budget.get("required_legacy_constructors",0)+1
+        budget.used_usec+=Time.get_ticks_usec()-started
+    result.ready=result.errors.is_empty() and wanted.keys().all(func(id):return handles.has(id))
     return result
 
 func prepare_optional(world:Node,cache:Dictionary,admission:Dictionary={})->void:
@@ -335,30 +355,14 @@ func sample(world: Node, samples: Array,frame_seconds: float=1.0/60.0,budget:Dic
         if component.kind=="native_effect":
             alive[component.id]=true
             if not handles.has(component.id):
-                if not NativeSources.Admission.can_mutate():
-                    ready=false;continue
-                var construction_started:int=Time.get_ticks_usec()
-                if not budget.is_empty():budget["required_legacy_constructors"]=budget.get("required_legacy_constructors",0)+1
-                var presenter=NativePreview.new(); world.add_child(presenter)
-                var issue=presenter.configure(component.source_id,world.catalog_cache,Components.effect_seed(component),component.get("palette",[]))
-                if not issue.is_empty():
-                    world.presentation_errors.append(issue); presenter.queue_free()
-                    if not budget.is_empty():budget.used_usec+=Time.get_ticks_usec()-construction_started
-                    continue
-                issue=presenter.bind_receiving(world.source_lighting)
-                if not issue.is_empty():
-                    world.presentation_errors.append(issue);presenter.close();presenter.queue_free()
-                    if not budget.is_empty():budget.used_usec+=Time.get_ticks_usec()-construction_started
-                    continue
-                var placement=row.duplicate(); placement.id=component.id
-                var draws=presenter.draw_entries(component.id,placement,-10,100)
-                world.actor_entries.append_array(draws)
-                handles[component.id]={"node":presenter,"draws":draws,"placement":placement,"component":component}
-                world.draw_order_dirty=true
-                if not budget.is_empty():budget.used_usec+=Time.get_ticks_usec()-construction_started
+                ready=false;continue
             var handle: Dictionary=handles[component.id]
-            handle.placement.position=row.position
-            handle.placement.base_height_steps=row.base_height_steps
+            if not handle.published:
+                world.actor_entries.append_array(handle.draws)
+                handle.published=true;handle.node.visible=true
+                world.draw_order_dirty=true
+            handle.component=component
+            handle.placement.merge(row,true);handle.placement.id=component.id
             var attach: String=component.get("attachment","body")
             if attach=="projectile":
                 var fraction=clampf(component.age_ms/maxf(.001,component.duration_ms),0,1)
@@ -515,7 +519,7 @@ func sample(world: Node, samples: Array,frame_seconds: float=1.0/60.0,budget:Dic
             _witness(world,component,not world.camera.is_position_behind(numbers[component.id].global_position) and world.get_viewport().get_visible_rect().has_point(world.camera.unproject_position(numbers[component.id].global_position)))
         elif component.kind=="material_flash": _witness(world,component,_actor_visible(world,component.actor_uuid))
     for id in handles.keys():
-        if not alive.has(id): _release(world,id)
+        if handles[id].published and not alive.has(id): _release(world,id)
     for id in numbers.keys():
         if not live_numbers.has(id): numbers[id].queue_free(); numbers.erase(id)
     for id in media_handles.keys():
@@ -638,9 +642,10 @@ func _condition_witnesses(world: Node,actor_id: String,samples: Array) -> void:
 
 func _release(world: Node, id: String) -> void:
     var handle: Dictionary=handles[id]
-    for draw in handle.draws: world.actor_entries.erase(draw)
+    if handle.get("published",false):
+        for draw in handle.draws:world.actor_entries.erase(draw)
+        world.draw_order_dirty=true
     handle.node.close();handle.node.queue_free();handles.erase(id)
-    world.draw_order_dirty=true
 
 func close(world: Node) -> void:
     native_spells.close(world)
@@ -653,6 +658,6 @@ func close(world: Node) -> void:
     for entry in media_handles.values():world.actor_entries.erase(entry);entry.node.queue_free()
     media_handles.clear();audio.close()
     prepared_groups.clear();pending_evidence=[]
-    _native_prepare_key=[];_native_prepare_groups=[];_native_optical_groups=[];_native_prepare_components=[];_native_prepare_records=[]
+    _native_prepare_groups=[];_native_optical_groups=[];_native_prepare_components=[]
     _native_budget={"frame":-1,"used_usec":0,"limit_usec":NATIVE_CONSTRUCTION_USEC}
     _optional_components=[];_optional_blood_groups=[];_optional_owner=[]

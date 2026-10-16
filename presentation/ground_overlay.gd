@@ -12,6 +12,8 @@ var mesh: PlaneMesh
 var route_mesh: QuadMesh
 var revision: Variant = null
 var marks: Dictionary = {}
+var changed_marks: Dictionary = {}
+var mark_order: Array = []
 var path: Array = []
 var route_colour = Color("70d6be")
 var materials: Dictionary = {}
@@ -41,8 +43,21 @@ var support_contact_updates = 0
 func set_preview(value: Dictionary, route: Array = [], colour: Color = Color("70d6be")) -> void:
     # Keys are disclosed tile keys; values {colour:Color,width:float}. The path
     # comes directly from SDK preview.selected_route, never local pathfinding.
-    if marks == value and path == route and route_colour == colour: return
-    marks = value.duplicate(true)
+    var changes = {}
+    for key in marks:
+        if not value.has(key): changes[key] = {}
+    for key in value:
+        if marks.get(key,{}) != value[key]: changes[key] = value[key].duplicate(true)
+    if changes.is_empty() and path == route and route_colour == colour: return
+    # This owner retains only changed cells' previous styles until rendering.
+    # Several preview updates before one draw still remove the displayed style.
+    for key in changes:
+        if not changed_marks.has(key): changed_marks[key] = marks.get(key,{})
+        if changes[key].is_empty(): marks.erase(key)
+        else: marks[key] = changes[key]
+    # First-use material IDs participate in painter ties. Preserve the caller's
+    # current order for complete selection without copying every style again.
+    mark_order = value.keys()
     path = route.duplicate(true)
     route_colour = colour
     preview_revision += 1
@@ -88,16 +103,24 @@ func _batch_positions(entry: Dictionary, positions: Array) -> void:
     # than resetting the entire buffer when a few cells change style.
     var wanted = {}
     for position in positions: wanted[position] = true
+    var removed = []
+    for position in entry.positions:
+        if not wanted.has(position): removed.append(position)
+    removed.reverse()
+    _batch_changes(entry,removed,positions)
+
+func _batch_changes(entry: Dictionary, removed: Array, added: Array) -> void:
     var dirty = {}
     var dense: Array = entry.positions
     var slots: Dictionary = entry.slots
-    for i in range(dense.size()-1,-1,-1):
-        if wanted.has(dense[i]): continue
-        slots.erase(dense[i])
+    for position in removed:
+        if not slots.has(position): continue
+        var index: int = slots[position]
+        slots.erase(position)
         var last: Vector3 = dense.pop_back()
-        if i < dense.size():
-            dense[i] = last; slots[last] = i; dirty[i] = true
-    for position in positions:
+        if index < dense.size():
+            dense[index] = last; slots[last] = index; dirty[index] = true
+    for position in added:
         if slots.has(position): continue
         var index = dense.size()
         dense.append(position); slots[position] = index; dirty[index] = true
@@ -107,12 +130,58 @@ func _batch_positions(entry: Dictionary, positions: Array) -> void:
         while capacity < dense.size(): capacity *= 2
         multimesh.instance_count = capacity
         buffer_allocations += 1
-        for i in range(dense.size()): dirty[i] = true
-    for i in dirty:
-        if i >= dense.size(): continue
-        multimesh.set_instance_transform(i,Transform3D(Basis.IDENTITY,dense[i]))
-        transform_writes += 1
+        # Capacity growth replaces every native slot. Submit the complete
+        # transform buffer once instead of making one engine call per cell.
+        var buffer = PackedFloat32Array(); buffer.resize(capacity*12)
+        for i in range(dense.size()):
+            var position: Vector3 = dense[i]
+            var offset: int = i*12
+            buffer[offset] = 1; buffer[offset+3] = position.x
+            buffer[offset+5] = 1; buffer[offset+7] = position.y
+            buffer[offset+10] = 1; buffer[offset+11] = position.z
+        multimesh.buffer = buffer
+        transform_writes += dense.size()
+    else:
+        for i in dirty:
+            if i >= dense.size(): continue
+            multimesh.set_instance_transform(i,Transform3D(Basis.IDENTITY,dense[i]))
+            transform_writes += 1
     multimesh.visible_instance_count = dense.size()
+
+func _change_flat_marks(tiles: Dictionary) -> bool:
+    # A style not yet constructed takes the original complete selection path,
+    # preserving first-use material identity and painter ordering. Existing
+    # flat styles already own native batches; only edited cells move between them.
+    for key in changed_marks:
+        if not tiles.has(key): continue
+        if tiles[key].elevation_steps != 0: return false
+        for style in [changed_marks[key],marks.get(key,{})]:
+            if not style.is_empty() and not materials.has([style.colour,style.get("width",2.0),style.get("fill_colour",Color.TRANSPARENT)]): return false
+    var updates = {}
+    for key in changed_marks:
+        if not tiles.has(key): continue
+        var before: Dictionary = changed_marks[key]
+        var after: Dictionary = marks.get(key,{})
+        if before == after: continue
+        var position: Vector3 = support_positions[key]
+        if not before.is_empty():
+            var material = _material(before.colour,before.get("width",2.0),before.get("fill_colour",Color.TRANSPARENT))
+            if mark_batches.has(material):
+                if not updates.has(material): updates[material] = {"removed":[],"added":[]}
+                updates[material].removed.append(position)
+        if not after.is_empty():
+            var material = _material(after.colour,after.get("width",2.0),after.get("fill_colour",Color.TRANSPARENT))
+            if not mark_batches.has(material):
+                mark_batches[material] = _batch("marks:"+str(material.get_instance_id()),material,2)
+                changed = true
+            if not updates.has(material): updates[material] = {"removed":[],"added":[]}
+            updates[material].added.append(position)
+    for material in updates:
+        _batch_changes(mark_batches[material],updates[material].removed,updates[material].added)
+    if not mark_batches.is_empty() and mark_batches.values().all(func(entry):return entry.positions.is_empty()):
+        for entry in mark_batches.values(): entry.node.free()
+        mark_batches.clear(); changed = true
+    return true
 
 static func _row(key: String, tile: Dictionary) -> Dictionary:
     return {"id":"ground-overlay:"+key,"kind":"terrain","position":tile.position,
@@ -151,11 +220,14 @@ func sync(world: Node, tiles: Dictionary, world_revision: Variant, grid_visible:
         mesh.size = Vector2.ONE
         route_mesh = QuadMesh.new()
     var geometry_changed = false
-    if revision != world_revision or not is_same(support_owner,tiles) or support_scope != proof.get("scope"):
+    # The published row owner survives Timeline's temporary staged tile views.
+    # Standalone snapshot callers continue to use their actual tile ownership.
+    var source_owner: Dictionary = proof.get("owner",tiles)
+    if revision != world_revision or not is_same(support_owner,source_owner) or support_scope != proof.get("scope"):
         # Light, fog and sensory commits still reach the world renderer. Only
         # disclosed support membership, position or height changes ground UI.
         var changes: Dictionary = proof.get("changes",{})
-        var sparse = not proof.is_empty() and is_same(support_owner,tiles) \
+        var sparse = not proof.is_empty() and is_same(support_owner,source_owner) \
             and support_scope == proof.get("scope") and not changes.get("full",true) \
             and changes.get("base_revision",-2) == support_revision \
             and changes.get("revision",-2) == proof.get("revision",-1)
@@ -190,7 +262,7 @@ func sync(world: Node, tiles: Dictionary, world_revision: Variant, grid_visible:
                 else: raised_supports[key] = true
         if geometry_changed: support_geometry_revision += 1
         revision = world_revision
-        support_owner = tiles
+        support_owner = source_owner
         support_scope = proof.get("scope")
         support_revision = proof.get("revision",-1)
     support_check_us = Time.get_ticks_usec()-began
@@ -198,12 +270,18 @@ func sync(world: Node, tiles: Dictionary, world_revision: Variant, grid_visible:
     changed = false
     if not geometry_changed and stamp == next_stamp: return ordered
     var mark_began = Time.get_ticks_usec()
+    if not geometry_changed and background and not stamp.is_empty() and stamp.slice(0,3)==next_stamp.slice(0,3) and _change_flat_marks(tiles):
+        changed = _routes(tiles,background) or changed
+        if changed: _order(quarter,background)
+        changed_marks.clear(); stamp = next_stamp
+        mark_update_us = Time.get_ticks_usec()-mark_began
+        return ordered
     var order_changed = geometry_changed or stamp.is_empty() or stamp.slice(0,3)!=next_stamp.slice(0,3)
     var wanted = {}
     var ground: Array = background_positions if grid_visible and background else []
     var marked: Dictionary = {}
     var candidates: Dictionary = (raised_supports if background else tiles).duplicate() if grid_visible else {}
-    candidates.merge(marks)
+    for key in mark_order: candidates[key] = true
     var previous_style: Dictionary = {}
     var previous_material: ShaderMaterial
     for key in candidates:
@@ -272,14 +350,18 @@ func sync(world: Node, tiles: Dictionary, world_revision: Variant, grid_visible:
     elif not batch.is_empty(): batch.node.visible = false
     order_changed = _routes(tiles,background) or order_changed
     if order_changed:
-        ordered = cells.values()+routes.values()+mark_batches.values()
-        if not batch.is_empty() and batch.node.visible: ordered.append(batch)
-        for entry in ordered: entry.order_key = Order.key(entry.placement,entry.role,entry.layer,quarter,background)
-        ordered.sort_custom(func(a,b):return Order.less(a.order_key,b.order_key) if a.order_key!=b.order_key else a.id<b.id)
+        _order(quarter,background)
     changed = order_changed
+    changed_marks.clear()
     stamp = next_stamp
     mark_update_us = Time.get_ticks_usec()-mark_began
     return ordered
+
+func _order(quarter: int, background: bool) -> void:
+    ordered = cells.values()+routes.values()+mark_batches.values()
+    if not batch.is_empty() and batch.node.visible: ordered.append(batch)
+    for entry in ordered: entry.order_key = Order.key(entry.placement,entry.role,entry.layer,quarter,background)
+    ordered.sort_custom(func(a,b):return Order.less(a.order_key,b.order_key) if a.order_key!=b.order_key else a.id<b.id)
 
 func _routes(tiles: Dictionary, background: bool) -> bool:
     var wanted = {}
@@ -333,6 +415,7 @@ func close() -> void:
     if is_instance_valid(root): root.free()
     root = null
     cells.clear(); routes.clear(); batch.clear(); mark_batches.clear(); ordered.clear(); materials.clear()
+    changed_marks.clear()
     support_geometry.clear(); grid_geometry_stamp.clear(); stamp.clear()
     support_positions.clear(); raised_supports.clear(); background_positions.clear()
     support_rows.clear(); support_owner = {}; support_scope = null; support_revision = -1

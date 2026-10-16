@@ -50,10 +50,10 @@ static func _fade_ms(config:Dictionary,selected:Dictionary,phases:Array,cache:Di
         fade=maxf(fade,duration)
     return fade
 
-static func native_samples(owners:Dictionary,at_ms:float,cache:Dictionary)->Array:
-    return samples(owners,at_ms,cache,{},true,true)
+static func native_samples(owners:Dictionary,at_ms:float,cache:Dictionary,include_legacy:bool=false)->Array:
+    return samples(owners,at_ms,cache,{},true,true,include_legacy)
 
-static func samples(owners: Dictionary, at_ms: float, cache: Dictionary, activities: Dictionary={}, select_layers_now: bool=true, native_only: bool=false) -> Array:
+static func samples(owners: Dictionary, at_ms: float, cache: Dictionary, activities: Dictionary={}, select_layers_now: bool=true, native_only: bool=false,include_legacy:bool=false) -> Array:
     var result: Array=[]
     for owner_id in owners.keys():
         var owner: Dictionary=owners[owner_id]
@@ -77,7 +77,7 @@ static func samples(owners: Dictionary, at_ms: float, cache: Dictionary, activit
         result.append_array(NativePersistent.phase_samples(common,native_phases))
         # Keep the common owner rows through the same recipe priority/removal
         # selection below; only audio and legacy layer construction are skipped.
-        if native_only:continue
+        if native_only and not include_legacy:continue
         var natives: Dictionary=Authoring.load_data("native_effects/index.json",cache).sources
         for layer in persistent.get("layers",[]):
             if layer.get("assetId","") in native_selection.get("lifecycle",{}).get("replaces_media",[]):continue
@@ -97,11 +97,13 @@ static func samples(owners: Dictionary, at_ms: float, cache: Dictionary, activit
                 row.kind="native_effect";row.source_id=source_id;row.scale=row.metadata.get("scale",.5)
                 row.loop=true;row.source_duration_ms=natives[source_id].duration*1000.0
             else:
+                if native_only:continue
                 row.kind="registered_media"
                 row.media=RegisteredMedia.resolve(row.metadata.get("asset_id",layer.assetId),cache)
                 row.status=row.media.status
                 row.media_samples=MediaSamples.sample(row,cache)
             result.append(row)
+        if native_only:continue
         var audio_binding:Dictionary=Authoring.load_data("audio/bindings.json",cache).get("conditions",{}).get(owner.condition.behavior_id,{})
         if audio_binding.has("persistent") and is_inf(owner.end_ms):
             var sound=AudioCues.resolve(audio_binding.persistent.cue,common.id,0,owner.start_ms,INF,
@@ -113,7 +115,7 @@ static func samples(owners: Dictionary, at_ms: float, cache: Dictionary, activit
             result.append(sound)
     # Native preparation has no output to compose when these owners supply
     # only body/legacy effects. Expiry above still runs for every owner.
-    if native_only and not result.any(func(sample):return sample.get("native_spell",false)):return []
+    if native_only and not result.any(func(sample):return sample.kind=="native_effect"):return []
     var selected_owners={}
     var selected_recipes={}
     var actors={}
@@ -125,7 +127,10 @@ static func samples(owners: Dictionary, at_ms: float, cache: Dictionary, activit
             selected_owners[sample.condition_uuid]=true
             selected_recipes[id][JSON.stringify(sample.recipe.definitionRef,"",false)]=true
     result=result.filter(func(sample):return sample.kind=="condition" or not sample.has("condition_uuid") or selected_owners.has(sample.condition_uuid) or (sample.get("layer",{}).get("markerGroup")!=null and selected_recipes.get(sample.actor_uuid,{}).has(JSON.stringify(sample.recipe.definitionRef,"",false))))
-    if native_only:return result.filter(func(sample):return sample.get("native_spell",false))
+    # Prepare every potentially selected legacy layer for these disclosed
+    # owners. Activity, marker rotation, source offset and fades still select
+    # the displayed rows below; preparation never runs their occurrence clocks.
+    if native_only:return result.filter(func(sample):return sample.kind=="native_effect")
     if not select_layers_now:return result
     var layers=select_layers(result.filter(func(sample):return sample.has("layer")),at_ms,activities)
     result=result.filter(func(sample):return not sample.has("layer"))

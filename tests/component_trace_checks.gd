@@ -163,7 +163,7 @@ func run()->void:
     check(charm_missing.size()==1 and charm_missing[0].timing.resolved and charm_missing[0].timing.start_ms==550 and charm_missing[0].timing.end_ms==2050,"Missing authored effect keeps its real commit-relative offset/duration")
     check(charm_missing[0].source_pointer=="catalog/condition_recipes.json:/condition.charmed/application/effects/2","Missing expected effect points at exact canonical authoring field")
     check(unmatched.rows[0].components.filter(func(c):return c.kind=="weapon_trail")[0].timing.resolved==false,"Missing timing is unresolved rather than fabricated at default zero")
-    var unsupported={"components":[],"actor_uuid":"actor","_admit_ms":0.0}
+    var unsupported={"components":[],"actor_uuid":"actor","target_uuid":"actor","_admit_ms":0.0}
     Trace._persistent_condition(unsupported,condition,{"bodyScale":{"enlarge":2,"reduce":.5},"equipmentModifiers":[]},cache,"neuroclient.modular")
     check(unsupported.components.size()==1 and unsupported.components[0].reason=="authored_condition_bodyScale_not_implemented","Structured and array authoring requirements retain independent missing mechanisms")
     var selected_recipe_case=compile(application,[],{"persistent":{},"application":{"feedbackEnabled":false}},false)

@@ -136,7 +136,7 @@ func run() -> void:
     # cannot overwrite latest required plans or the active group's ownership.
     var completions := 0
     var deadline := Time.get_ticks_msec()+30000
-    while player.media_warmup.plan_task>=0 and Time.get_ticks_msec()<deadline:
+    while (player.media_warmup.plan_task>=0 or not player.media_warmup.optional_pending.is_empty()) and Time.get_ticks_msec()<deadline:
         var done := Media.poll_plan(player.media_warmup)
         if not done.is_empty():
             check(done.stage=="optional","Received metadata schedules only optional family work")
@@ -144,8 +144,9 @@ func run() -> void:
             player._adopt_media_plan(done)
             check(is_same(player.media_group_plans[old.id],current_before),"Optional completion never replaces current required plan")
             completions += 1
+        player._prepare_media()
         await process_frame
-    check(completions>0 and player.media_warmup.plan_task<0,"Optional family queue completes through its existing worker")
+    check(completions>0 and player.media_warmup.plan_task<0 and player.media_warmup.optional_pending.is_empty(),"Optional family queue completes through its existing worker")
     check(var_to_bytes(prepared.source_files)==source_bytes,"Worker cache merge never mutates transferred source-file owners")
     check(not player.media_warmup.encounter.is_empty(),"Matching latest optional completion preserves encounter preload planning")
     player.timeline.current = first
@@ -175,6 +176,9 @@ func run() -> void:
     check(player.timeline.initialization_revision!=old_epoch and player.media_group_plans.is_empty() and player.media_received_owners.is_empty(),"Reset clears received metadata and rejects old accepted group owners")
     Media.close(player.media_warmup)
     check(player.media_warmup.plan_task<0 and player.media_warmup.optional_pending.is_empty(),"Close joins owned optional/required work and clears unpublished requests")
+    # This metadata-only fixture never enters the tree; run its normal owner
+    # teardown explicitly before freeing the detached scene.
+    player._exit_tree()
     player.context_menu.free(); player.free()
     evidence = {"groups_prepared":prepared.groups.size(),"required":prepared.value.required.size(),
         "environment":prepared.value.environment_required.size(),"optional_completions":completions}

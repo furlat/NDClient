@@ -1,6 +1,7 @@
 extends SceneTree
 # Actual delivered source packets. Native caster coverage must equal original
 # selected-body alpha ∩ raw support ∩ depth validity at each native cell size.
+const SourceMaterial=preload("res://presentation/source_material.gd")
 const Shadows=preload("res://presentation/canvas_shadows.gd")
 const Geometry=preload("res://presentation/character_geometry.gd")
 const Catalog=preload("res://source_catalog.gd")
@@ -42,16 +43,16 @@ func packet(table:Dictionary,folder:String,id:String)->Dictionary:
     var origin:Array=action.get("canonical_mapping",{}).get("native_inferred_camera_origin",table.recipe.origin_xy)
     var ground=(origin[1]-pivot.y)/cos(deg_to_rad(table.recipe.elevation_degrees))
     var material=ShaderMaterial.new();material.shader=Body
-    material.set_shader_parameter("sheet",texture(folder.path_join(action.files["colour.png"].path)))
-    material.set_shader_parameter("component_depth",texture(folder.path_join(action.files["depth.png"].path)))
-    material.set_shader_parameter("component_support",texture(folder.path_join(action.files["raw-support.png"].path)))
-    material.set_shader_parameter("frame_uv",Vector4(0,0,1.0/action.frames,.125))
-    material.set_shader_parameter("component_depth_range",Vector2(table.recipe.common_depth_world_range[0],table.recipe.common_depth_world_range[1]))
-    material.set_shader_parameter("component_units",1.0/Placement.PIXELS_PER_UNIT)
-    material.set_shader_parameter("component_reconstruction_origin",Vector2(origin[0],origin[1]))
-    material.set_shader_parameter("component_elevation",deg_to_rad(table.recipe.elevation_degrees))
-    material.set_shader_parameter("has_component_geometry",true)
     var entry=make_entry(id,material,cell,pivot)
+    SourceMaterial.set_parameter(entry,"sheet",texture(folder.path_join(action.files["colour.png"].path)))
+    SourceMaterial.set_parameter(entry,"component_depth",texture(folder.path_join(action.files["depth.png"].path)))
+    SourceMaterial.set_parameter(entry,"component_support",texture(folder.path_join(action.files["raw-support.png"].path)))
+    SourceMaterial.set_parameter(entry,"frame_uv",Vector4(0,0,1.0/action.frames,.125))
+    SourceMaterial.set_parameter(entry,"component_depth_range",Vector2(table.recipe.common_depth_world_range[0],table.recipe.common_depth_world_range[1]))
+    SourceMaterial.set_parameter(entry,"component_units",1.0/Placement.PIXELS_PER_UNIT)
+    SourceMaterial.set_parameter(entry,"component_reconstruction_origin",Vector2(origin[0],origin[1]))
+    SourceMaterial.set_parameter(entry,"component_elevation",deg_to_rad(table.recipe.elevation_degrees))
+    SourceMaterial.set_parameter(entry,"has_component_geometry",true)
     entry.geometry_cell_size=cell;entry.geometry_ground_pixels=ground
     entry.frames=action.frames;entry.source_action=action
     return entry
@@ -65,8 +66,9 @@ func make_entry(id:String,material:ShaderMaterial,cell:Vector2,pivot:Vector2)->D
 
 func modular()->Dictionary:
     var path="/media/smallscale/modular/Chest14/Idle.png"
-    var material=ShaderMaterial.new();material.shader=Body;material.set_shader_parameter("sheet",texture(path));material.set_shader_parameter("frame_uv",Vector4(0,0,1.0/15,.125))
+    var material=ShaderMaterial.new();material.shader=Body
     var entry=make_entry("modular-Chest14",material,Vector2(128,128),Vector2(64,87));entry.actor_layer.slot="chest"
+    SourceMaterial.set_parameter(entry,"sheet",texture(path));SourceMaterial.set_parameter(entry,"frame_uv",Vector4(0,0,1.0/15,.125))
     Geometry.bind(entry,path,cache,texture,true,true,"reference")
     entry.frames=15
     return entry
@@ -75,7 +77,7 @@ func selected_partition(entry:Dictionary)->void:
     if not entry.get("source_action",{}).get("visible_body_only",false):return
     var action:Dictionary=entry.source_action
     var original:Image=Image.load_from_file(Catalog.media_path(action.layers.combined.media))
-    var body:Image=entry.material.get_shader_parameter("sheet").get_image()
+    var body:Image=SourceMaterial.value(entry,"sheet").get_image()
     var removed:=0;var mismatch:=0
     var rule:Dictionary=action.component_definition.selection.rules[0]
     for y in int(entry.cell.y):
@@ -91,7 +93,7 @@ func selected_partition(entry:Dictionary)->void:
     evidence.append({"id":entry.id,"original_shadow_pixels_removed_first_cell":removed,"partition_mismatches":mismatch})
 
 func coverage(entry:Dictionary,row:int)->void:
-    var uv:Vector4=entry.material.get_shader_parameter("frame_uv");uv.y=float(row)/8;entry.material.set_shader_parameter("frame_uv",uv)
+    var uv:Vector4=SourceMaterial.value(entry,"frame_uv");uv.y=float(row)/8;SourceMaterial.set_parameter(entry,"frame_uv",uv)
     var snapshot:Dictionary=Shadows._snapshots([entry],camera)[0]
     var cell:Vector2=snapshot.component_cell_size
     var units:float=snapshot.component_units;var ground:float=snapshot.ground_pixels*units
@@ -143,14 +145,14 @@ func shadow(entry:Dictionary)->void:
     var snapshot:Dictionary=Shadows._snapshots([entry],camera)[0]
     check(is_equal_approx(state.ground.position.y,snapshot.ground_pixels*snapshot.component_units),entry.id+" helper uses delivered optical ground")
     var caster:MeshInstance3D=state.casters[entry.id]
-    check(caster.material_override.get_shader_parameter("sheet")==entry.material.get_shader_parameter("sheet"),entry.id+" shadow caster uses actual selected body source")
+    check(caster.material_override.get_shader_parameter("sheet")==SourceMaterial.value(entry,"sheet"),entry.id+" shadow caster uses actual selected body source")
     var image=await capture(state.viewport);var blocked:=0
     for y in image.get_height():
         for x in image.get_width():
             if image.get_pixel(x,y).r<.99:blocked+=1
     check(blocked>0,entry.id+" native shadow measurement contains body occlusion")
     var prior:int=manager.diagnostics().updates
-    var frame:Vector4=entry.material.get_shader_parameter("frame_uv");frame.x=1.0/entry.frames;entry.material.set_shader_parameter("frame_uv",frame)
+    var frame:Vector4=SourceMaterial.value(entry,"frame_uv");frame.x=1.0/entry.frames;SourceMaterial.set_parameter(entry,"frame_uv",frame)
     manager.sync([actor],camera,sources)
     check(manager.diagnostics().updates==prior+1,entry.id+" native shadow invalidates on authored frame change")
     var expected:int=2*int(snapshot.component_cell_size.x)*int(snapshot.component_cell_size.y)

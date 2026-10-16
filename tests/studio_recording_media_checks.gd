@@ -6,7 +6,6 @@ const Media=preload("res://presentation/media_warmup.gd")
 const EnvironmentMedia=preload("res://presentation/environment_media.gd")
 const Catalog=preload("res://source_catalog.gd")
 const Compiler=preload("res://presentation/compiler.gd")
-const Player=preload("res://play.gd")
 var checks=0
 var failures:Array=[]
 var evidence:Array=[]
@@ -15,8 +14,12 @@ func check(value:bool,label:String)->void:
     checks+=1
     if not value:failures.append(label);print("STUDIO_RECORDING_MEDIA_FAIL ",label)
 func run()->void:
-    for name in ["hide-light-schema9-seed3/amber","hide-light-schema9-seed3/blue","dash-seed3/amber"]:
-        var index=Recording.read("res://.runtime/studio-cases/"+name+"/journal")
+    var recordings:Array=[]
+    for arg in OS.get_cmdline_user_args():
+        if arg.begins_with("--recording="):recordings.append(arg.trim_prefix("--recording="))
+    check(not recordings.is_empty(),"Usage: --recording=<journal-directory> (repeat for additional real recordings)")
+    for name in recordings:
+        var index=Recording.read(name)
         check(index.ok,name+" current recording admits")
         if not index.ok:continue
         var history=var_to_bytes([index.initialization,index.groups,index.rows,index.cache])
@@ -64,17 +67,20 @@ func run()->void:
             for path in group_cpu:group_gpu.erase(path)
             check(closure.cpu_required==group_cpu and closure.gpu_only==group_gpu,name+" exact group CPU/GPU roles "+group.id)
             for commit in group.commits:Compiler.apply_delta(prefix,commit.delta)
-        # Dash includes real damage/residue frame preparation: its rendering
-        # gate belongs to the native replay suite, not a headless PNG fixture.
-        if name.begins_with("hide-light-"):await replay_demand(index,actual,name)
+        # Replay admission now includes native startup and component preparation.
+        # It requires the real Studio scene; metadata receipts cannot certify it.
         var again=RecordingMedia.plan(index)
         check(actual==again and actual.revision==1,name+" immutable recording has stable plan identity data/revision")
         var full=Media.create();full.budget_bytes=total
         full.plan_cache=Catalog.source_snapshot(actual.source_files)
         full.encounter_override=actual
         Media.adopt_required(full,1)
-        Media.demand(full,actual.priority)
-        check(full.preload_selected==actual.paths and full.preload_skipped==0,name+" existing budget selector accepts full recording when it fits")
+        Media.demand(full,actual.priority,actual.environment,actual.fixtures,actual.gpu_only,actual.cpu_required)
+        var selection_deadline=Time.get_ticks_msec()+20000
+        while Media.diagnostics(full).selection_pending and Time.get_ticks_msec()<selection_deadline:
+            Media.prepare_optional(full)
+            await process_frame
+        check(full.preload_selected==actual.paths and Media.preload_progress(full).skipped==0,name+" existing budget selector accepts full recording when it fits")
         check(full.boot_paths==actual.priority and full.resident.is_empty() and not Media.ready(full,actual.priority),name+" metadata creates no textures or readiness and startup pins only current exact sources")
         Media.adopt_required(full,2)
         check(full.encounter==actual and full.boot_paths.is_empty() and not full.boot_complete,name+" reverse seek retains the exact recording source set but resets current-state readiness")
@@ -89,8 +95,12 @@ func run()->void:
         Media.close(full)
         var capped=Media.create();capped.budget_bytes=0
         Media.adopt_encounter(capped,actual,1)
-        Media.demand(capped,actual.priority)
-        check(capped.preload_selected==actual.priority and capped.preload_skipped==actual.paths.size()-actual.priority.size(),name+" existing zero optional budget retains mandatory sources and skips future media")
+        Media.demand(capped,actual.priority,actual.environment,actual.fixtures,actual.gpu_only,actual.cpu_required)
+        deadline=Time.get_ticks_msec()+30000
+        while Media.diagnostics(capped).selection_pending and Time.get_ticks_msec()<deadline:
+            Media.prepare_optional(capped)
+            await process_frame
+        check(capped.preload_selected==actual.priority and Media.preload_progress(capped).skipped==actual.paths.size()-actual.priority.size(),name+" existing zero optional budget retains mandatory sources and skips future media")
         Media.close(capped)
         var narrow_cache=Catalog.source_snapshot(index.cache)
         var narrow=Media.plan(index.initialization.state,groups.slice(0,2),narrow_cache)
@@ -101,75 +111,6 @@ func run()->void:
         evidence.append({"recording":name,"groups":groups.size(),"sources":actual.paths.size(),"first_two_groups_sources":first_two.size(),
             "future_only_sources":actual.paths.size()-first_two.size(),"environment_sources":actual.environment.size(),"fixture_sources":actual.fixtures.size(),
             "cpu_required":actual.cpu_required.size(),"gpu_only":actual.gpu_only.size(),"estimated_bytes":total,"metadata_ms":elapsed})
-    var report={"checks":checks,"failures":failures,"evidence":evidence,"scope":"Real Hide/light Amber and Blue plus Dash journals. Worker-only exact shared source closure for all admitted groups, immutable histories, existing PNG header accounting and existing bounded selection. No textures/GPU and no native loading-performance claim."}
+    var report={"checks":checks,"failures":failures,"evidence":evidence,"scope":"Explicit admitted journals. Worker-only exact source closure for all groups, immutable histories, PNG header accounting and bounded selection. No texture publication, native replay admission or performance claim.","unqualified":["Cumulative replay admission, cancellation and publication require real scene acceptance (studio_replay_native_checks)."]}
     FileAccess.open("res://generated/studio_recording_media_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("STUDIO_RECORDING_MEDIA ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)
-
-func replay_demand(index:Dictionary,source:Dictionary,label:String)->void:
-    var player=Player.new();player.external_playback=true;player.external_clock=true
-    player.catalog_cache=Catalog.source_snapshot(source.source_files)
-    player.media_warmup.encounter_override=source;player.media_warmup.budget_bytes=0
-    player.install_playback(Recording.restore(index,0.0))
-    player.world_revision=player.timeline.world_revision
-    player.world_prepare_epoch=player.timeline.initialization_revision
-    player._prepare_media()
-    var ordinary:Dictionary=player.media_warmup.wanted.duplicate()
-    var optional_before:Dictionary=player.media_warmup.preload_selected.duplicate()
-    var plan=player.timeline.replay_plan(index.duration_ms)
-    var state=var_to_bytes(player.timeline.state)
-    check(plan.groups.size()>2,label+" actual replay target crosses more than two groups")
-    check(not player._replay_media_ready(plan),label+" cold exact replay target blocks before media publication")
-    var wanted={};var environment={}
-    for group in plan.groups:
-        wanted.merge(source.group_plans[group.id].character);wanted.merge(source.group_plans[group.id].environment)
-        environment.merge(source.group_plans[group.id].environment)
-    check(wanted.keys().all(func(path):return player.media_warmup.wanted.has(path)),label+" crossed groups promote exact closure with zero optional budget")
-    check(player.media_warmup.preload_selected.size()<source.paths.size() or wanted.size()==source.paths.size(),label+" optional recording closure remains budget selected")
-    var future:Array=wanted.keys().filter(func(path):return not ordinary.has(path))
-    check(not future.is_empty() and future.all(func(path):return not optional_before.has(path)),label+" future-only sources were absent from optional preloading before the replay demand")
-    player._prepare_media()
-    check(wanted.keys().all(func(path):return player.media_warmup.wanted.has(path)),label+" regular next-frame preparation retains pending cumulative pins")
-    check(player.media_warmup.plan_task<0,label+" crossed group metadata uses the recording worker plans without a new worker")
-    var candidate={"replay":true,"replay_groups":plan.groups,"source_group_id":plan.groups.back().id}
-    check(not player._prepared_world_sources_ready(candidate),label+" cumulative environment closure blocks while cold")
-    var missing:String=environment.keys()[0]
-    for path in player.media_warmup.wanted:
-        if path!=missing:Media.published(player.media_warmup,{"path":path,"cpu_bytes":16,"gpu_bytes":16,"energy":1.0,"emission_centroid":Vector2.ZERO})
-    check(not player._prepared_world_sources_ready(candidate) and not player._replay_media_ready(plan),label+" one missing cumulative environment source blocks both admissions")
-    Media.published(player.media_warmup,{"path":missing,"cpu_bytes":16,"gpu_bytes":16,"energy":1.0,"emission_centroid":Vector2.ZERO})
-    var deadline=Time.get_ticks_msec()+10000
-    var prepared=player._replay_media_ready(plan)
-    while not prepared and Time.get_ticks_msec()<deadline:
-        await process_frame
-        prepared=player._replay_media_ready(plan)
-    check(player._prepared_world_sources_ready(candidate) and prepared,label+" full mandatory publication plus normal native resource preparation admits cumulative closure")
-    check(var_to_bytes(player.timeline.state)==state,label+" media preparation never publishes future reducer state")
-    player.timeline.replay_cancel_preparation();player._prepare_media()
-    check(player.replay_media_groups.is_empty() and player.media_warmup.wanted==ordinary,label+" cancel restores only the actual current window demand")
-    check(future.all(func(path):return not player.media_warmup.wanted.has(path)),label+" cancel releases every crossed-only mandatory pin")
-    player._replay_media_ready(plan)
-    # This fixture qualifies media/prefix ownership only; native scene admission
-    # and simultaneous pane publication are exercised by the native replay suite.
-    player.timeline.world_ready=func(_candidate):return true
-    check(player.timeline.replay_prepare(plan) and player.timeline.replay_publish(plan),label+" admitted real cumulative prefix publishes after the media proof")
-    player._prepare_media()
-    deadline=Time.get_ticks_msec()+10000
-    while not player.media_metadata_ready and Time.get_ticks_msec()<deadline:
-        var completed=Media.poll_plan(player.media_warmup)
-        if not completed.is_empty():player._adopt_media_plan(completed)
-        player._prepare_media()
-        await process_frame
-    var final_cache=Catalog.source_snapshot(source.source_files)
-    var final_actor=Media.plan(player.timeline.state,[],final_cache)
-    var final_world=EnvironmentMedia.plan(player.timeline.state,[],final_cache)
-    var final_required:Dictionary=final_actor.required.duplicate();final_required.merge(final_world.required);final_required.merge(player.media_condition_paths)
-    check(player.replay_media_groups.is_empty() and player.media_warmup.wanted.keys().all(func(path):return final_required.has(path)) and player.media_warmup.wanted.size()==final_required.size(),label+" success releases cumulative pins and retains only final-state plus live condition closure")
-    player.install_playback(Recording.restore(index,0.0));player._prepare_media()
-    check(player.replay_media_groups.is_empty() and player.media_warmup.wanted==ordinary,label+" seek/reset cannot inherit the canceled replay closure")
-    player.install_playback(Recording.restore(index,0.0))
-    var fresh_plan=player.timeline.replay_plan(index.duration_ms)
-    player._replay_media_ready(fresh_plan)
-    check(player.replay_media_groups==fresh_plan.groups and wanted.keys().all(func(path):return player.media_warmup.wanted.has(path)),label+" first replay callback after a new epoch retains the full crossed closure")
-    player.timeline.replay_cancel_preparation();player._prepare_media()
-    Media.close(player.media_warmup);player.component_renderer.close(player)
-    player.context_menu.free();player.free()

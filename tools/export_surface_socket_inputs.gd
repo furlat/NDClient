@@ -52,7 +52,9 @@ func _initialize()->void:
         if not key is String:continue
         var path:String=key.trim_prefix("native_resource:") if key.begins_with("native_resource:") else ("res://authoring/"+key if key.ends_with(".json") and not key.begins_with("res://") else key)
         if FileAccess.file_exists(path):inputs[path]=stamp(path)
-    for path in ["res://source_catalog.gd","res://presentation/native_authoring.gd","res://presentation/native_spell_authoring.gd","res://presentation/spell_feedback.gd","res://presentation/character_geometry.gd","res://presentation/authoring.gd","res://generated/character_geometry.json","res://generated/creature_geometry.json","res://tools/export_surface_socket_inputs.gd","res://tools/bake_surface_socket_samples.py"]:
+    # The baker reads optical records directly. Runtime material binding in
+    # character_geometry.gd does not produce its pixel coordinates or bytes.
+    for path in ["res://source_catalog.gd","res://presentation/native_authoring.gd","res://presentation/native_spell_authoring.gd","res://presentation/spell_feedback.gd","res://presentation/authoring.gd","res://generated/character_geometry.json","res://generated/creature_geometry.json","res://tools/export_surface_socket_inputs.gd","res://tools/bake_surface_socket_samples.py"]:
         if FileAccess.file_exists(path):inputs[path]=stamp(path)
     var errors:Array=cache.get("native_authoring_errors",[])
     if not errors.is_empty():printerr(errors);quit(1);return

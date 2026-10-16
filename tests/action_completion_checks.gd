@@ -71,6 +71,9 @@ func prepare_display() -> void:
     player.force_attack = false
     player.choices_force_attack = false
     player.media_initial_ready = true
+    # This request/publication fixture controls readiness explicitly; native
+    # startup construction and pixels belong to the real scene checks.
+    player.native_startup.ready = true
 
 func request_while_playing() -> bool:
     player._discover()

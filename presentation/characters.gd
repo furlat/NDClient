@@ -28,22 +28,29 @@ static func resolve(actor: Dictionary, state: Dictionary, cache: Dictionary) -> 
         or actor.get("spatial_disposition", "present") != "present" \
         or actor.get("remains_disposition", "intact") == "disintegrated":
         return {"ok":true, "value":null}
-    var id = rig_id(actor, cache)
-    var index: Dictionary = _read("catalog-index.json", cache)
-    var rigs: Dictionary = _read(index.rigs, cache)
-    if id.is_empty() or not rigs.has(id): return _error("No authored rig for actor " + str(actor.get("uuid")))
+    var selected = structure(actor,cache)
+    if not selected.ok:return selected
     var position: Array = actor.last_visual_position
     var tile_key = "%d,%d" % [position[0], position[1]]
     var tile: Dictionary = state.get("tiles", {}).get(tile_key, {})
     if not tile.has("elevation_steps"): return _error("No disclosed elevation for actor tile " + tile_key)
-    var selected = _select_layers(actor, rigs[id], id == _read(index.root_rig, cache), cache)
-    if not selected.ok: return selected
     var appearance: Dictionary = actor.appearance
-    return {"ok":true, "value":{"id":actor.uuid, "kind":"actor", "rig":id,
+    return {"ok":true, "value":{"id":actor.uuid, "kind":"actor", "rig":selected.value.rig,
         "position":position.duplicate(), "base_height_steps":tile.elevation_steps, "visual_height":0.0,
         "scale":float(appearance.visual_scale), "scale_x":float(appearance.visual_scale_x),
-        "appearance":appearance.duplicate(true), "equipment_layers":selected.value,
+        "appearance":appearance.duplicate(true), "equipment_layers":selected.value.equipment_layers,
         "facing":"SW", "life_state":actor.life_state}}
+
+static func structure(actor:Dictionary,cache:Dictionary)->Dictionary:
+    # The compiler compares these same constructor operands without inventing
+    # a support tile or resolving position on every ordinary actor after-value.
+    var id=rig_id(actor,cache)
+    var index:Dictionary=_read("catalog-index.json",cache)
+    var rigs:Dictionary=_read(index.rigs,cache)
+    if id.is_empty() or not rigs.has(id):return _error("No authored rig for actor "+str(actor.get("uuid")))
+    var selected=_select_layers(actor,rigs[id],id==_read(index.root_rig,cache),cache)
+    if not selected.ok:return selected
+    return {"ok":true,"value":{"rig":id,"appearance":actor.appearance,"equipment_layers":selected.value}}
 
 static func _layer(category: String, tint: int = 0xFFFFFF, alpha: float = 1.0) -> Dictionary:
     return {"category":category, "tint":tint, "alpha":alpha}

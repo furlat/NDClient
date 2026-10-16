@@ -193,14 +193,14 @@ func step(budget_usec: int = 3000) -> void:
                     if not scenery_consumers.has(id): scenery_consumers[id] = []
                     scenery_consumers[id].append({"entry":entry,"index":-1})
                     var value = 1.0 if current_visibility.get(entry.placement.id,false) else 0.0
-                    entry.material.set_shader_parameter("current_visibility",value); entry.scenery_value = value
+                    SourceMaterial.set_parameter(entry,&"current_visibility",value); entry.scenery_value = value
                 if entry.has("wall_source"):
                     wall_entries.append(entry)
                     var alpha: float = choices[entry.wall_source.id].get(entry.wall_variant,0.0)
                     entry.node.visible = alpha>0 and entry.wall_source_visible
-                    entry.wall_opacity = alpha; entry.material.set_shader_parameter("wall_opacity",alpha)
+                    entry.wall_opacity = alpha; SourceMaterial.set_parameter(entry,&"wall_opacity",alpha)
                     entry.wall_mask_enabled = wall_mode=="translucent" and entry.role!="shadow"
-                    entry.material.set_shader_parameter("wall_mask_enabled",wall_mode=="translucent" and entry.role!="shadow")
+                    SourceMaterial.set_parameter(entry,&"wall_mask_enabled",wall_mode=="translucent" and entry.role!="shadow")
                     if entry.role!="shadow" and entry.wall_variant!="joined" and entry.wall_source_visible: picks.append(entry)
                 entry.order_key = Order.key(entry.placement,entry.role,entry.layer,quarter,background); entry.order_quarter = quarter
                 if entry.node.visible: order.append(entry)
@@ -230,12 +230,12 @@ func step(budget_usec: int = 3000) -> void:
                 var source_key = [entry.node.get_instance_id(),entry.material.get_instance_id(),entry.get("source_version",0)]
                 if rect.material.get_meta("coverage_source",[]) != source_key:
                     for parameter in ["colour_texture","colour_size","colour_rect","use_selection","invert_selection","selection_kind","rgba_min","rgba_max","selection_mask","selection_rect","selection_scale","selection_offset","selection_values"]:
-                        rect.material.set_shader_parameter(parameter,entry.material.get_shader_parameter(parameter))
+                        rect.material.set_shader_parameter(parameter,SourceMaterial.value(entry,StringName(parameter)))
                     rect.material.set_meta("coverage_source",source_key)
                 rect.material.set_shader_parameter("wall_mask_id",mask_cursor)
-                entry.material.set_shader_parameter("wall_mask_id",mask_cursor)
-                entry.material.set_shader_parameter("wall_mask_texture",mask_viewport.get_texture())
-                entry.material.set_shader_parameter("wall_mask_enabled",wall_mode=="translucent")
+                SourceMaterial.set_parameter(entry,&"wall_mask_id",mask_cursor)
+                SourceMaterial.set_parameter(entry,&"wall_mask_texture",mask_viewport.get_texture())
+                SourceMaterial.set_parameter(entry,&"wall_mask_enabled",wall_mode=="translucent")
                 mask_sources.append(entry)
             "mask_position":
                 var view = [camera.global_transform,camera.size,host.get_viewport().get_visible_rect().size]
