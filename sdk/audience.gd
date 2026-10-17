@@ -14,13 +14,26 @@ static func point_key(point: Array) -> String:
     return "%d,%d" % [point[0], point[1]]
 
 static func parse_cell_key(key: String) -> Dictionary:
-    var fields = key.split(",")
-    if fields.size() != 2:
-        return failure("Sensory cell key requires two integer coordinates")
-    for value in fields:
-        if not value.strip_edges().is_valid_int():
-            return failure("Sensory cell key requires two integer coordinates")
-    return success(point_key([int(fields[0]), int(fields[1])]))
+    var cell: Array = _wire_cell(key, {})
+    return success(cell[0]) if not cell.is_empty() else failure("Sensory cell key requires two integer coordinates")
+
+# One parse per wire cell key and event: [point key, [x, y]], or [] unless the
+# key is two (edge-trimmed) integers. Light and hazard maps usually share every
+# key and the composed view reuses the same parse. A canonical spelling is
+# already its own point key; any other accepted spelling is reformatted.
+static func _wire_cell(key: String, parsed: Dictionary) -> Array:
+    var cell: Variant = parsed.get(key)
+    if cell != null: return cell
+    var fields: PackedStringArray = key.split(",")
+    var result: Array = []
+    if fields.size() == 2 and (fields[0].is_valid_int() or fields[0].strip_edges().is_valid_int()) \
+            and (fields[1].is_valid_int() or fields[1].strip_edges().is_valid_int()):
+        var x: int = int(fields[0])
+        var y: int = int(fields[1])
+        var canonical: bool = fields[0].length() <= 10 and fields[1].length() <= 10 and str(x) == fields[0] and str(y) == fields[1]
+        result = [key if canonical else point_key([x, y]), [x, y]]
+    parsed[key] = result
+    return result
 
 static func compare(a: Variant, b: Variant) -> int:
     if a is Array and b is Array:
@@ -73,6 +86,7 @@ static func resolve(observer: String, supplied: Variant) -> Dictionary:
 static func reduce_senses(expected_observer: String, previous: Variant, event: Dictionary) -> Dictionary:
     var result = _reduce_senses_retained(expected_observer, previous, event)
     if result.ok: result.value = result.value.duplicate(true)
+    result.erase("wire_cells")
     return result
 
 # Internal folds retain immutable prior leaves. Public value-in/value-out helpers
@@ -93,17 +107,18 @@ static func _reduce_senses_retained(expected_observer: String, previous: Variant
     # lookups. A caller retry must not inherit part of a rejected observation.
     var lights = {}
     var hazards = {}
+    var wire_cells = {}
     for key in event.effective_light_levels_changed:
-        var parsed = parse_cell_key(key)
-        if not parsed.ok: return parsed
+        var cell: Array = _wire_cell(key, wire_cells)
+        if cell.is_empty(): return failure("Sensory cell key requires two integer coordinates")
         var light = event.effective_light_levels_changed[key]
         if light < 0 or light > 4 or float(light) != floor(float(light)):
             return failure("Unknown recorded light level")
-        lights[parsed.value] = light
+        lights[cell[0]] = light
     for key in event.hazardous_cells_changed:
-        var parsed = parse_cell_key(key)
-        if not parsed.ok: return parsed
-        hazards[parsed.value] = event.hazardous_cells_changed[key]
+        var cell: Array = _wire_cell(key, wire_cells)
+        if cell.is_empty(): return failure("Sensory cell key requires two integer coordinates")
+        hazards[cell[0]] = event.hazardous_cells_changed[key]
     var indexed = _member_cells(previous, expected_observer, cells)
     var result: Dictionary = previous.duplicate()
     # Retained member leaves are immutable. Detach a collection only when this
@@ -155,11 +170,14 @@ static func _reduce_senses_retained(expected_observer: String, previous: Variant
         result.visual_access = event.visual_access
     result.paths_dirty = previous.paths_dirty or event.paths_dirty
     indexed.source = result
-    return success(result)
+    var reduced: Dictionary = success(result)
+    reduced.wire_cells = wire_cells
+    return reduced
 
 static func observe(previous: Dictionary, audience: Dictionary, event: Dictionary, cursor: int) -> Dictionary:
     var result = _observe_retained(previous, audience, event, cursor)
     if result.ok: result.value = result.value.duplicate(true)
+    result.erase("wire_cells")
     return result
 
 static func _observe_retained(previous: Dictionary, audience: Dictionary, event: Dictionary, cursor: int, cells: Dictionary = {}) -> Dictionary:
@@ -207,7 +225,9 @@ static func _observe_retained(previous: Dictionary, audience: Dictionary, event:
                         apparent = true; break
                 if apparent or (prior != null and point in prior.positions):
                     result.effect_absences[key] = cursor
-    return success(result)
+    var observed_result: Dictionary = success(result)
+    observed_result.wire_cells = reduced.wire_cells
+    return observed_result
 
 static func contacts(perception: Dictionary, objects: bool) -> Dictionary:
     return _contacts_retained(perception, objects).duplicate(true)
@@ -399,7 +419,7 @@ static func _view_retained(perception: Dictionary, observer: String) -> Variant:
 # Only an owned event fold that already composed a sensory view may reuse these
 # cell collections. Initial observer resets still recompute the full union.
 # Contacts/effects stay exhaustive; observations/spatial facts may alter them.
-static func _view_after(perception: Dictionary, observer: String, previous: Variant, event: Dictionary, cells: Dictionary = {}, retained:bool=false) -> Variant:
+static func _view_after(perception: Dictionary, observer: String, previous: Variant, event: Dictionary, cells: Dictionary = {}, retained:bool=false, wire_cells:Dictionary={}) -> Variant:
     if previous == null or event.initial or perception.members.is_empty():
         return _view_retained(perception, observer)
     var anchor: Dictionary = perception.members.get(observer, perception.members.values()[0])
@@ -419,11 +439,11 @@ static func _view_after(perception: Dictionary, observer: String, previous: Vari
     var affected = {}
     for point in event.visible_cells_added + event.visible_cells_removed:
         affected[point_key(point)] = point
+    # The member fold already parsed (and validated) these wire keys.
     for field in ["effective_light_levels_changed", "hazardous_cells_changed"]:
         for key in event[field]:
-            var parts: PackedStringArray = key.split(",")
-            var point = [int(parts[0]), int(parts[1])]
-            affected[point_key(point)] = point
+            var cell: Array = _wire_cell(key, wire_cells)
+            affected[cell[0]] = cell[1]
     if not affected.is_empty():
         result.effective_light_levels = result.effective_light_levels.duplicate()
         result.hazardous_cells = result.hazardous_cells.duplicate()
