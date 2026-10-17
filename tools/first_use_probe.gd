@@ -81,7 +81,12 @@ func play_pass(label:String)->void:
                     var owner_name:String=str(view.get_parent().name) if view.get_parent()!=null else "-"
                     var key:String=owner_name+"/"+str(view.name).rstrip("0123456789")
                     fresh[key]=fresh.get(key,0)+1
-            var updating:=viewports.filter(func(view):return view.render_target_update_mode!=SubViewport.UPDATE_DISABLED).size()
+            var updating_views:=viewports.filter(func(view):return view.render_target_update_mode!=SubViewport.UPDATE_DISABLED)
+            var updating:=updating_views.size()
+            var updating_owners:={}
+            for view in updating_views:
+                var key:String=str(view.get_parent().get_class())+"/"+str(view.size)
+                updating_owners[key]=updating_owners.get(key,0)+1
             slow.append({"display_ms":snappedf(studio.world.timeline.display_ms,1),"interval_ms":snappedf(interval,0.1),
                 "player_ms":snappedf(phases.get("player_process",0.0),0.01),"new_pipelines":compiled_now-compiled,"pipeline_kinds":category_delta,
                 "lights":studio.world.light_table.count,"shadow_actors":studio.world.generated_shadows.actors.size(),
@@ -89,7 +94,8 @@ func play_pass(label:String)->void:
                 "new_nodes":nodes_now-nodes,"process_ms":snappedf(Performance.get_monitor(Performance.TIME_PROCESS)*1000.0,0.1),
                 "render_setup_ms":snappedf(RenderingServer.get_frame_setup_time_cpu(),0.1),
                 "viewports":viewports.size(),"updating_viewports":updating,"new_viewports":fresh,"top":named,
-                "studio_thumbnail_descriptor_ms":snappedf(descriptor_ms,0.01)})
+                "studio_thumbnail_descriptor_ms":snappedf(descriptor_ms,0.01),"studio_tracks_ms":studio.tracks.frame_cpu_ms.get("total",0.0),
+                "render_viewports_ms":snappedf(RenderingServer.get_frame_setup_time_cpu(),0.01),"updating_owners":updating_owners})
         if interval<SLOW_MS and not category_delta.is_empty():
             fast.append({"display_ms":snappedf(studio.world.timeline.display_ms,1),"interval_ms":snappedf(interval,0.1),"pipeline_kinds":category_delta})
         compiled=compiled_now;nodes=nodes_now
