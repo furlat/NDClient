@@ -92,14 +92,15 @@ static func describe(row:Dictionary,record:Dictionary,source_role:int,quarter:in
     return value
 
 static func row_packet(row:Dictionary,quarter:int,camera_basis:Basis,cache:Dictionary,source_depth:bool,source_normals:bool)->Dictionary:
-    if row.has("lit_animation") or row.get("water_surface",false):return {"eligible":false}
+    # Fixture flames stay scene-owned; their static body uses this packet.
+    if row.get("water_surface",false):return {"eligible":false}
     var source:Dictionary=row.duplicate()
     if source.has("views"):source.asset=source.views[Placement.pose(source.orientation,quarter)]
     var variants:Array=[source];variants.append_array(source.get("wall_members",[]))
     var records:Array=[];var frames:Array=[];var paths:Dictionary={}
     for variant in variants:
         var record:Dictionary=Catalog.environment(variant,quarter,cache)
-        if record.has("water") or variant.has("lit_animation") or variant.get("water_surface",false):return {"eligible":false}
+        if record.has("water") or variant.get("water_surface",false):return {"eligible":false}
         records.append(record);EnvironmentMedia.record_paths(record,paths,cache)
         if variant.kind=="door":
             var frame:Dictionary=Catalog.door_frame(variant,quarter,cache);frames.append(frame);EnvironmentMedia.record_paths(frame,paths,cache)

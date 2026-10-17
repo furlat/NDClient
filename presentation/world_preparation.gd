@@ -425,7 +425,8 @@ static func derive_static(input:Dictionary,output:Dictionary)->void:
                 var source_id:String=str(selected.placement.id)
                 selected.descriptor.parameters.current_visibility=1.0 if sight.changes.get(source_id,sight.visibility.has(source_id)) else 0.0
             environment_packets[id]=packet
-            object_sources[id]={"paths":packet.paths,"fixtures":{}}
+            # A fixture flame still needs its frames and optical facts.
+            object_sources[id]=_row_sources(row,input.quarter,input.cache) if row.has("lit_animation") else {"paths":packet.paths,"fixtures":{}}
         else:object_sources[id]=_row_sources(row,input.quarter,input.cache)
     for key in ground:
         if not ground[key].is_empty() and not input.ground.has(key):ground_sources[key]=_row_sources(ground[key][0],input.quarter,input.cache)
@@ -1159,6 +1160,10 @@ func _prepare_object_step(deadline:int,measured:bool)->bool:
                 if environment_capture_complete and environment_task<0:
                     media_issue="Private environment resource task missed its captured row: "+id;phase="failed";return false
                 continue
+            # The scene-owned flame needs its frames and optical facts.
+            if row.has("lit_animation") and not _sources_ready(result.object_sources.get(id,{}),id):
+                if measured:object_work_counts.source_waits+=1
+                continue
         else:
             var source_started:int=Time.get_ticks_usec() if measured else 0
             var sources_ready:bool=_sources_ready(result.object_sources.get(id,{}),id)
@@ -1194,12 +1199,17 @@ func _prepare_object_step(deadline:int,measured:bool)->bool:
             var fallback_started:int=Time.get_ticks_usec() if measured else 0
             _environment_row(row.duplicate(true))
             if measured:phase_usec.object_ordinary_constructor=phase_usec.get("object_ordinary_constructor",0)+Time.get_ticks_usec()-fallback_started
+        var flame_index:int=-1
+        if from_worker and row.has("lit_animation"):
+            flame_index=static_entries.size()-first
+            _add_fixture_flame(row)
         if not media_issue.is_empty():return false
         var built:Array=static_entries.slice(first)
-        native_groups[id]={"row":row,"entries":built,"source_cursor":built.size() if from_worker else 0}
+        # Worker entries arrive bound; only a scene-owned flame is primed here.
+        native_groups[id]={"row":row,"entries":built,"source_cursor":(flame_index if flame_index>=0 else built.size()) if from_worker else 0}
         if from_worker:
             var queue_started:int=Time.get_ticks_usec() if measured else 0
-            for entry in built:_queue_atlas_source(entry)
+            for entry in (built.slice(0,flame_index) if flame_index>=0 else built):_queue_atlas_source(entry)
             if measured:phase_usec.object_worker_atlas_queue=phase_usec.get("object_worker_atlas_queue",0)+Time.get_ticks_usec()-queue_started
         created_count+=static_entries.size()-first
         if measured:object_work_counts.constructed+=1

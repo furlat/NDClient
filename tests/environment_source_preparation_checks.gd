@@ -43,7 +43,21 @@ func run()->void:
         rows.append(row)
     check(not rows.is_empty(),"Real authored environment rows selected")
     check(not Description.row_packet({"water_surface":true},0,Basis.IDENTITY,cache,true,true).eligible,"Water clock stays with scene owner")
-    check(not Description.row_packet({"lit_animation":"torch.flame"},0,Basis.IDENTITY,cache,true,true).eligible,"Fixture clock stays with scene owner")
+    # A fixture's static body is prepared like any prop; its animated flame
+    # (layer 100) and clock stay with the scene owner.
+    # Live WorldRows add lit_animation to a disclosed lit prop; use a real
+    # authored prop row with and without it.
+    var body_row:Dictionary={}
+    for row in rows:
+        if row.kind not in ["terrain","wall","cliff","door"]:body_row=row;break
+    check(not body_row.is_empty(),"Real authored prop row selected for the fixture contract")
+    if not body_row.is_empty():
+        var lit_row:Dictionary=body_row.duplicate(true);lit_row.lit_animation="torch.flame"
+        var plain_packet:Dictionary=Description.row_packet(body_row,0,Basis.IDENTITY,cache,true,true)
+        var lit_packet:Dictionary=Description.row_packet(lit_row,0,Basis.IDENTITY,cache,true,true)
+        check(lit_packet.eligible and lit_packet.entries.size()==plain_packet.entries.size(),"Fixture static body has the same prepared operands")
+        check(lit_packet.paths==plain_packet.paths,"Fixture static body requests the same body sources")
+        check(not lit_packet.get("entries",[]).any(func(entry):return entry.layer==100),"Fixture flame and clock stay with scene owner")
     var names:Dictionary=Sources.environment_parameter_names()
     for quarter in 4:
         var reference:FixtureSources=owner(quarter,pixels,cache)
