@@ -56,7 +56,6 @@ under-reports holds. Holds are judged on three-run medians.
 | Optional maintenance returns when settled (`media_warmup.gd` `prepare_optional`) | 0.74 ms per idle frame | applies when the optional library has finished accounting |
 | Generated shadows retain unchanged actors (`canvas_shadows.gd` `sync`): key = layer versions/transforms/bind fields, contact, view, light **ranking** revision, dominant source's live fields; hide only dropped helpers | key never matched: flicker moves torch light positions each frame, but ranking deliberately uses each flame cycle's mean | `modular_shadows` 1.39 → 0.48 ms; 6/6 actors retained in 186/200 idle frames |
 | Optional selection and family accounting read each family map once (`_select_optional`, `_step_families`) | see spike S1 below | targeting burst removed |
-
 | Native spell support adoption runs only when a texture enters or leaves residency or an actor layer's displayed path changes (`native_scene_support.gd` `adopt`; new `texture_revision` in Play, bumped on upload-create and prune) | during Fireball, the spell prefetch re-walked every actor layer each frame, with two body-descriptor lookups per layer, to rebuild an unchanged mask map | prefetch minus image requirements 0.65–0.71 → 0.48–0.60 ms per Fireball frame, lower in all three interleaved pairs (`T021535`… vs `T021628`…). Native scene support 12,939 checks; native spell playback has the same 6 failures as `af3daa2`. |
 
 Result after Phase 1 (median of 3 runs `20261017T001059`, `T001138`,
