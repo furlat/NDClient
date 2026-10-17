@@ -318,37 +318,53 @@ binds at 16 GiB (1,910 selected, 1,125 skipped) but nothing is ever evicted.
 change facing dynamically, and camera rotation uses the other views. A sheet
 is the smallest residency unit.
 
-**Levers, all to be measured before choosing:**
+**The sheets are almost empty.** Measured on the colour alpha of all 132
+modular layers, clips Idle, Walk and Attack1 (387 sheets):
+
+| | Visible pixels | Per-cell tight boxes | Cells with pixels |
+|---|---:|---:|---:|
+| One layer (mean) | 0.6% | **2.0%** | 91% |
+| Body (`NakedBody`) | 1.6% | 5.8% | 100% |
+| Whole actor (union of 15 categories) | 3.6–4.9% | 8.3–12.3% | 100% |
+
+About 98% of the VRAM spent on modular layers holds transparent texels. Every
+cell is used, so trimming whole cells saves nothing; the waste is inside the
+cells. Texture sharing already works (textures are keyed by path,
+`play.gd:2478`), so identical outfits already cost once; the Gallery's actors
+are simply distinct.
+
+**Levers:**
+- **Crop and pack (lossless, the main lever).** For each sheet bundle, the
+  union of non-empty texels across colour and companions gives a tight box per
+  cell, padded by one texel for filtering. Boxes are packed into shared atlas
+  pages, with a per-sheet table of cell → (page rect, offset in cell). The quad
+  stays the full 128² cell, so lighting snap, picking and order are
+  unchanged; the shader maps the cell texel to its packed texel, transparent
+  outside the box. Expected ~20–50× less VRAM for modular actors, all 8
+  facing rows resident, and ~20–50× less data to load per clip. Fewer distinct
+  textures also make shared materials easier (L2/L5).
 - **Residency policy.** Resident = clips displayed now plus clips the
-  timeline will display soon, not the whole optional preload. Measure what the
-  524 "required" paths actually are against that definition.
-- **Merged maps (lossless, format-dependent).** Pack depth and the grayscale
-  masks into the channels of one texture, only if each uses a single channel
-  and Godot stores the masks wider than R8 today. Check the real formats
-  first; three R8 masks merged into RGBA8 would cost more, not less.
-- **Trim empty frame cells (lossless).** Clips with fewer than 15 frames
-  still ship 1920-wide sheets; measure how many cells are empty.
-- **GPU compression (lossy).** BC7 for colour, BC5 for normals. Changes
-  pixels, so only with the user's consent after side-by-side captures; depth
-  and masks stay lossless.
+  timeline will display soon, not the whole optional preload.
+- **Not needed:** lossy GPU compression, and baking an actor's layers into one
+  sheet. Baking would save ~9.5× but changes per-layer tint, conditions,
+  lighting at partially transparent edges, shadow relief and layer order, and
+  needs a rebake on every outfit change; cropping saves more and changes no
+  pixel.
+- To check during L8: whether companions have non-zero texels outside the
+  colour alpha (the box uses the union), and the same measurement for
+  environment and creature sheets.
 
-Without facing-row residency the lossless levers are modest. Six idle actors
-already need ~1.6 GiB at one clip each, so a scene with many actors under a
-~2.5 GiB budget probably needs GPU compression of colour and normals. That is
-the user's decision, made on captures.
-
-**Moving the media.** Trimmed cells, merged maps and compression change the
-file layout, so the practical form is an offline **prepack step**: it converts
-the referenced subset into the runtime layout into a git-ignored cache that
-the worker loads directly. Importing the raw corpus through the Godot importer
-is not proposed: it would duplicate 5.9 GB into `.godot/imported` and saves
-VRAM only with lossy compression.
+**Moving the media.** Cropping changes the file layout, so the practical form
+is an offline **prepack step**: it converts the referenced media into packed
+pages plus cell tables in a git-ignored cache that the worker loads directly.
+Importing the raw corpus through the Godot importer is not proposed: it would
+duplicate 5.9 GB into `.godot/imported` and keep the empty texels.
 
 **Design.** Budget in real GPU bytes by format, plus render targets, against
 a < 4 GB GPU (≤ ~2.5 GiB total). Residency and eviction per **sheet bundle**
 (all facing rows). Eviction drops every Texture2D reference. LRU touched for
-every displayed path. Fixed-capacity Texture2DArray pools per size class are
-an option (they give both the budget and per-instance texture selection).
+every displayed path. Packed pages are the natural fixed-capacity pool (they
+give both the budget and per-instance texture selection).
 
 **CPU Images.** Also used as the actor display gate, by surface sockets
 (alpha tri-state, depth/support/solid), for the fixture-flame Texture2DArray,
@@ -418,7 +434,7 @@ deleted; any remaining difference is shown side by side to the user.
 | L5 | **Actors.** As in §3 Actors. | AnimationTree for live actors, per-frame pose dictionaries, the SourceMaterial ledger, source-only world cuts | Actor captures; per-frame actor cost ≈ L instance-uniform writes + L transforms and offsets, plus condition writes for actors with active conditions; clip changes with no pause |
 | L6 | **Blood.** Field atlas; stains as their own ordered draws lit by the shared loop (ambient 0.18, per screen pixel); droplets keep buckets and halves. | Per-tile viewports, lit pages | Blood oracles (Pygame reference within .008) |
 | L7 | **Effects.** Legacy effects keep off-screen composition, lit by the shared loop (no duplicated light pages). Spells stay in the main world; per-piece writes gated. Hit flashes and outlines as sprite shader effects. | Duplicated light pages, per-hit viewports | Spell/effect captures |
-| L8 | **Media and VRAM.** Real-format GPU budget for a < 4 GB GPU; whole-sheet bundle residency (all facing rows) and eviction that drops every reference; levers from §3 measured (lossless first, compression only with consent); prepack step if the layout changes. | Role/family/selection accounting replaced by a budgeted bundle LRU | Holds stay 0 **with the consumer budget**; VRAM breakdown reported per route |
+| L8 | **Media and VRAM.** Real-format GPU budget for a < 4 GB GPU; crop-and-pack prepack of the referenced media (lossless, all facing rows); whole-bundle residency and eviction that drops every reference. | Role/family/selection accounting replaced by a budgeted bundle LRU | Holds stay 0 **with the consumer budget**; VRAM breakdown reported per route |
 
 **L3 notes.** The user's caution (17 October): it is very easy to render
 assets out of order and break the perspective.
