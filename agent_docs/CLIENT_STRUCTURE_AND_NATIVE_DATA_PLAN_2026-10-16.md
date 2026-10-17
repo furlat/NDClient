@@ -1,5 +1,11 @@
 # Client structure, steady frame and native data plan — 16 October 2026
 
+> **Superseded for rendering and preparation (17 October 2026).** This plan
+> optimized inside the existing renderer design. See
+> [the essential-work audit and replacement plan](CLIENT_ESSENTIAL_WORK_AUDIT_2026-10-17.md).
+> Its user decisions still hold.
+
+
 Status: **final plan** (revision 5, 17 October 2026). Requested by the user
 on 16 October 2026: a complete plan to organize the client, isolate
 performance culprits, separate Studio from the live game while sharing the
