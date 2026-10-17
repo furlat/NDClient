@@ -24,7 +24,7 @@ code. Live counts come from the Gallery route.
 
 | | Value |
 |---|---:|
-| GPU time per frame | **0.24 ms** |
+| GPU time per frame, measured viewports (main 0.24, light atlas 0.21, shadows 0.26; blood, spell and support passes not measured) | **~0.7 ms** |
 | Render-thread CPU | 0.47 ms |
 | Player script time | **8.4 ms** |
 | Frame interval | 11.8 ms |
@@ -33,7 +33,9 @@ code. Live counts come from the Gallery route.
 | Video memory | **6.2 GB** |
 | Light atlas | 538 receivers, 20.9 Mpx |
 
-The GPU is idle. The frame is script bookkeeping.
+The frame is script bookkeeping. GPU time is under a millisecond across every
+measured viewport (`gpu_ms` covers only the main viewport, so each SubViewport
+is read separately).
 
 ## 1. Lighting: the 2D light atlas
 
@@ -243,9 +245,11 @@ The corpus (~59k PNGs, 3.7 GiB) justifies streaming.
 bind. CPU `Image`s are kept for picking and atlas crops; a 1-bit alpha mask
 is enough for picking.
 
-**Design.** Godot-imported textures with `ResourceLoader.load_threaded_request`
-(no runtime PNG decode). A per-group path set, a `has_all` readiness check, a
-simple LRU only if memory requires it. About 400–600 lines.
+**Design.**
+- Keep worker decode from the external media root. The corpus lives outside
+  the project (`source_data/media_root`), so Godot import is not practical.
+- A per-group path set, a `has_all` readiness check, and a simple LRU only if
+  memory requires it. About 400–600 lines.
 
 ### Draw order
 
@@ -306,7 +310,7 @@ feeds shadows, blood and effects.
 | L5 | **Actors.** Shared materials, per-layer instance uniforms, integer clock (no AnimationTree), clip change = texture swap when resident (no world cut) | Per-frame pose dictionaries, the SourceMaterial ledger, source-only world cuts | Actor captures; per-frame actor script cost ≈ L uniform writes |
 | L6 | **Blood.** Field atlas plus terrain-shader lookup; droplets in the vertex shader | Per-tile viewports, lit pages | Blood oracles (Pygame reference within .008) |
 | L7 | **Effects.** Legacy effects, hit flashes and outlines as main-pass shader effects. Spells in their own World3D with an on-change support pass. | 2–14 viewports per effect, per-hit viewports | Spell/effect captures |
-| L8 | **Media.** Imported textures with threaded loading, path-set readiness | Residency/budget/role accounting (~2,000 lines) | Holds stay 0; memory reported |
+| L8 | **Media.** Worker decode as today, with path-set readiness | Residency/budget/role accounting (~2,000 lines) | Holds stay 0; memory reported |
 
 **L3 notes: draw order is the highest-risk step (user caution, 17 October).**
 The game is 2.5D: pre-rendered sprites with depth relative to their own
