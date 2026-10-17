@@ -294,6 +294,42 @@ func _derive_forecast(input:Dictionary,forecast:Dictionary)->void:
         input.cache.__actor_source_profile=forecast.cache.get("__actor_source_profile",{})
     result=_complete_actors(input,forecast)
 
+static func _derive_ground_material(input:Dictionary,job:Dictionary,full_membership:bool,sight:Dictionary,slots:Dictionary)->void:
+    var key:String=job.key
+    var before: Dictionary = input.ground.get(key,{})
+    if not full_membership and not before.is_empty():
+        var geometry_patch = GroundData.prepare_changes(job.changes,job.removed,before.geometry)
+        if not geometry_patch.rebuild_required:
+            if not geometry_patch.changed.is_empty():
+                var changed_packets = {}
+                for id in geometry_patch.records:
+                    changed_packets[id] = GroundData._packet(geometry_patch.records[id],bool(sight.changes.get(id,sight.visibility.has(id))))
+                job.result.packet = {"sparse":true,"geometry_patch":geometry_patch,"row_changes":job.changes,
+                    "packets":changed_packets,"indices":before.geometry.indices,"rows":before.geometry.rows,
+                    "geometry_changes":{"base_version":before.ground_version,"changed":geometry_patch.changed,"removed":[]}}
+            return
+    var rows: Array = job.rows
+    if not full_membership:
+        var by_id = {}
+        if not before.is_empty():
+            for row in before.rows: by_id[row.id] = row
+        for id in job.removed: by_id.erase(id)
+        by_id.merge(job.changes,true)
+        rows = by_id.values()
+        rows.sort_custom(func(a,b):return slots[a.id]<slots[b.id])
+        job.result.rows = rows
+    if rows.is_empty(): return
+    if before.is_empty():
+        var sorted: Array = rows.duplicate(); var initial_packets = {}; var ranks = {}
+        for i in rows.size(): ranks[rows[i].id] = i
+        GroundData.sort_rows(sorted,initial_packets,input.quarter)
+        job.result.packet = {"new_rows":sorted,"new_packets":initial_packets,"source_ranks":ranks}
+    elif before.rows!=rows:
+        var visible = {}
+        for row in rows:
+            if sight.changes.get(row.id,sight.visibility.has(row.id)): visible[row.id] = true
+        job.result.packet = GroundData.prepare(rows,before,input.quarter,input.basis,visible)
+
 const SOURCE_CHUNK_ROWS:=24
 const SOURCE_CHUNKS:=4
 
@@ -397,42 +433,21 @@ static func derive_static(input:Dictionary,output:Dictionary)->void:
         output.merge({"complete":false,"error":"Cannot load selected asset metadata: particles.region.blood","worker_ms":(Time.get_ticks_usec()-started)/1000.0})
         return
     worker_phases.routing=(Time.get_ticks_usec()-phase_started)/1000.0;phase_started=Time.get_ticks_usec()
+    # Each floor material is independent: one task per material, results
+    # merged in material order.
     var affected: Array = ground.keys() if full_membership else ground_changes.keys()
+    var slots: Dictionary = patch.get("prepared_visual_slots",input.retained.get("visual_slots",{}))
+    var ground_jobs: Array = []
     for key in affected:
-        var before: Dictionary = input.ground.get(key,{})
-        if not full_membership and not before.is_empty():
-            var geometry_patch = GroundData.prepare_changes(ground_changes[key],ground_removed.get(key,[]),before.geometry)
-            if not geometry_patch.rebuild_required:
-                if not geometry_patch.changed.is_empty():
-                    var changed_packets = {}
-                    for id in geometry_patch.records:
-                        changed_packets[id] = GroundData._packet(geometry_patch.records[id],bool(sight.changes.get(id,sight.visibility.has(id))))
-                    packets[key] = {"sparse":true,"geometry_patch":geometry_patch,"row_changes":ground_changes[key],
-                        "packets":changed_packets,"indices":before.geometry.indices,"rows":before.geometry.rows,
-                        "geometry_changes":{"base_version":before.ground_version,"changed":geometry_patch.changed,"removed":[]}}
-                continue
-        var rows: Array = ground.get(key,[])
-        if not full_membership:
-            var by_id = {}
-            if not before.is_empty():
-                for row in before.rows: by_id[row.id] = row
-            for id in ground_removed.get(key,[]): by_id.erase(id)
-            by_id.merge(ground_changes[key],true)
-            rows = by_id.values()
-            var slots: Dictionary = patch.get("prepared_visual_slots",input.retained.get("visual_slots",{}))
-            rows.sort_custom(func(a,b):return slots[a.id]<slots[b.id])
-            ground[key] = rows
-        if rows.is_empty(): continue
-        if before.is_empty():
-            var sorted: Array = rows.duplicate(); var initial_packets = {}; var ranks = {}
-            for i in rows.size(): ranks[rows[i].id] = i
-            GroundData.sort_rows(sorted,initial_packets,input.quarter)
-            packets[key] = {"new_rows":sorted,"new_packets":initial_packets,"source_ranks":ranks}
-        elif before.rows!=rows:
-            var visible = {}
-            for row in rows:
-                if sight.changes.get(row.id,sight.visibility.has(row.id)): visible[row.id] = true
-            packets[key] = GroundData.prepare(rows,before,input.quarter,input.basis,visible)
+        ground_jobs.append({"key":key,"rows":ground.get(key,[]),"changes":ground_changes.get(key,{}),"removed":ground_removed.get(key,[]),"result":{}})
+    var ground_tasks: Array = []
+    for job in ground_jobs.slice(1):
+        ground_tasks.append(WorkerThreadPool.add_task(_derive_ground_material.bind(input,job,full_membership,sight,slots),false,"Prepare floor material"))
+    if not ground_jobs.is_empty(): _derive_ground_material(input,ground_jobs[0],full_membership,sight,slots)
+    for task in ground_tasks: WorkerThreadPool.wait_for_task_completion(task)
+    for job in ground_jobs:
+        if job.result.has("rows"): ground[job.key] = job.result.rows
+        if job.result.has("packet"): packets[job.key] = job.result.packet
     worker_phases.ground=(Time.get_ticks_usec()-phase_started)/1000.0;phase_started=Time.get_ticks_usec()
     var object_sources:Dictionary={};var ground_sources:Dictionary={};var environment_packets:Dictionary={}
     # Rows are independent: chunks run on their own catalog snapshots and are
