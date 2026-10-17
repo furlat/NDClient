@@ -160,11 +160,9 @@ static func complete_private_layer(packet:Dictionary,textures:Dictionary)->bool:
 
 static func adopt_private_layer(owner:Node,packet:Dictionary)->Dictionary:
     var entry:Dictionary=packet.entry
-    var node:=MeshInstance3D.new()
-    node.mesh=packet.mesh;node.material_override=entry.material
-    node.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-    node.sorting_use_aabb_center=false;node.custom_aabb=packet.aabb
-    entry.node=node
+    # The worker built the node; completed textures may have widened its bounds.
+    var node:MeshInstance3D=entry.node
+    node.custom_aabb=packet.aabb
     owner.add_child(node)
     owner.entries.append(entry);owner.actor_entries.append(entry)
     owner._light_entry(entry)

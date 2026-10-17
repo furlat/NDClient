@@ -615,7 +615,13 @@ func step(budget_usec: int = 2000) -> void:
     if prepared or stale or not media_issue.is_empty(): return
     var started = Time.get_ticks_usec()
     var environment_attempted:bool=false
+    var timed:bool=host.profile.get("recording",false)
+    var timed_phase:String=phase;var timed_from:int=started
     while not prepared:
+        if timed and phase!=timed_phase:
+            var now:int=Time.get_ticks_usec()
+            phase_usec["phase:"+timed_phase]=phase_usec.get("phase:"+timed_phase,0)+now-timed_from
+            timed_phase=phase;timed_from=now
         # A completed passive result may hand off even after another owner has
         # spent the allowance. The caller charges this real work; native scene
         # construction below still requires time in the same frame allowance.
@@ -785,6 +791,7 @@ func step(budget_usec: int = 2000) -> void:
             if host.component_renderer.blood.prepare_world(host,self,result.get("blood_rows",{}),blood_preparation,_preparation_allowance(started,budget_usec)):
                 prepared=true;phase="ready"
             else:break
+    if timed:phase_usec["phase:"+timed_phase]=phase_usec.get("phase:"+timed_phase,0)+Time.get_ticks_usec()-timed_from
     FrameProfile.end_phase(profile,"world_prepare_native",started)
 
 func _prepare_construction_turn(deadline:int)->bool:
