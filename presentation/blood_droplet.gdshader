@@ -3,10 +3,11 @@ render_mode unshaded,cull_disabled,shadows_disabled,depth_draw_never,depth_test_
 #include "res://presentation/blood_receiving.gdshaderinc"
 uniform float light_cap=0.;
 uniform bool normals_visible=false;
-uniform bool partition=false;
-uniform bool back=false;
-uniform vec3 plane_origin;
-uniform vec3 plane_normal;
+// One shared material; each bucket half carries its own split plane.
+instance uniform bool partition=false;
+instance uniform bool back=false;
+instance uniform vec3 plane_origin;
+instance uniform vec3 plane_normal;
 varying vec3 world_point;
 varying vec4 tint;
 void vertex(){world_point=(MODEL_MATRIX*vec4(VERTEX,1.)).xyz;tint=COLOR;}
