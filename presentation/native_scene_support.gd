@@ -117,6 +117,7 @@ func set_enabled(value:bool)->void:
         for node in actors.values():
             for parameter in ["sheet","received","component_depth","component_support","component_solid"]:
                 node.material_override.set_shader_parameter(parameter,null)
+            node.material_override.remove_meta(&"native_scene_written")
 
 func _floor(id:int)->MeshInstance3D:
     if not floors.has(id):
@@ -296,6 +297,7 @@ func sync(static_entries:Array,visual_actors:Dictionary,view_camera:Camera3D)->v
     last_sync_phases.floor_sources=floor_sources
     phase_started=Time.get_ticks_usec()
     retained={}
+    var proxy_writes:int=0
     for visual in visual_actors.values():
         for source in visual.entries:
             if source.role=="shadow" or not source.actor_layer.get("effect",{}).is_empty():continue
@@ -323,8 +325,6 @@ func sync(static_entries:Array,visual_actors:Dictionary,view_camera:Camera3D)->v
             node.sorting_use_aabb_center=false;node.sorting_offset=source.node.sorting_offset
             var material:ShaderMaterial=node.material_override
             material.render_priority=source.material.render_priority
-            for parameter in ["received","source_crop","atlas_region"]:
-                material.set_shader_parameter(parameter,source.received_material.get_shader_parameter(parameter))
             # Production sprite bindings publish a version only after the
             # complete frame/geometry material changes. Unstamped callers keep
             # the exhaustive path; moving the proxy still updates every frame.
@@ -332,22 +332,31 @@ func sync(static_entries:Array,visual_actors:Dictionary,view_camera:Camera3D)->v
             if not source.has("source_version") or _source_bindings.get(id)!=binding:
                 for parameter in Shadows.CASTER_PARAMETERS:material.set_shader_parameter(parameter,SourceMaterial.value(source,parameter))
                 _source_bindings[id]=binding
-            material.set_shader_parameter("has_geometry",has_geometry and solid!=null)
-            material.set_shader_parameter("component_solid",solid)
-            material.set_shader_parameter("component_cell_size",source.get("geometry_cell_size",source.cell))
-            material.set_shader_parameter("display_basis",view_camera.global_basis)
-            material.set_shader_parameter("sprite_pivot",source.pivot)
-            if has_geometry:material.set_shader_parameter("ground_height",source.get("geometry_ground_pixels",19.0)*SourceMaterial.value(source,"component_units"))
+            var received:ShaderMaterial=source.received_material
+            var values:Array=[received.get_shader_parameter("received"),received.get_shader_parameter("source_crop"),
+                received.get_shader_parameter("atlas_region"),has_geometry and solid!=null,solid,
+                source.get("geometry_cell_size",source.cell),view_camera.global_basis,source.pivot,
+                source.get("geometry_ground_pixels",19.0)*SourceMaterial.value(source,"component_units") if has_geometry else null]
+            # The proxy owns these uniforms; write them only when a value changed.
+            if material.get_meta(&"native_scene_written",[])!=values:
+                for index in PROXY_PARAMETERS.size():
+                    if values[index]!=null or index<PROXY_PARAMETERS.size()-1:material.set_shader_parameter(PROXY_PARAMETERS[index],values[index])
+                material.set_meta(&"native_scene_written",values)
+                proxy_writes+=1
     for id in actors.keys():
         if not retained.has(id):actors[id].visible=false
     last_sync_phases.actors=(Time.get_ticks_usec()-phase_started)/1000.0
     last_sync_phases.actor_receivers=retained.size()
+    last_sync_phases.actor_uniform_writes=proxy_writes
     phase_started=Time.get_ticks_usec()
     # Output materials retained by this pass keep their enabled state. Reset
     # only retired owners rather than disabling/re-enabling every floor/body.
     for material in previous_outputs:
         if not live_outputs.has(material):material.set_shader_parameter("native_scene_enabled",false)
     last_sync_phases.retirement=(Time.get_ticks_usec()-phase_started)/1000.0
+
+const PROXY_PARAMETERS=["received","source_crop","atlas_region","has_geometry","component_solid","component_cell_size",
+    "display_basis","sprite_pivot","ground_height"]
 
 func close()->void:
     clear_effect=null
