@@ -44,8 +44,7 @@ func run()->void:
     var door:Dictionary=world.entries.back();world.set_quad(door,Vector2(4,4),Vector2(2,2),32)
     door.record={"path":"door","native_size":[4,4],"rect":[4,0,4,4]}
     var blood=Blood.new()
-    var plane=PlaneMesh.new();plane.size=Vector2.ONE
-    var deposit:Dictionary=blood._entry(world,"blood:tile:0,0",plane,"covering",[0,0],0,1,Blood.Surface)
+    var deposit:Dictionary=blood._deposit(world,"0,0",{"position":[0,0],"elevation_steps":0}).entry
     # A native component may borrow the recipient actor's placement, but its
     # own mesh and UVs do not become that actor's clickable source sheet.
     var native_node=MultiMeshInstance3D.new();world.add_child(native_node)
@@ -66,7 +65,7 @@ func run()->void:
         var ground=world.camera.unproject_position(Vector3.ZERO)
         var picked=world.pick_world(ground)
         check(picked.get("kind")=="ground" and picked.get("position")==[0,0],"Residue-only ground remains a disclosed movement target q%d"%quarter)
-    world.draw_order=[];world.queue_free();await process_frame
+    world.draw_order=[];blood.close(world);world.queue_free();await process_frame
     var report={"checks":checks,"failures":failures,"scope":"Real pick_world/pick_actor paths, native blood PlaneMesh ownership and effect-owned geometry, exact actor alpha and environment atlas region, four camera quarters. No GPU or performance claim."}
     FileAccess.open("res://.runtime/player-effect-picking-checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("PLAYER_EFFECT_PICKING ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)

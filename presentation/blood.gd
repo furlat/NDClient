@@ -59,7 +59,9 @@ static func reveals(group:Dictionary,node:Dictionary,initial:Dictionary,previous
             previous[cell]=current[cell]
     return result
 
-static func particles(component:Dictionary,source:Dictionary,age_seconds:float)->Array:
+static func flight_plan(component:Dictionary,source:Dictionary)->Array:
+    # The age-independent half of particles(): every authored particle copy
+    # that lands in a released tile, in emission order, with its schedule.
     if not component.get("flight_enabled",true):return []
     var release:Dictionary=component.body_release;var style:Dictionary=source.region
     if not style.families.has(release.get("pattern")):return []
@@ -76,18 +78,29 @@ static func particles(component:Dictionary,source:Dictionary,age_seconds:float)-
             if not allowed.has(key([floori(goal.x+.5),floori(goal.y+.5)])):continue
             for copy in copies:
                 var times=schedule(particle,style.families[release.pattern],copy)
-                var t=age_seconds-times.x
-                if t<0 or t>=times.y:continue
                 var velocity=(goal-start)/times.y
                 var vertical=(region.elevation_steps-start_height+.5*particle.gravity*times.y*times.y)/times.y
-                var point=start+velocity*t
-                var height=start_height+vertical*t-.5*particle.gravity*t*t
-                var previous=point-velocity*source.tailSeconds
-                var old_height=height-(vertical-particle.gravity*t)*source.tailSeconds
-                result.append({"id":(region_index*selected.particles.size()+int(particle.id))*copies+copy,
-                    "position":point,"height":height,"previous":previous,"previous_height":old_height,
-                    "size":particle.size,"support_height":region.elevation_steps,"goal":goal})
+                result.append([times.x,times.y,velocity,vertical,particle.gravity,(region_index*selected.particles.size()+int(particle.id))*copies+copy,particle.size,region.elevation_steps,goal])
         region_index+=1
+    return result
+
+static func particles(component:Dictionary,source:Dictionary,age_seconds:float,plan=null)->Array:
+    # A caller that keeps the component's flight_plan() evaluates only age.
+    if plan==null:plan=flight_plan(component,source)
+    if plan.is_empty():return []
+    var start=Vector2(component.position[0],component.position[1])
+    var start_height=float(component.elevation_steps)+float(source.region.get("sourceHeight",.65))
+    var result:Array=[]
+    for row in plan:
+        var t=age_seconds-row[0]
+        if t<0 or t>=row[1]:continue
+        var velocity:Vector2=row[2];var vertical=row[3];var gravity=row[4]
+        var point=start+velocity*t
+        var height=start_height+vertical*t-.5*gravity*t*t
+        var previous=point-velocity*source.tailSeconds
+        var old_height=height-(vertical-gravity*t)*source.tailSeconds
+        result.append({"id":row[5],"position":point,"height":height,"previous":previous,"previous_height":old_height,
+            "size":row[6],"support_height":row[7],"goal":row[8]})
     return result
 
 static func contribution_amount(value:Dictionary,ellipses:Array)->float:
