@@ -373,6 +373,38 @@ Slices, one commit each:
    (10) migrated; live route 81/0; compact interaction and hover feedback
    unchanged (the latter already red).
 
+Next slices (design from the inventory):
+
+2. **Interaction controller** `live/interaction.gd`.
+   - **Contents:** the choices, preview, command, receipt, hover, approach and
+     storage members, with the functions that own them, plus the PopupMenu.
+   - **Forwarding:** Play keeps typed forwarding properties for the duration
+     of the migration, except for the four exit-criterion names (`session`,
+     `hud`, `context_menu`, `selection_media`).
+   - **Interface it gets from the world view:** picking (`pick_world(screen,
+     force)`, `pick_cell`, `pick_actor`, a public identity hit), camera/view
+     queries, `timeline`, readiness (`native_startup.ready`,
+     `media_initial_ready`, `media_issue`) and an `invalidate_media_plan()`
+     call.
+   - **Per-frame order:** discovery, storage and hover run after the draw
+     sort; action responses run before the prepared advance.
+   - **Tests:** the five test subclasses that override interaction methods
+     (compact interaction, hover feedback, live gallery, targeting native
+     capture, targeting hover) are retargeted at the controller.
+3. **Selection hints** `live/selection_hints.gd`. The world view's media
+   pipeline reads an injected provider instead of the selection-media state:
+   - the hint value and its onset paths;
+   - a refresh hook taking the groups and media plans (for the hold-cursor
+     release);
+   - the live native-startup plan.
+
+   Studio panes get no provider, so they allocate no `selection_media`.
+4. **Live game** `live/live_game.gd`: session start and config/recording
+   parsing, HUD creation, per-frame orchestration (poll, displayed sequence,
+   ready/connection notices), teardown. Tests migrate from `scene.session`,
+   `scene.hud` and `scene.context_menu` to the live game (86 files, mostly one
+   `scene.session.close()` / `scene.hud.hide()` line each).
+
 ## Studio gate
 
 `tests/studio_replay_native_checks.gd` (the plan's "full native Studio run"):
