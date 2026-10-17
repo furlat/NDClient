@@ -12,6 +12,9 @@ var last_ms: float=NAN
 var sampled_ms: float=NAN
 var epoch: int=-1
 var consumed: Dictionary={}
+## One-shots whose start was crossed before their stream finished loading:
+## they start late, at their offset into the clip, while still live.
+var late: Dictionary={}
 var enabled := true
 var outcomes: Dictionary={}
 const DIAGNOSTIC_LIMIT=512
@@ -145,28 +148,29 @@ func _position(node: Node, row: Dictionary) -> bool:
 func _offset(row: Dictionary, age_ms: float) -> float:
     return AudioCues.source_seconds(row,age_ms)
 
-func _start(host: Node, row: Dictionary, age_ms: float, speed: float, paused: bool) -> void:
-    if voices.has(row.id): return
+## False only while the row's stream or voice is still being prepared (the
+## caller retries); every other outcome is final and recorded.
+func _start(host: Node, row: Dictionary, age_ms: float, speed: float, paused: bool) -> bool:
+    if voices.has(row.id): return true
     if not enabled:
         if outcomes.get(row.id,{}).get("reason")!="muted":counters.muted+=1
-        _record(row,"skipped","muted");return
+        _record(row,"skipped","muted");return true
     if row.get("attachment_error","")!="":
-        _record(row,"skipped",row.attachment_error);return
+        _record(row,"skipped",row.attachment_error);return true
     var key=_key(row)
-    if not streams.has(key):
-        counters.missing+=1;_record(row,"skipped","source_not_ready");_error("Audio not prepared: "+str(row.get("clip")));return
+    # A stream still loading never holds the picture; the voice starts late.
+    if not streams.has(key) or not prepared_voices.has(row.id):
+        _record(row,"scheduled","awaiting_stream");return false
     var same=0
     for voice in voices.values():
         if voice.row.cue_id==row.cue_id: same+=1
     if voices.size()>=int(row.get("total_voice_limit",24)) or same>=int(row.get("voice_limit",4)):
-        counters.limited+=1;_record(row,"skipped","voice_limit");return
-    if not prepared_voices.has(row.id):
-        counters.missing+=1;_record(row,"skipped","voice_not_prepared");_error("Audio voice not prepared: "+str(row.id));return
+        counters.limited+=1;_record(row,"skipped","voice_limit");return true
     var node:Node=prepared_voices[row.id];prepared_voices.erase(row.id)
     if node.get_parent()==null:host.add_child(node)
     _gain(node,row.get("gain_db",0.0));node.pitch_scale=maxf(.01,speed)
     if not _position(node,row):
-        _record(row,"skipped","attachment_unresolved");node.free();return
+        _record(row,"skipped","attachment_unresolved");node.free();return true
     var offset=_offset(row,age_ms)
     # Spatial players register with AudioServer on their next physics tick.
     # Pausing before that registration has no native recall, so held seeks own
@@ -175,6 +179,7 @@ func _start(host: Node, row: Dictionary, age_ms: float, speed: float, paused: bo
     if not paused:_play(voices[row.id],offset)
     else:_record(row,"scheduled","paused")
     counters["loops" if row.get("loop",false) else "shots"]+=1
+    return true
 
 func _release(id: String) -> void:
     _record(voices[id].row,"finished")
@@ -186,7 +191,7 @@ func sample(host: Node, components: Array, display_ms: float, speed: float, paus
     var discontinuity=is_nan(last_ms) or seek_epoch!=epoch or display_ms<last_ms
     if discontinuity:
         for id in voices.keys(): _release(id)
-        consumed.clear()
+        consumed.clear();late.clear()
     var forward=not discontinuity and display_ms>last_ms and not paused and speed>0
     var held=paused or speed<=0 or (not discontinuity and display_ms==last_ms)
     var active={}
@@ -202,12 +207,16 @@ func sample(host: Node, components: Array, display_ms: float, speed: float, paus
         elif not loop and forward and start<=display_ms and start>=last_ms and not consumed.has(row.id):
             consumed[row.id]=start
             counters.crossed+=1
-            if live: _start(host,row,age,speed,held)
+            if live:
+                if not _start(host,row,age,speed,held):late[row.id]=row
             else:
                 counters.expired+=1;_record(row,"skipped","expired")
         elif not loop and not consumed.has(row.id) and not voices.has(row.id):
             if age==0:_record(row,"scheduled","paused" if held else "onset")
             elif age>0 and discontinuity:_record(row,"skipped","seek_inside")
+        if late.has(row.id) and not voices.has(row.id):
+            if not live:late.erase(row.id);_record(row,"skipped","expired_before_stream")
+            elif _start(host,row,age,speed,held):late.erase(row.id)
         if live and voices.has(row.id):
             active[row.id]=row
     for id in voices.keys():

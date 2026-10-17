@@ -1,6 +1,7 @@
 extends RefCounted
 ## Bounded source previews use shared GPU materials and native simulations.
 const Catalog=preload("res://source_catalog.gd")
+const BackgroundRelease=preload("res://presentation/background_release.gd")
 const Characters=preload("res://presentation/characters.gd")
 const Tracks=preload("res://presentation/tracks.gd")
 const Components=preload("res://presentation/components.gd")
@@ -565,4 +566,5 @@ func close() -> void:
         if is_instance_valid(node):node.close();node.queue_free()
     native_spares.clear()
     if worker!=null:worker.wait_to_finish();worker=null
-    images.clear();image_bytes=0
+    # Retired tracks drop their decoded source images on a worker, not in a frame.
+    BackgroundRelease.release([images]);images={};image_bytes=0

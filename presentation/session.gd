@@ -308,20 +308,25 @@ func _prepare_operation(next:int,handoff:Dictionary)->void:
             # message after the scene can borrow it for passive projection.
             message.stage="compiled"
             message.source_files=Catalog.source_snapshot(authoring_cache)
-            mutex.lock()
-            prepared.append(message)
-            mutex.unlock()
+            var compiled:Dictionary=message
             message={"kind":"operation","stage":"media","sequence":next,
                 "groups":result.value.groups}
+            # The compiled groups and the opening cut's media plan reach the
+            # scene together: a group taken without its plan holds its first
+            # frame until the plan follows.
+            var first:Dictionary={}
             if not result.value.groups.is_empty():
                 var opening:Dictionary=MediaWarmup.prepare_opening_handoff(before,result.value.groups[0],authoring_cache)
                 if not opening.is_empty() and not _stopping():
                     var opening_at:int=Time.get_ticks_usec()
                     transport.profile_preparation(next,packet_started,started,opening_at,true,handoff.is_empty() or handoff.get("from_disk",false),compiled_at,(opening_at-compiled_at)/1000.0,true,
                         {"packet_setup":packet_phases,"compiler":result.get("compile_phases_ms",{}),"metadata":opening.get("phases",{})} if journal.profile_enabled else {})
-                    var first:Dictionary=message.duplicate()
+                    first=message.duplicate()
                     first.media=opening
-                    mutex.lock();prepared.append(first);mutex.unlock()
+            mutex.lock()
+            prepared.append(compiled)
+            if not first.is_empty():prepared.append(first)
+            mutex.unlock()
         message.media = MediaWarmup.prepare_handoff(before,result.value.groups,authoring_cache,result.value.final_state)
         media_ms = (Time.get_ticks_usec()-compiled_at)/1000.0
     if _stopping(): return

@@ -1,11 +1,25 @@
 extends RefCounted
 ## Strict JSON syntax, preserving integer tokens (Godot JSON parses all as float).
 const DecimalFloat = preload("res://sdk/decimal_float.gd")
+## Native exact path. A text that _grammar matches whole is strict JSON nested
+## at most NATIVE_DEPTH containers deep, whose strings hold no control character
+## and no \u escape, whose integers have at most 18 digits and whose other
+## numbers are plain decimals (no exponent). For exactly these texts Godot's
+## Variant parser (str_to_var) builds the value the character parser below
+## builds: equal Strings, int and float tokens, key order, a duplicate key
+## keeping its last value. Its decimals use String.to_float, which can be one
+## ULP from correct rounding, so every decimal token is first compared bit for
+## bit with DecimalFloat. Any other text, or any difference, parses below.
+const NATIVE_DEPTH = 32
+static var _grammar: RegEx = _native_grammar()
+static var _decimals := RegEx.create_from_string("\"(?:[^\"\\\\]++|\\\\.)*+\"(*SKIP)(*F)|-?[0-9]++\\.[0-9]++")
 var source := ""
 var offset := 0
 var issue := ""
 
 func parse(text: String) -> Dictionary:
+	var native := _native(text)
+	if not native.is_empty(): return native
 	source = text
 	offset = 0
 	issue = ""
@@ -14,6 +28,27 @@ func parse(text: String) -> Dictionary:
 	if issue.is_empty() and offset != source.length(): issue = "Trailing JSON input"
 	if not issue.is_empty(): return {"ok": false, "error": {"kind": "protocol", "message": "%s at character %d" % [issue, offset], "retryable": false}}
 	return {"ok": true, "value": value}
+
+static func _native(text: String) -> Dictionary:
+	if _grammar.search(text) == null: return {}
+	for found in _decimals.search_all(text):
+		var token := found.get_string()
+		var exact := DecimalFloat.parse(token)
+		if not exact.ok or PackedFloat64Array([exact.value]).to_byte_array() != PackedFloat64Array([str_to_var(token)]).to_byte_array(): return {}
+	return {"ok": true, "value": str_to_var(text)}
+
+static func _native_grammar() -> RegEx:
+	const SPACE = "[ \\t\\n\\r]*+"
+	const STRING = "\"(?:[^\"\\\\\\x00-\\x1f]++|\\\\[\"\\\\/bfnrt])*+\""
+	const NUMBER = "-?+(?:(?:0|[1-9][0-9]*+)\\.[0-9]++|0|[1-9][0-9]{0,17}+)"
+	# Level n: a scalar, or a container whose members are at most level n-1.
+	var levels := "(?<v0>(?>" + STRING + "|" + NUMBER + "|true|false|null))"
+	for n in range(1, NATIVE_DEPTH + 1):
+		var inner := "(?&v%d)" % (n - 1)
+		var member := STRING + SPACE + ":" + SPACE + inner + SPACE
+		var element := inner + SPACE
+		levels += "(?<v%d>(?>(?&v0)|\\{%s(?:%s(?:,%s%s)*+)?+\\}|\\[%s(?:%s(?:,%s%s)*+)?+\\]))" % [n, SPACE, member, SPACE, member, SPACE, element, SPACE, element]
+	return RegEx.create_from_string("(?(DEFINE)" + levels + ")\\A" + SPACE + "(?&v%d)" % NATIVE_DEPTH + SPACE + "\\z")
 
 func _space() -> void:
 	while offset < source.length() and source.unicode_at(offset) in [9, 10, 13, 32]: offset += 1

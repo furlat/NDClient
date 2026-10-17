@@ -630,3 +630,27 @@ in progress on `feature/opus-load`.
 Open: floor receiver rebuild wait at cast start; bake the remaining spells and
 add the bake to asset preparation; Fire Bolt's flight (CPU Trail3D) stays
 native; L5 and the door path; L8.
+
+### Later the same night (18 October, early)
+
+| Commit | Change | Evidence |
+|---|---|---|
+| `6c4b601` | Spell pass floor receivers: one buffer write, never deferred. | native_floor_batch 267/0, native_scene_support 11,600/0 (byte parity, same as before). |
+| `3986abf` | Whole spell catalog baked (64 of 72 clips); fixes from the visual review: hash without `source_identity` (index rebuilds made every recording stale), override materials not overwritten (Burning Hands black), bone poses recorded, emitter-less clips, standard-material tracks; Chill Touch's impact rejected (plays native). | Gate 8,878/0 with baked effects; native spell tests identical with and without baking. |
+| `fafb382` | First frame of an action without a held frame: compiled groups and the opening media plan reach the scene together; audio never gates the picture (late voices start at their offset). | Live routes 81/0: no held first frame on move, drink or Fireball (was one per action). |
+| `693a694` | Baked loading: first variants first, extra variants only between actions; fixes a clip marked unrecorded while its textures were still being created. | baked_effect_checks 133/0; startup checks 29/0 and 156/0. |
+
+Known differences for the VFX agent:
+[FACTORY_VFX_BAKING_REPORT_2026-10-17.md](FACTORY_VFX_BAKING_REPORT_2026-10-17.md).
+
+Client latency (packet to first animated frame, three clean routes before
+`fafb382`): door 83–87 ms, move 60–72, Fireball 40–49 (server answer:
+door 133–150, move 91–136, Fireball 450–750 in `execute_action`; server work
+is owned elsewhere). Breakdown for the door: parse 19–21, reduce 19–21
+(sensory facts ~9, world ~7), compile ~15, ready to screen 23–27. Reduce and
+compile are being cut on `feature/opus-latency`; Studio load time on
+`feature/opus-load`.
+
+Open: the door's remaining holds (room late at the cue: L1; sprite sources:
+L8); Fireball's first cast waits one frame for a native source; first-draw
+pipeline compiles show as 30–45 ms frames outside the script under load.

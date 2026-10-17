@@ -16,6 +16,11 @@ const ORIGINAL_CHEST_RESTS = {
     "prop.chest-a3.intact":"fantasy.chest.a3", "prop.chest-a4.intact":"fantasy.chest.a4",
     "prop.chest-b1.intact":"fantasy.chest.b1", "prop.chest-b2.intact":"fantasy.chest.b2",
 }
+# Parsed authoring documents, shared by every catalog cache in the process
+# (documents are immutable after admission; see source_snapshot). A document
+# is reused only while its file holds the same bytes it was parsed from.
+static var _documents:Dictionary={}
+static var _documents_mutex:=Mutex.new()
 
 static func media_path(path: String) -> String:
     if path.begins_with("res://"): return ProjectSettings.globalize_path(path)
@@ -30,9 +35,16 @@ static func media_path(path: String) -> String:
 static func read_file(relative_path: String, cache: Dictionary) -> Variant:
     if not cache.has(relative_path):
         var root: String = ProjectSettings.get_setting("source_data/authoring_root")
-        var legacy: Variant = JSON.parse_string(FileAccess.get_file_as_string(root.path_join(relative_path)))
-        cache[relative_path] = NativeAuthoring.overlay(relative_path, legacy, cache)
+        cache[relative_path] = NativeAuthoring.overlay(relative_path, _document(root.path_join(relative_path)), cache)
     return cache[relative_path]
+
+static func _document(path:String)->Variant:
+    var raw:=FileAccess.get_file_as_bytes(path)
+    _documents_mutex.lock();var known:Array=_documents.get(path,[]);_documents_mutex.unlock()
+    if not known.is_empty() and known[0]==raw:return known[1]
+    var parsed:Variant=JSON.parse_string(raw.get_string_from_utf8())
+    _documents_mutex.lock();_documents[path]=[raw,parsed];_documents_mutex.unlock()
+    return parsed
 
 static func asset(asset_id:String,cache:Dictionary)->Dictionary:
     var selected:Resource=NativePresentationSources.asset(asset_id,cache)
@@ -113,6 +125,7 @@ static func source_snapshot(cache: Dictionary) -> Dictionary:
 static func invalidate_source_indexes()->void:
     NativePresentationSources.invalidate()
     BodySources.invalidate()
+    _documents_mutex.lock();_documents={};_documents_mutex.unlock()
 
 static func adopt_snapshot(cache:Dictionary,offered:Dictionary)->void:
     # Documents belong to the admitted revision. Lazy source references can

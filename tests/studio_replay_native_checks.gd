@@ -121,11 +121,16 @@ func play_once(studio:Control,label:String)->void:
         await process_frame
         var now=Time.get_ticks_usec();longest=maxf(longest,(now-last)/1000.0);last=now;frames+=1
         var timeline=studio.world.timeline
-        if timeline.current.is_empty() and atomic_targets.has(timeline.completed_group_count) and not atomic_seen.has(timeline.completed_group_count):
-            var cut:Dictionary=atomic_targets[timeline.completed_group_count]
+        # A cut is observed on a frame displaying its exact clock with nothing
+        # playing. Zero-time groups at that same instant may already have been
+        # applied in that frame (nothing to prepare means no frame between).
+        for index in atomic_targets:
+            if atomic_seen.has(index) or not timeline.current.is_empty() or timeline.completed_group_count<index:continue
+            var cut:Dictionary=atomic_targets[index]
+            if timeline.completed_group_count>index and timeline.display_ms!=cut.at_ms:continue
             check(timeline.display_ms==cut.at_ms,label+": native atomic cut uses the exact recorded absolute clock")
-            verify_prefix(studio,label+" atomic cut "+str(timeline.completed_group_count),true)
-            atomic_seen[timeline.completed_group_count]=true
+            verify_prefix(studio,label+" atomic cut "+str(index),true)
+            atomic_seen[index]=true
         if studio.world.timeline.display_ms>=next_sample:
             verify_prefix(studio,label+" playback "+str(studio.world.timeline.display_ms),true);next_sample=studio.world.timeline.display_ms+150.0
         if not failures.is_empty():break

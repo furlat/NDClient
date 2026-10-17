@@ -19,7 +19,8 @@ extends Resource
 @export var trails:Array=[]
 ## True when playback needs the occurrence's path history (BakedEffect.follow).
 @export var moving:bool=false
-## {kind:"node"|"material", path:String (node) or material:int, property:String, values:Array, blend:bool}
+## {kind:"node"|"bone"|"material", path:String (node, skeleton) or material:int,
+## property:String (bone index for "bone"), values:Array, blend:bool}
 @export var tracks:Array=[]
 ## Material indices (BakedEffect.material_locations order) copied per occurrence.
 @export var private_materials:Array=[]

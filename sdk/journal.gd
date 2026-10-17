@@ -12,6 +12,9 @@ var _sensory_context: Dictionary = {}
 # Optional payload-free timing for the transport owner; no work history retained.
 var profile_enabled := false
 var last_profile: Dictionary = {}
+# A historical reader opened without replay: open() already parsed packet 0
+# to select its protocol. decode_record() admits that parse instead of a second.
+var _opened_initialization: Array = []
 
 func open(path: String, historical_recording: bool = false, replay_existing: bool = true) -> Dictionary:
 	if not directory.is_empty(): return _failure("Journal already opened")
@@ -21,7 +24,8 @@ func open(path: String, historical_recording: bool = false, replay_existing: boo
 	# Explicit offline-only compatibility. Never change packet identities or
 	# let a live connection silently accept a different protocol.
 	if historical_recording and FileAccess.file_exists(_file(0)):
-		var first := Protocol.parse_json(FileAccess.get_file_as_bytes(_file(0)))
+		var raw := FileAccess.get_file_as_bytes(_file(0))
+		var first := Protocol.parse_json(raw)
 		if not first.ok: return first
 		if not first.value is Dictionary: return _failure("Invalid recording initialization")
 		if not protocol.check_identity(first.value.get("protocol",{})).ok:
@@ -34,7 +38,17 @@ func open(path: String, historical_recording: bool = false, replay_existing: boo
 					matched = true
 					break
 			if not matched: return _failure("Unsupported recording protocol")
+		if not replay_existing: _opened_initialization = [raw, first.value]
 	return replay() if replay_existing else {"ok":true,"value":null}
+
+## Offline decode of one recorded packet. Packet 0 reuses open()'s parse when
+## its bytes are unchanged: decode() is that same parse plus schema admission.
+func decode_record(sequence: int, raw: PackedByteArray) -> Dictionary:
+	if sequence == 0 and not _opened_initialization.is_empty():
+		var opened: Array = _opened_initialization
+		_opened_initialization = []
+		if opened[0] == raw: return protocol._validate_schema("InitializationResponse", opened[1])
+	return protocol.decode("InitializationResponse" if sequence == 0 else "PlayerOperation", raw)
 
 func consume(packet: Dictionary, raw: PackedByteArray) -> Dictionary:
 	if directory.is_empty(): return _failure("Journal is not open")
@@ -52,6 +66,7 @@ func _consume_admitted(packet: Dictionary, raw: PackedByteArray, record_transiti
 	var identity_check := protocol.check_identity(packet.protocol)
 	if not identity_check.ok: return identity_check
 	var next: Dictionary = packet.cursor
+	_opened_initialization.clear()
 	if not cursor.is_empty():
 		for key in ["game_id", "game_epoch", "audience_id"]:
 			if next[key] != cursor[key]: return _failure("Journal audience/epoch mismatch")

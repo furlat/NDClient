@@ -154,8 +154,8 @@ static func _step(world:Node3D,cache:Dictionary,request:Dictionary,budget:Dictio
         if not _state.known.has(item.key):
             _state.known[item.key]=true;_state.plan.append(item);_state.ready=false
             # Every baked file in the plan starts loading on a worker now,
-            # not when the warm-up reaches its turn.
-            Baked.request(item.clip)
+            # ahead of the background catalog, not when the warm-up reaches it.
+            Baked.request(item.clip,true)
     if _state.ready:return status(request)
     var required:Array=request.get("required",request.plan)
     var optional:bool=request.get("optional",true)

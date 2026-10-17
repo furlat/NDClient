@@ -19,6 +19,7 @@ const LIGHT_AMBIENT := 0.30
 const GroundReceiving = preload("res://presentation/ground_receiving.gd")
 const BackgroundRelease = preload("res://presentation/background_release.gd")
 const NativeStartup = preload("res://presentation/native_source_startup.gd")
+const BakedEffects = preload("res://presentation/baked_effect.gd")
 var native_startup:Dictionary={"ready":false,"completed":0,"total":0,"elapsed_ms":0.0}
 # Sources are scoped to actual disclosed interests; Studio supplies recorded cues.
 var native_startup_plan:Variant=[]
@@ -695,6 +696,8 @@ func _process(delta: float) -> void:
     if not external_clock:_advance_prepared(advance_ms)
     FrameProfile.end_phase(profile,"timeline_advance",subphase)
     if session != null: session.set_displayed_sequence(timeline.sequence)
+    # Extra effect variants load only between actions, never into a cast.
+    BakedEffects.background_allowed=timeline.current.is_empty() and timeline.queue.is_empty()
     FrameProfile.end_phase(profile,"session_timeline",phase)
     var world_available:bool=not timeline.state.is_empty() and world_prepare_epoch==timeline.initialization_revision and (world_revision>=0 or (pending_world!=null and pending_world.epoch==timeline.initialization_revision and pending_world.initial and pending_world.prepared))
     var can_publish_world:bool=world_available and _playback_environment_ready() and _world_can_publish()
