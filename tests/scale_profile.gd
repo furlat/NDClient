@@ -99,22 +99,10 @@ func run() -> void:
     for i in range(args.size()-1):
         if args[i]=="--profile-label": label = args[i+1]
     scene.FrameProfile.save(scene.profile,root,label)
-    # Conservative native Canvas culling rectangles, measured outside the timed
-    # samples. GLES admits at most 15 positional lights to one CanvasItem.
-    var overlap_counts = {}
-    var maximum_overlap = 0
-    var source_rects: Array = []
-    for source in scene.source_lighting.canvas_sources():
-        if source.enabled: source_rects.append(Rect2(source.screen_position-source.span*0.5,source.span))
-    for receiver in scene.native_light_atlas.receivers:
-        if not scene.native_light_atlas.receiver_visible(receiver): continue
-        var bounds: Rect2 = scene.native_light_atlas.plane_to_screen*receiver.bounds
-        var count = 0
-        for rect in source_rects:
-            if bounds.intersects(rect): count+=1
-        maximum_overlap=maxi(maximum_overlap,count)
-        overlap_counts[count]=overlap_counts.get(count,0)+1
-    print("NATIVE_2D_LIGHT_OVERLAP ",JSON.stringify({"sources":source_rects.size(),"maximum_per_receiver":maximum_overlap,"receiver_counts":overlap_counts,"scope":"Final visible Gallery view; conservative native culling rectangles, not a whole-route guarantee."}))
+    # Every lit sprite fragment walks the whole light table, measured outside
+    # the timed samples; there is no per-item native light limit any more.
+    var enabled_sources = scene.source_lighting.canvas_sources().filter(func(source): return source.enabled).size()
+    print("LIGHT_TABLE_LIGHTS ",JSON.stringify({"sources":enabled_sources,"table_lights":scene.light_table.count,"uploads":scene.light_table.uploads,"scope":"Final visible Gallery view; lights each lit sprite evaluates per fragment."}))
     var matches: bool = scene.timeline.state==scene.session.journal.state
     var complete: bool = not scene.timeline.busy() and scene.timeline.sequence==scene.session.journal.cursor.sequence and scene.timeline.sequence==scene.session.latest_sequence and scene.session.terminal
     var clean: bool = scene.presentation_errors.is_empty() and scene.session.issue.is_empty() and (not exercise_cache or (cached_change_seen and retirement_frames==0 and scene.retiring_node_count==0))

@@ -21,7 +21,8 @@ func changed(a:Image,b:Image)->int:
     return count
 
 func output_entries(world:Node,actor:String)->Array:
-    return world.visual_actors[actor].entries.filter(func(entry):return entry.role!="shadow" and entry.has("received_material"))
+    # Lit sprites carry the body films on their own source material.
+    return world.visual_actors[actor].entries.filter(func(entry):return entry.role!="shadow")
 
 func resample(world:Node)->void:
     world._sample_frame(0.0)
@@ -42,8 +43,8 @@ func film_control(world:Node,actor:String,label:String,max_strength:float)->Dict
     var entries=output_entries(world,actor)
     check(not entries.is_empty(),label+": assembled recipient has receiving outputs")
     for entry in entries:
-        check(entry.received_material.get_shader_parameter("body_surface_count")==1,label+": receiving output has exactly one active film")
-        var textures:Array=entry.received_material.get_shader_parameter("body_surface_texture")
+        check(entry.material.get_shader_parameter("body_surface_count")==1,label+": receiving output has exactly one active film")
+        var textures:Array=entry.material.get_shader_parameter("body_surface_texture")
         check(textures.size()>0 and textures[0]==samples[0].body_surface_texture,label+": outfit shares the original native noise texture")
     var on=picture(world,label+"-film")
     var strength:float=binding.cue.body_surface.strength
@@ -58,12 +59,12 @@ func film_control(world:Node,actor:String,label:String,max_strength:float)->Dict
     var native_fields=["native_body_enabled","native_body_strength","native_body_surface","native_body_ramp_count"]
     for entry in entries:
         var values:Dictionary={}
-        for field in native_fields:values[field]=entry.received_material.get_shader_parameter(field)
+        for field in native_fields:values[field]=entry.material.get_shader_parameter(field)
         native_values.append(values)
-        entry.received_material.set_shader_parameter("native_body_enabled",true)
-        entry.received_material.set_shader_parameter("native_body_strength",1.0)
-        entry.received_material.set_shader_parameter("native_body_surface",white)
-        entry.received_material.set_shader_parameter("native_body_ramp_count",0)
+        entry.material.set_shader_parameter("native_body_enabled",true)
+        entry.material.set_shader_parameter("native_body_strength",1.0)
+        entry.material.set_shader_parameter("native_body_surface",white)
+        entry.material.set_shader_parameter("native_body_ramp_count",0)
     await frame();await frame()
     var coverage=world.get_viewport().get_texture().get_image();coverage.convert(Image.FORMAT_RGBA8)
     var visible:Array=[]
@@ -73,7 +74,7 @@ func film_control(world:Node,actor:String,label:String,max_strength:float)->Dict
     absent.convert(Image.FORMAT_RGBA8)
     for index in entries.size():
         entries[index].node.visible=visible[index]
-        for field in native_fields:entries[index].received_material.set_shader_parameter(field,native_values[index][field])
+        for field in native_fields:entries[index].material.set_shader_parameter(field,native_values[index][field])
     var a=on.get_data();var b=off.get_data();var c=absent.get_data();var mask=coverage.get_data()
     var changed_pixels=0;var outside=0
     for at in range(0,a.size(),4):
@@ -90,26 +91,41 @@ func film_control(world:Node,actor:String,label:String,max_strength:float)->Dict
     world.body_surface_bindings=bindings;await resample(world)
     check(changed(on,world.get_viewport().get_texture().get_image())==0,label+": restoring the source restores its exact film")
     observations.append({"sample":label,"changed_body_pixels":changed_pixels,"outside_body_pixels":outside,"strength":samples[0].body_surface_strength,"native_clock":samples[0].body_surface_clock})
-    # Alter only the final output's measurement inputs. The native Canvas light
-    # atlas remains unchanged, so this isolates the film's actual depth/normal use.
+    # Alter only the film's measurement inputs. Lit sprites also read the
+    # component depth/normal for their own receiving normal, so hold lighting on
+    # the flat painted-plane normal while measuring; this isolates the film's
+    # actual depth/normal use, as the former separate lighting pass did.
+    var lighting_normals:Array=[]
+    for entry in entries:
+        lighting_normals.append(entry.material.get_shader_parameter("use_component_normals"))
+        entry.material.set_shader_parameter("use_component_normals",false)
+    await frame();await frame()
+    var flat_lit_on=world.get_viewport().get_texture().get_image()
+    for entry in entries:entry.material.set_shader_parameter("body_surface_enabled",false)
+    await frame();await frame()
+    var flat_lit_off=world.get_viewport().get_texture().get_image()
+    for entry in entries:entry.material.set_shader_parameter("body_surface_enabled",true)
     for field in ["component_depth","component_normal"]:
         var flat_image=Image.create(1,1,false,Image.FORMAT_RGBA8)
         flat_image.fill(Color8(128,128,255,255) if field=="component_normal" else Color8(128,0,0,255))
         var flat=ImageTexture.create_from_image(flat_image);var originals:Array=[]
         for entry in entries:
-            originals.append(entry.received_material.get_shader_parameter(field))
-            entry.received_material.set_shader_parameter(field,flat)
+            originals.append(entry.material.get_shader_parameter(field))
+            entry.material.set_shader_parameter(field,flat)
         await frame();await frame()
         var flattened=world.get_viewport().get_texture().get_image()
-        check(changed(on,flattened)>0,label+": film responds to actual "+field)
-        for entry in entries:entry.received_material.set_shader_parameter("body_surface_enabled",false)
+        check(changed(flat_lit_on,flattened)>0,label+": film responds to actual "+field)
+        for entry in entries:entry.material.set_shader_parameter("body_surface_enabled",false)
         await frame();await frame()
-        check(changed(off,world.get_viewport().get_texture().get_image())==0,label+": measurement control preserves existing lighting with film off")
+        check(changed(flat_lit_off,world.get_viewport().get_texture().get_image())==0,label+": measurement control preserves existing lighting with film off")
         for index in entries.size():
-            entries[index].received_material.set_shader_parameter(field,originals[index])
-            entries[index].received_material.set_shader_parameter("body_surface_enabled",true)
+            entries[index].material.set_shader_parameter(field,originals[index])
+            entries[index].material.set_shader_parameter("body_surface_enabled",true)
         await frame();await frame()
-        check(changed(on,world.get_viewport().get_texture().get_image())==0,label+": geometry control restores exact film")
+        check(changed(flat_lit_on,world.get_viewport().get_texture().get_image())==0,label+": geometry control restores exact film")
+    for index in entries.size():entries[index].material.set_shader_parameter("use_component_normals",lighting_normals[index])
+    await frame();await frame()
+    check(changed(on,world.get_viewport().get_texture().get_image())==0,label+": receiving normals restore the exact lit film")
     return {"on":on,"off":off,"coverage":coverage,"absent":absent}
 
 func spell_check(world:Node,spell_id:String,max_strength:float)->void:
@@ -147,7 +163,7 @@ func spell_check(world:Node,spell_id:String,max_strength:float)->void:
         check(world.source_lighting.effect_sources.all(func(source):return is_zero_approx(float(source.energy))),label+": body film emits no room light")
         await advance(world,world.duration)
         check(Surface.samples(world,world.elapsed).is_empty(),label+": finite preview ends without inventing a persistent game condition")
-        for entry in output_entries(world,sustain.target):check(not entry.received_material.get_shader_parameter("body_surface_enabled"),label+": expiry clears the receiving film")
+        for entry in output_entries(world,sustain.target):check(not entry.material.get_shader_parameter("body_surface_enabled"),label+": expiry clears the receiving film")
         world.restart();pause(world)
         check(Surface.samples(world,world.elapsed).is_empty(),label+": recast starts without the retired film")
         if quarter==0:
@@ -158,7 +174,7 @@ func spell_check(world:Node,spell_id:String,max_strength:float)->void:
             world._process(.01);pause(world)
             check(world.loop_count==loops+1 and is_zero_approx(world.elapsed),spell_id+": actual loop returns to the beginning")
             check(Surface.samples(world,world.elapsed).is_empty(),spell_id+": actual loop clears the old surface")
-            for entry in output_entries(world,sustain.target):check(not entry.received_material.get_shader_parameter("body_surface_enabled"),spell_id+": loop resets retained output material")
+            for entry in output_entries(world,sustain.target):check(not entry.material.get_shader_parameter("body_surface_enabled"),spell_id+": loop resets retained output material")
             await advance(world,application.begin+.3)
             check(world.handles[application.id].root.visible and Surface.samples(world,world.elapsed).is_empty(),spell_id+": loop plays the native burst again before film")
     select(world,spell_id)
@@ -170,13 +186,12 @@ func spell_check(world:Node,spell_id:String,max_strength:float)->void:
     if isolated_samples.size()==1:await film_control(world,isolated_samples[0].actor_uuid,spell_id+"-isolated",max_strength)
     select(world,"shield");await frame();await frame()
     for id in world.visual_actors:
-        for entry in output_entries(world,id):check(not entry.received_material.get_shader_parameter("body_surface_enabled"),spell_id+": switching spells clears previous body film")
+        for entry in output_entries(world,id):check(not entry.material.get_shader_parameter("body_surface_enabled"),spell_id+": switching spells clears previous body film")
 
 func bind_layers(world:Node,actor:String,layers:Array)->Array:
     var value:Dictionary=Conditions.material(actor,layers)
     for entry in output_entries(world,actor):
         BodySurfaces.bind(entry.material,value.body_surfaces)
-        BodySurfaces.bind(entry.received_material,value.body_surfaces)
     await frame();await frame()
     return value.body_surfaces.get("layers",[])
 
@@ -217,9 +232,9 @@ func stack_check(world:Node)->void:
     check(ordered.size()==2,"Shared collector retains both active surface sources")
     check(changed(both,only_a)>20 and changed(both,only_b)>20,"Combined film includes visible contributions from both sources")
     for entry in output_entries(world,actor):
-        check(entry.received_material.get_shader_parameter("body_surface_count")==2,"Every outfit output receives both layers")
-        var clocks:PackedFloat32Array=entry.received_material.get_shader_parameter("body_surface_clock")
-        var textures:Array=entry.received_material.get_shader_parameter("body_surface_texture")
+        check(entry.material.get_shader_parameter("body_surface_count")==2,"Every outfit output receives both layers")
+        var clocks:PackedFloat32Array=entry.material.get_shader_parameter("body_surface_clock")
+        var textures:Array=entry.material.get_shader_parameter("body_surface_texture")
         for index in ordered.size():
             check(is_equal_approx(clocks[index],ordered[index].body_surface_clock),"Stack keeps each native material clock")
             check(textures[index]==ordered[index].body_surface_texture,"Stack keeps each native noise texture")
@@ -240,18 +255,18 @@ func stack_check(world:Node)->void:
     var actor_entries=output_entries(world,actor)
     for entry in actor_entries:
         var previous:Dictionary={}
-        for field in hit_fields:previous[field]=entry.received_material.get_shader_parameter(field)
+        for field in hit_fields:previous[field]=entry.material.get_shader_parameter(field)
         hit_previous.append(previous)
-        entry.received_material.set_shader_parameter("native_body_enabled",true)
-        entry.received_material.set_shader_parameter("native_body_strength",1.0)
-        entry.received_material.set_shader_parameter("native_body_surface",hit)
-        entry.received_material.set_shader_parameter("native_body_ramp_count",0)
+        entry.material.set_shader_parameter("native_body_enabled",true)
+        entry.material.set_shader_parameter("native_body_strength",1.0)
+        entry.material.set_shader_parameter("native_body_surface",hit)
+        entry.material.set_shader_parameter("native_body_ramp_count",0)
     await frame();await frame()
     var hit_with_films=world.get_viewport().get_texture().get_image()
     await bind_layers(world,actor,[])
     check(changed(hit_with_films,world.get_viewport().get_texture().get_image())==0,"Full-strength native body hit colour remains above all persistent films")
     for index in actor_entries.size():
-        for field in hit_fields:actor_entries[index].received_material.set_shader_parameter(field,hit_previous[index][field])
+        for field in hit_fields:actor_entries[index].material.set_shader_parameter(field,hit_previous[index][field])
     await bind_layers(world,actor,[a,b])
     check(changed(both,world.get_viewport().get_texture().get_image())==0,"Retiring the hit texture restores both persistent films")
     await bind_layers(world,actor,[b,a])

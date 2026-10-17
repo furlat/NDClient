@@ -47,7 +47,9 @@ func run()->void:
     var prepared:Dictionary=scene.pending_world.native_actors[id]
     check(prepared.new_entries.size()==1 and prepared.new_entries[0].actor_layer.category=="Magic2","Only actual Magic2 source is constructed")
     check(prepared.retained_entries.size()==8 and prepared.playback==graph,"All eight unchanged sources and animation graph are borrowed")
-    check(scene.pending_world.membership.removed.is_empty() and scene.pending_world.membership.upserts.size()==1,"Only added Magic2 enters atlas membership preparation")
+    # Lit sprites have no receiver membership: the added layer is actor-owned
+    # and the candidate's static world membership stays unchanged.
+    check(scene.pending_world.membership.removed.is_empty() and scene.pending_world.membership.upserts.is_empty(),"Adding Magic2 leaves static world membership unchanged")
     check(source_versions==entries.map(func(entry):return entry.source_version),"Preparing the new cast does not modify retained source operands")
     var private_node=weakref(prepared.new_entries[0].node)
     scene._discard_world_preparation()
@@ -81,7 +83,7 @@ func run()->void:
     scene._sample_actors();scene._sample_fixtures()
     await compare_full(scene,actual,"fireball-layer")
     check(var_to_bytes(scene.timeline.state)==state and scene.timeline.display_ms==clock,"Independent full construction changes neither actual event state nor its clock")
-    check(scene.presentation_errors.is_empty() and scene.media_issue.is_empty(),"Actual cast leaves no presentation errors")
+    check(scene.presentation_errors.is_empty() and scene.media_issue.is_empty(),"Actual cast leaves no presentation errors: "+str(scene.presentation_errors.slice(0,3))+" "+scene.media_issue)
     var report={"checks":checks,"failures":failures,"comparisons":comparisons,"retained_layers":entries.size(),"scope":"Actual second Fireball onset; private cancellation and retained source/graph/shadow ownership; first framebuffer versus full actor construction at the same published clock."}
     FileAccess.open("res://generated/fireball_layer_ownership_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("FIREBALL_LAYER_OWNERSHIP ",JSON.stringify(report))
