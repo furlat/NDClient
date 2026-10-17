@@ -247,8 +247,21 @@ preparation sparse 78, world atlas preparation 172 (native), world preview
 capture, native atlas staged and receiver ownership are red or time out the
 same way on both).
 
-Next on this path: planner bookkeeping (records, spec copies, plan specs),
-the publication frame, and construction work.
+### Planner work is proportional to new content
+
+New planner counters (`prepared_specs_*`) show what the door's 1,156 specs
+are: 875 rows of the one floor batch, which grows from 9 to 884 rows; 220
+single static sources; 58 actor layers; 3 retained neighbours whose support
+mask changed. The move plans 369 new floor rows of a 1,253-row batch. No
+unchanged row is re-planned. The planner costs about 50 µs of GDScript
+bookkeeping per new receiver (records 15, plan specs ~7, spec copy ~6, canvas
+item 4.5, projection 3.7, floor address 3.6). Its remaining wait, about 43 ms
+after membership, cannot start earlier without breaking source-order
+reservations: floor addresses follow every object's. Shortening it means
+restructuring per-row records, which is not attempted under Stage 1.
+
+Next on this path: the publication frame and construction work, and the
+held-frame allowance decision (see Gate A status).
 
 ## Tests that were already failing at the checkpoint
 

@@ -732,7 +732,14 @@ static func compute_candidate(work:Dictionary)->void:
         if not source.is_empty():
             source.receivers.erase(receiver.row_id);source.by_row.erase(receiver.row_id);source.packets.erase(receiver.row_id)
     work.spec_worker_ms=(Time.get_ticks_usec()-started)/1000.0
+    var source_specs:int=work.specs.size()
     work.plan=_plan(work.passive,work.source_patches,work.removed,work.specs)
+    var counts:Dictionary={"floor_rows":0,"single":0,"dynamic":0,"support_neighbours":work.specs.size()-source_specs}
+    for source in work.source_patches.values():
+        if source.info.dynamic:counts.dynamic+=source.rows.size()
+        elif source.is_floor:counts.floor_rows+=source.rows.size()
+        else:counts.single+=source.rows.size()
+    work.spec_counts=counts
     if work.get("global",false) and work.plan.get("error","") in ["changed_crop","append_overflow"]:
         # Preserve addresses when the normal planner fits. A real rebase uses
         # the original complete planner and exact future source/row order.
@@ -1249,6 +1256,7 @@ static func _publish_bulk(atlas,work:Dictionary,positions:Dictionary,world:Node)
     atlas.last_reconcile_phases.prepared_worker_group_uniforms=work.get("worker_group_uniforms",0)
     atlas.last_reconcile_phases.prepared_resource_group_materials=work.get("prepared_group_materials",0)
     atlas.last_reconcile_phases.prepared_spec_worker_ms=work.get("spec_worker_ms",0.0)
+    for name in work.get("spec_counts",{}):atlas.last_reconcile_phases["prepared_specs_"+name]=work.spec_counts[name]
     atlas.last_reconcile_phases.prepared_plan_specs_worker_ms=work.plan.get("specs_ms",0.0)
     atlas.last_reconcile_phases.prepared_plan_reservations_worker_ms=work.plan.get("reservations_ms",0.0)
     atlas.last_reconcile_phases.prepared_address_worker_ms=work.get("address_worker_ms",0.0)
