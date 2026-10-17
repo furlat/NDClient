@@ -99,12 +99,13 @@ func run() -> void:
         var size=Vector2i(rect.size)
         var helper=probe._create("narrow")
         probe.actors.narrow=helper
-        probe._update(helper,snapshots,scene.camera,origin,ground,projection,rect,size,ppu)
+        probe._update_casters(helper,snapshots,scene.camera,origin,ground,false)
+        probe._update_layout(helper,scene.camera,origin,ground,projection,rect,size,ppu);probe._render(helper)
         await RenderingServer.frame_post_draw
         var native_size=helper.viewport.get_texture().get_image().get_size()
-        check(native_size==size and native_size.x>=2 and native_size.y>=2,"Clipped shadow renders at the expanded native sample dimensions")
+        check(native_size==probe.TARGET and helper.footprint==size and size.x>=2 and size.y>=2,"Clipped shadow keeps the expanded sample dimensions in its fixed target")
         var projected_width=helper.camera.size*float(native_size.x)/native_size.y*ppu
-        check(is_equal_approx(projected_width,rect.size.x) and helper.entry.node.mesh.size.is_equal_approx(rect.size/ppu),"Clipped shadow camera and output quad retain identical screen-space aspect")
+        check(is_equal_approx(projected_width,rect.size.x/size.x*native_size.x) and helper.entry.node.mesh.size.is_equal_approx(rect.size/ppu),"Clipped shadow camera and output quad retain identical screen-space aspect")
         probe._remove("narrow")
     probe.close()
     check(scene.timeline.state==canonical and scene.timeline.trace==trace,"Idle visual sampling changes no canonical state, events or logs")

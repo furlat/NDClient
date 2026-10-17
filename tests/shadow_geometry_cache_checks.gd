@@ -2,6 +2,24 @@ extends "res://tests/creature_shadow_checks.gd"
 ## Same delivered bodies and exact pre-edit shadow calculation, with independent
 ## helper viewports. The optional oracle is a saved source file, never gameplay.
 var reference:RefCounted
+var largest_delta:=0
+var differing_samples:=0
+var compared_samples:=0
+# The fixed helper target keeps the footprint in its top-left corner; the
+# pre-edit helper was exactly the footprint. Accepted (user, 17 October): the
+# moved helper camera's noise, measured as fewer than 0.5% of the footprint's
+# samples differing (mostly by 1/255; a flipped soft-shadow tap gives more).
+func visibility_matches(current:Dictionary,previous:Dictionary)->bool:
+    var expected:Image=previous.viewport.get_texture().get_image()
+    var actual:Image=current.viewport.get_texture().get_image().get_region(Rect2i(Vector2i.ZERO,expected.get_size()))
+    var a:PackedByteArray=actual.get_data();var b:PackedByteArray=expected.get_data()
+    var stride:=4 if expected.get_format()==Image.FORMAT_RGBA8 else 3
+    var differing:=0
+    for i in range(0,a.size(),stride):
+        var delta:=maxi(absi(a[i]-b[i]),maxi(absi(a[i+1]-b[i+1]),absi(a[i+2]-b[i+2])))
+        if delta>0:differing+=1;largest_delta=maxi(largest_delta,delta)
+    differing_samples+=differing;compared_samples+=a.size()/stride
+    return differing*200<=a.size()/stride
 func run()->void:
     if DisplayServer.get_name()=="headless":quit(2);return
     create_timer(90).timeout.connect(func():printerr("Shadow cache qualification deadline");quit(2))
@@ -24,6 +42,7 @@ func run()->void:
     var frame_timings:Dictionary={"original":[],"cached":[]}
     var frame_copies:int=0
     for entry in selected:
+        print("SHADOW_GEOMETRY_VISIBILITY ",JSON.stringify({"before":entry.id,"largest_delta":largest_delta,"differing_samples":differing_samples,"compared_samples":compared_samples}))
         var actor:Dictionary={"valid":true,"row":entry.placement,"entries":[entry]}
         var sources:Array=[]
         for quarter in 4:
@@ -45,8 +64,8 @@ func run()->void:
                 if actual.is_empty() or expected.is_empty():continue
                 var current:Dictionary=manager.actors[entry.id];var previous:Dictionary=reference.actors[entry.id]
                 await process_frame;await RenderingServer.frame_post_draw
-                check(current.viewport.get_texture().get_image().get_data()==previous.viewport.get_texture().get_image().get_data(),"Byte-exact shadow visibility "+str([entry.id,quarter,step]))
-                check(current.viewport.size==previous.viewport.size and current.camera.transform==previous.camera.transform and current.camera.size==previous.camera.size,"Exact receiver projection")
+                check(visibility_matches(current,previous),"Shadow visibility matches the pre-edit helper within the fixed-target noise "+str([entry.id,quarter,step]))
+                check(current.footprint==previous.viewport.size and current.entry.node.global_transform==previous.entry.node.global_transform and current.entry.node.mesh.size==previous.entry.node.mesh.size,"Exact footprint and output quad")
                 var a:MeshInstance3D=current.casters[entry.id];var b:MeshInstance3D=previous.casters[entry.id]
                 check(a.position==b.position and a.custom_aabb==b.custom_aabb,"Exact local bounds and contact")
                 for parameter in Shadows.CASTER_PARAMETERS+["component_cell_size","display_basis","sprite_pivot","horizontal_scale","ground_height"]:
@@ -62,7 +81,7 @@ func run()->void:
                 manager.sync([actor],camera,sources);reference.sync([actor],camera,sources)
                 frame_copies+=int(manager.diagnostics().sync_counts.get("caster_frame_copies",0))
                 await process_frame;await RenderingServer.frame_post_draw
-                check(current.viewport.get_texture().get_image().get_data()==previous.viewport.get_texture().get_image().get_data(),"Byte-exact actual-frame UV-only redraw "+str([entry.id,quarter,step]))
+                check(visibility_matches(current,previous),"Actual-frame UV-only redraw within the fixed-target noise "+str([entry.id,quarter,step]))
                 for parameter in Shadows.CASTER_PARAMETERS+["component_cell_size","display_basis","sprite_pivot","horizontal_scale","ground_height"]:
                     check(a.material_override.get_shader_parameter(parameter)==b.material_override.get_shader_parameter(parameter),"Exact UV-only caster parameter "+parameter)
                 check(a.custom_aabb==b.custom_aabb and a.position==b.position,"UV-only redraw retains exact contact/bounds")
@@ -74,7 +93,7 @@ func run()->void:
                     timings[pair[1]].append((Time.get_ticks_usec()-began)/1000.)
                 check(is_same(shape,manager._caster_shapes[entry.id]),"Light movement preserves cached local geometry")
                 await process_frame;await RenderingServer.frame_post_draw
-                check(current.viewport.get_texture().get_image().get_data()==previous.viewport.get_texture().get_image().get_data(),"Byte-exact light-only redraw")
+                check(visibility_matches(current,previous),"Light-only redraw within the fixed-target noise "+str([entry.id,quarter,step]))
         for cycle in 9:
             for step in 40:
                 var uv:Vector4=SourceMaterial.value(entry,"frame_uv")
@@ -102,6 +121,6 @@ func run()->void:
     check(frame_copies>0,"Delivered body animations exercise UV-only update across views")
     manager.close();reference.close();viewport.queue_free();await process_frame;await process_frame
     var profile=load("res://frame_profile.gd")
-    var report:Dictionary={"checks":checks,"failures":failures,"timings":{"original":profile.distribution(timings.original),"cached":profile.distribution(timings.cached)},"frame_only_timings":{"original":profile.distribution(frame_timings.original),"cached":profile.distribution(frame_timings.cached)},"frame_copies":frame_copies,"scope":"Delivered goblin and modular chest; four cameras, animated UVs, moving actor and light; byte-exact pre-edit native visibility and all caster parameters. Isolated timings, not full-game acceptance."}
+    var report:Dictionary={"checks":checks,"failures":failures,"timings":{"original":profile.distribution(timings.original),"cached":profile.distribution(timings.cached)},"frame_only_timings":{"original":profile.distribution(frame_timings.original),"cached":profile.distribution(frame_timings.cached)},"frame_copies":frame_copies,"largest_visibility_delta":largest_delta,"differing_visibility_samples":differing_samples,"compared_visibility_samples":compared_samples,"scope":"Delivered goblin and modular chest; four cameras, animated UVs, moving actor and light; pre-edit native visibility within the fixed-target noise (under 0.5% of samples) and all caster parameters. Isolated timings, not full-game acceptance."}
     FileAccess.open("res://.runtime/shadow-geometry-cache-checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("SHADOW_GEOMETRY_CACHE_CHECKS ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)
