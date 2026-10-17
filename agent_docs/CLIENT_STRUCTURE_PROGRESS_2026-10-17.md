@@ -484,14 +484,20 @@ by these absolutes.
 | Steady frame median | ≤ 10 ms | idle 10.0–10.1; animating 12.3–13.1 (Fireball 15.4–17.9) | Idle meets the target in a normal window (8.0–8.8 earlier). Fireball frames carry the spell's real per-frame work, plus 3–4.5 ms outside the script. |
 | Spikes > 16.7 ms attributed, none from repeated work | all attributed | 229–272 per run, each labelled by `route_summary.py` | Repeated-work causes found today were removed (Phase 1 rows). Open, not repeated work: the media-readiness return cost (~0.24 ms) and shadow viewport resizes (1–6 ms). |
 
-**Decision for the user (D1, reopened with new evidence).** D1 was withdrawn
-because full-scene held frames then took 14.2–55.4 ms. After Phase 1 they take
-4.4–6.8 ms (median about 5.8 ms), of which world preparation is the 2 ms
-allowance. Estimated from the held frames of three door runs: with a 6–8 ms
-allowance only while the clock is held for the world, the held phase would
-shrink from 151–223 ms to about 86–113 ms. Held frames would rise to roughly
-10–13 ms, still under 16.7. This is not implemented; the 2 ms account is
-unchanged.
+**D1 rejected by the user (17 October).** A hold is the display clock
+waiting, so the door animation visibly pauses. The user: "there can be no
+frozen frames". The goal is **no hold at all**, not a shorter or better-used
+one. The revealed room must be ready before the door animation reaches its
+cue: about 240 ms after the packet in these runs, against ~425 ms of
+preparation today. Ways to close it:
+- less scene-thread work (the 2 ms per animating frame budget is what
+  stretches ~60 ms of construction over ~150–200 ms);
+- more of that work on workers, published once;
+- a shorter planner chain (derivation ~79 ms, planner ~58 ms);
+- a lighter publication frame (~32 ms).
+
+The 2 ms budget itself stays, because the door animation must not stutter
+either.
 
 ### Stage 1 items still open
 
