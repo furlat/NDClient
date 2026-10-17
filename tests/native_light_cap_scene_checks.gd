@@ -1,6 +1,11 @@
 extends "res://tests/native_surface_receiving_checks.gd"
 # Cap on/off through the real disclosed room, four fixed camera views, and
 # final 3D composition. Isolated source/illumination oracles run separately.
+# The cap is play.gd's in-memory light_cap_enabled published as the light_cap
+# global; the user's saved setting is never written.
+func set_cap(scene:Node,enabled:bool)->void:
+    scene.light_cap_enabled=enabled;publish_receiving(scene)
+
 func run()->void:
     var expect_off="--expect-carried-off" in OS.get_cmdline_user_args()
     var label="carried-off" if expect_off else "all-lit"
@@ -27,31 +32,28 @@ func run()->void:
         await scene.presentation_updated;await scene.presentation_updated;scene.set_process(false)
         var display_clock=scene.timeline.display_ms
         var samples=scene.displayed_samples.duplicate(true)
-        scene.native_light_atlas.set_light_cap(0.0)
-        scene.native_light_atlas.sync(scene);scene.native_light_atlas.sync_output(scene)
+        var original_cap:bool=scene.light_cap_enabled
+        set_cap(scene,false)
         var uncapped=await snapshot()
-        scene.native_light_atlas.set_light_cap(1.0)
-        scene.native_light_atlas.sync(scene);scene.native_light_atlas.sync_output(scene)
+        set_cap(scene,true)
         var capped=await snapshot()
         var delta=difference(uncapped,capped)
         check(delta.changed>0,"Native accumulated light ceiling affects overlapping room lights q"+str(quarter))
         check(delta.alpha==0,"Light cap preserves final composition alpha q"+str(quarter))
         uncapped.save_png(capture_dir+"/q%d-off.png"%quarter);capped.save_png(capture_dir+"/q%d-on.png"%quarter)
-        scene.native_light_atlas.set_light_cap(0.0)
-        scene.native_light_atlas.sync(scene);scene.native_light_atlas.sync_output(scene)
+        set_cap(scene,false)
         var restored=await snapshot()
         check(difference(uncapped,restored).maximum==0,"Cap off restores the original room framebuffer exactly q"+str(quarter))
-        scene.set_normals_visible(true);scene.native_light_atlas.sync(scene);scene.native_light_atlas.sync_output(scene)
+        scene.set_normals_visible(true);publish_receiving(scene)
         var normal_off=await snapshot()
-        scene.native_light_atlas.set_light_cap(1.0)
-        scene.native_light_atlas.sync(scene);scene.native_light_atlas.sync_output(scene)
+        set_cap(scene,true)
         var normal_on=await snapshot()
         check(difference(normal_off,normal_on).maximum==0,"Normals diagnostic is unaffected by illumination cap q"+str(quarter))
-        scene.set_normals_visible(false);scene.native_light_atlas.sync(scene);scene.native_light_atlas.sync_output(scene)
+        scene.set_normals_visible(false);set_cap(scene,original_cap)
         check(scene.timeline.display_ms==display_clock and scene.displayed_samples==samples,"Lighting toggles preserve displayed animation clocks and source samples q"+str(quarter))
-        receipts.append({"quarter":quarter,"delta":delta,"atlas_size":[scene.native_light_atlas.viewport.size.x,scene.native_light_atlas.viewport.size.y],"native_2d_gpu_ms":RenderingServer.viewport_get_measured_render_time_gpu(scene.native_light_atlas.viewport.get_viewport_rid())})
+        receipts.append({"quarter":quarter,"delta":delta,"lights":scene.light_table.count})
     check(scene.timeline.state==canonical,"Cap never changes authoritative gameplay state")
-    check(scene.presentation_errors.is_empty() and scene.native_light_atlas.errors.is_empty(),"Native scene reports no source or lighting errors")
+    check(scene.presentation_errors.is_empty() and scene.light_table.issues.is_empty(),"Native scene reports no source or lighting errors")
     var report={"lighting":receipt,"checks":checks,"failures":failures,"cases":receipts,"renderer":RenderingServer.get_current_rendering_method(),"driver":RenderingServer.get_current_rendering_driver_name(),"scope":"Actual recorded room, four camera quarters, final3D pixels. Off restores baseline, alpha and canonical state stay unchanged, and unlit Normals is invariant. Pixel differences/captures support visual inspection; independent isolated cap oracles are separate."}
     FileAccess.open("res://generated/native_light_cap_scene_"+label+".json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("NATIVE_LIGHT_CAP_SCENE ",JSON.stringify({"checks":checks,"failures":failures,"label":label}))

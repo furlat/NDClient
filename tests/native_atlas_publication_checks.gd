@@ -1,6 +1,7 @@
 extends "res://tests/native_surface_receiving_checks.gd"
-# Run this same immutable recording twice, selecting only the atlas script.
-# This captures evidence; cross-run byte comparison belongs to the caller.
+# Capture first-disclosure and final-grid frames of one immutable recording.
+# Sprites light themselves from the light table. This captures evidence;
+# cross-run byte comparison (e.g. two revisions) belongs to the caller.
 var publication_captures:Array=[]
 var output_directory:String
 var run_label:String
@@ -47,8 +48,8 @@ func _watch()->void:
     var failed:bool=watched.publication_failed
     if not failed and Time.get_ticks_msec()<stage_limit:return
     stall={"stage":stage,"publication_failed":failed,"timed_out":not failed,"media_issue":watched.media_issue,
-        "presentation_errors":watched.presentation_errors.slice(0,5),"atlas_errors":watched.native_light_atlas.errors.slice(0,5),
-        "quarter":watched.quarter,"wall_mode":watched.wall_mode,"cap":watched.native_light_atlas.light_cap,"normals":watched.normals_visible,
+        "presentation_errors":watched.presentation_errors.slice(0,5),"light_table_issues":watched.light_table.issues.slice(0,5),
+        "quarter":watched.quarter,"wall_mode":watched.wall_mode,"cap":published_cap(watched),"normals":watched.normals_visible,
         "sequence":watched.timeline.sequence,"captures":publication_captures.size(),"components":component_status(watched)}
     print("STALL ",JSON.stringify(stall))
     check(false,"Publication continues through "+stage)
@@ -109,9 +110,9 @@ func save_first_draw(scene:Node,label:String,extra:Dictionary={})->Image:
     var item={"label":label,"sequence":scene.timeline.sequence,"display_ms":clock,
         "group":scene.timeline.current.get("id",""),"commit_index":scene.timeline.commit_index,
         "completed_groups":scene.timeline.completed_group_count,"world_revision":scene.world_revision,
-        "quarter":scene.quarter,"wall_mode":scene.wall_mode,"cap":scene.native_light_atlas.light_cap,
+        "quarter":scene.quarter,"wall_mode":scene.wall_mode,"cap":published_cap(scene),
         "normals":scene.normals_visible,"actors":actors,"tiles":scene.timeline.presentation_state().tiles.size(),
-        "objects":scene.timeline.state.objects.size(),"receivers":scene.native_light_atlas.receivers.size(),
+        "objects":scene.timeline.state.objects.size(),"lights":scene.light_table.count,
         "effects_ready":scene.component_renderer.ready,"effect_issues":scene.component_renderer.native_spells.issues.duplicate(),
         "camera_focus":[scene.camera_focus.x,scene.camera_focus.y,scene.camera_focus.z],"camera_size":scene.camera.size}
     item.merge(extra)
@@ -124,10 +125,13 @@ func save_first_draw(scene:Node,label:String,extra:Dictionary={})->Image:
     check(scene.timeline.display_ms==clock and sample_receipt(scene)==actors,"First draw retains exact clock/source samples "+label)
     return image
 
+## The light_cap global as last published by play.gd (-1 before the first publication).
+func published_cap(scene:Node)->float:
+    return float(scene.receiving_globals[0]) if not scene.receiving_globals.is_empty() else -1.0
+
 func mode_published(scene:Node)->bool:
     var cap:float=1.0 if scene.light_cap_enabled else 0.0
-    return scene.native_light_atlas.light_cap==cap and scene.native_light_atlas.normals_visible==scene.requested_normals_visible \
-        and scene.normals_visible==scene.requested_normals_visible and scene.pending_global_atlas.is_empty()
+    return scene.receiving_globals==[cap,scene.requested_normals_visible] and scene.normals_visible==scene.requested_normals_visible
 
 func component_status(scene:Node)->Dictionary:
     var renderer=scene.component_renderer
@@ -148,21 +152,18 @@ func refresh_capture(scene:Node,label:String)->Image:
     enter(label)
     scene.set_process(true)
     await scene.presentation_updated
-    # Cap/Normals on a published world arrive through a prepared global atlas
-    # over later frames; capture the first draw of that publication.
+    # Cap/Normals are receiving globals play.gd publishes on its next processed
+    # frame; capture the first draw of that publication.
     while not mode_published(scene) and not scene.publication_failed:await scene.presentation_updated
     return await save_first_draw(scene,label)
 
 func apply_mode(scene:Node,wall:String,cap:bool,normals:bool)->void:
     # In-memory controls only: the user's persisted settings are never changed.
-    # Same routing as set_light_cap_enabled minus its settings write: a
-    # published world takes cap/Normals as a prepared global-atlas publication;
-    # switching the atlas directly would discard its committed lighting delta.
+    # Same state as set_light_cap_enabled minus its settings write; play.gd
+    # publishes cap/Normals as receiving globals on its next processed frame.
     scene.wall_mode=wall
     if scene.world_revision>=0:scene.update_wall_visibility()
     scene.light_cap_enabled=cap
-    if scene.entries.is_empty() or scene.world_prepare_epoch!=scene.timeline.initialization_revision:
-        scene.native_light_atlas.set_light_cap(1.0 if cap else 0.0)
     scene.set_normals_visible(normals)
 
 func run()->void:
@@ -170,8 +171,7 @@ func run()->void:
     # The new window can take OS focus before unfocusable applies; keystrokes
     # typed elsewhere (P pause, Q/E rotate, Z walls) must never drive a capture.
     root.gui_disable_input=true
-    var reference=argument("--reference-atlas")
-    run_label="reference" if not reference.is_empty() else "lit" if "--lit-sprites" in OS.get_cmdline_user_args() else "current"
+    run_label="current"
     var requested=argument("--reveal-indices")
     if not requested.is_empty():
         reveal_indices=[]
@@ -192,11 +192,6 @@ func run()->void:
         finish_report();return
     ProjectSettings.set_setting("source_data/encounter_cache_mib",0)
     var scene=Player.instantiate();scene.timeline.paused=true
-    if not reference.is_empty():
-        var selected=preload("res://tests/atlas_reference.gd").instantiate(reference)
-        if selected==null:
-            check(false,"Reference atlas script loads: "+reference);scene.free();finish_report();return
-        scene.native_light_atlas=selected
     root.add_child(scene)
     scene.set_process_input(false);scene.set_process_unhandled_input(false)
     watched=scene;process_frame.connect(_watch)
@@ -302,7 +297,7 @@ func run()->void:
         check(hidden.get_data()==restored.get_data(),"Cap/Normals restores final beauty byte-exactly q"+str(quarter))
         check(scene.timeline.display_ms==final_clock,"Quarter/settings preserve final displayed clock q"+str(quarter))
     check(scene.timeline.state==canonical,"Capture matrix never changes canonical state")
-    check(scene.presentation_errors.is_empty() and scene.native_light_atlas.errors.is_empty(),"No source/native atlas errors")
+    check(scene.presentation_errors.is_empty() and scene.light_table.issues.is_empty(),"No source/light table errors")
     stage=""
     scene.queue_free();await process_frame;await process_frame
     finish_report()
@@ -311,10 +306,10 @@ func finish_report()->void:
     if report_written:return
     report_written=true
     var report={"run":run_label,"checks":checks,"failures":failures,"recording":argument("--recording"),
-        "reference_atlas":argument("--reference-atlas"),"selected_reveals":reveal_indices,"initialization":initialization,"reveals":reveal_log,"captures":publication_captures,
+"selected_reveals":reveal_indices,"initialization":initialization,"reveals":reveal_log,"captures":publication_captures,
         "rotation_failures":rotation_failures,"stall":stall,"settled":settled,
         "renderer":RenderingServer.get_current_rendering_method(),"driver":RenderingServer.get_current_rendering_driver_name(),
-        "scope":"Same immutable recording and1000ms manual timeline requests, paused between requests; no empty-queue clock advances. Selected first-disclosure native frames and24 final captures: four quarters, three wall modes, cap/Normals beauty roundtrip. Fixed source profile/strength and static fire. Cross-run exact pixels and matching clock/source receipts must be compared externally; this report alone does not assert reference/current equality. No timing claim."}
+        "scope":"Same immutable recording and1000ms manual timeline requests, paused between requests; no empty-queue clock advances. Selected first-disclosure native frames and24 final captures: four quarters, three wall modes, cap/Normals beauty roundtrip. Fixed source profile/strength and static fire. Cross-run exact pixels and matching clock/source receipts must be compared externally; this report alone does not assert cross-run equality. No timing claim."}
     FileAccess.open(output_directory+"/report.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("NATIVE_ATLAS_PUBLICATION ",JSON.stringify({"run":run_label,"checks":checks,"failures":failures,"reveals":reveal_log.size(),"captures":publication_captures.size()}))
     quit(0 if failures.is_empty() else 1)
