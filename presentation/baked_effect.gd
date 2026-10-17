@@ -7,6 +7,9 @@ const LightUnits=preload("res://presentation/native_light_units.gd")
 const Bundle=preload("res://presentation/baked_effect_bundle.gd")
 const DIRECTORY:="res://.derived/baked_effects/"
 const SLOTS:=256
+## Extra recording variants (beyond each clip's first) load only while this is
+## true; Play sets it while no action is playing, so no file lands mid-cast.
+static var background_allowed:bool=true
 ## `-- --native-effects` plays every clip from its native source (baselines).
 static var enabled:bool=not OS.get_cmdline_user_args().has("--native-effects")
 static var _clock_image:Image
@@ -15,7 +18,9 @@ static var _free_slots:Array=[]
 static var _clock_dirty:bool=false
 static var _bundles:Dictionary={}
 static var _requested:Dictionary={}
-static var _queue:Array=[]
+static var _queue_first:Array=[]
+static var _queue_rest:Array=[]
+static var _owners:Dictionary={}
 static var _loading:String=""
 static var _pumping:bool=false
 ## Loaded bundles whose recorded-state textures are still being created
@@ -61,61 +66,52 @@ static func _canonical(value:Variant)->Variant:
 
 ## Threaded load of a clip's recordings. Files load one at a time: each
 ## carries megabytes of textures, and several finishing together stall the
-## frame that uploads them. A clip needed now (`urgent`) moves to the front.
-## Returns the array of bundles once loaded, null while loading, and false
+## frame that uploads them. Every clip's first variant loads before any
+## further variant, and a clip is usable once one variant is uploaded (more
+## variants join as they arrive). A clip needed now (`urgent`) moves to the
+## front. Returns the usable bundles, null while none is ready yet, and false
 ## when there is no current recording for this clip.
 static func request(clip:Dictionary,urgent:bool=false)->Variant:
     if not enabled:return false
     var id:String=clip.get("id","")
-    if _bundles.has(id):
-        if _bundles[id] is Array and not _uploaded(_bundles[id]):
-            if urgent:
-                for bundle in _bundles[id]:
-                    if bundle in _uploads:_uploads.erase(bundle);_uploads.push_front(bundle)
-            _pump()
-            return null
-        return _bundles[id]
+    if _bundles.has(id):return _bundles[id]
     if not _requested.has(id):
         var paths:Array=[]
         for variant in MAX_VARIANTS:
             if ResourceLoader.exists(path_for(id,variant)):paths.append(path_for(id,variant))
         if paths.is_empty():_bundles[id]=false;return false
-        _requested[id]=paths
-        _queue.append_array(paths)
+        _requested[id]={"paths":paths,"hash":clip_hash(_comparable(clip)),"loaded":[],"done":0}
+        for path in paths:_owners[path]=id
+        _queue_first.append(paths[0]);_queue_rest.append_array(paths.slice(1))
+    var owner:Dictionary=_requested[id]
     if urgent:
-        var queued:Array=_requested[id].filter(func(path):return path in _queue)
-        for path in queued:_queue.erase(path)
-        _queue=queued+_queue
+        for queue in [_queue_first,_queue_rest]:
+            var mine:Array=owner.paths.filter(func(path):return path in queue)
+            for path in mine:queue.erase(path)
+            for index in mine.size():queue.insert(index,mine[index])
+        for bundle in owner.loaded:
+            if bundle in _uploads:_uploads.erase(bundle);_uploads.push_front(bundle)
     _pump()
-    # Results are taken only once every variant has loaded (a taken result
-    # is no longer known to the loader).
-    for path in _requested[id]:
-        if path in _queue:return null
-        var status:int=ResourceLoader.load_threaded_get_status(path)
-        if status==ResourceLoader.THREAD_LOAD_IN_PROGRESS:return null
-        if status!=ResourceLoader.THREAD_LOAD_LOADED:
-            push_warning("Baked native clip failed to load (status %d); using the native source: %s"%[status,path])
-            _bundles[id]=false;return false
-    var bundles:Array=[]
-    for path in _requested[id]:
-        var bundle:Resource=ResourceLoader.load_threaded_get(path)
-        if bundle==null or bundle.get_script()!=Bundle or bundle.clip_hash!=clip_hash(_comparable(clip)):
-            push_warning("Baked native clip is stale; using the native source: "+id)
-            _bundles[id]=false;return false
-        bundles.append(bundle)
-    # Recorded states reach the GPU one texture per frame before the clip is
-    # ready; a whole file's worth in one frame is a visible stall.
-    for bundle in bundles:
-        if not _textures.has(bundle):_textures[bundle]=[];_uploads.append(bundle)
-    _bundles[id]=bundles
+    var usable:Array=owner.loaded.filter(func(bundle):return _uploaded([bundle]))
+    if not usable.is_empty():
+        if usable.size()==owner.paths.size():_bundles[id]=usable
+        return usable
+    if owner.done==owner.paths.size() and owner.loaded.is_empty():_bundles[id]=false;return false
     return null
+
+## Number of recorded variants on disk for this clip.
+static func variants_on_disk(clip_id:String)->int:
+    var count:int=0
+    for variant in MAX_VARIANTS:
+        if ResourceLoader.exists(path_for(clip_id,variant)):count+=1
+    return count
 
 ## True once every texture of these bundles exists.
 static func _uploaded(bundles:Array)->bool:
     return bundles.all(func(bundle):return _textures.has(bundle) and _textures[bundle].size()==bundle.systems.size())
 
-## Creates the next pending texture (one per frame), and starts the next
-## queued file once the one in flight has finished.
+## Creates the next pending texture (one per frame), takes the file in flight
+## once it has loaded, and starts the next queued file.
 static func _pump()->void:
     if _pump_frame!=Engine.get_process_frames() and not _uploads.is_empty():
         _pump_frame=Engine.get_process_frames()
@@ -127,10 +123,24 @@ static func _pump()->void:
     if not _pumping:
         _pumping=true
         RenderingServer.frame_pre_draw.connect(_pump)
-    if not _loading.is_empty() and ResourceLoader.load_threaded_get_status(_loading)==ResourceLoader.THREAD_LOAD_IN_PROGRESS:return
-    _loading=""
-    if _queue.is_empty():return
-    _loading=_queue.pop_front()
+    if not _loading.is_empty():
+        var status:int=ResourceLoader.load_threaded_get_status(_loading)
+        if status==ResourceLoader.THREAD_LOAD_IN_PROGRESS:return
+        var owner:Dictionary=_requested.get(_owners.get(_loading,""),{"paths":[],"hash":"","loaded":[],"done":0})
+        owner.done+=1
+        if status!=ResourceLoader.THREAD_LOAD_LOADED:
+            push_warning("Baked native clip failed to load (status %d); skipping it: %s"%[status,_loading])
+        else:
+            var bundle:Resource=ResourceLoader.load_threaded_get(_loading)
+            if bundle==null or bundle.get_script()!=Bundle or bundle.clip_hash!=owner.hash:
+                push_warning("Baked native clip is stale; skipping it: "+_loading)
+            else:
+                owner.loaded.append(bundle)
+                _textures[bundle]=[];_uploads.append(bundle)
+        _loading=""
+    var next:Array=_queue_first if not _queue_first.is_empty() else _queue_rest if background_allowed else []
+    if next.is_empty():return
+    _loading=next.pop_front()
     ResourceLoader.load_threaded_request(_loading,"",false)
 
 ## The baked recording for this source when it can replace the native one:

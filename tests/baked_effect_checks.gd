@@ -71,9 +71,10 @@ func _view()->Dictionary:
 func compare(clip:Dictionary,save_dir:String)->void:
     var id:String=clip.id
     Baked._bundles.erase(id);Baked._requested.erase(id)
-    var bundles:Variant=Baked.request(clip)
-    while bundles==null:
-        await frame();bundles=Baked.request(clip)
+    var bundles:Variant=Baked.request(clip,true)
+    # Every recorded variant on disk is compared (variants join as they load).
+    while bundles==null or (bundles is Array and bundles.size()<Baked.variants_on_disk(id) and not Baked._bundles.has(id)):
+        await frame();bundles=Baked.request(clip,true)
     check(bundles is Array,"Current recording exists: "+id)
     if not bundles is Array:return
     # --sparse: first variant only, three saved frames (visual review sheets).
