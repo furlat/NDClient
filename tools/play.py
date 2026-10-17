@@ -221,6 +221,7 @@ async def run(args: argparse.Namespace) -> Path:
                 native_args.append("--profile-view-size=" + str(args.profile_view_size))
             if args.profile_stop_stage is not None:
                 native_args.append("--profile-stop-stage=" + str(args.profile_stop_stage))
+            native_args.extend(args.client_arg)
             client = await asyncio.create_subprocess_exec(*native_args, stdout=godot_log, stderr=godot_log)
             print("Godot opened; waiting for initialization and current player choices…", flush=True)
             player_ready = False
@@ -284,6 +285,7 @@ def main() -> None:
     parser.add_argument("--profile-cpu-commands", default="", help="Optional comma-separated command numbers for cProfile; adds overhead to those commands")
     parser.add_argument("--profile-action-phases", action="store_true", help="Optional nested engine phase hooks; adds diagnostic overhead")
     parser.add_argument("--profile-view-size", type=float, help="Live Gallery profiling: fixed orthographic camera size, with a 1600×960 native window")
+    parser.add_argument("--client-arg", action="append", default=[], help="Extra user argument passed to the Godot client (repeatable)")
     parser.add_argument("--profile-stop-stage", type=int, help="Live Gallery profiling: stop after 9–11 route stages and retain a three-second idle control instead of the full zoom/cap matrix")
     args = parser.parse_args()
     if args.live_fireball_ui and (args.scenario != "gallery_sorcerer" or args.test_script != "res://tests/live_spell_checks.gd"):

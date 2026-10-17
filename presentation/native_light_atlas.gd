@@ -94,6 +94,7 @@ var sample_serial:int=0
 
 func attach(parent: Node3D) -> void:
     owner = parent
+    if not enabled: return
     viewport = SubViewport.new()
     viewport.name = "Native2DReceiving"
     viewport.disable_3d = true
@@ -132,6 +133,9 @@ var normals_visible = false
 var normal_shaders: Dictionary = {}
 # False: sprites keep their own lit materials; the atlas runs for comparison only.
 var display_outputs := true
+# False: no atlas at all. Sprites are lit in their own shaders; every entry
+# point below is a no-op and preparation skips the atlas stages.
+var enabled := true
 
 func _uses_hdr() -> bool:
     return light_cap>0.0 and not normals_visible
@@ -492,6 +496,7 @@ func capture_group_input(entry:Dictionary,info:Dictionary,crop:Dictionary,basis:
     return input
 
 func static_environment_options(world:Node,packets:Dictionary={},images:Dictionary={})->Dictionary:
+    if not enabled: return {}
     var shader:Shader=preload("res://environment.gdshader")
     var roles:Dictionary={}
     for role in ["body","wall","cliff","terrain","shadow"]:
@@ -592,6 +597,7 @@ static func _link_private_source(prepared:Dictionary,entry:Dictionary)->void:
     source.proof.binding_revision=entry.source_binding_revision
 
 func actor_resource_options(world:Node)->Dictionary:
+    if not enabled: return {}
     # Scene-owner shader/transport capture; the worker receives only selected
     # immutable values and strong resources, never an atlas or live Node.
     var shader:Shader=preload("res://modular.gdshader")
@@ -1329,11 +1335,13 @@ func _project_entry(receiver:Dictionary,entry:Dictionary,basis:Basis)->void:
     receiver.bounds=Rect2(origin,Vector2.ZERO).expand(origin+axis_x).expand(origin+axis_y).expand(origin+axis_x+axis_y)
 
 func style_changed(entry: Dictionary, row_id: String = "source") -> void:
+    if not enabled: return
     var source_id: int=entry.node.get_instance_id()
     style_dirty[str(source_id)+":"+row_id]=true
     material_dirty[source_id]=true
 
 func visibility_changed(entry: Dictionary) -> void:
+    if not enabled: return
     visibility_dirty[entry.node.get_instance_id()]=true
 
 func capture_projection(world:Node)->Dictionary:
@@ -1348,6 +1356,7 @@ func projection_key(world:Node)->Array:
     return [world.camera.global_transform,world.camera.size,world.get_viewport().get_visible_rect().size]
 
 func output_changed(entry: Dictionary) -> void:
+    if not enabled: return
     # These final3D fields are owned by wall selection/coverage and output
     # creation, not Canvas receiving. Consume only after painter/mask publication.
     if is_instance_valid(entry.node): output_dirty[entry.node.get_instance_id()]=entry
@@ -1394,6 +1403,7 @@ func _style(receiver: Dictionary) -> void:
         receiver.group.material.set_shader_parameter("receiver_world_origin",receiver.get("world_origin",Vector3.ZERO))
 
 func sync(world: Node, published: Array = [], styles: Array = [], changes: Dictionary = {}, tracked_receivers: bool = false) -> void:
+    if not enabled: return
     sample_serial+=1
     var started = Time.get_ticks_usec()
     projection_dirty=[]
@@ -1607,6 +1617,7 @@ func sync(world: Node, published: Array = [], styles: Array = [], changes: Dicti
     last_sync_ms=(Time.get_ticks_usec()-started)/1000.0
 
 func sync_output(world: Node, published: Array = [], tracked: bool = false) -> void:
+    if not enabled: return
     # Only after painter/mask publication. The original texture RID remains live
     # across mask redraws; source/material admissions invalidate this stamp.
     last_reconcile_phases.output_entries_checked=0

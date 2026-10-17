@@ -31,7 +31,8 @@ var native_light_atlas = NativeLightAtlas.new()
 var generated_shadows = GeneratedShadows.new()
 # Sprites lit in their own shaders from the light table. The atlas still runs
 # but never installs its output materials (side-by-side parity runs).
-var lit_sprites: bool = "--lit-sprites" in OS.get_cmdline_user_args()
+var atlas_enabled: bool = not "--no-atlas" in OS.get_cmdline_user_args()
+var lit_sprites: bool = "--lit-sprites" in OS.get_cmdline_user_args() or not atlas_enabled
 var light_table = LightTable.new()
 var receiving_globals: Array = []
 # Shader globals are process-wide: only the displayed world publishes them
@@ -340,13 +341,14 @@ func _ready() -> void:
     if settings.error != OK: presentation_errors.append("Cannot read local rendering settings: "+error_string(settings.error))
     native_light_atlas.require_prepared_publication=true
     native_light_atlas.display_outputs=not lit_sprites
+    native_light_atlas.enabled=atlas_enabled
     native_light_atlas.attach(self)
     # Source and receiving shaders a reveal may meet first mid-play.
     NativeLightAtlas.compile_shaders(NativeLightAtlas.RECEIVING_SHADERS+[ENVIRONMENT_SHADER,WATER_SHADER,FIXTURE_FLAME_SHADER,ActorConstruction.MODULAR_SHADER,
         GroundOverlay.SHADER,GroundOverlay.ROUTE])
     light_cap_enabled = settings.light_cap_enabled
     native_light_atlas.set_light_cap(1.0 if light_cap_enabled else 0.0)
-    source_lighting.attach(native_light_atlas.viewport)
+    if atlas_enabled: source_lighting.attach(native_light_atlas.viewport)
     generated_shadows.attach(self)
     timeline.profile = profile
     timeline.media_ready = _media_ready
@@ -809,7 +811,7 @@ func _detailed_frame_context(active_motion: bool) -> Dictionary:
         "native_2d_repack_count":native_light_atlas.repack_count,"native_2d_receivers":native_light_atlas.live_receivers,"native_2d_atlas_pixels":native_light_atlas.packed_pixels,"generated_shadows":generated_shadows.diagnostics(),
         "native_2d_reconcile_ms":native_light_atlas.last_reconcile_ms,"native_2d_projection_ms":native_light_atlas.last_projection_ms,"native_2d_pack_ms":native_light_atlas.last_pack_ms,
         "native_2d_reconcile_phases":native_light_atlas.last_reconcile_phases,
-        "native_2d_gpu_ms":RenderingServer.viewport_get_measured_render_time_gpu(native_light_atlas.viewport.get_viewport_rid()),
+        "native_2d_gpu_ms":RenderingServer.viewport_get_measured_render_time_gpu(native_light_atlas.viewport.get_viewport_rid()) if is_instance_valid(native_light_atlas.viewport) else 0.0,
         "native_spell_render_ms":component_renderer.native_spells.render_timings(),
         "native_support_sync":component_renderer.native_spells._support.last_sync_phases if component_renderer.native_spells._support!=null else {},
         "actor_sample_counts":profile.get("actor_sample_counts",{}),
@@ -3167,12 +3169,18 @@ func _publish_global_atlas() -> void:
 func _prepare_render_options() -> void:
     if rotation_pending() or world_revision<0 or entries.is_empty(): return
     var options={"light_cap":1.0 if light_cap_enabled else 0.0,"normals_visible":requested_normals_visible}
+    if not atlas_enabled:
+        # Lit sprites read the cap/Normals globals: a toggle is a global write.
+        native_light_atlas.set_light_cap(options.light_cap);native_light_atlas.set_normals_visible(options.normals_visible)
+        _publish_normals(options.normals_visible)
+        return
     if not _atlas_needs_viewport_growth() and options.light_cap==native_light_atlas.light_cap and options.normals_visible==native_light_atlas.normals_visible:
         if not pending_global_atlas.is_empty() and pending_global_atlas.target==self:_cancel_global_atlas()
         return
     if _global_atlas_ready(self,entries,options): _publish_global_atlas()
 
 func _atlas_needs_viewport_growth()->bool:
+    if not atlas_enabled: return false
     var size:Vector2=get_viewport().get_visible_rect().size
     return size.x>native_light_atlas.viewport.size.x or size.y>native_light_atlas.viewport.size.y
 

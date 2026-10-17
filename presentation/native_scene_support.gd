@@ -173,7 +173,7 @@ func prepare_membership(static_entries:Array,visual_actors:Dictionary,budget:Dic
     var retained_actors:Dictionary={}
     for visual in visual_actors.values():
         for source in visual.entries:
-            if source.role=="shadow" or not source.actor_layer.get("effect",{}).is_empty() or not source.node.visible or not source.has("received_material"):continue
+            if source.role=="shadow" or not source.actor_layer.get("effect",{}).is_empty() or not source.node.visible or (not lit_sprites and not source.has("received_material")):continue
             var alpha:Variant=SourceMaterial.value(source,"condition_alpha")
             if alpha!=null and float(alpha)<1.0:continue
             retained_actors[source.id]=true
@@ -276,7 +276,7 @@ func sync(static_entries:Array,visual_actors:Dictionary,view_camera:Camera3D)->v
             if floor_node.position!=contact:floor_repositioned+=1
             floor_node.position=contact
         floors[id].visible=true
-        if entry.has("received_material"):
+        if lit_sprites or entry.has("received_material"):
             var displayed:ShaderMaterial=_displayed(entry)
             _outputs.append(displayed)
             live_outputs[displayed]=true
@@ -304,7 +304,7 @@ func sync(static_entries:Array,visual_actors:Dictionary,view_camera:Camera3D)->v
         for source in visual.entries:
             if source.role=="shadow" or not source.actor_layer.get("effect",{}).is_empty():continue
             var has_geometry:bool=SourceMaterial.value(source,"has_component_geometry")==true
-            if source.has("received_material"):
+            if lit_sprites or source.has("received_material"):
                 var output:ShaderMaterial=_displayed(source)
                 _outputs.append(output)
                 live_outputs[output]=true
@@ -312,7 +312,7 @@ func sync(static_entries:Array,visual_actors:Dictionary,view_camera:Camera3D)->v
                 output.set_shader_parameter("native_scene_plane",false)
                 output.set_shader_parameter("native_scene_pivot",source.pivot)
                 if has_geometry:output.set_shader_parameter("native_scene_ground_height",source.get("geometry_ground_pixels",19.0)*SourceMaterial.value(source,"component_units"))
-            if not source.node.visible or not source.has("received_material"):continue
+            if not source.node.visible or (not lit_sprites and not source.has("received_material")):continue
             # Translucent bodies require transparent compositing, not an
             # invisible opaque blocker. This bridge admits solid surfaces only.
             var condition_alpha:Variant=SourceMaterial.value(source,"condition_alpha")
@@ -334,9 +334,11 @@ func sync(static_entries:Array,visual_actors:Dictionary,view_camera:Camera3D)->v
             if not source.has("source_version") or _source_bindings.get(id)!=binding:
                 for parameter in Shadows.CASTER_PARAMETERS:material.set_shader_parameter(parameter,SourceMaterial.value(source,parameter))
                 _source_bindings[id]=binding
-            var received:ShaderMaterial=source.received_material
-            var values:Array=[received.get_shader_parameter("received"),received.get_shader_parameter("source_crop"),
-                received.get_shader_parameter("atlas_region"),has_geometry and solid!=null,solid,
+            # Lit sprites address their cell texel directly; atlas outputs name it by atlas address.
+            var received:ShaderMaterial=null if lit_sprites else source.received_material
+            var values:Array=[received.get_shader_parameter("received") if received!=null else null,
+                received.get_shader_parameter("source_crop") if received!=null else Vector4(0,0,1,1),
+                received.get_shader_parameter("atlas_region") if received!=null else Vector4.ZERO,received!=null,has_geometry and solid!=null,solid,
                 source.get("geometry_cell_size",source.cell),view_camera.global_basis,source.pivot,
                 source.get("geometry_ground_pixels",19.0)*SourceMaterial.value(source,"component_units") if has_geometry else null]
             # The proxy owns these uniforms; write them only when a value changed.
@@ -357,7 +359,7 @@ func sync(static_entries:Array,visual_actors:Dictionary,view_camera:Camera3D)->v
         if not live_outputs.has(material):material.set_shader_parameter("native_scene_enabled",false)
     last_sync_phases.retirement=(Time.get_ticks_usec()-phase_started)/1000.0
 
-const PROXY_PARAMETERS=["received","source_crop","atlas_region","has_geometry","component_solid","component_cell_size",
+const PROXY_PARAMETERS=["received","source_crop","atlas_region","atlas_addressed","has_geometry","component_solid","component_cell_size",
     "display_basis","sprite_pivot","ground_height"]
 
 func close()->void:

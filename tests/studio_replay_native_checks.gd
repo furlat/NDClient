@@ -129,6 +129,12 @@ func play_once(studio:Control,label:String)->void:
         if studio.world.timeline.display_ms>=next_sample:
             verify_prefix(studio,label+" playback "+str(studio.world.timeline.display_ms),true);next_sample=studio.world.timeline.display_ms+150.0
         if not failures.is_empty():break
+    if not studio.world.timeline.paused:
+        var w=studio.world;var pw=w.pending_world
+        print("PLAYBACK_STALL ",JSON.stringify({"display_ms":w.timeline.display_ms,"waiting_media":w.timeline.waiting_for_media,"busy":w.timeline.busy(),
+            "world_revision":w.world_revision,"pending":pw!=null,"phase":pw.phase if pw!=null else "","atlas_stage":pw.atlas_stage if pw!=null else "",
+            "prepared":pw.prepared if pw!=null else false,"media_issue":w.media_issue,"errors":w.presentation_errors.slice(0,3),
+            "media_gate":w.media_gate,"rotation":w.rotation_pending()}))
     check(studio.world.timeline.paused,label+": reaches stop")
     check(atomic_seen.size()==atomic_targets.size(),label+": every requested native atomic cut was observed before ordered zero-time tails drained")
     check(is_equal_approx(studio.world.timeline.display_ms,studio.index.presentation_end_ms),label+": reaches actual recorded endpoint")
