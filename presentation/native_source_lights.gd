@@ -41,9 +41,12 @@ func prepare_native_handles(handles:Dictionary,budget:Dictionary={})->bool:
                 light.enabled=false;light.texture_filter=CanvasItem.TEXTURE_FILTER_LINEAR;light.shadow_enabled=false
                 page.parent.add_child(light);page.effect_nodes[id]=light;preparation_counts.nodes+=1
     for attenuation in _pending_attenuations.keys():
-        if _effect_cookies.has(attenuation):_pending_attenuations.erase(attenuation);continue
+        if _effect_cookies.has(attenuation):
+            if _effect_cookie("",attenuation)!=null:_pending_attenuations.erase(attenuation)
+            else:ready=false
+            continue
         if not budget.is_empty() and budget.used_usec+Time.get_ticks_usec()-started>=budget.limit_usec:ready=false;continue
-        _effect_cookie("",attenuation);preparation_counts.cookies+=1;_pending_attenuations.erase(attenuation)
+        _effect_cookie("",attenuation);preparation_counts.cookies+=1;ready=false
     for instance in _effect_roots.keys():
         if not retained.has(instance):_effect_roots.erase(instance)
     for page in _pages:
@@ -118,32 +121,31 @@ func sample_handles(handles: Dictionary, support_y: float = 0.0, optical: Dictio
     effect_sources.sort_custom(func(a, b): return a.id < b.id)
     _update_issues()
 
-func _effect_cookie(_id: String, attenuation: float) -> GradientTexture2D:
+func _effect_cookie(_id: String, attenuation: float) -> Texture2D:
     # The grayscale image depends only on exact source attenuation. Position,
-    # colour, radius and energy remain per-light values below. Never mutate an
-    # admitted texture: shadow registration observes its immutable RID/image.
+    # colour, radius and energy remain per-light values below. Generated off the
+    # main thread: null until ready, which preparation waits for.
     if not _effect_cookies.has(attenuation):
-        var texture := GradientTexture2D.new()
-        texture.width = 256; texture.height = 256
-        texture.fill = GradientTexture2D.FILL_RADIAL
-        texture.fill_from = Vector2(.5, .5); texture.fill_to = Vector2(1.0, .5)
-        texture.gradient = Gradient.new()
-        var offsets := PackedFloat32Array()
-        var colours := PackedColorArray()
-        for index in 65:
-            var radius := float(index) / 64.0
-            # A smooth range envelope, shaped by the donor attenuation. This is
-            # a Canvas optical approximation, not OmniLight3D inverse-distance
-            # attenuation or the game's bright/dim category cookie.
-            var envelope := 1.0 - smoothstep(0.0, 1.0, radius)
-            var value := pow(envelope, 1.0 + maxf(0.0, attenuation))
-            offsets.append(radius); colours.append(Color(value, value, value, 1.0))
-        texture.gradient.offsets = offsets
-        texture.gradient.colors = colours
-        _effect_cookies[attenuation]={"texture":texture,"used":0}
-    var cookie:Dictionary=_effect_cookies[attenuation]
-    _effect_cookie_use+=1;cookie.used=_effect_cookie_use
-    return cookie.texture
+        _effect_cookies[attenuation]={"cookie":LightCookies.start(_attenuation_gradient(attenuation)),"used":0}
+    var entry:Dictionary=_effect_cookies[attenuation]
+    _effect_cookie_use+=1;entry.used=_effect_cookie_use
+    return LightCookies.texture(entry.cookie)
+
+func _attenuation_gradient(attenuation: float) -> Gradient:
+    var gradient := Gradient.new()
+    var offsets := PackedFloat32Array()
+    var colours := PackedColorArray()
+    for index in 65:
+        var radius := float(index) / 64.0
+        # A smooth range envelope, shaped by the donor attenuation. This is
+        # a Canvas optical approximation, not OmniLight3D inverse-distance
+        # attenuation or the game's bright/dim category cookie.
+        var envelope := 1.0 - smoothstep(0.0, 1.0, radius)
+        var value := pow(envelope, 1.0 + maxf(0.0, attenuation))
+        offsets.append(radius); colours.append(Color(value, value, value, 1.0))
+    gradient.offsets = offsets
+    gradient.colors = colours
+    return gradient
 
 func _trim_effect_cookies()->void:
     var active:Dictionary={}
@@ -185,8 +187,7 @@ func project(camera: Camera3D, source_scale: float = 2.0) -> void:
     for source in effect_sources:
         var position: Vector3 = source.world_position
         var screen := camera.unproject_position(position)
-        var cookie:Dictionary=_effect_cookies.get(source.native_attenuation,{})
-        var texture:GradientTexture2D=cookie.get("texture")
+        var texture:Texture2D=_effect_cookie("",source.native_attenuation) if _effect_cookies.has(source.native_attenuation) else null
         if texture==null:
             _pending_attenuations[source.native_attenuation]=true;native_preparation_ready=false
             _effect_issues.append("Native light attenuation awaiting preparation: "+source.id)

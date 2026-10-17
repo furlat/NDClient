@@ -233,6 +233,8 @@ func cookie_image(texture: Texture2D) -> Image:
     return _cookie_image(texture)
 
 func _cookie_image(texture: Texture2D) -> Image:
+    # Generated cookies carry their image: no GPU readback (a readback stalls).
+    if texture.has_meta(&"cookie_image"):return texture.get_meta(&"cookie_image")
     var id:RID=texture.get_rid()
     var retained:Dictionary=_retained_cookies.get(id,{})
     var image:Image=retained.get("image") if is_same(retained.get("texture"),texture) else null
@@ -686,7 +688,7 @@ func diagnostics() -> Dictionary:
             triangles+=2*(caster.mesh.subdivide_width+1)*(caster.mesh.subdivide_depth+1)
         pixels+=state.viewport.size.x*state.viewport.size.y
         if state.unbounded: wide_bounds+=1
-        selected[state.entry.placement.id]=state.source_id
+        selected[state.entry.placement.id]=state.get("source_id","")
     return {"actors":actors.size(),"casters":casters,"caster_triangles_before_native_shadow_passes":triangles,
         "target_pixels":pixels,"last_render_gpu_ms":last_gpu_ms,"last_render_cpu_ms":last_cpu_ms,"sources":_sources.size(),"updates":_updates,"wide_depth_bounds":wide_bounds,"sync_cpu_ms":_last_cpu_ms,"selected_sources":selected,
         "sync_phases_ms":_last_phases.duplicate(),"sync_counts":_last_counts.duplicate(),"cookie_cached_images":_retained_cookies.size(),"source_revision":_source_revision,"rank_revision":_rank_revision,

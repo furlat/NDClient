@@ -55,12 +55,20 @@ func node_inputs(source: Dictionary) -> Dictionary:
     source.span = Vector2(texture.get_size()) * source.texture_scale * scale
     return source
 
+# Cookies are generated off the main thread; wait for each.
+func cookie(request: Callable) -> Texture2D:
+    var texture: Texture2D = request.call()
+    while texture == null:
+        await process_frame
+        texture = request.call()
+    return texture
+
 func lights() -> Array:
     var world := Lighting2D.new()
     var spells := NativeSourceLights.new()
-    var near: Texture2D = world._source_cookie({"outer": 6.0, "very_bright_radius_feet": 10, "bright_radius_feet": 20})
-    var far: Texture2D = world._source_cookie({"outer": 8.0, "very_bright_radius_feet": 0, "bright_radius_feet": 20})
-    var spell: Texture2D = spells._effect_cookie("", 1.0)
+    var near: Texture2D = await cookie(world._source_cookie.bind({"outer": 6.0, "very_bright_radius_feet": 10, "bright_radius_feet": 20}))
+    var far: Texture2D = await cookie(world._source_cookie.bind({"outer": 8.0, "very_bright_radius_feet": 0, "bright_radius_feet": 20}))
+    var spell: Texture2D = await cookie(spells._effect_cookie.bind("", 1.0))
     var ellipse := 0.57735
     # Positions, cookie centres (support points), spans, heights as project() builds them.
     return [
@@ -142,7 +150,7 @@ func compare(hdr: bool, native: Image, table: Image) -> Dictionary:
         "lit_samples": lit, "samples": (SIZE.x / 4) * (SIZE.y / 4), "brightest": brightest}
 
 func run() -> void:
-    var sources := lights()
+    var sources: Array = await lights()
     # GradientTexture2D generates its image on the render thread.
     for i in 3: await process_frame
     await RenderingServer.frame_post_draw
