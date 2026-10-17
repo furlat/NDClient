@@ -94,7 +94,7 @@ static func read(directory: String, token: Dictionary={}, projection:Dictionary=
         var raw = FileAccess.get_file_as_bytes(directory.path_join(files[sequence]))
         result.bytes += raw.size()
         var phase_started=Time.get_ticks_usec()
-        var decoded = journal.protocol.decode("InitializationResponse" if sequence==0 else "PlayerOperation",raw)
+        var decoded = journal.decode_record(sequence,raw)
         var packet_profile={"sequence":sequence,"bytes":raw.size(),"decode_ms":(Time.get_ticks_usec()-phase_started)/1000.0}
         read_profile.decode_ms+=packet_profile.decode_ms
         if not decoded.ok: return decoded

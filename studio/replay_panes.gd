@@ -1,6 +1,7 @@
 extends RefCounted
 ## Stable viewport owners for offline playback. Mutable render state is never shared.
 const Play=preload("res://play.gd")
+const BackgroundRelease=preload("res://presentation/background_release.gd")
 
 static func viewport()->SubViewport:
     var view=SubViewport.new();view.size=Vector2i(1440,430);view.own_world_3d=true
@@ -15,6 +16,8 @@ static func discard(pane:Dictionary)->void:
         pane.world.component_renderer.audio.set_enabled(false)
         pane.world.timeline.paused=true
         freeze(pane,true)
+    # Its Play host's data is dropped on a worker after ordinary teardown.
+    BackgroundRelease.release_after_exit(pane.viewport,[pane.get("index",{})])
     pane.viewport.queue_free()
 
 static func freeze(pane:Dictionary,value:bool)->void:

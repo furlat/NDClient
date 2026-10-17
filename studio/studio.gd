@@ -10,6 +10,7 @@ const CaseLibrary=preload("res://studio/case_library.gd")
 const StudyLibrary=preload("res://studio/study_library.gd")
 const ViewportLayout=preload("res://studio/viewport_layout.gd")
 const ReplayPanes=preload("res://studio/replay_panes.gd")
+const BackgroundRelease=preload("res://presentation/background_release.gd")
 const ConditionCoverage=preload("res://presentation/condition_coverage.gd")
 var world: Node3D
 var viewport: SubViewport
@@ -705,16 +706,21 @@ static func _restore_selection(source:Dictionary,target:float,token:Dictionary)-
     var result={"primary":restored}
     return result
 
+## A retired preview, its tracks and a replaced recording index keep their
+## ordinary teardown; their data is dropped on a worker, not in a frame.
+func _retire(node:Node,data:Array=[])->void:
+    BackgroundRelease.release_after_exit(node,data);node.queue_free()
+
 func _discard_spare()->void:
-    if spare_viewport!=null:spare_viewport.queue_free()
+    if spare_viewport!=null:_retire(spare_viewport,[spare_index])
     spare_viewport=null;spare_world=null;spare_index={};frozen_spare_viewports=[]
 
 func _discard_candidate()->void:
     if world!=null:world.native_startup_background=true
-    if candidate_tracks!=null:candidate_tracks.queue_free();candidate_tracks=null
+    if candidate_tracks!=null:_retire(candidate_tracks);candidate_tracks=null
     candidate_preview_errors=[]
     frozen_candidate_viewports=[]
-    if candidate_viewport!=null:candidate_viewport.queue_free()
+    if candidate_viewport!=null:_retire(candidate_viewport,[candidate_index])
     candidate_viewport=null;candidate_world=null;candidate_index={};installing=false;tracks.thumbnails.suspended=false
 
 func _reload_authoring()->void:
@@ -809,6 +815,7 @@ func _publish_candidate()->void:
     if transport_measurements.size()>32:transport_measurements.pop_front()
     var previous=viewport
     var previous_world=world
+    var previous_data:Array=[index,case_bundle]
     _cancel_replay_advance()
     var changed=not is_same(index,candidate_index)
     viewport=candidate_viewport;world=candidate_world
@@ -825,7 +832,7 @@ func _publish_candidate()->void:
     previous.audio_listener_enable_3d=false;previous_world.component_renderer.audio.set_enabled(false)
     viewport.audio_listener_enable_3d=true
     preview.texture=viewport.get_texture()
-    if changed:previous.queue_free();_discard_spare()
+    if changed:_retire(previous);_discard_spare()
     else:
         _discard_spare()
         spare_viewport=previous;spare_world=previous_world;spare_index=index
@@ -842,7 +849,7 @@ func _publish_candidate()->void:
     if changed:
         var previous_tracks=tracks
         tracks=candidate_tracks;candidate_tracks=null
-        previous_tracks.hide();timeline_split.move_child(tracks,0);tracks.show();previous_tracks.queue_free()
+        previous_tracks.hide();timeline_split.move_child(tracks,0);tracks.show();_retire(previous_tracks,previous_data)
         selected_row={};loop_start=0;loop_end=index.get("presentation_end_ms",index.duration_ms)
         for row in index.rows:
             if row.id==pending_selected_id:selected_row=row;tracks.reveal(row.id);break
@@ -1280,3 +1287,4 @@ func _exit_tree() -> void:
     Recording.cancel(loader_token);Recording.cancel(seeker_token)
     if loader!=null:loader.wait_to_finish()
     if seeker!=null:seeker.wait_to_finish()
+    BackgroundRelease.join()
