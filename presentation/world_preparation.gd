@@ -35,6 +35,8 @@ var objects_complete:Dictionary={}
 var object_target_count:int=-1
 var ground_target_count:int=-1
 var construction_turn:int=0
+var actor_blocked_frame:int=-1
+var object_blocked_frame:int=-1
 var object_work_counts:Dictionary={"attempts":0,"visited":0,"completed_skips":0,"source_waits":0,"retained":0,"constructed":0,"primed":0}
 var ground_complete:Dictionary={}
 var environment_task:int=-1
@@ -912,6 +914,9 @@ func _prepare_actor(deadline:int=9223372036854775807)->bool:
     # Native entries remain in canonical layer order. A missing source defers
     # that entry's binding, not the graph/layers of another ready actor.
     if actor_cursor==actor_ids.size():return false
+    # A pass that found every actor waiting (worker result or texture) is not
+    # repeated in the same frame: those inputs arrive between frames.
+    if actor_blocked_frame==Engine.get_process_frames():return false
     var checked:int=0
     while checked<actor_ids.size() and Time.get_ticks_usec()<deadline:
         var id:String=actor_ids[actor_scan_cursor]
@@ -922,6 +927,7 @@ func _prepare_actor(deadline:int=9223372036854775807)->bool:
         var progress:bool=_prepare_actor_step(actor,deadline)
         phase_usec.actors=phase_usec.get("actors",0)+Time.get_ticks_usec()-began
         if progress:return true
+    if checked>=actor_ids.size():actor_blocked_frame=Engine.get_process_frames()
     return false
 
 func _prepare_actor_resources()->void:
@@ -1078,6 +1084,7 @@ func _prepare_object(deadline:int)->bool:
     return progress
 
 func _prepare_object_step(deadline:int,measured:bool)->bool:
+    if object_blocked_frame==Engine.get_process_frames():return false
     var checked:int=0
     while checked<wanted_ids.size() and Time.get_ticks_usec()<deadline:
         var id:String=wanted_ids[object_cursor]
@@ -1151,6 +1158,8 @@ func _prepare_object_step(deadline:int,measured:bool)->bool:
         if measured:object_work_counts.constructed+=1
         phase_usec.objects=phase_usec.get("objects",0)+Time.get_ticks_usec()-began
         return true
+    # Every remaining object waits for the resource worker or a source.
+    if checked>=wanted_ids.size():object_blocked_frame=Engine.get_process_frames()
     return false
 
 func _prepare_ground(deadline:int)->bool:
