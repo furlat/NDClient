@@ -58,8 +58,17 @@ static func _ordered_rows(rows: Array, cursors: Dictionary, identity_field: Stri
     for index in order: result.append(rows[index])
     return result
 
-static func apply_world_update(target: Dictionary, update: Dictionary) -> Dictionary:
-    for row in update.tiles: target.tiles[Audience.point_key(row.position)] = row.duplicate(true)
+static func apply_world_update(target: Dictionary, update: Dictionary, disclosed: Dictionary = {}) -> Dictionary:
+    # Each row is keyed and detached once. The fold's captures and the
+    # compiler's staged supports reuse this record: first copy per key, in
+    # wire order, and the keys of the field changes below.
+    var tiles: Dictionary = {}
+    for row in update.tiles:
+        var key: String = Audience.point_key(row.position)
+        var tile: Dictionary = row.duplicate(true)
+        target.tiles[key] = tile
+        if not tiles.has(key): tiles[key] = tile
+    var changes: Array = []
     # Each row is an after-value at this event, including explicit clears. Never
     # mutate a tile held by an earlier event or use a future discovery as its base.
     for row in update.get("tile_changes",[]):
@@ -68,9 +77,11 @@ static func apply_world_update(target: Dictionary, update: Dictionary) -> Dictio
         var tile: Dictionary = target.tiles[key].duplicate()
         tile.merge(row.changes.duplicate(true),true)
         target.tiles[key] = tile
+        changes.append(key)
     for identity in update.objects_removed: target.objects.erase(identity)
     for row in update.objects: target.objects[row.item.item_uuid] = row.duplicate(true)
     target.connectors = update.connectors.duplicate(true)
+    disclosed.tiles = tiles; disclosed.changes = changes
     return success(target)
 
 static func _observe(target: Dictionary, observation: Dictionary, retained:bool=false,cells:Dictionary={}) -> void:
@@ -177,7 +188,7 @@ static func _apply_player_fact_owned(target: Dictionary, fact: Dictionary, sourc
             var observed = Audience._observe_retained(target.perception, audience.value, fact, int(target.reducer_cursor if source_cursor == null else source_cursor), cells)
             if not observed.ok: return observed
             target.perception = observed.value
-            target.senses = Audience._view_after(target.perception, target.observer_uuid, target.senses, fact, cells,retained) if composed_senses else Audience._view_retained(target.perception, target.observer_uuid)
+            target.senses = Audience._view_after(target.perception, target.observer_uuid, target.senses, fact, cells,retained,observed.wire_cells) if composed_senses else Audience._view_retained(target.perception, target.observer_uuid)
             if fact.observer_position_changed and target.actors.has(fact.observer_uuid):
                 actor=_actor_for_write(target,fact.observer_uuid,retained)
                 actor.last_visual_position = fact.observer_position.duplicate()
@@ -299,9 +310,11 @@ static func _reduce_nodes_owned(result: Dictionary, nodes: Array, versions: Arra
         if profile != null: _profile_elapsed(profile, "actor_inputs", started)
         started = Time.get_ticks_usec() if profile != null else 0
         var update: Variant = world_updates.get(node.uuid)
+        var disclosed: Dictionary = {}
         if update != null:
-            var updated = apply_world_update(result, update)
+            var updated = apply_world_update(result, update, disclosed)
             if not updated.ok: return updated
+            if recorded != null: recorded.world[node.uuid] = disclosed
         if profile != null: _profile_elapsed(profile, "world", started)
         started = Time.get_ticks_usec() if profile != null else 0
         if not node.canceled and node.fact != null:
@@ -316,7 +329,7 @@ static func _reduce_nodes_owned(result: Dictionary, nodes: Array, versions: Arra
         started = Time.get_ticks_usec() if profile != null else 0
         if recorded != null:
             recorded.events.append({"event_uuid":node.uuid, "source_index":indexes[node.uuid],
-                "actor_inputs":inputs, "delta":Transitions.capture_delta(result,node,admitted,update,actor_snapshots,retained)})
+                "actor_inputs":inputs, "delta":Transitions.capture_delta(result,node,admitted,update,actor_snapshots,retained,disclosed)})
         if profile != null: _profile_elapsed(profile, "captures", started)
     while next < pending.size():
         var observation: Dictionary = pending[next]
@@ -410,7 +423,7 @@ static func _reduce_operation(target: Dictionary, update: Dictionary, record_eve
         if lineage.start_cursor != result.reducer_cursor:
             return failure("Operation occurrence sequence has a gap")
         var recorded: Variant = {"lineage_uuid":lineage.lineage_uuid, "start_cursor":lineage.start_cursor,
-            "end_cursor":lineage.end_cursor, "events":[], "trailing":Transitions.empty_delta()} if record_events else null
+            "end_cursor":lineage.end_cursor, "events":[], "trailing":Transitions.empty_delta(), "world":{}} if record_events else null
         var folded = _reduce_lineage_owned(result, lineage, recorded, profile, cells if retained else {},retained)
         if not folded.ok: return folded
         result = folded.value

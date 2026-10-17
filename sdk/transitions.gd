@@ -42,7 +42,7 @@ static func actor_inputs(target: Dictionary, node: Dictionary, snapshots:Diction
                 result[identity] = _captured_actor(target,identity,snapshots,retained)
     return result
 
-static func capture_delta(target: Dictionary, node: Dictionary, observations: Array, update: Variant, snapshots:Dictionary={},retained:bool=false) -> Dictionary:
+static func capture_delta(target: Dictionary, node: Dictionary, observations: Array, update: Variant, snapshots:Dictionary={},retained:bool=false,disclosed:Dictionary={}) -> Dictionary:
     var delta = empty_delta()
     var actors = {}
     for observation in observations: actors[observation.actor.uuid] = true
@@ -67,10 +67,13 @@ static func capture_delta(target: Dictionary, node: Dictionary, observations: Ar
         if observation.contact != null:
             delta.set.senses = target.senses if retained else snapshot_senses(target.senses)
     if update != null:
-        for tile in update.tiles: delta.tiles[Audience.point_key(tile.position)] = target.tiles[Audience.point_key(tile.position)]
-        for row in update.get("tile_changes",[]):
-            var key = Audience.point_key(row.position)
-            delta.tiles[key] = target.tiles[key]
+        # The fold already keyed this event's rows (Reducer.apply_world_update).
+        # Without field changes or repeated keys, those copies are the after-values.
+        if disclosed.changes.is_empty() and disclosed.tiles.size() == update.tiles.size():
+            delta.tiles = disclosed.tiles.duplicate()
+        else:
+            for key in disclosed.tiles: delta.tiles[key] = target.tiles[key]
+            for key in disclosed.changes: delta.tiles[key] = target.tiles[key]
         for object in update.objects: delta.objects[object.item.item_uuid] = target.objects[object.item.item_uuid]
         delta.objects_removed = update.objects_removed.duplicate()
         delta.set.connectors = target.connectors

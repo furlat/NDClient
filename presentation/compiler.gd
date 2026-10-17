@@ -662,7 +662,20 @@ static func compile_recorded(before: Dictionary, packet: Dictionary, cache: Dict
         for observation in lineage.observations:
             if not target.actors.has(observation.actor.uuid) and not group.staged_actors.has(observation.actor.uuid):
                 group.staged_actors[observation.actor.uuid] = observation.actor.duplicate(true)
-        for update in lineage.world_updates:
+        # The fold already keyed and detached each disclosed row once; staging
+        # shares that immutable copy (as event deltas do) instead of a second.
+        # The fold applies an event's last world row (by event identity).
+        var folded: Dictionary = recorded.get("world",{})
+        var applied: Dictionary = {}
+        for index in lineage.world_updates.size(): applied[lineage.world_updates[index].event_uuid] = index
+        for index in lineage.world_updates.size():
+            var update: Dictionary = lineage.world_updates[index]
+            if applied[update.event_uuid] == index and folded.has(update.event_uuid):
+                var disclosed: Dictionary = folded[update.event_uuid].tiles
+                for key in disclosed:
+                    if not target.tiles.has(key) and not group.staged_tiles.has(key): group.staged_tiles[key] = disclosed[key]
+                continue
+            # A world row no folded event applied (no recorded copy to share).
             for tile in update.tiles:
                 var key = Reducer.Audience.point_key(tile.position)
                 if not target.tiles.has(key) and not group.staged_tiles.has(key): group.staged_tiles[key] = tile.duplicate(true)
@@ -714,24 +727,37 @@ static func compile_recorded(before: Dictionary, packet: Dictionary, cache: Dict
         group.duration_ms = maxf(group.duration_ms,at)
         _reaction_casts(lineage,target,group,graph,cache)
         if profile_enabled:stage_started=_profile_phase(compile_phases,"schedule_delivery",stage_started)
-        for identity in group.staged_actors:
-            var admitted_at = group.duration_ms
+        # A staged row is disclosed at its first commit, actor admission or
+        # track endpoint. Fold those few clocks once per source, visiting each
+        # identity's candidates in the same order as a per-row scan would,
+        # instead of rescanning every commit/track (and formatting every
+        # endpoint) for every staged row.
+        var end: float = group.duration_ms
+        var actor_clocks: Dictionary = {}
+        for commit in group.commits:
+            for identity in commit.delta.actors:
+                if group.staged_actors.has(identity): actor_clocks[identity] = minf(actor_clocks.get(identity,end),commit.at_ms)
+        for track in group.actor_tracks:
+            var target_uuid: Variant = track.get("target_uuid")
+            for identity in [track.actor_uuid] if target_uuid == track.actor_uuid else [track.actor_uuid,target_uuid]:
+                if group.staged_actors.has(identity): actor_clocks[identity] = minf(actor_clocks.get(identity,end),track.start_ms)
+        for identity in group.staged_actors: group.staged_at_ms[identity] = actor_clocks.get(identity,end)
+        var tile_clocks: Dictionary = {}
+        if not group.staged_tiles.is_empty():
             for commit in group.commits:
-                if commit.delta.actors.has(identity): admitted_at = minf(admitted_at,commit.at_ms)
-            for track in group.actor_tracks:
-                if track.actor_uuid == identity or track.get("target_uuid") == identity: admitted_at = minf(admitted_at,track.start_ms)
-            group.staged_at_ms[identity] = admitted_at
-        for key in group.staged_tiles:
-            var visible_at = group.duration_ms
-            for commit in group.commits:
-                if commit.delta.tiles.has(key): visible_at = minf(visible_at,commit.at_ms)
+                for key in commit.delta.tiles:
+                    if group.staged_tiles.has(key): tile_clocks[key] = minf(tile_clocks.get(key,end),commit.at_ms)
             for identity in group.staged_actors:
                 var point: Variant = group.staged_actors[identity].last_visual_position
-                if point != null and Reducer.Audience.point_key(point) == key: visible_at = minf(visible_at,group.staged_at_ms[identity])
+                if point == null: continue
+                var key: String = Reducer.Audience.point_key(point)
+                if group.staged_tiles.has(key): tile_clocks[key] = minf(tile_clocks.get(key,end),group.staged_at_ms[identity])
             for track in group.actor_tracks:
                 for field in ["from_position","to_position","target_position"]:
-                    if track.get(field) != null and Reducer.Audience.point_key(track[field]) == key: visible_at = minf(visible_at,track.start_ms)
-            group.staged_tile_at_ms[key] = visible_at
+                    if track.get(field) == null: continue
+                    var key: String = Reducer.Audience.point_key(track[field])
+                    if group.staged_tiles.has(key): tile_clocks[key] = minf(tile_clocks.get(key,end),track.start_ms)
+        for key in group.staged_tiles: group.staged_tile_at_ms[key] = tile_clocks.get(key,end)
         group.commits.append({"at_ms":group.duration_ms,"source_index":lineage.end_cursor,"delta":trailing})
         if profile_enabled:stage_started=_profile_phase(compile_phases,"disclosure_times",stage_started)
         var components:Dictionary=Components.compile(group,lineage,graph,cache)
