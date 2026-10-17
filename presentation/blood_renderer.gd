@@ -35,6 +35,9 @@ var last_sample_usec=0
 var last_allocations=0
 var peak_sample_usec=0
 var visible_fields:Dictionary={}
+# Screen visibility per deposit tile for one camera/viewport: key -> [tile, on_screen].
+var _tile_view:Array=[]
+var _tile_on_screen:Dictionary={}
 var ready=true
 var deposit_create_usec:int=0
 var light_page_create_usec:int=0
@@ -398,9 +401,15 @@ func sample(world:Node,samples:Array,changes:Dictionary={})->void:
     _phase("active",stage_started);stage_started=Time.get_ticks_usec()
     var visible:Dictionary=world.scenery_visible_cells
     visible_fields={}
+    # A tile's screen visibility changes only with the camera, the viewport or
+    # the tile's own after-value; recompute it only then.
+    var view:Array=[world.camera.global_transform,world.camera.size,world.get_viewport().get_visible_rect()]
+    if view!=_tile_view:_tile_view=view;_tile_on_screen={}
     for key in tiles:
         var tile:Dictionary=tiles[key];var value=Blood.residue(tile)
-        var on_screen=_tile_visible(world,tile)
+        var known:Array=_tile_on_screen.get(key,[])
+        var on_screen:bool=known[1] if not known.is_empty() and is_same(known[0],tile) else _tile_visible(world,tile)
+        if known.is_empty() or not is_same(known[0],tile):_tile_on_screen[key]=[tile,on_screen]
         if not on_screen and not deposits.has(key):continue
         if not deposits.has(key):
             if pending_deposits.has(key):
@@ -425,10 +434,14 @@ func sample(world:Node,samples:Array,changes:Dictionary={})->void:
             _phase("upload",upload_started)
         if handle.get("coverage",false) and handle.entry.node.visible:visible_fields[key]=true
         var entry:Dictionary=handle.entry
-        entry.placement.base_height_steps=tile.get("elevation_steps",0);entry.node.position=Placement.contact(entry.placement)
-        entry.material.set_shader_parameter("visibility",1. if visible.has(key) else 0.)
-        entry.material.set_shader_parameter("light_cap",1. if world.light_cap_enabled else 0.)
-        entry.material.set_shader_parameter("normals_visible",world.normals_visible)
+        # This renderer alone writes its deposit nodes and materials.
+        var written:Array=[tile.get("elevation_steps",0),1. if visible.has(key) else 0.,1. if world.light_cap_enabled else 0.,world.normals_visible]
+        if handle.get("written",[])!=written:
+            entry.placement.base_height_steps=written[0];entry.node.position=Placement.contact(entry.placement)
+            entry.material.set_shader_parameter("visibility",written[1])
+            entry.material.set_shader_parameter("light_cap",written[2])
+            entry.material.set_shader_parameter("normals_visible",written[3])
+            handle.written=written
     _phase("fields",stage_started);stage_started=Time.get_ticks_usec()
     for key in deposits.keys():
         if not tiles.has(key):deposits[key].entry.node.visible=false
@@ -440,7 +453,8 @@ func sample(world:Node,samples:Array,changes:Dictionary={})->void:
         page.rectangle.size=Vector2(page.view.size)
         page.material.set_shader_parameter("receiving_normal",normal if name=="floor" else Vector3(0,0,1))
         page.view.render_target_update_mode=SubViewport.UPDATE_ALWAYS if not page.ready or (not visible_fields.is_empty() if name=="floor" else not flights.is_empty()) else SubViewport.UPDATE_DISABLED
-    for handle in deposits.values():handle.entry.material.set_shader_parameter("receiving_normal",normal)
+    for handle in deposits.values():
+        if handle.get("written_normal")!=normal:handle.entry.material.set_shader_parameter("receiving_normal",normal);handle.written_normal=normal
     _phase("retire_pages",stage_started)
     last_sample_usec=Time.get_ticks_usec()-began
     peak_sample_usec=maxi(peak_sample_usec,last_sample_usec)
@@ -544,5 +558,5 @@ func close(world:Node)->void:
     for handle in pending_deposits.values():_free_deposit(world,handle)
     pending_deposits.clear()
     for page in pages.values():world.source_lighting.detach_page(page.view);page.view.queue_free()
-    pages={};tiles_owner={};tiles={};source={};tiles_revision=-1
+    pages={};tiles_owner={};tiles={};source={};tiles_revision=-1;_tile_view=[];_tile_on_screen={}
     resources_ready=false;resource_frame=-1
