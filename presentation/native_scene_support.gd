@@ -184,9 +184,10 @@ func prepare_membership(static_entries:Array,visual_actors:Dictionary,budget:Dic
             if alpha!=null and float(alpha)<1.0:continue
             retained_actors[source.id]=true
             if actors.has(source.id):continue
-            if not budget.is_empty() and budget.used_usec>=budget.limit_usec:
-                result.ready=false;result.pending+=1;continue
+            # A new layer's receiver is one hidden mesh node; creating it is
+            # cheaper than any held frame, so it is never deferred.
             var started:int=Time.get_ticks_usec()
+            result.actors_created=int(result.get("actors_created",0))+1
             _actor(source.id).mesh=source.node.mesh
             if not budget.is_empty():budget.used_usec+=Time.get_ticks_usec()-started
     for pair in [[floors,retained_floors],[actors,retained_actors]]:

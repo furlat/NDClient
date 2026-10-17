@@ -9,6 +9,7 @@ const Support=preload("res://presentation/native_scene_support.gd")
 const Playback=preload("res://presentation/native_spell_playback.gd")
 const Sockets=preload("res://presentation/spell_placement.gd")
 const Components=preload("res://presentation/components.gd")
+const Baked=preload("res://presentation/baked_effect.gd")
 const FIRST_BIT=1
 const LAST_BIT=12
 const HISTORY_STEP=1.0/60.0
@@ -83,9 +84,14 @@ func prepare(compiled_groups:Array,cache:Dictionary,world:Node=null,prefetch_gro
             for component in group.get("components",[]):
                 if not accepts(component) or component.get("status")=="missing":continue
                 pair[1][component.id]=component
+    # A baked clip loads as one file on a worker; only native clips admit.
+    var baked_pending:int=0
     for id in wanted:
         optional.erase(id)
-        if not handles.has(id):clips.append(wanted[id].native_clip)
+        if handles.has(id):continue
+        var bundle:Variant=Baked.ready_for(wanted[id].native_clip)
+        if bundle==null:baked_pending+=1
+        elif not bundle is Resource:clips.append(wanted[id].native_clip)
     var optical:Dictionary=wanted
     if not optical_groups.is_empty():
         optical={}
@@ -100,6 +106,7 @@ func prepare(compiled_groups:Array,cache:Dictionary,world:Node=null,prefetch_gro
         result={"ready":false,"pending":clips.size(),"errors":[]}
     else:result=Factory.prepare(clips,_resource_cache)
     if not budget.is_empty():budget.used_usec+=Time.get_ticks_usec()-started
+    if baked_pending>0:result.ready=false;result.pending+=baked_pending
     if world!=null:FrameProfile.end_phase(world.profile,"native_prepare_resources",started)
     if world==null:
         if not budget.is_empty():budget.used_usec+=maxi(0,Time.get_ticks_usec()-admission_started-(budget.used_usec-charged_before))
@@ -139,11 +146,14 @@ func prepare(compiled_groups:Array,cache:Dictionary,world:Node=null,prefetch_gro
             if handles.has(id) or _prepare_failures.has(id):continue
             if not budget.is_empty() and budget.used_usec>=budget.limit_usec:break
             started=Time.get_ticks_usec()
-            var loading=Factory.prepare([optional[id].native_clip],_resource_cache)
-            if not budget.is_empty():budget.used_usec+=Time.get_ticks_usec()-started
-            FrameProfile.end_phase(world.profile,"native_prepare_resources",started)
-            if not loading.errors.is_empty():_prepare_failures[id]=str(loading.errors);continue
-            if not loading.ready:continue
+            var bundle:Variant=Baked.ready_for(optional[id].native_clip)
+            if bundle==null:continue
+            if not bundle is Resource:
+                var loading=Factory.prepare([optional[id].native_clip],_resource_cache)
+                if not budget.is_empty():budget.used_usec+=Time.get_ticks_usec()-started
+                FrameProfile.end_phase(world.profile,"native_prepare_resources",started)
+                if not loading.errors.is_empty():_prepare_failures[id]=str(loading.errors);continue
+                if not loading.ready:continue
             if not budget.is_empty() and budget.used_usec>=budget.limit_usec:break
             started=Time.get_ticks_usec()
             _construct(optional[id])
@@ -180,7 +190,9 @@ func prepare(compiled_groups:Array,cache:Dictionary,world:Node=null,prefetch_gro
 func _construct(component:Dictionary)->String:
     var clip:Dictionary=component.native_clip.duplicate(false)
     if component.native_cue.has("opacity_uniform"):clip.opacity_uniform=component.native_cue.opacity_uniform
-    var handle=Factory.make(_owner,clip,0)
+    var seed:int=Components.effect_seed(component)
+    var bundle:Variant=Baked.ready_for(clip,seed)
+    var handle=Baked.make(_owner,bundle,clip,0) if bundle is Resource else Factory.make(_owner,clip,0)
     # Factory already measures its constructor stages. Preserve that breakdown
     # in the live frame profile so an indivisible construction overrun is
     # attributable without adding another set of timers around its internals.
@@ -190,7 +202,6 @@ func _construct(component:Dictionary)->String:
         frame_phases[name]=frame_phases.get(name,0.0)+handle.construction_phases[phase]
     if not handle.error.is_empty():
         var error:String=handle.error;_prepare_failures[component.id]=error;Factory.close(handle);return error
-    var seed:int=Components.effect_seed(component)
     for index in handle.emitters.size():
         handle.emitters[index].use_fixed_seed=true;handle.emitters[index].seed=seed+index
     handle.component=component;handle.sample_time=0.0;handle.requested_time=-1.0;handle.drawn_time=-1.0
@@ -307,7 +318,7 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
         cue.merge({"from":points.from,"to":points.to,"ground":points.ground,"caster_ground":points.caster_ground},true)
         if not cue.get("bend",Vector2.ZERO) is Vector2:
             cue.bend=Vector2(cue.bend[0],cue.bend[1])
-        if age+0.000001<float(handle.sample_time):
+        if age+0.000001<float(handle.sample_time) and not handle.get("baked",false):
             # Normal replay seeks use a fresh presentation epoch. An explicit
             # backwards sample still clears its own particles/trails honestly.
             Factory.close(handle);handles.erase(id);preparation_revision+=1
@@ -322,7 +333,9 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
         # The bounded pass is only for a cold/seek history. Ordinary live
         # samples must follow the requested component clock at any frame rate.
         var expected_step:float=maxf(HISTORY_STEP,frame_seconds*maxf(1.0,float(world.playback_speed)))
-        if not handle.started and age>expected_step+0.000001:handle.warming=true
+        # A baked clip draws any age directly; only a simulation has history.
+        if handle.get("baked",false):handle.warming=false
+        elif not handle.started and age>expected_step+0.000001:handle.warming=true
         elif handle.started and not handle.warming and age-float(handle.requested_time)>expected_step*2.0+0.000001:handle.warming=true
         var sample_time:float=minf(age,float(handle.sample_time)+maxf(HISTORY_STEP,expected_step*2.0)) if handle.warming else age
         if component.get("persistent_owner",false) and float(handle.sample_time)>=float(component.lifecycle.get("enter_end_seconds",0)):
@@ -333,6 +346,8 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
         handle.root.global_transform=Playback.transform(cue,sample_time,points.hand,1.0)
         Factory.view(handle,world.camera)
         var native_advance:float=frame_seconds if frame_seconds>0 else _owner.get_process_delta_time() if handle.warming else 0.0
+        if handle.get("baked",false) and not handle.has("emission_stop_set"):
+            Baked.stop_emission(handle,_emission_stop(cue));handle.emission_stop_set=true
         Factory.sample(handle,Playback.source_time(cue,sample_time),native_advance,sample_time-float(cue.launch))
         if cue.has("origin_path"):
             var anchor=handle.root.get_node_or_null(cue.origin_path)
@@ -375,6 +390,16 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
     _image_requirements(world)
     FrameProfile.end_phase(world.profile,"native_sample_images",sample_phase)
     FrameProfile.end_phase(world.profile,"native_spell_sample",sample_started)
+
+## Source time after which no new particle life starts (Playback.controls
+## stops a simulation's emitters at these cue times).
+static func _emission_stop(cue:Dictionary)->float:
+    var stop:float=INF
+    if cue.role=="flight" and cue.get("stop_emission_at_contact",false):
+        stop=minf(stop,float(cue.contact) if cue.has("lifecycle") else Playback.source_time(cue,float(cue.contact)))
+    if cue.has("emission_stop"):
+        stop=minf(stop,float(cue.emission_stop) if cue.has("lifecycle") else Playback.source_time(cue,float(cue.emission_stop)))
+    return stop
 
 static func submitted_geometry(handle:Dictionary,frustum:Array[Plane],layer_mask:int)->bool:
     # Conservative submission evidence, matching ordinary component bounds:

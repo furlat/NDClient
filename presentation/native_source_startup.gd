@@ -4,6 +4,7 @@ extends RefCounted
 const Factory=preload("res://presentation/native_factory_source.gd")
 const Authoring=preload("res://presentation/native_spell_authoring.gd")
 const Profile=preload("res://frame_profile.gd")
+const Baked=preload("res://presentation/baked_effect.gd")
 const SOURCE_LAYER=1<<19
 const SETTLE_FRAMES=4
 static var _state:Dictionary={}
@@ -152,6 +153,9 @@ static func _step(world:Node3D,cache:Dictionary,request:Dictionary,budget:Dictio
     for item in request.plan:
         if not _state.known.has(item.key):
             _state.known[item.key]=true;_state.plan.append(item);_state.ready=false
+            # Every baked file in the plan starts loading on a worker now,
+            # not when the warm-up reaches its turn.
+            Baked.request(item.clip)
     if _state.ready:return status(request)
     var required:Array=request.get("required",request.plan)
     var optional:bool=request.get("optional",true)
@@ -205,18 +209,23 @@ static func _step(world:Node3D,cache:Dictionary,request:Dictionary,budget:Dictio
             _state.memory_after=_memory();_state.pipeline_after=Profile.pipeline_compilations()
         return status(request)
     _frame=Engine.get_process_frames()
-    var loaded:Dictionary=Factory.prepare([item.clip],_state.resources)
-    var worker:Dictionary=Factory.Admission.material_profile
-    if not is_same(worker,_state.last_worker_profile):
-        _state.last_worker_profile=worker
-        if not worker.is_empty():_state.resource_worker_ms.append(worker.worker_ms)
-    if not loaded.errors.is_empty():
-        _state.failures[item.key]="; ".join(loaded.errors)
-        return status(request)
-    if not loaded.ready:return status(request)
+    # A baked clip is one file loaded on a worker; its warm draw still
+    # compiles the same programs ahead of play. Native clips admit sources.
+    var bundle:Variant=Baked.ready_for(item.clip)
+    if bundle==null:return status(request)
+    if not bundle is Resource:
+        var loaded:Dictionary=Factory.prepare([item.clip],_state.resources)
+        var worker:Dictionary=Factory.Admission.material_profile
+        if not is_same(worker,_state.last_worker_profile):
+            _state.last_worker_profile=worker
+            if not worker.is_empty():_state.resource_worker_ms.append(worker.worker_ms)
+        if not loaded.errors.is_empty():
+            _state.failures[item.key]="; ".join(loaded.errors)
+            return status(request)
+        if not loaded.ready:return status(request)
     if not is_instance_valid(_state.owner):_state.owner=_owner(world)
     var construct_started:int=Time.get_ticks_usec()
-    var handle:Dictionary=Factory.make(_state.owner,item.clip.duplicate(true),SOURCE_LAYER)
+    var handle:Dictionary=Baked.make(_state.owner,bundle,item.clip.duplicate(true),SOURCE_LAYER) if bundle is Resource else Factory.make(_state.owner,item.clip.duplicate(true),SOURCE_LAYER)
     _state.construction_ms.append({"source":item.clip.id,"ms":(Time.get_ticks_usec()-construct_started)/1000.0,"phases":handle.get("construction_phases",{})})
     if not handle.error.is_empty():
         _state.failures[item.key]=handle.error;Factory.close(handle)

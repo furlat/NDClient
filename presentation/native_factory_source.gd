@@ -8,6 +8,7 @@ const DEFAULT_LAYER = 1 << 19
 const ParticleUnits=preload("res://presentation/native_particle_units.gd")
 const LightUnits=preload("res://presentation/native_light_units.gd")
 const Programs=preload("res://assets/native_effects/sandbox/projectiles/factory/core/native_source_resources.gd")
+const Baked=preload("res://presentation/baked_effect.gd")
 static var source_revision:int=0
 static var _prepared_packets:Dictionary={}
 
@@ -228,6 +229,9 @@ static func _materials(resource: Resource, seen: Dictionary, clocks: Array) -> v
             if child is Resource:_materials(child,seen,clocks)
 
 static func sample(handle: Dictionary, seconds: float, frame_seconds: float, motion_seconds:float=NAN) -> void:
+    if handle.get("baked",false):
+        Baked.sample(handle,seconds)
+        return
     # Duplicate display sampling must not cancel the GPU delta submitted for
     # this frame. The post-draw completion alone stops that native advance.
     var motion_age:float=maxf(0.0,seconds if is_nan(motion_seconds) else motion_seconds)
@@ -315,6 +319,7 @@ static func view(handle:Dictionary,camera:Camera3D)->void:
         mark.quaternion=Quaternion(Vector3.UP,direction)*Quaternion(Vector3.UP,before).inverse()*mark.quaternion
 
 static func close(handle: Dictionary) -> void:
+    if handle.get("baked",false):Baked.release(handle)
     if is_instance_valid(handle.get("root")): Native.release(handle)
 
 static func set_layer(handle:Dictionary,mask:int)->void:
