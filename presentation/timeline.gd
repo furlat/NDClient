@@ -15,6 +15,9 @@ var display_ms = 0.0
 # still publish source changes through a private world preparation keep these
 # cuts as world boundaries.
 var source_cut_boundaries := true
+var _actor_samples_group: Dictionary = {}
+var _actor_samples_at := NAN
+var _actor_samples: Dictionary = {}
 var media_target_ms = 0.0
 var group_start_ms = 0.0
 var commit_index = 0
@@ -659,7 +662,11 @@ func presentation_state() -> Dictionary:
     return result
 
 func actor_samples() -> Dictionary:
-    return Tracks.samples(current.get("actor_tracks",[]),display_ms-group_start_ms)
+    # Play and component sampling both read the same instant each frame.
+    if not is_same(_actor_samples_group,current) or _actor_samples_at!=display_ms-group_start_ms:
+        _actor_samples_group=current;_actor_samples_at=display_ms-group_start_ms
+        _actor_samples=Tracks.samples(current.get("actor_tracks",[]),_actor_samples_at)
+    return _actor_samples
 
 static func _actor_layers_at(candidates:Array,at_ms:float)->Array:
     var result:Array=[]
