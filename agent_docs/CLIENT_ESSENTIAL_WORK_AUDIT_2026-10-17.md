@@ -242,14 +242,25 @@ The corpus (~59k PNGs, 3.7 GiB) justifies streaming.
 
 `BUDGET_BYTES` and `encounter_cache_mib` are both **16 GiB**
 (`media_warmup.gd:13`, `project.godot:34`), so selection and pruning never
-bind. CPU `Image`s are kept for picking and atlas crops; a 1-bit alpha mask
-is enough for picking.
+bind in testing. That is a test setting, not a design.
+
+**User requirement (17 October):** the game must run on consumer GPUs with
+**under 4 GB of VRAM**. Today the Gallery uses **6.2 GB**. The eviction and
+budget logic is therefore needed, but it has never been exercised. CPU
+`Image`s are kept for picking and atlas crops; a 1-bit alpha mask is enough
+for picking.
 
 **Design.**
 - Keep worker decode from the external media root. The corpus lives outside
   the project (`source_data/media_root`), so Godot import is not practical.
-- A per-group path set, a `has_all` readiness check, and a simple LRU only if
-  memory requires it. About 400–600 lines.
+- A per-group path set and a `has_all` readiness check.
+- A real **VRAM budget** (the default fits a < 4 GB GPU, e.g. ≤ 2.5 GiB for
+  textures plus render targets) with LRU eviction of non-displayed sources.
+  It must be tested by running the routes with that budget, not 16 GiB.
+- First find out what fills 6.2 GB: textures and their geometry/normal/depth
+  companions, the light atlas (RGBA16F, ~21 Mpx), per-actor 2,048² shadow
+  atlases, and the blood, effect and screen-sized SubViewports. Several of
+  these disappear with L1, L4, L6 and L7.
 
 ### Draw order
 
@@ -310,7 +321,7 @@ feeds shadows, blood and effects.
 | L5 | **Actors.** Shared materials, per-layer instance uniforms, integer clock (no AnimationTree), clip change = texture swap when resident (no world cut) | Per-frame pose dictionaries, the SourceMaterial ledger, source-only world cuts | Actor captures; per-frame actor script cost ≈ L uniform writes |
 | L6 | **Blood.** Field atlas plus terrain-shader lookup; droplets in the vertex shader | Per-tile viewports, lit pages | Blood oracles (Pygame reference within .008) |
 | L7 | **Effects.** Legacy effects, hit flashes and outlines as main-pass shader effects. Spells in their own World3D with an on-change support pass. | 2–14 viewports per effect, per-hit viewports | Spell/effect captures |
-| L8 | **Media.** Worker decode as today, with path-set readiness | Residency/budget/role accounting (~2,000 lines) | Holds stay 0; memory reported |
+| L8 | **Media and VRAM budget.** Worker decode as today, path-set readiness, one LRU against a consumer-GPU budget | Role/family/selection accounting (~2,000 lines) replaced by a small budgeted LRU | Holds stay 0 **with a < 4 GB budget**; VRAM breakdown reported |
 
 **L3 notes: draw order is the highest-risk step (user caution, 17 October).**
 The game is 2.5D: pre-rendered sprites with depth relative to their own
@@ -338,7 +349,8 @@ easily put assets out of order and break the perspective.
   between them. Only the background floor stays instanced that way.
 
 **Steady target.** Idle-frame script ≤ 2 ms, and animating frames dominated
-by GPU work.
+by GPU work. Total VRAM under the consumer budget (< 4 GB GPU) on every
+route.
 
 **Reveal target.** The room appears at the door cue with no pause.
 
