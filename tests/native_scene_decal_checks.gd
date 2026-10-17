@@ -1,8 +1,11 @@
 extends SceneTree
 ## Native Decal projection on a painted floor, compared with a real PlaneMesh.
+## The painted floors are the lit environment and modular sprite shaders, white
+## under ambient 1 and no lights, with the light cap off and on.
 ## This tests receiver coordinates; it does not qualify normal/ORM decal lighting.
-const Output=preload("res://presentation/canvas_received.gdshader")
-const Capped=preload("res://presentation/canvas_capped_modular.gdshader")
+const EnvironmentSource=preload("res://environment.gdshader")
+const Modular=preload("res://modular.gdshader")
+const LightTable=preload("res://presentation/light_table.gd")
 var checks=0
 var failures:Array=[]
 var measurements:Array=[]
@@ -30,16 +33,18 @@ func world(kind:String)->Dictionary:
         material.shader=shader
     else:
         floor.mesh=QuadMesh.new();floor.mesh.size=Vector2(4,4)
-        material.shader=Capped if kind=="capped" else Output
-        material.set_shader_parameter("received",texture(Color.WHITE))
-        material.set_shader_parameter("atlas_region",Vector4(0,0,1,1))
+        material.shader=Modular if kind=="modular" else EnvironmentSource
         material.set_shader_parameter("source_quad_size",Vector2(4,4))
         material.set_shader_parameter("native_scene_enabled",true)
         material.set_shader_parameter("native_scene_plane",true)
-        if kind=="capped":
+        if kind=="modular":
             material.set_shader_parameter("sheet",texture(Color.WHITE))
             material.set_shader_parameter("frame_uv",Vector4(0,0,1,1))
-            material.set_shader_parameter("light_cap",1.0)
+        else:
+            material.set_shader_parameter("colour_texture",texture(Color.WHITE))
+            material.set_shader_parameter("colour_rect",Vector4(0,0,1,1))
+            material.set_shader_parameter("colour_size",Vector2(1,1))
+            material.set_shader_parameter("has_geometry",false)
     floor.material_override=material
     var decal=Decal.new();decal.size=Vector3(.9,2,.9);decal.cull_mask=1
     var image=Image.create(32,32,false,Image.FORMAT_RGBA8);image.fill(Color(0,0,0,0))
@@ -79,28 +84,37 @@ func compare(actual:Image,expected:Image,label:String,allowed_coverage:int=-1)->
     if allowed_coverage>=0:
         check(mask_changed<=allowed_coverage,label+": footprint differs no more than the same-case native PlaneMesh control")
     return measurements.back()
+# The receiving globals as play.gd writes them: white ambient, no lights.
+func publish(cap:float)->void:
+    var table=LightTable.new();table.publish([],func(_texture):return null)
+    RenderingServer.global_shader_parameter_set(&"light_ambient",1.0)
+    RenderingServer.global_shader_parameter_set(&"light_cap",cap)
+    RenderingServer.global_shader_parameter_set(&"light_normals",false)
 func run()->void:
     DirAccess.make_dir_recursive_absolute("res://.captures/native-scene-decal")
-    var reference=world("reference");var control=world("reference_control");var painted=world("painted");var capped=world("capped")
-    for quarter in 4:
-        var rotation=Basis(Vector3.UP,quarter*PI*.5)
-        for state in [reference,control,painted,capped]:
-            state.camera.position=rotation*Vector3(5,5,5);state.camera.look_at(Vector3.ZERO)
-            if not state.kind.begins_with("reference"):state.floor.basis=state.camera.basis
-        for x in [-.7,0.0,.7]:
-            for state in [reference,control,painted,capped]:state.decal.position=Vector3(x,.1,.2)
-            await draw()
-            var expected:Image=reference.view.get_texture().get_image()
-            var native_control=compare(control.view.get_texture().get_image(),expected,"reference_control quarter%d x%.1f"%[quarter,x])
-            for state in [painted,capped]:
-                var actual:Image=state.view.get_texture().get_image()
-                compare(actual,expected,"%s quarter%d x%.1f"%[state.kind,quarter,x],native_control.coverage_differences)
-                if quarter==0 and x==0:
-                    actual.save_png("res://.captures/native-scene-decal/"+state.kind+".png")
-            if quarter==0 and x==0:expected.save_png("res://.captures/native-scene-decal/reference.png")
+    var reference=world("reference");var control=world("reference_control");var painted=world("environment");var modular=world("modular")
+    for cap in [0.0,1.0]:
+        publish(cap)
+        var mode:String="cap" if cap>0.0 else "ldr"
+        for quarter in 4:
+            var rotation=Basis(Vector3.UP,quarter*PI*.5)
+            for state in [reference,control,painted,modular]:
+                state.camera.position=rotation*Vector3(5,5,5);state.camera.look_at(Vector3.ZERO)
+                if not state.kind.begins_with("reference"):state.floor.basis=state.camera.basis
+            for x in [-.7,0.0,.7]:
+                for state in [reference,control,painted,modular]:state.decal.position=Vector3(x,.1,.2)
+                await draw()
+                var expected:Image=reference.view.get_texture().get_image()
+                var native_control=compare(control.view.get_texture().get_image(),expected,"reference_control %s quarter%d x%.1f"%[mode,quarter,x])
+                for state in [painted,modular]:
+                    var actual:Image=state.view.get_texture().get_image()
+                    compare(actual,expected,"%s %s quarter%d x%.1f"%[state.kind,mode,quarter,x],native_control.coverage_differences)
+                    if quarter==0 and x==0:
+                        actual.save_png("res://.captures/native-scene-decal/"+state.kind+"-"+mode+".png")
+                if quarter==0 and x==0:expected.save_png("res://.captures/native-scene-decal/reference.png")
     # No receiver flag is required by existing scenes. With no Decal, enabling
     # or disabling coordinates cannot change colour, alpha or lighting output.
-    for state in [reference,control,painted,capped]:state.decal.visible=false
+    for state in [reference,control,painted,modular]:state.decal.visible=false
     await draw()
     var enabled:Image=painted.view.get_texture().get_image()
     painted.material.set_shader_parameter("native_scene_enabled",false)
@@ -110,7 +124,7 @@ func run()->void:
     await process_frame
     var report={"checks":checks,"failures":failures,"samples":measurements,
         "renderer":RenderingServer.get_current_rendering_method(),
-        "scope":"Native moving albedo Decal on painted versus real flat floor; four quarters, capped and uncapped shared output. Exact stable colour/alpha; footprint bounded by the same-case native PlaneMesh extent control; filtered-edge RGB differences recorded. No whole-image byte parity or normal/ORM parity claim."}
+        "scope":"Native moving albedo Decal on lit environment/modular painted floors versus a real flat floor; four quarters, light cap off and on. Exact stable colour/alpha; footprint bounded by the same-case native PlaneMesh extent control; filtered-edge RGB differences recorded. No whole-image byte parity or normal/ORM parity claim."}
     FileAccess.open("res://generated/native_scene_decal_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("NATIVE_SCENE_DECAL ",JSON.stringify({"checks":checks,"failures":failures}))
     quit(0 if failures.is_empty() else 1)

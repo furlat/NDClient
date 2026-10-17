@@ -1,14 +1,30 @@
 extends SceneTree
-## Finite native receiving-plane proof; server categories are never inferred here.
+## Finite native receiving-plane proof through the lit modular sprite and the
+## light table; server categories are never inferred here. The native Canvas
+## page with the same PointLight2D nodes measures the uncapped irradiance.
 const Lighting=preload("res://presentation/lighting_2d.gd")
+const LightTable=preload("res://presentation/light_table.gd")
 const Recording=preload("res://studio/recording.gd")
 const Placement=preload("res://placement.gd")
-const Capped=preload("res://presentation/canvas_capped_modular.gdshader")
-const Passthrough=preload("res://presentation/canvas_received.gdshader")
+const Modular=preload("res://modular.gdshader")
+const AMBIENT=.18
 const DIRECTORY="res://.runtime/studio-cases/hide-light-seed3/blue"
 var checks=0
 var failures:Array=[]
 var samples:Array=[]
+var light_table=LightTable.new()
+var cookie_images:Dictionary={}
+func cookie_image(texture:Texture2D)->Image:
+    if not cookie_images.has(texture.get_rid()):
+        var image:Image=texture.get_image().duplicate();image.convert(Image.FORMAT_RGBA8);cookie_images[texture.get_rid()]=image
+    return cookie_images[texture.get_rid()]
+# The receiving globals as play.gd _publish_receiving writes them.
+func publish(sources:Array,cap:float)->void:
+    light_table.publish(sources,cookie_image)
+    var ambient:=Color(AMBIENT,AMBIENT,AMBIENT)
+    RenderingServer.global_shader_parameter_set(&"light_ambient",ambient.linear_to_srgb().srgb_to_linear().r if cap>0.0 else AMBIENT)
+    RenderingServer.global_shader_parameter_set(&"light_cap",cap)
+    RenderingServer.global_shader_parameter_set(&"light_normals",false)
 func check(ok:bool,label:String)->void:
     checks+=1
     if not ok:failures.append(label);print("LIGHT_RANGE_RENDER_FAIL ",label)
@@ -40,9 +56,10 @@ func run()->void:
     var output=SubViewport.new();output.size=canvas.size;output.own_world_3d=true;output.render_target_update_mode=SubViewport.UPDATE_ALWAYS;root.add_child(output)
     var camera=Camera3D.new();camera.projection=Camera3D.PROJECTION_ORTHOGONAL;camera.size=2;camera.position=Vector3(0,0,3);output.add_child(camera)
     var image=Image.create(1,1,false,Image.FORMAT_RGBA8);image.fill(Color.WHITE)
-    var material=ShaderMaterial.new();material.shader=Capped
+    # A flat white lit modular receiver filling the output; one texel per pixel.
+    var material=ShaderMaterial.new();material.shader=Modular
     material.set_shader_parameter("sheet",ImageTexture.create_from_image(image));material.set_shader_parameter("frame_uv",Vector4(0,0,1,1))
-    material.set_shader_parameter("received",canvas.get_texture());material.set_shader_parameter("atlas_region",Vector4(0,0,1,1));material.set_shader_parameter("light_cap",1.0)
+    material.set_shader_parameter("material_cell_size",Vector2(canvas.size));material.set_shader_parameter("source_quad_size",Vector2(2,2))
     var quad=MeshInstance3D.new();quad.mesh=QuadMesh.new();quad.mesh.size=Vector2(2,2);quad.material_override=material;output.add_child(quad)
     var projection=SubViewport.new();projection.size=canvas.size;root.add_child(projection)
     var source_camera=Camera3D.new();source_camera.projection=Camera3D.PROJECTION_ORTHOGONAL;projection.add_child(source_camera)
@@ -66,9 +83,9 @@ func run()->void:
                 # its normal-light vector still uses the actual optical origin.
                 var exposure: Dictionary=lighting.canvas_sources()[0]
                 var pixel=Vector2i((exposure.cookie_position+Vector2(ratio*exposure.span.x*.5,0)).round())
-                material.shader=Capped;material.set_shader_parameter("light_cap",1.0)
+                publish(lighting.canvas_sources(),1.0)
                 var capped=await capture(output);var c=capped.get_pixelv(pixel)
-                material.shader=Passthrough;material.set_shader_parameter("received_is_encoded_hdr",true)
+                publish(lighting.canvas_sources(),0.0)
                 var uncapped=await capture(output);var u=uncapped.get_pixelv(pixel)
                 var row={"quarter":q,"camera_size":size,"recorded_zone":declared[i].label,"sequence":declared[i].sequence,
                     "normalized_optical_radius":ratio,"pixel":str(pixel),"capped": [c.r8,c.g8,c.b8],"uncapped":[u.r8,u.g8,u.b8]}
@@ -82,20 +99,23 @@ func run()->void:
                     capped.save_png("res://.captures/light-ranges/"+declared[i].label+"-cap.png")
             check(intensities[0]<intensities[1] and intensities[1]<intensities[2],"Native dim/bright/very-bright profile samples remain distinct with cap, quarter%d size%d"%[q,size])
     # Actual multiple-source additivity remains native, and the existing cap still bounds it.
-    material.shader=Capped;material.set_shader_parameter("light_cap",1.0)
+    var sources:Array=lighting.canvas_sources()
+    publish(sources,1.0)
     var one=await capture(output)
     var duplicate=lighting.nodes.values()[0].duplicate();canvas.add_child(duplicate)
+    var second:Dictionary=sources[0].duplicate();second.id=str(second.id)+"-second"
+    publish(sources+[second],1.0)
     var two=await capture(output)
     var irradiance=await capture(canvas)
-    var peak=Vector2i(lighting.canvas_sources()[0].cookie_position.round())
+    var peak=Vector2i(sources[0].cookie_position.round())
     check(irradiance.get_pixelv(peak).r>1.0 and one.get_pixelv(peak).r8==255 and two.get_pixelv(peak).r8==255,
         "Measured over-cap native irradiance reaches the same capped source peak with one/two lights")
     check(two.get_data()!=one.get_data(),"Overlapping native lights still contribute; no claim of engine MAX composition")
-    duplicate.queue_free();await process_frame
+    duplicate.queue_free();publish(sources,1.0);await process_frame
     var restored=await capture(output)
     check(restored.get_data()==one.get_data(),"Removing second light restores original pixels")
     lighting.clear_pages()
     var report={"checks":checks,"failures":failures,"renderer":RenderingServer.get_current_rendering_method(),"samples":samples,
-        "scope":"Real observed DIM/BRIGHT/VERY_BRIGHT source ratios through native PointLight2D, a named flat optical receiver and production spatial cap/output. All four quarters/two zooms. Ground projection, occlusion and backend MAX are not claimed by this optical-plane fixture."}
+        "scope":"Real observed DIM/BRIGHT/VERY_BRIGHT source ratios through the light table and a flat lit modular receiver with the production light cap; the native PointLight2D page measures irradiance. All four quarters/two zooms. Ground projection, occlusion and backend MAX are not claimed by this optical-plane fixture."}
     FileAccess.open("res://generated/light_range_render_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("LIGHT_RANGE_RENDER ",JSON.stringify({"checks":checks,"failures":failures}));quit(0 if failures.is_empty() else 1)

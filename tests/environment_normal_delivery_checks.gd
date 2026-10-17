@@ -1,7 +1,7 @@
 extends "res://tests/native_light_output_checks.gd"
-# Original source registration through Catalog, SpriteSources, native Canvas
-# receiving and the existing final3D output. The expected path comes directly
-# from the delivery, independently of the client's normalized manifest.
+# Original source registration through Catalog, SpriteSources and the production
+# lit environment sprite (light table receiving, spatial output). The expected
+# path comes directly from the delivery, independently of the normalized manifest.
 const DELIVERY="C:/Users/tommaso/Documents/assets/fantasy-unified-catalog/environment-normal-quality-2026-10-12"
 const CAPTURES="res://.captures/environment-normal-delivery"
 const EnvironmentMedia=preload("res://presentation/environment_media.gd")
@@ -67,12 +67,11 @@ func fixture(spec:Dictionary,quarter:int)->Dictionary:
     check(depth_changes==0 and unsupported_changes==0,label+" normal-only selection keeps exact depth and unsupported pixels")
     if spec.retained:check(normal_changes==0 and chosen.is_empty(),label+" explicitly retained source stays original")
     elif phase!=1:check(normal_changes>0,label+" selected view really contains changed receiving normals")
-    var material=ShaderMaterial.new();material.shader=EnvironmentReceiver
-    for uniform in entry.material.shader.get_shader_uniform_list():material.set_shader_parameter(uniform.name,entry.material.get_shader_parameter(uniform.name))
-    material.set_shader_parameter("world_to_canvas",Basis(probe.camera.basis.x,-probe.camera.basis.y,probe.camera.basis.z).transposed())
+    check(entry.material.shader==EnvironmentSource,label+" production entry uses the lit environment shader")
+    var material:ShaderMaterial=entry.material.duplicate()
     var rect:Array=selected.rect
     var colour:Image=probe.images[selected.path].get_region(Rect2i(rect[0],rect[1],rect[2],rect[3]))
-    var result={"id":label,"material":material,"colour":colour,"visible":1.0,
+    var result={"id":label,"material":material,"colour":colour,"visible":1.0,"basis":probe.camera.basis,"mirror":false,"family":"environment",
         "normal_changes":normal_changes,"expected_path":expected_path,"original_path":original.normal.region.path,
         "selected":not chosen.is_empty(),"retained":spec.retained}
     var asset_key:String="library/"+row.asset if row.kind=="library" else "bank/"+original.bank
@@ -93,29 +92,16 @@ func source_variant(value:Dictionary,path:String)->Dictionary:
 func native_case(value:Dictionary,zoom:float)->void:
     var expected=source_variant(value,value.expected_path)
     var original=source_variant(value,value.original_path)
-    var actual_atlas=receiving(value,1,false,56,zoom,.8)
-    var expected_atlas=receiving(expected,1,false,56,zoom,.8)
-    var original_atlas=receiving(original,1,false,56,zoom,.8)
-    var actual_output=spatial(value,actual_atlas)
-    var expected_output=spatial(expected,expected_atlas)
-    var original_output=spatial(original,original_atlas)
-    # Exercise final spatial nearest sampling at the same fractional display
-    # magnification as the receiving/light coordinates, with unclipped borders.
-    var cell:Vector2i=value.colour.get_size()
-    var target_size=Vector2i(ceili(cell.x*zoom)+16,ceili(cell.y*zoom)+16)
-    for output in [actual_output,expected_output,original_output]:
-        output.size=target_size
-        var camera:Camera3D=output.get_child(1)
-        camera.size=2.0*target_size.y/(cell.y*zoom)
-    # The two receiving variants differ only at the selected normal sampler.
-    # No native-light approximation or RGB tolerance is used for this path test.
-    var actual:Image=await capture(actual_output)
-    var reference:Image=await capture(expected_output)
-    var before:Image=await capture(original_output)
+    # The three lit variants differ only at the selected normal sampler. Same
+    # light and magnification; no RGB tolerance is used for this path test.
+    var lights:Array=output_lights(value,1,56,zoom,.8)
+    var actual:Image=await lit_receiving(value,lights,false,zoom)
+    var reference:Image=await lit_receiving(expected,lights,false,zoom)
+    var before:Image=await lit_receiving(original,lights,false,zoom)
     var difference=compare(actual,reference)
     var change=compare(actual,before)
     var id:String=value.id+"-zoom"+str(zoom)
-    check(difference.changed_pixels==0,id+" final3D equals explicit delivery-path native reference byteexact")
+    check(difference.changed_pixels==0,id+" lit sprite equals explicit delivery-path reference byteexact")
     check(change.alpha_mismatches==0,id+" receiving replacement preserves final original alpha")
     if value.retained:check(change.changed_pixels==0,id+" retained source final output stays byteexact")
     elif value.normal_changes>0:check(change.changed_pixels>0,id+" selected normals affect native lighting")
@@ -128,18 +114,12 @@ func native_case(value:Dictionary,zoom:float)->void:
         preview.blit_rect(left,Rect2i(0,0,128,128),Vector2i(quarter*256,preview_row*128))
         preview.blit_rect(right,Rect2i(0,0,128,128),Vector2i(quarter*256+128,preview_row*128))
     cases.append({"id":id,"explicit_path_reference":difference,"original_vs_selected":change})
-    for node in [actual_output,expected_output,original_output,actual_atlas,expected_atlas,original_atlas]:node.queue_free()
-    await process_frame
 
 func unlit_case(value:Dictionary)->void:
     var old=source_variant(value,value.original_path)
-    var selected=receiving(value,0,true)
-    var original=receiving(old,0,true)
-    var size:Vector2i=value.colour.get_size()
-    var a:Image=(await capture(selected)).get_region(Rect2i(Vector2i.ZERO,size))
-    var b:Image=(await capture(original)).get_region(Rect2i(Vector2i.ZERO,size))
+    var a:Image=await lit_receiving(value,[],true)
+    var b:Image=await lit_receiving(old,[],true)
     check(compare(a,b).changed_pixels==0,value.id+" no-light source RGBA remains byteexact")
-    selected.queue_free();original.queue_free();await process_frame
 
 func run()->void:
     root.unfocusable=true;root.position=Vector2i(-16000,-16000)
@@ -169,7 +149,7 @@ func run()->void:
     var report={"checks":checks,"failures":failures,"sources":source_rows,"cases":cases,
         "renderer":RenderingServer.get_current_rendering_method(),"driver":RenderingServer.get_current_rendering_driver_name(),
         "capture":CAPTURES+"/comparison.png","contact_sheet_rows":specs.map(func(spec):return spec.id),
-        "scope":"Production source/normal binding and final3D path versus independently selected delivery packet. Exact native RGBA; original registrations/depth/support/alpha/clocks unchanged. Source-derived, inferred and retained qualifications remain distinct. This does not certify physical inferred relief or introduce gameplay bindings."}
+        "scope":"Production source/normal binding and lit environment sprite path versus independently selected delivery packet. Exact native RGBA; original registrations/depth/support/alpha/clocks unchanged. Source-derived, inferred and retained qualifications remain distinct. This does not certify physical inferred relief or introduce gameplay bindings."}
     FileAccess.open("res://generated/environment_normal_delivery_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("ENVIRONMENT_NORMAL_DELIVERY_CHECKS ",checks,"/",failures.size())
     quit(0 if failures.is_empty() else 1)
