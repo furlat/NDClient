@@ -30,8 +30,8 @@ func inspect(world:Node,index:Dictionary,time:float,actor_id:String,expected_cou
         check(actor.row.equipment_layers.size()==expected_count,"Native outfit has authored layer count at "+str(time))
         var transient:Array=actor.row.equipment_layers.filter(func(layer):return not layer.get("effect",{}).is_empty())
         check(transient.size()==expected_count-7,"Only active authored cast layers are published at "+str(time))
-    check(not world.publication_failed and not world.native_light_atlas.output_admission_failed,
-        "Cast seek never publishes an unprepared actor or receiving material "+str(time))
+    check(not world.publication_failed and world.light_table.issues.is_empty(),
+        "Cast seek never publishes an unprepared actor or receiving light "+str(time))
     evidence.append({"display_ms":time,"layer_count":actor.get("row",{}).get("equipment_layers",[]).size(),
         "errors":world.presentation_errors.duplicate(),"ready":ready})
     return ready

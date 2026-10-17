@@ -3,7 +3,6 @@ extends SceneTree
 const Studio=preload("res://studio/studio.gd")
 const RangeProfile=preload("res://presentation/resources/light_range_profile.gd")
 const Calibrated=preload("res://authoring/presentation/light_ranges.tres")
-const NativeAtlas=preload("res://presentation/native_light_atlas.gd")
 const DIRECTORY="res://.captures/studio/light-calibration"
 var checks=0
 var failures:Array=[]
@@ -12,6 +11,28 @@ func _initialize()->void:run.call_deferred()
 func check(value:bool,label:String)->void:
     checks+=1
     if not value:failures.append(label);print("LIGHT_CALIBRATION_FAIL ",label)
+## Ambient as the lit sprites read it (play.gd _publish_receiving): under the
+## HDR cap the receiving canvas saw CanvasModulate after Godot's sRGB conversion.
+func ambient_global(world:Node,value:float)->float:
+    var hdr:bool=world.light_cap_enabled and not world.normals_visible
+    return Color(value,value,value).linear_to_srgb().srgb_to_linear().r if hdr else value
+## Read the light_ambient global back through a 1px HDR probe (the green
+## channel is a constant control for the probe's own colour transfer).
+var probe:SubViewport
+func published_ambient()->float:
+    if probe==null:
+        probe=SubViewport.new();probe.size=Vector2i(1,1);probe.disable_3d=true;probe.use_hdr_2d=true
+        probe.transparent_bg=true;probe.render_target_update_mode=SubViewport.UPDATE_ALWAYS
+        var rect=ColorRect.new();rect.size=Vector2(1,1)
+        var shader=Shader.new();shader.code="shader_type canvas_item;render_mode unshaded,blend_disabled;global uniform float light_ambient;void fragment(){COLOR=vec4(light_ambient,0.30,0.0,1.0);}"
+        var material=ShaderMaterial.new();material.shader=shader;rect.material=material
+        probe.add_child(rect);root.add_child(probe)
+    await process_frame;await RenderingServer.frame_post_draw
+    var colour:Color=probe.get_texture().get_image().get_pixel(0,0)
+    check(absf(colour.g-.30)<.001,"Ambient probe reads shader values without transfer")
+    return colour.r
+func near(a:float,b:float)->bool:
+    return absf(a-b)<.001
 func settle(studio:Control)->bool:
     var deadline=Time.get_ticks_msec()+120000
     while (studio.index.is_empty() or studio.loader!=null or studio.seeker!=null or studio.installing or studio.requested_seek>=0 or studio.world.rotation_pending()) and Time.get_ticks_msec()<deadline:await process_frame
@@ -31,10 +52,10 @@ func capture_pair(studio:Control,label:String,point:Vector2i)->void:
             profile.bright_edge=.25 if profile_name=="before" else Calibrated.bright_edge
             studio.world.source_lighting.range_profile=profile
             studio.world.source_lighting.sync(state)
-            var ambient_value=.18 if profile_name=="before" else NativeAtlas.AMBIENT_INTENSITY
-            var ambient_colour=Color(ambient_value,ambient_value,ambient_value,1.0)
-            studio.world.native_light_atlas.ambient.color=ambient_colour.linear_to_srgb() if studio.world.native_light_atlas._uses_hdr() else ambient_colour
-            # Native canvas/output and their texture consumers span draw frames.
+            var ambient_value=.18 if profile_name=="before" else Studio.Play.LIGHT_AMBIENT
+            # Same global play.gd publishes; it is republished only when cap/Normals change.
+            RenderingServer.global_shader_parameter_set(&"light_ambient",ambient_global(studio.world,ambient_value))
+            # Light table uploads and their texture consumers span draw frames.
             for _i in 4:await process_frame;await RenderingServer.frame_post_draw
             var picture=studio.viewport.get_texture().get_image()
             var name=label+"-"+profile_name+"-strength"+str(strength)
@@ -55,6 +76,7 @@ func capture_pair(studio:Control,label:String,point:Vector2i)->void:
                 "sample_rgb":[rgb.x,rgb.y,rgb.z],"path":path})
     studio.world.source_lighting.range_profile=original_profile
     studio.world.source_lighting.sync(state)
+    studio.world.receiving_globals=[];studio.world._publish_receiving()
 func run()->void:
     root.unfocusable=true;root.position=Vector2i(-16000,-16000);root.size=Vector2i(1600,900)
     DirAccess.make_dir_recursive_absolute(DIRECTORY)
@@ -63,14 +85,21 @@ func run()->void:
     check(studio.active_directory=="res://.runtime/studio-cases/jump-seed3-v2/amber/journal","Capture starts from the exact real Jump recording")
     if not failures.is_empty():await finish(studio);return
     studio.loop_enabled=false;studio.world.timeline.paused=true
-    var atlas=studio.world.native_light_atlas
-    var expected=Color(NativeAtlas.AMBIENT_INTENSITY,NativeAtlas.AMBIENT_INTENSITY,NativeAtlas.AMBIENT_INTENSITY,1.0)
-    check(atlas.ambient.color.is_equal_approx(expected.linear_to_srgb() if atlas._uses_hdr() else expected),"Creation uses the calibrated native ambient")
-    var cap=atlas.light_cap
-    atlas.set_light_cap(0.0);check(atlas.ambient.color.is_equal_approx(expected),"Uncapped native ambient preserves calibration")
-    atlas.set_light_cap(cap);check(atlas.ambient.color.is_equal_approx(expected.linear_to_srgb() if atlas._uses_hdr() else expected),"Restoring cap preserves native ambient calibration")
-    atlas.set_normals_visible(true);check(atlas.ambient.color.is_equal_approx(expected),"Normals toggle preserves native ambient calibration")
-    atlas.set_normals_visible(false);check(atlas.ambient.color.is_equal_approx(expected.linear_to_srgb() if atlas._uses_hdr() else expected),"Returning to colour preserves native ambient calibration")
+    # In-memory cap/Normals only; the saved settings are never written.
+    var world=studio.world
+    var expected:float=Studio.Play.LIGHT_AMBIENT
+    world._publish_receiving()
+    check(near(await published_ambient(),ambient_global(world,expected)),"Creation uses the calibrated native ambient")
+    var cap:bool=world.light_cap_enabled
+    world.light_cap_enabled=false;world._publish_receiving()
+    check(near(await published_ambient(),expected),"Uncapped native ambient preserves calibration")
+    world.light_cap_enabled=true;world._publish_receiving()
+    check(near(await published_ambient(),ambient_global(world,expected)),"Capped native ambient preserves calibration under HDR conversion")
+    world.light_cap_enabled=cap;world._publish_receiving()
+    world.set_normals_visible(true);world._publish_receiving()
+    check(near(await published_ambient(),expected),"Normals toggle preserves native ambient calibration")
+    world.set_normals_visible(false);world._publish_receiving()
+    check(near(await published_ambient(),ambient_global(world,expected)),"Returning to colour preserves native ambient calibration")
     studio.world.camera.size=6;studio.world.position_camera()
     studio._seek(1087.0)
     if await settle(studio):await capture_pair(studio,"jump",Vector2i(4,6))

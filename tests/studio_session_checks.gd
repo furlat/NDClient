@@ -23,7 +23,7 @@ func run() -> void:
     displayed.catalog_cache = Play.Catalog.source_snapshot(live.catalog_cache)
     root.add_child(displayed)
     check(displayed.session == null and displayed.hud == null and not displayed.timeline.retire_group.is_valid(),"External startup has no live admission, input HUD or Session retirement owner")
-    check(displayed.camera != null and displayed.native_light_atlas.viewport != null,"External startup still creates the production camera and receiving renderer")
+    check(displayed.camera != null and displayed.light_table != null,"External startup still creates the production camera and receiving light table")
     await process_frame
     await process_frame
     check(displayed.session == null and displayed.timeline.state.is_empty() and displayed.timeline.sequence == -1,"Shared frame processing cannot create a live Session or fabricate a received prefix")

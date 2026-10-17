@@ -132,7 +132,7 @@ func play_once(studio:Control,label:String)->void:
     if not studio.world.timeline.paused:
         var w=studio.world;var pw=w.pending_world
         print("PLAYBACK_STALL ",JSON.stringify({"display_ms":w.timeline.display_ms,"waiting_media":w.timeline.waiting_for_media,"busy":w.timeline.busy(),
-            "world_revision":w.world_revision,"pending":pw!=null,"phase":pw.phase if pw!=null else "","atlas_stage":pw.atlas_stage if pw!=null else "",
+            "world_revision":w.world_revision,"pending":pw!=null,"phase":pw.phase if pw!=null else "",
             "prepared":pw.prepared if pw!=null else false,"media_issue":w.media_issue,"errors":w.presentation_errors.slice(0,3),
             "media_gate":w.media_gate,"rotation":w.rotation_pending()}))
     check(studio.world.timeline.paused,label+": reaches stop")

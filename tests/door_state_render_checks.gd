@@ -41,8 +41,8 @@ func assert_door(scene: Node, id: String, label: String) -> void:
     check(leaf.material.get_shader_parameter("colour_texture")!=null
         and leaf.material.get_shader_parameter("normal_texture")!=null,
         label+": original debris colour and normal textures are prepared")
-    check(leaf.has("received_material") and leaf.node.material_override==leaf.received_material,
-        label+": native lighting output is bound to the prepared debris source")
+    check(leaf.node.material_override==leaf.material and leaf.material.shader==scene.ENVIRONMENT_SHADER,
+        label+": lit sprite output is the prepared debris source material")
     var item: Dictionary=scene.timeline.state.objects[id].item
     check(item.integrity=="destroyed" and item.destruction_outcome=="clear"
         and item.boundary_structure.blocked_channels.is_empty(),label+": display agrees with authoritative clear passage")
