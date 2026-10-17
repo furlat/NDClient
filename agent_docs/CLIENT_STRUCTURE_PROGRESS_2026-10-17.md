@@ -570,3 +570,35 @@ are Fireball frames (`actor_sample`/`component_sample` 4 ms,
 `actor_preparation` (fixture lacks `source_sample`).
 `native_spell_playback` keeps 2 failures: blood fields are never prepared for
 a restored residue tile.
+
+## Evening, 17 October: plan steps in progress
+
+User direction: do the plan's remaining big steps first; media size (L8) after, but
+it stays required (sheet loading also causes in-play hitches). Sprite-sheet
+effects without a native version are dropped (user, 17 October): they show
+nothing until an artist agent authors Factory VFX.
+
+Work split: the lead agent takes L5 and the L1 door path on
+`feature/opus-refactor`; agents work in their own worktrees and branches:
+L4 shadows (`feature/opus-L4`), L6 blood fields (`feature/opus-L6`), L7
+effects plus the legacy sprite-effect deletion (`feature/opus-L7`), L3 draw
+order and ground overlay (`feature/opus-L3`). Measurements from this window ran
+beside those agents and an unrelated CPU job (idle frame ~9 ms instead of
+~4.6 ms); only counts, phase splits and byte-identical captures are used.
+
+| Commit | Change | Evidence |
+|---|---|---|
+| `f77f83d` | Encounter preload: selected light profile only; inactive weapon-set gear at rest only; clips outside the rig skipped. | Gallery plan 2,555 files / 18.7 GiB -> 1,825 / 13.4 GiB. A run uploaded 1,758 sheets of 1920x1024 and displayed 356 before the change. |
+| `5ff3442` | Live clip changes bind in sampling (no source-only world cut). | Room preparation now starts ~20 ms after the door packet (was ~100 ms, behind the source cut). |
+| `4efffa8` | Actor track samples computed once per displayed instant. | Gate identical. |
+| `347dcc5` | Effect-layer changes (e.g. Fireball's Magic2) build in sampling; the group's later cut media load early. | No world waits at Fireball start. Exposes the projectile's native readiness ~70 ms into the group (handed to L7). |
+| `76bff4c` | Construction lanes stop re-polling when everything waits. | `actor_layer_blocked` (2.9 ms per door) gone. |
+| `3df7580` | Object lane adopts ready worker rows in one pass. | Fewer turns per row; operands identical (33,833 checks). |
+| `2d5fdf5`, `edb9379` | Preparation allowance rises before a world's cue (3 ms within 300 ms, 4 ms within 150 ms, 8 ms once held); fixes the optional-skip regression that also skipped the next world's preparation. | Door construction 21-22 -> 13-15 frames under the same load. |
+| `8ba8993` | Static derivation prepares environment row sources in parallel chunks. | `sources` worker phase 16 -> 12 ms on a ~35% slower machine. |
+
+Door, current window: room preparation starts at the packet; derivation
+65-90 ms on a worker; construction 13-15 frames; the room still misses the
+cue by ~50 ms under this load. The publication frame is dominated by shadow
+updates (L4), draw sorting (L3), timeline state apply (~1.3 ms) and wall
+visibility (~1.1 ms).
