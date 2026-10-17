@@ -68,8 +68,12 @@ static func capture_delta(target: Dictionary, node: Dictionary, observations: Ar
             delta.set.senses = target.senses if retained else snapshot_senses(target.senses)
     if update != null:
         # The fold already keyed this event's rows (Reducer.apply_world_update).
-        for key in disclosed.tiles: delta.tiles[key] = target.tiles[key]
-        for key in disclosed.changes: delta.tiles[key] = target.tiles[key]
+        # Without field changes or repeated keys, those copies are the after-values.
+        if disclosed.changes.is_empty() and disclosed.tiles.size() == update.tiles.size():
+            delta.tiles = disclosed.tiles.duplicate()
+        else:
+            for key in disclosed.tiles: delta.tiles[key] = target.tiles[key]
+            for key in disclosed.changes: delta.tiles[key] = target.tiles[key]
         for object in update.objects: delta.objects[object.item.item_uuid] = target.objects[object.item.item_uuid]
         delta.objects_removed = update.objects_removed.duplicate()
         delta.set.connectors = target.connectors

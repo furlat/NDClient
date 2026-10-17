@@ -49,6 +49,11 @@ static func _canonical_cells(cells: Dictionary) -> bool:
     var text: String = "\n".join(PackedStringArray(keys)) + "\n0,0"
     return text.count("\n") == keys.size() and RegEx.create_from_string(NONCANONICAL_CELL).search(text) == null
 
+# Two exact integers: point_key and its integer parse round-trip this point.
+static func _integer_cell(point: Variant) -> bool:
+    return point is Array and point.size() == 2 and typeof(point[0]) == TYPE_INT and typeof(point[1]) == TYPE_INT \
+        and absi(point[0]) < 1000000000000000 and absi(point[1]) < 1000000000000000
+
 static func compare(a: Variant, b: Variant) -> int:
     if a is Array and b is Array:
         for i in range(mini(a.size(), b.size())):
@@ -437,9 +442,7 @@ static func _view_retained(perception: Dictionary, observer: String) -> Variant:
         # An admitted integer point already is the cell its key names; only
         # another spelling round-trips through the key's integers.
         var point: Array = owner[1]
-        if point.size() == 2 and typeof(point[0]) == TYPE_INT and typeof(point[1]) == TYPE_INT \
-                and absi(point[0]) < 1000000000000000 and absi(point[1]) < 1000000000000000:
-            result.visible.append(point)
+        if _integer_cell(point): result.visible.append(point)
         else:
             var components = key.split(",")
             result.visible.append([int(components[0]), int(components[1])])
@@ -479,9 +482,11 @@ static func _view_after(perception: Dictionary, observer: String, previous: Vari
     var affected = {}
     for point in event.visible_cells_added + event.visible_cells_removed:
         affected[point_key(point)] = point
-    # The member fold already parsed (and validated) these wire keys.
+    # The member fold already validated these wire keys. A key that already
+    # holds an integer point (usually a cell disclosed above) names that cell.
     for field in ["effective_light_levels_changed", "hazardous_cells_changed"]:
         for key in event[field]:
+            if _integer_cell(affected.get(key)): continue
             var cell: Array = _wire_cell(key, wire_cells)
             affected[cell[0]] = cell[1]
     if not affected.is_empty():
