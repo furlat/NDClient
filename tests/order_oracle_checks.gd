@@ -12,8 +12,9 @@ extends SceneTree
 ## ground UI densely ranked, visible moving draws inserted with fractional
 ## ranks). Play's merged picking order must equal the key+id order too.
 ## A synthetic Play section adds exact actor/static key ties, statics between
-## one actor's layers, many draws in one gap and continuous walks with lift.
-## Usage: -- [--cases=all|a,b] [--gallery=<journal>|none] [--play-frames=N]
+## one actor's layers, many draws in one gap, continuous walks with lift and
+## hidden ground stains whose keys differ only in number type.
+## Usage: -- [--cases=all|none|a,b] [--gallery=<journal>|none] [--play-frames=N] [--explain]
 const Studio=preload("res://studio/studio.gd")
 const Order=preload("res://grid_order.gd")
 const Placement=preload("res://placement.gd")
@@ -146,7 +147,13 @@ func evaluate(world:Node,label:String,extra:Dictionary={},informational:bool=fal
             if level==previous_actual[0]:
                 min_actual=minf(min_actual,previous_actual[1]-depth)
                 if not previous_actual[1]>depth:
-                    if actual_ok:first_failure="%s (%s) before %s (%s): depth %.6f then %.6f"%[previous_actual[2],str(previous_actual[3]),entry.id,str(item.key),previous_actual[1],depth]
+                    if actual_ok and OS.get_cmdline_user_args().has("--explain"):
+                        var gap_index:int=entry.get("order_gap",-1)
+                        if world.get("order_gaps")!=null and gap_index>=0 and world.order_gaps[gap_index]!=null:
+                            for member in world.order_gaps[gap_index]:print("ORDER_ORACLE_GAP ",member.id," ",var_to_str(member.order_key)," rank=",member.get("draw_rank")," visible=",member.node.visible," kind=",member.placement.get("kind"))
+                        for value in [previous_actual[4],entry]:print("ORDER_ORACLE_EXPLAIN ",label," ",value.id," stored=",value.get("order_key")," gap_key=",value.get("order_gap_key")," stamp=",value.get("order_stamp")," keyed=",value.get("order_keyed")," row=",value.placement," node=",value.node.global_position," offset=",value.node.sorting_offset," rank=",value.get("draw_rank"))
+                    if actual_ok:first_failure="%s (%s, rank %s, gap %s) before %s (%s, rank %s, gap %s): depth %.6f then %.6f"%[previous_actual[2],str(previous_actual[3]),str(previous_actual[4].get("draw_rank")),str(previous_actual[4].get("order_gap")),
+                        entry.id,str(item.key),str(entry.get("draw_rank")),str(entry.get("order_gap")),previous_actual[1],depth]
                     actual_ok=false
             elif level<previous_actual[0]:actual_ok=false;first_failure="priority decreases at "+entry.id
             if level==previous_reference[0]:
@@ -156,7 +163,7 @@ func evaluate(world:Node,label:String,extra:Dictionary={},informational:bool=fal
         var rank:float=float(entry.get("draw_rank",NAN))
         if not is_nan(previous_rank) and not is_nan(rank):min_step=minf(min_step,(rank-previous_rank)*8.0)
         previous_rank=rank
-        previous_actual=[level,depth,entry.id,item.key];previous_reference=[level,reference_depth]
+        previous_actual=[level,depth,entry.id,item.key,entry];previous_reference=[level,reference_depth]
     var merged:Array=world.draw_order.filter(func(entry):return drawn(entry)).map(func(entry):return entry.id)
     var merged_ok:bool=merged==participants.map(func(item):return item.entry.id)
     if informational:
@@ -234,7 +241,10 @@ func journal(directory:String,play_frames:int)->void:
     var name:String=directory.trim_suffix("/journal").get_base_dir().get_file() if not directory.contains("player-runs") else "gallery"
     for at in instants():
         studio._seek(at)
-        if not await settle():check(false,"%s seeks to %.0f ms"%[name,at]);continue
+        if not await settle():
+            # A Studio seek that never settles (dying-seed3-v3 and dying-seed5
+            # end instants, on the previous code too) gives no order evidence.
+            _count("unsettled_seeks");print("ORDER_ORACLE_UNSETTLED %s %.0f ms "%[name,at],studio.status.text);continue
         for turn in 4:
             if turn>0:
                 studio.world.request_view(studio.world.quarter+1)
@@ -331,6 +341,35 @@ func synthetic()->void:
             evaluate(scene,"synthetic walk q%d step %d"%[quarter,step])
         for value in statics+actors:value.node.free()
         scene.static_entries=[];scene.actor_entries=[];scene.static_order_dirty=true;scene.draw_order_dirty=true
+    # Ground stains of equal keys on the background band, as blood residue
+    # leaves them: hidden ones still carry a float height (0.0), shown ones an
+    # int (0). Numerically equal keys of different types have no order in the
+    # comparator, so hidden draws must not take part in ranking. Shown later,
+    # they get the int height and rank by ID.
+    scene.ground_is_background=true
+    for quarter in 4:
+        scene.quarter=quarter;scene.camera.transform=Placement.camera_transform(Vector3.ZERO,quarter)
+        var statics:Array=[];var stains:Array=[]
+        for x in range(-3,4):
+            for z in range(-3,4):statics.append(make.call("floor:%d,%d"%[x,z],"terrain","terrain",2,[x,z],0))
+        # Listed in falling ID order with a hidden float stain between shown
+        # ones: neighbours compare equal, the shown pair does not.
+        for k in range(3,-4,-1):
+            var stain:Dictionary=make.call("stain:%d"%(k+3),"effect","covering",1,[k,-k],0)
+            stain.placement.layer=1
+            if posmod(k,2)==1:stain.placement.base_height_steps=0.0;stain.node.visible=false
+            else:stain.placement.base_height_steps=0
+            stains.append(stain)
+        scene.static_entries=statics;scene.actor_entries=stains
+        scene.static_order_dirty=true;scene.draw_order_dirty=true
+        scene._sort_draws()
+        evaluate(scene,"synthetic stains q%d"%quarter)
+        for stain in stains:
+            if not stain.node.visible:stain.placement.base_height_steps=0;stain.node.visible=true
+        scene._sort_draws()
+        evaluate(scene,"synthetic stains shown q%d"%quarter)
+        for value in statics+stains:value.node.free()
+        scene.static_entries=[];scene.actor_entries=[];scene.static_order_dirty=true;scene.draw_order_dirty=true
     scene.queue_free();await process_frame
 
 func run()->void:
@@ -341,6 +380,7 @@ func run()->void:
         names=[]
         for name in DirAccess.get_directories_at("res://.runtime/studio-cases"):
             if DirAccess.dir_exists_absolute("res://.runtime/studio-cases/%s/amber/journal"%name):names.append(name)
+    elif selected=="none":names=[]
     elif selected!="default":names=selected.split(",")
     var play_frames:=int(argument("--play-frames","600"))
     await synthetic()

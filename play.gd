@@ -136,6 +136,7 @@ var order_moving: Array = []
 var order_positions: PackedVector3Array = []
 var order_nodes: Array = []
 var order_keyed: PackedInt64Array = []
+var order_shown: PackedByteArray = []
 var order_ground: Array = []
 var order_ground_source: Variant = null
 var order_gaps: Array = []
@@ -2967,19 +2968,23 @@ func _order_moving(statics_changed: bool, forward: Vector3) -> void:
     if rekey or draw_order_dirty or actor_entries.size()!=order_moving.size():
         structure = true
         _order_members(rekey)
-    elif replace:
-        var previous: int = -1
-        for entry in order_moving:
-            _order_place(entry,previous)
-            previous = entry.order_gap
+    else:
+        if order_shown_changed:
+            structure = true
+            _order_shown()
+        if replace:
+            var previous: int = -1
+            for s in order_moving.size():
+                if order_shown[s]==0: continue
+                _order_place(order_moving[s],previous)
+                previous = order_moving[s].order_gap
     draw_order_dirty = false
+    order_shown_changed = false
     if not _order_poll(moved):
         # A participant joined or left without notice.
         structure = true
         _order_members(false)
         _order_poll(moved)
-    structure = structure or order_shown_changed
-    order_shown_changed = false
     for gap in order_dirty_gaps:
         var gap_members: Array = order_gaps[gap]
         var in_order: bool = true
@@ -2995,14 +3000,15 @@ func _order_moving(statics_changed: bool, forward: Vector3) -> void:
     if structure: _order_merge()
 
 func _order_poll(moved: Array) -> bool:
-    # Once per frame per participant: its placement (key) and node origin.
-    # Visibility arrives by signal. False when actor_entries no longer holds
-    # the polled slots.
+    # Once per frame per displayed participant: its placement (key) and node
+    # origin. Visibility arrives by signal. False when actor_entries no longer
+    # holds the polled slots.
     var head: Variant = null
     var serial: int = -1
     for s in actor_entries.size():
         var entry: Dictionary = actor_entries[s]
         if not is_same(entry,order_moving[s]): return false
+        if order_shown[s]==0: continue
         var row: Dictionary = entry.placement
         if not is_same(row,head):
             # The placement values grid_order.key reads, compared once per run
@@ -3050,21 +3056,27 @@ func _order_members(rekey: bool) -> void:
     order_member_generation += 1
     var previous: int = -1
     var count: int = actor_entries.size()
-    order_positions.resize(count); order_nodes.resize(count); order_keyed.resize(count)
+    order_positions.resize(count); order_nodes.resize(count); order_keyed.resize(count); order_shown.resize(count)
     for s in count:
         var entry: Dictionary = actor_entries[s]
         var member: bool = entry.get("order_member",-1)==kept
         entry.order_member = order_member_generation
         order_positions[s] = entry.get("draw_position",Vector3.INF)
         order_nodes[s] = entry.node
-        if not member or rekey or entry.id!=entry.get("order_gap_id") or entry.layer!=entry.get("order_gap_layer"):
-            if not member:
-                entry.order_gap = -1; entry.order_key = []; entry.order_gap_id = ""
-                if not entry.node.visibility_changed.is_connected(_order_visibility_changed): entry.node.visibility_changed.connect(_order_visibility_changed)
+        if not member:
+            entry.order_gap = -1; entry.order_key = []; entry.order_gap_id = ""
+            if not entry.node.visibility_changed.is_connected(_order_visibility_changed): entry.node.visibility_changed.connect(_order_visibility_changed)
+        var shown: bool = entry.node.visible
+        order_shown[s] = 1 if shown else 0
+        if not shown:
+            # A hidden draw holds no rank: it is keyed and placed when shown.
+            if entry.order_gap>=0: _order_detach(entry)
+            entry.order_keyed = -1
+        elif not member or rekey or entry.id!=entry.order_gap_id or entry.layer!=entry.get("order_gap_layer"):
             entry.order_keyed = -1
         elif entry.order_gap<0: _order_place(entry,previous)
         order_keyed[s] = entry.order_keyed
-        previous = entry.order_gap
+        if shown: previous = entry.order_gap
     for entry in order_moving:
         if entry.get("order_member")==order_member_generation: continue
         if entry.get("order_gap",-1)>=0: _order_detach(entry)
@@ -3073,8 +3085,19 @@ func _order_members(rekey: bool) -> void:
     order_moving = actor_entries.duplicate()
 
 func _order_visibility_changed() -> void:
-    # A displayed or hidden moving draw leaves or joins the merged sequence.
+    # A moving draw was shown or hidden; _order_shown finds which.
     order_shown_changed = true
+
+func _order_shown() -> void:
+    # Only displayed moving draws hold ranks, as in the full sort they replace:
+    # a hidden draw leaves its gap, a shown one is keyed, placed and ranked.
+    for s in order_moving.size():
+        var shown: int = 1 if order_nodes[s].visible else 0
+        if shown==order_shown[s]: continue
+        order_shown[s] = shown
+        var entry: Dictionary = order_moving[s]
+        if shown==0 and entry.order_gap>=0: _order_detach(entry)
+        entry.order_keyed = -1; order_keyed[s] = -1; order_positions[s] = Vector3.INF
 
 func _order_ground(moved: Array) -> void:
     # The overlay keys its entries and replaces its ordered list whenever any
