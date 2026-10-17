@@ -61,6 +61,7 @@ under-reports holds. Holds are judged on three-run medians.
 | Blood deposits: tile screen visibility recomputed only when the camera, viewport or tile after-value changes; deposit position and four uniforms written only when a value changed (`blood_renderer.gd` `sample`; the renderer alone writes its deposit nodes/materials) | every visible residue tile ran five camera projections and five uniform/position writes each frame while blood was present | `blood_fields` median 0.172–0.186 → 0.111–0.124 ms over ~1,000 blood frames per run, lower in all three interleaved pairs (`T025250`… vs `T025340`…); p95 0.65–0.68 → 0.60–0.61 ms (kernel rebuild and upload during landing remain). Blood checks identical to `d737883` (phase preparation 1,100, residue 281, tile index 51, resource poll 20, native partition; loading 101–103 by frame timing; authority, kernel cache and the two studio blood suites exit 2 on both). |
 | Targeting marks and floor geometry no longer read native buffers back from the GPU (`ground_overlay.gd` `_batch_changes` keeps its transform buffer and submits it whole; `sprite_sources.gd` `_ground_publish_changes` submits its existing `ground_buffer` mirror, the same float encoding, instead of per-instance writes) | the plan's Fireball targeting spike. With a probe: a flat mark update with **one** changed cell took 23 ms (frame 37 ms). Godot's RD renderer serves a per-instance write on a multimesh whose buffer was uploaded whole, and which keeps no CPU copy, by first reading the whole buffer back from the GPU (a full stall) | mark updates above 2.5 ms per run: 0 (current) vs 3–6 on `d990882`, worst 2.5 vs 6–9 ms (and 15–20 ms in two of three earlier runs); mark-update time per run 15–16 vs 32–40 ms (`T031412`… vs `T031507`…). Overlay delta checks 13 (headless) / 17 (native, exact visible transforms), overlay support 67, sparse world preparation 78, world atlas preparation 172 (native), native atlas lifecycle 221. |
 | Ground overlay mark and route shaders compiled at startup with the other reveal shaders; equal mark styles reuse the previous material when cells change | a single new overlay cell or route cost 5.5–6 ms (first shader use, R4); the 697-cell area set/clear resolved a material key twice per cell | the 5.5–6 ms events are gone; full-area updates 2.6–3.1 → 2.1–2.5 ms |
+| Shadow light plane is a unit `PlaneMesh` sized by its node transform (`canvas_shadows.gd` `_create`/`_update`) | plan Phase 1 item 3. Sub-timers showed the cost was `PlaneMesh.size` (surface rebuild), 2.4–9.9 ms when a move starts (frame up to 43 ms). The visibility shader reads `MODEL_MATRIX*VERTEX`; unit vertices ±0.5 times the size are exact (power-of-two scale), the same as the sized plane's ±size/2, and the normal stays (0,1,0) | `update_light_plane` max 0.10–0.13 ms in three runs vs 10.2–13.1 ms (2–4 events above 1 ms per run) on `901340c`, interleaved (`T040606`… vs `T040700`…). Parity: the Studio replay's seven primary scene captures are byte-identical to `901340c`'s; the Studio window captures differ only in a 120×18-pixel UI text area (x 1435–1554, y 49–66, timing labels). Shadow scalar capture identical; shadow scalar 19, idle and preparation suites give the same results as before. |
 
 Result after Phase 1 (median of 3 runs `20261017T001059`, `T001138`,
 `T001215`): idle same-view frame **8.77 ms** (p95 14.05; script 6.60 ms);
@@ -307,6 +308,20 @@ restructuring per-row records, which is not attempted under Stage 1.
 
 Next on this path: the publication frame and construction work, and the
 held-frame allowance decision (see Gate A status).
+
+## Studio gate
+
+`tests/studio_replay_native_checks.gd` (the plan's "full native Studio run"):
+8,617 checks on `901340c` and 8,519 with the light-plane change, zero
+failures, script errors or warnings. The count varies run to run because the
+Invisibility loop checks once per frame and playback samples every 150 ms
+(the plan's 8,686 was one such run).
+
+Remaining shadow cost, attributed: shadow viewport resizes
+(`state.viewport.size`) take 1–6 ms when an actor's shadow rect changes size
+during a spell, one to four times in some frames. Avoiding them changes how
+the visibility texture is addressed (render to a fixed-capacity target and
+sample a sub-rect), so it needs its own capture qualification. Not done.
 
 ## Tests that were already failing at the checkpoint
 

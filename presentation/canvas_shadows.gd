@@ -541,7 +541,10 @@ func _create(id: String,owner:Node3D=null) -> Dictionary:
     root.add_child(camera)
     camera.current=true
     var ground := MeshInstance3D.new()
+    # A unit plane sized by its transform: resizing a PlaneMesh rebuilds its
+    # native surface (measured up to 9.9 ms when a move starts).
     ground.mesh=PlaneMesh.new()
+    ground.mesh.size=Vector2.ONE
     ground.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
     ground.material_override=ShaderMaterial.new()
     ground.material_override.shader=VISIBILITY
@@ -622,8 +625,10 @@ func _update(state: Dictionary,snapshots: Array,camera: Camera3D,origin: Vector3
         var corner := _on_plane(camera,point,origin.y+ground)-origin
         plane_bounds=plane_bounds.expand(corner)
         helper_range=maxf(helper_range,projection.position.distance_to(corner)+2.0)
-    state.ground.position=plane_bounds.get_center()
-    state.ground.mesh.size=Vector2(plane_bounds.size.x,plane_bounds.size.z)+Vector2.ONE*0.01
+    # The visibility shader reads MODEL_MATRIX*VERTEX; unit vertices +-0.5
+    # scaled by the size give the same world positions as a sized plane.
+    var ground_size:Vector2=Vector2(plane_bounds.size.x,plane_bounds.size.z)+Vector2.ONE*0.01
+    state.ground.transform=Transform3D(Basis.from_scale(Vector3(ground_size.x,1.0,ground_size.y)),plane_bounds.get_center())
     state.ground.material_override.set_shader_parameter("helper_position",projection.position)
     state.ground.material_override.set_shader_parameter("helper_range",helper_range)
     state.light.position=projection.position
