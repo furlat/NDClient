@@ -4,6 +4,9 @@ extends "res://presentation/lighting_2d.gd"
 var effect_sources: Array = []
 var _effect_roots: Dictionary = {}
 var _effect_issues: Array = []
+## Lights still being prepared. native_preparation_ready holds the spell for
+## them; they are not errors, so they stay out of issues.
+var pending: Array = []
 const RETAINED_EFFECT_COOKIES=8
 var _effect_cookies: Dictionary = {}
 var _effect_cookie_use:int=0
@@ -66,7 +69,7 @@ func effect_was_submitted(id:String)->bool:
 
 func sample_handles(handles: Dictionary, support_y: float = 0.0, optical: Dictionary = {}) -> void:
     effect_sources.clear()
-    _effect_issues.clear()
+    _effect_issues.clear();pending.clear()
     var retained := {}
     for handle_id in handles:
         var handle: Dictionary = handles[handle_id]
@@ -83,7 +86,7 @@ func sample_handles(handles: Dictionary, support_y: float = 0.0, optical: Dictio
         # explicit conversion once, just like native particle distances.
         var unit_scale := absf(root.global_basis.get_scale().x)
         if not _effect_roots.has(instance):
-            native_preparation_ready=false;_effect_issues.append("Native effect lights awaiting preparation: "+str(handle_id));continue
+            native_preparation_ready=false;pending.append("Native effect lights awaiting preparation: "+str(handle_id));continue
         for entry in _effect_roots[instance]:
             var id := "native-effect/" + str(handle_id) + "/" + str(entry.path)
             if not is_instance_valid(entry.node):
@@ -190,7 +193,7 @@ func project(camera: Camera3D, source_scale: float = 2.0) -> void:
         var texture:Texture2D=_effect_cookie("",source.native_attenuation) if _effect_cookies.has(source.native_attenuation) else null
         if texture==null:
             _pending_attenuations[source.native_attenuation]=true;native_preparation_ready=false
-            _effect_issues.append("Native light attenuation awaiting preparation: "+source.id)
+            pending.append("Native light attenuation awaiting preparation: "+source.id)
             continue
         var radius: float = source.radius
         var energy: float = source.energy * light_strength
@@ -212,7 +215,7 @@ func project(camera: Camera3D, source_scale: float = 2.0) -> void:
         for page in _pages:
             if not is_instance_valid(page.parent): continue
             if not page.effect_nodes.has(source.id):
-                native_preparation_ready=false;_effect_issues.append("Native light page awaiting preparation: "+source.id);continue
+                native_preparation_ready=false;pending.append("Native light page awaiting preparation: "+source.id);continue
             var light: PointLight2D = page.effect_nodes[source.id]
             light.texture = texture
             light.position = screen
