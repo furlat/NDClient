@@ -122,10 +122,12 @@ func prepare(compiled_groups:Array,cache:Dictionary,world:Node=null,prefetch_gro
     # Receiver membership is prepared before any effect can become due. Sync
     # only samples published transforms/materials; it never constructs proxies.
     var receivers:Dictionary={"ready":true,"pending":0}
+    var receivers_started:int=Time.get_ticks_usec()
     if not wanted.is_empty() or not groups.is_empty():
         receivers=_support.prepare_membership(world.static_entries,world.visual_actors,budget)
     elif budget.is_empty() or budget.used_usec<budget.limit_usec:
         _support.prepare_membership(world.static_entries,world.visual_actors,budget)
+    FrameProfile.end_phase(world.profile,"native_prepare_receivers",receivers_started)
     result.ready=result.ready and receivers.ready
     if result.ready:
         for id in wanted:

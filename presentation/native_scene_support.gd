@@ -30,6 +30,7 @@ var _source_bindings:Dictionary={}
 var clear_effect:CompositorEffect
 var enabled:bool=true
 var last_sync_phases:Dictionary={}
+var last_floor_rebuild_ms:float=0.0
 
 static func required_paths(path:String,slot:String,cache:Dictionary)->Dictionary:
     return Geometry.BodySources.descriptor(path,slot,cache).get("optical_paths",{})
@@ -138,10 +139,15 @@ func _batch_floor(entry:Dictionary)->MultiMeshInstance3D:
     # Ground publication owns this version. Camera and lighting updates do not
     # rebuild unchanged world-space contact planes. Unversioned callers refresh.
     if entry.has("ground_version") and receiver.get_meta("ground_version",-1)==entry.ground_version:return receiver
+    # One buffer write: per-instance writes read the uploaded buffer back
+    # from the GPU first (as the ground batch itself notes).
     var rows:Array=entry.batch_rows
-    receiver.multimesh.instance_count=rows.size()
+    var buffer:=PackedFloat32Array();buffer.resize(rows.size()*12)
     for index in rows.size():
-        receiver.multimesh.set_instance_transform(index,Transform3D(Basis.IDENTITY,Placement.contact(rows[index])))
+        var contact:Vector3=Placement.contact(rows[index]);var at:int=index*12
+        buffer[at]=1.0;buffer[at+3]=contact.x;buffer[at+5]=1.0;buffer[at+7]=contact.y;buffer[at+10]=1.0;buffer[at+11]=contact.z
+    if receiver.multimesh.instance_count!=rows.size():receiver.multimesh.instance_count=rows.size()
+    receiver.multimesh.buffer=buffer
     if entry.has("ground_version"):receiver.set_meta("ground_version",entry.ground_version)
     return receiver
 
@@ -163,11 +169,13 @@ func prepare_floors(static_entries:Array,budget:Dictionary={},retained:Dictionar
         var id:int=entry.node.get_instance_id();retained[id]=true
         var changed:bool=not floors.has(id) or (entry.has("batch_rows") and (not entry.has("ground_version") or floors[id].get_meta("ground_version",-1)!=entry.ground_version))
         if not changed:continue
-        if not budget.is_empty() and budget.used_usec>=budget.limit_usec:
-            result.ready=false;result.pending+=1;continue
+        # A changed ground's receivers are one buffer write; holding the
+        # displayed clock for it would cost a whole frame, so it never waits.
         var started:int=Time.get_ticks_usec()
+        result.floors_rebuilt=int(result.get("floors_rebuilt",0))+1
         if entry.has("batch_rows"):_batch_floor(entry)
         else:_floor(id).position=Placement.contact(entry.placement)
+        last_floor_rebuild_ms=(Time.get_ticks_usec()-started)/1000.0
         if not budget.is_empty():budget.used_usec+=Time.get_ticks_usec()-started
     return result
 
