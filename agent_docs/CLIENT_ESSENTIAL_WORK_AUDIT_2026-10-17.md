@@ -314,28 +314,39 @@ idle Gallery actors ~1.6 GiB. The **required** set alone is 524 paths,
 and one budget-0 route test exist; in the Gallery, optional selection already
 binds at 16 GiB (1,910 selected, 1,125 skipped) but nothing is ever evicted.
 
+**All 8 facing rows stay resident** (user, 17 October): many animations
+change facing dynamically, and camera rotation uses the other views. A sheet
+is the smallest residency unit.
+
 **Levers, all to be measured before choosing:**
-- **Facing-row residency (lossless).** A layer shows one of 8 facing rows at a
-  time; an idle actor needs 1/8 of each sheet. The timeline knows facing
-  changes in advance, so rows can be made resident before they show.
-- **Merged masks (lossless).** Pack the grayscale maps into the channels of
-  one texture, after checking which channels each map actually uses.
-- **Trim unused frame cells (lossless).**
+- **Residency policy.** Resident = clips displayed now plus clips the
+  timeline will display soon, not the whole optional preload. Measure what the
+  524 "required" paths actually are against that definition.
+- **Merged maps (lossless, format-dependent).** Pack depth and the grayscale
+  masks into the channels of one texture, only if each uses a single channel
+  and Godot stores the masks wider than R8 today. Check the real formats
+  first; three R8 masks merged into RGBA8 would cost more, not less.
+- **Trim empty frame cells (lossless).** Clips with fewer than 15 frames
+  still ship 1920-wide sheets; measure how many cells are empty.
 - **GPU compression (lossy).** BC7 for colour, BC5 for normals. Changes
   pixels, so only with the user's consent after side-by-side captures; depth
   and masks stay lossless.
 
-**Moving the media.** The levers above change the file layout, so the
-practical form is an offline **prepack step**: it converts the referenced
-subset into the runtime layout (per facing row, merged masks, trimmed cells,
-optionally compressed) into a git-ignored cache that the worker loads
-directly. Importing the raw corpus through the Godot importer is not
-proposed: it would duplicate 5.9 GB into `.godot/imported` and saves VRAM
-only with lossy compression.
+Without facing-row residency the lossless levers are modest. Six idle actors
+already need ~1.6 GiB at one clip each, so a scene with many actors under a
+~2.5 GiB budget probably needs GPU compression of colour and normals. That is
+the user's decision, made on captures.
+
+**Moving the media.** Trimmed cells, merged maps and compression change the
+file layout, so the practical form is an offline **prepack step**: it converts
+the referenced subset into the runtime layout into a git-ignored cache that
+the worker loads directly. Importing the raw corpus through the Godot importer
+is not proposed: it would duplicate 5.9 GB into `.godot/imported` and saves
+VRAM only with lossy compression.
 
 **Design.** Budget in real GPU bytes by format, plus render targets, against
 a < 4 GB GPU (≤ ~2.5 GiB total). Residency and eviction per **sheet bundle**
-(or per facing row). Eviction drops every Texture2D reference. LRU touched for
+(all facing rows). Eviction drops every Texture2D reference. LRU touched for
 every displayed path. Fixed-capacity Texture2DArray pools per size class are
 an option (they give both the budget and per-instance texture selection).
 
@@ -407,7 +418,7 @@ deleted; any remaining difference is shown side by side to the user.
 | L5 | **Actors.** As in §3 Actors. | AnimationTree for live actors, per-frame pose dictionaries, the SourceMaterial ledger, source-only world cuts | Actor captures; per-frame actor cost ≈ L instance-uniform writes + L transforms and offsets, plus condition writes for actors with active conditions; clip changes with no pause |
 | L6 | **Blood.** Field atlas; stains as their own ordered draws lit by the shared loop (ambient 0.18, per screen pixel); droplets keep buckets and halves. | Per-tile viewports, lit pages | Blood oracles (Pygame reference within .008) |
 | L7 | **Effects.** Legacy effects keep off-screen composition, lit by the shared loop (no duplicated light pages). Spells stay in the main world; per-piece writes gated. Hit flashes and outlines as sprite shader effects. | Duplicated light pages, per-hit viewports | Spell/effect captures |
-| L8 | **Media and VRAM.** Real-format GPU budget for a < 4 GB GPU; bundle residency and eviction that drops every reference; levers from §3 measured (lossless first); prepack step if the layout changes. | Role/family/selection accounting replaced by a budgeted bundle LRU | Holds stay 0 **with the consumer budget**; VRAM breakdown reported per route |
+| L8 | **Media and VRAM.** Real-format GPU budget for a < 4 GB GPU; whole-sheet bundle residency (all facing rows) and eviction that drops every reference; levers from §3 measured (lossless first, compression only with consent); prepack step if the layout changes. | Role/family/selection accounting replaced by a budgeted bundle LRU | Holds stay 0 **with the consumer budget**; VRAM breakdown reported per route |
 
 **L3 notes.** The user's caution (17 October): it is very easy to render
 assets out of order and break the perspective.
