@@ -294,6 +294,31 @@ func _derive_forecast(input:Dictionary,forecast:Dictionary)->void:
         input.cache.__actor_source_profile=forecast.cache.get("__actor_source_profile",{})
     result=_complete_actors(input,forecast)
 
+const SOURCE_CHUNK_ROWS:=24
+const SOURCE_CHUNKS:=4
+
+static func _derive_row_sources(input:Dictionary,wanted:Dictionary,sight:Dictionary,chunk:Dictionary)->void:
+    var cache:Dictionary=chunk.cache
+    for id in chunk.ids:
+        var row:Dictionary=wanted[id]
+        var previous:Dictionary=_old_visual(input.retained,id)
+        var packet:Dictionary={}
+        if input.get("initial",false) or previous!=row:
+            var options:Dictionary=input.environment_options
+            packet=EnvironmentSource.row_packet(row,input.quarter,input.basis,cache,options.depth,options.normals)
+        if packet.get("eligible",false):
+            # This is the same visibility operand applied by the private
+            # scenery owner. Seed it before final source construction.
+            for selected in packet.entries:
+                selected.light_parameters=SourceMaterial.environment_policy(selected.placement.kind,selected.role)
+                if selected.descriptor.get("empty",false):continue
+                var source_id:String=str(selected.placement.id)
+                selected.descriptor.parameters.current_visibility=1.0 if sight.changes.get(source_id,sight.visibility.has(source_id)) else 0.0
+            chunk.packets[id]=packet
+            # A fixture flame still needs its frames and optical facts.
+            chunk.sources[id]=_row_sources(row,input.quarter,cache) if row.has("lit_animation") else {"paths":packet.paths,"fixtures":{}}
+        else:chunk.sources[id]=_row_sources(row,input.quarter,cache)
+
 static func derive_static(input:Dictionary,output:Dictionary)->void:
     var started = Time.get_ticks_usec()
     var worker_phases:Dictionary={};var phase_started:int=started
@@ -410,25 +435,29 @@ static func derive_static(input:Dictionary,output:Dictionary)->void:
             packets[key] = GroundData.prepare(rows,before,input.quarter,input.basis,visible)
     worker_phases.ground=(Time.get_ticks_usec()-phase_started)/1000.0;phase_started=Time.get_ticks_usec()
     var object_sources:Dictionary={};var ground_sources:Dictionary={};var environment_packets:Dictionary={}
-    for id in wanted:
-        var row:Dictionary=wanted[id]
-        var previous:Dictionary=_old_visual(input.retained,id)
-        var packet:Dictionary={}
-        if input.get("initial",false) or previous!=row:
-            var options:Dictionary=input.environment_options
-            packet=EnvironmentSource.row_packet(row,input.quarter,input.basis,input.cache,options.depth,options.normals)
-        if packet.get("eligible",false):
-            # This is the same visibility operand applied by the private
-            # scenery owner. Seed it before final source construction.
-            for selected in packet.entries:
-                selected.light_parameters=SourceMaterial.environment_policy(selected.placement.kind,selected.role)
-                if selected.descriptor.get("empty",false):continue
-                var source_id:String=str(selected.placement.id)
-                selected.descriptor.parameters.current_visibility=1.0 if sight.changes.get(source_id,sight.visibility.has(source_id)) else 0.0
-            environment_packets[id]=packet
-            # A fixture flame still needs its frames and optical facts.
-            object_sources[id]=_row_sources(row,input.quarter,input.cache) if row.has("lit_animation") else {"paths":packet.paths,"fixtures":{}}
-        else:object_sources[id]=_row_sources(row,input.quarter,input.cache)
+    # Rows are independent: chunks run on their own catalog snapshots and are
+    # merged back in row order, with the records they admitted.
+    var ids:Array=wanted.keys()
+    var chunk_count:int=clampi(ids.size()/SOURCE_CHUNK_ROWS,1,SOURCE_CHUNKS)
+    var chunks:Array=[]
+    for index in chunk_count:
+        chunks.append({"ids":ids.slice(index*ids.size()/chunk_count,(index+1)*ids.size()/chunk_count),
+            "cache":Catalog.source_snapshot(input.cache) if chunk_count>1 else input.cache,"packets":{},"sources":{}})
+    var chunk_tasks:Array=[]
+    for chunk in chunks.slice(1):
+        chunk_tasks.append(WorkerThreadPool.add_task(_derive_row_sources.bind(input,wanted,sight,chunk),false,"Prepare environment row sources"))
+    _derive_row_sources(input,wanted,sight,chunks[0])
+    for task in chunk_tasks:WorkerThreadPool.wait_for_task_completion(task)
+    for chunk in chunks:
+        if not is_same(chunk.cache,input.cache):Catalog.adopt_snapshot(input.cache,chunk.cache)
+        environment_packets.merge(chunk.packets);object_sources.merge(chunk.sources)
+    var ordered_sources:Dictionary={}
+    for id in ids:ordered_sources[id]=object_sources[id]
+    object_sources=ordered_sources
+    var ordered_packets:Dictionary={}
+    for id in ids:
+        if environment_packets.has(id):ordered_packets[id]=environment_packets[id]
+    environment_packets=ordered_packets
     for key in ground:
         if not ground[key].is_empty() and not input.ground.has(key):ground_sources[key]=_row_sources(ground[key][0],input.quarter,input.cache)
     var environment_paths:Dictionary={};var environment_fixtures:Dictionary={}
