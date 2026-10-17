@@ -7,8 +7,6 @@ const Resources=preload("res://presentation/actor_resources.gd")
 const BODY="/fixture/actor-resource-body.png"
 const NOISE="/fixture/actor-resource-noise.png"
 class ActorOwner extends "res://presentation/sprite_sources.gd":
-    var textures:Dictionary={}
-    var resources:Dictionary={}
     var character_light_profile:String="original"
     func texture(path:String)->Texture2D:return textures.get(path)
     func _light_entry(entry:Dictionary)->void:SourceMaterial.set_parameter(entry,"authored_base_light",0.0)

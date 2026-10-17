@@ -32,7 +32,6 @@ void fragment() {
 }'''
 class SourceProbe extends "res://presentation/sprite_sources.gd":
     var images: Dictionary = {}
-    var textures: Dictionary = {}
     func texture(path: String) -> Texture2D:
         if not textures.has(path):
             images[path]=Image.load_from_file(Catalog.media_path(path))

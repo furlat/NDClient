@@ -35,6 +35,24 @@ var fixture_frame_centroids: Dictionary = {}
 var presentation_errors: Array = []
 var media_issue = ""
 var sprite_parent: Node3D
+# Host members shared by the live player and the workshop (moved from main.gd
+# so the live player no longer extends the workshop).
+const CharacterGeometry = preload("res://presentation/character_geometry.gd")
+const EnvironmentMedia = preload("res://presentation/environment_media.gd")
+var grid_visible = false
+var textures: Dictionary = {}
+var texture_last_use: Dictionary = {}
+var scenes: Array
+var placements: Array = []
+var actor_rows: Array = []
+var player: Dictionary
+var resources: Dictionary
+var components: Dictionary
+var status: Label
+var playbacks: Dictionary = {}
+var unresolved: Array = []
+var draw_order: Array = []
+var camera_focus = Vector3.ZERO
 
 func texture(_path: String) -> Texture2D:
     assert(false,"A source renderer requires its owning prepared texture loader")
@@ -493,3 +511,18 @@ func _add_fixture_flame(row: Dictionary) -> void:
     SourceMaterial.set_parameter(entry,"alpha_pedestal",1.0/255.0 if name=="torch.flame" else 0.0,true)
     static_entries.append(entry)
     fixture_entries.append(entry)
+
+func position_camera() -> void:
+    camera.transform=Placement.camera_transform(camera_focus,quarter)
+
+func pixel_selected(selection: Dictionary, pixel: Vector2, colour: Color) -> bool:
+    if selection.kind == "source_rgba":
+        var values = [roundi(colour.r*255),roundi(colour.g*255),roundi(colour.b*255),roundi(colour.a*255)]
+        for i in range(4):
+            if values[i] < selection.bounds.minimum[i] or values[i] > selection.bounds.maximum[i]: return false
+        return true
+    var mask: Dictionary = selection.mask
+    var p = (pixel.floor()*v2(mask.sampling.scale)+v2(mask.sampling.offset)).floor()
+    if p.x<0 or p.y<0 or p.x>=mask.region.rect[2] or p.y>=mask.region.rect[3]: return false
+    var value = roundi(source_images[mask.region.path].get_pixelv(Vector2i(p)+Vector2i(mask.region.rect[0],mask.region.rect[1])).r*255)
+    return value in selection.values

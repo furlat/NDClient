@@ -311,6 +311,44 @@ restructuring per-row records, which is not attempted under Stage 1.
 Next on this path: the publication frame and construction work, and the
 held-frame allowance decision (see Gate A status).
 
+## Phase 2 — `main.gd` cut out of the live chain (done)
+
+`play.gd` extended the workshop script `main.gd`, which loaded the workshop's
+exploration, editor, walking, map, view-build and grid-renderer scripts into
+the live game. An inventory of `main.gd`'s 137 members showed Play uses 16
+variables/constants and two functions (`position_camera`, `pixel_selected`);
+its six engine callbacks were all overridden without `super`. Those members
+moved to `presentation/sprite_sources.gd`, which both `main.gd` and `play.gd`
+now extend directly.
+
+- `world_preparation.gd` drops its now-inherited `EnvironmentMedia` constant
+  and renames a local `resources` that would shadow the inherited member.
+- Four test fixtures that subclass `sprite_sources.gd` drop their redeclared
+  `textures`/`resources`; one test reads the modular shader directly instead
+  of `world.MODULAR_SHADER`.
+- New `tests/live_chain_separation_checks.gd` (18 checks): loading `play.gd`
+  loads neither `main.gd` nor its workshop-only scripts, and Play's base
+  script is `sprite_sources.gd`. It fails on the previous commit.
+
+Gates:
+- live route 81/0;
+- Studio replay 8,840, no failures, errors or warnings;
+- actor 341 (native) and 305 (headless);
+- environment source 25,877; world preview 10,079; world atlas 172 (native);
+  native scene support 12,939;
+- media streaming 50, shared residency 44, priority 34, optional
+  selection 12, preparation admission 35, environment streaming 35, world
+  preparation sparse 78, live environment admission 36.
+
+Unchanged from the previous commit (already red there):
+- native 2D source checks (18 script errors and a timeout);
+- player effect picking (16 errors);
+- modular tint;
+- environment input state;
+- reveal preparation overlap.
+
+`selection_media_checks` needs a `--case` capture argument.
+
 ## Studio gate
 
 `tests/studio_replay_native_checks.gd` (the plan's "full native Studio run"):

@@ -1,4 +1,4 @@
-extends "res://main.gd"
+extends "res://presentation/sprite_sources.gd"
 # Godot scene specialization: reuse the tested sprite/material helpers. This
 # scene owns no offline movement, editor handlers, collision or game rules.
 const Session = preload("res://presentation/session.gd")

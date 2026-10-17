@@ -12,7 +12,6 @@ const SourceLighting = preload("res://presentation/lighting_2d.gd")
 const Blood=preload("res://presentation/blood.gd")
 const MediaWarmup=preload("res://presentation/media_warmup.gd")
 const GroundOverlay=preload("res://presentation/ground_overlay.gd")
-const EnvironmentMedia=preload("res://presentation/environment_media.gd")
 const EnvironmentResources=preload("res://presentation/environment_resources.gd")
 const ActorResources=preload("res://presentation/actor_resources.gd")
 var host: Node
@@ -978,7 +977,7 @@ func _prepare_actor_resources()->void:
     actor_resources_started=true
     var measured:bool=host.profile.get("recording",false)
     var started:int=Time.get_ticks_usec() if measured else 0
-    var resources:Dictionary={};var cycle:Array=host.rig_config.FACING_CYCLE
+    var noise_resources:Dictionary={};var cycle:Array=host.rig_config.FACING_CYCLE
     for id in result.actors:
         var actor:Dictionary=result.actors[id];var layers:Dictionary={}
         var facing:String="SW" if host.external_playback else actor.row.facing
@@ -997,7 +996,7 @@ func _prepare_actor_resources()->void:
             var palette:Dictionary=layer.get("effect",{}).get("palette",{}) if layer.get("effect",{}).get("palette")!=null else {}
             var noise:Variant=palette.get("noiseSheet")
             if noise!=null and host.resources.has(noise):
-                var path:String=host.resources[noise];resources[noise]=path;actor_resource_textures[path]=host.textures.get(path)
+                var path:String=host.resources[noise];noise_resources[noise]=path;actor_resource_textures[path]=host.textures.get(path)
         if not layers.is_empty():
             actor_resource_inputs[id]={"row":actor.row,"rig":actor.rig,"layers":layers,"facing":facing,"quarter":quarter,
                 "scale":128.0/host.rig_config.TILE_W*actor.row.scale,"light_parameters":{"authored_base_light":0.0}}
@@ -1005,7 +1004,7 @@ func _prepare_actor_resources()->void:
     else:
         actor_resource_names=ActorConstruction.source_parameter_names()
         if not initial:actor_resource_options=host.native_light_atlas.actor_resource_options(host)
-        actor_resource_task=WorkerThreadPool.add_task(ActorResources.build_private.bind(actor_resource_inputs,actor_resource_textures,resources,actor_resource_names,actor_resource_options,actor_resource_output),false,"Prepare private actor resources")
+        actor_resource_task=WorkerThreadPool.add_task(ActorResources.build_private.bind(actor_resource_inputs,actor_resource_textures,noise_resources,actor_resource_names,actor_resource_options,actor_resource_output),false,"Prepare private actor resources")
     _record_actor_phase("actor_resource_capture",started)
 
 func _poll_actor_resources()->bool:

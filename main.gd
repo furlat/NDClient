@@ -13,33 +13,20 @@ var last_sort_job_ms = 0.0
 var terrain_batches: Array = []
 var batches_dirty = true
 var exploration_ui: Control
-var grid_visible = false
 var follow_player = false
 
 const Walking = preload("res://walking.gd")
 const MapData = preload("res://map_data.gd")
 const Editor = preload("res://editor.gd")
 const Modular = preload("res://modular.gd")
-const CharacterGeometry = preload("res://presentation/character_geometry.gd")
-const EnvironmentMedia = preload("res://presentation/environment_media.gd")
 const MODULAR_SHADER = preload("res://modular.gdshader")
 const ACTOR_SHADER = preload("res://actor.gdshader")
 const SHADOW_SHADER = preload("res://shadow.gdshader")
-var textures: Dictionary = {}
-var texture_last_use: Dictionary = {}
 var active_texture_paths: Dictionary = {}
 var texture_gc_dirty = true
-var scenes: Array
-var placements: Array = []
-var actor_rows: Array = []
 var composition_cache: Dictionary = {}
-var player: Dictionary
-var resources: Dictionary
-var components: Dictionary
 var lamp: OmniLight3D
-var status: Label
 var scene_index = 0
-var playbacks: Dictionary = {}
 var actor_action: OptionButton
 var outfit_choice = "Leather Armor"
 var effect_choice = ""
@@ -49,8 +36,6 @@ var equipment_controls = {}
 var effect_controls = {}
 var player_clip = "Idle"
 var capturing = false
-var unresolved: Array = []
-var draw_order: Array = []
 var preview_mode = true
 var selected_id = ""
 var asset_catalog: Array = []
@@ -63,7 +48,6 @@ var editor_info: Label
 var editor_tool = "select"
 var source_choice: OptionButton
 var frame_control: SpinBox
-var camera_focus = Vector3.ZERO
 var loaded_rows: Dictionary = {}
 var undo_history: Array = []
 var map_serial = 0
@@ -417,9 +401,6 @@ func reset_destruction() -> void:
         row.erase("attachment_absent")
         row.erase("preview_sequence")
     update_camera()
-
-func position_camera() -> void:
-    camera.transform=Placement.camera_transform(camera_focus,quarter)
 
 func update_camera(refresh_materials: bool = true, incremental: bool = false) -> void:
     var started = Time.get_ticks_usec()
@@ -811,18 +792,6 @@ func pick_object(screen: Vector2) -> Dictionary:
             if role.role == "ground_shadow" and pixel_selected(role.selection,uv,colour): shadow = true; break
         if not shadow: return entry.placement
     return {}
-
-func pixel_selected(selection: Dictionary, pixel: Vector2, colour: Color) -> bool:
-    if selection.kind == "source_rgba":
-        var values = [roundi(colour.r*255),roundi(colour.g*255),roundi(colour.b*255),roundi(colour.a*255)]
-        for i in range(4):
-            if values[i] < selection.bounds.minimum[i] or values[i] > selection.bounds.maximum[i]: return false
-        return true
-    var mask: Dictionary = selection.mask
-    var p = (pixel.floor()*v2(mask.sampling.scale)+v2(mask.sampling.offset)).floor()
-    if p.x<0 or p.y<0 or p.x>=mask.region.rect[2] or p.y>=mask.region.rect[3]: return false
-    var value = roundi(source_images[mask.region.path].get_pixelv(Vector2i(p)+Vector2i(mask.region.rect[0],mask.region.rect[1])).r*255)
-    return value in selection.values
 
 func build_controls() -> void:
     var canvas = CanvasLayer.new()

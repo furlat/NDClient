@@ -11,8 +11,6 @@ const B="/fixture/ready-b.png"
 const ENV="/fixture/ready-env.png"
 const LATE_ENV="/fixture/deferred-env.png"
 class Host extends "res://presentation/sprite_sources.gd":
-    var textures:Dictionary={}
-    var resources:Dictionary={}
     var animation_templates:Array=[]
     var external_playback:bool=false
     var character_light_profile:String="original"

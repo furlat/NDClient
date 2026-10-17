@@ -7,7 +7,6 @@ const Preparation=preload("res://presentation/world_preparation.gd")
 var checks:int=0
 var failures:Array=[]
 class FixtureHost extends Sources:
-    var textures:Dictionary={}
     func texture(path:String)->Texture2D:return textures.get(path)
 class ConstructionProbe extends Preparation:
     # Controlled actor readiness isolates the dispatcher while the object lane

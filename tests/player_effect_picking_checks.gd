@@ -33,7 +33,7 @@ func run()->void:
     var actor_image=Image.create(4,4,false,Image.FORMAT_RGBA8);actor_image.fill(Color.WHITE)
     actor_image.set_pixel(0,0,Color.TRANSPARENT)
     world.source_images["actor"]=actor_image
-    world.add_entry(actor,"body",0,world.MODULAR_SHADER)
+    world.add_entry(actor,"body",0,preload("res://modular.gdshader"))
     var body:Dictionary=world.entries.back();world.set_quad(body,Vector2(4,4),Vector2(2,2),32)
     body.texture_path="actor";body.material.set_shader_parameter("frame_uv",Vector4(0,0,1,1))
     var object_image=Image.create(8,4,false,Image.FORMAT_RGBA8);object_image.fill(Color.TRANSPARENT)
