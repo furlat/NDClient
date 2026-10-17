@@ -336,7 +336,7 @@ func _prepare_legacy(world:Node,components:Array,cache:Dictionary,budget:Diction
         var component:Dictionary=wanted[id]
         var presenter=NativePreview.new();presenter.visible=false;world.add_child(presenter)
         var issue=presenter.configure(component.source_id,cache,Components.effect_seed(component),component.get("palette",[]))
-        if issue.is_empty():issue=presenter.bind_receiving(world.source_lighting)
+        if issue.is_empty():issue=presenter.bind_receiving()
         if not issue.is_empty():
             result.errors.append(issue);presenter.close();presenter.queue_free()
         else:

@@ -1,11 +1,10 @@
 extends RefCounted
 ## Selected native blood material adapter. One simulation supplies all views;
 ## its source fragment/COLOR/animation remains the coverage and colour owner.
-const Receiver=preload("res://presentation/native_effect_receiver.gdshader")
 const Depth=preload("res://presentation/native_effect_depth.gdshader")
-const Specular=preload("res://presentation/native_effect_specular.gdshader")
 const NORMAL_LAYER=1<<16
-const MATERIAL_LAYER=1<<17
+# No camera selects bit 17 (the material capture of the former specular page:
+# a canvas specular map lit nothing). Adapted programs keep their code.
 const SUPPORT_LAYER=1<<15
 
 # Adapted programs by code. Every occurrence of a source adapts to the same
@@ -126,9 +125,12 @@ static func adapt(handle:Dictionary,depth_texture:Texture2D)->String:
         node.material_override=material
     return ""
 
-static func make(parent:Node,record:Dictionary,world:World3D,colour:SubViewport,lighting:RefCounted,partition_layer:int=0)->Dictionary:
-    var state={"views":[],"supports":[],"lighting":lighting,"support_key":[],"error":""}
-    for kind in ["normal","material","depth"]:
+## The receiving captures of one source view: composition normals and the
+## support depth. Light comes from the shared light table in the output shader
+## (native_effect_output.gdshader), as the former lit Canvas page computed it.
+static func make(parent:Node,record:Dictionary,world:World3D,colour:SubViewport,partition_layer:int=0)->Dictionary:
+    var state={"views":[],"supports":[],"support_key":[],"error":"","colour":colour}
+    for kind in ["normal","depth"]:
         var view=SubViewport.new();view.size=colour.size;view.world_3d=world
         view.transparent_bg=true;view.msaa_3d=colour.msaa_3d
         view.use_hdr_2d=kind=="depth"
@@ -136,36 +138,11 @@ static func make(parent:Node,record:Dictionary,world:World3D,colour:SubViewport,
         var camera=Camera3D.new();view.add_child(camera)
         camera.projection=Camera3D.PROJECTION_ORTHOGONAL;camera.keep_aspect=Camera3D.KEEP_WIDTH
         camera.size=float(record.canvas[0])/float(record.pixels_per_unit)
-        camera.cull_mask=SUPPORT_LAYER if kind=="depth" else ((1<<15)-1)|(NORMAL_LAYER if kind=="normal" else MATERIAL_LAYER)|partition_layer
+        camera.cull_mask=SUPPORT_LAYER if kind=="depth" else ((1<<15)-1)|NORMAL_LAYER|partition_layer
         camera.current=true
         state.views.append({"viewport":view,"camera":camera,"kind":kind})
         state[kind]=view
-    var specular=SubViewport.new();specular.size=colour.size;specular.disable_3d=true
-    specular.use_hdr_2d=true;specular.transparent_bg=true
-    specular.render_target_update_mode=SubViewport.UPDATE_DISABLED;parent.add_child(specular)
-    var specular_rect=ColorRect.new();specular_rect.size=Vector2(colour.size)
-    specular_rect.mouse_filter=Control.MOUSE_FILTER_IGNORE
-    var specular_material=ShaderMaterial.new();specular_material.shader=Specular
-    specular_material.set_shader_parameter("native_material",state.material.get_texture())
-    specular_rect.material=specular_material;specular.add_child(specular_rect)
-    state.specular=specular;state.specular_rect=specular_rect
-    var output=SubViewport.new();output.size=colour.size;output.disable_3d=true
-    output.transparent_bg=true;output.use_hdr_2d=true
-    output.render_target_update_mode=SubViewport.UPDATE_DISABLED;parent.add_child(output)
-    var ambient=CanvasModulate.new();ambient.color=Color(.18,.18,.18).linear_to_srgb();output.add_child(ambient)
-    var rectangle=Sprite2D.new();rectangle.centered=false
-    var white=Image.create(1,1,false,Image.FORMAT_RGBA8);white.fill(Color.WHITE)
-    var canvas_texture=CanvasTexture.new();canvas_texture.diffuse_texture=ImageTexture.create_from_image(white)
-    canvas_texture.specular_texture=specular.get_texture();canvas_texture.specular_shininess=1.0
-    rectangle.texture=canvas_texture;rectangle.scale=Vector2(colour.size)
-    var material=ShaderMaterial.new();material.shader=Receiver
-    material.set_shader_parameter("native_colour",colour.get_texture())
-    material.set_shader_parameter("native_normals",state.normal.get_texture())
-    material.set_shader_parameter("native_material",state.material.get_texture())
-    rectangle.material=material;output.add_child(rectangle)
-    state.output=output;state.rectangle=rectangle;state.material_owner=material;state.colour=colour
     var support_owner=Node3D.new();state.depth.add_child(support_owner);state.support_owner=support_owner
-    lighting.attach_page(output)
     return state
 
 static func sample(state:Dictionary,camera_basis:Basis,target:Vector3,context:Dictionary)->String:
@@ -173,19 +150,8 @@ static func sample(state:Dictionary,camera_basis:Basis,target:Vector3,context:Di
     var size=Vector2i(state.colour.size)
     var scale:float=context.pixel_scale
     if scale<=0:return "Native receiving pixel scale must be positive"
-    state.output.size=size
-    var specular_resized=state.specular.size!=size
-    # Godot4.7 CanvasTexture keeps its own list of native uniform sets. Clear
-    # that owner BEFORE resizing its viewport texture invalidates those sets.
-    var channels:CanvasTexture=state.rectangle.texture
-    if specular_resized:channels.specular_texture=null
-    state.specular.size=size;state.specular_rect.size=Vector2(size)
-    if specular_resized:channels.specular_texture=state.specular.get_texture()
-    state.specular.render_target_update_mode=SubViewport.UPDATE_ONCE
-    # Only translation: native light heights and normals keep the same pixel
-    # convention as the live Canvas page. Capture resolution follows zoom.
-    state.output.global_canvas_transform=Transform2D(0,-Vector2(context.screen_origin))
-    state.rectangle.position=context.screen_origin;state.rectangle.scale=Vector2(size)
+    # Capture resolution follows zoom; texel t receives the light of screen
+    # pixel screen_origin+t+0.5 (the output shader's receiving_origin).
     for row in state.views:
         row.viewport.size=size;row.camera.basis=camera_basis;row.camera.position=target+camera_basis.z*12.
         row.viewport.render_target_update_mode=SubViewport.UPDATE_ONCE
@@ -198,21 +164,9 @@ static func sample(state:Dictionary,camera_basis:Basis,target:Vector3,context:Di
             node.mesh=mesh;node.transform=transform;node.layers=SUPPORT_LAYER
             var material=ShaderMaterial.new();material.shader=Depth;node.material_override=material
             state.support_owner.add_child(node);state.supports.append(node)
-    state.output.render_target_update_mode=SubViewport.UPDATE_ONCE
     return ""
 
 static func close(state:Dictionary)->void:
     if state.is_empty():return
-    state.lighting.detach_page(state.output)
-    # Destroy consumers before their viewport texture providers. CanvasTexture
-    # keeps an RD uniform set for the specular page; freeing that page first
-    # invalidates the set while its native Canvas consumer is still alive.
-    state.rectangle.texture=null
-    state.rectangle.material=null
-    for name in ["native_colour","native_normals","native_material"]:
-        state.material_owner.set_shader_parameter(name,null)
-    state.specular_rect.material.set_shader_parameter("native_material",null)
-    state.output.free()
-    state.specular.free()
     for row in state.views:row.viewport.free()
     state.clear()

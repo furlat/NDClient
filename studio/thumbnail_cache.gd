@@ -412,14 +412,11 @@ func _start_native(job:Dictionary)->Dictionary:
         node=NativeSpellPreview.new() if job.component.get("native_spell",false) else NativePreview.new()
         host.add_child(node)
     var issue:String=node.configure_component(job.component) if job.component.get("native_spell",false) else node.configure(job.component.source_id,cache,Components.effect_seed(job.component),job.component.get("palette",[]))
-    if issue.is_empty() and not job.component.get("native_spell",false):issue=node.bind_receiving(source_lights)
+    # Source swatches keep their neutral illumination: white ambient, no room
+    # lights, independent of the scene and of every other preview.
+    if issue.is_empty() and not job.component.get("native_spell",false):issue=node.bind_receiving(1.0,false)
     if not issue.is_empty():
         errors[job.key]=issue;requested.erase(job.key);node.close();node.queue_free();return {}
-    # Source swatches retain their existing neutral illumination, independent
-    # of the scene's actual lights and of every other preview's source state.
-    if not job.component.get("native_spell",false) and not node.receiving.is_empty():
-        for child in node.receiving.output.get_children():
-            if child is CanvasModulate:child.color=Color.WHITE
     var context={"screen_origin":Vector2.ZERO,"pixel_scale":1.0,"light_cap":0.0,"supports":[Transform3D(Basis.from_scale(Vector3(3,1,3)),Vector3.ZERO)]}
     context.merge(job.native_context)
     node.texture()

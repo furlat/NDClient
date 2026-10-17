@@ -95,19 +95,28 @@ func _surface(view: SubViewport) -> MeshInstance3D:
     add_child(output)
     return output
 
-func bind_receiving(lighting: RefCounted) -> String:
+## The receiving page's ambient: CanvasModulate 0.18 as an HDR canvas sees it.
+const AMBIENT:float=0.18
+static func ambient_value(value:float)->float:return Color(value,value,value).linear_to_srgb().srgb_to_linear().r
+
+## Room lights come from the shared light table; a swatch passes its own
+## neutral ambient and no room lights.
+func bind_receiving(ambient:float=AMBIENT,room_lights:bool=true) -> String:
     if not receiving.is_empty():return ""
     if "native_surface_lighting" not in record.get("requirements",[]):return ""
     for index in views.size():
         var row:Dictionary=views[index]
         var partition_layer=(1<<18) if row.half=="back" else ((1<<19) if row.half=="front" else 0)
-        var state=Receiving.make(self,record,viewport.world_3d,row.viewport,lighting,partition_layer)
+        var state=Receiving.make(self,record,viewport.world_3d,row.viewport,partition_layer)
         receiving_halves.append(state)
         if row.viewport==viewport:receiving=state
         row.camera.cull_mask=((1<<15)-1)|partition_layer
         var material:ShaderMaterial=surfaces[index].node.material_override
         material.set_shader_parameter("receiving_enabled",true)
-        material.set_shader_parameter("receiving_texture",state.output.get_texture())
+        material.set_shader_parameter("native_colour",row.viewport.get_texture())
+        material.set_shader_parameter("native_normals",state.normal.get_texture())
+        material.set_shader_parameter("receiving_ambient",ambient_value(ambient))
+        material.set_shader_parameter("receiving_room_lights",room_lights)
     var issue=Receiving.adapt(handle,receiving.depth.get_texture())
     if not issue.is_empty():
         for state in receiving_halves:Receiving.close(state)
@@ -182,6 +191,7 @@ func sample(seconds: float, camera_basis: Basis, world_position: Vector3, source
             if not issue.is_empty():return {"ready":false,"error":issue}
         for row in surfaces:
             row.node.material_override.set_shader_parameter("light_cap",float(receiving_context.get("light_cap",0.0)))
+            row.node.material_override.set_shader_parameter("receiving_origin",Vector2(receiving_context.screen_origin))
     if history.is_empty():
         handle.root.basis=receiving_context.get("source_basis",Basis.IDENTITY)
         if record.get("camera_relative",false):
@@ -189,16 +199,11 @@ func sample(seconds: float, camera_basis: Basis, world_position: Vector3, source
             handle.root.basis=camera_basis*original_basis.inverse()
     var result=Sources.sample(handle,seconds,history,receiving_context)
     Sources.set_view(handle,camera_basis)
-    var light_fields:Array=[]
-    if not receiving.is_empty():
-        for child in receiving.output.get_children():
-            if child is Light2D:
-                light_fields.append([child.get_instance_id(),child.transform,child.color,child.energy,child.enabled])
-                if child is PointLight2D:light_fields.append([child.height,child.texture,child.texture_scale])
-            elif child is CanvasModulate:light_fields.append(child.color)
     var render_context=receiving_context.duplicate(true)
     render_context.erase("native_frame_seconds");render_context.erase("native_continuous");render_context.erase("native_transform")
-    _requested_render_key=[camera_basis,world_position,source_scale,render_context,light_fields,_actor_partition_key]
+    # Room light is applied when the output draws; it never requires a capture.
+    render_context.erase("light_cap")
+    _requested_render_key=[camera_basis,world_position,source_scale,render_context,_actor_partition_key]
     sample_ready=result.ready and is_equal_approx(sampled_age,seconds) and _rendered_key==_requested_render_key
     for row in views:
         row.viewport.render_target_update_mode=SubViewport.UPDATE_ONCE
@@ -249,7 +254,9 @@ func close() -> void:
     _generation+=1;sampled_age=-1.0;requested_age=-1.0;_draw_pending=false
     _requested_render_key=[];_rendered_key=[];_history_owner=[];_history_basis=Basis(Vector3.ZERO,Vector3.ZERO,Vector3.ZERO)
     for row in surfaces:
-        if is_instance_valid(row.node):row.node.material_override.set_shader_parameter("receiving_texture",null)
+        if is_instance_valid(row.node):
+            row.node.material_override.set_shader_parameter("native_colour",null)
+            row.node.material_override.set_shader_parameter("native_normals",null)
     # Adapted source materials also borrow the support-depth viewport. Drop
     # those consumers while all receiving texture providers are still alive.
     if not handle.is_empty():Sources.release(handle)
