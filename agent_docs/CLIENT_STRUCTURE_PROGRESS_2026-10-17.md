@@ -376,11 +376,38 @@ Passing after the Phase 1 changes: media optional selection 12, media
 streaming 50, shared residency 44, publication priority 34, preparation
 admission 35, shadow scalar 19, light projection 1,478.
 
-## Gate A status
+## Gate A status (17 October, after `c006218`)
 
-| Criterion | Target | Now |
-|---|---|---|
-| Door hold | < 100 ms | 197.2 ms median in the slow window (committed code 250.0 in the same window; 198.6 → est. ~155 in the earlier fast window) |
-| Movement hold | < 100 ms | 0 ms median (bimodal; one baseline run 1,319 ms) |
-| Steady frame median | ≤ 10 ms | idle 7.98 ms ✓; animating ~10.5 ms |
-| Unattributed frames > 16.7 ms | none | ~170 per run, attribution in progress |
+Three routes on `c006218` (`T041855`, `T041933`, `T042011`) in the slowest
+machine window of the day: the committed baseline itself ran 25–50 % slower
+than in the morning. Every change above is judged by interleaved pairs, not
+by these absolutes.
+
+| Criterion | Target | Now | Notes |
+|---|---|---|---|
+| Door hold | < 100 ms | 203.6 ms median | Every pair is faster than its baseline (R2–R5: 250 → 197 and 222 → 198 in matched windows). What remains: about 60 ms of scene-thread work at 2 ms per frame (~30 frames), the planner's ~43 ms wait (proportional to the 1,156 new receivers), and the ~32 ms publication frame. See D1 below. |
+| Movement hold | < 100 ms | 0 ms median | met |
+| Steady frame median | ≤ 10 ms | idle 10.0–10.1; animating 12.3–13.1 (Fireball 15.4–17.9) | Idle meets the target in a normal window (8.0–8.8 earlier). Fireball frames carry the spell's real per-frame work, plus 3–4.5 ms outside the script. |
+| Spikes > 16.7 ms attributed, none from repeated work | all attributed | 229–272 per run, each labelled by `route_summary.py` | Repeated-work causes found today were removed (Phase 1 rows). Open, not repeated work: the media-readiness return cost (~0.24 ms) and shadow viewport resizes (1–6 ms). |
+
+**Decision for the user (D1, reopened with new evidence).** D1 was withdrawn
+because full-scene held frames then took 14.2–55.4 ms. After Phase 1 they take
+4.4–6.8 ms (median about 5.8 ms), of which world preparation is the 2 ms
+allowance. Estimated from the held frames of three door runs: with a 6–8 ms
+allowance only while the clock is held for the world, the held phase would
+shrink from 151–223 ms to about 86–113 ms. Held frames would rise to roughly
+10–13 ms, still under 16.7. This is not implemented; the 2 ms account is
+unchanged.
+
+### Stage 1 items still open
+
+- Track N step 1: N1 (attack recipe deep copy: callers share nested recipe
+  parts, so a shallow copy needs a mutation audit; attacks are not in the
+  Gallery route, so it cannot be measured there), N11 (palette-range
+  freshness scan: bake ranges into the body-source importer; compile-worker
+  cost only), N7/N8 (startup document reads to a worker; startup only), N12
+  (PNG header reads now already run on workers).
+- §5.5 item 6 (one account): every live caller passes the shared account. The
+  remaining defaults serve Studio's blood thumbnails (`thumbnail_cache.gd`)
+  and several test harnesses; a Studio-side owner is needed before deleting
+  `_native_budget`/`_prepare_budget`.
