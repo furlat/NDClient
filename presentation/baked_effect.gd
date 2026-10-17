@@ -7,7 +7,8 @@ const LightUnits=preload("res://presentation/native_light_units.gd")
 const Bundle=preload("res://presentation/baked_effect_bundle.gd")
 const DIRECTORY:="res://.derived/baked_effects/"
 const SLOTS:=256
-static var enabled:bool=true
+## `-- --native-effects` plays every clip from its native source (baselines).
+static var enabled:bool=not OS.get_cmdline_user_args().has("--native-effects")
 static var _clock_image:Image
 static var _clock_texture:ImageTexture
 static var _free_slots:Array=[]
@@ -120,8 +121,9 @@ static func _pump()->void:
         _pump_frame=Engine.get_process_frames()
         var bundle:Resource=_uploads[0]
         var made:Array=_textures[bundle]
-        made.append(ImageTexture.create_from_image(bundle.systems[made.size()].vat_image))
-        if made.size()==bundle.systems.size():_uploads.pop_front()
+        # A clip without emitters (meshes, lights and decals only) has none.
+        if made.size()<bundle.systems.size():made.append(ImageTexture.create_from_image(bundle.systems[made.size()].vat_image))
+        if made.size()>=bundle.systems.size():_uploads.pop_front()
     if not _pumping:
         _pumping=true
         RenderingServer.frame_pre_draw.connect(_pump)
@@ -142,10 +144,13 @@ static func ready_for(clip:Dictionary,choice:int=0,urgent:bool=false)->Variant:
         if str(gap).begins_with("script_trail_hidden:"):return false
     return bundles[posmod(choice,bundles.size())]
 
-## Fields the renderer adds per occurrence are not part of the recording.
+## Fields the renderer adds per occurrence, and the index revision's own
+## path (`source_identity` names the regenerated index folder), are not part
+## of what was recorded.
 static func _comparable(clip:Dictionary)->Dictionary:
     var result:Dictionary=clip.duplicate(false)
     result.erase("opacity_uniform")
+    result.erase("source_identity")
     return result
 
 static func _ensure_clock()->void:
@@ -200,7 +205,7 @@ static func make(parent:Node3D,bundle:Resource,clip:Dictionary,layer_mask:int)->
         handle.path_materials.append(process)
         handle.trail_draws.append({"node":node,"scroll":trail.scroll,"motion":trail.motion,"process":process})
     for track in bundle.tracks:
-        var target:Object=root.get_node(track.path) if track.kind=="node" else copies.get(int(track.material))
+        var target:Object=root.get_node(track.path) if track.kind in ["node","bone"] else copies.get(int(track.material))
         if target==null:handle.error="Baked track target missing: "+str(track);return handle
         handle.tracks.append({"target":target,"track":track})
     for node in root.find_children("*","",true,false):
@@ -287,7 +292,8 @@ static func sample(handle:Dictionary,seconds:float)->void:
             var values:Array=track.values
             var value:Variant=values[low]
             if track.blend and high!=low:value=_blend(values[low],values[high],weight)
-            if track.kind=="node":entry.target.set(track.property,value)
+            if track.kind=="bone":entry.target.set_bone_pose(int(track.property),value)
+            elif track.kind=="node" or not entry.target is ShaderMaterial:entry.target.set(track.property,value)
             else:entry.target.set_shader_parameter(track.property,value)
         for binding in handle.opacity_bindings:
             binding.native=float(binding.material.get_shader_parameter(binding.uniform))
@@ -324,13 +330,16 @@ static func material_locations(root:Node)->Array:
         if not node is GeometryInstance3D:continue
         var path:String=str(root.get_path_to(node))
         var found:Array=[]
-        if node.material_override!=null:found.append([{"path":path,"kind":"override"},node.material_override])
-        if node is MeshInstance3D and node.mesh!=null:
+        # An override is the only material such a node draws with; its mesh's
+        # own materials are hidden behind it (and must not be bound over it).
+        if node.material_override!=null:
+            found.append([{"path":path,"kind":"override"},node.material_override])
+        elif node is MeshInstance3D and node.mesh!=null:
             for surface in node.mesh.get_surface_count():
                 var material:Material=node.get_surface_override_material(surface)
                 if material==null:material=node.mesh.surface_get_material(surface)
                 if material!=null:found.append([{"path":path,"kind":"surface","surface":surface},material])
-        if node is GPUParticles3D:
+        elif node is GPUParticles3D:
             for pass_index in node.draw_passes:
                 var mesh:Mesh=node.get_draw_pass_mesh(pass_index)
                 if mesh==null:continue

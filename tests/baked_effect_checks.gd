@@ -19,6 +19,8 @@ var failures:Array=[]
 var clips_report:Array=[]
 ## --offset=N plays the recording N frames ahead (diagnostics).
 var frame_offset:int=0
+var sparse:bool=false
+var hide_filter:String=""
 
 func _initialize()->void:run.call_deferred()
 func check(ok:bool,label:String)->void:
@@ -39,12 +41,14 @@ func run()->void:
     var ids:Array=arguments.get("clips","").split(",",false)
     var save_dir:String=arguments.get("save","")
     frame_offset=int(arguments.get("offset","0"))
+    sparse=arguments.has("sparse")
+    hide_filter=arguments.get("hide","")
     for behavior in owner.index.spells:
         var record:Resource=Sources.find(behavior,cache)
         if record==null:continue
         var selection:Dictionary=record.selection
         for id in selection.get("clip_by_id",{}):
-            if str(selection.get("id",behavior)) in spells or behavior in spells or id in ids:
+            if arguments.has("all") or str(selection.get("id",behavior)) in spells or behavior in spells or id in ids:
                 await compare(selection.clip_by_id[id],save_dir)
     var report={"checks":checks,"failures":failures,"clips":clips_report,
         "scope":"Baked playback versus its native source in isolated identical worlds at the recording's source times; same seeds, fixed recording step."}
@@ -72,7 +76,8 @@ func compare(clip:Dictionary,save_dir:String)->void:
         await frame();bundles=Baked.request(clip)
     check(bundles is Array,"Current recording exists: "+id)
     if not bundles is Array:return
-    for variant in bundles.size():await compare_variant(clip,bundles[variant],variant,save_dir)
+    # --sparse: first variant only, three saved frames (visual review sheets).
+    for variant in (1 if sparse else bundles.size()):await compare_variant(clip,bundles[variant],variant,save_dir)
 
 func _native(view:Dictionary,clip:Dictionary,variant:int)->Dictionary:
     var handle:Dictionary=Factory.make(view.holder,clip,LAYER,false)
@@ -117,6 +122,11 @@ func compare_variant(clip:Dictionary,bundle:Resource,variant:int,save_dir:String
         view.camera.position=bounds.get_center()+Vector3(0.0,0.6,1.0).normalized()*reach*1.3
         view.camera.look_at(bounds.get_center())
     live.root.show();control.root.show();baked.root.show()
+    # --hide=<node name substring>: hide matching nodes in every version (diagnostics).
+    if not hide_filter.is_empty():
+        for handle in [live,control,baked]:
+            for node in handle.root.find_children("*","Node3D",true,false):
+                if hide_filter=="particles" and node is GPUParticles3D or node.name.contains(hide_filter):node.visible=false
     var frames:int=bundle.frames
     var stats:Dictionary={"clip":id,"variant":variant,"frames":frames,"baked_changed":0,"control_changed":0,"covered_pixels":0,"gaps":bundle.gaps,
         "plays_baked":Baked.ready_for(clip) is Resource}
@@ -147,7 +157,7 @@ func compare_variant(clip:Dictionary,bundle:Resource,variant:int,save_dir:String
             var offset:float=against_baked.centre_a.distance_to(against_baked.centre_b)
             if offset>float(stats.get("centre_offset",0.0)):stats.centre_offset=offset;stats.centre_offset_frame=step
         if step in [frames/4,frames/2]:played[step]=b
-        if not save_dir.is_empty() and (step%6==0 or step<4):
+        if not save_dir.is_empty() and ((sparse and step in [frames/4,frames/2,frames*3/4]) or (not sparse and (step%6==0 or step<4))):
             var base:String=save_dir.path_join(id.replace("/","__")+"_v%d_%03d"%[variant,step])
             a.save_png(base+"_live.png");b.save_png(base+"_baked.png")
     var covered:float=maxf(1.0,float(stats.covered_pixels))

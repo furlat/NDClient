@@ -4,7 +4,7 @@ extends SceneTree
 ## renderer's emitter seeds), sampled one recording step per frame, and its
 ## particle states read back from the GPU. Run with --fixed-fps 60 so every
 ## frame advances the source exactly one step.
-##   --script res://tools/bake_native_effects.gd -- --spells=fireball,fire_bolt [--clips=id,...] [--variants=3]
+##   --script res://tools/bake_native_effects.gd -- --spells=fireball,fire_bolt [--clips=id,...] [--all] [--variants=3]
 const Capture=preload("res://presentation/baked_effect_capture.gd")
 const Baked=preload("res://presentation/baked_effect.gd")
 const Bundle=preload("res://presentation/baked_effect_bundle.gd")
@@ -13,6 +13,9 @@ const Sources=preload("res://presentation/native_presentation_sources.gd")
 const PARTICLES=preload("res://presentation/baked_particles.gdshader")
 const TRAILING=preload("res://presentation/baked_trailing_particles.gdshader")
 const PATH_TRAIL=preload("res://presentation/baked_path_trail.gdshader")
+## Clips whose recording does not match its native source on review; they
+## keep playing natively (no recording is written) until the cause is fixed.
+const REJECTED:={"spells/chill_touch/impact/impact":"skinned fist renders dark when baked (materials, mesh, skin and bone poses match; cause not found)"}
 ## Stages whose root moves during play (flight path, casting hand).
 const MOVING_STAGES:=["travel","cast"]
 const RATE:=60.0
@@ -41,7 +44,7 @@ func run()->void:
         arguments[parts[0]]=parts[1] if parts.size()>1 else "true"
     if not OS.get_cmdline_args().has("--fixed-fps"):
         push_warning("Run with --fixed-fps 60: recording steps assume a fixed frame delta")
-    var clips:Array=_clips(arguments.get("spells","").split(",",false),arguments.get("clips","").split(",",false))
+    var clips:Array=_clips(arguments.get("spells","").split(",",false),arguments.get("clips","").split(",",false),arguments.has("all"))
     full_precision=arguments.has("float")
     DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(Baked.DIRECTORY))
     var variants:int=clampi(int(arguments.get("variants","3")),1,Baked.MAX_VARIANTS)
@@ -57,7 +60,7 @@ func run()->void:
     FileAccess.open("res://.runtime/baked-effects-report.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     quit(0 if report.all(func(entry):return entry.error.is_empty()) else 1)
 
-func _clips(spells:Array,ids:Array)->Array:
+func _clips(spells:Array,ids:Array,all:bool=false)->Array:
     var cache:Dictionary={}
     var owner:Dictionary=Sources.admission(cache)
     var result:Array=[]
@@ -67,7 +70,7 @@ func _clips(spells:Array,ids:Array)->Array:
         var selection:Dictionary=record.selection
         var spell:String=str(selection.get("id",behavior))
         for id in selection.get("clip_by_id",{}):
-            if spell in spells or behavior in spells or id in ids:result.append(selection.clip_by_id[id])
+            if all or spell in spells or behavior in spells or id in ids:result.append(selection.clip_by_id[id])
     return result
 
 func bake(clip:Dictionary,variant:int)->Dictionary:
@@ -78,6 +81,9 @@ func bake(clip:Dictionary,variant:int)->Dictionary:
     var result:Dictionary={"clip":clip.id,"variant":variant,"error":"","gaps":[],"systems":0,"particles":0,"frames":0,"tracks":0,"bytes":0}
     if not clip.get("view_direction",{}).is_empty():
         result.error="view_direction: camera-dependent source parameter";return result
+    if REJECTED.has(clip.id):
+        if FileAccess.file_exists(Baked.path_for(clip.id,variant)):DirAccess.remove_absolute(ProjectSettings.globalize_path(Baked.path_for(clip.id,variant)))
+        result.error="rejected on review: "+REJECTED[clip.id];return result
     var capture=Capture.new()
     root.add_child(capture.viewport)
     var holder:=Node3D.new();capture.world.add_child(holder)
@@ -187,7 +193,7 @@ func bake(clip:Dictionary,variant:int)->Dictionary:
     var error:int=ResourceSaver.save(bundle,Baked.path_for(clip.id,variant))
     if error!=OK:result.error="save failed: "+str(error)
     result.systems=systems.size();result.frames=frames;result.tracks=tracks.size();result.world_space=world_space
-    result.track_names=tracks.map(func(track):return (track.path if track.kind=="node" else "material "+str(track.material))+":"+track.property)
+    result.track_names=tracks.map(func(track):return (track.path if track.kind in ["node","bone"] else "material "+str(track.material))+":"+track.property)
     return result
 
 func _snapshot(root_node:Node3D,nodes:Array,materials:Array)->Dictionary:
@@ -195,6 +201,9 @@ func _snapshot(root_node:Node3D,nodes:Array,materials:Array)->Dictionary:
     for node in nodes:
         if node is GPUParticles3D:continue
         var path:String=str(root_node.get_path_to(node))
+        # Skinned meshes follow their skeleton's animated bone poses.
+        if node is Skeleton3D:
+            for bone in node.get_bone_count():values["bone|"+path+"|"+str(bone)]=node.get_bone_pose(bone)
         for type in NODE_PROPERTIES:
             if not node.is_class(type):continue
             for property in NODE_PROPERTIES[type]:values["node|"+path+"|"+property]=node.get(property)
@@ -232,7 +241,7 @@ func _tracks(snapshots:Array)->Array:
         var values:Array=snapshots.map(func(snapshot):return snapshot.get(key))
         var blend:bool=typeof(values[0]) in [TYPE_FLOAT,TYPE_VECTOR2,TYPE_VECTOR3,TYPE_VECTOR4,TYPE_COLOR,TYPE_TRANSFORM3D]
         var track:Dictionary={"kind":parts[0],"property":parts[2],"values":values,"blend":blend}
-        if parts[0]=="node":track.path=parts[1]
+        if parts[0] in ["node","bone"]:track.path=parts[1]
         else:track.material=int(parts[1]);track.kind="material"
         result.append(track)
     return result
@@ -292,6 +301,12 @@ func _template(clip:Dictionary,systems:Array,tracks:Array,material_count:int,tra
     var scene_root:Node3D=handle.root
     var materials:Array=Baked.material_locations(scene_root)
     if materials.size()!=material_count:result.error="template material order differs from the recording";holder.free();return result
+    # Sources that create emitters while they play (not present when built)
+    # have no baked scene yet; the clip stays native (reported).
+    var missing:Array=systems.map(func(system):return system.path)+trails.map(func(trail):return trail.path)
+    missing=missing.filter(func(path):return scene_root.get_node_or_null(path)==null)
+    if not missing.is_empty():
+        result.error="emitters created during play: "+", ".join(missing.slice(0,4));holder.free();return result
     for system in systems:
         var particles:GPUParticles3D=scene_root.get_node(system.path)
         var process:=ShaderMaterial.new();process.shader=TRAILING if system.trailing else PARTICLES
