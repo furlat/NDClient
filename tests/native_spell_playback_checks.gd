@@ -186,7 +186,7 @@ func body_pixels(world:Node,view:SubViewport,actor:String,label:String,source_hi
     var colour=view.get_texture().get_image();colour.convert(Image.FORMAT_RGBA8)
     captures.append({"label":label+"-colour","image":colour})
     if probe:probes=pause_stage(world,label+"-3-colour",probes)
-    var entries:Array=world.visual_actors[actor].entries.filter(func(entry):return entry.role!="shadow" and entry.node.visible and entry.has("received_material"))
+    var entries:Array=world.visual_actors[actor].entries.filter(func(entry):return entry.role!="shadow" and entry.node.visible)
     check(not entries.is_empty(),label+": real recipient has assembled receiving layers")
     # White through the original source alpha, compared with those same layers
     # at zero output alpha, measures recipient coverage without a rectangle.
@@ -198,21 +198,21 @@ func body_pixels(world:Node,view:SubViewport,actor:String,label:String,source_hi
     var saved:Array=[]
     for entry in entries:
         var values:Dictionary={}
-        for field in fields:values[field]=entry.received_material.get_shader_parameter(field)
+        for field in fields:values[field]=entry.material.get_shader_parameter(field)
         saved.append(values)
-        entry.received_material.set_shader_parameter("native_body_enabled",true)
-        entry.received_material.set_shader_parameter("native_body_strength",1.0)
-        entry.received_material.set_shader_parameter("native_body_surface",white)
-        entry.received_material.set_shader_parameter("native_body_ramp_count",0)
+        entry.material.set_shader_parameter("native_body_enabled",true)
+        entry.material.set_shader_parameter("native_body_strength",1.0)
+        entry.material.set_shader_parameter("native_body_surface",white)
+        entry.material.set_shader_parameter("native_body_ramp_count",0)
     await frame();await frame()
     var coverage=view.get_texture().get_image();coverage.convert(Image.FORMAT_RGBA8)
     if probe:probes=pause_stage(world,label+"-4-white",probes)
-    for entry in entries:entry.received_material.set_shader_parameter("wall_opacity",0.0)
+    for entry in entries:entry.material.set_shader_parameter("wall_opacity",0.0)
     await frame();await frame()
     var absent=view.get_texture().get_image();absent.convert(Image.FORMAT_RGBA8)
     if probe:probes=pause_stage(world,label+"-5-transparent",probes)
     for index in entries.size():
-        for field in fields:entries[index].received_material.set_shader_parameter(field,saved[index][field])
+        for field in fields:entries[index].material.set_shader_parameter(field,saved[index][field])
     if probe:
         await frame();await frame()
         probes=pause_stage(world,label+"-6-opaque",probes)
@@ -300,7 +300,7 @@ func assert_frame(world:Node,data:Dictionary,observed:Dictionary)->void:
                 var material:ShaderMaterial=entry.node.material_override
                 if material.get_shader_parameter("native_body_enabled"):
                     count+=1
-                    check(material.get_shader_parameter("native_body_surface")!=null and float(material.get_shader_parameter("native_body_strength"))>0,data.spec.id+": actual received actor output carries the current native material")
+                    check(material.get_shader_parameter("native_body_surface")!=null and float(material.get_shader_parameter("native_body_strength"))>0,data.spec.id+": actual lit actor output carries the current native material")
             check(count>0,data.spec.id+": actual damaged recipient has native-material body layers")
 
 func continuous(world:Node,view:SubViewport,data:Dictionary,fps:int,rate:float)->void:
