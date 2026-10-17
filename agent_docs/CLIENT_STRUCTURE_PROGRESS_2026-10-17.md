@@ -133,9 +133,80 @@ world preview 10,079.
 | 581–596 | 15 ms | bind 1,156 receivers (bulk) and 278 outputs |
 | 596–631 | 35 ms | one publication frame: atlas sync 10.1, world sync 4.0, shadows 3.6, timeline 4.8 |
 
-Next: overlap per-source group material creation with construction so the
-planner no longer starts only after the last object; derivation phases that
-depend only on rows (support, visibility, walls) can overlap routing.
+### Measurement drift and the A/B method
+
+Later in the session the same committed code ran markedly slower: idle
+same-view frame 8.0 → 9.8–13.0 ms and the door hold 198.6 → 250–270 ms, with
+every Player phase about 25–50 % slower at once. Memory, CPU load and clock
+were normal, and pinning Godot to either CCD of the 9950X3D (`AFFINITY=0xFFFF`
+or `0xFFFF0000`, new option in `tools/live_routes.sh`) gave the same times, so
+the drift is in the machine state, not the code. From here on, a change is
+judged by **interleaved** runs (current, committed, current, …, three of each)
+inside one window, never against numbers from an earlier window.
+
+### R2 — static receiving materials built by the resource worker (done)
+
+The planner worker created one receiving `ShaderMaterial` per new static
+source (225 per door, about 44 uniforms each) and one output material per
+source, only after construction ended. Both are fully determined by the
+private environment producer's own operands: the source material, the seeded
+candidate visibility and, for a non-floor non-water row, no support mask.
+`EnvironmentResources.build_private` (through
+`private_environment_binding`) now builds them, using the same constructors
+the planner uses (`Delta.static_group`, `Delta.realize_output`). The planner
+adopts a prepared group when its key matches, otherwise it builds one as
+before. Planner group stage 35.8 → 26–28 ms (220 of 225 groups adopted),
+output stage 5.4 → 3.4 ms. The rest of that stage is receiver records
+(16–17 ms) and canvas items (5 ms), which is bookkeeping, not materials.
+
+### R3 — support and wall geometry overlap the rest of derivation (done)
+
+`GroundOverlay.prepare_support` (8–10 ms) and `WallReveal.prepare_geometry`
+(7–9 ms) are pure functions of the tile after-values and visual rows and
+touch no catalog cache. `derive_static` now runs them in one side task
+started right after the row patch, joining before the result is assembled
+(`side_wait` ≈ 0). Visibility rises from ~3.7 to ~7 ms while they run
+alongside it, from shared-read contention. The net cut on the derivation path
+is about 10–12 ms.
+
+### Result (interleaved, same window)
+
+| Runs | Door world hold, per run | Median |
+|---|---|---:|
+| Current (`T010632`, `T010810`, `T010945`) | 235.0, 197.2, 179.5 | **197.2** |
+| Committed `3e4d22e` (`T010729`, `T010904`, `T011039`) | 255.6, 250.0, 191.1 | 250.0 |
+
+The current code is faster in every pair, by 53 ms (21 %) at the median.
+Idle frames are unchanged within noise (9.6 against 9.8 ms). All six runs
+passed 81 checks with no script errors. Checks: world atlas preparation 54
+(headless) and 172 (native framebuffer comparison), live environment
+admission 36, environment source preparation 25,877, world preview 10,079,
+world preparation sparse 78, static forecast 23, reveal scenery publication
+10, environment streaming 35, prepared admission 28, preparation admission
+35, light preparation ownership 17.
+
+### Current door critical path (after R2/R3, run `20261017T004726`)
+
+From packet to publication is about 430 ms:
+
+| Window | Duration | Work |
+|---|---:|---|
+| derivation | ~79 ms | worker: rows 18–20, routing 14–16, sources 16, ground 9–11, visibility 7, actors/blood 6; support and walls now hidden |
+| construction start | ~70 ms | actor and environment resource capture; the environment worker waits on textures from media upload; atlas begin 3.8 ms |
+| objects and actors | ~150 ms | 107 objects and 6 actors at ≤ 2 ms per frame (media upload takes 0.4–0.8 ms of each frame's allowance before the cue) |
+| atlas capture and membership | ~38 ms | seal 2.4, supports/receivers 3.6, membership, scenery, order |
+| planner wait | ~43 ms | planner worker 54–62 ms: receiver records 16–17, plan specs 6.5–12.5, spec copy 7.2, canvas 5, floor addresses 4.2, projection 4.2, outputs 3.4, plan reservations 2.5 |
+| reserve and bind | ~15 ms | 3 frames |
+| publication frame | ~34 ms | atlas sync, world sync, shadows, timeline |
+
+The door's scene-thread work totals 72.7 ms over 43 frames, 27 of them
+held: objects 16.5 (of which 6.5 ms is the one-time `Texture2DArray` build of
+a newly seen flame clip), actors 12.2, atlas source capture 11.1,
+bind/capture/reserve 9.5, environment capture 2.8.
+
+Next on this path: planner bookkeeping (records, spec copies, plan specs),
+the publication frame, the flame clip build off the scene thread, and
+construction work.
 
 ## Tests that were already failing at the checkpoint
 
@@ -158,6 +229,16 @@ Confirmed red with the original code (not caused by this work):
 - `tests/native_atlas_door_preparation_checks.gd` — worker canvas item,
   private RID binding and profile-field checks (230 checks, same failures on
   the clean checkpoint).
+- `tests/reveal_preparation_overlap_checks.gd` — script error reading
+  `worker_ms` in `_poll_actor_resources`; identical on `3e4d22e`.
+- `tests/blood_world_preparation_checks.gd` — "Blood world preparation
+  deadline" (exit 2); identical on `3e4d22e`.
+
+One live run (`20261017T005810`) failed 2 of 78 checks: the second Fireball's
+target click received its preview, but the client never sent the command
+(`pending_kind=choices`). Command 4 in that run had a 666 ms server exchange.
+The cause is not yet attributed. It has not recurred in 11 later runs and is
+watched.
 
 Passing after the Phase 1 changes: media optional selection 12, media
 streaming 50, shared residency 44, publication priority 34, preparation
@@ -167,7 +248,7 @@ admission 35, shadow scalar 19, light projection 1,478.
 
 | Criterion | Target | Now |
 |---|---|---|
-| Door hold | < 100 ms | 198.6 ms (median) |
+| Door hold | < 100 ms | 197.2 ms median in the slow window (committed code 250.0 in the same window; 198.6 → est. ~155 in the earlier fast window) |
 | Movement hold | < 100 ms | 0 ms median (bimodal; one baseline run 1,319 ms) |
 | Steady frame median | ≤ 10 ms | idle 7.98 ms ✓; animating ~10.5 ms |
 | Unattributed frames > 16.7 ms | none | ~170 per run, attribution in progress |

@@ -268,6 +268,15 @@ static func _candidate_visibility(input: Dictionary, patch: Dictionary) -> Dicti
 func candidate_visible(id: String) -> bool:
     return bool(result.visibility_changes.get(id,result.visibility.has(id)))
 
+static func _derive_support_walls(input:Dictionary,rebuild_rows:bool,all_rows:Array,full_membership:bool,side:Dictionary)->void:
+    var started:int=Time.get_ticks_usec()
+    side.support=GroundOverlay.prepare_support(input.state.tiles,input.changes,input.get("ground_support",{}),rebuild_rows)
+    side.support_ms=(Time.get_ticks_usec()-started)/1000.0;started=Time.get_ticks_usec()
+    # Full membership/view changes are explicit larger geometry jobs. Sparse
+    # source changes use the existing owner-side wall bucket invalidations.
+    side.geometry=WallReveal.prepare_geometry(input.state.tiles,all_rows,input.quarter) if full_membership else {}
+    side.walls_ms=(Time.get_ticks_usec()-started)/1000.0
+
 static func _row_sources(row:Dictionary,quarter:int,cache:Dictionary)->Dictionary:
     var paths:Dictionary={};var fixtures:Dictionary={}
     var variants:Array=[row]
@@ -309,10 +318,6 @@ static func derive_static(input:Dictionary,output:Dictionary)->void:
     var worker_phases:Dictionary={};var phase_started:int=started
     var patch = WorldRows.prepare_changes(input.state,input.cache,input.retained,input.changes)
     worker_phases.rows=(Time.get_ticks_usec()-phase_started)/1000.0;phase_started=Time.get_ticks_usec()
-    var ground_support:Dictionary=GroundOverlay.prepare_support(input.state.tiles,input.changes,input.get("ground_support",{}),patch.rebuild_rows)
-    worker_phases.support=(Time.get_ticks_usec()-phase_started)/1000.0;phase_started=Time.get_ticks_usec()
-    var sight = _candidate_visibility(input,patch)
-    worker_phases.visibility=(Time.get_ticks_usec()-phase_started)/1000.0;phase_started=Time.get_ticks_usec()
     var background: bool = _background_for(input.state,input.retained,input.changes)
     var full_membership: bool = input.global_rows or patch.rebuild_visual
     # Moving between a native source and a batch is a real membership change.
@@ -322,9 +327,16 @@ static func derive_static(input:Dictionary,output:Dictionary)->void:
         var was_static: bool = not old.is_empty() and not _floor(old,input.background)
         var now_static: bool = not row.is_empty() and not _floor(row,background)
         full_membership = full_membership or was_static!=now_static
+    var all_rows: Array = _all_visual(input.retained,patch) if full_membership else []
+    # Support directories and wall geometry read only immutable after-values
+    # and touch no catalog cache. They overlap visibility, routing, ground and
+    # source preparation instead of extending this worker's sequence.
+    var side:Dictionary={}
+    var side_task:int=WorkerThreadPool.add_task(_derive_support_walls.bind(input,patch.rebuild_rows,all_rows,full_membership,side),false,"Prepare support and wall geometry")
+    var sight = _candidate_visibility(input,patch)
+    worker_phases.visibility=(Time.get_ticks_usec()-phase_started)/1000.0;phase_started=Time.get_ticks_usec()
     var ground = {}; var wanted = {}; var packets = {}; var supports = {}
     var ground_changes = {}; var ground_removed = {}; var removed_wanted: Array = []
-    var all_rows: Array = _all_visual(input.retained,patch) if full_membership else []
     var rows_to_route: Array = all_rows if full_membership else patch.visual_changes.values()
     var residue_source_admitted:bool=not Catalog.prepared_asset("particles.region.blood",input.cache).is_empty()
     var residue_source_needed:bool=false
@@ -368,6 +380,7 @@ static func derive_static(input:Dictionary,output:Dictionary)->void:
     # A disclosed residue can change without changing its terrain geometry or
     # disclosing an injury event. Its server tile after-value owns this source.
     if residue_source_needed and Catalog.asset("particles.region.blood",input.cache).is_empty():
+        WorkerThreadPool.wait_for_task_completion(side_task)
         output.merge({"complete":false,"error":"Cannot load selected asset metadata: particles.region.blood","worker_ms":(Time.get_ticks_usec()-started)/1000.0})
         return
     worker_phases.routing=(Time.get_ticks_usec()-phase_started)/1000.0;phase_started=Time.get_ticks_usec()
@@ -435,10 +448,10 @@ static func derive_static(input:Dictionary,output:Dictionary)->void:
         environment_paths.merge(sources.paths);environment_fixtures.merge(sources.fixtures)
     environment_paths.make_read_only()
     worker_phases.sources=(Time.get_ticks_usec()-phase_started)/1000.0;phase_started=Time.get_ticks_usec()
-    # Full membership/view changes are explicit larger geometry jobs. Sparse
-    # source changes use the existing owner-side wall bucket invalidations.
-    var geometry = WallReveal.prepare_geometry(input.state.tiles,all_rows,input.quarter) if full_membership else {}
-    worker_phases.walls=(Time.get_ticks_usec()-phase_started)/1000.0;phase_started=Time.get_ticks_usec()
+    WorkerThreadPool.wait_for_task_completion(side_task)
+    var ground_support:Dictionary=side.support;var geometry:Dictionary=side.geometry
+    worker_phases.support=side.support_ms;worker_phases.walls=side.walls_ms
+    worker_phases.side_wait=(Time.get_ticks_usec()-phase_started)/1000.0;phase_started=Time.get_ticks_usec()
     var canonical_tiles:Dictionary=input.canonical_tiles if input.has("canonical_tiles") else input.actor_state.tiles
     # The existing sparse/full terrain walk supplies authoritative residue
     # values, including remembered/offscreen cells. Camera motion cannot create

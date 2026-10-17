@@ -12,6 +12,41 @@ static func new_group(entry:Dictionary,crop:Dictionary,visibility:float,id:Array
     return {"id":id,"entry":entry,"info":info,"material":material,"crop":crop,"version":-1,"source_shader":null,
         "highlighted":null,"visibility":visibility,"join_mask":join_mask,"rank":0,"water":info.water}
 
+static func static_group(input:Dictionary,key:Array,visibility:float,join_mask:int,world_origin:Variant=null)->Dictionary:
+    # One private receiving material from captured source values. The planner
+    # and the environment resource producer construct it identically.
+    var group:Dictionary=new_group(input.get("entry",{}),input.crop,visibility,key,input.info,join_mask)
+    var material:ShaderMaterial=group.material
+    for name in input.parameters:material.set_shader_parameter(name,input.parameters[name])
+    material.set_shader_parameter("use_instance_visibility",false)
+    material.set_shader_parameter("source_crop",input.crop.uv)
+    material.set_shader_parameter("atlas_cell_size",Vector2(input.crop.pixels.size))
+    material.set_shader_parameter("receiver_visibility",visibility)
+    material.set_shader_parameter("ground_join_mask",join_mask)
+    material.set_shader_parameter("store_irradiance",input.info.capped)
+    material.set_shader_parameter("world_to_canvas",input.basis)
+    material.set_shader_parameter("actual_scene_viewport_size",input.screen)
+    material.set_shader_parameter("highlighted",input.highlighted)
+    if input.info.water:material.set_shader_parameter("receiver_world_origin",world_origin)
+    group.version=input.version;group.source_shader=input.source_shader;group.source_material=input.source_material
+    group.target_material=material;group.target_shader=input.info.shader;group.binding_revision=input.binding_revision
+    group.capped=input.info.capped;group.seconds=null;group.highlighted=input.highlighted
+    return group
+
+static func realize_output(output:Dictionary)->void:
+    # The deferred output material of one private source, realized once.
+    var input:Dictionary=output.input
+    var material:ShaderMaterial=ShaderMaterial.new();material.shader=input.shader
+    for name in input.parameters:material.set_shader_parameter(name,input.parameters[name])
+    material.get_rid()
+    output.received_material=material;output.binding=input.binding
+    if input.capped:
+        var sample:Dictionary=output.sample
+        output.received_source_key={"binding_revision":sample.binding_revision,"version":sample.version,
+            "output":material,"output_shader":input.shader,"quad_size":input.quad_size}
+        output.received_style={"output":material,"visibility":sample.visibility,"highlighted":sample.highlighted,"seconds":sample.seconds}
+    output.erase("input")
+
 static func _row(entry: Dictionary, row_id: String) -> Dictionary:
     return entry.batch_rows[entry.ground_indices[row_id]] if entry.has("batch_rows") else entry.placement
 
@@ -538,7 +573,13 @@ static func _capture_source_value(atlas,work:Dictionary,world,job:Dictionary)->b
         source.future_visible=job.get("source_visible",entry.node.visible)
         job.source_id=id
         work.binding_sources[id]=prepared;work.source_ground_versions[id]=0
-        if not source.info.dynamic:work.group_inputs[id]=prepared.group_input
+        if not source.info.dynamic:
+            work.group_inputs[id]=prepared.group_input
+            # The resource producer already built this source's single-row
+            # receiving material; the planner adopts it when the key matches.
+            if prepared.has("static_group"):
+                var group:Dictionary=prepared.static_group;prepared.erase("static_group")
+                work.private_groups[id]={group.id:group}
         if work.capture_sparse:
             _need_receiver(atlas,work,str(id)+":source")
             _need_support(work,source.rows[0])
@@ -685,6 +726,7 @@ static func compute_candidate(work:Dictionary)->void:
         var source:Dictionary=work.source_patches.get(receiver.spec.source_id,{})
         if not source.is_empty():
             source.receivers.erase(receiver.row_id);source.by_row.erase(receiver.row_id);source.packets.erase(receiver.row_id)
+    work.spec_worker_ms=(Time.get_ticks_usec()-started)/1000.0
     work.plan=_plan(work.passive,work.source_patches,work.removed,work.specs)
     if work.get("global",false) and work.plan.get("error","") in ["changed_crop","append_overflow"]:
         # Preserve addresses when the normal planner fits. A real rebase uses
@@ -711,8 +753,10 @@ static func compute_candidate(work:Dictionary)->void:
             work.plan.growing=work.plan.next_height!=work.passive.viewport.size.y
     if work.plan.has("error"):
         work.error=work.plan.error;work.worker_ms=(Time.get_ticks_usec()-started)/1000.0;return
+    var addresses_started:int=Time.get_ticks_usec()
     if not _candidate_addresses(work):
         work.worker_ms=(Time.get_ticks_usec()-started)/1000.0;return
+    work.address_worker_ms=(Time.get_ticks_usec()-addresses_started)/1000.0
     # Native source/mesh values were captured once per source. Project final
     # static rows here, after support expansion, without reading live Nodes or
     # Resources. Scene binding consumes these numeric operands exactly once.
@@ -753,18 +797,7 @@ static func compute_candidate(work:Dictionary)->void:
     for id in work.source_patches:
         var source:Dictionary=work.source_patches[id]
         var output:Dictionary=source.get("prepared_output",{})
-        if output.has("input"):
-            var input:Dictionary=output.input
-            var material:ShaderMaterial=ShaderMaterial.new();material.shader=input.shader
-            for name in input.parameters:material.set_shader_parameter(name,input.parameters[name])
-            material.get_rid()
-            output.received_material=material;output.binding=input.binding
-            if input.capped:
-                var sample:Dictionary=output.sample
-                output.received_source_key={"binding_revision":sample.binding_revision,"version":sample.version,
-                    "output":material,"output_shader":input.shader,"quad_size":input.quad_size}
-                output.received_style={"output":material,"visibility":sample.visibility,"highlighted":sample.highlighted,"seconds":sample.seconds}
-            output.erase("input");output_count+=1
+        if output.has("input"):realize_output(output);output_count+=1
         if not output.is_empty():
             var position:Vector2i=Vector2i.ZERO
             if not source.is_floor:
@@ -791,7 +824,7 @@ static func compute_candidate(work:Dictionary)->void:
 
 static func _prepare_group_resources(work:Dictionary)->void:
     var started:int=Time.get_ticks_usec();var counts:Dictionary=work.group_users.duplicate()
-    var created:int=0;var uniforms:int=0;var rid_usec:int=0
+    var created:int=0;var prepared_groups:int=0;var uniforms:int=0;var rid_usec:int=0
     var ranks:Dictionary=work.ranks.duplicate();var rank_count:int=work.rank_count
     var selected_groups:Dictionary=work.planned_groups.duplicate();var material_rids:Dictionary={}
     var materials:Dictionary={};var versions:Dictionary={};var introductions:Dictionary={}
@@ -814,29 +847,17 @@ static func _prepare_group_resources(work:Dictionary)->void:
                 var groups:Dictionary=work.private_groups[spec.source_id]
                 if not groups.has(key):
                     var input:Dictionary=work.group_inputs[spec.source_id]
-                    var group:Dictionary=new_group(input.entry,input.crop,visibility,key,input.info,spec.join_mask)
-                    var material:ShaderMaterial=group.material
-                    for name in input.parameters:material.set_shader_parameter(name,input.parameters[name]);uniforms+=1
-                    material.set_shader_parameter("use_instance_visibility",false)
-                    material.set_shader_parameter("source_crop",input.crop.uv)
-                    material.set_shader_parameter("atlas_cell_size",Vector2(input.crop.pixels.size))
-                    material.set_shader_parameter("receiver_visibility",visibility)
-                    material.set_shader_parameter("ground_join_mask",spec.join_mask)
-                    material.set_shader_parameter("store_irradiance",input.info.capped)
-                    material.set_shader_parameter("world_to_canvas",input.basis)
-                    material.set_shader_parameter("actual_scene_viewport_size",input.screen)
-                    material.set_shader_parameter("highlighted",input.highlighted)
-                    if input.info.water:material.set_shader_parameter("receiver_world_origin",work.projection_packets[id].world_origin)
-                    group.version=input.version;group.source_shader=input.source_shader;group.source_material=input.source_material
-                    group.target_material=material;group.target_shader=input.info.shader;group.binding_revision=input.binding_revision
-                    group.capped=input.info.capped;group.seconds=null;group.highlighted=input.highlighted
+                    var group:Dictionary=static_group(input,key,visibility,spec.join_mask,
+                        work.projection_packets[id].world_origin if input.info.water else null)
+                    uniforms+=input.parameters.size()
                     # Only this newly constructed private resource is realized.
                     # The scene owner later attaches its ready native RID; no
                     # displayed material/Node/texture is mutated by the worker.
                     var rid_started:int=Time.get_ticks_usec()
-                    material.get_rid()
+                    group.material.get_rid()
                     rid_usec+=Time.get_ticks_usec()-rid_started
                     groups[key]=group;created+=1
+                else:prepared_groups+=1
                 selected_groups[key]=groups[key]
                 material_rids[key]=groups[key].material.get_rid()
                 materials[key]=groups[key].material;versions[key]=groups[key].version
@@ -873,7 +894,8 @@ static func _prepare_group_resources(work:Dictionary)->void:
         record_usec+=Time.get_ticks_usec()-record_started
     work.group_worker_ms=(Time.get_ticks_usec()-started)/1000.0
     work.group_worker_rid_ms=rid_usec/1000.0
-    work.worker_group_materials=created;work.worker_group_uniforms=uniforms
+    work.worker_group_materials=created+prepared_groups;work.worker_group_uniforms=uniforms
+    work.prepared_group_materials=prepared_groups
     work.canvas_worker_ms=canvas_usec/1000.0;work.worker_canvas_items=work.private_draws.size()
     work.receiver_record_worker_ms=record_usec/1000.0
     work.source_bind_ids=[];work.source_bind_cursor=0
@@ -1220,6 +1242,11 @@ static func _publish_bulk(atlas,work:Dictionary,positions:Dictionary,world:Node)
     atlas.last_reconcile_phases.prepared_group_worker_rid_ms=work.get("group_worker_rid_ms",0.0)
     atlas.last_reconcile_phases.prepared_worker_group_materials=work.get("worker_group_materials",0)
     atlas.last_reconcile_phases.prepared_worker_group_uniforms=work.get("worker_group_uniforms",0)
+    atlas.last_reconcile_phases.prepared_resource_group_materials=work.get("prepared_group_materials",0)
+    atlas.last_reconcile_phases.prepared_spec_worker_ms=work.get("spec_worker_ms",0.0)
+    atlas.last_reconcile_phases.prepared_plan_specs_worker_ms=work.plan.get("specs_ms",0.0)
+    atlas.last_reconcile_phases.prepared_plan_reservations_worker_ms=work.plan.get("reservations_ms",0.0)
+    atlas.last_reconcile_phases.prepared_address_worker_ms=work.get("address_worker_ms",0.0)
     atlas.last_reconcile_phases.prepared_canvas_worker_ms=work.get("canvas_worker_ms",0.0)
     atlas.last_reconcile_phases.prepared_worker_canvas_items=work.get("worker_canvas_items",0)
     atlas.last_reconcile_phases.prepared_static_batches=int(work.get("static_batch")!=null)

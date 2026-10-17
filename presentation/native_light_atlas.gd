@@ -541,6 +541,15 @@ static func private_environment_binding(entry:Dictionary,value:Dictionary,option
     prepared.erase("entry") # Installed only after removing the owning entry's packet field.
     prepared.private_static=true;prepared.crop_key=crop_key
     group_input.parameters.make_read_only()
+    # A non-floor static source has one receiving row whose group key is
+    # already final: its material, its seeded visibility and no support mask.
+    # Building that material here keeps it off the planner after construction.
+    if not info.dynamic and not info.water and not GroundReceiving.eligible(entry.placement):
+        var visibility:float=sampled.scenery_value
+        var group:Dictionary=Delta.static_group(group_input,[entry.material.get_instance_id(),visibility,"",0],visibility,0)
+        group.material.get_rid()
+        prepared.static_group=group
+    Delta.realize_output(output)
     prepared.capture=Delta.private_source_capture(prepared)
     return prepared
 
@@ -555,6 +564,7 @@ func adopt_private_environment_binding(entry:Dictionary,packet:Dictionary,world:
     source.geometry[0]=entry.node.global_transform
     packet.entry=entry
     var input:Dictionary=packet.group_input;input.entry=entry
+    if packet.has("static_group"):packet.static_group.entry=entry
     var output:Dictionary=packet.output
     input.make_read_only()
     packet.receiver_parent=projection_root;output.private_node=true
