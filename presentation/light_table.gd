@@ -4,7 +4,8 @@ extends RefCounted
 ## cookie matrix Godot 4.7.2 derives from them (renderer_viewport.cpp
 ## light_shader_xform, renderer_canvas_render_rd.cpp light uniforms), built
 ## with the same float32 Transform2D operations. Cookies are layers of one
-## Texture2DArray. Both are shader globals: a light change is one small upload.
+## texture array, copied in on the GPU once per cookie and kept (no readback).
+## Both are shader globals: a light change is one small upload.
 const TEXELS := 4
 const FLOATS := TEXELS * 4
 
@@ -15,25 +16,28 @@ var issues: Array = []
 var uploads := 0
 var _image: Image
 var _table: ImageTexture
-var _cookies: Texture2DArray
-var _cookie_layers: Dictionary = {} # Cookie texture RID -> array layer.
-var _missing: Dictionary = {} # Cookie texture RID -> texture, not prepared at the last build.
+const COOKIE_SIZE := 256
+static var _cookie_publisher := 0 # Identity of the table whose array is bound.
+var _identity := 0
+const COOKIE_LAYERS := 64
+var _rd: RenderingDevice
+var _cookie_rd: RID
+var _cookies: TextureLayered # Texture2DArrayRD; Texture2DArray on the Compatibility path.
+var _cookie_layers: Dictionary = {} # Cookie texture RID -> array layer, kept once copied.
+var _cookie_images: Array[Image] = [] # Compatibility path only: one image per layer.
 
 ## `sources` are canvas sources as built by Lighting2D.project(). `cookie_image`
-## returns the retained RGBA8 image of a cookie texture, or null when it is not
-## prepared yet; such a light is left out and reported.
+## returns the RGBA8 image of a cookie texture; it is only used where there is no
+## RenderingDevice (Compatibility). A cookie not generated yet leaves its light
+## out for that frame and is reported.
 func publish(sources: Array, cookie_image: Callable) -> void:
     issues.clear()
-    var wanted: Dictionary = {}
-    for source in sources:
-        if source.enabled and source.texture != null: wanted[source.texture.get_rid()] = source.texture
-    if not _same_cookies(wanted, cookie_image): _build_cookies(wanted, cookie_image)
     var next := PackedFloat32Array()
     var next_ids := PackedStringArray()
     for source in sources:
         if not source.enabled or source.texture == null: continue
-        var rid: RID = source.texture.get_rid()
-        if not _cookie_layers.has(rid):
+        var layer: int = _cookie_layer(source.texture, cookie_image)
+        if layer < 0:
             issues.append("Light table has no prepared cookie for " + str(source.id))
             continue
         var position: Vector2 = source.screen_position
@@ -44,7 +48,7 @@ func publish(sources: Array, cookie_image: Callable) -> void:
         var weight: float = PackedFloat32Array([colour.a * energy])[0]
         next.append_array([position.x, position.y, float(source.height), weight,
             cookie.x.x, cookie.y.x, cookie.origin.x, cookie.x.y,
-            cookie.y.y, cookie.origin.y, float(_cookie_layers[rid]), 0.0,
+            cookie.y.y, cookie.origin.y, float(layer), 0.0,
             colour.r, colour.g, colour.b, 0.0])
         next_ids.append(str(source.id))
     ids = next_ids
@@ -80,33 +84,67 @@ func _empty_row() -> PackedFloat32Array:
 func invalidate() -> void:
     rows = PackedFloat32Array()
     _table = null
-    _cookie_layers = {}
-    _missing = {}
+    if _cookies != null: _publish_cookies()
 
-func _same_cookies(wanted: Dictionary, cookie_image: Callable) -> bool:
-    for rid in _missing:
-        if cookie_image.call(_missing[rid]) != null: return false
-    for rid in wanted:
-        if not _cookie_layers.has(rid) and not _missing.has(rid): return false
-    return true
+## The array layer holding this cookie, copying it in on first use.
+func _cookie_layer(texture: Texture2D, cookie_image: Callable) -> int:
+    var rid: RID = texture.get_rid()
+    if _cookie_layers.has(rid): return _cookie_layers[rid]
+    if _cookie_layers.size() >= COOKIE_LAYERS:
+        # Full: start over; the cookies still in use are copied again this frame.
+        _cookie_layers = {}; _cookie_images = []
+    if _rd == null: _rd = RenderingServer.get_rendering_device()
+    if _rd != null: return _copy_cookie(rid)
+    var image: Image = cookie_image.call(texture)
+    if image == null: return -1
+    if image.get_size() != Vector2i(COOKIE_SIZE, COOKIE_SIZE):
+        issues.append("Light cookie is not %dx%d" % [COOKIE_SIZE, COOKIE_SIZE]); return -1
+    var layer := _cookie_images.size()
+    _cookie_images.append(image)
+    var images := Texture2DArray.new()
+    images.create_from_images(_cookie_images)
+    _cookies = images
+    _publish_cookies()
+    _cookie_layers[rid] = layer
+    return layer
 
-func _build_cookies(wanted: Dictionary, cookie_image: Callable) -> void:
-    # Layers are reassigned on every rebuild; the rows are rewritten in the same call.
-    var images: Array[Image] = []
-    var layers: Dictionary = {}
-    _missing.clear()
-    for rid in wanted:
-        var image: Image = cookie_image.call(wanted[rid])
-        if image == null:
-            _missing[rid] = wanted[rid]
-            continue
-        if not images.is_empty() and (image.get_size() != images[0].get_size() or image.get_format() != images[0].get_format()):
-            issues.append("Light cookies differ in size or format; the table needs one layer size")
-            continue
-        layers[rid] = images.size()
-        images.append(image)
-    _cookie_layers = layers
-    if images.is_empty(): return
-    _cookies = Texture2DArray.new()
-    _cookies.create_from_images(images)
+## GPU copy of a generated RGBA8 cookie into the next layer: no readback.
+func _copy_cookie(rid: RID) -> int:
+    if not _cookie_rd.is_valid():
+        var format := RDTextureFormat.new()
+        format.texture_type = RenderingDevice.TEXTURE_TYPE_2D_ARRAY
+        format.format = RenderingDevice.DATA_FORMAT_R8G8B8A8_UNORM
+        format.width = COOKIE_SIZE; format.height = COOKIE_SIZE; format.array_layers = COOKIE_LAYERS
+        format.usage_bits = RenderingDevice.TEXTURE_USAGE_SAMPLING_BIT | RenderingDevice.TEXTURE_USAGE_CAN_COPY_TO_BIT
+        _cookie_rd = _rd.texture_create(format, RDTextureView.new(), [])
+        var array := Texture2DArrayRD.new()
+        array.texture_rd_rid = _cookie_rd
+        _cookies = array
+        _publish_cookies()
+    var source: RID = RenderingServer.texture_get_rd_texture(rid)
+    if not source.is_valid(): return -1
+    var format: RDTextureFormat = _rd.texture_get_format(source)
+    # A GradientTexture2D still holding its placeholder is not generated yet.
+    if format.width != COOKIE_SIZE or format.height != COOKIE_SIZE: return -1
+    if format.format != RenderingDevice.DATA_FORMAT_R8G8B8A8_UNORM:
+        issues.append("Light cookie format %d is not RGBA8" % format.format); return -1
+    var layer := _cookie_layers.size()
+    _rd.texture_copy(source, _cookie_rd, Vector3.ZERO, Vector3.ZERO, Vector3(COOKIE_SIZE, COOKIE_SIZE, 1), 0, 0, 0, layer)
+    _cookie_layers[rid] = layer
+    return layer
+
+func _init() -> void:
+    _identity = get_instance_id()
+
+func _publish_cookies() -> void:
     RenderingServer.global_shader_parameter_set(&"light_cookies", _cookies)
+    _cookie_publisher = _identity
+
+func _notification(what: int) -> void:
+    if what != NOTIFICATION_PREDELETE or not _cookie_rd.is_valid(): return
+    # Unbind before freeing, unless another table (another world) owns the global.
+    if _cookie_publisher == _identity:
+        RenderingServer.global_shader_parameter_set(&"light_cookies", null)
+        _cookie_publisher = 0
+    _cookies = null
+    _rd.free_rid(_cookie_rd)

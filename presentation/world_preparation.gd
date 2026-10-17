@@ -59,9 +59,6 @@ var environment_source_record:Dictionary={}
 var optical_owner:RefCounted
 var light_preparation:Dictionary={}
 var cookie_source_cursor:int=0
-var cookie_image_cursor:int=0
-var cookie_jobs:Array=[]
-var cookie_seen:Dictionary={}
 var wanted_ids: Array = []
 var ground_keys: Array = []
 var cursor = 0
@@ -697,16 +694,6 @@ func step(budget_usec: int = 2000) -> void:
                 if media_issue not in presentation_errors:presentation_errors.append(media_issue)
                 break
         elif phase=="membership_begin":_begin_membership()
-        elif phase=="cookie_images":
-            var job:Dictionary=cookie_jobs[cookie_image_cursor]
-            if not job.drawn:break
-            var cookie_started:int=Time.get_ticks_usec()
-            var ok:bool=host.generated_shadows.prepare_cookie(job.texture)
-            FrameProfile.end_phase(profile,"world_prepare_cookie_image",cookie_started)
-            if not ok:
-                media_issue="World preparation could not read the exact native light cookie."
-                phase="failed";return
-            cookie_image_cursor+=1
         elif phase=="membership_objects":
             var id: String = wanted_ids[cursor]; cursor += 1
             var group: Dictionary = native_groups.get(id,membership_base.groups.get(id,{}))
@@ -908,31 +895,18 @@ func _advance_completed_phase()->bool:
             else:
                 phase="sort_wait"
                 task=WorkerThreadPool.add_task(_sort_order,false,"Sort prepared world")
-        "cookie_images":
-            if cookie_image_cursor!=cookie_jobs.size():return false
-            phase="native_receivers"
         _:return false
     return true
 
+# A light's cookie is generated off the main thread (with its image kept for
+# CPU consumers); its source advances once the cookie exists.
 func _prepare_cookie_resource() -> void:
     var source:Dictionary=result.light_resolution.sources[cookie_source_cursor]
-    cookie_source_cursor+=1
-    var texture:Texture2D=host.source_lighting.prepare_cookie(source)
-    if texture==null or host.generated_shadows.cookie_prepared(texture) or cookie_seen.has(texture.get_rid()):return
-    cookie_seen[texture.get_rid()]=true
-    var job:Dictionary={"texture":texture,"drawn":false}
-    cookie_jobs.append(job)
-    # Let the existing actor/static preparation continue while the native
-    # GradientTexture is processed. No current light node is configured here.
-    if not RenderingServer.frame_post_draw.is_connected(_cookie_drawn):
-        RenderingServer.frame_post_draw.connect(_cookie_drawn,CONNECT_ONE_SHOT)
-
-func _cookie_drawn() -> void:
-    for job in cookie_jobs:job.drawn=true
+    host.source_lighting.prepare_cookie(source)
+    if not host.source_lighting.cookie_pending(source):cookie_source_cursor+=1
 
 func _finish_preparation() -> void:
-    if cookie_image_cursor<cookie_jobs.size():phase="cookie_images"
-    else:phase="native_receivers"
+    phase="native_receivers"
 
 func _prepare_actor(deadline:int=9223372036854775807)->bool:
     # Native entries remain in canonical layer order. A missing source defers

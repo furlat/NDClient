@@ -9,6 +9,7 @@ const TORCH_COLOUR := Color(0.809372,0.429306,0.269121,1.0)
 const TORCH_ITEM_IDS = ["equipment.portable_torch","environment.wall_torch"]
 const DEFAULT_COOKIE = "C:/Users/tommaso/Documents/Dev/NDCharacterLight/.reference-template/scenes/vfx/textures/T_basic1_vfx.PNG"
 const RangeProfile = preload("res://presentation/resources/light_range_profile.gd")
+const LightCookies = preload("res://presentation/light_cookies.gd")
 var range_profile: RangeProfile = preload("res://authoring/presentation/light_ranges.tres")
 var cookie_path: String = ProjectSettings.get_setting("source_data/light_cookie",DEFAULT_COOKIE)
 var sources: Array = []
@@ -81,7 +82,17 @@ func _source_cookie(source: Dictionary) -> Texture2D:
     var very = clampf(float(source.very_bright_radius_feet) / (5.0 * outer), 0.0, 1.0)
     var bright = clampf(maxf(floor(float(source.bright_radius_feet) / 5.0), 1.0) / outer, very, 1.0)
     var key = Vector4(very, bright, range_profile.very_bright_edge, range_profile.bright_edge)
-    if _range_cookies.has(key): return _range_cookies[key]
+    # One immutable cookie per ratio/profile, shared across emitters. It shapes
+    # the receiving plane; it is not an objective light map. Generated off the
+    # main thread: null until ready, which preparation waits for.
+    if not _range_cookies.has(key): _range_cookies[key] = LightCookies.start(_range_gradient(very, bright))
+    return LightCookies.texture(_range_cookies[key])
+
+## True while the cookie this source needs is still being generated.
+func cookie_pending(source: Dictionary) -> bool:
+    return range_profile != null and _source_cookie(source) == null
+
+func _range_gradient(very: float, bright: float) -> Gradient:
     var gradient = Gradient.new()
     gradient.interpolation_mode = Gradient.GRADIENT_INTERPOLATE_CUBIC
     gradient.offsets = PackedFloat32Array([0.0, 1.0])
@@ -93,15 +104,7 @@ func _source_cookie(source: Dictionary) -> Texture2D:
     if bright > very and bright < 1:
         var value = range_profile.bright_edge
         gradient.add_point(bright, Color(value, value, value))
-    var texture = GradientTexture2D.new()
-    texture.width = 256; texture.height = 256
-    texture.fill = GradientTexture2D.FILL_RADIAL
-    texture.fill_from = Vector2(.5, .5); texture.fill_to = Vector2(1, .5)
-    texture.gradient = gradient
-    # One immutable native texture per ratio/profile, shared across emitters/pages.
-    # It shapes the existing receiving plane; it is not an objective light map.
-    _range_cookies[key] = texture
-    return texture
+    return gradient
 
 func prepare_cookie(source: Dictionary) -> Texture2D:
     # Only immutable artwork is admitted here. The current source list, native

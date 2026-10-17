@@ -770,7 +770,7 @@ func _detailed_frame_context(active_motion: bool) -> Dictionary:
             "actor_binding_cursor":pending_world.binding_cursor,"actor_binding_total":pending_world.actor_bindings.size(),
             "actor_binding_path":pending_world.actor_bindings[pending_world.binding_cursor].value.get("path","") if pending_world.binding_cursor<pending_world.actor_bindings.size() else "",
             "blood_rows":pending_world.result.get("blood_rows",{}).size(),"blood_handles":pending_world.blood_preparation.handles.size(),
-            "retained_lights":pending_world.light_preparation.get("retained",false),"cookie_jobs":pending_world.cookie_jobs.size()} if pending_world!=null else {}),
+            "retained_lights":pending_world.light_preparation.get("retained",false)} if pending_world!=null else {}),
         "native_startup":{"ready":native_startup.ready,"completed":native_startup.completed,"total":native_startup.total,"elapsed_ms":native_startup.elapsed_ms},
         "generated_shadows":generated_shadows.diagnostics(),"light_table":{"lights":light_table.count,"uploads":light_table.uploads},
         "native_spell_render_ms":component_renderer.native_spells.render_timings(),
