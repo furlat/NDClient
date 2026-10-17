@@ -115,6 +115,9 @@ var retiring_views: Array = []
 var retirement_frame = -1
 var retiring_node_count = 0
 const PREPARATION_USEC=2000
+const PREPARATION_DUE_MS:=150.0
+const PREPARATION_DUE_USEC:=4000
+const PREPARATION_HELD_USEC:=8000
 var preparation_admission:Dictionary={"frame":-1,"used_usec":0,"limit_usec":PREPARATION_USEC,"phase_usec":{},"optional_order":[],"minimum_cleanup":0}
 # Optional preparation is skipped in a frame whose script work already passed
 # this, at most OPTIONAL_MAX_SKIPS frames in a row.
@@ -482,11 +485,20 @@ func set_light_cap_enabled(enabled: bool) -> void:
 func _preparation_budget()->Dictionary:
     if preparation_admission.frame!=Engine.get_process_frames():
         preparation_admission.frame=Engine.get_process_frames()
+        preparation_admission.limit_usec=_preparation_limit()
         preparation_admission.used_usec=0;preparation_admission.phase_usec={}
         preparation_admission.background_source_handoffs=0
         preparation_admission.optional_order=[];preparation_admission.minimum_cleanup=0
         preparation_admission.required_legacy_constructors=0
     return preparation_admission
+
+## The allowance grows only for a world due soon: a few slower frames before
+## its cue instead of a held clock at it (live play; Studio shares a fixed one).
+func _preparation_limit()->int:
+    if external_playback or pending_world==null or pending_world.prepared or pending_world.initial:return PREPARATION_USEC
+    if timeline.waiting_for_world:return PREPARATION_HELD_USEC
+    var until_ms:float=float(pending_world.boundary.get("display_ms",INF))-timeline.display_ms
+    return PREPARATION_DUE_USEC if until_ms<=PREPARATION_DUE_MS else PREPARATION_USEC
 
 func _charge_preparation(name:String,started:int,charged_before:int)->void:
     var budget:Dictionary=_preparation_budget()
@@ -747,8 +759,10 @@ func _process(delta: float) -> void:
         _prepare_optional_work()
     else:
         # This frame already did its heavy work (a world publication, a burst
-        # of sampling); optional work waits a frame instead of extending it.
+        # of sampling); speculative work waits a frame instead of extending it.
+        # The next received world cut is not speculative: keep preparing it.
         optional_skips+=1
+        _step_world_preparation()
     FrameProfile.end_phase(profile,"optional_preparation",phase)
     if not media_issue.is_empty():
         var preparing: Dictionary = timeline.current if not timeline.current.is_empty() else (timeline.queue[0] if not timeline.queue.is_empty() else {})
