@@ -153,14 +153,14 @@ func _actor(id:String)->MeshInstance3D:
         owner.add_child(node);actors[id]=node
     return actors[id]
 
-func prepare_membership(static_entries:Array,visual_actors:Dictionary,budget:Dictionary={})->Dictionary:
-    # Membership/geometry allocation belongs to the existing cue preparation
-    # account. New proxies stay hidden until sync publishes the displayed cut.
+## Creates or updates the receivers these terrain entries need and retires
+## nothing, so a rotation prepares its target quarter while the displayed
+## quarter keeps its receivers.
+func prepare_floors(static_entries:Array,budget:Dictionary={},retained:Dictionary={})->Dictionary:
     var result:Dictionary={"ready":true,"pending":0}
-    var retained_floors:Dictionary={}
     for entry in static_entries:
         if entry.role!="terrain" or not entry.node.visible:continue
-        var id:int=entry.node.get_instance_id();retained_floors[id]=true
+        var id:int=entry.node.get_instance_id();retained[id]=true
         var changed:bool=not floors.has(id) or (entry.has("batch_rows") and (not entry.has("ground_version") or floors[id].get_meta("ground_version",-1)!=entry.ground_version))
         if not changed:continue
         if not budget.is_empty() and budget.used_usec>=budget.limit_usec:
@@ -169,6 +169,13 @@ func prepare_membership(static_entries:Array,visual_actors:Dictionary,budget:Dic
         if entry.has("batch_rows"):_batch_floor(entry)
         else:_floor(id).position=Placement.contact(entry.placement)
         if not budget.is_empty():budget.used_usec+=Time.get_ticks_usec()-started
+    return result
+
+func prepare_membership(static_entries:Array,visual_actors:Dictionary,budget:Dictionary={})->Dictionary:
+    # Membership/geometry allocation belongs to the existing cue preparation
+    # account. New proxies stay hidden until sync publishes the displayed cut.
+    var retained_floors:Dictionary={}
+    var result:Dictionary=prepare_floors(static_entries,budget,retained_floors)
     var retained_actors:Dictionary={}
     for visual in visual_actors.values():
         for source in visual.entries:

@@ -390,6 +390,10 @@ static func submitted_geometry(handle:Dictionary,frustum:Array[Plane],layer_mask
         if intersects:return true
     return false
 
+## A rotation prepares its target quarter's floor receivers before it publishes.
+func prepare_receivers(static_entries:Array,budget:Dictionary)->bool:
+    return _support==null or _support.prepare_floors(static_entries,budget).ready
+
 func prepare_boundary(candidate:Node3D,jobs:Array,state:Dictionary,budget:Dictionary)->bool:
     if groups.is_empty() and _required_ids.is_empty():return true
     return _support==null or _support.prepare_boundary(candidate,jobs,state,budget)

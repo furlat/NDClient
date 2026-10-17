@@ -295,6 +295,7 @@ func run()->void:
         apply_mode(scene,"hidden",false,false)
         var restored=await refresh_capture(scene,"final-q%d-hidden-restored"%quarter)
         check(hidden.get_data()==restored.get_data(),"Cap/Normals restores final beauty byte-exactly q"+str(quarter))
+        check(scene.component_renderer.ready,"Native effects receive on the published quarter's floors q"+str(quarter)+" "+str(scene.component_renderer.native_spells.issues.slice(0,2)))
         check(scene.timeline.display_ms==final_clock,"Quarter/settings preserve final displayed clock q"+str(quarter))
     check(scene.timeline.state==canonical,"Capture matrix never changes canonical state")
     check(scene.presentation_errors.is_empty() and scene.light_table.issues.is_empty(),"No source/light table errors")

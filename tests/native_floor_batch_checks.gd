@@ -24,7 +24,7 @@ func publish(value:Dictionary,rows:Array,batched:bool)->void:
             var node=MultiMeshInstance3D.new();node.multimesh=MultiMesh.new()
             node.multimesh.transform_format=MultiMesh.TRANSFORM_3D
             node.multimesh.mesh=PlaneMesh.new();value.host.add_child(node)
-            value.entries.append({"id":"batch","role":"terrain","node":node,"ground_version":0})
+            value.entries.append({"id":"batch","role":"terrain","node":node,"material":ShaderMaterial.new(),"ground_version":0})
         var entry:Dictionary=value.entries[0]
         entry.ground_version+=1;entry.batch_rows=rows.duplicate(true);entry.placement=rows[0]
         entry.node.multimesh.instance_count=rows.size()
@@ -34,7 +34,7 @@ func publish(value:Dictionary,rows:Array,batched:bool)->void:
         value.entries=[]
         for row in rows:
             var node=MeshInstance3D.new();node.mesh=PlaneMesh.new();node.position=Placement.contact(row);value.host.add_child(node)
-            value.entries.append({"id":row.id,"role":"terrain","node":node,"placement":row.duplicate(true)})
+            value.entries.append({"id":row.id,"role":"terrain","node":node,"material":ShaderMaterial.new(),"placement":row.duplicate(true)})
 func view(value:Dictionary,quarter:int,zoom:float)->void:
     var camera:Camera3D=value.host.camera
     camera.basis=Basis(Vector3.UP,quarter*PI*.5)*Basis.from_euler(Vector3(-atan(sqrt(.5)),PI/4,0))

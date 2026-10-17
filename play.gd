@@ -3083,6 +3083,11 @@ func _prepare_rotation() -> void:
         pending_view.is_prepared = false; pending_view.begin_style(); rotation_publication_frame = -1; return
     if not pending_view.projection_is_current():
         pending_view.refresh_projection(); rotation_publication_frame = -1; return
+    # Native spells receive on the target quarter's floors from its first frame.
+    var receivers_started:int=Time.get_ticks_usec();var receivers_before:int=budget.used_usec
+    var receivers_ready:bool=component_renderer.native_spells.prepare_receivers(pending_view.static_entries,budget)
+    _charge_preparation("rotation_receivers",receivers_started,receivers_before)
+    if not receivers_ready: return
     # Let prepared mask textures complete a native frame before publication.
     if rotation_publication_frame < 0:
         rotation_publication_frame = Engine.get_process_frames(); return
