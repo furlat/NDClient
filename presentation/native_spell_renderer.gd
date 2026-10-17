@@ -66,7 +66,7 @@ func _ensure(world:Node)->void:
         world.camera.cull_mask &= ~mask
         # The shared renderer exists before interactive playback, like the
         # ordinary light atlas. Its first allocation must not happen on impact.
-        _support=Support.new();_support.lit_sprites=world.get("lit_sprites")==true;_support.attach_shared(world)
+        _support=Support.new();_support.attach_shared(world)
         _support.set_enabled(false)
         var layer=Layer.make(world,1<<FIRST_BIT);layer.bit=FIRST_BIT
         Layer.integrate(layer,_support)

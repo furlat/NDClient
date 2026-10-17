@@ -11,7 +11,6 @@ const CharacterDepth=preload("res://presentation/native_scene_support.gdshader")
 const DepthCopy=preload("res://presentation/native_scene_depth_copy.gdshader")
 const LAYER=1<<14
 const DEPTH_LAYER=1<<13
-var lit_sprites:=false # Sprites display their own lit materials (play.gd lit_sprites).
 var actors:Dictionary={}
 var floors:Dictionary={}
 var owner:Node3D
@@ -116,7 +115,7 @@ func set_enabled(value:bool)->void:
         _source_bindings.clear()
         solid_masks.clear();_adopt_key=[]
         for node in actors.values():
-            for parameter in ["sheet","received","component_depth","component_support","component_solid"]:
+            for parameter in ["sheet","component_depth","component_support","component_solid"]:
                 node.material_override.set_shader_parameter(parameter,null)
             node.material_override.remove_meta(&"native_scene_written")
 
@@ -173,7 +172,7 @@ func prepare_membership(static_entries:Array,visual_actors:Dictionary,budget:Dic
     var retained_actors:Dictionary={}
     for visual in visual_actors.values():
         for source in visual.entries:
-            if source.role=="shadow" or not source.actor_layer.get("effect",{}).is_empty() or not source.node.visible or not source.has("received_material"):continue
+            if source.role=="shadow" or not source.actor_layer.get("effect",{}).is_empty() or not source.node.visible:continue
             var alpha:Variant=SourceMaterial.value(source,"condition_alpha")
             if alpha!=null and float(alpha)<1.0:continue
             retained_actors[source.id]=true
@@ -276,12 +275,11 @@ func sync(static_entries:Array,visual_actors:Dictionary,view_camera:Camera3D)->v
             if floor_node.position!=contact:floor_repositioned+=1
             floor_node.position=contact
         floors[id].visible=true
-        if entry.has("received_material"):
-            var displayed:ShaderMaterial=_displayed(entry)
-            _outputs.append(displayed)
-            live_outputs[displayed]=true
-            displayed.set_shader_parameter("native_scene_enabled",true)
-            displayed.set_shader_parameter("native_scene_plane",true)
+        var displayed:ShaderMaterial=entry.material
+        _outputs.append(displayed)
+        live_outputs[displayed]=true
+        displayed.set_shader_parameter("native_scene_enabled",true)
+        displayed.set_shader_parameter("native_scene_plane",true)
         floor_binding_usec+=Time.get_ticks_usec()-binding_started
     var floor_retirement_started:int=Time.get_ticks_usec()
     for id in floors.keys():
@@ -304,15 +302,14 @@ func sync(static_entries:Array,visual_actors:Dictionary,view_camera:Camera3D)->v
         for source in visual.entries:
             if source.role=="shadow" or not source.actor_layer.get("effect",{}).is_empty():continue
             var has_geometry:bool=SourceMaterial.value(source,"has_component_geometry")==true
-            if source.has("received_material"):
-                var output:ShaderMaterial=_displayed(source)
-                _outputs.append(output)
-                live_outputs[output]=true
-                output.set_shader_parameter("native_scene_enabled",has_geometry and source.node.visible)
-                output.set_shader_parameter("native_scene_plane",false)
-                output.set_shader_parameter("native_scene_pivot",source.pivot)
-                if has_geometry:output.set_shader_parameter("native_scene_ground_height",source.get("geometry_ground_pixels",19.0)*SourceMaterial.value(source,"component_units"))
-            if not source.node.visible or not source.has("received_material"):continue
+            var output:ShaderMaterial=source.material
+            _outputs.append(output)
+            live_outputs[output]=true
+            output.set_shader_parameter("native_scene_enabled",has_geometry and source.node.visible)
+            output.set_shader_parameter("native_scene_plane",false)
+            output.set_shader_parameter("native_scene_pivot",source.pivot)
+            if has_geometry:output.set_shader_parameter("native_scene_ground_height",source.get("geometry_ground_pixels",19.0)*SourceMaterial.value(source,"component_units"))
+            if not source.node.visible:continue
             # Translucent bodies require transparent compositing, not an
             # invisible opaque blocker. This bridge admits solid surfaces only.
             var condition_alpha:Variant=SourceMaterial.value(source,"condition_alpha")
@@ -334,9 +331,7 @@ func sync(static_entries:Array,visual_actors:Dictionary,view_camera:Camera3D)->v
             if not source.has("source_version") or _source_bindings.get(id)!=binding:
                 for parameter in Shadows.CASTER_PARAMETERS:material.set_shader_parameter(parameter,SourceMaterial.value(source,parameter))
                 _source_bindings[id]=binding
-            var received:ShaderMaterial=source.received_material
-            var values:Array=[received.get_shader_parameter("received"),received.get_shader_parameter("source_crop"),
-                received.get_shader_parameter("atlas_region"),has_geometry and solid!=null,solid,
+            var values:Array=[has_geometry and solid!=null,solid,
                 source.get("geometry_cell_size",source.cell),view_camera.global_basis,source.pivot,
                 source.get("geometry_ground_pixels",19.0)*SourceMaterial.value(source,"component_units") if has_geometry else null]
             # The proxy owns these uniforms; write them only when a value changed.
@@ -357,7 +352,7 @@ func sync(static_entries:Array,visual_actors:Dictionary,view_camera:Camera3D)->v
         if not live_outputs.has(material):material.set_shader_parameter("native_scene_enabled",false)
     last_sync_phases.retirement=(Time.get_ticks_usec()-phase_started)/1000.0
 
-const PROXY_PARAMETERS=["received","source_crop","atlas_region","has_geometry","component_solid","component_cell_size",
+const PROXY_PARAMETERS=["has_geometry","component_solid","component_cell_size",
     "display_basis","sprite_pivot","ground_height"]
 
 func close()->void:
@@ -370,7 +365,3 @@ func close()->void:
     if is_instance_valid(owner):owner.free()
     if is_instance_valid(viewport):viewport.free()
     actors.clear();floors.clear()
-
-# The atlas output, or the sprite's own material when sprites are lit in place.
-func _displayed(entry:Dictionary)->ShaderMaterial:
-    return entry.material if lit_sprites else entry.received_material

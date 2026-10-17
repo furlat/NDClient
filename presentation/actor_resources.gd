@@ -3,10 +3,9 @@ extends RefCounted
 ## selected Texture references are strong snapshots, never live directories.
 const Construction=preload("res://presentation/actor_construction.gd")
 const SourceMaterial=preload("res://presentation/source_material.gd")
-const Atlas=preload("res://presentation/native_light_atlas.gd")
 const Placement=preload("res://placement.gd")
 
-static func build_private(inputs:Dictionary,textures:Dictionary,resources:Dictionary,declared:Dictionary,atlas_options:Dictionary,output:Dictionary)->void:
+static func build_private(inputs:Dictionary,textures:Dictionary,resources:Dictionary,declared:Dictionary,output:Dictionary)->void:
     var started:int=Time.get_ticks_usec();var rows:Dictionary={};var count:int=0
     for id in inputs:
         var actor:Dictionary=inputs[id];var packets:Dictionary={}
@@ -46,9 +45,6 @@ static func build_private(inputs:Dictionary,textures:Dictionary,resources:Dictio
             if not noise.is_empty() and textures.get(noise)==null:pending.effect_noise=noise
             material.get_rid();mesh.get_rid()
             var packet:Dictionary={"entry":entry,"mesh":mesh,"aabb":bounds,"pending_textures":pending,"noise_path":noise,"condition_parameters":condition_parameters}
-            if not atlas_options.is_empty():
-                SourceMaterial.set_parameter(entry,"current_visibility",1.0);entry.scenery_value=1.0
-                packet.atlas=Atlas.private_actor_binding(entry,mesh,atlas_options)
             packets[index]=packet;count+=1
         rows[id]=packets
     output.merge({"complete":true,"error":"","rows":rows,"draw_count":count,"worker_ms":(Time.get_ticks_usec()-started)/1000.0})

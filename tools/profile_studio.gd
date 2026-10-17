@@ -103,7 +103,7 @@ func sample(now:int)->void:
         players.append({"perspective":"primary" if owner==studio.world else "peer","display_ms":owner.timeline.display_ms,
             "phases":record.get("cpu_ms",{}),"view":record.get("view",{}),"active_motion":record.get("view",{}).get("active_motion",false),
             "native_components":native_count,"held_media":owner.timeline.waiting_for_media,"held_world":owner.timeline.waiting_for_world,
-            "source_receivers":owner.native_light_atlas.live_receivers,"atlas_pixels":owner.native_light_atlas.packed_pixels,
+            "lights":owner.light_table.count,
             "native_handles":owner.component_renderer.native_spells.handles.size(),"camera_size":owner.camera.size})
     var cache:RefCounted=studio.tracks.thumbnails
     var view:Dictionary=viewport_metrics()
@@ -140,17 +140,13 @@ func summary()->Dictionary:
     for threshold in [10.0,16.667,33.333,100.0]:
         result.frames_over_ms[str(threshold)]=frames.filter(func(frame):return frame.frame_ms>threshold).size()
     for field in ["frame_ms","display_advance_ms","studio_process_ms","pair_advance_ms","engine_process_ms","render_setup_ms","draw_calls","root_render_cpu_ms","root_render_gpu_ms","observer_ms"]:result[field]=distribution(field)
-    var player_phases:Dictionary={};var view_times:Dictionary={};var atlas_phases:Dictionary={};var thumbnail_phases:Dictionary={}
+    var player_phases:Dictionary={};var view_times:Dictionary={};var thumbnail_phases:Dictionary={}
     for frame in frames:
         for player in frame.players:
             if not player_phases.has(player.perspective):player_phases[player.perspective]={}
             for phase in player.phases:
                 if not player_phases[player.perspective].has(phase):player_phases[player.perspective][phase]=[]
                 player_phases[player.perspective][phase].append(player.phases[phase])
-            for phase in player.view.get("native_2d_reconcile_phases",{}):
-                if not str(phase).ends_with("_ms"):continue
-                if not atlas_phases.has(phase):atlas_phases[phase]=[]
-                atlas_phases[phase].append(player.view.native_2d_reconcile_phases[phase])
         for owner in ["cpu_ms","candidate_cpu_ms"]:
             var phases:Dictionary=frame.thumbnails.get(owner,{})
             if phases.get("frame",-1)!=frame.engine_frame:continue
@@ -166,8 +162,6 @@ func summary()->Dictionary:
     for side in player_phases:
         result.player_phases[side]={}
         for phase in player_phases[side]:result.player_phases[side][phase]=Profile.distribution(player_phases[side][phase])
-    result.atlas_reconcile_ms={}
-    for phase in atlas_phases:result.atlas_reconcile_ms[phase]=Profile.distribution(atlas_phases[phase])
     result.thumbnail_cpu_ms={}
     for phase in thumbnail_phases:result.thumbnail_cpu_ms[phase]=Profile.distribution(thumbnail_phases[phase])
     result.viewport_times={}

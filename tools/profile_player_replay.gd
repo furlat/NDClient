@@ -14,7 +14,6 @@ var label="gallery"
 var start_ms=0.0
 var end_ms=INF
 var caster=""
-var reserve_atlas_height=0
 var setup:Dictionary={}
 
 func _initialize()->void:run.call_deferred()
@@ -39,7 +38,6 @@ func run()->void:
         if arg.begins_with("--profile-label="):label=arg.trim_prefix("--profile-label=")
         elif arg.begins_with("--profile-start="):start_ms=arg.trim_prefix("--profile-start=").to_float()*1000
         elif arg.begins_with("--profile-end="):end_ms=arg.trim_prefix("--profile-end=").to_float()*1000
-        elif arg.begins_with("--reserve-atlas-height="):reserve_atlas_height=clampi(arg.trim_prefix("--reserve-atlas-height=").to_int(),1024,Play.NativeLightAtlas.MAX_SIZE)
     Engine.max_fps=0;DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
     root.size=Vector2i(1600,960);root.position=Vector2i(40,40);root.unfocusable=true
     var setup_started:int=Time.get_ticks_usec()
@@ -54,14 +52,13 @@ func run()->void:
     world.catalog_cache=Play.Catalog.source_snapshot(index.cache)
     world.media_warmup.encounter_override=index.media_preload
     root.add_child(world);world.camera.size=12;world.position_camera()
-    if reserve_atlas_height>0:world.native_light_atlas.viewport.size=Vector2i(Play.NativeLightAtlas.MAX_SIZE,reserve_atlas_height)
     world.playback_end_ms=end_ms;world.install_playback(restored)
     var deadline:int=Time.get_ticks_msec()+120000
     while not ready() and healthy() and Time.get_ticks_msec()<deadline:await process_frame
     if not ready() or not healthy():failures.append("Initial player preparation failed");await finish(0,0);return
     print("PLAYER_REPLAY_READY ",label)
     setup={"initial_preparation_ms":(Time.get_ticks_usec()-setup_started)/1000.0,"native_startup":Play.NativeStartup.status(),"paused_warmup_seconds":0,
-        "start_ms":start_ms,"end_ms":end_ms,"passes":1,"reserved_atlas_height":reserve_atlas_height,
+        "start_ms":start_ms,"end_ms":end_ms,"passes":1,
         "scope":"Initial loading and paused warmup measured separately. First uses during the selected action interval remain included. A nonzero start excludes earlier casts."}
     await RenderingServer.frame_post_draw
     print("PLAYER_REPLAY_BEGIN ",label)

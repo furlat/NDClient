@@ -54,10 +54,11 @@ func prepare_native_handles(handles:Dictionary,budget:Dictionary={})->bool:
     if not budget.is_empty():budget.used_usec+=Time.get_ticks_usec()-started
     return ready
 
+## A spell light reaches the sprites when its canvas source is enabled this
+## frame: the light table publishes every enabled canvas source.
 func effect_was_submitted(id:String)->bool:
-    for page in _pages:
-        var node:PointLight2D=page.get("effect_nodes",{}).get(id)
-        if is_instance_valid(node) and node.enabled and node.is_visible_in_tree():return true
+    for source in _canvas_sources:
+        if source.id==id:return source.enabled
     return false
 
 func sample_handles(handles: Dictionary, support_y: float = 0.0, optical: Dictionary = {}) -> void:

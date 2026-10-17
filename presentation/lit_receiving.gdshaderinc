@@ -1,7 +1,8 @@
 // The light atlas's receiving and storage, evaluated in the sprite's own pass.
 // A source texel is lit once, at its screen centre on the painted plane, by the
-// light table; the result then takes the atlas storage (RGBA16F with the light
-// cap, RGBA8 without) and the former output shader's decode and transfer.
+// light table; the result then takes the former atlas storage (RGBA16F with the
+// light cap, RGBA8 without) and the former output shader's decode and transfer,
+// so the picture is the one the light atlas produced.
 #include "light_table.gdshaderinc"
 // CanvasModulate as the receiving canvas saw it: 0.30, converted under HDR.
 global uniform float light_ambient;
@@ -77,12 +78,9 @@ vec3 lit_unlit(vec3 encoded) {
 
 // Atlas receiving at one texel: p in viewport pixels, n the canvas normal,
 // source the encoded receiver colour. Returns linear colour.
-global uniform int light_debug;
 vec3 lit_received(vec3 source, vec2 p, vec3 n) {
     if (lit_hdr()) {
         vec3 irradiance = max(lit_half3(table_light(p, n, vec3(1.0), light_ambient)), vec3(0.0));
-        if (light_debug == 1) return fract(irradiance * 16.0);
-        if (light_debug == 2) return source;
         float peak = max(irradiance.r, max(irradiance.g, irradiance.b));
         float gain = peak > light_cap ? light_cap / peak : 1.0;
         vec3 encoded = clamp(source * irradiance * gain, vec3(0.0), vec3(1.0));

@@ -481,8 +481,6 @@ func _sample_frame(delta: float) -> void:
         for entry in visual_actors[id].entries:
             if entry.role=="shadow":continue
             BodySurfaces.bind(entry.material,current_surfaces.get(id,{}))
-            if entry.has("received_material"):
-                BodySurfaces.bind(entry.received_material,current_surfaces.get(id,{}))
     body_surface_actors=current_surfaces
     var optical:Dictionary={}
     if spell_colours and staging_spec.has("light_color"):optical.color=Color(staging_spec.light_color)
@@ -492,7 +490,6 @@ func _sample_frame(delta: float) -> void:
     EffectLayer.sync(effect_layer,self)
     _sync_native_lighting()
     _sort_draws()
-    native_light_atlas.sync_output(self,[world_generation,quarter,scenery_revision,wall_mode,native_light_atlas.revision],true)
     native_support.prepare_membership(static_entries,visual_actors)
     native_support.sync(static_entries,visual_actors,camera)
 

@@ -13,9 +13,10 @@ var ground_draw_order: Array = []
 const Interaction = preload("res://presentation/interaction.gd")
 const Choices = preload("res://sdk/choices.gd")
 const Lighting = preload("res://presentation/native_source_lights.gd")
-const NativeLightAtlas = preload("res://presentation/native_light_atlas.gd")
 const GeneratedShadows = preload("res://presentation/canvas_shadows.gd")
 const LightTable = preload("res://presentation/light_table.gd")
+# CanvasModulate of the former receiving canvas; blood and effect pages keep 0.18.
+const LIGHT_AMBIENT := 0.30
 const GroundReceiving = preload("res://presentation/ground_receiving.gd")
 const NativeStartup = preload("res://presentation/native_source_startup.gd")
 var native_startup:Dictionary={"ready":false,"completed":0,"total":0,"elapsed_ms":0.0}
@@ -27,17 +28,13 @@ var draw_fixed_order:Array=[]
 var draw_rank_updates:int=0
 var native_startup_requested_ms:float=0.0
 var native_startup_background:bool=true
-var native_light_atlas = NativeLightAtlas.new()
 var generated_shadows = GeneratedShadows.new()
-# Sprites lit in their own shaders from the light table. The atlas still runs
-# but never installs its output materials (side-by-side parity runs).
-var lit_sprites: bool = "--lit-sprites" in OS.get_cmdline_user_args()
+# Sprites light themselves from this table of the frame's canvas lights.
 var light_table = LightTable.new()
 var receiving_globals: Array = []
 # Shader globals are process-wide: only the displayed world publishes them
 # (Studio prepares candidate worlds alongside the displayed one).
 var publishes_receiving := true
-var _traced_uploads := -1
 var ground_supports_revision := -1
 var ground_supports_texture: ImageTexture
 var generated_shadow_ids: Array = []
@@ -75,8 +72,6 @@ var world_prepared_count = 0
 var actor_prepared_layers = 0
 var world_prepare_worker_ms = 0.0
 var world_generation = 0
-var native_light_changes: Dictionary = {}
-var native_light_change_serial = 0
 var publication_failed:bool=false
 var world_visual_rows: Array = []
 var world_row_cache: Dictionary = {}
@@ -96,7 +91,6 @@ var scenery_generation := -1
 var requested_quarter = -1
 var pending_view: Variant
 var rotation_publication_frame = -1
-var pending_global_atlas: Dictionary = {}
 signal presentation_updated
 var session: RefCounted
 var timeline = Timeline.new()
@@ -305,7 +299,6 @@ func publish_replay_advance(plan:Dictionary)->bool:
     if plan.boundary:
         if not pending_world.can_publish_membership(int(pending_world.boundary.world_revision)):return false
         pending_world.admitted=true
-        if not pending_world.atlas_prefix.is_empty():pending_world.atlas_prefix.admitted=true
     return timeline.replay_publish(plan)
 
 func playback_prepared() -> bool:
@@ -338,15 +331,10 @@ func _ready() -> void:
     light_strength = settings.light_strength
     source_lighting.light_strength = light_strength
     if settings.error != OK: presentation_errors.append("Cannot read local rendering settings: "+error_string(settings.error))
-    native_light_atlas.require_prepared_publication=true
-    native_light_atlas.display_outputs=not lit_sprites
-    native_light_atlas.attach(self)
-    # Source and receiving shaders a reveal may meet first mid-play.
-    NativeLightAtlas.compile_shaders(NativeLightAtlas.RECEIVING_SHADERS+[ENVIRONMENT_SHADER,WATER_SHADER,FIXTURE_FLAME_SHADER,ActorConstruction.MODULAR_SHADER,
-        GroundOverlay.SHADER,GroundOverlay.ROUTE])
+    # Shaders a reveal may meet first mid-play: a material compiles its shader.
+    for shader in [ENVIRONMENT_SHADER,WATER_SHADER,FIXTURE_FLAME_SHADER,ActorConstruction.MODULAR_SHADER,GroundOverlay.SHADER,GroundOverlay.ROUTE]:
+        var material:=ShaderMaterial.new();material.shader=shader
     light_cap_enabled = settings.light_cap_enabled
-    native_light_atlas.set_light_cap(1.0 if light_cap_enabled else 0.0)
-    source_lighting.attach(native_light_atlas.viewport)
     generated_shadows.attach(self)
     timeline.profile = profile
     timeline.media_ready = _media_ready
@@ -473,8 +461,6 @@ func set_light_strength(value: float, persist: bool = true) -> void:
 
 func set_light_cap_enabled(enabled: bool) -> void:
     light_cap_enabled = enabled
-    if entries.is_empty() or world_prepare_epoch!=timeline.initialization_revision:
-        native_light_atlas.set_light_cap(1.0 if enabled else 0.0)
     var error = RenderSettings.write_light_cap(enabled)
     if error != OK: notice_text = "Setting applied; cannot save it: "+error_string(error)
 
@@ -641,18 +627,12 @@ func _process(delta: float) -> void:
     # effects. Only an initial/due world gets priority before playback; taking
     # every frame for a later impact starves the earlier windup constructor.
     if _world_preparation_due(advance_ms) and (not timeline.waiting_for_media or media_gate.get("native",true)):_step_world_preparation()
-    _prepare_render_options()
-    # Resizing the outer window can require a larger native receiving target.
-    # Keep the displayed source/light sample while preparing that target, then
-    # consume its admitted prefix in the ordinary render body below.
-    if world_revision>=0 and _atlas_needs_viewport_growth() and rotation_pending():_prepare_rotation()
-    var global_draw_hold:bool=world_revision>=0 and _atlas_needs_viewport_growth() and not native_light_atlas.prepared_delta.get("admitted",false)
     FrameProfile.end_phase(profile,"preparation_step",subphase)
     subphase = Time.get_ticks_usec()
     if not external_playback: _poll_actions()
     FrameProfile.end_phase(profile,"action_responses",subphase)
     subphase = Time.get_ticks_usec()
-    if not external_clock and not global_draw_hold:_advance_prepared(advance_ms)
+    if not external_clock:_advance_prepared(advance_ms)
     FrameProfile.end_phase(profile,"timeline_advance",subphase)
     if session != null: session.set_displayed_sequence(timeline.sequence)
     FrameProfile.end_phase(profile,"session_timeline",phase)
@@ -660,7 +640,7 @@ func _process(delta: float) -> void:
     var can_publish_world:bool=world_available and _playback_environment_ready() and _world_can_publish()
     # A rejected initial candidate has no displayed actor owner yet. Keep
     # preparation and UI running, but do not sample its private world.
-    if not global_draw_hold and world_available and (world_revision>=0 or can_publish_world):
+    if world_available and (world_revision>=0 or can_publish_world):
         var supports = timeline.staged_tiles().keys()
         if can_publish_world and (timeline.world_revision != world_revision or sampled_support_ids != supports or (pending_world!=null and pending_world.admitted)):
             phase = Time.get_ticks_usec()
@@ -716,16 +696,12 @@ func _process(delta: float) -> void:
         phase = Time.get_ticks_usec()
         _sync_native_lighting()
         FrameProfile.end_phase(profile,"native_2d_lighting",phase)
-        if native_light_atlas.output_admission_failed:
-            _publication_failure("; ".join(native_light_atlas.errors))
-            return
         # Wall member selection precedes the final painter order and coverage mask.
         phase = Time.get_ticks_usec()
         subphase = Time.get_ticks_usec()
         _sort_draws()
         FrameProfile.end_phase(profile,"draw_sort",subphase)
         subphase = Time.get_ticks_usec()
-        native_light_atlas.sync_output(self,[world_generation,quarter,scenery_revision,wall_mode,native_light_atlas.revision],true)
         component_renderer.native_spells.sync(self)
         component_renderer.ready=component_renderer.ready and component_renderer.native_spells.ready
         _retain_displayed_sources()
@@ -742,8 +718,6 @@ func _process(delta: float) -> void:
         if not external_playback and not announced_ready and command_ready():
             announced_ready = true
             print("PLAYER_READY: initialized, acknowledged, and current choices available")
-    if global_draw_hold and not external_playback:
-        _discover();_poll_storage();_update_hover()
     phase = Time.get_ticks_usec()
     if external_playback:_prepare_optional_work.call_deferred()
     else:_prepare_optional_work()
@@ -780,22 +754,13 @@ func _process(delta: float) -> void:
     presentation_updated.emit()
 
 func _detailed_frame_context(active_motion: bool) -> Dictionary:
-    # The atlas prefix is worker-private during planning. Report the main-owned
-    # stage then; inspect its result containers only after the worker joins.
-    var atlas_profile:Dictionary=pending_world.atlas_prefix if pending_world!=null and pending_world.atlas_task<0 else {}
     return {"media_gate":media_gate,"active_motion":active_motion,"motion_held":timeline.waiting_for_media or timeline.waiting_for_world or timeline.paused,"light_cap_enabled":light_cap_enabled,"scene":"live_player","zoom":camera.size,"quarter":quarter,
         "static_forecast":({"task_pending":static_forecast.task>=0,"target_ms":static_forecast.boundary.display_ms,
             "worker_ms":static_forecast.output.get("worker_ms",0.0) if static_forecast.task<0 else 0.0} if not static_forecast.is_empty() else {}),
-        "world_preparation":({"atlas_jobs":pending_world.atlas_jobs.size(),"upserts":pending_world.membership.get("upserts",[]).size(),"removals":pending_world.membership.get("removed",{}).size(),
-            "atlas_stage":pending_world.atlas_stage,"atlas_task_pending":pending_world.atlas_task>=0,
+        "world_preparation":({"boundary_jobs":pending_world.boundary_jobs.size(),"upserts":pending_world.membership.get("upserts",[]).size(),"removals":pending_world.membership.get("removed",{}).size(),
             "environment_batches":pending_world.environment_output.get("batches",0),"environment_submitted":pending_world.environment_capture_cursor,
             "environment_ready_rows":pending_world.environment_output.get("rows",{}).size(),"environment_task_pending":pending_world.environment_task>=0,
             "actor_worker_profile":pending_world.result.get("actor_worker_profile",{}),
-            "capture_stage":atlas_profile.get("stage",""),"capture_cursor":atlas_profile.get("cursor",0),"capture_total":atlas_profile.get("capture_ids",[]).size(),
-            "bind_cursor":atlas_profile.get("bind_cursor",0),"bind_total":atlas_profile.get("bind_ids",[]).size(),
-            "source_bind_cursor":atlas_profile.get("source_bind_cursor",0),"source_bind_total":atlas_profile.get("source_bind_ids",[]).size(),
-            "output_cursor":atlas_profile.get("output_cursor",0),"output_total":atlas_profile.get("output_ids",[]).size(),
-            "planning_lane":atlas_profile.get("planning_lane",""),
             "blocked_actor":pending_world.blocked_actor.duplicate(),"blocked_source":pending_world.blocked_source.duplicate(),
             "worker_phases":pending_world.result.get("worker_phases",{}).duplicate(),
             "object_work":pending_world.object_work_counts.duplicate(),
@@ -806,10 +771,7 @@ func _detailed_frame_context(active_motion: bool) -> Dictionary:
             "blood_rows":pending_world.result.get("blood_rows",{}).size(),"blood_handles":pending_world.blood_preparation.handles.size(),
             "retained_lights":pending_world.light_preparation.get("retained",false),"cookie_jobs":pending_world.cookie_jobs.size()} if pending_world!=null else {}),
         "native_startup":{"ready":native_startup.ready,"completed":native_startup.completed,"total":native_startup.total,"elapsed_ms":native_startup.elapsed_ms},
-        "native_2d_repack_count":native_light_atlas.repack_count,"native_2d_receivers":native_light_atlas.live_receivers,"native_2d_atlas_pixels":native_light_atlas.packed_pixels,"generated_shadows":generated_shadows.diagnostics(),
-        "native_2d_reconcile_ms":native_light_atlas.last_reconcile_ms,"native_2d_projection_ms":native_light_atlas.last_projection_ms,"native_2d_pack_ms":native_light_atlas.last_pack_ms,
-        "native_2d_reconcile_phases":native_light_atlas.last_reconcile_phases,
-        "native_2d_gpu_ms":RenderingServer.viewport_get_measured_render_time_gpu(native_light_atlas.viewport.get_viewport_rid()),
+        "generated_shadows":generated_shadows.diagnostics(),"light_table":{"lights":light_table.count,"uploads":light_table.uploads},
         "native_spell_render_ms":component_renderer.native_spells.render_timings(),
         "native_support_sync":component_renderer.native_spells._support.last_sync_phases if component_renderer.native_spells._support!=null else {},
         "actor_sample_counts":profile.get("actor_sample_counts",{}),
@@ -972,7 +934,6 @@ func _world_ready(candidate: Dictionary) -> bool:
             if pending_world.can_publish_membership(int(candidate.world_revision)):
                 if not external_clock:
                     pending_world.admitted = true
-                    if not pending_world.atlas_prefix.is_empty():pending_world.atlas_prefix.admitted=true
                 return true
             if not pending_world.prepared:return false
             _discard_world_preparation()
@@ -984,7 +945,6 @@ func _world_ready(candidate: Dictionary) -> bool:
         if not pending_world.source_only() and not static_forecast.is_empty() and static_forecast.task>=0:return false
         if not external_clock:
             pending_world.admitted=true
-            if not pending_world.atlas_prefix.is_empty():pending_world.atlas_prefix.admitted=true
         return true
     return false
 
@@ -1004,12 +964,11 @@ func _world_can_publish() -> bool:
         if not pending_world.can_publish_membership(timeline.world_revision):
             if pending_world.prepared:pending_world.stale=true
             return false
-        if not pending_world.atlas_prefix.is_empty():pending_world.atlas_prefix.admitted=true
     return pending_world.admitted or pending_world.initial
 
 func _discard_world_preparation() -> void:
     if pending_world==null: return
-    _retire_view(pending_world,null,pending_world.entries,pending_world.atlas_retirement)
+    _retire_view(pending_world,null,pending_world.entries)
     pending_world = null
 
 func _finish_world_preparation() -> void:
@@ -1032,17 +991,8 @@ func _finish_world_preparation() -> void:
 
 func _finish_actor_preparation() -> void:
     if prepared_actor_owner==null:return
-    _retire_view(prepared_actor_owner,null,[],prepared_actor_owner.atlas_retirement)
+    _retire_view(prepared_actor_owner,null,[])
     prepared_actor_owner=null
-
-func _publish_native_light_changes(upserts: Array, removed: Array, full: bool = false) -> void:
-    if not full and upserts.is_empty() and removed.is_empty(): return
-    var base = native_light_change_serial
-    native_light_change_serial += 1
-    # Only the latest completed admission is retained. If more than one is
-    # published before atlas sync, the missed base forces its complete planner.
-    native_light_changes = {"base":base,"serial":native_light_change_serial,
-        "full":full,"upserts":upserts,"removed":removed}
 
 func _sync_world() -> void:
     prepared_scenery = {}; prepared_static_order = {}
@@ -1053,8 +1003,7 @@ func _sync_world() -> void:
         var detail:Dictionary={"display_revision":timeline.world_revision,"base_revision":world_revision,"pending":pending_world!=null}
         if pending_world!=null:
             detail.merge({"phase":pending_world.phase,"initial":pending_world.initial,"admitted":pending_world.admitted,
-                "boundary_revision":pending_world.boundary.get("world_revision",-1),"lights_valid":source_lighting.preparation_valid(pending_world.light_preparation),
-                "atlas_valid":pending_world.atlas_prefix.is_empty() or WorldPreparation.AtlasDelta.candidate_base_matches(native_light_atlas,pending_world.atlas_prefix,self)})
+                "boundary_revision":pending_world.boundary.get("world_revision",-1),"lights_valid":source_lighting.preparation_valid(pending_world.light_preparation)})
         _publication_failure("Displayed world boundary has no valid prepared owner: "+JSON.stringify(detail))
         return
     if prepared.is_empty() and pending_world!=null: _discard_world_preparation()
@@ -1124,8 +1073,6 @@ func _sync_world() -> void:
     if not changed and not rotated:
         if not prepared.is_empty():
             pending_world.publish_membership()
-            pending_world.publish_atlas_receivers()
-            _publish_native_light_changes(pending_world.membership.upserts,pending_world.membership.removed.keys())
         _finish_world_preparation()
         return
     # Inactive views belong to one canonical world, not a state revision: HP,
@@ -1165,8 +1112,7 @@ func _sync_world() -> void:
         phase = Time.get_ticks_usec()
         for group in membership.retired_groups:
             for entry in group.entries: entry.node.queue_free()
-        # Preserve the combined entries' historical insertion order. Rebuilding
-        # it static-first would change native atlas reservation order.
+        # Preserve the combined entries' historical insertion order.
         for group in membership.new_groups:
             for entry in group.entries: entry.node.reparent(sprite_parent,false)
             entries.append_array(group.entries)
@@ -1268,9 +1214,6 @@ func _sync_world() -> void:
         detail_started=Time.get_ticks_usec()
         pending_world.publish_order()
         FrameProfile.end_phase(profile,"world_order_publish",detail_started)
-        detail_started=Time.get_ticks_usec()
-        pending_world.publish_atlas_receivers()
-        FrameProfile.end_phase(profile,"world_atlas_publish",detail_started)
     # New floor instances start remembered; current grants are applied through
     # their direct packed index without rebuilding one consumer per known tile.
     for key in world_row_cache.changed_tiles:
@@ -1285,7 +1228,6 @@ func _sync_world() -> void:
     # An authoritative replay reset replaces state, but may retain every native
     # lighting source. Only the physical view replacement is a full receipt;
     # prepared membership already supplies ordinary source additions/removals.
-    _publish_native_light_changes(light_upserts,removed.keys(),rotated)
     detail_started=Time.get_ticks_usec()
     _finish_world_preparation()
     FrameProfile.end_phase(profile,"world_finish_publish",detail_started)
@@ -1307,7 +1249,7 @@ func _clear_static_view_cache() -> void:
         _retire_view(view.root,view.get("mask_viewport"),view.entries)
     static_views = {}
 
-func _retire_view(source: Node3D, mask: SubViewport, source_entries: Array = [], atlas_cleanup:Dictionary = {}) -> void:
+func _retire_view(source: Node3D, mask: SubViewport, source_entries: Array = []) -> void:
     if source == null: return
     source.visible = false
     source.process_mode = Node.PROCESS_MODE_DISABLED
@@ -1319,9 +1261,8 @@ func _retire_view(source: Node3D, mask: SubViewport, source_entries: Array = [],
         var id: int = entry.node.get_instance_id()
         if held.has(id): continue
         held[id] = entry
-        # Future atlas receivers already have their final canvas parent but
-        # remain owned by the unpublished candidate. Retire those hidden nodes
-        # with the existing per-frame budget, never the displayed atlas itself.
+        # Nodes parented outside the candidate but owned by it retire with it,
+        # within the existing per-frame budget.
         if entry.get("retire_external",false) and entry.node!=source and not source.is_ancestor_of(entry.node):
             pending.append(entry.node)
     for entry in source_entries:
@@ -1329,7 +1270,7 @@ func _retire_view(source: Node3D, mask: SubViewport, source_entries: Array = [],
     if mask != null and not source.is_ancestor_of(mask) and not pending.has(mask): pending.append(mask)
     # Descendant discovery belongs to the bounded retirement lane too.
     # Retaining roots avoids an unbounded prewalk at publication.
-    retiring_views.append({"nodes":pending,"entries":held,"atlas_cleanup":atlas_cleanup})
+    retiring_views.append({"nodes":pending,"entries":held})
     retiring_node_count += pending.size()
 
 func _dispose_views(budget:Dictionary={},minimum:bool=false) -> void:
@@ -1345,17 +1286,6 @@ func _dispose_views(budget:Dictionary={},minimum:bool=false) -> void:
     var metadata_steps = 0
     while not retiring_views.is_empty() and released<16 and metadata_steps<4096 and (Time.get_ticks_usec()-started<allowance or (minimum and released==0 and metadata_steps==0)):
         var view: Dictionary = retiring_views[0]
-        var cleanup:Dictionary=view.get("atlas_cleanup",{})
-        if not cleanup.is_empty():
-            # The final static child also releases its private batch parent.
-            # Reserve both native frees before this indivisible cleanup unit.
-            if released+2>16:break
-            var progress:Dictionary=NativeLightAtlas.Delta.retire_candidate_step(cleanup)
-            if progress.get("blocked",false):break
-            if progress.get("node",false):released+=int(progress.get("native_units",1))
-            metadata_steps+=1
-            if progress.done:view.atlas_cleanup={}
-            else:continue
         if view.nodes.is_empty():retiring_views.pop_front();continue
         var node:Node=view.nodes.back()
         if is_instance_valid(node) and node.get_child_count()>0:
@@ -1423,7 +1353,6 @@ func _activate_static_view(view_quarter: int, publish_lighting: bool = true) -> 
     scenery_quarter = view_quarter; scenery_world_revision = world_revision; scenery_revision = timeline.world_revision
     water_entries = static_entries.filter(func(entry):return entry.material.shader==WATER_SHADER)
     water_display_seconds = -1.0
-    if publish_lighting: _publish_native_light_changes([],[],true)
 
 func _sample_fixtures() -> void:
     fixture_energy.clear()
@@ -1585,7 +1514,6 @@ func _sync_scenery(force: bool = false, refresh_sight: bool = false) -> void:
     if water_display_seconds != seconds:
         for entry in water_entries:
             SourceMaterial.set_parameter(entry,"displayed_time_seconds",seconds)
-            native_light_atlas.style_changed(entry)
         water_display_seconds = seconds
 
 func _publish_scenery_writes(writes:Array)->void:
@@ -1593,13 +1521,11 @@ func _publish_scenery_writes(writes:Array)->void:
     for write in writes:
         var entry:Dictionary=write.entry
         if write.index>=0:
-            native_light_atlas.style_changed(entry,write.id)
             _ground_visibility(entry,write.index,write.value)
             var key:int=entry.node.get_instance_id()
             if not batches.has(key):batches[key]={"entry":entry,"indices":[]}
             batches[key].indices.append(write.index)
         else:
-            native_light_atlas.style_changed(entry)
             SourceMaterial.set_parameter(entry,"current_visibility",write.value)
             entry.scenery_value=write.value
     for batch in batches.values():_ground_flush_visibility(batch.entry,batch.indices)
@@ -1758,7 +1684,7 @@ func _sync_actor_membership() -> void:
                 entries.append(entry);actor_entries.append(entry)
             var retired_shadows:Array=generated_shadows.adopt_actor(prepared)
             if not retired_shadows.is_empty():
-                retiring_views.append({"nodes":retired_shadows,"entries":{},"atlas_cleanup":{}})
+                retiring_views.append({"nodes":retired_shadows,"entries":{}})
                 retiring_node_count+=retired_shadows.size()
             FrameProfile.end_phase(profile,"actor_prepared_adopt",actor_stage)
             actor_prepared_layers+=prepared.new_entries.size()
@@ -2475,9 +2401,7 @@ func _adopt_media_plan(completed: Dictionary, offer_to_session:bool=true) -> voi
 
 func set_normals_visible(value: bool) -> void:
     requested_normals_visible = value
-    if not entries.is_empty() and world_prepare_epoch==timeline.initialization_revision: return
     _publish_normals(value)
-    native_light_atlas.set_normals_visible(value)
 
 func _publish_normals(value: bool) -> void:
     if normals_visible == value: return
@@ -2816,22 +2740,20 @@ func _sample_actors() -> void:
             if not effect.is_empty() and component_renderer._entry_visible(self,entry):component_renderer.pending_evidence.append({"trace_track_id":effect.id,"display_ms":timeline.display_ms,"visible":true})
 
 # Room-wide receiving inputs of the lit sprite shaders: the light table, the
-# atlas's current cap/Normals storage and ambient, and the terrain supports.
+# cap/Normals storage and ambient, and the terrain supports.
 func _publish_receiving() -> void:
     if not publishes_receiving: return
     light_table.publish(source_lighting.canvas_sources(),generated_shadows.cookie_image)
-    if OS.get_environment("LIGHT_TABLE_TRACE")!="" and light_table.uploads!=_traced_uploads:
-        _traced_uploads=light_table.uploads;print("LIGHT_TABLE_COUNT ",light_table.count," ",light_table.ids)
-    if OS.get_environment("LIGHT_DEBUG")!="":RenderingServer.global_shader_parameter_set(&"light_debug",int(OS.get_environment("LIGHT_DEBUG")))
-    var receiving:Array=[native_light_atlas.light_cap,native_light_atlas.normals_visible]
+    var cap:float=1.0 if light_cap_enabled else 0.0
+    var receiving:Array=[cap,normals_visible]
     if receiving!=receiving_globals:
         receiving_globals=receiving
-        var hdr:bool=native_light_atlas.light_cap>0.0 and not native_light_atlas.normals_visible
-        var ambient:=Color(NativeLightAtlas.AMBIENT_INTENSITY,NativeLightAtlas.AMBIENT_INTENSITY,NativeLightAtlas.AMBIENT_INTENSITY)
+        var hdr:bool=cap>0.0 and not normals_visible
+        var ambient:=Color(LIGHT_AMBIENT,LIGHT_AMBIENT,LIGHT_AMBIENT)
         # The receiving canvas sees CanvasModulate after Godot's HDR conversion.
         RenderingServer.global_shader_parameter_set(&"light_ambient",ambient.linear_to_srgb().srgb_to_linear().r if hdr else ambient.r)
-        RenderingServer.global_shader_parameter_set(&"light_cap",native_light_atlas.light_cap)
-        RenderingServer.global_shader_parameter_set(&"light_normals",native_light_atlas.normals_visible)
+        RenderingServer.global_shader_parameter_set(&"light_cap",cap)
+        RenderingServer.global_shader_parameter_set(&"light_normals",normals_visible)
     if ground_supports_revision!=world_revision:
         ground_supports_revision=world_revision
         var supports:Dictionary=GroundReceiving.support_image(entries)
@@ -2857,11 +2779,6 @@ func _sync_native_lighting() -> void:
     phase = Time.get_ticks_usec()
     _publish_receiving()
     FrameProfile.end_phase(profile,"light_table",phase)
-    phase = Time.get_ticks_usec()
-    native_light_atlas.sync(self,
-        [world_generation,world_revision,quarter,wall_mode,scenery_revision,source_depth,source_normals],
-        [world_generation,quarter,scenery_revision,wall_mode],native_light_changes,true)
-    FrameProfile.end_phase(profile,"native_2d_atlas",phase)
     phase = Time.get_ticks_usec()
     # Remove stale handles before the helper retires hidden actors. Source
     # components and picking continue to use the original visual.entries list.
@@ -3075,7 +2992,6 @@ func _sync_wall_mask() -> void:
             SourceMaterial.set_parameter(entry,"wall_mask_id",index)
             SourceMaterial.set_parameter(entry,"wall_mask_texture",wall_mask_viewport.get_texture())
             SourceMaterial.set_parameter(entry,"wall_mask_enabled",wall_mode=="translucent")
-            native_light_atlas.output_changed(entry)
         while wall_mask_nodes.size()>index:
             var retired: ColorRect = wall_mask_nodes.pop_back()
             wall_mask_viewport.remove_child(retired)
@@ -3118,63 +3034,10 @@ func _rotate_view() -> void:
     request_view(target)
 
 func _cancel_rotation() -> void:
-    _cancel_global_atlas()
     if pending_view == null: return
     _retire_view(pending_view,pending_view.mask_viewport)
     pending_view = null
     rotation_publication_frame = -1
-
-func _cancel_global_atlas() -> void:
-    if pending_global_atlas.is_empty(): return
-    var cleanup={"blocked":false,"payloads":[],"directories":[],"unused":[],"active":{}}
-    NativeLightAtlas.Delta.retire_global(pending_global_atlas,cleanup)
-    retiring_views.append({"nodes":[],"entries":{},"atlas_cleanup":cleanup})
-    pending_global_atlas={}
-
-func _global_atlas_ready(target: Node, sources: Array, options: Dictionary) -> bool:
-    var atlas = native_light_atlas
-    if not pending_global_atlas.is_empty():
-        if pending_global_atlas.target!=target or pending_global_atlas.options!=options \
-                or not NativeLightAtlas.Delta.global_base_matches(atlas,pending_global_atlas):
-            _cancel_global_atlas(); return false
-    # Finish the already admitted boundary before borrowing its atlas base.
-    if not atlas.delta_ready or atlas.delta_serial!=native_light_change_serial or not atlas.prepared_delta.is_empty(): return false
-    var budget:Dictionary=_preparation_budget()
-    if budget.used_usec>=budget.limit_usec: return false
-    if pending_global_atlas.is_empty():
-        if not retiring_views.is_empty(): return false
-        pending_global_atlas=NativeLightAtlas.Delta.begin_global(atlas,self,target,sources,options)
-    var started:int=Time.get_ticks_usec();var charged_before:int=budget.used_usec
-    NativeLightAtlas.Delta.step_global(atlas,pending_global_atlas,maxi(0,budget.limit_usec-budget.used_usec))
-    _charge_preparation("global_lighting",started,charged_before)
-    if pending_global_atlas.phase=="failed":
-        if pending_global_atlas.error in ["atlas_changed_during_capture","source_changed_before_prefix_capture"]:
-            _cancel_global_atlas()
-        else:media_issue="Render preparation failed: "+str(pending_global_atlas.error)
-        return false
-    return pending_global_atlas.phase=="ready" and NativeLightAtlas.Delta.global_base_matches(atlas,pending_global_atlas)
-
-func _publish_global_atlas() -> void:
-    var work:Dictionary=pending_global_atlas
-    var cleanup={"blocked":false,"payloads":[],"directories":[],"unused":[],"active":{}}
-    native_light_atlas.publish_render_options(work.options)
-    _publish_normals(work.options.normals_visible)
-    NativeLightAtlas.Delta.publish_global(native_light_atlas,work,cleanup)
-    _publish_native_light_changes(work.upserts,work.removed.keys(),true)
-    retiring_views.append({"nodes":[],"entries":{},"atlas_cleanup":cleanup})
-    pending_global_atlas={}
-
-func _prepare_render_options() -> void:
-    if rotation_pending() or world_revision<0 or entries.is_empty(): return
-    var options={"light_cap":1.0 if light_cap_enabled else 0.0,"normals_visible":requested_normals_visible}
-    if not _atlas_needs_viewport_growth() and options.light_cap==native_light_atlas.light_cap and options.normals_visible==native_light_atlas.normals_visible:
-        if not pending_global_atlas.is_empty() and pending_global_atlas.target==self:_cancel_global_atlas()
-        return
-    if _global_atlas_ready(self,entries,options): _publish_global_atlas()
-
-func _atlas_needs_viewport_growth()->bool:
-    var size:Vector2=get_viewport().get_visible_rect().size
-    return size.x>native_light_atlas.viewport.size.x or size.y>native_light_atlas.viewport.size.y
 
 func _prepare_rotation() -> void:
     var budget:Dictionary=_preparation_budget()
@@ -3204,10 +3067,8 @@ func _prepare_rotation() -> void:
         _charge_preparation("rotation",started,before)
         return
     if not pending_view.style_is_current():
-        _cancel_global_atlas()
         pending_view.is_prepared = false; pending_view.begin_style(); rotation_publication_frame = -1; return
     if not pending_view.projection_is_current():
-        _cancel_global_atlas()
         pending_view.refresh_projection(); rotation_publication_frame = -1; return
     # Let prepared mask textures complete a native frame before publication.
     if rotation_publication_frame < 0:
@@ -3217,13 +3078,6 @@ func _prepare_rotation() -> void:
     if not static_forecast.is_empty() and static_forecast.task>=0:return
     # The target view owns its exact static sources. Existing actors keep their
     # published occurrence/clock while receiving target-basis bindings.
-    var target_sources:Array=pending_global_atlas.get("entries",[])
-    if pending_global_atlas.is_empty():
-        for entry in entries:
-            if entry.placement.kind=="actor":target_sources.append(entry)
-        target_sources.append_array(pending_view.static_entries)
-    var options={"light_cap":native_light_atlas.light_cap,"normals_visible":normals_visible}
-    if not _global_atlas_ready(pending_view,target_sources,options): return
     var started = Time.get_ticks_usec()
     var target: int = pending_view.quarter
     var prepared: Dictionary = pending_view.snapshot()
@@ -3231,7 +3085,6 @@ func _prepare_rotation() -> void:
     _deactivate_static_view(true)
     static_views[target] = prepared
     quarter = target; position_camera(); _activate_static_view(target,false)
-    _publish_global_atlas()
     _sample_actors(); _sample_fixtures(); _sync_scenery()
     _sort_draws()
     hover_key = []; hover_hit = {}; hover_preview = {}
@@ -3741,19 +3594,16 @@ func update_wall_visibility(refresh_sight: bool = true, finish_draw_order: bool 
         var shown: bool = alpha>0.0 and entry.wall_source_visible
         if entry.node.visible != shown:
             entry.node.visible = shown
-            native_light_atlas.visibility_changed(entry)
             static_order_dirty = true
             draw_order_dirty = true
             wall_mask_dirty = true
         if entry.get("wall_opacity",-1.0) != alpha:
             entry.wall_opacity = alpha
             SourceMaterial.set_parameter(entry,"wall_opacity",alpha)
-            native_light_atlas.output_changed(entry)
         var masked = wall_mode=="translucent" and entry.role!="shadow"
         if entry.get("wall_mask_enabled") != masked:
             entry.wall_mask_enabled = masked
             SourceMaterial.set_parameter(entry,"wall_mask_enabled",masked)
-            native_light_atlas.output_changed(entry)
     FrameProfile.end_phase(profile,"wall_candidates",candidates_started)
     wall_visibility_revision = timeline.revision
     wall_visible_cells = senses.get("visible",[]).duplicate(true) if senses != null else []
@@ -4027,16 +3877,10 @@ func _exit_tree() -> void:
     if pending_world!=null: pending_world.join()
     if not static_forecast.is_empty() and static_forecast.task>=0:WorkerThreadPool.wait_for_task_completion(static_forecast.task)
     static_forecast={}
-    _cancel_global_atlas()
-    for retired in retiring_views:
-        var cleanup:Dictionary=retired.get("atlas_cleanup",{})
-        if cleanup.get("task",-1)>=0:
-            WorkerThreadPool.wait_for_task_completion(cleanup.task);cleanup.task=-1
     ground_overlay.close()
     component_renderer.close(self)
     generated_shadows.close()
     source_lighting.clear_pages()
-    native_light_atlas.close()
     if session != null: session.close()
     SelectionMedia.close(selection_media)
     MediaWarmup.close(media_warmup)
