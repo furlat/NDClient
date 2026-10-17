@@ -134,7 +134,7 @@ func elevation_case() -> void:
 
 func run() -> void:
     root.unfocusable=true;root.position=Vector2i(-16000,-16000)
-    var one=Image.create(1,1,false,Image.FORMAT_RGBA8);one.fill(Color.WHITE);white=ImageTexture.create_from_image(one);cookie=texture(COOKIE)
+    var one=Image.create(1,1,false,Image.FORMAT_RGBA8);one.fill(Color.WHITE);white=ImageTexture.create_from_image(one);cookie=light_cookie()
     reference_shader=Shader.new();reference_shader.code=REFERENCE
     DirAccess.make_dir_recursive_absolute("res://.captures/native-2d-source")
     var body=modular("Chest14","chest",0,"reference",false);body.family="modular"

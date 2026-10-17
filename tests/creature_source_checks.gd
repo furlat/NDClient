@@ -42,7 +42,7 @@ func run() -> void:
     if DisplayServer.get_name()=="headless":quit(2);return
     root.unfocusable=true;root.position=Vector2i(-16000,-16000)
     var one=Image.create(1,1,false,Image.FORMAT_RGBA8);one.fill(Color.WHITE);white=ImageTexture.create_from_image(one)
-    cookie=texture(COOKIE);reference_shader=Shader.new();reference_shader.code=REFERENCE
+    cookie=light_cookie();reference_shader=Shader.new();reference_shader.code=REFERENCE
     DirAccess.make_dir_recursive_absolute("res://.captures/native-2d-source")
     var table: Dictionary=JSON.parse_string(FileAccess.get_file_as_string(Geometry.CREATURE_TABLE))
     var selected={}

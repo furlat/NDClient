@@ -59,7 +59,7 @@ func assemble(fixture_layers:Array,zoom:float,lit:bool)->Dictionary:
 func run()->void:
     root.unfocusable=true;root.position=Vector2i(-16000,-16000)
     DirAccess.make_dir_recursive_absolute("res://.captures/assembled-demo")
-    var one=Image.create(1,1,false,Image.FORMAT_RGBA8);one.fill(Color.WHITE);white=ImageTexture.create_from_image(one);cookie=texture(COOKIE)
+    var one=Image.create(1,1,false,Image.FORMAT_RGBA8);one.fill(Color.WHITE);white=ImageTexture.create_from_image(one);cookie=light_cookie()
     for preset in PRESETS:
         var layers=outfit(preset)
         for zoom in [1.0,1.37,3.0]:

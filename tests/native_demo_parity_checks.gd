@@ -66,7 +66,7 @@ func case(fixture:Dictionary,zoom:float,offset:Vector2,lit:bool)->void:
     await process_frame
 func run()->void:
     root.unfocusable=true;root.position=Vector2i(-16000,-16000);DirAccess.make_dir_recursive_absolute("res://.captures/demo-parity")
-    var one=Image.create(1,1,false,Image.FORMAT_RGBA8);one.fill(Color.WHITE);white=ImageTexture.create_from_image(one);cookie=texture(COOKIE)
+    var one=Image.create(1,1,false,Image.FORMAT_RGBA8);one.fill(Color.WHITE);white=ImageTexture.create_from_image(one);cookie=light_cookie()
     var body=modular("Chest14","chest",0,"reference",false);body.family="modular";body.material.set_shader_parameter("layer_alpha",1.0);body.material.set_shader_parameter("tint",Vector3.ONE)
     var floor_source=floor_fixture()
     for zoom in [1.0,1.37,3.0]:

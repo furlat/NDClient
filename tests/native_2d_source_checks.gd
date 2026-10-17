@@ -97,6 +97,16 @@ func page(lit: bool,lights: Variant=null,size: Vector2i=PAGE) -> SubViewport:
     if lit:native_lights(view,page_lights() if lights==null else lights)
     return view
 
+## The authored light cookie as the light table accepts it: an RGBA8 texture of
+## LightTable.COOKIE_SIZE squared, copied into the cookie array on the GPU. The
+## native PointLight2D reference page uses this same texture.
+func light_cookie() -> Texture2D:
+    var image: Image=Image.load_from_file(COOKIE)
+    if image.is_compressed():image.decompress()
+    image.convert(Image.FORMAT_RGBA8)
+    image.resize(LightTable.COOKIE_SIZE,LightTable.COOKIE_SIZE,Image.INTERPOLATE_BILINEAR)
+    return ImageTexture.create_from_image(image)
+
 func cookie_image(source: Texture2D) -> Image:
     var id: RID=source.get_rid()
     if not cookie_images.has(id):
@@ -327,7 +337,7 @@ func check_source(fixture: Dictionary,lit: bool) -> void:
 func run() -> void:
     root.unfocusable=true;root.position=Vector2i(-16000,-16000)
     var one=Image.create(1,1,false,Image.FORMAT_RGBA8);one.fill(Color.WHITE);white=ImageTexture.create_from_image(one)
-    cookie=texture(COOKIE);reference_shader=Shader.new();reference_shader.code=REFERENCE
+    cookie=light_cookie();reference_shader=Shader.new();reference_shader.code=REFERENCE
     DirAccess.make_dir_recursive_absolute("res://.captures/native-2d-source")
     for category in [["Head15","helmet"],["Chest14","chest"]]:
         for profile in ["original","gentle","reference"]:

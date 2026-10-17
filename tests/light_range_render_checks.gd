@@ -71,6 +71,9 @@ func run()->void:
             var intensities=[]
             for i in declared.size():
                 lighting.sync(states[i]);lighting.sample({})
+                # Range cookies are generated off the main thread; wait for this one.
+                while lighting.sources.size()==1 and lighting.cookie_pending(lighting.sources[0]):await process_frame
+                lighting.sync(states[i]);lighting.sample({})
                 check(lighting.sources.size()==1,"Only real disclosed lit Blue torch at "+declared[i].label)
                 if lighting.sources.size()!=1:continue
                 var source:Dictionary=lighting.sources[0]

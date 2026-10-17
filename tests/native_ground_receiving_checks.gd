@@ -32,7 +32,7 @@ func neighbours(own:float,value:float)->Dictionary:
     return {Vector2.ZERO:own,Vector2(1,0):value,Vector2(0,1):value,Vector2(-1,0):value,Vector2(0,-1):value}
 func run()->void:
     root.unfocusable=true;root.position=Vector2i(-16000,-16000)
-    var one=Image.create(1,1,false,Image.FORMAT_RGBA8);one.fill(Color.WHITE);white=ImageTexture.create_from_image(one);cookie=texture(COOKIE)
+    var one=Image.create(1,1,false,Image.FORMAT_RGBA8);one.fill(Color.WHITE);white=ImageTexture.create_from_image(one);cookie=light_cookie()
     DirAccess.make_dir_recursive_absolute("res://.captures/ground-receiving")
     for quarter in 4:
         var fixture=floor_fixture(quarter)

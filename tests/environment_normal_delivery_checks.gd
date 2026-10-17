@@ -126,7 +126,7 @@ func run()->void:
     var delivery:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(DELIVERY+"/quality.json"))
     selection=delivery.normals;dispositions=delivery.assets
     var one=Image.create(1,1,false,Image.FORMAT_RGBA8);one.fill(Color.WHITE)
-    white=ImageTexture.create_from_image(one);cookie=texture(COOKIE)
+    white=ImageTexture.create_from_image(one);cookie=light_cookie()
     DirAccess.make_dir_recursive_absolute(CAPTURES)
     var specs:Array=[
         {"id":"desk","row":prop("environment.furniture.writing_desk"),"retained":false},
