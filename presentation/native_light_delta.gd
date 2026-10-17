@@ -1106,7 +1106,7 @@ static func prepare_candidate_binding(atlas,work:Dictionary,bindings:Dictionary)
             if not output.is_empty():
                 if output.get("private_node",false):
                     _install_output(source.entry,output)
-                    source.entry.node.material_override=output.received_material
+                    if atlas.display_outputs:source.entry.node.material_override=output.received_material
                     output.installed=true
                     # All receivers and the output have consumed this private
                     # source. Its first visible sample now starts a new delivery.
@@ -1660,7 +1660,7 @@ static func reconcile(atlas, world, changes: Dictionary) -> bool:
             output.set_shader_parameter("use_instance_atlas",entry.has("batch_rows"))
             output.set_shader_parameter("light_cap",atlas.light_cap)
         else:prepared_binding_count+=1
-        if not prepared_output.get("installed",false):entry.node.material_override=output
+        if not prepared_output.get("installed",false) and atlas.display_outputs:entry.node.material_override=output
         source.output=output
         if staged and candidate.source_patches.has(id) and prepared_output.get("region_target",Vector2.ZERO)==output_target:
             prepared_regions[id]=true

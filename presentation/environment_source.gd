@@ -4,6 +4,7 @@ const Placement=preload("res://placement.gd")
 const Catalog=preload("res://source_catalog.gd")
 const EnvironmentMedia=preload("res://presentation/environment_media.gd")
 const Order=preload("res://grid_order.gd")
+const GroundReceiving=preload("res://presentation/ground_receiving.gd")
 
 static func v2(value:Array)->Vector2:return Vector2(value[0],value[1])
 static func v4(value:Array)->Vector4:return Vector4(value[0],value[1],value[2],value[3])
@@ -66,6 +67,7 @@ static func describe(row:Dictionary,record:Dictionary,source_role:int,quarter:in
             var values:Array=[-1.0,-1.0,-1.0,-1.0]
             for i in range(mini(4,selection.values.size())):values[i]=selection.values[i]
             p.selection_values=v4(values)
+    p.ground_receiver=GroundReceiving.eligible(row)
     p.has_geometry=record.has("geometry")
     if p.has_geometry:
         var g:Dictionary=record.geometry;var sampling:Dictionary=record.geometry_sampling

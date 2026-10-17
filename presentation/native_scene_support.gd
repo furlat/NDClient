@@ -11,6 +11,7 @@ const CharacterDepth=preload("res://presentation/native_scene_support.gdshader")
 const DepthCopy=preload("res://presentation/native_scene_depth_copy.gdshader")
 const LAYER=1<<14
 const DEPTH_LAYER=1<<13
+var lit_sprites:=false # Sprites display their own lit materials (play.gd lit_sprites).
 var actors:Dictionary={}
 var floors:Dictionary={}
 var owner:Node3D
@@ -276,10 +277,11 @@ func sync(static_entries:Array,visual_actors:Dictionary,view_camera:Camera3D)->v
             floor_node.position=contact
         floors[id].visible=true
         if entry.has("received_material"):
-            _outputs.append(entry.received_material)
-            live_outputs[entry.received_material]=true
-            entry.received_material.set_shader_parameter("native_scene_enabled",true)
-            entry.received_material.set_shader_parameter("native_scene_plane",true)
+            var displayed:ShaderMaterial=_displayed(entry)
+            _outputs.append(displayed)
+            live_outputs[displayed]=true
+            displayed.set_shader_parameter("native_scene_enabled",true)
+            displayed.set_shader_parameter("native_scene_plane",true)
         floor_binding_usec+=Time.get_ticks_usec()-binding_started
     var floor_retirement_started:int=Time.get_ticks_usec()
     for id in floors.keys():
@@ -303,7 +305,7 @@ func sync(static_entries:Array,visual_actors:Dictionary,view_camera:Camera3D)->v
             if source.role=="shadow" or not source.actor_layer.get("effect",{}).is_empty():continue
             var has_geometry:bool=SourceMaterial.value(source,"has_component_geometry")==true
             if source.has("received_material"):
-                var output:ShaderMaterial=source.received_material
+                var output:ShaderMaterial=_displayed(source)
                 _outputs.append(output)
                 live_outputs[output]=true
                 output.set_shader_parameter("native_scene_enabled",has_geometry and source.node.visible)
@@ -368,3 +370,7 @@ func close()->void:
     if is_instance_valid(owner):owner.free()
     if is_instance_valid(viewport):viewport.free()
     actors.clear();floors.clear()
+
+# The atlas output, or the sprite's own material when sprites are lit in place.
+func _displayed(entry:Dictionary)->ShaderMaterial:
+    return entry.material if lit_sprites else entry.received_material

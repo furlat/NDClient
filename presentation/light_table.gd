@@ -76,6 +76,13 @@ func _empty_row() -> PackedFloat32Array:
     row.resize(FLOATS)
     return row
 
+## Forget what was uploaded, so the next publish rewrites every global.
+func invalidate() -> void:
+    rows = PackedFloat32Array()
+    _table = null
+    _cookie_layers = {}
+    _missing = {}
+
 func _same_cookies(wanted: Dictionary, cookie_image: Callable) -> bool:
     for rid in _missing:
         if cookie_image.call(_missing[rid]) != null: return false

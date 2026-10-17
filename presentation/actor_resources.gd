@@ -26,6 +26,7 @@ static func build_private(inputs:Dictionary,textures:Dictionary,resources:Dictio
             SourceMaterial.set_parameter(entry,"tint",Construction.Modular.rgb(layer.tint))
             var shape:Dictionary=Construction.layer_shape(rig,actor.scale)
             var mesh:=QuadMesh.new();mesh.size=shape.mesh_size;mesh.center_offset=shape.mesh_center
+            material.set_shader_parameter("source_quad_size",shape.mesh_size)
             entry.cell=shape.cell;entry.pivot=shape.pivot;entry.scale=shape.scale
             var origin:Vector2=Placement.project(Vector2(row.position[0],row.position[1]),row.base_height_steps,actor.quarter)
             entry.screen_rect=Rect2(origin-entry.pivot*entry.scale,entry.cell*entry.scale)

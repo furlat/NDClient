@@ -15,6 +15,8 @@ const Choices = preload("res://sdk/choices.gd")
 const Lighting = preload("res://presentation/native_source_lights.gd")
 const NativeLightAtlas = preload("res://presentation/native_light_atlas.gd")
 const GeneratedShadows = preload("res://presentation/canvas_shadows.gd")
+const LightTable = preload("res://presentation/light_table.gd")
+const GroundReceiving = preload("res://presentation/ground_receiving.gd")
 const NativeStartup = preload("res://presentation/native_source_startup.gd")
 var native_startup:Dictionary={"ready":false,"completed":0,"total":0,"elapsed_ms":0.0}
 # Sources are scoped to actual disclosed interests; Studio supplies recorded cues.
@@ -27,6 +29,17 @@ var native_startup_requested_ms:float=0.0
 var native_startup_background:bool=true
 var native_light_atlas = NativeLightAtlas.new()
 var generated_shadows = GeneratedShadows.new()
+# Sprites lit in their own shaders from the light table. The atlas still runs
+# but never installs its output materials (side-by-side parity runs).
+var lit_sprites: bool = "--lit-sprites" in OS.get_cmdline_user_args()
+var light_table = LightTable.new()
+var receiving_globals: Array = []
+# Shader globals are process-wide: only the displayed world publishes them
+# (Studio prepares candidate worlds alongside the displayed one).
+var publishes_receiving := true
+var _traced_uploads := -1
+var ground_supports_revision := -1
+var ground_supports_texture: ImageTexture
 var generated_shadow_ids: Array = []
 const RenderSettings = preload("res://presentation/render_settings.gd")
 var character_light_profile = RenderSettings.DEFAULT_PROFILE
@@ -326,6 +339,7 @@ func _ready() -> void:
     source_lighting.light_strength = light_strength
     if settings.error != OK: presentation_errors.append("Cannot read local rendering settings: "+error_string(settings.error))
     native_light_atlas.require_prepared_publication=true
+    native_light_atlas.display_outputs=not lit_sprites
     native_light_atlas.attach(self)
     # Source and receiving shaders a reveal may meet first mid-play.
     NativeLightAtlas.compile_shaders(NativeLightAtlas.RECEIVING_SHADERS+[ENVIRONMENT_SHADER,WATER_SHADER,FIXTURE_FLAME_SHADER,ActorConstruction.MODULAR_SHADER,
@@ -2801,6 +2815,37 @@ func _sample_actors() -> void:
             FrameProfile.end_phase(profile,"actor_sprite_transform",transform_started)
             if not effect.is_empty() and component_renderer._entry_visible(self,entry):component_renderer.pending_evidence.append({"trace_track_id":effect.id,"display_ms":timeline.display_ms,"visible":true})
 
+# Room-wide receiving inputs of the lit sprite shaders: the light table, the
+# atlas's current cap/Normals storage and ambient, and the terrain supports.
+func _publish_receiving() -> void:
+    if not publishes_receiving: return
+    light_table.publish(source_lighting.canvas_sources(),generated_shadows.cookie_image)
+    if OS.get_environment("LIGHT_TABLE_TRACE")!="" and light_table.uploads!=_traced_uploads:
+        _traced_uploads=light_table.uploads;print("LIGHT_TABLE_COUNT ",light_table.count," ",light_table.ids)
+    if OS.get_environment("LIGHT_DEBUG")!="":RenderingServer.global_shader_parameter_set(&"light_debug",int(OS.get_environment("LIGHT_DEBUG")))
+    var receiving:Array=[native_light_atlas.light_cap,native_light_atlas.normals_visible]
+    if receiving!=receiving_globals:
+        receiving_globals=receiving
+        var hdr:bool=native_light_atlas.light_cap>0.0 and not native_light_atlas.normals_visible
+        var ambient:=Color(NativeLightAtlas.AMBIENT_INTENSITY,NativeLightAtlas.AMBIENT_INTENSITY,NativeLightAtlas.AMBIENT_INTENSITY)
+        # The receiving canvas sees CanvasModulate after Godot's HDR conversion.
+        RenderingServer.global_shader_parameter_set(&"light_ambient",ambient.linear_to_srgb().srgb_to_linear().r if hdr else ambient.r)
+        RenderingServer.global_shader_parameter_set(&"light_cap",native_light_atlas.light_cap)
+        RenderingServer.global_shader_parameter_set(&"light_normals",native_light_atlas.normals_visible)
+    if ground_supports_revision!=world_revision:
+        ground_supports_revision=world_revision
+        var supports:Dictionary=GroundReceiving.support_image(entries)
+        ground_supports_texture=ImageTexture.create_from_image(supports.image)
+        RenderingServer.global_shader_parameter_set(&"ground_supports",ground_supports_texture)
+        RenderingServer.global_shader_parameter_set(&"ground_supports_rect",supports.rect)
+
+## Make this world the publisher of the receiving globals and republish them all.
+func claim_receiving() -> void:
+    publishes_receiving = true
+    light_table.invalidate()
+    receiving_globals = []
+    ground_supports_revision = -1
+
 func _facing(direction: Vector2) -> String:
     var cycle: Array = rig_config.FACING_CYCLE
     return cycle[posmod(roundi((atan2(direction.y,direction.x)+PI/4)/(TAU/8))+cycle.find("E"),8)]
@@ -2809,6 +2854,9 @@ func _sync_native_lighting() -> void:
     var phase = Time.get_ticks_usec()
     source_lighting.project(camera)
     FrameProfile.end_phase(profile,"native_2d_projection",phase)
+    phase = Time.get_ticks_usec()
+    _publish_receiving()
+    FrameProfile.end_phase(profile,"light_table",phase)
     phase = Time.get_ticks_usec()
     native_light_atlas.sync(self,
         [world_generation,world_revision,quarter,wall_mode,scenery_revision,source_depth,source_normals],

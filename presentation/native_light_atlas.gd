@@ -130,6 +130,8 @@ func set_light_cap(value: float) -> void:
 
 var normals_visible = false
 var normal_shaders: Dictionary = {}
+# False: sprites keep their own lit materials; the atlas runs for comparison only.
+var display_outputs := true
 
 func _uses_hdr() -> bool:
     return light_cap>0.0 and not normals_visible
@@ -1276,7 +1278,7 @@ func _reconcile(world: Node) -> bool:
         entry.received_material.set_shader_parameter("use_instance_atlas",entry.has("batch_rows"))
         entry.received_material.set_shader_parameter("received_is_encoded_hdr",transport[1])
         entry.received_material.set_shader_parameter("light_cap",light_cap)
-        if entry.node.material_override!=entry.received_material: entry.node.material_override=entry.received_material
+        if display_outputs and entry.node.material_override!=entry.received_material: entry.node.material_override=entry.received_material
         entry_specs[entry.node.get_instance_id()].output=entry.received_material
         output_changed(entry)
     transport_stamp=transport

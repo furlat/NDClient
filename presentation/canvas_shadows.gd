@@ -228,6 +228,10 @@ func cookie_prepared(texture: Texture2D) -> bool:
     var retained:Dictionary=_retained_cookies.get(texture.get_rid(),{})
     return is_same(retained.get("texture"),texture) and retained.get("image")!=null
 
+## The retained RGBA8 image of a light cookie, read back once if not prepared.
+func cookie_image(texture: Texture2D) -> Image:
+    return _cookie_image(texture)
+
 func _cookie_image(texture: Texture2D) -> Image:
     var id:RID=texture.get_rid()
     var retained:Dictionary=_retained_cookies.get(id,{})

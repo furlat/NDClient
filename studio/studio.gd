@@ -780,6 +780,7 @@ func _prepare_candidate(restored: Dictionary, source: Dictionary)->void:
     var shared=not pending_authoring_reload and (is_same(source,index) or (not case_bundle.is_empty() and is_same(pending_bundle,case_bundle)))
     var prepared=ReplayPanes.prepare(self,restored.primary,source,world,spare,candidate_budget,shared,not index.is_empty())
     candidate_world=prepared.world;candidate_viewport=prepared.viewport
+    candidate_world.publishes_receiving=false
     # The retained preview cannot spend the shared native warmup draw before
     # this candidate admits its actual requested sources.
     world.native_startup_background=false
@@ -811,6 +812,8 @@ func _publish_candidate()->void:
     _cancel_replay_advance()
     var changed=not is_same(index,candidate_index)
     viewport=candidate_viewport;world=candidate_world
+    if is_instance_valid(previous_world) and previous_world!=world:previous_world.publishes_receiving=false
+    world.claim_receiving()
     world.native_startup_background=true
     if is_equal_approx(world.timeline.display_ms,scrub_target):scrub_target=-1.0
     viewport.render_target_update_mode=SubViewport.UPDATE_ALWAYS

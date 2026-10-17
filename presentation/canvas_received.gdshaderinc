@@ -4,6 +4,7 @@ uniform sampler2D received : source_color, filter_nearest, repeat_disable;
 uniform bool received_is_encoded_hdr = false;
 uniform float light_cap = 0.0;
 uniform vec2 source_quad_size = vec2(1.0);
+global uniform int light_debug;
 uniform float current_visibility = 1.0;
 uniform bool use_instance_visibility = false;
 #include "native_body_material.gdshaderinc"
@@ -100,6 +101,8 @@ void fragment() {
 #ifdef CAPPED_RECEIVING
     vec2 selected_screen = source_screen_origin+selected_uv.x*source_screen_axis_x+selected_uv.y*source_screen_axis_y;
     vec3 irradiance = max(colour.rgb,vec3(0.0));
+    if (light_debug == 1) { ALBEDO = fract(irradiance * 16.0); ALPHA = colour.a * wall_opacity; return; }
+    if (light_debug == 2) { ALBEDO = received_source_colour(selected_uv,selected_screen); ALPHA = colour.a * wall_opacity; return; }
     float peak = max(irradiance.r,max(irradiance.g,irradiance.b));
     float gain = light_cap>0.0 && peak>light_cap ? light_cap/peak : 1.0;
     vec3 encoded = clamp(received_source_colour(selected_uv,selected_screen)*irradiance*gain,vec3(0.0),vec3(1.0));

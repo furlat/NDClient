@@ -132,6 +132,7 @@ func initialize_entry(entry: Dictionary) -> void:
 func set_quad(entry: Dictionary, cell: Vector2, pivot: Vector2, scale: float) -> void:
     var mesh: QuadMesh = entry.node.mesh
     mesh.size = cell * scale / Placement.PIXELS_PER_UNIT
+    entry.material.set_shader_parameter("source_quad_size", mesh.size)
     mesh.center_offset = Vector3((cell.x * 0.5 - pivot.x) * scale / Placement.PIXELS_PER_UNIT,
         (pivot.y - cell.y * 0.5) * scale / Placement.PIXELS_PER_UNIT, 0.0)
     entry.node.custom_aabb = mesh.get_aabb()
@@ -157,6 +158,7 @@ func _release_water_clock(entry:Dictionary)->void:
 
 func _environment_quad(entry:Dictionary,value:Dictionary)->void:
     entry.node.mesh.size=value.mesh_size
+    entry.material.set_shader_parameter("source_quad_size",value.mesh_size)
     entry.node.mesh.center_offset=value.mesh_center
     entry.node.custom_aabb=value.aabb
     entry.cell=value.cell;entry.pivot=value.pivot;entry.scale=value.scale
@@ -194,6 +196,7 @@ func set_environment(entry: Dictionary, _rotation: Basis) -> void:
         if mat.shader != WATER_SHADER:
             mat.shader = WATER_SHADER
             SourceMaterial.initialize(entry)
+        mat.set_shader_parameter("source_quad_size",entry.node.mesh.size)
         SourceMaterial.set_parameter(entry,"source_tint",v4(row.get("tint",[1,1,1,1])))
         SourceMaterial.set_parameter(entry,"displayed_time_seconds",water_clock_seconds)
         _register_water_clock(entry)

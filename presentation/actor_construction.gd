@@ -60,6 +60,7 @@ static func layer(owner:Node,row:Dictionary,rig:Dictionary,source:Dictionary,ind
     SourceMaterial.set_parameter(entry,"tint",Modular.rgb(source.tint))
     var shape:Dictionary=layer_shape(rig,128.0/owner.rig_config.TILE_W*row.scale)
     entry.node.mesh.size=shape.mesh_size;entry.node.mesh.center_offset=shape.mesh_center
+    entry.material.set_shader_parameter("source_quad_size",shape.mesh_size)
     entry.node.custom_aabb=entry.node.mesh.get_aabb()
     entry.cell=shape.cell;entry.pivot=shape.pivot;entry.scale=shape.scale
     owner.update_bounds(entry)

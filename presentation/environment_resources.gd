@@ -28,7 +28,9 @@ static func build_private(packets:Dictionary,texture_refs:Dictionary,declared_na
                     var value:Texture2D=texture_refs[path]
                     parameters[name]=value;changes[name]=value;version+=1;material.set_shader_parameter(name,value)
             var mesh:=QuadMesh.new()
-            if not descriptor.get("empty",false):mesh.size=descriptor.mesh_size;mesh.center_offset=descriptor.mesh_center
+            if not descriptor.get("empty",false):
+                mesh.size=descriptor.mesh_size;mesh.center_offset=descriptor.mesh_center
+                material.set_shader_parameter("source_quad_size",descriptor.mesh_size)
             mesh.get_rid()
             entry.merge({"material":material,"mesh":mesh,"prepared_source":descriptor,"source_parameters":parameters,
                 "source_changes":changes,"source_version":version,"source_change_base":1,"source_binding_revision":2})
