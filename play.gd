@@ -40,6 +40,7 @@ var light_cap_enabled = RenderSettings.DEFAULT_LIGHT_CAP_ENABLED
 const PLAYER_ENVIRONMENT = preload("res://presentation/player_environment.tres")
 const MediaWarmup = preload("res://presentation/media_warmup.gd")
 const SelectionMedia = preload("res://presentation/selection_media.gd")
+const ChoiceResources = preload("res://live/choice_resources.gd")
 const WallReveal = preload("res://presentation/wall_reveal.gd")
 const WALL_COVERAGE_SHADER = preload("res://presentation/wall_coverage.gdshader")
 const QuarterView = preload("res://presentation/quarter_view.gd")
@@ -182,6 +183,8 @@ var fixture_heights: Dictionary = {}
 var fixture_shadow_heights: Dictionary = {}
 var media_warmup = MediaWarmup.create()
 var selection_media = SelectionMedia.create()
+# Native resources of the disclosed choices, warmed from the shared account.
+var choice_resources = ChoiceResources.new()
 var selection_media_hold_cursor = -1
 var selection_media_demand_paths: Dictionary = {}
 var selection_media_preview: Dictionary = {}
@@ -539,7 +542,7 @@ func _prepare_optional_work()->void:
                 var started:int=Time.get_ticks_usec();var before:int=budget.used_usec
                 if native_startup_plan!=null:_step_native_startup(true)
                 component_renderer.prepare_optional(self,catalog_cache,budget)
-                if not external_playback:component_renderer.prepare_choice_resources(self,budget)
+                if not external_playback:choice_resources.prepare(catalog_cache,budget)
                 _charge_preparation("optional_components",started,before)
             2:_warm_media(false,budget)
             3:
@@ -3477,7 +3480,7 @@ func _poll_actions() -> void:
         "choices":
             if pending_request.force_attack != force_attack or not session.matches_choice_boundary(pending_request.boundary): return
             pending_choices = {"boundary":pending_request.boundary,"force_attack":pending_request.force_attack,"value":response.value}
-            component_renderer.request_choice_resources(response.value.choices,catalog_cache)
+            choice_resources.request(response.value.choices,catalog_cache)
         "preview":
             var preview: Dictionary = response.value.preview
             selection_preview = preview

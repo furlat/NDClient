@@ -349,6 +349,30 @@ Unchanged from the previous commit (already red there):
 
 `selection_media_checks` needs a `--case` capture argument.
 
+## Phase 3 — live interaction extraction (in progress)
+
+Inventory (read-only, 17 October; `play.gd` 4,020 lines):
+- 86 test files use the four exit-criterion names on Play instances (`session`
+  55, `hud` 42, `context_menu`/`context_options` 36), so those names need test
+  migration rather than forwarders.
+- Five test subclasses override interaction methods.
+- The HUD (`play_hud.gd`) makes 184 `world.*` accesses.
+- The renderer's coupling to live code is in the media pipeline: selection
+  hints in `_prepare_media`, `_publish_media_interest`, `_prioritized_media`
+  and the live native-startup plan. The only render-path coupling is the hover
+  reset after rotation.
+- Per-frame order to preserve: session poll → prepared-operation drain;
+  action responses → prepared advance; discovery/storage/hover after the draw
+  sort; HUD bar before optional work.
+
+Slices, one commit each:
+
+1. **Native choice resources** moved from `component_renderer.gd` (shared with
+   Studio) to `live/choice_resources.gd`. Play owns it; it takes the shared
+   account explicitly (no private allowance). `native_choice_prefetch_checks`
+   (10) migrated; live route 81/0; compact interaction and hover feedback
+   unchanged (the latter already red).
+
 ## Studio gate
 
 `tests/studio_replay_native_checks.gd` (the plan's "full native Studio run"):
