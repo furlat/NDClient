@@ -1306,6 +1306,9 @@ func take_actor(id:String,row:Dictionary,rig:Dictionary)->Dictionary:
 # for lighting: sprites light themselves from the light table.
 func _finish_receivers() -> void:
     boundary_jobs=membership.upserts.map(func(entry):return {"entry":entry})
+    # New actor layers receive spells from their first displayed frame too.
+    for actor in native_actors.values():
+        for entry in actor.new_entries:boundary_jobs.append({"entry":entry})
     _finish_preparation()
 
 func _capture_membership() -> void:
