@@ -1131,6 +1131,12 @@ func _sync_world() -> void:
         FrameProfile.end_phase(profile,"world_scenery_membership",detail_started)
         detail_started=Time.get_ticks_usec()
         pending_world.publish_membership()
+        if rotated:
+            # An initial preparation can retain entries of the previous view
+            # (ground batches updated in place). They leave its retiring root,
+            # or its bounded retirement frees them while they are displayed.
+            for entry in static_entries:
+                if not sprite_parent.is_ancestor_of(entry.node):entry.node.reparent(sprite_parent,false)
         FrameProfile.end_phase(profile,"world_membership_publish",detail_started)
     else:
         phase = Time.get_ticks_usec()
