@@ -112,11 +112,13 @@ func publish_receiving(cap:bool,normals:bool,cookie:ImageTexture)->void:
     light_table.publish([source],func(texture:Texture2D)->Image:return image if texture==cookie else null)
     check(light_table.count==1 and light_table.issues.is_empty(),"Fixture light enters the light table")
 
+## Radial fixture cookie at the size the light table copies (RGBA8, COOKIE_SIZE²).
 func cookie_texture()->ImageTexture:
-    var image=Image.create(64,64,false,Image.FORMAT_RGBA8)
-    for y in 64:
-        for x in 64:
-            var d:float=Vector2(x+.5-32,y+.5-32).length()/32.0
+    var size:int=LightTable.COOKIE_SIZE;var half:float=size*.5
+    var image=Image.create(size,size,false,Image.FORMAT_RGBA8)
+    for y in size:
+        for x in size:
+            var d:float=Vector2(x+.5-half,y+.5-half).length()/half
             image.set_pixel(x,y,Color(1,1,1,clampf(1.0-d,0.0,1.0)))
     return ImageTexture.create_from_image(image)
 
