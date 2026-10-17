@@ -29,6 +29,12 @@ func texture(path:String)->Texture2D:
         images[path]=Image.load_from_file(Catalog.media_path(path) if path.begins_with("/media/") else path)
         textures[path]=ImageTexture.create_from_image(images[path])
     return textures[path]
+func light_cookie(path:String)->Texture2D:
+    # Light cookies carry their RGBA8 image, as generated cookies do.
+    var result:Texture2D=texture(path)
+    if not result.has_meta(&"cookie_image"):
+        var pixels:Image=images[path].duplicate();pixels.convert(Image.FORMAT_RGBA8);result.set_meta(&"cookie_image",pixels)
+    return result
 func read(path:String)->Dictionary:return JSON.parse_string(FileAccess.get_file_as_string(path))
 func capture(view:SubViewport)->Image:
     await process_frame;await RenderingServer.frame_post_draw
@@ -136,7 +142,7 @@ func shadow(entry:Dictionary)->void:
     var row:Dictionary=entry.placement
     var actor={"valid":true,"row":row,"entries":[entry]}
     var zoom=1.0/Placement.PIXELS_PER_UNIT*camera.unproject_position(camera.basis.x).distance_to(camera.unproject_position(Vector3.ZERO))
-    var cookie=texture("C:/Users/tommaso/Documents/Dev/NDCharacterLight/.reference-template/scenes/vfx/textures/T_basic1_vfx.PNG")
+    var cookie=light_cookie("C:/Users/tommaso/Documents/Dev/NDCharacterLight/.reference-template/scenes/vfx/textures/T_basic1_vfx.PNG")
     var sources=[{"id":"original-warm","screen_position":camera.unproject_position(Vector3.ZERO)+Vector2(14,42)*zoom,"span":Vector2(cookie.get_size())*19.36*zoom,"height":20*zoom,"texture":cookie,"energy":2.0,"color":Color(.809372,.429306,.269121),"enabled":true}]
     var produced=manager.sync([actor],camera,sources)
     check(produced.size()==1 and manager.issues.is_empty(),entry.id+" original body produces one generated shadow without fallback")

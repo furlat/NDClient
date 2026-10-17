@@ -30,7 +30,7 @@ func run()->void:
     camera.position=Vector3(12,12*Placement.HEIGHT_UNIT,12);camera.look_at(Vector3.ZERO);camera.current=true
     var cookie=Image.load_from_file(Lighting.DEFAULT_COOKIE)
     lighting.cookie=ImageTexture.create_from_image(cookie)
-    shadows._cookie_images[lighting.cookie.get_rid()]=cookie
+    lighting.cookie.set_meta(&"cookie_image",cookie)
     var assets=Catalog.read_file("assets.json",cache)
     var total=0.0
     for frame in assets.animations["torch.flame"].frames:
@@ -94,11 +94,12 @@ func run()->void:
                     var foot=camera.unproject_position(Placement.contact(row))
                     var selected=shadows._dominant(foot)
                     if not selections.has(id):selections[id]=[];scores[id]=[]
-                    selections[id].append(shadows._sources[selected].id if selected>=0 else "")
+                    selections[id].append(shadows._source_ids[selected] if selected>=0 else "")
                     var ranked=[]
-                    for source in shadows._sources:
+                    for index in shadows._source_ids.size():
+                        var source:Dictionary=shadows._source_row(index)
                         var uv=(foot-source.screen_position)/source.span+Vector2.ONE*.5
-                        ranked.append({"id":source.id,"score":source.strength*Shadows._cookie_at(cookie,uv),"screen_position":[source.screen_position.x,source.screen_position.y],"energy":source.energy})
+                        ranked.append({"id":source.id,"score":source.strength*Shadows._cookie_at(cookie,uv),"screen_position":[source.screen_position.x,source.screen_position.y],"strength":source.strength})
                     ranked.sort_custom(func(a,b):return a.score>b.score)
                     scores[id].append(ranked.slice(0,2))
             for id in selections:
@@ -113,16 +114,16 @@ func run()->void:
                     var foot=camera.unproject_position(Placement.contact(rows[id]))
                     var original=shadows._dominant(foot)
                     if original>=0:
-                        var source_id=shadows._sources[original].id
+                        var source_id=shadows._source_ids[original]
                         var original_sources=lighting.canvas_sources().duplicate(true)
                         var changed=original_sources.duplicate(true)
                         for source in changed:
                             if source.id==source_id:source.enabled=false
                         shadows._prepare_sources(changed)
                         var replacement=shadows._dominant(foot)
-                        check(replacement<0 or shadows._sources[replacement].id!=source_id,"Extinguishing selected source immediately removes its casting ownership")
+                        check(replacement<0 or shadows._source_ids[replacement]!=source_id,"Extinguishing selected source immediately removes its casting ownership")
                         shadows._prepare_sources(original_sources)
-                        check(shadows._sources[shadows._dominant(foot)].id==source_id,"Re-enabling unchanged source restores deterministic selection")
+                        check(shadows._source_ids[shadows._dominant(foot)]==source_id,"Re-enabling unchanged source restores deterministic selection")
                         changed=original_sources.duplicate(true)
                         for source in changed:
                             if source.id==source_id:
@@ -130,7 +131,7 @@ func run()->void:
                                 source.shadow_rank_position+=source.span*3.0
                         shadows._prepare_sources(changed)
                         replacement=shadows._dominant(foot)
-                        check(replacement<0 or shadows._sources[replacement].id!=source_id,"Moving the selected native light beyond its footprint reranks immediately")
+                        check(replacement<0 or shadows._source_ids[replacement]!=source_id,"Moving the selected native light beyond its footprint reranks immediately")
                         shadows._prepare_sources(original_sources)
                         extinction_checks+=1
                 if unique.size()>1:

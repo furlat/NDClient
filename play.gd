@@ -40,6 +40,7 @@ var ground_supports_revision := -1
 var ground_supports_texture: ImageTexture
 var ground_supports_rect := Vector4(0, 0, 1, 1)
 var generated_shadow_ids: Array = []
+var generated_shadow_entries: Array = []
 const RenderSettings = preload("res://presentation/render_settings.gd")
 var character_light_profile = RenderSettings.DEFAULT_PROFILE
 var requested_character_light_profile = ""
@@ -560,6 +561,8 @@ func _prepare_optional_work()->void:
                 if native_startup_plan!=null:_step_native_startup(true)
                 component_renderer.prepare_optional(self,catalog_cache,budget)
                 if not external_playback:choice_resources.prepare(catalog_cache,budget)
+                # Spare shadow helpers, so a reveal's new actors construct none.
+                if generated_shadows.spares_needed():generated_shadows.prepare_spares(budget.limit_usec-budget.used_usec-(Time.get_ticks_usec()-started))
                 _charge_preparation("optional_components",started,before)
             2:_warm_media(false,budget)
             3:
@@ -2843,17 +2846,20 @@ func _sync_native_lighting() -> void:
     _publish_receiving()
     FrameProfile.end_phase(profile,"light_table",phase)
     phase = Time.get_ticks_usec()
-    # Remove stale handles before the helper retires hidden actors. Source
-    # components and picking continue to use the original visual.entries list.
-    actor_entries = actor_entries.filter(func(entry):return not entry.get("generated_shadow",false))
-    var shadows = generated_shadows.sync(visual_actors.values(),camera,source_lighting.canvas_sources())
+    # The light table's upload count changes whenever the canvas sources do.
+    var shadows: Array = generated_shadows.sync(visual_actors.values(),camera,source_lighting.canvas_sources(),light_table.uploads if publishes_receiving else -1)
     if normals_visible:
         for entry in shadows: entry.node.visible = false
-    var ids = shadows.map(func(entry):return entry.node.get_instance_id())
-    if ids != generated_shadow_ids:
-        generated_shadow_ids = ids
-        draw_order_dirty = true
-    actor_entries.append_array(shadows)
+    # A new array only when the shown helpers changed. Source components and
+    # picking continue to use the original visual.entries list.
+    if not is_same(shadows,generated_shadow_entries):
+        generated_shadow_entries = shadows
+        actor_entries = actor_entries.filter(func(entry):return not entry.get("generated_shadow",false))
+        actor_entries.append_array(shadows)
+        var ids = shadows.map(func(entry):return entry.node.get_instance_id())
+        if ids != generated_shadow_ids:
+            generated_shadow_ids = ids
+            draw_order_dirty = true
     FrameProfile.end_phase(profile,"modular_shadows",phase)
     for issue in source_lighting.issues+generated_shadows.issues:
         if issue not in presentation_errors: presentation_errors.append(issue)

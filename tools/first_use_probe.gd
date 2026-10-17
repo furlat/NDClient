@@ -71,7 +71,7 @@ func play_pass(label:String)->void:
             slow.append({"display_ms":snappedf(studio.world.timeline.display_ms,1),"interval_ms":snappedf(interval,0.1),
                 "player_ms":snappedf(phases.get("player_process",0.0),0.01),"new_pipelines":compiled_now-compiled,"pipeline_kinds":category_delta,
                 "lights":studio.world.light_table.count,"shadow_actors":studio.world.generated_shadows.actors.size(),
-                "shadow_rendered":studio.world.generated_shadows.actors.values().filter(func(state):return state.viewport.render_target_update_mode!=SubViewport.UPDATE_DISABLED).size(),
+                "shadow_rendered":studio.world.generated_shadows.diagnostics().sync_counts.updated_actors,
                 "new_nodes":nodes_now-nodes,"process_ms":snappedf(Performance.get_monitor(Performance.TIME_PROCESS)*1000.0,0.1),
                 "render_setup_ms":snappedf(RenderingServer.get_frame_setup_time_cpu(),0.1),
                 "viewports":viewports.size(),"updating_viewports":updating,"new_viewports":fresh,"top":named})

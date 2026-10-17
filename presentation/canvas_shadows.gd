@@ -8,8 +8,22 @@ const VISIBILITY = preload("shadow_visibility.gdshader")
 const COMPOSITE = preload("shadow_composite.gdshader")
 const CASTER_PARAMETERS = ["sheet","frame_uv","component_depth","component_support",
     "component_depth_range","component_units","component_reconstruction_origin","component_elevation"]
-const RETAINED_COOKIE_IMAGES=16
-const RETAINED_COOKIE_BYTES=4*1024*1024
+## Every caster operand but the sampled frame, as snapshot keys and as the
+## source's parameter names.
+const OPERANDS = ["sheet","component_depth","component_support","component_depth_range","component_units","component_reconstruction_origin","component_elevation"]
+const OPERAND_NAMES = [&"sheet",&"component_depth",&"component_support",&"component_depth_range",&"component_units",&"component_reconstruction_origin",&"component_elevation"]
+## Packed light rows in canvas-source order (the deterministic tie order).
+## Live: screen position, height, cookie centre, span, strength. Rank: cookie
+## centre, span and the cycle-mean strength. Doubles: every value reaches the
+## projection and the ranking exactly as the source carried it.
+const LIVE := 8
+const RANK := 5
+const SOURCE_ROWS := 64 # The composite's light table keeps one texture while this suffices.
+const COUNTS := {"new_actors":0,"new_casters":0,"new_meshes":0,"updated_actors":0,"removed_actors":0,"evaluated_actors":0,"retained_actors":0}
+## Helpers built ahead with optional work, so a reveal's new actors take them
+## instead of constructing worlds, viewports and casters in preparation.
+const SPARE_HELPERS := 8
+const SPARE_CASTERS := 80
 
 var enabled := true
 var shadow_atlas_size := 2048
@@ -17,22 +31,37 @@ var issues: Array = []
 var actors: Dictionary = {}
 var _parent: Node3D
 var _meshes: Dictionary = {}
-var _sources: Array = []
-var _source_key: Array = []
+var _source_ids := PackedStringArray()
+var _source_textures: Array = []
+var _source_live := PackedFloat64Array()
+var _source_rank := PackedFloat64Array()
+var _source_moved := PackedByteArray() # Rows whose live projection changed at this frame's pack.
+var _sources_ready := false
 var _source_revision: int = 0
-var _rank_key: Array = []
 var _rank_revision: int = 0
+var _light_revision := -2
 var _cookie_key: Array = []
 var _cookie_images: Dictionary = {}
-var _retained_cookies:Dictionary={}
-var _cookie_use:int=0
 var _cookie_rects: Dictionary = {}
 var _cookie_texture: Texture2D
 var _source_texture: ImageTexture
+var _source_data := PackedFloat32Array()
+var _view_transform := Transform3D()
+var _view_scale := -1.0
+var _view_size := Vector2(-1,-1)
+var _active := false
+var _frame := 0
+var _seen: Dictionary = {} # Actor id -> [visual, sampled pose, frame, dominant row] of its last evaluation.
+var _shown: Array = [] # Shown helper entries in actor order; a new array only when the set changes.
+var _shown_dirty := false
+var _dominant_row := -1
+var _spare_helpers: Array = []
+var _spare_casters: Array = []
 var _updates := 0
+var _writes := 0
 var _last_cpu_ms := 0.0
 var _last_phases: Dictionary = {}
-var _last_counts: Dictionary = {}
+var _last_counts: Dictionary = COUNTS.duplicate()
 var _caster_shapes: Dictionary = {}
 
 func _timed(name: String, started: int) -> void:
@@ -41,134 +70,184 @@ func _timed(name: String, started: int) -> void:
 func attach(parent: Node3D) -> void:
     close()
     _parent=parent
-    RenderingServer.frame_post_draw.connect(_after_draw)
 
 ## visual_actors are the existing displayed records: {row, entries, valid}.
 ## canvas_sources use displayed viewport pixels: id, screen_position, span,
 ## height, texture, energy, color, enabled. Their order is the deterministic tie
 ## order. They are NOT undisclosed backend objects or future prepared actors.
-func sync(visual_actors: Array, camera: Camera3D, canvas_sources: Array) -> Array:
+## light_revision changes whenever the canvas sources may have changed; -1
+## packs them on every call. An actor is evaluated again only when its record,
+## its sampled pose, the view, the ranking or its casting light changed. The
+## returned array is replaced only when the set of shown helpers changes.
+func sync(visual_actors: Array, camera: Camera3D, canvas_sources: Array, light_revision: int = -1) -> Array:
     var started := Time.get_ticks_usec()
-    _last_phases={};_last_counts={"new_actors":0,"new_casters":0,"new_meshes":0,"cookie_reads":0,"cookie_cache_hits":0,"updated_actors":0,"removed_actors":0}
-    issues.clear()
-    var result: Array = []
-    var retained := {}
-    if not is_instance_valid(_parent): _last_cpu_ms=0.0;return result
-    # Visibility and light selection do not end the actor's resource lifetime.
-    # Keep prepared helpers disabled between casts instead of recreating them
-    # when the camera or a light returns.
-    for actor in visual_actors:
-        if actor.get("valid",true):retained[str(actor.row.id)]=true
-    for id in actors.keys():
-        if not retained.has(id):_remove(id);_last_counts.removed_actors+=1
-    var shown:Dictionary={}
+    _last_phases.clear();_last_counts=COUNTS.duplicate()
+    if not is_instance_valid(_parent): _last_cpu_ms=0.0;return _show([])
+    _frame+=1
     var phase_started:=Time.get_ticks_usec()
-    if not enabled or not _prepare_sources(canvas_sources):
-        _timed("sources",phase_started);phase_started=Time.get_ticks_usec()
-        _hide_unshown(shown)
-        _timed("retire",phase_started);_last_cpu_ms=float(Time.get_ticks_usec()-started)/1000.0
-        return result
+    var view_size:Vector2=camera.get_viewport().get_visible_rect().size
+    var view_changed:bool=camera.global_transform!=_view_transform or camera.size!=_view_scale or view_size!=_view_size
+    if view_changed:_view_transform=camera.global_transform;_view_scale=camera.size;_view_size=view_size
+    var rank_revision:int=_rank_revision
+    if view_changed or light_revision<0 or light_revision!=_light_revision:
+        _light_revision=light_revision
+        _sources_ready=_prepare_sources(canvas_sources)
+    elif not _source_moved.is_empty():_source_moved=PackedByteArray()
     _timed("sources",phase_started)
-    var view_key:Array=[camera.global_transform,camera.size,camera.get_viewport().get_visible_rect().size,_rank_revision,_sources.size(),_source_texture,_cookie_texture]
-    for actor in visual_actors:
-        if not actor.get("valid",true): continue
-        var row: Dictionary=actor.row
-        phase_started=Time.get_ticks_usec()
-        # Every snapshot, layout and binding input of an unchanged actor: its
-        # layers' material versions, transforms and bind-time fields, its
-        # contact, the camera/view and the light sources. Equal inputs give
-        # the same key below, so the shown helper is kept as it is.
-        var contact:Vector3=Placement.contact(row)
-        # Ranking uses each flame cycle's mean; only the dominant source's live
-        # position/height/cookie feed this actor's projection and footprint.
-        var dominant:int=_dominant(camera.unproject_position(contact))
-        var live_source:Array=[] if dominant<0 else [_sources[dominant].screen_position,_sources[dominant].height,_sources[dominant].cookie_position,_sources[dominant].span]
-        var input_key:Array=[view_key,contact,dominant,live_source]
-        for entry in actor.entries:
-            input_key.append([entry.node.visible,entry.get("source_version",0),entry.node.global_position,entry.get("pivot"),
-                entry.get("geometry_cell_size"),entry.get("geometry_ground_pixels"),entry.placement.get("scale_x",1.0)])
-        var held: Dictionary=actors.get(str(row.id),{})
-        if not held.is_empty() and held.get("input_key")==input_key:
-            shown[str(row.id)]=true
-            held.entry.node.visible=true
-            result.append(held.entry)
-            _last_counts.retained_actors=int(_last_counts.get("retained_actors",0))+1
-            _timed("retained",phase_started)
+    var active:bool=enabled and _sources_ready
+    # Leaving and returning re-evaluates everyone; helpers are only hidden.
+    var force:bool=view_changed or rank_revision!=_rank_revision or active!=_active
+    _active=active
+    var looked:=0
+    for visual in visual_actors:
+        if not visual.get("valid",true): continue
+        looked+=1
+        var id:String=visual.row.id
+        var pose:Variant=visual.get("sampled_pose")
+        var seen:Variant=_seen.get(id)
+        var moved:bool=seen!=null and seen[3]>=0 and seen[3]<_source_moved.size() and _source_moved[seen[3]]==1
+        # A null pose is a hidden actor or an unsampled record: always looked at.
+        if not force and not moved and pose!=null and seen!=null and is_same(seen[0],visual) and is_same(seen[1],pose):
+            seen[2]=_frame;_last_counts.retained_actors+=1
             continue
-        if not held.is_empty():held.erase("input_key")
-        phase_started=Time.get_ticks_usec()
-        var snapshots := _snapshots(actor.entries,camera)
-        _timed("snapshots",phase_started)
-        if snapshots.is_empty(): continue
-        phase_started=Time.get_ticks_usec()
-        var origin := Placement.contact(row)
-        var pixels_per_world := camera.unproject_position(origin+camera.global_basis.x).distance_to(camera.unproject_position(origin))
-        var units: float=snapshots[0].component_units
-        var zoom: float=units*pixels_per_world
-        if zoom<=0.00001: _timed("layout",phase_started);continue
-        var ground: float=snapshots[0].ground_pixels*units
-        for snapshot in snapshots:
-            snapshot.caster_shape=_caster_shape(snapshot,ground)
-        var selection := _dominant(camera.unproject_position(origin))
-        if selection<0: _timed("layout",phase_started);continue
-        var projection := _projection(camera,origin,ground,units,zoom,_sources[selection])
-        var bounds := _bounds(snapshots,origin,ground,projection.position,camera)
-        var source: Dictionary=_sources[selection]
-        var visible_rect := Rect2(Vector2.ZERO,camera.get_viewport().get_visible_rect().size)
-        var cookie_rect := Rect2(source.cookie_position-source.span*0.5,source.span)
-        var rect: Rect2=(cookie_rect if bounds.unbounded else bounds.rect.grow(2.0*maxf(zoom,1.0))).intersection(cookie_rect).intersection(visible_rect)
-        if not rect.has_area(): _timed("layout",phase_started);continue
-        # At close range use one sample per source pixel. At distance never
-        # allocate a target larger than its actual displayed footprint.
-        var sample_scale := maxf(zoom,1.0)
-        rect=_sampling_rect(rect,sample_scale)
-        var size := Vector2i((rect.size/sample_scale).round())
-        var id: String=row.id
-        _timed("layout",phase_started)
-        if not actors.has(id):
-            phase_started=Time.get_ticks_usec();actors[id]=_create(id)
-            _timed("create",phase_started);_last_counts.new_actors+=1
-        phase_started=Time.get_ticks_usec()
-        var state: Dictionary=actors[id]
-        state.entry.placement=row
-        state.source_id=_sources[selection].id
-        state.entry.screen_rect=rect
-        state.entry.material.set_shader_parameter("dominant_index",selection)
-        state.entry.material.set_shader_parameter("source_count",_sources.size())
-        state.entry.material.set_shader_parameter("source_data",_source_texture)
-        state.entry.material.set_shader_parameter("cookie_atlas",_cookie_texture)
-        var key: Array=[snapshots,origin,camera.global_basis,projection,rect,size]
-        _timed("bind",phase_started)
-        if state.key!=key:
-            phase_started=Time.get_ticks_usec()
-            _update(state,snapshots,camera,origin,ground,projection,rect,size,pixels_per_world)
-            _timed("update",phase_started);_last_counts.updated_actors+=1
-            state.key=key
-            state.unbounded=bounds.unbounded
-        state.entry.node.visible=true
-        result.append(state.entry)
-        shown[id]=true
-        state.input_key=input_key
+        _dominant_row=-1
+        var shown:bool=active and _evaluate(visual,camera,force or moved)
+        _seen[id]=[visual,pose,_frame,_dominant_row]
+        var state:Variant=actors.get(id)
+        if state!=null and state.shown!=shown:
+            state.shown=shown;_shown_dirty=true
+            if shown:state.entry.node.visible=true
+            else:_hide(state)
     phase_started=Time.get_ticks_usec()
-    _hide_unshown(shown)
-    var retained_shapes:Dictionary={}
-    for state in actors.values():
-        for id in state.casters:retained_shapes[id]=true
-    for id in _caster_shapes.keys():
-        if not retained_shapes.has(id):_caster_shapes.erase(id)
+    # Records that left the displayed set retire their helpers.
+    if _seen.size()!=looked or actors.size()>looked:
+        for id in _seen.keys():
+            if _seen[id][2]!=_frame:_seen.erase(id)
+        for id in actors.keys():
+            if not _seen.has(id):_remove(id);_last_counts.removed_actors+=1
+        for id in _caster_shapes.keys():
+            if not _caster_owned(id):_caster_shapes.erase(id)
+    if _shown_dirty:
+        _shown_dirty=false
+        var result:Array=[]
+        for visual in visual_actors:
+            var state:Variant=actors.get(visual.row.id) if visual.get("valid",true) else null
+            if state!=null and state.shown:result.append(state.entry)
+        _show(result)
     _timed("retire",phase_started)
     _last_cpu_ms=float(Time.get_ticks_usec()-started)/1000.0
-    return result
+    return _shown
 
-func _hide_unshown(shown: Dictionary) -> void:
-    # Only helpers that are not drawn this frame are hidden; shown helpers keep
-    # their visibility and update mode instead of toggling every frame.
-    for id in actors:
-        if shown.has(id): continue
-        var state: Dictionary=actors[id]
-        state.erase("input_key")
-        if state.entry.node.visible: state.entry.node.hide()
-        state.viewport.render_target_update_mode=SubViewport.UPDATE_DISABLED
+func _show(result: Array) -> Array:
+    var same:bool=result.size()==_shown.size()
+    for i in result.size():
+        if not same:break
+        same=is_same(result[i],_shown[i])
+    if not same:_shown=result
+    return _shown
+
+func _caster_owned(id: String) -> bool:
+    for state in actors.values():
+        if state.casters.has(id):return true
+    return false
+
+func _hide(state: Dictionary) -> void:
+    if state.entry.node.visible: state.entry.node.hide()
+    state.viewport.render_target_update_mode=SubViewport.UPDATE_DISABLED
+
+## One actor's helper from its displayed layers. Writes only operands that
+## differ from what the helper holds and renders only when one was written.
+## Without `relayout` (same view, ranking and casting light) and with the same
+## contact and layer geometry, the footprint is kept and only casters update.
+func _evaluate(visual: Dictionary, camera: Camera3D, relayout: bool) -> bool:
+    var row: Dictionary=visual.row
+    var id: String=row.id
+    _last_counts.evaluated_actors+=1
+    var phase_started:=Time.get_ticks_usec()
+    var state: Dictionary=actors.get(id,{})
+    var snapshots := _snapshots(visual.entries,camera,state.get("snapshots",[]))
+    _timed("snapshots",phase_started)
+    if snapshots.is_empty(): return _unlit(state)
+    phase_started=Time.get_ticks_usec()
+    var origin := Placement.contact(row)
+    var units: float=snapshots[0].component_units
+    var ground: float=snapshots[0].ground_pixels*units
+    var geometry:Array=[origin,ground]
+    for snapshot in snapshots:geometry.append(snapshot.geometry)
+    if not relayout and not state.is_empty() and state.dominant>=0 and geometry==state.geometry:
+        # Only sampled frames or sheets changed: the footprint stays.
+        _dominant_row=state.dominant
+        state.snapshots=snapshots
+        _timed("layout",phase_started);phase_started=Time.get_ticks_usec()
+        if _update_casters(state,snapshots,camera,origin,ground,true):_render(state)
+        _timed("update",phase_started)
+        return true
+    var foot:=camera.unproject_position(origin)
+    var pixels_per_world := camera.unproject_position(origin+camera.global_basis.x).distance_to(foot)
+    var zoom: float=units*pixels_per_world
+    if zoom<=0.00001: _timed("layout",phase_started);return _unlit(state)
+    for snapshot in snapshots:
+        snapshot.caster_shape=_caster_shape(snapshot,ground)
+    var selection := _dominant(foot)
+    if selection<0: _timed("layout",phase_started);return _unlit(state)
+    _dominant_row=selection
+    var k:int=selection*LIVE
+    var projection := _projection(camera,origin,ground,units,zoom,Vector2(_source_live[k],_source_live[k+1]),_source_live[k+2])
+    var bounds := _bounds(snapshots,origin,ground,projection.position,camera)
+    var visible_rect := Rect2(Vector2.ZERO,_view_size)
+    var span:=Vector2(_source_live[k+5],_source_live[k+6])
+    var cookie_rect := Rect2(Vector2(_source_live[k+3],_source_live[k+4])-span*0.5,span)
+    var rect: Rect2=(cookie_rect if bounds.unbounded else bounds.rect.grow(2.0*maxf(zoom,1.0))).intersection(cookie_rect).intersection(visible_rect)
+    if not rect.has_area(): _timed("layout",phase_started);return _unlit(state)
+    # At close range use one sample per source pixel. At distance never
+    # allocate a target larger than its actual displayed footprint.
+    var sample_scale := maxf(zoom,1.0)
+    rect=_sampling_rect(rect,sample_scale)
+    var size := Vector2i((rect.size/sample_scale).round())
+    _timed("layout",phase_started)
+    if state.is_empty():
+        phase_started=Time.get_ticks_usec();state=_create(id);actors[id]=state
+        _timed("create",phase_started);_last_counts.new_actors+=1
+    phase_started=Time.get_ticks_usec()
+    state.entry.placement=row
+    state.source_id=_source_ids[selection]
+    _bind(state,selection)
+    var same_place:bool=state.geometry.size()>=2 and state.geometry[0]==origin and state.geometry[1]==ground and state.geometry_basis==camera.global_basis
+    state.snapshots=snapshots;state.geometry=geometry;state.geometry_basis=camera.global_basis;state.dominant=selection
+    _timed("bind",phase_started);phase_started=Time.get_ticks_usec()
+    var written:bool=_update_casters(state,snapshots,camera,origin,ground,same_place)
+    var layout:Array=[size,rect,projection.position,origin,ground,pixels_per_world,_view_transform,_view_scale,_view_size]
+    if layout!=state.layout:
+        state.layout=layout
+        _update_layout(state,camera,origin,ground,projection,rect,size,pixels_per_world)
+        written=true
+    if written:_render(state)
+    state.unbounded=bounds.unbounded
+    _timed("update",phase_started)
+    return true
+
+# Nothing is cast here (no geometry, light or footprint): the helper keeps its
+# resources, and its next evaluation lays it out again.
+func _unlit(state: Dictionary) -> bool:
+    if not state.is_empty():state.dominant=-1
+    return false
+
+func _bind(state: Dictionary, selection: int) -> void:
+    var material: ShaderMaterial=state.entry.material
+    if state.bound_dominant!=selection:
+        state.bound_dominant=selection;material.set_shader_parameter("dominant_index",selection);_writes+=1
+    if state.bound_count!=_source_ids.size():
+        state.bound_count=_source_ids.size();material.set_shader_parameter("source_count",_source_ids.size());_writes+=1
+    if not is_same(state.bound_data,_source_texture):
+        state.bound_data=_source_texture;material.set_shader_parameter("source_data",_source_texture);_writes+=1
+    if not is_same(state.bound_cookies,_cookie_texture):
+        state.bound_cookies=_cookie_texture;material.set_shader_parameter("cookie_atlas",_cookie_texture);_writes+=1
+
+func _render(state: Dictionary) -> void:
+    # One render in this frame's draw, before the composite samples it; the
+    # server disables the target again by itself.
+    RenderingServer.viewport_set_update_mode(state.viewport.get_viewport_rid(),RenderingServer.VIEWPORT_UPDATE_ONCE)
+    _updates+=1;_last_counts.updated_actors+=1
 
 static func _sampling_rect(rect: Rect2, sample_scale: float) -> Rect2:
     var first := (rect.position/sample_scale).floor()*sample_scale
@@ -182,103 +261,87 @@ static func _sampling_rect(rect: Rect2, sample_scale: float) -> Rect2:
     last=first+((last-first)/(sample_scale*4.0)).ceil()*(sample_scale*4.0)
     return Rect2(first,last-first)
 
+## Packs the canvas sources. A changed row set or rank field re-ranks every
+## actor; changed live values mark their rows moved; the composite's table is
+## uploaded only when its values change.
 func _prepare_sources(input: Array) -> bool:
-    var sources: Array=[]
-    var key: Array=[]
+    issues.clear()
+    var ids := PackedStringArray()
+    var textures: Array=[]
+    var live := PackedFloat64Array()
+    var rank := PackedFloat64Array()
     for source in input:
         if not source.get("enabled",true) or float(source.get("energy",0.0))<=0.0: continue
         if not source.get("texture") is Texture2D or not source.get("span") is Vector2 or not source.get("screen_position") is Vector2 or not source.get("color") is Color:
             issues.append("Generated shadow requires the exact native 2D source projection/cookie: "+str(source.get("id","")))
             return false
-        if source.span.x<=0 or source.span.y<=0: continue
+        var span: Vector2=source.span
+        if span.x<=0 or span.y<=0: continue
         var colour: Color=source.color.srgb_to_linear()
         var strength: float=source.energy*(0.2126*colour.r+0.7152*colour.g+0.0722*colour.b)
         if strength<=0: continue
-        var row: Dictionary=source.duplicate()
-        row.strength=strength
-        row.cookie_position=source.get("cookie_position",source.screen_position)
-        row.shadow_cookie_position=source.get("cookie_position",source.get("shadow_rank_position",source.screen_position))
-        row.shadow_rank_position=source.get("shadow_rank_position",source.screen_position)
-        row.shadow_rank_strength=float(source.get("shadow_rank_energy",source.energy))*(0.2126*colour.r+0.7152*colour.g+0.0722*colour.b)
-        sources.append(row)
-        key.append([row.id,row.screen_position,row.cookie_position,row.span,row.height,row.texture.get_rid(),row.energy,row.color,row.shadow_rank_position,row.shadow_rank_strength])
-    if key==_source_key: return true
-    if not _prepare_cookies(sources): return false
-    # This is a small numeric parameter upload (3 RGBA float texels/source),
-    # not image readback, sprite rasterization or per-frame artwork decoding.
-    var data := Image.create(3,maxi(sources.size(),1),false,Image.FORMAT_RGBAF)
-    for i in sources.size():
-        var source: Dictionary=sources[i]
-        var rect: Rect2=_cookie_rects[source.texture.get_rid()]
-        data.set_pixel(0,i,Color(source.cookie_position.x,source.cookie_position.y,source.span.x,source.span.y))
-        data.set_pixel(1,i,Color(rect.position.x,rect.position.y,rect.size.x,rect.size.y))
-        data.set_pixel(2,i,Color(source.strength,0,0,0))
-    if _source_texture==null or _source_texture.get_height()!=data.get_height(): _source_texture=ImageTexture.create_from_image(data)
-    else: _source_texture.update(data)
-    _source_key=key
-    _source_revision+=1
-    var rank_key:Array=[]
-    for source in sources:rank_key.append([source.id,source.shadow_cookie_position,source.span,source.shadow_rank_strength,source.texture.get_rid()])
-    if rank_key!=_rank_key:_rank_key=rank_key;_rank_revision+=1
-    _sources=sources
+        var position: Vector2=source.screen_position
+        var cookie: Vector2=source.get("cookie_position",position)
+        var rank_cookie: Vector2=source.get("cookie_position",source.get("shadow_rank_position",position))
+        ids.append(str(source.id));textures.append(source.texture)
+        live.append_array([position.x,position.y,source.height,cookie.x,cookie.y,span.x,span.y,strength])
+        rank.append_array([rank_cookie.x,rank_cookie.y,span.x,span.y,float(source.get("shadow_rank_energy",source.energy))*(0.2126*colour.r+0.7152*colour.g+0.0722*colour.b)])
+    var same_rows:bool=ids==_source_ids and textures.size()==_source_textures.size()
+    for i in textures.size():
+        if not same_rows:break
+        same_rows=is_same(textures[i],_source_textures[i])
+    if same_rows and live==_source_live and rank==_source_rank:
+        if not _source_moved.is_empty():_source_moved=PackedByteArray()
+        return true
+    if not _prepare_cookies(textures): return false
+    # A small numeric table (3 RGBA float texels per source) in one texture.
+    var data := PackedFloat32Array()
+    for i in ids.size():
+        var rect: Rect2=_cookie_rects[textures[i].get_rid()]
+        var k:int=i*LIVE
+        data.append_array(PackedFloat32Array([live[k+3],live[k+4],live[k+5],live[k+6],rect.position.x,rect.position.y,rect.size.x,rect.size.y,live[k+7],0,0,0]))
+    data.resize(maxi(SOURCE_ROWS,nearest_po2(ids.size()))*12)
+    if data!=_source_data:
+        _source_data=data
+        var image:=Image.create_from_data(3,data.size()/12,false,Image.FORMAT_RGBAF,data.to_byte_array())
+        if _source_texture==null or _source_texture.get_height()!=image.get_height(): _source_texture=ImageTexture.create_from_image(image)
+        else: _source_texture.update(image)
+        _source_revision+=1
+    var moved:=PackedByteArray();moved.resize(ids.size())
+    if same_rows:
+        for i in ids.size():
+            for j in 7:
+                if live[i*LIVE+j]!=_source_live[i*LIVE+j]:moved[i]=1;break
+    if not same_rows or rank!=_source_rank:_rank_revision+=1
+    _source_ids=ids;_source_textures=textures;_source_live=live;_source_rank=rank;_source_moved=moved
     return true
 
-func cookie_prepared(texture: Texture2D) -> bool:
-    if texture==null:return false
-    var retained:Dictionary=_retained_cookies.get(texture.get_rid(),{})
-    return is_same(retained.get("texture"),texture) and retained.get("image")!=null
+## One packed light row as a dictionary, for checks and diagnostics.
+func _source_row(row: int) -> Dictionary:
+    var k:int=row*LIVE;var r:int=row*RANK
+    return {"id":_source_ids[row],"texture":_source_textures[row],"screen_position":Vector2(_source_live[k],_source_live[k+1]),"height":_source_live[k+2],
+        "cookie_position":Vector2(_source_live[k+3],_source_live[k+4]),"span":Vector2(_source_live[k+5],_source_live[k+6]),"strength":_source_live[k+7],
+        "shadow_cookie_position":Vector2(_source_rank[r],_source_rank[r+1]),"shadow_rank_strength":_source_rank[r+4]}
 
-## The retained RGBA8 image of a light cookie, read back once if not prepared.
+## The CPU image of a light cookie. Generated cookies carry it (meta
+## cookie_image); nothing is ever read back from the GPU.
 func cookie_image(texture: Texture2D) -> Image:
-    return _cookie_image(texture)
-
-func _cookie_image(texture: Texture2D) -> Image:
-    # Generated cookies carry their image: no GPU readback (a readback stalls).
     if texture.has_meta(&"cookie_image"):return texture.get_meta(&"cookie_image")
-    var id:RID=texture.get_rid()
-    var retained:Dictionary=_retained_cookies.get(id,{})
-    var image:Image=retained.get("image") if is_same(retained.get("texture"),texture) else null
-    if image==null:
-        _last_counts.cookie_reads=int(_last_counts.get("cookie_reads",0))+1
-        image=texture.get_image()
-        if image==null or image.is_empty():
-            issues.append("Generated shadow cannot read original light cookie once at registration")
-            return null
-        image=image.duplicate()
-        if image.is_compressed():image.decompress()
-        image.convert(Image.FORMAT_RGBA8)
-        # Retain the exact native texture, never just a recyclable RID.
-        retained={"texture":texture,"image":image,"bytes":image.get_width()*image.get_height()*4,"used":0}
-        _retained_cookies[id]=retained
-    else:_last_counts.cookie_cache_hits=int(_last_counts.get("cookie_cache_hits",0))+1
-    _cookie_use+=1;retained.used=_cookie_use
-    return image
+    var message:="Generated shadow requires a light cookie that carries its image: "+str(texture)
+    if not message in issues:issues.append(message)
+    return null
 
-func prepare_cookie(texture: Texture2D) -> bool:
-    # World preparation calls this only after the native texture's draw fence.
-    # CPU image retention does not publish source selection or a shadow atlas.
-    var image:Image=_cookie_image(texture)
-    var active:Dictionary=_cookie_images.duplicate()
-    active[texture.get_rid()]=true
-    _trim_cookie_images(active)
-    return image!=null
-
-func _prepare_cookies(sources: Array) -> bool:
-    var textures: Dictionary={}
-    for source in sources: textures[source.texture.get_rid()]=source.texture
-    var key: Array=textures.keys()
+func _prepare_cookies(textures: Array) -> bool:
+    var unique: Dictionary={}
+    for texture in textures: unique[texture.get_rid()]=texture
+    var key: Array=unique.keys()
     if key==_cookie_key: return true
     var phase_started:=Time.get_ticks_usec()
     var images: Dictionary={}
-    for id in textures:
-        var image:Image=_cookie_image(textures[id])
-        if image==null:
-            _trim_cookie_images(textures)
-            _timed("cookie_read_format",phase_started)
-            return false
+    for id in unique:
+        var image:Image=cookie_image(unique[id])
+        if image==null:return false
         images[id]=image
-    _trim_cookie_images(textures)
-    _timed("cookie_read_format",phase_started);phase_started=Time.get_ticks_usec()
     var width := 1
     var height := 1
     for image in images.values():
@@ -312,28 +375,15 @@ func _prepare_cookies(sources: Array) -> bool:
     _cookie_key=key
     return true
 
-func _trim_cookie_images(active:Dictionary)->void:
-    var count:int=0;var bytes:int=0
-    for id in _retained_cookies:
-        if active.has(id):continue
-        count+=1;bytes+=_retained_cookies[id].bytes
-    # Active source images remain required. Only inactive reuse is bounded;
-    # removal never changes a live light or silently skips its fresh readback.
-    while count>RETAINED_COOKIE_IMAGES or bytes>RETAINED_COOKIE_BYTES:
-        var oldest:RID;var use:int=9223372036854775807
-        for id in _retained_cookies:
-            if not active.has(id) and _retained_cookies[id].used<use:
-                oldest=id;use=_retained_cookies[id].used
-        bytes-=_retained_cookies[oldest].bytes;count-=1
-        _retained_cookies.erase(oldest)
-
 func _dominant(foot: Vector2) -> int:
     var selected := -1
     var strongest := 0.0
-    for i in _sources.size():
-        var source: Dictionary=_sources[i]
-        var uv: Vector2=(foot-source.shadow_cookie_position)/source.span+Vector2.ONE*0.5
-        var score: float=source.shadow_rank_strength*_cookie_at(_cookie_images[source.texture.get_rid()],uv)
+    for i in _source_ids.size():
+        var k:int=i*RANK
+        var uv: Vector2=(foot-Vector2(_source_rank[k],_source_rank[k+1]))/Vector2(_source_rank[k+2],_source_rank[k+3])+Vector2.ONE*0.5
+        # Outside its cookie a light scores 0, which never beats the start.
+        if uv.x<0 or uv.y<0 or uv.x>=1 or uv.y>=1: continue
+        var score: float=_source_rank[k+4]*_cookie_at(_cookie_images[_source_textures[i].get_rid()],uv)
         # Strict comparison preserves exact input order for equal scores.
         if score>strongest: strongest=score; selected=i
     return selected
@@ -354,10 +404,10 @@ static func _on_plane(camera: Camera3D,screen: Vector2,height: float) -> Vector3
     var start := camera.project_ray_origin(screen)
     return start+ray*((height-start.y)/ray.y)
 
-static func _projection(camera: Camera3D,origin: Vector3,ground: float,units: float,zoom: float,source: Dictionary) -> Dictionary:
+static func _projection(camera: Camera3D,origin: Vector3,ground: float,units: float,zoom: float,light: Vector2,light_height: float) -> Dictionary:
     var foot := _on_plane(camera,camera.unproject_position(origin),origin.y+ground)-origin
-    var on_ground := _on_plane(camera,source.screen_position,origin.y+ground)-origin
-    var height := maxf(64.0*units,(64.0+source.height/zoom)*units)
+    var on_ground := _on_plane(camera,light,origin.y+ground)-origin
+    var height := maxf(64.0*units,(64.0+light_height/zoom)*units)
     var offset := Vector3(on_ground.x-foot.x,0,on_ground.z-foot.z)
     var slope := offset.length()/height
     if slope>0.72:
@@ -365,20 +415,50 @@ static func _projection(camera: Camera3D,origin: Vector3,ground: float,units: fl
         offset*=(0.72+excess/(1.0+excess/0.08))/slope
     return {"position":foot+offset+Vector3.UP*height,"foot":foot}
 
-static func _snapshots(entries: Array,camera: Camera3D) -> Array:
+## Caster inputs of the displayed geometry layers. Given the last evaluated
+## snapshots, a layer whose entry, source version, position and geometry
+## fields are unchanged keeps its snapshot without reading its operands.
+static func _snapshots(entries: Array,camera: Camera3D,previous: Array=[]) -> Array:
     var result: Array=[]
+    var cursor:=0
     for entry in entries:
-        if entry.role=="shadow" or not entry.node.visible or not SourceMaterial.value(entry,"has_component_geometry"): continue
-        var snapshot: Dictionary={"id":entry.id,"pivot":entry.pivot,"position":entry.node.global_position,
+        if entry.role=="shadow" or not entry.node.visible: continue
+        var position:Vector3=entry.node.global_position
+        var version:int=entry.get("source_version",0)
+        var cell:=Vector2(entry.get("geometry_cell_size",Vector2(128,128)))
+        var ground_pixels:=float(entry.get("geometry_ground_pixels",19.0))
+        if cursor<previous.size() and is_same(previous[cursor].entry,entry):
+            var last:Dictionary=previous[cursor];cursor+=1
+            if last.id==entry.id and last.position==position and last.basis==camera.global_basis \
+                and last.pivot==entry.pivot and last.scale_x==entry.placement.get("scale_x",1.0) \
+                and last.component_cell_size==cell and last.ground_pixels==ground_pixels \
+                and (last.version==version or _frame_only(entry.source_parameters,last)):
+                last.version=version;result.append(last);continue
+        if not SourceMaterial.value(entry,"has_component_geometry"): continue
+        var snapshot: Dictionary={"id":entry.id,"pivot":entry.pivot,"position":position,
             "scale_x":entry.placement.get("scale_x",1.0),"basis":camera.global_basis,
-            "component_cell_size":Vector2(entry.get("geometry_cell_size",Vector2(128,128))),
-            "ground_pixels":float(entry.get("geometry_ground_pixels",19.0))}
+            "component_cell_size":cell,"ground_pixels":ground_pixels,"entry":entry,"version":version}
         var complete := true
         for parameter in CASTER_PARAMETERS:
             snapshot[parameter]=SourceMaterial.value(entry,parameter)
             if snapshot[parameter]==null: complete=false
-        if complete: result.append(snapshot)
+        if not complete: continue
+        # Everything the footprint depends on; sampled frames and sheets are not.
+        snapshot.geometry=[entry.id,position,entry.pivot,snapshot.scale_x,snapshot.basis,cell,ground_pixels,
+            snapshot.component_depth_range,snapshot.component_units,snapshot.component_reconstruction_origin,snapshot.component_elevation]
+        result.append(snapshot)
     return result
+
+# A new source version that changed at most the sampled frame keeps its
+# snapshot; a changed frame is marked for a frame-only caster write.
+static func _frame_only(parameters: Dictionary,last: Dictionary) -> bool:
+    if not parameters.get(&"has_component_geometry",false): return false
+    for i in OPERANDS.size():
+        if parameters.get(OPERAND_NAMES[i])!=last[OPERANDS[i]]: return false
+    var frame:Variant=parameters.get(&"frame_uv")
+    if frame==null: return false
+    if frame!=last.frame_uv: last.frame_uv=frame;last.frame_changed=true
+    return true
 
 static func _caster_point(snapshot: Dictionary,x: float,y: float,depth: float,ground: float) -> Vector3:
     var units: float=snapshot.component_units
@@ -459,17 +539,14 @@ func prepare_actor_step(owner:Node3D,prepared:Dictionary)->bool:
             # Only added/replaced caster resources belong to the hidden owner.
             # The displayed viewport and its existing casters stay untouched.
             var private:Dictionary={"root":owner,"casters":prepared.shadow_new}
-            var caster:MeshInstance3D=_create_caster(private,target_id,Vector2(entry.get("geometry_cell_size",Vector2(128,128))))
-            for parameter in CASTER_PARAMETERS:caster.material_override.set_shader_parameter(parameter,SourceMaterial.value(entry,parameter))
+            _create_caster(private,target_id,Vector2(entry.get("geometry_cell_size",Vector2(128,128))))
         prepared.shadow_cursor=index+1
         return false
     if not prepared.has("shadow_state"):
         prepared.shadow_state=_create(prepared.row.id,owner)
-        prepared.shadow_state.entry.node.hide()
         return false
-    var state:Dictionary=prepared.shadow_state
-    var caster:MeshInstance3D=_create_caster(state,entry.id,Vector2(entry.get("geometry_cell_size",Vector2(128,128))))
-    for parameter in CASTER_PARAMETERS:caster.material_override.set_shader_parameter(parameter,SourceMaterial.value(entry,parameter))
+    # Operands are bound at the first displayed sample, which writes them all.
+    _create_caster(prepared.shadow_state,entry.id,Vector2(entry.get("geometry_cell_size",Vector2(128,128))))
     prepared.shadow_cursor=index+1
     return false
 
@@ -490,7 +567,7 @@ func adopt_actor(prepared:Dictionary)->Array:
             var caster:MeshInstance3D=prepared.shadow_new[id]
             caster.reparent(state.root,false);casters[id]=caster
         _caster_shapes.merge(shapes)
-        state.casters=casters;state.caster_samples=samples;state.entry.placement=prepared.row;state.key=[];state.erase("input_key")
+        state.casters=casters;state.caster_samples=samples;state.entry.placement=prepared.row;_forget(state)
         prepared.erase("shadow_base");prepared.erase("shadow_new");prepared.erase("shadow_rekeys")
         return retired
     if not prepared.has("shadow_state"):return retired
@@ -505,23 +582,44 @@ func adopt_actor(prepared:Dictionary)->Array:
     state.entry.node.reparent(_parent,false)
     state.entry.placement=prepared.row
     actors[id]=state
+    _forget(state)
     prepared.erase("shadow_state")
     return retired
 
+# The helper's next evaluation lays it out again and the shown set is
+# rebuilt: its record or its layers were replaced.
+func _forget(state: Dictionary) -> void:
+    state.snapshots=[];state.geometry=[];state.layout=[];state.applied={};state.dominant=-1
+    _seen.erase(str(state.entry.placement.get("id","")))
+    _shown_dirty=true
+
 func _create_caster(state:Dictionary,id:String,cell:Vector2)->MeshInstance3D:
-    var node:=MeshInstance3D.new()
-    node.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY
-    node.material_override=ShaderMaterial.new()
-    node.material_override.shader=CASTER
+    var node:MeshInstance3D=_spare_casters.pop_back() if not _spare_casters.is_empty() else _new_caster()
     node.mesh=_caster_mesh(cell)
     state.root.add_child(node)
     state.casters[id]=node
     return node
 
+func _new_caster()->MeshInstance3D:
+    var node:=MeshInstance3D.new()
+    node.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY
+    node.material_override=ShaderMaterial.new()
+    node.material_override.shader=CASTER
+    return node
+
 func _create(id: String,owner:Node3D=null) -> Dictionary:
     if owner==null:owner=_parent
+    var state:Dictionary=_spare_helpers.pop_back() if not _spare_helpers.is_empty() else _new_helper()
+    state.viewport.name=("ShadowMeasure_"+id).validate_node_name()
+    owner.add_child(state.viewport)
+    owner.add_child(state.entry.node)
+    state.entry.id=id+":generatedShadow"
+    return state
+
+## A complete disabled helper outside the tree: its own world, camera, light,
+## ground and hidden composite quad.
+func _new_helper() -> Dictionary:
     var viewport := SubViewport.new()
-    viewport.name=("ShadowMeasure_"+id).validate_node_name()
     viewport.size=Vector2i(2,2)
     viewport.world_3d=World3D.new()
     viewport.msaa_3d=Viewport.MSAA_DISABLED
@@ -531,7 +629,6 @@ func _create(id: String,owner:Node3D=null) -> Dictionary:
     # RD Omni shadows need two adjacent atlas slots; a one-slot quadrant can
     # never allocate the pair and silently produces an entirely unshadowed map.
     for quadrant in range(4): viewport.set_positional_shadow_atlas_quadrant_subdiv(quadrant,Viewport.SHADOW_ATLAS_QUADRANT_SUBDIV_4)
-    owner.add_child(viewport)
     RenderingServer.viewport_set_measure_render_time(viewport.get_viewport_rid(),true)
     var root := Node3D.new()
     viewport.add_child(root)
@@ -567,18 +664,35 @@ func _create(id: String,owner:Node3D=null) -> Dictionary:
     output.mesh=QuadMesh.new()
     output.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
     output.sorting_use_aabb_center=false
+    output.visible=false
     var material := ShaderMaterial.new()
     material.shader=COMPOSITE
     material.set_shader_parameter("visibility_map",viewport.get_texture())
     output.material_override=material
-    owner.add_child(output)
-    var entry: Dictionary={"id":id+":generatedShadow","placement":{},"role":"shadow","layer":-1,
+    var entry: Dictionary={"id":"","placement":{},"role":"shadow","layer":-1,
         "source_role":-1,"node":output,"material":material,"mobile":true,"screen_rect":Rect2(),"generated_shadow":true}
     return {"viewport":viewport,"root":root,"camera":camera,"ground":ground,"light":light,"casters":{},"caster_samples":{},
-        "entry":entry,"key":[],"pending":false,"unbounded":false}
+        "entry":entry,"layout":[],"geometry":[],"geometry_basis":Basis(),"snapshots":[],"applied":{},"dominant":-1,"shown":false,"unbounded":false,
+        "bound_dominant":-2,"bound_count":-1,"bound_data":null,"bound_cookies":null}
 
-func _update(state: Dictionary,snapshots: Array,camera: Camera3D,origin: Vector3,ground: float,projection: Dictionary,rect: Rect2,size: Vector2i,pixels_per_world: float) -> void:
+## Builds spare helpers, then spare casters, while `budget_usec` lasts.
+## Optional work calls it, so reveals rarely construct native objects.
+func prepare_spares(budget_usec: int) -> void:
+    var deadline:int=Time.get_ticks_usec()+budget_usec
+    while Time.get_ticks_usec()<deadline:
+        if _spare_helpers.size()<SPARE_HELPERS:_spare_helpers.append(_new_helper())
+        elif _spare_casters.size()<SPARE_CASTERS:_spare_casters.append(_new_caster())
+        else:return
+
+func spares_needed() -> bool:
+    return _spare_helpers.size()<SPARE_HELPERS or _spare_casters.size()<SPARE_CASTERS
+
+## Writes each caster's operands that differ from its last applied snapshot.
+## `same_place`: the contact and ground of the applied snapshots still hold, so
+## an applied snapshot is current but for a marked frame.
+func _update_casters(state: Dictionary,snapshots: Array,camera: Camera3D,origin: Vector3,ground: float,same_place: bool) -> bool:
     var update_started:int=Time.get_ticks_usec()
+    var written:=false
     var wanted := {}
     for snapshot in snapshots:
         wanted[snapshot.id]=true
@@ -586,7 +700,17 @@ func _update(state: Dictionary,snapshots: Array,camera: Camera3D,origin: Vector3
             _last_counts.new_casters=int(_last_counts.get("new_casters",0))+1
             _create_caster(state,snapshot.id,snapshot.component_cell_size)
         var caster: MeshInstance3D=state.casters[snapshot.id]
-        caster.visible=true
+        if not caster.visible:caster.visible=true;written=true
+        var applied:Variant=state.applied.get(snapshot.id)
+        if same_place and applied!=null and is_same(applied[0],snapshot) and is_same(applied[1],caster.material_override):
+            if snapshot.has("frame_changed"):
+                snapshot.erase("frame_changed")
+                caster.material_override.set_shader_parameter("frame_uv",snapshot.frame_uv);_writes+=1;written=true
+                state.caster_samples[snapshot.id][0][1]=snapshot.frame_uv
+                _last_counts.caster_frame_copies=int(_last_counts.get("caster_frame_copies",0))+1
+            continue
+        state.applied[snapshot.id]=[snapshot,caster.material_override]
+        snapshot.erase("frame_changed")
         var parameters:Array=[]
         for parameter in CASTER_PARAMETERS:parameters.append(snapshot[parameter])
         var sample_key:Array=[parameters,snapshot.component_cell_size,camera.global_basis,snapshot.pivot,
@@ -594,6 +718,7 @@ func _update(state: Dictionary,snapshots: Array,camera: Camera3D,origin: Vector3
         var previous:Array=state.caster_samples.get(snapshot.id,[])
         if previous==sample_key:continue
         state.caster_samples[snapshot.id]=sample_key
+        written=true
         # These operands already prove the full caster sample. An animation UV
         # changes no sheet, optical packet, transform, material owner or bounds.
         var frame_only:bool=previous.size()==sample_key.size()
@@ -604,7 +729,7 @@ func _update(state: Dictionary,snapshots: Array,camera: Camera3D,origin: Vector3
             for index in parameters.size():
                 if index!=1 and previous[0][index]!=parameters[index]:frame_only=false;break
         if frame_only:
-            caster.material_override.set_shader_parameter("frame_uv",snapshot.frame_uv)
+            caster.material_override.set_shader_parameter("frame_uv",snapshot.frame_uv);_writes+=1
             _last_counts.caster_frame_copies=int(_last_counts.get("caster_frame_copies",0))+1
             continue
         _last_counts.caster_full_copies=int(_last_counts.get("caster_full_copies",0))+1
@@ -616,13 +741,19 @@ func _update(state: Dictionary,snapshots: Array,camera: Camera3D,origin: Vector3
         caster.material_override.set_shader_parameter("sprite_pivot",snapshot.pivot)
         caster.material_override.set_shader_parameter("horizontal_scale",snapshot.scale_x)
         caster.material_override.set_shader_parameter("ground_height",ground)
+        _writes+=CASTER_PARAMETERS.size()+5
         var shape:Dictionary=snapshot.caster_shape if snapshot.has("caster_shape") else _caster_shape(snapshot,ground)
         caster.custom_aabb=shape.bounds
         RenderingServer.instance_set_custom_aabb(caster.get_instance(),caster.custom_aabb)
     for id in state.casters:
-        if not wanted.has(id):state.casters[id].hide()
-    _timed("update_casters",update_started);update_started=Time.get_ticks_usec()
-    state.viewport.size=size
+        if not wanted.has(id) and state.casters[id].visible:state.casters[id].hide();written=true
+    _timed("update_casters",update_started)
+    return written
+
+func _update_layout(state: Dictionary,camera: Camera3D,origin: Vector3,ground: float,projection: Dictionary,rect: Rect2,size: Vector2i,pixels_per_world: float) -> void:
+    var update_started:int=Time.get_ticks_usec()
+    # The target follows the exact footprint: its sample grid is the picture.
+    if state.viewport.size!=size:state.viewport.size=size
     _timed("update_target",update_started);update_started=Time.get_ticks_usec()
     var center := _on_plane(camera,rect.get_center(),origin.y+ground)-origin
     var plane_bounds := AABB(center,Vector3.ZERO)
@@ -637,6 +768,7 @@ func _update(state: Dictionary,snapshots: Array,camera: Camera3D,origin: Vector3
     state.ground.transform=Transform3D(Basis.from_scale(Vector3(ground_size.x,1.0,ground_size.y)),plane_bounds.get_center())
     state.ground.material_override.set_shader_parameter("helper_position",projection.position)
     state.ground.material_override.set_shader_parameter("helper_range",helper_range)
+    _writes+=2
     state.light.position=projection.position
     state.light.omni_range=helper_range
     _timed("update_light_plane",update_started);update_started=Time.get_ticks_usec()
@@ -647,21 +779,12 @@ func _update(state: Dictionary,snapshots: Array,camera: Camera3D,origin: Vector3
     state.entry.node.global_transform=Transform3D(camera.global_basis,center+origin)
     state.entry.node.mesh.size=rect.size/pixels_per_world
     state.entry.node.custom_aabb=state.entry.node.mesh.get_aabb()
+    state.entry.screen_rect=rect
     _timed("update_camera_output",update_started)
-    # Dependency rendering runs before the parent consumes the texture. Keep
-    # ALWAYS for this actual frame; frame_post_draw disables unchanged helpers.
-    state.viewport.render_target_update_mode=SubViewport.UPDATE_ALWAYS
-    state.pending=true
-    _updates+=1
-
-func _after_draw() -> void:
-    for state in actors.values():
-        if state.pending:
-            state.viewport.render_target_update_mode=SubViewport.UPDATE_DISABLED
-            state.pending=false
 
 func _remove(id: String) -> void:
     var state: Dictionary=actors[id]
+    if state.shown:_shown_dirty=true
     state.entry.node.visible=false
     state.viewport.render_target_update_mode=SubViewport.UPDATE_DISABLED
     state.entry.node.free()
@@ -671,6 +794,7 @@ func _remove(id: String) -> void:
 func _clear_actors() -> void:
     for id in actors.keys(): _remove(id)
     _caster_shapes.clear()
+    _seen.clear()
 
 func diagnostics() -> Dictionary:
     var casters := 0
@@ -690,20 +814,25 @@ func diagnostics() -> Dictionary:
         if state.unbounded: wide_bounds+=1
         selected[state.entry.placement.id]=state.get("source_id","")
     return {"actors":actors.size(),"casters":casters,"caster_triangles_before_native_shadow_passes":triangles,
-        "target_pixels":pixels,"last_render_gpu_ms":last_gpu_ms,"last_render_cpu_ms":last_cpu_ms,"sources":_sources.size(),"updates":_updates,"wide_depth_bounds":wide_bounds,"sync_cpu_ms":_last_cpu_ms,"selected_sources":selected,
-        "sync_phases_ms":_last_phases.duplicate(),"sync_counts":_last_counts.duplicate(),"cookie_cached_images":_retained_cookies.size(),"source_revision":_source_revision,"rank_revision":_rank_revision,
-        "phase_accounting":"Cookie read/pack/upload are nested inside sources; other named phases are disjoint."}
+        "target_pixels":pixels,"last_render_gpu_ms":last_gpu_ms,"last_render_cpu_ms":last_cpu_ms,"sources":_source_ids.size(),"updates":_updates,"writes":_writes,"wide_depth_bounds":wide_bounds,"sync_cpu_ms":_last_cpu_ms,"selected_sources":selected,
+        "sync_phases_ms":_last_phases.duplicate(),"sync_counts":_last_counts.duplicate(),"cookie_images":_cookie_images.size(),"source_revision":_source_revision,"rank_revision":_rank_revision,
+        "spare_helpers":_spare_helpers.size(),"spare_casters":_spare_casters.size(),
+        "phase_accounting":"Cookie pack/upload are nested inside sources and update_* inside update; other named phases are disjoint."}
 
 func close() -> void:
-    if RenderingServer.frame_post_draw.is_connected(_after_draw): RenderingServer.frame_post_draw.disconnect(_after_draw)
     _clear_actors()
     _parent=null
     _meshes.clear()
-    _sources.clear()
-    _source_key.clear()
+    _source_ids=PackedStringArray();_source_textures=[];_source_live=PackedFloat64Array();_source_rank=PackedFloat64Array()
+    _source_moved=PackedByteArray();_source_data=PackedFloat32Array();_sources_ready=false;_light_revision=-2
+    _view_scale=-1.0;_view_size=Vector2(-1,-1);_active=false
     _cookie_key.clear()
     _cookie_images.clear()
-    _retained_cookies.clear();_cookie_use=0
     _cookie_rects.clear()
     _cookie_texture=null
     _source_texture=null
+    _shown=[];_shown_dirty=false
+    for state in _spare_helpers:
+        state.entry.node.free();state.viewport.free()
+    for node in _spare_casters:node.free()
+    _spare_helpers.clear();_spare_casters.clear()
