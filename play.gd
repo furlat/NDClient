@@ -210,6 +210,12 @@ var native_media_paths:Dictionary={}
 var native_media_cpu_paths:Dictionary={}
 var native_media_record:Dictionary={}
 var media_profile_record:Dictionary={}
+const EMPTY_PATHS:Dictionary={}
+# Last composed due set and the exact part maps it was built from (§5.5).
+var media_due_current_parts:Array=[]
+var media_due_current:Dictionary={}
+var media_due_parts:Array=[]
+var media_due:Dictionary={}
 var native_spell_hit_material:bool=true
 var draw_order_dirty = true
 var wall_pick_order: Array = []
@@ -785,6 +791,7 @@ func _detailed_frame_context(active_motion: bool) -> Dictionary:
         "native_spell_render_ms":component_renderer.native_spells.render_timings(),
         "native_support_sync":component_renderer.native_spells._support.last_sync_phases if component_renderer.native_spells._support!=null else {},
         "actor_sample_counts":profile.get("actor_sample_counts",{}),
+        "media_settle":_media_settle_diagnostics(),
         "actor_membership_counts":profile.get("actor_membership_counts",{}),
         "scenery_sample_counts":profile.get("scenery_sample_counts",{}),
         "world_prepare_worker_phases":world_prepare_worker_phases,
@@ -792,6 +799,22 @@ func _detailed_frame_context(active_motion: bool) -> Dictionary:
         "profile_stage":profile.label,"wall_mode":wall_mode,"wall_support_candidates":wall_support_candidates,"wall_max_member_candidates":wall_max_member_candidates,
         "wall_mask_gpu_ms":RenderingServer.viewport_get_measured_render_time_gpu(wall_mask_viewport.get_viewport_rid()) if wall_mask_viewport!=null and wall_mode=="translucent" else 0.0,
         "wall_mask_cpu_ms":RenderingServer.viewport_get_measured_render_time_cpu(wall_mask_viewport.get_viewport_rid()) if wall_mask_viewport!=null and wall_mode=="translucent" else 0.0,"textures":textures.size(),"media_pending":media_warmup.pending.size(),"encounter_preload":MediaWarmup.preload_progress(media_warmup),"preload_ready":media_warmup.boot_complete,"character_media":MediaWarmup.diagnostics(media_warmup),"environment_media":MediaWarmup.diagnostics(media_warmup,true),"media_metadata_ms":media_metadata_ms,"media_metadata_pending":media_warmup.plan_task>=0,"media_waiting":timeline.waiting_for_media,"actors":actor_rows.size(),"placements":placements.size(),"draws":static_entries.size()+actor_entries.size()}
+
+func _media_settle_diagnostics()->Dictionary:
+    # Recording-only: why optional maintenance and due composition did or did
+    # not settle this frame. Counters reset after each recorded frame.
+    var owner:Dictionary=MediaWarmup.physical(media_warmup)
+    var publication:Dictionary=owner.selection_publication
+    var result:Dictionary={"changed_paths":owner.changed_paths.size(),"pending_paths":owner.pending_paths.size(),
+        "selection_task":owner.selection_task,"publication":[publication.get("cursor",-1),publication.get("paths",[]).size()],
+        "applied_revision":owner.selection_applied_revision,"selection_revision":owner.selection_revision,
+        "families_pending":MediaWarmup._families_pending(owner),"families":owner.families.size(),
+        "due_reused":profile.get("media_due_reused",0),"due_rebuilt":profile.get("media_due_rebuilt",0),
+        "due_current_changes":profile.get("media_due_current_changes",[]),
+        "unsettled_families":owner.families.filter(func(row):return row.cursor!=(row.paths.size() if row.users>0 else 0)).map(func(row):return [row.users,row.hint,row.cursor,row.paths.size()]),
+        "changed_sample":owner.changed_paths.keys().slice(0,3)}
+    profile.media_due_reused=0;profile.media_due_rebuilt=0;profile.media_due_current_changes=[]
+    return result
 
 func _prepare_initial_world() -> void:
     if timeline.state.is_empty(): return
@@ -1767,6 +1790,7 @@ func _reset_media_epoch() -> void:
     media_condition_key = []
     media_condition_paths = {}
     media_condition_record={};native_media_record={};media_profile_record={}
+    media_due_current_parts=[];media_due_parts=[]
     media_source_issue=""
 
 func _retained_condition_media() -> bool:
@@ -2285,40 +2309,77 @@ func _playback_environment_ready(group:Dictionary={},at_ms:float=-1.0)->bool:
     return world_prepare_epoch==timeline.initialization_revision and media_metadata_ready and media_plan.errors.is_empty()
 
 func _prioritize_media(at_ms:float)->Dictionary:
+    var prioritize_started:int=Time.get_ticks_usec()
+    var due:Dictionary=_prioritized_media(at_ms)
+    FrameProfile.end_phase(profile,"media_prioritize",prioritize_started)
+    return due
+
+func _prioritized_media(at_ms:float)->Dictionary:
+    var interest_started:int=Time.get_ticks_usec()
     _publish_media_interest(at_ms)
+    FrameProfile.end_phase(profile,"media_prioritize_interest",interest_started)
     # Readiness and preparation use the same authored cut. Keeping a later cue
     # pinned does not let it displace the sources needed to start this one.
-    var due:Dictionary=_character_source_paths({},at_ms).duplicate()
-    if external_playback or world_revision<0:due.merge(_environment_source_paths({},at_ms))
-    due.merge(media_condition_paths)
-    due.merge(native_media_paths)
-    if not external_playback and timeline.current.is_empty() and timeline.queue.is_empty():due.merge(selection_media.value.get("onset_paths",{}))
+    # Every part below is an immutable or replaced-on-change path map, so the
+    # composed set is rebuilt only when one of them is a different object.
+    var current_parts:Array=[_character_source_paths({},at_ms)]
+    if external_playback or world_revision<0:current_parts.append(_environment_source_paths({},at_ms))
+    current_parts.append(media_condition_paths)
+    current_parts.append(native_media_paths)
+    if not external_playback and timeline.current.is_empty() and timeline.queue.is_empty():current_parts.append(selection_media.value.get("onset_paths",EMPTY_PATHS))
+    if not _same_source_refs(current_parts,media_due_current_parts):
+        var differing:Array=[]
+        for index in current_parts.size():
+            if index>=media_due_current_parts.size() or not is_same(current_parts[index],media_due_current_parts[index]):differing.append(index)
+        profile.media_due_current_changes=differing
+        var composed:Dictionary={}
+        for part in current_parts:composed.merge(part)
+        composed.make_read_only()
+        media_due_current_parts=current_parts;media_due_current=composed
     # Current source/CPU/fixture requirements have strict priority. Future
     # resources keep their existing pins, but cannot fill urgent decode slots
     # while a newly selected animation still lacks one of its own operands.
-    var prepare_future:bool=not external_playback and world_revision>=0 and MediaWarmup.ready(media_warmup,due)
-    var future_environment:Dictionary={}
-    if prepare_future and pending_world!=null and not pending_world.stale and pending_world.epoch==timeline.initialization_revision and pending_world.quarter==quarter:
-        future_environment.merge(pending_world.result.get("environment_paths",{}))
+    # Readiness of the current set only decides whether future cuts may join.
+    # Without a prepared candidate or forecast there is nothing to join.
+    var future_world:bool=pending_world!=null and not pending_world.stale and pending_world.epoch==timeline.initialization_revision and pending_world.quarter==quarter
+    var future_forecast:bool=_static_forecast_base_matches()
+    var prepare_future:bool=false
+    if (future_world or future_forecast) and not external_playback and world_revision>=0:
+        var ready_started:int=Time.get_ticks_usec()
+        prepare_future=MediaWarmup.ready(media_warmup,media_due_current)
+        FrameProfile.end_phase(profile,"media_prioritize_ready",ready_started)
+    var future_characters:Array=[];var future_environment:Array=[]
+    if prepare_future and future_world:
+        future_environment.append(pending_world.result.get("environment_paths",EMPTY_PATHS))
         # These actors are already in the received cut being prepared. Their
         # exact selected sheets must publish ahead of constructors that depend
         # on them, rather than wait until the displayed clock hits the reveal.
         var boundary:Dictionary=pending_world.boundary
-        var future:Dictionary=media_group_plans.get(boundary.get("source_group_id",""),{})
+        var future:Dictionary=media_group_plans.get(boundary.get("source_group_id",""),EMPTY_PATHS)
         if not future.is_empty():
-            var paths:Dictionary=MediaWarmup.required_at(future.get("character_timeline",{}),float(boundary.get("source_local_ms",0)),future.get("character",{}))
-            due.merge(CharacterGeometry.for_profile(paths,media_normal_sets,character_light_profile,catalog_cache,"prepared_character_due"))
-    if prepare_future and _static_forecast_base_matches():
+            var paths:Dictionary=MediaWarmup.required_at(future.get("character_timeline",EMPTY_PATHS),float(boundary.get("source_local_ms",0)),future.get("character",EMPTY_PATHS))
+            future_characters.append(CharacterGeometry.for_profile(paths,media_normal_sets,character_light_profile,catalog_cache,"prepared_character_due"))
+    if prepare_future and future_forecast:
         var boundary:Dictionary=static_forecast.boundary
-        if static_forecast.task<0 and static_forecast.output.get("complete",false):future_environment.merge(static_forecast.output.static_result.environment_paths)
-        var future:Dictionary=media_group_plans.get(boundary.source_group_id,{})
+        if static_forecast.task<0 and static_forecast.output.get("complete",false):future_environment.append(static_forecast.output.static_result.environment_paths)
+        var future:Dictionary=media_group_plans.get(boundary.source_group_id,EMPTY_PATHS)
         if not future.is_empty():
-            var paths:Dictionary=MediaWarmup.required_at(future.get("character_timeline",{}),float(boundary.source_local_ms),future.get("character",{}))
-            due.merge(CharacterGeometry.for_profile(paths,media_normal_sets,character_light_profile,catalog_cache,"forecast_character_due"))
+            var paths:Dictionary=MediaWarmup.required_at(future.get("character_timeline",EMPTY_PATHS),float(boundary.source_local_ms),future.get("character",EMPTY_PATHS))
+            future_characters.append(CharacterGeometry.for_profile(paths,media_normal_sets,character_light_profile,catalog_cache,"forecast_character_due"))
     # The displayed/onset cut above keeps strict priority. Once it is ready,
     # the next cut's actor and environment producers are independent: missing
     # future actor pixels must not hold unrelated room resources behind them.
-    if not future_environment.is_empty():due.merge(future_environment)
+    var parts:Array=[media_due_current]+future_characters+future_environment
+    if _same_source_refs(parts,media_due_parts):
+        profile.media_due_reused=int(profile.get("media_due_reused",0))+1
+        return media_due
+    profile.media_due_rebuilt=int(profile.get("media_due_rebuilt",0))+1
+    var due:Dictionary=media_due_current
+    if parts.size()>1:
+        due={}
+        for part in parts:due.merge(part)
+        due.make_read_only()
+    media_due_parts=parts;media_due=due
     MediaWarmup.prioritize(media_warmup,due)
     return due
 
@@ -2468,9 +2529,14 @@ func _warm_media(required_only:bool=false,budget:Dictionary={},through_ms:float=
             return
     if not required_only:
         var maintenance_started:int=Time.get_ticks_usec();var maintenance_before:int=budget.get("used_usec",0)
+        var physical_media:Dictionary=MediaWarmup.physical(media_warmup)
+        physical_media.optional_phases={}
         MediaWarmup.prepare_optional(media_warmup)
         if not budget.is_empty():_charge_preparation("media_optional_maintenance",maintenance_started,maintenance_before)
         FrameProfile.end_phase(profile,"media_optional_maintenance",maintenance_started)
+        for part in ["family","selection","pending"]:
+            var phase_name:String="media_optional_"+part
+            profile.phases[phase_name]=profile.phases.get(phase_name,0.0)+float(physical_media.optional_phases.get(part,0.0))
     var tick = Time.get_ticks_usec()
     var charged_before:int=budget.get("used_usec",0)
     var owner:Dictionary=MediaWarmup.physical(media_warmup)

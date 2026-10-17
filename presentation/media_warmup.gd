@@ -1,6 +1,7 @@
 extends RefCounted
 # Exact current/near-future character sheets, prepared off the scene thread.
 # Workers own unpublished images/textures. Only scene publication makes them ready.
+const EMPTY:Dictionary={}
 const Characters = preload("res://presentation/characters.gd")
 const Conditions = preload("res://presentation/conditions.gd")
 const WorldRows = preload("res://presentation/world.gd")
@@ -170,16 +171,26 @@ static func _step_families(owner:Dictionary,limit:int,hints_only:bool=false)->in
         ordered.append_array(owner.families.filter(func(row):return not row.hint or row.users<=0))
     for row in ordered:
         var adding:bool=row.users>0
+        if not ((adding and row.cursor<row.paths.size()) or (not adding and row.cursor>0)):
+            if not adding:completed.append(row)
+            continue
+        var family:Dictionary=row.family
+        var paths:Dictionary=family.paths
+        var source_sizes:Dictionary=family.get("source_sizes",EMPTY)
+        var estimates:Dictionary=family.get("estimates",EMPTY)
+        var estimate_bytes:Dictionary=family.get("estimate_bytes",EMPTY)
+        var environment:Dictionary=family.get("environment",EMPTY)
+        var fixtures:Dictionary=family.get("fixtures",EMPTY)
+        var gpu_only:Dictionary=family.get("gpu_only",EMPTY)
+        var cpu_required:Dictionary=family.get("cpu_required",EMPTY)
         while used<limit and ((adding and row.cursor<row.paths.size()) or (not adding and row.cursor>0)):
             if not adding:row.cursor-=1
             var path:String=row.paths[row.cursor]
-            var family:Dictionary=row.family
-            var paths:Dictionary=family.paths
             if adding:
-                if family.get("source_sizes",{}).has(path):_source_size(owner,path,family.source_sizes[path])
-                if family.get("estimates",{}).has(path):owner.encounter.estimates[path]=family.estimates[path]
-                elif family.get("estimate_bytes",{}).has(path):owner.encounter.estimates[path]={"bytes":family.estimate_bytes[path]}
-            var roles=_role_values(paths,family.get("environment",{}),family.get("fixtures",{}),family.get("gpu_only",{}),family.get("cpu_required",{}),path,false)
+                if source_sizes.has(path):_source_size(owner,path,source_sizes[path])
+                if estimates.has(path):owner.encounter.estimates[path]=estimates[path]
+                elif estimate_bytes.has(path):owner.encounter.estimates[path]={"bytes":estimate_bytes[path]}
+            var roles=_role_values(paths,environment,fixtures,gpu_only,cpu_required,path,false)
             _change_interest(owner,path,paths[path],[0,0,0,0,0] if adding else roles,roles if adding else [0,0,0,0,0],false,true)
             if adding:row.cursor+=1
             used+=1
@@ -234,13 +245,23 @@ static func _select_optional(families:Array,required:Dictionary,budget:int,previ
     # is the small captured input; no residency maps or consumer nodes are read.
     var known={};var sizes={}
     for family in families:
-        for path in family.get("paths",{}):
-            known[path]=family.paths[path]
-            var estimate:Dictionary=family.get("estimates",{}).get(path,{})
-            var size:int=estimate.get("bytes",family.get("estimate_bytes",{}).get(path,-1))
-            if family.get("source_sizes",{}).has(path):
-                var cpu:bool=family.get("cpu_required",{}).has(path) or family.get("environment",{}).has(path) or family.get("fixtures",{}).has(path) or not family.get("gpu_only",{}).has(path)
-                size=int(family.source_sizes[path])*(2 if cpu else 1)
+        # Read each shared family map once. Per-path lookups with fresh default
+        # dictionaries allocated and contended with the scene thread per hover.
+        var paths:Dictionary=family.get("paths",EMPTY)
+        var estimates:Dictionary=family.get("estimates",EMPTY)
+        var estimate_bytes:Dictionary=family.get("estimate_bytes",EMPTY)
+        var source_sizes:Dictionary=family.get("source_sizes",EMPTY)
+        var cpu_required:Dictionary=family.get("cpu_required",EMPTY)
+        var environment:Dictionary=family.get("environment",EMPTY)
+        var fixtures:Dictionary=family.get("fixtures",EMPTY)
+        var gpu_only:Dictionary=family.get("gpu_only",EMPTY)
+        for path in paths:
+            known[path]=paths[path]
+            var estimate:Dictionary=estimates.get(path,EMPTY)
+            var size:int=estimate.get("bytes",estimate_bytes.get(path,-1))
+            if source_sizes.has(path):
+                var cpu:bool=cpu_required.has(path) or environment.has(path) or fixtures.has(path) or not gpu_only.has(path)
+                size=int(source_sizes[path])*(2 if cpu else 1)
             sizes[path]=maxi(int(sizes.get(path,-1)),size)
     var used=0;var unknown=0
     for path in required:
@@ -388,6 +409,13 @@ static func prepare_optional(data:Dictionary,hints_only:bool=false)->void:
     if owner.optional_frame!=frame:owner.optional_frame=frame;owner.optional_updates=0
     var remaining:int=OPTIONAL_UPDATES_PER_FRAME-owner.optional_updates
     if remaining<=0:return
+    # Settled: every interest change marks changed/pending paths and every
+    # selector input bumps selection_revision, so a pass here would only
+    # recompute the values already stored.
+    var publication:Dictionary=owner.selection_publication
+    if owner.changed_paths.is_empty() and owner.pending_paths.is_empty() and owner.selection_task<0 \
+            and (publication.is_empty() or publication.cursor>=publication.paths.size()) \
+            and owner.selection_applied_revision==owner.selection_revision and not _families_pending(owner):return
     var started=Time.get_ticks_usec()
     var used=_step_families(owner,maxi(1,remaining/2),hints_only)
     var family_done=Time.get_ticks_usec()

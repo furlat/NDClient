@@ -48,6 +48,9 @@ func _resource_scope(world:Node)->Array:
 func _same_resource_groups(groups:Array)->bool:
     if groups.size()!=_prepared_resource_groups.size():return false
     for index in groups.size():
+        # Idle readiness passes a fresh empty group every frame; empty groups
+        # carry no identity, so they match. Owner changes bump resource_revision.
+        if groups[index].is_empty() and _prepared_resource_groups[index].is_empty():continue
         if not is_same(groups[index],_prepared_resource_groups[index]):return false
     return true
 

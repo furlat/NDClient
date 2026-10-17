@@ -19,6 +19,9 @@ var _parent: Node3D
 var _meshes: Dictionary = {}
 var _sources: Array = []
 var _source_key: Array = []
+var _source_revision: int = 0
+var _rank_key: Array = []
+var _rank_revision: int = 0
 var _cookie_key: Array = []
 var _cookie_images: Dictionary = {}
 var _retained_cookies:Dictionary={}
@@ -58,18 +61,41 @@ func sync(visual_actors: Array, camera: Camera3D, canvas_sources: Array) -> Arra
         if actor.get("valid",true):retained[str(actor.row.id)]=true
     for id in actors.keys():
         if not retained.has(id):_remove(id);_last_counts.removed_actors+=1
-        else:
-            actors[id].entry.node.hide()
-            actors[id].viewport.render_target_update_mode=SubViewport.UPDATE_DISABLED
+    var shown:Dictionary={}
     var phase_started:=Time.get_ticks_usec()
     if not enabled or not _prepare_sources(canvas_sources):
         _timed("sources",phase_started);phase_started=Time.get_ticks_usec()
+        _hide_unshown(shown)
         _timed("retire",phase_started);_last_cpu_ms=float(Time.get_ticks_usec()-started)/1000.0
         return result
     _timed("sources",phase_started)
+    var view_key:Array=[camera.global_transform,camera.size,camera.get_viewport().get_visible_rect().size,_rank_revision,_sources.size(),_source_texture,_cookie_texture]
     for actor in visual_actors:
         if not actor.get("valid",true): continue
         var row: Dictionary=actor.row
+        phase_started=Time.get_ticks_usec()
+        # Every snapshot, layout and binding input of an unchanged actor: its
+        # layers' material versions, transforms and bind-time fields, its
+        # contact, the camera/view and the light sources. Equal inputs give
+        # the same key below, so the shown helper is kept as it is.
+        var contact:Vector3=Placement.contact(row)
+        # Ranking uses each flame cycle's mean; only the dominant source's live
+        # position/height/cookie feed this actor's projection and footprint.
+        var dominant:int=_dominant(camera.unproject_position(contact))
+        var live_source:Array=[] if dominant<0 else [_sources[dominant].screen_position,_sources[dominant].height,_sources[dominant].cookie_position,_sources[dominant].span]
+        var input_key:Array=[view_key,contact,dominant,live_source]
+        for entry in actor.entries:
+            input_key.append([entry.node.visible,entry.get("source_version",0),entry.node.global_position,entry.get("pivot"),
+                entry.get("geometry_cell_size"),entry.get("geometry_ground_pixels"),entry.placement.get("scale_x",1.0)])
+        var held: Dictionary=actors.get(str(row.id),{})
+        if not held.is_empty() and held.get("input_key")==input_key:
+            shown[str(row.id)]=true
+            held.entry.node.visible=true
+            result.append(held.entry)
+            _last_counts.retained_actors=int(_last_counts.get("retained_actors",0))+1
+            _timed("retained",phase_started)
+            continue
+        if not held.is_empty():held.erase("input_key")
         phase_started=Time.get_ticks_usec()
         var snapshots := _snapshots(actor.entries,camera)
         _timed("snapshots",phase_started)
@@ -121,7 +147,10 @@ func sync(visual_actors: Array, camera: Camera3D, canvas_sources: Array) -> Arra
             state.unbounded=bounds.unbounded
         state.entry.node.visible=true
         result.append(state.entry)
+        shown[id]=true
+        state.input_key=input_key
     phase_started=Time.get_ticks_usec()
+    _hide_unshown(shown)
     var retained_shapes:Dictionary={}
     for state in actors.values():
         for id in state.casters:retained_shapes[id]=true
@@ -130,6 +159,16 @@ func sync(visual_actors: Array, camera: Camera3D, canvas_sources: Array) -> Arra
     _timed("retire",phase_started)
     _last_cpu_ms=float(Time.get_ticks_usec()-started)/1000.0
     return result
+
+func _hide_unshown(shown: Dictionary) -> void:
+    # Only helpers that are not drawn this frame are hidden; shown helpers keep
+    # their visibility and update mode instead of toggling every frame.
+    for id in actors:
+        if shown.has(id): continue
+        var state: Dictionary=actors[id]
+        state.erase("input_key")
+        if state.entry.node.visible: state.entry.node.hide()
+        state.viewport.render_target_update_mode=SubViewport.UPDATE_DISABLED
 
 static func _sampling_rect(rect: Rect2, sample_scale: float) -> Rect2:
     var first := (rect.position/sample_scale).floor()*sample_scale
@@ -177,6 +216,10 @@ func _prepare_sources(input: Array) -> bool:
     if _source_texture==null or _source_texture.get_height()!=data.get_height(): _source_texture=ImageTexture.create_from_image(data)
     else: _source_texture.update(data)
     _source_key=key
+    _source_revision+=1
+    var rank_key:Array=[]
+    for source in sources:rank_key.append([source.id,source.shadow_cookie_position,source.span,source.shadow_rank_strength,source.texture.get_rid()])
+    if rank_key!=_rank_key:_rank_key=rank_key;_rank_revision+=1
     _sources=sources
     return true
 
@@ -441,7 +484,7 @@ func adopt_actor(prepared:Dictionary)->Array:
             var caster:MeshInstance3D=prepared.shadow_new[id]
             caster.reparent(state.root,false);casters[id]=caster
         _caster_shapes.merge(shapes)
-        state.casters=casters;state.caster_samples=samples;state.entry.placement=prepared.row;state.key=[]
+        state.casters=casters;state.caster_samples=samples;state.entry.placement=prepared.row;state.key=[];state.erase("input_key")
         prepared.erase("shadow_base");prepared.erase("shadow_new");prepared.erase("shadow_rekeys")
         return retired
     if not prepared.has("shadow_state"):return retired
@@ -637,7 +680,7 @@ func diagnostics() -> Dictionary:
         selected[state.entry.placement.id]=state.source_id
     return {"actors":actors.size(),"casters":casters,"caster_triangles_before_native_shadow_passes":triangles,
         "target_pixels":pixels,"last_render_gpu_ms":last_gpu_ms,"last_render_cpu_ms":last_cpu_ms,"sources":_sources.size(),"updates":_updates,"wide_depth_bounds":wide_bounds,"sync_cpu_ms":_last_cpu_ms,"selected_sources":selected,
-        "sync_phases_ms":_last_phases.duplicate(),"sync_counts":_last_counts.duplicate(),"cookie_cached_images":_retained_cookies.size(),
+        "sync_phases_ms":_last_phases.duplicate(),"sync_counts":_last_counts.duplicate(),"cookie_cached_images":_retained_cookies.size(),"source_revision":_source_revision,"rank_revision":_rank_revision,
         "phase_accounting":"Cookie read/pack/upload are nested inside sources; other named phases are disjoint."}
 
 func close() -> void:
