@@ -201,6 +201,7 @@ func project(camera: Camera3D, source_scale: float = 2.0) -> void:
         var span := Vector2(texture.get_size()) * texture_scale if texture != null else Vector2.ZERO
         _canvas_sources.append({"id":source.id, "screen_position":screen,
             "cookie_position":screen, "span":span, "height":height,
+            "texture_scale":texture_scale, "cookie_scale":Vector2.ONE, "offset":Vector2.ZERO,
             "energy":energy, "color":source.color, "texture":texture,
             "enabled":active, "shadow_rank_position":screen,
             "shadow_rank_energy":energy, "world_position":position,

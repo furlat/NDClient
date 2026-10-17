@@ -27,6 +27,21 @@ limits/opengl/max_renderable_lights=256
 limits/opengl/max_lights_per_object=64
 environment/defaults/default_clear_color=Color(0.035, 0.043, 0.058, 1)
 
+[shader_globals]
+
+light_table={
+"type": "sampler2D",
+"value": ""
+}
+light_count={
+"type": "int",
+"value": 0
+}
+light_cookies={
+"type": "sampler2DArray",
+"value": ""
+}
+
 [source_data]
 
 creature_geometry_root="C:/Users/tommaso/Documents/assets/fantasy-unified-catalog/authored-creature-geometry-2026-10-12"

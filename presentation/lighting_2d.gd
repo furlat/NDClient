@@ -363,6 +363,7 @@ func project(camera: Camera3D, source_scale: float = 2.0) -> void:
             cookie_position = camera.unproject_position(support)
         var span: Vector2=Vector2(source_cookie.get_size())*texture_scale*cookie_scale if source_cookie!=null else Vector2.ZERO
         _canvas_sources.append({"id":source.item_uuid,"screen_position":position,"span":span,
+            "texture_scale":texture_scale,"cookie_scale":cookie_scale,"offset":(cookie_position-position)/cookie_scale,
             "height":height,"energy":value.energy,"color":colour,"texture":source_cookie,"enabled":active,
             "shadow_rank_position":camera.unproject_position(value.get("shadow_rank_position",value.position)),
             "shadow_rank_energy":value.get("shadow_rank_energy",value.energy),
@@ -375,7 +376,7 @@ func project(camera: Camera3D, source_scale: float = 2.0) -> void:
             var node: PointLight2D=page.nodes[source.item_uuid]
             node.position=position
             node.scale=cookie_scale
-            node.offset=(cookie_position-position)/cookie_scale
+            node.offset=_canvas_sources[-1].offset
             node.texture_scale=texture_scale
             node.height=height
             node.energy=value.energy
