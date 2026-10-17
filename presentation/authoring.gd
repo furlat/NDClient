@@ -2,6 +2,7 @@ extends RefCounted
 const Catalog = preload("res://source_catalog.gd")
 const Characters = preload("res://presentation/characters.gd")
 const ConditionPose = preload("res://presentation/condition_pose.gd")
+const NativeAuthoring = preload("res://presentation/native_authoring.gd")
 
 static func load_data(path: String, cache: Dictionary) -> Dictionary:
     return Catalog.read_file(path, cache)
@@ -17,8 +18,9 @@ static func clip(actor: Dictionary, name: String, cache: Dictionary) -> Dictiona
     return available.get(rig_id(actor, cache), {}).get("clips", {}).get(name, {})
 
 static func movement_reference_speed(cache: Dictionary) -> float:
-    # The exported catalog relies on this field's supplied schema default.
-    return float(load_data("schemas/animation.schema.json",cache).properties.movement_reference_speed_feet.default)
+    # The exported catalog relies on this field's supplied schema default,
+    # carried by the native presentation catalog.
+    return NativeAuthoring._catalog(cache).movement_reference_speed_feet
 
 static func playback_rate(actor: Dictionary, cache: Dictionary) -> float:
     var rates = load_data("catalog/action_playback_rates.json", cache)

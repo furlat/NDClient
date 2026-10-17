@@ -63,6 +63,7 @@ under-reports holds. Holds are judged on three-run medians.
 | Ground overlay mark and route shaders compiled at startup with the other reveal shaders; equal mark styles reuse the previous material when cells change | a single new overlay cell or route cost 5.5–6 ms (first shader use, R4); the 697-cell area set/clear resolved a material key twice per cell | the 5.5–6 ms events are gone; full-area updates 2.6–3.1 → 2.1–2.5 ms |
 | Shadow light plane is a unit `PlaneMesh` sized by its node transform (`canvas_shadows.gd` `_create`/`_update`) | plan Phase 1 item 3. Sub-timers showed the cost was `PlaneMesh.size` (surface rebuild), 2.4–9.9 ms when a move starts (frame up to 43 ms). The visibility shader reads `MODEL_MATRIX*VERTEX`; unit vertices ±0.5 times the size are exact (power-of-two scale), the same as the sized plane's ±size/2, and the normal stays (0,1,0) | `update_light_plane` max 0.10–0.13 ms in three runs vs 10.2–13.1 ms (2–4 events above 1 ms per run) on `901340c`, interleaved (`T040606`… vs `T040700`…). Parity: the Studio replay's seven primary scene captures are byte-identical to `901340c`'s; the Studio window captures differ only in a 120×18-pixel UI text area (x 1435–1554, y 49–66, timing labels). Shadow scalar capture identical; shadow scalar 19, idle and preparation suites give the same results as before. |
 | Protocol schema and identity parsed once per path pair per process (`sdk/protocol.gd`, a mutex-guarded static map; Protocol objects share only the parsed dictionaries, which nothing mutates, and keep their own pattern/envelope/producer caches) | plan N13 / Phase 1 item 4. Measured: each `Protocol.new()` costs 86–98 ms (GDScript strict parse of the 512 KB schema plus the vocabulary walk); the live game builds one for the session and one for its journal on the scene thread at startup, and one on the transport thread | first `Protocol.new()` 86 ms, later ones 0.003–0.011 ms: about 190 ms of scene-thread startup and 95 ms of transport-thread work removed. SDK protocol 61, journal 30, choices 86, decimal 3,404, transport 358 and reducer suites identical to `990b491`; live route 81/0. |
+| Movement reference speed read from the native presentation catalog (`catalog.tres` / `PresentationResourceCatalog.movement_reference_speed_feet = 30.0`) instead of the 213 KB animation schema (`authoring.gd`) | plan N10: the first movement compile parsed the whole schema for its one supplied default | the compiler no longer reads the schema; new `tests/movement_reference_speed_checks.gd` proves the catalog value equals the schema default exactly (30.0, float) and that a movement compile leaves the schema unparsed. Native authoring 286 identical; presentation checks have the same 2 failures as `77ad0e6`; live route 81/0. |
 
 Result after Phase 1 (median of 3 runs `20261017T001059`, `T001138`,
 `T001215`): idle same-view frame **8.77 ms** (p95 14.05; script 6.60 ms);
@@ -356,6 +357,9 @@ Confirmed red with the original code (not caused by this work):
   `eff11fd` as well.
 - `tests/prepared_membership_checks.gd` — 4 script errors and a timeout,
   identical on `d990882`.
+- `tests/presentation_checks.gd` — 2 failures ("HP commits exactly at
+  authored contact/release", "contact exposes recorded HP after-value"),
+  identical on `77ad0e6`. `tests/basic_condition_checks.gd` needs `--cases=`.
 - `tests/targeting_hover_checks.gd` — needs a `--case=` capture argument
   and exits 2 without it (on `d990882` as well).
 - `tests/native_spell_playback_checks.gd` — 6 failures (fire bolt and magic

@@ -4,3 +4,6 @@ extends Resource
 @export var condition_recipes: Dictionary[String, String] = {}
 @export var action_recipes: Dictionary[String, String] = {}
 @export var body_clips: PackedStringArray = []
+# The animation schema's supplied default for movement_reference_speed_feet.
+# The compiler needs only this value; it no longer parses the 213 KB schema.
+@export var movement_reference_speed_feet: float = 30.0
