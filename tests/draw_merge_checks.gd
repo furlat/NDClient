@@ -1,9 +1,17 @@
 extends "res://tests/prepared_admission_checks.gd"
-# Compare native range merging with the previous linear traversal, including
-# object identity at exact ties. No artwork, gameplay or frame-time claim.
+# Production painter merge (visible statics, moving draws in the gaps between
+# them) against the previous linear traversal, including object identity at
+# exact ties. No artwork, gameplay or frame-time claim.
+var probe: Node
+var ordinal: int = 0
 
 func before(a: Dictionary, b: Dictionary) -> bool:
     return Order.less(a.order_key,b.order_key) if a.order_key!=b.order_key else a.id<b.id
+
+# Exact key+id ties keep their input order, as production keeps them.
+func stable_before(a: Dictionary, b: Dictionary) -> bool:
+    if before(a,b) or before(b,a): return before(a,b)
+    return a.ordinal<b.ordinal
 
 func old_linear(fixed: Array, moving: Array) -> Array:
     var result: Array=[]
@@ -17,7 +25,10 @@ func old_linear(fixed: Array, moving: Array) -> Array:
     return result
 
 func keyed(value: int, id: String, label: String = "") -> Dictionary:
-    return {"id":id,"order_key":[1,value,0,0,2,0,0],"label":label}
+    # Owner cell (value,0): the key orders by value, then by ID.
+    var result: Dictionary=entry(probe,id,value)
+    result.role="body"; result.label=label
+    return result
 
 func same_entries(a: Array, b: Array) -> bool:
     if a.size()!=b.size(): return false
@@ -26,39 +37,58 @@ func same_entries(a: Array, b: Array) -> bool:
     return true
 
 func compare(scene: Node, fixed: Array, moving: Array, label: String) -> void:
-    fixed.sort_custom(before); moving.sort_custom(before)
-    var expected=old_linear(fixed,moving)
-    scene.static_order=fixed
-    var actual: Array=scene._merge_draw_order(moving)
-    check(same_entries(actual,expected),label+" exact old order and occurrence identity")
-    check(same_entries(fixed,actual.filter(func(value):return value in fixed)),label+" unchanged static subsequence")
+    for value in fixed+moving:
+        value.ordinal=ordinal; ordinal+=1
+    scene.static_entries=fixed; scene.actor_entries=moving
+    scene.static_order_dirty=true; scene.draw_order_dirty=true
+    scene._sort_draws()
+    # The static subsequence is production's own sort (exact full-key ties among
+    # statics have no defined order); it must be sorted and complete.
+    var statics: Array=scene.static_order
+    var sorted=statics.size()==fixed.size() and fixed.all(func(item):return statics.any(func(value):return is_same(item,value)))
+    for i in range(1,statics.size()):
+        if before(statics[i],statics[i-1]): sorted=false
+    check(sorted,label+" sorted complete static subsequence")
+    var draws: Array=moving.duplicate(); draws.sort_custom(stable_before)
+    var actual: Array=scene.draw_order
+    check(same_entries(actual,old_linear(statics,draws)),label+" exact old order and occurrence identity")
+    check(same_entries(statics,actual.filter(func(value):return fixed.any(func(item):return is_same(item,value)))),label+" unchanged static subsequence")
     check(actual.size()==fixed.size()+moving.size(),label+" no omitted or duplicated occurrence")
+    physical_rank(scene,label)
 
 func original_keys(quarter: int, actors: bool) -> Array:
     var values: Array=[]
     for x in range(-2,3):
         for height in [-1,0,1]:
             for layer in ([0,1,5] if actors else [0]):
-                var row={"position":[x,-x],"base_height_steps":height,"kind":"actor" if actors else "resource"}
-                var role="shadow" if actors and layer==0 else "body"
                 var id=("actor" if actors else "fixed")+"-%d-%d-%d"%[x,height,layer]
-                values.append({"id":id,"order_key":Order.key(row,role,layer,quarter,false)})
+                var value: Dictionary=entry(probe,id,0)
+                value.placement={"id":id,"position":[x,-x],"base_height_steps":height,"kind":"actor" if actors else "resource"}
+                value.role="shadow" if actors and layer==0 else "body"; value.layer=layer
+                values.append(value)
     values.reverse()
     return values
 
 func physical_rank(scene: Node, label: String) -> void:
     var moving: Array=scene.actor_entries.filter(func(value):return value.node.visible)
-    moving.sort_custom(before)
+    moving.sort_custom(stable_before)
     check(same_entries(scene.draw_order,old_linear(scene.static_order,moving)),label+" original painter sequence")
-    var exact=true
-    for i in range(scene.draw_order.size()):
-        var value: Dictionary=scene.draw_order[i]
-        var expected=i*8.0+(-scene.camera.global_basis.z).dot(value.node.global_position)
+    # Statics hold dense ranks and moving draws fractions between them: ranks
+    # rise strictly along the sequence and every offset is rank*8 plus depth.
+    var exact=true; var rising=true; var last=-INF
+    for value in scene.draw_order:
+        var expected=float(value.draw_rank)*8.0+(-scene.camera.global_basis.z).dot(value.node.global_position)
         if not is_equal_approx(value.node.sorting_offset,expected): exact=false
+        if not float(value.draw_rank)>last: rising=false
+        last=float(value.draw_rank)
     check(exact,label+" native physical depth compensation")
+    check(rising,label+" ranks rise strictly along the painter sequence")
 
 func run() -> void:
     var scene=Probe.new(); root.add_child(scene)
+    probe=scene
+    scene.camera.rotation_degrees=Vector3(-30,45,0)
+    scene.wall_mode="solid"; scene.ground_is_background=false
     compare(scene,[],[],"empty")
     compare(scene,[],[keyed(2,"a"),keyed(1,"b")],"actors only")
     compare(scene,[keyed(2,"a"),keyed(1,"b")],[],"statics only")
@@ -69,25 +99,26 @@ func run() -> void:
     var fixed_ties=[keyed(0,"same","static1"),keyed(0,"same","static2")]
     var actor_ties=[keyed(0,"same","actor1"),keyed(0,"same","actor2")]
     compare(scene,fixed_ties,actor_ties,"exact full-key ties")
-    check(scene._merge_draw_order(actor_ties).slice(0,2)==actor_ties,"Exact actor/static ties remain actor-first")
+    check(same_entries(scene.draw_order.slice(0,2),actor_ties),"Exact actor/static ties remain actor-first")
     var fixed=[keyed(0,"s0"),keyed(1,"hidden"),keyed(2,"s2")]
     compare(scene,fixed.filter(func(value):return value.id!="hidden"),[keyed(1,"actor")],"hidden static subsequence")
     for quarter in range(4):
+        scene.quarter=quarter
         compare(scene,original_keys(quarter,false),original_keys(quarter,true),"q%d original negative/elevated actor and shadow layers"%quarter)
+    scene.quarter=0
     # Actual production sorting still filters native visibility and applies
     # physical depth on both changed-order and unchanged-key jump paths.
     scene.static_order=[]; scene.static_complete_order=[]; scene.static_sort_nodes={}
-    scene.camera.rotation_degrees=Vector3(-30,45,0)
-    scene.wall_mode="solid"; scene.ground_is_background=false
     var static_a=entry(scene,"static-a",0)
     var static_b=entry(scene,"static-b",1)
     var hidden=entry(scene,"static-hidden",2); hidden.node.visible=false
     var actor=entry(scene,"actor-body",1); actor.placement.kind="actor"; actor.role="body"
     var shadow=entry(scene,"actor-shadow",1); shadow.placement.kind="actor"; shadow.role="shadow"
+    for value in [static_a,static_b,hidden,actor,shadow]: value.ordinal=ordinal; ordinal+=1
     scene.static_entries=[static_b,hidden,static_a]; scene.actor_entries=[actor,shadow]
     scene.static_order_dirty=true; scene.draw_order_dirty=true
     scene._sort_draws(); physical_rank(scene,"native initial")
-    check(not hidden in scene.draw_order,"Hidden native static does not enter merged order")
+    check(not scene.draw_order.any(func(value):return is_same(value,hidden)),"Hidden native static does not enter merged order")
     var logical: Array=actor.order_key.duplicate()
     var actor_offset: float=actor.node.sorting_offset
     actor.node.position.y+=1.25
@@ -100,7 +131,7 @@ func run() -> void:
     check(static_a.order_key==logical and not is_equal_approx(static_a.node.sorting_offset,static_offset),"Dirty merge retains full static physical-position polling")
     hidden.node.visible=true; actor.node.visible=false
     scene.static_order_dirty=true; scene._sort_draws(); physical_rank(scene,"native visibility changed")
-    check(hidden in scene.draw_order and not actor in scene.draw_order,"Native visibility changes replace the visible subsequences")
+    check(scene.draw_order.any(func(value):return is_same(value,hidden)) and not scene.draw_order.any(func(value):return is_same(value,actor)),"Native visibility changes replace the visible subsequences")
     # Walk continuously across and between the static objects in every view,
     # including actor/actor crossings, jumps and a hidden body becoming visible.
     # Every submitted native offset must equal the original full merge oracle.
@@ -117,7 +148,7 @@ func run() -> void:
             actor.node.visible=step<60 or step>=70
             scene._sort_draws()
             physical_rank(scene,"interpolated q%d step%d"%[quarter,step])
-    var report={"checks":checks,"failures":failures,"scope":"Old linear-merge occurrence oracle for empty/extreme/interleaved/exact ties/hidden/layered four-view inputs; production native order and physical depth compensation with unchanged logical keys. Headless only, no pixel or speedup claim."}
+    var report={"checks":checks,"failures":failures,"scope":"Old linear-merge occurrence oracle for empty/extreme/interleaved/exact ties/hidden/layered four-view inputs through the production painter merge; native order, strictly rising ranks and physical depth compensation with unchanged logical keys. Headless only, no pixel or speedup claim."}
     FileAccess.open("res://generated/draw_merge_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("DRAW_MERGE_CHECKS ",JSON.stringify(report))
     scene.queue_free(); await process_frame

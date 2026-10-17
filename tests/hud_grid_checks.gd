@@ -166,13 +166,22 @@ func run() -> void:
     # The caller provides its local source snapshot; ordinary regression runs
     # retain no dependency on that temporary evidence directory.
     var before_path = ""
+    var route_shader: Shader = null
     for argument in OS.get_cmdline_user_args():
         if argument.begins_with("--compare-before="): before_path = argument.trim_prefix("--compare-before=")
+        # The frozen route shader for the frozen overlay (route halves).
+        if argument.begins_with("--compare-before-route="):
+            route_shader = Shader.new(); route_shader.code = FileAccess.get_file_as_string(argument.trim_prefix("--compare-before-route="))
     if not before_path.is_empty():
         # Adapt only the added optional ledger argument/profile fields. The
         # frozen painter/geometry body remains the original pixel oracle.
         var before_script = GDScript.new()
-        before_script.source_code = FileAccess.get_file_as_string(before_path).replace("background: bool) -> Array:","background: bool, _proof: Dictionary = {}) -> Array:")+"\nvar support_check_us = 0\nvar mark_update_us = 0\n"
+        var before_source: String = FileAccess.get_file_as_string(before_path).replace("background: bool) -> Array:","background: bool, _proof: Dictionary = {}) -> Array:")
+        if not before_source.contains("var support_check_us"): before_source += "\nvar support_check_us = 0\nvar mark_update_us = 0\n"
+        # Play asks the overlay whether it is current; a frozen one never is.
+        if not before_source.contains("func current("): before_source += "\nfunc current(_a=null,_b=null,_c=null,_d=null,_e=null,_f=null) -> bool:\n    return false\n"
+        if route_shader != null: before_source = before_source.replace("const ROUTE = preload(\"res://presentation/ground_route.gdshader\")","var ROUTE: Shader")
+        before_script.source_code = before_source
         check(before_script.reload()==OK,"Frozen pixel oracle accepts passive optional support proof")
         var current_script = scene.ground_overlay.get_script()
         for q in range(4):
@@ -224,6 +233,24 @@ func run() -> void:
             scene.ground_overlay.set_preview(adjacent_marks)
             var restored=await capture()
             check(restored.get_data()==before.get_data() and is_same(reserved_order,scene.ground_overlay.ordered),"Restored style preserves exact original pixels without world reordering in quarter %d" % q)
+            if route_shader != null:
+                # A route across differently styled cells: the frozen per-half
+                # route materials against shared instance uniforms.
+                var route=[[-1,-1],[0,-1],[0,0],[1,0],[1,1]]
+                scene.ground_overlay.set_preview(adjacent_marks,route,Color(.8,.4,.8))
+                var route_after=await capture()
+                var current_overlay=scene.ground_overlay
+                current_overlay.root.visible=false
+                var frozen=before_script.new();frozen.ROUTE=route_shader;scene.ground_overlay=frozen
+                frozen.set_preview(adjacent_marks,route,Color(.8,.4,.8))
+                scene.static_order_dirty=true;scene.draw_order_dirty=true
+                var route_before=await capture()
+                check(route_before.get_data()==route_after.get_data(),"Route halves preserve exact original pixels in quarter %d" % q)
+                check(current_overlay.routes.size()==8 and current_overlay.routes.values().all(func(entry):return is_same(entry.material,current_overlay.route_material)),"Eight route halves share one material in quarter %d" % q)
+                frozen.close();scene.ground_overlay=current_overlay;current_overlay.root.visible=true
+                current_overlay.set_preview(adjacent_marks)
+                scene.static_order_dirty=true;scene.draw_order_dirty=true
+                await capture()
             var candidate=scene.ground_overlay
             # Keep this actual overlay alive across every sparse publication.
             # A fresh frozen renderer supplies the full-snapshot pixel oracle.

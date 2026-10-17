@@ -9,7 +9,6 @@ const WorldRows = preload("res://presentation/world.gd")
 const PlayerHUD = preload("res://play_hud.gd")
 const GroundOverlay = preload("res://presentation/ground_overlay.gd")
 var ground_overlay = GroundOverlay.new()
-var ground_draw_order: Array = []
 const Interaction = preload("res://presentation/interaction.gd")
 const Choices = preload("res://sdk/choices.gd")
 const Lighting = preload("res://presentation/native_source_lights.gd")
@@ -25,7 +24,6 @@ var native_startup:Dictionary={"ready":false,"completed":0,"total":0,"elapsed_ms
 var native_startup_plan:Variant=[]
 var native_live_plan:Array=[]
 var native_live_owners:Array=[]
-var draw_fixed_order:Array=[]
 var draw_rank_updates:int=0
 var native_startup_requested_ms:float=0.0
 var native_startup_background:bool=true
@@ -129,7 +127,24 @@ var static_sort_nodes: Dictionary = {}
 var static_order_dirty = true
 var static_order_count = -1
 var prepared_static_order: Dictionary = {}
-var draw_merge_slots: Array = []
+# Painter order of the moving participants (see _order_moving): the polled
+# participants by slot, the ground UI list, and the gaps between visible
+# statics with the draws they hold.
+var order_moving: Array = []
+var order_positions: PackedVector3Array = []
+var order_ground: Array = []
+var order_ground_source: Variant = null
+var order_gaps: Array = []
+var order_dirty_gaps: Dictionary = {}
+var order_resized_gaps: Dictionary = {}
+var order_statics: Variant = null
+var order_quarter: int = -1
+var order_background: bool = true
+var order_forward: Vector3 = Vector3.ZERO
+var order_generation: int = 0
+var order_member_generation: int = 0
+var order_serial: int = 0
+var order_shown_changed: bool = false
 var initial_focus = false
 var selected_mode = "action.move"
 var action_request = -1
@@ -2868,12 +2883,8 @@ func _sync_native_lighting() -> void:
 func _sort_draws() -> void:
     # Ground UI joins only painter order, never actor/media/light/picking owners.
     var phase = Time.get_ticks_usec()
-    var overlay_revision = [timeline.initialization_revision,timeline.world_revision,world_generation,timeline._support_signature()]
-    ground_overlay.sync(self,timeline.presentation_state().get("tiles",{}),overlay_revision,grid_visible,quarter,ground_is_background,
-        {"changes":world_changes,"revision":timeline.world_revision,"scope":[timeline.initialization_revision],"owner":world_row_cache})
+    _sync_ground_overlay()
     FrameProfile.end_phase(profile,"ground_overlay_sync",phase)
-    profile.phases.ground_overlay_support_check = profile.phases.get("ground_overlay_support_check",0.0)+ground_overlay.support_check_us/1000.0
-    profile.phases.ground_overlay_mark_update = profile.phases.get("ground_overlay_mark_update",0.0)+ground_overlay.mark_update_us/1000.0
     var fixed_changed = false
     # Source geometry establishes one total order. Changing which wall variants
     # are visible selects a subsequence; it does not change those ordering keys.
@@ -2903,98 +2914,234 @@ func _sort_draws() -> void:
         wall_pick_order = static_complete_order.filter(func(entry):return entry.has("wall_source") and entry.role!="shadow" and entry.wall_variant!="joined" and entry.wall_source_visible)
         static_order_count = static_entries.size()
         static_order_dirty = false
-        draw_order_dirty = true
         FrameProfile.end_phase(profile,"static_order",ordering_started)
-    if fixed_changed or ground_overlay.changed:
+    # Visible statics take the dense ranks 0..n-1 of their order. Moving draws
+    # take fractions between them, so a moving draw never renumbers a static.
+    var forward: Vector3 = -camera.global_basis.z
+    var statics_changed: bool = fixed_changed or not is_same(static_order,order_statics) or forward!=order_forward
+    if statics_changed:
         phase = Time.get_ticks_usec()
-        ground_draw_order = ground_overlay.merge(static_order)
-        draw_order_dirty = true
-        FrameProfile.end_phase(profile,"ground_overlay_merge",phase)
-    # An explicit invalidation can include changed static transforms. Only
-    # interpolation discovered below may reuse the unchanged static ranks.
-    var static_ranks_dirty:bool=fixed_changed or ground_overlay.changed or not is_same(draw_fixed_order,ground_draw_order)
-    for entry in actor_entries:
-        var shown: bool = entry.node.visible
-        if entry.get("sort_visible") != shown:
-            entry.sort_visible = shown
-            draw_order_dirty = true
-        if not shown: continue
-        var key = Order.key(entry.placement,entry.role,entry.layer,quarter,ground_is_background)
-        if entry.get("order_key",[]) != key:
-            entry.order_key = key
-            draw_order_dirty = true
-        entry.order_quarter = quarter
-    var forward = -camera.global_basis.z
-    if draw_order_dirty:
-        phase = Time.get_ticks_usec()
-        var moving = actor_entries.filter(func(entry):return entry.node.visible)
-        moving.sort_custom(_entry_before)
-        var insertions: PackedInt32Array = _draw_insertions(moving,ground_draw_order)
-        var slots: Array = []
-        for i in range(moving.size()):
-            slots.append(moving[i].node.get_instance_id())
-            slots.append(insertions[i])
-        FrameProfile.end_phase(profile,"actor_order",phase)
-        phase = Time.get_ticks_usec()
-        if static_ranks_dirty or slots != draw_merge_slots:
-            draw_order = _merge_draw_order(moving,insertions,ground_draw_order)
-            if static_ranks_dirty:
-                for i in range(ground_draw_order.size()):_apply_draw_rank(ground_draw_order[i],float(i),forward)
-                draw_fixed_order=ground_draw_order
-            # Static ranks remain stable when a moving actor crosses them.
-            # Fractional ranks preserve the exact merged painter order without
-            # renumbering every unrelated receiver in the room.
-            var first:int=0
-            while first<moving.size():
-                var stop:int=first+1
-                while stop<moving.size() and insertions[stop]==insertions[first]:stop+=1
-                for i in range(first,stop):
-                    var rank:float=float(insertions[first]-1)+float(i-first+1)/float(stop-first+1)
-                    _apply_draw_rank(moving[i],rank,forward)
-                first=stop
-            draw_merge_slots = slots
-        else:
-            # The complete static subsequence, actor identities and insertion
-            # positions are unchanged. Physical actor motion still compensates
-            # its depth every frame; no room-wide rank walk is needed.
-            for entry in moving: _apply_draw_rank(entry,entry.draw_rank,forward)
-        draw_order_dirty = false
+        for i in range(static_order.size()):_apply_draw_rank(static_order[i],float(i),forward)
+        order_statics = static_order
         FrameProfile.end_phase(profile,"draw_rank_apply",phase)
-    else:
-        # Jump height can move a node without changing its ground painter key.
-        for entry in actor_entries:
-            if entry.node.visible: _apply_draw_rank(entry,entry.draw_rank,forward)
+    phase = Time.get_ticks_usec()
+    _order_moving(statics_changed,forward)
+    FrameProfile.end_phase(profile,"actor_order",phase)
     _sync_wall_mask()
 
-func _draw_insertions(moving: Array, fixed: Array = []) -> PackedInt32Array:
-    if fixed.is_empty(): fixed = static_order
-    var insertions: PackedInt32Array = []
-    var fixed_index = 0
-    for actor in moving:
-        var low = fixed_index
-        var high = fixed.size()
-        while low < high:
-            var middle: int = (low+high)/2
-            if _entry_before(fixed[middle],actor): low = middle+1
-            else: high = middle
-        insertions.append(low)
-        fixed_index = low
-    return insertions
+func _sync_ground_overlay() -> void:
+    # Disclosed supports, the preview, the grid toggle and the view are the
+    # overlay's inputs; while none changes it is not visited at all.
+    var support: Array = [] if timeline.current.get("staged_tiles",{}).is_empty() else timeline._support_signature()
+    var revision: Array = [timeline.initialization_revision,timeline.world_revision,world_generation,support]
+    if ground_overlay.current(revision,grid_visible,quarter,ground_is_background,world_row_cache,timeline.initialization_revision): return
+    ground_overlay.sync(self,timeline.presentation_state().get("tiles",{}),revision,grid_visible,quarter,ground_is_background,
+        {"changes":world_changes,"revision":timeline.world_revision,"scope":[timeline.initialization_revision],"owner":world_row_cache})
+    profile.phases.ground_overlay_support_check = profile.phases.get("ground_overlay_support_check",0.0)+ground_overlay.support_check_us/1000.0
+    profile.phases.ground_overlay_mark_update = profile.phases.get("ground_overlay_mark_update",0.0)+ground_overlay.mark_update_us/1000.0
 
-func _merge_draw_order(moving: Array, insertions: PackedInt32Array = PackedInt32Array(), fixed: Array = []) -> Array:
-    if fixed.is_empty(): fixed = static_order
-    if insertions.size()!=moving.size(): insertions = _draw_insertions(moving,fixed)
+# Moving participants: actor layers, generated shadows, blood stains, droplet
+# halves and effect draws (actor_entries), and ground UI. A draw sits in the gap
+# of the visible static order where its key+id lower bound falls, and the j-th
+# of the m draws in gap g takes rank g-1+(j+1)/(m+1). Keys follow placements,
+# ranks follow a gap's members and their order, offsets follow ranks and node
+# origins: an unchanged participant costs one poll per frame.
+func _order_moving(statics_changed: bool, forward: Vector3) -> void:
+    var rekey: bool = quarter!=order_quarter or ground_is_background!=order_background
+    var replace: bool = statics_changed or rekey
+    order_quarter = quarter; order_background = ground_is_background; order_forward = forward
+    if replace:
+        # Static indices moved: every participant takes its gap again.
+        for entry in order_moving+order_ground+actor_entries+ground_overlay.ordered: entry.order_gap = -1
+        order_gaps = []; order_gaps.resize(static_order.size()+1)
+        order_dirty_gaps.clear(); order_resized_gaps.clear()
+    var structure: bool = replace
+    var moved: Array = []
+    if replace or not is_same(ground_overlay.ordered,order_ground_source):
+        structure = true
+        _order_ground(moved)
+    if rekey or draw_order_dirty or actor_entries.size()!=order_moving.size():
+        structure = true
+        _order_members(rekey)
+    elif replace:
+        var previous: int = -1
+        for entry in order_moving:
+            _order_place(entry,previous)
+            previous = entry.order_gap
+    draw_order_dirty = false
+    if not _order_poll(moved):
+        # A participant joined or left without notice.
+        structure = true
+        _order_members(false)
+        _order_poll(moved)
+    structure = structure or order_shown_changed
+    order_shown_changed = false
+    for gap in order_dirty_gaps:
+        var gap_members: Array = order_gaps[gap]
+        var in_order: bool = true
+        for j in range(1,gap_members.size()):
+            if _entry_before(gap_members[j],gap_members[j-1]): in_order = false; break
+        if in_order and not order_resized_gaps.has(gap): continue
+        if not in_order: gap_members.sort_custom(_entry_before)
+        structure = true
+        var m: int = gap_members.size()
+        for j in m: _order_rank(gap_members[j],float(gap-1)+float(j+1)/float(m+1),forward)
+    order_dirty_gaps.clear(); order_resized_gaps.clear()
+    for entry in moved: _order_rank(entry,entry.draw_rank,forward)
+    if structure: _order_merge()
+
+func _order_poll(moved: Array) -> bool:
+    # Once per frame per participant: its placement (key) and node origin.
+    # Visibility arrives by signal. False when actor_entries no longer holds
+    # the polled slots.
+    var head: Variant = null
+    var serial: int = -1
+    for s in actor_entries.size():
+        var entry: Dictionary = actor_entries[s]
+        if not is_same(entry,order_moving[s]): return false
+        var row: Dictionary = entry.placement
+        if not is_same(row,head):
+            # The placement values grid_order.key reads, compared once per run
+            # of draws sharing a row. Samplers assign equal values in new
+            # arrays and some producers edit arrays in place, so the values are
+            # copied; scalar types count, as they do in the comparator. A new
+            # serial re-keys every draw of the run, and any draw keyed under
+            # another serial (other row, other run head) re-keys too.
+            head = row
+            var stamp: Variant = entry.get("order_stamp")
+            if stamp==null or stamp[1]!=row.position or not is_same(stamp[2],row.base_height_steps) \
+                    or not is_same(stamp[3],row.get("sort_height_steps")) or not is_same(stamp[4],row.get("layer")) \
+                    or stamp[5]!=row.get("sort_position") or stamp[6]!=row.get("boundaries"):
+                var sort_position: Variant = row.get("sort_position")
+                var boundaries: Variant = row.get("boundaries")
+                order_serial += 1
+                stamp = [order_serial,row.position.duplicate(),row.base_height_steps,row.get("sort_height_steps"),row.get("layer"),
+                    sort_position.duplicate() if sort_position is Array else sort_position,boundaries.duplicate() if boundaries is Array else boundaries]
+                entry.order_stamp = stamp
+            serial = stamp[0]
+        if entry.order_keyed!=serial:
+            entry.order_keyed = serial
+            var key: Array = Order.key(row,entry.role,entry.layer,quarter,ground_is_background)
+            if entry.order_gap<0 or key!=entry.order_key or entry.id!=entry.order_gap_id:
+                entry.order_key = key
+                _order_place(entry,order_moving[s-1].order_gap if s>0 else -1)
+        var position: Vector3 = entry.node.global_position
+        if position!=order_positions[s]:
+            order_positions[s] = position; moved.append(entry)
+    return true
+
+func _order_members(rekey: bool) -> void:
+    # A participant joined, left or moved within actor_entries. Joiners, and
+    # members renamed or re-layered, are keyed by the poll; members whose gap
+    # was reset by new statics take a gap with their current key.
+    var kept: int = order_member_generation
+    order_member_generation += 1
+    var previous: int = -1
+    var count: int = actor_entries.size()
+    order_positions.resize(count)
+    for s in count:
+        var entry: Dictionary = actor_entries[s]
+        var member: bool = entry.get("order_member",-1)==kept
+        entry.order_member = order_member_generation
+        order_positions[s] = entry.get("draw_position",Vector3.INF)
+        if not member or rekey or entry.id!=entry.get("order_gap_id") or entry.layer!=entry.get("order_gap_layer"):
+            if not member:
+                entry.order_gap = -1; entry.order_key = []; entry.order_gap_id = ""
+                if not entry.node.visibility_changed.is_connected(_order_visibility_changed): entry.node.visibility_changed.connect(_order_visibility_changed)
+            entry.order_keyed = -1
+        elif entry.order_gap<0: _order_place(entry,previous)
+        previous = entry.order_gap
+    for entry in order_moving:
+        if entry.get("order_member")==order_member_generation: continue
+        if entry.get("order_gap",-1)>=0: _order_detach(entry)
+        var node: Variant = entry.node
+        if is_instance_valid(node) and node.visibility_changed.is_connected(_order_visibility_changed): node.visibility_changed.disconnect(_order_visibility_changed)
+    order_moving = actor_entries.duplicate()
+
+func _order_visibility_changed() -> void:
+    # A displayed or hidden moving draw leaves or joins the merged sequence.
+    order_shown_changed = true
+
+func _order_ground(moved: Array) -> void:
+    # The overlay keys its entries and replaces its ordered list whenever any
+    # of them changes; an unchanged list is never visited.
+    order_generation += 1
+    var ground: Array = ground_overlay.ordered
+    for entry in ground: entry.order_ground_member = order_generation
+    for entry in order_ground:
+        if entry.get("order_ground_member")!=order_generation and entry.get("order_gap",-1)>=0: _order_detach(entry)
+    var previous: int = -1
+    for entry in ground:
+        if entry.get("order_gap",-1)<0 or entry.order_key!=entry.get("order_gap_key") or entry.id!=entry.get("order_gap_id"):
+            _order_place(entry,previous,maxi(previous,0))
+        if entry.node.global_position!=entry.get("draw_position"): moved.append(entry)
+        previous = entry.order_gap
+    order_ground = ground; order_ground_source = ground
+
+func _order_fits(entry: Dictionary, gap: int) -> bool:
+    return gap>=0 and gap<=static_order.size() and (gap==0 or _entry_before(static_order[gap-1],entry)) \
+        and (gap==static_order.size() or not _entry_before(static_order[gap],entry))
+
+func _order_place(entry: Dictionary, hint: int, low: int = 0) -> void:
+    # The gap is the draw's lower bound among the visible statics by key, then
+    # id. A draw usually keeps its gap, and an actor's layers share one unless
+    # a static key falls between them, so both are tried before a search.
+    # Callers placing draws in key order pass the previous gap as the floor.
+    var gap: int = entry.get("order_gap",-1)
+    var target: int = gap
+    if not _order_fits(entry,gap):
+        if _order_fits(entry,hint): target = hint
+        else:
+            var high: int = static_order.size()
+            while low < high:
+                var middle: int = (low+high)/2
+                if _entry_before(static_order[middle],entry): low = middle+1
+                else: high = middle
+            target = low
+    entry.order_gap_key = entry.order_key; entry.order_gap_id = entry.id; entry.order_gap_layer = entry.layer
+    if target==gap:
+        if order_gaps[gap].size()>1: order_dirty_gaps[gap] = true
+        return
+    if gap>=0: _order_detach(entry)
+    if order_gaps[target]==null: order_gaps[target] = []
+    order_gaps[target].append(entry)
+    entry.order_gap = target
+    order_dirty_gaps[target] = true; order_resized_gaps[target] = true
+
+func _order_detach(entry: Dictionary) -> void:
+    var gap: int = entry.order_gap
+    var members: Array = order_gaps[gap]
+    for j in members.size():
+        if is_same(members[j],entry):
+            members.remove_at(j)
+            break
+    entry.order_gap = -1
+    order_dirty_gaps[gap] = true; order_resized_gaps[gap] = true
+
+func _order_rank(entry: Dictionary, rank: float, forward: Vector3) -> void:
+    draw_rank_updates+=1
+    var position: Vector3 = entry.node.global_position
+    var offset: float = rank*8.0+forward.dot(position)
+    if entry.get("draw_offset") != offset:
+        entry.node.sorting_offset = offset
+        entry.draw_offset = offset
+    entry.draw_rank = rank
+    entry.draw_position = position
+
+func _order_merge() -> void:
+    # The merged painter sequence for picking and the wall mask: displayed
+    # moving draws in their gaps between the visible statics.
     var merged: Array = []
-    var fixed_index = 0
-    for i in range(moving.size()):
-        var low: int = insertions[i]
-        # Lower bounds use the complete key + ID comparison, preserving exact
-        # actor-first ties and the original static subsequence.
-        if low > fixed_index: merged.append_array(fixed.slice(fixed_index,low))
-        merged.append(moving[i])
-        fixed_index = low
-    if fixed_index < fixed.size(): merged.append_array(fixed.slice(fixed_index))
-    return merged
+    var start: int = 0
+    for gap in order_gaps.size():
+        var members: Variant = order_gaps[gap]
+        if members==null or members.is_empty(): continue
+        if gap>start: merged.append_array(static_order.slice(start,gap))
+        start = gap
+        for entry in members:
+            if entry.node.visible: merged.append(entry)
+    if start<static_order.size(): merged.append_array(static_order.slice(start))
+    draw_order = merged
 
 func _entry_before(a: Dictionary, b: Dictionary) -> bool:
     return Order.less(a.order_key,b.order_key) if a.order_key != b.order_key else a.id < b.id

@@ -10,6 +10,7 @@ var routes: Dictionary = {}
 var root: Node3D
 var mesh: PlaneMesh
 var route_mesh: QuadMesh
+var route_material: ShaderMaterial
 var revision: Variant = null
 var marks: Dictionary = {}
 var changed_marks: Dictionary = {}
@@ -309,6 +310,13 @@ func _update_support(key: String, tile: Dictionary, row: Array, prepared_positio
         raised_supports.erase(key)
     else: raised_supports[key] = true
 
+func current(world_revision: Variant, grid_visible: bool, quarter: int, background: bool, owner: Dictionary, epoch: Variant) -> bool:
+    # True exactly when sync would return early: no support, preview, grid or
+    # view change. The caller then skips sync and its support snapshot.
+    return not pending_support_change and stamp.size()==4 and stamp[0]==grid_visible and stamp[1]==quarter \
+        and stamp[2]==background and stamp[3]==preview_revision and revision==world_revision and is_same(support_owner,owner) \
+        and support_scope is Array and support_scope.size()==1 and support_scope[0]==epoch
+
 func sync(world: Node, tiles: Dictionary, world_revision: Variant, grid_visible: bool, quarter: int, background: bool, proof: Dictionary = {}) -> Array:
     var began = Time.get_ticks_usec()
     support_checked_tiles = 0
@@ -476,12 +484,21 @@ func sync(world: Node, tiles: Dictionary, world_revision: Variant, grid_visible:
 func _order(quarter: int, background: bool) -> void:
     ordered = cells.values()+routes.values()+mark_batches.values()
     if not batch.is_empty() and batch.node.visible: ordered.append(batch)
-    for entry in ordered: entry.order_key = Order.key(entry.placement,entry.role,entry.layer,quarter,background)
+    # An entry keeps its key until its placement or the view changes.
+    for entry in ordered:
+        if not is_same(entry.get("order_placement"),entry.placement) or entry.get("order_quarter",-1)!=quarter or entry.get("order_background")!=background:
+            entry.order_key = Order.key(entry.placement,entry.role,entry.layer,quarter,background)
+            entry.order_placement = entry.placement; entry.order_quarter = quarter; entry.order_background = background
     ordered.sort_custom(func(a,b):return Order.less(a.order_key,b.order_key) if a.order_key!=b.order_key else a.id<b.id)
 
 func _routes(tiles: Dictionary, background: bool) -> bool:
     var wanted = {}
     var order_changed = false
+    # Every route half draws with one material; its segment and colour are
+    # instance uniforms. The colour is linearized here exactly as the former
+    # source_color material uniform was.
+    var linear: Color = route_colour.srgb_to_linear()
+    var colour := Vector4(linear.r,linear.g,linear.b,linear.a)
     for i in range(1,path.size()):
         var first_key = "%d,%d" % [path[i-1][0],path[i-1][1]]
         var last_key = "%d,%d" % [path[i][0],path[i][1]]
@@ -497,18 +514,24 @@ func _routes(tiles: Dictionary, background: bool) -> bool:
             row.id = id
             if background and row.base_height_steps == 0: row.layer = 3
             if not routes.has(id):
-                var material = ShaderMaterial.new()
-                material.shader = ROUTE
-                routes[id] = _entry(id,row,route_mesh,material)
+                if route_material == null:
+                    route_material = ShaderMaterial.new()
+                    route_material.shader = ROUTE
+                routes[id] = _entry(id,row,route_mesh,route_material)
                 order_changed = true
             var entry: Dictionary = routes[id]
-            if entry.placement != row: order_changed = true
-            entry.placement = row
+            if entry.placement != row:
+                order_changed = true
+                entry.placement = row
             entry.layer = 1001
-            entry.node.position = Placement.contact(row)
-            entry.material.set_shader_parameter("line_colour",route_colour)
-            entry.material.set_shader_parameter("line_from",(a if half==0 else middle)-entry.node.position)
-            entry.material.set_shader_parameter("line_to",(middle if half==0 else b)-entry.node.position)
+            var origin: Vector3 = Placement.contact(row)
+            var values: Array = [colour,(a if half==0 else middle)-origin,(middle if half==0 else b)-origin,origin]
+            if entry.get("route_values") != values:
+                entry.node.position = origin
+                entry.node.set_instance_shader_parameter("line_colour",values[0])
+                entry.node.set_instance_shader_parameter("line_from",values[1])
+                entry.node.set_instance_shader_parameter("line_to",values[2])
+                entry.route_values = values
             wanted[id] = true
     for id in routes.keys():
         if not wanted.has(id):
@@ -516,21 +539,10 @@ func _routes(tiles: Dictionary, background: bool) -> bool:
             order_changed = true
     return order_changed
 
-func merge(fixed: Array) -> Array:
-    # Both subsequences already use the production total painter key.
-    var result: Array = []
-    var cursor = 0
-    for entry in ordered:
-        while cursor<fixed.size() and (Order.less(fixed[cursor].order_key,entry.order_key) if fixed[cursor].order_key!=entry.order_key else fixed[cursor].id<entry.id):
-            result.append(fixed[cursor]); cursor += 1
-        result.append(entry)
-    result.append_array(fixed.slice(cursor))
-    return result
-
 func close() -> void:
     if is_instance_valid(root): root.free()
     root = null
-    cells.clear(); routes.clear(); batch.clear(); mark_batches.clear(); ordered.clear(); materials.clear()
+    cells.clear(); routes.clear(); batch.clear(); mark_batches.clear(); ordered = []; materials.clear(); route_material = null
     changed_marks.clear()
     support_geometry.clear(); grid_geometry_stamp.clear(); stamp.clear()
     support_positions.clear(); raised_supports.clear(); background_positions.clear()
