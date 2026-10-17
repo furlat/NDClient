@@ -211,7 +211,8 @@ func _place_actors() -> void:
         var marker: Node3D = get_node(actor_markers[id])
         var position = [marker.position.x,marker.position.z]
         timeline.state.actors[id].last_visual_position = position
-        timeline.state.tiles["%d,%d"%position] = {"elevation_steps":marker.position.y/Placement.HEIGHT_UNIT}
+        # Same tile shape as disclosed state: the ground overlay reads its cell.
+        timeline.state.tiles["%d,%d"%position] = {"position":[int(position[0]),int(position[1])],"elevation_steps":marker.position.y/Placement.HEIGHT_UNIT}
     if not feedback.is_empty():
         feedback.track.from_position=timeline.state.actors.caster.last_visual_position
         feedback.track.target_position=timeline.state.actors.target.last_visual_position
