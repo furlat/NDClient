@@ -300,13 +300,38 @@ feeds shadows, blood and effects.
 | # | Change | Deletes | Gate |
 |---|---|---|---|
 | L1 | **Per-pixel lighting.** A light table (data texture + cookie atlas, like `shadow_composite.gdshader`), evaluated in the sprite shaders with the atlas formula (sRGB-space multiply, cap, texel-centre snap, ambient). PointLight2D nodes go away. | The light atlas, planner, receivers, output/receiving materials, atlas stages, global rebuilds (~5,000 lines) | Atlas pixel oracles (`compare_atlas_captures.py`, cap oracle, 2D source reference). Every remaining difference (e.g. the 15-light cap) captured side by side for the user. |
-| L2 | **Shared materials and instancing.** One material per texture/shader variant with instance uniforms. Static props and floors as per-texture MultiMesh or shared-material nodes. Sight greying via a per-cell visibility texture. A reveal is per-texture buffers built on the worker, assigned in one frame. | Per-entry materials and uniform ledgers, construction lanes, slicing, membership/order/retire loops, identity proofs (~1,500 lines) | Door: room on screen at the cue with **no pause**, ≤ ~5 ms main-thread work in the publishing frame. Studio and live captures identical. |
-| L3 | **Depth instead of the CPU painter sort.** Write `DEPTH` from the depth packets, alpha scissor; sort only translucent pixels. | Painter keys, ranks, merges, door partition passes, possibly the wall coverage mask | Ordering captures (walls, doors, actors behind/in front of props) |
+| L2 | **Shared materials and instancing.** One material per texture/shader variant with instance uniforms. Floors (background layer) as per-texture MultiMesh, as today. Props, walls and doors become separate lightweight instances that share one material per texture, because each must keep its own position in the painter order (see L3). Sight greying via a per-cell visibility texture. A reveal is per-texture data built on the worker and applied in one frame. | Per-entry materials and uniform ledgers, construction lanes, slicing, membership/order/retire loops, identity proofs (~1,500 lines) | Door: room on screen at the cue with **no pause**, ≤ ~5 ms main-thread work in the publishing frame. Studio and live captures identical. |
+| L3 | **Draw order without the global CPU sort, same semantics.** See the L3 notes below. | Global ranks, binary-search merges, per-frame rank writes, static re-ranking on reveals | Order oracle (below), then captures |
 | L4 | **Shadows as a planar projection pass** in the main world, dominant light picked in the shader | Per-actor World3D, omni cube shadows, caster grids (~700 lines) | Shadow oracles, re-qualified against the new pass |
 | L5 | **Actors.** Shared materials, per-layer instance uniforms, integer clock (no AnimationTree), clip change = texture swap when resident (no world cut) | Per-frame pose dictionaries, the SourceMaterial ledger, source-only world cuts | Actor captures; per-frame actor script cost ≈ L uniform writes |
 | L6 | **Blood.** Field atlas plus terrain-shader lookup; droplets in the vertex shader | Per-tile viewports, lit pages | Blood oracles (Pygame reference within .008) |
 | L7 | **Effects.** Legacy effects, hit flashes and outlines as main-pass shader effects. Spells in their own World3D with an on-change support pass. | 2–14 viewports per effect, per-hit viewports | Spell/effect captures |
 | L8 | **Media.** Imported textures with threaded loading, path-set readiness | Residency/budget/role accounting (~2,000 lines) | Holds stay 0; memory reported |
+
+**L3 notes: draw order is the highest-risk step (user caution, 17 October).**
+The game is 2.5D: pre-rendered sprites with depth relative to their own
+render camera. Order comes from a grid painter key (`grid_order.gd`):
+background floor first, then the owner cell's diagonal x+y, then x−y, then
+height, role, contact y and layer. Tall objects are ordered by their owner
+cell (`sort_position`). Per-pixel depth would change these semantics and can
+easily put assets out of order and break the perspective.
+
+- **L3a (planned).** Keep exactly this key. Compute it locally per sprite as
+  one scalar that sorts identically, and use that as the sprite's draw order
+  (`sorting_offset`, or a constant per-sprite depth). Static sprites compute
+  it once at creation, actors when they move. No global rank, merge or
+  re-rank.
+  - Before switching, prove equivalence with an **order oracle**: for every
+    Gallery and Studio scene and all four quarters, the scalar order must
+    equal today's key order exactly. Ties and the known int/float `0`/`0.0`
+    issue must be resolved explicitly.
+  - Then compare captures of walls, doors, tall props, raised tiles and
+    actors behind and in front of props.
+- **L3b (not planned).** Per-pixel depth only if a specific visual problem
+  needs it, and only with the same oracle and captures.
+- **Instancing constraint.** Transparent sprites in one MultiMesh draw as one
+  object, so props of one texture cannot be one MultiMesh while actors move
+  between them. Only the background floor stays instanced that way.
 
 **Steady target.** Idle-frame script ≤ 2 ms, and animating frames dominated
 by GPU work.
