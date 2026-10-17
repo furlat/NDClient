@@ -80,6 +80,9 @@ var _static_preview_world:Dictionary={}
 var _static_preview_signature:Array=[]
 var _scheduled_group: Dictionary = {}
 var _staged_world_times: Array = []
+var _staged_group: Dictionary = {}
+var _staged_times: Array = []
+var _staged_indices: Array = []
 var retire_group: Callable
 var waiting_for_media = false
 var retained_components: Array = []
@@ -102,7 +105,7 @@ func accept(message: Dictionary) -> void:
         _replay_prepared_plan={}
         _preview_world = {}; _preview_signature = []
         _static_preview_world={};_static_preview_signature=[]
-        _scheduled_group = {}; _staged_world_times = []
+        _scheduled_group = {}; _staged_world_times = []; _staged_group = {}
         # A new admitted initialization replaces the pending presentation epoch.
         # Retire immutable old groups through the existing worker owner; none may
         # later apply an old operation to this new canonical snapshot.
@@ -144,7 +147,7 @@ func advance(delta_ms: float) -> void:
         _advance_with_world_preparation(delta_ms)
     else:
         pending_world = {}; _world_plan = {}; waiting_for_world = false
-        _scheduled_group = {}; _staged_world_times = []
+        _scheduled_group = {}; _staged_world_times = []; _staged_group = {}
         _advance_immediate(delta_ms)
 
 # Offline comparisons prepare each independent reducer before publishing either.
@@ -317,7 +320,10 @@ func _advance_with_world_preparation(delta_ms: float) -> void:
                 continue
             _world_plan = plan
             started=Time.get_ticks_usec()
-            pending_world = _world_candidate(plan)
+            # The preview already built this boundary's candidate; the cue frame
+            # reuses it instead of copying and re-reducing the state again.
+            pending_world = _previewed_candidate(plan)
+            if pending_world.is_empty():pending_world = _world_candidate(plan)
             FrameProfile.end_phase(profile,"timeline_candidate",started)
         # Reuse this exact passive candidate across waits. The elapsed wait is
         # never appended to display time, and this cut has not published yet.
@@ -414,7 +420,10 @@ func _plan_group_world(group: Dictionary, start: float, first_commit: int, curso
     if local>=duration and not _tiles_for(group,duration,state).is_empty():
         boundary_at = minf(boundary_at,duration)
     var boundary = boundary_at!=INF
-    if boundary and stop_at_boundary: local = minf(local,boundary_at)
+    # A boundary commit admitted within the commit tolerance publishes at its
+    # exact authored time, the time the preview planned and prepared it for:
+    # a clock one rounding below it ((start+at)-start) must not miss that key.
+    if boundary and stop_at_boundary: local = boundary_at if boundary_at>local and boundary_at<=local+0.000001 else minf(local,boundary_at)
     var end_commit = first_commit
     while end_commit<commits.size() and float(commits[end_commit].at_ms)<=local+0.000001: end_commit += 1
     var complete = local>=duration
@@ -471,6 +480,19 @@ func preview_world(source_cuts:bool=true) -> Dictionary:
         cursor = plan.display_ms
     return {}
 
+func _previewed_candidate(plan: Dictionary) -> Dictionary:
+    # The cached preview names the same boundary commit and clock, the same
+    # revision after its commits and the same retained layers: _world_candidate
+    # would rebuild these exact values (the deltas applied since the preview are
+    # already in its snapshot).
+    if _preview_world.is_empty(): return {}
+    var last: Dictionary = plan.segments.back()
+    var next_revision: int = revision
+    for segment in plan.segments: next_revision += segment.end_commit-segment.first_commit
+    if _preview_world.display_ms!=plan.display_ms or _preview_world.revision!=next_revision or _preview_world.get("resource_revision",-1)!=resource_revision: return {}
+    var key: Array = [initialization_revision,world_revision,_support_signature(),last.group.operation_sequence,last.group.id,last.end_commit,last.local_ms,last.complete]
+    return _preview_world if _preview_world.preparation_key==key else {}
+
 func _world_candidate(plan: Dictionary) -> Dictionary:
     var snapshot = state.duplicate()
     # These are the collections Compiler.apply_delta mutates. Their immutable
@@ -517,7 +539,8 @@ func _world_candidate(plan: Dictionary) -> Dictionary:
         "state":snapshot,"presentation_state":presented,"staged_tiles":supports,"staged_actors":_actors_for(group,last.local_ms),
         "actor_samples":Tracks.samples(group.get("actor_tracks",[]),last.local_ms),"actor_layers":actor_layers,
         "changes":changes,"display_ms":plan.display_ms,"revision":next_revision,"world_revision":next_world_revision,
-        "sequence":next_sequence,"group_id":group.get("id",""),"operation_sequence":int(last.group.operation_sequence)}
+        "sequence":next_sequence,"group_id":group.get("id",""),"operation_sequence":int(last.group.operation_sequence),
+        "resource_revision":resource_revision}
 
 func _apply_world_plan(plan: Dictionary) -> void:
     var apply_started:int=Time.get_ticks_usec()
@@ -551,7 +574,7 @@ func _apply_world_plan(plan: Dictionary) -> void:
             completed_group_count += 1
             completed_groups.append({"id":current.id,"at_ms":display_ms,"sequence":sequence})
             if completed_groups.size()>DIAGNOSTIC_LIMIT: completed_groups.pop_front()
-            _scheduled_group = {}; _staged_world_times = []
+            _scheduled_group = {}; _staged_world_times = []; _staged_group = {}
             _retain_completed_presentation()
             if retire_group.is_valid(): retire_group.call(current)
             current = {}
@@ -644,12 +667,37 @@ func component_samples(cache: Dictionary={}) -> Array:
     return result
 
 func staged_tiles() -> Dictionary:
+    # Only tiles whose admission time has passed are visited, in the group's
+    # own order: a room staged for later costs one search per call, not a walk.
     var admitted = {}
+    var staged: Dictionary = current.get("staged_tiles",{})
+    if staged.is_empty(): return admitted
+    if not is_same(_staged_group,current): _index_staged(current)
     var local = display_ms-group_start_ms
-    for key in current.get("staged_tiles",{}):
-        if not state.tiles.has(key) and local >= float(current.get("staged_tile_at_ms",{}).get(key,0.0)):
-            admitted[key] = current.staged_tiles[key]
+    var count: int = _staged_times.bsearch(local,false)
+    if count==0: return admitted
+    if count==staged.size():
+        for key in staged:
+            if not state.tiles.has(key): admitted[key] = staged[key]
+        return admitted
+    var keys: Array = staged.keys()
+    var indices: Array = _staged_indices.slice(0,count); indices.sort()
+    for i in indices:
+        if not state.tiles.has(keys[i]): admitted[keys[i]] = staged[keys[i]]
     return admitted
+
+func _index_staged(group: Dictionary) -> void:
+    # Admission times ascending, ties in the group's order, with each tile's
+    # position in group.staged_tiles; received groups are immutable.
+    _staged_group = group
+    var times: Dictionary = group.get("staged_tile_at_ms",{})
+    var order: Array = []
+    var i: int = 0
+    for key in group.staged_tiles:
+        order.append([float(times.get(key,0.0)),i]); i += 1
+    order.sort()
+    _staged_times = order.map(func(pair):return pair[0])
+    _staged_indices = order.map(func(pair):return pair[1])
 
 func presentation_state() -> Dictionary:
     # First disclosed support can be needed to draw an admitted actor before
