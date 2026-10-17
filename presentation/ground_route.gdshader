@@ -1,8 +1,10 @@
 shader_type spatial;
 render_mode unshaded, cull_disabled, shadows_disabled, depth_draw_never, depth_test_disabled;
-uniform vec4 line_colour : source_color;
-uniform vec3 line_from;
-uniform vec3 line_to;
+// One material draws every route half. Each half carries its segment and its
+// colour, already linear (the former source_color conversion), per instance.
+instance uniform vec4 line_colour;
+instance uniform vec3 line_from;
+instance uniform vec3 line_to;
 uniform float line_width_pixels = 2.0;
 void vertex() {
     vec4 a = PROJECTION_MATRIX*MODELVIEW_MATRIX*vec4(line_from,1.0);
