@@ -97,7 +97,7 @@ func run()->void:
     _assignment_boundaries(cache,recipes)
     check(entries["condition.spell.mirror_image"].requirements.any(func(row):return row.mechanism=="liveCopies" and row.status=="missing"),"Lifecycle capture does not pretend Mirror Image copies are implemented")
     check(entries["condition.poisoned"].requirements.any(func(row):return row.mechanism.ends_with(":markerGroup") and row.implementation=="implemented"),"Original shared grouping policy is supported without inventing render evidence")
-    check(entries["condition.charmed"].requirements.any(func(row):return row.get("resolved_asset_id","").begins_with("control.charmed.") and row.availability=="available"),"Condition metadata aliases retain real registered source availability")
+    check(entries["condition.charmed"].requirements.any(func(row):return row.get("resolved_asset_id","").begins_with("control.charmed.") and row.reason=="native_source_not_authored" and row.status=="missing"),"Condition metadata aliases name the sprite asset that still needs a native source")
     check(entries["condition.spell.guidance"].requirements.any(func(row):return row.mechanism=="native:0" and row.availability=="available" and row.implementation=="implemented" and row.status=="unexercised"),"Guidance now uses its actual native owner source instead of the replaced static sprite")
     for id in ["condition.blinded","condition.spell.bestow_curse.ability"]:
         var offsets=entries[id].requirements.filter(func(row):return row.mechanism.ends_with(":offsetY"))
@@ -107,7 +107,8 @@ func run()->void:
         check(not attachments.is_empty() and attachments.all(func(row):return row.implementation=="implemented" and row.status=="unexercised" and not row.rendered),"Implemented ground/face registration remains distinct from source or pixel evidence "+id)
     var selected_report=Coverage.build(cache,[],{"condition.spell.hold_person":true})
     check(selected_report.entries.size()==1 and selected_report.totals.entries==1,"Witnessed condition filter preserves exact finite denominator")
-    check(selected_report.entries[0].requirements.filter(func(row):return row.mechanism.ends_with(":application_asset_id") or row.mechanism.ends_with(":removal_asset_id")).all(func(row):return row.implementation=="implemented" and row.status=="unexercised"),"Qualified phase sampler is supported without inventing native exercise")
+    var banks:Array=selected_report.entries[0].requirements.filter(func(row):return row.mechanism.ends_with(":application_asset_id") or row.mechanism.ends_with(":removal_asset_id"))
+    check(not banks.is_empty() and banks.all(func(row):return row.implementation=="missing" and row.reason=="native_source_not_authored"),"Sprite-sheet entry/release banks are reported as needing a native source")
     var recorded=[{"id":"recorded-poison-material","kind":"condition_material","recording":"explicit semantic fixture",
         "start_ms":10.0,"end_ms":20.0,"source_start_ms":0.0,"owner":{"id":"owner","condition":{"behavior_id":"condition.poisoned"}},
         "operations":{"bodyColor":recipes["condition.poisoned"].persistent.bodyColor}}]

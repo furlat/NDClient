@@ -62,7 +62,7 @@ var follow_scans=0
 var preview_visible_rows:Array=[]
 var frame_cpu_ms:Dictionary={}
 const RULER = 27.0
-const PREVIEW_KINDS = ["body","part","condition_material","condition_pose","condition_restore","registered_media","native_effect","sprite_layer","material_flash","feedback_text","damage_number","audio","residue_deposit","geometry_projectile"]
+const PREVIEW_KINDS = ["body","part","condition_material","condition_pose","condition_restore","native_effect","sprite_layer","material_flash","feedback_text","damage_number","audio","residue_deposit","geometry_projectile"]
 
 func _ready() -> void:
     thumbnails.host=self
@@ -274,7 +274,7 @@ func _follow_priority(row:Dictionary)->int:
             return {"cast":3,"flight":4,"area":5,"impact":5,"spray":5,"attached":4}.get(component.get("native_cue",{}).get("role",""),3)
         return 2
     if row.kind in ["body","condition_pose","condition_restore"]:return 2
-    if row.kind in ["registered_media","sprite_layer","geometry_projectile","residue_deposit"]:return 1
+    if row.kind in ["sprite_layer","geometry_projectile","residue_deposit"]:return 1
     if row.kind=="audio":return 0
     return -1
 

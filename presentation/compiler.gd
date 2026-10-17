@@ -502,9 +502,7 @@ static func _native_requirement_cut(group: Dictionary, previous: Dictionary, own
             if not outlined.has(row.condition_uuid):continue
             row={"id":str(row.id)+":outline","kind":"condition_outline","actor_uuid":row.actor_uuid,
                 "condition_uuid":row.condition_uuid,"status":"available"}
-        elif row.kind not in ["native_effect","registered_media","audio"]:continue
-        if row.kind=="registered_media" and row.has("media_samples"):
-            row.media_samples=row.media_samples.map(func(phase):return {"part_id":phase.part_id,"media":phase.media})
+        elif row.kind not in ["native_effect","audio"]:continue
         var runtime_fields:Array=["age_ms","initial","removal_age_ms","alpha","source_age_ms","selection_alpha","condition","recipe"]
         if row.kind!="audio":runtime_fields.append_array(["start_ms","absolute_start_ms","duration_ms"])
         for field in runtime_fields:

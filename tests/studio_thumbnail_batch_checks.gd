@@ -56,7 +56,7 @@ func run()->void:
         if not index.ok:continue
         var rows:Array=[];var kinds={}
         for row in index.rows:
-            if row.kind not in ["body","material_flash","condition_material","condition_restore","sprite_layer","registered_media"] or row.get("status")=="missing" or not row.get("visible_here",true):continue
+            if row.kind not in ["body","material_flash","condition_material","condition_restore","sprite_layer"] or row.get("status")=="missing" or not row.get("visible_here",true):continue
             if kinds.has(row.kind):continue
             kinds[row.kind]=true;exercised[row.kind]=true;rows.append(row)
         if DisplayServer.get_name()=="headless":
@@ -70,7 +70,9 @@ func run()->void:
         check(mismatches.is_empty(),"Every final native swatch byte matches the single-composite path: "+name)
         evidence.append({"case":name,"kinds":kinds.keys(),"samples":batched.samples,"serial_ms":serial.elapsed_ms,"batch_ms":batched.elapsed_ms,"serial_source_reads":serial.source_reads,"batch_source_reads":batched.source_reads,"peak_batch_views":batched.peak_views,"pixel_mismatches":mismatches})
         if name=="melee-seed3":await cancel_batch(index,rows[0])
-    check(exercised.has("body") and exercised.has("material_flash") and exercised.has("condition_restore") and exercised.has("registered_media"),"Parity set includes real body, impact material, condition restoration and registered source media")
+    # Sprite-sheet condition media have no renderer (they show nothing until a
+    # native source is authored); no recording may produce them.
+    check(exercised.has("body") and exercised.has("material_flash") and exercised.has("condition_restore") and not exercised.has("registered_media"),"Parity set includes real body, impact material and condition restoration; no sprite-sheet media")
     finish()
 func finish()->void:
     var report={"checks":checks,"failures":failures,"evidence":evidence,"scope":"Actual source recipes through identical Godot shaders/viewports at batch size one/eight. Pixel-for-pixel comparison; native VFX and blood simulation paths remain unchanged."}

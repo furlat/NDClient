@@ -379,9 +379,9 @@ func _inspect_study_expectation()->void:
     inspector_text.text="\n".join(lines);inspector.popup_centered()
 
 func _diagnostic_id()->String:
-    if selected_row.get("kind") not in ["native_effect","registered_media","sprite_layer","material_flash","damage_number","audio","condition_material"]:return ""
+    if selected_row.get("kind") not in ["native_effect","sprite_layer","material_flash","damage_number","audio","condition_material"]:return ""
     var component:Dictionary=selected_row.get("component",{})
-    if component.get("kind") not in ["native_effect","registered_media","sprite_layer","material_flash","damage_number","audio","condition"]:return ""
+    if component.get("kind") not in ["native_effect","sprite_layer","material_flash","damage_number","audio","condition"]:return ""
     return component.get("id","")
 
 func _diagnostic_menu_state()->void:
