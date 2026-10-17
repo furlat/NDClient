@@ -1,12 +1,11 @@
 extends "res://presentation/sprite_sources.gd"
 # One unpublished world boundary. Worker owns passive projection/buffers;
-# the scene thread builds changed native groups and owns hidden atlas receivers.
+# the scene thread builds changed native groups.
 const WorldRows = preload("res://presentation/world.gd")
 const Characters = preload("res://presentation/characters.gd")
 const ActorConstruction = preload("res://presentation/actor_construction.gd")
 const GroundData = preload("res://presentation/ground_data.gd")
 const WallReveal = preload("res://presentation/wall_reveal.gd")
-const AtlasDelta = preload("res://presentation/native_light_delta.gd")
 const GroundReceiving = preload("res://presentation/ground_receiving.gd")
 const SourceLighting = preload("res://presentation/lighting_2d.gd")
 const Blood=preload("res://presentation/blood.gd")
@@ -31,7 +30,6 @@ var actor_resource_output:Dictionary={}
 var actor_resource_inputs:Dictionary={}
 var actor_resource_textures:Dictionary={}
 var actor_resource_names:Dictionary={}
-var actor_resource_options:Dictionary={}
 var object_cursor:int=0
 var objects_complete:Dictionary={}
 var object_target_count:int=-1
@@ -93,26 +91,11 @@ var scenery_cursor:int=0
 var scenery_style_ids:Array=[]
 var scenery_style_cursor:int=0
 var scenery_packet_entries:Dictionary={}
-var atlas_jobs: Array = []
-var atlas_shells: Dictionary = {}
-var atlas_cursor = 0
-var atlas_prefix: Dictionary = {}
-# One prefix receives ready actual source identities while the scene lanes
-# continue. Its planner is independent of the existing final-order sort task.
-var atlas_task:int=-1
-var atlas_stage:String=""
-var atlas_source_jobs:Dictionary={}
-var atlas_source_queue:Array=[]
-var atlas_source_cursor:int=0
-var atlas_manifest_ready:bool=false
-var atlas_floor_updates:Dictionary={}
-var atlas_worker_accounted:bool=false
+# Every new entry of this preparation, for the spell receiver boundary.
+var boundary_jobs: Array = []
 var membership_inputs_ready:bool=false
 var membership_full:bool=false
 var native_receiver_boundary:Dictionary={}
-# Shared data ownership survives this Node's retirement until atlas publication
-# has either consumed or rejected the private prefix.
-var atlas_retirement: Dictionary = {"blocked":false,"payloads":[],"directories":[],"unused":[],"active":{}}
 
 func texture(path: String) -> Texture2D:
     var value: Texture2D = host.texture(path)
@@ -140,7 +123,7 @@ static func capture_static(owner:Node,candidate:Dictionary,first:bool=false)->Di
         var group: Dictionary = owner.ground_groups[key]
         var entry: Dictionary = group.entries[0]
         # Only numeric immutable geometry crosses the worker boundary. Visibility
-        # and atlas addresses continue to belong to the displayed entry/atlas.
+        # continues to belong to the displayed entry.
         ground_before[key] = {"rows":group.rows,"geometry":entry.ground_geometry,
             "receiver_bounds":entry.ground_receiver_bounds,"capacity":entry.node.multimesh.instance_count,
             "ground_version":entry.get("ground_version",0)}
@@ -430,7 +413,7 @@ static func derive_static(input:Dictionary,output:Dictionary)->void:
             packet=EnvironmentSource.row_packet(row,input.quarter,input.basis,input.cache,options.depth,options.normals)
         if packet.get("eligible",false):
             # This is the same visibility operand applied by the private
-            # scenery owner. Seed it before final source/atlas construction.
+            # scenery owner. Seed it before final source construction.
             for selected in packet.entries:
                 selected.light_parameters=SourceMaterial.environment_policy(selected.placement.kind,selected.role)
                 if selected.descriptor.get("empty",false):continue
@@ -629,7 +612,6 @@ static func _record_actor_worker_phase(profile:Dictionary,name:String,started:in
 func step(budget_usec: int = 2000) -> void:
     _refresh_actor_binding_owner()
     _poll_environment_resources()
-    _poll_atlas_task()
     if prepared or stale or not media_issue.is_empty(): return
     var started = Time.get_ticks_usec()
     var environment_attempted:bool=false
@@ -690,15 +672,11 @@ func step(budget_usec: int = 2000) -> void:
             if not actor_resources_started:_prepare_actor_resources()
             if not media_issue.is_empty():break
             if Time.get_ticks_usec()-started>=budget_usec:break
-            if atlas_stage.is_empty():_begin_atlas_overlap()
-            if Time.get_ticks_usec()-started>=budget_usec:break
         if not environment_attempted and not environment_capture_complete and phase=="construction":
             environment_attempted=true
             _prepare_environment_resources(started+budget_usec)
             if Time.get_ticks_usec()-started>=budget_usec:break
-        if _step_atlas_overlap(started+budget_usec):continue
         if not media_issue.is_empty() or stale:break
-        if phase=="atlas_overlap":break
         if phase=="construction":
             if not _prepare_construction_turn(started+budget_usec):break
             if not media_issue.is_empty():
@@ -784,11 +762,11 @@ func step(budget_usec: int = 2000) -> void:
             if not order_records.is_empty(): order_records.pop_back()
             else:
                 order_keys = []; order_ids = []; sorted_indices = []
-                _begin_atlas_preparation()
+                _finish_receivers()
         elif phase=="native_receivers":
             var receiver_budget:Dictionary={"used_usec":Time.get_ticks_usec()-started,"limit_usec":budget_usec}
             var receiver_started:int=Time.get_ticks_usec()
-            var receiver_ready:bool=host.component_renderer.native_spells.prepare_boundary(self,atlas_jobs,native_receiver_boundary,receiver_budget)
+            var receiver_ready:bool=host.component_renderer.native_spells.prepare_boundary(self,boundary_jobs,native_receiver_boundary,receiver_budget)
             FrameProfile.end_phase(profile,"world_prepare_native_receivers",receiver_started)
             if receiver_ready:phase="sampling"
             else:break
@@ -839,7 +817,7 @@ func _prepare_environment_resources(deadline:int)->void:
     # Each task writes a fresh result; only its joined result enters this owner.
     if environment_task>=0:return
     var began:int=Time.get_ticks_usec()
-    var packets:Dictionary={};var textures:Dictionary={};var images:Dictionary={}
+    var packets:Dictionary={};var textures:Dictionary={}
     var checked:int=0
     while checked<environment_ids.size() and Time.get_ticks_usec()<deadline:
         var id:String=environment_ids[environment_scan_cursor]
@@ -856,17 +834,12 @@ func _prepare_environment_resources(deadline:int)->void:
         packets[id]=packet
         for path in packet.paths:
             textures[path]=host.textures[path]
-            images[path]=host.source_images[path]
         environment_capture_cursor+=1
     environment_capture_complete=environment_capture_cursor==environment_ids.size()
     if not packets.is_empty():
         var declared:Dictionary=environment_parameter_names()
-        var options:Dictionary={}
-        if not initial and host.native_light_atlas.enabled:
-            options=host.native_light_atlas.static_environment_options(host,packets,images)
-            options.source_parent_transform=global_transform
         environment_batch_output={}
-        environment_task=WorkerThreadPool.add_task(EnvironmentResources.build_private.bind(packets,textures,declared,environment_batch_output,images,options),false,"Prepare resident environment resources")
+        environment_task=WorkerThreadPool.add_task(EnvironmentResources.build_private.bind(packets,textures,declared,environment_batch_output),false,"Prepare resident environment resources")
     if host.profile.get("recording",false):phase_usec.environment_resource_capture=phase_usec.get("environment_resource_capture",0)+Time.get_ticks_usec()-began
 
 func _poll_environment_resources()->void:
@@ -916,7 +889,7 @@ func _advance_completed_phase()->bool:
             phase="scenery_styles"
         "scenery_styles":
             if scenery_style_cursor!=scenery_style_ids.size():return false
-            if not result.needs_order:_begin_atlas_preparation()
+            if not result.needs_order:_finish_receivers()
             elif not membership.full:phase="order_collect";cursor=0
             else:
                 phase="sort_wait"
@@ -926,15 +899,6 @@ func _advance_completed_phase()->bool:
             phase="native_receivers"
         _:return false
     return true
-
-func _prefix_failed() -> void:
-    var reason:String=str(atlas_prefix.get("error","incomplete_private_prefix"))
-    if reason in ["atlas_changed_during_capture","source_changed_before_prefix_capture"]:
-        stale=true;phase="stale"
-    else:
-        media_issue="World lighting preparation failed: "+reason
-        phase="failed"
-        if media_issue not in presentation_errors:presentation_errors.append(media_issue)
 
 func _prepare_cookie_resource() -> void:
     var source:Dictionary=result.light_resolution.sources[cookie_source_cursor]
@@ -1003,8 +967,7 @@ func _prepare_actor_resources()->void:
     if actor_resource_inputs.is_empty():actor_resource_output={"complete":true,"error":"","rows":{},"worker_ms":0.0}
     else:
         actor_resource_names=ActorConstruction.source_parameter_names()
-        if not initial:actor_resource_options=host.native_light_atlas.actor_resource_options(host)
-        actor_resource_task=WorkerThreadPool.add_task(ActorResources.build_private.bind(actor_resource_inputs,actor_resource_textures,noise_resources,actor_resource_names,actor_resource_options,actor_resource_output),false,"Prepare private actor resources")
+        actor_resource_task=WorkerThreadPool.add_task(ActorResources.build_private.bind(actor_resource_inputs,actor_resource_textures,noise_resources,actor_resource_names,actor_resource_output),false,"Prepare private actor resources")
     _record_actor_phase("actor_resource_capture",started)
 
 func _poll_actor_resources()->bool:
@@ -1030,14 +993,7 @@ func _adopt_actor_resource(prepared:Dictionary,index:int)->Dictionary:
         blocked_actor={"actor":prepared.row.id,"path":path,"status":"missing_binding_texture"};return {}
     var entry:Dictionary=ActorConstruction.adopt_private_layer(self,packet)
     entry.private_resource_bound=true
-    entry.atlas_preparation={"status":"source_bound","path":path}
     prepared.condition_parameters=packet.condition_parameters
-    if packet.has("atlas"):
-        atlas_shells[entry.node.get_instance_id()]=host.native_light_atlas.adopt_private_actor_binding(entry,packet.atlas,host,packet.get("filled_textures",[]))
-        # Both private receiving/output resources now contain this exact ledger.
-        # The first real UV/condition change must remain a delta, not another
-        # full initialization copied from the worker's original write history.
-        SourceMaterial.acknowledge(entry)
     return entry
 
 func _prepare_actor_step(prepared:Dictionary,deadline:int)->bool:
@@ -1086,17 +1042,6 @@ func _prepare_actor_step(prepared:Dictionary,deadline:int)->bool:
         if _prepare_actor_source(prepared,entry,owned):
             prepared.source_ready[index]=true
             return true
-    for i in prepared.entries.size():
-        if initial:break
-        if Time.get_ticks_usec()>=deadline:return false
-        if not prepared.source_ready.has(i):continue
-        var entry:Dictionary=prepared.entries[i]
-        if is_same(prepared.get("retained_entries",{}).get(entry.actor_layer.slot),entry):continue
-        if entry.has("cell") and host.native_light_atlas.enabled and not atlas_shells.has(entry.node.get_instance_id()):
-            var atlas_started:int=Time.get_ticks_usec() if measured else 0
-            var atlas_ready:bool=_prepare_private_source(entry)
-            _record_actor_phase("actor_atlas_source",atlas_started)
-            return atlas_ready
     if prepared.source_ready.size()!=prepared.entries.size():return false
     # All selected source operands are resident. Shadow snapshots may now copy
     # real bound geometry; retained live materials have never been mutated.
@@ -1128,12 +1073,12 @@ func _prepare_object(deadline:int)->bool:
     if objects_complete.size()==(object_target_count if object_target_count>=0 else wanted_ids.size()):return false
     var measured:bool=bool(host.profile.get("recording",false))
     var started:int=Time.get_ticks_usec() if measured else 0
-    var nested_before:int=phase_usec.get("objects",0)+phase_usec.get("object_sources",0)+phase_usec.get("object_atlas_source",0) if measured else 0
+    var nested_before:int=phase_usec.get("objects",0)+phase_usec.get("object_sources",0)+phase_usec.get("object_source_priming",0) if measured else 0
     if measured:object_work_counts.attempts+=1
     var progress:bool=_prepare_object_step(deadline,measured)
     if measured:
         var elapsed:int=Time.get_ticks_usec()-started
-        var nested_after:int=phase_usec.get("objects",0)+phase_usec.get("object_sources",0)+phase_usec.get("object_atlas_source",0)
+        var nested_after:int=phase_usec.get("objects",0)+phase_usec.get("object_sources",0)+phase_usec.get("object_source_priming",0)
         phase_usec.object_dispatch=phase_usec.get("object_dispatch",0)+elapsed
         phase_usec.object_scan=phase_usec.get("object_scan",0)+maxi(0,elapsed-(nested_after-nested_before))
     return progress
@@ -1160,7 +1105,7 @@ func _prepare_object_step(deadline:int,measured:bool)->bool:
                 if _prepare_private_source(group.entries[group.source_cursor]):
                     group.source_cursor+=1
                     if measured:object_work_counts.primed+=1
-                if measured:phase_usec.object_atlas_source=phase_usec.get("object_atlas_source",0)+Time.get_ticks_usec()-priming_started
+                if measured:phase_usec.object_source_priming=phase_usec.get("object_source_priming",0)+Time.get_ticks_usec()-priming_started
                 return true
             objects_complete[id]=true;return true
         var from_worker:bool=result.get("environment_packets",{}).has(id)
@@ -1196,18 +1141,6 @@ func _prepare_object_step(deadline:int,measured:bool)->bool:
                     var visibility:float=1.0 if candidate_visible(str(entry.placement.id)) else 0.0
                     SourceMaterial.set_parameter(entry,"current_visibility",visibility);entry.scenery_value=visibility
                     if measured:phase_usec.object_worker_visibility=phase_usec.get("object_worker_visibility",0)+Time.get_ticks_usec()-visibility_started
-                    if not host.native_light_atlas.enabled:continue
-                    var packet:Dictionary=entry.get("static_atlas_packet",{})
-                    if packet.is_empty():
-                        media_issue="Private environment resource task missed its final atlas packet: "+str(entry.id);phase="failed";return false
-                    var binding_started:int=Time.get_ticks_usec() if measured else 0
-                    var shell:Dictionary=host.native_light_atlas.adopt_private_environment_binding(entry,packet,host)
-                    if shell.is_empty():
-                        media_issue="Private environment source could not adopt its final atlas packet: "+str(entry.id);phase="failed";return false
-                    shell.receiver_parent=host.native_light_atlas.projection_root
-                    shell.output.private_node=true
-                    atlas_shells[entry.node.get_instance_id()]=shell
-                    if measured:phase_usec.object_worker_atlas_adopt=phase_usec.get("object_worker_atlas_adopt",0)+Time.get_ticks_usec()-binding_started
         else:
             var fallback_started:int=Time.get_ticks_usec() if measured else 0
             _environment_row(row.duplicate(true))
@@ -1220,10 +1153,6 @@ func _prepare_object_step(deadline:int,measured:bool)->bool:
         var built:Array=static_entries.slice(first)
         # Worker entries arrive bound; only a scene-owned flame is primed here.
         native_groups[id]={"row":row,"entries":built,"source_cursor":(flame_index if flame_index>=0 else built.size()) if from_worker else 0}
-        if from_worker:
-            var queue_started:int=Time.get_ticks_usec() if measured else 0
-            for entry in (built.slice(0,flame_index) if flame_index>=0 else built):_queue_atlas_source(entry)
-            if measured:phase_usec.object_worker_atlas_queue=phase_usec.get("object_worker_atlas_queue",0)+Time.get_ticks_usec()-queue_started
         created_count+=static_entries.size()-first
         if measured:object_work_counts.constructed+=1
         phase_usec.objects=phase_usec.get("objects",0)+Time.get_ticks_usec()-began
@@ -1262,42 +1191,21 @@ func _prepare_ground(deadline:int)->bool:
             # This private floor owns its final visibility/buffer. Its source
             # setup is picked up below without another packed-floor rebuild.
             ground_complete[key]=true;ground_job={}
-            _queue_atlas_source(native_ground[key].entries[0])
         phase_usec.ground=phase_usec.get("ground",0)+Time.get_ticks_usec()-began
         return true
     return false
 
+# A private entry starts with its candidate visibility; sprites light themselves.
 func _prepare_private_source(entry:Dictionary)->bool:
-    if not entry.has("cell"):return true
-    if not host.native_light_atlas.enabled:
-        if not initial:
-            var shown:float=1.0 if entry.placement.kind=="actor" or candidate_visible(str(entry.placement.id)) else 0.0
-            SourceMaterial.set_parameter(entry,"current_visibility",shown);entry.scenery_value=shown
-        return true
-    if initial:
-        _queue_atlas_source(entry);return true
-    var id:int=entry.node.get_instance_id()
-    if atlas_shells.has(id):
-        _queue_atlas_source(entry);return true
-    var path:String=entry.get("record",{}).get("path","")
-    if not path.is_empty() and not host.source_images.has(path):return false
-    var visibility:float=1.0 if entry.placement.kind=="actor" or candidate_visible(str(entry.placement.id)) else 0.0
-    SourceMaterial.set_parameter(entry,"current_visibility",visibility);entry.scenery_value=visibility
-    var prepared:Dictionary=host.native_light_atlas.prepare_source_binding(entry,{},host,true,{"defer_static_output":true},bool(host.profile.get("recording",false)))
-    if prepared.is_empty():
-        media_issue="World lighting preparation has no valid source bounds: "+str(entry.get("id",id))
-        return false
-    prepared.receiver_parent=host.native_light_atlas.projection_root
-    prepared.output.private_node=true
-    atlas_shells[id]=prepared
-    _queue_atlas_source(entry)
+    if entry.has("cell") and not initial:
+        var shown:float=1.0 if entry.placement.kind=="actor" or candidate_visible(str(entry.placement.id)) else 0.0
+        SourceMaterial.set_parameter(entry,"current_visibility",shown);entry.scenery_value=shown
     return true
 
 func _prepare_actor_source(prepared:Dictionary,entry:Dictionary,private:bool=true)->bool:
     var started:int=Time.get_ticks_usec() if host.profile.get("recording",false) else 0
     var ready:bool=_prepare_actor_source_step(prepared,entry,private,started>0)
     _record_actor_phase("actor_source",started)
-    if ready and private:_queue_atlas_source(entry)
     return ready
 
 func _prepare_actor_source_step(prepared:Dictionary,entry:Dictionary,private:bool,measured:bool)->bool:
@@ -1315,7 +1223,6 @@ func _prepare_actor_source_step(prepared:Dictionary,entry:Dictionary,private:boo
     var layer:Dictionary=entry.actor_layer
     var clip:String=prepared.get("layer_clips",{}).get(layer.get("effect",{}).get("component_id",""),selected.get("clip",""))
     var admission:Dictionary={"status":"no_selected_clip","clip":clip}
-    if private:entry.atlas_preparation=admission
     blocked_actor={"actor":prepared.row.id,"slot":layer.slot,"clip":clip,"status":"checking"}
     if not layer.paths.has(clip) or not prepared.rig.clips.has(clip):
         _record_actor_phase("actor_source_readiness",readiness_started)
@@ -1401,296 +1308,18 @@ func take_actor(id:String,row:Dictionary,rig:Dictionary)->Dictionary:
     native_actors.erase(id)
     return prepared
 
-func _begin_atlas_overlap()->void:
-    if not atlas_stage.is_empty():return
-    if not host.native_light_atlas.enabled:
-        atlas_stage="empty";return
-    object_target_count=wanted_ids.size();ground_target_count=ground_keys.size()
-    # The same empty-atlas base is also valid during initial preparation.
-    if not host.native_light_atlas.delta_ready and host.native_light_atlas.entry_specs.is_empty():
-        AtlasDelta.rebuild(host.native_light_atlas,host.native_light_change_serial)
-    if not host.native_light_atlas.delta_ready:
-        atlas_stage="empty";return
-    var removed:Dictionary={}
-    # Removal identity is known from passive membership and retained actor slots;
-    # it must be complete before the first source is lent to the prefix.
-    var old_ids:Array=membership_base.groups.keys() if result.get("full_membership",true) else result.wanted.keys()
-    for id in old_ids:
-        var old:Dictionary=membership_base.groups.get(id,{})
-        if old.is_empty():continue
-        if not result.wanted.has(id) or old.row!=result.wanted[id]:
-            for entry in old.entries:removed[entry.node.get_instance_id()]=true
-    for id in result.get("removed_wanted",[]):
-        for entry in membership_base.groups.get(id,{}).get("entries",[]):removed[entry.node.get_instance_id()]=true
-    var floor_ids:Array=membership_base.ground.keys() if result.get("full_membership",true) else result.ground.keys()
-    for key in floor_ids:
-        var old:Dictionary=membership_base.ground.get(key,{})
-        if old.is_empty():continue
-        if not result.ground.has(key) or result.ground[key].is_empty():
-            for entry in old.entries:removed[entry.node.get_instance_id()]=true
-    for id in host.visual_actors:
-        if not result.get("actor_members",{}).has(id):
-            for entry in host.visual_actors[id].entries:removed[entry.node.get_instance_id()]=true
-        elif result.actors.has(id):
-            var retained:Dictionary=result.actors[id].retained_slots
-            for entry in host.visual_actors[id].entries:
-                if not retained.has(entry.actor_layer.slot):removed[entry.node.get_instance_id()]=true
-    atlas_prefix=AtlasDelta.begin_candidate(host.native_light_atlas,[],removed,host)
-    atlas_stage="sources"
-    # Retained floor geometry/sight operands need no future Node. These exact
-    # snapshots can enter capture while private source constructors still run.
-    for key in result.packets:
-        if not membership_base.ground.has(key) or (result.ground.has(key) and result.ground[key].is_empty()):continue
-        var entry:Dictionary=membership_base.ground[key].entries[0]
-        atlas_floor_updates[entry.node.get_instance_id()]=result.packets[key]
-        _queue_atlas_source(entry)
-    for row_id in result.get("visibility_changes",{}):
-        for consumer in host.scenery_consumers.get(row_id,[]):_queue_atlas_source(consumer.entry)
-        for entry in host.scenery_batches:
-            if entry.ground_indices.has(row_id):_queue_atlas_source(entry)
-
-func _queue_atlas_source(entry:Dictionary)->void:
-    if atlas_stage!="sources" or not entry.has("cell"):return
-    var id:int=entry.node.get_instance_id()
-    if atlas_prefix.removed_sources.has(id) or atlas_source_jobs.has(id):return
-    var packet:Dictionary=atlas_floor_updates.get(id,{})
-    var rows:Dictionary={}
-    var selected:Array=packet.geometry_changes.changed if not packet.is_empty() else entry.batch_rows if entry.has("batch_rows") else [entry.placement]
-    # Retained sight-only sources select only their changed rows. A source with
-    # future geometry keeps geometry order first, then the extra sight rows.
-    var retained_sight:bool=not is_ancestor_of(entry.node) and packet.is_empty()
-    if not retained_sight:
-        for row in selected:rows[str(row.id) if row is Dictionary else str(row)]=row
-    if entry.has("batch_rows"):
-        for row_id in result.get("visibility_changes",{}):
-            if not entry.ground_indices.has(row_id) or (not packet.is_empty() and not packet.indices.has(row_id)):continue
-            if not rows.has(row_id):rows[row_id]=str(row_id)
-    else:
-        var row_id:String=str(entry.placement.id)
-        if result.get("visibility_changes",{}).has(row_id):rows[row_id]=entry.placement
-    var published_visibility:bool=entry.node.visible and host.is_visible_in_tree() if is_ancestor_of(entry.node) else entry.node.is_visible_in_tree()
-    var job:Dictionary={"entry":entry,"rows":rows.values(),"packet":packet,"source_visible":published_visibility}
-    atlas_source_jobs[id]=job;atlas_source_queue.append(job)
-
-func _atlas_inputs_ready()->bool:
-    if objects_complete.size()!=(object_target_count if object_target_count>=0 else wanted_ids.size()) or ground_complete.size()!=(ground_target_count if ground_target_count>=0 else ground_keys.size()):return false
-    for id in actor_ids:
-        var actor:Dictionary=result.actors[id]
-        if actor.entries.size()!=actor.layers.size() or actor.get("source_ready",{}).size()!=actor.entries.size():return false
-    return true
-
-func _seal_atlas_manifest()->void:
-    _prepare_membership_inputs()
-    var source_order:Dictionary={}
-    # This is precisely the original membership-upsert sequence: objects,
-    # floors, new actor layers, then extra existing sight consumers. Native
-    # completion order and actual Node IDs never assign painter/address ranks.
-    for id in wanted_ids:
-        if native_groups.has(id):
-            for entry in native_groups[id].entries:
-                if entry.has("cell"):source_order[entry.node.get_instance_id()]=entry
-    for key in ground_keys:
-        var group:Dictionary=native_ground.get(key,membership_base.ground.get(key,{}))
-        if native_ground.has(key) or result.packets.has(key):
-            for entry in group.entries:
-                if entry.has("cell"):source_order[entry.node.get_instance_id()]=entry
-    for actor in native_actors.values():
-        for entry in actor.new_entries:
-            if entry.has("cell"):source_order[entry.node.get_instance_id()]=entry
-    for row_id in result.get("visibility_changes",{}):
-        for consumer in host.scenery_consumers.get(row_id,[]):
-            var entry:Dictionary=consumer.entry;var id:int=entry.node.get_instance_id()
-            if not atlas_prefix.removed_sources.has(id) and entry.has("cell"):source_order[id]=entry
-        for entry in host.scenery_batches:
-            var id:int=entry.node.get_instance_id()
-            if atlas_prefix.removed_sources.has(id) or not entry.ground_indices.has(row_id):continue
-            var packet:Dictionary=atlas_floor_updates.get(id,{})
-            if not packet.is_empty() and not packet.indices.has(row_id):continue
-            source_order[id]=entry
-    atlas_jobs=[]
-    for entry in source_order.values():
-        _queue_atlas_source(entry)
-        atlas_jobs.append(atlas_source_jobs[entry.node.get_instance_id()])
-    atlas_manifest_ready=true
-
-func _poll_atlas_task()->void:
-    if atlas_task<0 or not WorkerThreadPool.is_task_completed(atlas_task):return
-    WorkerThreadPool.wait_for_task_completion(atlas_task);atlas_task=-1
-    if atlas_prefix.has("error"):_prefix_failed();return
-    if not atlas_worker_accounted:
-        result.worker_ms=float(result.get("worker_ms",0.0))+float(atlas_prefix.get("worker_ms",0.0));atlas_worker_accounted=true
-    atlas_stage="reserve"
-
-func _step_atlas_overlap(deadline:int=9223372036854775807)->bool:
-    if atlas_stage.is_empty() or atlas_stage in ["ready","empty"]:return false
-    var started:int=Time.get_ticks_usec()
-    var step_stage:String=atlas_stage
-    if atlas_stage=="sources":
-        if atlas_source_cursor<atlas_source_queue.size():
-            var job:Dictionary=atlas_source_queue[atlas_source_cursor]
-            _prepare_atlas_job(job)
-            if not media_issue.is_empty():return false
-            if not AtlasDelta.capture_source_job(host.native_light_atlas,atlas_prefix,host,job):
-                _prefix_failed();return false
-            atlas_source_cursor+=1
-        elif not atlas_manifest_ready and _atlas_inputs_ready():_seal_atlas_manifest()
-        elif atlas_manifest_ready:
-            if atlas_jobs.is_empty() and atlas_prefix.removed_sources.is_empty():
-                atlas_prefix={};atlas_stage="empty"
-            else:
-                AtlasDelta.seal_candidate_jobs(host.native_light_atlas,atlas_prefix,atlas_jobs)
-                atlas_stage="capture"
-        else:return false
-    elif atlas_stage=="capture":
-        if AtlasDelta.capture_candidate(host.native_light_atlas,atlas_prefix,host):
-            if atlas_prefix.has("error"):_prefix_failed();return false
-            # Preserve the existing bounded single-dynamic lane; larger layouts
-            # use the one finite planner independently of final world sorting.
-            var inline_plan:bool=atlas_prefix.capture_sparse and atlas_prefix.source_patches.size()==1 \
-                and atlas_prefix.removed_sources.is_empty() and atlas_prefix.removed.is_empty() and atlas_prefix.floor_ids.is_empty() \
-                and atlas_prefix.capture_cells.is_empty() and atlas_prefix.capture_ids.size()<=1 and atlas_prefix.group_proofs.size()<=1
-            if inline_plan and Time.get_ticks_usec()<deadline:
-                var source:Dictionary=atlas_prefix.source_patches.values()[0]
-                inline_plan=source.info.dynamic and not source.entry.has("batch_rows") and source.rows.size()==1
-            else:inline_plan=false
-            if inline_plan:
-                AtlasDelta.compute_candidate(atlas_prefix);atlas_prefix.planning_lane="scene_single_dynamic";atlas_stage="reserve"
-                if atlas_prefix.has("error"):_prefix_failed();return false
-            else:
-                atlas_prefix.planning_lane="worker";atlas_stage="wait"
-                atlas_task=WorkerThreadPool.add_task(AtlasDelta.compute_candidate.bind(atlas_prefix),false,"Plan prepared lighting addresses")
-    elif atlas_stage=="wait":
-        _poll_atlas_task()
-        if atlas_stage=="wait":return false
-        if not media_issue.is_empty() or stale:return false
-    elif atlas_stage=="reserve":
-        if not AtlasDelta.reserve_candidate_capacity(host.native_light_atlas,atlas_prefix):_prefix_failed();return false
-        atlas_stage="bind"
-    elif atlas_stage=="bind":
-        if AtlasDelta.prepare_candidate_binding(host.native_light_atlas,atlas_prefix,atlas_shells):
-            if atlas_prefix.has("error"):_prefix_failed();return false
-            atlas_stage="ready"
-    if phase=="atlas_overlap" and atlas_stage in ["ready","empty"]:_finish_atlas_overlap()
-    if host.profile.get("recording",false):
-        var elapsed:int=Time.get_ticks_usec()-started
-        phase_usec.atlas_overlap=phase_usec.get("atlas_overlap",0)+elapsed
-        var key:String="atlas_"+step_stage
-        phase_usec[key]=phase_usec.get(key,0)+elapsed
-    return true
-
-func _finish_atlas_overlap()->void:
-    if not host.native_light_atlas.enabled:
-        # No receivers: the spell receiver boundary still covers every new entry.
-        atlas_jobs=membership.upserts.map(func(entry):return {"entry":entry})
-    if not atlas_worker_accounted:
-        result.worker_ms+=float(atlas_prefix.get("worker_ms",0.0));atlas_worker_accounted=true
-    # The normal receipt still contains actor/sight additions and old actor
-    # removals. Preparing them early does not change the displayed change set.
-    if not atlas_prefix.is_empty():membership.removed.merge(atlas_prefix.removed_sources)
-    var upserted:Dictionary={}
-    for entry in membership.upserts:upserted[entry.node.get_instance_id()]=true
-    for job in atlas_jobs:
-        var id:int=job.entry.node.get_instance_id()
-        if not upserted.has(id):membership.upserts.append(job.entry);upserted[id]=true
+# Every new entry joins the spell receiver boundary; nothing else is prepared
+# for lighting: sprites light themselves from the light table.
+func _finish_receivers() -> void:
+    boundary_jobs=membership.upserts.map(func(entry):return {"entry":entry})
     _finish_preparation()
-
-func _begin_atlas_preparation() -> void:
-    # Membership/order still gate publication, but they no longer gate source
-    # capture, receiver planning or private binding preparation.
-    if atlas_stage.is_empty():_begin_atlas_overlap()
-    if atlas_stage in ["ready","empty"]:_finish_atlas_overlap()
-    else:phase="atlas_overlap"
-
-func _prepare_atlas_receiver() -> void:
-    _prepare_atlas_job(atlas_jobs[atlas_cursor])
-    atlas_cursor+=1
-
-func _prepare_atlas_job(job:Dictionary)->void:
-    var entry: Dictionary=job.entry
-    var id: int=entry.node.get_instance_id()
-    if not job.has("prepared"):
-        var owned:Dictionary=atlas_shells.get(id,{})
-        if owned.get("private_static",false) or owned.get("private_actor",false):
-            owned.receiver_parent=host.native_light_atlas.projection_root
-            owned.output.private_node=is_ancestor_of(entry.node)
-            job.prepared=owned
-            return
-        if is_ancestor_of(entry.node) and not entry.has("batch_rows"):
-            var visibility:float=1.0 if entry.placement.kind=="actor" or candidate_visible(str(entry.placement.id)) else 0.0
-            SourceMaterial.set_parameter(entry,"current_visibility",visibility)
-            entry.scenery_value=visibility
-        var snapshot:Dictionary=entry.duplicate()
-        var packet:Dictionary=job.packet
-        if not packet.is_empty():
-            snapshot.ground_version=entry.get("ground_version",0)+1
-            snapshot.batch_rows=packet.rows;snapshot.ground_packets=packet.packets
-            snapshot.ground_indices=packet.indices
-            if packet.get("sparse",false):
-                snapshot.sparse_ground=true;snapshot.ground_row_changes=packet.row_changes
-                snapshot.erase("ground_buffer");snapshot.erase("scenery_values")
-                snapshot.ground_visibility={}
-                for row_id in packet.row_changes:snapshot.ground_visibility[row_id]=1.0 if candidate_visible(row_id) else 0.0
-                snapshot.placement=packet.row_changes.get(str(packet.rows[0].id),packet.rows[0])
-            else:
-                snapshot.ground_buffer=packet.buffer;snapshot.scenery_values=packet.values
-                snapshot.placement=packet.rows[0]
-        if snapshot.has("batch_rows") and not snapshot.get("sparse_ground",false):
-            snapshot.scenery_values=snapshot.scenery_values.duplicate()
-            snapshot.ground_buffer=snapshot.ground_buffer.duplicate()
-            snapshot.ground_packets=snapshot.ground_packets.duplicate()
-            # A full private floor packet already owns these values. Retained
-            # style-only rows need only their future scalar data here; native
-            # receiver creation belongs to the final planner packet below.
-            if packet.is_empty():
-                for selected in job.rows:
-                    var row_id:String=str(selected.id) if selected is Dictionary else str(selected)
-                    var index:int=snapshot.ground_indices[row_id]
-                    var value:float=1.0 if candidate_visible(row_id) else 0.0
-                    if snapshot.scenery_values[index]==value:continue
-                    snapshot.scenery_values[index]=value;snapshot.ground_buffer[index*20+16]=value
-                    var row_packet:Dictionary=snapshot.ground_packets[row_id].duplicate()
-                    row_packet.data=row_packet.data.duplicate();row_packet.data[16]=value
-                    snapshot.ground_packets[row_id]=row_packet
-        elif not snapshot.has("batch_rows"):
-            snapshot.scenery_value=1.0 if snapshot.placement.kind=="actor" or candidate_visible(str(snapshot.placement.id)) else 0.0
-        job.prepared=atlas_shells.get(id,{})
-        if job.prepared.is_empty():job.prepared=host.native_light_atlas.prepare_source_binding(entry,snapshot,host,true,{"defer_static_output":true},bool(host.profile.get("recording",false)))
-        if job.prepared.is_empty():
-            media_issue="World lighting preparation has no valid source bounds: "+str(entry.get("id",id))+" "+str(entry.get("atlas_preparation",{}))
-            phase="failed"
-            return
-        # Receiver nodes can enter their final canvas while hidden. Their maps
-        # stay exclusively owned here until the exact displayed atlas accepts
-        # them, so preparation neither publishes addresses nor exposes pixels.
-        job.prepared.receiver_parent=host.native_light_atlas.projection_root
-        job.prepared.output.private_node=is_ancestor_of(entry.node)
-        atlas_shells[id]=job.prepared
-    # Capture passive rows now; the planner owns their final support masks and
-    # projections. Native binding creates each receiver from that final packet
-    # once, instead of constructing a provisional row before planning it again.
-
-func publish_atlas_receivers() -> void:
-    if not host.native_light_atlas.enabled:
-        atlas_prefix={};atlas_jobs=[];return
-    for id in atlas_shells.keys():
-        if host.native_light_atlas.adopt_source_binding(atlas_shells[id]):
-            atlas_shells.erase(id)
-    # A replaced atlas rejects the old parent. Those private nodes remain ours
-    # and are released by the same bounded retirement path as cancellation.
-    host.native_light_atlas.prepared_delta=atlas_prefix
-    if not atlas_prefix.is_empty() or not host.native_light_atlas.prepared_source_bindings.is_empty() \
-        or not host.native_light_atlas.prepared_receiver_sources.is_empty():
-        atlas_retirement.blocked=true
-        host.native_light_atlas.prepared_cleanup=atlas_retirement
-    atlas_prefix={};atlas_jobs=[]
 
 func _capture_membership() -> void:
     # These collection owners are replaced at static admission, never updated by
     # actor sampling. Dynamic entries deliberately aren't part of this proof.
     membership_base = {"groups":host.world_groups,"ground":host.ground_groups,"entries":host.static_entries,
         "groups_size":host.world_groups.size(),"ground_size":host.ground_groups.size(),"entries_size":host.static_entries.size(),
-        "generation":host.world_generation,"quarter":host.world_quarter,"revision":host.world_revision,
-        "light_serial":host.native_light_change_serial}
+        "generation":host.world_generation,"quarter":host.world_quarter,"revision":host.world_revision}
 
 func can_publish_membership(target_revision: int = -1) -> bool:
     _refresh_actor_binding_owner()
@@ -1704,13 +1333,11 @@ func can_publish_membership(target_revision: int = -1) -> bool:
             if not is_same(host.visual_actors.get(id),actor.actor_base) or host.playbacks.get(id)!=actor.playback:return false
             if actor.has("shadow_base") and not is_same(host.generated_shadows.actors.get(id),actor.shadow_base):return false
     if not source_only() and not host.source_lighting.preparation_valid(light_preparation):return false
-    if not atlas_prefix.is_empty():
-        if not AtlasDelta.candidate_base_matches(host.native_light_atlas,atlas_prefix,host):return false
     var expected:int=host.timeline.world_revision if target_revision<0 else target_revision
     return epoch==host.timeline.initialization_revision and quarter==host.quarter \
         and boundary.get("world_revision",-1)==expected \
         and membership_base.generation==host.world_generation and membership_base.quarter==host.world_quarter \
-        and membership_base.revision==host.world_revision and membership_base.light_serial==host.native_light_change_serial \
+        and membership_base.revision==host.world_revision \
         and is_same(membership_base.groups,host.world_groups) and membership_base.groups_size==host.world_groups.size() \
         and is_same(membership_base.ground,host.ground_groups) and membership_base.ground_size==host.ground_groups.size() \
         and is_same(membership_base.entries,host.static_entries) and membership_base.entries_size==host.static_entries.size()
@@ -1918,11 +1545,10 @@ func publish_order() -> void:
         "quarter":quarter,"background":result.background,"generation":host.world_generation,"epoch":epoch}
 
 func worker_finished() -> bool:
-    return (task<0 or WorkerThreadPool.is_task_completed(task)) and (atlas_task<0 or WorkerThreadPool.is_task_completed(atlas_task)) and (environment_task<0 or WorkerThreadPool.is_task_completed(environment_task)) and (actor_resource_task<0 or WorkerThreadPool.is_task_completed(actor_resource_task))
+    return (task<0 or WorkerThreadPool.is_task_completed(task)) and (environment_task<0 or WorkerThreadPool.is_task_completed(environment_task)) and (actor_resource_task<0 or WorkerThreadPool.is_task_completed(actor_resource_task))
 
 func join() -> void:
     if task>=0: WorkerThreadPool.wait_for_task_completion(task); task = -1
-    if atlas_task>=0:WorkerThreadPool.wait_for_task_completion(atlas_task);atlas_task=-1
     if environment_task>=0:WorkerThreadPool.wait_for_task_completion(environment_task);environment_task=-1
     if actor_resource_task>=0:WorkerThreadPool.wait_for_task_completion(actor_resource_task);actor_resource_task=-1
 
@@ -1937,17 +1563,9 @@ func release_handles() -> Array:
     light_preparation={}
     for prepared in native_actors.values():
         held.append_array(prepared.get("new_entries",prepared.entries))
-    for prepared in atlas_shells.values():
-        for receiver in prepared.receivers.values():
-            if receiver.has("draw"):atlas_retirement.unused.append(receiver)
-            elif receiver.has("node"):
-                receiver.retire_external=true
-                held.append(receiver)
-    if not atlas_prefix.is_empty() or not atlas_shells.is_empty():
-        AtlasDelta.retire_candidate(atlas_retirement,atlas_prefix,atlas_shells,false)
     # Transfer native cleanup handles now. Passive completed projection,
     # membership and support values stay on this already-retiring owner until
     # its budgeted free; eagerly clearing them here made publication pay their
     # large Dictionary/Array destruction cost.
-    entries=[];atlas_shells={};atlas_prefix={};native_receiver_boundary={}
+    entries=[];native_receiver_boundary={}
     return held

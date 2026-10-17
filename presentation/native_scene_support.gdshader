@@ -1,15 +1,9 @@
 shader_type spatial;
 render_mode unshaded, cull_disabled, shadows_disabled, fog_disabled, depth_test_disabled, depth_draw_never;
-#include "source_atlas_uv.gdshaderinc"
 // Compose packet depth in the SAME source-over order as the painted outfit.
 // Independently inferred component depths must never reorder that outfit.
 uniform bool has_geometry=false;
 uniform sampler2D sheet:filter_nearest,repeat_disable;
-uniform sampler2D received:filter_nearest,repeat_disable;
-uniform vec4 source_crop=vec4(0.0,0.0,1.0,1.0);
-uniform vec4 atlas_region;
-// False for sprites lit in their own pass: the cell texel comes from UV.
-uniform bool atlas_addressed=true;
 uniform sampler2D component_depth:filter_nearest,repeat_disable;
 uniform sampler2D component_support:filter_nearest,repeat_disable;
 uniform sampler2D component_solid:filter_nearest,repeat_disable;
@@ -23,10 +17,8 @@ uniform mat3 display_basis;
 uniform vec2 sprite_pivot;
 uniform float ground_height;
 void fragment(){
-    if(any(lessThan(UV,source_crop.xy)) || any(greaterThanEqual(UV,source_crop.xy+source_crop.zw)))discard;
-    vec2 cell_uv=(UV-source_crop.xy)/source_crop.zw;
-    vec2 selected_uv=atlas_addressed?source_atlas_uv(cell_uv,atlas_region.xy,atlas_region.zw,vec2(textureSize(received,0)),source_crop)
-        :(floor(cell_uv*component_cell_size)+.5)/component_cell_size;
+    // The sprite lights one cell texel per fragment; address the same texel.
+    vec2 selected_uv=(floor(UV*component_cell_size)+.5)/component_cell_size;
     vec2 pixel=floor(selected_uv*component_cell_size)+.5;
     vec2 uv=frame_uv.xy+pixel/component_cell_size*frame_uv.zw;
     if(texture(sheet,uv).a<1.0)discard;
