@@ -115,6 +115,8 @@ var retiring_views: Array = []
 var retirement_frame = -1
 var retiring_node_count = 0
 const PREPARATION_USEC=2000
+const PREPARATION_NEAR_MS:=300.0
+const PREPARATION_NEAR_USEC:=3000
 const PREPARATION_DUE_MS:=150.0
 const PREPARATION_DUE_USEC:=4000
 const PREPARATION_HELD_USEC:=8000
@@ -498,7 +500,8 @@ func _preparation_limit()->int:
     if external_playback or pending_world==null or pending_world.prepared or pending_world.initial:return PREPARATION_USEC
     if timeline.waiting_for_world:return PREPARATION_HELD_USEC
     var until_ms:float=float(pending_world.boundary.get("display_ms",INF))-timeline.display_ms
-    return PREPARATION_DUE_USEC if until_ms<=PREPARATION_DUE_MS else PREPARATION_USEC
+    if until_ms<=PREPARATION_DUE_MS:return PREPARATION_DUE_USEC
+    return PREPARATION_NEAR_USEC if until_ms<=PREPARATION_NEAR_MS else PREPARATION_USEC
 
 func _charge_preparation(name:String,started:int,charged_before:int)->void:
     var budget:Dictionary=_preparation_budget()
