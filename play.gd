@@ -18,6 +18,7 @@ const LightTable = preload("res://presentation/light_table.gd")
 # CanvasModulate of the former receiving canvas; blood and effect pages keep 0.18.
 const LIGHT_AMBIENT := 0.30
 const GroundReceiving = preload("res://presentation/ground_receiving.gd")
+const BackgroundRelease = preload("res://presentation/background_release.gd")
 const NativeStartup = preload("res://presentation/native_source_startup.gd")
 var native_startup:Dictionary={"ready":false,"completed":0,"total":0,"elapsed_ms":0.0}
 # Sources are scoped to actual disclosed interests; Studio supplies recorded cues.
@@ -115,6 +116,12 @@ var retirement_frame = -1
 var retiring_node_count = 0
 const PREPARATION_USEC=2000
 var preparation_admission:Dictionary={"frame":-1,"used_usec":0,"limit_usec":PREPARATION_USEC,"phase_usec":{},"optional_order":[],"minimum_cleanup":0}
+# Optional preparation is skipped in a frame whose script work already passed
+# this, at most OPTIONAL_MAX_SKIPS frames in a row.
+const OPTIONAL_FRAME_LIMIT_USEC := 7000
+const OPTIONAL_MAX_SKIPS := 3
+const OPTIONAL_OWNER_PHASES := ["optional_owner_world","optional_owner_components","optional_owner_media","optional_owner_retirement"]
+var optional_skips := 0
 var preparation_turn:int=0
 var static_order: Array = []
 var static_complete_order: Array = []
@@ -513,12 +520,14 @@ func _native_startup_ready(at_ms:float)->bool:
 
 func _prepare_optional_work()->void:
     var budget:Dictionary=_preparation_budget()
+    var section:int=Time.get_ticks_usec()
     # A producer may finish while this frame draws the retained display. Adopt
     # its passive handoff now so native preparation need not start a frame late.
     if _receive_prepared_operations():
         _prepare_future_world()
         _prepare_media()
         _warm_media(true,budget,timeline.media_target_ms)
+    FrameProfile.end_phase(profile,"optional_received",section);section=Time.get_ticks_usec()
     var required_world:bool=timeline.waiting_for_world or _world_preparation_due(0.0)
     # Visible pending controls share the host allowance ahead of speculative
     # uploads. Otherwise a steady optional backlog can starve the bar forever.
@@ -527,6 +536,7 @@ func _prepare_optional_work()->void:
     # speculative work. Current required effects and uploads ran above; spend
     # their remainder on this cut before optional later effects/retirement.
     _step_world_preparation()
+    FrameProfile.end_phase(profile,"optional_world",section);section=Time.get_ticks_usec()
     # Rotate only the first existing owner. The queues and readiness contracts
     # stay where they were; empty owners leave their allowance to the next one.
     var first:int=preparation_turn;preparation_turn=(preparation_turn+1)%4
@@ -534,6 +544,7 @@ func _prepare_optional_work()->void:
         if budget.used_usec>=budget.limit_usec:break
         var owner:int=(first+offset)%4
         budget.optional_order.append(owner)
+        var owner_started:int=Time.get_ticks_usec()
         match owner:
             0:continue # The existing world owner already used its remainder.
             1:
@@ -549,6 +560,8 @@ func _prepare_optional_work()->void:
             3:
                 _prune_character_media(budget)
                 _dispose_views(budget)
+        FrameProfile.end_phase(profile,OPTIONAL_OWNER_PHASES[owner],owner_started)
+    FrameProfile.end_phase(profile,"optional_owners",section);section=Time.get_ticks_usec()
     # A requested rotation cannot release its previous view without cleanup.
     # Permit one existing cleanup unit under that explicit memory blocker;
     # charge the overrun rather than pretending it fitted the allowance.
@@ -557,6 +570,7 @@ func _prepare_optional_work()->void:
     var bytes:int=stats[false].estimated_bytes+stats[true].estimated_bytes
     var pinned:int=stats[false].pinned_bytes+stats[true].pinned_bytes
     if bytes>maxi(pinned,MediaWarmup.physical(media_warmup).budget_bytes):_prune_character_media(budget,true)
+    FrameProfile.end_phase(profile,"optional_residency",section)
 
 func _receive_prepared_operations()->bool:
     if session==null:return false
@@ -721,7 +735,13 @@ func _process(delta: float) -> void:
             print("PLAYER_READY: initialized, acknowledged, and current choices available")
     phase = Time.get_ticks_usec()
     if external_playback:_prepare_optional_work.call_deferred()
-    else:_prepare_optional_work()
+    elif phase-started<OPTIONAL_FRAME_LIMIT_USEC or optional_skips>=OPTIONAL_MAX_SKIPS:
+        optional_skips=0
+        _prepare_optional_work()
+    else:
+        # This frame already did its heavy work (a world publication, a burst
+        # of sampling); optional work waits a frame instead of extending it.
+        optional_skips+=1
     FrameProfile.end_phase(profile,"optional_preparation",phase)
     if not media_issue.is_empty():
         var preparing: Dictionary = timeline.current if not timeline.current.is_empty() else (timeline.queue[0] if not timeline.queue.is_empty() else {})
@@ -1305,6 +1325,8 @@ func _dispose_views(budget:Dictionary={},minimum:bool=false) -> void:
         view.nodes.pop_back()
         if is_instance_valid(node):
             var id = node.get_instance_id()
+            # A view root's tables are freed on a worker, not with the node.
+            if node.get_script()!=null:BackgroundRelease.release(BackgroundRelease.detach_tables(node))
             node.free()
             view.entries.erase(id)
         retiring_node_count -= 1
@@ -2443,7 +2465,10 @@ func _prune_character_media(budget:Dictionary={},minimum:bool=false) -> void:
     var charged_before:int=budget.get("used_usec",0)
     var admission_started:int=Time.get_ticks_usec()
     var started=Time.get_ticks_usec()
-    for path in MediaWarmup.release_cold_images(media_warmup): source_images.erase(path)
+    var released_images:Array=[]
+    for path in MediaWarmup.release_cold_images(media_warmup):
+        released_images.append(source_images.get(path));source_images.erase(path)
+    BackgroundRelease.release(released_images)
     FrameProfile.end_phase(profile,"media_release_cpu",started)
     started=Time.get_ticks_usec()
     var retired_paths:Array=MediaWarmup.prune(media_warmup)
@@ -2770,9 +2795,23 @@ func _publish_receiving() -> void:
         _publish_ground_supports(GroundReceiving.support_image(entries))
 
 func _publish_ground_supports(supports:Dictionary)->void:
-    ground_supports_texture=ImageTexture.create_from_image(supports.image)
+    # One texture while it is large enough: replacing a global texture re-queues
+    # every material that reads it. The rect bounds what the shader reads.
+    var image:Image=supports.image
+    var capacity:=Vector2i(ground_supports_texture.get_size()) if ground_supports_texture!=null else Vector2i.ZERO
+    var grown:bool=image.get_width()>capacity.x or image.get_height()>capacity.y
+    if grown:capacity=capacity.max(Vector2i(maxi(64,nearest_po2(image.get_width())),maxi(64,nearest_po2(image.get_height()))))
+    if image.get_size()!=capacity:
+        var padded:=Image.create_empty(capacity.x,capacity.y,false,image.get_format())
+        padded.blit_rect(image,Rect2i(Vector2i.ZERO,image.get_size()),Vector2i.ZERO)
+        image=padded
     ground_supports_rect=supports.rect
-    _publish_ground_supports_texture()
+    if grown:
+        ground_supports_texture=ImageTexture.create_from_image(image)
+        _publish_ground_supports_texture()
+        return
+    ground_supports_texture.update(image)
+    if publishes_receiving:RenderingServer.global_shader_parameter_set(&"ground_supports_rect",ground_supports_rect)
 
 func _publish_ground_supports_texture()->void:
     if not publishes_receiving: return
@@ -3910,6 +3949,7 @@ func _exit_tree() -> void:
     MediaWarmup.close(media_warmup)
     # Retired nodes remain scene children, so ordinary tree teardown owns them.
     retiring_views = []
+    BackgroundRelease.join()
 
 func error_report(displayed_message: String) -> Dictionary:
     # Copy only diagnostic state; connection tokens, requests and private config

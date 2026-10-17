@@ -5,8 +5,11 @@ extends RefCounted
 ## light_shader_xform, renderer_canvas_render_rd.cpp light uniforms), built
 ## with the same float32 Transform2D operations. Cookies are layers of one
 ## texture array, copied in on the GPU once per cookie and kept (no readback).
-## Both are shader globals: a light change is one small upload.
+## Both are shader globals: a light change is one small upload. The table keeps
+## one texture while its capacity suffices: replacing a global texture re-queues
+## every material that reads it (about 10 ms when a room's lights appeared).
 const TEXELS := 4
+const MIN_CAPACITY := 256
 const FLOATS := TEXELS * 4
 
 var rows := PackedFloat32Array() # CPU mirror, FLOATS per light, same order as the GPU rows.
@@ -14,8 +17,8 @@ var ids := PackedStringArray()
 var count := 0
 var issues: Array = []
 var uploads := 0
-var _image: Image
-var _table: ImageTexture
+var _table: ImageTexture # Null after invalidate(): the next publish rebinds the globals.
+var _texture: ImageTexture # The table's one texture, kept across invalidate().
 const COOKIE_SIZE := 256
 static var _cookie_publisher := 0 # Identity of the table whose array is bound.
 var _identity := 0
@@ -55,14 +58,17 @@ func publish(sources: Array, cookie_image: Callable) -> void:
     if next == rows and _table != null: return
     rows = next
     count = rows.size() / FLOATS
-    var data := rows if count > 0 else _empty_row()
-    var image := Image.create_from_data(TEXELS, maxi(count, 1), false, Image.FORMAT_RGBAF, data.to_byte_array())
-    if _table == null or _image.get_size() != image.get_size():
-        _table = ImageTexture.create_from_image(image)
+    var capacity: int = _texture.get_height() if _texture != null else 0
+    var grown := _texture == null or count > capacity
+    if grown: capacity = maxi(MIN_CAPACITY, nearest_po2(count))
+    var data := rows.duplicate()
+    data.resize(capacity * FLOATS)
+    var image := Image.create_from_data(TEXELS, capacity, false, Image.FORMAT_RGBAF, data.to_byte_array())
+    if grown: _texture = ImageTexture.create_from_image(image)
+    else: _texture.update(image)
+    if _table != _texture:
+        _table = _texture
         RenderingServer.global_shader_parameter_set(&"light_table", _table)
-    else:
-        _table.update(image)
-    _image = image
     RenderingServer.global_shader_parameter_set(&"light_count", count)
     uploads += 1
 
@@ -74,11 +80,6 @@ func _cookie_matrix(source: Dictionary) -> Transform2D:
     var node := Transform2D(0.0, source.cookie_scale, 0.0, source.screen_position)
     var shape := Transform2D(Vector2(rect.size.x, 0.0), Vector2(0.0, rect.size.y), rect.position)
     return (node * shape).affine_inverse()
-
-func _empty_row() -> PackedFloat32Array:
-    var row := PackedFloat32Array()
-    row.resize(FLOATS)
-    return row
 
 ## Forget what was uploaded, so the next publish rewrites every global.
 func invalidate() -> void:
