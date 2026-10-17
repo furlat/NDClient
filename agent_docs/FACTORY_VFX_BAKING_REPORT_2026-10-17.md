@@ -90,11 +90,10 @@ Largest recordings (all variants):
 | --- | --- | --- | --- |
 | Fireball explosion, fire | 735 | 4.0 s | 12.4 MB |
 | Fireball explosion, smoke | 715 | 4.0 s | 12.3 MB |
-| Chill Touch impact | 400 | 8.0 s | 8.6 MB |
 | Ray of Frost travel (`recovered/travelIce`) | 254 | 3.0 s | 6.6 MB |
 | Mage Armor (persistent) | 80 | 8.0 s, cut at the limit | 4.5 MB |
 
-All 66 baked clips together are 97 MB. Most are under 1 MB.
+The 64 baked clips (of 72; three keep a CPU trail, four are listed under known differences or structural limits) have 88 MB of recorded states (112 MB on disk with their scenes). Most are under 1 MB.
 
 What this means when authoring:
 
@@ -128,6 +127,41 @@ What this means when authoring:
 - Every cast picks one of three recorded variants by its seed. More variants,
   or variation in the shader (mirroring or rotating the recorded layout per
   cast), are possible later.
+
+## Known differences between baked and native (for the VFX agent)
+
+Found by the side-by-side review (`tests/baked_effect_checks.gd -- --all
+--sparse --save=<dir>`: native, a second native control and baked, at 25 %,
+50 % and 75 % of each clip, variant 0). "Changed" is the share of drawn pixels
+that differ by more than 8/255 from the native frame. Two native runs started
+on the same frame match exactly unless noted.
+
+| Clip | What differs | Status / what is known |
+| --- | --- | --- |
+| `spells/chill_touch/impact/impact` | The green skinned fist (`punch/Skeleton3D/demonhand`, shader with fresnel, `DetailsTexture`, `Color1DGradient`, `cutplane`) renders **dark in its interior** baked; native shows a bright green surface. Changed 37 %. | **Rejected: plays native.** Bone poses are now recorded (all 26 bones match native within 1e-6), and material parameters, the gradient texture, mesh format/vertex count, skin, light and visibility all match at the same time. Cause not found. Starting points: the `cutplane` uniform and what sets it (a `plane_cutter.gd` script exists in the selected scenes), the NORMAL/VIEW fresnel on the skinned mesh, and anything a script does to the fist that is not a node property, shader uniform or bone pose. |
+| `spells/burning_hands_production_xyz/whole/lifecycle` | Was black when baked. | **Fixed** (the flame emitters' override material was replaced by the imported mesh's material). Now 8 % changed; two native runs differ by 97 % on this clip (its emitters use `DRAW_ORDER_LIFETIME`). |
+| Projectile flights (`fireball_travel`, `magic_missile/travel`, `produce_flame/travel_back/travel`, `recovered/travel`, `recovered/travelIce`) | Particles left behind land a few pixels apart (native births them between frames along the moving emitter). After impact the native GPUTrail3D ribbon keeps a longer bright head; before launch the native ribbon draws a fragment of unfilled segments. | Accepted: coverage within 0–11 % and placement within 4–13 px during flight. Produce Flame's flight has the largest offset (12.9 px). |
+| `recovered/travel` | This clip id exists in two spells (Ray of Frost and Sleep) with **different contents**; only one can match a recording, the other plays native. | Give the two clips distinct ids in the Factory/import. |
+| `spells/thunderwave_production_xyz/whole/lifecycle` | 38 % changed against a native-to-native 11 %; looks the same at review size. | Accepted for now; worth a closer look at full size. |
+| `spells/guidance/back/*`, `spells/ice_knife_production_xyz_materials/debris/lifecycle` | 29–63 % changed, but the effects are a few pixels in the test framing; enlarged they look the same. | Accepted. |
+| `spells/magic_missile/default/impact` | Jumping straight to frame 12 differs from playing to it by 18 pixels (one small particle near the impact light). | Accepted; probably the light switching on in that frame reaching geometry one frame late. |
+| Emitters with built-in particle trails (`trail_enabled`, Fireball's ribbon sparks) | Trail history is rebuilt from playback; after a seek the trail is short for one trail length. | Known limitation. |
+
+Still native for structural reasons (listed earlier): Fire Bolt, Guiding Bolt
+and Scorching Ray flights (CPU `Trail3D.gd`), Command's back layer and Produce
+Flame's palm (emitters created during play), Sanctuary's back layer
+(camera-dependent parameter).
+
+Reproducing a difference:
+
+```sh
+# frames for one clip: native, baked, at 25/50/75 % (variant 0)
+$G --path . --rendering-method forward_plus --rendering-driver vulkan --fixed-fps 60 \
+   --script res://tests/baked_effect_checks.gd -- --clips=<clip id> --sparse --save=<dir>
+# hide nodes in every version to isolate a part: a name substring, or "particles"
+   ... -- --clips=<clip id> --sparse --hide=particles --save=<dir>
+# native everywhere (the game and tests): add -- --native-effects
+```
 
 ## Workflow
 
