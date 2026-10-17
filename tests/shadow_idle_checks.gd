@@ -64,7 +64,7 @@ func run() -> void:
             control._cookie_images=scene.generated_shadows._cookie_images.duplicate()
             control._prepare_sources(old_sources)
             var selected=control._dominant(scene.camera.unproject_position(scene.Placement.contact(actor.row)))
-            old[control._sources[selected].id if selected>=0 else ""]=true
+            old[control._source_ids[selected] if selected>=0 else ""]=true
             control.close()
             all_rows.append({"quarter":quarter,"frame":frame,"source_id":source,"native_direction":directions.back()})
             if quarter==1 and frame in [1,8]:
@@ -90,9 +90,9 @@ func run() -> void:
     var ppu=scene.camera.unproject_position(origin+scene.camera.global_basis.x).distance_to(scene.camera.unproject_position(origin))
     var ground=snapshots[0].ground_pixels*snapshots[0].component_units
     var selected=scene.generated_shadows._dominant(scene.camera.unproject_position(origin))
-    var source=scene.generated_shadows._sources[selected]
+    var source=scene.generated_shadows._source_row(selected)
     var zoom=snapshots[0].component_units*ppu
-    var projection=scene.generated_shadows._projection(scene.camera,origin,ground,snapshots[0].component_units,zoom,source)
+    var projection=scene.generated_shadows._projection(scene.camera,origin,ground,snapshots[0].component_units,zoom,source.screen_position,source.height)
     var probe=scene.GeneratedShadows.new();probe.attach(scene)
     for dimensions in [Vector2(1,10),Vector2(10,1),Vector2(1,1)]:
         var rect=probe._sampling_rect(Rect2(Vector2.ZERO,dimensions),1.0)

@@ -19,7 +19,7 @@ func run()->void:
     manager.attach(stage);reference.attach(stage)
     var authored=read(FACTORY.path_join("delivery/catalog.json"))
     var selected:Array=[packet(authored,FACTORY.path_join("delivery"),"goblin-01/idle"),modular()]
-    var cookie=texture("C:/Users/tommaso/Documents/Dev/NDCharacterLight/.reference-template/scenes/vfx/textures/T_basic1_vfx.PNG")
+    var cookie=light_cookie("C:/Users/tommaso/Documents/Dev/NDCharacterLight/.reference-template/scenes/vfx/textures/T_basic1_vfx.PNG")
     var timings:Dictionary={"original":[],"cached":[]}
     var frame_timings:Dictionary={"original":[],"cached":[]}
     var frame_copies:int=0
@@ -32,9 +32,9 @@ func run()->void:
             for step in 6:
                 var origin:=Vector3(step*.05,0,0)
                 actor.row.position=[origin.x,origin.z];entry.node.position=origin
-                var uv:Vector4=entry.material.get_shader_parameter("frame_uv")
+                var uv:Vector4=SourceMaterial.value(entry,"frame_uv")
                 uv.x=float(step%3)/entry.frames;uv.y=float(quarter*2)/8
-                entry.material.set_shader_parameter("frame_uv",uv)
+                SourceMaterial.set_parameter(entry,"frame_uv",uv)
                 var zoom:float=1.0/Placement.PIXELS_PER_UNIT*camera.unproject_position(camera.basis.x).distance_to(camera.unproject_position(Vector3.ZERO))
                 sources=[{"id":"reference","screen_position":camera.unproject_position(origin)+Vector2(14+step*3,42)*zoom,
                     "span":Vector2(cookie.get_size())*19.36*zoom,"height":(20+step)*zoom,"texture":cookie,
@@ -56,9 +56,9 @@ func run()->void:
                 check(is_same(shape,manager._caster_shapes[entry.id]),"Repeated sample reuses immutable geometry")
                 # This second actual source frame keeps actor/light/geometry
                 # fixed, exercising only the existing sample key's UV operand.
-                var next_uv:Vector4=entry.material.get_shader_parameter("frame_uv")
+                var next_uv:Vector4=SourceMaterial.value(entry,"frame_uv")
                 next_uv.x=float((step+1)%3)/entry.frames
-                entry.material.set_shader_parameter("frame_uv",next_uv)
+                SourceMaterial.set_parameter(entry,"frame_uv",next_uv)
                 manager.sync([actor],camera,sources);reference.sync([actor],camera,sources)
                 frame_copies+=int(manager.diagnostics().sync_counts.get("caster_frame_copies",0))
                 await process_frame;await RenderingServer.frame_post_draw
@@ -77,9 +77,9 @@ func run()->void:
                 check(current.viewport.get_texture().get_image().get_data()==previous.viewport.get_texture().get_image().get_data(),"Byte-exact light-only redraw")
         for cycle in 9:
             for step in 40:
-                var uv:Vector4=entry.material.get_shader_parameter("frame_uv")
+                var uv:Vector4=SourceMaterial.value(entry,"frame_uv")
                 uv.x=float(step%3)/entry.frames
-                entry.material.set_shader_parameter("frame_uv",uv)
+                SourceMaterial.set_parameter(entry,"frame_uv",uv)
                 var order=[[reference,"original"],[manager,"cached"]] if cycle%2==0 else [[manager,"cached"],[reference,"original"]]
                 for pair in order:
                     var began=Time.get_ticks_usec();pair[0].sync([actor],camera,sources)
@@ -90,8 +90,8 @@ func run()->void:
         for state in [current,previous]:
             state.casters[entry.id].material_override=state.casters[entry.id].material_override.duplicate()
             state.casters[entry.id].material_override.set_shader_parameter("component_units",0.0)
-        var replacement_uv:Vector4=entry.material.get_shader_parameter("frame_uv");replacement_uv.x=float(2)/entry.frames
-        entry.material.set_shader_parameter("frame_uv",replacement_uv)
+        var replacement_uv:Vector4=SourceMaterial.value(entry,"frame_uv");replacement_uv.x=float(2)/entry.frames
+        SourceMaterial.set_parameter(entry,"frame_uv",replacement_uv)
         manager.sync([actor],camera,sources);reference.sync([actor],camera,sources)
         check(manager.diagnostics().sync_counts.get("caster_frame_copies",0)==0,"Material replacement refuses UV-only update")
         for parameter in Shadows.CASTER_PARAMETERS:

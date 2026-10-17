@@ -24,7 +24,7 @@ func private_actor(source:Dictionary)->Dictionary:
 
 func lights()->Array:
     var zoom=1.0/Placement.PIXELS_PER_UNIT*camera.unproject_position(camera.basis.x).distance_to(camera.unproject_position(Vector3.ZERO))
-    var cookie=texture("C:/Users/tommaso/Documents/Dev/NDCharacterLight/.reference-template/scenes/vfx/textures/T_basic1_vfx.PNG")
+    var cookie=light_cookie("C:/Users/tommaso/Documents/Dev/NDCharacterLight/.reference-template/scenes/vfx/textures/T_basic1_vfx.PNG")
     return [{"id":"original-warm","screen_position":camera.unproject_position(Vector3.ZERO)+Vector2(14,42)*zoom,
         "span":Vector2(cookie.get_size())*19.36*zoom,"height":20*zoom,"texture":cookie,"energy":2.0,
         "color":Color(.809372,.429306,.269121),"enabled":true}]

@@ -92,9 +92,9 @@ func run()->void:
     var exposure:Dictionary=adapter.canvas_sources()[0]
     var packed=shadows._source_texture.get_image().get_pixel(0,0)
     check(Vector2(packed.r,packed.g).is_equal_approx(exposure.cookie_position) and Vector2(packed.b,packed.a).is_equal_approx(exposure.span),"Shadow composite samples the actual cookie ellipse/offset")
-    check(shadows._sources[0].screen_position==exposure.screen_position,"Shadow projection retains original optical origin")
+    check(shadows._source_row(0).screen_position==exposure.screen_position,"Shadow projection retains original optical origin")
     var legacy_source=exposure.duplicate();legacy_source.erase("cookie_position")
-    check(shadows._prepare_sources([legacy_source]) and shadows._sources[0].cookie_position==legacy_source.screen_position,"Legacy shadow fixture defaults cookie center to optical position")
+    check(shadows._prepare_sources([legacy_source]) and shadows._source_row(0).cookie_position==legacy_source.screen_position,"Legacy shadow fixture defaults cookie center to optical position")
     adapter.clear_pages();native_control.queue_free()
     actual.queue_free();reference.queue_free();projection.queue_free();await process_frame
     var report={"checks":checks,"failures":failures,"renderer":RenderingServer.get_current_rendering_method(),"driver":RenderingServer.get_current_rendering_driver_name(),"cases":cases,
