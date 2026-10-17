@@ -511,3 +511,62 @@ either.
   remaining defaults serve Studio's blood thumbnails (`thumbnail_cache.gd`)
   and several test harnesses; a Studio-side owner is needed before deleting
   `_native_budget`/`_prepare_budget`.
+
+## Afternoon, 17 October (after the atlas deletion)
+
+The afternoon runs shared the machine with an unrelated pytest job at 100 %
+CPU; absolutes drifted up by about 40 % across unrelated changes. Each change
+below is judged by its own phase maxima or by byte-identical captures, not
+by route medians.
+
+| Commit | Change | Evidence |
+|---|---|---|
+| `b803a81` | Sampled actors use an arithmetic clip clock (no AnimationPlayer/Tree per actor). | Equals the seek tree bit for bit for every clip of every rig (`runtime_retention_checks`). Door `actor_graph` 5.4 → 0.26 ms. |
+| `5350223` | Rotation prepares the target quarter's native floor receivers. | Native effects were not ready from q1 on; now ready in all four quarters (check added to the publication harness). |
+| `7fabca9` | Sprite quads shared by shape; shape changes swap the mesh. | A worker-built node with its own QuadMesh costs ~6 µs to attach, shared ~1.4 µs. Door objects 6.2 → 4.4 ms. |
+| `c89efaa` | Retained entries leave a retiring view root at rotated publication. | Studio reverse seek freed displayed terrain nodes; `studio_hide_render` now completes the seek (808 → 985 checks). |
+| `b1fc64d` | Lights awaiting preparation are pending, not presentation errors. | `fireball_layer_ownership` 25/0 (was 25/1); `native_spell_playback` 1911/2 (was 1871/6). |
+| `8548532` | New actor layers join the spell receiver boundary. | Agent report item 2. |
+| `667db0e` | Blood lights itself from the light table; its two full-screen PointLight2D pages are gone. | Light projection max 9–10 → 0.5 ms. All 29 `studio_blood_residue` captures and the gate's game views byte-identical. |
+| `7994a38` | One texture per receiving global; retired view tables and decoded images freed on a worker; optional work waits a frame after a heavy frame. | Replacing a global texture re-queued every material (~10 ms). View retirement max 14.6 → ~2 ms; image release 5.8 → 0.14 ms. |
+
+### Door critical path (run `T125712`)
+
+Packet at 164 ms → source-only cut prepared at ~197 ms → static forecast
+derivation on a worker until ~263 ms → construction 271–393 ms → membership,
+scenery and sort until ~423 ms. Construction is main-thread bound: 16 frames
+at the 2 ms budget, 22 ms of world work and 9.5 ms of texture handoff. The
+room was ready before the cue in these runs (world hold 0 in most). Per item
+on the main thread: ~37 µs per actor layer (24 µs completing late textures),
+~25 µs per object, against ~1.4 µs for the attach itself.
+
+### Packet → first animation
+
+About 40–55 ms happen off the main thread before the group exists. A move
+packet is 347 KB: JSON 9.7 ms (str_to_var fast path), reducer 15.6 ms
+(sensory facts 9.1 ms), compile 7.5 ms. Packet size is server-side.
+
+### Texture uploads (open, L8)
+
+A Gallery run uploads ~900 sheets of 1920×1024 (~7 GB). Most cost ~0.4 ms,
+but about 1 % take ~10 ms (allocation), and any main-thread RenderingDevice
+call waits for them: a 16 KB light-table update was measured at 2–8.5 ms.
+Serializing worker uploads, main-thread uploads and a 512 MB staging buffer
+were each tried and did not help. Crop-and-pack into preallocated page
+arrays (L8) removes allocation during play and cuts the bytes 25–35×.
+
+### Spike attribution (three contended runs)
+
+194 script spikes and about 50 engine-side stalls. 146 of the script spikes
+are Fireball frames (`actor_sample`/`component_sample` 4 ms,
+`session_timeline` 3.5 ms on average in a spike). A Fireball frame is
+~7.5 ms of script at p50, spread over many 0.4–1.4 ms parts.
+
+### Known failures checked against the previous commit (same on both)
+
+`studio_blood_residue` (2: field allocation pacing), `impact_placement`
+(null socket attachment), `condition_pose` (recording decode),
+`character_geometry_render`, `receiver_bounds` (fixture), and
+`actor_preparation` (fixture lacks `source_sample`).
+`native_spell_playback` keeps 2 failures: blood fields are never prepared for
+a restored residue tile.
