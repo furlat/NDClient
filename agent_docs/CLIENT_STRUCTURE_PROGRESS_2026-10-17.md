@@ -204,9 +204,51 @@ held: objects 16.5 (of which 6.5 ms is the one-time `Texture2DArray` build of
 a newly seen flame clip), actors 12.2, atlas source capture 11.1,
 bind/capture/reserve 9.5, environment capture 2.8.
 
+### R4 — first shader use moved to startup (done)
+
+The 6.5 ms object chunk was not the flame's texture array (its upload is
+0.29 ms). A probe on native Godot showed the cost is the **first** assignment
+of a shader to any material, paid once per shader per session and not again
+after that material is freed (`fixture_flame` 5.5 ms, `canvas_fixture_flame`
+2.5 ms, `canvas_environment_unshaded` 4.3 ms, `canvas_water` 6.6 ms,
+`canvas_capped_water` 12.1 ms, `water` 11.8 ms). The door was the first
+place these appeared: the flame body chunk in an animating frame, and the
+3.4 ms flame-receiver chunk when priming the first flame. The atlas owner now
+lists its receiving and output shaders (`RECEIVING_SHADERS`), and Play
+assigns those plus the environment, water, flame and modular source shaders
+once in `_ready`. A worker-built flame texture array was tried and reverted:
+it saved only the 0.29 ms upload.
+
+### R5 — support cells captured with their first source (done)
+
+The planner capture visited each needed support cell (1,131 for the door) in
+its own preparation step after the last source. `_need_cell` now captures a
+cell's owners and published height when a source first needs it. The capture
+token still proves the atlas did not change, cell order is unchanged, and the
+receiver set is still sorted by list index. Capture after construction fell
+from 3.6 to 1.3 ms (3 → 2 frames).
+
+### Result (interleaved, same window)
+
+| Runs | Door world hold, per run | Median |
+|---|---|---:|
+| Current (`T014059`, `T014237`, `T014413`) | 265.8, 179.1, 197.9 | **197.9** |
+| Committed `eff11fd` (`T014154`, `T014332`, `T014502`) | 275.5, 190.8, 221.6 | 221.6 |
+| Earlier pair, before reverting the texture array (`T013122`… vs `T013215`…) | 224.1, 217.8, 160.0 vs 257.4, 247.2, 240.7 | 217.8 vs 247.2 |
+
+The current code is faster in every pair. Door scene-thread work
+72.7 → 61.6 ms (objects 16.5 → 10.7, flame priming 4.45 → 0.74), over
+38 frames (24 held) instead of 43 (27). The only remaining over-budget chunk
+is the first construction frame (5.5 ms: result adoption, atlas begin,
+environment capture). Checks: live environment admission 36, world
+preparation sparse 78, world atlas preparation 172 (native), world preview
+10,079; the capture-related suites give the same results as `eff11fd`
+(native atlas output sample 159, actor resource preparation 305; native light
+capture, native atlas staged and receiver ownership are red or time out the
+same way on both).
+
 Next on this path: planner bookkeeping (records, spec copies, plan specs),
-the publication frame, the flame clip build off the scene thread, and
-construction work.
+the publication frame, and construction work.
 
 ## Tests that were already failing at the checkpoint
 
@@ -233,6 +275,11 @@ Confirmed red with the original code (not caused by this work):
   `worker_ms` in `_poll_actor_resources`; identical on `3e4d22e`.
 - `tests/blood_world_preparation_checks.gd` — "Blood world preparation
   deadline" (exit 2); identical on `3e4d22e`.
+- `tests/native_light_capture_checks.gd` — 17 script errors, "Changed
+  admitted token rejects private prefix before worker publication";
+  identical on `eff11fd`.
+- `tests/native_atlas_staged_checks.gd` — exceeds a 400 s timeout on
+  `eff11fd` as well.
 
 One live run (`20261017T005810`) failed 2 of 78 checks: the second Fireball's
 target click received its preview, but the client never sent the command

@@ -322,6 +322,8 @@ func _ready() -> void:
     if settings.error != OK: presentation_errors.append("Cannot read local rendering settings: "+error_string(settings.error))
     native_light_atlas.require_prepared_publication=true
     native_light_atlas.attach(self)
+    # Source and receiving shaders a reveal may meet first mid-play.
+    NativeLightAtlas.compile_shaders(NativeLightAtlas.RECEIVING_SHADERS+[ENVIRONMENT_SHADER,WATER_SHADER,FIXTURE_FLAME_SHADER,ActorConstruction.MODULAR_SHADER])
     light_cap_enabled = settings.light_cap_enabled
     native_light_atlas.set_light_cap(1.0 if light_cap_enabled else 0.0)
     source_lighting.attach(native_light_atlas.viewport)

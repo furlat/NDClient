@@ -452,16 +452,27 @@ static func publish_global(atlas,work:Dictionary,cleanup:Dictionary)->void:
     cleanup.blocked=true;atlas.prepared_cleanup=cleanup
     work.bindings={};work.prefix={}
 
-static func _need_support(work:Dictionary,row:Dictionary)->void:
+static func _need_support(atlas,work:Dictionary,row:Dictionary)->void:
     if not GroundReceiving.eligible(row):return
     var cell=Vector2(row.position[0],row.position[1])
+    _need_cell(atlas,work,cell)
+    for direction in GroundReceiving.DIRECTIONS:_need_cell(atlas,work,cell+direction)
+
+static func _need_cell(atlas,work:Dictionary,cell:Vector2)->void:
+    # Each support cell is captured once, with the source that first needs it,
+    # instead of in a separate pass after the last source. The capture token
+    # proves the atlas did not change in between; cell order is unchanged.
+    if work.needed_cells.has(cell):return
     work.needed_cells[cell]=true
-    for direction in GroundReceiving.DIRECTIONS:work.needed_cells[cell+direction]=true
+    var owners:Dictionary=atlas.support_owners.get(cell,{})
+    work.passive.support_owners[cell]=owners.duplicate()
+    if atlas.published_supports.has(cell):work.passive.published_supports[cell]=atlas.published_supports[cell]
+    for id in owners:work.needed_receivers[id]=true
 
 static func _need_receiver(atlas,work:Dictionary,id:String)->void:
     if not atlas.receiver_index.has(id):return
     work.needed_receivers[id]=true
-    _need_support(work,atlas.receiver_index[id].row)
+    _need_support(atlas,work,atlas.receiver_index[id].row)
 
 static func _capture_removal(atlas,work:Dictionary,id:String)->void:
     if work.capture_sparse:
@@ -582,7 +593,7 @@ static func _capture_source_value(atlas,work:Dictionary,world,job:Dictionary)->b
                 work.private_groups[id]={group.id:group}
         if work.capture_sparse:
             _need_receiver(atlas,work,str(id)+":source")
-            _need_support(work,source.rows[0])
+            _need_support(atlas,work,source.rows[0])
         work.source_patches[id]=source
         return false
     var snapshot:Dictionary=prepared.snapshot if not prepared.is_empty() else entry.duplicate()
@@ -645,7 +656,7 @@ static func _capture_source_value(atlas,work:Dictionary,world,job:Dictionary)->b
             var row:Dictionary=selected if selected is Dictionary else sampled_row(snapshot,str(selected))
             var receiver_id:String=str(id)+":"+(str(row.id) if entry.has("batch_rows") else "source")
             _need_receiver(atlas,work,receiver_id)
-            _need_support(work,row)
+            _need_support(atlas,work,row)
     work.source_patches[id]=source
     if entry.has("batch_rows"):work.floor_ids[id]=true
     return false
@@ -667,13 +678,7 @@ static func capture_candidate(atlas,work:Dictionary,world)->bool:
             work.capture_cells=work.needed_cells.keys();work.cursor=0;work.stage="supports"
             return false
         if work.stage=="supports":
-            if work.cursor<work.capture_cells.size():
-                var cell:Vector2=work.capture_cells[work.cursor];work.cursor+=1
-                var owners:Dictionary=atlas.support_owners.get(cell,{})
-                work.passive.support_owners[cell]=owners.duplicate()
-                if atlas.published_supports.has(cell):work.passive.published_supports[cell]=atlas.published_supports[cell]
-                for id in owners:work.needed_receivers[id]=true
-                return false
+            # Every needed cell was captured with its first source (_need_cell).
             # Preserve the full snapshot's exact removal/reservation traversal.
             # Native array searches/sort avoid a GDScript walk of every receiver.
             var positions=PackedInt64Array();var ids={}

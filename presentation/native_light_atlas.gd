@@ -16,6 +16,10 @@ const WaterReceiver = preload("res://presentation/canvas_water.gdshader")
 const NonreceivingDebug = preload("res://presentation/canvas_nonreceiving_debug.gdshader")
 const FlameReceiver = preload("res://presentation/canvas_fixture_flame.gdshader")
 const FlameSource = preload("res://presentation/fixture_flame.gdshader")
+# Each shader's first material assignment compiles it once per session
+# (2.5–12 ms measured). Reveals create these receiving/output materials
+# mid-play, so the owner assigns each once while it is attached.
+const RECEIVING_SHADERS = [CappedEnvironment,CappedModular,CappedWater,Output,EnvironmentReceiver,ShadowReceiver,ModularReceiver,WaterReceiver,FlameReceiver]
 const MAX_SIZE = 8192
 const AMBIENT_INTENSITY = 0.30
 # These parameters have explicit style/output owners below. They do not change
@@ -505,6 +509,10 @@ func static_environment_options(world:Node,packets:Dictionary={},images:Dictiona
     return {"roles":roles,"basis":Basis(world.camera.global_basis.x,-world.camera.global_basis.y,world.camera.global_basis.z).transposed(),
         "screen_size":world.get_viewport().get_visible_rect().size,"parent_transform":world.global_transform,
         "received":viewport.get_texture(),"transport":[viewport.get_instance_id(),_uses_hdr(),light_cap],"cached_crops":crops}
+
+static func compile_shaders(shaders:Array)->void:
+    for shader in shaders:
+        var material:=ShaderMaterial.new();material.shader=shader
 
 static func _binding_shell(entry:Dictionary,sampled:Dictionary,source:Dictionary,output:Dictionary,group_input:Dictionary,basis:Basis,screen:Vector2)->Dictionary:
     return {"entry":entry,"snapshot":sampled,"source":source,"signature":source.signature,"info":source.info,
