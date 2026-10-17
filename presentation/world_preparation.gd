@@ -310,6 +310,13 @@ static func derive_static(input:Dictionary,output:Dictionary)->void:
         var now_static: bool = not row.is_empty() and not _floor(row,background)
         full_membership = full_membership or was_static!=now_static
     var all_rows: Array = _all_visual(input.retained,patch) if full_membership else []
+    # Terrain supports for the lit floors' join masks, rebuilt only when terrain rows change.
+    var terrain_changed: bool = full_membership
+    if not terrain_changed:
+        for id in patch.visual_changes:
+            if GroundReceiving.eligible(patch.visual_changes[id]) or GroundReceiving.eligible(_old_visual(input.retained,id)):
+                terrain_changed = true; break
+    var ground_supports: Dictionary = GroundReceiving.support_image_rows(all_rows if full_membership else _all_visual(input.retained,patch)) if terrain_changed else {}
     # Support directories and wall geometry read only immutable after-values
     # and touch no catalog cache. They overlap visibility, routing, ground and
     # source preparation instead of extending this worker's sequence.
@@ -478,7 +485,7 @@ static func derive_static(input:Dictionary,output:Dictionary)->void:
     var value:Dictionary={"light_resolution":light_resolution,"geometry":geometry,
         "row_patch":patch,"wanted":wanted,"removed_wanted":removed_wanted,"ground":ground,"packets":packets,"supports":supports,
         "background":background,"full_membership":full_membership,"global_rows":input.global_rows,"needs_order":full_membership,
-        "visibility":sight.visibility,"visibility_sparse":sight.sparse,"visible_cells":sight.cells,"ground_support":ground_support,
+        "visibility":sight.visibility,"visibility_sparse":sight.sparse,"visible_cells":sight.cells,"ground_support":ground_support,"ground_supports":ground_supports,
         "visibility_base":input.visibility,"visibility_changes":sight.changes,"blood_rows":blood_rows,"blood_index":blood_index,
         "object_sources":object_sources,"ground_sources":ground_sources,"environment_paths":environment_paths,"environment_packets":environment_packets,
         "environment_source_record":MediaWarmup.source_record(environment_paths,environment_paths,environment_fixtures)}

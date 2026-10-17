@@ -30,17 +30,27 @@ static func mask(row: Dictionary, supports: Dictionary) -> int:
 ## that derive their mask in the shader: texel = highest eligible terrain step at
 ## that cell, or -1e30 where there is none. rect = (first cell x, y, width, height).
 static func support_image(entries: Array) -> Dictionary:
-    var supports := heights(entries)
+    var rows: Array = []
+    for entry in entries: rows.append_array(entry.get("batch_rows",[entry.placement]))
+    return support_image_rows(rows)
+
+## The support texture from visual rows directly (worker-safe: rows are immutable).
+static func support_image_rows(rows: Array) -> Dictionary:
+    var supports := {}
+    for row in rows:
+        if not eligible(row): continue
+        var cell = Vector2(row.position[0],row.position[1])
+        supports[cell] = maxf(float(supports.get(cell,-INF)),float(row.base_height_steps))
     if supports.is_empty():
-        var empty := Image.create_empty(1, 1, false, Image.FORMAT_RF)
-        empty.fill(Color(-1e30, 0, 0))
-        return {"image": empty, "rect": Vector4(0, 0, 1, 1)}
+        return {"image": Image.create_from_data(1, 1, false, Image.FORMAT_RF, PackedFloat32Array([-1e30]).to_byte_array()), "rect": Vector4(0, 0, 1, 1)}
     var low := Vector2(INF, INF); var high := -low
     for cell in supports:
         low = low.min(cell); high = high.max(cell)
     var size := Vector2i(high - low) + Vector2i.ONE
-    var image := Image.create_empty(size.x, size.y, false, Image.FORMAT_RF)
-    image.fill(Color(-1e30, 0, 0))
+    var texels := PackedFloat32Array()
+    texels.resize(size.x * size.y)
+    texels.fill(-1e30)
     for cell in supports:
-        image.set_pixelv(Vector2i(cell - low), Color(float(supports[cell]), 0, 0))
-    return {"image": image, "rect": Vector4(low.x, low.y, size.x, size.y)}
+        var at := Vector2i(cell - low)
+        texels[at.y * size.x + at.x] = supports[cell]
+    return {"image": Image.create_from_data(size.x, size.y, false, Image.FORMAT_RF, texels.to_byte_array()), "rect": Vector4(low.x, low.y, size.x, size.y)}

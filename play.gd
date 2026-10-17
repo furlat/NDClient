@@ -37,6 +37,7 @@ var receiving_globals: Array = []
 var publishes_receiving := true
 var ground_supports_revision := -1
 var ground_supports_texture: ImageTexture
+var ground_supports_rect := Vector4(0, 0, 1, 1)
 var generated_shadow_ids: Array = []
 const RenderSettings = preload("res://presentation/render_settings.gd")
 var character_light_profile = RenderSettings.DEFAULT_PROFILE
@@ -1016,6 +1017,9 @@ func _sync_world() -> void:
     world_revision = timeline.world_revision
     var detail_started:int=Time.get_ticks_usec()
     if not prepared.is_empty():
+        # The worker rebuilt the terrain supports only if terrain rows changed.
+        if not prepared.get("ground_supports",{}).is_empty():_publish_ground_supports(prepared.ground_supports)
+        ground_supports_revision=world_revision
         source_lighting.publish_prepared(pending_world.light_preparation)
         var senses:Variant=timeline.state.get("senses")
         var inputs:Variant=senses.get("light_sources") if senses!=null else null
@@ -2754,19 +2758,28 @@ func _publish_receiving() -> void:
         RenderingServer.global_shader_parameter_set(&"light_ambient",ambient.linear_to_srgb().srgb_to_linear().r if hdr else ambient.r)
         RenderingServer.global_shader_parameter_set(&"light_cap",cap)
         RenderingServer.global_shader_parameter_set(&"light_normals",normals_visible)
+    # Worlds published without a preparation (isolated fixtures) build them here.
     if ground_supports_revision!=world_revision:
         ground_supports_revision=world_revision
-        var supports:Dictionary=GroundReceiving.support_image(entries)
-        ground_supports_texture=ImageTexture.create_from_image(supports.image)
-        RenderingServer.global_shader_parameter_set(&"ground_supports",ground_supports_texture)
-        RenderingServer.global_shader_parameter_set(&"ground_supports_rect",supports.rect)
+        _publish_ground_supports(GroundReceiving.support_image(entries))
+
+func _publish_ground_supports(supports:Dictionary)->void:
+    ground_supports_texture=ImageTexture.create_from_image(supports.image)
+    ground_supports_rect=supports.rect
+    _publish_ground_supports_texture()
+
+func _publish_ground_supports_texture()->void:
+    if not publishes_receiving: return
+    RenderingServer.global_shader_parameter_set(&"ground_supports",ground_supports_texture)
+    RenderingServer.global_shader_parameter_set(&"ground_supports_rect",ground_supports_rect)
 
 ## Make this world the publisher of the receiving globals and republish them all.
 func claim_receiving() -> void:
     publishes_receiving = true
     light_table.invalidate()
     receiving_globals = []
-    ground_supports_revision = -1
+    if ground_supports_texture != null: _publish_ground_supports_texture()
+    else: ground_supports_revision = -1
 
 func _facing(direction: Vector2) -> String:
     var cycle: Array = rig_config.FACING_CYCLE
