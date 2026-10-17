@@ -52,6 +52,8 @@ var component_renderer = ComponentRenderer.new()
 var displayed_components: Array = []
 var pending_world: Variant
 var static_forecast:Dictionary={}
+# Changes whenever a path enters or leaves `textures` (upload or prune).
+var texture_revision:int=0
 var prepared_actor_owner: Variant
 var world_prepare_epoch = -1
 var world_prepare_worker_phases:Dictionary={}
@@ -2497,7 +2499,7 @@ func _prune_character_media(budget:Dictionary={},minimum:bool=false) -> void:
     started=Time.get_ticks_usec()
     for path in retired_paths:
         for owner in MediaWarmup.hosts(media_warmup):owner._release_actor_source(path)
-        textures.erase(path)
+        if textures.erase(path):texture_revision+=1
         source_images.erase(path)
         texture_last_use.erase(path)
     FrameProfile.end_phase(profile,"media_prune_retire",started)
@@ -2575,6 +2577,7 @@ func _warm_media(required_only:bool=false,budget:Dictionary={},through_ms:float=
         var created:bool=not textures.has(loaded.path)
         if created:
             textures[loaded.path] = loaded.texture if loaded.has("texture") else ImageTexture.create_from_image(loaded.image)
+            texture_revision+=1
         var creation_ms:float=(Time.get_ticks_usec()-phase)/1000.0
         FrameProfile.end_phase(profile,"media_texture_create",phase)
         uploads.append({"path":loaded.path,"created":created,"create_ms":creation_ms,"worker_upload_ms":loaded.get("worker_upload_ms",0.0),"decode_ms":loaded.get("elapsed_ms",0.0),"decode_phases_ms":loaded.get("phases_ms",{}),"worker_clock_us":loaded.get("worker_clock_us",{}),"width":loaded.image.get_width(),"height":loaded.image.get_height(),"gpu_estimated_bytes":loaded.gpu_bytes})

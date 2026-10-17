@@ -20,6 +20,9 @@ var viewport:SubViewport
 var camera:Camera3D
 var depth_copy:MeshInstance3D
 var solid_masks:Dictionary={}
+# Inputs of the last adopt(): residency revision and selected (path, slot) pairs.
+var _adopt_key:Array=[]
+var _adopt_result:Dictionary={}
 var issues:Array=[]
 var ready:bool=true
 var _outputs:Array=[]
@@ -53,17 +56,26 @@ func prepare(path:String,slot:String,host:Node)->void:
     if mask!=null:solid_masks[path]=mask
 
 func adopt(host:Node)->Dictionary:
-    var pending:Array=[]
+    # The result depends only on each selected layer's displayed path/slot and
+    # on which textures are resident. A host that tracks residency changes
+    # skips the descriptor walk while neither changed.
+    var revision:Variant=host.get("texture_revision")
+    var key:Array=[revision]
     for visual in host.visual_actors.values():
         for entry in visual.entries:
             if entry.role=="shadow" or not entry.actor_layer.get("effect",{}).is_empty():continue
             var path:String=entry.get("texture_path","")
-            if path.is_empty():continue
-            var paths=required_paths(path,entry.actor_layer.slot,host.catalog_cache)
-            if paths.is_empty():continue
-            if not host.textures.has(paths.solid):pending.append(paths.solid);continue
-            solid_masks[path]=host.textures[paths.solid]
-    return {"ready":pending.is_empty(),"pending":pending}
+            if not path.is_empty():key.append(path);key.append(entry.actor_layer.slot)
+    if revision!=null and key==_adopt_key:return _adopt_result
+    var pending:Array=[]
+    for index in range(1,key.size(),2):
+        var path:String=key[index]
+        var paths=required_paths(path,key[index+1],host.catalog_cache)
+        if paths.is_empty():continue
+        if not host.textures.has(paths.solid):pending.append(paths.solid);continue
+        solid_masks[path]=host.textures[paths.solid]
+    _adopt_key=key;_adopt_result={"ready":pending.is_empty(),"pending":pending}
+    return _adopt_result
 
 func attach_shared(host:Node3D)->void:
     _attach(host,host,null)
@@ -101,7 +113,7 @@ func set_enabled(value:bool)->void:
         for material in _outputs:material.set_shader_parameter("native_scene_enabled",false)
         _outputs.clear()
         _source_bindings.clear()
-        solid_masks.clear()
+        solid_masks.clear();_adopt_key=[]
         for node in actors.values():
             for parameter in ["sheet","received","component_depth","component_support","component_solid"]:
                 node.material_override.set_shader_parameter(parameter,null)
@@ -342,7 +354,7 @@ func close()->void:
     for material in _outputs:material.set_shader_parameter("native_scene_enabled",false)
     _outputs.clear()
     _source_bindings.clear()
-    solid_masks.clear()
+    solid_masks.clear();_adopt_key=[]
     if is_instance_valid(depth_copy):depth_copy.free()
     if is_instance_valid(owner):owner.free()
     if is_instance_valid(viewport):viewport.free()
