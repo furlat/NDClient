@@ -534,6 +534,14 @@ static func _actor_structure_value(actor:Dictionary,loadouts:Dictionary,inputs:A
     var selected=Authoring.Characters.structure(ActorConstruction.actor_with_loadout(actor,loadouts),cache)
     return selected.value if selected.ok else {"error":selected.error}
 
+## Only effect layers (spell overlays) differ. A live host builds those layers
+## while sampling (play.gd _reconcile_actor_layers): no world preparation.
+static func _effect_only_change(before:Dictionary,after:Dictionary)->bool:
+    if before.is_empty() or after.is_empty() or before.has("error") or after.has("error"):return false
+    if before.rig!=after.rig or before.appearance!=after.appearance:return false
+    var base:=func(layer):return layer.get("effect",{}).is_empty()
+    return before.equipment_layers.filter(base)==after.equipment_layers.filter(base)
+
 static func _actor_source_clip(actor:Dictionary,structure:Dictionary,sample:Dictionary,cache:Dictionary)->String:
     if structure.is_empty() or structure.has("error"):return ""
     if not sample.is_empty():return sample.clip
@@ -584,7 +592,7 @@ static func _actor_structure_requirements(before:Dictionary,groups:Array,cache:D
             previous[id]=_actor_structure_value(actor,initial_loadouts,previous_inputs[id],cache)
             previous_clips[id]=_actor_source_clip(actor,previous[id],{},cache)
         var times:Array=cuts.keys();times.sort()
-        var boundaries:Dictionary={};var source_boundaries:Dictionary={};var cursor=0
+        var boundaries:Dictionary={};var source_boundaries:Dictionary={};var effect_boundaries:Dictionary={};var cursor=0
         for at in times:
             while cursor<group.commits.size() and group.commits[cursor].at_ms<=at:
                 var commit:Dictionary=group.commits[cursor]
@@ -602,7 +610,9 @@ static func _actor_structure_requirements(before:Dictionary,groups:Array,cache:D
                 var inputs=_actor_structure_inputs(actor,state,staged,loadouts)
                 if previous_inputs[id]!=inputs:
                     var value=_actor_structure_value(actor,loadouts,inputs,cache)
-                    if previous[id]!=value:boundaries[float(at)]=true
+                    if previous[id]!=value:
+                        if _effect_only_change(previous[id],value):effect_boundaries[float(at)]=true
+                        else:boundaries[float(at)]=true
                     previous_inputs[id]=inputs;previous[id]=value
                 var clip:String=_actor_source_clip(actor,previous[id],samples.get(id,{}),cache)
                 if previous_clips[id]!=clip:source_boundaries[float(at)]=true
@@ -614,6 +624,7 @@ static func _actor_structure_requirements(before:Dictionary,groups:Array,cache:D
             cursor+=1
         group.actor_structure_times=boundaries.keys();group.actor_structure_times.sort()
         group.actor_source_times=source_boundaries.keys();group.actor_source_times.sort()
+        group.actor_effect_times=effect_boundaries.keys();group.actor_effect_times.sort()
         start+=duration
         retained=layers.filter(func(item):return item.start_ms+item.component.duration_ms>start)
 

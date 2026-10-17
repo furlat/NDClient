@@ -62,7 +62,7 @@ func yielded_recorded_prefix(index:Dictionary,timeline)->RefCounted:
     var next:Dictionary=index.groups[count]
     if float(next.start_ms)>timeline.display_ms or timeline.queue.is_empty() or timeline.queue[0].id!=next.group.id:return null
     var world_cut:bool=item.group.commits.any(func(commit):return float(commit.at_ms)==float(item.group.duration_ms) and timeline._world_delta(commit.delta))
-    world_cut=world_cut or float(item.group.duration_ms) in item.group.get("actor_structure_times",[]) or not item.group.get("staged_tiles",{}).is_empty()
+    world_cut=world_cut or float(item.group.duration_ms) in item.group.get("actor_structure_times",[])+item.group.get("actor_effect_times",[]) or not item.group.get("staged_tiles",{}).is_empty()
     if not world_cut and not timeline.waiting_for_media and not timeline.waiting_for_world:return null
     return Recording.restore_boundary(index,count-1,item.group.commits.size())
 func verify_prefix(studio:Control,label:String,allow_atomic_yield:bool=false)->void:

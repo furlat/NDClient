@@ -86,13 +86,15 @@ func recorded(index:Dictionary,primary:bool=true)->int:
         var value:Dictionary=item.group
         var light_timeline=timeline(index,value)
         check(value.has("actor_structure_times"),"Compiled group carries actor constructor cuts")
+        # Effect-only layers are their own cut list: a live host builds them in sampling.
+        var layer_cuts:Array=value.actor_structure_times+value.get("actor_effect_times",[])
         for component in value.components:
             if component.kind!="sprite_layer" or component.duration_ms<=0:continue
             if component.start_ms<value.duration_ms:
-                check(component.start_ms in value.actor_structure_times,"Actual authored sprite layer prepares at its onset")
+                check(component.start_ms in layer_cuts,"Actual authored sprite layer prepares at its onset")
                 sprite_edges+=1
             var end:float=component.start_ms+component.duration_ms
-            if end<=value.duration_ms:check(end in value.actor_structure_times,"Actual authored sprite layer retires at its endpoint")
+            if end<=value.duration_ms:check(end in layer_cuts,"Actual authored sprite layer retires at its endpoint")
         var moves=0;var only_motion=true
         for commit in value.commits:
             if commit.delta.get("set",{}).has("senses") and commit.delta.set.senses.get("light_sources",{})!=state.senses.get("light_sources",{}):

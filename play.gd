@@ -1681,7 +1681,8 @@ func _sync_actor_membership() -> void:
                 old.row.merge(row,true)
                 old.valid = true
                 continue
-            if world_prepare_epoch!=timeline.initialization_revision and _reconcile_actor_layers(id,row):continue
+            # Effect-layer changes are not world boundaries in live play.
+            if (world_prepare_epoch!=timeline.initialization_revision or not timeline.source_cut_boundaries) and _reconcile_actor_layers(id,row):continue
             # Exact replacement comes from the admitted structural boundary.
             # Keep old ownership until its complete replacement is available.
         draw_order_dirty = true
@@ -2073,8 +2074,12 @@ func _publish_media_interest(at_ms:float)->void:
         var start:float=timeline.group_start_ms if is_same(group,timeline.current) else timeline.display_ms
         start=maxf(start,float(group.get("preview_start_ms",start)))
         var local:float=maxf(0.0,at_ms-start)
-        record_sets.append(MediaWarmup.records_at(current_plan.get("source_cuts",{}).get(character_light_profile,{}),local,
-            current_plan.get("source_records",{}).get(character_light_profile,[])))
+        var schedule:Dictionary=current_plan.get("source_cuts",{}).get(character_light_profile,{})
+        var group_records:Array=current_plan.get("source_records",{}).get(character_light_profile,[])
+        record_sets.append(MediaWarmup.records_at(schedule,local,group_records))
+        # Clip and effect changes bind in sampling, not behind a preparation
+        # that pinned their media early: load the group's later cuts now too.
+        if not timeline.source_cut_boundaries:record_sets.append(MediaWarmup.records_at(schedule,INF,group_records))
     # A private candidate owns real resources too. Keep its exact cut pinned
     # while it is prepared, even when that cut is later than displayed time.
     for prepared_owner in [pending_world,prepared_actor_owner]:
