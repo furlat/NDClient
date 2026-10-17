@@ -389,7 +389,10 @@ func _ground_publish_changes(entry: Dictionary, packet: Dictionary) -> void:
             entry.ground_buffer[index*20+channel] = data[channel]
         current.data = data; current.row = record.row; current.y = record.y; current.bounds = record.bounds
         entry.batch_rows[index] = record.row
-        multi.set_instance_transform(index,record.transform)
+    # ground_buffer mirrors the native buffer and now holds these transforms
+    # (the same float encoding). Submitting it whole avoids per-instance writes,
+    # which would first read the uploaded buffer back from the GPU.
+    multi.buffer = entry.ground_buffer
     multi.custom_aabb = patch.bounds
     entry.ground_version = base_version+1
     entry.geometry_changes = {"base_version":base_version,"version":entry.ground_version,"changed":patch.changed,"removed":[]}

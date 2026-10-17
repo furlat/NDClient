@@ -59,6 +59,8 @@ under-reports holds. Holds are judged on three-run medians.
 | Native spell support adoption runs only when a texture enters or leaves residency or an actor layer's displayed path changes (`native_scene_support.gd` `adopt`; new `texture_revision` in Play, bumped on upload-create and prune) | during Fireball, the spell prefetch re-walked every actor layer each frame, with two body-descriptor lookups per layer, to rebuild an unchanged mask map | prefetch minus image requirements 0.65–0.71 → 0.48–0.60 ms per Fireball frame, lower in all three interleaved pairs (`T021535`… vs `T021628`…). Native scene support 12,939 checks; native spell playback has the same 6 failures as `af3daa2`. |
 | Native scene proxy uniforms written only when a value changed (`native_scene_support.gd` `sync`; the support owner creates and alone writes these proxy materials; the last written values live in the material's metadata, cleared when proxies are reset) | during a spell, every visible actor layer's depth proxy received nine `set_shader_parameter` calls per frame, each marking the material for a uniform update | in run `T023554`, proxies were rewritten 138 times in 37,339 proxy-frames (671 of 682 command frames wrote none), about 490 redundant writes per frame avoided. Support sync cost was lower in 2 of 3 interleaved pairs (−0.10 to −0.17 ms) but drifted within the third. The output-material uniforms stay re-asserted every frame: `native_scene_support_checks` requires that an outside overwrite (`output_recopy`, `stamped_recopy`) is restored. |
 | Blood deposits: tile screen visibility recomputed only when the camera, viewport or tile after-value changes; deposit position and four uniforms written only when a value changed (`blood_renderer.gd` `sample`; the renderer alone writes its deposit nodes/materials) | every visible residue tile ran five camera projections and five uniform/position writes each frame while blood was present | `blood_fields` median 0.172–0.186 → 0.111–0.124 ms over ~1,000 blood frames per run, lower in all three interleaved pairs (`T025250`… vs `T025340`…); p95 0.65–0.68 → 0.60–0.61 ms (kernel rebuild and upload during landing remain). Blood checks identical to `d737883` (phase preparation 1,100, residue 281, tile index 51, resource poll 20, native partition; loading 101–103 by frame timing; authority, kernel cache and the two studio blood suites exit 2 on both). |
+| Targeting marks and floor geometry no longer read native buffers back from the GPU (`ground_overlay.gd` `_batch_changes` keeps its transform buffer and submits it whole; `sprite_sources.gd` `_ground_publish_changes` submits its existing `ground_buffer` mirror, the same float encoding, instead of per-instance writes) | the plan's Fireball targeting spike. With a probe: a flat mark update with **one** changed cell took 23 ms (frame 37 ms). Godot's RD renderer serves a per-instance write on a multimesh whose buffer was uploaded whole, and which keeps no CPU copy, by first reading the whole buffer back from the GPU (a full stall) | mark updates above 2.5 ms per run: 0 (current) vs 3–6 on `d990882`, worst 2.5 vs 6–9 ms (and 15–20 ms in two of three earlier runs); mark-update time per run 15–16 vs 32–40 ms (`T031412`… vs `T031507`…). Overlay delta checks 13 (headless) / 17 (native, exact visible transforms), overlay support 67, sparse world preparation 78, world atlas preparation 172 (native), native atlas lifecycle 221. |
+| Ground overlay mark and route shaders compiled at startup with the other reveal shaders; equal mark styles reuse the previous material when cells change | a single new overlay cell or route cost 5.5–6 ms (first shader use, R4); the 697-cell area set/clear resolved a material key twice per cell | the 5.5–6 ms events are gone; full-area updates 2.6–3.1 → 2.1–2.5 ms |
 
 Result after Phase 1 (median of 3 runs `20261017T001059`, `T001138`,
 `T001215`): idle same-view frame **8.77 ms** (p95 14.05; script 6.60 ms);
@@ -86,7 +88,47 @@ max 36.6). Fix: read each family map once per family (identical results).
 After the fix (run `20261017T000518`): Fireball 1 targeting 3 frames above
 25 ms, max 28.5 ms, p95 20.0 ms.
 
-### S2 — remaining spikes after Phase 1 (open)
+### Spike causes (tool)
+
+`tools/route_summary.py` now labels every frame above 16.7 ms with one cause,
+checked in order:
+- `pipeline_compile`: a render pipeline compiled in that frame;
+- `world_publication`: `world_sync` of 3 ms or more;
+- `preparation_chunk`: a single preparation step of 3 ms or more;
+- `outside_script`: more time outside the Player script than inside it;
+- a phase burst: optional ≥ 4, actor sample ≥ 5, native lighting ≥ 5,
+  timeline ≥ 5 or draw order ≥ 4 ms;
+- `steady_load`: cost spread over ordinary per-frame phases, labelled by
+  command or frame class.
+
+It prints counts per run and across runs.
+
+Three slow-window runs on `d990882` (`T025250`, `T025423`, `T025554`, 584
+spikes):
+
+| Cause | Count | Max | Cause in detail |
+|---|---:|---:|---|
+| steady load, Fireball | 306 | 24.9 | Fireball frames run at 12–15 ms median in this window. Script: spell/actor sampling ~2.4, native lighting ~2.2 (the moving spell light re-ranks every actor shadow, 1.2), optional preparation ~1.5, draw order ~1.4, timeline ~0.9. Plus 3–4.5 ms outside the script: GPU particles, the 8,192-wide atlas viewport, native effect viewports, per-actor shadow viewports. Repeated work found here was removed (rows above). Still open: ~0.24 ms per animating frame spent returning from the timeline's media readiness callable (below). |
+| actor sample burst | 57 | 33.3 | Hit and death frames: blood landing (kernel rebuild and upload, 1–3 ms), new clip binding for the hit actor, spell sampling. |
+| steady load, idle | 51 | 27.6 | Settling after Fireball: blood fields, the spell's lingering components, optional media maintenance draining hundreds of changed paths. |
+| optional preparation burst | 32 | 26.9 | Optional media maintenance (budgeted, finite: it drains the changed-path queue); CPU image release (`media_release_cpu` up to 5.6 ms when large decoded images are freed). |
+| timeline burst | 27 | 29.9 | Command boundaries: timeline advance/apply, media plan demand and preparation steps on the first frames of a group. |
+| outside script | 26 | 56.0 | First interactive frames after initialization (driver/swap-chain warm-up, ~54 ms once per run), and frames where rendering outweighs script work. |
+| native lighting burst | 24 | 30.8 | Shadow re-ranking when a spell light appears or moves; one projection burst of 11 ms after the door (camera follow re-projects all receivers). |
+| pipeline compile | 23 | 40.7 | First draw of a material/pipeline variant (spell particles, haste effect, newly revealed content). One-time per session. |
+| world publication | 10 | 35.6 | The door and move cut publication frames (atlas adoption of ~1,100 receivers, world sync, shadows, draw sort). |
+| draw order burst | 10 | 26.1 | Targeting-mark updates and full re-sorts after membership changes. The 15–23 ms targeting outliers were the GPU readback fixed above. |
+| preparation chunk | 4 | 25.2 | First construction frame of a reveal (result adoption, atlas begin, environment capture). |
+| steady load, move / open | 14 | 23.1 | Animating frames of those commands under the same per-frame load. |
+
+Open, not repeated-work: the media readiness return cost. Timestamps on both
+sides of `media_ready.call(first)` show 0.15–0.25 ms between the callee's
+last statement and the caller's next one, in animating frames only. A no-op
+method called the same way with the same argument costs 0.002 ms. Locals were
+released explicitly without effect, and static memory grows ~7 KiB across the
+return. The cause lies below GDScript and was not found.
+
+### S2 — remaining spikes after Phase 1 (superseded by the table above)
 
 510 frames above 16.7 ms over three runs: 353 between 16.7 and 20 ms,
 105 between 20 and 25, 43 above 25. 394 fall inside the two Fireball
@@ -296,6 +338,13 @@ Confirmed red with the original code (not caused by this work):
   identical on `eff11fd`.
 - `tests/native_atlas_staged_checks.gd` — exceeds a 400 s timeout on
   `eff11fd` as well.
+- `tests/prepared_membership_checks.gd` — 4 script errors and a timeout,
+  identical on `d990882`.
+- `tests/targeting_hover_checks.gd` — needs a `--case=` capture argument
+  and exits 2 without it (on `d990882` as well).
+- `tests/native_spell_playback_checks.gd` — 6 failures (fire bolt and magic
+  missile readiness), identical on `af3daa2`; `native_optical_media_checks`
+  times out and `selection_media_checks` exits 2 on both.
 
 One live run (`20261017T005810`) failed 2 of 78 checks: the second Fireball's
 target click received its preview, but the client never sent the command

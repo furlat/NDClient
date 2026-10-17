@@ -132,39 +132,51 @@ func _batch_changes(entry: Dictionary, removed: Array, added: Array) -> void:
         var index = dense.size()
         dense.append(position); slots[position] = index; dirty[index] = true
     var multimesh: MultiMesh = entry.node.multimesh
+    # The batch keeps its own copy of the transform buffer and always submits
+    # it whole. A single-instance write to a native buffer with no CPU copy
+    # first reads the complete buffer back from the GPU, stalling the frame.
+    var buffer: PackedFloat32Array = entry.get("buffer",PackedFloat32Array())
+    var rebuild: bool = buffer.size() != multimesh.instance_count*12
     if multimesh.instance_count < dense.size():
         var capacity = maxi(8,multimesh.instance_count)
         while capacity < dense.size(): capacity *= 2
         multimesh.instance_count = capacity
         buffer_allocations += 1
-        # Capacity growth replaces every native slot. Submit the complete
-        # transform buffer once instead of making one engine call per cell.
-        var buffer = PackedFloat32Array(); buffer.resize(capacity*12)
-        for i in range(dense.size()):
-            var position: Vector3 = dense[i]
-            var offset: int = i*12
-            buffer[offset] = 1; buffer[offset+3] = position.x
-            buffer[offset+5] = 1; buffer[offset+7] = position.y
-            buffer[offset+10] = 1; buffer[offset+11] = position.z
-        multimesh.buffer = buffer
-        transform_writes += dense.size()
-    else:
-        for i in dirty:
-            if i >= dense.size(): continue
-            multimesh.set_instance_transform(i,Transform3D(Basis.IDENTITY,dense[i]))
-            transform_writes += 1
+        rebuild = true
+    if rebuild:
+        # Capacity growth replaces every native slot.
+        buffer = PackedFloat32Array(); buffer.resize(multimesh.instance_count*12)
+        dirty = {}
+        for i in range(dense.size()): dirty[i] = true
+    for i in dirty:
+        if i >= dense.size(): continue
+        var position: Vector3 = dense[i]
+        var offset: int = i*12
+        buffer[offset] = 1; buffer[offset+3] = position.x
+        buffer[offset+5] = 1; buffer[offset+7] = position.y
+        buffer[offset+10] = 1; buffer[offset+11] = position.z
+        transform_writes += 1
+    if not dirty.is_empty(): multimesh.buffer = buffer
+    entry.buffer = buffer
     multimesh.visible_instance_count = dense.size()
 
 func _change_flat_marks(tiles: Dictionary) -> bool:
     # A style not yet constructed takes the original complete selection path,
     # preserving first-use material identity and painter ordering. Existing
     # flat styles already own native batches; only edited cells move between them.
+    # Edited cells usually share the exact style: like the complete path, reuse
+    # the previous cell's material when the style is equal.
+    var last_style: Dictionary = {}
     for key in changed_marks:
         if not tiles.has(key): continue
         if tiles[key].elevation_steps != 0: return false
         for style in [changed_marks[key],marks.get(key,{})]:
-            if not style.is_empty() and not materials.has([style.colour,style.get("width",2.0),style.get("fill_colour",Color.TRANSPARENT)]): return false
+            if style.is_empty() or style == last_style: continue
+            if not materials.has([style.colour,style.get("width",2.0),style.get("fill_colour",Color.TRANSPARENT)]): return false
+            last_style = style
     var updates = {}
+    var last_material: ShaderMaterial = null
+    last_style = {}
     for key in changed_marks:
         if not tiles.has(key): continue
         var before: Dictionary = changed_marks[key]
@@ -172,12 +184,16 @@ func _change_flat_marks(tiles: Dictionary) -> bool:
         if before == after: continue
         var position: Vector3 = support_positions[key]
         if not before.is_empty():
-            var material = _material(before.colour,before.get("width",2.0),before.get("fill_colour",Color.TRANSPARENT))
+            if last_material == null or before != last_style:
+                last_style = before; last_material = _material(before.colour,before.get("width",2.0),before.get("fill_colour",Color.TRANSPARENT))
+            var material = last_material
             if mark_batches.has(material):
                 if not updates.has(material): updates[material] = {"removed":[],"added":[]}
                 updates[material].removed.append(position)
         if not after.is_empty():
-            var material = _material(after.colour,after.get("width",2.0),after.get("fill_colour",Color.TRANSPARENT))
+            if last_material == null or after != last_style:
+                last_style = after; last_material = _material(after.colour,after.get("width",2.0),after.get("fill_colour",Color.TRANSPARENT))
+            var material = last_material
             if not mark_batches.has(material):
                 mark_batches[material] = _batch("marks:"+str(material.get_instance_id()),material,2)
                 changed = true

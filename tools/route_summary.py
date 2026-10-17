@@ -83,6 +83,36 @@ def attribute(frame, previous):
     }
 
 
+def attribute_cause(frame, previous):
+    spike = attribute(frame, previous)
+    spike["cause"] = spike_cause(spike, frame["cpu_ms"])
+    return spike
+
+
+# Spike causes, checked in order. A burst is one parent phase over its limit;
+# steady load is a frame whose cost is spread over ordinary per-frame phases.
+BURST_LIMITS = [("optional_preparation", 4.0), ("actor_sample", 5.0), ("native_2d_lighting", 5.0),
+    ("session_timeline", 5.0), ("draw_order", 4.0)]
+
+
+def spike_cause(spike, cpu):
+    if spike["pipelines"]:
+        return "pipeline_compile"
+    if cpu.get("world_sync", 0.0) >= 3.0:
+        return "world_publication"
+    if cpu.get("world_prepare_native", 0.0) >= 3.0:
+        return "preparation_chunk"
+    if spike["outside_player_ms"] > spike["player_ms"]:
+        return "outside_script"
+    for name, limit in BURST_LIMITS:
+        if spike["parents"].get(name, 0.0) >= limit:
+            return name + "_burst"
+    stage = spike["stage"] or ""
+    if stage.startswith("command"):
+        return "steady_load:" + stage.split(".")[-1]
+    return "steady_load:" + spike["class"]
+
+
 def distribution(values):
     return live.distribution(values) or {}
 
@@ -118,7 +148,7 @@ def summarize_run(directory):
         stage = frame["view"].get("profile_stage") or ""
         # Startup/preload frames are a separate concern from the play route.
         if frame["frame_ms"] > SPIKE_MS and stage not in ("initialization", ""):
-            spikes.append(attribute(frame, previous))
+            spikes.append(attribute_cause(frame, previous))
         previous = frame
     actions = []
     for command in summary["commands"]:
@@ -153,6 +183,10 @@ def print_run(result):
     top = sorted(((v, k) for k, v in result["idle_phase_medians"].items() if k in PARENTS or k == "player_process"), reverse=True)
     print("idle parents (median): " + ", ".join("%s %.2f" % (k, v) for v, k in top))
     print("spikes > %.1f ms: %d" % (SPIKE_MS, len(result["spikes"])))
+    causes = {}
+    for s in result["spikes"]:
+        causes[s["cause"]] = causes.get(s["cause"], 0)+1
+    print("  by cause: " + ", ".join("%s %d" % (k, v) for k, v in sorted(causes.items(), key=lambda item: -item[1])))
     for s in sorted(result["spikes"], key=lambda s: -s["interval_ms"])[:12]:
         print("  f%-6d %6.1f ms [%s/%s] player %.1f outside %.1f dominant=%s %s %s%s" % (
             s["frame"], s["interval_ms"], s["class"], s["stage"], s["player_ms"], s["outside_player_ms"],
@@ -175,6 +209,12 @@ def print_medians(results):
     if idle:
         print("idle same-view frame p50 %.2f p95 %.2f player p50 %.2f" % (median(idle), median(idle95), median(player)))
     print("spike counts per run: %s" % [len(r["spikes"]) for r in results])
+    causes = {}
+    for r in results:
+        for s in r["spikes"]:
+            causes.setdefault(s["cause"], []).append(s["interval_ms"])
+    print("spikes by cause (all runs): " + ", ".join("%s %d (max %.1f)" % (k, len(v), max(v))
+        for k, v in sorted(causes.items(), key=lambda item: -len(item[1]))))
 
 
 def main():
