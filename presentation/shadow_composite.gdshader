@@ -8,6 +8,8 @@ uniform sampler2D source_data : filter_nearest, repeat_disable;
 uniform int source_count=0;
 uniform int dominant_index=-1;
 uniform float core_opacity=0.8392156862745098;
+// The footprint's share of the fixed helper target (its top-left corner).
+uniform vec2 visibility_scale=vec2(1.0);
 
 float cookie(int i,vec2 screen) {
     vec4 projection=texelFetch(source_data,ivec2(0,i),0);
@@ -19,7 +21,7 @@ float cookie(int i,vec2 screen) {
 }
 void fragment() {
     if(dominant_index<0 || dominant_index>=source_count) discard;
-    float blocked=1.0-texture(visibility_map,UV).r;
+    float blocked=1.0-texture(visibility_map,UV*visibility_scale).r;
     if(blocked<=0.0) discard;
     vec2 screen=SCREEN_UV*VIEWPORT_SIZE;
     float total=0.0;

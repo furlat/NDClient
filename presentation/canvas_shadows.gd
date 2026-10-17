@@ -20,6 +20,15 @@ const LIVE := 8
 const RANK := 5
 const SOURCE_ROWS := 64 # The composite's light table keeps one texture while this suffices.
 const COUNTS := {"new_actors":0,"new_casters":0,"new_meshes":0,"updated_actors":0,"removed_actors":0,"evaluated_actors":0,"retained_actors":0}
+## Helper targets never resize: a footprint's samples are the top-left corner
+## of a fixed power-of-two target (its scale in the composite is then exact).
+## Against exact-size targets this moves the helper camera: up to 1/255 at
+## isolated samples, and a pixel exactly on a sample edge may take its
+## neighbour (accepted, 17 October). This class holds every footprint measured
+## on the Gallery, torch, Fireball and Studio journals at all zooms and
+## quarters (at most 728x404; a torch's whole cookie is about 828x328 at any
+## zoom). A larger footprint moves its helper once to the next class.
+const TARGET := Vector2i(1024,512)
 ## Helpers built ahead with optional work, so a reveal's new actors take them
 ## instead of constructing worlds, viewports and casters in preparation.
 const SPARE_HELPERS := 8
@@ -59,6 +68,7 @@ var _spare_helpers: Array = []
 var _spare_casters: Array = []
 var _updates := 0
 var _writes := 0
+var _promotions := 0
 var _last_cpu_ms := 0.0
 var _last_phases: Dictionary = {}
 var _last_counts: Dictionary = COUNTS.duplicate()
@@ -208,6 +218,8 @@ func _evaluate(visual: Dictionary, camera: Camera3D, relayout: bool) -> bool:
     if state.is_empty():
         phase_started=Time.get_ticks_usec();state=_create(id);actors[id]=state
         _timed("create",phase_started);_last_counts.new_actors+=1
+    if size.x>state.viewport.size.x or size.y>state.viewport.size.y:
+        phase_started=Time.get_ticks_usec();_promote(state,size);_timed("promote",phase_started)
     phase_started=Time.get_ticks_usec()
     state.entry.placement=row
     state.source_id=_source_ids[selection]
@@ -242,6 +254,23 @@ func _bind(state: Dictionary, selection: int) -> void:
         state.bound_data=_source_texture;material.set_shader_parameter("source_data",_source_texture);_writes+=1
     if not is_same(state.bound_cookies,_cookie_texture):
         state.bound_cookies=_cookie_texture;material.set_shader_parameter("cookie_atlas",_cookie_texture);_writes+=1
+
+# A footprint beyond its target moves the helper's scene, once, into a target
+# of the next power-of-two class. No target is ever resized.
+func _promote(state: Dictionary, size: Vector2i) -> void:
+    var old: SubViewport=state.viewport
+    var viewport:=_new_target(Vector2i(maxi(old.size.x,nearest_po2(size.x)),maxi(old.size.y,nearest_po2(size.y))))
+    var name:=old.name
+    old.name=(name+"_retired").validate_node_name()
+    old.render_target_update_mode=SubViewport.UPDATE_DISABLED
+    old.get_parent().add_child(viewport)
+    viewport.name=name
+    state.root.reparent(viewport,false)
+    old.queue_free()
+    state.viewport=viewport
+    state.entry.material.set_shader_parameter("visibility_map",viewport.get_texture());_writes+=1
+    state.layout=[]
+    _promotions+=1;_last_counts.promotions=int(_last_counts.get("promotions",0))+1
 
 func _render(state: Dictionary) -> void:
     # One render in this frame's draw, before the composite samples it; the
@@ -616,11 +645,10 @@ func _create(id: String,owner:Node3D=null) -> Dictionary:
     state.entry.id=id+":generatedShadow"
     return state
 
-## A complete disabled helper outside the tree: its own world, camera, light,
-## ground and hidden composite quad.
-func _new_helper() -> Dictionary:
+## A disabled helper target of its final size, with its own world.
+func _new_target(size: Vector2i) -> SubViewport:
     var viewport := SubViewport.new()
-    viewport.size=Vector2i(2,2)
+    viewport.size=size
     viewport.world_3d=World3D.new()
     viewport.msaa_3d=Viewport.MSAA_DISABLED
     viewport.positional_shadow_atlas_size=shadow_atlas_size
@@ -630,6 +658,12 @@ func _new_helper() -> Dictionary:
     # never allocate the pair and silently produces an entirely unshadowed map.
     for quadrant in range(4): viewport.set_positional_shadow_atlas_quadrant_subdiv(quadrant,Viewport.SHADOW_ATLAS_QUADRANT_SUBDIV_4)
     RenderingServer.viewport_set_measure_render_time(viewport.get_viewport_rid(),true)
+    return viewport
+
+## A complete disabled helper outside the tree: its target, camera, light,
+## ground and hidden composite quad.
+func _new_helper() -> Dictionary:
+    var viewport := _new_target(TARGET)
     var root := Node3D.new()
     viewport.add_child(root)
     var environment := Environment.new()
@@ -673,7 +707,7 @@ func _new_helper() -> Dictionary:
         "source_role":-1,"node":output,"material":material,"mobile":true,"screen_rect":Rect2(),"generated_shadow":true}
     return {"viewport":viewport,"root":root,"camera":camera,"ground":ground,"light":light,"casters":{},"caster_samples":{},
         "entry":entry,"layout":[],"geometry":[],"geometry_basis":Basis(),"snapshots":[],"applied":{},"dominant":-1,"shown":false,"unbounded":false,
-        "bound_dominant":-2,"bound_count":-1,"bound_data":null,"bound_cookies":null}
+        "bound_dominant":-2,"bound_count":-1,"bound_data":null,"bound_cookies":null,"bound_scale":Vector2.ZERO,"footprint":Vector2i.ZERO}
 
 ## Builds spare helpers, then spare casters, while `budget_usec` lasts.
 ## Optional work calls it, so reveals rarely construct native objects.
@@ -752,15 +786,23 @@ func _update_casters(state: Dictionary,snapshots: Array,camera: Camera3D,origin:
 
 func _update_layout(state: Dictionary,camera: Camera3D,origin: Vector3,ground: float,projection: Dictionary,rect: Rect2,size: Vector2i,pixels_per_world: float) -> void:
     var update_started:int=Time.get_ticks_usec()
-    # The target follows the exact footprint: its sample grid is the picture.
-    if state.viewport.size!=size:state.viewport.size=size
+    # The footprint's samples are the target's top-left corner: the helper
+    # camera spans the whole target at the footprint's sample scale, and the
+    # composite samples only that corner.
+    var target:Vector2i=state.viewport.size
+    var view:=Rect2(rect.position,rect.size/Vector2(size)*Vector2(target))
+    var scale:=Vector2(size)/Vector2(target)
+    if state.bound_scale!=scale:
+        state.bound_scale=scale;state.entry.material.set_shader_parameter("visibility_scale",scale);_writes+=1
+    state.footprint=size
     _timed("update_target",update_started);update_started=Time.get_ticks_usec()
     var center := _on_plane(camera,rect.get_center(),origin.y+ground)-origin
     var plane_bounds := AABB(center,Vector3.ZERO)
     var helper_range := 2.0
+    var corners:Array=[]
     for point in [rect.position,Vector2(rect.end.x,rect.position.y),rect.end,Vector2(rect.position.x,rect.end.y)]:
         var corner := _on_plane(camera,point,origin.y+ground)-origin
-        plane_bounds=plane_bounds.expand(corner)
+        plane_bounds=plane_bounds.expand(corner);corners.append(corner)
         helper_range=maxf(helper_range,projection.position.distance_to(corner)+2.0)
     # The visibility shader reads MODEL_MATRIX*VERTEX; unit vertices +-0.5
     # scaled by the size give the same world positions as a sized plane.
@@ -773,8 +815,12 @@ func _update_layout(state: Dictionary,camera: Camera3D,origin: Vector3,ground: f
     state.light.omni_range=helper_range
     _timed("update_light_plane",update_started);update_started=Time.get_ticks_usec()
     var distance: float=maxf(20.0,helper_range*2.0)
-    state.camera.transform=Transform3D(camera.global_basis,center+camera.global_basis.z*distance)
-    state.camera.size=rect.size.y/pixels_per_world
+    var view_center:=_on_plane(camera,view.get_center(),origin.y+ground)-origin
+    # The footprint stays inside the camera's depth range when it is far from
+    # the target's centre (a wide target at a distant zoom).
+    for corner in corners:distance=maxf(distance,2.0*corner.distance_to(view_center)+2.0)
+    state.camera.transform=Transform3D(camera.global_basis,view_center+camera.global_basis.z*distance)
+    state.camera.size=view.size.y/pixels_per_world
     state.camera.far=distance*3.0
     state.entry.node.global_transform=Transform3D(camera.global_basis,center+origin)
     state.entry.node.mesh.size=rect.size/pixels_per_world
@@ -799,6 +845,7 @@ func _clear_actors() -> void:
 func diagnostics() -> Dictionary:
     var casters := 0
     var pixels := 0
+    var footprint_pixels := 0
     var triangles := 0
     var wide_bounds := 0
     var selected := {}
@@ -811,10 +858,11 @@ func diagnostics() -> Dictionary:
         for caster in state.casters.values():
             triangles+=2*(caster.mesh.subdivide_width+1)*(caster.mesh.subdivide_depth+1)
         pixels+=state.viewport.size.x*state.viewport.size.y
+        footprint_pixels+=state.footprint.x*state.footprint.y
         if state.unbounded: wide_bounds+=1
         selected[state.entry.placement.id]=state.get("source_id","")
     return {"actors":actors.size(),"casters":casters,"caster_triangles_before_native_shadow_passes":triangles,
-        "target_pixels":pixels,"last_render_gpu_ms":last_gpu_ms,"last_render_cpu_ms":last_cpu_ms,"sources":_source_ids.size(),"updates":_updates,"writes":_writes,"wide_depth_bounds":wide_bounds,"sync_cpu_ms":_last_cpu_ms,"selected_sources":selected,
+        "target_pixels":pixels,"footprint_pixels":footprint_pixels,"promotions":_promotions,"last_render_gpu_ms":last_gpu_ms,"last_render_cpu_ms":last_cpu_ms,"sources":_source_ids.size(),"updates":_updates,"writes":_writes,"wide_depth_bounds":wide_bounds,"sync_cpu_ms":_last_cpu_ms,"selected_sources":selected,
         "sync_phases_ms":_last_phases.duplicate(),"sync_counts":_last_counts.duplicate(),"cookie_images":_cookie_images.size(),"source_revision":_source_revision,"rank_revision":_rank_revision,
         "spare_helpers":_spare_helpers.size(),"spare_casters":_spare_casters.size(),
         "phase_accounting":"Cookie pack/upload are nested inside sources and update_* inside update; other named phases are disjoint."}
