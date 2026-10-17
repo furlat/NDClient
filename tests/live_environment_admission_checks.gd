@@ -17,7 +17,6 @@ class Host extends Player:
         set_process(false);set_process_unhandled_input(false)
         attach_media_sources();add_child(context_menu)
         camera=Camera3D.new();camera.projection=Camera3D.PROJECTION_ORTHOGONAL;add_child(camera)
-        native_light_atlas.attach(self);source_lighting.attach(native_light_atlas.viewport)
         generated_shadows.attach(self)
         timeline.media_ready=_media_ready;timeline.world_ready=_world_ready
     func _process(_delta:float)->void:pass

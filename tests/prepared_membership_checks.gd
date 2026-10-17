@@ -106,14 +106,13 @@ func run() -> void:
     target_boundary(scene)
     check(job.can_publish_membership(),"Matching admitted boundary accepts prepared ownership")
     # Independent invalidations reject even though the private target is ready.
-    for field in ["epoch","quarter","generation","revision","serial","groups","ground","entries","count","target"]:
+    for field in ["epoch","quarter","generation","revision","groups","ground","entries","count","target"]:
         var saved: Variant
         match field:
             "epoch": saved=scene.timeline.initialization_revision; scene.timeline.initialization_revision+=1
             "quarter": saved=scene.quarter; scene.quarter=1
             "generation": saved=scene.world_generation; scene.world_generation+=1
             "revision": saved=scene.world_revision; scene.world_revision+=1
-            "serial": saved=scene.native_light_change_serial; scene.native_light_change_serial+=1
             "groups": saved=scene.world_groups; scene.world_groups=scene.world_groups.duplicate()
             "ground": saved=scene.ground_groups; scene.ground_groups=scene.ground_groups.duplicate()
             "entries": saved=scene.static_entries; scene.static_entries=scene.static_entries.duplicate()
@@ -125,7 +124,6 @@ func run() -> void:
             "quarter": scene.quarter=saved
             "generation": scene.world_generation=saved
             "revision": scene.world_revision=saved
-            "serial": scene.native_light_change_serial=saved
             "groups": scene.world_groups=saved
             "ground": scene.ground_groups=saved
             "entries": scene.static_entries=saved
@@ -144,7 +142,7 @@ func run() -> void:
     check(floor.placement.id=="floor-retained" and floor.batch_rows==packet.rows and floor.node.multimesh.buffer==packet.buffer,"Admitted floor publishes original sorted representative and exact prepared native buffer")
     check(is_same(old_floor_group.rows,old_floor_rows),"Old floor group stays immutable after admission")
     check(floor.ground_version==2 and floor.geometry_changes.base_version==1 and floor.geometry_changes.changed==["floor-new"] and floor.geometry_changes.removed==["floor-first"],"Prepared floor retains exact geometry/version receipt")
-    check(scene.native_light_changes.upserts==[replacement,added,floor] and scene.native_light_changes.removed.size()==2,"Lighting admission receives exactly new/replaced/updated native sources")
+    check(job.boundary_jobs.map(func(value):return value.entry)==[replacement,added,floor] and job.membership.removed.size()==2,"Spell receiver boundary receives exactly new/replaced/updated native sources")
     assert_order(scene,"prepared membership")
     check(scene.timeline.state==before,"Native admission never mutates canonical state")
     await sparse_replacement_case(scene)

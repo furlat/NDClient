@@ -1,15 +1,30 @@
-extends "res://tests/native_atlas_growth_checks.gd"
+extends SceneTree
 ## First actual assembled actor frame from private resources, compared with the
-## ordinary source constructor/binder; independent received-cell/output oracle.
+## ordinary source constructor/binder. Sprites light themselves from the light
+## table, so the oracle is the final lit framebuffer of two otherwise identical
+## views: one adopting the worker's private layers, one built directly.
 const Construction=preload("res://presentation/actor_construction.gd")
 const Original=preload("res://presentation/actor_construction.gd")
 const Resources=preload("res://presentation/actor_resources.gd")
+const SourceMaterial=preload("res://presentation/source_material.gd")
+const LightTable=preload("res://presentation/light_table.gd")
+const AMBIENT:=0.30
 const BODY="/fixture/actor-resource-body.png"
 const NOISE="/fixture/actor-resource-noise.png"
 class ActorOwner extends "res://presentation/sprite_sources.gd":
     var character_light_profile:String="original"
     func texture(path:String)->Texture2D:return textures.get(path)
     func _light_entry(entry:Dictionary)->void:SourceMaterial.set_parameter(entry,"authored_base_light",0.0)
+var checks:int=0
+var failures:Array=[]
+var cases:Dictionary={}
+var light_table=LightTable.new()
+
+func check(value:bool,label:String)->void:
+    checks+=1
+    if not value:failures.append(label);print("ACTOR_RESOURCE_FAIL ",label)
+
+func _initialize()->void:run.call_deferred()
 
 func actor_image()->Image:
     var image=Image.create(192,128,false,Image.FORMAT_RGBA8)
@@ -40,12 +55,17 @@ func geometry(owner:ActorOwner,image:Image)->void:
     var noise=Image.create(64,64,false,Image.FORMAT_RGBA8);noise.fill(Color(.3,.7,.2,1))
     owner.textures[NOISE]=ImageTexture.create_from_image(noise);owner.resources.noise=NOISE
 
-func actor_owner(side:Dictionary,image:Image)->ActorOwner:
-    var owner=ActorOwner.new();side.world.add_child(owner);owner.camera=side.world.camera
+# One 3D view per side, identical except for how its actor layers were built.
+func make_side(image:Image)->Dictionary:
+    var view=SubViewport.new();view.size=Vector2i(256,256);view.own_world_3d=true
+    view.transparent_bg=true;view.render_target_update_mode=SubViewport.UPDATE_ALWAYS;root.add_child(view)
+    var owner=ActorOwner.new();view.add_child(owner)
+    var camera=Camera3D.new();camera.projection=Camera3D.PROJECTION_ORTHOGONAL
+    camera.size=2.0;camera.position=Vector3(0,0,10);owner.add_child(camera);camera.current=true;owner.camera=camera
     owner.rig_config={"TILE_W":128};owner.quarter=0
     owner.source_depth=true;owner.source_normals=true
     geometry(owner,image)
-    return owner
+    return {"view":view,"owner":owner}
 
 func source_inputs(owner:ActorOwner)->Dictionary:
     var rig={"cell_width":64,"cell_height":64,"origin_y_from_ground":19,"facing_rows":{"SW":0,"NE":1},
@@ -67,7 +87,6 @@ func reference_actor(owner:ActorOwner,input:Dictionary)->Array:
         var entry:Dictionary=Original.layer(owner,input.row,input.rig,selected.layer,index)
         SourceMaterial.apply(entry,conditions);entry.bound_condition_parameters=conditions
         Original.bind_source(owner,entry,input.rig,BODY,0,"SW",conditions)
-        SourceMaterial.set_parameter(entry,"current_visibility",1.0);entry.scenery_value=1.0
         result.append(entry)
     return result
 
@@ -76,37 +95,51 @@ func compare_source(a:Dictionary,b:Dictionary,label:String)->void:
     check(a.cell==b.cell and a.pivot==b.pivot and a.scale==b.scale and a.screen_rect==b.screen_rect,label+" exact authored quad placement")
     check(a.node.mesh.size==b.node.mesh.size and a.node.mesh.center_offset==b.node.mesh.center_offset and a.node.custom_aabb==b.node.custom_aabb,label+" exact native mesh and expanded optical bounds")
     check(a.geometry_binding==b.geometry_binding and a.geometry_paths==b.geometry_paths and a.geometry_status==b.geometry_status,label+" exact optical source provenance")
+    check(a.material.shader==b.material.shader and a.node.material_override==a.material,label+" adopted node displays its own lit source material")
+
+# The receiving globals as play.gd publishes them, and one warm light.
+func publish_receiving(cap:bool,normals:bool,cookie:ImageTexture)->void:
+    var capped:float=1.0 if cap else 0.0
+    var hdr:bool=capped>0.0 and not normals
+    var ambient:=Color(AMBIENT,AMBIENT,AMBIENT)
+    RenderingServer.global_shader_parameter_set(&"light_ambient",ambient.linear_to_srgb().srgb_to_linear().r if hdr else ambient.r)
+    RenderingServer.global_shader_parameter_set(&"light_cap",capped)
+    RenderingServer.global_shader_parameter_set(&"light_normals",normals)
+    var source:Dictionary={"id":"fixture-light","enabled":true,"texture":cookie,"screen_position":Vector2(110,96),
+        "height":40.0,"energy":1.6,"color":Color(1,.74,.36,1),"texture_scale":300.0/cookie.get_width(),
+        "cookie_scale":Vector2.ONE,"offset":Vector2.ZERO}
+    var image:Image=cookie.get_image()
+    light_table.publish([source],func(texture:Texture2D)->Image:return image if texture==cookie else null)
+    check(light_table.count==1 and light_table.issues.is_empty(),"Fixture light enters the light table")
+
+func cookie_texture()->ImageTexture:
+    var image=Image.create(64,64,false,Image.FORMAT_RGBA8)
+    for y in 64:
+        for x in 64:
+            var d:float=Vector2(x+.5-32,y+.5-32).length()/32.0
+            image.set_pixel(x,y,Color(1,1,1,clampf(1.0-d,0.0,1.0)))
+    return ImageTexture.create_from_image(image)
 
 func first_draw(a:Dictionary,b:Dictionary,label:String)->void:
-    # Multiple modular layers intentionally share placement.id. The native
-    # pair key must retain actual layer identity, not overwrite one body layer
-    # with another while comparing received cells.
     await process_frame;await RenderingServer.frame_post_draw
-    var received_a:Image=a.atlas.viewport.get_texture().get_image()
-    var received_b:Image=b.atlas.viewport.get_texture().get_image()
-    var other:Dictionary={};var differences:int=0;var painted_actor_cells:int=0
-    for receiver in b.atlas.receivers:
-        other[receiver.entry.get("id",receiver.entry.placement.id)+":"+receiver.row_id]=receiver
-    for receiver in a.atlas.receivers:
-        var key:String=receiver.entry.get("id",receiver.entry.placement.id)+":"+receiver.row_id
-        var expected:Dictionary=other[key]
-        var actual:Image=received_a.get_region(Rect2i(receiver.position,receiver.crop.pixels.size))
-        if actual.get_data()!=received_b.get_region(Rect2i(expected.position,expected.crop.pixels.size)).get_data():differences+=1
-        if receiver.dynamic and actual.get_used_rect().has_area():painted_actor_cells+=1
+    await process_frame;await RenderingServer.frame_post_draw
     var image_a:Image=a.view.get_texture().get_image();var image_b:Image=b.view.get_texture().get_image()
     var exact:bool=image_a.get_data()==image_b.get_data()
-    check(differences==0,label+" every layer's native received cell is byte-exact on first draw")
+    var painted:int=0
+    for y in image_a.get_height():
+        for x in image_a.get_width():
+            if image_a.get_pixel(x,y).a8>0:painted+=1
     check(exact,label+" assembled final framebuffer is byte-exact on first draw")
-    check(painted_actor_cells==(2 if a.atlas.normals_visible else 3),label+" every intended visible actor layer paints received pixels")
-    cases[label]={"different_cells":differences,"final_framebuffer_exact":exact,"painted_actor_cells":painted_actor_cells}
-    image_a.save_png("res://.captures/atlas-growth/"+label+"-private.png")
-    image_b.save_png("res://.captures/atlas-growth/"+label+"-original.png")
+    check(painted>200,label+" the private actor paints visible lit pixels")
+    cases[label]={"final_framebuffer_exact":exact,"painted_pixels":painted}
+    image_a.save_png("res://.captures/actor-resource/"+label+"-private.png")
+    image_b.save_png("res://.captures/actor-resource/"+label+"-original.png")
 
-func actor_case(cap:bool,normals:bool,late:bool)->void:
+func actor_case(cap:bool,normals:bool,late:bool,cookie:ImageTexture)->void:
     var label:String="actor-private-"+("normals" if normals else "capped" if cap else "ldr")+("-late" if late else "-resident")
-    var a:Dictionary=make_side(pair_source(),cap,normals);var b:Dictionary=make_side(pair_source(),cap,normals)
-    publish(a,true,a.world.entries);publish(b,true,b.world.entries)
-    var image:Image=actor_image();var host_a:ActorOwner=actor_owner(a,image);var host_b:ActorOwner=actor_owner(b,image)
+    publish_receiving(cap,normals,cookie)
+    var image:Image=actor_image();var a:Dictionary=make_side(image);var b:Dictionary=make_side(image)
+    var host_a:ActorOwner=a.owner;var host_b:ActorOwner=b.owner
     # Both independent owners deliberately share the same admitted originals.
     host_b.textures=host_a.textures.duplicate();host_b.resources=host_a.resources.duplicate()
     var inputs:Dictionary=source_inputs(host_a);var input:Dictionary=inputs.values()[0]
@@ -114,75 +147,31 @@ func actor_case(cap:bool,normals:bool,late:bool)->void:
     if late:
         for path in texture_refs:texture_refs[path]=null
     var output:Dictionary={};var before:int=host_a.get_child_count()
-    var task:int=WorkerThreadPool.add_task(Resources.build_private.bind(inputs,texture_refs,host_a.resources.duplicate(),Construction.source_parameter_names(),a.atlas.actor_resource_options(a.world),output),false,"Actor first-frame private resources")
+    var task:int=WorkerThreadPool.add_task(Resources.build_private.bind(inputs,texture_refs,host_a.resources.duplicate(),Construction.source_parameter_names(),output),false,"Actor first-frame private resources")
     while not WorkerThreadPool.is_task_completed(task):await process_frame
     WorkerThreadPool.wait_for_task_completion(task)
     check(output.get("complete",false) and output.error=="" and output.draw_count==3,label+" finite resource task completes before residency")
-    check(host_a.get_child_count()==before and host_a.entries.is_empty() and a.atlas.dynamic_receivers.is_empty(),label+" worker publishes no Node or atlas membership")
+    check(host_a.get_child_count()==before and host_a.entries.is_empty(),label+" worker publishes no attached Node or membership")
     if late:
         var missing:Dictionary={}
         check(not Construction.complete_private_layer(output.rows[input.row.id][2],missing),label+" exact missing texture operands cannot falsely admit")
     var original:Array=reference_actor(host_b,input)
-    var adopted:Array=[];var total_pending:int=0;var bindings:Dictionary={};var jobs:Array=[]
+    var adopted:Array=[];var total_pending:int=0
     for index in output.rows[input.row.id]:
         var packet:Dictionary=output.rows[input.row.id][index]
-        check(packet.atlas.has("capture") and not packet.atlas.capture.has("entry")
-            and not packet.atlas.capture.proof.has("entry") and packet.atlas.capture.rows==[input.row],
-            label+" resource worker completes passive capture without a native identity")
+        var node:MeshInstance3D=packet.entry.node
+        check(node!=null and not node.is_inside_tree() and node.material_override==packet.entry.material and node.mesh==packet.mesh,
+            label+" worker builds the finished layer node outside any tree")
         total_pending+=packet.pending_textures.size()
         check(Construction.complete_private_layer(packet,host_a.textures),label+" actual selected texture closure completes")
         var entry:Dictionary=Construction.adopt_private_layer(host_a,packet)
-        var prepared:Dictionary=a.atlas.adopt_private_actor_binding(entry,packet.atlas,a.world,packet.filled_textures)
-        SourceMaterial.acknowledge(entry)
-        check(prepared.specs.is_empty() and prepared.receivers.is_empty() and prepared.material_only,label+" actor packet contains only private materials")
-        check(a.atlas.adopt_source_binding(prepared),label+" exact dynamic material owner admitted")
-        bindings[entry.node.get_instance_id()]=prepared
-        jobs.append({"entry":entry,"prepared":prepared,"rows":[entry.placement],"packet":{}})
+        check(entry.node==node and node.get_parent()==host_a,label+" scene adoption only attaches the worker node")
         compare_source(entry,original[index],label+" layer "+str(index))
-        entry.node.position=Vector3(-.3,.5,1);original[index].node.position=entry.node.position
+        entry.node.position=Vector3(-.1,.2,1);original[index].node.position=entry.node.position
         adopted.append(entry)
     check((total_pending>0)==late,label+" pending texture quantities match actual residency")
     check(adopted[2].source_parameters.effect_has_noise,label+" late palette noise retains its authored enabled state")
-    a.world.entries.append_array(adopted);a.world.actor_entries=adopted
-    b.world.entries.append_array(original);b.world.actor_entries=original
-    var private_groups:Dictionary={}
-    for index in output.rows[input.row.id]:
-        private_groups[index]=output.rows[input.row.id][index].atlas.groups.values()[0].material
-    var prefix:Dictionary=Atlas.Delta.begin_candidate(a.atlas,jobs,{},a.world)
-    while not Atlas.Delta.capture_candidate(a.atlas,prefix,a.world):pass
-    check(bindings.values().all(func(value):return not value.has("capture")),
-        label+" real identity admission transfers each completed capture once")
-    var plan_task:int=WorkerThreadPool.add_task(Atlas.Delta.compute_candidate.bind(prefix),false,"Actual private actor source prefix")
-    while not WorkerThreadPool.is_task_completed(plan_task):await process_frame
-    WorkerThreadPool.wait_for_task_completion(plan_task)
-    check(not prefix.has("error") and prefix.get("complete",false),label+" exact private actor plan completes")
-    check(Atlas.Delta.reserve_candidate_capacity(a.atlas,prefix),label+" exact private actor plan capacity is admitted")
-    while not Atlas.Delta.prepare_candidate_binding(a.atlas,prefix,bindings):pass
-    check(not prefix.has("error") and prefix.get("bound",false),label+" receiving Nodes and output install finish before publication")
-    prefix.admitted=true;a.atlas.prepared_delta=prefix
-    var delivery:Array=[]
-    for index in adopted.size():
-        var entry:Dictionary=adopted[index]
-        var group:Dictionary=bindings[entry.node.get_instance_id()].groups.values()[0]
-        delivery.append({"layer":index,"source_version":entry.source_version,"change_base":entry.source_change_base,
-            "group_version":group.version,"source_material":group.get("source_material")==entry.material,
-            "source_shader":group.source_shader==entry.material.shader,"target_material":group.get("target_material")==group.material,
-            "target_shader":group.get("target_shader")==group.material.shader,
-            "binding_revision":group.get("binding_revision",-1)==entry.source_binding_revision})
-    publish(a,false,adopted);publish(b,true,b.world.entries)
-    if a.atlas.last_reconcile_phases.get("material_full_copies",0)!=0:
-        var copies:Dictionary={}
-        for key in ["material_full_copies","material_receiver_full_dynamic","material_receiver_full_static",
-            "material_output_full_dynamic","material_output_full_static","material_frame_copies","material_sample_versions"]:
-            copies[key]=a.atlas.last_reconcile_phases.get(key,0)
-        print("ACTOR_FIRST_PUBLICATION_DIAGNOSTIC ",JSON.stringify({"label":label,"copies":copies,"delivery_before_publish":delivery}))
-    check(a.atlas.last_reconcile_phases.get("material_full_copies",0)==0,
-        label+" first published sample consumes the completed worker delivery without a full receiving copy")
-    for index in adopted.size():
-        check(row_receiver(a.atlas,adopted[index]).group.material==private_groups[index],label+" retains exact worker receiving material "+str(index))
-    check(a.atlas.last_reconcile_phases.get("prepared_prefix_specs",0)>=3
-        and a.atlas.last_reconcile_phases.get("delta_fallback","").is_empty(),
-        label+" first actual atlas uses the completed private prefix without fallback")
+    check(host_a.actor_entries==adopted and host_a.entries==adopted,label+" adoption registers each layer once in canonical order")
     if DisplayServer.get_name()!="headless":await first_draw(a,b,label+"-idle")
     var actual:Dictionary=Construction.Conditions.material(input.row.id,[]);actual.alpha=.36;actual.brightness=.8
     var changed:Dictionary=Construction.Conditions.parameters(actual,host_a.textures,host_a.resources);changed.make_read_only()
@@ -190,31 +179,38 @@ func actor_case(cap:bool,normals:bool,late:bool)->void:
         Construction.bind_source(host_a,adopted[index],input.rig,BODY,2,"NE",changed)
         Original.bind_source(host_b,original[index],input.rig,BODY,2,"NE",changed)
         compare_source(adopted[index],original[index],label+" current hidden+UV "+str(index))
-    publish(a,false,adopted);publish(b,true,b.world.entries)
-    check(a.atlas.last_reconcile_phases.get("material_full_copies",0)==0,label+" first real nonneutral/UV sample uses operand deltas rather than reinitializing")
     if DisplayServer.get_name()!="headless":await first_draw(a,b,label+"-current-hidden-uv")
-    a.atlas.close();b.atlas.close();a.view.queue_free();b.view.queue_free();await process_frame
+    a.view.queue_free();b.view.queue_free();await process_frame
 
 func cancellation_case()->void:
-    var side:Dictionary=make_side(pair_source(),true,false);var owner:ActorOwner=actor_owner(side,actor_image())
+    var side:Dictionary=make_side(actor_image());var owner:ActorOwner=side.owner
     var inputs:Dictionary=source_inputs(owner);var output:Dictionary={}
-    var task:int=WorkerThreadPool.add_task(Resources.build_private.bind(inputs,owner.textures.duplicate(),owner.resources.duplicate(),Construction.source_parameter_names(),side.atlas.actor_resource_options(side.world),output),false,"Canceled private actor resources")
+    var task:int=WorkerThreadPool.add_task(Resources.build_private.bind(inputs,owner.textures.duplicate(),owner.resources.duplicate(),Construction.source_parameter_names(),output),false,"Canceled private actor resources")
     while not WorkerThreadPool.is_task_completed(task):await process_frame
     WorkerThreadPool.wait_for_task_completion(task)
-    var source:WeakRef=weakref(output.rows["assembled-actor"][1].entry.material)
-    var received:WeakRef=weakref(output.rows["assembled-actor"][1].atlas.output.received_material)
-    check(source.get_ref()!=null and received.get_ref()!=null and owner.entries.is_empty(),"Canceled worker owns hidden resources without any actor Node")
-    output.clear();inputs.clear();await process_frame
-    check(source.get_ref()==null and received.get_ref()==null,"Cancellation releases source/receiving packet without a dictionary cycle")
-    side.atlas.close();side.view.queue_free();await process_frame
+    var packet:Dictionary=output.rows["assembled-actor"][1]
+    var source:WeakRef=weakref(packet.entry.material)
+    var mesh:WeakRef=weakref(packet.mesh)
+    var nodes:Array=[]
+    for value in output.rows["assembled-actor"].values():nodes.append(value.entry.node)
+    check(source.get_ref()!=null and mesh.get_ref()!=null and owner.entries.is_empty() and nodes.all(func(node):return not node.is_inside_tree()),
+        "Canceled worker owns hidden resources without any attached actor Node")
+    # The canceling owner frees the detached worker nodes it never adopted.
+    packet={};output.clear();inputs.clear()
+    for node in nodes:node.free()
+    nodes.clear()
+    await process_frame
+    check(source.get_ref()==null and mesh.get_ref()==null,"Cancellation releases source material and mesh without a dictionary cycle")
+    side.view.queue_free();await process_frame
 
 func run()->void:
     root.position=Vector2i(-16000,-16000);root.unfocusable=true
-    DirAccess.make_dir_recursive_absolute("res://.captures/atlas-growth")
+    DirAccess.make_dir_recursive_absolute("res://.captures/actor-resource")
+    var cookie:ImageTexture=cookie_texture()
     for mode in [[false,false],[true,false],[true,true]]:
-        for late in [false,true]:await actor_case(mode[0],mode[1],late)
+        for late in [false,true]:await actor_case(mode[0],mode[1],late,cookie)
     await cancellation_case()
     var report={"checks":checks,"failures":failures,"cases":cases,"renderer":RenderingServer.get_current_rendering_method(),
-        "scope":"Assembled private actor resource packet versus ordinary constructor; first received/final framebuffer, current Hidden+UV, late body/companion/noise closure and no-node cancellation. No gameplay latency claim."}
+        "scope":"Assembled private actor resource packet versus ordinary constructor; worker-built detached layer nodes, first lit final framebuffer in LDR/capped/Normals, current Hidden+UV, late body/companion/noise closure and no-cycle cancellation. No gameplay latency claim."}
     FileAccess.open("res://generated/actor_resource_preparation_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("ACTOR_RESOURCE_PREPARATION ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)

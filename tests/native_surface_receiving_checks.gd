@@ -1,12 +1,75 @@
-extends "res://tests/native_floor_address_checks.gd"
+extends "res://tests/native_2d_integration_checks.gd"
 # Same actual disclosed scene: receiving-normal and connected-floor correction
-# versus the prior single-ray/exposed-skirt baseline, through final3D output.
+# versus the prior single-ray/exposed-skirt baseline, through the lit sprites'
+# final3D output. Sprites light themselves from the light table; the baseline
+# is reproduced on their own materials and receiving globals.
+const GroundReceiving=preload("res://presentation/ground_receiving.gd")
+var baseline_normals:Dictionary={}
+
+func snapshot()->Image:
+    await process_frame;await RenderingServer.frame_post_draw
+    await process_frame;await RenderingServer.frame_post_draw
+    return root.get_texture().get_image()
+
+func difference(a:Image,b:Image)->Dictionary:
+    var changed:=0;var alpha:=0;var maximum:=0
+    for y in a.get_height():
+        for x in a.get_width():
+            var av=a.get_pixel(x,y);var bv=b.get_pixel(x,y)
+            var delta=maxi(absi(av.r8-bv.r8),maxi(absi(av.g8-bv.g8),absi(av.b8-bv.b8)))
+            maximum=maxi(maximum,delta)
+            if delta>0:changed+=1
+            if av.a8!=bv.a8:alpha+=1
+    return {"changed":changed,"alpha":alpha,"maximum":maximum}
+
+## Republish the receiving globals (cap/Normals/ambient, light table, supports)
+## from the scene's own state while its _process is stopped.
+func publish_receiving(scene:Node)->void:
+    scene._publish_receiving()
+
+func prop_entries(scene:Node)->Array:
+    return scene.entries.filter(func(entry):return entry.get("record",{}).get("normal",{}).has("original_path"))
+
+## Interior skirt joins come from the ground_supports global. NaN supports make
+## every neighbour comparison false: each skirt receives as an exposed return.
+func set_joins(scene:Node,enabled:bool)->void:
+    if enabled:
+        scene.ground_supports_revision=-1;publish_receiving(scene);return
+    var rect:Vector4=GroundReceiving.support_image(scene.entries).rect
+    var image:=Image.create_empty(maxi(1,int(rect.z)),maxi(1,int(rect.w)),false,Image.FORMAT_RF)
+    image.fill(Color(NAN,0,0))
+    RenderingServer.global_shader_parameter_set(&"ground_supports",ImageTexture.create_from_image(image))
+
+## Original single-ray prop normals live in the registered geometry packet.
+func set_prop_normals(scene:Node,corrected:bool)->void:
+    for entry in prop_entries(scene):
+        var material:ShaderMaterial=entry.material
+        var key:int=material.get_instance_id()
+        if not baseline_normals.has(key):baseline_normals[key]=material.get_shader_parameter("normal_texture")
+        material.set_shader_parameter("normal_texture",baseline_normals[key] if corrected else material.get_shader_parameter("geometry_texture"))
+
 func original_receiving(scene:Node,enabled:bool)->void:
-    for group in scene.native_light_atlas.groups.values():
-        group.material.set_shader_parameter("ground_join_mask",0 if enabled else group.get("join_mask",0))
-        var record:Dictionary=group.entry.get("record",{})
-        if record.get("normal",{}).has("original_path"):
-            group.material.set_shader_parameter("normal_texture",group.entry.material.get_shader_parameter("geometry_texture") if enabled else group.entry.material.get_shader_parameter("normal_texture"))
+    set_joins(scene,not enabled);set_prop_normals(scene,not enabled)
+
+func receiver_counts(scene:Node)->Dictionary:
+    var supports:Dictionary=GroundReceiving.heights(scene.entries)
+    var joins:=0;var exposed:=0
+    for entry in scene.entries:
+        if not entry.node.visible or not entry.has("batch_rows"):continue
+        for row in entry.batch_rows:
+            if GroundReceiving.mask(row,supports)>0:joins+=1
+            else:exposed+=1
+    return {"joined":joins,"unjoined":exposed,"props":prop_entries(scene).filter(func(entry):return entry.node.visible).size()}
+
+## Move and brighten every table light; restore by republishing the scene's own sources.
+func perturb_lights(scene:Node,perturbed:bool)->void:
+    var sources:Array=[]
+    for source in scene.source_lighting.canvas_sources():
+        var copy:Dictionary=source.duplicate()
+        if perturbed:copy.energy=8.0;copy.screen_position+=Vector2(331,173)
+        sources.append(copy)
+    scene.light_table.publish(sources,scene.generated_shadows.cookie_image)
+
 func lighting_receipt(scene:Node)->Dictionary:
     var actors=[]
     for id in scene.timeline.state.audience.controlled:
@@ -16,13 +79,15 @@ func lighting_receipt(scene:Node)->Dictionary:
             if item.get("item_id","")=="equipment.portable_torch":
                 torches.append({"id":item.item_uuid,"name":item.name,"is_lit":item.is_lit})
         actors.append({"id":id,"name":actor.name,"position":actor.last_visual_position,"torches":torches})
+    var enabled:Dictionary={}
+    for source in scene.source_lighting.canvas_sources():enabled[source.id]=source.enabled
     var lights=[]
     for source in scene.source_lighting.sources:
         var label=""
         if not source.actor_uuid.is_empty(): label=scene.timeline.state.actors[source.actor_uuid].name
         elif scene.timeline.state.objects.has(source.item_uuid): label=scene.timeline.state.objects[source.item_uuid].item.name
-        lights.append({"id":source.item_uuid,"name":label,"actor_id":source.actor_uuid,"position":[source.position.x,source.position.y,source.position.z],"enabled":scene.source_lighting.nodes[source.item_uuid].enabled})
-    return {"sequence":scene.timeline.sequence,"actors":actors,"resolved_sources":lights,"light_strength":scene.source_lighting.light_strength,"source_override":false,"wall_mode":scene.wall_mode}
+        lights.append({"id":source.item_uuid,"name":label,"actor_id":source.actor_uuid,"position":[source.position.x,source.position.y,source.position.z],"enabled":enabled.get(source.item_uuid,false)})
+    return {"sequence":scene.timeline.sequence,"actors":actors,"resolved_sources":lights,"table_lights":scene.light_table.count,"light_strength":scene.source_lighting.light_strength,"source_override":false,"wall_mode":scene.wall_mode}
 
 func run()->void:
     var expect_off="--expect-carried-off" in OS.get_cmdline_user_args()
@@ -52,40 +117,39 @@ func run()->void:
         scene.set_process(true);scene.request_view(quarter)
         while scene.rotation_pending() and Time.get_ticks_msec()<deadline:await scene.presentation_updated
         await scene.presentation_updated;await scene.presentation_updated;scene.set_process(false)
+        var after=await snapshot()
+        set_joins(scene,false)
+        var exposed_skirts=await snapshot()
         original_receiving(scene,true)
         var before=await snapshot()
         original_receiving(scene,false)
-        var after=await snapshot()
-        var joins=0;var exposed=0;var props=0
-        for receiver in scene.native_light_atlas.receivers:
-            if receiver.get("join_mask",0)>0:joins+=1
-            elif receiver.index>=0:exposed+=1
-            if receiver.entry.get("record",{}).get("normal",{}).has("original_path"):props+=1
+        var restored_after=await snapshot()
+        var counts=receiver_counts(scene)
         var delta=difference(before,after)
-        check(joins>0 and props>0,"Actual published terrain/prop receivers use both corrected inputs q"+str(quarter))
+        check(counts.joined>0 and counts.props>0,"Actual published terrain/prop receivers use both corrected inputs q"+str(quarter))
+        check(difference(exposed_skirts,after).changed>0,"Actual final framebuffer responds to connected-floor joins q"+str(quarter))
+        check(difference(before,exposed_skirts).changed>0,"Actual final framebuffer responds to integrated prop normals q"+str(quarter))
         check(delta.changed>0,"Actual final framebuffer responds to corrected receiving q"+str(quarter))
         check(delta.alpha==0,"Actual final framebuffer keeps alpha q"+str(quarter))
+        check(difference(after,restored_after).maximum==0,"Restoring corrected inputs restores the published frame exactly q"+str(quarter))
         before.save_png(capture_dir+"/q%d-before.png"%quarter);after.save_png(capture_dir+"/q%d-after.png"%quarter)
-        scene.set_normals_visible(true);scene.native_light_atlas.sync(scene);scene.native_light_atlas.sync_output(scene)
+        scene.set_normals_visible(true);publish_receiving(scene)
         var normals=await snapshot()
         check(difference(after,normals).changed>0,"Normals view shows receiving vectors without native illumination q"+str(quarter))
-        var lights=[]
-        for light in scene.source_lighting.nodes.values():
-            lights.append({"node":light,"energy":light.energy,"position":light.position})
-            light.energy=8.0;light.position+=Vector2(331,173)
+        perturb_lights(scene,true)
         var moved_lights=await snapshot()
         check(difference(normals,moved_lights).maximum==0,"Normals view is exactly invariant to light energy and position q"+str(quarter))
-        for light in lights:light.node.energy=light.energy;light.node.position=light.position
+        perturb_lights(scene,false)
         var shadow_visible=false
         for entry in scene.actor_entries:
             if entry.get("generated_shadow",false) and entry.node.visible:shadow_visible=true
         check(not shadow_visible,"Normals omits generated shadow overlays q"+str(quarter))
         normals.save_png(capture_dir+"/q%d-normals.png"%quarter)
-        scene.set_normals_visible(false);scene.native_light_atlas.sync(scene);scene.native_light_atlas.sync_output(scene)
+        scene.set_normals_visible(false);publish_receiving(scene)
         var restored=await snapshot()
         check(difference(after,restored).maximum<=1,"Disabling Normals restores original receiving frame q"+str(quarter))
-        receipts.append({"quarter":quarter,"joined":joins,"unjoined":exposed,"props":props,"difference":delta})
+        receipts.append({"quarter":quarter,"joined":counts.joined,"unjoined":counts.unjoined,"props":counts.props,"difference":delta,"lights":scene.light_table.count})
     check(scene.timeline.state==canonical,"Receiving corrections never alter canonical gameplay")
     check(scene.presentation_errors.is_empty(),"Actual scene has no missing source or receiving errors")
-    var report={"lighting":source_receipt,"checks":checks,"failures":failures,"cases":receipts,"renderer":RenderingServer.get_current_rendering_method(),"driver":RenderingServer.get_current_rendering_driver_name(),"scope":"Final3D finite recorded scene in four quarters. Before uses original single-ray prop normals and independently exposed floor skirts; after uses source pixel-integrated Cycles normals and published-topology interior joins. Alpha/state unchanged. Pixel differences are recorded, not a subjective-quality assertion."}
+    var report={"lighting":source_receipt,"checks":checks,"failures":failures,"cases":receipts,"renderer":RenderingServer.get_current_rendering_method(),"driver":RenderingServer.get_current_rendering_driver_name(),"scope":"Final3D finite recorded scene in four quarters, lit sprite shaders. Before uses original single-ray prop normals (geometry packet) and independently exposed floor skirts (no ground supports); after uses source pixel-integrated Cycles normals and published-topology interior joins. Alpha/state unchanged. Pixel differences are recorded, not a subjective-quality assertion."}
     FileAccess.open("res://generated/native_surface_receiving_checks"+suffix+".json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "));print("NATIVE_SURFACE_RECEIVING ",JSON.stringify(report));scene.queue_free();await process_frame;await process_frame;quit(0 if failures.is_empty() else 1)
