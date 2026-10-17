@@ -1085,6 +1085,9 @@ func _prepare_object(deadline:int)->bool:
 
 func _prepare_object_step(deadline:int,measured:bool)->bool:
     if object_blocked_frame==Engine.get_process_frames():return false
+    # Ready rows are adopted in one pass up to the deadline; a scene-owned
+    # flame or ordinary constructor still ends the turn after one row.
+    var progress:bool=false
     var checked:int=0
     while checked<wanted_ids.size() and Time.get_ticks_usec()<deadline:
         var id:String=wanted_ids[object_cursor]
@@ -1098,7 +1101,7 @@ func _prepare_object_step(deadline:int,measured:bool)->bool:
         if not old.is_empty() and old.row==row:
             objects_complete[id]=true
             if measured:object_work_counts.retained+=1
-            return true
+            progress=true;continue
         if native_groups.has(id):
             var group:Dictionary=native_groups[id]
             if group.source_cursor<group.entries.size():
@@ -1157,10 +1160,11 @@ func _prepare_object_step(deadline:int,measured:bool)->bool:
         created_count+=static_entries.size()-first
         if measured:object_work_counts.constructed+=1
         phase_usec.objects=phase_usec.get("objects",0)+Time.get_ticks_usec()-began
-        return true
+        if not from_worker or flame_index>=0:return true
+        objects_complete[id]=true;progress=true
     # Every remaining object waits for the resource worker or a source.
-    if checked>=wanted_ids.size():object_blocked_frame=Engine.get_process_frames()
-    return false
+    if not progress and checked>=wanted_ids.size():object_blocked_frame=Engine.get_process_frames()
+    return progress
 
 func _prepare_ground(deadline:int)->bool:
     if ground_job.is_empty() and ground_complete.size()==(ground_target_count if ground_target_count>=0 else ground_keys.size()):return false

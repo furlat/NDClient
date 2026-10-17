@@ -239,12 +239,11 @@ static func environment_parameter_names()->Dictionary:
     return SourceMaterial.declared_parameters[ENVIRONMENT_SHADER]
 
 func adopt_environment_row(_row:Dictionary,prepared_entries:Array)->void:
-    var measured:bool=bool(profile.get("recording",false))
+    # The worker built and configured the node, including the environment
+    # light policy (derive_static); only scene attachment is left.
+    var parent:Node=sprite_parent if sprite_parent!=null else self
     for entry in prepared_entries:
         var value:Dictionary=entry.prepared_source
-        var started:int=Time.get_ticks_usec() if measured else 0
-        # The worker built and configured the node; only scene attachment is left.
-        var node:MeshInstance3D=entry.node
         entry.erase("mesh")
         entry.screen_rect=Rect2()
         entry.record=value.record
@@ -252,12 +251,8 @@ func adopt_environment_row(_row:Dictionary,prepared_entries:Array)->void:
             entry.cell=value.cell;entry.pivot=value.pivot;entry.scale=value.scale
             entry.screen_rect=value.screen_rect;entry.floor_group=value.floor_group
         entry.erase("prepared_source")
-        if measured:FrameProfile.end_phase(profile,"world_environment_node_adopt",started);started=Time.get_ticks_usec()
-        (sprite_parent if sprite_parent!=null else self).add_child(node)
-        if measured:FrameProfile.end_phase(profile,"world_environment_node_attach",started);started=Time.get_ticks_usec()
-        entries.append(entry);static_entries.append(entry)
-        _light_entry(entry)
-        if measured:FrameProfile.end_phase(profile,"world_environment_register",started)
+        parent.add_child(entry.node)
+    entries.append_array(prepared_entries);static_entries.append_array(prepared_entries)
 
 func _ground_sort(rows: Array, packets: Dictionary) -> void:
     preload("res://presentation/ground_data.gd").sort_rows(rows,packets,quarter)
