@@ -602,3 +602,31 @@ Door, current window: room preparation starts at the packet; derivation
 cue by ~50 ms under this load. The publication frame is dominated by shadow
 updates (L4), draw sorting (L3), timeline state apply (~1.3 ms) and wall
 visibility (~1.1 ms).
+
+## Night, 17 October: merges and baked spell effects
+
+| Commit | Change | Evidence |
+|---|---|---|
+| `c698883` (L4) | Shadows: change detection, no cookie readback, fixed helper targets (no resize in play). | Gate 0 failures; primaries differ only by 4-31 shadow pixels at 1/255 (accepted). |
+| `e238ad2` (L7) | Native construction without GPU readback (15-19 -> 1-4 ms); spell passes warmed; Studio swatches parked; sprite-sheet condition effects deleted; native receiving pages lit by the light table. | Gate 8,883/0; only the Haste and See Invisibility sprite pixels change. |
+| `25cb447` | Baked native effects (recorded particle states) for static clips; actor receiver proxies never deferred. | `baked_effect_checks` 178/0; live route 81/0. |
+| `8b4db36` | Baked moving projectiles (path-placed particles, path trails); one-file-at-a-time loading with per-frame texture creation; canonical clip hashes. | `baked_effect_checks` 187/0; three live routes 81/0, no stale fallbacks. |
+| `0e8d882` (L3) | Draw order: moving draws keep ranks in gaps between statics; work only on change; shared route material. | L3: order oracle 118,098/0 over 44 journals; idle `draw_order` 0.265 -> 0.074 ms. |
+
+Fireball (live route, Fireball portion, same machine as the native runs):
+effect sampling 0.29-0.33 -> 0.18-0.19 ms per frame; no mid-cast freeze (the
+43-114 ms holds were gone after L7); remaining waits are one frame at cast
+start, from the spell pass's floor receivers being rebuilt when the ground
+batch changes (budgeted GDScript loop). Contract and guidance:
+[NATIVE_VFX_RUNTIME_CONTRACT_2026-10-17.md](NATIVE_VFX_RUNTIME_CONTRACT_2026-10-17.md).
+
+Studio load time (measurement agent): the "Preparing 4.7 s" text is the
+recording position, not elapsed time. A cold Studio launch to the first case
+is 4.2-5.2 s (engine 1.0, GDScript compile 1.9-2.3, `Recording.read` 1.0-1.1
+with a GDScript JSON parser 7x slower than Godot's, media plan 0.3); a case
+switch 1.1-1.7 s with a 40-130 ms main-thread free of the old index. Fixes are
+in progress on `feature/opus-load`.
+
+Open: floor receiver rebuild wait at cast start; bake the remaining spells and
+add the bake to asset preparation; Fire Bolt's flight (CPU Trail3D) stays
+native; L5 and the door path; L8.
