@@ -153,7 +153,10 @@ func run()->void:
     check(service.decorate(world,future).ready,"An active tail remains available beyond its preparation group")
     service.decorate(world,[])
     await frame()
-    check(world.get_children().filter(func(node):return node is SubViewport).is_empty(),"Expired admitted and active occurrences release their native viewports")
+    # Expired surfaces park for the next hit: nothing draws, and they are the
+    # owner's spare surfaces, released when the owner closes.
+    var parked:Array=world.get_children().filter(func(node):return node is SubViewport)
+    check(parked.all(func(view):return view.render_target_update_mode==SubViewport.UPDATE_DISABLED) and parked.size()==service.spare_surfaces.size(),"Expired admitted and active occurrences park their native viewports")
     var definitions=JSON.parse_string(FileAccess.get_file_as_string("res://authoring/sandbox/body_materials.json")).spells
     var unsupported:Array=[]
     for id in ["burning_hands","chill_touch","poison_spray","shocking_grasp"]:
@@ -163,6 +166,8 @@ func run()->void:
     check(service.decorate(world,unsupported).ready,"Unsupported full materials do not stall the existing feedback")
     for row in unsupported:check(not row.has("native_surface") and row.color=="#fb632d","Unsupported "+row.id+" retains colour with no fabricated native surface")
     service.close()
+    await frame()
+    check(world.get_children().filter(func(node):return node is SubViewport).is_empty(),"Closing the owner releases its parked native viewports")
     for failure in ["node","surface","clock"]:
         var invalid=fire.duplicate(true)
         if failure=="node":invalid.definition.node="travel/Absent"

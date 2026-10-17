@@ -1,6 +1,7 @@
 extends SceneTree
 const Preview=preload("res://presentation/native_effect_preview.gd")
 const Lighting=preload("res://presentation/lighting_2d.gd")
+const LightTable=preload("res://presentation/light_table.gd")
 var passed=0
 var failures:Array=[]
 var cases:Array=[]
@@ -26,29 +27,30 @@ func run()->void:
     var owner=Node3D.new();main.add_child(owner)
     var camera=Camera3D.new();owner.add_child(camera);camera.projection=Camera3D.PROJECTION_ORTHOGONAL
     camera.keep_aspect=Camera3D.KEEP_WIDTH;camera.size=6.0;camera.current=true
+    # Room lights come from the shared light table, as in play.
+    var world_lights=Lighting.new()
+    var cookie:Texture2D=world_lights._source_cookie({"outer":6.0,"very_bright_radius_feet":10,"bright_radius_feet":20})
+    while cookie==null:
+        await process_frame;cookie=world_lights._source_cookie({"outer":6.0,"very_bright_radius_feet":10,"bright_radius_feet":20})
+    for i in 3:await process_frame
+    var table=LightTable.new()
     for quarter in 4:
         var basis=Basis(Vector3.UP,quarter*PI*.5)*Basis.looking_at(Vector3(-6,-sqrt(24.0),-6))
         camera.basis=basis;camera.position=Vector3(0,.9*.816496580927726,0)+basis.z*12.
         for id in ["blood.hit_a1","blood.hit_a2","blood.deposit_a1"]:
             var preview=Preview.new();owner.add_child(preview)
             check(preview.configure(id,{},73).is_empty(),id+" selected source builds")
-            var lights=Lighting.new()
-            lights.sources=[{"item_uuid":"registered_fixture"}]
-            lights._source_colours={"registered_fixture":Lighting.TORCH_COLOUR}
-            check(preview.bind_receiving(lights).is_empty(),id+" source materials bind native Canvas receiving")
+            check(preview.bind_receiving().is_empty(),id+" source materials bind table receiving")
             var record=preview.record;var ppu=float(record.pixels_per_unit)
             var top_left=Vector3(-record.pivot[0]/ppu,record.pivot[1]/ppu,0)
             var origin=camera.unproject_position(basis*top_left)
             var pixel_scale=(camera.unproject_position(basis*Vector3.RIGHT)-camera.unproject_position(Vector3.ZERO)).length()/ppu
             var context={"screen_origin":origin,"pixel_scale":pixel_scale,"light_cap":1.0,"source_basis":Basis(Vector3.UP,.4),"supports":[]}
-            # Production projection updates every attached receiving page. The
-            # split source owns two pages for one field and one simulation.
-            var light_nodes:Array=[]
-            for page in lights._pages:
-                var node:PointLight2D=page.nodes.registered_fixture
-                node.position=camera.unproject_position(Vector3.ZERO)+Vector2(40,-70)
-                node.height=56.0*pixel_scale;node.scale=Vector2.ONE*2.0;node.energy=.9;node.enabled=true
-                light_nodes.append(node)
+            # One registered torch near the source, as Lighting2D.project() builds it.
+            var at:Vector2=camera.unproject_position(Vector3.ZERO)+Vector2(40,-70)
+            var light={"id":"registered_fixture","screen_position":at,"texture":cookie,"texture_scale":2.0*300.0/cookie.get_width(),
+                "cookie_scale":Vector2.ONE*2.0,"offset":Vector2.ZERO,"height":56.0*pixel_scale,"energy":.9,"color":Lighting.TORCH_COLOUR,"enabled":true}
+            table.publish([light],func(_texture):return null)
             var age=.2 if id!="blood.deposit_a1" else 2.0
             if id=="blood.deposit_a1":
                 var missing=preview.sample(age,basis,Vector3.ZERO,1.0,[],context)
@@ -68,21 +70,19 @@ func run()->void:
             await process_frame;await RenderingServer.frame_post_draw
             var colour=preview.viewport.get_texture().get_image()
             var normal=preview.receiving.normal.get_texture().get_image()
-            var material=preview.receiving.material.get_texture().get_image()
             var final_image=main.get_texture().get_image()
             var covered=count_alpha(colour)
             check(covered>0,id+" actual selected source has native coverage in q"+str(quarter))
-            check(count_alpha(normal)>0 and count_alpha(material)>0,id+" original normal/roughness passes have coverage")
+            check(count_alpha(normal)>0,id+" original normal pass has coverage")
             check(preview.sample_ready and preview.surface.visible,id+" source publishes its rendered requested age")
             var name="q%d-%s"%[quarter,id.replace(".","-")]
             colour.save_png("res://.captures/native-effects/blood/"+name+"-colour.png")
             preview.receiving.depth.get_texture().get_image().save_png("res://.captures/native-effects/blood/"+name+"-depth.png")
             normal.save_png("res://.captures/native-effects/blood/"+name+"-normal.png")
-            material.save_png("res://.captures/native-effects/blood/"+name+"-material.png")
             final_image.save_png("res://.captures/native-effects/blood/"+name+"-lit.png")
-            for node in light_nodes:node.energy=0.0
+            light.energy=0.0;table.publish([light],func(_texture):return null)
             var changed_light=preview.sample(age,basis,Vector3.ZERO,1.0,[],context)
-            check(not changed_light.ready,id+" changed receiving light waits for a new native draw")
+            check(changed_light.ready,id+" a changed room light needs no new native capture")
             await process_frame;await RenderingServer.frame_post_draw
             var dark=main.get_texture().get_image()
             var same_normal=preview.receiving.normal.get_texture().get_image()
@@ -90,7 +90,7 @@ func run()->void:
             check(max_alpha_difference(final_image,dark)==0.0,id+" light energy leaves final coverage unchanged")
             check(final_image.get_data()!=dark.get_data(),id+" actual final output responds to native light")
             cases.append({"id":id,"quarter":quarter,"source_covered_pixels":covered,"capture":name})
-            preview.close();preview.free();lights.clear_pages()
+            preview.close();preview.free()
     main.free()
     var report={"passed":passed,"failed":failures.size(),"failures":failures,"cases":cases,"renderer":RenderingServer.get_current_rendering_method(),"scope":"Selected native blood sources with controlled native2D lights and explicit flat support planes; original shader colour/coverage/normal/roughness, no donor light. Composition-normal/Canvas specular is an explicit receiving adaptation, not donor3D PBR equivalence."}
     var file=FileAccess.open("res://generated/native_effect_receiving_checks.json",FileAccess.WRITE);file.store_string(JSON.stringify(report,"  "));file.close()

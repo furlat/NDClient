@@ -1,7 +1,6 @@
 extends RefCounted
 ## Passive source/implementation inventory. A compiled row is not render proof.
 const Authoring=preload("res://presentation/authoring.gd")
-const RegisteredMedia=preload("res://presentation/registered_media.gd")
 const Catalog=preload("res://source_catalog.gd")
 const NativeSpells=preload("res://presentation/native_spell_authoring.gd")
 const NativeFactory=preload("res://presentation/native_factory_source.gd")
@@ -75,7 +74,7 @@ static func _indicator_assignment(entry: Dictionary,recipe: Dictionary,cache: Di
 
 static func _media(asset: String,cache: Dictionary,availability: Dictionary) -> Dictionary:
     if availability.has(asset):return availability[asset]
-    var result={"asset_id":asset,"kind":"registered_media","source_id":"","availability":"missing","missing_paths":[],"reason":"missing_media_registration"}
+    var result={"asset_id":asset,"kind":"sprite_vfx","source_id":"","availability":"missing","missing_paths":[],"reason":"native_source_not_authored"}
     var selected:Dictionary=Authoring.load_data("native_effects/index.json",cache).get("sources",{})
     for id in selected:
         var record:Dictionary=selected[id]
@@ -95,21 +94,16 @@ static func _media(asset: String,cache: Dictionary,availability: Dictionary) -> 
         result.availability="available" if result.missing_paths.is_empty() else "missing"
         if result.availability=="missing":result.reason="condition_static_image_missing"
         availability[asset]=result;return result
-    var resolved:String=metadata.get("asset_id",asset)
-    result.resolved_asset_id=resolved
-    var media=RegisteredMedia.resolve(resolved,cache)
-    if media.status=="available":
-        result.reason=""
-        for path in media.paths:
-            if not FileAccess.file_exists(Catalog.media_path(path)):result.missing_paths.append(path)
-        result.availability="available" if result.missing_paths.is_empty() else "missing"
-        if result.availability=="missing":result.reason="registered_media_file_missing"
+    # Sprite-sheet effects have no renderer. The asset shows nothing until a
+    # native source is authored for it (native_effects/index.json media_ids).
+    result.kind="sprite_vfx";result.reason="native_source_not_authored"
+    result.resolved_asset_id=metadata.get("asset_id",asset)
     availability[asset]=result;return result
 
 static func _layer(entry: Dictionary,phase: String,layer: Dictionary,pointer: String,implemented: bool,cache: Dictionary,availability: Dictionary) -> void:
     var asset:String=layer.get("assetId","")
     var media=_media(asset,cache,availability)
-    var source_implemented=implemented and media.kind!="condition_static_image"
+    var source_implemented=implemented and media.kind not in ["condition_static_image","sprite_vfx"]
     var reason:String=media.reason if media.availability=="missing" else ("" if source_implemented else ("condition_static_image_not_implemented" if implemented else "condition_phase_effect_not_compiled"))
     _require(entry,phase,"layer:"+str(layer.id),pointer,source_implemented,reason,media.availability,{"asset_id":asset,"component_kind":media.kind,"source_id":media.source_id,"resolved_asset_id":media.get("resolved_asset_id",asset),"missing_paths":media.missing_paths.duplicate()})
     if not implemented:return
@@ -133,11 +127,13 @@ static func _layer(entry: Dictionary,phase: String,layer: Dictionary,pointer: St
         _require(entry,phase,"layer:"+str(layer.id)+":lifeStates",pointer+"/lifeStates",true)
 
     var metadata:Dictionary=media.get("metadata",{})
+    # Application and removal banks were sprite-sheet crossfades: nothing draws
+    # them until a native source is authored.
     for field in ["application_asset_id","removal_asset_id","removal_mask_asset_id"]:
         if metadata.get(field)!=null:
             var source=_media(metadata[field],cache,availability)
-            var supported=field!="removal_mask_asset_id" and metadata.get("application_mode","crossfade")=="crossfade"
-            _require(entry,phase,"layer:"+str(layer.id)+":"+field,"catalog/condition_media.json:/"+asset+"/"+field,supported,"" if supported else "condition_media_lifecycle_not_implemented",source.availability,{"asset_id":metadata[field],"missing_paths":source.missing_paths})
+            var bank_reason:String="native_source_not_authored" if source.kind=="sprite_vfx" else "condition_media_lifecycle_not_implemented"
+            _require(entry,phase,"layer:"+str(layer.id)+":"+field,"catalog/condition_media.json:/"+asset+"/"+field,false,bank_reason,source.availability,{"asset_id":metadata[field],"missing_paths":source.missing_paths})
     for field in ["loop_crossfade_ms","sustain_start_ms"]:
         if float(metadata.get(field,0))!=0:
             var supported=field=="sustain_start_ms" and metadata.get("application_mode","crossfade")=="crossfade"

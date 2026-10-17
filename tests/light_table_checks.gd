@@ -35,6 +35,25 @@ void fragment() {
     COLOR = vec4(table_light(screen_pixel, normalize(probe_normal(screen_pixel)), vec3(1.0), ambient), 1.0);
 }'''
 
+# A native-effect receiving page: white receiver, normal map, CanvasTexture
+# specular map (specular strength, shininess), linear item filter, HDR.
+const NATIVE_SPECULAR = '''shader_type canvas_item;
+render_mode blend_disabled;
+''' + PROBE_NORMAL + '''
+void fragment() {
+    LIGHT_VERTEX = vec3(screen_pixel, 0.0);
+    NORMAL = probe_normal(screen_pixel);
+    COLOR = vec4(1.0);
+}'''
+const TABLE_SPECULAR = '''shader_type canvas_item;
+render_mode blend_disabled, unshaded;
+#include "res://presentation/light_table_linear.gdshaderinc"
+uniform float ambient;
+''' + PROBE_NORMAL + '''
+void fragment() {
+    COLOR = vec4(table_light_linear(screen_pixel, normalize(probe_normal(screen_pixel)), vec3(1.0), ambient), 1.0);
+}'''
+
 var checks := 0
 var failures: Array = []
 var report: Dictionary = {}
@@ -121,6 +140,32 @@ func page(hdr: bool, shader_code: String, sources: Array, native: bool) -> SubVi
     view.add_child(rect)
     return view
 
+# Specular strength and shininess vary over the page, including zero.
+func specular_map() -> ImageTexture:
+    var image := Image.create(SIZE.x, SIZE.y, false, Image.FORMAT_RGBA8)
+    for y in SIZE.y:
+        for x in SIZE.x:
+            var strength := clampf(float(x) / SIZE.x * 1.2 - 0.1, 0.0, 1.0)
+            image.set_pixel(x, y, Color(strength, strength, strength, float(y % 128) / 127.0))
+    return ImageTexture.create_from_image(image)
+
+func specular_page(shader_code: String, sources: Array, native: bool, map: ImageTexture = null) -> SubViewport:
+    var view := page(true, shader_code, sources, native)
+    view.canvas_item_default_texture_filter = Viewport.DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_LINEAR
+    var rect: ColorRect = view.get_child(view.get_child_count() - 1)
+    if native:
+        # The receiving page's item: a white texel stretched over the page with
+        # the specular map in its CanvasTexture (shininess 1, white colour).
+        var white := Image.create(1, 1, false, Image.FORMAT_RGBA8); white.fill(Color.WHITE)
+        var channels := CanvasTexture.new()
+        channels.diffuse_texture = ImageTexture.create_from_image(white)
+        if map != null: channels.specular_texture = map; channels.specular_shininess = 1.0
+        var sprite := Sprite2D.new(); sprite.centered = false; sprite.texture = channels
+        sprite.scale = Vector2(SIZE); sprite.material = rect.material
+        rect.material = null; view.remove_child(rect); rect.free()
+        view.add_child(sprite)
+    return view
+
 func floats(image: Image) -> Image:
     var copy := image.duplicate()
     copy.convert(Image.FORMAT_RGBAF)
@@ -177,6 +222,23 @@ func run() -> void:
         check(result.lit_samples > result.samples / 3 and result.brightest > (1.0 if hdr else 0.9), "Native page is lit, hdr=" + str(hdr))
         check(result.pixels_over_limit == 0, "Table irradiance equals native PointLight2D receiving, hdr=" + str(hdr))
         native_view.queue_free(); table_view.queue_free()
+    # The native-effect receiving page (linear item filter, CanvasTexture with a
+    # specular map): its specular map changes no pixel, and the table loop with
+    # a linearly filtered cookie equals it.
+    var native_view := specular_page(NATIVE_SPECULAR, sources, true, specular_map())
+    var plain_view := specular_page(NATIVE_SPECULAR, sources, true)
+    var table_view := specular_page(TABLE_SPECULAR, sources, false)
+    for i in 2: await process_frame
+    await RenderingServer.frame_post_draw
+    var native_image := native_view.get_texture().get_image()
+    check(native_image.get_data() == plain_view.get_texture().get_image().get_data(), "A CanvasTexture specular map does not change native receiving")
+    var specular := compare(true, native_image, table_view.get_texture().get_image())
+    specular.specular_map = true
+    results.append(specular)
+    print("LIGHT_TABLE_SPECULAR ", JSON.stringify(specular))
+    check(specular.lit_samples > specular.samples / 3 and specular.brightest > 1.0, "Native specular-map page is lit")
+    check(specular.pixels_over_limit == 0, "Table irradiance with linear cookies equals the native specular-map receiving page")
+    native_view.queue_free(); plain_view.queue_free(); table_view.queue_free()
     report = {"checks": checks, "failures": failures, "comparisons": results}
     print("LIGHT_TABLE_REPORT ", JSON.stringify(report))
     quit(0 if failures.is_empty() else 1)

@@ -27,6 +27,19 @@ static func _program_policy(script:String)->bool:
         "res://assets/native_effects/sandbox/projectiles/factory/components/recipient/selected_projectile.gd",
         "res://assets/native_effects/sandbox/projectiles/factory/components/recipient/ice_projectile.gd"]
 
+## Packets mark every resource scene-local. Instancing copies a scene-local
+## ArrayMesh by reading its vertex buffers back from the GPU, a full GPU stall
+## (10-16 ms per construction, every occurrence). Vertex data nothing rewrites
+## is shared instead: ArrayMeshes without surface materials; runtime mesh edits
+## (Trail3D, silk_area) use ImmediateMeshes or new meshes, never these.
+static func _share_vertex_data(packet:Resource)->void:
+    var state:SceneState=packet.scene.get_state()
+    for index in state.get_node_count():
+        for property in state.get_node_property_count(index):
+            var mesh:Variant=state.get_node_property_value(index,property)
+            if not mesh is ArrayMesh or not mesh.resource_local_to_scene:continue
+            if range(mesh.get_surface_count()).all(func(surface):return mesh.surface_get_material(surface)==null):mesh.resource_local_to_scene=false
+
 static func _constructor_input(spec:Dictionary)->Dictionary:
     var input:Dictionary=spec.input.duplicate(true)
     if _program_policy(spec.script):input.share_shader_programs=true
@@ -244,8 +257,9 @@ static func sample(handle: Dictionary, seconds: float, frame_seconds: float, mot
                 player.play(cue.animation)
                 step=seconds-float(cue.at_seconds)
         player.advance(step)
+    var mask:int=int(handle.layer_mask)
     for piece in handle.geometry:
-        if piece.node.layers!=0:piece.node.layers=int(handle.layer_mask)
+        if piece.node.layers!=0 and piece.node.layers!=mask:piece.node.layers=mask
     for carrier in handle.carriers:
         carrier.component.position-=handle.root.to_local(carrier.node.global_position)
     for material in handle.clocks: material.set_shader_parameter("sandbox_source_seconds",seconds)
@@ -374,7 +388,9 @@ static func prepare(clips:Array,cache:Dictionary)->Dictionary:
             var packet:Resource=cache[path]
             if not Admission.prepare_materials(packet,packet.program_materials,cache):
                 program_pending+=1
-            else:_prepared_packets[path]=packet
+            else:
+                if not _prepared_packets.has(path):_share_vertex_data(packet)
+                _prepared_packets[path]=packet
         pending+=program_pending
     if not clips.is_empty() and not Admission.can_mutate():pending+=1
     if pending==0 and errors.is_empty():
