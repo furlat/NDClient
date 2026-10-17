@@ -1,6 +1,7 @@
 extends SceneTree
 # Every lit sprite shader compiles and renders one frame without errors.
-const SHADERS = ["res://environment.gdshader", "res://modular.gdshader", "res://water.gdshader", "res://presentation/fixture_flame.gdshader"]
+const SHADERS = ["res://environment.gdshader", "res://modular.gdshader", "res://water.gdshader", "res://presentation/fixture_flame.gdshader",
+    "res://presentation/canvas_capped_environment.gdshader", "res://presentation/canvas_capped_modular.gdshader", "res://presentation/canvas_capped_water.gdshader", "res://presentation/canvas_received.gdshader"]
 
 func _initialize() -> void: run.call_deferred()
 

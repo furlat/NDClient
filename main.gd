@@ -22,6 +22,13 @@ const Modular = preload("res://modular.gd")
 const MODULAR_SHADER = preload("res://modular.gdshader")
 const ACTOR_SHADER = preload("res://actor.gdshader")
 const SHADOW_SHADER = preload("res://shadow.gdshader")
+# The workshop lights sprites with its movable 3D lamp, not the game's light table.
+const WORKSHOP_SHADERS = {
+    preload("res://environment.gdshader"): preload("res://workshop/environment_3d.gdshader"),
+    preload("res://modular.gdshader"): preload("res://workshop/modular_3d.gdshader"),
+    preload("res://water.gdshader"): preload("res://workshop/water_3d.gdshader"),
+    preload("res://presentation/fixture_flame.gdshader"): preload("res://workshop/fixture_flame_3d.gdshader"),
+}
 var active_texture_paths: Dictionary = {}
 var texture_gc_dirty = true
 var composition_cache: Dictionary = {}
@@ -71,6 +78,10 @@ var stair_rows: Array = []
 var placement_buckets: Array = [{},{},{},{}]
 var map_min_height = 0.0
 var rows_by_id: Dictionary = {}
+
+
+func sprite_shader(shader: Shader) -> Shader:
+    return WORKSHOP_SHADERS.get(shader, shader)
 
 func _ready() -> void:
     DisplayServer.window_set_title("NDClient — Smallscale GPU exploration" if exploration_mode else "NDClient — Authoring workshop")

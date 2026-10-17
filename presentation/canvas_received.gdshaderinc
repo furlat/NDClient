@@ -98,11 +98,12 @@ void fragment() {
     // can select an adjacent original texel at fractional zoom/crop boundaries.
     vec2 dimensions = vec2(textureSize(received,0));
     vec2 selected_uv = source_atlas_uv(cell_uv,atlas_origin,size,dimensions,source_crop);
+    vec3 debug_albedo = vec3(-1.0);
 #ifdef CAPPED_RECEIVING
     vec2 selected_screen = source_screen_origin+selected_uv.x*source_screen_axis_x+selected_uv.y*source_screen_axis_y;
     vec3 irradiance = max(colour.rgb,vec3(0.0));
-    if (light_debug == 1) { ALBEDO = fract(irradiance * 16.0); ALPHA = colour.a * wall_opacity; return; }
-    if (light_debug == 2) { ALBEDO = received_source_colour(selected_uv,selected_screen); ALPHA = colour.a * wall_opacity; return; }
+    if (light_debug == 1) debug_albedo = fract(irradiance * 16.0);
+    if (light_debug == 2) debug_albedo = received_source_colour(selected_uv,selected_screen);
     float peak = max(irradiance.r,max(irradiance.g,irradiance.b));
     float gain = light_cap>0.0 && peak>light_cap ? light_cap/peak : 1.0;
     vec3 encoded = clamp(received_source_colour(selected_uv,selected_screen)*irradiance*gain,vec3(0.0),vec3(1.0));
@@ -134,6 +135,7 @@ void fragment() {
     }
     colour.rgb=native_body_colour(colour.rgb,selected_uv);
     ALBEDO=OUTPUT_IS_SRGB ? canvas_encoded_for_spatial(colour.rgb) : colour.rgb;
+    if (debug_albedo.r >= 0.0) ALBEDO = debug_albedo;
     ALPHA=colour.a*wall_opacity;
     if (native_scene_enabled) {
         vec3 receiver;

@@ -101,7 +101,13 @@ func record_for(row: Dictionary) -> Dictionary:
         record.hidden = true
     return record
 
+## The shader a sprite of this kind uses here. The workshop substitutes its
+## 3D-lit variants; the game uses the light-table shaders as given.
+func sprite_shader(shader: Shader) -> Shader:
+    return shader
+
 func add_entry(row: Dictionary, role: String, layer: int, shader: Shader, source_role: int = -1) -> void:
+    shader = sprite_shader(shader)
     var node = MeshInstance3D.new()
     node.mesh = QuadMesh.new()
     node.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
@@ -193,8 +199,8 @@ func set_environment(entry: Dictionary, _rotation: Basis) -> void:
     SourceMaterial.set_parameter(entry,"source_tint",v4(row.get("tint",[1,1,1,1])))
     if record.has("water"):
         entry.node.visible = entry.source_role == 1
-        if mat.shader != WATER_SHADER:
-            mat.shader = WATER_SHADER
+        if mat.shader != sprite_shader(WATER_SHADER):
+            mat.shader = sprite_shader(WATER_SHADER)
             SourceMaterial.initialize(entry)
         mat.set_shader_parameter("source_quad_size",entry.node.mesh.size)
         SourceMaterial.set_parameter(entry,"source_tint",v4(row.get("tint",[1,1,1,1])))

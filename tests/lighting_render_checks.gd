@@ -72,7 +72,7 @@ func run() -> void:
     camera = Camera3D.new(); camera.projection = Camera3D.PROJECTION_ORTHOGONAL; camera.size = 12
     stage.add_child(camera); camera.position = Vector3(0,20,0); camera.look_at(Vector3.ZERO,Vector3.FORWARD); camera.current = true
     plane = MeshInstance3D.new(); var mesh := PlaneMesh.new(); mesh.size = Vector2(14,14); plane.mesh = mesh
-    var material := ShaderMaterial.new(); material.shader = load("res://modular.gdshader")
+    var material := ShaderMaterial.new(); material.shader = load("res://workshop/modular_3d.gdshader")
     var white := Image.create(1,1,false,Image.FORMAT_RGBA8); white.fill(Color.WHITE)
     material.set_shader_parameter("sheet",ImageTexture.create_from_image(white))
     material.set_shader_parameter("frame_uv",Vector4(0,0,1,1))
