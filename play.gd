@@ -25,6 +25,8 @@ var native_startup_plan:Variant=[]
 var native_live_plan:Array=[]
 var native_live_owners:Array=[]
 var draw_rank_updates:int=0
+# Optional placement fields grid_order.key reads besides position and height.
+const ORDER_FIELDS := ["sort_position","sort_height_steps","layer","boundaries"]
 var native_startup_requested_ms:float=0.0
 var native_startup_background:bool=true
 var generated_shadows = GeneratedShadows.new()
@@ -132,6 +134,8 @@ var prepared_static_order: Dictionary = {}
 # statics with the draws they hold.
 var order_moving: Array = []
 var order_positions: PackedVector3Array = []
+var order_nodes: Array = []
+var order_keyed: PackedInt64Array = []
 var order_ground: Array = []
 var order_ground_source: Variant = null
 var order_gaps: Array = []
@@ -3009,23 +3013,31 @@ func _order_poll(moved: Array) -> bool:
             # another serial (other row, other run head) re-keys too.
             head = row
             var stamp: Variant = entry.get("order_stamp")
-            if stamp==null or stamp[1]!=row.position or not is_same(stamp[2],row.base_height_steps) \
-                    or not is_same(stamp[3],row.get("sort_height_steps")) or not is_same(stamp[4],row.get("layer")) \
-                    or stamp[5]!=row.get("sort_position") or stamp[6]!=row.get("boundaries"):
-                var sort_position: Variant = row.get("sort_position")
-                var boundaries: Variant = row.get("boundaries")
+            var same: bool = stamp!=null and stamp[1]==row.position and is_same(stamp[2],row.base_height_steps) and stamp[3]==row.size()
+            if same:
+                # The optional key fields this row had when stamped; any field
+                # added or removed changes the row's size.
+                var optional: Array = stamp[4]
+                for i in range(0,optional.size(),2):
+                    var value: Variant = row.get(optional[i])
+                    if not is_same(value,optional[i+1]) and not (value is Array and value==optional[i+1]): same = false; break
+            if not same:
                 order_serial += 1
-                stamp = [order_serial,row.position.duplicate(),row.base_height_steps,row.get("sort_height_steps"),row.get("layer"),
-                    sort_position.duplicate() if sort_position is Array else sort_position,boundaries.duplicate() if boundaries is Array else boundaries]
+                var optional: Array = []
+                for field in ORDER_FIELDS:
+                    if row.has(field):
+                        var value: Variant = row[field]
+                        optional.append_array([field,value.duplicate() if value is Array else value])
+                stamp = [order_serial,row.position.duplicate(),row.base_height_steps,row.size(),optional]
                 entry.order_stamp = stamp
             serial = stamp[0]
-        if entry.order_keyed!=serial:
-            entry.order_keyed = serial
+        if order_keyed[s]!=serial:
+            order_keyed[s] = serial; entry.order_keyed = serial
             var key: Array = Order.key(row,entry.role,entry.layer,quarter,ground_is_background)
             if entry.order_gap<0 or key!=entry.order_key or entry.id!=entry.order_gap_id:
                 entry.order_key = key
                 _order_place(entry,order_moving[s-1].order_gap if s>0 else -1)
-        var position: Vector3 = entry.node.global_position
+        var position: Vector3 = order_nodes[s].global_position
         if position!=order_positions[s]:
             order_positions[s] = position; moved.append(entry)
     return true
@@ -3038,18 +3050,20 @@ func _order_members(rekey: bool) -> void:
     order_member_generation += 1
     var previous: int = -1
     var count: int = actor_entries.size()
-    order_positions.resize(count)
+    order_positions.resize(count); order_nodes.resize(count); order_keyed.resize(count)
     for s in count:
         var entry: Dictionary = actor_entries[s]
         var member: bool = entry.get("order_member",-1)==kept
         entry.order_member = order_member_generation
         order_positions[s] = entry.get("draw_position",Vector3.INF)
+        order_nodes[s] = entry.node
         if not member or rekey or entry.id!=entry.get("order_gap_id") or entry.layer!=entry.get("order_gap_layer"):
             if not member:
                 entry.order_gap = -1; entry.order_key = []; entry.order_gap_id = ""
                 if not entry.node.visibility_changed.is_connected(_order_visibility_changed): entry.node.visibility_changed.connect(_order_visibility_changed)
             entry.order_keyed = -1
         elif entry.order_gap<0: _order_place(entry,previous)
+        order_keyed[s] = entry.order_keyed
         previous = entry.order_gap
     for entry in order_moving:
         if entry.get("order_member")==order_member_generation: continue
