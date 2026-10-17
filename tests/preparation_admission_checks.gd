@@ -43,7 +43,6 @@ func passive_worker_handoffs(host:Host)->void:
     for stage in ["sort_wait","failed_projection"]:
         var candidate=Preparation.new();host.add_child(candidate);candidate.host=host
         candidate.phase=stage
-        candidate.atlas_prefix={"worker_ms":3.0}
         candidate.order_records=[];candidate.sorted_indices=[]
         var work:Callable=complete_error if stage=="failed_projection" else complete_projection
         candidate.task=WorkerThreadPool.add_task(work.bind(candidate.result))
@@ -56,16 +55,6 @@ func passive_worker_handoffs(host:Host)->void:
         if stage=="failed_projection":check(candidate.media_issue=="Authored actor source is unavailable."
             and candidate.presentation_errors==[candidate.media_issue],"Spent allowance exposes the worker's real preparation error")
         candidate.free()
-    var atlas=Preparation.new();host.add_child(atlas);atlas.host=host
-    atlas.phase="atlas_overlap";atlas.atlas_stage="wait";atlas.atlas_prefix={"worker_ms":3.0}
-    atlas.atlas_task=WorkerThreadPool.add_task(complete_projection.bind(atlas.result))
-    while not WorkerThreadPool.is_task_completed(atlas.atlas_task):await process_frame
-    atlas.step(0)
-    check(atlas.atlas_task<0 and atlas.atlas_stage=="reserve" and atlas.phase=="atlas_overlap" and not atlas.prepared
-        and atlas.entries.is_empty() and atlas.native_actors.is_empty(),
-        "Spent allowance acknowledges the completed atlas worker without reserving capacity, binding Nodes or publishing")
-    check(atlas.atlas_prefix.worker_ms==3.0,"Completed atlas packet retains its measured worker time until admission")
-    atlas.free()
     var blocked=Preparation.new();host.add_child(blocked);blocked.host=host
     var gate=Semaphore.new()
     blocked.task=WorkerThreadPool.add_task(blocked_projection.bind(blocked.result,gate))
@@ -185,7 +174,7 @@ func run()->void:
     budget=host._preparation_budget();budget.used_usec=budget.limit_usec
     var a=Node3D.new();var b=Node3D.new();host.add_child(a);host.add_child(b)
     var a_id:int=a.get_instance_id();var b_id:int=b.get_instance_id()
-    host.retiring_views=[{"nodes":[a,b],"entries":{},"atlas_cleanup":{}}];host.retiring_node_count=2
+    host.retiring_views=[{"nodes":[a,b],"entries":{}}];host.retiring_node_count=2
     host._dispose_views(budget)
     check(host.retiring_node_count==2 and is_instance_id_valid(a_id) and is_instance_id_valid(b_id),
         "Optional retirement cannot start a second independent slice after other work spends the frame")

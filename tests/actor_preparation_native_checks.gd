@@ -14,16 +14,18 @@ func follow()->void:
     if world.pending_world==null:return
     var candidate=world.pending_world
     var count:int=0
-    for fixture in candidate.atlas_fixture_shells.values():
-        var material:Dictionary=fixture.get("materials",{})
-        if not material.is_empty():
-            seen_fixture_materials[fixture.entry.node.get_instance_id()]={"output":material.output.received_material.get_instance_id(),
-                "groups":material.groups.values().map(func(group):return group.material.get_instance_id())}
+    # Sprites light themselves: each prepared source material is the material
+    # its node will display. Record them to prove adoption keeps them.
+    for entry in candidate.entries:
+        if entry.material is ShaderMaterial and entry.material.shader==world.FIXTURE_FLAME_SHADER:
+            seen_fixture_materials[entry.node.get_instance_id()]=entry.material.get_instance_id()
     for actor in candidate.native_actors.values():
-        for materials in actor.get("materials",{}).values():
-            seen_materials[materials.entry.node.get_instance_id()]=materials.output.received_material.get_instance_id()
-            actor_check(materials.specs.is_empty() and materials.receivers.is_empty(),"Future actor material copies have no receiver geometry or address")
-        for entry in actor.entries:
+        for entry in actor.get("new_entries",actor.entries):
+            seen_materials[entry.node.get_instance_id()]=entry.material.get_instance_id()
+            actor_check(entry.node.material_override==entry.material,"Future actor layer displays its own lit source material")
+        # Retained layers of a reused actor are the displayed ones; only new
+        # private layers belong to the unpublished candidate.
+        for entry in actor.get("new_entries",[]):
             actor_check(not entry.node.is_visible_in_tree(),"Unpublished future actor layer remains hidden")
             actor_check(entry not in world.entries and entry not in world.actor_entries,"Future layer is absent from both live directories")
             count+=1
@@ -32,9 +34,14 @@ func capture()->Image:
     await process_frame;await RenderingServer.frame_post_draw
     await process_frame;await RenderingServer.frame_post_draw
     return root.get_texture().get_image()
+# The original direct constructor, as other ownership suites call it: Play
+# refuses unprepared actor structure within a prepared epoch, so the reference
+# rebuild runs outside that epoch and restores it.
+func direct_rebuild()->void:
+    var epoch:int=world.world_prepare_epoch
+    world.world_prepare_epoch=-1;world.actor_revision=-1;world._sync_actors();world.world_prepare_epoch=epoch
 func resample()->void:
     world._sample_actors();world._sample_fixtures();world._sync_native_lighting();world._sort_draws()
-    world.native_light_atlas.sync_output(world,[world.world_generation,world.quarter,world.scenery_revision,world.wall_mode,world.native_light_atlas.revision],true)
     world.component_renderer.native_spells.sync(world)
 func changed_condition_control(before:Image)->void:
     # Renderer-input control using the actual authored Hidden material. It never
@@ -55,24 +62,41 @@ func changed_condition_control(before:Image)->void:
     candidate.rigs=world.rigs;candidate.rig_config=world.rig_config;candidate.profile=world.profile
     candidate.camera=Camera3D.new();candidate.add_child(candidate.camera)
     var row:Dictionary=world.visual_actors[id].row.duplicate(true);var rig:Dictionary=world.rigs[row.rig]
-    candidate.result={"worker_ms":0.0,"actors":{id:{"row":row,"rig":rig,
-        "layers":world.Characters.layers(row,rig,world.catalog_cache),"entries":[],"new_entries":[],"playback":null,"reuse_actor":false,"retained_slots":{},
-        "source_sample":{"clip":world.playbacks[id].clip,"source_seconds":world.playbacks[id].sample_seconds}}}}
+    var layers:Array=world.Characters.layers(row,rig,world.catalog_cache)
+    var clip:String=world.playbacks[id].clip
+    # The worker's selected source bindings, as WorldPreparation derives them.
+    var source_bindings:Dictionary={}
+    for layer in layers:
+        if layer.paths.has(clip):source_bindings[layer.slot]=world.ActorConstruction.prepare_binding(rig,layer,layer.paths[clip],world.catalog_cache,
+            world.source_depth,world.source_normals,world.character_light_profile,128.0/world.rig_config.TILE_W*row.scale,row.get("scale_x",1.0))
+    candidate.result={"worker_ms":0.0,"worker_phases":{},"actors":{id:{"row":row,"rig":rig,
+        "layers":layers,"entries":[],"new_entries":[],"playback":null,"reuse_actor":false,"retained_slots":{},
+        "source_sample":{"clip":clip,"source_seconds":world.playbacks[id].sample_seconds},"source_bindings":source_bindings,
+        "layer_clips":{},"source_ready":{},"source_cursor":0}}}
+    # Every displayed actor keeps its published row; only the control actor is new.
+    var members:Dictionary={}
+    for other in world.visual_actors:members[other]=world.visual_actors[other].row.duplicate(true)
+    members[id]=row
+    candidate.result.actor_members=members
     candidate.actor_ids=[id]
-    while candidate.actor_cursor<candidate.actor_ids.size():candidate._prepare_actor()
+    var waited:int=0
+    while candidate.actor_cursor<candidate.actor_ids.size() and candidate.media_issue.is_empty() and waited<600:
+        if not candidate._prepare_actor():await process_frame;waited+=1
+    actor_check(candidate.media_issue.is_empty() and candidate.native_actors.get(id,{}).get("complete",false),"Changed-condition control prepares its private actor: "+candidate.media_issue)
+    if not candidate.native_actors.get(id,{}).get("complete",false):return
     var prepared:Dictionary=candidate.native_actors[id]
     actor_check(prepared.entries.all(func(entry):return not entry.node.is_visible_in_tree() and entry.material.get_shader_parameter("condition_alpha")==1.0),"New private layers are neutral and hidden before changed-condition admission")
     var nodes:Array=prepared.entries.map(func(entry):return entry.node)
-    actor_check(not prepared.get("materials",{}).is_empty(),"Changed-condition control prepares real neutral source/receiving copies before admission")
-    var old_outputs:Array=prepared.materials.values().map(func(materials):return materials.output.received_material.get_instance_id())
+    var neutral_materials:Array=prepared.entries.map(func(entry):return entry.material.get_instance_id())
     world._retire_actor(id);candidate.entries=[];world.prepared_actor_owner=candidate;world.actor_revision=-1
     world._sync_actors();resample()
     actor_check(world.visual_actors[id].entries.map(func(entry):return entry.node)==nodes,"Changed condition keeps exact prepared geometry ownership")
     actor_check(world.visual_actors[id].entries.all(func(entry):return entry.material.get_shader_parameter("condition_alpha")==changed.alpha),"Actual live sampler replaces neutral binding with current condition at admission")
-    actor_check(world.visual_actors[id].entries.all(func(entry):return not entry.has("received_material") or entry.received_material.get_instance_id() not in old_outputs),"Changed condition rejects the old neutral receiving destinations")
+    actor_check(world.visual_actors[id].entries.map(func(entry):return entry.material.get_instance_id())==neutral_materials
+        and world.visual_actors[id].entries.all(func(entry):return entry.node.material_override==entry.material),"Changed condition rebinds the prepared lit materials in place")
     var conditioned:Image=await capture()
     actor_check(conditioned.get_data()!=before.get_data(),"Changed condition visibly changes the actual recipient framebuffer")
-    world._retire_actor(id);world.actor_revision=-1;world._sync_actors();resample()
+    world._retire_actor(id);direct_rebuild();resample()
     var reference:Image=await capture()
     actor_check(conditioned.get_data()==reference.get_data(),"Changed-at-admission framebuffer equals original direct constructor and current binder exactly")
     world.displayed_components=original_components;resample()
@@ -101,22 +125,20 @@ func finish(wall_ms:float,display_ms:float)->void:
     actor_check(not seen_candidates.is_empty(),"Actual running world exposes hidden constructed future layers before publication")
     var material_adoptions:int=0
     for entry in world.actor_entries:
-        if entry.has("received_material") and seen_materials.get(entry.node.get_instance_id(),-1)==entry.received_material.get_instance_id():material_adoptions+=1
-    actor_check(material_adoptions>0,"Actual live Gallery uses the exact privately prepared actor output materials")
+        if seen_materials.get(entry.node.get_instance_id(),-1)==entry.material.get_instance_id() and entry.node.material_override==entry.material:material_adoptions+=1
+    actor_check(material_adoptions>0,"Actual live Gallery displays the exact privately prepared actor materials")
     var fixture_material_adoptions:int=0
     for entry in world.fixture_entries:
         var source_id:int=entry.node.get_instance_id()
         if not seen_fixture_materials.has(source_id):continue
-        var prepared:Dictionary=seen_fixture_materials[source_id]
-        var groups:Dictionary=world.native_light_atlas.source_groups.get(source_id,{})
-        actor_check(entry.received_material.get_instance_id()==prepared.output and groups.values().all(func(group):return group.material.get_instance_id() in prepared.groups),
-            "Actual Gallery fixture retains its privately constructed output and receiver material owners")
+        actor_check(entry.material.get_instance_id()==seen_fixture_materials[source_id] and entry.node.material_override==entry.material,
+            "Actual Gallery fixture retains its privately constructed lit material")
         fixture_material_adoptions+=1
-    actor_check(fixture_material_adoptions>0,"Actual Gallery reveal adopts prepared fixture material owners")
+    actor_check(fixture_material_adoptions>0,"Actual Gallery reveal adopts prepared fixture materials")
     var actual:Image=await capture()
     var created:int=world.entries.size()
     for id in world.visual_actors.keys():world._retire_actor(id)
-    world.actor_revision=-1;world._sync_actors()
+    direct_rebuild()
     resample()
     var rebuilt:Image=await capture()
     actor_check(world.entries.size()==created,"Original constructor recreates the exact live actor membership")
