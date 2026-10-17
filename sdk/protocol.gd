@@ -14,20 +14,33 @@ var _server_choices_envelope: Dictionary = {}
 var _server_operation_envelope: Dictionary = {}
 var _current_server_contract := false
 var _producer_json: RefCounted
+# The shipped schema and identity are parsed once per path pair per process
+# (each strict parse is ~95 ms). Protocol objects share only these parsed,
+# never-mutated dictionaries; their caches above stay per object.
+static var _parsed: Dictionary = {}
+static var _parsed_mutex := Mutex.new()
 
 func _init(schema_path: String = "res://sdk/player-api-v1.schema.json", identity_path: String = "res://sdk/protocol-identity.json") -> void:
+	var key := schema_path + "\n" + identity_path
+	_parsed_mutex.lock()
+	if not _parsed.has(key): _parsed[key] = _parse(schema_path, identity_path)
+	var parsed: Dictionary = _parsed[key]
+	_parsed_mutex.unlock()
+	setup_error = parsed.error
+	if not parsed.has("schema"): return
+	schema = parsed.schema
+	identity = parsed.identity
+	_current_server_contract = schema_path == "res://sdk/player-api-v1.schema.json" and identity_path == "res://sdk/protocol-identity.json"
+
+func _parse(schema_path: String, identity_path: String) -> Dictionary:
 	var schema_result := StrictJSON.new().parse(FileAccess.get_file_as_string(schema_path))
 	var identity_result := StrictJSON.new().parse(FileAccess.get_file_as_string(identity_path))
 	if not schema_result.ok or not schema_result.value is Dictionary or not schema_result.value.get("$defs") is Dictionary:
-		setup_error = "Cannot load the shipped player schema"
-		return
+		return {"error": "Cannot load the shipped player schema"}
 	if not identity_result.ok or not identity_result.value is Dictionary:
-		setup_error = "Cannot load the shipped protocol identity"
-		return
+		return {"error": "Cannot load the shipped protocol identity"}
 	schema = schema_result.value
-	identity = identity_result.value
-	setup_error = _vocabulary(schema)
-	_current_server_contract = schema_path == "res://sdk/player-api-v1.schema.json" and identity_path == "res://sdk/protocol-identity.json"
+	return {"schema": schema, "identity": identity_result.value, "error": _vocabulary(schema)}
 
 static func failure(message: String) -> Dictionary:
 	return {"ok": false, "error": {"kind": "protocol", "message": message, "retryable": false}}
