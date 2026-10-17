@@ -19,6 +19,10 @@ var _producer_json: RefCounted
 # never-mutated dictionaries; their caches above stay per object.
 static var _parsed: Dictionary = {}
 static var _parsed_mutex := Mutex.new()
+# Exact native UTF-8 admission. get_string_from_ascii reads bytes 1-255 as
+# U+0001-U+00FF (a NUL ends it, failing the length check); this expression
+# accepts exactly the sequences validate_utf8 accepts (Unicode Table 3-7).
+static var _utf8_sequences := RegEx.create_from_string("\\A(?:[\\x01-\\x7f]++|[\\xc2-\\xdf][\\x80-\\xbf]|\\xe0[\\xa0-\\xbf][\\x80-\\xbf]|[\\xe1-\\xec\\xee\\xef][\\x80-\\xbf]{2}|\\xed[\\x80-\\x9f][\\x80-\\xbf]|\\xf0[\\x90-\\xbf][\\x80-\\xbf]{2}|[\\xf1-\\xf3][\\x80-\\xbf]{3}|\\xf4[\\x80-\\x8f][\\x80-\\xbf]{2})*+\\z")
 
 func _init(schema_path: String = "res://sdk/player-api-v1.schema.json", identity_path: String = "res://sdk/protocol-identity.json") -> void:
 	var key := schema_path + "\n" + identity_path
@@ -77,6 +81,8 @@ static func validate_utf8(raw: PackedByteArray) -> Dictionary:
 	return {"ok": true}
 
 static func utf8(raw: PackedByteArray) -> Dictionary:
+	var bytes := raw.get_string_from_ascii()
+	if bytes.length() == raw.size() and _utf8_sequences.search(bytes) != null: return {"ok": true, "value": raw.get_string_from_utf8()}
 	var checked := validate_utf8(raw)
 	if not checked.ok: return checked
 	if raw.has(0): return failure("Godot strings cannot represent NUL characters")
