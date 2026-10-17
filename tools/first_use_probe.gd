@@ -3,6 +3,8 @@ extends SceneTree
 ## its largest Player phases, new pipeline compilations and node growth. A cost
 ## present only in the first pass is first-use work (compilation, construction).
 ## Usage: --script res://tools/first_use_probe.gd -- [--case=magic_missile-seed3] [--perspective=amber]
+## [--thumbnails=off] suspends Studio's timeline thumbnails (their own spell
+## previews), leaving only the live presentation the game also runs.
 const Studio=preload("res://studio/studio.gd")
 const Profile=preload("res://frame_profile.gd")
 const SLOW_MS:=10.0
@@ -23,7 +25,9 @@ func settled()->bool:
 
 func wait_settled()->bool:
     var deadline:=Time.get_ticks_msec()+120000
-    while not settled() and Time.get_ticks_msec()<deadline:await process_frame
+    while not settled() and Time.get_ticks_msec()<deadline:
+        await process_frame
+        if studio.tracks!=null:quiet_thumbnails()
     return settled()
 
 func pipelines()->int:
@@ -32,7 +36,13 @@ func pipelines()->int:
     for value in counts.values():total+=int(value)
     return total
 
+func quiet_thumbnails()->void:
+    if argument("--thumbnails","on")!="off":return
+    for tracks in [studio.tracks,studio.candidate_tracks]:
+        if tracks!=null:tracks.thumbnails.suspended=true;tracks.thumbnails.prewarm_suspended=true
+
 func play_pass(label:String)->void:
+    quiet_thumbnails()
     studio._seek(0.0)
     await wait_settled()
     studio.world.profile.recording=true
@@ -40,12 +50,14 @@ func play_pass(label:String)->void:
     var deadline:=Time.get_ticks_msec()+40000
     var last:=Time.get_ticks_usec();var compiled:=pipelines();var categories:Dictionary=Profile.pipeline_compilations()
     var nodes:=int(Performance.get_monitor(Performance.OBJECT_NODE_COUNT))
-    var intervals:=[];var slow:=[];var window:={};var window_frames:=0
+    var intervals:=[];var slow:=[];var fast:=[];var window:={};var window_frames:=0
+    var descriptor_usec:=int(studio.tracks.thumbnails.native_store.descriptor_usec)
     var known_views:={}
     for view in root.find_children("*","SubViewport",true,false):known_views[view.get_instance_id()]=true
     var window_from:=float(argument("--window-from","-1"));var window_to:=float(argument("--window-to","-1"))
     while Time.get_ticks_msec()<deadline:
         await process_frame
+        quiet_thumbnails()
         var now:=Time.get_ticks_usec();var interval:=(now-last)/1000.0;last=now
         intervals.append(interval)
         var compiled_now:=pipelines();var nodes_now:=int(Performance.get_monitor(Performance.OBJECT_NODE_COUNT))
@@ -53,6 +65,8 @@ func play_pass(label:String)->void:
         for key in categories_now:
             if int(categories_now[key])!=int(categories.get(key,0)):category_delta[key]=int(categories_now[key])-int(categories.get(key,0))
         categories=categories_now
+        var descriptor_now:=int(studio.tracks.thumbnails.native_store.descriptor_usec)
+        var descriptor_ms:=(descriptor_now-descriptor_usec)/1000.0;descriptor_usec=descriptor_now
         if interval>=SLOW_MS:
             var frames:Array=studio.world.profile.frames
             var sample:Dictionary=frames[posmod(studio.world.profile.cursor-1,frames.size())] if not frames.is_empty() else {}
@@ -74,7 +88,10 @@ func play_pass(label:String)->void:
                 "shadow_rendered":studio.world.generated_shadows.actors.values().filter(func(state):return state.viewport.render_target_update_mode!=SubViewport.UPDATE_DISABLED).size(),
                 "new_nodes":nodes_now-nodes,"process_ms":snappedf(Performance.get_monitor(Performance.TIME_PROCESS)*1000.0,0.1),
                 "render_setup_ms":snappedf(RenderingServer.get_frame_setup_time_cpu(),0.1),
-                "viewports":viewports.size(),"updating_viewports":updating,"new_viewports":fresh,"top":named})
+                "viewports":viewports.size(),"updating_viewports":updating,"new_viewports":fresh,"top":named,
+                "studio_thumbnail_descriptor_ms":snappedf(descriptor_ms,0.01)})
+        if interval<SLOW_MS and not category_delta.is_empty():
+            fast.append({"display_ms":snappedf(studio.world.timeline.display_ms,1),"interval_ms":snappedf(interval,0.1),"pipeline_kinds":category_delta})
         compiled=compiled_now;nodes=nodes_now
         if interval>=SLOW_MS:
             known_views={}
@@ -90,6 +107,10 @@ func play_pass(label:String)->void:
     print("FIRST_USE_PASS ",JSON.stringify({"pass":label,"frames":intervals.size(),"p50":snappedf(intervals[intervals.size()/2],0.1),
         "p95":snappedf(intervals[int(intervals.size()*0.95)],0.1),"max":snappedf(intervals.back(),0.1),"slow":slow.size()}))
     for row in slow:print("FIRST_USE_SLOW ",label," ",JSON.stringify(row))
+    # Compilations in frames that stayed under SLOW_MS (background work).
+    for row in fast:print("FIRST_USE_COMPILED ",label," ",JSON.stringify(row))
+    var startup:Dictionary=studio.world.native_startup
+    print("FIRST_USE_STARTUP ",label," ",JSON.stringify({"completed":startup.get("completed",0),"total":startup.get("total",0),"construction_ms":startup.get("construction_ms",[]).map(func(row):return [row.source,snappedf(row.ms,0.01),row.get("phases",{})])}))
     if window_frames>0:
         var keys:=window.keys();keys.sort_custom(func(a,b):return window[a]>window[b])
         var mean:={}

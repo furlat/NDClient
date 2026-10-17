@@ -4,6 +4,7 @@ extends RefCounted
 const Admission=preload("res://presentation/native_source_admission.gd")
 const INDEX = "res://authoring/native_effects/index.json"
 const ClassPalette = preload("res://presentation/native_effect_palette.gdshader")
+const Receiving = preload("res://presentation/native_effect_receiving.gd")
 
 static func source_age_ms(component:Dictionary,age_ms:float)->float:
     var age:float=component.get("source_age_ms",age_ms)*component.get("native_age_rate",1.0)
@@ -159,9 +160,7 @@ static func make(parent: Node3D, record: Dictionary, occurrence_seed: int = 0) -
         var code:String=node.material_override.shader.code
         var token=RegEx.new();token.compile("\\bTIME\\b")
         if token.search(code):
-            var shader=Shader.new()
-            shader.code=token.sub(code,binding.uniform,true).replace("shader_type spatial;","shader_type spatial;\n uniform float "+binding.uniform+"=0.0;")
-            node.material_override.shader=shader
+            node.material_override.shader=Receiving.program(token.sub(code,binding.uniform,true).replace("shader_type spatial;","shader_type spatial;\n uniform float "+binding.uniform+"=0.0;"))
         handle.clocks.append({"material":node.material_override,"uniform":binding.uniform})
     parent.add_child(handle.root)
     subject.set_process(false)
@@ -187,7 +186,7 @@ static func _isolate(node: Node) -> void:
 static func _material_rules(subject: Node3D, rules: Array) -> void:
     # Exact Factory keyed_native_donor substitutions on fresh source instances.
     for rule in rules:
-        var shader=Shader.new();shader.code=FileAccess.get_file_as_string(rule.shader_source)
+        var shader:Shader=Receiving.program(FileAccess.get_file_as_string(rule.shader_source))
         for node in subject.find_children("*","GeometryInstance3D",true,false):
             var original:Material=node.material_override
             if not original is BaseMaterial3D:continue
@@ -337,9 +336,7 @@ static func add_palette_pass(viewport: SubViewport, record: Dictionary, source_t
     if source_texture!=null:
         # Forward+ screen-copy alpha is opaque. The original transparent source
         # viewport texture preserves RGBA, as Factory's data-finish path does.
-        var shader=Shader.new()
-        shader.code=material.shader.code.replace("hint_screen_texture, ","")
-        material.shader=shader
+        material.shader=Receiving.program(material.shader.code.replace("hint_screen_texture, ",""))
         material.set_shader_parameter("screen_texture",source_texture)
     var layer=CanvasLayer.new()
     var rectangle=ColorRect.new()

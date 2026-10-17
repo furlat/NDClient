@@ -8,6 +8,14 @@ const NORMAL_LAYER=1<<16
 const MATERIAL_LAYER=1<<17
 const SUPPORT_LAYER=1<<15
 
+# Adapted programs by code. Every occurrence of a source adapts to the same
+# code; a new Shader per occurrence recompiled it and its pipelines each time.
+static var _programs:Dictionary={}
+static func program(code:String)->Shader:
+    if not _programs.has(code):
+        var shader:=Shader.new();shader.code=code;_programs[code]=shader
+    return _programs[code]
+
 static func _body_end(code:String,name:String)->int:
     var expression=RegEx.new();expression.compile("void\\s+"+name+"\\s*\\(\\s*\\)\\s*\\{")
     var found=expression.search(code)
@@ -110,7 +118,7 @@ static func adapt(handle:Dictionary,depth_texture:Texture2D)->String:
             fragment_end=_body_end(code,"fragment")
             output+="vec4 native_support=texture(native_support_depth,SCREEN_UV);vec3 native_depth_bytes=round(native_support.rgb*255.);float native_depth=dot(native_depth_bytes,vec3(65536.,256.,1.))/16777215.;if(native_support.a<=0. || abs(native_depth-FRAGCOORD.z)>2./16777215.)discard;"
         code=code.insert(fragment_end,output)
-        var shader=Shader.new();shader.code=code
+        var shader:Shader=program(code)
         var material:ShaderMaterial=source if source is ShaderMaterial else ShaderMaterial.new()
         material.shader=shader
         for name in values:material.set_shader_parameter(name,values[name])

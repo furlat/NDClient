@@ -46,7 +46,39 @@ static func integrate(layer:Dictionary,support:RefCounted)->void:
     layer.camera.compositor=compositor
     layer.clear_support=clear
 
+## A pass's first render allocates its targets and compiles its programs (the
+## receiver depth copy, the receiver clear, the colour finish). It happens once,
+## before any spell needs the pass: one render with the output hidden, then one
+## frame drawing the finish over a transparent texel, which leaves every pixel
+## unchanged (premultiplied zero). Returns true once the pass is warm.
+static func warm(layer:Dictionary)->bool:
+    var step:int=layer.get("warm",0)
+    if step>=3:return true
+    if layer.get("warm_pending",false):return false
+    match step:
+        0:layer.viewport.render_target_update_mode=SubViewport.UPDATE_ONCE
+        1:
+            layer.output.material.set_shader_parameter("native_colour",_clear_texel())
+            layer.output.visible=true
+        2:
+            layer.output.material.set_shader_parameter("native_colour",layer.viewport.get_texture())
+            layer.output.visible=false
+            layer.warm=3
+            return true
+    layer.warm=step+1;layer.warm_pending=true
+    RenderingServer.frame_post_draw.connect(func():layer.warm_pending=false,CONNECT_ONE_SHOT)
+    return false
+
+static var _clear:ImageTexture
+static func _clear_texel()->ImageTexture:
+    if _clear==null:_clear=ImageTexture.create_from_image(Image.create(1,1,false,Image.FORMAT_RGBA8))
+    return _clear
+
 static func set_enabled(layer:Dictionary,value:bool)->void:
+    if value and layer.get("warm",3)<3:
+        # A spell claims the pass mid-warm: it is the first real render.
+        layer.output.material.set_shader_parameter("native_colour",layer.viewport.get_texture())
+        layer.warm=3
     layer.output.visible=value
     layer.viewport.render_target_update_mode=SubViewport.UPDATE_ALWAYS if value else SubViewport.UPDATE_DISABLED
 
