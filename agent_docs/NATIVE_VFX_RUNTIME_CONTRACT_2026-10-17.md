@@ -83,9 +83,10 @@ What keeps an effect cheap:
 
 ## Next steps
 
-- Bake the remaining spells (one command; about 1 s per clip per variant).
-- Put the bake into the asset preparation step so recordings are rebuilt when
-  Factory sources change (the clip hash already rejects stale recordings).
+- Done: the whole catalog is baked (64 of 72 clips; the rest are listed in the
+  Factory report). Recordings are local generated data in `.derived/baked_effects`,
+  rebuilt with `bake-native-effects.cmd` after a Factory import; a stale or
+  missing recording plays the native source and logs a warning.
 - Optional: randomize a variant in the shader (mirroring/rotating the
   recorded layout per cast) instead of storing more variants.
 - VRAM (plan step L8): half-float recordings could be packed tighter.

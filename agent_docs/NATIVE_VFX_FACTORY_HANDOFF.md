@@ -213,6 +213,12 @@ see `.runtime/sandbox-position-checks.json` and `.captures/positions/`.
    python3 tools/prepare_projectile_sandbox.py --factory /mnt/c/Users/tommaso/Documents/assets/VFXFactory
    ```
 
+   Then re-record the baked effects the game plays (local generated data in
+   `.derived/baked_effects`; a changed clip plays its native source, with a
+   warning, until it is baked again): run `bake-native-effects.cmd` (all clips,
+   three variants) or `bake-native-effects.cmd --spells=<id>`. See
+   [FACTORY_VFX_BAKING_REPORT_2026-10-17.md](FACTORY_VFX_BAKING_REPORT_2026-10-17.md).
+
 4. Inspect the real fixture in all four views: hand charge/release continuity,
    moving source, contact and receiver, then complete retirement. Check pause,
    recast, loop and different flight speeds. Inspect raw source colours separately.
