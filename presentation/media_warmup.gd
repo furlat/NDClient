@@ -42,7 +42,10 @@ static func create() -> Dictionary:
         "required_plan":false,"metadata_phases":{},"metadata_ms":0.0,"metadata_jobs":0,
         "wanted":{},"environment":{},"fixtures":{},"gpu_only":{},"cpu_required":{},"budget_bytes":budget,
         "encounter":{},"encounter_override":{},"encounter_epoch":-1,"source_sizes":{},
-        "demand_runs":0,"demand_noops":0,"demand_phases":{},"demand_counts":{}}
+        "demand_runs":0,"demand_noops":0,"demand_phases":{},"demand_counts":{},
+        # The character light profile in use; the optional library loads only
+        # its normals. optional_last is re-planned when the profile changes.
+        "light_profile":"","optional_last":{}}
     _attach(data,owner)
     return data
 
@@ -537,6 +540,8 @@ static func _start_plan(data: Dictionary, allow_optional:bool=false) -> void:
         request = data.optional_pending
         data.optional_pending = {}; optional = true
         request = request.duplicate()
+        request.profile = data.light_profile
+        data.optional_last = request
     else: return
     data.plan_result = {}
     var work = _plan_optional.bind(request,data.plan_result,data.plan_cache) if optional else _plan_sources.bind(request,data.plan_result,data.plan_cache)
@@ -805,7 +810,7 @@ static func _plan_optional(request: Dictionary, result: Dictionary, cache: Dicti
     var required: Dictionary = request.required
     var environment: Dictionary = required.environment_required.duplicate()
     environment.merge(required.environment_upcoming)
-    var family=EncounterMedia.plan(request.state,environment,required.fixtures,cache,request.groups)
+    var family=EncounterMedia.plan(request.state,environment,required.fixtures,cache,request.groups,request.get("profile",""))
     var families_done=Time.get_ticks_usec()
     var prior:Dictionary=cache.get("__published_optional_family",{})
     var encounter:Dictionary

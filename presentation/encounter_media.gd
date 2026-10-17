@@ -32,7 +32,23 @@ static func _priority_clips(actor:Dictionary,rig:Dictionary,index:Dictionary,cac
         if context.role=="movement" and body.get("enabled",false):clips[body.clip]=true
     return clips.keys().filter(func(clip):return rig.clips.has(clip))
 
-static func plan(state:Dictionary,environment:Dictionary,fixtures:Dictionary,cache:Dictionary,groups:Array=[])->Dictionary:
+## Normal maps of the light profiles not in use for this colour sheet. A
+## profile switch requests its own normals (play.gd media_profile_record).
+static func _unselected_normals(path:String,profile:String,cache:Dictionary)->Dictionary:
+    var result:Dictionary={}
+    if profile.is_empty():return result
+    if not cache.has("__normal_profile_table"):
+        var parsed:Variant=JSON.parse_string(FileAccess.get_file_as_string(Characters.CharacterGeometry.PROFILE_TABLE))
+        cache.__normal_profile_table=parsed.get("records",{}) if parsed is Dictionary else {}
+    var record:Dictionary=cache.__normal_profile_table.get(path,{})
+    if not record.has(profile):return result
+    for name in record:
+        if name==profile:continue
+        var root:String=ProjectSettings.get_setting("source_data/character_geometry_root" if name=="original" else "source_data/normal_profiles_root")
+        result[root.path_join(record[name])]=true
+    return result
+
+static func plan(state:Dictionary,environment:Dictionary,fixtures:Dictionary,cache:Dictionary,groups:Array=[],profile:String="")->Dictionary:
     var paths:Dictionary=environment.duplicate();var cpu_required:Dictionary=environment.duplicate()
     var gpu_only:Dictionary={};var priority:Dictionary={};var errors:Array=[];var witnesses:Dictionary={}
     for actor in state.get("actors",{}).values():_include(witnesses,actor)
@@ -68,19 +84,32 @@ static func plan(state:Dictionary,environment:Dictionary,fixtures:Dictionary,cac
                     var resource=Characters.BodySources.prepare_layer(layer.source_path,cache)
                     if resource==null:errors.append("Cannot admit body category: "+layer.source_path);continue
                     var key:Array=[layer.source_path,layer.slot]
-                    if not selected_sources.has(key):selected_sources[key]={"resource":resource,"slot":layer.slot,"priority":{}}
+                    if not selected_sources.has(key):selected_sources[key]={"resource":resource,"slot":layer.slot,"priority":{},"worn":false,"rest":{},"rig_clips":rigs[id].clips}
                     if is_same(variant,actor):
+                        selected_sources[key].worn=true
                         for clip in priority_clips:selected_sources[key].priority[clip]=true
+                    else:
+                        # Gear of the inactive weapon set only rests until it is
+                        # swapped in; the swap changes the loadout and re-plans.
+                        var rest:Dictionary=Characters.rest_sample(variant,rigs[id],cache)
+                        if rest.ok:selected_sources[key].rest[rest.value.clip]=true
     for selected in selected_sources.values():
         # Thin source summaries cover the optional library without admitting
         # any clip's geometry, sockets or native optical metadata.
         for clip in selected.resource.clips:
+            # A clip outside the rig can never play (the clock has no length for it).
+            if not selected.rig_clips.has(clip):continue
+            if not selected.worn and not selected.rest.has(clip):continue
             var descriptor:Dictionary=selected.resource.clips[clip].get(selected.slot,{})
             if descriptor.is_empty():continue
             paths[descriptor.path]=true;cpu_required[descriptor.path]=true
-            paths.merge(descriptor.companions);gpu_only.merge(descriptor.companions)
+            var unselected:Dictionary=_unselected_normals(descriptor.path,profile,cache)
+            var kept:Dictionary={}
+            for companion in descriptor.companions:
+                if not unselected.has(companion):kept[companion]=true
+            paths.merge(kept);gpu_only.merge(kept)
             if selected.priority.has(clip):
-                priority[descriptor.path]=true;priority.merge(descriptor.companions)
+                priority[descriptor.path]=true;priority.merge(kept)
     for path in cpu_required:gpu_only.erase(path)
     var ordered:Dictionary=priority.duplicate();ordered.merge(paths);paths=ordered
     var retained:Dictionary=cache.get("__encounter_closure",{})

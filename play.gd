@@ -333,6 +333,7 @@ func _ready() -> void:
     if not external_playback and session == null: session = Session.new()
     var settings = RenderSettings.read()
     character_light_profile = settings.profile
+    media_warmup.light_profile = character_light_profile
     native_spell_hit_material = settings.native_spell_hit_material
     fire_light_flicker = settings.fire_light_flicker
     source_lighting.fire_light_flicker = fire_light_flicker
@@ -443,6 +444,10 @@ func _poll_character_light_profile() -> void:
     var profile_name: String=requested_character_light_profile
     character_light_profile = profile_name
     requested_character_light_profile="";character_profile_pending_paths={};media_plan_key=[]
+    # The optional library follows the profile in use.
+    media_warmup.light_profile = profile_name
+    if not media_warmup.optional_last.is_empty() and media_warmup.optional_pending.is_empty():
+        media_warmup.optional_pending = media_warmup.optional_last.duplicate()
     var error = _save_character_light_profile(profile_name)
     if error != OK: notice_text = "Setting applied; cannot save it: "+error_string(error)
     elif notice_text==character_profile_notice:notice_text=""
