@@ -1,5 +1,6 @@
 extends "res://tests/native_2d_integration_checks.gd"
-# Same recorded scene and camera, three source-preserving illumination captures.
+# Same recorded scene and camera, three source-preserving illumination captures
+# through the lit sprite shaders: received normals, flat normals, and unlit.
 func snap(scene:Node,label:String)->void:
     await process_frame;await RenderingServer.frame_post_draw
     await process_frame;await RenderingServer.frame_post_draw
@@ -20,24 +21,29 @@ func run()->void:
     await scene.presentation_updated;await scene.presentation_updated;scene.set_process(false)
     DirAccess.make_dir_recursive_absolute("res://.captures/floor-lighting")
     await snap(scene,"lit-normals")
-    for group in scene.native_light_atlas.groups.values():group.material.set_shader_parameter("use_source_normals",false)
+    # Lit sprites receive in their own environment shader; flat normals and the
+    # unlit view are written on the same materials and receiving globals.
+    var receivers:Array=scene.entries.filter(func(entry):return entry.material is ShaderMaterial and entry.material.shader==scene.ENVIRONMENT_SHADER)
+    for entry in receivers:entry.material.set_shader_parameter("use_source_normals",false)
     await snap(scene,"lit-flat")
-    for group in scene.native_light_atlas.groups.values():group.material.set_shader_parameter("use_source_normals",true)
-    for child in scene.native_light_atlas.viewport.get_children():
-        if child is CanvasModulate:child.color=Color.WHITE
-        if child is Light2D:child.enabled=false
+    for entry in receivers:entry.material.set_shader_parameter("use_source_normals",true)
+    RenderingServer.global_shader_parameter_set(&"light_ambient",1.0)
+    RenderingServer.global_shader_parameter_set(&"light_count",0)
     await snap(scene,"unlit-original")
+    scene.claim_receiving();scene._publish_receiving()
     var rows=[]
     var props=[]
-    for receiver in scene.native_light_atlas.receivers:
-        if not receiver.entry.node.visible:continue
-        if receiver.index<0:
-            if receiver.entry.has("record"):
-                var p:Transform2D=scene.native_light_atlas.receiver_global_transform(receiver)
-                props.append({"id":receiver.id,"record":receiver.entry.record,"placement":receiver.entry.get("placement",{}),"role":receiver.entry.get("source_role",-1),"rank":receiver.entry.get("draw_rank",0),"crop":[receiver.crop.pixels.position.x,receiver.crop.pixels.position.y,receiver.crop.pixels.size.x,receiver.crop.pixels.size.y],"screen_transform":[p.x.x,p.x.y,p.y.x,p.y.y,p.origin.x,p.origin.y],"atlas":[receiver.position.x,receiver.position.y]})
-            continue
-        var t:Transform2D=scene.native_light_atlas.receiver_global_transform(receiver)
-        rows.append({"id":receiver.id,"source":receiver.entry.record.path,"crop":[receiver.crop.pixels.position.x,receiver.crop.pixels.position.y,receiver.crop.pixels.size.x,receiver.crop.pixels.size.y],"screen_transform":[t.x.x,t.x.y,t.y.x,t.y.y,t.origin.x,t.origin.y],"index":receiver.index,"rank":receiver.entry.draw_rank,"atlas":[receiver.position.x,receiver.position.y]})
+    for entry in receivers:
+        if not entry.node.visible:continue
+        if entry.has("batch_rows"):
+            for index in entry.batch_rows.size():
+                var row:Dictionary=entry.batch_rows[index]
+                var at:Vector3=(entry.node.global_transform*entry.node.multimesh.get_instance_transform(index)).origin
+                var screen:Vector2=scene.camera.unproject_position(at)
+                rows.append({"id":str(row.id),"source":entry.record.path,"index":index,"rank":entry.draw_rank,"screen_origin":[screen.x,screen.y]})
+        elif entry.has("record"):
+            var screen:Vector2=scene.camera.unproject_position(entry.node.global_position)
+            props.append({"id":entry.get("id",""),"record":entry.record,"placement":entry.get("placement",{}),"role":entry.get("source_role",-1),"rank":entry.get("draw_rank",0),"screen_origin":[screen.x,screen.y]})
     var report={"checks":checks,"failures":failures,"sequence":scene.timeline.sequence,"renderer":RenderingServer.get_current_rendering_method(),"driver":RenderingServer.get_current_rendering_driver_name(),"floor_sources":rows,"prop_sources":props}
     DirAccess.make_dir_recursive_absolute("res://.runtime/graphics-quality")
     var diagnostic=".runtime/graphics-quality/native_floor_lighting_checks.json"

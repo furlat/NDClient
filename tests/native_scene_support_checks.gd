@@ -1,9 +1,11 @@
 extends SceneTree
 ## Exact native receiver depth/output parity against the pre-optimization pass.
+## Sources are lit sprites: each entry displays its own material (modular for
+## actors, environment for floors) and the proxies address the cell texel.
 const Support=preload("res://presentation/native_scene_support.gd")
 const Original=preload("res://tests/native_scene_support_reference.gd")
-const Source=preload("res://presentation/canvas_capped_modular.gdshader")
-const Output=preload("res://presentation/canvas_received.gdshader")
+const Source=preload("res://modular.gdshader")
+const Floor=preload("res://environment.gdshader")
 class Host extends Node3D:
     var camera:Camera3D
 var checks:int=0
@@ -26,17 +28,17 @@ func make_world(script:Script)->Dictionary:
     var state={"view":view,"host":host,"support":support,"floors":[],"actors":{"body":{"entries":[]}}}
     for i in 36:
         var node=MeshInstance3D.new();node.mesh=QuadMesh.new();node.mesh.size=Vector2.ONE;host.add_child(node)
-        var output=ShaderMaterial.new();output.shader=Output;output.set_shader_parameter("received",images.white);output.set_shader_parameter("atlas_region",Vector4(0,0,1,1));output.set_shader_parameter("source_quad_size",Vector2.ONE);node.material_override=output
+        var output=ShaderMaterial.new();output.shader=Floor;output.set_shader_parameter("colour_texture",images.white);output.set_shader_parameter("colour_rect",Vector4(0,0,16,16))
+        output.set_shader_parameter("colour_size",Vector2(16,16));output.set_shader_parameter("has_geometry",false);output.set_shader_parameter("source_quad_size",Vector2.ONE);node.material_override=output
         var placement={"position":[float(i%6)-2.5,float(i/6)-2.5],"base_height_steps":0}
-        state.floors.append({"id":"floor"+str(i),"role":"terrain","source_version":0,"node":node,"placement":placement,"received_material":output})
+        state.floors.append({"id":"floor"+str(i),"role":"terrain","source_version":0,"node":node,"placement":placement,"material":output})
     for i in actor_count:
         var node=MeshInstance3D.new();node.mesh=QuadMesh.new();node.mesh.size=Vector2(.8,1.4);host.add_child(node)
-        var material=ShaderMaterial.new();material.shader=Source
-        var output=ShaderMaterial.new();output.shader=Output;node.material_override=output
-        var source_fields:Dictionary={"sheet":images.white,"frame_uv":Vector4(0,0,1,1),"component_depth":images.depth,"component_support":images.white,"component_depth_range":Vector2(0,1),"component_units":.06,"component_reconstruction_origin":Vector2(8,16),"component_elevation":PI/4,"condition_alpha":1.0,"has_component_geometry":true}
+        var material=ShaderMaterial.new();material.shader=Source;node.material_override=material
+        var source_fields:Dictionary={"sheet":images.white,"frame_uv":Vector4(0,0,1,1),"component_depth":images.depth,"component_support":images.white,"component_depth_range":Vector2(0,1),"component_units":.06,"component_reconstruction_origin":Vector2(8,16),"component_elevation":PI/4,"condition_alpha":1.0,"has_component_geometry":true,"material_cell_size":Vector2(16,16)}
         for parameter in source_fields:material.set_shader_parameter(parameter,source_fields[parameter])
-        output.set_shader_parameter("received",images.white);output.set_shader_parameter("source_crop",Vector4(0,0,1,1));output.set_shader_parameter("atlas_region",Vector4(0,0,1,1));output.set_shader_parameter("source_quad_size",node.mesh.size)
-        state.actors.body.entries.append({"id":"body"+str(i),"role":"body","source_version":0,"source_parameters":source_fields.duplicate(),"actor_layer":{"effect":{},"slot":"body"},"node":node,"material":material,"received_material":output,"texture_path":"body","cell":Vector2(16,16),"pivot":Vector2(8,16),"geometry_ground_pixels":0.0})
+        material.set_shader_parameter("source_quad_size",node.mesh.size)
+        state.actors.body.entries.append({"id":"body"+str(i),"role":"body","source_version":0,"source_parameters":source_fields.duplicate(),"actor_layer":{"effect":{},"slot":"body"},"node":node,"material":material,"texture_path":"body","cell":Vector2(16,16),"pivot":Vector2(8,16),"geometry_ground_pixels":0.0})
     support.solid_masks.body=images.white
     return state
 func camera_view(state:Dictionary,quarter:int,zoom:float)->void:
@@ -79,13 +81,14 @@ func compare(a:Dictionary,b:Dictionary,label:String)->void:
             check(actual.material_override.get_shader_parameter(field.name)==expected.material_override.get_shader_parameter(field.name),label+": exact proxy uniform "+id+"/"+str(field.name))
     for i in a.floors.size():
         for field in ["native_scene_enabled","native_scene_plane"]:
-            check(a.floors[i].received_material.get_shader_parameter(field)==b.floors[i].received_material.get_shader_parameter(field),label+": exact floor output "+field)
+            check(a.floors[i].material.get_shader_parameter(field)==b.floors[i].material.get_shader_parameter(field),label+": exact floor output "+field)
     for i in a.actors.body.entries.size():
         for field in ["native_scene_enabled","native_scene_plane","native_scene_pivot","native_scene_ground_height"]:
-            check(a.actors.body.entries[i].received_material.get_shader_parameter(field)==b.actors.body.entries[i].received_material.get_shader_parameter(field),label+": exact actor output "+field)
+            check(a.actors.body.entries[i].material.get_shader_parameter(field)==b.actors.body.entries[i].material.get_shader_parameter(field),label+": exact actor output "+field)
 func run()->void:
     root.unfocusable=true;root.position=Vector2i(-16000,-16000);root.size=Vector2i(320,240);Engine.max_fps=60
     create_timer(60).timeout.connect(func():printerr("Support check deadline");quit(2))
+    RenderingServer.global_shader_parameter_set(&"light_ambient",1.0);RenderingServer.global_shader_parameter_set(&"light_cap",0.0);RenderingServer.global_shader_parameter_set(&"light_normals",false)
     images={"white":texture(Color.WHITE),"depth":texture(Color(.5,0,0,1)),"changed":texture(Color(.75,0,0,1)),"empty":texture(Color(0,0,0,1))}
     var candidate:Script=Support;var before:Script=Support
     for argument in OS.get_cmdline_user_args():
@@ -113,29 +116,28 @@ func run()->void:
                 entry.node=old_source.duplicate()
                 state.host.add_child(entry.node)
                 old_source.free()
-                var old_output:ShaderMaterial=entry.received_material
-                entry.received_material=old_output.duplicate()
-                entry.node.material_override=entry.received_material
+                var old_output:ShaderMaterial=entry.material
+                entry.material=old_output.duplicate()
+                entry.node.material_override=entry.material
                 sync(state)
                 check(old_output.get_shader_parameter("native_scene_enabled")==false,"Replaced floor output disabled")
             check(not is_instance_valid(retained),"Actual source-node replacement retires old floor proxy despite same row ID")
             check(a.support.last_sync_phases.floor_created==0 and a.support.last_sync_phases.floor_retired==0,"Actual source-node replacement is prepared before sampling without constructors")
             await draw();compare(a,b,"source_node_replacement_view%d_zoom%.0f"%[quarter,zoom])
     var states=[a,b,c]
-    for label in ["unchanged","clock","geometry","atlas","opacity","restore","hidden","reveal","output_replace","output_recopy","stamped_recopy","same_count_replace","mask","pivot","ground","cell_size","solid_missing","solid_arrival","copy_proof","copy_stable","copy_overwrite","first_draw","removed","sleep","wake"]:
+    for label in ["unchanged","clock","geometry","opacity","restore","hidden","reveal","material_replace","output_recopy","stamped_recopy","same_count_replace","mask","pivot","ground","cell_size","solid_missing","solid_arrival","copy_stable","copy_overwrite","first_draw","removed","sleep","wake"]:
         for state in states:
             var entry:Dictionary=state.actors.body.entries[0]
             match label:
                 "clock":set_source(entry,"frame_uv",Vector4(.25,0,.5,1));entry.source_version+=1
                 "geometry":entry.erase("source_version");set_source(entry,"component_depth",images.changed);set_source(entry,"component_units",.075)
-                "atlas":entry.received_material.set_shader_parameter("atlas_region",Vector4(.1,.1,.8,.8));entry.received_material.set_shader_parameter("source_crop",Vector4(.1,.1,.8,.8))
                 "opacity":set_source(entry,"condition_alpha",.55)
                 "restore":set_source(entry,"condition_alpha",1.0)
                 "hidden":entry.node.hide();state.floors[0].node.hide()
                 "reveal":entry.node.show();state.floors[0].node.show()
-                "output_replace":entry.received_material=entry.received_material.duplicate();entry.node.material_override=entry.received_material
-                "output_recopy":entry.source_version=20;entry.received_material.set_shader_parameter("native_scene_enabled",false);entry.received_material.set_shader_parameter("native_scene_pivot",Vector2.ZERO)
-                "stamped_recopy":entry.received_material.set_shader_parameter("native_scene_enabled",false);entry.received_material.set_shader_parameter("native_scene_pivot",Vector2.ZERO)
+                "material_replace":entry.material=entry.material.duplicate();entry.node.material_override=entry.material
+                "output_recopy":entry.source_version=20;entry.material.set_shader_parameter("native_scene_enabled",false);entry.material.set_shader_parameter("native_scene_pivot",Vector2.ZERO)
+                "stamped_recopy":entry.material.set_shader_parameter("native_scene_enabled",false);entry.material.set_shader_parameter("native_scene_pivot",Vector2.ZERO)
                 "same_count_replace":entry.id="replacement";state.floors[0].id="floor-replacement"
                 "mask":state.support.solid_masks.body=images.empty
                 "pivot":entry.pivot=Vector2(7,14)
@@ -143,15 +145,10 @@ func run()->void:
                 "cell_size":entry.geometry_cell_size=Vector2(17,18)
                 "solid_missing":state.support.solid_masks.erase("body")
                 "solid_arrival":state.support.solid_masks.body=images.changed
-                "copy_proof":
-                    for source in state.actors.body.entries:
-                        source.source_version=30
-                        source.received_source_key={"source":source.material,"shader":source.material.shader,"version":30,"output":source.received_material,"output_shader":source.received_material.shader}
                 "copy_stable":pass
                 "copy_overwrite":
-                    entry.received_material.set_shader_parameter("native_scene_enabled",false)
-                    entry.received_material.set_shader_parameter("native_scene_pivot",Vector2.ZERO)
-                    entry.received_source_key=entry.received_source_key.duplicate()
+                    entry.material.set_shader_parameter("native_scene_enabled",false)
+                    entry.material.set_shader_parameter("native_scene_pivot",Vector2.ZERO)
                 "first_draw":entry.pivot=Vector2(6,15);entry.geometry_ground_pixels=2.0
                 "removed":state.actors.body.entries[1].node.hide()
                 "sleep":state.support.set_enabled(false)
@@ -163,9 +160,7 @@ func run()->void:
         await draw();compare(a,b,label)
         if label=="sleep":check(a.support.actors.values().all(func(node):return node.material_override.get_shader_parameter("sheet")==null),"Inactive support releases texture references")
     for state in states:
-        for entry in state.actors.body.entries:
-            entry.source_version=10
-            entry.received_source_key={"source":entry.material,"shader":entry.material.shader,"version":10,"output":entry.received_material,"output_shader":entry.received_material.shader}
+        for entry in state.actors.body.entries:entry.source_version=10
         sync(state)
     var measured={"original":[],"before":[],"revised":[]}
     # Alternate complete sync calls against the immediate pre-edit source,
@@ -195,5 +190,5 @@ func run()->void:
         check(state.support.floors.is_empty() and state.support.actors.is_empty(),"Close releases every floor and actor receiver")
         state.view.queue_free()
     await draw()
-    var report={"actor_proxies":actor_count,"checks":checks,"failures":failures,"timings":timings,"scope":"Original versus revised receiver depth and painted-output byte parity across fourviews/twozooms, live unstamped material/atlas/opacity/mask changes, membership, inactive media release. Synthetic finite receiver fixture; full real replay timing separate."}
+    var report={"actor_proxies":actor_count,"checks":checks,"failures":failures,"timings":timings,"scope":"Original versus revised receiver depth and painted-output byte parity across fourviews/twozooms, live unstamped material/opacity/mask changes on lit sprite materials, membership, inactive media release. Synthetic finite receiver fixture; full real replay timing separate."}
     FileAccess.open("res://.runtime/native-scene-support-checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "));print("NATIVE_SCENE_SUPPORT_CHECKS ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)

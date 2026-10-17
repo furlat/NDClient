@@ -44,9 +44,9 @@ func run()->void:
         if quarter!=studio.world.quarter:studio.world.request_view(quarter)
         if not await settle(studio):break
         for capped in [false,true]:
-            # Exact native setter; avoid changing the human's persisted preference.
+            # In-memory cap, published as the light_cap global on the next
+            # processed frame; avoid changing the human's persisted preference.
             studio.world.light_cap_enabled=capped
-            studio.world.native_light_atlas.set_light_cap(1.0 if capped else 0.0)
             studio.world.set_normals_visible(false)
             var label="q%s-cap%s"%[quarter,int(capped)]
             var coloured=await capture(studio,label+"-condition")

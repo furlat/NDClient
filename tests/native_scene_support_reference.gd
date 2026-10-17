@@ -1,6 +1,8 @@
 extends RefCounted
 ## Receiver geometry for native VFX, sourced from the same displayed records as
 ## the sprite renderer. No inferred walls, physics bodies or CPU pixel meshes.
+## Frozen pre-optimization pass, updated only for lit sprites: the displayed
+## material is entry.material and proxies address the cell texel directly.
 const Placement=preload("res://placement.gd")
 const Shadows=preload("res://presentation/canvas_shadows.gd")
 const Geometry=preload("res://presentation/character_geometry.gd")
@@ -91,7 +93,7 @@ func set_enabled(value:bool)->void:
         _outputs.clear()
         solid_masks.clear()
         for node in actors.values():
-            for parameter in ["sheet","received","component_depth","component_support","component_solid"]:
+            for parameter in ["sheet","component_depth","component_support","component_solid"]:
                 node.material_override.set_shader_parameter(parameter,null)
 
 func _floor(id:String)->MeshInstance3D:
@@ -151,10 +153,9 @@ func sync(static_entries:Array,visual_actors:Dictionary,view_camera:Camera3D)->v
         if entry.role!="terrain" or not entry.node.visible:continue
         var id:String=entry.id;retained[id]=true
         _floor(id).position=Placement.contact(entry.placement)
-        if entry.has("received_material"):
-            _outputs.append(entry.received_material)
-            entry.received_material.set_shader_parameter("native_scene_enabled",true)
-            entry.received_material.set_shader_parameter("native_scene_plane",true)
+        _outputs.append(entry.material)
+        entry.material.set_shader_parameter("native_scene_enabled",true)
+        entry.material.set_shader_parameter("native_scene_plane",true)
     for id in floors.keys():
         if not retained.has(id):floors[id].free();floors.erase(id)
     retained={}
@@ -162,14 +163,13 @@ func sync(static_entries:Array,visual_actors:Dictionary,view_camera:Camera3D)->v
         for source in visual.entries:
             if source.role=="shadow" or not source.actor_layer.get("effect",{}).is_empty():continue
             var has_geometry:bool=source.material.get_shader_parameter("has_component_geometry")==true
-            if source.has("received_material"):
-                var output:ShaderMaterial=source.received_material
-                _outputs.append(output)
-                output.set_shader_parameter("native_scene_enabled",has_geometry and source.node.visible)
-                output.set_shader_parameter("native_scene_plane",false)
-                output.set_shader_parameter("native_scene_pivot",source.pivot)
-                if has_geometry:output.set_shader_parameter("native_scene_ground_height",source.get("geometry_ground_pixels",19.0)*source.material.get_shader_parameter("component_units"))
-            if not source.node.visible or not source.has("received_material"):continue
+            var output:ShaderMaterial=source.material
+            _outputs.append(output)
+            output.set_shader_parameter("native_scene_enabled",has_geometry and source.node.visible)
+            output.set_shader_parameter("native_scene_plane",false)
+            output.set_shader_parameter("native_scene_pivot",source.pivot)
+            if has_geometry:output.set_shader_parameter("native_scene_ground_height",source.get("geometry_ground_pixels",19.0)*source.material.get_shader_parameter("component_units"))
+            if not source.node.visible:continue
             # Translucent bodies require transparent compositing, not an
             # invisible opaque blocker. This bridge admits solid surfaces only.
             var condition_alpha:Variant=source.material.get_shader_parameter("condition_alpha")
@@ -182,8 +182,6 @@ func sync(static_entries:Array,visual_actors:Dictionary,view_camera:Camera3D)->v
             node.sorting_use_aabb_center=false;node.sorting_offset=source.node.sorting_offset
             var material:ShaderMaterial=node.material_override
             material.render_priority=source.material.render_priority
-            for parameter in ["received","source_crop","atlas_region"]:
-                material.set_shader_parameter(parameter,source.received_material.get_shader_parameter(parameter))
             for parameter in Shadows.CASTER_PARAMETERS:material.set_shader_parameter(parameter,source.material.get_shader_parameter(parameter))
             material.set_shader_parameter("has_geometry",has_geometry and solid!=null)
             material.set_shader_parameter("component_solid",solid)

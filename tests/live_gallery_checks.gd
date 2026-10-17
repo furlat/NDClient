@@ -346,19 +346,14 @@ func _run() -> void:
         root.size=Vector2i(1600,960)
         Engine.max_fps=0
     scene=CapturingPlayer.new();scene.choices_observed=capture_choices;scene.profile.recording=true
-    evidence.atlas_reference=""
-    for argument in OS.get_cmdline_user_args():
-        if argument.begins_with("--reference-atlas="):
-            evidence.atlas_reference=argument.trim_prefix("--reference-atlas=")
-            scene.native_light_atlas=preload("res://tests/atlas_reference.gd").instantiate(evidence.atlas_reference)
     root.add_child(scene)
     check(scene.profiling_configured.ok and scene.session.transport.profiling_enabled(),"Transport profiling configured before live start")
     if profile_view_size>0.0:scene.camera.size=profile_view_size
     # Default to approved capped lighting; an explicit diagnostic run can
-    # compare the same real movement/reveal route with the cap disabled.
+    # compare the same real movement/reveal route with the cap disabled. The
+    # in-memory cap is published as the light_cap global on the next frame.
     var profile_cap := not OS.get_cmdline_user_args().has("--profile-light-cap=off")
     scene.light_cap_enabled=profile_cap
-    scene.native_light_atlas.set_light_cap(1.0 if profile_cap else 0.0)
     evidence.light_cap_enabled=profile_cap
     evidence.profile_view_size=profile_view_size if profile_view_size>0.0 else null
     evidence.profile_stop_stage=profile_stop_stage
@@ -418,7 +413,6 @@ func _run() -> void:
     var idle_zooms:Array=[scene.camera.size] if bounded_profile else [8.137,16.0,28.0]
     for cap in idle_caps:
         scene.light_cap_enabled=cap
-        scene.native_light_atlas.set_light_cap(1.0 if cap else 0.0)
         for zoom in idle_zooms:
             scene.profile.label="idle_settle"
             scene.camera.size=zoom

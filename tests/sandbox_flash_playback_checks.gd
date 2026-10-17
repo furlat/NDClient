@@ -61,7 +61,7 @@ func receiver(world: Node, id: String) -> Dictionary:
             "source_strength":source_strength, "output_strength":output_strength,
             "native_enabled":output.get_shader_parameter("native_body_enabled"),
             "native_strength":output.get_shader_parameter("native_body_strength"),
-            "received_output":entry.get("received_material") == output})
+            "source_is_output":source == output})
     return {"drawable_layers":drawable, "active_layers":active,
         "source_output_agree":agrees, "layers":rows}
 

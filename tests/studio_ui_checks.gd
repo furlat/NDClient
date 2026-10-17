@@ -23,7 +23,7 @@ func capture(studio:Control,name:String)->void:
     while (cache.worker!=null or not cache.pending.is_empty() or not cache.active.is_empty()) and Time.get_ticks_msec()<deadline:
         await process_frame
     await RenderingServer.frame_post_draw
-    check(studio.world.native_light_atlas.viewport!=null and studio.world.entries.size()>0,"Published renderer retains its native atlas and original draw entries "+name)
+    check(studio.world.light_table!=null and studio.world.entries.size()>0,"Published renderer retains its light table and original draw entries "+name)
     var image=studio.viewport.get_texture().get_image()
     check(image!=null and not image.is_empty() and image.get_used_rect().has_area(),"Published native viewport contains pixels "+name)
     if DisplayServer.get_name()!="headless":root.get_texture().get_image().save_png("res://.captures/studio/"+name+".png")

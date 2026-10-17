@@ -1,5 +1,5 @@
 extends SceneTree
-## Actual admitted Hide recording through the production Studio host and atlas.
+## Actual admitted Hide recording through the production Studio host and lit sprites.
 const Studio=preload("res://studio/studio.gd")
 const Geometry=preload("res://presentation/character_geometry.gd")
 const Pose=preload("res://presentation/condition_pose.gd")
@@ -124,8 +124,7 @@ func inspect_actor(studio:Control,row:Dictionary,expected_clip:String,alpha:floa
     else:
         expected_seconds=fposmod(world.timeline.display_ms/1000.0,float(rig.clips[expected_clip].frames)/rig.clips[expected_clip].fps)
     check(frame==mini(int(expected_seconds*rig.clips[expected_clip].fps),int(rig.clips[expected_clip].frames)-1),"Source row clock and viewport frame agree "+label)
-    var atlas=world.native_light_atlas.viewport.get_texture().get_image()
-    var count=0;var gear=0;var opaque=0;var coverage_mismatches=0;var max_alpha_error=0.0
+    var count=0;var gear=0;var opaque=0;var coverage_mismatches=0;var max_alpha_error=0.0;var boundary=0;var covered=0
     for entry in visual.entries:
         if not entry.node.visible or entry.role=="shadow":continue
         count+=1
@@ -141,23 +140,71 @@ func inspect_actor(studio:Control,row:Dictionary,expected_clip:String,alpha:floa
         if not profiles.value.is_empty():
             check(material.get_shader_parameter("component_normal")==world.textures[profiles.value[world.character_light_profile]],"Matching delivered normal profile bound "+entry.actor_layer.slot+" "+label)
             check(material.get_shader_parameter("has_component_geometry"),"Original geometry remains enabled "+entry.actor_layer.slot+" "+label)
-        var receivers=world.native_light_atlas.receivers.filter(func(r):return is_same(r.entry,entry))
-        check(receivers.size()==1,"One actual native receive cell "+entry.actor_layer.slot+" "+label)
-        if receivers.is_empty():continue
-        var receiver:Dictionary=receivers[0]
         var layer_alpha=float(material.get_shader_parameter("layer_alpha"))
-        for y in 128:
-            for x in 128:
-                var source=original.get_pixel(start.x+x,start.y+y)
-                var received=atlas.get_pixel(receiver.position.x+x,receiver.position.y+y)
-                var expected=source.a*layer_alpha*alpha
-                if (expected>0)!=(received.a>0):coverage_mismatches+=1
-                max_alpha_error=maxf(max_alpha_error,absf(expected-received.a))
+        var cell:Vector2=material.get_shader_parameter("material_cell_size")
+        var painted:Image=await isolated_layer(world,entry)
+        var mesh:QuadMesh=entry.node.mesh
+        var inverse:Transform3D=entry.node.global_transform.affine_inverse()
+        var normal:Vector3=entry.node.global_basis.z
+        var top_left:=Vector2(mesh.center_offset.x-mesh.size.x*.5,mesh.center_offset.y+mesh.size.y*.5)
+        for y in painted.get_height():
+            for x in painted.get_width():
+                # The pixel centre's ray meets the layer's quad at its source texel.
+                var centre:=Vector2(x+.5,y+.5)
+                var origin:Vector3=world.camera.project_ray_origin(centre);var ray:Vector3=world.camera.project_ray_normal(centre)
+                var denominator:float=ray.dot(normal)
+                if absf(denominator)<.000001:continue
+                var local:Vector3=inverse*(origin+ray*((entry.node.global_position-origin).dot(normal)/denominator))
+                var quad_uv:=Vector2((local.x-top_left.x)/mesh.size.x,(top_left.y-local.y)/mesh.size.y)
+                if quad_uv.x<0 or quad_uv.y<0 or quad_uv.x>=1 or quad_uv.y>=1:continue
+                var at:Vector2=quad_uv*cell
+                var received:float=painted.get_pixel(x,y).a
+                # A pixel centre on a texel edge may be sampled from either
+                # neighbour; take the neighbour that explains the pixel and
+                # count it as a texel-boundary flip when it is not the floor.
+                var candidates:Array[Vector2i]=[]
+                for dy in [0,-1,1]:
+                    for dx in [0,-1,1]:
+                        var near:Vector2=at+Vector2(dx,dy)*.001
+                        var texel:=Vector2i(near.floor()).clamp(Vector2i.ZERO,Vector2i(cell)-Vector2i.ONE)
+                        if texel not in candidates:candidates.append(texel)
+                var best:float=-1.0;var best_index:=0
+                for index in candidates.size():
+                    var value:float=original.get_pixel(start.x+candidates[index].x,start.y+candidates[index].y).a*layer_alpha*alpha
+                    if best<0 or absf(value-received)<absf(best-received):best=value;best_index=index
+                if best_index>0:boundary+=1
+                var source=original.get_pixel(start.x+candidates[best_index].x,start.y+candidates[best_index].y)
+                var expected:float=best
+                if expected>0:covered+=1
+                if (expected>0)!=(received>0):coverage_mismatches+=1
+                max_alpha_error=maxf(max_alpha_error,absf(expected-received))
                 if source.a==1:opaque+=1
     check(count>1 and gear>0 and opaque>0,"Assembled body and equipment contribute original pixels "+label)
-    check(coverage_mismatches==0,"Native atlas preserves every source alpha support pixel "+label)
+    check(covered>0 and coverage_mismatches==0,"Lit layers preserve every source alpha support pixel "+label)
     check(max_alpha_error<=1.0/255.0,"Native body/gear alpha equals source×condition opacity within one storage byte "+label)
-    evidence.append({"label":label,"time_ms":world.timeline.display_ms,"quarter":world.quarter,"clip":playback.clip,"frame":frame,"parts":count,"gear":gear,"condition_alpha":alpha,"alpha_max_error":max_alpha_error,"alpha_coverage_mismatches":coverage_mismatches,"source_profile":world.character_light_profile})
+    evidence.append({"label":label,"time_ms":world.timeline.display_ms,"quarter":world.quarter,"clip":playback.clip,"frame":frame,"parts":count,"gear":gear,"condition_alpha":alpha,"alpha_max_error":max_alpha_error,"alpha_coverage_mismatches":coverage_mismatches,"covered_pixels":covered,"texel_boundary_flips":boundary,"source_profile":world.character_light_profile})
+## This one displayed layer alone, drawn by the displayed camera with its own
+## material over a transparent target: framebuffer alpha is the layer's ALPHA.
+func isolated_layer(world:Node,entry:Dictionary)->Image:
+    var bit:=1<<13
+    var original_mask:int=world.camera.cull_mask
+    world.camera.cull_mask&=~bit
+    var viewport=SubViewport.new();viewport.size=world.get_viewport().size
+    viewport.world_3d=world.get_world_3d();viewport.transparent_bg=true
+    viewport.render_target_update_mode=SubViewport.UPDATE_ALWAYS
+    world.add_child(viewport)
+    var camera=Camera3D.new();camera.cull_mask=bit;viewport.add_child(camera)
+    var clear=Environment.new();clear.background_mode=Environment.BG_COLOR;clear.background_color=Color(0,0,0,0);camera.environment=clear
+    camera.global_transform=world.camera.global_transform
+    for property in ["projection","keep_aspect","size","near","far"]:camera.set(property,world.camera.get(property))
+    var node=MeshInstance3D.new();node.mesh=entry.node.mesh;node.material_override=entry.node.get_active_material(0);node.layers=bit
+    node.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+    world.add_child(node);node.global_transform=entry.node.global_transform
+    await process_frame;await RenderingServer.frame_post_draw
+    await process_frame;await RenderingServer.frame_post_draw
+    var image:Image=viewport.get_texture().get_image()
+    node.queue_free();viewport.queue_free();world.camera.cull_mask=original_mask
+    return image
 func has_hidden(world:Node)->bool:
     return world.timeline.state.actors.get(actor_id,{}).get("conditions",[]).any(func(c):return c.behavior_id=="condition.hidden")
 func inspect_hidden_state(studio:Control,expected:bool,label:String)->void:
@@ -193,25 +240,25 @@ func inspect_transition(studio:Control,hidden:Dictionary,poses:Array)->void:
     var action_time=lerpf(body.start_ms,body.end_ms,.45)
     if await seek(studio,body,initial_time):
         inspect_hidden_state(studio,false,"normal idle")
-        inspect_actor(studio,{},"Idle",1.0,"transition-normal-idle")
+        await inspect_actor(studio,{},"Idle",1.0,"transition-normal-idle")
         await capture(studio,"transition-normal-idle")
     var action_image:Image
     var action_bounds:Rect2i
     if await seek(studio,body,action_time):
         inspect_hidden_state(studio,false,"Hide action")
-        inspect_actor(studio,body,body.track.clip,1.0,"transition-hide-action")
+        await inspect_actor(studio,body,body.track.clip,1.0,"transition-hide-action")
         action_image=await capture(studio,"transition-hide-action")
         action_bounds=actor_rect(studio)
         await source_capture(studio,body,"transition-hide-action")
     if await seek(studio,body,effect_time-1.0):
         inspect_hidden_state(studio,false,"last action frame before effect")
-        inspect_actor(studio,body,body.track.clip,1.0,"transition-before-effect")
+        await inspect_actor(studio,body,body.track.clip,1.0,"transition-before-effect")
         await capture(studio,"transition-before-effect")
     var active=poses.filter(func(r):return r.start_ms<=effect_time and r.end_ms>effect_time)
     check(not active.is_empty(),"Actual condition has an indexed pose at its effect boundary")
     if not active.is_empty() and await seek(studio,active[0],effect_time):
         inspect_hidden_state(studio,true,"exact effect")
-        inspect_actor(studio,active[0],active[0].selected_pose.clip,.55,"transition-hidden-condition")
+        await inspect_actor(studio,active[0],active[0].selected_pose.clip,.55,"transition-hidden-condition")
         await capture(studio,"transition-hidden-condition")
     var audio_rows=studio.index.rows.filter(func(r):return r.kind=="audio" and r.component.get("cue_id")=="hide_transition")
     check(audio_rows.size()==1 and audio_rows[0].component.get("status")=="available" and is_equal_approx(audio_rows[0].start_ms,effect_time),"Actual Hide effect owns one available selected audio cue")
@@ -293,7 +340,7 @@ func run()->void:
         if not await seek(studio,idle,idle_time):break
         studio.world.request_view(q)
         if not await settle(studio):break
-        inspect_actor(studio,idle,"CrouchIdle",.55,"idle-q"+str(q))
+        await inspect_actor(studio,idle,"CrouchIdle",.55,"idle-q"+str(q))
         await capture(studio,"idle-q"+str(q))
         if q==0:
             await source_capture(studio,idle,"idle-q0")
@@ -301,7 +348,7 @@ func run()->void:
             await capture(studio,"idle-q0-normals")
             studio.world.set_normals_visible(false)
         if not await seek(studio,move,move_time):break
-        inspect_actor(studio,move,"CrouchRun",.55,"move-q"+str(q))
+        await inspect_actor(studio,move,"CrouchRun",.55,"move-q"+str(q))
         await capture(studio,"move-q"+str(q))
         if q==0:await source_capture(studio,move,"move-q0")
     var badges=studio.index.rows.filter(func(r):return r.kind=="feedback_text" and r.component.get("text")=="+Hidden")
@@ -318,10 +365,10 @@ func run()->void:
     if not attacks.is_empty():
         var attack:Dictionary=attacks[0]
         if await seek(studio,attack,lerpf(attack.start_ms,attack.end_ms,.35)):
-            inspect_actor(studio,attack,attack.track.clip,.55,"attack-before-removal")
+            await inspect_actor(studio,attack,attack.track.clip,.55,"attack-before-removal")
             await capture(studio,"attack-before-removal")
         if await seek(studio,hidden,hidden.end_ms+25):
-            inspect_actor(studio,{},"Idle",1.0,"authoritative-removal")
+            await inspect_actor(studio,{},"Idle",1.0,"authoritative-removal")
             check(not studio.world.timeline.state.actors[actor_id].conditions.any(func(c):return c.behavior_id=="condition.hidden"),"Canonical removal owns return to normal opacity")
             await inspect_badge(studio)
     if await seek(studio,move,move_time):
@@ -346,7 +393,7 @@ func run()->void:
             if blue_start>0 and await seek(studio,blue_row,blue_start*.5):
                 check(studio.world.visual_actors.has(actor_id) and studio.world.visual_actors[actor_id].entries.any(func(entry):return entry.node.visible),"Blue sees the actual initialized Amber visual contact before Hide")
                 inspect_hidden_state(studio,false,"Blue initialization")
-                inspect_actor(studio,{},"Idle",1.0,"blue-before-hide")
+                await inspect_actor(studio,{},"Idle",1.0,"blue-before-hide")
                 await capture(studio,"blue-before-hide")
                 if await seek(studio,blue_row,unseen_time):
                     check(not studio.world.visual_actors.has(actor_id) or not studio.world.visual_actors[actor_id].entries.any(func(entry):return entry.node.visible),"Blue's own admitted visibility boundary removes actor again after reverse seek")
@@ -381,6 +428,6 @@ func run()->void:
 func finish(studio:Control)->void:
     check(studio.world.presentation_errors.is_empty(),"Final renderer errors remain empty")
     studio.queue_free();await process_frame;await process_frame
-    var report={"checks":checks,"failures":failures,"evidence":evidence,"captures":CAPTURES,"renderer":RenderingServer.get_current_rendering_method(),"scope":"Actual recorded normal idle -> finite authored Hide action -> effect-owned Hidden state, in forward playback and reverse seek; cold source demand, shared Graphs, original body+gear atlas alpha/normal registration, four sustained views, native feedback/removal, faction visibility and isolated reload. Lighting unchanged; alpha allows native HDR storage error <=1/255 with exact support. CrouchIdle is existing crouched source, not a newly invented standing-to-crouching animation."}
+    var report={"checks":checks,"failures":failures,"evidence":evidence,"captures":CAPTURES,"renderer":RenderingServer.get_current_rendering_method(),"scope":"Actual recorded normal idle -> finite authored Hide action -> effect-owned Hidden state, in forward playback and reverse seek; cold source demand, shared Graphs, original body+gear isolated lit-layer alpha/normal registration, four sustained views, native feedback/removal, faction visibility and isolated reload. Lighting unchanged; alpha allows native HDR storage error <=1/255 with exact support. CrouchIdle is existing crouched source, not a newly invented standing-to-crouching animation."}
     FileAccess.open("res://generated/studio_hide_render_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("STUDIO_HIDE_RENDER ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)

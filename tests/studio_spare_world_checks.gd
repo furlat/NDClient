@@ -27,7 +27,7 @@ func run()->void:
     var world=Play.new();world.external_playback=true;world.catalog_cache=Play.Catalog.source_snapshot(index.cache);world.media_warmup.budget_bytes=0
     view.add_child(world);world.install_playback(terminal)
     if not await settle(world):view.queue_free();await process_frame;finish();return
-    var atlas=world.native_light_atlas.viewport
+    var table=world.light_table
     var textures=world.textures.duplicate();var prepared=world.world_prepared_count
     var old_epoch=world.timeline.initialization_revision
     view.audio_listener_enable_3d=true
@@ -46,7 +46,7 @@ func run()->void:
         var ready_started=Time.get_ticks_msec()
         if not await settle(world):break
         measurements.append({"at_ms":at,"install_ms":install_ms,"ready_ms":Time.get_ticks_msec()-ready_started,"world_revision":world.world_revision})
-        check(world.native_light_atlas.viewport==atlas,"The same receiving atlas survives full-prefix preparation")
+        check(world.light_table==table and world.publishes_receiving,"The same receiving light table survives full-prefix preparation")
         var shared=0
         for path in textures:
             if world.textures.get(path)==textures[path]:shared+=1
@@ -60,7 +60,7 @@ func run()->void:
     view.queue_free();await process_frame;await process_frame
     finish()
 func finish()->void:
-    var report={"checks":checks,"failures":failures,"evidence":evidence,"scope":"Three actual initial/terminal prefix restores in one hidden native host, original atlas/source reuse, full world preparation, new epochs, no stale audio/native owners and audible-host rejection. Studio keeps the visible/spare publication boundary."}
+    var report={"checks":checks,"failures":failures,"evidence":evidence,"scope":"Three actual initial/terminal prefix restores in one hidden native host, original light-table/source reuse, full world preparation, new epochs, no stale audio/native owners and audible-host rejection. Studio keeps the visible/spare publication boundary."}
     var path="res://generated/studio_spare_world_native_checks.json" if evidence.get("native",false) else "res://generated/studio_spare_world_checks.json"
     FileAccess.open(path,FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("STUDIO_SPARE_WORLD ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)

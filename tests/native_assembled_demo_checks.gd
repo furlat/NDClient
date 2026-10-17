@@ -1,6 +1,6 @@
 extends "res://tests/native_demo_parity_checks.gd"
 # End-to-end original demo preset, including authored component order/tint, direct
-# native Canvas lighting and the production atlas -> spatial framebuffer path.
+# native Canvas lighting and the production lit sprite -> spatial framebuffer path.
 const PRESETS=[{"name":"Knight","items":["Chain Mail","Longsword","Shield"]},
     {"name":"Wizard","items":["Robes","Quarterstaff","Wizard's Hat"]}]
 var assembled_rows:Array=[]
@@ -37,33 +37,24 @@ func outfit(preset:Dictionary)->Array:
 
 func assemble(fixture_layers:Array,zoom:float,lit:bool)->Dictionary:
     var offset=Vector2(91.37,83.23)
-    var packed=page(false);packed.size=Vector2i(2048,1024)
-    packed.get_child(0).color=Color(.176419,.176419,.176419,1) if lit else Color.WHITE
-    if lit:add_light(packed,offset+Vector2(64,87)*zoom,zoom)
-    var reference=page(false);reference.size=Vector2i(768,768)
-    reference.get_child(0).color=packed.get_child(0).color
-    if lit:add_light(reference,offset+Vector2(64,87)*zoom,zoom)
-    var final_view=SubViewport.new();final_view.size=reference.size;final_view.own_world_3d=true;final_view.transparent_bg=true;final_view.render_target_update_mode=SubViewport.UPDATE_ALWAYS;root.add_child(final_view)
-    var env=WorldEnvironment.new();env.environment=Environment.new();env.environment.background_mode=Environment.BG_COLOR;env.environment.background_color=Color(0,0,0,0);final_view.add_child(env)
-    var cam=Camera3D.new();cam.projection=Camera3D.PROJECTION_ORTHOGONAL;cam.size=768;cam.position.z=100;final_view.add_child(cam)
+    var reference=page(false);reference.size=VIEW
+    reference.get_child(0).color=Color(AMBIENT,AMBIENT,AMBIENT,1) if lit else Color.WHITE
+    if lit:native_lights(reference,demo_lights(offset+Vector2(64,87)*zoom,zoom))
+    var final_view=lit_view(VIEW)
     var original_shader=Shader.new();original_shader.code=FileAccess.get_file_as_string(DEMO)
     var accepted={}
     for u in original_shader.get_shader_uniform_list():accepted[u.name]=true
     for i in fixture_layers.size():
         var fixture:Dictionary=fixture_layers[i]
-        var rect=Rect2(16+i*144,16,128,128)
-        var receive:ShaderMaterial=fixture.material.duplicate()
-        receive.set_shader_parameter("source_crop",Vector4(0,0,1,1));receive.set_shader_parameter("atlas_cell_size",Vector2(128,128));receive.set_shader_parameter("receiver_visibility",1.0)
-        var node=sprite(packed,receive,Transform2D(0,Vector2.ONE*zoom,0,offset))
-        node.region_enabled=true;node.region_rect=rect;node.region_filter_clip_enabled=false
         var mat=ShaderMaterial.new();mat.shader=original_shader
         for u in fixture.material.shader.get_shader_uniform_list():
             if accepted.has(u.name):mat.set_shader_parameter(u.name,fixture.material.get_shader_parameter(u.name))
         var direct_node=Sprite2D.new();direct_node.texture=fixture.material.get_shader_parameter("sheet");direct_node.centered=false;direct_node.hframes=15;direct_node.vframes=8;direct_node.frame_coords=Vector2i(0,3);direct_node.position=offset;direct_node.scale=Vector2.ONE*zoom;direct_node.material=mat;direct_node.z_index=i;reference.add_child(direct_node)
-        var output_mat=ShaderMaterial.new();output_mat.shader=PassThrough;output_mat.render_priority=i
-        output_mat.set_shader_parameter("received",packed.get_texture());output_mat.set_shader_parameter("atlas_region",Vector4(rect.position.x/2048,rect.position.y/1024,128.0/2048,128.0/1024))
-        var mesh=MeshInstance3D.new();mesh.mesh=QuadMesh.new();mesh.mesh.size=Vector2(128,128)*zoom;mesh.position=Vector3(offset.x+64*zoom-384,384-offset.y-64*zoom,0);mesh.material_override=output_mat;final_view.add_child(mesh)
-    return {"atlas":packed,"reference":reference,"final":final_view}
+        # Authored slot order is the painter order: one render priority per layer.
+        var layer:ShaderMaterial=fixture.material.duplicate();layer.render_priority=i
+        lit_quad(final_view,layer,Rect2(offset,Vector2(128,128)*zoom))
+    publish_receiving(demo_lights(offset+Vector2(64,87)*zoom,zoom) if lit else [],AMBIENT if lit else 1.0)
+    return {"reference":reference,"final":final_view}
 
 func run()->void:
     root.unfocusable=true;root.position=Vector2i(-16000,-16000)

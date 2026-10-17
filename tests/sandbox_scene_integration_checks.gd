@@ -204,7 +204,7 @@ func character_occlusion(world:Node,quarter:int)->void:
 
 func rendered_owner_alignment(world:Node,label:String)->void:
     # Reuse the actual final materials in an actor-only view. This is an image
-    # oracle, not another implementation of the atlas address calculation.
+    # oracle, not another implementation of the source texel address calculation.
     var layer=1<<12
     var original_mask:int=world.camera.cull_mask
     world.camera.cull_mask&=~layer
@@ -305,7 +305,6 @@ func floor_pixels(world:Node,centre:Vector3,exclude:Dictionary)->Dictionary:
 func sync_lights(world:Node)->void:
     world.source_lighting.sample_handles(world.handles)
     world._sync_native_lighting();world._sort_draws()
-    world.native_light_atlas.sync_output(world,[world.world_generation,world.quarter,world.scenery_revision,world.wall_mode,world.native_light_atlas.revision],true)
 
 func sheet_pixel(entry:Dictionary,local:Vector2i)->Vector2i:
     var uv:Vector4=entry.material.get_shader_parameter("frame_uv")

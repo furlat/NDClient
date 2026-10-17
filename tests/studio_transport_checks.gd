@@ -130,7 +130,7 @@ func run()->void:
     await scrub(s,body.start_ms+interval*.3,body.start_ms+interval*.8,body.start_ms+interval*.45)
     await scrub(s,body.start_ms+interval*.45,body.start_ms+interval*.1,body.start_ms+interval*.7)
     var unchanged_index:Dictionary=s.index;var unchanged_rows:Array=s.index.rows
-    var unchanged_world=s.world;var atlas=s.world.native_light_atlas.viewport
+    var unchanged_world=s.world;var table=s.world.light_table
     var textures:Dictionary=s.world.textures.duplicate()
     var before_projection=projection(s.world);var before_pane=s.preview.size
     var divider=Vector2(s.split.global_position.x+s.split.size.x*.5,(s.preview.global_position.y+s.preview.size.y+s.bottom.global_position.y)*.5)
@@ -150,7 +150,7 @@ func run()->void:
         rotation_times.append(Time.get_ticks_msec()-started_rotation)
         check(s.world.quarter==posmod(quarter+1,4) and not s.world.rotation_pending(),"Actual preview rotation key publishes prepared quarter "+str(turn))
         check(s.world==unchanged_world and is_same(s.index,unchanged_index) and is_same(s.index.rows,unchanged_rows) and s.loader==null and s.seeker==null,"Camera rotation preserves resolved tracks and does not reindex or restore the recording")
-        check(s.world.native_light_atlas.viewport==atlas,"Camera rotation retains the existing native receiving atlas")
+        check(s.world.light_table==table,"Camera rotation retains the existing receiving light table")
     var same_sources=0
     for path in textures:
         if s.world.textures.get(path)==textures[path]:same_sources+=1
@@ -196,6 +196,6 @@ func finish(s:Control)->void:
     s.queue_free();await process_frame;await process_frame
     if had_layout:FileAccess.open(Studio.CONFIG,FileAccess.WRITE).store_string(saved_layout)
     else:DirAccess.remove_absolute(ProjectSettings.globalize_path(Studio.CONFIG))
-    var report={"checks":checks,"failures":failures,"evidence":evidence,"scope":"Native actual track-label/ruler/splitter/key input, exact forward/backward seek, three causal two-host loops, retained source/track/atlas handles, no-op seek, study/case atomic publication and rejected case retention."}
+    var report={"checks":checks,"failures":failures,"evidence":evidence,"scope":"Native actual track-label/ruler/splitter/key input, exact forward/backward seek, three causal two-host loops, retained source/track/light-table handles, no-op seek, study/case atomic publication and rejected case retention."}
     FileAccess.open("res://generated/studio_transport_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("STUDIO_TRANSPORT ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)
