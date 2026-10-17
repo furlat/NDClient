@@ -37,6 +37,14 @@ static func build_private(packets:Dictionary,texture_refs:Dictionary,declared_na
             # this source constructor, before its first sample.
             SourceMaterial.apply(entry,selected.get("light_parameters",{}))
             material.get_rid()
+            # The finished sprite node, outside any tree: the scene owner only attaches it.
+            var node:=MeshInstance3D.new()
+            node.mesh=mesh;node.material_override=material
+            node.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+            node.sorting_use_aabb_center=false
+            node.position=descriptor.position;node.basis=descriptor.basis;node.visible=descriptor.visible
+            if not descriptor.get("empty",false):node.custom_aabb=descriptor.aabb
+            entry.node=node
             entries.append(entry);count+=1
         rows[id]=entries
     output.merge({"complete":true,"error":"","rows":rows,"worker_ms":(Time.get_ticks_usec()-started)/1000.0,"draw_count":count})

@@ -44,6 +44,12 @@ static func build_private(inputs:Dictionary,textures:Dictionary,resources:Dictio
             var noise:String=resources.get(palette.get("noiseSheet"),"")
             if not noise.is_empty() and textures.get(noise)==null:pending.effect_noise=noise
             material.get_rid();mesh.get_rid()
+            # The finished layer node, outside any tree: the scene owner only attaches it.
+            var node:=MeshInstance3D.new()
+            node.mesh=mesh;node.material_override=material
+            node.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+            node.sorting_use_aabb_center=false;node.custom_aabb=bounds
+            entry.node=node
             var packet:Dictionary={"entry":entry,"mesh":mesh,"aabb":bounds,"pending_textures":pending,"noise_path":noise,"condition_parameters":condition_parameters}
             packets[index]=packet;count+=1
         rows[id]=packets

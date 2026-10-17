@@ -243,21 +243,16 @@ func adopt_environment_row(_row:Dictionary,prepared_entries:Array)->void:
     for entry in prepared_entries:
         var value:Dictionary=entry.prepared_source
         var started:int=Time.get_ticks_usec() if measured else 0
-        var node:=MeshInstance3D.new()
-        if measured:FrameProfile.end_phase(profile,"world_environment_node_create",started);started=Time.get_ticks_usec()
-        node.mesh=entry.mesh;entry.erase("mesh")
-        node.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-        node.sorting_use_aabb_center=false
-        node.position=value.position;node.basis=value.basis;node.visible=value.visible
-        node.material_override=entry.material
-        entry.node=node;entry.screen_rect=Rect2()
+        # The worker built and configured the node; only scene attachment is left.
+        var node:MeshInstance3D=entry.node
+        entry.erase("mesh")
+        entry.screen_rect=Rect2()
         entry.record=value.record
         if not value.get("empty",false):
-            node.custom_aabb=value.aabb
             entry.cell=value.cell;entry.pivot=value.pivot;entry.scale=value.scale
             entry.screen_rect=value.screen_rect;entry.floor_group=value.floor_group
         entry.erase("prepared_source")
-        if measured:FrameProfile.end_phase(profile,"world_environment_node_configure",started);started=Time.get_ticks_usec()
+        if measured:FrameProfile.end_phase(profile,"world_environment_node_adopt",started);started=Time.get_ticks_usec()
         (sprite_parent if sprite_parent!=null else self).add_child(node)
         if measured:FrameProfile.end_phase(profile,"world_environment_node_attach",started);started=Time.get_ticks_usec()
         entries.append(entry);static_entries.append(entry)
