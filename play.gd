@@ -260,6 +260,7 @@ func install_playback(value: RefCounted) -> void:
     _release_replay_media()
     timeline = value
     timeline.profile = profile
+    timeline.source_cut_boundaries = external_playback
     timeline.media_ready = _media_ready
     timeline.replay_media_ready = _replay_media_ready
     timeline.replay_media_release = _release_replay_media
@@ -346,6 +347,7 @@ func _ready() -> void:
     light_cap_enabled = settings.light_cap_enabled
     generated_shadows.attach(self)
     timeline.profile = profile
+    timeline.source_cut_boundaries = external_playback
     timeline.media_ready = _media_ready
     timeline.replay_media_ready = _replay_media_ready
     timeline.replay_media_release = _release_replay_media

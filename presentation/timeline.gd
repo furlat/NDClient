@@ -11,6 +11,10 @@ var state: Dictionary = {}
 var queue: Array = []
 var current: Dictionary = {}
 var display_ms = 0.0
+# A clip change binds its prepared, resident sources in sampling. Hosts that
+# still publish source changes through a private world preparation keep these
+# cuts as world boundaries.
+var source_cut_boundaries := true
 var media_target_ms = 0.0
 var group_start_ms = 0.0
 var commit_index = 0
@@ -385,7 +389,7 @@ func _plan_group_world(group: Dictionary, start: float, first_commit: int, curso
         var at = float(commits[i].at_ms)
         if at>local+0.000001: break
         if _world_delta(commits[i].delta): boundary_at = at; break
-    for cuts in [group.get("actor_structure_times",[]),group.get("actor_source_times",[]) if source_cuts else []]:
+    for cuts in [group.get("actor_structure_times",[]),group.get("actor_source_times",[]) if source_cuts and source_cut_boundaries else []]:
         for at in cuts:
             # Source changes use the existing private preparation owner too;
             # no geometry rebuild or world revision is implied by a new clip.
