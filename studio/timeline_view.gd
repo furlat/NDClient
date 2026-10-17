@@ -81,6 +81,7 @@ func set_index(value: Dictionary) -> void:
     light_plots.clear()
     collapsed.clear(); thumbnails.reset(); scroll_y = 0; origin_ms = 0
     thumbnails.cache=Thumbnails.Catalog.source_snapshot(value.get("cache",{}))
+    thumbnails.prepare_descriptors(index.get("rows",[]))
     rows_by_id.clear();event_descendants.clear();environment_lights.clear();lighting_rows.clear();follow_rows.clear()
     follow_from=INF;follow_until=-INF;follow_scans=0
     var by_id=rows_by_id

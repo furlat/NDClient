@@ -50,6 +50,9 @@ var composites:Array=[]
 const NATIVE_BATCH_LIMIT=8
 var native_batch_size=NATIVE_BATCH_LIMIT
 var native_composites:Array=[]
+# Parked spell swatches (NATIVE_BATCH_LIMIT at most), built before playback
+# and reused by every later batch instead of new viewport pairs per job.
+var native_spares:Array=[]
 var images: Dictionary={}
 var image_bytes=0
 var image_generation=-1
@@ -352,6 +355,7 @@ func poll() -> bool:
         if active.get("kind")=="native_effect":active.started_ms=Time.get_ticks_msec()
         for composite in native_composites:composite.started_ms=Time.get_ticks_msec()
         return false
+    _prepare_spares()
     var changed=false
     # Each spell swatch retains its own simulation and private viewport. They
     # advance one existing 60 Hz history step together per drawn frame, rather
@@ -426,8 +430,11 @@ func poll() -> bool:
     return changed
 
 func _start_native(job:Dictionary)->Dictionary:
-    var node:Node=NativeSpellPreview.new() if job.component.get("native_spell",false) else NativePreview.new()
-    host.add_child(node)
+    var node:Node
+    if job.component.get("native_spell",false) and not native_spares.is_empty():node=native_spares.pop_back()
+    else:
+        node=NativeSpellPreview.new() if job.component.get("native_spell",false) else NativePreview.new()
+        host.add_child(node)
     var issue:String=node.configure_component(job.component) if job.component.get("native_spell",false) else node.configure(job.component.source_id,cache,Components.effect_seed(job.component),job.component.get("palette",[]))
     if issue.is_empty() and not job.component.get("native_spell",false):issue=node.bind_receiving(source_lights)
     if not issue.is_empty():
@@ -456,7 +463,27 @@ func _sample_native(composite:Dictionary)->bool:
     return false
 
 func _close_native(composite:Dictionary)->void:
+    if composite.node is NativeSpellPreview and native_spares.size()<NATIVE_BATCH_LIMIT:
+        composite.node.release();native_spares.append(composite.node);return
     composite.node.close();composite.node.queue_free()
+
+## Spell swatch viewports exist before playback: one parked swatch per frame
+## until the batch size, while nothing else is queued.
+func _prepare_spares()->void:
+    if native_spares.size()+native_composites.size()>=NATIVE_BATCH_LIMIT or native_composites.size()>0:return
+    var node:=NativeSpellPreview.new();host.add_child(node)
+    node.configure_component({"finish_profile":{}})
+    node.release();native_spares.append(node)
+
+## Spell swatch descriptors read their source files' stamps (tens of ms per
+## spell). Resolve them when the recording is installed, not at first request.
+func prepare_descriptors(rows:Array)->void:
+    for row in rows:
+        var component:Dictionary=row.get("component",{})
+        if row.get("kind")!="native_effect" or not component.get("native_spell",false) or row.get("status")=="missing":continue
+        var hz=float(row.get("source_fps",component.get("sample_hz",32)))
+        var descriptor_key:String=str(row.id)+":"+str(hz)
+        if not native_descriptors.has(descriptor_key):native_descriptors[descriptor_key]=native_store.descriptor(component,maxf(1,hz))
 
 func _primitive(job: Dictionary) -> void:
     var component: Dictionary=job.component
@@ -568,5 +595,8 @@ func reset() -> void:
 
 func close() -> void:
     reset()
+    for node in native_spares:
+        if is_instance_valid(node):node.close();node.queue_free()
+    native_spares.clear()
     if worker!=null:worker.wait_to_finish();worker=null
     images.clear();image_bytes=0

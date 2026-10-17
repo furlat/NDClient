@@ -162,6 +162,11 @@ static func _step(world:Node3D,cache:Dictionary,request:Dictionary,budget:Dictio
     if eligible.is_empty():return status(request)
     if not budget.is_empty() and budget.used_usec>=budget.limit_usec:return status(request)
     if _frame==Engine.get_process_frames():return status(request)
+    # The private viewport exists as soon as there is work, in its own frame,
+    # never in the frame of a source's first construction.
+    if not is_instance_valid(_state.owner):
+        _state.owner=_owner(world);_frame=Engine.get_process_frames()
+        return status(request)
     # An optional source may finish its existing draw before a new request;
     # no second mutable source constructor runs alongside it.
     if not _state.active.is_empty():
