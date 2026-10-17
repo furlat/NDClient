@@ -11,8 +11,14 @@ extends Resource
 @export var frames:int=1
 @export var seconds:float=0.0
 @export var scene:PackedScene
-## {path:String, vat:Texture2D, amount:int}
+## {path:String, vat:Texture2D, amount:int, first:int, world_space:bool,
+## trailing:bool (placed by the occurrence's path where each life began)}
 @export var systems:Array=[]
+## GPUTrail3D ribbons drawn from the occurrence's path: {path, scroll:Vector2,
+## motion:bool (starts at release, as the renderer's motion trails do)}
+@export var trails:Array=[]
+## True when playback needs the occurrence's path history (BakedEffect.follow).
+@export var moving:bool=false
 ## {kind:"node"|"material", path:String (node) or material:int, property:String, values:Array, blend:bool}
 @export var tracks:Array=[]
 ## Material indices (BakedEffect.material_locations order) copied per occurrence.

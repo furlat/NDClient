@@ -31,8 +31,10 @@ func _init()->void:
     _material_shader.code=SHADER
     _mesh=_capture_mesh()
 
-## Replace every emitter's draw passes with the capture pass.
-func bind(emitters:Array)->void:
+## Replace every emitter's draw passes with the capture pass. Particles are
+## read relative to `references[i]` when given (the effect root, for
+## particles that trail behind a moving effect), else to their own emitter.
+func bind(emitters:Array,references:Array=[])->void:
     _systems.clear()
     var width:int=1
     for particles in emitters:width=maxi(width,particles.amount)
@@ -49,15 +51,15 @@ func bind(emitters:Array)->void:
         particles.transform_align=GPUParticles3D.TRANSFORM_ALIGN_DISABLED
         particles.trail_enabled=false
         particles.visibility_aabb=AABB(Vector3(-1e5,-1e5,-1e5),Vector3(2e5,2e5,2e5))
-        _systems.append({"node":particles,"material":material})
+        _systems.append({"node":particles,"material":material,"reference":references[index] if index<references.size() and references[index]!=null else particles})
 
-## Call before each render: particles are read relative to their own emitter
-## node (playback keeps that node where the source had it, so transparent
+## Call before each render: particles are read relative to their reference
+## (playback keeps an emitter node where the source had it, so transparent
 ## sorting is unchanged), and source sampling reassigns render layers.
 func update_reference()->void:
     for system in _systems:
         system.node.layers=CAPTURE_LAYER
-        system.material.set_shader_parameter("capture_from_world",Projection(system.node.global_transform.affine_inverse()))
+        system.material.set_shader_parameter("capture_from_world",Projection(system.reference.global_transform.affine_inverse()))
 
 ## The whole capture as RGBA floats, row-major (width = viewport width).
 func read_floats()->PackedFloat32Array:

@@ -11,6 +11,10 @@ const Bundle=preload("res://presentation/baked_effect_bundle.gd")
 const Factory=preload("res://presentation/native_factory_source.gd")
 const Sources=preload("res://presentation/native_presentation_sources.gd")
 const PARTICLES=preload("res://presentation/baked_particles.gdshader")
+const TRAILING=preload("res://presentation/baked_trailing_particles.gdshader")
+const PATH_TRAIL=preload("res://presentation/baked_path_trail.gdshader")
+## Stages whose root moves during play (flight path, casting hand).
+const MOVING_STAGES:=["travel","cast"]
 const RATE:=60.0
 const MAX_SECONDS:=8.0
 const QUIET_FRAMES:=6
@@ -67,6 +71,10 @@ func _clips(spells:Array,ids:Array)->Array:
     return result
 
 func bake(clip:Dictionary,variant:int)->Dictionary:
+    # The recording belongs to the clip as the renderer receives it: hash it
+    # before anything here runs.
+    var clip_hash:String=Baked.clip_hash(Baked._comparable(clip))
+    var before_text:String=JSON.stringify(clip,"",true)
     var result:Dictionary={"clip":clip.id,"variant":variant,"error":"","gaps":[],"systems":0,"particles":0,"frames":0,"tracks":0,"bytes":0}
     if not clip.get("view_direction",{}).is_empty():
         result.error="view_direction: camera-dependent source parameter";return result
@@ -80,22 +88,32 @@ func bake(clip:Dictionary,variant:int)->Dictionary:
         handle.emitters[index].use_fixed_seed=true;handle.emitters[index].seed=Baked.bake_seed(variant)+index
     var materials:Array=Baked.material_locations(handle.root)
     var nodes:Array=handle.root.find_children("*","Node3D",true,false)
-    # Script-driven trails record the emitter's own motion history; they are
-    # left for path playback (reported) and never sampled here.
+    # GPUTrail3D ribbons record their emitter's own motion history; they play
+    # from the occurrence's path instead (their emitter motion is recorded
+    # here). A CPU Trail3D mesh has no baked form yet and is hidden (reported).
     handle.scripts.clear()
-    var emitters:Array=handle.emitters.filter(func(particles):return particles.get_script()==null or not particles.get_script().resource_path.ends_with("Trail3D.gd"))
-    var script_trails:Array=handle.emitters.filter(func(particles):return particles not in emitters).map(func(particles):return str(handle.root.get_path_to(particles)))
-    for path in clip.get("motion_trails",[]):result.gaps.append("motion_trail:"+str(path))
+    var trail_nodes:Array=handle.emitters.filter(func(particles):return particles.get_script()!=null and particles.get_script().resource_path.ends_with("GPUTrail3D.gd"))
+    var emitters:Array=handle.emitters.filter(func(particles):return particles not in trail_nodes)
+    var trails:Array=trail_nodes.map(func(node):return {"path":str(handle.root.get_path_to(node)),"scroll":node.get("scroll") if node.get("scroll") is Vector2 else Vector2.ZERO,
+        "step":1.0/float(maxi(1,node.fixed_fps)),"billboard":node.get("billboard")==true,"motion":str(handle.root.get_path_to(node)) in clip.get("motion_trails",[]).map(func(path):return str(path)),"transforms":[]})
+    var hidden:Array=[]
     for node in handle.root.find_children("*","",true,false):
-        if node.get_script()!=null and node.get_script().resource_path.ends_with("Trail3D.gd"):result.gaps.append("script_trail_hidden:"+str(handle.root.get_path_to(node)))
+        if node.get_script()!=null and node.get_script().resource_path.ends_with("/Trail3D.gd"):
+            hidden.append(str(handle.root.get_path_to(node)));result.gaps.append("script_trail_hidden:"+hidden[-1])
+    for trail in trails:result.gaps.append("path_trail:"+trail.path)
+    var moving:bool=str(clip.get("stage","")) in MOVING_STAGES
     var world_space:Array=[]
+    var references:Array=[]
     for particles in emitters:
         var path:String=str(handle.root.get_path_to(particles))
         if not particles.local_coords:world_space.append(path)
         if particles.trail_enabled:result.gaps.append("trail_history:"+path)
         if particles.draw_order in [GPUParticles3D.DRAW_ORDER_LIFETIME,GPUParticles3D.DRAW_ORDER_REVERSE_LIFETIME]:result.gaps.append("lifetime_draw_order:"+path)
         particles.fixed_fps=0;particles.interpolate=false
-    capture.bind(emitters)
+        # Particles left behind by a moving effect are recorded against the
+        # root, and placed by the root's actual path when each life began.
+        references.append(handle.root if moving and not particles.local_coords else null)
+    capture.bind(emitters,references)
     handle.root.show()
     var base_frames:int=int(ceil(float(handle.clip.seconds)*RATE))+1
     # Continuous emitters never fall quiet: record one longest lifetime past
@@ -114,6 +132,7 @@ func bake(clip:Dictionary,variant:int)->Dictionary:
         var seconds:float=float(step)/RATE
         Factory.sample(handle,seconds,0.0 if step==0 else 1.0/RATE,seconds)
         snapshots.append(_snapshot(handle.root,nodes,materials))
+        for index in trails.size():trails[index].transforms.append(handle.root.global_transform.affine_inverse()*trail_nodes[index].global_transform)
         capture.update_reference()
         await frame()
         var data:PackedFloat32Array=capture.read_floats()
@@ -136,25 +155,34 @@ func bake(clip:Dictionary,variant:int)->Dictionary:
             break
     var frames:int=states.size()
     var tracks:Array=_tracks(snapshots)
-    for track in tracks:
-        if track.kind=="node" and track.property=="transform":
-            var target:Node=handle.root.get_node(track.path)
-            for particles in emitters:
-                if target==particles or target.is_ancestor_of(particles):result.gaps.append("moving_emitter:"+track.path)
     var systems:Array=[]
     for index in emitters.size():
         var vat:Dictionary=_vat(states,offsets[index],int(emitters[index].amount),frames)
-        systems.append({"path":str(handle.root.get_path_to(emitters[index])),"amount":vat.amount,"vat":vat.texture,"first":vat.first,"bounds":vat.bounds,"world_space":not emitters[index].local_coords})
+        systems.append({"path":str(handle.root.get_path_to(emitters[index])),"amount":vat.amount,"vat":vat.texture,"first":vat.first,"bounds":vat.bounds,
+            "world_space":not emitters[index].local_coords,"trailing":references[index]!=null})
         result.particles+=vat.amount;result.bytes+=vat.amount*VAT_TEXELS*vat.texture.get_width()*(16 if full_precision else 8)
+    for trail in trails:
+        var still:bool=trail.transforms.all(func(transform):return transform.is_equal_approx(trail.transforms[0]))
+        trail.offset=trail.transforms[0]
+        trail.track=null if still else _rows(trail.transforms)
     handle.root.free();capture.viewport.queue_free()
-    var template:Dictionary=_template(clip,systems,tracks,materials.size(),script_trails)
+    var template:Dictionary=_template(clip,systems,tracks,materials.size(),trails,hidden)
     if not template.error.is_empty():result.error=template.error;return result
     result.gaps.append_array(template.gaps)
     var bundle:=Bundle.new()
-    bundle.clip_id=clip.id;bundle.clip_hash=Baked.clip_hash(Baked._comparable(clip))
+    bundle.clip_id=clip.id;bundle.clip_hash=clip_hash
+    var after_text:String=JSON.stringify(clip,"",true)
+    if after_text!=before_text:
+        for i in mini(before_text.length(),after_text.length()):
+            if before_text[i]!=after_text[i]:
+                result.gaps.append("clip_changed_during_bake:"+after_text.substr(maxi(0,i-80),200));break
     bundle.rate=RATE;bundle.frames=frames;bundle.seconds=float(frames-1)/RATE
     bundle.scene=template.scene
-    bundle.systems=systems.map(func(system):return {"path":system.path,"amount":system.amount,"vat":system.vat,"first":system.first,"world_space":system.world_space})
+    # Recorded states stay images in the file; playback creates their
+    # textures one per frame (BakedEffect), so loading uploads nothing.
+    bundle.systems=systems.map(func(system):return {"path":system.path,"amount":system.amount,"vat_image":system.vat.get_image(),"first":system.first,"world_space":system.world_space,"trailing":system.trailing})
+    bundle.trails=trails.map(func(trail):return {"path":trail.path,"scroll":trail.scroll,"motion":trail.motion})
+    bundle.moving=systems.any(func(system):return system.trailing) or not trails.is_empty()
     bundle.tracks=tracks;bundle.private_materials=template.private_materials;bundle.gaps=result.gaps
     var error:int=ResourceSaver.save(bundle,Baked.path_for(clip.id,variant))
     if error!=OK:result.error="save failed: "+str(error)
@@ -180,6 +208,17 @@ func _snapshot(root_node:Node3D,nodes:Array,materials:Array)->Dictionary:
             for property in ["albedo_color","emission","emission_energy_multiplier","uv1_offset"]:
                 values["material|"+str(index)+"|"+property]=material.get(property)
     return values
+
+## Transforms as a texture of matrix rows (3 rows, one column per frame),
+## as baked_path.gdshaderinc reads them.
+func _rows(transforms:Array)->ImageTexture:
+    var values:=PackedFloat32Array();values.resize(transforms.size()*3*4)
+    for column in transforms.size():
+        var t:Transform3D=transforms[column]
+        for row in 3:
+            var at:int=(row*transforms.size()+column)*4
+            values[at]=t.basis.x[row];values[at+1]=t.basis.y[row];values[at+2]=t.basis.z[row];values[at+3]=t.origin[row]
+    return ImageTexture.create_from_image(Image.create_from_data(transforms.size(),3,false,Image.FORMAT_RGBAF,values.to_byte_array()))
 
 ## Values that change over the recording become tracks.
 func _tracks(snapshots:Array)->Array:
@@ -245,7 +284,7 @@ func _vat(states:Array,first_particle:int,amount:int,frames:int)->Dictionary:
 ## The runtime scene: the same clip built again at source time 0, with nothing
 ## left that runs (animation players, scripts, collision) and every emitter
 ## replaced by recorded playback.
-func _template(clip:Dictionary,systems:Array,tracks:Array,material_count:int,script_trails:Array)->Dictionary:
+func _template(clip:Dictionary,systems:Array,tracks:Array,material_count:int,trails:Array,hidden:Array)->Dictionary:
     var result:Dictionary={"error":"","gaps":[],"scene":null,"private_materials":[]}
     var holder:=Node3D.new();root.add_child(holder)
     var handle:Dictionary=Factory.make(holder,clip,1<<1,false)
@@ -255,8 +294,7 @@ func _template(clip:Dictionary,systems:Array,tracks:Array,material_count:int,scr
     if materials.size()!=material_count:result.error="template material order differs from the recording";holder.free();return result
     for system in systems:
         var particles:GPUParticles3D=scene_root.get_node(system.path)
-        var process:=ShaderMaterial.new();process.shader=PARTICLES
-        process.set_shader_parameter("vat",system.vat)
+        var process:=ShaderMaterial.new();process.shader=TRAILING if system.trailing else PARTICLES
         process.set_shader_parameter("vat_rate",RATE)
         process.set_shader_parameter("vat_frames",system.vat.get_width())
         process.set_shader_parameter("vat_first",system.first)
@@ -264,9 +302,23 @@ func _template(clip:Dictionary,systems:Array,tracks:Array,material_count:int,scr
         particles.process_material=process
         particles.lifetime=1000.0;particles.one_shot=true;particles.explosiveness=1.0;particles.randomness=0.0
         particles.preprocess=0.0;particles.fixed_fps=0;particles.interpolate=false;particles.speed_scale=1.0
-        particles.local_coords=true;particles.sub_emitter=NodePath("");particles.amount_ratio=1.0
+        particles.local_coords=not system.trailing;particles.sub_emitter=NodePath("");particles.amount_ratio=1.0
         particles.emitting=true
-    for path in script_trails:scene_root.get_node(path).visible=false
+    for path in hidden:scene_root.get_node(path).visible=false
+    for trail in trails:
+        var node:GPUParticles3D=scene_root.get_node(trail.path)
+        var process:=ShaderMaterial.new();process.shader=PATH_TRAIL
+        process.set_shader_parameter("emitter_tracked",trail.track!=null)
+        if trail.track!=null:process.set_shader_parameter("emitter_track",trail.track)
+        process.set_shader_parameter("emitter_rate",RATE)
+        process.set_shader_parameter("emitter_offset",Projection(trail.offset))
+        process.set_shader_parameter("trail_step",trail.step)
+        process.set_shader_parameter("billboard",trail.billboard)
+        node.process_material=process
+        # GPUTrail3D keeps lifetime equal to its particle count.
+        node.lifetime=float(node.amount);node.one_shot=false;node.explosiveness=1.0;node.randomness=0.0
+        node.preprocess=0.0;node.fixed_fps=0;node.interpolate=false;node.speed_scale=1.0
+        node.local_coords=false;node.emitting=true;node.visible=true
     for node in scene_root.find_children("*","",true,false):
         if REMOVED.any(func(type):return node.is_class(type)):
             node.get_parent().remove_child(node);node.free()

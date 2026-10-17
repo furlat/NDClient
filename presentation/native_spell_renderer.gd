@@ -89,7 +89,7 @@ func prepare(compiled_groups:Array,cache:Dictionary,world:Node=null,prefetch_gro
     for id in wanted:
         optional.erase(id)
         if handles.has(id):continue
-        var bundle:Variant=Baked.ready_for(wanted[id].native_clip)
+        var bundle:Variant=Baked.ready_for(wanted[id].native_clip,0,true)
         if bundle==null:baked_pending+=1
         elif not bundle is Resource:clips.append(wanted[id].native_clip)
     var optical:Dictionary=wanted
@@ -355,6 +355,13 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
                 handle.root.hide();_missing(component,"native_spell_origin_missing");continue
             handle.root.global_position+=Playback.transform(cue,sample_time,points.hand,1.0).origin-anchor.global_position
         Playback.controls(handle,cue,sample_time)
+        if handle.get("baked",false) and handle.bundle.moving:
+            # Path history for trailing particles and trails: frames a jump
+            # skipped use the cue's placement, shifted like the current root.
+            var placed:Vector3=Playback.transform(cue,sample_time,points.hand,1.0).origin
+            var shift:Vector3=handle.root.global_position-placed
+            var hand:Vector3=points.hand
+            Baked.follow(handle,cue,sample_time,func(time:float)->Transform3D:return Playback.transform(cue,time,hand,1.0).translated(shift))
         handle.sample_time=sample_time;handle.requested_time=age;handle.started=true
         handle.attachment_support=points.surfaces
         handle.cue=cue

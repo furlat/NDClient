@@ -211,7 +211,7 @@ static func _step(world:Node3D,cache:Dictionary,request:Dictionary,budget:Dictio
     _frame=Engine.get_process_frames()
     # A baked clip is one file loaded on a worker; its warm draw still
     # compiles the same programs ahead of play. Native clips admit sources.
-    var bundle:Variant=Baked.ready_for(item.clip)
+    var bundle:Variant=Baked.ready_for(item.clip,0,required.any(func(entry):return entry.key==item.key))
     if bundle==null:return status(request)
     if not bundle is Resource:
         var loaded:Dictionary=Factory.prepare([item.clip],_state.resources)
