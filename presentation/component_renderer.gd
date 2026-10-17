@@ -176,7 +176,6 @@ func prepare(groups: Array,cache: Dictionary,world: Node=null,admission:Dictiona
         FrameProfile.end_phase(world.profile,"component_prepare_static",stage_started)
         stage_started=Time.get_ticks_usec()
         var deposit_before:int=blood.deposit_create_usec
-        var page_before:int=blood.light_page_create_usec
         var blood_groups:Array=due_groups(groups,world,through_ms)
         var blood_due:bool=is_inf(through_ms) or blood_groups.any(func(group):return group.components.any(func(component):return component.get("kind")=="residue_deposit"))
         var blood_ready:bool=not blood_due or blood.prepare(world,blood_groups,budget)
@@ -187,7 +186,6 @@ func prepare(groups: Array,cache: Dictionary,world: Node=null,admission:Dictiona
         readiness={"blood":blood_ready,"legacy_sources":result.ready}
         result.ready=blood_ready and result.ready
         world.profile.phases["blood_deposit_create"]=world.profile.phases.get("blood_deposit_create",0.0)+(blood.deposit_create_usec-deposit_before)/1000.0
-        world.profile.phases["blood_light_page_create"]=world.profile.phases.get("blood_light_page_create",0.0)+(blood.light_page_create_usec-page_before)/1000.0
         FrameProfile.end_phase(world.profile,"component_prepare_blood",stage_started)
         stage_started=Time.get_ticks_usec()
         var persistent_charged_before:int=budget.used_usec

@@ -56,12 +56,9 @@ func run()->void:
         world.sample()
         if complete:break
         await frame()
-    check(complete and world.renderer.resources_ready,"Loading waits for native floor and air pages")
-    for name in ["floor","air"]:
-        check(world.renderer.pages.has(name) and world.renderer.pages[name].ready,"Actual receiving page drew: "+name)
-        check(world.renderer.pages[name].view.size==Vector2i(384,256),"Receiving page uses actual viewport dimensions: "+name)
-        check(world.renderer.pages[name].view.render_target_update_mode==SubViewport.UPDATE_DISABLED,"Unused receiving page stops drawing: "+name)
-    var page_ids:Array=world.renderer.pages.values().map(func(page):return page.view.get_instance_id())
+    check(complete and world.renderer.resources_ready,"Loading waits for the blood shader programs")
+    # Blood lights itself from the light table: no receiving viewport exists.
+    check(world.find_children("*","SubViewport",true,false).is_empty(),"Loading creates no receiving viewport")
     world.timeline.queue=[group]
     world.renderer.prepare(world,[group],{"used_usec":2000,"limit_usec":2000})
     check(world.renderer.pending_deposits.is_empty() and world.renderer.kernel_jobs.is_empty(),"Exhausted admission starts neither worker work nor native field allocation")
@@ -72,7 +69,6 @@ func run()->void:
     world.timeline.queue=[];world.sample()
     check(world.renderer.pending_deposits.is_empty() and world.actor_entries.is_empty(),"Cancelling future groups retires their unpublished fields")
     check(world.timeline.state.tiles.is_empty() and world.renderer.deposits.is_empty(),"Cancelled preparation publishes no residue")
-    check(world.renderer.pages.values().map(func(page):return page.view.get_instance_id())==page_ids,"Cancellation preserves reusable receiving pages")
     await frame()
     world.timeline.queue=[group]
     var costs:Array=[];var first_construction:Array=[];complete=false
@@ -97,7 +93,6 @@ func run()->void:
     var after_pipelines:Dictionary=Profile.pipeline_compilations()
     for key in before_pipelines:measurements.first_air_pipeline_delta[key]=after_pipelines[key]-before_pipelines[key]
     check(not world.renderer.flights.is_empty(),"Actual release has airborne geometry")
-    check(world.renderer.pages.values().map(func(page):return page.view.get_instance_id())==page_ids,"First flight reuses prepared receiving pages")
     check(world.renderer.pending_deposits.is_empty() and world.renderer.deposits.size()==20,"Only actual admitted residue adopts prepared fields")
     var reference:Node3D
     if not oracle.is_empty():
@@ -122,14 +117,13 @@ func run()->void:
                 pixel_samples.append({"quarter":quarter,"age_ms":age,"fields":world.renderer.deposits.size()})
     check(component==held and journal.state==canonical,"Preparation and playback preserve actual event/canonical inputs")
     world.close();await frame()
-    check(world.actor_entries.is_empty() and world.renderer.pages.is_empty() and not world.renderer.resources_ready,"Close retires all per-world receiving resources")
+    check(world.actor_entries.is_empty() and not world.renderer.resources_ready,"Close retires all per-world receiving resources")
     world.timeline.state.tiles={};world.timeline.queue=[];world.samples=[]
     complete=false
     for attempt in 8:
         complete=world.renderer.prepare(world,[]);world.sample();await frame()
         if complete:break
-    check(complete and world.renderer.resources_ready,"A new epoch recreates and redraws its own pages")
-    check(world.renderer.pages.values().map(func(page):return page.view.get_instance_id())!=page_ids,"Epoch reset does not retain freed page owners")
+    check(complete and world.renderer.resources_ready,"A new epoch prepares its resources again")
     world.close();world.get_viewport().queue_free()
     if reference!=null:reference.close();reference.get_viewport().queue_free()
     await frame();await frame()

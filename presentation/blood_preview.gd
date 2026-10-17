@@ -26,10 +26,9 @@ func configure(component:Dictionary,cache:Dictionary,age_ms:float,quarter:int,li
         scenery_visible_cells[key]=true
     var sampled=component.duplicate();sampled.age_ms=age_ms
     samples=[sampled]
+    # The swatch shows the blood itself: white ambient, no room lights.
+    renderer.ambient=1.0;renderer.room_lights=false
     sample()
-    for page in renderer.pages.values():
-        for child in page.view.get_children():
-            if child is CanvasModulate:child.color=Color.WHITE
     # Swatch uses the same floor/air ordering, with no unrelated scene actors.
     for entry in actor_entries:entry.material.render_priority=0 if entry.role=="covering" else 1
 func sample()->void:renderer.sample(self,samples)
