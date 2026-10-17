@@ -499,7 +499,7 @@ func _add_fixture_flame(row: Dictionary) -> void:
         FrameProfile.end_phase(profile,"texture_upload",started)
         assert(result == OK,"Cannot prepare authored fixture animation: "+name)
         var duration: float = authored.frames.size()/float(authored.fps)
-        var clock_node = Graphs.make(fixture_clock_owner if fixture_clock_owner!=null else self,{"Idle":Graphs.animation("Idle",duration,true)},"Idle",[])
+        var clock_node = Graphs.clip_clock(fixture_clock_owner if fixture_clock_owner!=null else self,{"Idle":[maxf(duration,0.001),true]})
         fixture_clips[name] = {"authored":authored,"frames":sheets,"clock":clock_node,"index":0,"energy":energy,"heights":heights,"mean_height":height_total/maxi(1,heights.size())}
     var clip: Dictionary = fixture_clips[name]
     var record: Dictionary = assets.resources[clip.authored.frames[0]]

@@ -116,6 +116,7 @@ static func activate(host: Node, hub: String) -> Node:
     return host
 
 static func character(parent: Node, rig: Dictionary, sampled: bool = false, templates: Array = []) -> Node:
+    if sampled: return clock(parent, rig)
     # Libraries/graphs are immutable shared resources; playback parameters and
     # property tracks are resolved independently by every actor's native tree.
     for cached in templates:
@@ -129,6 +130,35 @@ static func character(parent: Node, rig: Dictionary, sampled: bool = false, temp
         "library":host.get_node("AnimationPlayer").get_animation_library(""),
         "graph":host.get_meta("tree").tree_root})
     return host
+
+## A sampled actor only maps a source time to its clip time. The clock holds
+## each clip's length and loop rule and computes what the seek tree produced,
+## without building an AnimationPlayer/AnimationTree per actor.
+static func clock(parent: Node, rig: Dictionary) -> Node:
+    var lengths = {}
+    for name in rig.clips:
+        var source: Dictionary = rig.clips[name]
+        lengths[name] = [maxf(float(source.frames) / float(source.fps), 0.001), character_loops(rig, name)]
+    var host = clip_clock(parent, lengths)
+    host.set_meta("clips", rig.clips)
+    return host
+
+## Clip name -> [length seconds, loops].
+static func clip_clock(parent: Node, lengths: Dictionary) -> Node:
+    var host = Playback.new()
+    host.name = "Playback"
+    host.set_meta("clip_lengths", lengths)
+    host.set_meta("sampling", true)
+    parent.add_child(host)
+    return host
+
+## The tree's sample_seconds: a linear value track keyed 0 -> 0 and length ->
+## length, evaluated by Animation._interpolate (float32 weight, double lerp).
+static func _track_seconds(time: float, length: float) -> float:
+    if time <= 0.0: return 0.0
+    if time >= length: return length
+    var weight: float = PackedFloat32Array([PackedFloat32Array([time])[0] / PackedFloat32Array([length])[0]])[0]
+    return length * weight
 
 static func seek_node(name: String) -> AnimationNodeBlendTree:
     var blend = AnimationNodeBlendTree.new()
@@ -194,6 +224,18 @@ static func _enable_sampling(host: Node) -> void:
     host.set_meta("sampling", true)
 
 static func sample(host: Node, clip: String, source_seconds: float, occurrence_key: String) -> Dictionary:
+    if host.has_meta("clip_lengths"):
+        var lengths: Dictionary = host.get_meta("clip_lengths")
+        if not lengths.has(clip):
+            return {"ok":false, "error":{"kind":"authoring", "message":"Rig has no clip " + clip, "retryable":false}}
+        if not is_finite(source_seconds) or source_seconds < 0.0:
+            return {"ok":false, "error":{"kind":"presentation", "message":"Invalid source animation time", "retryable":false}}
+        var length: float = lengths[clip][0]
+        var time = fposmod(source_seconds, length) if lengths[clip][1] else minf(source_seconds, length)
+        host.clip = clip
+        host.sample_seconds = _track_seconds(time, length)
+        host.set_meta("occurrence", occurrence_key)
+        return {"ok":true, "value":{"clip":host.clip, "source_seconds":host.sample_seconds}}
     var player: AnimationPlayer = host.get_node("AnimationPlayer")
     if not player.has_animation(clip):
         return {"ok":false, "error":{"kind":"authoring", "message":"Rig has no clip " + clip, "retryable":false}}
