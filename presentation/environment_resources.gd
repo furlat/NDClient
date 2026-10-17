@@ -3,6 +3,7 @@ extends RefCounted
 ## the scene owner adopts them; referenced textures are captured strong refs.
 const SHADER=preload("res://environment.gdshader")
 const SourceMaterial=preload("res://presentation/source_material.gd")
+const QuadShapes=preload("res://presentation/quad_shapes.gd")
 
 static func build_private(packets:Dictionary,texture_refs:Dictionary,declared_names:Dictionary,output:Dictionary)->void:
     var started:int=Time.get_ticks_usec();var rows:Dictionary={};var count:int=0
@@ -26,11 +27,10 @@ static func build_private(packets:Dictionary,texture_refs:Dictionary,declared_na
                         output.merge({"complete":false,"error":"Missing prepared environment texture: "+path,"worker_ms":(Time.get_ticks_usec()-started)/1000.0});return
                     var value:Texture2D=texture_refs[path]
                     parameters[name]=value;changes[name]=value;version+=1;material.set_shader_parameter(name,value)
-            var mesh:=QuadMesh.new()
+            var mesh:=QuadShapes.mesh(Vector2.ONE)
             if not descriptor.get("empty",false):
-                mesh.size=descriptor.mesh_size;mesh.center_offset=descriptor.mesh_center
+                mesh=QuadShapes.mesh(descriptor.mesh_size,descriptor.mesh_center)
                 material.set_shader_parameter("source_quad_size",descriptor.mesh_size)
-            mesh.get_rid()
             entry.merge({"material":material,"mesh":mesh,"prepared_source":descriptor,"source_parameters":parameters,
                 "source_changes":changes,"source_version":version,"source_change_base":1,"source_binding_revision":2})
             # These are the same final scene policy operands. They belong to

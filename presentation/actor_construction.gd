@@ -10,6 +10,7 @@ const CharacterGeometry=preload("res://presentation/character_geometry.gd")
 const Modular=preload("res://modular.gd")
 const MODULAR_SHADER=preload("res://modular.gdshader")
 const Placement=preload("res://placement.gd")
+const QuadShapes=preload("res://presentation/quad_shapes.gd")
 
 static func source_cache(cache:Dictionary)->Dictionary:
     Catalog.seal_environment_sources(cache)
@@ -59,7 +60,7 @@ static func layer(owner:Node,row:Dictionary,rig:Dictionary,source:Dictionary,ind
     owner._light_entry(entry)
     SourceMaterial.set_parameter(entry,"tint",Modular.rgb(source.tint))
     var shape:Dictionary=layer_shape(rig,128.0/owner.rig_config.TILE_W*row.scale)
-    entry.node.mesh.size=shape.mesh_size;entry.node.mesh.center_offset=shape.mesh_center
+    entry.node.mesh=QuadShapes.mesh(shape.mesh_size,shape.mesh_center)
     entry.material.set_shader_parameter("source_quad_size",shape.mesh_size)
     entry.node.custom_aabb=entry.node.mesh.get_aabb()
     entry.cell=shape.cell;entry.pivot=shape.pivot;entry.scale=shape.scale

@@ -4,6 +4,7 @@ extends RefCounted
 const Construction=preload("res://presentation/actor_construction.gd")
 const SourceMaterial=preload("res://presentation/source_material.gd")
 const Placement=preload("res://placement.gd")
+const QuadShapes=preload("res://presentation/quad_shapes.gd")
 
 static func build_private(inputs:Dictionary,textures:Dictionary,resources:Dictionary,declared:Dictionary,output:Dictionary)->void:
     var started:int=Time.get_ticks_usec();var rows:Dictionary={};var count:int=0
@@ -24,7 +25,7 @@ static func build_private(inputs:Dictionary,textures:Dictionary,resources:Dictio
             SourceMaterial.apply(entry,actor.light_parameters)
             SourceMaterial.set_parameter(entry,"tint",Construction.Modular.rgb(layer.tint))
             var shape:Dictionary=Construction.layer_shape(rig,actor.scale)
-            var mesh:=QuadMesh.new();mesh.size=shape.mesh_size;mesh.center_offset=shape.mesh_center
+            var mesh:=QuadShapes.mesh(shape.mesh_size,shape.mesh_center)
             material.set_shader_parameter("source_quad_size",shape.mesh_size)
             entry.cell=shape.cell;entry.pivot=shape.pivot;entry.scale=shape.scale
             var origin:Vector2=Placement.project(Vector2(row.position[0],row.position[1]),row.base_height_steps,actor.quarter)
@@ -43,7 +44,7 @@ static func build_private(inputs:Dictionary,textures:Dictionary,resources:Dictio
             var palette:Dictionary=layer.get("effect",{}).get("palette",{}) if layer.get("effect",{}).get("palette")!=null else {}
             var noise:String=resources.get(palette.get("noiseSheet"),"")
             if not noise.is_empty() and textures.get(noise)==null:pending.effect_noise=noise
-            material.get_rid();mesh.get_rid()
+            material.get_rid()
             # The finished layer node, outside any tree: the scene owner only attaches it.
             var node:=MeshInstance3D.new()
             node.mesh=mesh;node.material_override=material

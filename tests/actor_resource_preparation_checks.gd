@@ -8,6 +8,7 @@ const Original=preload("res://presentation/actor_construction.gd")
 const Resources=preload("res://presentation/actor_resources.gd")
 const SourceMaterial=preload("res://presentation/source_material.gd")
 const LightTable=preload("res://presentation/light_table.gd")
+const QuadShapes=preload("res://presentation/quad_shapes.gd")
 const AMBIENT:=0.30
 const BODY="/fixture/actor-resource-body.png"
 const NOISE="/fixture/actor-resource-noise.png"
@@ -192,17 +193,19 @@ func cancellation_case()->void:
     WorkerThreadPool.wait_for_task_completion(task)
     var packet:Dictionary=output.rows["assembled-actor"][1]
     var source:WeakRef=weakref(packet.entry.material)
-    var mesh:WeakRef=weakref(packet.mesh)
+    var mesh:QuadMesh=packet.mesh
     var nodes:Array=[]
     for value in output.rows["assembled-actor"].values():nodes.append(value.entry.node)
-    check(source.get_ref()!=null and mesh.get_ref()!=null and owner.entries.is_empty() and nodes.all(func(node):return not node.is_inside_tree()),
+    check(source.get_ref()!=null and owner.entries.is_empty() and nodes.all(func(node):return not node.is_inside_tree()),
         "Canceled worker owns hidden resources without any attached actor Node")
     # The canceling owner frees the detached worker nodes it never adopted.
     packet={};output.clear();inputs.clear()
     for node in nodes:node.free()
     nodes.clear()
     await process_frame
-    check(source.get_ref()==null and mesh.get_ref()==null,"Cancellation releases source material and mesh without a dictionary cycle")
+    check(source.get_ref()==null,"Cancellation releases source material without a dictionary cycle")
+    # Quads are shared by shape and stay cached for the next actor of that shape.
+    check(mesh==QuadShapes.mesh(mesh.size,mesh.center_offset),"Canceled layer used the shared quad of its shape")
     side.view.queue_free();await process_frame
 
 func run()->void:

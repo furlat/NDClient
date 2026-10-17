@@ -38,6 +38,7 @@ var sprite_parent: Node3D
 # Host members shared by the live player and the workshop (moved from main.gd
 # so the live player no longer extends the workshop).
 const CharacterGeometry = preload("res://presentation/character_geometry.gd")
+const QuadShapes = preload("res://presentation/quad_shapes.gd")
 const EnvironmentMedia = preload("res://presentation/environment_media.gd")
 var grid_visible = false
 var textures: Dictionary = {}
@@ -109,7 +110,7 @@ func sprite_shader(shader: Shader) -> Shader:
 func add_entry(row: Dictionary, role: String, layer: int, shader: Shader, source_role: int = -1) -> void:
     shader = sprite_shader(shader)
     var node = MeshInstance3D.new()
-    node.mesh = QuadMesh.new()
+    node.mesh = QuadShapes.mesh(Vector2.ONE)
     node.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
     node.sorting_use_aabb_center = false
     var material = ShaderMaterial.new()
@@ -136,11 +137,11 @@ func initialize_entry(entry: Dictionary) -> void:
         set_environment(entry, Basis(Vector3.UP, quarter * PI * 0.5))
 
 func set_quad(entry: Dictionary, cell: Vector2, pivot: Vector2, scale: float) -> void:
-    var mesh: QuadMesh = entry.node.mesh
-    mesh.size = cell * scale / Placement.PIXELS_PER_UNIT
+    var mesh: QuadMesh = QuadShapes.mesh(cell * scale / Placement.PIXELS_PER_UNIT,
+        Vector3((cell.x * 0.5 - pivot.x) * scale / Placement.PIXELS_PER_UNIT,
+        (pivot.y - cell.y * 0.5) * scale / Placement.PIXELS_PER_UNIT, 0.0))
+    entry.node.mesh = mesh
     entry.material.set_shader_parameter("source_quad_size", mesh.size)
-    mesh.center_offset = Vector3((cell.x * 0.5 - pivot.x) * scale / Placement.PIXELS_PER_UNIT,
-        (pivot.y - cell.y * 0.5) * scale / Placement.PIXELS_PER_UNIT, 0.0)
     entry.node.custom_aabb = mesh.get_aabb()
     entry.cell = cell
     entry.pivot = pivot
@@ -163,9 +164,8 @@ func _release_water_clock(entry:Dictionary)->void:
     entry.erase("water_clock_registered")
 
 func _environment_quad(entry:Dictionary,value:Dictionary)->void:
-    entry.node.mesh.size=value.mesh_size
+    entry.node.mesh=QuadShapes.mesh(value.mesh_size,value.mesh_center)
     entry.material.set_shader_parameter("source_quad_size",value.mesh_size)
-    entry.node.mesh.center_offset=value.mesh_center
     entry.node.custom_aabb=value.aabb
     entry.cell=value.cell;entry.pivot=value.pivot;entry.scale=value.scale
     entry.screen_rect=value.screen_rect

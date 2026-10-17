@@ -79,7 +79,7 @@ func run()->void:
         if not output.get("complete",false):reference.free();prepared.free();continue
         for id in packets:
             for entry in output.rows[id]:
-                check(not entry.has("node") and entry.mesh is QuadMesh and entry.material is ShaderMaterial,"Worker owns only private native resources")
+                check(entry.node is MeshInstance3D and not entry.node.is_inside_tree() and entry.node.mesh==entry.mesh and entry.mesh is QuadMesh and entry.material is ShaderMaterial,"Worker builds detached nodes on private native resources")
             prepared.adopt_environment_row({},output.rows[id])
         check(reference.entries.size()==prepared.entries.size(),"Exact draw membership after main adoption")
         for i in reference.entries.size():compare(reference.entries[i],prepared.entries[i])
@@ -115,6 +115,6 @@ func run()->void:
     var missing:Dictionary={}
     Resources.build_private({"missing":{"entries":[{"descriptor":{"parameters":{},"texture_parameters":{"colour_texture":"absent"}}}]}},{},names,missing)
     check(not missing.complete and not missing.error.is_empty(),"Missing actual selected texture fails private preparation")
-    var report:Dictionary={"checks":checks,"failures":failures,"scope":"Exact live/private source operands and ownership in all four authored views; native uniform values, provenance, geometry/bounds; finite worker contains no Nodes, water/fixture clocks remain main. No authored-image pixel or gameplay performance claim."}
+    var report:Dictionary={"checks":checks,"failures":failures,"scope":"Exact live/private source operands and ownership in all four authored views; native uniform values, provenance, geometry/bounds; finite worker builds only detached Nodes, water/fixture clocks remain main. No authored-image pixel or gameplay performance claim."}
     FileAccess.open("res://generated/environment_source_preparation_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("ENVIRONMENT_SOURCE_PREPARATION ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)

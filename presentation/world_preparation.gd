@@ -977,9 +977,14 @@ func _adopt_actor_resource(prepared:Dictionary,index:int)->Dictionary:
         media_issue="Private actor resources have no selected layer: "+str(prepared.row.id)+" / "+str(index);phase="failed";return {}
     var path:String=packet.entry.texture_path
     if not host.source_images.has(path):blocked_actor={"actor":prepared.row.id,"path":path,"status":"missing_colour_image"};return {}
+    var measured:bool=host.profile.get("recording",false)
+    var complete_started:int=Time.get_ticks_usec() if measured else 0
     if not ActorConstruction.complete_private_layer(packet,host.textures):
         blocked_actor={"actor":prepared.row.id,"path":path,"status":"missing_binding_texture"};return {}
+    _record_actor_phase("actor_layer_complete",complete_started)
+    var adopt_started:int=Time.get_ticks_usec() if measured else 0
     var entry:Dictionary=ActorConstruction.adopt_private_layer(self,packet)
+    _record_actor_phase("actor_layer_attach",adopt_started)
     entry.private_resource_bound=true
     prepared.condition_parameters=packet.condition_parameters
     return entry
@@ -1014,7 +1019,8 @@ func _prepare_actor_step(prepared:Dictionary,deadline:int)->bool:
         if owned:
             var layer_started:int=Time.get_ticks_usec() if measured else 0
             entry=_adopt_actor_resource(prepared,index)
-            _record_actor_phase("actor_layer",layer_started)
+            # Blocked attempts wait for the resource worker or a texture.
+            _record_actor_phase("actor_layer" if not entry.is_empty() else "actor_layer_blocked",layer_started)
             if entry.is_empty():return false
             prepared.new_entries.append(entry);created_count+=1
         prepared.entries.append(entry)
