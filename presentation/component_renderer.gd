@@ -211,7 +211,9 @@ func prepare(groups: Array,cache: Dictionary,world: Node=null,admission:Dictiona
         for actor_id in outline_actors:
             if not outlines.prepare(world,actor_id,budget).ready:outline_ready=false
         readiness.audio=audio_ready;readiness.presenters=presentation_ready;readiness.outlines=outline_ready
-        result.ready=result.ready and audio_ready and presentation_ready and outline_ready
+        # A sound still loading never holds the picture: its voice starts when
+        # its stream arrives, at its offset into the clip (AudioCues).
+        result.ready=result.ready and presentation_ready and outline_ready
         result.errors.append_array(audio_errors)
         var required_ids:Dictionary={}
         for component in due_components:required_ids[component.get("preparation_key",component.id)]=true
