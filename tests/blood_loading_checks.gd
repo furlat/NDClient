@@ -24,6 +24,10 @@ func fixture(renderer:Script=null)->Node3D:
     world.camera.basis=Basis.from_euler(Vector3(-atan(sqrt(.5)),PI/4,0));world.camera.position=Vector3(4,.4,6)+world.camera.basis.z*12
     return world
 func image(world:Node3D)->Image:return world.get_viewport().get_texture().get_image()
+func field(world:Node3D,key:String)->Image:
+    # The pre-edit oracle owns one viewport per tile; the atlas reads its slot.
+    var handle:Dictionary=world.renderer.deposits[key]
+    return handle.field.get_texture().get_image() if handle.has("field") else world.renderer.field_image(handle)
 func run()->void:
     root.unfocusable=true;root.position=Vector2i(-16000,-16000);root.size=Vector2i(384,256)
     Engine.max_fps=0;DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
@@ -96,7 +100,15 @@ func run()->void:
     check(world.renderer.pending_deposits.is_empty() and world.renderer.deposits.size()==20,"Only actual admitted residue adopts prepared fields")
     var reference:Node3D
     if not oracle.is_empty():
-        reference=fixture(load(oracle));reference.catalog_cache=cache;reference.timeline.queue=[group];reference.camera.free()
+        reference=fixture(load(oracle));reference.catalog_cache=cache;reference.timeline.queue=[group]
+        # Fields exist only through preparation; the oracle prepares its own.
+        var reference_ready:bool=false
+        for attempt in 40:
+            reference_ready=reference.renderer.prepare(reference,[group],{"used_usec":0,"limit_usec":100000})
+            reference.sample();await frame()
+            if reference_ready:break
+        check(reference_ready,"Pre-edit oracle prepares its twenty fields")
+        reference.timeline.world_revision+=1;reference.camera.free()
         reference.configure(component,cache,350.,0,reference.source_lighting)
         await frame();await frame()
     var pixel_samples:Array=[]
@@ -107,12 +119,15 @@ func run()->void:
                 instance.camera.basis=Basis.from_euler(Vector3(-atan(sqrt(.5)),PI/4+quarter*PI/2,0))
                 instance.camera.position=Vector3(component.position[0],.4,component.position[1])+instance.camera.basis.z*12.
                 instance.samples[0].age_ms=age;instance.sample()
+                # The swatch's floor/air priority holds for flights first drawn
+                # after configure too (the oracle's per-flight materials kept 0).
+                for entry in instance.actor_entries:entry.material.render_priority=0 if entry.role=="covering" else 1
             await frame();await frame()
             if reference!=null:
                 check(image(world).get_data()==image(reference).get_data(),"Original final scene pixels preserved at view/age "+str([quarter,age]))
                 for key in world.renderer.deposits:
-                    var actual:Image=world.renderer.deposits[key].field.get_texture().get_image()
-                    var expected:Image=reference.renderer.deposits[key].field.get_texture().get_image()
+                    var actual:Image=field(world,key)
+                    var expected:Image=field(reference,key)
                     check(actual.get_data()==expected.get_data(),"Original field bytes preserved "+str([quarter,age,key]))
                 pixel_samples.append({"quarter":quarter,"age_ms":age,"fields":world.renderer.deposits.size()})
     check(component==held and journal.state==canonical,"Preparation and playback preserve actual event/canonical inputs")

@@ -40,6 +40,7 @@ var ground_supports_revision := -1
 var ground_supports_texture: ImageTexture
 var ground_supports_rect := Vector4(0, 0, 1, 1)
 var generated_shadow_ids: Array = []
+var generated_shadow_entries: Array = []
 const RenderSettings = preload("res://presentation/render_settings.gd")
 var character_light_profile = RenderSettings.DEFAULT_PROFILE
 var requested_character_light_profile = ""
@@ -115,6 +116,11 @@ var retiring_views: Array = []
 var retirement_frame = -1
 var retiring_node_count = 0
 const PREPARATION_USEC=2000
+const PREPARATION_NEAR_MS:=300.0
+const PREPARATION_NEAR_USEC:=3000
+const PREPARATION_DUE_MS:=150.0
+const PREPARATION_DUE_USEC:=4000
+const PREPARATION_HELD_USEC:=8000
 var preparation_admission:Dictionary={"frame":-1,"used_usec":0,"limit_usec":PREPARATION_USEC,"phase_usec":{},"optional_order":[],"minimum_cleanup":0}
 # Optional preparation is skipped in a frame whose script work already passed
 # this, at most OPTIONAL_MAX_SKIPS frames in a row.
@@ -502,11 +508,21 @@ func set_light_cap_enabled(enabled: bool) -> void:
 func _preparation_budget()->Dictionary:
     if preparation_admission.frame!=Engine.get_process_frames():
         preparation_admission.frame=Engine.get_process_frames()
+        preparation_admission.limit_usec=_preparation_limit()
         preparation_admission.used_usec=0;preparation_admission.phase_usec={}
         preparation_admission.background_source_handoffs=0
         preparation_admission.optional_order=[];preparation_admission.minimum_cleanup=0
         preparation_admission.required_legacy_constructors=0
     return preparation_admission
+
+## The allowance grows only for a world due soon: a few slower frames before
+## its cue instead of a held clock at it (live play; Studio shares a fixed one).
+func _preparation_limit()->int:
+    if external_playback or pending_world==null or pending_world.prepared or pending_world.initial:return PREPARATION_USEC
+    if timeline.waiting_for_world:return PREPARATION_HELD_USEC
+    var until_ms:float=float(pending_world.boundary.get("display_ms",INF))-timeline.display_ms
+    if until_ms<=PREPARATION_DUE_MS:return PREPARATION_DUE_USEC
+    return PREPARATION_NEAR_USEC if until_ms<=PREPARATION_NEAR_MS else PREPARATION_USEC
 
 func _charge_preparation(name:String,started:int,charged_before:int)->void:
     var budget:Dictionary=_preparation_budget()
@@ -582,6 +598,8 @@ func _prepare_optional_work()->void:
                 if native_startup_plan!=null:_step_native_startup(true)
                 component_renderer.prepare_optional(self,catalog_cache,budget)
                 if not external_playback:choice_resources.prepare(catalog_cache,budget)
+                # Spare shadow helpers, so a reveal's new actors construct none.
+                if generated_shadows.spares_needed():generated_shadows.prepare_spares(budget.limit_usec-budget.used_usec-(Time.get_ticks_usec()-started))
                 _charge_preparation("optional_components",started,before)
             2:_warm_media(false,budget)
             3:
@@ -767,8 +785,10 @@ func _process(delta: float) -> void:
         _prepare_optional_work()
     else:
         # This frame already did its heavy work (a world publication, a burst
-        # of sampling); optional work waits a frame instead of extending it.
+        # of sampling); speculative work waits a frame instead of extending it.
+        # The next received world cut is not speculative: keep preparing it.
         optional_skips+=1
+        _step_world_preparation()
     FrameProfile.end_phase(profile,"optional_preparation",phase)
     if not media_issue.is_empty():
         var preparing: Dictionary = timeline.current if not timeline.current.is_empty() else (timeline.queue[0] if not timeline.queue.is_empty() else {})
@@ -2870,17 +2890,20 @@ func _sync_native_lighting() -> void:
     _publish_receiving()
     FrameProfile.end_phase(profile,"light_table",phase)
     phase = Time.get_ticks_usec()
-    # Remove stale handles before the helper retires hidden actors. Source
-    # components and picking continue to use the original visual.entries list.
-    actor_entries = actor_entries.filter(func(entry):return not entry.get("generated_shadow",false))
-    var shadows = generated_shadows.sync(visual_actors.values(),camera,source_lighting.canvas_sources())
+    # The light table's upload count changes whenever the canvas sources do.
+    var shadows: Array = generated_shadows.sync(visual_actors.values(),camera,source_lighting.canvas_sources(),light_table.uploads if publishes_receiving else -1)
     if normals_visible:
         for entry in shadows: entry.node.visible = false
-    var ids = shadows.map(func(entry):return entry.node.get_instance_id())
-    if ids != generated_shadow_ids:
-        generated_shadow_ids = ids
-        draw_order_dirty = true
-    actor_entries.append_array(shadows)
+    # A new array only when the shown helpers changed. Source components and
+    # picking continue to use the original visual.entries list.
+    if not is_same(shadows,generated_shadow_entries):
+        generated_shadow_entries = shadows
+        actor_entries = actor_entries.filter(func(entry):return not entry.get("generated_shadow",false))
+        actor_entries.append_array(shadows)
+        var ids = shadows.map(func(entry):return entry.node.get_instance_id())
+        if ids != generated_shadow_ids:
+            generated_shadow_ids = ids
+            draw_order_dirty = true
     FrameProfile.end_phase(profile,"modular_shadows",phase)
     for issue in source_lighting.issues+generated_shadows.issues:
         if issue not in presentation_errors: presentation_errors.append(issue)

@@ -29,7 +29,7 @@ func run(world: Node) -> void:
     check(RenderingServer.get_current_rendering_method()=="forward_plus","Native Forward+ renderer")
     await frame();await frame()
     for helper in world.generated_shadows.actors.values():
-        var shadow=helper.viewport.get_texture().get_image()
+        var shadow=helper.viewport.get_texture().get_image().get_region(Rect2i(Vector2i.ZERO,helper.footprint))
         var lit_edge=false
         for y in shadow.get_height():
             if shadow.get_pixel(shadow.get_width()-1,y).r>.9:lit_edge=true;break

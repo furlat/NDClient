@@ -74,6 +74,11 @@ func _load_cookie() -> void:
         _resource_issues.append("Native 2D light cookie cannot be decoded: "+cookie_path)
     else:
         cookie = ImageTexture.create_from_image(image)
+        # Like generated cookies, it carries its RGBA8 image for CPU consumers.
+        var pixels := image.duplicate()
+        if pixels.is_compressed(): pixels.decompress()
+        pixels.convert(Image.FORMAT_RGBA8)
+        cookie.set_meta(&"cookie_image", pixels)
     _update_issues()
 
 func _source_cookie(source: Dictionary) -> Texture2D:

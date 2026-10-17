@@ -34,6 +34,7 @@ var _queued_key:Array=[]
 var _queued_cache:Dictionary={}
 var _required_ids:Dictionary={}
 var _prepare_failures:Dictionary={}
+var _support_warm:bool=false
 
 func render_timings()->Dictionary:
     # Last completed native viewport timestamps can lag the sampled CPU frame.
@@ -108,6 +109,7 @@ func prepare(compiled_groups:Array,cache:Dictionary,world:Node=null,prefetch_gro
     # Epoch reset owns all resources/instances, including required-image pins.
     _required_ids=optical
     var appearance:Dictionary=_prepare_layers(world,wanted,budget,optional,allow_optional)
+    _warm_passes()
     result.ready=result.ready and appearance.ready
     result.errors.append_array(appearance.errors)
     # Receiver membership is prepared before any effect can become due. Sync
@@ -234,6 +236,14 @@ func _prepare_layers(world:Node,wanted:Dictionary,budget:Dictionary,optional:Dic
         if not budget.is_empty():budget.used_usec+=Time.get_ticks_usec()-started
         FrameProfile.end_phase(world.profile,"native_prepare_appearance",started)
     return result
+
+## Passes not in use render once ahead of any spell (Layer.warm), and the
+## shared receiver pass allocates its targets with one empty render.
+func _warm_passes()->void:
+    if not groups.is_empty():return
+    for layer in spare_layers+prepared_layers.values():Layer.warm(layer)
+    if _support!=null and not _support.enabled and not _support_warm:
+        _support.viewport.render_target_update_mode=SubViewport.UPDATE_ONCE;_support_warm=true
 
 func sample(world:Node,components:Array,frame_seconds:float)->void:
     var sample_started:int=Time.get_ticks_usec()
@@ -525,6 +535,7 @@ func close(world:Node=null)->void:
     for layer in prepared_layers.values():Layer.close(layer)
     groups.clear();spare_layers.clear();prepared_layers.clear()
     if _support!=null:_support.close();_support=null
+    _support_warm=false
     if is_instance_valid(_owner):_owner.free()
     _owner=null
     if world!=null and is_instance_valid(world.camera) and _epoch>=0:

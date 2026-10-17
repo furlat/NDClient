@@ -97,6 +97,7 @@ static func controls(handle:Dictionary,cue:Dictionary,time:float)->void:
     for path in cue.get("show_nodes",[]):
         var node:GeometryInstance3D=handle.root.get_node(path)
         node.layers=int(handle.layer_mask);node.show()
-    for piece in handle.geometry:
-        if (cue.has("fade_out_seconds") or cue.has("opacity_keys")) and not cue.has("fade_bindings") and handle.opacity_bindings.is_empty():
-            piece.node.transparency=1.0-opacity
+    if (cue.has("fade_out_seconds") or cue.has("opacity_keys")) and not cue.has("fade_bindings") and handle.opacity_bindings.is_empty():
+        var transparency:float=1.0-opacity
+        for piece in handle.geometry:
+            if piece.node.transparency!=transparency:piece.node.transparency=transparency

@@ -22,6 +22,8 @@ does not establish visual acceptance. Client/Studio migration must preserve thes
 outstanding items and make the effects available for further authoring; it must
 not present the current appearances as user-approved or finished.
 
+Proposed replacement runtime shape (not yet accepted): [NATIVE_VFX_RUNTIME_CONTRACT_2026-10-17.md](NATIVE_VFX_RUNTIME_CONTRACT_2026-10-17.md).
+
 ## Start here
 
 - Client: `C:/Users/tommaso/Documents/Dev/NDClientGodot`.

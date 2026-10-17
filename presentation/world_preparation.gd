@@ -294,6 +294,67 @@ func _derive_forecast(input:Dictionary,forecast:Dictionary)->void:
         input.cache.__actor_source_profile=forecast.cache.get("__actor_source_profile",{})
     result=_complete_actors(input,forecast)
 
+static func _derive_ground_material(input:Dictionary,job:Dictionary,full_membership:bool,sight:Dictionary,slots:Dictionary)->void:
+    var key:String=job.key
+    var before: Dictionary = input.ground.get(key,{})
+    if not full_membership and not before.is_empty():
+        var geometry_patch = GroundData.prepare_changes(job.changes,job.removed,before.geometry)
+        if not geometry_patch.rebuild_required:
+            if not geometry_patch.changed.is_empty():
+                var changed_packets = {}
+                for id in geometry_patch.records:
+                    changed_packets[id] = GroundData._packet(geometry_patch.records[id],bool(sight.changes.get(id,sight.visibility.has(id))))
+                job.result.packet = {"sparse":true,"geometry_patch":geometry_patch,"row_changes":job.changes,
+                    "packets":changed_packets,"indices":before.geometry.indices,"rows":before.geometry.rows,
+                    "geometry_changes":{"base_version":before.ground_version,"changed":geometry_patch.changed,"removed":[]}}
+            return
+    var rows: Array = job.rows
+    if not full_membership:
+        var by_id = {}
+        if not before.is_empty():
+            for row in before.rows: by_id[row.id] = row
+        for id in job.removed: by_id.erase(id)
+        by_id.merge(job.changes,true)
+        rows = by_id.values()
+        rows.sort_custom(func(a,b):return slots[a.id]<slots[b.id])
+        job.result.rows = rows
+    if rows.is_empty(): return
+    if before.is_empty():
+        var sorted: Array = rows.duplicate(); var initial_packets = {}; var ranks = {}
+        for i in rows.size(): ranks[rows[i].id] = i
+        GroundData.sort_rows(sorted,initial_packets,input.quarter)
+        job.result.packet = {"new_rows":sorted,"new_packets":initial_packets,"source_ranks":ranks}
+    elif before.rows!=rows:
+        var visible = {}
+        for row in rows:
+            if sight.changes.get(row.id,sight.visibility.has(row.id)): visible[row.id] = true
+        job.result.packet = GroundData.prepare(rows,before,input.quarter,input.basis,visible)
+
+const SOURCE_CHUNK_ROWS:=24
+const SOURCE_CHUNKS:=4
+
+static func _derive_row_sources(input:Dictionary,wanted:Dictionary,sight:Dictionary,chunk:Dictionary)->void:
+    var cache:Dictionary=chunk.cache
+    for id in chunk.ids:
+        var row:Dictionary=wanted[id]
+        var previous:Dictionary=_old_visual(input.retained,id)
+        var packet:Dictionary={}
+        if input.get("initial",false) or previous!=row:
+            var options:Dictionary=input.environment_options
+            packet=EnvironmentSource.row_packet(row,input.quarter,input.basis,cache,options.depth,options.normals)
+        if packet.get("eligible",false):
+            # This is the same visibility operand applied by the private
+            # scenery owner. Seed it before final source construction.
+            for selected in packet.entries:
+                selected.light_parameters=SourceMaterial.environment_policy(selected.placement.kind,selected.role)
+                if selected.descriptor.get("empty",false):continue
+                var source_id:String=str(selected.placement.id)
+                selected.descriptor.parameters.current_visibility=1.0 if sight.changes.get(source_id,sight.visibility.has(source_id)) else 0.0
+            chunk.packets[id]=packet
+            # A fixture flame still needs its frames and optical facts.
+            chunk.sources[id]=_row_sources(row,input.quarter,cache) if row.has("lit_animation") else {"paths":packet.paths,"fixtures":{}}
+        else:chunk.sources[id]=_row_sources(row,input.quarter,cache)
+
 static func derive_static(input:Dictionary,output:Dictionary)->void:
     var started = Time.get_ticks_usec()
     var worker_phases:Dictionary={};var phase_started:int=started
@@ -372,63 +433,46 @@ static func derive_static(input:Dictionary,output:Dictionary)->void:
         output.merge({"complete":false,"error":"Cannot load selected asset metadata: particles.region.blood","worker_ms":(Time.get_ticks_usec()-started)/1000.0})
         return
     worker_phases.routing=(Time.get_ticks_usec()-phase_started)/1000.0;phase_started=Time.get_ticks_usec()
+    # Each floor material is independent: one task per material, results
+    # merged in material order.
     var affected: Array = ground.keys() if full_membership else ground_changes.keys()
+    var slots: Dictionary = patch.get("prepared_visual_slots",input.retained.get("visual_slots",{}))
+    var ground_jobs: Array = []
     for key in affected:
-        var before: Dictionary = input.ground.get(key,{})
-        if not full_membership and not before.is_empty():
-            var geometry_patch = GroundData.prepare_changes(ground_changes[key],ground_removed.get(key,[]),before.geometry)
-            if not geometry_patch.rebuild_required:
-                if not geometry_patch.changed.is_empty():
-                    var changed_packets = {}
-                    for id in geometry_patch.records:
-                        changed_packets[id] = GroundData._packet(geometry_patch.records[id],bool(sight.changes.get(id,sight.visibility.has(id))))
-                    packets[key] = {"sparse":true,"geometry_patch":geometry_patch,"row_changes":ground_changes[key],
-                        "packets":changed_packets,"indices":before.geometry.indices,"rows":before.geometry.rows,
-                        "geometry_changes":{"base_version":before.ground_version,"changed":geometry_patch.changed,"removed":[]}}
-                continue
-        var rows: Array = ground.get(key,[])
-        if not full_membership:
-            var by_id = {}
-            if not before.is_empty():
-                for row in before.rows: by_id[row.id] = row
-            for id in ground_removed.get(key,[]): by_id.erase(id)
-            by_id.merge(ground_changes[key],true)
-            rows = by_id.values()
-            var slots: Dictionary = patch.get("prepared_visual_slots",input.retained.get("visual_slots",{}))
-            rows.sort_custom(func(a,b):return slots[a.id]<slots[b.id])
-            ground[key] = rows
-        if rows.is_empty(): continue
-        if before.is_empty():
-            var sorted: Array = rows.duplicate(); var initial_packets = {}; var ranks = {}
-            for i in rows.size(): ranks[rows[i].id] = i
-            GroundData.sort_rows(sorted,initial_packets,input.quarter)
-            packets[key] = {"new_rows":sorted,"new_packets":initial_packets,"source_ranks":ranks}
-        elif before.rows!=rows:
-            var visible = {}
-            for row in rows:
-                if sight.changes.get(row.id,sight.visibility.has(row.id)): visible[row.id] = true
-            packets[key] = GroundData.prepare(rows,before,input.quarter,input.basis,visible)
+        ground_jobs.append({"key":key,"rows":ground.get(key,[]),"changes":ground_changes.get(key,{}),"removed":ground_removed.get(key,[]),"result":{}})
+    var ground_tasks: Array = []
+    for job in ground_jobs.slice(1):
+        ground_tasks.append(WorkerThreadPool.add_task(_derive_ground_material.bind(input,job,full_membership,sight,slots),false,"Prepare floor material"))
+    if not ground_jobs.is_empty(): _derive_ground_material(input,ground_jobs[0],full_membership,sight,slots)
+    for task in ground_tasks: WorkerThreadPool.wait_for_task_completion(task)
+    for job in ground_jobs:
+        if job.result.has("rows"): ground[job.key] = job.result.rows
+        if job.result.has("packet"): packets[job.key] = job.result.packet
     worker_phases.ground=(Time.get_ticks_usec()-phase_started)/1000.0;phase_started=Time.get_ticks_usec()
     var object_sources:Dictionary={};var ground_sources:Dictionary={};var environment_packets:Dictionary={}
-    for id in wanted:
-        var row:Dictionary=wanted[id]
-        var previous:Dictionary=_old_visual(input.retained,id)
-        var packet:Dictionary={}
-        if input.get("initial",false) or previous!=row:
-            var options:Dictionary=input.environment_options
-            packet=EnvironmentSource.row_packet(row,input.quarter,input.basis,input.cache,options.depth,options.normals)
-        if packet.get("eligible",false):
-            # This is the same visibility operand applied by the private
-            # scenery owner. Seed it before final source construction.
-            for selected in packet.entries:
-                selected.light_parameters=SourceMaterial.environment_policy(selected.placement.kind,selected.role)
-                if selected.descriptor.get("empty",false):continue
-                var source_id:String=str(selected.placement.id)
-                selected.descriptor.parameters.current_visibility=1.0 if sight.changes.get(source_id,sight.visibility.has(source_id)) else 0.0
-            environment_packets[id]=packet
-            # A fixture flame still needs its frames and optical facts.
-            object_sources[id]=_row_sources(row,input.quarter,input.cache) if row.has("lit_animation") else {"paths":packet.paths,"fixtures":{}}
-        else:object_sources[id]=_row_sources(row,input.quarter,input.cache)
+    # Rows are independent: chunks run on their own catalog snapshots and are
+    # merged back in row order, with the records they admitted.
+    var ids:Array=wanted.keys()
+    var chunk_count:int=clampi(ids.size()/SOURCE_CHUNK_ROWS,1,SOURCE_CHUNKS)
+    var chunks:Array=[]
+    for index in chunk_count:
+        chunks.append({"ids":ids.slice(index*ids.size()/chunk_count,(index+1)*ids.size()/chunk_count),
+            "cache":Catalog.source_snapshot(input.cache) if chunk_count>1 else input.cache,"packets":{},"sources":{}})
+    var chunk_tasks:Array=[]
+    for chunk in chunks.slice(1):
+        chunk_tasks.append(WorkerThreadPool.add_task(_derive_row_sources.bind(input,wanted,sight,chunk),false,"Prepare environment row sources"))
+    _derive_row_sources(input,wanted,sight,chunks[0])
+    for task in chunk_tasks:WorkerThreadPool.wait_for_task_completion(task)
+    for chunk in chunks:
+        if not is_same(chunk.cache,input.cache):Catalog.adopt_snapshot(input.cache,chunk.cache)
+        environment_packets.merge(chunk.packets);object_sources.merge(chunk.sources)
+    var ordered_sources:Dictionary={}
+    for id in ids:ordered_sources[id]=object_sources[id]
+    object_sources=ordered_sources
+    var ordered_packets:Dictionary={}
+    for id in ids:
+        if environment_packets.has(id):ordered_packets[id]=environment_packets[id]
+    environment_packets=ordered_packets
     for key in ground:
         if not ground[key].is_empty() and not input.ground.has(key):ground_sources[key]=_row_sources(ground[key][0],input.quarter,input.cache)
     var environment_paths:Dictionary={};var environment_fixtures:Dictionary={}
@@ -1085,6 +1129,9 @@ func _prepare_object(deadline:int)->bool:
 
 func _prepare_object_step(deadline:int,measured:bool)->bool:
     if object_blocked_frame==Engine.get_process_frames():return false
+    # Ready rows are adopted in one pass up to the deadline; a scene-owned
+    # flame or ordinary constructor still ends the turn after one row.
+    var progress:bool=false
     var checked:int=0
     while checked<wanted_ids.size() and Time.get_ticks_usec()<deadline:
         var id:String=wanted_ids[object_cursor]
@@ -1098,7 +1145,7 @@ func _prepare_object_step(deadline:int,measured:bool)->bool:
         if not old.is_empty() and old.row==row:
             objects_complete[id]=true
             if measured:object_work_counts.retained+=1
-            return true
+            progress=true;continue
         if native_groups.has(id):
             var group:Dictionary=native_groups[id]
             if group.source_cursor<group.entries.size():
@@ -1157,10 +1204,11 @@ func _prepare_object_step(deadline:int,measured:bool)->bool:
         created_count+=static_entries.size()-first
         if measured:object_work_counts.constructed+=1
         phase_usec.objects=phase_usec.get("objects",0)+Time.get_ticks_usec()-began
-        return true
+        if not from_worker or flame_index>=0:return true
+        objects_complete[id]=true;progress=true
     # Every remaining object waits for the resource worker or a source.
-    if checked>=wanted_ids.size():object_blocked_frame=Engine.get_process_frames()
-    return false
+    if not progress and checked>=wanted_ids.size():object_blocked_frame=Engine.get_process_frames()
+    return progress
 
 func _prepare_ground(deadline:int)->bool:
     if ground_job.is_empty() and ground_complete.size()==(ground_target_count if ground_target_count>=0 else ground_keys.size()):return false

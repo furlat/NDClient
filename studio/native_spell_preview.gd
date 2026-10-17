@@ -13,9 +13,19 @@ var prepared:Dictionary={}
 var sampled:=-1.0
 var drawn:=-1.0
 var drawn_basis:=Basis.IDENTITY
+var rect:TextureRect
+var source_parent:Node3D
 
+## A parked swatch keeps its viewports; the next component replaces only its
+## source and colour finish.
 func configure_component(value:Dictionary)->String:
     component=value
+    if is_instance_valid(output):
+        sampled=-1.0;drawn=-1.0;drawn_basis=Basis.IDENTITY
+        output.render_target_update_mode=SubViewport.UPDATE_ALWAYS
+        viewport.render_target_update_mode=SubViewport.UPDATE_ALWAYS
+        Layer.colours({"viewport":viewport,"output":rect},component.finish_profile,true)
+        return ""
     output=SubViewport.new();output.size=Vector2i(256,256)
     output.disable_3d=true;output.transparent_bg=true
     output.render_target_update_mode=SubViewport.UPDATE_ALWAYS
@@ -31,7 +41,7 @@ func configure_component(value:Dictionary)->String:
     camera.environment.ambient_light_source=Environment.AMBIENT_SOURCE_COLOR
     camera.environment.ambient_light_color=Color.WHITE
     viewport.add_child(camera)
-    var rect=TextureRect.new();rect.size=Vector2(output.size)
+    rect=TextureRect.new();rect.size=Vector2(output.size)
     rect.texture=viewport.get_texture();rect.expand_mode=TextureRect.EXPAND_IGNORE_SIZE
     output.add_child(rect)
     Layer.colours({"viewport":viewport,"output":rect},component.finish_profile,true)
@@ -41,10 +51,10 @@ func sample(seconds:float,basis:Basis,_position:Vector3,_scale:float,_history:Ar
     var resources=Factory.prepare([component.native_clip],prepared)
     if not resources.ready:return {"ready":false,"error":"; ".join(resources.errors)}
     if handle.is_empty():
-        var parent=Node3D.new();viewport.add_child(parent)
+        source_parent=Node3D.new();viewport.add_child(source_parent)
         var clip:Dictionary=component.native_clip.duplicate(true)
         if component.native_cue.has("opacity_uniform"):clip.opacity_uniform=component.native_cue.opacity_uniform
-        handle=Factory.make(parent,clip)
+        handle=Factory.make(source_parent,clip)
         if not handle.error.is_empty():return {"ready":false,"error":handle.error}
         handle.root.scale=Vector3.ONE*float(component.native_cue.get("scale",.18))
         handle.root.show()
@@ -62,6 +72,15 @@ func sample(seconds:float,basis:Basis,_position:Vector3,_scale:float,_history:Ar
     return {"ready":complete,"error":""}
 
 func texture()->Texture2D:return output.get_texture()
+
+## Park: release the source, stop drawing, keep the viewports for reuse.
+func release()->void:
+    if not handle.is_empty():Factory.close(handle);handle={}
+    if is_instance_valid(source_parent):source_parent.free()
+    component={}
+    if is_instance_valid(output):
+        output.render_target_update_mode=SubViewport.UPDATE_DISABLED
+        viewport.render_target_update_mode=SubViewport.UPDATE_DISABLED
 
 func close()->void:
     if not handle.is_empty():Factory.close(handle);handle={}

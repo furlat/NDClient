@@ -61,7 +61,7 @@ func _initialize()->void:
                 if row.reason=="persistent_visual_assignment_missing":
                     check(row.missing_category=="authoring" and row.source.ends_with("/persistent"),"Missing persistent assignment is an exact JSON-authoring gap, not a lost media file")
                 if row.source.ends_with("/application_asset_id") or row.source.ends_with("/removal_asset_id"):
-                    check(row.coverage.source=="available" and row.coverage.implementation=="missing","Existing entry/release art is distinct from missing execution")
+                    check(row.coverage.implementation=="missing" and row.reason=="native_source_not_authored","Sprite-sheet entry/release art is reported as needing a native source")
                     check(row.timing_status=="unresolved" and row.end_ms==row.start_ms,"Uncompiled lifecycle gets an honest unscheduled expectation")
             if row.kind!="audio" or row.status!="missing":continue
             observed.missing_audio+=1

@@ -5,6 +5,7 @@ const Factory=preload("res://presentation/native_factory_source.gd")
 const Authoring=preload("res://presentation/native_spell_authoring.gd")
 const Profile=preload("res://frame_profile.gd")
 const SOURCE_LAYER=1<<19
+const SETTLE_FRAMES=4
 static var _state:Dictionary={}
 static var _frame:int=-1
 
@@ -117,7 +118,7 @@ static func _owner(world:Node3D)->Node3D:
     viewport.name="NativeSourceStartup"
     viewport.size=Vector2i(64,64);viewport.own_world_3d=true
     viewport.transparent_bg=true;viewport.msaa_3d=Viewport.MSAA_DISABLED
-    viewport.render_target_update_mode=SubViewport.UPDATE_ONCE
+    viewport.render_target_update_mode=SubViewport.UPDATE_DISABLED
     world.get_tree().root.add_child(viewport)
     var camera=Camera3D.new();viewport.add_child(camera)
     camera.projection=Camera3D.PROJECTION_ORTHOGONAL;camera.size=128
@@ -161,10 +162,25 @@ static func _step(world:Node3D,cache:Dictionary,request:Dictionary,budget:Dictio
     if eligible.is_empty():return status(request)
     if not budget.is_empty() and budget.used_usec>=budget.limit_usec:return status(request)
     if _frame==Engine.get_process_frames():return status(request)
+    # The private viewport exists as soon as there is work, in its own frame,
+    # never in the frame of a source's first construction.
+    if not is_instance_valid(_state.owner):
+        _state.owner=_owner(world);_frame=Engine.get_process_frames()
+        return status(request)
     # An optional source may finish its existing draw before a new request;
     # no second mutable source constructor runs alongside it.
     if not _state.active.is_empty():
         if not optional and status(request).ready:return status(request)
+        if _state.active.has("settle"):
+            # Instancing queued this source's pipeline compiles on worker
+            # threads. Its first private draw waits for them a few frames later
+            # instead of blocking the frame that constructed it.
+            if Engine.get_process_frames()<_state.active.settle:return status(request)
+            _state.active.erase("settle")
+            _frame=Engine.get_process_frames()
+            _state.viewport.render_target_update_mode=SubViewport.UPDATE_ONCE
+            RenderingServer.frame_post_draw.connect(_drawn.bind(_state.active),CONNECT_ONE_SHOT)
+            return status(request)
         if not _state.active.drawn:return status(request)
         _frame=Engine.get_process_frames()
         _retain_program_owners(_state.active.handle)
@@ -217,9 +233,7 @@ static func _step(world:Node3D,cache:Dictionary,request:Dictionary,budget:Dictio
     for age in [.2,.7]:
         var bounded:float=minf(age,maxf(0.0,float(item.clip.get("seconds",age))))
         if bounded>0 and bounded not in ages:ages.append(bounded)
-    _state.active={"key":item.key,"handle":handle,"drawn":false,"ages":ages}
-    _state.viewport.render_target_update_mode=SubViewport.UPDATE_ONCE
-    RenderingServer.frame_post_draw.connect(_drawn.bind(_state.active),CONNECT_ONE_SHOT)
+    _state.active={"key":item.key,"handle":handle,"drawn":false,"ages":ages,"settle":Engine.get_process_frames()+SETTLE_FRAMES}
     return status(request)
 
 static func reset()->void:

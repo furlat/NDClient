@@ -57,10 +57,10 @@ func run()->void:
     check(await prepare(world.renderer,world,owner,rows,packet),"Initial field and actual pages draw privately before publication")
     check(world.actor_entries.is_empty() and world.renderer.deposits.is_empty(),"Private world preparation registers no displayed field")
     var handle:Dictionary=packet.handles[key].handle
-    check(handle.ready and not handle.entry.node.visible and handle.entry.node.get_parent()==owner,"Native field stays hidden and candidate-owned")
+    check(handle.ready and not handle.entry.node.visible and not handle.registered and handle.slot>=0,"Native field stays hidden in a private, unregistered atlas slot")
     var created:int=world.renderer.deposit_create_usec
     world.renderer.publish_world(world,packet)
-    check(world.renderer.deposits.size()==1 and world.actor_entries.size()==1 and handle.entry.node.get_parent()==world,"Publication transfers exact hidden nodes once")
+    check(world.renderer.deposits.size()==1 and world.actor_entries.size()==1 and is_same(world.actor_entries[0],handle.entry) and handle.registered,"Publication registers the exact prepared draw once")
     world.timeline.state=state;world.timeline.world_revision+=1;world.scenery_visible_cells={key:true}
     var uploads:int=world.renderer.field_uploads
     world.sample()
@@ -80,14 +80,14 @@ func run()->void:
         if not next_group.is_empty():break
     check(not next_group.is_empty(),"An actual future release crosses the existing authoritative blood tile")
     if not next_group.is_empty():
-        var pixels:PackedByteArray=handle.field.get_texture().get_image().get_data()
+        var pixels:PackedByteArray=world.renderer.field_image(handle).get_data()
         var was_covered:bool=world.renderer.visible_fields.has(key)
         world.timeline.current=next_group;world.timeline.display_ms=0.;world.timeline.group_start_ms=0.
         world.sample()
         check(world.renderer.field_uploads==uploads and handle.phase.is_empty(),"Inert future release does not reevaluate or upload an unchanged pre-drawn blood field")
         check(world.renderer.ready and handle.entry.node.visible and world.renderer.visible_fields.has(key)==was_covered,"Existing authoritative blood retains its exact native coverage while the next injury is pending")
         await frame()
-        check(handle.field.get_texture().get_image().get_data()==pixels,"Exact native field pixels stay unchanged before the real future release")
+        check(world.renderer.field_image(handle).get_data()==pixels,"Exact native field pixels stay unchanged before the real future release")
         world.timeline.current=null
     future={};decoded={};next_group={}
     for quarter in [0,1,2,3]:
@@ -106,15 +106,16 @@ func run()->void:
     var cancelled={"handles":{},"retired":[]};var cancelled_owner=Node3D.new();world.add_child(cancelled_owner)
     check(await prepare(world.renderer,world,cancelled_owner,{key:changed},cancelled),"Changed source with same canonical value receives private field")
     check(is_same(world.renderer.deposits[key],handle) and handle.entry.node.visible and world.actor_entries.size()==1,"Future source cannot mutate or replace displayed field before cue")
-    var cancelled_ref:WeakRef=weakref(cancelled.handles[key].handle.entry.node)
+    var cancelled_handle:Dictionary=cancelled.handles[key].handle;var cancelled_slot:int=cancelled_handle.slot
     dispose_packet(cancelled,world.renderer);cancelled_owner.queue_free();await frame()
-    check(cancelled_ref.get_ref()==null and is_same(world.renderer.deposits[key],handle),"Canceled candidate releases only its private nodes")
+    check(cancelled_handle.slot<0 and world.renderer._free_slots.has(cancelled_slot) and not cancelled_handle.entry.node.visible and is_same(world.renderer.deposits[key],handle) and handle.slot>=0 and handle.entry.node.visible,"Canceled candidate returns only its private slot and draw to the pool")
     var replacement={"handles":{},"retired":[]};var replacement_owner=Node3D.new();world.add_child(replacement_owner)
     check(await prepare(world.renderer,world,replacement_owner,{key:changed},replacement),"Next source candidate can prepare independently after cancellation")
     world.renderer.publish_world(world,replacement)
-    check(not handle.entry.node.visible and world.actor_entries.size()==1 and not is_same(world.renderer.deposits[key],handle),"Cue swaps prepared source while old field waits for bounded retirement")
+    check(not handle.entry.node.visible and world.actor_entries.size()==1 and not is_same(world.renderer.deposits[key],handle),"Cue swaps prepared source while the hidden old field waits for release")
+    var old_slot:int=handle.slot
     var held:Array=world.renderer.release_world(replacement)
-    check(held.size()==2 and held.all(func(entry):return entry.get("retire_external",false)),"Old field mesh and viewport transfer to existing external retirement")
+    check(held.is_empty() and handle.slot<0 and world.renderer._free_slots.has(old_slot) and world.renderer.deposits[key].slot!=old_slot,"Old field slot and draw return to the renderer pool; nothing needs external retirement")
     for entry in held:entry.node.queue_free()
     world.sample();check(world.renderer.last_allocations==0,"Reloaded source first sample allocates nothing")
     var removal={"handles":{},"retired":[]}

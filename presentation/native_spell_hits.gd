@@ -14,6 +14,8 @@ const MAX_TEMPLATES=64
 # Age-zero materials are immutable sources. Each occurrence still owns its
 # Surface, shader parameters and clock; no rendered texture is shared.
 var material_templates:Dictionary={}
+# Closed hit surfaces of this owner, reused by the next hit instead of a new viewport.
+var spare_surfaces:Array=[]
 
 static func _key(component:Dictionary)->String:
     return str(component.id)+"\u001f"+str(component.actor_uuid)
@@ -85,7 +87,7 @@ func _make(world:Node,component:Dictionary)->Dictionary:
         if template.has("error"):return {"issue":_issue(component,"missing",template.error)}
         if material_templates.size()>=MAX_TEMPLATES:material_templates.erase(material_templates.keys()[0])
         material_templates[key.duplicate(true)]=template
-    var surface=Surface.make(world,template.material,true)
+    var surface=Surface.make(world,template.material,true,spare_surfaces)
     var finishing:Dictionary=hit.get("finish_profile",{})
     var ramp:Texture2D
     if not finishing.get("ramp",[]).is_empty():ramp=Native._palette_texture(finishing.ramp)
@@ -150,10 +152,13 @@ func decorate(_world:Node,samples:Array,full_material:bool=true,spell_colours:bo
 func _retire()->void:
     for key in records.keys():
         if admitted.has(key) or active.has(key):continue
-        if records[key].has("surface"):Surface.close(records[key].surface)
+        if records[key].has("surface"):Surface.close(records[key].surface,spare_surfaces)
         records.erase(key)
 
 func close()->void:
     for record in records.values():
         if record.has("surface"):Surface.close(record.surface)
+    for parked in spare_surfaces:
+        if is_instance_valid(parked.viewport):parked.viewport.queue_free()
+    spare_surfaces.clear()
     records.clear();admitted.clear();active.clear();material_templates.clear();issues=[];pending_occurrences=[];ready=true

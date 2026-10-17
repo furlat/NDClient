@@ -124,8 +124,15 @@ static func _persistent_condition(row: Dictionary, condition: Dictionary, persis
     for field in ["bodyColor","bodyRamp","bodyOutline","bodyPose","frozenPose"]:
         if persistent.get(field)!=null:mechanisms.append(field)
     if persistent.get("alphaMultiplier",1.0)!=1.0:mechanisms.append("alphaMultiplier")
+    var natives:Dictionary={}
+    for record in Authoring.load_data("native_effects/index.json",cache).get("sources",{}).values():
+        for asset in record.get("media_ids",[]):natives[asset]=true
     for layer in persistent.get("layers",[]):
-        if layer.get("assetId","") not in replaced:mechanisms.append("layer:"+str(layer.id))
+        if layer.get("assetId","") in replaced:continue
+        if natives.has(layer.get("assetId","")):mechanisms.append("layer:"+str(layer.id));continue
+        # A sprite-sheet layer has no renderer until a native source is authored.
+        row.components.append(_component("condition","native_source_not_authored",
+            Authoring.Catalog.source_pointer("catalog/condition_recipes.json",prefix+"layers",cache)))
     var activity_poses:Array=persistent.get("activityPoses",[])
     for i in activity_poses.size():
         if activity_poses[i].rigId==rig_id:mechanisms.append("activityPoses:"+str(i))

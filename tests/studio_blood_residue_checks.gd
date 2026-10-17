@@ -25,9 +25,8 @@ func capture(studio:Control,label:String)->Image:
     var image=studio.viewport.get_texture().get_image();image.save_png(CAPTURE.path_join(label+".png"));return image
 func fields(studio:Control)->Dictionary:
     var result={}
-    for key in studio.world.component_renderer.blood.deposits:
-        var handle:Dictionary=studio.world.component_renderer.blood.deposits[key]
-        result[key]=handle.field.get_texture().get_image()
+    var renderer=studio.world.component_renderer.blood
+    for key in renderer.deposits:result[key]=renderer.field_image(renderer.deposits[key])
     return result
 func nonzero(image:Image)->int:
     var result=0

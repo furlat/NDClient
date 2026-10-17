@@ -64,7 +64,7 @@ func run() -> void:
             control._cookie_images=scene.generated_shadows._cookie_images.duplicate()
             control._prepare_sources(old_sources)
             var selected=control._dominant(scene.camera.unproject_position(scene.Placement.contact(actor.row)))
-            old[control._sources[selected].id if selected>=0 else ""]=true
+            old[control._source_ids[selected] if selected>=0 else ""]=true
             control.close()
             all_rows.append({"quarter":quarter,"frame":frame,"source_id":source,"native_direction":directions.back()})
             if quarter==1 and frame in [1,8]:
@@ -90,21 +90,22 @@ func run() -> void:
     var ppu=scene.camera.unproject_position(origin+scene.camera.global_basis.x).distance_to(scene.camera.unproject_position(origin))
     var ground=snapshots[0].ground_pixels*snapshots[0].component_units
     var selected=scene.generated_shadows._dominant(scene.camera.unproject_position(origin))
-    var source=scene.generated_shadows._sources[selected]
+    var source=scene.generated_shadows._source_row(selected)
     var zoom=snapshots[0].component_units*ppu
-    var projection=scene.generated_shadows._projection(scene.camera,origin,ground,snapshots[0].component_units,zoom,source)
+    var projection=scene.generated_shadows._projection(scene.camera,origin,ground,snapshots[0].component_units,zoom,source.screen_position,source.height)
     var probe=scene.GeneratedShadows.new();probe.attach(scene)
     for dimensions in [Vector2(1,10),Vector2(10,1),Vector2(1,1)]:
         var rect=probe._sampling_rect(Rect2(Vector2.ZERO,dimensions),1.0)
         var size=Vector2i(rect.size)
         var helper=probe._create("narrow")
         probe.actors.narrow=helper
-        probe._update(helper,snapshots,scene.camera,origin,ground,projection,rect,size,ppu)
+        probe._update_casters(helper,snapshots,scene.camera,origin,ground,false)
+        probe._update_layout(helper,scene.camera,origin,ground,projection,rect,size,ppu);probe._render(helper)
         await RenderingServer.frame_post_draw
         var native_size=helper.viewport.get_texture().get_image().get_size()
-        check(native_size==size and native_size.x>=2 and native_size.y>=2,"Clipped shadow renders at the expanded native sample dimensions")
+        check(native_size==probe.TARGET and helper.footprint==size and size.x>=2 and size.y>=2,"Clipped shadow keeps the expanded sample dimensions in its fixed target")
         var projected_width=helper.camera.size*float(native_size.x)/native_size.y*ppu
-        check(is_equal_approx(projected_width,rect.size.x) and helper.entry.node.mesh.size.is_equal_approx(rect.size/ppu),"Clipped shadow camera and output quad retain identical screen-space aspect")
+        check(is_equal_approx(projected_width,rect.size.x/size.x*native_size.x) and helper.entry.node.mesh.size.is_equal_approx(rect.size/ppu),"Clipped shadow camera and output quad retain identical screen-space aspect")
         probe._remove("narrow")
     probe.close()
     check(scene.timeline.state==canonical and scene.timeline.trace==trace,"Idle visual sampling changes no canonical state, events or logs")

@@ -4,8 +4,6 @@ const NativePersistent=preload("res://presentation/native_persistent.gd")
 const Authoring=preload("res://presentation/authoring.gd")
 const Palette=preload("res://presentation/palette.gd")
 const AudioCues=preload("res://presentation/audio_cues.gd")
-const MediaSamples=preload("res://presentation/condition_media_samples.gd")
-const RegisteredMedia=preload("res://presentation/registered_media.gd")
 const ConditionPose=preload("res://presentation/condition_pose.gd")
 const BodySurfaces=preload("res://presentation/body_surfaces.gd")
 
@@ -51,9 +49,7 @@ static func _fade_ms(config:Dictionary,selected:Dictionary,phases:Array,cache:Di
     for layer in persistent.get("layers",[]):
         if layer.get("assetId","") in selected.get("lifecycle",{}).get("replaces_media",[]):continue
         var metadata:Dictionary=media.get(layer.assetId,{})
-        var duration=float(metadata.get("removal_fade_ms",200))
-        if metadata.get("removal_asset_id")!=null:duration=MediaSamples.duration_ms(metadata.removal_asset_id,cache)
-        fade=maxf(fade,duration)
+        fade=maxf(fade,float(metadata.get("removal_fade_ms",200)))
     return fade
 
 static func native_samples(owners:Dictionary,at_ms:float,cache:Dictionary,include_legacy:bool=false)->Array:
@@ -82,7 +78,7 @@ static func samples(owners: Dictionary, at_ms: float, cache: Dictionary, activit
         result.append(common)
         result.append_array(NativePersistent.phase_samples(common,native_phases))
         # Keep the common owner rows through the same recipe priority/removal
-        # selection below; only audio and legacy layer construction are skipped.
+        # selection below; only audio and native layer construction are skipped.
         if native_only and not include_legacy:continue
         var natives: Dictionary=Authoring.load_data("native_effects/index.json",cache).sources
         for layer in persistent.get("layers",[]):
@@ -99,15 +95,11 @@ static func samples(owners: Dictionary, at_ms: float, cache: Dictionary, activit
             var source_id=""
             for id in natives:
                 if layer.assetId in natives[id].get("media_ids",[]): source_id=id;break
-            if not source_id.is_empty():
-                row.kind="native_effect";row.source_id=source_id;row.scale=row.metadata.get("scale",.5)
-                row.loop=true;row.source_duration_ms=natives[source_id].duration*1000.0
-            else:
-                if native_only:continue
-                row.kind="registered_media"
-                row.media=RegisteredMedia.resolve(row.metadata.get("asset_id",layer.assetId),cache)
-                row.status=row.media.status
-                row.media_samples=MediaSamples.sample(row,cache)
+            # Sprite-sheet layers have no renderer: a layer shows only through
+            # its native source, until one is authored for it.
+            if source_id.is_empty():continue
+            row.kind="native_effect";row.source_id=source_id;row.scale=row.metadata.get("scale",.5)
+            row.loop=true;row.source_duration_ms=natives[source_id].duration*1000.0
             result.append(row)
         if native_only:continue
         var audio_binding:Dictionary=Authoring.load_data("audio/bindings.json",cache).get("conditions",{}).get(owner.condition.behavior_id,{})
@@ -120,7 +112,7 @@ static func samples(owners: Dictionary, at_ms: float, cache: Dictionary, activit
             if sound.timing_selector!="condition.interval":sound.status="missing";sound.reason="authored_audio_timing_unavailable"
             result.append(sound)
     # Native preparation has no output to compose when these owners supply
-    # only body/legacy effects. Expiry above still runs for every owner.
+    # only body effects. Expiry above still runs for every owner.
     if native_only and not result.any(func(sample):return sample.kind=="native_effect"):return []
     var selected_owners={}
     var selected_recipes={}
@@ -133,7 +125,7 @@ static func samples(owners: Dictionary, at_ms: float, cache: Dictionary, activit
             selected_owners[sample.condition_uuid]=true
             selected_recipes[id][JSON.stringify(sample.recipe.definitionRef,"",false)]=true
     result=result.filter(func(sample):return sample.kind=="condition" or not sample.has("condition_uuid") or selected_owners.has(sample.condition_uuid) or (sample.get("layer",{}).get("markerGroup")!=null and selected_recipes.get(sample.actor_uuid,{}).has(JSON.stringify(sample.recipe.definitionRef,"",false))))
-    # Prepare every potentially selected legacy layer for these disclosed
+    # Prepare every potentially selected native layer for these disclosed
     # owners. Activity, marker rotation, source offset and fades still select
     # the displayed rows below; preparation never runs their occurrence clocks.
     if native_only:return result.filter(func(sample):return sample.kind=="native_effect")
@@ -149,9 +141,6 @@ static func samples(owners: Dictionary, at_ms: float, cache: Dictionary, activit
         if layer.kind=="native_effect":native[key]=layer
         result.append(layer)
     return result
-
-static func media_samples(row:Dictionary,cache:Dictionary)->Array:
-    return MediaSamples.sample(row,cache)
 
 static func select_layers(layers: Array, at_ms: float, activities: Dictionary={}) -> Array:
     var eligible:Array=[]
@@ -195,23 +184,12 @@ static func select_layers(layers: Array, at_ms: float, activities: Dictionary={}
     return result
 
 static func paths(actor: Dictionary, cache: Dictionary) -> Dictionary:
+    # Body treatments only: sprite-sheet condition layers are not drawn.
     var result={}
     var resources=Authoring.load_data("catalog/resources.json",cache)
-    var sources: Dictionary=Authoring.load_data("native_effects/index.json",cache).sources
-    var media: Dictionary=Authoring.load_data("catalog/condition_media.json",cache)
     for condition in actor.get("conditions",[]):
-        var persistent: Dictionary=recipe(condition,cache).get("persistent",{})
-        var ramp: Dictionary=persistent.get("bodyRamp",{})
+        var ramp: Dictionary=recipe(condition,cache).get("persistent",{}).get("bodyRamp",{})
         if resources.has(ramp.get("texture")): result[resources[ramp.texture]]=true
-        for layer in persistent.get("layers",[]):
-            var native=false
-            for source in sources.values():
-                if layer.assetId in source.get("media_ids",[]): native=true;break
-            if not native:
-                var metadata:Dictionary=media.get(layer.assetId,{})
-                result.merge(RegisteredMedia.resolve(metadata.get("asset_id",layer.assetId),cache).get("paths",{}))
-                for field in ["application_asset_id","removal_asset_id"]:
-                    if metadata.get(field)!=null:result.merge(RegisteredMedia.resolve(metadata[field],cache).get("paths",{}))
     return result
 
 static func pose(actor: Dictionary, rig_id: String, cache: Dictionary) -> Dictionary:

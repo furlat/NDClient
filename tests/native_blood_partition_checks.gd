@@ -18,7 +18,7 @@ func run()->void:
         var preview=Preview.new();owner.add_child(preview)
         check(preview.configure("blood.hit_a1",{},73).is_empty(),"Original blood source configures")
         var lights=Lighting.new()
-        check(preview.bind_receiving(lights).is_empty(),"Blood retains native receiving")
+        check(preview.bind_receiving().is_empty(),"Blood retains native receiving")
         var anchor=Vector3(3,1,4)
         var context={"screen_origin":Vector2.ZERO,"pixel_scale":1.,"supports":[],"source_basis":Basis.IDENTITY,"light_cap":1.}
         var sampled=await settle_source(preview,.2,basis,anchor,context)

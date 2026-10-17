@@ -13,7 +13,6 @@ const NativePreview=preload("res://presentation/native_effect_preview.gd")
 const NativeSpellPreview=preload("res://studio/native_spell_preview.gd")
 const NativePreviewStore=preload("res://studio/native_preview_store.gd")
 const NativeSources=preload("res://presentation/native_effects.gd")
-const RegisteredMedia=preload("res://presentation/registered_media.gd")
 const Lighting=preload("res://presentation/lighting_2d.gd")
 const ConditionOutline=preload("res://presentation/condition_outline.gd")
 const OutlineShader=preload("res://studio/condition_outline_preview.gdshader")
@@ -50,6 +49,9 @@ var composites:Array=[]
 const NATIVE_BATCH_LIMIT=8
 var native_batch_size=NATIVE_BATCH_LIMIT
 var native_composites:Array=[]
+# Parked spell swatches (NATIVE_BATCH_LIMIT at most), built before playback
+# and reused by every later batch instead of new viewport pairs per job.
+var native_spares:Array=[]
 var images: Dictionary={}
 var image_bytes=0
 var image_generation=-1
@@ -127,9 +129,6 @@ func request(row: Dictionary,sample_ms: float,quarter: int,prepare_views: bool=t
     if component.get("native_spell",false):age=tick*1000.0/maxf(1,hz)
     if row.kind in ["audio","feedback_text","damage_number","geometry_projectile"]:quarter=0
     var key="%s:%s:%s:%s" % [generation,row.id,tick,quarter]
-    if component.has("media_samples"):
-        # A held owner clock can still enter another bank or crossfade weight.
-        key+=":"+JSON.stringify(component.media_samples.map(func(part):return [part.part_id,part.media.asset_id,part.source_age_ms,part.alpha]))
     if row.kind=="audio":key="%s:audio:%s" % [generation,component.get("clip","")]
     if textures.has(key):
         var texture=textures[key];textures.erase(key);textures[key]=texture
@@ -160,7 +159,7 @@ func request(row: Dictionary,sample_ms: float,quarter: int,prepare_views: bool=t
             var weapon=NativeSources.weapon_context(component,native_actor,native_rig,job.facing_cycle,quarter)
             if not weapon.error.is_empty():errors[key]=weapon.error;return key
             job.native_context=weapon.context
-    if row.kind in ["native_effect","audio","registered_media","feedback_text","damage_number","geometry_projectile","residue_deposit"]:
+    if row.kind in ["native_effect","audio","feedback_text","damage_number","geometry_projectile","residue_deposit"]:
         _queue(job,prepare_views);return key
     var actor: Dictionary=row.get("actor",{}) if row.kind in ["body","part","sprite_layer"] else state.get("actor",row.get("actor",{}))
     if actor.is_empty():errors[key]="No disclosed source actor";return key
@@ -288,26 +287,6 @@ func _decode(job: Dictionary) -> Dictionary:
         images.clear();image_bytes=0;image_generation=job.generation;source_reads=0;source_hits=0;source_evictions=0
     var parts: Array=[];var auxiliary={}
     var resources:Dictionary=job.resources
-    if job.row.kind=="registered_media":
-        var cycle: Array=job.facing_cycle
-        var direction: String=job.row.get("actor",{}).get("facing","SW")
-        var facing: String=cycle[posmod(cycle.find(direction)+job.quarter*2,8)]
-        var component: Dictionary=job.component
-        var samples:Array=component.get("media_samples",[{"media":component.media,"source_age_ms":job.age_ms,"alpha":component.get("alpha",1.0)}])
-        var bounds=Rect2()
-        for sample in samples:
-            if sample.media.status!="available":return {"error":"Missing phase source: "+str(sample.media.asset_id),"job":job}
-            var definition:Dictionary=sample.media.definition
-            var anchor=Vector2(definition.anchor.x*definition.frame.width,definition.anchor.y*definition.frame.height)
-            for part in RegisteredMedia.sample(sample.media,sample.source_age_ms,facing):
-                var source=_image(part.file)
-                if source==null:return {"error":"Missing source: "+str(part.file),"job":job}
-                var region=Rect2i(part.rect[0],part.rect[1],part.rect[2],part.rect[3])
-                var offset=Vector2(part.offset[0],part.offset[1])-anchor
-                var rect=Rect2(offset,Vector2(region.size))
-                bounds=rect if parts.is_empty() else bounds.merge(rect)
-                parts.append({"image":source.get_region(region),"offset":offset,"alpha":sample.alpha})
-        return {"job":job,"parts":parts,"bounds":bounds.grow(3) if bounds.has_area() else Rect2(0,0,1,1)}
     for layer in job.layers:
         if layer.slot=="shadow" or layer.slot in job.hidden or not layer.paths.has(job.clip): continue
         var source=_image(layer.paths[job.clip])
@@ -352,6 +331,7 @@ func poll() -> bool:
         if active.get("kind")=="native_effect":active.started_ms=Time.get_ticks_msec()
         for composite in native_composites:composite.started_ms=Time.get_ticks_msec()
         return false
+    _prepare_spares()
     var changed=false
     # Each spell swatch retains its own simulation and private viewport. They
     # advance one existing 60 Hz history step together per drawn frame, rather
@@ -426,17 +406,17 @@ func poll() -> bool:
     return changed
 
 func _start_native(job:Dictionary)->Dictionary:
-    var node:Node=NativeSpellPreview.new() if job.component.get("native_spell",false) else NativePreview.new()
-    host.add_child(node)
+    var node:Node
+    if job.component.get("native_spell",false) and not native_spares.is_empty():node=native_spares.pop_back()
+    else:
+        node=NativeSpellPreview.new() if job.component.get("native_spell",false) else NativePreview.new()
+        host.add_child(node)
     var issue:String=node.configure_component(job.component) if job.component.get("native_spell",false) else node.configure(job.component.source_id,cache,Components.effect_seed(job.component),job.component.get("palette",[]))
-    if issue.is_empty() and not job.component.get("native_spell",false):issue=node.bind_receiving(source_lights)
+    # Source swatches keep their neutral illumination: white ambient, no room
+    # lights, independent of the scene and of every other preview.
+    if issue.is_empty() and not job.component.get("native_spell",false):issue=node.bind_receiving(1.0,false)
     if not issue.is_empty():
         errors[job.key]=issue;requested.erase(job.key);node.close();node.queue_free();return {}
-    # Source swatches retain their existing neutral illumination, independent
-    # of the scene's actual lights and of every other preview's source state.
-    if not job.component.get("native_spell",false) and not node.receiving.is_empty():
-        for child in node.receiving.output.get_children():
-            if child is CanvasModulate:child.color=Color.WHITE
     var context={"screen_origin":Vector2.ZERO,"pixel_scale":1.0,"light_cap":0.0,"supports":[Transform3D(Basis.from_scale(Vector3(3,1,3)),Vector3.ZERO)]}
     context.merge(job.native_context)
     node.texture()
@@ -456,7 +436,27 @@ func _sample_native(composite:Dictionary)->bool:
     return false
 
 func _close_native(composite:Dictionary)->void:
+    if composite.node is NativeSpellPreview and native_spares.size()<NATIVE_BATCH_LIMIT:
+        composite.node.release();native_spares.append(composite.node);return
     composite.node.close();composite.node.queue_free()
+
+## Spell swatch viewports exist before playback: one parked swatch per frame
+## until the batch size, while nothing else is queued.
+func _prepare_spares()->void:
+    if native_spares.size()+native_composites.size()>=NATIVE_BATCH_LIMIT or native_composites.size()>0:return
+    var node:=NativeSpellPreview.new();host.add_child(node)
+    node.configure_component({"finish_profile":{}})
+    node.release();native_spares.append(node)
+
+## Spell swatch descriptors read their source files' stamps (tens of ms per
+## spell). Resolve them when the recording is installed, not at first request.
+func prepare_descriptors(rows:Array)->void:
+    for row in rows:
+        var component:Dictionary=row.get("component",{})
+        if row.get("kind")!="native_effect" or not component.get("native_spell",false) or row.get("status")=="missing":continue
+        var hz=float(row.get("source_fps",component.get("sample_hz",32)))
+        var descriptor_key:String=str(row.id)+":"+str(hz)
+        if not native_descriptors.has(descriptor_key):native_descriptors[descriptor_key]=native_store.descriptor(component,maxf(1,hz))
 
 func _primitive(job: Dictionary) -> void:
     var component: Dictionary=job.component
@@ -481,13 +481,6 @@ func _primitive(job: Dictionary) -> void:
 func _compose(decoded: Dictionary) -> Dictionary:
     var job: Dictionary=decoded.job
     var view=SubViewport.new();view.disable_3d=true;view.transparent_bg=true
-    if job.row.kind=="registered_media":
-        view.size=Vector2i(ceilf(decoded.bounds.size.x),ceilf(decoded.bounds.size.y));view.render_target_update_mode=SubViewport.UPDATE_ONCE;host.add_child(view)
-        for part in decoded.parts:
-            var sprite=Sprite2D.new();sprite.centered=false;sprite.texture=ImageTexture.create_from_image(part.image);sprite.position=part.offset-decoded.bounds.position
-            sprite.modulate.a=part.alpha
-            sprite.texture_filter=CanvasItem.TEXTURE_FILTER_NEAREST;view.add_child(sprite)
-        return {"kind":"media","job":job,"viewport":view,"drawn":false}
     view.size=Vector2i(job.rig.cell_width,job.rig.cell_height);view.render_target_update_mode=SubViewport.UPDATE_ONCE;host.add_child(view)
     var resources: Dictionary=decoded.resources;var aux={}
     for path in decoded.auxiliary:
@@ -568,5 +561,8 @@ func reset() -> void:
 
 func close() -> void:
     reset()
+    for node in native_spares:
+        if is_instance_valid(node):node.close();node.queue_free()
+    native_spares.clear()
     if worker!=null:worker.wait_to_finish();worker=null
     images.clear();image_bytes=0

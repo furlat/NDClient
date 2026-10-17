@@ -1,8 +1,6 @@
 extends RefCounted
 const NativePreview=preload("res://presentation/native_effect_preview.gd")
 const Placement=preload("res://placement.gd")
-const RegisteredMedia=preload("res://presentation/registered_media.gd")
-const MediaShader=preload("res://presentation/registered_media.gdshader")
 const AudioPresenter=preload("res://presentation/audio_presenter.gd")
 const NativeSources=preload("res://presentation/native_effects.gd")
 const Conditions=preload("res://presentation/conditions.gd")
@@ -26,7 +24,6 @@ var audio=AudioPresenter.new()
 var handles: Dictionary={}
 var numbers: Dictionary={}
 var media_handles: Dictionary={}
-var _registration_parts:Dictionary={}
 var _prepared_resource_scope:Array=[]
 var _prepared_resource_groups:Array=[]
 var _prepared_resource_result:Dictionary={}
@@ -223,7 +220,7 @@ func prepare(groups: Array,cache: Dictionary,world: Node=null,admission:Dictiona
             for component in future_group.get("components",[]):
                 var key:String=component.get("preparation_key",component.id)
                 if required_ids.has(key) or seen.has(key):continue
-                if not component.get("native_spell",false) and component.get("native_hit",{}).is_empty() and component.get("kind") not in ["condition_outline","registered_media","geometry_projectile","damage_number","feedback_text","audio"]:continue
+                if not component.get("native_spell",false) and component.get("native_hit",{}).is_empty() and component.get("kind") not in ["condition_outline","geometry_projectile","damage_number","feedback_text","audio"]:continue
                 optional.append(component);seen[key]=true
         _optional_components=optional
         _optional_owner=[world.timeline.initialization_revision,world.timeline.resource_revision,world.timeline.group_start_ms,world.timeline.current,world.timeline.queue.duplicate()]
@@ -283,34 +280,7 @@ func _prepare_presenters(world:Node,components:Array,budget:Dictionary)->bool:
             budget.used_usec+=Time.get_ticks_usec()-started
         elif component.get("kind")=="geometry_projectile":
             if not _prepare_media_entry(world,component.id,component,BoltShader,budget):complete=false
-        elif component.get("kind")=="registered_media":
-            var phases:Array=component.get("media_samples",[{"part_id":"sustain","media":component.media}])
-            for phase in phases:
-                if phase.media.get("status")!="available":continue
-                var count:int=_registered_part_count(phase.media)
-                for index in count:
-                    var id:String=component.id+":"+str(phase.part_id)+":"+str(index)
-                    if not _prepare_media_entry(world,id,component,MediaShader,budget):complete=false
     return complete
-
-func _registered_part_count(media:Dictionary)->int:
-    var key:String=media.get("asset_id","")
-    var retained:Dictionary=_registration_parts.get(key,{})
-    if is_same(retained.get("media"),media):return retained.count
-    var count:int=0
-    # Resolve immutable registration shape once; every future frame/facing uses
-    # prepared part slots without rescanning this source registration.
-    for media_phase in media.storage.phases.values():
-        var total:int=0
-        for layer in media_phase.layers:
-            var largest:int=0
-            var collections:Array=layer.get("partsByFacing",{}).values() if layer.has("partsByFacing") else [layer.get("parts",[])]
-            for frames in collections:
-                for parts in frames:largest=maxi(largest,parts.size())
-            total+=largest
-        count=maxi(count,total)
-    _registration_parts[key]={"media":media,"count":count}
-    return count
 
 func _prepare_media_entry(world:Node,id:String,component:Dictionary,shader:Shader,budget:Dictionary)->bool:
     if media_handles.has(id):return true
@@ -319,7 +289,7 @@ func _prepare_media_entry(world:Node,id:String,component:Dictionary,shader:Shade
     var node=MeshInstance3D.new();node.visible=false;node.mesh=QuadMesh.new();node.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
     var material=ShaderMaterial.new();material.shader=shader;node.material_override=material;world.add_child(node)
     var row:Dictionary={"id":component.id,"position":[0,0],"base_height_steps":0.0,"kind":"effect","facing":"SW"}
-    media_handles[id]={"id":id,"node":node,"material":material,"placement":row,"role":"native_effect","layer":100 if component.kind=="geometry_projectile" else -10 if component.get("layer",{}).get("drawOrder")=="behind_body" else 101,"published":false,"component_id":component.id}
+    media_handles[id]={"id":id,"node":node,"material":material,"placement":row,"role":"native_effect","layer":100,"published":false,"component_id":component.id}
     budget.used_usec+=Time.get_ticks_usec()-started
     return true
 
@@ -366,7 +336,7 @@ func _prepare_legacy(world:Node,components:Array,cache:Dictionary,budget:Diction
         var component:Dictionary=wanted[id]
         var presenter=NativePreview.new();presenter.visible=false;world.add_child(presenter)
         var issue=presenter.configure(component.source_id,cache,Components.effect_seed(component),component.get("palette",[]))
-        if issue.is_empty():issue=presenter.bind_receiving(world.source_lighting)
+        if issue.is_empty():issue=presenter.bind_receiving()
         if not issue.is_empty():
             result.errors.append(issue);presenter.close();presenter.queue_free()
         else:
@@ -529,52 +499,6 @@ func sample(world: Node, samples: Array,frame_seconds: float=1.0/60.0,budget:Dic
             ready=ready and result.ready
             _witness(world,component,handle.node.sampled_age>=0 and handle.draws.any(func(draw):return _entry_visible(world,draw)))
             if not result.get("error","").is_empty() and result.error not in world.presentation_errors: world.presentation_errors.append(result.error)
-        elif component.kind=="registered_media":
-            if not row.has("rig"): continue
-            var canonical: Dictionary=world.timeline.presentation_state().actors.get(component.actor_uuid,{})
-            if canonical.get("life_state","alive") not in component.layer.get("lifeStates",["alive","dying","stable","dead"]): continue
-            var facing=_facing(world,row)
-            if component.metadata.has("world_basis"):
-                var basis_row=row.duplicate();basis_row.facing=component.metadata.world_basis;facing=_facing(world,basis_row)
-            var phases:Array=component.get("media_samples",[{"part_id":"sustain","media":component.media,"source_age_ms":component.get("source_age_ms",component.age_ms),"alpha":component.alpha}])
-            var origin_point=origin
-            if component.attachment=="body":origin_point+=Vector3.UP*row.get("visual_height",0.0)*Placement.HEIGHT_UNIT
-            elif component.attachment in ["head","face","hand"]:
-                if not _has_socket(world,row,component.attachment):continue
-                origin_point=_socket(world,row,component.attachment)
-            var unit=128.0/float(world.rig_config.TILE_W)*row.scale/Placement.PIXELS_PER_UNIT
-            if component.attachment in ["head","face","hand"]: origin_point+=world.camera.basis.y*float(component.metadata.get("actor_top_clearance_px",0))*unit
-            origin_point+=(world.camera.basis.x*float(component.layer.get("offsetX",0))*row.get("scale_x",1.0)-world.camera.basis.y*float(component.layer.get("offsetY",0)))*unit
-            var scale=float(component.metadata.get("scale",.5))
-            var drawn=false
-            for phase in phases:
-                if phase.media.status!="available":
-                    ready=false
-                    var issue="Missing condition phase registration: "+str(phase.media.get("asset_id",""))
-                    if issue not in world.presentation_errors:world.presentation_errors.append(issue)
-                    continue
-                var parts=RegisteredMedia.sample(phase.media,phase.source_age_ms,facing)
-                var definition:Dictionary=phase.media.definition
-                for i in parts.size():
-                    var part: Dictionary=parts[i]
-                    var id: String=component.id+":"+str(phase.part_id)+":"+str(i);live_media[id]=true
-                    if not world.textures.has(part.file): ready=false;continue
-                    if not media_handles.has(id):ready=false;continue
-                    _publish_media(world,media_handles[id])
-                    var entry: Dictionary=media_handles[id]
-                    entry.placement=row
-                    var rect: Array=part.rect
-                    var texture: Texture2D=world.textures[part.file]
-                    entry.material.set_shader_parameter("sheet",texture)
-                    entry.material.set_shader_parameter("frame_uv",Vector4(rect[0]/texture.get_width(),rect[1]/texture.get_height(),rect[2]/texture.get_width(),rect[3]/texture.get_height()))
-                    entry.material.set_shader_parameter("opacity",phase.alpha)
-                    entry.node.mesh.size=Vector2(rect[2],rect[3])*unit*scale
-                    var center=Vector2(part.offset[0]+rect[2]*.5-definition.anchor.x*definition.frame.width,part.offset[1]+rect[3]*.5-definition.anchor.y*definition.frame.height)
-                    entry.node.basis=world.camera.basis
-                    entry.node.position=origin_point+(world.camera.basis.x*center.x-world.camera.basis.y*center.y)*unit*scale
-                    entry.screen_rect=Rect2(world.camera.unproject_position(entry.node.position),Vector2(rect[2],rect[3]))
-                    if _entry_visible(world,entry):drawn=true
-            _witness(world,component,drawn)
         elif component.kind=="geometry_projectile":
             live_media[component.id]=true
             if not media_handles.has(component.id):ready=false;continue
@@ -742,7 +666,6 @@ func close(world: Node) -> void:
     native_hits.close()
     blood.close(world)
     outlines.close(world)
-    _registration_parts.clear()
     _prepared_resource_scope=[];_prepared_resource_groups=[];_prepared_resource_result={};_next_resource_cue_ms=-INF
     _resource_membership_revision+=1
     for id in handles.keys(): _release(world,id)
