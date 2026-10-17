@@ -16,7 +16,9 @@ const Surface=preload("res://presentation/blood_surface.gdshader")
 const Droplet=preload("res://presentation/blood_droplet.gdshader")
 const FieldCopy=preload("res://presentation/blood_field_copy.gdshader")
 const Admission=preload("res://presentation/native_source_admission.gd")
-const PROGRAMS=[Kernel,Surface,Droplet,FieldCopy]
+# One admission step per frame; the two-line field copy warms with the kernel
+# so first blood still waits the same three frames.
+const PROGRAMS=[[Kernel,FieldCopy],[Surface],[Droplet]]
 const FIELD=64
 const PAGE_SLOTS=8
 const SLOTS_PER_PAGE=PAGE_SLOTS*PAGE_SLOTS
@@ -101,7 +103,7 @@ func prepare_resources(world:Node,budget:Dictionary={})->bool:
         if _program_frame==frame or (not budget.is_empty() and budget.used_usec>=budget.limit_usec) or not Admission.begin_mutation():return false
         var started:int=Time.get_ticks_usec()
         _program_frame=frame
-        PROGRAMS[_programs_prepared].get_rid()
+        for program in PROGRAMS[_programs_prepared]:program.get_rid()
         _programs_prepared+=1
         if not budget.is_empty():budget.used_usec+=Time.get_ticks_usec()-started
         return false

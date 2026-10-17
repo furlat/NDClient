@@ -28,7 +28,7 @@ func run()->void:
         renderer.prepare_resources(host,{"used_usec":0,"limit_usec":10000})
         check(BloodRenderer._programs_prepared>=before and BloodRenderer._programs_prepared<=before+1,"Actual shader admission advances at most one authored program per frame")
         attempts+=1;await frame()
-    check(BloodRenderer._programs_prepared==programs,"All actual shader programs (kernel, surface, droplet, field copy) warm through admission")
+    check(BloodRenderer._programs_prepared==programs,"All three admission steps (kernel and field copy, surface, droplet) warm their actual programs")
     if BloodRenderer._programs_prepared!=programs:host.queue_free();quit(1);return
     # Blood lights itself from the light table: once its programs are warm,
     # a passive poll acknowledges readiness without constructors or budget.
@@ -36,6 +36,6 @@ func run()->void:
     check(renderer.prepare_resources(host,settled) and renderer.resources_ready,"Passive polling acknowledges warmed programs without constructor allowance")
     check(settled.used_usec==0 and host.actor_entries.is_empty() and host.find_children("*","SubViewport",true,false).is_empty(),"Preparation invents no displayed residue, receiving viewport or budget use")
     renderer.close(host);host.queue_free();await process_frame;await process_frame
-    var report={"checks":checks,"failures":failures,"scope":"Real four-shader admission and zero-budget readiness poll; no gameplay performance claim."}
+    var report={"checks":checks,"failures":failures,"scope":"Real three-step shader admission and zero-budget readiness poll; no gameplay performance claim."}
     FileAccess.open("res://.runtime/blood-resource-poll-checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("BLOOD_RESOURCE_POLL_CHECKS ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)
