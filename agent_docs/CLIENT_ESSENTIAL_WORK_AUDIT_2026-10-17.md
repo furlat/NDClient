@@ -464,9 +464,13 @@ assets out of order and break the perspective.
 - **Instancing constraint:** transparent sprites in one MultiMesh draw as one
   object, so only background floors stay MultiMesh.
 
+**Priority (user, 17 October): speed first.** L1–L7 make the game fast and
+are judged on frame time and pauses only. VRAM is L8, after them; nothing in
+L1–L7 is gated on it.
+
 **Steady target.** Idle-frame script ≤ 2 ms once optional media work has
-settled; animating frames dominated by GPU work; VRAM within the consumer
-budget on every route.
+settled; animating frames dominated by GPU work. (VRAM within the consumer
+budget is L8's target.)
 
 **Reveal target.** The room appears at the door cue with no pause.
 
