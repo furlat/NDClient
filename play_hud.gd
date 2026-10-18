@@ -253,13 +253,10 @@ func _layout() -> void:
     last_viewport_size = viewport_size
     world.FrameProfile.end_phase(world.profile,"hud_layout",phase)
 
-func _current_actor() -> Dictionary:
-    return world.timeline.state.get("actors",{}).get(world.timeline.state.get("current_actor_uuid"),{})
-
 func _inspect_actor() -> Dictionary:
     var inspected: Dictionary = world.timeline.state.get("actors",{}).get(inspected_actor_id,{})
     if not inspected.is_empty(): return inspected
-    var current = _current_actor()
+    var current = _action_actor()
     if not current.is_empty() and current.get("controlled_items") != null: return current
     return world.timeline.state.get("actors",{}).get(world.timeline.state.get("observer_uuid"),{})
 
@@ -371,9 +368,10 @@ func _process(delta: float) -> void:
     world.FrameProfile.end_phase(world.profile,"hud_process",phase)
 
 func _refresh_status(actor: Dictionary) -> void:
-    var state: Dictionary = world.timeline.state
-    if inspected_actor_id.is_empty(): inspected_actor_id=str(actor.get("uuid",""))
-    actor_hud.sync(state,actor,inspected_actor_id,cache)
+    # Only a clicked portrait stays inspected; otherwise the acting actor is.
+    # Latching the first painted actor (the observer, before any choices)
+    # kept showing that actor's bag on every later party member's turn.
+    actor_hud.sync(world.timeline.state,actor,inspected_actor_id if not inspected_actor_id.is_empty() else str(actor.get("uuid","")),cache)
 
 func _rebuild_bar() -> void:
     var phase = Time.get_ticks_usec()
