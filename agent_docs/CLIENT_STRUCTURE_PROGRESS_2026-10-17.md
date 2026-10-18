@@ -654,3 +654,66 @@ compile are being cut on `feature/opus-latency`; Studio load time on
 Open: the door's remaining holds (room late at the cue: L1; sprite sources:
 L8); Fireball's first cast waits one frame for a native source; first-draw
 pipeline compiles show as 30–45 ms frames outside the script under load.
+
+## Session close (18 October): merges, quiet-machine route, what is left
+
+Everything is on `feature/opus-refactor`; every `feature/opus-*` agent branch
+is merged into it (none has unmerged commits). `codex/ndclient` is untouched
+(user: keep the work on the branch).
+
+| Merge | Change | Evidence on the merged tree |
+|---|---|---|
+| `fd9c09c` (load) | Studio case switch: old index freed after exit, record decode once, catalogs parsed once per process, native strict journal parse. | Case switch 0.95–1.55 → 0.54–1.12 s; switch hitch 92–157 → 28–48 ms. |
+| `371b81c` (latency) | Reducer, transitions, compiler and audience cut per packet. | Door reduce 15.0 → 9.6 ms and compile 12.6 → 2.3 (agent, same journal); `packet_pipeline_equality_checks` 1,257/0 over three live journals and the defaults; SDK suites 0 failures; gate 8,904/0. |
+| `7dbb3c2` (L8 phase 1) | Offline sheet prepack into 128² page bundles; no runtime change yet ([L8_SHEET_PREPACK_2026-10-18.md](L8_SHEET_PREPACK_2026-10-18.md)). | `sheet_prepack_checks` 1,462,841/0 over 359 bundles; all 359 clips load and upload in 0.40 s against 16.9 s for PNG decode and upload; 277 MB of textures against 10.6 GB; 429 MB on disk against 82 MB (compression is phase 2). |
+| `ba2da1f` (L1 stage) | Door cue: a boundary commit within the commit tolerance publishes at its authored time (a rounding below it changed the preparation key and rebuilt the finished room: 12 held frames in 2 of 5 replays); the cue reuses the previewed candidate; staged tiles indexed by admission time. | Gate 8,883/0, primaries as accepted; order oracle 43,667/0; `world_boundary_rounding` 7/0 (4 failures before the fix); world preview, preparation gate, timeline world changes, Studio prefix and precision checks 0 failures. Door replay cue frame script 18.6–25.8 → 17.3–17.7 ms. |
+
+Gate primaries on the merged tree are the accepted set: baked-effect
+differences in `hide-mid` (212 px) and `invisibility-seed3-v2-end` (242 px),
+shadow rounding elsewhere (≤ 31 px at 1/255).
+
+### Quiet-machine route (three runs, `20261018T002837`, `T002918`, `T003012`)
+
+No agents and no other Godot running; all three 81/0, no script errors.
+Client time is packet to first animated frame; server time is not included.
+
+| Action | Packet → first animation (median, range) | Held frames (world / media) | Frames > 33 ms |
+|---|---|---|---|
+| Door open | 61 ms (56–63) | 0 / 0 in all runs | 0 (max 20–28 ms) |
+| Move into the big room | 50 ms (49–75) | 0 / 0 | 0 (max 19–23 ms) |
+| Drink | 25 ms (24–25) | 0 / 0 | 0 |
+| Fireball, first cast | 49 ms (48–66) | 0 / 1 in one run | 1 in two runs (pipeline compile, 36–43 ms) |
+| Fireball, second cast | 51 ms (33–57) | 0 / 0 | 0 |
+
+Door split: parse 18–24, reduce 15–16, compile 4–5, ready to screen 12–18.
+Before this session's latency work the door was 83–87 ms, with a held first
+frame on every action. Idle frame p50 7.2 ms, p95 9.9.
+
+### Known failures (checked, not from this session)
+
+- `studio_seek_checks` on the Gallery route journal (`.runtime/gallery-route/journal`):
+  "sampled movement keeps its recorded heading 96:a429c263…:0". Same on
+  `7faf78f` (the commit that added the test), on the pre-latency base and with
+  the L1 timeline reverted. The test's reference journal set passes on the
+  merged tree (6,339/0).
+- `presentation_staging_checks` "captured packet decodes" (fixture input);
+  same on the L1 base commit.
+
+### What is left, in order of payoff
+
+1. **Door, first draw of the new room:** the frame after the cue is 18–21 ms
+   with ~5 ms of script (draw calls 51 → 370, one pipeline specialization).
+   Shared per-record materials (the L1 static renderer) or warming the room's
+   pipelines before the cue.
+2. **Door, cue-frame static work** (~17.5 ms of script in the replay):
+   `world_sync` ~4.1, modular shadows 2.6–2.9, draw order 1.9–2.6,
+   wall visibility ~1.1; move it before the cue. Main-thread construction
+   (~19 ms over 15 frames in the replay, ~53 ms under live load).
+3. **Parse and reduce** are now most of the door's client time (~35 of 61 ms).
+4. **Fireball first cast:** one pipeline-compile frame (36–43 ms) and an
+   occasional one-frame media wait.
+5. **L8 phase 2:** runtime reads the sheet bundles (design in the L8 doc),
+   then compression for disk size; the VRAM target stays after speed.
+6. **VFX** (for the Factory agent): clips still native and the known
+   baked/native differences are in
+   [FACTORY_VFX_BAKING_REPORT_2026-10-17.md](FACTORY_VFX_BAKING_REPORT_2026-10-17.md).

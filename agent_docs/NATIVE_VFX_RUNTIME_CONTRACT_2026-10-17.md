@@ -1,7 +1,11 @@
 # Native VFX runtime contract (17 October 2026)
 
-Status: **prototype implemented for Fireball, Magic Missile and Fire Bolt**
-(commits 25cb447, 8b4db36). The Factory guidance below is the user-requested
+Status: **in use for the spell catalog**: 64 of 72 clips play baked (commits
+25cb447, 8b4db36, 3986abf, 693a694); the clips that still play native, and
+what differs between baked and native, are listed in
+[FACTORY_VFX_BAKING_REPORT_2026-10-17.md](FACTORY_VFX_BAKING_REPORT_2026-10-17.md).
+The measurements below are from the first three spells (Fireball, Magic
+Missile, Fire Bolt). The Factory guidance below is the user-requested
 contract for new effects; it does not replace the working contract in
 [NATIVE_VFX_FACTORY_HANDOFF.md](NATIVE_VFX_FACTORY_HANDOFF.md) until accepted.
 No new Factory content is authored against it before Gate A.
