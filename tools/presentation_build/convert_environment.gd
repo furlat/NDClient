@@ -8,7 +8,8 @@ extends SceneTree
 ## with its number text unchanged, since Godot's writers shorten some doubles.
 ## Reads the legacy files read-only: world.json, assets.json, environment/,
 ## catalog/{devices,device_wrecks,portals,world_animations,action_media_assets}.json,
-## generated/environment_{receiving_normals,texture_layouts}.json, the server id
+## generated/environment_{receiving_normals,texture_layouts}.json, the delivered
+## source records, the server id
 ## snapshot, the VFX package's surface scenarios and, when present, the
 ## fantasy-unified-catalog catalogue. Re-runnable: entries keep their files and
 ## uids; entries and measured files it no longer writes are removed.
@@ -134,6 +135,7 @@ func run() -> void:
     var package: Dictionary = _json("res://assets/vfx/index.json")
     package_version = str(package.version)
     for selection in package.selections: package_selections[selection.key] = selection
+    _shared_measurements()
     _images()
     _banks()
     _library_art()
@@ -144,7 +146,6 @@ func run() -> void:
     _library(catalogue_path)
     _surfaces()
     _connectors_lighting_battlefields()
-    _shared_measurements()
     var root := Root.new()
     root.domain = "environment"
     for section in SECTIONS: root.sections[section] = sections[section]
@@ -608,7 +609,7 @@ func _door(object: EnvironmentObject, owner: Dictionary) -> void:
     var bytes := FileAccess.get_file_as_bytes(LEGACY + index.doors[object.id])
     for member in Spans.members(bytes):
         if member[0] in ["assembly_variants", "authoring_record", "pose_offset"]: delivery[member[0]] = rewrite(Spans.text(bytes, member[1], member[2]))
-    if owner.has("authoring_record"): delivery.source_record = rewrite(FileAccess.get_file_as_string(LEGACY + owner.authoring_record))
+    if owner.has("authoring_record"): delivery.authoring_record = JSON.stringify(MEASURED_REL + owner.authoring_record.trim_prefix("environment/"))
     object.measurements = _measured("objects/" + object.id + ".json", Spans.object(delivery))
     _status_note(object, "ready", "Open and closed snap to the end poses; the transitions are data only. pose_offset, assembly_variants and the source record are kept as delivered in its measurements.")
 
@@ -633,9 +634,7 @@ func _prop(object: EnvironmentObject, owner: Dictionary) -> void:
         object.parts.append(part)
     elif owner.get("omit_with_destroyed_parent", false):
         errors.append("omit_with_destroyed_parent outside a window: " + object.id)
-    if owner.has("authoring_record"):
-        object.measurements = _measured("objects/" + object.id + ".json", Spans.object({"authoring_record": JSON.stringify(owner.authoring_record),
-            "source_record": rewrite(FileAccess.get_file_as_string(LEGACY + owner.authoring_record))}))
+    if owner.has("authoring_record"): object.measurements = MEASURED_REL + owner.authoring_record.trim_prefix("environment/")
     _status_note(object, "ready", "flat_ground is authored but the draw order does not use it." if object.flat_ground else "")
 
 func _trap(object: EnvironmentObject, owner: Dictionary) -> void:
@@ -785,6 +784,7 @@ func _surfaces() -> void:
         surface.layer = "ground_surface"
         surface.coverage = "footprint"
         surface.art = PackedStringArray([family])
+        if FileAccess.file_exists(LEGACY + "environment/source-records/decals/" + family + ".json"): surface.legacy = MEASURED_REL + "source-records/decals/" + family + ".json"
         _status_note(surface, "partial", "Decal art on the parent surface's depth and normals; the game does not draw decals.")
         _entry("surfaces", family, surface)
 
@@ -893,6 +893,10 @@ func _connectors_lighting_battlefields() -> void:
         _entry("battlefields", id, battlefield)
 
 func _shared_measurements() -> void:
+    # Every delivered source record (assembly and placement evidence, decal profiles), as delivered.
+    var records: Array = []
+    _collect(LEGACY + "environment/source-records", ".json", records)
+    for path in records: _measured(path.trim_prefix(LEGACY + "environment/"), rewrite(FileAccess.get_file_as_string(path)))
     var normals: Dictionary = _json("res://generated/environment_receiving_normals.json")
     var selected := {}
     for original in normals.normals:
