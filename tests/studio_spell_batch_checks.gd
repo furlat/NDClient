@@ -20,6 +20,10 @@ const EVENT_ROLES={
     "shocking_grasp":{"cast":1,"attached":1},"burning_hands":{"attached":1},"thunderwave":{"attached":1},
     "cure_wounds":{"attached":1},"healing_word":{"attached":1},"guidance":{},"resistance":{},
     "light":{},"thaumaturgy":{"attached":1},"shield_of_faith":{},"true_strike":{"attached":1}}
+# Recorded lifecycles whose spells have no native effect authoring yet.
+const RECORDED_ONLY=["aid","bless","false_life","sacred_flame"]
+# Further real recordings of an included spell, with their own delivery slots.
+const EXTRA_CASES={"native-spell-shield-ranged":{"attached":1},"native-spell-shield-walk":{"attached":1}}
 const OWNED=["bane","command","mage_armor","sanctuary","shield","guidance","resistance","light","shield_of_faith","web"]
 var checks:=0
 var failures:Array=[]
@@ -74,7 +78,7 @@ func inspect_case(item:Dictionary,descriptor:Dictionary)->void:
         if perspective.id=="amber":
             for event in descriptor.events:check(events.has(event.event_uuid),label+": inventory event belongs to the indexed recording")
         check(native_count>0,label+": selected spell exposes native components through the production pipeline")
-        check(roles==EVENT_ROLES[item.spell_id],label+": exact authored phase slots for the recorded deliveries; got "+JSON.stringify(roles))
+        check(roles==EXTRA_CASES.get(item.id,EVENT_ROLES[item.spell_id]),label+": exact authored phase slots for the recorded deliveries; got "+JSON.stringify(roles))
         check(instances.size()==(1 if item.spell_id in OWNED else 0),label+": exact disclosed persistent instance count")
         native_total+=native_count
         row.perspectives.append({"id":perspective.id,"operations":index.operations,"native_samples":native_count,
@@ -86,19 +90,24 @@ func run()->void:
     var inventory:Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://generated/studio_spell_case_inventory.json"))
     check(inventory.get("failures",[]).is_empty(),"All capture commands and per-spell evidence succeeded")
     var listed=Library.read().filter(func(item):return item.has("spell_id"))
-    check(listed.size()==EXPECTED.size(),"All30 included spells are selectable")
+    check(listed.size()==EXPECTED.size()+RECORDED_ONLY.size()+EXTRA_CASES.size(),"Every recorded spell case is selectable")
     var seen={}
     for item in listed:
-        check(item.spell_id in EXPECTED and not seen.has(item.spell_id),"Unique included spell: "+item.spell_id)
-        seen[item.spell_id]=true
-        check(item.perspectives.size()==2,item.spell_id+": both independent real audiences are selectable")
-        var found=inventory.cases.filter(func(row):return row.spell_id==item.spell_id)
-        check(found.size()==1,item.spell_id+": one concrete descriptor")
-        if found.size()==1:inspect_case(item,found[0])
-    for deferred in ["aid","bless","false_life","sacred_flame"]:
-        check(deferred in inventory.deferred and not seen.has(deferred),"Explicitly deferred: "+deferred)
+        check(not seen.has(item.id) and (item.id=="native-spell-"+item.spell_id or EXTRA_CASES.has(item.id)),"Unique spell case: "+item.id)
+        seen[item.id]=true
+        check(item.perspectives.size()==2,item.id+": both independent real audiences are selectable")
+        var found=inventory.cases.filter(func(row):return row.id==item.id)
+        check(found.size()==1,item.id+": one concrete descriptor")
+        if found.size()!=1:continue
+        if item.spell_id in RECORDED_ONLY:
+            check(not found[0].get("native_effects_authored",true) and not found[0].get("lifecycle",[]).is_empty(),item.id+": recorded lifecycle, explicitly without native authoring")
+            continue
+        check(item.spell_id in EXPECTED and found[0].get("native_effects_authored",false),item.id+": included natively authored spell")
+        inspect_case(item,found[0])
+    for spell in EXPECTED+RECORDED_ONLY:
+        check(seen.has("native-spell-"+spell),"Lifecycle case recorded: "+spell)
     var report={"checks":checks,"failures":failures,"cases":evidence,
-        "scope":"30 real SDK recordings, two independently admitted audiences, actual Studio source/owner indexing and canonical commit parity. No native rendering or artistic approval claim."}
+        "scope":"Real SDK lifecycle recordings (30 natively authored spells plus further Shield cases), two independently admitted audiences, actual Studio source/owner indexing and canonical commit parity. No native rendering or artistic approval claim."}
     FileAccess.open("res://generated/studio_spell_batch_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("STUDIO_SPELL_BATCH ",checks," / ",failures.size())
     quit(0 if failures.is_empty() else 1)

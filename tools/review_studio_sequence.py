@@ -87,7 +87,12 @@ def make_cases(args: argparse.Namespace) -> list[dict]:
     inventory = json.loads((PROJECT / "generated/studio_spell_case_inventory.json").read_text())
     if inventory.get("failures"):
         raise ValueError("The generated spell inventory contains capture failures; inspect it before reviewing")
-    by_id = {case["spell_id"]: case for case in inventory["cases"]}
+    # A spell's first case keeps its spell ID; further recordings of the same
+    # spell (e.g. native-spell-shield-ranged) are selected by their case suffix.
+    by_id = {}
+    for case in inventory["cases"]:
+        by_id.setdefault(case["spell_id"], case)
+        by_id.setdefault(case["id"].removeprefix("native-spell-"), case)
     selected = list(by_id) if args.spells == ["all"] else args.spells
     if "all" in selected or len(set(selected)) != len(selected):
         raise ValueError("Use --spells all alone, or a list of distinct spell IDs")

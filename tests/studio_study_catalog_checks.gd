@@ -56,9 +56,12 @@ func run()->void:
             check(record.id=="native-spell-"+id and record.spell_id==id,"Open recording cannot fall back to another spell: "+id)
             check(record.perspectives.size()==2,"Both independently recorded factions are selectable: "+id)
         check(scenario.coverage.native_render=="not_assessed_by_this_catalog","Recorded facts do not claim rendered qualification: "+id)
+    # Recorded lifecycles without native effect authoring (studio_spell_batch_checks
+    # asserts that flag); they are openable studies, not rendered qualification.
     for id in ["aid","bless","false_life","sacred_flame"]:
-        check(index.has("spell."+id),"Deferred spell remains in the capability denominator: "+id)
-        check(not index.get("spell."+id,{}).get("scenarios",[]).any(func(row):return row.id=="native-spell-"+id),"Deferred spell receives no new completed batch study: "+id)
+        check(index.has("spell."+id),"Formerly deferred spell remains in the capability denominator: "+id)
+        var recorded:Array=index.get("spell."+id,{}).get("scenarios",[]).filter(func(row):return row.id=="native-spell-"+id)
+        check(recorded.size()==1 and recorded[0].recordings.size()==1 and recorded[0].recordings[0].available,"Formerly deferred spell has exactly one openable lifecycle study: "+id)
     var expected_fields={}
     for id in ["action.move","action.jump"]:
         for requirement in index[id].requirements:

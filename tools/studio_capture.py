@@ -339,7 +339,9 @@ def qualify_dying(output):
         'provenance': 'Original public follower packets, independent current Python reduction; existing setup damage and actual offered attack commands only.'}
 
 
-async def record(config, url, output, steps, *, command_limit=40):
+async def record(config, url, output, steps, *, command_limit=40, resolve=None):
+    # resolve(step, seat, actor) may complete a request from the seat's own
+    # received journal (e.g. a relative move) or return None to skip it.
     seats, trace = [], []
     failure = None
     try:
@@ -379,6 +381,10 @@ async def record(config, url, output, steps, *, command_limit=40):
                 # Advance through the real initiative order, recording every end.
                 steps.insert(ordinal, action('end_turn', waiting_for_actor=step['actor_name']))
                 step = steps[ordinal]
+            if resolve is not None:
+                step = resolve(step, seat, actor)
+                if step is None: continue
+                steps[ordinal] = step
             await acknowledge(connection, seat['follower'].consumed)
             revision = now['boundary']['state_revision']
             row_evidence = {'step': ordinal, 'request': step, 'seat': seat['id'], 'previews': []}
