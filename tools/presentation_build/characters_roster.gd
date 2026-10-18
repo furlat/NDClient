@@ -165,3 +165,32 @@ const MISMATCH := {
     "creature.wing_regent_devil": "128 px cells on a Large creature.",
     "creature.fellwing_devil": "128 px cells on a Large creature.",
 }
+## Server creatures with no art of their own: the rig that stands in, and why.
+## Humanoids use the layered rig (dressed from the server's appearance and
+## loadout, like generic_caster); others borrow the closest delivered variant.
+const STAND_INS := {
+    "creature.acolyte": ["neuroclient.modular", "humanoid"], "creature.bandit": ["neuroclient.modular", "humanoid"],
+    "creature.bandit_captain": ["neuroclient.modular", "humanoid"], "creature.berserker": ["neuroclient.modular", "humanoid"],
+    "creature.commoner": ["neuroclient.modular", "humanoid"], "creature.cult_fanatic": ["neuroclient.modular", "humanoid"],
+    "creature.cultist": ["neuroclient.modular", "humanoid"], "creature.guard": ["neuroclient.modular", "humanoid"],
+    "creature.knight": ["neuroclient.modular", "humanoid"], "creature.mage": ["neuroclient.modular", "humanoid"],
+    "creature.priest": ["neuroclient.modular", "humanoid"], "creature.scout": ["neuroclient.modular", "humanoid"],
+    "creature.spy": ["neuroclient.modular", "humanoid"], "creature.thug": ["neuroclient.modular", "humanoid"],
+    "creature.tribal_warrior": ["neuroclient.modular", "humanoid"], "creature.veteran": ["neuroclient.modular", "humanoid"],
+    "creature.bugbear": ["smallscale.orc04", "orc art (club)"], "creature.hobgoblin": ["smallscale.orc03", "orc art"],
+    "creature.gnoll": ["smallscale.orc10", "orc art"], "creature.kobold": ["smallscale.goblin01", "goblin art"],
+    "creature.dire_wolf": ["smallscale.animals.elite-wolf", "the Elite Wolf variant"],
+    "creature.ghoul": ["smallscale.zombies-top-down.zombie-decay-02", "a decayed zombie"],
+    "creature.goblin_archer": ["smallscale.goblin03", "the Reedshot archer goblin"], "creature.goblin_caster": ["smallscale.goblin02", "the Wispbinder caster goblin"],
+    "creature.ogre": ["smallscale.barbarians.1ogre", "the barbarians pack's 1Ogre"], "creature.ogre_zombie": ["smallscale.zombies-hd.zombiehulk1", "a hulk zombie"],
+    "creature.skeleton": ["smallscale.undead.6warrior", "the undead pack's 6Warrior"], "creature.skeleton_warlock": ["smallscale.undead.8necromancer", "the undead pack's 8Necromancer"],
+    "creature.zombie": ["smallscale.zombies-hd.zombiemale1", "a zombie"],
+    "creature.spell.air_elemental": ["smallscale.enemies.11arcane-elemental", "the arcane elemental"], "creature.spell.air_myrmidon": ["smallscale.enemies.11arcane-elemental", "the arcane elemental"],
+    "creature.spell.earth_elemental": ["smallscale.enemies.11arcane-elemental", "the arcane elemental"], "creature.spell.earth_myrmidon": ["smallscale.enemies.11arcane-elemental", "the arcane elemental"],
+    "creature.spell.fire_elemental": ["smallscale.enemies.11arcane-elemental", "the arcane elemental"], "creature.spell.fire_myrmidon": ["smallscale.enemies.11arcane-elemental", "the arcane elemental"],
+    "creature.spell.water_elemental": ["smallscale.enemies.11arcane-elemental", "the arcane elemental"], "creature.spell.water_myrmidon": ["smallscale.enemies.11arcane-elemental", "the arcane elemental"],
+    "creature.spell.cambion": ["smallscale.demonelite01", "a demon elite"], "creature.spell.deva": ["smallscale.characters.4paladin", "the characters pack's 4Paladin"],
+    "creature.spell.djinni": ["smallscale.characters.6mage", "the characters pack's 6Mage"], "creature.spell.draconic_spirit": ["smallscale.dinosaurs.elite-armored-t-rex", "an armoured dinosaur"],
+}
+## Spell objects the server models as creatures: drawn by their spell's effect, not a body.
+const EFFECT_BODIES := ["creature.spell.flaming_sphere", "creature.spell.spiritual_weapon"]

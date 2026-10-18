@@ -44,6 +44,7 @@ var modular_geometry: Dictionary = {}
 var creature_geometry: Dictionary = {}
 var normal_profiles: Dictionary = {}
 var server: Dictionary = {}
+var attack_recipes: Dictionary = {}
 var source_root := Root.new()
 var errors: Array = []
 var notes: Array = []
@@ -108,7 +109,7 @@ func run() -> void:
     resources = read(AUTHORING + index.resources)
     components = read(AUTHORING + index.sheet_components)
     modular_geometry = read("res://generated/character_geometry.json")
-    creature_geometry = read("res://generated/creature_geometry.json")
+    creature_geometry = read(ART + INTAKE if LOAD_INTAKE else "res://generated/creature_geometry.json")
     normal_profiles = read("res://generated/normal_profiles.json")
     server = read(AUTHORING + "server_ids.json")
     _overlay_clips()
@@ -116,6 +117,7 @@ func run() -> void:
     var parts: Dictionary = _parts()
     var rigs: Dictionary = _current_rigs(parts)
     var library: Dictionary = _library_rigs(rigs)
+    if LOAD_INTAKE:_cross_check(library)
     _characters(rigs, library)
     _gear()
     _appearance()
@@ -233,6 +235,7 @@ func _parts() -> Dictionary:
             else:
                 surface.encoding = "none"
                 surface.coverage = 0.0
+            if REPAIRS and REPAIRED_PARTS.get(category, []).has(action):_repair_part(surface, samples.get(action, {}), REPAIRS_ROOT + "modular/" + category + "/" + action + "/")
             source.surface = surface
             source.status = "ready" if record.has("files") else ("missing" if record.status == "empty_source_no_surface" else "ready")
             part.actions[action] = source
@@ -256,6 +259,81 @@ func _parts() -> Dictionary:
     return parts
 
 # ---------------------------------------------------------------- rigs (today)
+
+## The full creature geometry intake (18 Oct repairs delivery): every packet
+## of the library with its native cell, optical origin and depth range. With
+## it, today's rigs read their surfaces from it (identical for the 1,438
+## sheets loaded before, plus SkeletonArcher05's six clips).
+const LOAD_INTAKE := true
+const INTAKE := "art/geometry/repairs-20261018/intake/creature_geometry.json"
+
+## Every delivered rig's surfaces against the intake's record for the same sheet.
+func _cross_check(library: Dictionary) -> void:
+    var by_media := {}
+    for media in creature_geometry.records:
+        var record: Dictionary = creature_geometry.records[media]
+        by_media[art(media)] = record
+        if record.has("combined_source_media"):by_media[art(record.combined_source_media)] = record
+    var checked := 0
+    for rig in library.values():
+        for clip in rig.clips:
+            var record: Dictionary = by_media.get(clip.art.get("body", ""), by_media.get(clip.art.get("combined", ""), {}))
+            if record.is_empty():fail("No intake record for " + rig.id + "/" + clip.name);continue
+            checked += 1
+            var surface: BodySurface = clip.surface
+            var expected := {"depth": art(creature_root + "/" + record.files.depth), "normal": art(creature_root + "/" + record.files.normal),
+                "range": Array(record.depth_range), "origin": Vector2(record.optical_camera.origin[0], record.optical_camera.origin[1]), "frames": int(record.frames),
+                "cell": Vector2i(int(record.cell_size[0]), int(record.cell_size[1]))}
+            var actual := {"depth": surface.depth, "normal": surface.normals.original, "range": Array(surface.depth_limits), "origin": surface.camera_origin,
+                "frames": clip.frames, "cell": rig.cell}
+            for key in expected:
+                if str(expected[key]) != str(actual[key]):fail("Intake differs for %s/%s %s: %s vs %s" % [rig.id, clip.name, key, expected[key], actual[key]])
+    print("INTAKE_CROSS_CHECK ", checked, " delivered clips")
+
+## The 18 Oct depth/normal repairs (art/geometry/repairs-20261018): Melee20's
+## two re-traced weapon sheets, and three creature packets whose unsupported
+## normal texels now carry alpha 0. The DeathKnight reconstructions in that
+## delivery are diagnostic only and are not used.
+const REPAIRS := false
+const REPAIRS_ROOT := "art/geometry/repairs-20261018/"
+const REPAIRED_PARTS := {"Melee20": ["Attack4", "AttackRun2"]}
+const REPAIRED_SHEETS := {"art/geometry/creatures/first/actions/goblin-09/run-backwards/": "invalid-normals/actions/goblin-09/run-backwards/",
+    "art/geometry/creatures/first/actions/demon-beast-2/attack-1/": "invalid-normals/actions/demon-beast-2/attack-1/",
+    "art/geometry/creatures/first/actions/demon-beast-2/attack-4/": "invalid-normals/actions/demon-beast-2/attack-4/"}
+
+## A repaired modular packet: its Original depth and normals, the Gentle and
+## Reference regenerated from that Original in the same packet, and its masks.
+## Socket samples are re-read from the repaired depth, support and solid maps.
+func _repair_part(surface: BodySurface, samples: Dictionary, folder: String) -> void:
+    surface.depth = folder + "depth.png"
+    surface.normals = {"original": folder + "normals.png", "gentle": folder + "normals-gentle.png", "reference": folder + "normals-reference.png"}
+    surface.masks = {"support": folder + "raw-support.png", "normal_valid": folder + "normal-valid.png", "solid": folder + "solid-valid.png", "lighting_valid": folder + "lighting-valid.png"}
+    surface.source = "geometry-gap-repairs-2026-10-18"
+    for path in [surface.depth] + surface.normals.values() + surface.masks.values():
+        if not exists(path):fail("Repair file missing: " + path)
+    if samples.is_empty():return
+    var images := {}
+    for name in ["depth", "support", "solid"]:
+        images[name] = Image.load_from_file(ProjectSettings.globalize_path(ART + (surface.depth if name == "depth" else surface.masks[name])))
+        images[name].convert(Image.FORMAT_RGBA8)
+    var values: Array = samples.values
+    for i in samples.pixels.size() / 2:
+        var at := Vector2i(int(samples.pixels[i * 2]), int(samples.pixels[i * 2 + 1]))
+        var depth: Color = images.depth.get_pixelv(at)
+        values[i * 4] = depth.r8;values[i * 4 + 1] = depth.a8
+        values[i * 4 + 2] = images.support.get_pixelv(at).r8;values[i * 4 + 3] = images.solid.get_pixelv(at).r8
+
+## A creature packet replaced by its repaired copy (same files, same layout).
+func _repair_sheet(surface: BodySurface) -> void:
+    var folder: String = surface.depth.get_base_dir() + "/"
+    if not REPAIRED_SHEETS.has(folder):return
+    var target: String = REPAIRS_ROOT + REPAIRED_SHEETS[folder]
+    surface.depth = surface.depth.replace(folder, target)
+    for key in surface.normals.keys():surface.normals[key] = surface.normals[key].replace(folder, target)
+    for key in surface.masks.keys():surface.masks[key] = surface.masks[key].replace(folder, target)
+    surface.source = "geometry-gap-repairs-2026-10-18"
+    for path in [surface.depth] + surface.normals.values() + surface.masks.values():
+        if not exists(path):fail("Repair file missing: " + path)
 
 ## Shared role vocabulary from a clip or source animation name.
 static func role_of(name: String) -> String:
@@ -302,6 +380,7 @@ func _surface_from_record(record: Dictionary) -> BodySurface:
     surface.qualification = "source"
     for path in [surface.depth] + surface.normals.values() + surface.masks.values():
         if not exists(path):fail("Creature surface file missing: " + path)
+    if REPAIRS:_repair_sheet(surface)
     return surface
 
 ## The pack, layer folder and variant a delivered sheet path names.
@@ -401,6 +480,8 @@ func _current_rigs(parts: Dictionary) -> Dictionary:
                     if not exists(value):fail("Rig art missing: " + value)
             rig.clips.append(clip)
         if not clip_sockets.is_empty():measured.clip_sockets = clip_sockets
+        var trails := _weapon_trails(rig_id)
+        if not trails.is_empty():measured.weapon_trails = trails
         for context in source.get("body_contexts", []):rig.contexts.append(_context(context))
         if rig.kind == "layered":
             rig.shadow = "generated"
@@ -420,6 +501,22 @@ func _current_rigs(parts: Dictionary) -> Dictionary:
             rig.status = "partial"
             rig.notes = "Shadow is baked into the delivered sheet and no geometry is loaded for this rig."
         result[rig_id] = rig
+    return result
+
+## Measured weapon-trail points (part -> clip -> facing -> per-frame points)
+## of the attack recipes' trail poses on this rig. The attack recipes still
+## carry the copy the attack presentation reads.
+func _weapon_trails(rig_id: String) -> Dictionary:
+    var result := {}
+    if attack_recipes.is_empty():attack_recipes = read(AUTHORING + "catalog/attack_recipes.json")
+    for recipe in attack_recipes.values():
+        var trail: Variant = recipe.get("weaponTrail")
+        if not trail is Dictionary:continue
+        for pose in trail.get("poses", []):
+            if pose.rigId != rig_id:continue
+            if not result.has(pose.category):result[pose.category] = {}
+            if result[pose.category].has(pose.clip) and result[pose.category][pose.clip] != pose.pointsByFacing:fail("Two trails for " + pose.category + "/" + pose.clip)
+            result[pose.category][pose.clip] = pose.pointsByFacing
     return result
 
 func _key_map(sheets: Dictionary) -> Dictionary:
@@ -492,7 +589,8 @@ func _library_rigs(current: Dictionary) -> Dictionary:
             var origin := sheet_origin(art(combined))
             var key: String = origin.pack + "/" + origin.variant
             if covered.has(key):continue
-            if not families.has(key):families[key] = {"pack": origin.pack, "variant": origin.variant, "family": row.family, "rows": [], "catalog": catalog, "base": base, "group": pair[1]}
+            if not families.has(key):families[key] = {"pack": origin.pack, "variant": origin.variant, "family": row.family, "rows": [], "catalog": catalog, "base": base, "group": pair[1],
+                "template": current["smallscale.goblin01"].contexts}
             families[key].rows.append(row)
     var result := {}
     var keys: Array = families.keys();keys.sort_custom(func(a, b): return a.naturalnocasecmp_to(b) < 0)
@@ -567,7 +665,52 @@ func _delivery_rig(family: Dictionary) -> Rig:
     _place(rig, family)
     rig.status = "partial"
     rig.notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed."
+    if BIND_ROSTER:_playable(rig, family.template)
     return rig
+
+## Clip keys the client's recipes, contexts and spells request (the layered
+## rig's names), and the clips a rig without one plays instead, in order.
+const WANTED := {"Idle": [], "Idle2": ["Idle"], "Idle4": ["Idle2", "Idle"], "Run": ["Walk", "Idle"], "Walk": ["Run", "Idle"],
+    "TakeDamage": ["Idle"], "Die": ["Death", "role:die_gore", "role:explode", "role:die", "TakeDamage"], "Death": ["Die"], "Taunt": ["Idle2", "Idle"],
+    "Rolling": ["BackFlip", "Run"], "CrouchWalk": ["Walk", "Run"], "Attack1": ["role:attack_1", "role:bite", "role:attack_run", "Idle"],
+    "Attack2": ["Attack1"], "Attack3": ["Attack2", "Attack1"], "Attack4": ["Attack3", "Attack2", "Attack1"], "AttackRun": ["Attack1"], "Kick": ["Attack1"],
+    "Special1": ["CastSpell", "Attack4", "Attack1"], "Attack5": ["CastSpell", "Special1", "Attack4", "Attack1"], "Attack6": ["CastSpell", "Attack5", "Special1", "Attack4", "Attack1"]}
+
+## Makes a delivered rig playable: an explicit stand-in for every clip key
+## the client asks for that the art lacks, and the standard body contexts
+## (from goblin01's) on this rig's clips.
+func _playable(rig: Rig, template: Array) -> void:
+    var clips := {}
+    for clip in rig.clips:clips[clip.name] = clip
+    var pick := func(key: String) -> String:
+        if clips.has(key):return key
+        for option in [key] + WANTED.get(key, []):
+            if clips.has(option):return option
+            if option.begins_with("role:"):
+                for clip in rig.clips:
+                    if clip.role == option.trim_prefix("role:"):return clip.name
+            if rig.fallbacks.has(option):return rig.fallbacks[option]
+        return ""
+    for key in WANTED:
+        if clips.has(key):continue
+        var target: String = pick.call(key)
+        if target.is_empty():target = rig.clips[0].name
+        rig.fallbacks[key] = target
+    for source in template:
+        var context: RigContext = source.duplicate(true)
+        var target: String = pick.call(context.clip)
+        if target.is_empty():target = "Idle" if clips.has("Idle") else rig.clips[0].name
+        context.clip = target
+        var frames: int = clips[target].frames if clips.has(target) else 1
+        var keys := []
+        for key in context.frame_keys:keys.append([key[0], minf(float(key[1]), float(frames - 1))])
+        context.frame_keys = keys
+        if context.rest_frame >= frames:context.rest_frame = frames - 1
+        for anchor in context.anchors:anchor.frame = minf(float(anchor.frame), float(frames - 1))
+        rig.contexts.append(context)
+    var stand_ins: Array = []
+    for key in rig.fallbacks:stand_ins.append(key + " -> " + rig.fallbacks[key])
+    if not stand_ins.is_empty():rig.notes += "\nStand-in clips: " + ", ".join(stand_ins) + "."
 
 ## Clip keys follow the client's own names (Attack1, TakeDamage, Die, Death ...).
 func _library_clip_name(source: String, taken: Dictionary) -> String:
@@ -608,6 +751,7 @@ func _surface_from_catalog(row: Dictionary, family: Dictionary) -> BodySurface:
     surface.qualification = "source"
     for path in [surface.depth] + surface.normals.values() + surface.masks.values():
         if not exists(path):fail("Delivery surface file missing: " + path)
+    if REPAIRS:_repair_sheet(surface)
     return surface
 
 ## Pivot and body anchor from the Idle body's opaque extent (median over every
@@ -644,6 +788,17 @@ func _place(rig: Rig, family: Dictionary) -> void:
 ## separate change); their delivered variant is named in the entry's notes.
 const BIND_ROSTER := false
 
+## Bind the delivered portraits of the roster NPCs (the bank's pack--variant
+## art and the 18 Oct delivery) to their creature ids.
+const BIND_PORTRAITS := false
+const DELIVERED_PORTRAITS := "art/ui-delivery-20261018/runtime/portraits192x256/"
+const PORTRAIT_PACKS := {"orcs-and-goblins": "orcs_goblins", "demons": "demons", "undead": "undead", "enemies": "enemy", "barbarians": "barbarian",
+    "characters": "character", "zombies-hd": "hdz", "zombies-top-down": "top", "animals": "animals", "dinosaurs": "dinosaurs"}
+
+## The creature bank's source key of a delivered variant (orcs_goblins--orc-02).
+static func portrait_key(rig: Rig) -> String:
+    return PORTRAIT_PACKS.get(rig.pack, rig.pack) + "--" + rig.variant.to_lower().replace(" ", "-")
+
 static func content_id(identity: String) -> String:
     return identity.get_slice(":", 2).get_slice("@", 0)
 
@@ -653,7 +808,8 @@ func _characters(current: Dictionary, library: Dictionary) -> void:
     for identity in creature_rigs:bindings[content_id(identity)] = {"identity": identity, "rig": creature_rigs[identity]}
     var ui_resources: Dictionary = read(AUTHORING + "ui/resources.json")
     var attacks := {}
-    var recipes: Dictionary = read(AUTHORING + "catalog/attack_recipes.json")
+    if attack_recipes.is_empty():attack_recipes = read(AUTHORING + "catalog/attack_recipes.json")
+    var recipes: Dictionary = attack_recipes
     for recipe_id in recipes:
         for variant in recipes[recipe_id].get("variants", []):
             for rig_id in variant.match.get("rigIds", []) if variant.match.get("rigIds") != null else []:
@@ -666,6 +822,9 @@ func _characters(current: Dictionary, library: Dictionary) -> void:
     var by_variant := {}
     for rig in current.values() + library.values():
         if rig.kind == "fixed":by_variant[rig.pack + "/" + rig.variant] = rig
+    var delivered_portraits := {}
+    for file in DirAccess.get_files_at(ART + DELIVERED_PORTRAITS):
+        if file.ends_with(".png"):delivered_portraits[file.get_basename()] = true
     var ids: Dictionary = server.ids.creature.duplicate()
     ids[PLAYER_BODY] = {"name": "Player character", "size": "Medium", "ui_group": "player"}
     for id in ids:
@@ -680,11 +839,22 @@ func _characters(current: Dictionary, library: Dictionary) -> void:
             entry.rig = bindings[id].rig
             entry.identity = bindings[id].identity
         elif BIND_ROSTER and delivered != null:entry.rig = delivered.id
+        var stand_in: Array = []
+        if BIND_ROSTER and entry.rig.is_empty() and id != PLAYER_BODY:
+            var base: String = "creature." + id.trim_prefix("creature.configured_srd.") if id.begins_with("creature.configured_srd.") else id
+            if base != id and bindings.has(base):entry.rig = bindings[base].rig
+            elif Roster.STAND_INS.has(base):
+                stand_in = Roster.STAND_INS[base]
+                entry.rig = stand_in[0]
         var rig: Rig = current.get(entry.rig, library.get(entry.rig))
         if not entry.rig.is_empty() and rig == null:fail("Character rig missing: " + id + " -> " + entry.rig)
         if ui_resources.has("portrait:" + id):entry.portrait = id
         elif id.begins_with("creature.configured_srd.") and ui_resources.has("portrait:creature." + id.trim_prefix("creature.configured_srd.")):
             entry.portrait = "creature." + id.trim_prefix("creature.configured_srd.")
+        elif BIND_PORTRAITS and delivered_portraits.has(id):entry.portrait = id
+        elif BIND_PORTRAITS and id.begins_with("creature.spell.") and delivered_portraits.has("srd22.portrait." + id.trim_prefix("creature.spell.")):
+            entry.portrait = "srd22.portrait." + id.trim_prefix("creature.spell.")
+        elif BIND_PORTRAITS and delivered != null and ui_resources.has("portrait:" + portrait_key(delivered)):entry.portrait = portrait_key(delivered)
         entry.kit_mismatch = Roster.MISMATCH.get(id, "") if not Roster.MISMATCH.get(id, "").begins_with("1") else ""
         if Roster.MISMATCH.get(id, "").contains(" px cells"):entry.size_note = Roster.MISMATCH[id];entry.kit_mismatch = ""
         if rig != null:
@@ -707,9 +877,15 @@ func _characters(current: Dictionary, library: Dictionary) -> void:
         elif rig.kind == "layered":
             entry.status = "stand_in"
             entry.notes = "Drawn by the layered humanoid rig from the server's appearance; no creature art of its own."
+        elif not stand_in.is_empty():
+            entry.status = "stand_in"
+            entry.notes = "No art of its own: stands in with %s (rig %s)." % [stand_in[1], rig.id]
         else:
-            entry.status = "ready" if rig.status == "ready" else "partial"
+            entry.status = "ready" if rig.status == "ready" and rig.fallbacks.is_empty() else "partial"
             if rig.status != "ready":entry.notes = rig.notes
+        if BIND_ROSTER and id in Roster.EFFECT_BODIES:
+            entry.status = "internal"
+            entry.notes = "A spell object the server models as a creature: its spell's effect draws it, not a body."
         if not roster.is_empty():entry.notes += ("\n" if entry.notes else "") + "Roster: %s, %s, kit %s." % [roster[2], roster[3], roster[4]]
         save(entry, "characters", id, "characters")
 
@@ -879,6 +1055,15 @@ func _portraits() -> void:
         var image := _image(resource, bank.source)
         image.sizes["preview"] = image.path
         bank.portraits[id] = image
+    if BIND_PORTRAITS:
+        for file in DirAccess.get_files_at(ART + DELIVERED_PORTRAITS):
+            if not file.ends_with(".png"):continue
+            var image := ImageRef.new()
+            image.path = DELIVERED_PORTRAITS + file
+            image.native_size = png_size(image.path)
+            image.source = "ui-delivery-20261018"
+            image.sizes["preview"] = image.path
+            creature.portraits[file.get_basename()] = image
     for id in heroes:
         var target := ""
         for key in player.portraits:
