@@ -3392,7 +3392,9 @@ func _discover() -> void:
                 or timeline.state.get("current_actor_uuid") != boundary.actor_uuid: return
         var value: Dictionary = pending_choices.value
         session.retire_record(available_actions)
-        var body_hint_current:bool=selection_media.key.size()>=7 and selection_media.key[5]=="available_body_actions" \
+        # A selected action's key holds the action itself at index 5.
+        var body_hint_current:bool=selection_media.key.size()>=7 and typeof(selection_media.key[5])==TYPE_STRING \
+            and selection_media.key[5]=="available_body_actions" \
             and selection_media.key[4]==value.choices.discovery_generation
         cancel_selection(false,body_hint_current)
         available_actions = value.choices
