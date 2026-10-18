@@ -211,3 +211,24 @@ Key evidence:
 - `/mnt/c/Users/tommaso/Documents/Dev/NDClientGodot/generated/creature_geometry_intake.json`
 - `…/environment-geometry-production-2026-10-09/family-worklist.csv`
 - `…/environment-normal-quality-2026-10-12/quality.json`
+
+## Follow-up delivery (18 October, 23:16)
+
+`fantasy-unified-catalog/geometry-gap-repairs-2026-10-18/` (copied, without
+float caches and review images, into `assets/art/geometry/repairs-20261018/`):
+
+- **Modular Melee20 Attack4 and AttackRun2:** a finer ray-sampling rescue adds
+  34 and 14 supported pixels (35.0 → 35.6% and 33.0 → 33.3%). The remaining
+  thin-weapon gaps have no depth consistent with all eight silhouettes at the
+  frozen tolerance; loosening the tolerance was rejected.
+- **Three invalid-normal texels** (Goblin09 RunBackwards, Demon Beast 2
+  Attack 1 and 4): normal alpha set to 0 where `normal_valid` is false.
+  The client already gates on `normal_valid`.
+- **Creature geometry intake table:** 4,381 records (1,438 already registered
+  + 2,943 animals, people, zombies), covering the 6 SkeletonArcher05 clips.
+  The characters migration uses it as the full-library cross-check.
+- **Not for adoption:** the DeathKnight Rolling/FrontFlip/MeleeRun
+  reconstructions. Their source art mixes translucent motion, shadow and
+  effect pixels, so a body/shadow mask is needed first.
+- **Unchanged:** the 9 repeated-view sheets and the Decay zombies' death poses
+  stay qualified.
