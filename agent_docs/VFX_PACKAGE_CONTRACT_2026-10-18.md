@@ -17,15 +17,20 @@ recording). The client keeps playback (`presentation/native_*`,
 
 ## 1. Where the package lives and how paths work
 
-- The Factory writes the package to `<Factory>/ndclient_vfx/` and commits it.
-  In the Factory project its files are `res://ndclient_vfx/...`.
-- The client mounts the same folder with a junction of the same name
-  (gitignored, like `assets`). So every `res://ndclient_vfx/...` path is
-  identical in both projects and nothing is rewritten.
-- Every reference inside the package stays inside `res://ndclient_vfx/`, or is
-  a Godot built-in. No `res://factory/`, `res://library/`, `res://authoring/`,
-  `res://integrations/`, `res://.derived/`, and no client path such as
-  `res://presentation/` or `res://assets/`.
+- The client keeps its own copy of every asset; it never reads outside its
+  project folder, so exporting the game needs nothing else.
+- The Factory's export writes the package into the client project, at
+  `NDClientGodot/assets/vfx/` (`res://assets/vfx/...`), as finished files with
+  their final client paths. Nothing in the client copies, rewrites or imports
+  them.
+- Each export replaces `assets/vfx/` as a whole, so old and new files never
+  mix; `index.json` names the package version.
+- Every reference inside the package stays inside `res://assets/vfx/`, or is a
+  Godot built-in. No `res://factory/`, `res://library/`, `res://authoring/`,
+  `res://integrations/`, `res://.derived/`, and no other client path such as
+  `res://presentation/`.
+- Before handing over, the Factory checks its export by loading it in the
+  client project: every index entry and every approach loads without error.
 - Every file loads with `ResourceLoader.load` in a project that has never seen
   it: `.res`/`.scn`/`.tres`/`.tscn` with textures and meshes saved as
   resources, `.gdshader`, `.gd`. No `.png`/`.jpg`/`.glb` that would need the
@@ -36,7 +41,7 @@ recording). The client keeps playback (`presentation/native_*`,
 
 ## 2. The index
 
-`res://ndclient_vfx/index.json`, one entry per clip:
+`res://assets/vfx/index.json`, one entry per clip:
 
 | Field | Meaning |
 |---|---|
@@ -82,7 +87,7 @@ out are reported back and then dropped from later packages.
   (`presentation/baked_effect_bundle.gd`: `rate`, `frames`, `seconds`, the
   scene, `systems` with their state images, `trails`, `moving`, `tracks`,
   `private_materials`, `gaps`). The data class goes in the package
-  (`res://ndclient_vfx/format/recording.gd`) as the shared definition.
+  (`res://assets/vfx/format/recording.gd`) as the shared definition.
 - Particle systems in the recorded scene carry no playback shader. Each one
   says what it is (`static`, `trailing` or `path_trail`), and the client
   attaches its own playback shader when it builds the effect. (Client change:
@@ -121,10 +126,10 @@ returned to the Factory. The package that follows keeps the winners.
 
 ## 6. Order of work
 
-1. Factory: commit the current delivery, then produce the first package (all
-   clips, all approaches it has) in this format.
-2. Client: the junction, the package loader in place of the importer's
-   manifest, recorded playback assigning its own shaders, and the bench.
+1. Factory: commit the current delivery, then export the first package (all
+   clips, all approaches it has) into `assets/vfx/` in this format.
+2. Client: the package loader in place of the importer's manifest, recorded
+   playback assigning its own shaders, and the bench.
 3. Run the bench, decide per clip or family, report back.
 4. Client: delete the importer, the generated manifest, the copied
    `assets/native_effects/` tree and the client baker.
