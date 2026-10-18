@@ -185,6 +185,30 @@ read.
   (Studio). `tests/condition_lifecycle_checks.gd` checks all 29;
   `tests/condition_lifecycle_frames.gd` captures them in the Studio cases.
 
+## 7a. Package `20261018-c3c616e88a6b725f` (18 October, 20:01)
+
+The Factory published this version straight into `assets/vfx/` as its answer to §8, replacing `fa4e64489d2d25a8`. The clip and approach counts are unchanged.
+
+What it changes:
+- The Chill Touch recordings are bright.
+- The 645 recorded `warm` lists name the recordings' own materials.
+- The electric includes resolve inside the package.
+- `node_aliases` gives `impact/Donor` → `impact/Source/Donor`.
+- Thaumaturgy has early review times; its art is unchanged and faint.
+- Every selection is tagged `staging_authority: client`.
+
+Its text was committed in the client by mistake inside `035dd58` (a design-doc commit made with `git commit -a`). The binaries are backed up as `NDClientGodot-backups/vfx-20261018-c3c616e88a6b725f-binary.zip`.
+
+Every client check since then ran on this version:
+- gate;
+- `effect_package_checks` 1,048/0;
+- Studio version 32/0;
+- condition lifecycles.
+
+Not yet used by the client:
+- The new `warm` lists. The client still compiles recorded materials on their first private draw.
+- `node_aliases`. The client resolves old node paths through selection staging.
+
 ## 8. Findings for the Factory (18 October, package `20261018-fa4e64489d2d25a8`)
 
 Found while loading and playing the package in the client. Evidence:
