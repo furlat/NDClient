@@ -76,6 +76,10 @@ static func status(request:Dictionary={})->Dictionary:
     var errors:Array=[];var pending:int=0;var completed:int=0;var background_errors:Array=[]
     for item in required:
         var key:String=_key(item.clip)
+        # A condition lifecycle only warms ahead of need: if it cannot build,
+        # loading goes on (its failure stays in background_errors) instead of
+        # holding the game on the loading notice.
+        if failures.has(key) and item.get("lifecycle",false):continue
         if failures.has(key):errors.append(failures[key])
         if not done.has(key):pending+=1
     for item in plan:
