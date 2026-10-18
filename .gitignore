@@ -5,6 +5,9 @@
 # versioned here; its binary resources (recordings, meshes, textures, warmed
 # materials) are stored outside git, per package version.
 !/assets/vfx/
+# Data measured from the art (sockets, ground lines, trails, palette ranges):
+# small text resources the presentation sources refer to, kept in git.
+!/assets/measured/
 /assets/vfx/**/*.res
 /assets/vfx/**/*.scn
 # Godot writes .uid files beside the package's scripts on import; the package
