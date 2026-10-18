@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="1_rj3jf"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="2_fuejr"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="3_420ri"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="4_civyb"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="5_3gasl"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="6_vc1sy"]
+
+[sub_resource type="Resource" id="Resource_500uu"]
+script = ExtResource("3_420ri")
+path = "art/media/ui/icons/smooth48/spell.aegis-spark.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:spell.aegis-spark"
+
+[resource]
+script = ExtResource("4_civyb")
+id = "spell.aegis_spark"
+icon = SubResource("Resource_500uu")
+delivery = "other"
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray("condition.aegis_spark")
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()

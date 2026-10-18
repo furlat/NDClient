@@ -1,0 +1,325 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_itou4"]
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="2_sorsp"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="3_u4wc4"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="4_j0gxi"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="5_fa75j"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="6_1n4jl"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="7_0i4yc"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="8_amwyi"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="9_ea3g6"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="10_0je1n"]
+
+[sub_resource type="Resource" id="Resource_0siud"]
+script = ExtResource("1_itou4")
+role = "cast"
+clip = "Attack5"
+markers = Dictionary[String, float]({
+"release": 7.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+unported = {
+"recovery": {
+"bodyClip": "Taunt",
+"bodyPlaybackSpeed": 1.0,
+"enabled": false
+}
+}
+
+[sub_resource type="Resource" id="Resource_26nos"]
+script = ExtResource("2_sorsp")
+roles = Dictionary[String, Color]({
+"primary": Color(0.98039216, 0.9019608, 0.6039216, 1),
+"secondary": Color(0.77254903, 0.57254905, 0.24705882, 1),
+"tertiary": Color(1, 0.9607843, 0.8117647, 1)
+})
+ramp = PackedColorArray()
+
+[sub_resource type="Resource" id="Resource_halgv"]
+script = ExtResource("3_u4wc4")
+clip = "spells/guiding_bolt/default/travel"
+role = "flight"
+scale = 0.45
+source_launch = 0.3
+source_contact = 0.75
+source_end = 1.1
+charge_seconds = 0.3
+stop_emission_at_contact = true
+hide_at_contact = PackedStringArray("travel/Donor/FireHead", "travel/Donor/InnerBall")
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray("travel/Donor/Trail1_static")
+show_nodes = PackedStringArray("travel/Donor/Trail2_dynamic")
+origin_path = "travel/Donor/InnerBall"
+opacity_keys = PackedVector2Array()
+staging_from = "client"
+
+[sub_resource type="Resource" id="Resource_chqgi"]
+script = ExtResource("3_u4wc4")
+clip = "spells/guiding_bolt/default/cast"
+role = "cast"
+scale = 0.18
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "client"
+extra = {
+"before_release": 0.5,
+"source_rate": 1.0
+}
+
+[sub_resource type="Resource" id="Resource_ots8i"]
+script = ExtResource("3_u4wc4")
+clip = "spells/guiding_bolt/default/impact"
+role = "impact"
+scale = 0.18
+source_end = 1.0
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "client"
+
+[sub_resource type="Resource" id="Resource_0wpjj"]
+script = ExtResource("5_fa75j")
+kind = "palette_ramp"
+colours = PackedColorArray(0.18039216, 0.10980392, 0.011764706, 1, 0.4392157, 0.2901961, 0.023529412, 1, 0.73333335, 0.5411765, 0.06666667, 1, 0.92941177, 0.7764706, 0.2901961, 1, 0.98039216, 0.9019608, 0.6039216, 1)
+ramp_floor = 0.18
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_qs1yk"]
+script = ExtResource("4_j0gxi")
+steps = Array[ExtResource("5_fa75j")]([SubResource("Resource_0wpjj")])
+
+[sub_resource type="Resource" id="Resource_p00nh"]
+script = ExtResource("5_fa75j")
+kind = "palette_ramp"
+colours = PackedColorArray(0.08627451, 0.050980393, 0.007843138, 1, 0.18039216, 0.10980392, 0.011764706, 1, 0.3019608, 0.19215687, 0.015686275, 1, 0.4392157, 0.2901961, 0.023529412, 1, 0.5882353, 0.40784314, 0.03529412, 1, 0.73333335, 0.5411765, 0.06666667, 1, 0.8509804, 0.6666667, 0.13333334, 1, 0.92941177, 0.7764706, 0.2901961, 1, 0.9607843, 0.85490197, 0.4509804, 1, 0.98039216, 0.9019608, 0.6039216, 1)
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_qxean"]
+script = ExtResource("4_j0gxi")
+steps = Array[ExtResource("5_fa75j")]([SubResource("Resource_p00nh")])
+
+[sub_resource type="Resource" id="Resource_pdr6q"]
+script = ExtResource("5_fa75j")
+kind = "palette_ramp"
+colours = PackedColorArray(1, 0.9607843, 0.8117647, 1, 0.98039216, 0.9019608, 0.6039216, 1, 0.77254903, 0.57254905, 0.24705882, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_t42cc"]
+script = ExtResource("4_j0gxi")
+steps = Array[ExtResource("5_fa75j")]([SubResource("Resource_pdr6q")])
+
+[sub_resource type="Resource" id="Resource_quh32"]
+script = ExtResource("6_1n4jl")
+category = "Magic2"
+sheet = "/spritesheets/Magic2/Attack5.png"
+look = SubResource("Resource_t42cc")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 16443034.0
+},
+"id": "cast-weaponGlow",
+"palette": {},
+"role": "hand_magic",
+"slot": "weaponGlow"
+}
+
+[sub_resource type="Resource" id="Resource_kkje0"]
+script = ExtResource("5_fa75j")
+kind = "palette_ramp"
+colours = PackedColorArray(1, 0.9607843, 0.8117647, 1, 0.98039216, 0.9019608, 0.6039216, 1, 0.77254903, 0.57254905, 0.24705882, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_uloej"]
+script = ExtResource("4_j0gxi")
+steps = Array[ExtResource("5_fa75j")]([SubResource("Resource_kkje0")])
+
+[sub_resource type="Resource" id="Resource_1obe3"]
+script = ExtResource("6_1n4jl")
+place = "effect"
+category = "Effect1"
+sheet = "/spritesheets/Effect1/Attack5.png"
+look = SubResource("Resource_uloej")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 16443034.0
+},
+"id": "cast-effect",
+"palette": {},
+"role": "effect",
+"slot": "effect"
+}
+
+[sub_resource type="Resource" id="Resource_syr62"]
+script = ExtResource("7_0i4yc")
+path = "art/media/ui/icons/smooth48/spell.guiding-bolt.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:spell.guiding-bolt"
+
+[resource]
+script = ExtResource("8_amwyi")
+id = "spell.guiding_bolt"
+icon = SubResource("Resource_syr62")
+delivery = "projectile"
+body = SubResource("Resource_0siud")
+hand_layers = Array[ExtResource("6_1n4jl")]([SubResource("Resource_quh32"), SubResource("Resource_1obe3")])
+sockets = "measured/abilities/spells/spell.guiding_bolt.sockets.json"
+effects = Array[ExtResource("3_u4wc4")]([SubResource("Resource_halgv"), SubResource("Resource_chqgi"), SubResource("Resource_ots8i")])
+native_staging = true
+effect_scope = "single"
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_colour = "edc64a"
+flight_tiles_per_second = 2.8125
+minimum_travel_seconds = 0.15
+stagger_seconds = 0.0
+impact_delay = 0.0
+flash_frame = 0.0
+flash_duration = 0.15
+flash_look = SubResource("Resource_qxean")
+number_frame = 7.0
+number_duration = 1.0
+body_material = {
+"clip": "spells/guiding_bolt/default/travel",
+"clock_parameter": "source_clock",
+"node": "travel/Donor/FireHead",
+"parameter_overrides": {},
+"status": "available",
+"surface": 0.0
+}
+colours = SubResource("Resource_26nos")
+finish = SubResource("Resource_qs1yk")
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray("condition.spell.guiding_bolt.marked")
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "client"
+status = "ready"
+bounds = "measured/abilities/spells/spell.guiding_bolt.bounds.json"
+staging_unported = {
+"palette": {
+"palette": ["160d02", "2e1c03", "4d3104", "704a06", "966809", "bb8a11", "d9aa22", "edc64a", "f5da73", "fae69a"],
+"parameters": {
+"alpha_cutoff": 0.22,
+"color_boost": 1.08,
+"energy_ceiling": 0.74,
+"energy_floor": 0.32,
+"palette_energy_floor": 0.0,
+"palette_luma_floor": 0.0,
+"ramp_ceiling": 1.0,
+"ramp_uses_luma": true,
+"rgb_block_pixels": 8.0
+},
+"shader": "res://assets/native_effects/sandbox/projectiles/factory/shaders/energy_palette_v1.gdshader"
+},
+"source": "sandbox/staging.json:/spells/guiding_bolt"
+}
+unported = {
+"condition": {
+"anchor": "effect",
+"delayMs": 0.0,
+"feedbackEnabled": true
+},
+"damage": {
+"death": {
+"enabled": true,
+"frame": 12.0
+},
+"floatingNumber": {
+"color": 15610692.0,
+"enabled": true,
+"label": "Radiant"
+},
+"hitFlash": {
+"color": 15610692.0,
+"enabled": true,
+"palette": {}
+}
+},
+"definitionRef": {
+"content_id": "spell.guiding_bolt",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"projectile": {
+"depthMode": "world",
+"fps": 24.0,
+"geometry": {
+"enabled": false,
+"primitive": "bolt",
+"renderer": "geometry_projectile"
+},
+"impact": {
+"assetId": "recovered.guiding_bolt.dense.v1",
+"assetPhase": "impact",
+"enabled": true,
+"fps": 32.0
+},
+"orientation": {
+"directionSource": "target_vector",
+"fineRotation": "isometricHybrid",
+"rotationOffsetDeg": 0.0,
+"rowSource": "targetVector"
+},
+"prepare": {
+"assetId": "recovered.guiding_bolt.dense.v1",
+"assetPhase": "cast",
+"enabled": false,
+"fps": 24.0,
+"startFrame": 4.0
+},
+"scale": 0.5,
+"sourceAnchor": {
+"axisPx": 24.0,
+"basis": "rigRoot",
+"forwardPx": 0.0,
+"liftY": 0.0,
+"sidePx": 0.0
+},
+"sprite": {
+"alpha": 1.0,
+"assetId": "recovered.guiding_bolt.dense.v1",
+"blendMode": "add",
+"geometryComposition": "replace_geometry",
+"mediaFailurePolicy": "fail_transaction",
+"offsetX": 0.0,
+"offsetY": 0.0,
+"renderer": "sprite_projectile",
+"tint": 16777215.0
+},
+"targetAnchor": {
+"basis": "body",
+"forwardPx": 0.0,
+"liftY": 0.0
+},
+"trajectory": {
+"sameTargetSpread": true,
+"type": "straight"
+},
+"travel": {
+"assetId": "recovered.guiding_bolt.dense.v1",
+"assetPhase": "travel",
+"enabled": true,
+"fps": 24.0
+}
+}
+}

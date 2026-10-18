@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_qvi8t"]
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="2_b4v7f"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_khb3s"]
+
+[sub_resource type="Resource" id="Resource_ecjnb"]
+script = ExtResource("1_qvi8t")
+path = "art/media/ui/icons/smooth48/ui.filter-attacks.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:action.attack"
+
+[resource]
+script = ExtResource("2_b4v7f")
+id = "action.attack"
+kind = "action"
+family = "core"
+icon = SubResource("Resource_ecjnb")
+effect_sources = PackedStringArray()
+status = "ready"
+notes = "Presented by the attacks section (attacks/action.attack)."

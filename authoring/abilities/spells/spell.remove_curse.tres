@@ -1,0 +1,194 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_aaix3"]
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="2_svepm"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="3_emwsr"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="4_bhdep"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="5_uy6la"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="6_pc1u8"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="7_cpnoh"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="8_ftcki"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="9_xc253"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="10_qqn0c"]
+
+[sub_resource type="Resource" id="Resource_68886"]
+script = ExtResource("1_aaix3")
+role = "cast"
+clip = "Attack5"
+markers = Dictionary[String, float]({
+"release": 7.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+unported = {
+"recovery": {
+"bodyClip": "Taunt",
+"bodyPlaybackSpeed": 1.0,
+"enabled": false
+}
+}
+
+[sub_resource type="Resource" id="Resource_8bkl6"]
+script = ExtResource("2_svepm")
+roles = Dictionary[String, Color]({
+"primary": Color(0.6, 0.6156863, 0.80784315, 1),
+"secondary": Color(0.85882354, 0.8745098, 0.9372549, 1),
+"tertiary": Color(0.1882353, 0.20392157, 0.31764707, 1)
+})
+ramp = PackedColorArray()
+
+[sub_resource type="Resource" id="Resource_4hi8c"]
+script = ExtResource("3_emwsr")
+clip = "review/remove_curse/back/lifecycle"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+scale = 0.471404520791032
+orientation = "world"
+source_end = 3.0
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.25
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0
+}
+
+[sub_resource type="Resource" id="Resource_c8i1m"]
+script = ExtResource("6_pc1u8")
+kind = "palette_ramp"
+colours = PackedColorArray(0.1882353, 0.20392157, 0.31764707, 1, 0.6, 0.6156863, 0.80784315, 1, 0.85882354, 0.8745098, 0.9372549, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_5s0pf"]
+script = ExtResource("5_uy6la")
+steps = Array[ExtResource("6_pc1u8")]([SubResource("Resource_c8i1m")])
+
+[sub_resource type="Resource" id="Resource_4re3a"]
+script = ExtResource("4_bhdep")
+category = "Magic2"
+sheet = "/spritesheets/Magic2/Attack5.png"
+look = SubResource("Resource_5s0pf")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 10067406.0
+},
+"id": "cast-weaponGlow",
+"palette": {},
+"role": "hand_magic",
+"slot": "weaponGlow"
+}
+
+[sub_resource type="Resource" id="Resource_mc0jc"]
+script = ExtResource("6_pc1u8")
+kind = "palette_ramp"
+colours = PackedColorArray(0.1882353, 0.20392157, 0.31764707, 1, 0.6, 0.6156863, 0.80784315, 1, 0.85882354, 0.8745098, 0.9372549, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_t6j0l"]
+script = ExtResource("5_uy6la")
+steps = Array[ExtResource("6_pc1u8")]([SubResource("Resource_mc0jc")])
+
+[sub_resource type="Resource" id="Resource_sd2es"]
+script = ExtResource("4_bhdep")
+place = "aura"
+category = "Effect5"
+sheet = "/spritesheets/Effect5/Attack5.png"
+look = SubResource("Resource_t6j0l")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 10067406.0
+},
+"id": "cast-aura",
+"palette": {},
+"role": "aura",
+"slot": "aura"
+}
+
+[sub_resource type="Resource" id="Resource_bg11t"]
+script = ExtResource("7_cpnoh")
+path = "art/media/ui/icons/smooth48/spell.remove-curse.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:spell.remove-curse"
+
+[resource]
+script = ExtResource("8_ftcki")
+id = "spell.remove_curse"
+icon = SubResource("Resource_bg11t")
+delivery = "touch"
+body = SubResource("Resource_68886")
+hand_layers = Array[ExtResource("4_bhdep")]([SubResource("Resource_4re3a"), SubResource("Resource_sd2es")])
+sockets = "measured/abilities/spells/spell.remove_curse.sockets.json"
+effects = Array[ExtResource("3_emwsr")]([SubResource("Resource_4hi8c")])
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+colours = SubResource("Resource_8bkl6")
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray()
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+staging_unported = {
+"selection": "remove_curse__back"
+}
+unported = {
+"condition": {
+"anchor": "effect",
+"delayMs": 0.0,
+"feedbackEnabled": true
+},
+"contact": {
+"cellsByFacing": null
+},
+"definitionRef": {
+"content_id": "spell.remove_curse",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"media": [{
+"assetId": "support.remove_curse_application.back",
+"attachment": "target_ground",
+"depth": "behind_body",
+"effectGroup": {
+"id": "effect",
+"label": "Remove Curse"
+},
+"fps": 32.0,
+"id": "back",
+"requireRemovedConditionTag": "curse",
+"scale": 0.5,
+"scaleWithActor": true,
+"viewFacing": "E"
+}, {
+"assetId": "support.remove_curse_application.front",
+"attachment": "target_ground",
+"depth": "front_body",
+"effectGroup": {
+"id": "effect",
+"label": "Remove Curse"
+},
+"fps": 32.0,
+"id": "front",
+"requireRemovedConditionTag": "curse",
+"scale": 0.5,
+"scaleWithActor": true,
+"viewFacing": "E"
+}]
+}

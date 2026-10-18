@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_2nsxn"]
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="2_wv4h6"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_c2xln"]
+
+[sub_resource type="Resource" id="Resource_7tjw3"]
+script = ExtResource("1_2nsxn")
+path = "art/ui-delivery-20261018/runtime/smooth48/action.spell.spiritual_weapon.strike.png"
+native_size = Vector2i(48, 48)
+source = "ui-delivery-20261018"
+
+[resource]
+script = ExtResource("2_wv4h6")
+id = "action.spell.spiritual_weapon.strike"
+kind = "action"
+family = "spell"
+icon = SubResource("Resource_7tjw3")
+effect_sources = PackedStringArray()

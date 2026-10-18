@@ -1,0 +1,201 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_c6255"]
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="2_17m50"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="3_vh4lk"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="4_i76ug"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="5_brdby"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="6_nvl2h"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="7_dyh0d"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="8_2wo52"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="9_uhl1f"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="10_mjy6s"]
+
+[sub_resource type="Resource" id="Resource_ur5wv"]
+script = ExtResource("1_c6255")
+role = "cast"
+clip = "Special1"
+markers = Dictionary[String, float]({
+"release": 11.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+unported = {
+"recovery": {
+"bodyClip": "Taunt",
+"bodyPlaybackSpeed": 1.0,
+"enabled": false
+}
+}
+
+[sub_resource type="Resource" id="Resource_0sa11"]
+script = ExtResource("2_17m50")
+roles = Dictionary[String, Color]({
+"primary": Color(0.98039216, 0.9019608, 0.6039216, 1),
+"secondary": Color(0.77254903, 0.57254905, 0.24705882, 1),
+"tertiary": Color(1, 0.9607843, 0.8117647, 1)
+})
+ramp = PackedColorArray()
+
+[sub_resource type="Resource" id="Resource_aggba"]
+script = ExtResource("3_vh4lk")
+clip = "native/guardian/sentinel"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 3.0
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.5
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"fade_bindings": [{
+"closed": 0.0,
+"node": "assembly/effect",
+"open": 1.0,
+"property": "visor_opacity"
+}],
+"live_endpoints": [{
+"point": [0.0, 0.0, 0.0]
+}, {
+"actor": "target",
+"socket": "body_center"
+}],
+"opacity_keys": [[0.0, 0.0], [0.4, 1.0]],
+"review_stationary_ground": [0.0, 0.0, 0.0]
+}
+
+[sub_resource type="Resource" id="Resource_idufa"]
+script = ExtResource("3_vh4lk")
+clip = "native/guardian/contact"
+role = "attached"
+at = "release"
+delay = 2.41666666666667
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 1.5
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "legs", "chest", "head", "helmet"]
+},
+"follow_attachment": true
+}
+
+[sub_resource type="Resource" id="Resource_5wfxt"]
+script = ExtResource("6_nvl2h")
+kind = "palette_ramp"
+colours = PackedColorArray(1, 0.9607843, 0.8117647, 1, 0.98039216, 0.9019608, 0.6039216, 1, 0.77254903, 0.57254905, 0.24705882, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_e25q2"]
+script = ExtResource("5_brdby")
+steps = Array[ExtResource("6_nvl2h")]([SubResource("Resource_5wfxt")])
+
+[sub_resource type="Resource" id="Resource_8c53m"]
+script = ExtResource("4_i76ug")
+category = "Magic2"
+sheet = "/spritesheets/Magic2/Special1.png"
+look = SubResource("Resource_e25q2")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 16443034.0
+},
+"id": "cast-weaponGlow",
+"palette": {},
+"role": "hand_magic",
+"slot": "weaponGlow"
+}
+
+[sub_resource type="Resource" id="Resource_q6ywc"]
+script = ExtResource("6_nvl2h")
+kind = "palette_ramp"
+colours = PackedColorArray(1, 0.9607843, 0.8117647, 1, 0.98039216, 0.9019608, 0.6039216, 1, 0.77254903, 0.57254905, 0.24705882, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_1ovrn"]
+script = ExtResource("5_brdby")
+steps = Array[ExtResource("6_nvl2h")]([SubResource("Resource_q6ywc")])
+
+[sub_resource type="Resource" id="Resource_t48uo"]
+script = ExtResource("4_i76ug")
+place = "aura"
+category = "Effect5"
+sheet = "/spritesheets/Effect5/Special1.png"
+look = SubResource("Resource_1ovrn")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 16443034.0
+},
+"id": "cast-aura",
+"palette": {},
+"role": "aura",
+"slot": "aura"
+}
+
+[sub_resource type="Resource" id="Resource_ulsyn"]
+script = ExtResource("7_dyh0d")
+path = "art/media/ui/icons/smooth48/spell.guardian-of-faith.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:spell.guardian-of-faith"
+
+[resource]
+script = ExtResource("8_2wo52")
+id = "spell.guardian_of_faith"
+icon = SubResource("Resource_ulsyn")
+delivery = "zone"
+body = SubResource("Resource_ur5wv")
+hand_layers = Array[ExtResource("4_i76ug")]([SubResource("Resource_8c53m"), SubResource("Resource_t48uo")])
+sockets = "measured/abilities/spells/spell.guardian_of_faith.sockets.json"
+effects = Array[ExtResource("3_vh4lk")]([SubResource("Resource_aggba"), SubResource("Resource_idufa")])
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+colours = SubResource("Resource_0sa11")
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray()
+applies_surfaces = PackedStringArray("spatial_effect.spell.guardian_of_faith")
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+staging_unported = {
+"selection": "guardian_of_faith_native"
+}
+unported = {
+"condition": {
+"anchor": "effect",
+"delayMs": 0.0,
+"feedbackEnabled": false
+},
+"contact": {
+"cellsByFacing": null
+},
+"definitionRef": {
+"content_id": "spell.guardian_of_faith",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+}
+}

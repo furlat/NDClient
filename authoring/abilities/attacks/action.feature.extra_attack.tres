@@ -1,0 +1,3117 @@
+[gd_resource type="Resource" script_class="PresentationAttack" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_3w48s"]
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="2_kjw7y"]
+[ext_resource type="Script" path="res://presentation/source/abilities/attack.gd" id="3_p6ob3"]
+[ext_resource type="Script" path="res://presentation/source/abilities/attack_variant.gd" id="4_83yuh"]
+
+[sub_resource type="Resource" id="Resource_542g3"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack1"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 8.0,
+"recover": 10.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_a5eyd"]
+script = ExtResource("2_kjw7y")
+text = "Critical!!"
+colour = Color(1, 0.8, 0, 1)
+
+[sub_resource type="Resource" id="Resource_dt5oc"]
+script = ExtResource("2_kjw7y")
+text = "Critical miss"
+colour = Color(0.53333336, 0.53333336, 0.53333336, 1)
+
+[sub_resource type="Resource" id="Resource_l4odj"]
+script = ExtResource("2_kjw7y")
+text = "Miss"
+colour = Color(0.53333336, 0.53333336, 0.53333336, 1)
+
+[sub_resource type="Resource" id="Resource_ed8lw"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack2"
+playback_speed = 1.05
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 8.0,
+"prepare": 3.0,
+"recover": 10.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_7swm6"]
+script = ExtResource("4_83yuh")
+id = "unarmed"
+precedence = 700.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"sourceItemRefs": null,
+"sourceKinds": ["unarmed"],
+"weaponSlots": ["MELEE_MAIN"]
+}
+body = SubResource("Resource_ed8lw")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_jk0ty"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack4"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 8.0,
+"prepare": 3.0,
+"recover": 10.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_qlql1"]
+script = ExtResource("4_83yuh")
+id = "dagger-critical-overhead"
+precedence = 600.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": ["critical"],
+"primaryDamageTypes": ["Piercing"],
+"sourceItemIds": ["weapon.dagger"],
+"sourceItemRefs": null,
+"weaponSlots": ["MELEE_MAIN"]
+}
+body = SubResource("Resource_jk0ty")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_raa6k"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack2"
+playback_speed = 1.05
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 8.0,
+"prepare": 3.0,
+"recover": 10.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_rjm7b"]
+script = ExtResource("4_83yuh")
+id = "melee-spiked-swing"
+precedence = 550.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": ["Piercing"],
+"sourceItemIds": ["weapon.morningstar", "weapon.circus.soul_draining_morningstar"],
+"sourceItemRefs": null,
+"weaponSlots": ["MELEE_MAIN"]
+}
+body = SubResource("Resource_raa6k")
+slash = {
+"onCrit": {
+"slash": {
+"category": "Slash2",
+"tint": "$element.primary"
+}
+},
+"onHit": {
+"slash": {
+"category": "Slash1",
+"tint": "$element.primary"
+}
+},
+"onMiss": {
+"slash": {
+"category": "Slash1",
+"tint": "$element.primary"
+}
+}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_s8jnm"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack5"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 8.0,
+"recover": 10.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_45mls"]
+script = ExtResource("4_83yuh")
+id = "melee-offhand"
+precedence = 100.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"sourceItemRefs": null,
+"weaponSlots": ["MELEE_OFF"]
+}
+body = SubResource("Resource_s8jnm")
+slash = {
+"onCrit": {
+"slash": {
+"category": "Slash2",
+"tint": "$element.primary"
+}
+},
+"onHit": {
+"slash": {
+"category": "Slash1",
+"tint": "$element.primary"
+}
+},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_jghbp"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack4"
+playback_speed = 0.95
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 8.0,
+"prepare": 3.0,
+"recover": 10.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_lrixu"]
+script = ExtResource("4_83yuh")
+id = "melee-heavy-cleave"
+precedence = 500.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": ["Slashing"],
+"sourceItemIds": ["weapon.battleaxe", "weapon.greataxe", "weapon.greatsword", "weapon.double_bladed_sword"],
+"sourceItemRefs": null,
+"weaponSlots": ["MELEE_MAIN"]
+}
+body = SubResource("Resource_jghbp")
+slash = {
+"onCrit": {
+"slash": {
+"category": "Slash2",
+"tint": "$element.primary"
+}
+},
+"onHit": {
+"slash": {
+"category": "Slash1",
+"tint": "$element.primary"
+}
+},
+"onMiss": {
+"slash": {
+"category": "Slash1",
+"tint": "$element.primary"
+}
+}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_2qd28"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack2"
+playback_speed = 1.05
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 8.0,
+"prepare": 3.0,
+"recover": 10.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_s26cx"]
+script = ExtResource("4_83yuh")
+id = "melee-blunt-swing"
+precedence = 500.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": ["Bludgeoning"],
+"sourceItemRefs": null,
+"weaponSlots": ["MELEE_MAIN"]
+}
+body = SubResource("Resource_2qd28")
+slash = {
+"onCrit": {
+"slash": {
+"category": "Slash2",
+"tint": "$element.primary"
+}
+},
+"onHit": {
+"slash": {
+"category": "Slash1",
+"tint": "$element.primary"
+}
+},
+"onMiss": {
+"slash": {
+"category": "Slash1",
+"tint": "$element.primary"
+}
+}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_h2sph"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack6"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 7.0,
+"recover": 10.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_wwqh3"]
+script = ExtResource("4_83yuh")
+id = "melee-piercing"
+precedence = 400.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": ["Piercing"],
+"sourceItemRefs": null,
+"weaponSlots": ["MELEE_MAIN"]
+}
+body = SubResource("Resource_h2sph")
+slash = {
+"onCrit": {
+"slash": {
+"category": "Slash2",
+"tint": "$element.primary"
+}
+},
+"onHit": {
+"slash": {
+"category": "Slash1",
+"tint": "$element.primary"
+}
+},
+"onMiss": {
+"slash": {
+"category": "Slash1",
+"tint": "$element.primary"
+}
+}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_kijfw"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack1"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 8.0,
+"recover": 10.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_oni5n"]
+script = ExtResource("4_83yuh")
+id = "melee-main"
+precedence = 100.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"sourceItemRefs": null,
+"weaponSlots": ["MELEE_MAIN"]
+}
+body = SubResource("Resource_kijfw")
+slash = {
+"onCrit": {
+"slash": {
+"category": "Slash2",
+"tint": "$element.primary"
+}
+},
+"onHit": {
+"slash": {
+"category": "Slash1",
+"tint": "$element.primary"
+}
+},
+"onMiss": {
+"slash": {
+"category": "Slash1",
+"tint": "$element.primary"
+}
+}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_6eopv"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack3"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"recover": 10.0,
+"release": 10.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_0tvui"]
+script = ExtResource("4_83yuh")
+id = "ranged"
+precedence = 100.0
+match = {
+"delivery": "projectile",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"sourceItemRefs": null,
+"weaponSlots": null
+}
+body = SubResource("Resource_6eopv")
+slash = {
+"onHit": {
+"slash": {
+"category": "Slash1",
+"tint": "white"
+}
+},
+"onMiss": {
+"slash": {
+"category": "Slash1",
+"tint": "white"
+}
+}
+}
+flight_tiles_per_second = 7.8125
+unported = {
+"actor": {
+"media": []
+},
+"projectile": {
+"debugAnchor": false,
+"depthMode": "world",
+"geometry": {
+"enabled": true,
+"primitive": "bolt",
+"renderer": "geometry_projectile"
+},
+"minimumTravelDurationMs": 150.0,
+"originX": 0.0,
+"originY": -16.0,
+"sourceForwardPx": 0.0,
+"targetForwardPx": 0.0,
+"targetY": -16.0,
+"trajectory": {
+"sameTargetSpread": false,
+"type": "straight"
+}
+}
+}
+
+[sub_resource type="Resource" id="Resource_arhjg"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack3"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"recover": 10.0,
+"release": 10.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_gtprl"]
+script = ExtResource("4_83yuh")
+id = "skeleton-archer-ranged"
+precedence = 900.0
+match = {
+"delivery": "projectile",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.skeletonarcher05"],
+"sourceItemRefs": null,
+"weaponSlots": null
+}
+body = SubResource("Resource_arhjg")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+flight_tiles_per_second = 7.8125
+unported = {
+"actor": {
+"media": []
+},
+"projectile": {
+"debugAnchor": false,
+"depthMode": "world",
+"geometry": {
+"enabled": true,
+"primitive": "bolt",
+"renderer": "geometry_projectile"
+},
+"minimumTravelDurationMs": 150.0,
+"originX": 0.0,
+"originY": -16.0,
+"sourceForwardPx": 0.0,
+"targetForwardPx": 0.0,
+"targetY": -16.0,
+"trajectory": {
+"sameTargetSpread": false,
+"type": "straight"
+}
+}
+}
+
+[sub_resource type="Resource" id="Resource_x08a3"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack2"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 5.0,
+"recover": 12.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_1pp5f"]
+script = ExtResource("4_83yuh")
+id = "greywolf-wolf_bite"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.greywolf"],
+"sourceItemIds": ["weapon.creature.wolf_bite"],
+"sourceItemRefs": null,
+"sourceKinds": ["equipped"],
+"weaponSlots": null
+}
+body = SubResource("Resource_x08a3")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_oykdw"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack2"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 5.0,
+"recover": 12.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_m63n6"]
+script = ExtResource("4_83yuh")
+id = "greywolf-unarmed"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.greywolf"],
+"sourceItemRefs": null,
+"sourceKinds": ["unarmed"],
+"weaponSlots": null
+}
+body = SubResource("Resource_oykdw")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_w13l6"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack2"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 7.0,
+"recover": 11.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_g0321"]
+script = ExtResource("4_83yuh")
+id = "shepherddog-hound_bite"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.shepherddog"],
+"sourceItemIds": ["weapon.creature.hound_bite"],
+"sourceItemRefs": null,
+"sourceKinds": ["equipped"],
+"weaponSlots": null
+}
+body = SubResource("Resource_w13l6")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_mnt7i"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack2"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 7.0,
+"recover": 11.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_6510v"]
+script = ExtResource("4_83yuh")
+id = "fixed-unarmed-attack2-7-11"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.shepherddog", "smallscale.jaguar", "smallscale.lion", "smallscale.tiger", "smallscale.mammoth"],
+"sourceItemRefs": null,
+"sourceKinds": ["unarmed"],
+"weaponSlots": null
+}
+body = SubResource("Resource_mnt7i")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_t5ed8"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack2"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 6.0,
+"recover": 12.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_rayag"]
+script = ExtResource("4_83yuh")
+id = "boar-boar_tusk"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.boar"],
+"sourceItemIds": ["weapon.creature.boar_tusk"],
+"sourceItemRefs": null,
+"sourceKinds": ["equipped"],
+"weaponSlots": null
+}
+body = SubResource("Resource_t5ed8")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_g4p2c"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack2"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 6.0,
+"recover": 12.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_xjuxv"]
+script = ExtResource("4_83yuh")
+id = "fixed-unarmed-attack2-6-12"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.boar", "smallscale.brownbear", "smallscale.polarbear", "smallscale.rhino"],
+"sourceItemRefs": null,
+"sourceKinds": ["unarmed"],
+"weaponSlots": null
+}
+body = SubResource("Resource_g4p2c")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_6my2y"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack1"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 6.0,
+"recover": 12.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_ys1pf"]
+script = ExtResource("4_83yuh")
+id = "stag-stag_ram"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.stag"],
+"sourceItemIds": ["weapon.creature.stag_ram"],
+"sourceItemRefs": null,
+"sourceKinds": ["equipped"],
+"weaponSlots": null
+}
+body = SubResource("Resource_6my2y")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_amghd"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack1"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 6.0,
+"recover": 12.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_1ji8x"]
+script = ExtResource("4_83yuh")
+id = "fixed-unarmed-attack1-6-12"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.stag", "smallscale.elephant"],
+"sourceItemRefs": null,
+"sourceKinds": ["unarmed"],
+"weaponSlots": null
+}
+body = SubResource("Resource_amghd")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_4op18"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack2"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 7.0,
+"recover": 11.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_r52da"]
+script = ExtResource("4_83yuh")
+id = "jaguar-jaguar_claws"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.jaguar"],
+"sourceItemIds": ["weapon.creature.jaguar_claws"],
+"sourceItemRefs": null,
+"sourceKinds": ["equipped"],
+"weaponSlots": null
+}
+body = SubResource("Resource_4op18")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_o5v4c"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack3"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 8.0,
+"recover": 12.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_xsg32"]
+script = ExtResource("4_83yuh")
+id = "jaguar-jaguar_bite"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.jaguar"],
+"sourceItemIds": ["weapon.creature.jaguar_bite"],
+"sourceItemRefs": null,
+"sourceKinds": ["equipped"],
+"weaponSlots": null
+}
+body = SubResource("Resource_o5v4c")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_xu10d"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack3"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 6.0,
+"recover": 12.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_cng4u"]
+script = ExtResource("4_83yuh")
+id = "bison-bison_ram"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.bison"],
+"sourceItemIds": ["weapon.creature.bison_ram"],
+"sourceItemRefs": null,
+"sourceKinds": ["equipped"],
+"weaponSlots": null
+}
+body = SubResource("Resource_xu10d")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_qqrvv"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack3"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 6.0,
+"recover": 12.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_47gs7"]
+script = ExtResource("4_83yuh")
+id = "bison-unarmed"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.bison"],
+"sourceItemRefs": null,
+"sourceKinds": ["unarmed"],
+"weaponSlots": null
+}
+body = SubResource("Resource_qqrvv")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_tvrn5"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack1"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 6.0,
+"recover": 11.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_0hk5x"]
+script = ExtResource("4_83yuh")
+id = "ostrich-ostrich_beak"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.ostrich"],
+"sourceItemIds": ["weapon.creature.ostrich_beak"],
+"sourceItemRefs": null,
+"sourceKinds": ["equipped"],
+"weaponSlots": null
+}
+body = SubResource("Resource_tvrn5")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_xdh26"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack1"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 6.0,
+"recover": 11.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_k6wuq"]
+script = ExtResource("4_83yuh")
+id = "fixed-unarmed-attack1-6-11"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.ostrich", "smallscale.blueraptor"],
+"sourceItemRefs": null,
+"sourceKinds": ["unarmed"],
+"weaponSlots": null
+}
+body = SubResource("Resource_xdh26")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_7vl7c"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack2"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 6.0,
+"recover": 12.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_4ylmd"]
+script = ExtResource("4_83yuh")
+id = "brownbear-brown_bear_claws"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.brownbear"],
+"sourceItemIds": ["weapon.creature.brown_bear_claws"],
+"sourceItemRefs": null,
+"sourceKinds": ["equipped"],
+"weaponSlots": null
+}
+body = SubResource("Resource_7vl7c")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_m2xoe"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack3"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 7.0,
+"recover": 11.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_u50xl"]
+script = ExtResource("4_83yuh")
+id = "brownbear-brown_bear_bite"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.brownbear"],
+"sourceItemIds": ["weapon.creature.brown_bear_bite"],
+"sourceItemRefs": null,
+"sourceKinds": ["equipped"],
+"weaponSlots": null
+}
+body = SubResource("Resource_m2xoe")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_xxkny"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack2"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 7.0,
+"recover": 11.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_uqtea"]
+script = ExtResource("4_83yuh")
+id = "lion-lion_claws"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.lion"],
+"sourceItemIds": ["weapon.creature.lion_claws"],
+"sourceItemRefs": null,
+"sourceKinds": ["equipped"],
+"weaponSlots": null
+}
+body = SubResource("Resource_xxkny")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_6tta0"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack3"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 8.0,
+"recover": 12.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_pt40s"]
+script = ExtResource("4_83yuh")
+id = "lion-lion_bite"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.lion"],
+"sourceItemIds": ["weapon.creature.lion_bite"],
+"sourceItemRefs": null,
+"sourceKinds": ["equipped"],
+"weaponSlots": null
+}
+body = SubResource("Resource_6tta0")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_ghgmx"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack2"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 7.0,
+"recover": 11.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_jhwyf"]
+script = ExtResource("4_83yuh")
+id = "tiger-tiger_claws"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.tiger"],
+"sourceItemIds": ["weapon.creature.tiger_claws"],
+"sourceItemRefs": null,
+"sourceKinds": ["equipped"],
+"weaponSlots": null
+}
+body = SubResource("Resource_ghgmx")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_3ca52"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack3"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 8.0,
+"recover": 12.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_orch7"]
+script = ExtResource("4_83yuh")
+id = "tiger-tiger_bite"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.tiger"],
+"sourceItemIds": ["weapon.creature.tiger_bite"],
+"sourceItemRefs": null,
+"sourceKinds": ["equipped"],
+"weaponSlots": null
+}
+body = SubResource("Resource_3ca52")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_7y3e2"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack2"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 6.0,
+"recover": 12.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_lke26"]
+script = ExtResource("4_83yuh")
+id = "polarbear-polar_bear_claws"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.polarbear"],
+"sourceItemIds": ["weapon.creature.polar_bear_claws"],
+"sourceItemRefs": null,
+"sourceKinds": ["equipped"],
+"weaponSlots": null
+}
+body = SubResource("Resource_7y3e2")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_gqv55"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack3"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 7.0,
+"recover": 11.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_8e40n"]
+script = ExtResource("4_83yuh")
+id = "polarbear-polar_bear_bite"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.polarbear"],
+"sourceItemIds": ["weapon.creature.polar_bear_bite"],
+"sourceItemRefs": null,
+"sourceKinds": ["equipped"],
+"weaponSlots": null
+}
+body = SubResource("Resource_gqv55")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_67n0s"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack2"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 6.0,
+"recover": 12.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_8rqna"]
+script = ExtResource("4_83yuh")
+id = "rhino-rhinoceros_gore"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.rhino"],
+"sourceItemIds": ["weapon.creature.rhinoceros_gore"],
+"sourceItemRefs": null,
+"sourceKinds": ["equipped"],
+"weaponSlots": null
+}
+body = SubResource("Resource_67n0s")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_rbws3"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack1"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 6.0,
+"recover": 11.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_pqff3"]
+script = ExtResource("4_83yuh")
+id = "blueraptor-blue_raptor_claws"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.blueraptor"],
+"sourceItemIds": ["weapon.creature.blue_raptor_claws"],
+"sourceItemRefs": null,
+"sourceKinds": ["equipped"],
+"weaponSlots": null
+}
+body = SubResource("Resource_rbws3")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_138ib"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack2"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 7.0,
+"recover": 11.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_qu8ma"]
+script = ExtResource("4_83yuh")
+id = "blueraptor-blue_raptor_bite"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.blueraptor"],
+"sourceItemIds": ["weapon.creature.blue_raptor_bite"],
+"sourceItemRefs": null,
+"sourceKinds": ["equipped"],
+"weaponSlots": null
+}
+body = SubResource("Resource_138ib")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_6138u"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack3"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 8.0,
+"recover": 12.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_b34ea"]
+script = ExtResource("4_83yuh")
+id = "stegosaurus-stegosaurus_tail"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.stegosaurus"],
+"sourceItemIds": ["weapon.creature.stegosaurus_tail"],
+"sourceItemRefs": null,
+"sourceKinds": ["equipped"],
+"weaponSlots": null
+}
+body = SubResource("Resource_6138u")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_cwrqp"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack3"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 8.0,
+"recover": 12.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_6fm1d"]
+script = ExtResource("4_83yuh")
+id = "stegosaurus-unarmed"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.stegosaurus"],
+"sourceItemRefs": null,
+"sourceKinds": ["unarmed"],
+"weaponSlots": null
+}
+body = SubResource("Resource_cwrqp")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_oa6fs"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack1"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 6.0,
+"recover": 12.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_4vmn7"]
+script = ExtResource("4_83yuh")
+id = "elephant-elephant_trunk"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.elephant"],
+"sourceItemIds": ["weapon.creature.elephant_trunk"],
+"sourceItemRefs": null,
+"sourceKinds": ["equipped"],
+"weaponSlots": null
+}
+body = SubResource("Resource_oa6fs")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_lca2k"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack1"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 8.0,
+"recover": 12.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_n27s7"]
+script = ExtResource("4_83yuh")
+id = "triceratops-triceratops_gore"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.triceratops"],
+"sourceItemIds": ["weapon.creature.triceratops_gore"],
+"sourceItemRefs": null,
+"sourceKinds": ["equipped"],
+"weaponSlots": null
+}
+body = SubResource("Resource_lca2k")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_xnnqh"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack1"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 8.0,
+"recover": 12.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_ihvq7"]
+script = ExtResource("4_83yuh")
+id = "fixed-unarmed-attack1-8-12"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.triceratops", "smallscale.tyrannosaurus"],
+"sourceItemRefs": null,
+"sourceKinds": ["unarmed"],
+"weaponSlots": null
+}
+body = SubResource("Resource_xnnqh")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_6i2rt"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack2"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 7.0,
+"recover": 11.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_vx0uh"]
+script = ExtResource("4_83yuh")
+id = "mammoth-mammoth_gore"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.mammoth"],
+"sourceItemIds": ["weapon.creature.mammoth_gore"],
+"sourceItemRefs": null,
+"sourceKinds": ["equipped"],
+"weaponSlots": null
+}
+body = SubResource("Resource_6i2rt")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_hm50r"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack1"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 8.0,
+"recover": 12.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_imbkx"]
+script = ExtResource("4_83yuh")
+id = "tyrannosaurus-raptor_bite"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.tyrannosaurus"],
+"sourceItemIds": ["weapon.creature.raptor_bite"],
+"sourceItemRefs": null,
+"sourceKinds": ["equipped"],
+"weaponSlots": null
+}
+body = SubResource("Resource_hm50r")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_4egjj"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack2"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 7.0,
+"recover": 12.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_f5o32"]
+script = ExtResource("4_83yuh")
+id = "tyrannosaurus-raptor_tail"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.tyrannosaurus"],
+"sourceItemIds": ["weapon.creature.raptor_tail"],
+"sourceItemRefs": null,
+"sourceKinds": ["equipped"],
+"weaponSlots": null
+}
+body = SubResource("Resource_4egjj")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_xw5ps"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack2"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 6.0,
+"recover": 11.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_5igpi"]
+script = ExtResource("4_83yuh")
+id = "fixed-dretch_bite-attack2-6-11"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.demonbeast01", "smallscale.demonbeast02", "smallscale.demonbeast03"],
+"sourceItemIds": ["weapon.creature.dretch_bite"],
+"sourceItemRefs": null,
+"sourceKinds": ["equipped"],
+"weaponSlots": null
+}
+body = SubResource("Resource_xw5ps")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_iylr1"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack3"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 6.0,
+"recover": 11.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_eleg5"]
+script = ExtResource("4_83yuh")
+id = "fixed-dretch_claws-attack3-6-11"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.demonbeast01", "smallscale.demonbeast02", "smallscale.demonbeast03"],
+"sourceItemIds": ["weapon.creature.dretch_claws"],
+"sourceItemRefs": null,
+"sourceKinds": ["equipped"],
+"weaponSlots": null
+}
+body = SubResource("Resource_iylr1")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_koiw0"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack2"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 6.0,
+"recover": 11.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_08oej"]
+script = ExtResource("4_83yuh")
+id = "fixed-unarmed-attack2-6-11"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.demonbeast01", "smallscale.imp05", "smallscale.demonbeast02", "smallscale.demonbeast03", "smallscale.demonbeast05"],
+"sourceItemRefs": null,
+"sourceKinds": ["unarmed"],
+"weaponSlots": null
+}
+body = SubResource("Resource_koiw0")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_7ey8e"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack2"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 6.0,
+"recover": 11.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_26cmf"]
+script = ExtResource("4_83yuh")
+id = "imp05-claw_mote_devil_claws"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.imp05"],
+"sourceItemIds": ["weapon.creature.claw_mote_devil_claws"],
+"sourceItemRefs": null,
+"sourceKinds": ["equipped"],
+"weaponSlots": null
+}
+body = SubResource("Resource_7ey8e")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_u626t"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack2"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 6.0,
+"recover": 11.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_xq3qg"]
+script = ExtResource("4_83yuh")
+id = "demonbeast05-huntsman_wing_devil_claws"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.demonbeast05"],
+"sourceItemIds": ["weapon.creature.huntsman_wing_devil_claws"],
+"sourceItemRefs": null,
+"sourceKinds": ["equipped"],
+"weaponSlots": null
+}
+body = SubResource("Resource_u626t")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_rkmh1"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack1"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 4.0,
+"recover": 11.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_05g4f"]
+script = ExtResource("4_83yuh")
+id = "demonbeast04-fellwing_devil_claws"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.demonbeast04"],
+"sourceItemIds": ["weapon.creature.fellwing_devil_claws"],
+"sourceItemRefs": null,
+"sourceKinds": ["equipped"],
+"weaponSlots": null
+}
+body = SubResource("Resource_rkmh1")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_mlfm4"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack2"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 6.0,
+"recover": 11.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_84dl5"]
+script = ExtResource("4_83yuh")
+id = "demonbeast04-fellwing_devil_gore"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.demonbeast04"],
+"sourceItemIds": ["weapon.creature.fellwing_devil_gore"],
+"sourceItemRefs": null,
+"sourceKinds": ["equipped"],
+"weaponSlots": null
+}
+body = SubResource("Resource_mlfm4")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_ousow"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack1"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 4.0,
+"recover": 11.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_u8705"]
+script = ExtResource("4_83yuh")
+id = "demonbeast04-unarmed"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.demonbeast04"],
+"sourceItemRefs": null,
+"sourceKinds": ["unarmed"],
+"weaponSlots": null
+}
+body = SubResource("Resource_ousow")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_fxe0p"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack1"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 6.0,
+"recover": 12.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_8n775"]
+script = ExtResource("4_83yuh")
+id = "goblin01-physical"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.goblin01"],
+"sourceItemRefs": null,
+"weaponSlots": null
+}
+body = SubResource("Resource_fxe0p")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_6w160"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "PhysicalGesture"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 6.0,
+"recover": 12.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_pgbu8"]
+script = ExtResource("4_83yuh")
+id = "goblin02-physical"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.goblin02"],
+"sourceItemRefs": null,
+"weaponSlots": null
+}
+body = SubResource("Resource_6w160")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_2n0rb"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack2"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 6.0,
+"recover": 12.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_nk6ms"]
+script = ExtResource("4_83yuh")
+id = "goblin03-physical"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.goblin03"],
+"sourceItemRefs": null,
+"weaponSlots": null
+}
+body = SubResource("Resource_2n0rb")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_on0qu"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack1"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"recover": 12.0,
+"release": 11.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_7smkf"]
+script = ExtResource("4_83yuh")
+id = "goblin03-ranged"
+precedence = 900.0
+match = {
+"delivery": "projectile",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.goblin03"],
+"sourceItemRefs": null,
+"weaponSlots": null
+}
+body = SubResource("Resource_on0qu")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+flight_tiles_per_second = 7.8125
+unported = {
+"actor": {
+"media": []
+},
+"projectile": {
+"debugAnchor": false,
+"depthMode": "world",
+"geometry": {
+"enabled": true,
+"primitive": "bolt",
+"renderer": "geometry_projectile"
+},
+"minimumTravelDurationMs": 150.0,
+"originX": 0.0,
+"originY": -16.0,
+"sourceForwardPx": 0.0,
+"targetForwardPx": 0.0,
+"targetY": -16.0,
+"trajectory": {
+"sameTargetSpread": false,
+"type": "straight"
+}
+}
+}
+
+[sub_resource type="Resource" id="Resource_sjr1u"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack1"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 6.0,
+"recover": 12.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_nnpmj"]
+script = ExtResource("4_83yuh")
+id = "goblin04-physical"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.goblin04"],
+"sourceItemRefs": null,
+"weaponSlots": null
+}
+body = SubResource("Resource_sjr1u")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_mkn7h"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack1"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 6.0,
+"recover": 12.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_q1yat"]
+script = ExtResource("4_83yuh")
+id = "goblin05-physical"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.goblin05"],
+"sourceItemRefs": null,
+"weaponSlots": null
+}
+body = SubResource("Resource_mkn7h")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_32yy8"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack1"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 6.0,
+"recover": 12.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_6etfj"]
+script = ExtResource("4_83yuh")
+id = "goblin06-physical"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.goblin06"],
+"sourceItemRefs": null,
+"weaponSlots": null
+}
+body = SubResource("Resource_32yy8")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_tw0s4"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack1"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 6.0,
+"recover": 12.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_hx6f2"]
+script = ExtResource("4_83yuh")
+id = "goblin07-physical"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.goblin07"],
+"sourceItemRefs": null,
+"weaponSlots": null
+}
+body = SubResource("Resource_tw0s4")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_r2hcl"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack2"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 6.0,
+"recover": 12.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_m5vvo"]
+script = ExtResource("4_83yuh")
+id = "goblin07-second-hand"
+precedence = 910.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.goblin07"],
+"sourceItemRefs": null,
+"weaponSlots": ["MELEE_OFF"]
+}
+body = SubResource("Resource_r2hcl")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_7j2q3"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "PhysicalGesture"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 6.0,
+"recover": 12.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_dmpbv"]
+script = ExtResource("4_83yuh")
+id = "goblin08-physical"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.goblin08"],
+"sourceItemRefs": null,
+"weaponSlots": null
+}
+body = SubResource("Resource_7j2q3")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_h4gdn"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack2"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 6.0,
+"recover": 12.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_ak5fq"]
+script = ExtResource("4_83yuh")
+id = "goblin09-physical"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.goblin09"],
+"sourceItemRefs": null,
+"weaponSlots": null
+}
+body = SubResource("Resource_h4gdn")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_usfj4"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack1"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"recover": 12.0,
+"release": 11.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_rbqr6"]
+script = ExtResource("4_83yuh")
+id = "goblin09-ranged"
+precedence = 900.0
+match = {
+"delivery": "projectile",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.goblin09"],
+"sourceItemRefs": null,
+"weaponSlots": null
+}
+body = SubResource("Resource_usfj4")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+flight_tiles_per_second = 7.8125
+unported = {
+"actor": {
+"media": []
+},
+"projectile": {
+"debugAnchor": false,
+"depthMode": "world",
+"geometry": {
+"enabled": true,
+"primitive": "bolt",
+"renderer": "geometry_projectile"
+},
+"minimumTravelDurationMs": 150.0,
+"originX": 0.0,
+"originY": -16.0,
+"sourceForwardPx": 0.0,
+"targetForwardPx": 0.0,
+"targetY": -16.0,
+"trajectory": {
+"sameTargetSpread": false,
+"type": "straight"
+}
+}
+}
+
+[sub_resource type="Resource" id="Resource_uwrdk"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack1"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 6.0,
+"recover": 12.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_ay05e"]
+script = ExtResource("4_83yuh")
+id = "goblin10-physical"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.goblin10"],
+"sourceItemRefs": null,
+"weaponSlots": null
+}
+body = SubResource("Resource_uwrdk")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_yy8pg"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack1"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 6.0,
+"recover": 12.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_bgsup"]
+script = ExtResource("4_83yuh")
+id = "goblin11-physical"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.goblin11"],
+"sourceItemRefs": null,
+"weaponSlots": null
+}
+body = SubResource("Resource_yy8pg")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_b3tw6"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack1"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 6.0,
+"recover": 12.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_7fnr4"]
+script = ExtResource("4_83yuh")
+id = "goblin12-physical"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.goblin12"],
+"sourceItemRefs": null,
+"weaponSlots": null
+}
+body = SubResource("Resource_b3tw6")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_doxis"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack1"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 6.0,
+"recover": 12.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_dxrpu"]
+script = ExtResource("4_83yuh")
+id = "goblin13-physical"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.goblin13"],
+"sourceItemRefs": null,
+"weaponSlots": null
+}
+body = SubResource("Resource_doxis")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_nqsr0"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack1"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 6.0,
+"recover": 12.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_t7jms"]
+script = ExtResource("4_83yuh")
+id = "goblin14-physical"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.goblin14"],
+"sourceItemRefs": null,
+"weaponSlots": null
+}
+body = SubResource("Resource_nqsr0")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_22s53"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack1"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 6.0,
+"recover": 12.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_vdwg7"]
+script = ExtResource("4_83yuh")
+id = "goblin15-physical"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.goblin15"],
+"sourceItemRefs": null,
+"weaponSlots": null
+}
+body = SubResource("Resource_22s53")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_2tlf1"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack2"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 6.0,
+"recover": 12.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_dvmyg"]
+script = ExtResource("4_83yuh")
+id = "goblin15-second-hand"
+precedence = 910.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.goblin15"],
+"sourceItemRefs": null,
+"weaponSlots": ["MELEE_OFF"]
+}
+body = SubResource("Resource_2tlf1")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_xbiun"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack1"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 6.0,
+"recover": 12.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_useai"]
+script = ExtResource("4_83yuh")
+id = "goblin16-physical"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.goblin16"],
+"sourceItemRefs": null,
+"weaponSlots": null
+}
+body = SubResource("Resource_xbiun")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_4xri0"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack1"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"contact": 6.0,
+"recover": 12.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_uauoc"]
+script = ExtResource("4_83yuh")
+id = "goblin17-physical"
+precedence = 900.0
+match = {
+"delivery": "melee",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.goblin17"],
+"sourceItemRefs": null,
+"weaponSlots": null
+}
+body = SubResource("Resource_4xri0")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+unported = {
+"actor": {
+"media": []
+},
+"projectile": null
+}
+
+[sub_resource type="Resource" id="Resource_1q62l"]
+script = ExtResource("1_3w48s")
+role = "attack"
+clip = "Attack5"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"recover": 12.0,
+"release": 5.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_l50qw"]
+script = ExtResource("4_83yuh")
+id = "goblin17-ranged"
+precedence = 900.0
+match = {
+"delivery": "projectile",
+"elemental": null,
+"kind": "attack",
+"outcomes": null,
+"primaryDamageTypes": null,
+"rigIds": ["smallscale.goblin17"],
+"sourceItemRefs": null,
+"weaponSlots": null
+}
+body = SubResource("Resource_1q62l")
+slash = {
+"onCrit": {},
+"onHit": {},
+"onMiss": {}
+}
+flight_tiles_per_second = 7.8125
+unported = {
+"actor": {
+"media": []
+},
+"projectile": {
+"debugAnchor": false,
+"depthMode": "world",
+"geometry": {
+"enabled": true,
+"primitive": "bolt",
+"renderer": "geometry_projectile"
+},
+"minimumTravelDurationMs": 150.0,
+"originX": 0.0,
+"originY": -16.0,
+"sourceForwardPx": 0.0,
+"targetForwardPx": 0.0,
+"targetY": -16.0,
+"trajectory": {
+"sameTargetSpread": false,
+"type": "straight"
+}
+}
+}
+
+[resource]
+script = ExtResource("3_p6ob3")
+id = "action.feature.extra_attack"
+body = SubResource("Resource_542g3")
+outcome_texts = Dictionary[String, ExtResource("2_kjw7y")]({
+"critical": SubResource("Resource_a5eyd"),
+"critical_miss": SubResource("Resource_dt5oc"),
+"miss": SubResource("Resource_l4odj")
+})
+variants = Array[ExtResource("4_83yuh")]([SubResource("Resource_7swm6"), SubResource("Resource_qlql1"), SubResource("Resource_rjm7b"), SubResource("Resource_45mls"), SubResource("Resource_lrixu"), SubResource("Resource_s26cx"), SubResource("Resource_wwqh3"), SubResource("Resource_oni5n"), SubResource("Resource_0tvui"), SubResource("Resource_gtprl"), SubResource("Resource_1pp5f"), SubResource("Resource_m63n6"), SubResource("Resource_g0321"), SubResource("Resource_6510v"), SubResource("Resource_rayag"), SubResource("Resource_xjuxv"), SubResource("Resource_ys1pf"), SubResource("Resource_1ji8x"), SubResource("Resource_r52da"), SubResource("Resource_xsg32"), SubResource("Resource_cng4u"), SubResource("Resource_47gs7"), SubResource("Resource_0hk5x"), SubResource("Resource_k6wuq"), SubResource("Resource_4ylmd"), SubResource("Resource_u50xl"), SubResource("Resource_uqtea"), SubResource("Resource_pt40s"), SubResource("Resource_jhwyf"), SubResource("Resource_orch7"), SubResource("Resource_lke26"), SubResource("Resource_8e40n"), SubResource("Resource_8rqna"), SubResource("Resource_pqff3"), SubResource("Resource_qu8ma"), SubResource("Resource_b34ea"), SubResource("Resource_6fm1d"), SubResource("Resource_4vmn7"), SubResource("Resource_n27s7"), SubResource("Resource_ihvq7"), SubResource("Resource_vx0uh"), SubResource("Resource_imbkx"), SubResource("Resource_f5o32"), SubResource("Resource_5igpi"), SubResource("Resource_eleg5"), SubResource("Resource_08oej"), SubResource("Resource_26cmf"), SubResource("Resource_xq3qg"), SubResource("Resource_05g4f"), SubResource("Resource_84dl5"), SubResource("Resource_u8705"), SubResource("Resource_8n775"), SubResource("Resource_pgbu8"), SubResource("Resource_nk6ms"), SubResource("Resource_7smkf"), SubResource("Resource_nnpmj"), SubResource("Resource_q1yat"), SubResource("Resource_6etfj"), SubResource("Resource_hx6f2"), SubResource("Resource_m5vvo"), SubResource("Resource_dmpbv"), SubResource("Resource_ak5fq"), SubResource("Resource_rbqr6"), SubResource("Resource_ay05e"), SubResource("Resource_bgsup"), SubResource("Resource_7fnr4"), SubResource("Resource_dxrpu"), SubResource("Resource_t7jms"), SubResource("Resource_vdwg7"), SubResource("Resource_dvmyg"), SubResource("Resource_useai"), SubResource("Resource_uauoc"), SubResource("Resource_l50qw")])
+trail_palette = PackedStringArray()
+trail_outcomes = PackedStringArray("critical")
+trail_behaviours = PackedStringArray("action.class.barbarian.frenzied_strike", "action.feature.extra_attack")
+trail_points = "measured/abilities/attacks/action.attack.trail.json"
+trail_unported = {
+"handlerIds": ["reaction.class_feature.barbarian.retaliation"],
+"impactAssetId": "class.martial.impact",
+"palette": [6564651.0, 12539717.0, 14994609.0]
+}
+variant_sockets = "measured/abilities/attacks/action.feature.extra_attack.sockets.json"
+unported = {
+"actionFeedback": null,
+"actor": {
+"media": []
+},
+"attackFeedback": {
+"critical": {},
+"critical_miss": {},
+"hit": null,
+"miss": {}
+},
+"compatibleCueKinds": ["attack"],
+"counterspellFeedback": null,
+"definitionRef": {
+"content_id": "action.feature.extra_attack",
+"content_version": 1.0,
+"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+"definition_kind": "action",
+"pack_id": "content.srd_5_1_cc"
+},
+"disposition": "authored",
+"mediaFailurePolicy": "fail_transaction",
+"previewChildCueKinds": ["damage"],
+"projectile": null
+}

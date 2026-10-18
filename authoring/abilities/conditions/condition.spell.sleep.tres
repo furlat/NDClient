@@ -1,0 +1,168 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_gcmnr"]
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="2_ii8yd"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="3_s3vrp"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="4_q3sid"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="5_krpsj"]
+
+[sub_resource type="Resource" id="Resource_o8sqw"]
+script = ExtResource("1_gcmnr")
+role = "apply"
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_w4q0g"]
+script = ExtResource("2_ii8yd")
+colour = Color(0.61960787, 0.89411765, 0.34509805, 1)
+
+[sub_resource type="Resource" id="Resource_4ikbm"]
+script = ExtResource("4_q3sid")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_imjoe"]
+script = ExtResource("4_q3sid")
+kind = "pose"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+pose_role = "rest"
+pose_clip = "Die"
+
+[sub_resource type="Resource" id="Resource_n0lju"]
+script = ExtResource("3_s3vrp")
+steps = Array[ExtResource("4_q3sid")]([SubResource("Resource_4ikbm"), SubResource("Resource_imjoe")])
+
+[sub_resource type="Resource" id="Resource_h4w0r"]
+script = ExtResource("1_gcmnr")
+role = "remove"
+clip = "Die"
+playback_speed = 1.5
+reversed = true
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_sqv67"]
+script = ExtResource("2_ii8yd")
+colour = Color(0.15294118, 0.80784315, 0.1764706, 1)
+
+[resource]
+script = ExtResource("5_krpsj")
+id = "condition.spell.sleep"
+label = "Sleep"
+disposition = "authored"
+lifecycle = PackedStringArray()
+look = SubResource("Resource_n0lju")
+layers = [{
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "control.sleep.sustain.back",
+"attachment": "face",
+"category": "sleep",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"fadeInMs": 200.0,
+"fps": 32.0,
+"id": "control.sleep.sustain.back",
+"lifeStates": ["alive", "dying", "stable"],
+"markerGroup": "asleep",
+"priority": 30.0
+}, {
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "control.sleep.sustain.front",
+"attachment": "face",
+"category": "sleep",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fadeInMs": 200.0,
+"fps": 32.0,
+"id": "control.sleep.sustain.front",
+"lifeStates": ["alive", "dying", "stable"],
+"markerGroup": "asleep",
+"priority": 30.0
+}]
+group = "marker.condition.spell.sleep"
+priority = 30.0
+max_layers = 3.0
+application_text = SubResource("Resource_w4q0g")
+removal_text = SubResource("Resource_sqv67")
+application_body = SubResource("Resource_o8sqw")
+removal_body = SubResource("Resource_h4w0r")
+status = "ready"
+unported = {
+"application": {
+"bodyAnimation": {},
+"durationMs": 220.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "control.sleep",
+"visualIntensity": "secondary_dynamic"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.spell.sleep",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "fail_transaction",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": false,
+"effect": "cleanse",
+"evidence": "branch=shake-awake; effect=condition.shake_awake.cleanse; disposition=beneficial; target=selected_target; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "action.shake_awake",
+"content_version": 1.0,
+"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+"definition_kind": "action",
+"pack_id": "core.rules"
+},
+"triggerType": "action"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=condition; effect=condition.apply; disposition=harmful; target=each_affected_entity; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.sleep",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}],
+"relatedStates": []
+},
+"removal": {
+"bodyAnimation": {},
+"durationMs": 200.0,
+"effects": []
+}
+}

@@ -1,0 +1,194 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_65twh"]
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="2_oa3kl"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="3_yycvf"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="4_nmbjb"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="5_6g17n"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="6_0ki8g"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="7_v8ffp"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="8_mjayf"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="9_48cax"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="10_o0ff2"]
+
+[sub_resource type="Resource" id="Resource_nswav"]
+script = ExtResource("1_65twh")
+role = "cast"
+clip = "Special1"
+markers = Dictionary[String, float]({
+"release": 11.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+unported = {
+"recovery": {
+"bodyClip": "Taunt",
+"bodyPlaybackSpeed": 1.0,
+"enabled": false
+}
+}
+
+[sub_resource type="Resource" id="Resource_w2co8"]
+script = ExtResource("2_oa3kl")
+roles = Dictionary[String, Color]({
+"primary": Color(1, 0.93333334, 0.6666667, 1),
+"secondary": Color(1, 0.8666667, 0.26666668, 1),
+"tertiary": Color(1, 0.8666667, 0.53333336, 1)
+})
+ramp = PackedColorArray()
+
+[sub_resource type="Resource" id="Resource_uobdl"]
+script = ExtResource("3_yycvf")
+clip = "assembled/conjure_fiend_native"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 4.6
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.3
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"follow_attachment": false,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_70auv"]
+script = ExtResource("6_0ki8g")
+kind = "palette_ramp"
+colours = PackedColorArray(1, 0.8666667, 0.53333336, 1, 1, 0.93333334, 0.6666667, 1, 1, 0.8666667, 0.26666668, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_xe8a7"]
+script = ExtResource("5_6g17n")
+steps = Array[ExtResource("6_0ki8g")]([SubResource("Resource_70auv")])
+
+[sub_resource type="Resource" id="Resource_vhp0q"]
+script = ExtResource("4_nmbjb")
+category = "Magic2"
+sheet = "/spritesheets/Magic2/Special1.png"
+look = SubResource("Resource_xe8a7")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 16772778.0
+},
+"id": "cast-weaponGlow",
+"palette": {},
+"role": "hand_magic",
+"slot": "weaponGlow"
+}
+
+[sub_resource type="Resource" id="Resource_ojalq"]
+script = ExtResource("6_0ki8g")
+kind = "palette_ramp"
+colours = PackedColorArray(1, 0.8666667, 0.53333336, 1, 1, 0.93333334, 0.6666667, 1, 1, 0.8666667, 0.26666668, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_mqvdg"]
+script = ExtResource("5_6g17n")
+steps = Array[ExtResource("6_0ki8g")]([SubResource("Resource_ojalq")])
+
+[sub_resource type="Resource" id="Resource_5wrkh"]
+script = ExtResource("4_nmbjb")
+place = "aura"
+category = "Effect5"
+sheet = "/spritesheets/Effect5/Special1.png"
+look = SubResource("Resource_mqvdg")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 16772778.0
+},
+"id": "cast-aura",
+"palette": {},
+"role": "aura",
+"slot": "aura"
+}
+
+[sub_resource type="Resource" id="Resource_mj23w"]
+script = ExtResource("7_v8ffp")
+path = "art/media/ui/icons/smooth48/spell.conjure_fiend.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:spell.conjure_fiend"
+
+[resource]
+script = ExtResource("8_mjayf")
+id = "spell.conjure_fiend"
+icon = SubResource("Resource_mj23w")
+delivery = "summon"
+body = SubResource("Resource_nswav")
+hand_layers = Array[ExtResource("4_nmbjb")]([SubResource("Resource_vhp0q"), SubResource("Resource_5wrkh")])
+sockets = "measured/abilities/spells/spell.conjure_fiend.sockets.json"
+effects = Array[ExtResource("3_yycvf")]([SubResource("Resource_uobdl")])
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+colours = SubResource("Resource_w2co8")
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray("condition.attack_assistance", "condition.dashing", "condition.disengaging", "condition.dodging", "condition.hidden", "condition.prone", "condition.summoned", "trait.innate_flight", "trait.magic_resistance")
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray("creature.claw_mote_devil", "creature.corrosive_demon", "creature.dread_demon", "creature.dretch", "creature.fellwing_devil", "creature.huntsman_wing_devil")
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+staging_unported = {
+"selection": "conjure_fiend_native"
+}
+unported = {
+"condition": {
+"anchor": "effect",
+"delayMs": 0.0,
+"feedbackEnabled": true
+},
+"definitionRef": {
+"content_id": "spell.conjure_fiend",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.neurodragon"
+},
+"media": [{
+"assetId": "summoning.fiend.cast.back",
+"attachment": "source_hand",
+"depth": "behind_body",
+"durationMs": 750.0,
+"effectGroup": {
+"id": "cast",
+"label": "Conjure Fiend · Cast"
+},
+"fps": 32.0,
+"id": "cast-back",
+"scale": 0.4,
+"startOffsetMs": -250.0,
+"viewFacing": "E"
+}, {
+"assetId": "summoning.fiend.cast.front",
+"attachment": "source_hand",
+"depth": "front_body",
+"durationMs": 750.0,
+"effectGroup": {
+"id": "cast",
+"label": "Conjure Fiend · Cast"
+},
+"fps": 32.0,
+"id": "cast-front",
+"scale": 0.4,
+"startOffsetMs": -250.0,
+"viewFacing": "E"
+}]
+}

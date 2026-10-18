@@ -1,0 +1,327 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_1n4mw"]
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="2_etm7k"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="3_c83fd"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="4_2pugn"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="5_dlgge"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="6_xs84i"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="7_fdmhm"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="8_qlkfk"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="9_jy6tm"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="10_8u5hf"]
+
+[sub_resource type="Resource" id="Resource_swvgy"]
+script = ExtResource("1_1n4mw")
+role = "cast"
+clip = "Attack6"
+enabled = false
+markers = Dictionary[String, float]({
+"release": 7.0
+})
+hidden_slots = PackedStringArray()
+unported = {
+"equipment": {
+"kind": "unchanged"
+},
+"recovery": {
+"bodyClip": "Taunt",
+"bodyPlaybackSpeed": 1.0,
+"enabled": false
+}
+}
+
+[sub_resource type="Resource" id="Resource_rhhu2"]
+script = ExtResource("2_etm7k")
+roles = Dictionary[String, Color]({
+"primary": Color(0.85882354, 0.75686276, 0.5137255, 1),
+"secondary": Color(0.94509804, 0.8745098, 0.6745098, 1),
+"tertiary": Color(1, 0.9411765, 0.7921569, 1)
+})
+ramp = PackedColorArray()
+
+[sub_resource type="Resource" id="Resource_ovnpn"]
+script = ExtResource("3_c83fd")
+clip = "spells/true_strike/back/lifecycle"
+role = "attached"
+at = "release"
+attachment = "caster_hand"
+scale = 0.3
+source_end = 1.5
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "client"
+extra = {
+"delay_seconds": 0.0,
+"orientation": "facing",
+"source_rate": 1.0
+}
+
+[sub_resource type="Resource" id="Resource_ik64v"]
+script = ExtResource("5_dlgge")
+kind = "palette_ramp"
+colours = PackedColorArray(0.28627452, 0.21960784, 0.22745098, 1, 0.50980395, 0.3764706, 0.26666668, 1, 0.72156864, 0.54901963, 0.34117648, 1, 0.85882354, 0.75686276, 0.5137255, 1, 0.94509804, 0.8745098, 0.6745098, 1, 1, 0.9411765, 0.7921569, 1)
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_d76e0"]
+script = ExtResource("4_2pugn")
+steps = Array[ExtResource("5_dlgge")]([SubResource("Resource_ik64v")])
+
+[sub_resource type="Resource" id="Resource_q3cli"]
+script = ExtResource("7_fdmhm")
+path = "art/media/ui/icons/smooth48/spell.true-strike.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:spell.true-strike"
+
+[sub_resource type="Resource" id="Resource_qw2gl"]
+script = ExtResource("3_c83fd")
+clip = "spells/true_strike/back/lifecycle"
+role = "attached"
+at = "release"
+attachment = "caster_hand"
+scale = 0.3
+source_end = 2.5
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"orientation": "facing",
+"source_rate": 1.0
+}
+
+[sub_resource type="Resource" id="Resource_gwtqb"]
+script = ExtResource("3_c83fd")
+clip = "entity-study/fitted/perfect_strike"
+role = "attached"
+at = "release"
+attachment = "caster_ground"
+orientation = "world"
+source_end = 2.3
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"entity_geometry": {
+"actor": "caster",
+"slots": ["weapon"]
+},
+"follow_attachment": true
+}
+
+[sub_resource type="Resource" id="Resource_xb0pu"]
+script = ExtResource("10_8u5hf")
+id = "perfect_strike_astral_native"
+kind = "form"
+selection = "perfect_strike_astral_native"
+effects = Array[ExtResource("3_c83fd")]([SubResource("Resource_qw2gl"), SubResource("Resource_gwtqb")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[resource]
+script = ExtResource("8_qlkfk")
+id = "spell.true_strike"
+icon = SubResource("Resource_q3cli")
+delivery = "touch"
+body = SubResource("Resource_swvgy")
+effects = Array[ExtResource("3_c83fd")]([SubResource("Resource_ovnpn")])
+native_staging = true
+effect_scope = "single"
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_colour = "dbc183"
+light_multiplier = 0.0
+colours = SubResource("Resource_rhhu2")
+finish = SubResource("Resource_d76e0")
+feedback_ramp = PackedStringArray()
+variants = Array[ExtResource("10_8u5hf")]([SubResource("Resource_xb0pu")])
+applies_conditions = PackedStringArray()
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "client"
+status = "ready"
+bounds = "measured/abilities/spells/spell.true_strike.bounds.json"
+staging_unported = {
+"source": "sandbox/batches/support.json:/spells/true_strike/staging"
+}
+unported = {
+"childAttack": {
+"poses": [{
+"clip": "Attack6",
+"layers": [{
+"category": "Magic2",
+"colors": {
+"mode": "paletteSwap",
+"primary": 14401923.0
+},
+"enabled": true,
+"hidden": false,
+"id": "cast-weaponGlow",
+"palette": {
+"colors": [16773322.0, 14401923.0, 15851436.0],
+"noiseSheet": "/spell-palettes/source-hand-noise.png"
+},
+"slot": "weaponGlow",
+"sourceSheet": "/spritesheets/Magic2/Attack6.png"
+}],
+"rigId": "neuroclient.modular",
+"weaponCategory": "Melee3"
+}, {
+"clip": "Attack3",
+"layers": [{
+"category": "Magic2",
+"colors": {
+"mode": "paletteSwap",
+"primary": 14401923.0
+},
+"enabled": true,
+"hidden": false,
+"id": "cast-weaponGlow",
+"palette": {
+"colors": [16773322.0, 14401923.0, 15851436.0],
+"noiseSheet": "/spell-palettes/source-hand-noise.png"
+},
+"slot": "weaponGlow",
+"sourceSheet": "/spritesheets/Magic2/Attack3.png"
+}],
+"rigId": "neuroclient.modular",
+"weaponCategory": "Ranged1"
+}, {
+"clip": "Attack1",
+"layers": [{
+"category": "Magic2",
+"colors": {
+"mode": "paletteSwap",
+"primary": 14401923.0
+},
+"enabled": true,
+"hidden": false,
+"id": "cast-weaponGlow",
+"palette": {
+"colors": [16773322.0, 14401923.0, 15851436.0],
+"noiseSheet": "/spell-palettes/source-hand-noise.png"
+},
+"slot": "weaponGlow",
+"sourceSheet": "/spritesheets/Magic2/Attack1.png"
+}],
+"rigId": "neuroclient.modular"
+}, {
+"clip": "Attack2",
+"layers": [{
+"category": "Magic2",
+"colors": {
+"mode": "paletteSwap",
+"primary": 14401923.0
+},
+"enabled": true,
+"hidden": false,
+"id": "cast-weaponGlow",
+"palette": {
+"colors": [16773322.0, 14401923.0, 15851436.0],
+"noiseSheet": "/spell-palettes/source-hand-noise.png"
+},
+"slot": "weaponGlow",
+"sourceSheet": "/spritesheets/Magic2/Attack2.png"
+}],
+"rigId": "neuroclient.modular"
+}, {
+"clip": "Attack3",
+"layers": [{
+"category": "Magic2",
+"colors": {
+"mode": "paletteSwap",
+"primary": 14401923.0
+},
+"enabled": true,
+"hidden": false,
+"id": "cast-weaponGlow",
+"palette": {
+"colors": [16773322.0, 14401923.0, 15851436.0],
+"noiseSheet": "/spell-palettes/source-hand-noise.png"
+},
+"slot": "weaponGlow",
+"sourceSheet": "/spritesheets/Magic2/Attack3.png"
+}],
+"rigId": "neuroclient.modular"
+}, {
+"clip": "Attack4",
+"layers": [{
+"category": "Magic2",
+"colors": {
+"mode": "paletteSwap",
+"primary": 14401923.0
+},
+"enabled": true,
+"hidden": false,
+"id": "cast-weaponGlow",
+"palette": {
+"colors": [16773322.0, 14401923.0, 15851436.0],
+"noiseSheet": "/spell-palettes/source-hand-noise.png"
+},
+"slot": "weaponGlow",
+"sourceSheet": "/spritesheets/Magic2/Attack4.png"
+}],
+"rigId": "neuroclient.modular"
+}, {
+"clip": "Attack5",
+"layers": [{
+"category": "Magic2",
+"colors": {
+"mode": "paletteSwap",
+"primary": 14401923.0
+},
+"enabled": true,
+"hidden": false,
+"id": "cast-weaponGlow",
+"palette": {
+"colors": [16773322.0, 14401923.0, 15851436.0],
+"noiseSheet": "/spell-palettes/source-hand-noise.png"
+},
+"slot": "weaponGlow",
+"sourceSheet": "/spritesheets/Magic2/Attack5.png"
+}],
+"rigId": "neuroclient.modular"
+}, {
+"clip": "Attack6",
+"layers": [{
+"category": "Magic2",
+"colors": {
+"mode": "paletteSwap",
+"primary": 14401923.0
+},
+"enabled": true,
+"hidden": false,
+"id": "cast-weaponGlow",
+"palette": {
+"colors": [16773322.0, 14401923.0, 15851436.0],
+"noiseSheet": "/spell-palettes/source-hand-noise.png"
+},
+"slot": "weaponGlow",
+"sourceSheet": "/spritesheets/Magic2/Attack6.png"
+}],
+"rigId": "neuroclient.modular"
+}]
+},
+"definitionRef": {
+"content_id": "spell.true_strike",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+}
+}

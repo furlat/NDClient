@@ -1,0 +1,108 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_w80st"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_2aa7c"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_foi0c"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_uixjd"]
+
+[sub_resource type="Resource" id="Resource_7ovml"]
+script = ExtResource("1_w80st")
+colour = Color(0.89411765, 0.49411765, 0.34509805, 1)
+
+[sub_resource type="Resource" id="Resource_xxw84"]
+script = ExtResource("3_foi0c")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_dxfby"]
+script = ExtResource("2_2aa7c")
+steps = Array[ExtResource("3_foi0c")]([SubResource("Resource_xxw84")])
+
+[sub_resource type="Resource" id="Resource_blld3"]
+script = ExtResource("1_w80st")
+colour = Color(0.80784315, 0.6745098, 0.15294118, 1)
+
+[resource]
+script = ExtResource("4_uixjd")
+id = "condition.spell.stinking_cloud.nauseated"
+label = "Nauseated"
+disposition = "authored"
+lifecycle = PackedStringArray("condition_sickened_native")
+look = SubResource("Resource_dxfby")
+layers = [{
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "condition.marker.sickened.overhead",
+"attachment": "head",
+"category": "debuff_marker",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fadeInMs": 160.0,
+"fps": 32.0,
+"id": "condition.marker.sickened.overhead",
+"lifeStates": ["alive", "dying", "stable"],
+"markerGroup": "sickened",
+"priority": 30.0
+}]
+group = "marker.condition.spell.stinking_cloud.nauseated"
+priority = 30.0
+max_layers = 3.0
+application_text = SubResource("Resource_7ovml")
+removal_text = SubResource("Resource_blld3")
+status = "ready"
+unported = {
+"application": {
+"durationMs": 220.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "catalog.condition.spell.stinking_cloud.nauseated",
+"visualIntensity": "secondary_dynamic"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.spell.stinking_cloud.nauseated",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "omit_optional_track",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": true,
+"effect": "apply",
+"evidence": "branch=condition; effect=condition.apply; disposition=harmful; target=each_affected_entity; gates=saving_throw:constitution:failed:actor_spell_save_dc",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "condition.spell.stinking_cloud.zone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "condition"
+}],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 200.0,
+"effects": []
+}
+}

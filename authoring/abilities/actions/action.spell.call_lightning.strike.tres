@@ -1,0 +1,48 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_uu1om"]
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="2_yxnob"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_e18we"]
+
+[sub_resource type="Resource" id="Resource_njfov"]
+script = ExtResource("1_uu1om")
+role = "act"
+clip = "Idle"
+enabled = false
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"effect": 0.0,
+"recover": 0.0
+})
+hidden_slots = PackedStringArray()
+
+[resource]
+script = ExtResource("2_yxnob")
+id = "action.spell.call_lightning.strike"
+kind = "action"
+family = "spell"
+disposition = "authored"
+body = SubResource("Resource_njfov")
+delivers_spell = "spell.call_lightning"
+effect_sources = PackedStringArray()
+status = "partial"
+unported = {
+"actionFeedback": null,
+"actor": {
+"media": []
+},
+"attackFeedback": null,
+"compatibleCueKinds": ["action"],
+"counterspellFeedback": null,
+"definitionRef": {
+"content_id": "action.spell.call_lightning.strike",
+"content_version": 1.0,
+"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+"definition_kind": "action",
+"pack_id": "content.srd_5_1_cc"
+},
+"mediaFailurePolicy": "fail_transaction",
+"previewChildCueKinds": [],
+"projectile": null,
+"variants": []
+}

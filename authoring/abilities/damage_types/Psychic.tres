@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="PresentationDamageType" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="1_wdld4"]
+[ext_resource type="Script" path="res://presentation/source/abilities/damage_type.gd" id="2_mho8d"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_5q26e"]
+
+[sub_resource type="Resource" id="Resource_hmbo2"]
+script = ExtResource("1_wdld4")
+id = "damage.psychic"
+roles = Dictionary[String, Color]({
+"primary": Color(1, 0.26666668, 1, 1),
+"secondary": Color(0.6666667, 0.13333334, 0.6666667, 1),
+"tertiary": Color(1, 0.53333336, 0.8666667, 1)
+})
+ramp = PackedColorArray()
+
+[resource]
+script = ExtResource("2_mho8d")
+id = "Psychic"
+label = "Psychic"
+palette = SubResource("Resource_hmbo2")
+impact_colour = "#ff44ff"
+status = "ready"

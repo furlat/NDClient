@@ -1,0 +1,252 @@
+[gd_resource type="Resource" script_class="PresentationContext" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/context.gd" id="1_pd2wk"]
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="2_qbmfr"]
+
+[resource]
+script = ExtResource("1_pd2wk")
+id = "entity_lifecycle_media"
+unported = {
+"arrival": {
+"bodyFadeMs": [500.0, 625.0],
+"durationMs": 1750.0,
+"tracksByManifestation": {
+"fey_spirit": [{
+"assetId": "summoning.fey_spirit.arrival.ground",
+"attachment": "target_ground",
+"depth": "ground",
+"durationMs": 1750.0,
+"fps": 32.0,
+"id": "arrival.ground",
+"viewFacing": "E"
+}, {
+"assetId": "summoning.fey_spirit.arrival.back",
+"attachment": "target_ground",
+"depth": "behind_body",
+"durationMs": 1750.0,
+"fps": 32.0,
+"id": "arrival.back",
+"viewFacing": "E"
+}, {
+"assetId": "summoning.fey_spirit.arrival.front",
+"attachment": "target_ground",
+"depth": "front_body",
+"durationMs": 1750.0,
+"fps": 32.0,
+"id": "arrival.front",
+"viewFacing": "E"
+}],
+"fiend": [{
+"assetId": "summoning.fiend.arrival.ground",
+"attachment": "target_ground",
+"depth": "ground",
+"durationMs": 1750.0,
+"fps": 32.0,
+"id": "arrival.ground",
+"viewFacing": "E"
+}, {
+"assetId": "summoning.fiend.arrival.back",
+"attachment": "target_ground",
+"depth": "behind_body",
+"durationMs": 1750.0,
+"fps": 32.0,
+"id": "arrival.back",
+"viewFacing": "E"
+}, {
+"assetId": "summoning.fiend.arrival.front",
+"attachment": "target_ground",
+"depth": "front_body",
+"durationMs": 1750.0,
+"fps": 32.0,
+"id": "arrival.front",
+"viewFacing": "E"
+}],
+"natural": [{
+"assetId": "summoning.natural.arrival.ground",
+"attachment": "target_ground",
+"depth": "ground",
+"durationMs": 1750.0,
+"fps": 32.0,
+"id": "arrival.ground",
+"viewFacing": "E"
+}, {
+"assetId": "summoning.natural.arrival.back",
+"attachment": "target_ground",
+"depth": "behind_body",
+"durationMs": 1750.0,
+"fps": 32.0,
+"id": "arrival.back",
+"viewFacing": "E"
+}, {
+"assetId": "summoning.natural.arrival.front",
+"attachment": "target_ground",
+"depth": "front_body",
+"durationMs": 1750.0,
+"fps": 32.0,
+"id": "arrival.front",
+"viewFacing": "E"
+}]
+}
+},
+"bond": {
+"durationMs": 750.0,
+"tracksByManifestation": {
+"fey_spirit": [{
+"assetId": "summoning.fey_spirit.bond.ground",
+"attachment": "target_ground",
+"depth": "ground",
+"durationMs": 750.0,
+"fps": 32.0,
+"id": "bond.ground",
+"viewFacing": "E"
+}, {
+"assetId": "summoning.fey_spirit.bond.back",
+"attachment": "target_ground",
+"depth": "behind_body",
+"durationMs": 750.0,
+"fps": 32.0,
+"id": "bond.back",
+"viewFacing": "E"
+}, {
+"assetId": "summoning.fey_spirit.bond.front",
+"attachment": "target_ground",
+"depth": "front_body",
+"durationMs": 750.0,
+"fps": 32.0,
+"id": "bond.front",
+"viewFacing": "E"
+}],
+"fiend": [{
+"assetId": "summoning.fiend.bond.ground",
+"attachment": "target_ground",
+"depth": "ground",
+"durationMs": 750.0,
+"fps": 32.0,
+"id": "bond.ground",
+"viewFacing": "E"
+}, {
+"assetId": "summoning.fiend.bond.back",
+"attachment": "target_ground",
+"depth": "behind_body",
+"durationMs": 750.0,
+"fps": 32.0,
+"id": "bond.back",
+"viewFacing": "E"
+}, {
+"assetId": "summoning.fiend.bond.front",
+"attachment": "target_ground",
+"depth": "front_body",
+"durationMs": 750.0,
+"fps": 32.0,
+"id": "bond.front",
+"viewFacing": "E"
+}],
+"natural": [{
+"assetId": "summoning.natural.bond.ground",
+"attachment": "target_ground",
+"depth": "ground",
+"durationMs": 750.0,
+"fps": 32.0,
+"id": "bond.ground",
+"viewFacing": "E"
+}, {
+"assetId": "summoning.natural.bond.back",
+"attachment": "target_ground",
+"depth": "behind_body",
+"durationMs": 750.0,
+"fps": 32.0,
+"id": "bond.back",
+"viewFacing": "E"
+}, {
+"assetId": "summoning.natural.bond.front",
+"attachment": "target_ground",
+"depth": "front_body",
+"durationMs": 750.0,
+"fps": 32.0,
+"id": "bond.front",
+"viewFacing": "E"
+}]
+}
+},
+"departure": {
+"bodyFadeMs": [187.5, 687.5],
+"durationMs": 1500.0,
+"tracksByManifestation": {
+"fey_spirit": [{
+"assetId": "summoning.fey_spirit.departure.ground",
+"attachment": "target_ground",
+"depth": "ground",
+"durationMs": 1500.0,
+"fps": 32.0,
+"id": "departure.ground",
+"viewFacing": "E"
+}, {
+"assetId": "summoning.fey_spirit.departure.back",
+"attachment": "target_ground",
+"depth": "behind_body",
+"durationMs": 1500.0,
+"fps": 32.0,
+"id": "departure.back",
+"viewFacing": "E"
+}, {
+"assetId": "summoning.fey_spirit.departure.front",
+"attachment": "target_ground",
+"depth": "front_body",
+"durationMs": 1500.0,
+"fps": 32.0,
+"id": "departure.front",
+"viewFacing": "E"
+}],
+"fiend": [{
+"assetId": "summoning.fiend.departure.ground",
+"attachment": "target_ground",
+"depth": "ground",
+"durationMs": 1500.0,
+"fps": 32.0,
+"id": "departure.ground",
+"viewFacing": "E"
+}, {
+"assetId": "summoning.fiend.departure.back",
+"attachment": "target_ground",
+"depth": "behind_body",
+"durationMs": 1500.0,
+"fps": 32.0,
+"id": "departure.back",
+"viewFacing": "E"
+}, {
+"assetId": "summoning.fiend.departure.front",
+"attachment": "target_ground",
+"depth": "front_body",
+"durationMs": 1500.0,
+"fps": 32.0,
+"id": "departure.front",
+"viewFacing": "E"
+}],
+"natural": [{
+"assetId": "summoning.natural.departure.ground",
+"attachment": "target_ground",
+"depth": "ground",
+"durationMs": 1500.0,
+"fps": 32.0,
+"id": "departure.ground",
+"viewFacing": "E"
+}, {
+"assetId": "summoning.natural.departure.back",
+"attachment": "target_ground",
+"depth": "behind_body",
+"durationMs": 1500.0,
+"fps": 32.0,
+"id": "departure.back",
+"viewFacing": "E"
+}, {
+"assetId": "summoning.natural.departure.front",
+"attachment": "target_ground",
+"depth": "front_body",
+"durationMs": 1500.0,
+"fps": 32.0,
+"id": "departure.front",
+"viewFacing": "E"
+}]
+}
+}
+}

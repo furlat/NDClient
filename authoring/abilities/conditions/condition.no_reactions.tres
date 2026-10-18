@@ -1,0 +1,110 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_4d0fv"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_mui63"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_kw37w"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_r08x2"]
+
+[sub_resource type="Resource" id="Resource_yu1bq"]
+script = ExtResource("1_4d0fv")
+enabled = false
+colour = Color(0.89411765, 0.3647059, 0.34509805, 1)
+
+[sub_resource type="Resource" id="Resource_2c57r"]
+script = ExtResource("3_kw37w")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_fvj05"]
+script = ExtResource("2_mui63")
+steps = Array[ExtResource("3_kw37w")]([SubResource("Resource_2c57r")])
+
+[sub_resource type="Resource" id="Resource_4edbn"]
+script = ExtResource("1_4d0fv")
+enabled = false
+colour = Color(0.80784315, 0.52156866, 0.15294118, 1)
+
+[resource]
+script = ExtResource("4_r08x2")
+id = "condition.no_reactions"
+label = "No Reactions"
+disposition = "authored"
+lifecycle = PackedStringArray("condition_no_reactions_native")
+look = SubResource("Resource_fvj05")
+layers = [{
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "condition.mark.no_reactions",
+"attachment": "head",
+"category": "no_reactions",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fps": 32.0,
+"id": "condition.mark.no_reactions",
+"lifeStates": ["alive"],
+"markerGroup": "condition.mark.no_reactions",
+"offsetY": -12.0,
+"priority": 35.0
+}]
+group = "marker.condition.no_reactions"
+priority = 35.0
+max_layers = 1.0
+application_text = SubResource("Resource_yu1bq")
+removal_text = SubResource("Resource_4edbn")
+status = "ready"
+unported = {
+"application": {
+"durationMs": 200.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "condition.mark.no_reactions",
+"visualIntensity": "ambient_passive"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.no_reactions",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "fail_transaction",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": true,
+"effect": "apply",
+"evidence": "branch=condition; effect=condition.apply; disposition=harmful; target=selected_target; gates=attack_outcome:hit,critical",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.shocking_grasp",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 200.0,
+"effects": []
+}
+}

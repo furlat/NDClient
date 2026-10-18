@@ -1,0 +1,223 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_x3yhb"]
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="2_imgsi"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="3_p14vm"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="4_0q8q5"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="5_ol3ic"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="6_te66m"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="7_uwawx"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="8_gnq5a"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="9_rrvax"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="10_6ksd6"]
+
+[sub_resource type="Resource" id="Resource_ohpf6"]
+script = ExtResource("1_x3yhb")
+role = "cast"
+clip = "Attack1"
+markers = Dictionary[String, float]({
+"release": 6.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+unported = {
+"recovery": {
+"bodyClip": "Taunt",
+"bodyPlaybackSpeed": 1.0,
+"enabled": false
+}
+}
+
+[sub_resource type="Resource" id="Resource_r8uuc"]
+script = ExtResource("2_imgsi")
+roles = Dictionary[String, Color]({
+"primary": Color(0.2901961, 0.54509807, 0.28627452, 1),
+"secondary": Color(0.7372549, 0.92156863, 0.627451, 1),
+"tertiary": Color(0.078431375, 0.19607843, 0.11764706, 1)
+})
+ramp = PackedColorArray()
+
+[sub_resource type="Resource" id="Resource_q44m2"]
+script = ExtResource("3_p14vm")
+clip = "review/inflict_wounds/back/lifecycle"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+scale = 0.471404520791032
+orientation = "world"
+source_end = 1.0
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+opacity_uniform = "factory_occurrence_alpha"
+fade_out = 0.25
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"opacity_keys": [[0.0, 0.68], [1.0, 0.68]]
+}
+
+[sub_resource type="Resource" id="Resource_reee1"]
+script = ExtResource("5_ol3ic")
+kind = "palette_ramp"
+colours = PackedColorArray(0.043137256, 0.08235294, 0.0627451, 1, 0.078431375, 0.19607843, 0.11764706, 1, 0.15294118, 0.35686275, 0.19607843, 1, 0.2901961, 0.54509807, 0.28627452, 1, 0.50980395, 0.7882353, 0.4509804, 1, 0.7372549, 0.92156863, 0.627451, 1)
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_acd0b"]
+script = ExtResource("4_0q8q5")
+steps = Array[ExtResource("5_ol3ic")]([SubResource("Resource_reee1")])
+
+[sub_resource type="Resource" id="Resource_nmyti"]
+script = ExtResource("5_ol3ic")
+kind = "palette_ramp"
+colours = PackedColorArray(0.078431375, 0.19607843, 0.11764706, 1, 0.2901961, 0.54509807, 0.28627452, 1, 0.7372549, 0.92156863, 0.627451, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_twiio"]
+script = ExtResource("4_0q8q5")
+steps = Array[ExtResource("5_ol3ic")]([SubResource("Resource_nmyti")])
+
+[sub_resource type="Resource" id="Resource_qdkyw"]
+script = ExtResource("6_te66m")
+category = "Magic2"
+sheet = "/spritesheets/Magic2/Attack1.png"
+look = SubResource("Resource_twiio")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 4885321.0
+},
+"id": "cast-weaponGlow",
+"palette": {},
+"role": "hand_magic",
+"slot": "weaponGlow"
+}
+
+[sub_resource type="Resource" id="Resource_lwhnh"]
+script = ExtResource("5_ol3ic")
+kind = "palette_ramp"
+colours = PackedColorArray(0.078431375, 0.19607843, 0.11764706, 1, 0.2901961, 0.54509807, 0.28627452, 1, 0.7372549, 0.92156863, 0.627451, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_hkyi6"]
+script = ExtResource("4_0q8q5")
+steps = Array[ExtResource("5_ol3ic")]([SubResource("Resource_lwhnh")])
+
+[sub_resource type="Resource" id="Resource_jmu7i"]
+script = ExtResource("6_te66m")
+place = "aura"
+category = "Effect5"
+sheet = "/spritesheets/Effect5/Attack1.png"
+look = SubResource("Resource_hkyi6")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 4885321.0
+},
+"id": "cast-aura",
+"palette": {},
+"role": "aura",
+"slot": "aura"
+}
+
+[sub_resource type="Resource" id="Resource_ylilh"]
+script = ExtResource("7_uwawx")
+path = "art/media/ui/icons/smooth48/spell.inflict-wounds.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:spell.inflict-wounds"
+
+[resource]
+script = ExtResource("8_gnq5a")
+id = "spell.inflict_wounds"
+icon = SubResource("Resource_ylilh")
+delivery = "melee_spell_attack"
+body = SubResource("Resource_ohpf6")
+hand_layers = Array[ExtResource("6_te66m")]([SubResource("Resource_qdkyw"), SubResource("Resource_jmu7i")])
+sockets = "measured/abilities/spells/spell.inflict_wounds.sockets.json"
+effects = Array[ExtResource("3_p14vm")]([SubResource("Resource_q44m2")])
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+impact_delay = 0.0
+flash_frame = 0.0
+flash_duration = 0.15
+flash_look = SubResource("Resource_acd0b")
+number_frame = 0.0
+number_duration = 0.8
+colours = SubResource("Resource_r8uuc")
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray()
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+staging_unported = {
+"selection": "inflict_wounds__back"
+}
+unported = {
+"condition": {
+"anchor": "effect",
+"delayMs": 0.0,
+"feedbackEnabled": true
+},
+"contact": {
+"cellsByFacing": null
+},
+"damage": {
+"floatingNumber": {
+"color": 4885321.0,
+"enabled": true,
+"label": ""
+},
+"hitFlash": {
+"color": 4885321.0,
+"enabled": true,
+"palette": {}
+}
+},
+"definitionRef": {
+"content_id": "spell.inflict_wounds",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"media": [{
+"assetId": "pending.inflict_wounds.back",
+"attachment": "target_ground",
+"depth": "behind_body",
+"effectGroup": {
+"id": "effect",
+"label": "Inflict Wounds"
+},
+"fps": 32.0,
+"id": "back",
+"onMiss": "omit",
+"scale": 0.5,
+"viewFacing": "SE"
+}, {
+"assetId": "pending.inflict_wounds.front",
+"attachment": "target_ground",
+"depth": "front_body",
+"effectGroup": {
+"id": "effect",
+"label": "Inflict Wounds"
+},
+"fps": 32.0,
+"id": "front",
+"onMiss": "omit",
+"scale": 0.5,
+"viewFacing": "SE"
+}]
+}

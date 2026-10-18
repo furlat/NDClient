@@ -1,0 +1,194 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_w1qlf"]
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="2_etyu0"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="3_gm3ry"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="4_dj1pv"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="5_lacex"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="6_g2x0s"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="7_yte8i"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="8_5lka2"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="9_0kl40"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="10_wxcys"]
+
+[sub_resource type="Resource" id="Resource_k5vss"]
+script = ExtResource("1_w1qlf")
+role = "cast"
+clip = "Special1"
+markers = Dictionary[String, float]({
+"release": 11.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+unported = {
+"recovery": {
+"bodyClip": "Taunt",
+"bodyPlaybackSpeed": 1.0,
+"enabled": false
+}
+}
+
+[sub_resource type="Resource" id="Resource_7wwtq"]
+script = ExtResource("2_etyu0")
+roles = Dictionary[String, Color]({
+"primary": Color(1, 0.93333334, 0.6666667, 1),
+"secondary": Color(1, 0.8666667, 0.26666668, 1),
+"tertiary": Color(1, 0.8666667, 0.53333336, 1)
+})
+ramp = PackedColorArray()
+
+[sub_resource type="Resource" id="Resource_oxwq2"]
+script = ExtResource("3_gm3ry")
+clip = "assembled/conjure_fey_native"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 4.6
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.3
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"follow_attachment": false,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_dugu5"]
+script = ExtResource("6_g2x0s")
+kind = "palette_ramp"
+colours = PackedColorArray(1, 0.8666667, 0.53333336, 1, 1, 0.93333334, 0.6666667, 1, 1, 0.8666667, 0.26666668, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_0mvoh"]
+script = ExtResource("5_lacex")
+steps = Array[ExtResource("6_g2x0s")]([SubResource("Resource_dugu5")])
+
+[sub_resource type="Resource" id="Resource_4s3qe"]
+script = ExtResource("4_dj1pv")
+category = "Magic2"
+sheet = "/spritesheets/Magic2/Special1.png"
+look = SubResource("Resource_0mvoh")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 16772778.0
+},
+"id": "cast-weaponGlow",
+"palette": {},
+"role": "hand_magic",
+"slot": "weaponGlow"
+}
+
+[sub_resource type="Resource" id="Resource_wsrap"]
+script = ExtResource("6_g2x0s")
+kind = "palette_ramp"
+colours = PackedColorArray(1, 0.8666667, 0.53333336, 1, 1, 0.93333334, 0.6666667, 1, 1, 0.8666667, 0.26666668, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_dbgmc"]
+script = ExtResource("5_lacex")
+steps = Array[ExtResource("6_g2x0s")]([SubResource("Resource_wsrap")])
+
+[sub_resource type="Resource" id="Resource_a8v0u"]
+script = ExtResource("4_dj1pv")
+place = "aura"
+category = "Effect5"
+sheet = "/spritesheets/Effect5/Special1.png"
+look = SubResource("Resource_dbgmc")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 16772778.0
+},
+"id": "cast-aura",
+"palette": {},
+"role": "aura",
+"slot": "aura"
+}
+
+[sub_resource type="Resource" id="Resource_txy2l"]
+script = ExtResource("7_yte8i")
+path = "art/media/ui/icons/smooth48/spell.conjure_fey.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:spell.conjure_fey"
+
+[resource]
+script = ExtResource("8_5lka2")
+id = "spell.conjure_fey"
+icon = SubResource("Resource_txy2l")
+delivery = "summon"
+body = SubResource("Resource_k5vss")
+hand_layers = Array[ExtResource("4_dj1pv")]([SubResource("Resource_4s3qe"), SubResource("Resource_a8v0u")])
+sockets = "measured/abilities/spells/spell.conjure_fey.sockets.json"
+effects = Array[ExtResource("3_gm3ry")]([SubResource("Resource_oxwq2")])
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+colours = SubResource("Resource_7wwtq")
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray("condition.attack_assistance", "condition.dashing", "condition.disengaging", "condition.dodging", "condition.hidden", "condition.paralyzed", "condition.prone", "condition.summoned", "trait.attack_hit_save_rider", "trait.ghoul_paralysis", "trait.keen_hearing_and_smell", "trait.keen_perception", "trait.pack_tactics", "trait.wolf_bite_prone")
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray("creature.bison", "creature.blue_raptor", "creature.boar", "creature.brown_bear", "creature.elephant", "creature.hound", "creature.jaguar", "creature.lion", "creature.mammoth", "creature.ostrich", "creature.polar_bear", "creature.raptor", "creature.rhinoceros", "creature.stag", "creature.stegosaurus", "creature.tiger", "creature.triceratops", "creature.wolf")
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+staging_unported = {
+"selection": "conjure_fey_native"
+}
+unported = {
+"condition": {
+"anchor": "effect",
+"delayMs": 0.0,
+"feedbackEnabled": true
+},
+"definitionRef": {
+"content_id": "spell.conjure_fey",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"media": [{
+"assetId": "summoning.fey_spirit.cast.back",
+"attachment": "source_hand",
+"depth": "behind_body",
+"durationMs": 750.0,
+"effectGroup": {
+"id": "cast",
+"label": "Conjure Fey · Cast"
+},
+"fps": 32.0,
+"id": "cast-back",
+"scale": 0.4,
+"startOffsetMs": -250.0,
+"viewFacing": "E"
+}, {
+"assetId": "summoning.fey_spirit.cast.front",
+"attachment": "source_hand",
+"depth": "front_body",
+"durationMs": 750.0,
+"effectGroup": {
+"id": "cast",
+"label": "Conjure Fey · Cast"
+},
+"fps": 32.0,
+"id": "cast-front",
+"scale": 0.4,
+"startOffsetMs": -250.0,
+"viewFacing": "E"
+}]
+}

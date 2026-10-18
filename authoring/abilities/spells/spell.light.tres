@@ -1,0 +1,196 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_7qner"]
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="2_f8lj6"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="3_axw8g"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="4_uf11j"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="5_xtguy"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="6_8eyla"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="7_v7lku"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="8_dg8bc"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="9_ttxmx"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="10_t4jex"]
+
+[sub_resource type="Resource" id="Resource_wxv0y"]
+script = ExtResource("1_7qner")
+role = "cast"
+clip = "Attack5"
+markers = Dictionary[String, float]({
+"release": 7.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+unported = {
+"recovery": {
+"bodyClip": "Taunt",
+"bodyPlaybackSpeed": 1.0,
+"enabled": false
+}
+}
+
+[sub_resource type="Resource" id="Resource_6li25"]
+script = ExtResource("2_f8lj6")
+roles = Dictionary[String, Color]({
+"primary": Color(0.61960787, 0.6117647, 0.79607844, 1),
+"secondary": Color(0.87058824, 0.85882354, 0.9647059, 1),
+"tertiary": Color(0.20392157, 0.19607843, 0.2784314, 1)
+})
+ramp = PackedColorArray()
+
+[sub_resource type="Resource" id="Resource_6fdye"]
+script = ExtResource("3_axw8g")
+clip = "spells/light/back/lifecycle"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+scale = 0.6
+orientation = "world"
+source_end = 2.0
+emission_seconds = 1.65
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.35
+staging_from = "client"
+extra = {
+"delay_seconds": 0.0,
+"fade_bindings": [{
+"closed": 0.0,
+"node": "effect/Donor/Glow",
+"open": 1.0,
+"property": "material_override:shader_parameter/alpha_multiplier"
+}, {
+"closed": 0.0,
+"node": "effect/Donor/Flare",
+"open": 1.0,
+"property": "material_override:shader_parameter/alpha_multiplier"
+}, {
+"closed": 0.0,
+"node": "effect/Donor/Light",
+"open": 1.0,
+"property": "light_multiplier"
+}],
+"source_rate": 1.0
+}
+
+[sub_resource type="Resource" id="Resource_nl0u8"]
+script = ExtResource("5_xtguy")
+kind = "palette_ramp"
+colours = PackedColorArray(0.20392157, 0.19607843, 0.2784314, 1, 0.3372549, 0.33333334, 0.44313726, 1, 0.48235294, 0.5019608, 0.6509804, 1, 0.61960787, 0.6117647, 0.79607844, 1, 0.79607844, 0.78431374, 0.96862745, 1, 0.87058824, 0.85882354, 0.9647059, 1)
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_1ynqd"]
+script = ExtResource("4_uf11j")
+steps = Array[ExtResource("5_xtguy")]([SubResource("Resource_nl0u8")])
+
+[sub_resource type="Resource" id="Resource_wgpmq"]
+script = ExtResource("5_xtguy")
+kind = "palette_ramp"
+colours = PackedColorArray(0.20392157, 0.19607843, 0.2784314, 1, 0.61960787, 0.6117647, 0.79607844, 1, 0.87058824, 0.85882354, 0.9647059, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_d4jdg"]
+script = ExtResource("4_uf11j")
+steps = Array[ExtResource("5_xtguy")]([SubResource("Resource_wgpmq")])
+
+[sub_resource type="Resource" id="Resource_cj35t"]
+script = ExtResource("6_8eyla")
+category = "Magic2"
+sheet = "/spritesheets/Magic2/Attack5.png"
+look = SubResource("Resource_d4jdg")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 10394827.0
+},
+"id": "cast-weaponGlow",
+"palette": {},
+"role": "hand_magic",
+"slot": "weaponGlow"
+}
+
+[sub_resource type="Resource" id="Resource_bp6bb"]
+script = ExtResource("7_v7lku")
+path = "art/media/ui/icons/smooth48/spell.light.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:spell.light"
+
+[resource]
+script = ExtResource("8_dg8bc")
+id = "spell.light"
+icon = SubResource("Resource_bp6bb")
+delivery = "touch"
+body = SubResource("Resource_wxv0y")
+hand_layers = Array[ExtResource("6_8eyla")]([SubResource("Resource_cj35t")])
+sockets = "measured/abilities/spells/spell.light.sockets.json"
+effects = Array[ExtResource("3_axw8g")]([SubResource("Resource_6fdye")])
+native_staging = true
+effect_scope = "application"
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_kind = "condition"
+owner_ids = PackedStringArray("condition.spell.light")
+owner_cues = PackedInt32Array(0)
+contact_cues = PackedInt32Array()
+optical_owner = "authoritative_light"
+light_colour = "9e9ccb"
+light_multiplier = 1.0
+colours = SubResource("Resource_6li25")
+finish = SubResource("Resource_1ynqd")
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray("condition.spell.light")
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "client"
+status = "ready"
+bounds = "measured/abilities/spells/spell.light.bounds.json"
+staging_unported = {
+"source": "sandbox/batches/support.json:/spells/light/staging"
+}
+unported = {
+"condition": {
+"anchor": "effect",
+"delayMs": 0.0,
+"feedbackEnabled": true
+},
+"contact": {
+"cellsByFacing": null
+},
+"definitionRef": {
+"content_id": "spell.light",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"media": [{
+"assetId": "support.light.back",
+"attachment": "target_ground",
+"depth": "behind_body",
+"durationMs": 2000.0,
+"effectGroup": {
+"id": "effect",
+"label": "Light"
+},
+"fps": 32.0,
+"id": "back",
+"scale": 0.5
+}, {
+"assetId": "support.light.front",
+"attachment": "target_ground",
+"depth": "front_body",
+"durationMs": 2000.0,
+"effectGroup": {
+"id": "effect",
+"label": "Light"
+},
+"fps": 32.0,
+"id": "front",
+"scale": 0.5
+}]
+}

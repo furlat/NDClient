@@ -1,0 +1,94 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_tyonc"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_t2oww"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_ojird"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_ix4qq"]
+
+[sub_resource type="Resource" id="Resource_bopn2"]
+script = ExtResource("1_tyonc")
+enabled = false
+
+[sub_resource type="Resource" id="Resource_5l6dx"]
+script = ExtResource("3_ojird")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_vcwtn"]
+script = ExtResource("2_t2oww")
+steps = Array[ExtResource("3_ojird")]([SubResource("Resource_5l6dx")])
+
+[sub_resource type="Resource" id="Resource_bj0hl"]
+script = ExtResource("1_tyonc")
+enabled = false
+
+[resource]
+script = ExtResource("4_ix4qq")
+id = "condition.spell.harm"
+label = "Harm"
+disposition = "authored"
+lifecycle = PackedStringArray("condition_life_drain_native")
+look = SubResource("Resource_vcwtn")
+layers = [{
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "condition.mark.life_drain",
+"attachment": "head",
+"category": "life_drain",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fps": 32.0,
+"id": "condition.mark.life_drain",
+"lifeStates": ["alive"],
+"markerGroup": "condition.mark.life_drain",
+"offsetY": -12.0,
+"priority": 35.0
+}]
+group = "marker.condition.spell.harm"
+max_layers = 1.0
+application_text = SubResource("Resource_bopn2")
+removal_text = SubResource("Resource_bj0hl")
+status = "ready"
+unported = {
+"application": {
+"durationMs": 0.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["hud_only"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "health.maximum_reduction",
+"visualIntensity": "state_only"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.spell.harm",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "fail_transaction",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 0.0,
+"effects": []
+}
+}

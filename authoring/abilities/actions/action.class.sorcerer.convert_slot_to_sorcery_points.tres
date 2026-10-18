@@ -1,0 +1,76 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_mtfcn"]
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="2_270w0"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_a85f2"]
+
+[sub_resource type="Resource" id="Resource_u0scm"]
+script = ExtResource("1_mtfcn")
+role = "act"
+clip = "Special1"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"effect": 0.0,
+"recover": 14.0
+})
+hidden_slots = PackedStringArray()
+
+[resource]
+script = ExtResource("2_270w0")
+id = "action.class.sorcerer.convert_slot_to_sorcery_points"
+kind = "action"
+disposition = "authored"
+body = SubResource("Resource_u0scm")
+effect_sources = PackedStringArray()
+status = "ready"
+unported = {
+"actionFeedback": null,
+"actor": {
+"media": []
+},
+"attackFeedback": null,
+"compatibleCueKinds": ["action"],
+"counterspellFeedback": null,
+"definitionRef": {
+"content_id": "action.class.sorcerer.convert_slot_to_sorcery_points",
+"content_version": 1.0,
+"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+"definition_kind": "action",
+"pack_id": "content.srd_5_1_cc"
+},
+"media": [{
+"alpha": 0.95,
+"assetId": "class.font_gather.charge-q0-all",
+"assetIdsByCamera": ["class.font_gather.charge-q0-all", "class.font_gather.charge-q1-all", "class.font_gather.charge-q2-all", "class.font_gather.charge-q3-all"],
+"attachment": "source_ground",
+"id": "charge-hand",
+"poseSocket": "hand",
+"scale": 0.3,
+"timeMap": [{
+"elapsedMs": 0.0,
+"sourceFrame": 39.0
+}, {
+"elapsedMs": 1250.0,
+"sourceFrame": 0.0
+}]
+}, {
+"alpha": 0.95,
+"assetId": "class.font_gather.charge-q0-all",
+"assetIdsByCamera": ["class.font_gather.charge-q0-all", "class.font_gather.charge-q1-all", "class.font_gather.charge-q2-all", "class.font_gather.charge-q3-all"],
+"attachment": "source_ground",
+"id": "charge-other_hand",
+"poseSocket": "other_hand",
+"scale": 0.3,
+"timeMap": [{
+"elapsedMs": 0.0,
+"sourceFrame": 39.0
+}, {
+"elapsedMs": 1250.0,
+"sourceFrame": 0.0
+}]
+}],
+"mediaFailurePolicy": "fail_transaction",
+"previewChildCueKinds": [],
+"projectile": null,
+"variants": []
+}

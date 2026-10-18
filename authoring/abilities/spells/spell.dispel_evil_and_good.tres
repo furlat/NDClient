@@ -1,0 +1,257 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="1_bkxga"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="2_16s66"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="3_rhru7"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="4_4qn8h"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="5_6rnnv"]
+
+[sub_resource type="Resource" id="Resource_bdi3s"]
+script = ExtResource("1_bkxga")
+clip = "high-level-22/dispel-evil-and-good/application"
+role = "attached"
+at = "contact"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 0.9
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.35
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "caster",
+"slots": ["body", "chest", "legs", "head", "helmet", "boots", "gauntlets", "belt", "cloak"]
+},
+"follow_attachment": true,
+"id": "high-level-22/dispel-evil-and-good/application-caster",
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "caster",
+"socket": "face"
+}, {
+"actor": "caster",
+"socket": "body_center"
+}],
+"to_actor": "caster"
+}
+
+[sub_resource type="Resource" id="Resource_r2qao"]
+script = ExtResource("1_bkxga")
+clip = "high-level-22/dispel-evil-and-good/ward"
+role = "attached"
+at = "contact"
+delay = 0.35
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 2.45
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.35
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "caster",
+"slots": ["body", "chest", "legs", "head", "helmet", "boots", "gauntlets", "belt", "cloak"]
+},
+"follow_attachment": true,
+"id": "high-level-22/dispel-evil-and-good/ward-caster",
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "caster",
+"socket": "face"
+}, {
+"actor": "caster",
+"socket": "body_center"
+}],
+"to_actor": "caster"
+}
+
+[sub_resource type="Resource" id="Resource_ut2lx"]
+script = ExtResource("1_bkxga")
+clip = "high-level-22/dispel-evil-and-good/break_enchantment"
+role = "attached"
+at = "contact"
+delay = 2.8
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 0.8
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.35
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "chest", "legs", "head", "helmet", "boots", "gauntlets", "belt", "cloak"]
+},
+"follow_attachment": true,
+"id": "high-level-22/dispel-evil-and-good/break_enchantment-target",
+"live_endpoints": [{
+"actor": "caster",
+"socket": "hand"
+}, {
+"actor": "caster",
+"socket": "face"
+}, {
+"actor": "target",
+"socket": "body_center"
+}],
+"to_actor": "target"
+}
+
+[sub_resource type="Resource" id="Resource_reu6x"]
+script = ExtResource("1_bkxga")
+clip = "high-level-22/dispel-evil-and-good/ward_retirement"
+role = "attached"
+at = "contact"
+delay = 2.8
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 0.55
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.35
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "caster",
+"slots": ["body", "chest", "legs", "head", "helmet", "boots", "gauntlets", "belt", "cloak"]
+},
+"follow_attachment": true,
+"id": "high-level-22/dispel-evil-and-good/ward_retirement-caster",
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "caster",
+"socket": "face"
+}, {
+"actor": "caster",
+"socket": "body_center"
+}],
+"to_actor": "caster"
+}
+
+[sub_resource type="Resource" id="Resource_6g5pj"]
+script = ExtResource("1_bkxga")
+clip = "high-level-22/dispel-evil-and-good/existing_fear"
+role = "attached"
+at = "contact"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 2.8
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.35
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "chest", "legs", "head", "helmet", "boots", "gauntlets", "belt", "cloak"]
+},
+"follow_attachment": true,
+"id": "high-level-22/dispel-evil-and-good/existing_fear-target",
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "caster",
+"socket": "face"
+}, {
+"actor": "target",
+"socket": "body_center"
+}],
+"to_actor": "target"
+}
+
+[sub_resource type="Resource" id="Resource_v41kd"]
+script = ExtResource("1_bkxga")
+clip = "high-level-22/dispel-evil-and-good/fear_retirement"
+role = "attached"
+at = "contact"
+delay = 2.8
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 0.55
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.35
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "chest", "legs", "head", "helmet", "boots", "gauntlets", "belt", "cloak"]
+},
+"follow_attachment": true,
+"id": "high-level-22/dispel-evil-and-good/fear_retirement-target",
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "caster",
+"socket": "face"
+}, {
+"actor": "target",
+"socket": "body_center"
+}],
+"to_actor": "target"
+}
+
+[resource]
+script = ExtResource("3_rhru7")
+id = "spell.dispel_evil_and_good"
+delivery = "self"
+effects = Array[ExtResource("1_bkxga")]([SubResource("Resource_bdi3s"), SubResource("Resource_r2qao"), SubResource("Resource_ut2lx"), SubResource("Resource_reu6x"), SubResource("Resource_6g5pj"), SubResource("Resource_v41kd")])
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray("condition.spell.dispel_evil_and_good")
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+staging_unported = {
+"selection": "dispel_evil_and_good_native"
+}

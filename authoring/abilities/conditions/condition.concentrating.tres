@@ -1,0 +1,724 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_8565k"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_yhy6v"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_2wd8y"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_48xvk"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="5_ese2j"]
+
+[sub_resource type="Resource" id="Resource_hs4wk"]
+script = ExtResource("1_8565k")
+colour = Color(0.34509805, 0.89411765, 0.58431375, 1)
+
+[sub_resource type="Resource" id="Resource_cc741"]
+script = ExtResource("3_2wd8y")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_laiag"]
+script = ExtResource("2_yhy6v")
+steps = Array[ExtResource("3_2wd8y")]([SubResource("Resource_cc741")])
+
+[sub_resource type="Resource" id="Resource_hnjrh"]
+script = ExtResource("1_8565k")
+colour = Color(0.15294118, 0.80784315, 0.78431374, 1)
+
+[sub_resource type="Resource" id="Resource_c2k2g"]
+script = ExtResource("5_ese2j")
+cue = "condition_loop"
+at = "condition.interval"
+enabled = false
+
+[resource]
+script = ExtResource("4_48xvk")
+id = "condition.concentrating"
+label = "Concentrating"
+disposition = "authored"
+lifecycle = PackedStringArray()
+look = SubResource("Resource_laiag")
+group = "body"
+priority = 30.0
+max_layers = 3.0
+application_text = SubResource("Resource_hs4wk")
+removal_text = SubResource("Resource_hnjrh")
+sounds = Dictionary[String, Resource]({
+"persistent": SubResource("Resource_c2k2g")
+})
+status = "partial"
+unported = {
+"application": {
+"durationMs": 220.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "catalog.condition.concentrating",
+"visualIntensity": "secondary_dynamic"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.concentrating",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "omit_optional_track",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": true,
+"effect": "apply",
+"evidence": "branch=aura; effect=condition.concentrating; disposition=beneficial; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "action.class.sorcerer.draconic_presence",
+"content_version": 1.0,
+"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+"definition_kind": "action",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "action"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=mark; effect=condition.concentrating; disposition=harmful; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "action.creature.skeleton_archer.mark_target",
+"content_version": 1.0,
+"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+"definition_kind": "action",
+"pack_id": "content.neurodragon"
+},
+"triggerType": "action"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=concentration_fire; effect=condition.concentrating; disposition=beneficial; target=actor; gates=origin_root:content.neurodragon:item:consumable.weapon_coat.concentration_fire@1",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "action.item.weapon_coat.apply",
+"content_version": 1.0,
+"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+"definition_kind": "action",
+"pack_id": "content.neurodragon"
+},
+"triggerType": "action"
+}, {
+"direct": true,
+"effect": "remove",
+"evidence": "branch=drop-concentration; effect=condition.concentrating.remove; disposition=neutral; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "action.drop_concentration",
+"content_version": 1.0,
+"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+"definition_kind": "action",
+"pack_id": "core.rules"
+},
+"triggerType": "action"
+}, {
+"direct": true,
+"effect": "remove",
+"evidence": "branch=failed-concentration-save; effect=condition.concentrating.remove; disposition=harmful; target=each_affected_entity; gates=saving_throw:constitution:failed:actor_spell_save_dc",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "condition.spell.sleet_storm.zone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "condition"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=concentration; effect=condition.concentrating; disposition=neutral; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.resistance",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=concentration; effect=condition.concentrating; disposition=neutral; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.guidance",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=concentration; effect=condition.concentrating; disposition=neutral; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.light",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=concentration; effect=condition.concentrating; disposition=neutral; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.shield_of_faith",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=concentration; effect=condition.concentrating; disposition=neutral; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.entangle",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=concentration; effect=condition.concentrating; disposition=neutral; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.fog_cloud",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=concentration; effect=condition.concentrating; disposition=neutral; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.bane",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=concentration; effect=condition.concentrating; disposition=neutral; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.bless",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=concentration; effect=condition.concentrating; disposition=neutral; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.expeditious_retreat",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=concentration; effect=condition.concentrating; disposition=neutral; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.web",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=concentration; effect=condition.concentrating; disposition=neutral; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.hold_person",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=concentration; effect=condition.concentrating; disposition=neutral; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.darkness",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=concentration; effect=condition.concentrating; disposition=neutral; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.gust_of_wind",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=concentration; effect=condition.concentrating; disposition=neutral; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.invisibility",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=concentration; effect=condition.concentrating; disposition=neutral; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.blur",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=concentration; effect=condition.concentrating; disposition=neutral; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.silence",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=concentration; effect=condition.concentrating; disposition=neutral; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.necrotic_bless",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.neurodragon"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=concentration; effect=condition.concentrating; disposition=neutral; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.spike_growth",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=concentration; effect=condition.concentrating; disposition=neutral; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.enhance_ability",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=concentration; effect=condition.concentrating; disposition=neutral; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.enlarge_reduce",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=concentration; effect=condition.concentrating; disposition=neutral; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.protection_from_energy",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=concentration; effect=condition.concentrating; disposition=neutral; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.beacon_of_hope",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=concentration; effect=condition.concentrating; disposition=neutral; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.call_lightning",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=concentration; effect=condition.concentrating; disposition=neutral; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.spirit_guardians",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=concentration; effect=condition.concentrating; disposition=neutral; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.stinking_cloud",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=concentration; effect=condition.concentrating; disposition=neutral; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.sleet_storm",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=concentration; effect=condition.concentrating; disposition=neutral; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.fear",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=concentration; effect=condition.concentrating; disposition=neutral; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.hypnotic_pattern",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=concentration; effect=condition.concentrating; disposition=neutral; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.bestow_curse",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=concentration; effect=condition.concentrating; disposition=neutral; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.slow",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=concentration; effect=condition.concentrating; disposition=neutral; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.haste",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=concentration; effect=condition.concentrating; disposition=neutral; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.stoneskin",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=concentration; effect=condition.concentrating; disposition=neutral; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.banishment",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=concentration; effect=condition.concentrating; disposition=neutral; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.evards_black_tentacles",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=concentration; effect=condition.concentrating; disposition=neutral; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.greater_invisibility",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=concentration; effect=condition.concentrating; disposition=neutral; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.cloudkill",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=concentration; effect=condition.concentrating; disposition=neutral; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.insect_plague",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=concentration; effect=condition.concentrating; disposition=neutral; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.hold_monster",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=concentration; effect=condition.concentrating; disposition=neutral; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.telekinesis",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=concentration; effect=condition.concentrating; disposition=neutral; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.globe_of_invulnerability",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=concentration; effect=condition.concentrating; disposition=neutral; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.sunbeam",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=concentration; effect=condition.concentrating; disposition=neutral; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.eyebite",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=concentration; effect=condition.concentrating; disposition=neutral; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.antimagic_field",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=concentration; effect=condition.concentrating; disposition=neutral; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.incendiary_cloud",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 200.0,
+"effects": []
+}
+}

@@ -1,0 +1,130 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_orje7"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_ey0qs"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_wsn4o"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_07dog"]
+
+[sub_resource type="Resource" id="Resource_boaao"]
+script = ExtResource("1_orje7")
+colour = Color(0.89411765, 0.34509805, 0.69411767, 1)
+
+[sub_resource type="Resource" id="Resource_g3pbj"]
+script = ExtResource("3_wsn4o")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_gkp1y"]
+script = ExtResource("2_ey0qs")
+steps = Array[ExtResource("3_wsn4o")]([SubResource("Resource_g3pbj")])
+
+[sub_resource type="Resource" id="Resource_h3epq"]
+script = ExtResource("1_orje7")
+colour = Color(0.80784315, 0.15294118, 0.21960784, 1)
+
+[resource]
+script = ExtResource("4_07dog")
+id = "condition.spell.expeditious_retreat"
+label = "Expeditious Retreat"
+disposition = "authored"
+lifecycle = PackedStringArray()
+look = SubResource("Resource_gkp1y")
+layers = [{
+"activeDuring": ["idle", "move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "pending.retreat.back",
+"attachment": "ground",
+"category": "retreat",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"fps": 32.0,
+"id": "pending.retreat.back",
+"priority": 30.0
+}, {
+"activeDuring": ["idle", "move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "pending.retreat.front",
+"attachment": "ground",
+"category": "retreat",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fps": 32.0,
+"id": "pending.retreat.front",
+"priority": 30.0
+}]
+group = "body"
+priority = 30.0
+max_layers = 3.0
+application_text = SubResource("Resource_boaao")
+removal_text = SubResource("Resource_h3epq")
+status = "partial"
+unported = {
+"application": {
+"durationMs": 220.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "catalog.condition.spell.expeditious_retreat",
+"visualIntensity": "secondary_dynamic"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.spell.expeditious_retreat",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "fail_transaction",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [{
+"actionRef": {
+"content_id": "action.spell.expeditious_retreat.dash",
+"content_version": 1.0,
+"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+"definition_kind": "action",
+"pack_id": "content.srd_5_1_cc"
+},
+"evidenceStatus": "verified_catalog_dependency",
+"notes": "Registered while this condition is the active provider."
+}],
+"incomingTriggers": [{
+"direct": true,
+"effect": "apply",
+"evidence": "branch=condition; effect=condition.apply; disposition=beneficial; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.expeditious_retreat",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 200.0,
+"effects": []
+}
+}

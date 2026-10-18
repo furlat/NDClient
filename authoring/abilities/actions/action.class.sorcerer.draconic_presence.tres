@@ -1,0 +1,64 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_c56mc"]
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="2_k1wuq"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_jacom"]
+
+[sub_resource type="Resource" id="Resource_atihb"]
+script = ExtResource("1_c56mc")
+role = "act"
+clip = "Special1"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"effect": 0.0,
+"recover": 14.0
+})
+hidden_slots = PackedStringArray()
+
+[resource]
+script = ExtResource("2_k1wuq")
+id = "action.class.sorcerer.draconic_presence"
+kind = "action"
+disposition = "authored"
+body = SubResource("Resource_atihb")
+effect_sources = PackedStringArray()
+status = "ready"
+unported = {
+"actionFeedback": null,
+"actor": {
+"media": []
+},
+"attackFeedback": null,
+"compatibleCueKinds": ["action"],
+"counterspellFeedback": null,
+"definitionRef": {
+"content_id": "action.class.sorcerer.draconic_presence",
+"content_version": 1.0,
+"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+"definition_kind": "action",
+"pack_id": "content.srd_5_1_cc"
+},
+"media": [{
+"alpha": 0.95,
+"assetId": "class.awe.charge-q0-all",
+"assetIdsByCamera": ["class.awe.charge-q0-all", "class.awe.charge-q1-all", "class.awe.charge-q2-all", "class.awe.charge-q3-all"],
+"attachment": "source_ground",
+"id": "charge-awe",
+"poseSocket": "hand",
+"scale": 0.3,
+"whenPresenceMode": "awe"
+}, {
+"alpha": 0.95,
+"assetId": "class.draconic_fear.charge-q0-all",
+"assetIdsByCamera": ["class.draconic_fear.charge-q0-all", "class.draconic_fear.charge-q1-all", "class.draconic_fear.charge-q2-all", "class.draconic_fear.charge-q3-all"],
+"attachment": "source_ground",
+"id": "charge-fear",
+"poseSocket": "hand",
+"scale": 0.3,
+"whenPresenceMode": "fear"
+}],
+"mediaFailurePolicy": "fail_transaction",
+"previewChildCueKinds": ["condition"],
+"projectile": null,
+"variants": []
+}

@@ -1,0 +1,91 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_op5ct"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_uvm0i"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_mxbuh"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_dkeug"]
+
+[sub_resource type="Resource" id="Resource_jyeh8"]
+script = ExtResource("1_op5ct")
+enabled = false
+colour = Color(0.34509805, 0.7647059, 0.89411765, 1)
+
+[sub_resource type="Resource" id="Resource_ijlbs"]
+script = ExtResource("3_mxbuh")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_52c1l"]
+script = ExtResource("2_uvm0i")
+steps = Array[ExtResource("3_mxbuh")]([SubResource("Resource_ijlbs")])
+
+[sub_resource type="Resource" id="Resource_rytpm"]
+script = ExtResource("1_op5ct")
+enabled = false
+colour = Color(0.15294118, 0.30588236, 0.80784315, 1)
+
+[resource]
+script = ExtResource("4_dkeug")
+id = "class_feature.barbarian.intimidating_presence_immunity"
+label = "Intimidating Presence Immunity"
+disposition = "state_only"
+lifecycle = PackedStringArray()
+look = SubResource("Resource_52c1l")
+group = "body"
+max_layers = 3.0
+application_text = SubResource("Resource_jyeh8")
+removal_text = SubResource("Resource_rytpm")
+unported = {
+"application": {
+"durationMs": 0.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["hud_only"],
+"runtimeRole": "passive_unlock",
+"visualFamily": "catalog.class_feature.barbarian.intimidating_presence_immunity",
+"visualIntensity": "icon_only"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "class_feature.barbarian.intimidating_presence_immunity",
+"content_version": 1.0,
+"definition_contract_hash": "2687590eedb36e5161aef83b10fbd3a38f68581b0d93ebdf0e283294ae8c2e6c",
+"definition_kind": "class_feature",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "omit_optional_track",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": true,
+"effect": "apply",
+"evidence": "branch=successful-save; effect=condition.intimidating_presence_immunity; disposition=beneficial; target=selected_target; gates=saving_throw:wisdom:succeeded:actor_action_dc",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "action.class.barbarian.intimidating_presence",
+"content_version": 1.0,
+"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+"definition_kind": "action",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "action"
+}],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 0.0,
+"effects": []
+}
+}
+notes = "Sent by the pinned engine under this id; not a condition id on the modern branch."

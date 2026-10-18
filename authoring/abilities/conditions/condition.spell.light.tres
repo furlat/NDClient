@@ -1,0 +1,121 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_yclrg"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_i8pq3"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_ymn2y"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_8g8pw"]
+
+[sub_resource type="Resource" id="Resource_h7liu"]
+script = ExtResource("1_yclrg")
+colour = Color(0.61960787, 0.6117647, 0.79607844, 1)
+
+[sub_resource type="Resource" id="Resource_og1my"]
+script = ExtResource("3_ymn2y")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_8ttbi"]
+script = ExtResource("2_i8pq3")
+steps = Array[ExtResource("3_ymn2y")]([SubResource("Resource_og1my")])
+
+[sub_resource type="Resource" id="Resource_ckb5g"]
+script = ExtResource("1_yclrg")
+colour = Color(0.61960787, 0.6117647, 0.79607844, 1)
+
+[resource]
+script = ExtResource("4_8g8pw")
+id = "condition.spell.light"
+label = "Light"
+disposition = "authored"
+lifecycle = PackedStringArray("condition_light_retained_native")
+owner_spell = "spell.light"
+look = SubResource("Resource_8ttbi")
+layers = [{
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "static",
+"assetId": "support.light.back",
+"attachment": "body",
+"category": "light",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"fps": 1.0,
+"id": "support.light.back",
+"priority": 40.0
+}, {
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "static",
+"assetId": "support.light.front",
+"attachment": "body",
+"category": "light",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fps": 1.0,
+"id": "support.light.front",
+"priority": 40.0
+}]
+group = "illumination"
+priority = 40.0
+max_layers = 1.0
+application_text = SubResource("Resource_h7liu")
+removal_text = SubResource("Resource_ckb5g")
+status = "ready"
+unported = {
+"application": {
+"durationMs": 0.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "catalog.condition.spell.light",
+"visualIntensity": "secondary_dynamic"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.spell.light",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "fail_transaction",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": true,
+"effect": "apply",
+"evidence": "branch=condition; effect=condition.apply; disposition=neutral; target=selected_object; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.light",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 0.0,
+"effects": []
+}
+}

@@ -1,0 +1,110 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_355np"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_i53nw"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_xcpxd"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_128fj"]
+
+[sub_resource type="Resource" id="Resource_1t6nw"]
+script = ExtResource("1_355np")
+enabled = false
+colour = Color(0.3372549, 0.8039216, 1, 1)
+
+[sub_resource type="Resource" id="Resource_gq5s3"]
+script = ExtResource("3_xcpxd")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_sltkf"]
+script = ExtResource("2_i53nw")
+steps = Array[ExtResource("3_xcpxd")]([SubResource("Resource_gq5s3")])
+
+[sub_resource type="Resource" id="Resource_5luhr"]
+script = ExtResource("1_355np")
+enabled = false
+colour = Color(0.3372549, 0.8039216, 1, 1)
+
+[resource]
+script = ExtResource("4_128fj")
+id = "condition.spell.mage_armor"
+label = "Mage Armor"
+disposition = "authored"
+lifecycle = PackedStringArray("condition_mage_armor_retained_native")
+owner_spell = "spell.mage_armor"
+look = SubResource("Resource_sltkf")
+layers = [{
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "persistent.mage_armor.back",
+"attachment": "body",
+"category": "mage_armor",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"fps": 144.0,
+"id": "persistent.mage_armor.back",
+"priority": 35.0
+}, {
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "persistent.mage_armor.front",
+"attachment": "body",
+"category": "mage_armor",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fps": 144.0,
+"id": "persistent.mage_armor.front",
+"priority": 35.0
+}]
+group = "protection"
+priority = 35.0
+max_layers = 3.0
+application_text = SubResource("Resource_1t6nw")
+removal_text = SubResource("Resource_5luhr")
+status = "ready"
+unported = {
+"application": {
+"durationMs": 0.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "persistent.mage_armor",
+"visualIntensity": "secondary_dynamic"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.spell.mage_armor",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "fail_transaction",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 0.0,
+"effects": []
+}
+}

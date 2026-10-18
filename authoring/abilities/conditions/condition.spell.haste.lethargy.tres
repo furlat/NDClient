@@ -1,0 +1,127 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_dpki1"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_x1big"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_dtlxg"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_34cw4"]
+
+[sub_resource type="Resource" id="Resource_ef7rp"]
+script = ExtResource("1_dpki1")
+colour = Color(0.3647059, 0.34509805, 0.89411765, 1)
+
+[sub_resource type="Resource" id="Resource_3efau"]
+script = ExtResource("3_dtlxg")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+rgb = Color(0.84705883, 0.9490196, 1, 1)
+saturation = 1.18
+brightness = 1.08
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_a4vqa"]
+script = ExtResource("2_x1big")
+steps = Array[ExtResource("3_dtlxg")]([SubResource("Resource_3efau")])
+
+[sub_resource type="Resource" id="Resource_s76dh"]
+script = ExtResource("1_dpki1")
+colour = Color(0.52156866, 0.15294118, 0.80784315, 1)
+
+[resource]
+script = ExtResource("4_34cw4")
+id = "condition.spell.haste.lethargy"
+label = "Haste Lethargy"
+disposition = "authored"
+lifecycle = PackedStringArray("condition_incapacitated_native")
+look = SubResource("Resource_a4vqa")
+layers = [{
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "hold",
+"assetId": "control.incapacitated.front",
+"attachment": "head",
+"category": "incapacitated",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fps": 32.0,
+"id": "control.incapacitated.front",
+"lifeStates": ["alive", "dying", "stable"],
+"markerGroup": "incapacitated",
+"priority": 30.0
+}]
+group = "marker.condition.spell.haste.lethargy"
+priority = 60.0
+max_layers = 3.0
+application_text = SubResource("Resource_ef7rp")
+removal_text = SubResource("Resource_s76dh")
+status = "ready"
+unported = {
+"application": {
+"durationMs": 220.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["body", "pose_movement"],
+"runtimeRole": "derived_or_nested_state",
+"visualFamily": "tempo.haste_lethargy",
+"visualIntensity": "primary_dynamic"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.spell.haste.lethargy",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "fail_transaction",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": {},
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": true,
+"effect": "apply",
+"evidence": "dnd/spells/transmutation.py: HasteEffect._remove creates one-round HasteLethargyEffect.",
+"evidenceStatus": "verified_source",
+"sourceRef": {
+"content_id": "condition.spell.haste",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "condition_transition"
+}, {
+"direct": true,
+"effect": "remove",
+"evidence": "Haste Lethargy has a one-round duration.",
+"evidenceStatus": "verified_source",
+"sourceRef": null,
+"triggerType": "duration"
+}],
+"relatedStates": [{
+"evidenceStatus": "verified_source",
+"relation": "derived_from",
+"targetRef": {
+"content_id": "condition.spell.haste",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+}
+}]
+},
+"removal": {
+"durationMs": 200.0,
+"effects": []
+}
+}

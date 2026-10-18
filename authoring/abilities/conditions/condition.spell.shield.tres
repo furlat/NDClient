@@ -1,0 +1,336 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_7wjpf"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_3t8dk"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_hhmhw"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_w6p6f"]
+
+[sub_resource type="Resource" id="Resource_gpg26"]
+script = ExtResource("1_7wjpf")
+enabled = false
+colour = Color(0.3372549, 0.8039216, 1, 1)
+
+[sub_resource type="Resource" id="Resource_l8knr"]
+script = ExtResource("3_hhmhw")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_kkql3"]
+script = ExtResource("2_3t8dk")
+steps = Array[ExtResource("3_hhmhw")]([SubResource("Resource_l8knr")])
+
+[sub_resource type="Resource" id="Resource_tq0a5"]
+script = ExtResource("1_7wjpf")
+enabled = false
+colour = Color(0.3372549, 0.8039216, 1, 1)
+
+[resource]
+script = ExtResource("4_w6p6f")
+id = "condition.spell.shield"
+label = "Shield"
+disposition = "authored"
+lifecycle = PackedStringArray("condition_shield_retained_native")
+owner_spell = "spell.shield"
+look = SubResource("Resource_kkql3")
+layers = [{
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "persistent.shield.back",
+"attachment": "body",
+"category": "shield",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"fps": 144.0,
+"id": "persistent.shield.back",
+"priority": 40.0
+}, {
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "persistent.shield.front",
+"attachment": "body",
+"category": "shield",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fps": 144.0,
+"id": "persistent.shield.front",
+"priority": 40.0
+}]
+group = "protection"
+priority = 40.0
+max_layers = 3.0
+application_text = SubResource("Resource_gpg26")
+removal_text = SubResource("Resource_tq0a5")
+reaction_cast = "spell.shield"
+status = "ready"
+unported = {
+"application": {
+"durationMs": 0.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "persistent.shield",
+"visualIntensity": "primary_dynamic"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.spell.shield",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {
+"E": [{
+"animation": "once",
+"assetId": "persistent.shield.hit.E.back",
+"attachment": "body",
+"category": "shield_hit",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"durationMs": 1000.0,
+"id": "persistent.shield.hit.E.back",
+"priority": 45.0
+}, {
+"animation": "once",
+"assetId": "persistent.shield.hit.E.front",
+"attachment": "body",
+"category": "shield_hit",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"durationMs": 1000.0,
+"id": "persistent.shield.hit.E.front",
+"priority": 45.0
+}],
+"N": [{
+"animation": "once",
+"assetId": "persistent.shield.hit.N.back",
+"attachment": "body",
+"category": "shield_hit",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"durationMs": 1000.0,
+"id": "persistent.shield.hit.N.back",
+"priority": 45.0
+}, {
+"animation": "once",
+"assetId": "persistent.shield.hit.N.front",
+"attachment": "body",
+"category": "shield_hit",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"durationMs": 1000.0,
+"id": "persistent.shield.hit.N.front",
+"priority": 45.0
+}],
+"NE": [{
+"animation": "once",
+"assetId": "persistent.shield.hit.NE.back",
+"attachment": "body",
+"category": "shield_hit",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"durationMs": 1000.0,
+"id": "persistent.shield.hit.NE.back",
+"priority": 45.0
+}, {
+"animation": "once",
+"assetId": "persistent.shield.hit.NE.front",
+"attachment": "body",
+"category": "shield_hit",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"durationMs": 1000.0,
+"id": "persistent.shield.hit.NE.front",
+"priority": 45.0
+}],
+"NW": [{
+"animation": "once",
+"assetId": "persistent.shield.hit.NW.back",
+"attachment": "body",
+"category": "shield_hit",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"durationMs": 1000.0,
+"id": "persistent.shield.hit.NW.back",
+"priority": 45.0
+}, {
+"animation": "once",
+"assetId": "persistent.shield.hit.NW.front",
+"attachment": "body",
+"category": "shield_hit",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"durationMs": 1000.0,
+"id": "persistent.shield.hit.NW.front",
+"priority": 45.0
+}],
+"S": [{
+"animation": "once",
+"assetId": "persistent.shield.hit.S.back",
+"attachment": "body",
+"category": "shield_hit",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"durationMs": 1000.0,
+"id": "persistent.shield.hit.S.back",
+"priority": 45.0
+}, {
+"animation": "once",
+"assetId": "persistent.shield.hit.S.front",
+"attachment": "body",
+"category": "shield_hit",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"durationMs": 1000.0,
+"id": "persistent.shield.hit.S.front",
+"priority": 45.0
+}],
+"SE": [{
+"animation": "once",
+"assetId": "persistent.shield.hit.SE.back",
+"attachment": "body",
+"category": "shield_hit",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"durationMs": 1000.0,
+"id": "persistent.shield.hit.SE.back",
+"priority": 45.0
+}, {
+"animation": "once",
+"assetId": "persistent.shield.hit.SE.front",
+"attachment": "body",
+"category": "shield_hit",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"durationMs": 1000.0,
+"id": "persistent.shield.hit.SE.front",
+"priority": 45.0
+}],
+"SW": [{
+"animation": "once",
+"assetId": "persistent.shield.hit.SW.back",
+"attachment": "body",
+"category": "shield_hit",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"durationMs": 1000.0,
+"id": "persistent.shield.hit.SW.back",
+"priority": 45.0
+}, {
+"animation": "once",
+"assetId": "persistent.shield.hit.SW.front",
+"attachment": "body",
+"category": "shield_hit",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"durationMs": 1000.0,
+"id": "persistent.shield.hit.SW.front",
+"priority": 45.0
+}],
+"W": [{
+"animation": "once",
+"assetId": "persistent.shield.hit.W.back",
+"attachment": "body",
+"category": "shield_hit",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"durationMs": 1000.0,
+"id": "persistent.shield.hit.W.back",
+"priority": 45.0
+}, {
+"animation": "once",
+"assetId": "persistent.shield.hit.W.front",
+"attachment": "body",
+"category": "shield_hit",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"durationMs": 1000.0,
+"id": "persistent.shield.hit.W.front",
+"priority": 45.0
+}]
+},
+"mediaFailurePolicy": "fail_transaction",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 0.0,
+"effects": []
+}
+}

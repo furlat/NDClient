@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="PresentationDamageType" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="1_evrlx"]
+[ext_resource type="Script" path="res://presentation/source/abilities/damage_type.gd" id="2_iy8ot"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_blr7l"]
+
+[sub_resource type="Resource" id="Resource_du6tk"]
+script = ExtResource("1_evrlx")
+id = "damage.bludgeoning"
+roles = Dictionary[String, Color]({
+"primary": Color(0.8, 0.8, 0.8, 1),
+"secondary": Color(0.53333336, 0.53333336, 0.53333336, 1),
+"tertiary": Color(1, 1, 1, 1)
+})
+ramp = PackedColorArray()
+
+[sub_resource type="Resource" id="Resource_rq6cy"]
+script = ExtResource("3_blr7l")
+cue = "physical_impact"
+at = "damage.hp"
+
+[resource]
+script = ExtResource("2_iy8ot")
+id = "Bludgeoning"
+label = "Bludgeoning"
+palette = SubResource("Resource_du6tk")
+impact_colour = "#ff8c44"
+sounds = Array[ExtResource("3_blr7l")]([SubResource("Resource_rq6cy")])
+status = "ready"

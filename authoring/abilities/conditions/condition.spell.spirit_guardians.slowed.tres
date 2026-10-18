@@ -1,0 +1,121 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_xx8ri"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_wqmd8"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_d38ok"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_78qxv"]
+
+[sub_resource type="Resource" id="Resource_r5bms"]
+script = ExtResource("1_xx8ri")
+colour = Color(0.34509805, 0.7647059, 0.89411765, 1)
+
+[sub_resource type="Resource" id="Resource_ka58c"]
+script = ExtResource("3_d38ok")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_1soro"]
+script = ExtResource("2_wqmd8")
+steps = Array[ExtResource("3_d38ok")]([SubResource("Resource_ka58c")])
+
+[sub_resource type="Resource" id="Resource_yv3xu"]
+script = ExtResource("1_xx8ri")
+colour = Color(0.15294118, 0.30588236, 0.80784315, 1)
+
+[resource]
+script = ExtResource("4_78qxv")
+id = "condition.spell.spirit_guardians.slowed"
+label = "Spirit Guardians Slowed"
+disposition = "authored"
+lifecycle = PackedStringArray("condition_movement_slowed_native")
+look = SubResource("Resource_1soro")
+layers = [{
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "condition.marker.movement_slowed.overhead",
+"attachment": "head",
+"category": "debuff_marker",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fadeInMs": 160.0,
+"fps": 32.0,
+"id": "condition.marker.movement_slowed.overhead",
+"lifeStates": ["alive", "dying", "stable"],
+"markerGroup": "movement_slowed",
+"priority": 30.0
+}]
+group = "marker.condition.spell.spirit_guardians.slowed"
+priority = 30.0
+max_layers = 3.0
+application_text = SubResource("Resource_r5bms")
+removal_text = SubResource("Resource_yv3xu")
+status = "ready"
+unported = {
+"application": {
+"durationMs": 220.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "catalog.condition.spell.spirit_guardians.slowed",
+"visualIntensity": "secondary_dynamic"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.spell.spirit_guardians.slowed",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "omit_optional_track",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": true,
+"effect": "apply",
+"evidence": "branch=condition; effect=condition.apply; disposition=harmful; target=each_affected_entity; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "condition.spell.spirit_guardians.zone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "condition"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=occupant-slow; effect=condition.spirit_guardians_slowed; disposition=harmful; target=each_affected_entity; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.spirit_guardians",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 200.0,
+"effects": []
+}
+}

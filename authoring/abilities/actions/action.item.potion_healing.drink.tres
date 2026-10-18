@@ -1,0 +1,69 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_xsv5f"]
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="2_53m40"]
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="3_nruuh"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="4_ex83q"]
+
+[sub_resource type="Resource" id="Resource_nqki8"]
+script = ExtResource("1_xsv5f")
+role = "act"
+clip = "Taunt"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"effect": 8.0,
+"recover": 10.0
+})
+hidden_slots = PackedStringArray("weapon", "weaponGlow", "offhand")
+
+[sub_resource type="Resource" id="Resource_o3jig"]
+script = ExtResource("2_53m40")
+text = "Healing Potion"
+colour = Color(0.30980393, 0.9372549, 0.38039216, 1)
+
+[resource]
+script = ExtResource("3_nruuh")
+id = "action.item.potion_healing.drink"
+kind = "action"
+family = "item"
+disposition = "authored"
+body = SubResource("Resource_nqki8")
+effect_sources = PackedStringArray()
+feedback = SubResource("Resource_o3jig")
+status = "ready"
+unported = {
+"actionFeedback": {},
+"actor": {
+"media": [{
+"anchor": "effect",
+"assetId": "strip.effect2.special1.phase1",
+"attachment": "body",
+"colors": {
+"primary": 5238625.0,
+"secondary": 16777215.0
+},
+"fps": 12.0,
+"id": "healing-potion-release",
+"loop": false,
+"offsetX": 0.0,
+"offsetY": -8.0,
+"reversed": false,
+"role": "source_vfx",
+"scale": 1.0
+}]
+},
+"attackFeedback": null,
+"compatibleCueKinds": ["item_action"],
+"counterspellFeedback": null,
+"definitionRef": {
+"content_id": "action.item.potion_healing.drink",
+"content_version": 1.0,
+"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+"definition_kind": "action",
+"pack_id": "content.neurodragon"
+},
+"mediaFailurePolicy": "fail_transaction",
+"previewChildCueKinds": ["heal"],
+"projectile": null,
+"variants": []
+}

@@ -1,0 +1,121 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_yf8e3"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_c7w2h"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_wqmeh"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_efqas"]
+
+[sub_resource type="Resource" id="Resource_1v0m1"]
+script = ExtResource("1_yf8e3")
+colour = Color(0.8666667, 0.7137255, 0.36862746, 1)
+
+[sub_resource type="Resource" id="Resource_df63p"]
+script = ExtResource("3_wqmeh")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_0iyej"]
+script = ExtResource("2_c7w2h")
+steps = Array[ExtResource("3_wqmeh")]([SubResource("Resource_df63p")])
+
+[sub_resource type="Resource" id="Resource_x2au1"]
+script = ExtResource("1_yf8e3")
+colour = Color(0.8666667, 0.7137255, 0.36862746, 1)
+
+[resource]
+script = ExtResource("4_efqas")
+id = "condition.spell.shield_of_faith"
+label = "Shield of Faith"
+disposition = "authored"
+lifecycle = PackedStringArray("condition_shield_of_faith_retained_native")
+owner_spell = "spell.shield_of_faith"
+look = SubResource("Resource_0iyej")
+layers = [{
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "static",
+"assetId": "support.shield_of_faith.back",
+"attachment": "body",
+"category": "shield_of_faith",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"fps": 1.0,
+"id": "support.shield_of_faith.back",
+"priority": 40.0
+}, {
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "static",
+"assetId": "support.shield_of_faith.front",
+"attachment": "body",
+"category": "shield_of_faith",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fps": 1.0,
+"id": "support.shield_of_faith.front",
+"priority": 40.0
+}]
+group = "body"
+priority = 40.0
+max_layers = 3.0
+application_text = SubResource("Resource_1v0m1")
+removal_text = SubResource("Resource_x2au1")
+status = "ready"
+unported = {
+"application": {
+"durationMs": 0.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "catalog.condition.spell.shield_of_faith",
+"visualIntensity": "secondary_dynamic"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.spell.shield_of_faith",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "fail_transaction",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": true,
+"effect": "apply",
+"evidence": "branch=condition; effect=condition.apply; disposition=beneficial; target=selected_target; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.shield_of_faith",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 0.0,
+"effects": []
+}
+}

@@ -1,0 +1,695 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="1_v37ej"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="2_r77q5"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="3_2s4s0"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="4_l0n5b"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="5_rxqqv"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="6_qbj7j"]
+
+[sub_resource type="Resource" id="Resource_nw1jp"]
+script = ExtResource("1_v37ej")
+clip = "bg3-36/sorcerous-burst/fire/delivery"
+role = "attached"
+at = "release"
+delay = -0.3
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.85
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center"
+}, {
+"cue_point": "source"
+}],
+"source_launch_local": 0.3
+}
+
+[sub_resource type="Resource" id="Resource_m6loi"]
+script = ExtResource("1_v37ej")
+clip = "bg3-36/sorcerous-burst/fire/impact"
+role = "attached"
+at = "release"
+delay = 0.38
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.46
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center"
+}, {
+"cue_point": "source"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_2sgs0"]
+script = ExtResource("3_2s4s0")
+path = "art/ui-delivery-20261018/runtime/smooth48/spell.sorcerous_burst.png"
+native_size = Vector2i(48, 48)
+source = "ui-delivery-20261018"
+
+[sub_resource type="Resource" id="Resource_cupom"]
+script = ExtResource("1_v37ej")
+clip = "bg3-36/sorcerous-burst/acid/delivery"
+role = "attached"
+at = "release"
+delay = -0.3
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.85
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center"
+}, {
+"cue_point": "source"
+}],
+"source_launch_local": 0.3
+}
+
+[sub_resource type="Resource" id="Resource_1owh6"]
+script = ExtResource("1_v37ej")
+clip = "bg3-36/sorcerous-burst/acid/impact"
+role = "attached"
+at = "release"
+delay = 0.38
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.46
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center"
+}, {
+"cue_point": "source"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_ci834"]
+script = ExtResource("6_qbj7j")
+id = "sorcerous_burst_acid_native"
+kind = "element"
+value = "acid"
+selection = "sorcerous_burst_acid_native"
+effects = Array[ExtResource("1_v37ej")]([SubResource("Resource_cupom"), SubResource("Resource_1owh6")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[sub_resource type="Resource" id="Resource_akfsd"]
+script = ExtResource("1_v37ej")
+clip = "bg3-36/sorcerous-burst/cold/delivery"
+role = "attached"
+at = "release"
+delay = -0.3
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.85
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center"
+}, {
+"cue_point": "source"
+}],
+"source_launch_local": 0.3
+}
+
+[sub_resource type="Resource" id="Resource_h6bil"]
+script = ExtResource("1_v37ej")
+clip = "bg3-36/sorcerous-burst/cold/impact"
+role = "attached"
+at = "release"
+delay = 0.38
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.46
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center"
+}, {
+"cue_point": "source"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_1vu7h"]
+script = ExtResource("6_qbj7j")
+id = "sorcerous_burst_cold_native"
+kind = "element"
+value = "cold"
+selection = "sorcerous_burst_cold_native"
+effects = Array[ExtResource("1_v37ej")]([SubResource("Resource_akfsd"), SubResource("Resource_h6bil")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[sub_resource type="Resource" id="Resource_0nfkv"]
+script = ExtResource("1_v37ej")
+clip = "bg3-36/sorcerous-burst/fire/miss"
+role = "attached"
+at = "release"
+delay = -0.3
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.85
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"point": [2.0, 0.8, 0.65]
+}, {
+"cue_point": "source"
+}],
+"source_launch_local": 0.3
+}
+
+[sub_resource type="Resource" id="Resource_n0edh"]
+script = ExtResource("6_qbj7j")
+id = "sorcerous_burst_miss_native"
+kind = "outcome"
+selection = "sorcerous_burst_miss_native"
+effects = Array[ExtResource("1_v37ej")]([SubResource("Resource_0nfkv")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[sub_resource type="Resource" id="Resource_siy30"]
+script = ExtResource("1_v37ej")
+clip = "bg3-36/sorcerous-burst/fire/delivery"
+role = "attached"
+at = "release"
+delay = -0.3
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.85
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center"
+}, {
+"cue_point": "source"
+}],
+"source_launch_local": 0.3
+}
+
+[sub_resource type="Resource" id="Resource_10axk"]
+script = ExtResource("1_v37ej")
+clip = "bg3-36/sorcerous-burst/fire/extra_dice"
+role = "attached"
+at = "release"
+delay = 0.38
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.46
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center"
+}, {
+"cue_point": "source"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_lpxs0"]
+script = ExtResource("6_qbj7j")
+id = "sorcerous_burst_extra_dice_native"
+kind = "form"
+selection = "sorcerous_burst_extra_dice_native"
+effects = Array[ExtResource("1_v37ej")]([SubResource("Resource_siy30"), SubResource("Resource_10axk")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[sub_resource type="Resource" id="Resource_tpaom"]
+script = ExtResource("1_v37ej")
+clip = "bg3-36/sorcerous-burst/fire/delivery"
+role = "attached"
+at = "release"
+delay = -0.3
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.85
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center"
+}, {
+"cue_point": "source"
+}],
+"source_launch_local": 0.3
+}
+
+[sub_resource type="Resource" id="Resource_ninej"]
+script = ExtResource("1_v37ej")
+clip = "bg3-36/sorcerous-burst/fire/critical"
+role = "attached"
+at = "release"
+delay = 0.38
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.46
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center"
+}, {
+"cue_point": "source"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_0bibu"]
+script = ExtResource("6_qbj7j")
+id = "sorcerous_burst_critical_native"
+kind = "outcome"
+selection = "sorcerous_burst_critical_native"
+effects = Array[ExtResource("1_v37ej")]([SubResource("Resource_tpaom"), SubResource("Resource_ninej")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[sub_resource type="Resource" id="Resource_o75yj"]
+script = ExtResource("1_v37ej")
+clip = "bg3-36/sorcerous-burst/lightning/delivery"
+role = "attached"
+at = "release"
+delay = -0.3
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.85
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center"
+}, {
+"cue_point": "source"
+}],
+"source_launch_local": 0.3
+}
+
+[sub_resource type="Resource" id="Resource_4g3n2"]
+script = ExtResource("1_v37ej")
+clip = "bg3-36/sorcerous-burst/lightning/impact"
+role = "attached"
+at = "release"
+delay = 0.38
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.46
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center"
+}, {
+"cue_point": "source"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_lswqx"]
+script = ExtResource("6_qbj7j")
+id = "sorcerous_burst_lightning_native"
+kind = "element"
+value = "lightning"
+selection = "sorcerous_burst_lightning_native"
+effects = Array[ExtResource("1_v37ej")]([SubResource("Resource_o75yj"), SubResource("Resource_4g3n2")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[sub_resource type="Resource" id="Resource_8nq7j"]
+script = ExtResource("1_v37ej")
+clip = "bg3-36/sorcerous-burst/poison/delivery"
+role = "attached"
+at = "release"
+delay = -0.3
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.85
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center"
+}, {
+"cue_point": "source"
+}],
+"source_launch_local": 0.3
+}
+
+[sub_resource type="Resource" id="Resource_8vrx2"]
+script = ExtResource("1_v37ej")
+clip = "bg3-36/sorcerous-burst/poison/impact"
+role = "attached"
+at = "release"
+delay = 0.38
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.46
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center"
+}, {
+"cue_point": "source"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_l08us"]
+script = ExtResource("6_qbj7j")
+id = "sorcerous_burst_poison_native"
+kind = "element"
+value = "poison"
+selection = "sorcerous_burst_poison_native"
+effects = Array[ExtResource("1_v37ej")]([SubResource("Resource_8nq7j"), SubResource("Resource_8vrx2")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[sub_resource type="Resource" id="Resource_w46r1"]
+script = ExtResource("1_v37ej")
+clip = "bg3-36/sorcerous-burst/psychic/delivery"
+role = "attached"
+at = "release"
+delay = -0.3
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.85
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center"
+}, {
+"cue_point": "source"
+}],
+"source_launch_local": 0.3
+}
+
+[sub_resource type="Resource" id="Resource_r80y2"]
+script = ExtResource("1_v37ej")
+clip = "bg3-36/sorcerous-burst/psychic/impact"
+role = "attached"
+at = "release"
+delay = 0.38
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.46
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center"
+}, {
+"cue_point": "source"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_uuowh"]
+script = ExtResource("6_qbj7j")
+id = "sorcerous_burst_psychic_native"
+kind = "element"
+value = "psychic"
+selection = "sorcerous_burst_psychic_native"
+effects = Array[ExtResource("1_v37ej")]([SubResource("Resource_w46r1"), SubResource("Resource_r80y2")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[sub_resource type="Resource" id="Resource_4ajd4"]
+script = ExtResource("1_v37ej")
+clip = "bg3-36/sorcerous-burst/thunder/delivery"
+role = "attached"
+at = "release"
+delay = -0.3
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.85
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center"
+}, {
+"cue_point": "source"
+}],
+"source_launch_local": 0.3
+}
+
+[sub_resource type="Resource" id="Resource_8nj6k"]
+script = ExtResource("1_v37ej")
+clip = "bg3-36/sorcerous-burst/thunder/impact"
+role = "attached"
+at = "release"
+delay = 0.38
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.46
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center"
+}, {
+"cue_point": "source"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_fe1dm"]
+script = ExtResource("6_qbj7j")
+id = "sorcerous_burst_thunder_native"
+kind = "element"
+value = "thunder"
+selection = "sorcerous_burst_thunder_native"
+effects = Array[ExtResource("1_v37ej")]([SubResource("Resource_4ajd4"), SubResource("Resource_8nj6k")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[resource]
+script = ExtResource("4_l0n5b")
+id = "spell.sorcerous_burst"
+icon = SubResource("Resource_2sgs0")
+delivery = "projectile"
+effects = Array[ExtResource("1_v37ej")]([SubResource("Resource_nw1jp"), SubResource("Resource_m6loi")])
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+feedback_ramp = PackedStringArray()
+variants = Array[ExtResource("6_qbj7j")]([SubResource("Resource_ci834"), SubResource("Resource_1vu7h"), SubResource("Resource_n0edh"), SubResource("Resource_lpxs0"), SubResource("Resource_0bibu"), SubResource("Resource_lswqx"), SubResource("Resource_l08us"), SubResource("Resource_uuowh"), SubResource("Resource_fe1dm")])
+applies_conditions = PackedStringArray()
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+staging_unported = {
+"selection": "sorcerous_burst_native"
+}

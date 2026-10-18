@@ -1,0 +1,417 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="1_yi2l2"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="2_djiiq"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="3_au07k"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="4_wv5su"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="5_7demh"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="6_2hve6"]
+
+[sub_resource type="Resource" id="Resource_x68bp"]
+script = ExtResource("1_yi2l2")
+clip = "bg3-36/flame-blade/hand_preparation"
+role = "attached"
+at = "release"
+delay = -0.55
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.55
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "hand"
+}, {
+"actor": "caster",
+"socket": "hand"
+}, {
+"cue_point": "source"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_ixmqg"]
+script = ExtResource("1_yi2l2")
+clip = "bg3-36/flame-blade/native_created_item"
+role = "attached"
+at = "release"
+attachment = "caster_ground"
+orientation = "world"
+source_end = 3.8
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "caster",
+"slots": ["weapon"]
+},
+"live_endpoints": [{
+"actor": "caster",
+"socket": "hand"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_hjtem"]
+script = ExtResource("1_yi2l2")
+clip = "bg3-36/flame-blade/native_lifetime_light"
+role = "attached"
+at = "release"
+attachment = "caster_ground"
+orientation = "world"
+source_end = 3.8
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "ground"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_8ckic"]
+script = ExtResource("1_yi2l2")
+clip = "bg3-36/flame-blade/ordinary_attack_hit"
+role = "attached"
+at = "release"
+delay = 1.72
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.45
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "chest", "head", "legs"]
+},
+"live_endpoints": [{
+"actor": "target",
+"socket": "ground"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_cxfuv"]
+script = ExtResource("3_au07k")
+path = "art/ui-delivery-20261018/runtime/smooth48/spell.flame_blade.png"
+native_size = Vector2i(48, 48)
+source = "ui-delivery-20261018"
+
+[sub_resource type="Resource" id="Resource_lh15a"]
+script = ExtResource("1_yi2l2")
+clip = "bg3-36/flame-blade/hand_preparation"
+role = "attached"
+at = "release"
+delay = -0.55
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.55
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "hand"
+}, {
+"actor": "caster",
+"socket": "hand"
+}, {
+"cue_point": "source"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_s4fsq"]
+script = ExtResource("1_yi2l2")
+clip = "bg3-36/flame-blade/miss_created_item"
+role = "attached"
+at = "release"
+attachment = "caster_ground"
+orientation = "world"
+source_end = 3.8
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "caster",
+"slots": ["weapon"]
+},
+"live_endpoints": [{
+"actor": "caster",
+"socket": "hand"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_llgj2"]
+script = ExtResource("1_yi2l2")
+clip = "bg3-36/flame-blade/miss_lifetime_light"
+role = "attached"
+at = "release"
+attachment = "caster_ground"
+orientation = "world"
+source_end = 3.8
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "ground"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_k0yrx"]
+script = ExtResource("6_2hve6")
+id = "flame_blade_miss_native"
+kind = "outcome"
+selection = "flame_blade_miss_native"
+effects = Array[ExtResource("1_yi2l2")]([SubResource("Resource_lh15a"), SubResource("Resource_s4fsq"), SubResource("Resource_llgj2")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[sub_resource type="Resource" id="Resource_5tl1n"]
+script = ExtResource("1_yi2l2")
+clip = "bg3-36/flame-blade/hand_preparation"
+role = "attached"
+at = "release"
+delay = -0.55
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.55
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "hand"
+}, {
+"actor": "caster",
+"socket": "hand"
+}, {
+"cue_point": "source"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_qr6i3"]
+script = ExtResource("1_yi2l2")
+clip = "bg3-36/flame-blade/inventory_created_item"
+role = "attached"
+at = "release"
+attachment = "caster_ground"
+orientation = "world"
+source_end = 3.8
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "caster",
+"slots": ["weapon"]
+},
+"live_endpoints": [{
+"actor": "caster",
+"socket": "hand"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_i4st1"]
+script = ExtResource("1_yi2l2")
+clip = "bg3-36/flame-blade/inventory_lifetime_light"
+role = "attached"
+at = "release"
+attachment = "caster_ground"
+orientation = "world"
+source_end = 3.8
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "ground"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_almtj"]
+script = ExtResource("6_2hve6")
+id = "flame_blade_inventory_native"
+kind = "form"
+selection = "flame_blade_inventory_native"
+effects = Array[ExtResource("1_yi2l2")]([SubResource("Resource_5tl1n"), SubResource("Resource_qr6i3"), SubResource("Resource_i4st1")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[sub_resource type="Resource" id="Resource_an4rd"]
+script = ExtResource("1_yi2l2")
+clip = "bg3-36/flame-blade/hand_preparation"
+role = "attached"
+at = "release"
+delay = -0.55
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.55
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "hand"
+}, {
+"actor": "caster",
+"socket": "hand"
+}, {
+"cue_point": "source"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_heeyk"]
+script = ExtResource("1_yi2l2")
+clip = "bg3-36/flame-blade/transfer_created_item"
+role = "attached"
+at = "release"
+attachment = "caster_ground"
+orientation = "world"
+source_end = 3.8
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "caster",
+"slots": ["weapon"]
+},
+"live_endpoints": [{
+"actor": "caster",
+"socket": "hand"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_sif1y"]
+script = ExtResource("1_yi2l2")
+clip = "bg3-36/flame-blade/transfer_lifetime_light"
+role = "attached"
+at = "release"
+attachment = "caster_ground"
+orientation = "world"
+source_end = 3.8
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "ground"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_fo625"]
+script = ExtResource("6_2hve6")
+id = "flame_blade_transfer_native"
+kind = "form"
+selection = "flame_blade_transfer_native"
+effects = Array[ExtResource("1_yi2l2")]([SubResource("Resource_an4rd"), SubResource("Resource_heeyk"), SubResource("Resource_sif1y")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[resource]
+script = ExtResource("4_wv5su")
+id = "spell.flame_blade"
+icon = SubResource("Resource_cxfuv")
+delivery = "self"
+effects = Array[ExtResource("1_yi2l2")]([SubResource("Resource_x68bp"), SubResource("Resource_ixmqg"), SubResource("Resource_hjtem"), SubResource("Resource_8ckic")])
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 1.0
+feedback_ramp = PackedStringArray()
+variants = Array[ExtResource("6_2hve6")]([SubResource("Resource_k0yrx"), SubResource("Resource_almtj"), SubResource("Resource_fo625")])
+applies_conditions = PackedStringArray("condition.spell.flame_blade")
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+staging_unported = {
+"selection": "flame_blade_native"
+}

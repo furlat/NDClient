@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_hyx1a"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_kqlfy"]
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="3_wsxhq"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="4_8ci4j"]
+
+[sub_resource type="Resource" id="Resource_11cxk"]
+script = ExtResource("1_hyx1a")
+role = "act"
+clip = "Idle"
+enabled = false
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"effect": 0.0,
+"recover": 0.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_dfjwe"]
+script = ExtResource("2_kqlfy")
+path = "art/media/ui/icons/smooth48/action.swim.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:action.swim"
+
+[resource]
+script = ExtResource("3_wsxhq")
+id = "action.swim"
+kind = "action"
+family = "core"
+icon = SubResource("Resource_dfjwe")
+disposition = "authored"
+body = SubResource("Resource_11cxk")
+effect_sources = PackedStringArray()
+status = "partial"
+unported = {
+"actionFeedback": null,
+"actor": {
+"media": []
+},
+"attackFeedback": null,
+"compatibleCueKinds": ["action"],
+"counterspellFeedback": null,
+"definitionRef": {
+"content_id": "action.swim",
+"content_version": 1.0,
+"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+"definition_kind": "action",
+"pack_id": "core.rules"
+},
+"mediaFailurePolicy": "fail_transaction",
+"previewChildCueKinds": [],
+"projectile": null,
+"variants": []
+}

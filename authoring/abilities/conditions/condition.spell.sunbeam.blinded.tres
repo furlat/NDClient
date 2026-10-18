@@ -1,0 +1,85 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_tkdvb"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_dtlg7"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_0b8ti"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_lmcon"]
+
+[sub_resource type="Resource" id="Resource_gpq4i"]
+script = ExtResource("1_tkdvb")
+enabled = false
+
+[sub_resource type="Resource" id="Resource_omqtm"]
+script = ExtResource("3_0b8ti")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_q14un"]
+script = ExtResource("2_dtlg7")
+steps = Array[ExtResource("3_0b8ti")]([SubResource("Resource_omqtm")])
+
+[sub_resource type="Resource" id="Resource_6xi4n"]
+script = ExtResource("1_tkdvb")
+enabled = false
+
+[resource]
+script = ExtResource("4_lmcon")
+id = "condition.spell.sunbeam.blinded"
+label = "Sunbeam Blindness"
+disposition = "state_only"
+lifecycle = PackedStringArray()
+look = SubResource("Resource_q14un")
+group = "condition.spell.sunbeam.blinded"
+max_layers = 1.0
+application_text = SubResource("Resource_gpq4i")
+removal_text = SubResource("Resource_6xi4n")
+unported = {
+"application": {
+"durationMs": 0.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["hud_only"],
+"runtimeRole": "condition_owner",
+"visualFamily": "shared.blinded",
+"visualIntensity": "state_only"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.spell.sunbeam.blinded",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "fail_transaction",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [],
+"relatedStates": [{
+"evidenceStatus": "native_shared_owner",
+"relation": "owns_shared_condition",
+"targetRef": {
+"content_id": "condition.blinded",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+}
+}]
+},
+"removal": {
+"durationMs": 0.0,
+"effects": []
+}
+}

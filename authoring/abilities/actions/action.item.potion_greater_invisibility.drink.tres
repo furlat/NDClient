@@ -1,0 +1,69 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_ajwu6"]
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="2_e1ka0"]
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="3_dfamg"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="4_um07p"]
+
+[sub_resource type="Resource" id="Resource_jiylq"]
+script = ExtResource("1_ajwu6")
+role = "act"
+clip = "Taunt"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"effect": 8.0,
+"recover": 10.0
+})
+hidden_slots = PackedStringArray("weapon", "weaponGlow", "offhand")
+
+[sub_resource type="Resource" id="Resource_al6mq"]
+script = ExtResource("2_e1ka0")
+text = "Greater Invisibility Potion"
+colour = Color(0.7490196, 0.49803922, 1, 1)
+
+[resource]
+script = ExtResource("3_dfamg")
+id = "action.item.potion_greater_invisibility.drink"
+kind = "action"
+family = "item"
+disposition = "authored"
+body = SubResource("Resource_jiylq")
+effect_sources = PackedStringArray()
+feedback = SubResource("Resource_al6mq")
+status = "ready"
+unported = {
+"actionFeedback": {},
+"actor": {
+"media": [{
+"anchor": "effect",
+"assetId": "strip.effect2.special1.phase1",
+"attachment": "body",
+"colors": {
+"primary": 12550143.0,
+"secondary": 16777215.0
+},
+"fps": 12.0,
+"id": "greater-invisibility-potion-release",
+"loop": false,
+"offsetX": 0.0,
+"offsetY": -8.0,
+"reversed": false,
+"role": "source_vfx",
+"scale": 1.0
+}]
+},
+"attackFeedback": null,
+"compatibleCueKinds": ["item_action"],
+"counterspellFeedback": null,
+"definitionRef": {
+"content_id": "action.item.potion_greater_invisibility.drink",
+"content_version": 1.0,
+"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+"definition_kind": "action",
+"pack_id": "content.neurodragon"
+},
+"mediaFailurePolicy": "fail_transaction",
+"previewChildCueKinds": ["condition"],
+"projectile": null,
+"variants": []
+}

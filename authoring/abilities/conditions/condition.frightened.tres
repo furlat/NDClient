@@ -1,0 +1,203 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_uq8nb"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_gf0vh"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_at5u6"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_72qwo"]
+
+[sub_resource type="Resource" id="Resource_tvkjk"]
+script = ExtResource("1_uq8nb")
+enabled = false
+colour = Color(0.8392157, 0.89411765, 0.34509805, 1)
+
+[sub_resource type="Resource" id="Resource_1uji7"]
+script = ExtResource("3_at5u6")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_gx1ph"]
+script = ExtResource("2_gf0vh")
+steps = Array[ExtResource("3_at5u6")]([SubResource("Resource_1uji7")])
+
+[sub_resource type="Resource" id="Resource_4jyn5"]
+script = ExtResource("1_uq8nb")
+enabled = false
+colour = Color(0.39215687, 0.80784315, 0.15294118, 1)
+
+[resource]
+script = ExtResource("4_72qwo")
+id = "condition.frightened"
+label = "Frightened"
+disposition = "authored"
+lifecycle = PackedStringArray("condition_frightened_native")
+look = SubResource("Resource_gx1ph")
+layers = [{
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "hold",
+"assetId": "control.frightened.back",
+"attachment": "ground",
+"category": "Frightened",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"fps": 32.0,
+"id": "frightened.back",
+"priority": 70.0
+}, {
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "hold",
+"assetId": "control.frightened.front",
+"attachment": "ground",
+"category": "Frightened",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fps": 32.0,
+"id": "frightened.front",
+"priority": 70.0
+}, {
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "condition.marker.frightened.overhead",
+"attachment": "head",
+"category": "debuff_marker",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fadeInMs": 160.0,
+"fps": 32.0,
+"id": "condition.marker.frightened.overhead",
+"lifeStates": ["alive", "dying", "stable"],
+"markerGroup": "frightened",
+"priority": 30.0
+}]
+group = "control.frightened"
+exclusive_group = "control.frightened"
+priority = 70.0
+max_layers = 1.0
+application_text = SubResource("Resource_tvkjk")
+removal_text = SubResource("Resource_4jyn5")
+status = "ready"
+unported = {
+"application": {
+"durationMs": 0.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "catalog.condition.frightened",
+"visualIntensity": "secondary_dynamic"
+},
+"composition": {},
+"definitionRef": {
+"content_id": "condition.frightened",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "omit_optional_track",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": true,
+"effect": "apply",
+"evidence": "branch=failed-save; effect=condition.frightened; disposition=harmful; target=selected_target; gates=saving_throw:wisdom:failed:actor_action_dc",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "action.class.barbarian.intimidating_presence",
+"content_version": 1.0,
+"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+"definition_kind": "action",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "action"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=failed-save-fear; effect=condition.frightened; disposition=harmful; target=each_affected_entity; gates=saving_throw:wisdom:failed:actor_action_dc+configuration:presence_mode=fear",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "class_feature.sorcerer.draconic_presence.aura",
+"content_version": 1.0,
+"definition_contract_hash": "2687590eedb36e5161aef83b10fbd3a38f68581b0d93ebdf0e283294ae8c2e6c",
+"definition_kind": "class_feature",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "class_feature"
+}, {
+"direct": true,
+"effect": "cleanse",
+"evidence": "branch=condition-cleanse; effect=cleanse.frightened; disposition=beneficial; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "condition.spell.heroes_feast",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "condition"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=condition; effect=condition.apply; disposition=harmful; target=selected_target; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "condition.spell.fear",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "condition"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=condition; effect=condition.apply; disposition=harmful; target=selected_target; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "condition.spell.eyebite.panicked",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "condition"
+}, {
+"direct": true,
+"effect": "cleanse",
+"evidence": "branch=exact-condition-cleanse; effect=cleanse.condition.frightened; disposition=beneficial; target=selected_target; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.greater_restoration",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 0.0,
+"effects": []
+}
+}

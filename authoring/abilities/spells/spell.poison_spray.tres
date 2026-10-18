@@ -1,0 +1,311 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_kyku7"]
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="2_0ion7"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="3_okksi"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="4_iavre"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="5_m4dfn"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="6_au4kb"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="7_ybvgg"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="8_q6igk"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="9_3w82t"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="10_sib0c"]
+
+[sub_resource type="Resource" id="Resource_6l4ws"]
+script = ExtResource("1_kyku7")
+role = "cast"
+clip = "Attack5"
+markers = Dictionary[String, float]({
+"release": 7.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+unported = {
+"recovery": {
+"bodyClip": "Taunt",
+"bodyPlaybackSpeed": 1.0,
+"enabled": false
+}
+}
+
+[sub_resource type="Resource" id="Resource_hpmyo"]
+script = ExtResource("2_0ion7")
+roles = Dictionary[String, Color]({
+"primary": Color(0.09411765, 0.32156864, 0.003921569, 1),
+"secondary": Color(0.38431373, 1, 0.05882353, 1),
+"tertiary": Color(0.03137255, 0.15686275, 0, 1)
+})
+ramp = PackedColorArray()
+
+[sub_resource type="Resource" id="Resource_33a2r"]
+script = ExtResource("3_okksi")
+clip = "spells/poison_spray/full/lifecycle"
+role = "spray"
+scale = 0.3
+source_launch = 0.3
+source_contact = 0.75
+source_end = 1.8
+charge_seconds = 0.3
+emission_seconds = 0.65
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "client"
+extra = {
+"rotation_degrees": [0.0, 0.0, 0.0]
+}
+
+[sub_resource type="Resource" id="Resource_8x4kg"]
+script = ExtResource("3_okksi")
+clip = "projectile-windups/poison_spray/default/cast/windup"
+role = "cast"
+scale = 0.18
+source_end = 2.52
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "client"
+extra = {
+"before_release": 0.5,
+"source_rate": 1.0
+}
+
+[sub_resource type="Resource" id="Resource_76iv1"]
+script = ExtResource("5_m4dfn")
+kind = "palette_ramp"
+colours = PackedColorArray(0, 0.003921569, 0, 1, 0.011764706, 0.07450981, 0, 1, 0.047058824, 0.19607843, 0.003921569, 1, 0.15686275, 0.4745098, 0.011764706, 1, 0.2627451, 0.7490196, 0.03137255, 1, 0.38431373, 1, 0.05882353, 1)
+ramp_floor = 0.02
+uses_luma = false
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_ftxqm"]
+script = ExtResource("4_iavre")
+steps = Array[ExtResource("5_m4dfn")]([SubResource("Resource_76iv1")])
+
+[sub_resource type="Resource" id="Resource_1s67d"]
+script = ExtResource("5_m4dfn")
+kind = "palette_ramp"
+colours = PackedColorArray(0, 0.003921569, 0, 1, 0, 0.007843138, 0, 1, 0.003921569, 0.015686275, 0, 1, 0.003921569, 0.03529412, 0, 1, 0.007843138, 0.05882353, 0, 1, 0.011764706, 0.07450981, 0, 1, 0.015686275, 0.101960786, 0, 1, 0.023529412, 0.13333334, 0, 1, 0.03137255, 0.15686275, 0, 1, 0.047058824, 0.19607843, 0.003921569, 1, 0.0627451, 0.23529412, 0.003921569, 1, 0.07450981, 0.26666668, 0.003921569, 1, 0.09411765, 0.32156864, 0.003921569, 1, 0.1254902, 0.39215687, 0.007843138, 1, 0.15686275, 0.4745098, 0.011764706, 1, 0.18039216, 0.5411765, 0.015686275, 1, 0.2, 0.5921569, 0.019607844, 1, 0.23137255, 0.67058825, 0.023529412, 1, 0.2627451, 0.7490196, 0.03137255, 1, 0.28235295, 0.8039216, 0.03529412, 1, 0.30588236, 0.8627451, 0.039215688, 1, 0.32941177, 0.91764706, 0.043137256, 1, 0.34901962, 0.9764706, 0.050980393, 1, 0.38431373, 1, 0.05882353, 1)
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_p4ivq"]
+script = ExtResource("4_iavre")
+steps = Array[ExtResource("5_m4dfn")]([SubResource("Resource_1s67d")])
+
+[sub_resource type="Resource" id="Resource_qtnxw"]
+script = ExtResource("5_m4dfn")
+kind = "palette_ramp"
+colours = PackedColorArray(0.03137255, 0.15686275, 0, 1, 0.09411765, 0.32156864, 0.003921569, 1, 0.38431373, 1, 0.05882353, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_x23lu"]
+script = ExtResource("4_iavre")
+steps = Array[ExtResource("5_m4dfn")]([SubResource("Resource_qtnxw")])
+
+[sub_resource type="Resource" id="Resource_0t3mk"]
+script = ExtResource("6_au4kb")
+category = "Magic2"
+sheet = "/spritesheets/Magic2/Attack5.png"
+look = SubResource("Resource_x23lu")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 1593857.0
+},
+"id": "cast-weaponGlow",
+"palette": {},
+"role": "hand_magic",
+"slot": "weaponGlow"
+}
+
+[sub_resource type="Resource" id="Resource_6hh0c"]
+script = ExtResource("5_m4dfn")
+kind = "palette_ramp"
+colours = PackedColorArray(0.03137255, 0.15686275, 0, 1, 0.09411765, 0.32156864, 0.003921569, 1, 0.38431373, 1, 0.05882353, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_i5wl0"]
+script = ExtResource("4_iavre")
+steps = Array[ExtResource("5_m4dfn")]([SubResource("Resource_6hh0c")])
+
+[sub_resource type="Resource" id="Resource_xwhr0"]
+script = ExtResource("6_au4kb")
+place = "effect"
+category = "Effect1"
+sheet = "/spritesheets/Effect1/Attack5.png"
+look = SubResource("Resource_i5wl0")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 1593857.0
+},
+"id": "cast-effect",
+"palette": {},
+"role": "effect",
+"slot": "effect"
+}
+
+[sub_resource type="Resource" id="Resource_ovb6k"]
+script = ExtResource("7_ybvgg")
+path = "art/media/ui/icons/smooth48/spell.poison-spray.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:spell.poison-spray"
+
+[resource]
+script = ExtResource("8_q6igk")
+id = "spell.poison_spray"
+icon = SubResource("Resource_ovb6k")
+delivery = "projectile"
+body = SubResource("Resource_6l4ws")
+hand_layers = Array[ExtResource("6_au4kb")]([SubResource("Resource_0t3mk"), SubResource("Resource_xwhr0")])
+sockets = "measured/abilities/spells/spell.poison_spray.sockets.json"
+effects = Array[ExtResource("3_okksi")]([SubResource("Resource_33a2r"), SubResource("Resource_8x4kg")])
+native_staging = true
+effect_scope = "single"
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+flight_tiles_per_second = 15.625
+minimum_travel_seconds = 0.4
+stagger_seconds = 0.0
+impact_delay = 0.0
+flash_frame = 0.0
+flash_duration = 0.15
+flash_look = SubResource("Resource_p4ivq")
+number_frame = 7.0
+number_duration = 1.0
+body_material = {
+"clip": "spells/poison_spray/full/lifecycle",
+"clock_parameter": "",
+"node": "effect/Donor/acidcone",
+"parameter_overrides": {},
+"reason": "The source uses particle StandardMaterial3D surfaces; its displayed colour and opacity include per-particle process colour/age and emission geometry. There is no independent native animated body material in the selected scene. Sampling a white-default quad would discard those inputs.",
+"status": "unsupported",
+"surface": -1.0
+}
+colours = SubResource("Resource_hpmyo")
+finish = SubResource("Resource_ftxqm")
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray()
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "client"
+status = "ready"
+bounds = "measured/abilities/spells/spell.poison_spray.bounds.json"
+staging_unported = {
+"palette": {
+"palette": ["000100", "000200", "010400", "010900", "020f00", "031300", "041a00", "062200", "082800", "0c3201", "103c01", "134401", "185201", "206402", "287903", "2e8a04", "339705", "3bab06", "43bf08", "48cd09", "4edc0a", "54ea0b", "59f90d", "62ff0f"],
+"parameters": {
+"alpha_cutoff": 0.035,
+"color_boost": 1.0,
+"energy_ceiling": 0.5,
+"energy_floor": 0.18,
+"palette_energy_floor": 0.0,
+"palette_luma_floor": 0.0,
+"ramp_ceiling": 1.0,
+"rgb_block_pixels": 3.0
+},
+"shader": "res://assets/native_effects/sandbox/projectiles/factory/shaders/energy_palette_v1.gdshader"
+},
+"source": "sandbox/staging.json:/spells/poison_spray"
+}
+unported = {
+"condition": {
+"anchor": "effect",
+"delayMs": 0.0,
+"feedbackEnabled": true
+},
+"damage": {
+"death": {
+"enabled": true,
+"frame": 12.0
+},
+"floatingNumber": {
+"color": 1593857.0,
+"enabled": true,
+"label": "Poison"
+},
+"hitFlash": {
+"color": 1593857.0,
+"enabled": true,
+"palette": {}
+}
+},
+"definitionRef": {
+"content_id": "spell.poison_spray",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"projectile": {
+"depthMode": "world",
+"fps": 32.0,
+"geometry": {
+"enabled": false,
+"primitive": "spray",
+"renderer": "geometry_projectile"
+},
+"impact": {
+"assetPhase": "impact",
+"enabled": true,
+"fps": 32.0
+},
+"orientation": {
+"directionSource": "tangent",
+"fineRotation": "isometricHybrid",
+"rotationOffsetDeg": 0.0,
+"rowSource": "targetVector"
+},
+"prepare": {
+"assetPhase": "cast",
+"enabled": false,
+"startFrame": 4.0
+},
+"scale": 0.5,
+"sourceAnchor": {
+"axisPx": 0.0,
+"basis": "rigRoot",
+"forwardPx": 0.0,
+"liftY": 0.0,
+"sidePx": 0.0
+},
+"sprite": {
+"alpha": 1.0,
+"assetId": "cantrip.poison_spray.full",
+"blendMode": "normal",
+"geometryComposition": "replace_geometry",
+"mediaFailurePolicy": "fail_transaction",
+"offsetX": 0.0,
+"offsetY": 0.0,
+"renderer": "sprite_projectile",
+"tint": 16777215.0
+},
+"targetAnchor": {
+"basis": "body",
+"forwardPx": 0.0,
+"liftY": 0.0
+},
+"trajectory": {
+"sameTargetSpread": false,
+"type": "straight"
+},
+"travel": {
+"assetPhase": "travel",
+"enabled": true,
+"fps": 32.0
+}
+}
+}

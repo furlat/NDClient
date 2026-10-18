@@ -1,0 +1,110 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_qj2bv"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_j0t27"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_utav0"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_fmt15"]
+
+[sub_resource type="Resource" id="Resource_bydir"]
+script = ExtResource("1_qj2bv")
+enabled = false
+colour = Color(0.34509805, 0.8392157, 0.89411765, 1)
+
+[sub_resource type="Resource" id="Resource_e8qwf"]
+script = ExtResource("3_utav0")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_vgvqg"]
+script = ExtResource("2_j0t27")
+steps = Array[ExtResource("3_utav0")]([SubResource("Resource_e8qwf")])
+
+[sub_resource type="Resource" id="Resource_4bbdi"]
+script = ExtResource("1_qj2bv")
+enabled = false
+colour = Color(0.15294118, 0.39215687, 0.80784315, 1)
+
+[resource]
+script = ExtResource("4_fmt15")
+id = "condition.spell.guiding_bolt.marked"
+label = "Guiding Bolt"
+disposition = "authored"
+lifecycle = PackedStringArray("condition_guiding_mark_native")
+look = SubResource("Resource_vgvqg")
+layers = [{
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "condition.mark.guiding_mark",
+"attachment": "head",
+"category": "guiding_mark",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fps": 32.0,
+"id": "condition.mark.guiding_mark",
+"lifeStates": ["alive"],
+"markerGroup": "condition.mark.guiding_mark",
+"offsetY": -12.0,
+"priority": 35.0
+}]
+group = "marker.condition.spell.guiding_bolt.marked"
+priority = 35.0
+max_layers = 1.0
+application_text = SubResource("Resource_bydir")
+removal_text = SubResource("Resource_4bbdi")
+status = "ready"
+unported = {
+"application": {
+"durationMs": 200.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "condition.mark.guiding_mark",
+"visualIntensity": "ambient_passive"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.spell.guiding_bolt.marked",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "fail_transaction",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": true,
+"effect": "apply",
+"evidence": "branch=condition; effect=condition.apply; disposition=harmful; target=selected_target; gates=attack_outcome:hit,critical",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.guiding_bolt",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 200.0,
+"effects": []
+}
+}

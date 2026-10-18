@@ -1,0 +1,114 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_0w1ht"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_j6loj"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_dpmug"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_telr8"]
+
+[sub_resource type="Resource" id="Resource_m6b6k"]
+script = ExtResource("1_0w1ht")
+colour = Color(0.6666667, 0.8, 1, 1)
+
+[sub_resource type="Resource" id="Resource_lm64f"]
+script = ExtResource("3_dpmug")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+rgb = Color(0.7176471, 0.78039217, 1, 1)
+saturation = 0.62
+brightness = 0.96
+alpha = 0.5
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_k4y4g"]
+script = ExtResource("2_j6loj")
+steps = Array[ExtResource("3_dpmug")]([SubResource("Resource_lm64f")])
+
+[sub_resource type="Resource" id="Resource_4g4mv"]
+script = ExtResource("1_0w1ht")
+colour = Color(0.8745098, 0.8745098, 1, 1)
+
+[resource]
+script = ExtResource("4_telr8")
+id = "condition.invisible"
+label = "Invisible"
+disposition = "authored"
+lifecycle = PackedStringArray()
+look = SubResource("Resource_k4y4g")
+group = "visibility"
+exclusive_group = "invisibility"
+priority = 90.0
+max_layers = 1.0
+application_text = SubResource("Resource_m6b6k")
+removal_text = SubResource("Resource_4g4mv")
+status = "ready"
+unported = {
+"application": {
+"durationMs": 240.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["perception_visibility", "body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "visibility.invisible",
+"visualIntensity": "primary_dynamic"
+},
+"composition": {},
+"definitionRef": {
+"content_id": "condition.invisible",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "fail_transaction",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": {},
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": true,
+"effect": "apply",
+"evidence": "Core Invisible is a registered runtime condition identity; no single applying action is currently declared in the catalog.",
+"evidenceStatus": "verified_backend_inventory",
+"sourceRef": null,
+"triggerType": "initialization_or_rules_effect"
+}, {
+"direct": true,
+"effect": "remove",
+"evidence": "dnd/conditions.py: Invisible removal and perception handlers.",
+"evidenceStatus": "verified_source",
+"sourceRef": null,
+"triggerType": "rules_effect"
+}],
+"relatedStates": [{
+"evidenceStatus": "authored_visual_relation",
+"relation": "shares_persistent_profile_with",
+"targetRef": {
+"content_id": "condition.spell.invisibility",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+}
+}, {
+"evidenceStatus": "authored_visual_relation",
+"relation": "shares_persistent_profile_with",
+"targetRef": {
+"content_id": "condition.spell.greater_invisibility",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+}
+}]
+},
+"removal": {
+"durationMs": 200.0,
+"effects": []
+}
+}

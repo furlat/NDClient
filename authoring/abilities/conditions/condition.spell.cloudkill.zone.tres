@@ -1,0 +1,91 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_1c62q"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_mekh8"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_p65b3"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_fyo6s"]
+
+[sub_resource type="Resource" id="Resource_j8mng"]
+script = ExtResource("1_1c62q")
+colour = Color(0.89411765, 0.70980394, 0.34509805, 1)
+
+[sub_resource type="Resource" id="Resource_q81go"]
+script = ExtResource("3_p65b3")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_31cf2"]
+script = ExtResource("2_mekh8")
+steps = Array[ExtResource("3_p65b3")]([SubResource("Resource_q81go")])
+
+[sub_resource type="Resource" id="Resource_uyw1k"]
+script = ExtResource("1_1c62q")
+colour = Color(0.6745098, 0.80784315, 0.15294118, 1)
+
+[resource]
+script = ExtResource("4_fyo6s")
+id = "condition.spell.cloudkill.zone"
+label = "Cloudkill Zone"
+disposition = "authored"
+lifecycle = PackedStringArray()
+surface = "spatial_effect.spell.cloudkill"
+look = SubResource("Resource_31cf2")
+group = "ground_zone"
+priority = 30.0
+max_layers = 3.0
+application_text = SubResource("Resource_j8mng")
+removal_text = SubResource("Resource_uyw1k")
+status = "partial"
+unported = {
+"application": {
+"durationMs": 220.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["ground_zone"],
+"runtimeRole": "zone_or_tile_state",
+"visualFamily": "catalog.condition.spell.cloudkill.zone",
+"visualIntensity": "secondary_dynamic"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.spell.cloudkill.zone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "omit_optional_track",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": true,
+"effect": "apply",
+"evidence": "branch=condition; effect=condition.apply; disposition=harmful; target=world_position; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.cloudkill",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 200.0,
+"effects": []
+}
+}

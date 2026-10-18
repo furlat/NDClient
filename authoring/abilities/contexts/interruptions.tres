@@ -1,0 +1,43 @@
+[gd_resource type="Resource" script_class="PresentationContext" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/context.gd" id="1_brb2f"]
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="2_ts62j"]
+
+[resource]
+script = ExtResource("1_brb2f")
+id = "interruptions"
+unported = {
+"outcomes": ["spell.sanctuary.blocked", "spell.globe_of_invulnerability.blocked", "spell.counterspell.interrupted"],
+"reactions": {
+"reaction.spell.counterspell": {
+"castLayers": [{
+"category": "Magic3",
+"colors": {
+"mode": "tint",
+"primary": 16777215.0,
+"source": "override"
+},
+"enabled": true,
+"hidden": false,
+"id": "counterspell-hands",
+"slot": "weaponGlow",
+"sourceSheet": "/counterspell-media/cast-hands.png"
+}],
+"dissipationMask": "counterspell.dissipation",
+"durationMs": 500.0,
+"failureByCamera": ["counterspell.failure.q0", "counterspell.failure.q1", "counterspell.failure.q2", "counterspell.failure.q3"],
+"successByCamera": ["counterspell.success.q0", "counterspell.success.q1", "counterspell.success.q2", "counterspell.success.q3"]
+}
+},
+"rules": [{
+"actionEconomySpent": false,
+"anticipationFraction": 0.8,
+"phases": ["declaration", "execution"]
+}, {
+"actionEconomySpent": true,
+"anticipationFraction": 0.95,
+"nonProjectileBodyFraction": 0.9,
+"phases": ["execution"],
+"travelFraction": 0.5
+}]
+}

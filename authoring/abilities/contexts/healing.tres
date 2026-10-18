@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="PresentationContext" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_wp0pi"]
+[ext_resource type="Script" path="res://presentation/source/abilities/context.gd" id="2_6md7h"]
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="3_qrpao"]
+
+[sub_resource type="Resource" id="Resource_7pboq"]
+script = ExtResource("1_wp0pi")
+role = "healing"
+clip = "none"
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_oswtn"]
+script = ExtResource("3_qrpao")
+text = "Heal"
+colour = Color(0.26666668, 1, 0.26666668, 1)
+duration = 0.9
+
+[resource]
+script = ExtResource("2_6md7h")
+id = "healing"
+body = SubResource("Resource_7pboq")
+texts = Dictionary[String, ExtResource("3_qrpao")]({
+"heal": SubResource("Resource_oswtn")
+})
+unported = {
+"media": []
+}

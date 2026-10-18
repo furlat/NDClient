@@ -1,0 +1,269 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_amyla"]
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="2_fnaw7"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="3_bc4k0"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="4_10coh"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="5_4ufdx"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="6_cjh4t"]
+
+[sub_resource type="Resource" id="Resource_nlgb0"]
+script = ExtResource("1_amyla")
+role = "apply"
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_qj2dw"]
+script = ExtResource("2_fnaw7")
+colour = Color(0.89411765, 0.7019608, 0.34509805, 1)
+
+[sub_resource type="Resource" id="Resource_763n1"]
+script = ExtResource("4_10coh")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_ei5s2"]
+script = ExtResource("4_10coh")
+kind = "pose"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+pose_role = "rest"
+pose_clip = "Die"
+
+[sub_resource type="Resource" id="Resource_7ueia"]
+script = ExtResource("3_bc4k0")
+steps = Array[ExtResource("4_10coh")]([SubResource("Resource_763n1"), SubResource("Resource_ei5s2")])
+
+[sub_resource type="Resource" id="Resource_sb85e"]
+script = ExtResource("1_amyla")
+role = "remove"
+clip = "Die"
+playback_speed = 1.5
+reversed = true
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_1y6g3"]
+script = ExtResource("2_fnaw7")
+colour = Color(0.6862745, 0.80784315, 0.15294118, 1)
+
+[sub_resource type="Resource" id="Resource_qhht6"]
+script = ExtResource("6_cjh4t")
+cue = "body_fall"
+at = "body.end"
+
+[sub_resource type="Resource" id="Resource_igehm"]
+script = ExtResource("6_cjh4t")
+cue = "stand_up"
+at = "event.start"
+
+[resource]
+script = ExtResource("5_4ufdx")
+id = "condition.prone"
+label = "Prone"
+disposition = "authored"
+lifecycle = PackedStringArray("condition_prone_native")
+look = SubResource("Resource_7ueia")
+layers = [{
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "condition.marker.prone.overhead",
+"attachment": "head",
+"category": "debuff_marker",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fadeInMs": 160.0,
+"fps": 32.0,
+"id": "condition.marker.prone.overhead",
+"lifeStates": ["alive", "dying", "stable"],
+"markerGroup": "prone",
+"priority": 50.0
+}]
+group = "marker.condition.prone"
+priority = 60.0
+max_layers = 3.0
+application_text = SubResource("Resource_qj2dw")
+removal_text = SubResource("Resource_1y6g3")
+application_body = SubResource("Resource_nlgb0")
+removal_body = SubResource("Resource_sb85e")
+sounds = Dictionary[String, Resource]({
+"application": SubResource("Resource_qhht6"),
+"removal": SubResource("Resource_igehm")
+})
+status = "ready"
+unported = {
+"application": {
+"bodyAnimation": {},
+"durationMs": 220.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["body", "pose_movement"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "pose.prone",
+"visualIntensity": "primary_dynamic"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "fail_transaction",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": true,
+"effect": "apply",
+"evidence": "branch=condition; effect=condition.apply; disposition=neutral; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "action.core.drop_prone",
+"content_version": 1.0,
+"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+"definition_kind": "action",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "action"
+}, {
+"direct": true,
+"effect": "remove",
+"evidence": "branch=stand-up; effect=condition.prone.remove; disposition=beneficial; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "action.core.stand_up",
+"content_version": 1.0,
+"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+"definition_kind": "action",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "action"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=successful-prone-shove; effect=condition.prone; disposition=harmful; target=selected_target; gates=action_outcome:succeeded+configuration:shove_mode=prone",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "action.shove",
+"content_version": 1.0,
+"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+"definition_kind": "action",
+"pack_id": "core.rules"
+},
+"triggerType": "action"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=condition; effect=condition.apply; disposition=harmful; target=each_affected_entity; gates=saving_throw:dexterity:failed:actor_spell_save_dc",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "condition.spell.grease.zone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "condition"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=failed-dexterity-save; effect=condition.prone; disposition=harmful; target=each_affected_entity; gates=saving_throw:dexterity:failed:actor_spell_save_dc",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "condition.spell.sleet_storm.zone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "condition"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=condition; effect=condition.apply; disposition=harmful; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "condition.spell.command.grovel",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "condition"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=bite-rider; effect=condition.prone; disposition=harmful; target=selected_target; gates=attack_outcome:hit,critical+saving_throw:strength:failed:fixed",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "trait.dire_wolf_bite_prone",
+"content_version": 1.0,
+"definition_contract_hash": "8b81685f804e251441a0107c1620212c9d441cf2d4c30a29cd5c34d344201c9a",
+"definition_kind": "trait",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "trait"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=bite-rider; effect=condition.prone; disposition=harmful; target=selected_target; gates=attack_outcome:hit,critical+saving_throw:strength:failed:fixed",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "trait.wolf_bite_prone",
+"content_version": 1.0,
+"definition_contract_hash": "8b81685f804e251441a0107c1620212c9d441cf2d4c30a29cd5c34d344201c9a",
+"definition_kind": "trait",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "trait"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=failed-save-prone; effect=condition.prone; disposition=harmful; target=each_affected_entity; gates=saving_throw:dexterity:failed:actor_spell_save_dc",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.grease",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=failed-dexterity-save; effect=condition.prone; disposition=harmful; target=each_affected_entity; gates=saving_throw:dexterity:failed:actor_spell_save_dc",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.sleet_storm",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}],
+"relatedStates": []
+},
+"removal": {
+"bodyAnimation": {},
+"durationMs": 200.0,
+"effects": []
+}
+}

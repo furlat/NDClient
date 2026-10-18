@@ -1,0 +1,142 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="1_5jxco"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="2_jf7pq"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="3_67l4k"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="4_qua5r"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="5_167o6"]
+
+[sub_resource type="Resource" id="Resource_e6m3i"]
+script = ExtResource("1_5jxco")
+clip = "high-level-22/flesh-to-stone/application"
+role = "attached"
+at = "cast"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 1.05
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.3
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "caster",
+"slots": ["body", "chest", "belt", "cloak", "legs", "shoes"]
+},
+"follow_attachment": true,
+"id": "flesh_to_stone-application-caster-0.0",
+"live_endpoints": [{
+"actor": "caster",
+"socket": "face"
+}, {
+"actor": "caster",
+"socket": "body_center"
+}],
+"to_actor": "caster"
+}
+
+[sub_resource type="Resource" id="Resource_xybf5"]
+script = ExtResource("1_5jxco")
+clip = "high-level-22/flesh-to-stone/application"
+role = "attached"
+at = "contact"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 1.05
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.3
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "chest", "belt", "cloak", "legs", "shoes"]
+},
+"follow_attachment": true,
+"id": "flesh_to_stone-application-target-0.0",
+"live_endpoints": [{
+"actor": "caster",
+"socket": "face"
+}, {
+"actor": "target",
+"socket": "body_center"
+}],
+"to_actor": "target"
+}
+
+[sub_resource type="Resource" id="Resource_0bnmh"]
+script = ExtResource("1_5jxco")
+clip = "high-level-22/flesh-to-stone/petrified_marker"
+role = "attached"
+at = "contact"
+delay = 2.6
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 2.25
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.2
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"follow_attachment": true,
+"id": "flesh_to_stone-petrified_marker-target-2.6",
+"to_actor": "target"
+}
+
+[sub_resource type="Resource" id="Resource_8n2ec"]
+script = ExtResource("1_5jxco")
+clip = "high-level-22/flesh-to-stone/material-body-window"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 6.17
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"id": "flesh-to-stone-complete-material-window",
+"to_actor": "target"
+}
+
+[resource]
+script = ExtResource("3_67l4k")
+id = "spell.flesh_to_stone"
+delivery = "condition_only"
+effects = Array[ExtResource("1_5jxco")]([SubResource("Resource_e6m3i"), SubResource("Resource_xybf5"), SubResource("Resource_0bnmh"), SubResource("Resource_8n2ec")])
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray("condition.spell.flesh_to_stone.petrified", "condition.spell.flesh_to_stone.stages")
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+staging_unported = {
+"selection": "flesh_to_stone_material_native"
+}

@@ -1,0 +1,391 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="1_owtpk"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="2_lgjr7"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="3_o0b3v"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="4_hcpcd"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="5_j3g27"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="6_xcbwv"]
+
+[sub_resource type="Resource" id="Resource_smev0"]
+script = ExtResource("1_owtpk")
+clip = "bg3-36/acid-arrow/delivery"
+role = "attached"
+at = "release"
+delay = -0.45
+attachment = "caster_ground"
+orientation = "world"
+source_end = 1.07
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center"
+}, {
+"cue_point": "source"
+}, {
+"actor": "target",
+"socket": "ground"
+}],
+"source_launch_local": 0.45
+}
+
+[sub_resource type="Resource" id="Resource_8swrr"]
+script = ExtResource("1_owtpk")
+clip = "bg3-36/acid-arrow/impact"
+role = "attached"
+at = "release"
+delay = 0.5
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.62
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center"
+}, {
+"cue_point": "source"
+}, {
+"actor": "target",
+"socket": "ground"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_7bh41"]
+script = ExtResource("1_owtpk")
+clip = "bg3-36/acid-arrow/residue"
+role = "attached"
+at = "release"
+delay = 0.5
+attachment = "caster_ground"
+orientation = "world"
+source_end = 1.8
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "legs", "shoes", "chest", "hands", "head", "helmet", "cloak"]
+},
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center"
+}, {
+"cue_point": "source"
+}, {
+"actor": "target",
+"socket": "ground"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_4tpo2"]
+script = ExtResource("1_owtpk")
+clip = "bg3-36/acid-arrow/tick"
+role = "attached"
+at = "release"
+delay = 2.3
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.55
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "legs", "shoes", "chest", "hands", "head", "helmet", "cloak"]
+},
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center"
+}, {
+"cue_point": "source"
+}, {
+"actor": "target",
+"socket": "ground"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_b1t0r"]
+script = ExtResource("1_owtpk")
+clip = "bg3-36/acid-arrow/patch"
+role = "attached"
+at = "release"
+delay = 0.5
+attachment = "caster_ground"
+orientation = "world"
+source_end = 3.7
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"point": [2.0, 0.0, 0.0]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_k84gt"]
+script = ExtResource("3_o0b3v")
+path = "art/ui-delivery-20261018/runtime/smooth48/spell.acid_arrow.png"
+native_size = Vector2i(48, 48)
+source = "ui-delivery-20261018"
+
+[sub_resource type="Resource" id="Resource_jqwfb"]
+script = ExtResource("1_owtpk")
+clip = "bg3-36/acid-arrow/miss-delivery"
+role = "attached"
+at = "release"
+delay = -0.45
+attachment = "caster_ground"
+orientation = "world"
+source_end = 1.07
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"point": [2.0, 0.15, 0.6]
+}, {
+"cue_point": "source"
+}, {
+"actor": "target",
+"socket": "ground"
+}],
+"source_launch_local": 0.45
+}
+
+[sub_resource type="Resource" id="Resource_oaupn"]
+script = ExtResource("1_owtpk")
+clip = "bg3-36/acid-arrow/miss-splash"
+role = "attached"
+at = "release"
+delay = 0.5
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.62
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"point": [2.0, 0.15, 0.6]
+}, {
+"cue_point": "source"
+}, {
+"actor": "target",
+"socket": "ground"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_4myjo"]
+script = ExtResource("1_owtpk")
+clip = "bg3-36/acid-arrow/patch"
+role = "attached"
+at = "release"
+delay = 0.5
+attachment = "caster_ground"
+orientation = "world"
+source_end = 3.7
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"point": [2.0, 0.0, 0.0]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_t0246"]
+script = ExtResource("6_xcbwv")
+id = "acid_arrow_miss_native"
+kind = "outcome"
+selection = "acid_arrow_miss_native"
+effects = Array[ExtResource("1_owtpk")]([SubResource("Resource_jqwfb"), SubResource("Resource_oaupn"), SubResource("Resource_4myjo")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[sub_resource type="Resource" id="Resource_ajncm"]
+script = ExtResource("1_owtpk")
+clip = "bg3-36/acid-arrow/ground-delivery"
+role = "attached"
+at = "release"
+delay = -0.45
+attachment = "caster_ground"
+orientation = "world"
+source_end = 1.07
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"point": [2.0, 0.025, 1.0]
+}, {
+"cue_point": "source"
+}, {
+"actor": "target",
+"socket": "ground"
+}],
+"source_launch_local": 0.45
+}
+
+[sub_resource type="Resource" id="Resource_58uoh"]
+script = ExtResource("1_owtpk")
+clip = "bg3-36/acid-arrow/ground-splash"
+role = "attached"
+at = "release"
+delay = 0.5
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.62
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"point": [2.0, 0.025, 1.0]
+}, {
+"cue_point": "source"
+}, {
+"actor": "target",
+"socket": "ground"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_jcc0t"]
+script = ExtResource("1_owtpk")
+clip = "bg3-36/acid-arrow/patch"
+role = "attached"
+at = "release"
+delay = 0.5
+attachment = "caster_ground"
+orientation = "world"
+source_end = 3.7
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"point": [2.0, 0.0, 1.0]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_usja6"]
+script = ExtResource("6_xcbwv")
+id = "acid_arrow_ground_native"
+kind = "form"
+selection = "acid_arrow_ground_native"
+effects = Array[ExtResource("1_owtpk")]([SubResource("Resource_ajncm"), SubResource("Resource_58uoh"), SubResource("Resource_jcc0t")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[resource]
+script = ExtResource("4_hcpcd")
+id = "spell.acid_arrow"
+icon = SubResource("Resource_k84gt")
+delivery = "projectile"
+effects = Array[ExtResource("1_owtpk")]([SubResource("Resource_smev0"), SubResource("Resource_8swrr"), SubResource("Resource_7bh41"), SubResource("Resource_4tpo2"), SubResource("Resource_b1t0r")])
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+feedback_ramp = PackedStringArray()
+variants = Array[ExtResource("6_xcbwv")]([SubResource("Resource_t0246"), SubResource("Resource_usja6")])
+applies_conditions = PackedStringArray("condition.prone", "condition.spell.acid_arrow", "condition.spell.acid_surface", "condition.spell.acid_surface.membership", "condition.spell.simple_toxin")
+applies_surfaces = PackedStringArray("spatial_effect.material.electrified_water", "spatial_effect.material.fire", "spatial_effect.material.ice", "spatial_effect.spell.acid_surface", "spatial_effect.spell.simple_toxin")
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+staging_unported = {
+"selection": "acid_arrow_native"
+}

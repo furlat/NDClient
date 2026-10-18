@@ -1,0 +1,158 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="1_lpasj"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="2_4xs85"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="3_drp8d"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="4_dl3lc"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="5_2yotj"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="6_kw6af"]
+
+[sub_resource type="Resource" id="Resource_1y83y"]
+script = ExtResource("1_lpasj")
+clip = "bg3-36/faerie-fire/mixed/initial-area"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 1.0
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+
+[sub_resource type="Resource" id="Resource_ygt6f"]
+script = ExtResource("1_lpasj")
+clip = "bg3-36/faerie-fire/mixed/observed-outline"
+role = "attached"
+at = "release"
+delay = 0.22
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 3.2
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.3
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "head", "helmet", "body_armor", "gauntlets", "boots", "belt", "legs", "cloak"]
+},
+"follow_attachment": true
+}
+
+[sub_resource type="Resource" id="Resource_mcy36"]
+script = ExtResource("3_drp8d")
+path = "art/ui-delivery-20261018/runtime/smooth48/spell.faerie_fire.png"
+native_size = Vector2i(48, 48)
+source = "ui-delivery-20261018"
+
+[sub_resource type="Resource" id="Resource_a2u6o"]
+script = ExtResource("1_lpasj")
+clip = "bg3-36/faerie-fire/saved/initial-area"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 1.0
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+
+[sub_resource type="Resource" id="Resource_rv185"]
+script = ExtResource("6_kw6af")
+id = "faerie_fire_saved_native"
+kind = "element"
+value = "fire"
+selection = "faerie_fire_saved_native"
+effects = Array[ExtResource("1_lpasj")]([SubResource("Resource_a2u6o")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[sub_resource type="Resource" id="Resource_jbwgb"]
+script = ExtResource("1_lpasj")
+clip = "bg3-36/faerie-fire/moving/initial-area"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 1.0
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+
+[sub_resource type="Resource" id="Resource_6b6eo"]
+script = ExtResource("1_lpasj")
+clip = "bg3-36/faerie-fire/moving/observed-outline"
+role = "attached"
+at = "release"
+delay = 0.22
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 3.2
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.3
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "head", "helmet", "body_armor", "gauntlets", "boots", "belt", "legs", "cloak"]
+},
+"follow_attachment": true
+}
+
+[sub_resource type="Resource" id="Resource_lvktd"]
+script = ExtResource("6_kw6af")
+id = "faerie_fire_moving_native"
+kind = "element"
+value = "fire"
+selection = "faerie_fire_moving_native"
+effects = Array[ExtResource("1_lpasj")]([SubResource("Resource_jbwgb"), SubResource("Resource_6b6eo")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[resource]
+script = ExtResource("4_dl3lc")
+id = "spell.faerie_fire"
+icon = SubResource("Resource_mcy36")
+delivery = "sphere"
+effects = Array[ExtResource("1_lpasj")]([SubResource("Resource_1y83y"), SubResource("Resource_ygt6f")])
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 1.0
+feedback_ramp = PackedStringArray()
+variants = Array[ExtResource("6_kw6af")]([SubResource("Resource_rv185"), SubResource("Resource_lvktd")])
+applies_conditions = PackedStringArray("condition.spell.faerie_fire")
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+staging_unported = {
+"selection": "faerie_fire_native"
+}

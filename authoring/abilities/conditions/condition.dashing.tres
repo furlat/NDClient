@@ -1,0 +1,103 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_24s18"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_nl0rv"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_ausu7"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_addjv"]
+
+[sub_resource type="Resource" id="Resource_ol1xe"]
+script = ExtResource("1_24s18")
+colour = Color(0.89411765, 0.34509805, 0.69411767, 1)
+
+[sub_resource type="Resource" id="Resource_53mla"]
+script = ExtResource("3_ausu7")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_drx8i"]
+script = ExtResource("2_nl0rv")
+steps = Array[ExtResource("3_ausu7")]([SubResource("Resource_53mla")])
+
+[sub_resource type="Resource" id="Resource_iuik4"]
+script = ExtResource("1_24s18")
+colour = Color(0.80784315, 0.15294118, 0.21960784, 1)
+
+[resource]
+script = ExtResource("4_addjv")
+id = "condition.dashing"
+label = "Dashing"
+disposition = "authored"
+lifecycle = PackedStringArray()
+look = SubResource("Resource_drx8i")
+group = "body"
+priority = 30.0
+max_layers = 3.0
+application_text = SubResource("Resource_ol1xe")
+removal_text = SubResource("Resource_iuik4")
+status = "partial"
+unported = {
+"application": {
+"durationMs": 220.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "catalog.condition.dashing",
+"visualIntensity": "secondary_dynamic"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.dashing",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "omit_optional_track",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": true,
+"effect": "apply",
+"evidence": "branch=condition; effect=condition.apply; disposition=beneficial; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "action.spell.expeditious_retreat.dash",
+"content_version": 1.0,
+"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+"definition_kind": "action",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "action"
+}, {
+"direct": true,
+"effect": "apply",
+"evidence": "branch=condition; effect=condition.apply; disposition=beneficial; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "action.dash",
+"content_version": 1.0,
+"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+"definition_kind": "action",
+"pack_id": "core.rules"
+},
+"triggerType": "action"
+}],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 200.0,
+"effects": []
+}
+}

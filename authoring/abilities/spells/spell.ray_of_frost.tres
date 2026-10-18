@@ -1,0 +1,471 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_3rug0"]
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="2_77rac"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="3_bm2ht"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="4_xnp0e"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="5_lucnd"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="6_uetum"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="7_ctbor"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="8_7xeqq"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="9_1wwhp"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="10_4ic25"]
+
+[sub_resource type="Resource" id="Resource_156fl"]
+script = ExtResource("1_3rug0")
+role = "cast"
+clip = "Attack5"
+markers = Dictionary[String, float]({
+"release": 7.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+unported = {
+"recovery": {
+"bodyClip": "Taunt",
+"bodyPlaybackSpeed": 1.0,
+"enabled": false
+}
+}
+
+[sub_resource type="Resource" id="Resource_jixgi"]
+script = ExtResource("2_77rac")
+roles = Dictionary[String, Color]({
+"primary": Color(0.5411765, 0.8, 1, 1),
+"secondary": Color(0.34901962, 0.45490196, 0.5294118, 1),
+"tertiary": Color(0.67058825, 0.93333334, 0.99607843, 1)
+})
+ramp = PackedColorArray()
+
+[sub_resource type="Resource" id="Resource_utdnq"]
+script = ExtResource("3_bm2ht")
+clip = "spells/ray_of_frost/impact/impact"
+role = "impact"
+scale = 0.18
+source_end = 1.0
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "client"
+
+[sub_resource type="Resource" id="Resource_j8qk2"]
+script = ExtResource("3_bm2ht")
+clip = "recovered/travel"
+role = "flight"
+scale = 0.18
+source_launch = 0.3
+source_contact = 0.75
+source_end = 1.1
+charge_seconds = 0.3
+stop_emission_at_contact = true
+hide_at_contact = PackedStringArray("effect/Donor/FireTorch_AC")
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+origin_path = "effect/Donor/FireTorch_AC"
+opacity_keys = PackedVector2Array()
+staging_from = "client"
+
+[sub_resource type="Resource" id="Resource_awmo3"]
+script = ExtResource("3_bm2ht")
+clip = "projectile-windups/ray_of_frost/default/cast/windup"
+role = "cast"
+scale = 0.18
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "client"
+extra = {
+"before_release": 0.5,
+"source_rate": 1.0
+}
+
+[sub_resource type="Resource" id="Resource_ninwo"]
+script = ExtResource("3_bm2ht")
+clip = "recovered/travelIce"
+role = "flight"
+scale = 0.22
+source_launch = 0.3
+source_contact = 0.75
+source_end = 1.1
+charge_seconds = 0.3
+stop_emission_at_contact = true
+hide_at_contact = PackedStringArray("effect/Donor/FireTorch_AC")
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+origin_path = "effect/Donor/FireTorch_AC"
+opacity_keys = PackedVector2Array()
+staging_from = "client"
+
+[sub_resource type="Resource" id="Resource_ldmew"]
+script = ExtResource("5_lucnd")
+kind = "palette_ramp"
+colours = PackedColorArray(0.02745098, 0.050980393, 0.06666667, 1, 0.13333334, 0.1882353, 0.22745098, 1, 0.25882354, 0.40784314, 0.53333336, 1, 0.4117647, 0.5764706, 0.7058824, 1, 0.5411765, 0.8, 1, 1, 0.67058825, 0.93333334, 0.99607843, 1)
+ramp_floor = 0.02
+uses_luma = false
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_hu511"]
+script = ExtResource("4_xnp0e")
+steps = Array[ExtResource("5_lucnd")]([SubResource("Resource_ldmew")])
+
+[sub_resource type="Resource" id="Resource_qm8xq"]
+script = ExtResource("5_lucnd")
+kind = "palette_ramp"
+colours = PackedColorArray(0.02745098, 0.050980393, 0.06666667, 1, 0.047058824, 0.078431375, 0.09803922, 1, 0.06666667, 0.101960786, 0.1254902, 1, 0.101960786, 0.14117648, 0.17254902, 1, 0.13333334, 0.1882353, 0.22745098, 1, 0.16470589, 0.21176471, 0.25490198, 1, 0.19215687, 0.25882354, 0.3137255, 1, 0.23137255, 0.31764707, 0.3882353, 1, 0.2627451, 0.36078432, 0.44313726, 1, 0.25882354, 0.40784314, 0.53333336, 1, 0.32156864, 0.4117647, 0.48235294, 1, 0.34901962, 0.45490196, 0.5294118, 1, 0.38039216, 0.5137255, 0.6117647, 1, 0.4117647, 0.5764706, 0.7058824, 1, 0.47843137, 0.6156863, 0.70980394, 1, 0.5176471, 0.69411767, 0.8156863, 1, 0.5568628, 0.78039217, 0.9019608, 1, 0.48235294, 0.79607844, 1, 1, 0.5411765, 0.8, 1, 1, 0.5882353, 0.8, 1, 1, 0.6, 0.8, 1, 1, 0.6431373, 0.827451, 0.9490196, 1, 0.67058825, 0.93333334, 0.99607843, 1)
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_661a5"]
+script = ExtResource("4_xnp0e")
+steps = Array[ExtResource("5_lucnd")]([SubResource("Resource_qm8xq")])
+
+[sub_resource type="Resource" id="Resource_xvrdj"]
+script = ExtResource("5_lucnd")
+kind = "palette_ramp"
+colours = PackedColorArray(0.67058825, 0.93333334, 0.99607843, 1, 0.5411765, 0.8, 1, 1, 0.34901962, 0.45490196, 0.5294118, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_mnftf"]
+script = ExtResource("4_xnp0e")
+steps = Array[ExtResource("5_lucnd")]([SubResource("Resource_xvrdj")])
+
+[sub_resource type="Resource" id="Resource_cmgqq"]
+script = ExtResource("6_uetum")
+category = "Magic2"
+sheet = "/spritesheets/Magic2/Attack5.png"
+look = SubResource("Resource_mnftf")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 9096447.0
+},
+"id": "cast-weaponGlow",
+"palette": {},
+"role": "hand_magic",
+"slot": "weaponGlow"
+}
+
+[sub_resource type="Resource" id="Resource_m5g4b"]
+script = ExtResource("5_lucnd")
+kind = "palette_ramp"
+colours = PackedColorArray(0.67058825, 0.93333334, 0.99607843, 1, 0.5411765, 0.8, 1, 1, 0.34901962, 0.45490196, 0.5294118, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_x7hc1"]
+script = ExtResource("4_xnp0e")
+steps = Array[ExtResource("5_lucnd")]([SubResource("Resource_m5g4b")])
+
+[sub_resource type="Resource" id="Resource_y0hqk"]
+script = ExtResource("6_uetum")
+place = "effect"
+category = "Effect1"
+sheet = "/spritesheets/Effect1/Attack5.png"
+look = SubResource("Resource_x7hc1")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 9096447.0
+},
+"id": "cast-effect",
+"palette": {},
+"role": "effect",
+"slot": "effect"
+}
+
+[sub_resource type="Resource" id="Resource_kqlhy"]
+script = ExtResource("7_ctbor")
+path = "art/media/ui/icons/smooth48/spell.ray-of-frost.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:spell.ray-of-frost"
+
+[sub_resource type="Resource" id="Resource_ht88r"]
+script = ExtResource("3_bm2ht")
+clip = "surface_water_freeze_thaw"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 10.6
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+
+[sub_resource type="Resource" id="Resource_2v135"]
+script = ExtResource("10_4ic25")
+id = "surface_water_freeze_thaw"
+kind = "outcome"
+selection = "surface_water_freeze_thaw"
+effects = Array[ExtResource("3_bm2ht")]([SubResource("Resource_ht88r")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[sub_resource type="Resource" id="Resource_s3ox3"]
+script = ExtResource("3_bm2ht")
+clip = "surface_blood_freeze_thaw"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 10.6
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+
+[sub_resource type="Resource" id="Resource_b3xco"]
+script = ExtResource("10_4ic25")
+id = "surface_blood_freeze_thaw"
+kind = "outcome"
+selection = "surface_blood_freeze_thaw"
+effects = Array[ExtResource("3_bm2ht")]([SubResource("Resource_s3ox3")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[sub_resource type="Resource" id="Resource_7q0d4"]
+script = ExtResource("3_bm2ht")
+clip = "water_partial_freeze_vaporize"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 11.2
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+
+[sub_resource type="Resource" id="Resource_3hnue"]
+script = ExtResource("10_4ic25")
+id = "water_partial_freeze_vaporize"
+kind = "outcome"
+selection = "water_partial_freeze_vaporize"
+effects = Array[ExtResource("3_bm2ht")]([SubResource("Resource_7q0d4")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[sub_resource type="Resource" id="Resource_5wkxf"]
+script = ExtResource("3_bm2ht")
+clip = "water_charge_freeze_vaporize"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 11.2
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+
+[sub_resource type="Resource" id="Resource_wwqck"]
+script = ExtResource("10_4ic25")
+id = "water_charge_freeze_vaporize"
+kind = "outcome"
+selection = "water_charge_freeze_vaporize"
+effects = Array[ExtResource("3_bm2ht")]([SubResource("Resource_5wkxf")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[sub_resource type="Resource" id="Resource_2bmhf"]
+script = ExtResource("3_bm2ht")
+clip = "blood_freeze_thaw_candidate"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 11.2
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+
+[sub_resource type="Resource" id="Resource_106wv"]
+script = ExtResource("10_4ic25")
+id = "blood_freeze_thaw_candidate"
+kind = "outcome"
+selection = "blood_freeze_thaw_candidate"
+effects = Array[ExtResource("3_bm2ht")]([SubResource("Resource_2bmhf")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[resource]
+script = ExtResource("8_7xeqq")
+id = "spell.ray_of_frost"
+icon = SubResource("Resource_kqlhy")
+delivery = "ray"
+body = SubResource("Resource_156fl")
+hand_layers = Array[ExtResource("6_uetum")]([SubResource("Resource_cmgqq"), SubResource("Resource_y0hqk")])
+sockets = "measured/abilities/spells/spell.ray_of_frost.sockets.json"
+effects = Array[ExtResource("3_bm2ht")]([SubResource("Resource_utdnq"), SubResource("Resource_j8qk2"), SubResource("Resource_awmo3"), SubResource("Resource_ninwo")])
+native_staging = true
+effect_scope = "single"
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_colour = "8accff"
+flight_tiles_per_second = 6.5625
+minimum_travel_seconds = 0.15
+stagger_seconds = 0.0
+impact_delay = 0.0
+flash_frame = 0.0
+flash_duration = 0.15
+flash_look = SubResource("Resource_661a5")
+number_frame = 7.0
+number_duration = 1.0
+body_material = {
+"clip": "recovered/travel",
+"clock_parameter": "source_clock",
+"node": "effect/Donor/FireTorch_AC",
+"parameter_overrides": {
+"enable_vertex_movement": false,
+"wobble_strength": 0.0
+},
+"status": "available",
+"surface": 0.0
+}
+colours = SubResource("Resource_jixgi")
+finish = SubResource("Resource_hu511")
+feedback_ramp = PackedStringArray()
+variants = Array[ExtResource("10_4ic25")]([SubResource("Resource_2v135"), SubResource("Resource_b3xco"), SubResource("Resource_3hnue"), SubResource("Resource_wwqck"), SubResource("Resource_106wv")])
+applies_conditions = PackedStringArray("condition.spell.ray_of_frost")
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "client"
+status = "ready"
+bounds = "measured/abilities/spells/spell.ray_of_frost.bounds.json"
+staging_unported = {
+"palette": {
+"palette": ["000000", "070d11", "0c1419", "111a20", "1a242c", "22303a", "2a3641", "314250", "3b5163", "435c71", "426888", "52697b", "597487", "61839c", "6993b4", "7a9db5", "84b1d0", "8ec7e6", "7bcbff", "8accff", "96ccff", "99ccff", "a4d3f2", "abeefe"],
+"parameters": {
+"alpha_cutoff": 0.035,
+"color_boost": 1.0,
+"energy_ceiling": 0.5,
+"energy_floor": 0.18,
+"palette_energy_floor": 0.0,
+"palette_luma_floor": 0.0,
+"ramp_ceiling": 1.0,
+"rgb_block_pixels": 3.0
+},
+"shader": "res://assets/native_effects/sandbox/projectiles/factory/shaders/energy_palette_v1.gdshader"
+},
+"source": "sandbox/staging.json:/spells/ray_of_frost"
+}
+unported = {
+"condition": {
+"anchor": "effect",
+"delayMs": 0.0,
+"feedbackEnabled": true
+},
+"damage": {
+"death": {
+"enabled": true,
+"frame": 12.0
+},
+"floatingNumber": {
+"color": 15610692.0,
+"enabled": true,
+"label": "Cold"
+},
+"hitFlash": {
+"color": 15610692.0,
+"enabled": true,
+"palette": {}
+}
+},
+"definitionRef": {
+"content_id": "spell.ray_of_frost",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"projectile": {
+"depthMode": "world",
+"fps": 32.0,
+"geometry": {
+"enabled": false,
+"primitive": "bolt",
+"renderer": "geometry_projectile"
+},
+"impact": {
+"assetId": "ice.v8.ray_of_frost.impact",
+"assetPhase": "impact",
+"enabled": true,
+"fps": 32.0
+},
+"orientation": {
+"directionSource": "target_vector",
+"fineRotation": "isometricHybrid",
+"rotationOffsetDeg": 0.0,
+"rowSource": "targetVector"
+},
+"prepare": {
+"assetPhase": "cast",
+"enabled": false,
+"startFrame": 4.0
+},
+"scale": 0.5,
+"sourceAnchor": {
+"axisPx": 24.0,
+"basis": "rigRoot",
+"forwardPx": 0.0,
+"liftY": 0.0,
+"sidePx": 0.0
+},
+"sprite": {
+"alpha": 1.0,
+"assetId": "ice.v8.ray_of_frost.travel",
+"blendMode": "normal",
+"geometryComposition": "replace_geometry",
+"mediaFailurePolicy": "fail_transaction",
+"offsetX": 0.0,
+"offsetY": 0.0,
+"renderer": "sprite_projectile",
+"tint": 16777215.0
+},
+"targetAnchor": {
+"basis": "body",
+"forwardPx": 0.0,
+"liftY": 0.0
+},
+"trajectory": {
+"sameTargetSpread": true,
+"type": "straight"
+},
+"travel": {
+"assetId": "ice.v8.ray_of_frost.travel",
+"assetPhase": "travel",
+"enabled": true,
+"fps": 32.0,
+"overlapContactMs": 160.0
+}
+}
+}

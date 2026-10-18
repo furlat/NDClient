@@ -1,0 +1,97 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_b77vg"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_eo30v"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_yohyi"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_4meqf"]
+
+[sub_resource type="Resource" id="Resource_c6t4k"]
+script = ExtResource("1_b77vg")
+enabled = false
+colour = Color(0.69411767, 0.89411765, 0.34509805, 1)
+
+[sub_resource type="Resource" id="Resource_op2h5"]
+script = ExtResource("3_yohyi")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_7wxge"]
+script = ExtResource("2_eo30v")
+steps = Array[ExtResource("3_yohyi")]([SubResource("Resource_op2h5")])
+
+[sub_resource type="Resource" id="Resource_0gctu"]
+script = ExtResource("1_b77vg")
+enabled = false
+colour = Color(0.21960784, 0.80784315, 0.15294118, 1)
+
+[resource]
+script = ExtResource("4_4meqf")
+id = "condition.wight.life_drain"
+label = "Life Drain"
+disposition = "authored"
+lifecycle = PackedStringArray("condition_life_drain_native")
+look = SubResource("Resource_7wxge")
+layers = [{
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "condition.mark.life_drain",
+"attachment": "head",
+"category": "life_drain",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fps": 32.0,
+"id": "condition.mark.life_drain",
+"lifeStates": ["alive"],
+"markerGroup": "condition.mark.life_drain",
+"offsetY": -12.0,
+"priority": 35.0
+}]
+group = "marker.condition.wight.life_drain"
+priority = 35.0
+max_layers = 1.0
+application_text = SubResource("Resource_c6t4k")
+removal_text = SubResource("Resource_0gctu")
+status = "ready"
+unported = {
+"application": {
+"durationMs": 200.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "condition.mark.life_drain",
+"visualIntensity": "ambient_passive"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.wight.life_drain",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "fail_transaction",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 200.0,
+"effects": []
+}
+}

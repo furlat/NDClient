@@ -1,0 +1,235 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_vhr68"]
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="2_d78i1"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="3_217sv"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="4_t1s0k"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="5_u8bgq"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="6_vb34o"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="7_n7kdm"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="8_wmk2f"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="9_5ohfp"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="10_p0iwm"]
+
+[sub_resource type="Resource" id="Resource_yc2g4"]
+script = ExtResource("1_vhr68")
+role = "cast"
+clip = "Special1"
+markers = Dictionary[String, float]({
+"release": 11.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+unported = {
+"recovery": {
+"bodyClip": "Taunt",
+"bodyPlaybackSpeed": 1.0,
+"enabled": false
+}
+}
+
+[sub_resource type="Resource" id="Resource_5tdkt"]
+script = ExtResource("2_d78i1")
+roles = Dictionary[String, Color]({
+"primary": Color(0.5921569, 0.59607846, 0.7529412, 1),
+"secondary": Color(0.88235295, 0.85490197, 0.94509804, 1),
+"tertiary": Color(0.29411766, 0.29411766, 0.4392157, 1)
+})
+ramp = PackedColorArray()
+
+[sub_resource type="Resource" id="Resource_6mcs7"]
+script = ExtResource("3_217sv")
+clip = "review/misty_step/back/lifecycle"
+role = "attached"
+at = "release"
+attachment = "caster_ground"
+scale = 0.471404520791032
+orientation = "world"
+source_end = 1.5
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.25
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0
+}
+
+[sub_resource type="Resource" id="Resource_q08hx"]
+script = ExtResource("3_217sv")
+clip = "review/misty_step/arrival/lifecycle"
+role = "attached"
+at = "release"
+delay = 0.25
+attachment = "recipient_ground"
+scale = 0.471404520791032
+orientation = "world"
+source_end = 1.5
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.25
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"to_actor": "target"
+}
+
+[sub_resource type="Resource" id="Resource_kykhc"]
+script = ExtResource("6_vb34o")
+kind = "palette_ramp"
+colours = PackedColorArray(0.29411766, 0.29411766, 0.4392157, 1, 0.5921569, 0.59607846, 0.7529412, 1, 0.88235295, 0.85490197, 0.94509804, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_exato"]
+script = ExtResource("5_u8bgq")
+steps = Array[ExtResource("6_vb34o")]([SubResource("Resource_kykhc")])
+
+[sub_resource type="Resource" id="Resource_gt5kn"]
+script = ExtResource("4_t1s0k")
+category = "Magic2"
+sheet = "/spritesheets/Magic2/Special1.png"
+look = SubResource("Resource_exato")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 9935040.0
+},
+"id": "cast-weaponGlow",
+"palette": {},
+"role": "hand_magic",
+"slot": "weaponGlow"
+}
+
+[sub_resource type="Resource" id="Resource_elhj7"]
+script = ExtResource("6_vb34o")
+kind = "palette_ramp"
+colours = PackedColorArray(0.29411766, 0.29411766, 0.4392157, 1, 0.5921569, 0.59607846, 0.7529412, 1, 0.88235295, 0.85490197, 0.94509804, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_y4bon"]
+script = ExtResource("5_u8bgq")
+steps = Array[ExtResource("6_vb34o")]([SubResource("Resource_elhj7")])
+
+[sub_resource type="Resource" id="Resource_it420"]
+script = ExtResource("4_t1s0k")
+place = "aura"
+category = "Effect5"
+sheet = "/spritesheets/Effect5/Special1.png"
+look = SubResource("Resource_y4bon")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 9935040.0
+},
+"id": "cast-aura",
+"palette": {},
+"role": "aura",
+"slot": "aura"
+}
+
+[sub_resource type="Resource" id="Resource_h5n46"]
+script = ExtResource("7_n7kdm")
+path = "art/media/ui/icons/smooth48/spell.misty-step.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:spell.misty-step"
+
+[resource]
+script = ExtResource("8_wmk2f")
+id = "spell.misty_step"
+icon = SubResource("Resource_h5n46")
+delivery = "teleport"
+body = SubResource("Resource_yc2g4")
+hand_layers = Array[ExtResource("4_t1s0k")]([SubResource("Resource_gt5kn"), SubResource("Resource_it420")])
+sockets = "measured/abilities/spells/spell.misty_step.sockets.json"
+effects = Array[ExtResource("3_217sv")]([SubResource("Resource_6mcs7"), SubResource("Resource_q08hx")])
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+colours = SubResource("Resource_5tdkt")
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray()
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+staging_unported = {
+"selection": "misty_step__back"
+}
+unported = {
+"condition": {
+"anchor": "effect",
+"delayMs": 0.0,
+"feedbackEnabled": true
+},
+"definitionRef": {
+"content_id": "spell.misty_step",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"media": [{
+"assetId": "pending.misty_step.back",
+"attachment": "departure_ground",
+"depth": "behind_body",
+"effectGroup": {
+"id": "departure",
+"label": "Misty Step · Departure"
+},
+"fps": 32.0,
+"id": "departure-back",
+"scale": 0.5,
+"startOffsetMs": -500.0,
+"viewFacing": "SE"
+}, {
+"assetId": "pending.misty_step.front",
+"attachment": "departure_ground",
+"depth": "front_body",
+"effectGroup": {
+"id": "departure",
+"label": "Misty Step · Departure"
+},
+"fps": 32.0,
+"id": "departure-front",
+"scale": 0.5,
+"startOffsetMs": -500.0,
+"viewFacing": "SE"
+}, {
+"assetId": "pending.misty_step.back",
+"attachment": "arrival_ground",
+"depth": "behind_body",
+"effectGroup": {
+"id": "arrival",
+"label": "Misty Step · Arrival"
+},
+"fps": 32.0,
+"id": "arrival-back",
+"scale": 0.5,
+"viewFacing": "SE"
+}, {
+"assetId": "pending.misty_step.front",
+"attachment": "arrival_ground",
+"depth": "front_body",
+"effectGroup": {
+"id": "arrival",
+"label": "Misty Step · Arrival"
+},
+"fps": 32.0,
+"id": "arrival-front",
+"scale": 0.5,
+"viewFacing": "SE"
+}]
+}

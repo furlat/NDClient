@@ -1,0 +1,285 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="1_peor0"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="2_3axst"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="3_vfacm"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="4_dtoor"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="5_gpw56"]
+
+[sub_resource type="Resource" id="Resource_p7xbo"]
+script = ExtResource("1_peor0")
+clip = "high-level-22/weird/application"
+role = "attached"
+at = "cast"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 1.05
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.3
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "caster",
+"slots": ["body", "chest", "belt", "cloak", "legs", "shoes"]
+},
+"follow_attachment": true,
+"id": "weird-application-caster-0.0",
+"live_endpoints": [{
+"actor": "caster",
+"socket": "face"
+}, {
+"actor": "caster",
+"socket": "body_center"
+}],
+"to_actor": "caster"
+}
+
+[sub_resource type="Resource" id="Resource_ekbru"]
+script = ExtResource("1_peor0")
+clip = "high-level-22/weird/application"
+role = "attached"
+at = "contact"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 1.05
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.3
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "chest", "belt", "cloak", "legs", "shoes"]
+},
+"follow_attachment": true,
+"id": "weird-application-target-0.0",
+"live_endpoints": [{
+"actor": "caster",
+"socket": "face"
+}, {
+"actor": "target",
+"socket": "body_center"
+}],
+"to_actor": "target"
+}
+
+[sub_resource type="Resource" id="Resource_4cf7i"]
+script = ExtResource("1_peor0")
+clip = "high-level-22/weird/held"
+role = "attached"
+at = "contact"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 3.2
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.3
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "chest", "belt", "cloak", "legs", "shoes"]
+},
+"follow_attachment": true,
+"id": "weird-held-target-0.0",
+"live_endpoints": [{
+"actor": "caster",
+"socket": "face"
+}, {
+"actor": "target",
+"socket": "body_center"
+}],
+"to_actor": "target"
+}
+
+[sub_resource type="Resource" id="Resource_bcx00"]
+script = ExtResource("1_peor0")
+clip = "high-level-22/weird/frightened"
+role = "attached"
+at = "contact"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 3.2
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.3
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"follow_attachment": true,
+"id": "weird-frightened-target-0.0",
+"to_actor": "target"
+}
+
+[sub_resource type="Resource" id="Resource_4brku"]
+script = ExtResource("1_peor0")
+clip = "high-level-22/weird/psychic_contact"
+role = "attached"
+at = "contact"
+delay = 1.35
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 0.7
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.3
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "chest", "belt", "cloak", "legs", "shoes"]
+},
+"follow_attachment": true,
+"id": "weird-psychic_contact-target-1.35",
+"live_endpoints": [{
+"actor": "caster",
+"socket": "face"
+}, {
+"actor": "target",
+"socket": "body_center"
+}],
+"to_actor": "target"
+}
+
+[sub_resource type="Resource" id="Resource_a3usj"]
+script = ExtResource("1_peor0")
+clip = "high-level-22/weird/application"
+role = "attached"
+at = "contact"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 1.05
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.3
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target2",
+"slots": ["body", "chest", "belt", "cloak", "legs", "shoes"]
+},
+"follow_attachment": true,
+"id": "weird-application-target2-0.0",
+"live_endpoints": [{
+"actor": "caster",
+"socket": "face"
+}, {
+"actor": "target2",
+"socket": "body_center"
+}],
+"to_actor": "target2"
+}
+
+[sub_resource type="Resource" id="Resource_kht41"]
+script = ExtResource("1_peor0")
+clip = "high-level-22/weird/held"
+role = "attached"
+at = "contact"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 1.65
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.3
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target2",
+"slots": ["body", "chest", "belt", "cloak", "legs", "shoes"]
+},
+"follow_attachment": true,
+"id": "weird-held-target2-0.0",
+"live_endpoints": [{
+"actor": "caster",
+"socket": "face"
+}, {
+"actor": "target2",
+"socket": "body_center"
+}],
+"to_actor": "target2"
+}
+
+[sub_resource type="Resource" id="Resource_jjyvh"]
+script = ExtResource("1_peor0")
+clip = "high-level-22/weird/frightened"
+role = "attached"
+at = "contact"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 1.65
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.3
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"follow_attachment": true,
+"id": "weird-frightened-target2-0.0",
+"to_actor": "target2"
+}
+
+[resource]
+script = ExtResource("3_vfacm")
+id = "spell.weird"
+delivery = "sphere"
+effects = Array[ExtResource("1_peor0")]([SubResource("Resource_p7xbo"), SubResource("Resource_ekbru"), SubResource("Resource_4cf7i"), SubResource("Resource_bcx00"), SubResource("Resource_4brku"), SubResource("Resource_a3usj"), SubResource("Resource_kht41"), SubResource("Resource_jjyvh")])
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray("condition.spell.weird")
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+staging_unported = {
+"selection": "weird_native"
+}

@@ -1,0 +1,344 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="1_3cbtq"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="2_f30f0"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="3_8s8dp"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="4_xqpmu"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="5_6wfu1"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="6_1givs"]
+
+[sub_resource type="Resource" id="Resource_w62to"]
+script = ExtResource("1_3cbtq")
+clip = "bg3-36/branding-smite/branding_smite_native/impact"
+role = "attached"
+at = "release"
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.52
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "caster",
+"slots": ["weapon"]
+},
+"live_endpoints": [{
+"actor": "caster",
+"socket": "hand"
+}, {
+"actor": "target",
+"socket": "body_center",
+"surface_slots": ["body", "chest", "cloak", "legs", "head", "helmet", "hands", "shoes"]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_is0qq"]
+script = ExtResource("1_3cbtq")
+clip = "bg3-36/branding-smite/branding_smite_native/condition"
+role = "attached"
+at = "release"
+delay = 0.28
+attachment = "caster_ground"
+orientation = "world"
+source_end = 2.65
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "caster",
+"slots": ["weapon"]
+},
+"live_endpoints": [{
+"actor": "caster",
+"socket": "hand"
+}, {
+"actor": "target",
+"socket": "body_center",
+"surface_slots": ["body", "chest", "cloak", "legs", "head", "helmet", "hands", "shoes"]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_x7d6n"]
+script = ExtResource("1_3cbtq")
+clip = "bg3-36/branding-smite/branding_smite_native/retire"
+role = "attached"
+at = "release"
+delay = 2.78
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.42
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "caster",
+"slots": ["weapon"]
+},
+"live_endpoints": [{
+"actor": "caster",
+"socket": "hand"
+}, {
+"actor": "target",
+"socket": "body_center",
+"surface_slots": ["body", "chest", "cloak", "legs", "head", "helmet", "hands", "shoes"]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_qp6me"]
+script = ExtResource("3_8s8dp")
+path = "art/ui-delivery-20261018/runtime/smooth48/spell.branding_smite.png"
+native_size = Vector2i(48, 48)
+source = "ui-delivery-20261018"
+
+[sub_resource type="Resource" id="Resource_qq0rf"]
+script = ExtResource("1_3cbtq")
+clip = "bg3-36/branding-smite/branding_smite_miss_native/impact"
+role = "attached"
+at = "release"
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.52
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "caster",
+"slots": ["weapon"]
+},
+"live_endpoints": [{
+"actor": "caster",
+"socket": "hand"
+}, {
+"actor": "target",
+"socket": "body_center",
+"surface_slots": ["body", "chest", "cloak", "legs", "head", "helmet", "hands", "shoes"]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_hmvtr"]
+script = ExtResource("1_3cbtq")
+clip = "bg3-36/branding-smite/branding_smite_miss_native/condition"
+role = "attached"
+at = "release"
+delay = 0.28
+attachment = "caster_ground"
+orientation = "world"
+source_end = 2.65
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "caster",
+"slots": ["weapon"]
+},
+"live_endpoints": [{
+"actor": "caster",
+"socket": "hand"
+}, {
+"actor": "target",
+"socket": "body_center",
+"surface_slots": ["body", "chest", "cloak", "legs", "head", "helmet", "hands", "shoes"]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_lp3fs"]
+script = ExtResource("1_3cbtq")
+clip = "bg3-36/branding-smite/branding_smite_miss_native/retire"
+role = "attached"
+at = "release"
+delay = 2.78
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.42
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "caster",
+"slots": ["weapon"]
+},
+"live_endpoints": [{
+"actor": "caster",
+"socket": "hand"
+}, {
+"actor": "target",
+"socket": "body_center",
+"surface_slots": ["body", "chest", "cloak", "legs", "head", "helmet", "hands", "shoes"]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_s2di8"]
+script = ExtResource("6_1givs")
+id = "branding_smite_miss_native"
+kind = "outcome"
+selection = "branding_smite_miss_native"
+effects = Array[ExtResource("1_3cbtq")]([SubResource("Resource_qq0rf"), SubResource("Resource_hmvtr"), SubResource("Resource_lp3fs")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[sub_resource type="Resource" id="Resource_7ppfj"]
+script = ExtResource("1_3cbtq")
+clip = "bg3-36/branding-smite/branding_smite_blocked_magic_native/impact"
+role = "attached"
+at = "release"
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.52
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "caster",
+"slots": ["weapon"]
+},
+"live_endpoints": [{
+"actor": "caster",
+"socket": "hand"
+}, {
+"actor": "target",
+"socket": "body_center",
+"surface_slots": ["body", "chest", "cloak", "legs", "head", "helmet", "hands", "shoes"]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_n4h7j"]
+script = ExtResource("1_3cbtq")
+clip = "bg3-36/branding-smite/branding_smite_blocked_magic_native/condition"
+role = "attached"
+at = "release"
+delay = 0.28
+attachment = "caster_ground"
+orientation = "world"
+source_end = 2.65
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "caster",
+"slots": ["weapon"]
+},
+"live_endpoints": [{
+"actor": "caster",
+"socket": "hand"
+}, {
+"actor": "target",
+"socket": "body_center",
+"surface_slots": ["body", "chest", "cloak", "legs", "head", "helmet", "hands", "shoes"]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_njc45"]
+script = ExtResource("1_3cbtq")
+clip = "bg3-36/branding-smite/branding_smite_blocked_magic_native/retire"
+role = "attached"
+at = "release"
+delay = 2.78
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.42
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "caster",
+"slots": ["weapon"]
+},
+"live_endpoints": [{
+"actor": "caster",
+"socket": "hand"
+}, {
+"actor": "target",
+"socket": "body_center",
+"surface_slots": ["body", "chest", "cloak", "legs", "head", "helmet", "hands", "shoes"]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_sow1j"]
+script = ExtResource("6_1givs")
+id = "branding_smite_blocked_magic_native"
+kind = "outcome"
+selection = "branding_smite_blocked_magic_native"
+effects = Array[ExtResource("1_3cbtq")]([SubResource("Resource_7ppfj"), SubResource("Resource_n4h7j"), SubResource("Resource_njc45")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[resource]
+script = ExtResource("4_xqpmu")
+id = "spell.branding_smite"
+icon = SubResource("Resource_qp6me")
+delivery = "condition_only"
+effects = Array[ExtResource("1_3cbtq")]([SubResource("Resource_w62to"), SubResource("Resource_is0qq"), SubResource("Resource_x7d6n")])
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+feedback_ramp = PackedStringArray()
+variants = Array[ExtResource("6_1givs")]([SubResource("Resource_s2di8"), SubResource("Resource_sow1j")])
+applies_conditions = PackedStringArray("condition.spell.branding_smite")
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+staging_unported = {
+"selection": "branding_smite_native"
+}

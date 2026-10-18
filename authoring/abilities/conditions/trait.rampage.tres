@@ -1,0 +1,78 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_vtdra"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_vk12r"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_f4pyo"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_xniqr"]
+
+[sub_resource type="Resource" id="Resource_3wr1p"]
+script = ExtResource("1_vtdra")
+enabled = false
+colour = Color(0.89411765, 0.34509805, 0.8392157, 1)
+
+[sub_resource type="Resource" id="Resource_jva5c"]
+script = ExtResource("3_f4pyo")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_lxl3c"]
+script = ExtResource("2_vk12r")
+steps = Array[ExtResource("3_f4pyo")]([SubResource("Resource_jva5c")])
+
+[sub_resource type="Resource" id="Resource_euacl"]
+script = ExtResource("1_vtdra")
+enabled = false
+colour = Color(0.80784315, 0.15294118, 0.39215687, 1)
+
+[resource]
+script = ExtResource("4_xniqr")
+id = "trait.rampage"
+label = "Rampage"
+disposition = "state_only"
+lifecycle = PackedStringArray()
+look = SubResource("Resource_lxl3c")
+group = "body"
+max_layers = 3.0
+application_text = SubResource("Resource_3wr1p")
+removal_text = SubResource("Resource_euacl")
+unported = {
+"application": {
+"durationMs": 0.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["hud_only"],
+"runtimeRole": "passive_unlock",
+"visualFamily": "catalog.trait.rampage",
+"visualIntensity": "icon_only"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "trait.rampage",
+"content_version": 1.0,
+"definition_contract_hash": "8b81685f804e251441a0107c1620212c9d441cf2d4c30a29cd5c34d344201c9a",
+"definition_kind": "trait",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "omit_optional_track",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 0.0,
+"effects": []
+}
+}
+notes = "Sent by the pinned engine under this id; not a condition id on the modern branch."

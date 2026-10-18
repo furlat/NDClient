@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_ovvm7"]
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="2_cxvph"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_k3fx2"]
+
+[sub_resource type="Resource" id="Resource_saqfu"]
+script = ExtResource("1_ovvm7")
+path = "art/media/ui/icons/smooth48/action.pull-lever.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:action.environment.control_lever.toggle"
+
+[resource]
+script = ExtResource("2_cxvph")
+id = "action.environment.control_lever.toggle"
+kind = "action"
+family = "environment"
+icon = SubResource("Resource_saqfu")
+plays = "action.environment.trap_lever.pull"
+target = "source_item"
+effect_sources = PackedStringArray()
+status = "ready"

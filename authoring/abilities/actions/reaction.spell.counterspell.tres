@@ -1,0 +1,59 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_yj8kk"]
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="2_orltq"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_5g7ty"]
+
+[sub_resource type="Resource" id="Resource_lse1i"]
+script = ExtResource("1_yj8kk")
+role = "act"
+clip = "Special1"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"recover": 10.0,
+"release": 8.0
+})
+hidden_slots = PackedStringArray()
+
+[resource]
+script = ExtResource("2_orltq")
+id = "reaction.spell.counterspell"
+kind = "reaction"
+family = "reaction"
+disposition = "authored"
+body = SubResource("Resource_lse1i")
+effect_sources = PackedStringArray()
+status = "ready"
+unported = {
+"actionFeedback": null,
+"actor": {
+"media": []
+},
+"attackFeedback": null,
+"compatibleCueKinds": ["counterspell"],
+"counterspellFeedback": {
+"automatic_success": {
+"color": 9163775.0,
+"text": "Counterspelled"
+},
+"check_failure": {
+"color": 16751473.0,
+"text": "Counterspell failed"
+},
+"check_success": {
+"color": 9163775.0,
+"text": "Counterspelled"
+}
+},
+"definitionRef": {
+"content_id": "reaction.spell.counterspell",
+"content_version": 1.0,
+"definition_contract_hash": "636ffe03ecf4e9d65b406137f0b2812c3a667e4641a56b912c67453ce0790d4b",
+"definition_kind": "reaction",
+"pack_id": "content.srd_5_1_cc"
+},
+"mediaFailurePolicy": "fail_transaction",
+"previewChildCueKinds": [],
+"projectile": null,
+"variants": []
+}

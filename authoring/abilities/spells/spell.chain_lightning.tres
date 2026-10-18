@@ -1,0 +1,263 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_s2baw"]
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="2_wklaj"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="3_0t0rm"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="4_0atwv"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="5_gk8fw"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="6_8pv67"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="7_puq7p"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="8_ovw87"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="9_u2m7d"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="10_11ufo"]
+
+[sub_resource type="Resource" id="Resource_rhppk"]
+script = ExtResource("1_s2baw")
+role = "cast"
+clip = "Attack5"
+markers = Dictionary[String, float]({
+"release": 7.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+unported = {
+"recovery": {
+"bodyClip": "Taunt",
+"bodyPlaybackSpeed": 1.0,
+"enabled": false
+}
+}
+
+[sub_resource type="Resource" id="Resource_qfunk"]
+script = ExtResource("2_wklaj")
+roles = Dictionary[String, Color]({
+"primary": Color(0.101960786, 0.61960787, 0.8784314, 1),
+"secondary": Color(0.5529412, 0.9019608, 1, 1),
+"tertiary": Color(0.91764706, 0.9843137, 1, 1)
+})
+ramp = PackedColorArray()
+
+[sub_resource type="Resource" id="Resource_gjfnn"]
+script = ExtResource("3_0t0rm")
+clip = "live-electric/chain_live_hops"
+role = "attached"
+at = "release"
+delay = -0.28
+attachment = "caster_ground"
+orientation = "world"
+source_end = 1.8
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center",
+"surface_slots": ["body", "legs", "shoes", "chest", "belt", "hands", "head", "helmet", "beard", "cloak"]
+}, {
+"actor": "target2",
+"socket": "body_center",
+"surface_slots": ["body", "legs", "shoes", "chest", "belt", "hands", "head", "helmet", "beard", "cloak"]
+}],
+"source_rate": 1.0
+}
+
+[sub_resource type="Resource" id="Resource_1hrmf"]
+script = ExtResource("6_8pv67")
+kind = "palette_ramp"
+colours = PackedColorArray(0.91764706, 0.9843137, 1, 1, 0.101960786, 0.61960787, 0.8784314, 1, 0.5529412, 0.9019608, 1, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_5mogi"]
+script = ExtResource("5_gk8fw")
+steps = Array[ExtResource("6_8pv67")]([SubResource("Resource_1hrmf")])
+
+[sub_resource type="Resource" id="Resource_dwwk2"]
+script = ExtResource("4_0atwv")
+category = "Magic2"
+sheet = "/spritesheets/Magic2/Attack5.png"
+look = SubResource("Resource_5mogi")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 1744608.0
+},
+"id": "cast-weaponGlow",
+"palette": {},
+"role": "hand_magic",
+"slot": "weaponGlow"
+}
+
+[sub_resource type="Resource" id="Resource_5s6r3"]
+script = ExtResource("6_8pv67")
+kind = "palette_ramp"
+colours = PackedColorArray(0.91764706, 0.9843137, 1, 1, 0.101960786, 0.61960787, 0.8784314, 1, 0.5529412, 0.9019608, 1, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_ti2r6"]
+script = ExtResource("5_gk8fw")
+steps = Array[ExtResource("6_8pv67")]([SubResource("Resource_5s6r3")])
+
+[sub_resource type="Resource" id="Resource_o6ej4"]
+script = ExtResource("4_0atwv")
+place = "effect"
+category = "Effect1"
+sheet = "/spritesheets/Effect1/Attack5.png"
+look = SubResource("Resource_ti2r6")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 1744608.0
+},
+"id": "cast-effect",
+"palette": {},
+"role": "effect",
+"slot": "effect"
+}
+
+[sub_resource type="Resource" id="Resource_0i0ad"]
+script = ExtResource("7_puq7p")
+path = "art/media/ui/icons/smooth48/spell.chain-lightning.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:spell.chain-lightning"
+
+[sub_resource type="Resource" id="Resource_17cb1"]
+script = ExtResource("3_0t0rm")
+clip = "live-electric/chain_live_branches"
+role = "attached"
+at = "release"
+delay = -0.28
+attachment = "caster_ground"
+orientation = "world"
+source_end = 1.78
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center",
+"surface_slots": ["body", "legs", "shoes", "chest", "belt", "hands", "head", "helmet", "beard", "cloak"]
+}, {
+"actor": "target2",
+"socket": "body_center",
+"surface_slots": ["body", "legs", "shoes", "chest", "belt", "hands", "head", "helmet", "beard", "cloak"]
+}, {
+"point": [3.0, 1.0, 2.4]
+}],
+"source_rate": 1.0
+}
+
+[sub_resource type="Resource" id="Resource_516en"]
+script = ExtResource("10_11ufo")
+id = "chain_live_branches"
+kind = "outcome"
+selection = "chain_live_branches"
+effects = Array[ExtResource("3_0t0rm")]([SubResource("Resource_17cb1")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[sub_resource type="Resource" id="Resource_ejb2q"]
+script = ExtResource("3_0t0rm")
+clip = "live-electric/chain_live_single"
+role = "attached"
+at = "release"
+delay = -0.28
+attachment = "caster_ground"
+orientation = "world"
+source_end = 1.53
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center",
+"surface_slots": ["body", "legs", "shoes", "chest", "belt", "hands", "head", "helmet", "beard", "cloak"]
+}],
+"source_rate": 1.0
+}
+
+[sub_resource type="Resource" id="Resource_nyhkx"]
+script = ExtResource("10_11ufo")
+id = "chain_live_single"
+kind = "outcome"
+selection = "chain_live_single"
+effects = Array[ExtResource("3_0t0rm")]([SubResource("Resource_ejb2q")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[resource]
+script = ExtResource("8_ovw87")
+id = "spell.chain_lightning"
+icon = SubResource("Resource_0i0ad")
+delivery = "projectile"
+body = SubResource("Resource_rhppk")
+hand_layers = Array[ExtResource("4_0atwv")]([SubResource("Resource_dwwk2"), SubResource("Resource_o6ej4")])
+sockets = "measured/abilities/spells/spell.chain_lightning.sockets.json"
+effects = Array[ExtResource("3_0t0rm")]([SubResource("Resource_gjfnn")])
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+colours = SubResource("Resource_qfunk")
+feedback_ramp = PackedStringArray()
+variants = Array[ExtResource("10_11ufo")]([SubResource("Resource_516en"), SubResource("Resource_nyhkx")])
+applies_conditions = PackedStringArray()
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+staging_unported = {
+"selection": "chain_live_hops"
+}
+unported = {
+"arcs": {
+"branchDelayMs": 85.0,
+"glow": "/electric/glow.png",
+"maximumTravelMs": 340.0,
+"mode": "applications",
+"secondaryWidthCells": 0.64,
+"spark": "/electric/spark_dot.png",
+"star": "/electric/star.png",
+"streak": "/electric/streak.png",
+"texture": "/electric/arc-material.png",
+"travelBaseMs": 140.0,
+"travelPerCellMs": 12.0,
+"widthCells": 0.78
+},
+"definitionRef": {
+"content_id": "spell.chain_lightning",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+}
+}

@@ -1,0 +1,235 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_2dxq0"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_7lqqg"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_scgr3"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_26vdd"]
+
+[sub_resource type="Resource" id="Resource_mwoin"]
+script = ExtResource("1_2dxq0")
+enabled = false
+colour = Color(0.9607843, 0.7764706, 0.5411765, 1)
+
+[sub_resource type="Resource" id="Resource_fnad3"]
+script = ExtResource("3_scgr3")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_k8foq"]
+script = ExtResource("2_7lqqg")
+steps = Array[ExtResource("3_scgr3")]([SubResource("Resource_fnad3")])
+
+[sub_resource type="Resource" id="Resource_22qkx"]
+script = ExtResource("1_2dxq0")
+enabled = false
+colour = Color(0.9607843, 0.7764706, 0.5411765, 1)
+
+[resource]
+script = ExtResource("4_26vdd")
+id = "condition.spell.protection_from_energy"
+label = "Protection from Energy"
+disposition = "authored"
+lifecycle = PackedStringArray()
+look = SubResource("Resource_k8foq")
+layers = [{
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "persistent.energy.acid.back",
+"attachment": "body",
+"category": "energy",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"fps": 144.0,
+"id": "persistent.energy.acid.back",
+"priority": 40.0,
+"whenEnergyType": "Acid"
+}, {
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "persistent.energy.acid.front",
+"attachment": "body",
+"category": "energy",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fps": 144.0,
+"id": "persistent.energy.acid.front",
+"priority": 40.0,
+"whenEnergyType": "Acid"
+}, {
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "persistent.energy.cold.back",
+"attachment": "body",
+"category": "energy",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"fps": 144.0,
+"id": "persistent.energy.cold.back",
+"priority": 40.0,
+"whenEnergyType": "Cold"
+}, {
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "persistent.energy.cold.front",
+"attachment": "body",
+"category": "energy",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fps": 144.0,
+"id": "persistent.energy.cold.front",
+"priority": 40.0,
+"whenEnergyType": "Cold"
+}, {
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "persistent.energy.fire.back",
+"attachment": "body",
+"category": "energy",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"fps": 144.0,
+"id": "persistent.energy.fire.back",
+"priority": 40.0,
+"whenEnergyType": "Fire"
+}, {
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "persistent.energy.fire.front",
+"attachment": "body",
+"category": "energy",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fps": 144.0,
+"id": "persistent.energy.fire.front",
+"priority": 40.0,
+"whenEnergyType": "Fire"
+}, {
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "persistent.energy.lightning.back",
+"attachment": "body",
+"category": "energy",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"fps": 144.0,
+"id": "persistent.energy.lightning.back",
+"priority": 40.0,
+"whenEnergyType": "Lightning"
+}, {
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "persistent.energy.lightning.front",
+"attachment": "body",
+"category": "energy",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fps": 144.0,
+"id": "persistent.energy.lightning.front",
+"priority": 40.0,
+"whenEnergyType": "Lightning"
+}, {
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "persistent.energy.thunder.back",
+"attachment": "body",
+"category": "energy",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"fps": 144.0,
+"id": "persistent.energy.thunder.back",
+"priority": 40.0,
+"whenEnergyType": "Thunder"
+}, {
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "persistent.energy.thunder.front",
+"attachment": "body",
+"category": "energy",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fps": 144.0,
+"id": "persistent.energy.thunder.front",
+"priority": 40.0,
+"whenEnergyType": "Thunder"
+}]
+group = "protection"
+priority = 40.0
+max_layers = 3.0
+application_text = SubResource("Resource_mwoin")
+removal_text = SubResource("Resource_22qkx")
+status = "partial"
+unported = {
+"application": {
+"durationMs": 0.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "persistent.energy",
+"visualIntensity": "primary_dynamic"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.spell.protection_from_energy",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "fail_transaction",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 0.0,
+"effects": []
+}
+}

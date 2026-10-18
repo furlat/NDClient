@@ -1,0 +1,219 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_x8b8v"]
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="2_x51ur"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="3_kxouw"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="4_h5gvh"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="5_x28oo"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="6_elp21"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="7_28fe0"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="8_h2vnd"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="9_4ty3c"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="10_35smj"]
+
+[sub_resource type="Resource" id="Resource_6bhtw"]
+script = ExtResource("1_x8b8v")
+role = "cast"
+clip = "Attack5"
+markers = Dictionary[String, float]({
+"release": 7.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+unported = {
+"recovery": {
+"bodyClip": "Taunt",
+"bodyPlaybackSpeed": 1.0,
+"enabled": false
+}
+}
+
+[sub_resource type="Resource" id="Resource_moxnw"]
+script = ExtResource("2_x51ur")
+roles = Dictionary[String, Color]({
+"primary": Color(0.6392157, 0.47843137, 0.7921569, 1),
+"secondary": Color(0.90588236, 0.84313726, 0.98039216, 1),
+"tertiary": Color(0.28627452, 0.1882353, 0.39215687, 1)
+})
+ramp = PackedColorArray()
+
+[sub_resource type="Resource" id="Resource_nwmgp"]
+script = ExtResource("3_kxouw")
+clip = "review/shatter/back/lifecycle"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+scale = 0.471404520791032
+orientation = "world"
+source_end = 0.75
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.25
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0
+}
+
+[sub_resource type="Resource" id="Resource_73cid"]
+script = ExtResource("5_x28oo")
+kind = "palette_ramp"
+colours = PackedColorArray(0.12941177, 0.09019608, 0.19215687, 1, 0.28627452, 0.1882353, 0.39215687, 1, 0.46666667, 0.32156864, 0.60784316, 1, 0.6392157, 0.47843137, 0.7921569, 1, 0.76862746, 0.6431373, 0.9137255, 1, 0.90588236, 0.84313726, 0.98039216, 1)
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_8d4aq"]
+script = ExtResource("4_h5gvh")
+steps = Array[ExtResource("5_x28oo")]([SubResource("Resource_73cid")])
+
+[sub_resource type="Resource" id="Resource_7pucm"]
+script = ExtResource("5_x28oo")
+kind = "palette_ramp"
+colours = PackedColorArray(0.28627452, 0.1882353, 0.39215687, 1, 0.6392157, 0.47843137, 0.7921569, 1, 0.90588236, 0.84313726, 0.98039216, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_frs8k"]
+script = ExtResource("4_h5gvh")
+steps = Array[ExtResource("5_x28oo")]([SubResource("Resource_7pucm")])
+
+[sub_resource type="Resource" id="Resource_jblko"]
+script = ExtResource("6_elp21")
+category = "Magic2"
+sheet = "/spritesheets/Magic2/Attack5.png"
+look = SubResource("Resource_frs8k")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 10713802.0
+},
+"id": "cast-weaponGlow",
+"palette": {},
+"role": "hand_magic",
+"slot": "weaponGlow"
+}
+
+[sub_resource type="Resource" id="Resource_xwuwd"]
+script = ExtResource("5_x28oo")
+kind = "palette_ramp"
+colours = PackedColorArray(0.28627452, 0.1882353, 0.39215687, 1, 0.6392157, 0.47843137, 0.7921569, 1, 0.90588236, 0.84313726, 0.98039216, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_jdw7r"]
+script = ExtResource("4_h5gvh")
+steps = Array[ExtResource("5_x28oo")]([SubResource("Resource_xwuwd")])
+
+[sub_resource type="Resource" id="Resource_jb6yy"]
+script = ExtResource("6_elp21")
+place = "aura"
+category = "Effect5"
+sheet = "/spritesheets/Effect5/Attack5.png"
+look = SubResource("Resource_jdw7r")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 10713802.0
+},
+"id": "cast-aura",
+"palette": {},
+"role": "aura",
+"slot": "aura"
+}
+
+[sub_resource type="Resource" id="Resource_cd7cb"]
+script = ExtResource("7_28fe0")
+path = "art/media/ui/icons/smooth48/spell.shatter.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:spell.shatter"
+
+[resource]
+script = ExtResource("8_h2vnd")
+id = "spell.shatter"
+icon = SubResource("Resource_cd7cb")
+delivery = "projectile"
+body = SubResource("Resource_6bhtw")
+hand_layers = Array[ExtResource("6_elp21")]([SubResource("Resource_jblko"), SubResource("Resource_jb6yy")])
+sockets = "measured/abilities/spells/spell.shatter.sockets.json"
+effects = Array[ExtResource("3_kxouw")]([SubResource("Resource_nwmgp")])
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+impact_delay = 0.0
+flash_frame = 0.0
+flash_duration = 0.15
+flash_look = SubResource("Resource_8d4aq")
+number_frame = 0.0
+number_duration = 0.8
+colours = SubResource("Resource_moxnw")
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray()
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+staging_unported = {
+"selection": "shatter__back"
+}
+unported = {
+"condition": {
+"anchor": "effect",
+"delayMs": 0.0,
+"feedbackEnabled": true
+},
+"contact": {
+"cellsByFacing": null
+},
+"damage": {
+"floatingNumber": {
+"color": 10713802.0,
+"enabled": true,
+"label": ""
+},
+"hitFlash": {
+"color": 10713802.0,
+"enabled": true,
+"palette": {}
+}
+},
+"definitionRef": {
+"content_id": "spell.shatter",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"media": [{
+"assetId": "pending.shatter.back",
+"attachment": "area_ground",
+"composition": "paired_depth",
+"depth": "behind_body",
+"effectGroup": {
+"id": "effect",
+"label": "Shatter"
+},
+"fps": 32.0,
+"id": "back",
+"viewFacing": "SE"
+}, {
+"assetId": "pending.shatter.front",
+"attachment": "area_ground",
+"composition": "paired_depth",
+"depth": "front_body",
+"effectGroup": {
+"id": "effect",
+"label": "Shatter"
+},
+"fps": 32.0,
+"id": "front",
+"viewFacing": "SE"
+}]
+}

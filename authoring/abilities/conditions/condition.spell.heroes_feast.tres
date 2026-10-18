@@ -1,0 +1,90 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_qdh05"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_p2mxs"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_jmgb5"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_5y5lg"]
+
+[sub_resource type="Resource" id="Resource_ao5os"]
+script = ExtResource("1_qdh05")
+colour = Color(0.89411765, 0.34509805, 0.7647059, 1)
+
+[sub_resource type="Resource" id="Resource_n0dk6"]
+script = ExtResource("3_jmgb5")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_j5ipn"]
+script = ExtResource("2_p2mxs")
+steps = Array[ExtResource("3_jmgb5")]([SubResource("Resource_n0dk6")])
+
+[sub_resource type="Resource" id="Resource_gxiig"]
+script = ExtResource("1_qdh05")
+colour = Color(0.80784315, 0.15294118, 0.30588236, 1)
+
+[resource]
+script = ExtResource("4_5y5lg")
+id = "condition.spell.heroes_feast"
+label = "Heroes' Feast"
+disposition = "authored"
+lifecycle = PackedStringArray()
+look = SubResource("Resource_j5ipn")
+group = "body"
+priority = 30.0
+max_layers = 3.0
+application_text = SubResource("Resource_ao5os")
+removal_text = SubResource("Resource_gxiig")
+status = "partial"
+unported = {
+"application": {
+"durationMs": 220.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "catalog.condition.spell.heroes_feast",
+"visualIntensity": "secondary_dynamic"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.spell.heroes_feast",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "omit_optional_track",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": true,
+"effect": "apply",
+"evidence": "branch=feast; effect=condition.heroes_feast; disposition=beneficial; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "action.environment.heroes_feast.eat",
+"content_version": 1.0,
+"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+"definition_kind": "action",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "action"
+}],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 200.0,
+"effects": []
+}
+}

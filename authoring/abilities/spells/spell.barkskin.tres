@@ -1,0 +1,160 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_rqk86"]
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="2_85ce5"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="3_du3at"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="4_xbxhr"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="5_vlbq7"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="6_a2rqt"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="7_mxobc"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="8_nw84l"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="9_u3nv0"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="10_4nv1y"]
+
+[sub_resource type="Resource" id="Resource_0c12u"]
+script = ExtResource("1_rqk86")
+role = "cast"
+clip = "Attack5"
+markers = Dictionary[String, float]({
+"release": 7.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+unported = {
+"recovery": {
+"bodyClip": "Taunt",
+"bodyPlaybackSpeed": 1.0,
+"enabled": false
+}
+}
+
+[sub_resource type="Resource" id="Resource_3miqi"]
+script = ExtResource("2_85ce5")
+roles = Dictionary[String, Color]({
+"primary": Color(0.5411765, 0.4117647, 0.23921569, 1),
+"secondary": Color(0.7607843, 0.60784316, 0.3529412, 1),
+"tertiary": Color(0.29411766, 0.21960784, 0.14509805, 1)
+})
+ramp = PackedColorArray()
+
+[sub_resource type="Resource" id="Resource_lybcg"]
+script = ExtResource("3_du3at")
+clip = "barkskin_native"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 4.6
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+
+[sub_resource type="Resource" id="Resource_5l5x4"]
+script = ExtResource("6_a2rqt")
+kind = "palette_ramp"
+colours = PackedColorArray(0.29411766, 0.21960784, 0.14509805, 1, 0.5411765, 0.4117647, 0.23921569, 1, 0.7607843, 0.60784316, 0.3529412, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_1ykyn"]
+script = ExtResource("5_vlbq7")
+steps = Array[ExtResource("6_a2rqt")]([SubResource("Resource_5l5x4")])
+
+[sub_resource type="Resource" id="Resource_7h3yx"]
+script = ExtResource("4_xbxhr")
+category = "Magic2"
+sheet = "/spritesheets/Magic2/Attack5.png"
+look = SubResource("Resource_1ykyn")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 9070909.0
+},
+"id": "cast-weaponGlow",
+"palette": {},
+"role": "hand_magic",
+"slot": "weaponGlow"
+}
+
+[sub_resource type="Resource" id="Resource_peddj"]
+script = ExtResource("6_a2rqt")
+kind = "palette_ramp"
+colours = PackedColorArray(0.29411766, 0.21960784, 0.14509805, 1, 0.5411765, 0.4117647, 0.23921569, 1, 0.7607843, 0.60784316, 0.3529412, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_vkssd"]
+script = ExtResource("5_vlbq7")
+steps = Array[ExtResource("6_a2rqt")]([SubResource("Resource_peddj")])
+
+[sub_resource type="Resource" id="Resource_a2s03"]
+script = ExtResource("4_xbxhr")
+place = "aura"
+category = "Effect5"
+sheet = "/spritesheets/Effect5/Attack5.png"
+look = SubResource("Resource_vkssd")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 9070909.0
+},
+"id": "cast-aura",
+"palette": {},
+"role": "aura",
+"slot": "aura"
+}
+
+[sub_resource type="Resource" id="Resource_feck5"]
+script = ExtResource("7_mxobc")
+path = "art/media/ui/icons/smooth48/spell.barkskin.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:spell.barkskin"
+
+[resource]
+script = ExtResource("8_nw84l")
+id = "spell.barkskin"
+icon = SubResource("Resource_feck5")
+delivery = "touch"
+body = SubResource("Resource_0c12u")
+hand_layers = Array[ExtResource("4_xbxhr")]([SubResource("Resource_7h3yx"), SubResource("Resource_a2s03")])
+sockets = "measured/abilities/spells/spell.barkskin.sockets.json"
+effects = Array[ExtResource("3_du3at")]([SubResource("Resource_lybcg")])
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+colours = SubResource("Resource_3miqi")
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray("condition.spell.barkskin")
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+staging_unported = {
+"selection": "barkskin_native"
+}
+unported = {
+"condition": {
+"anchor": "effect",
+"delayMs": 0.0,
+"feedbackEnabled": false
+},
+"contact": {
+"cellsByFacing": null
+},
+"definitionRef": {
+"content_id": "spell.barkskin",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+}
+}

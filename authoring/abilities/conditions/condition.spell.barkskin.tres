@@ -1,0 +1,89 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_h3hkw"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_ugk7y"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_qalta"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_ncw83"]
+
+[sub_resource type="Resource" id="Resource_kj5yi"]
+script = ExtResource("1_h3hkw")
+enabled = false
+
+[sub_resource type="Resource" id="Resource_w32k7"]
+script = ExtResource("3_qalta")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_xubw8"]
+script = ExtResource("3_qalta")
+kind = "body_film"
+colours = PackedColorArray(0.27058825, 0.14509805, 0.05882353, 1, 0.81960785, 0.6392157, 0.34117648, 1)
+replace_from = PackedColorArray()
+texture = "/nature/bark.png"
+mapping = "bark_texture"
+hide = PackedStringArray()
+fade_in = 1.1
+fade_out = 1.0
+
+[sub_resource type="Resource" id="Resource_5gdrk"]
+script = ExtResource("2_ugk7y")
+steps = Array[ExtResource("3_qalta")]([SubResource("Resource_w32k7"), SubResource("Resource_xubw8")])
+
+[sub_resource type="Resource" id="Resource_jd444"]
+script = ExtResource("1_h3hkw")
+enabled = false
+
+[resource]
+script = ExtResource("4_ncw83")
+id = "condition.spell.barkskin"
+label = "Barkskin"
+disposition = "authored"
+lifecycle = PackedStringArray()
+look = SubResource("Resource_5gdrk")
+group = "condition.spell.barkskin"
+priority = 40.0
+max_layers = 1.0
+application_text = SubResource("Resource_kj5yi")
+removal_text = SubResource("Resource_jd444")
+status = "ready"
+unported = {
+"application": {
+"durationMs": 0.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["actor"],
+"runtimeRole": "actor_state",
+"visualFamily": "condition.spell.barkskin",
+"visualIntensity": "normal"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.spell.barkskin",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "fail_transaction",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"bodyRamp": {},
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 0.0,
+"effects": []
+}
+}

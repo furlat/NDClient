@@ -1,0 +1,90 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_ekavn"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_hqu4w"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_w5ql7"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_uee8f"]
+
+[sub_resource type="Resource" id="Resource_o0xan"]
+script = ExtResource("1_ekavn")
+colour = Color(0.69411767, 0.89411765, 0.34509805, 1)
+
+[sub_resource type="Resource" id="Resource_ex7qe"]
+script = ExtResource("3_w5ql7")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_7ag8r"]
+script = ExtResource("2_hqu4w")
+steps = Array[ExtResource("3_w5ql7")]([SubResource("Resource_ex7qe")])
+
+[sub_resource type="Resource" id="Resource_61uo0"]
+script = ExtResource("1_ekavn")
+colour = Color(0.21960784, 0.80784315, 0.15294118, 1)
+
+[resource]
+script = ExtResource("4_uee8f")
+id = "condition.spell.chill_touch"
+label = "Chill Touch Effect"
+disposition = "authored"
+lifecycle = PackedStringArray()
+look = SubResource("Resource_7ag8r")
+group = "body"
+priority = 30.0
+max_layers = 3.0
+application_text = SubResource("Resource_o0xan")
+removal_text = SubResource("Resource_61uo0")
+status = "partial"
+unported = {
+"application": {
+"durationMs": 220.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "catalog.condition.spell.chill_touch",
+"visualIntensity": "secondary_dynamic"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.spell.chill_touch",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "omit_optional_track",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": true,
+"effect": "apply",
+"evidence": "branch=hit; effect=condition.chill_touch_tracker; disposition=harmful; target=selected_target; gates=attack_outcome:hit,critical",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.chill_touch",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 200.0,
+"effects": []
+}
+}

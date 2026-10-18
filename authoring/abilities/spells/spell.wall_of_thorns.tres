@@ -1,0 +1,197 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_v63s2"]
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="2_hxkma"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="3_qpele"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="4_ij0s8"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="5_smrrh"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="6_ak84c"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="7_h6ctw"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="8_4gvag"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="9_l0ogm"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="10_x4qko"]
+
+[sub_resource type="Resource" id="Resource_1sve4"]
+script = ExtResource("1_v63s2")
+role = "cast"
+clip = "Attack4"
+markers = Dictionary[String, float]({
+"release": 9.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+unported = {
+"recovery": {
+"bodyClip": "Taunt",
+"bodyPlaybackSpeed": 1.0,
+"enabled": false
+}
+}
+
+[sub_resource type="Resource" id="Resource_oiq5s"]
+script = ExtResource("2_hxkma")
+roles = Dictionary[String, Color]({
+"primary": Color(0.4117647, 0.44313726, 0.23921569, 1),
+"secondary": Color(0.8156863, 0.7529412, 0.5882353, 1),
+"tertiary": Color(0.2784314, 0.21960784, 0.13725491, 1)
+})
+ramp = PackedColorArray()
+
+[sub_resource type="Resource" id="Resource_bn8ke"]
+script = ExtResource("3_qpele")
+clip = "wall_of_thorns_straight_native"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+scale = 0.471404520693175
+orientation = "world"
+source_end = 5.6
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"review_contact_actors": ["target"],
+"review_stationary_ground": [1.0, 0.0, 0.0]
+}
+
+[sub_resource type="Resource" id="Resource_y6ke8"]
+script = ExtResource("6_ak84c")
+kind = "palette_ramp"
+colours = PackedColorArray(0.2784314, 0.21960784, 0.13725491, 1, 0.4117647, 0.44313726, 0.23921569, 1, 0.8156863, 0.7529412, 0.5882353, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_c4d53"]
+script = ExtResource("5_smrrh")
+steps = Array[ExtResource("6_ak84c")]([SubResource("Resource_y6ke8")])
+
+[sub_resource type="Resource" id="Resource_365hq"]
+script = ExtResource("4_ij0s8")
+category = "Magic2"
+sheet = "/spritesheets/Magic2/Attack4.png"
+look = SubResource("Resource_c4d53")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 6910269.0
+},
+"id": "cast-weaponGlow",
+"palette": {},
+"role": "hand_magic",
+"slot": "weaponGlow"
+}
+
+[sub_resource type="Resource" id="Resource_67jxu"]
+script = ExtResource("6_ak84c")
+kind = "palette_ramp"
+colours = PackedColorArray(0.2784314, 0.21960784, 0.13725491, 1, 0.4117647, 0.44313726, 0.23921569, 1, 0.8156863, 0.7529412, 0.5882353, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_2f23k"]
+script = ExtResource("5_smrrh")
+steps = Array[ExtResource("6_ak84c")]([SubResource("Resource_67jxu")])
+
+[sub_resource type="Resource" id="Resource_8de2e"]
+script = ExtResource("4_ij0s8")
+place = "effect"
+category = "Effect2"
+sheet = "/spritesheets/Effect2/Attack4.png"
+look = SubResource("Resource_2f23k")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 6910269.0
+},
+"id": "cast-effect",
+"palette": {},
+"role": "effect",
+"slot": "effect"
+}
+
+[sub_resource type="Resource" id="Resource_370ug"]
+script = ExtResource("7_h6ctw")
+path = "art/media/ui/icons/smooth48/spell.wall_of_thorns.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:spell.wall_of_thorns"
+
+[sub_resource type="Resource" id="Resource_ybold"]
+script = ExtResource("3_qpele")
+clip = "wall_of_thorns_circle_native"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+scale = 0.471404520693175
+orientation = "world"
+source_end = 5.6
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"review_contact_actors": ["target"],
+"review_stationary_ground": [1.0, 0.0, 0.0]
+}
+
+[sub_resource type="Resource" id="Resource_o1ai2"]
+script = ExtResource("10_x4qko")
+id = "wall_of_thorns_circle_native"
+kind = "form"
+selection = "wall_of_thorns_circle_native"
+effects = Array[ExtResource("3_qpele")]([SubResource("Resource_ybold")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[resource]
+script = ExtResource("8_4gvag")
+id = "spell.wall_of_thorns"
+icon = SubResource("Resource_370ug")
+delivery = "wall"
+body = SubResource("Resource_1sve4")
+hand_layers = Array[ExtResource("4_ij0s8")]([SubResource("Resource_365hq"), SubResource("Resource_8de2e")])
+sockets = "measured/abilities/spells/spell.wall_of_thorns.sockets.json"
+effects = Array[ExtResource("3_qpele")]([SubResource("Resource_bn8ke")])
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+colours = SubResource("Resource_oiq5s")
+feedback_ramp = PackedStringArray()
+variants = Array[ExtResource("10_x4qko")]([SubResource("Resource_o1ai2")])
+applies_conditions = PackedStringArray("condition.spell.wall_of_thorns.zone")
+applies_surfaces = PackedStringArray("spatial_effect.spell.wall_of_thorns")
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+staging_unported = {
+"selection": "wall_of_thorns_straight_native"
+}
+unported = {
+"condition": {
+"anchor": "effect",
+"delayMs": 0.0,
+"feedbackEnabled": false
+},
+"contact": {
+"cellsByFacing": null,
+"delayMs": 1968.75
+},
+"definitionRef": {
+"content_id": "spell.wall_of_thorns",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+}
+}

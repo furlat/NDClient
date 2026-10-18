@@ -1,0 +1,191 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="1_8yj1a"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="2_we7dm"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="3_7an8h"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="4_50ngg"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="5_mdety"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="6_vvdlk"]
+
+[sub_resource type="Resource" id="Resource_o4fvx"]
+script = ExtResource("1_8yj1a")
+clip = "bg3-36/dissonant-whispers/voice"
+role = "attached"
+at = "release"
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.4
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "caster",
+"slots": ["head", "helmet"]
+},
+"follow_attachment": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "face"
+}, {
+"actor": "target",
+"socket": "head"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_ktyhv"]
+script = ExtResource("1_8yj1a")
+clip = "bg3-36/dissonant-whispers/impact"
+role = "attached"
+at = "contact"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 1.1
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["head", "helmet"]
+},
+"follow_attachment": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "face"
+}, {
+"actor": "target",
+"socket": "head"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_yb3mb"]
+script = ExtResource("1_8yj1a")
+clip = "condition_frightened_native"
+role = "attached"
+at = "contact"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 3.0
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.25
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"follow_attachment": true
+}
+
+[sub_resource type="Resource" id="Resource_dylj6"]
+script = ExtResource("3_7an8h")
+path = "art/ui-delivery-20261018/runtime/smooth48/spell.dissonant_whispers.png"
+native_size = Vector2i(48, 48)
+source = "ui-delivery-20261018"
+
+[sub_resource type="Resource" id="Resource_dk1p3"]
+script = ExtResource("1_8yj1a")
+clip = "bg3-36/dissonant-whispers/voice"
+role = "attached"
+at = "release"
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.4
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "caster",
+"slots": ["head", "helmet"]
+},
+"follow_attachment": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "face"
+}, {
+"actor": "target",
+"socket": "head"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_fdi03"]
+script = ExtResource("1_8yj1a")
+clip = "bg3-36/dissonant-whispers/saved"
+role = "attached"
+at = "contact"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 0.85
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["head", "helmet"]
+},
+"follow_attachment": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "face"
+}, {
+"actor": "target",
+"socket": "head"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_3368w"]
+script = ExtResource("6_vvdlk")
+id = "dissonant_whispers_saved_native"
+kind = "outcome"
+selection = "dissonant_whispers_saved_native"
+effects = Array[ExtResource("1_8yj1a")]([SubResource("Resource_dk1p3"), SubResource("Resource_fdi03")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[resource]
+script = ExtResource("4_50ngg")
+id = "spell.dissonant_whispers"
+icon = SubResource("Resource_dylj6")
+delivery = "condition_only"
+effects = Array[ExtResource("1_8yj1a")]([SubResource("Resource_o4fvx"), SubResource("Resource_ktyhv"), SubResource("Resource_yb3mb")])
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+feedback_ramp = PackedStringArray()
+variants = Array[ExtResource("6_vvdlk")]([SubResource("Resource_3368w")])
+applies_conditions = PackedStringArray("condition.spell.dissonant_whispers")
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+staging_unported = {
+"selection": "dissonant_whispers_native"
+}

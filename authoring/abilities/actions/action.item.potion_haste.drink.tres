@@ -1,0 +1,75 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_ksuoh"]
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="2_de0i5"]
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="3_ctehh"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="4_ld7qy"]
+
+[sub_resource type="Resource" id="Resource_8820e"]
+script = ExtResource("1_ksuoh")
+role = "act"
+clip = "Taunt"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"effect": 8.0,
+"recover": 10.0
+})
+hidden_slots = PackedStringArray("weapon", "weaponGlow", "offhand")
+
+[sub_resource type="Resource" id="Resource_t3x80"]
+script = ExtResource("2_de0i5")
+text = "Haste Potion"
+colour = Color(1, 0.8784314, 0.18431373, 1)
+
+[sub_resource type="Resource" id="Resource_kr6c1"]
+script = ExtResource("4_ld7qy")
+cue = "potion_drink"
+at = "body.contact"
+
+[resource]
+script = ExtResource("3_ctehh")
+id = "action.item.potion_haste.drink"
+kind = "action"
+family = "item"
+disposition = "authored"
+body = SubResource("Resource_8820e")
+effect_sources = PackedStringArray()
+feedback = SubResource("Resource_t3x80")
+sounds = Array[ExtResource("4_ld7qy")]([SubResource("Resource_kr6c1")])
+status = "ready"
+unported = {
+"actionFeedback": {},
+"actor": {
+"media": [{
+"anchor": "effect",
+"assetId": "strip.effect2.special1.phase1",
+"attachment": "body",
+"colors": {
+"primary": 16769071.0,
+"secondary": 16777215.0
+},
+"fps": 12.0,
+"id": "haste-potion-release",
+"loop": false,
+"offsetX": 0.0,
+"offsetY": -8.0,
+"reversed": false,
+"role": "source_vfx",
+"scale": 1.0
+}]
+},
+"attackFeedback": null,
+"compatibleCueKinds": ["item_action"],
+"counterspellFeedback": null,
+"definitionRef": {
+"content_id": "action.item.potion_haste.drink",
+"content_version": 1.0,
+"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+"definition_kind": "action",
+"pack_id": "content.neurodragon"
+},
+"mediaFailurePolicy": "fail_transaction",
+"previewChildCueKinds": ["condition"],
+"projectile": null,
+"variants": []
+}

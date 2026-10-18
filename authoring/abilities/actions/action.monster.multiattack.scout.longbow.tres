@@ -1,0 +1,47 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_koxwy"]
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="2_4e45j"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_ro3r3"]
+
+[sub_resource type="Resource" id="Resource_srbru"]
+script = ExtResource("1_koxwy")
+role = "act"
+clip = "Idle"
+enabled = false
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"effect": 0.0,
+"recover": 0.0
+})
+hidden_slots = PackedStringArray()
+
+[resource]
+script = ExtResource("2_4e45j")
+id = "action.monster.multiattack.scout.longbow"
+kind = "action"
+family = "monster"
+disposition = "authored"
+body = SubResource("Resource_srbru")
+effect_sources = PackedStringArray()
+status = "partial"
+unported = {
+"actionFeedback": null,
+"actor": {
+"media": []
+},
+"attackFeedback": null,
+"compatibleCueKinds": ["action"],
+"counterspellFeedback": null,
+"definitionRef": {
+"content_id": "action.monster.multiattack.scout.longbow",
+"content_version": 1.0,
+"definition_contract_hash": "55eb3a13d620536ba108a3e8cb10b6673307fcb9f18ed0836999f1d39feb796e",
+"definition_kind": "action",
+"pack_id": "content.srd_5_1_cc"
+},
+"mediaFailurePolicy": "fail_transaction",
+"previewChildCueKinds": ["attack"],
+"projectile": null,
+"variants": []
+}

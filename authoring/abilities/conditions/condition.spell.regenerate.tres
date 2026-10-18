@@ -1,0 +1,151 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_bj5wa"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_br8tp"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_evqdh"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_nov7p"]
+
+[sub_resource type="Resource" id="Resource_45rnc"]
+script = ExtResource("1_bj5wa")
+enabled = false
+
+[sub_resource type="Resource" id="Resource_332da"]
+script = ExtResource("3_evqdh")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_73imn"]
+script = ExtResource("2_br8tp")
+steps = Array[ExtResource("3_evqdh")]([SubResource("Resource_332da")])
+
+[sub_resource type="Resource" id="Resource_882uy"]
+script = ExtResource("1_bj5wa")
+enabled = false
+
+[resource]
+script = ExtResource("4_nov7p")
+id = "condition.spell.regenerate"
+label = "Regenerating"
+disposition = "authored"
+lifecycle = PackedStringArray()
+look = SubResource("Resource_73imn")
+layers = [{
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "support.regenerate.back",
+"attachment": "body",
+"category": "regenerate",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"fps": 32.0,
+"id": "support.regenerate.back",
+"priority": 30.0
+}, {
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "support.regenerate.front",
+"attachment": "body",
+"category": "regenerate",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fps": 32.0,
+"id": "support.regenerate.front",
+"priority": 30.0
+}]
+group = "body"
+priority = 30.0
+max_layers = 3.0
+application_text = SubResource("Resource_45rnc")
+removal_text = SubResource("Resource_882uy")
+status = "partial"
+unported = {
+"application": {
+"durationMs": 0.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "catalog.condition.spell.regenerate",
+"visualIntensity": "secondary_dynamic"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.spell.regenerate",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "fail_transaction",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": true,
+"effect": "apply",
+"evidence": "branch=condition; effect=condition.apply; disposition=beneficial; target=selected_target; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.regenerate",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 450.0,
+"effects": []
+},
+"responses": [{
+"effects": [{
+"animation": "once",
+"assetId": "support.regenerate_healing_event.back",
+"attachment": "body",
+"category": "regenerate_healing_event",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"durationMs": 1500.0,
+"id": "support.regenerate_healing_event.back",
+"priority": 31.0
+}, {
+"animation": "once",
+"assetId": "support.regenerate_healing_event.front",
+"attachment": "body",
+"category": "regenerate_healing_event",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"durationMs": 1500.0,
+"id": "support.regenerate_healing_event.front",
+"priority": 31.0
+}],
+"trigger": "healed"
+}]
+}

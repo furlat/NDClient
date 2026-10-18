@@ -1,0 +1,337 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_8rfgy"]
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="2_61i5g"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="3_un2rm"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="4_s5ebj"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="5_c2ew6"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="6_16sry"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="7_8aaww"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="8_jh1hk"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="9_xyfkm"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="10_4dkng"]
+
+[sub_resource type="Resource" id="Resource_igkct"]
+script = ExtResource("1_8rfgy")
+role = "cast"
+clip = "Special1"
+markers = Dictionary[String, float]({
+"release": 11.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+unported = {
+"recovery": {
+"bodyClip": "Taunt",
+"bodyPlaybackSpeed": 1.0,
+"enabled": false
+}
+}
+
+[sub_resource type="Resource" id="Resource_1ktib"]
+script = ExtResource("2_61i5g")
+roles = Dictionary[String, Color]({
+"primary": Color(0.8862745, 0.7176471, 0.4, 1),
+"secondary": Color(0.972549, 0.9098039, 0.7176471, 1),
+"tertiary": Color(0.3019608, 0.20392157, 0.21568628, 1)
+})
+ramp = PackedColorArray()
+
+[sub_resource type="Resource" id="Resource_2nxhl"]
+script = ExtResource("3_un2rm")
+clip = "review/divine_word/back/proclamation"
+role = "attached"
+at = "release"
+attachment = "caster_ground"
+scale = 0.471404520791032
+orientation = "world"
+source_end = 2.0
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"fade_out_seconds": 0.0,
+"follow_attachment": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "ground"
+}],
+"to_actor": "caster"
+}
+
+[sub_resource type="Resource" id="Resource_rogwt"]
+script = ExtResource("3_un2rm")
+clip = "review/divine_word/back/target_release"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+scale = 0.471404520791032
+orientation = "world"
+source_end = 3.0
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"fade_out_seconds": 0.0,
+"follow_attachment": true,
+"live_endpoints": [{
+"actor": "target",
+"socket": "ground"
+}],
+"to_actor": "target"
+}
+
+[sub_resource type="Resource" id="Resource_rx1vd"]
+script = ExtResource("3_un2rm")
+clip = "review/divine_word/back/target2_release"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+scale = 0.471404520791032
+orientation = "world"
+source_end = 3.0
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"fade_out_seconds": 0.0,
+"follow_attachment": true,
+"live_endpoints": [{
+"actor": "target2",
+"socket": "ground"
+}],
+"to_actor": "target2"
+}
+
+[sub_resource type="Resource" id="Resource_ujetv"]
+script = ExtResource("3_un2rm")
+clip = "review/divine_word/back/target_deafened"
+role = "attached"
+at = "contact"
+attachment = "recipient_ground"
+scale = 0.471404520791032
+orientation = "world"
+source_end = 1.7
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"fade_out_seconds": 0.0,
+"follow_attachment": true,
+"live_endpoints": [{
+"actor": "target",
+"socket": "ground"
+}, {
+"actor": "target",
+"socket": "head",
+"surface_slots": ["head", "helmet"]
+}],
+"to_actor": "target"
+}
+
+[sub_resource type="Resource" id="Resource_2dy2l"]
+script = ExtResource("3_un2rm")
+clip = "review/divine_word/back/target_blinded"
+role = "attached"
+at = "contact"
+attachment = "recipient_ground"
+scale = 0.471404520791032
+orientation = "world"
+source_end = 1.7
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"fade_out_seconds": 0.0,
+"follow_attachment": true,
+"live_endpoints": [{
+"actor": "target",
+"socket": "ground"
+}, {
+"actor": "target",
+"socket": "head",
+"surface_slots": ["head", "helmet"]
+}],
+"to_actor": "target"
+}
+
+[sub_resource type="Resource" id="Resource_tqmpn"]
+script = ExtResource("6_16sry")
+kind = "palette_ramp"
+colours = PackedColorArray(0.3019608, 0.20392157, 0.21568628, 1, 0.8862745, 0.7176471, 0.4, 1, 0.972549, 0.9098039, 0.7176471, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_cy3ag"]
+script = ExtResource("5_c2ew6")
+steps = Array[ExtResource("6_16sry")]([SubResource("Resource_tqmpn")])
+
+[sub_resource type="Resource" id="Resource_cawiq"]
+script = ExtResource("4_s5ebj")
+category = "Magic2"
+sheet = "/spritesheets/Magic2/Special1.png"
+look = SubResource("Resource_cy3ag")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 14858086.0
+},
+"id": "cast-weaponGlow",
+"palette": {},
+"role": "hand_magic",
+"slot": "weaponGlow"
+}
+
+[sub_resource type="Resource" id="Resource_muc2p"]
+script = ExtResource("6_16sry")
+kind = "palette_ramp"
+colours = PackedColorArray(0.3019608, 0.20392157, 0.21568628, 1, 0.8862745, 0.7176471, 0.4, 1, 0.972549, 0.9098039, 0.7176471, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_cd8nu"]
+script = ExtResource("5_c2ew6")
+steps = Array[ExtResource("6_16sry")]([SubResource("Resource_muc2p")])
+
+[sub_resource type="Resource" id="Resource_1ggle"]
+script = ExtResource("4_s5ebj")
+place = "aura"
+category = "Effect4"
+sheet = "/spritesheets/Effect4/Special1.png"
+look = SubResource("Resource_cd8nu")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 14858086.0
+},
+"id": "cast-aura",
+"palette": {},
+"role": "aura",
+"slot": "aura"
+}
+
+[sub_resource type="Resource" id="Resource_8ie1f"]
+script = ExtResource("7_8aaww")
+path = "art/media/ui/icons/smooth48/spell.divine-word.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:spell.divine-word"
+
+[resource]
+script = ExtResource("8_jh1hk")
+id = "spell.divine_word"
+icon = SubResource("Resource_8ie1f")
+delivery = "condition_only"
+body = SubResource("Resource_igkct")
+hand_layers = Array[ExtResource("4_s5ebj")]([SubResource("Resource_cawiq"), SubResource("Resource_1ggle")])
+sockets = "measured/abilities/spells/spell.divine_word.sockets.json"
+effects = Array[ExtResource("3_un2rm")]([SubResource("Resource_2nxhl"), SubResource("Resource_rogwt"), SubResource("Resource_rx1vd"), SubResource("Resource_ujetv"), SubResource("Resource_2dy2l")])
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+colours = SubResource("Resource_1ktib")
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray("condition.blinded", "condition.deafened", "condition.spell.divine_word", "condition.stunned")
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+staging_unported = {
+"selection": "divine_word__back"
+}
+unported = {
+"condition": {
+"anchor": "effect",
+"delayMs": 0.0,
+"feedbackEnabled": false
+},
+"contact": {
+"cellsByFacing": null,
+"delayMs": 906.25
+},
+"definitionRef": {
+"content_id": "spell.divine_word",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"media": [{
+"assetId": "divine.divine_word.finite.back",
+"attachment": "target_ground",
+"depth": "behind_body",
+"effectGroup": {
+"id": "divine_word",
+"label": "Divine Word"
+},
+"fps": 32.0,
+"id": "divine_word.back",
+"scale": 0.5,
+"viewFacing": "E"
+}, {
+"assetId": "divine.divine_word.finite.front",
+"attachment": "target_ground",
+"depth": "front_body",
+"effectGroup": {
+"id": "divine_word",
+"label": "Divine Word"
+},
+"fps": 32.0,
+"id": "divine_word.front",
+"scale": 0.5,
+"viewFacing": "E"
+}, {
+"assetId": "divine.divine_proclamation.finite.back",
+"attachment": "source_ground",
+"depth": "behind_body",
+"effectGroup": {
+"id": "proclamation",
+"label": "Divine Word · Proclamation"
+},
+"fps": 32.0,
+"id": "proclamation.back",
+"scale": 0.5,
+"viewFacing": "E"
+}, {
+"assetId": "divine.divine_proclamation.finite.front",
+"attachment": "source_ground",
+"depth": "front_body",
+"effectGroup": {
+"id": "proclamation",
+"label": "Divine Word · Proclamation"
+},
+"fps": 32.0,
+"id": "proclamation.front",
+"scale": 0.5,
+"viewFacing": "E"
+}]
+}

@@ -1,0 +1,73 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_tkwrp"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="2_8v4cd"]
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="3_nu3kk"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="4_dd3kj"]
+
+[sub_resource type="Resource" id="Resource_8pofa"]
+script = ExtResource("1_tkwrp")
+role = "act"
+clip = "CrouchIdle"
+playback_speed = 3.0
+hidden_slots = PackedStringArray()
+rig = "neuroclient.modular"
+
+[sub_resource type="Resource" id="Resource_tkk1a"]
+script = ExtResource("2_8v4cd")
+path = "art/media/ui/icons/smooth48/action.hide.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:action.hide"
+
+[sub_resource type="Resource" id="Resource_qt8ba"]
+script = ExtResource("4_dd3kj")
+cue = "hide_transition"
+at = "effect"
+
+[resource]
+script = ExtResource("3_nu3kk")
+id = "action.hide"
+kind = "action"
+family = "core"
+icon = SubResource("Resource_tkk1a")
+disposition = "authored"
+body = SubResource("Resource_8pofa")
+effect_sources = PackedStringArray()
+sounds = Array[ExtResource("4_dd3kj")]([SubResource("Resource_qt8ba")])
+status = "ready"
+unported = {
+"_legacy_source": "catalog/body_action_recipes.json:/action.hide",
+"_resource_source": "res://authoring/presentation/actions/hide.tres",
+"_source_fields": {
+"actor": "res://authoring/presentation/actions/hide.tres",
+"actor/clip": "res://authoring/presentation/actions/hide.tres::clip",
+"actor/playbackSpeed": "res://authoring/presentation/actions/hide.tres::playback_speed",
+"anchors/1/frame": "res://authoring/presentation/actions/hide.tres::effect_frame",
+"effectAudioCue": "res://authoring/presentation/actions/hide.tres::effect_audio_cue"
+},
+"actionFeedback": null,
+"actor": {
+"media": []
+},
+"anchors": [{
+"frame": 0,
+"name": "action_start"
+}, {
+"frame": 15,
+"name": "effect"
+}],
+"attackFeedback": null,
+"compatibleCueKinds": ["action"],
+"counterspellFeedback": null,
+"definitionRef": {
+"content_id": "action.hide",
+"content_version": 1.0,
+"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+"definition_kind": "action",
+"pack_id": "core.rules"
+},
+"mediaFailurePolicy": "fail_transaction",
+"previewChildCueKinds": ["condition"],
+"projectile": null,
+"variants": []
+}

@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="PresentationNativeSource" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/native_source.gd" id="1_5aw20"]
+
+[resource]
+script = ExtResource("1_5aw20")
+id = "class.second_wind"
+kind = "class_component"
+record = {
+"camera_target": [0.0, 0.734846922834953, 0.0],
+"canvas": [384.0, 384.0],
+"capture_halves": ["back", "front"],
+"duration": 1.5,
+"id": "class.second_wind",
+"kind": "class_component",
+"loop": false,
+"media_ids": ["class.second_wind.heal-q0-back", "class.second_wind.heal-q0-front"],
+"palette": {
+"colors": ["#458b83", "#75bfa3", "#c3dace"],
+"operator": "class_neutral"
+},
+"pivot": [192.0, 249.6],
+"pixels_per_unit": 90.5096679918781,
+"preload_paths": ["res://assets/native_effects/class_actions/ClassComponents.gd", "res://assets/native_effects/class_actions/Flow.gdshader", "res://presentation/native_effect_mote.gdshader", "res://assets/native_effects/class_actions/vfx_1/arc_charge/textures/flow_noise.tres"],
+"properties": {
+"kind": "heal",
+"quadrant": 0.0,
+"side_name": "all"
+},
+"requirements": ["production_painter_integration"],
+"sample_hz": 32.0,
+"script": "res://assets/native_effects/class_actions/ClassComponents.gd"
+}

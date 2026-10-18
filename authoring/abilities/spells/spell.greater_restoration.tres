@@ -1,0 +1,193 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_mtbna"]
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="2_ncxqj"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="3_l3w3j"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="4_1dspc"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="5_jry56"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="6_jitjj"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="7_e8gov"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="8_hl3ia"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="9_sj24r"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="10_qegq6"]
+
+[sub_resource type="Resource" id="Resource_3eyfq"]
+script = ExtResource("1_mtbna")
+role = "cast"
+clip = "Attack5"
+markers = Dictionary[String, float]({
+"release": 7.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+unported = {
+"recovery": {
+"bodyClip": "Taunt",
+"bodyPlaybackSpeed": 1.0,
+"enabled": false
+}
+}
+
+[sub_resource type="Resource" id="Resource_l7dyl"]
+script = ExtResource("2_ncxqj")
+roles = Dictionary[String, Color]({
+"primary": Color(0.4392157, 0.827451, 0.8745098, 1),
+"secondary": Color(0.8156863, 0.95686275, 0.92941177, 1),
+"tertiary": Color(0.16078432, 0.22352941, 0.34509805, 1)
+})
+ramp = PackedColorArray()
+
+[sub_resource type="Resource" id="Resource_70757"]
+script = ExtResource("3_l3w3j")
+clip = "review/greater_restoration/back/lifecycle"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+scale = 0.471404520791032
+orientation = "world"
+source_end = 3.5
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.25
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0
+}
+
+[sub_resource type="Resource" id="Resource_2h2uy"]
+script = ExtResource("6_jitjj")
+kind = "palette_ramp"
+colours = PackedColorArray(0.16078432, 0.22352941, 0.34509805, 1, 0.4392157, 0.827451, 0.8745098, 1, 0.8156863, 0.95686275, 0.92941177, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_g4xc2"]
+script = ExtResource("5_jry56")
+steps = Array[ExtResource("6_jitjj")]([SubResource("Resource_2h2uy")])
+
+[sub_resource type="Resource" id="Resource_4ydkh"]
+script = ExtResource("4_1dspc")
+category = "Magic2"
+sheet = "/spritesheets/Magic2/Attack5.png"
+look = SubResource("Resource_g4xc2")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 7394271.0
+},
+"id": "cast-weaponGlow",
+"palette": {},
+"role": "hand_magic",
+"slot": "weaponGlow"
+}
+
+[sub_resource type="Resource" id="Resource_bgdft"]
+script = ExtResource("6_jitjj")
+kind = "palette_ramp"
+colours = PackedColorArray(0.16078432, 0.22352941, 0.34509805, 1, 0.4392157, 0.827451, 0.8745098, 1, 0.8156863, 0.95686275, 0.92941177, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_xiyfs"]
+script = ExtResource("5_jry56")
+steps = Array[ExtResource("6_jitjj")]([SubResource("Resource_bgdft")])
+
+[sub_resource type="Resource" id="Resource_dsprl"]
+script = ExtResource("4_1dspc")
+place = "aura"
+category = "Effect5"
+sheet = "/spritesheets/Effect5/Attack5.png"
+look = SubResource("Resource_xiyfs")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 7394271.0
+},
+"id": "cast-aura",
+"palette": {},
+"role": "aura",
+"slot": "aura"
+}
+
+[sub_resource type="Resource" id="Resource_dsv6g"]
+script = ExtResource("7_e8gov")
+path = "art/media/ui/icons/smooth48/spell.greater-restoration.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:spell.greater-restoration"
+
+[resource]
+script = ExtResource("8_hl3ia")
+id = "spell.greater_restoration"
+icon = SubResource("Resource_dsv6g")
+delivery = "touch"
+body = SubResource("Resource_3eyfq")
+hand_layers = Array[ExtResource("4_1dspc")]([SubResource("Resource_4ydkh"), SubResource("Resource_dsprl")])
+sockets = "measured/abilities/spells/spell.greater_restoration.sockets.json"
+effects = Array[ExtResource("3_l3w3j")]([SubResource("Resource_70757")])
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+colours = SubResource("Resource_l7dyl")
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray()
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+staging_unported = {
+"selection": "greater_restoration__back"
+}
+unported = {
+"condition": {
+"anchor": "effect",
+"delayMs": 0.0,
+"feedbackEnabled": true
+},
+"contact": {
+"cellsByFacing": null,
+"delayMs": 500.0
+},
+"definitionRef": {
+"content_id": "spell.greater_restoration",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"media": [{
+"assetId": "healing.greater_restoration.back",
+"attachment": "target_ground",
+"depth": "behind_body",
+"effectGroup": {
+"id": "effect",
+"label": "Greater Restoration"
+},
+"fps": 32.0,
+"id": "back",
+"scale": 0.5,
+"scaleWithActor": true,
+"viewFacing": "E"
+}, {
+"assetId": "healing.greater_restoration.front",
+"attachment": "target_ground",
+"depth": "front_body",
+"effectGroup": {
+"id": "effect",
+"label": "Greater Restoration"
+},
+"fps": 32.0,
+"id": "front",
+"scale": 0.5,
+"scaleWithActor": true,
+"viewFacing": "E"
+}]
+}

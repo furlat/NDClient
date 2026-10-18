@@ -1,0 +1,137 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="1_k2mhg"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="2_x2pbk"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="3_sgkgn"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="4_i54p4"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="5_i7d4y"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="6_fkoud"]
+
+[sub_resource type="Resource" id="Resource_2diq4"]
+script = ExtResource("1_k2mhg")
+clip = "bg3-36/goodberry/goodberry_native"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 1.35
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.25
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"follow_attachment": true,
+"live_endpoints": [{
+"actor": "target",
+"socket": "hand"
+}, {
+"actor": "target",
+"socket": "hand"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_d8w5y"]
+script = ExtResource("3_sgkgn")
+path = "art/ui-delivery-20261018/runtime/smooth48/spell.goodberry.png"
+native_size = Vector2i(48, 48)
+source = "ui-delivery-20261018"
+
+[sub_resource type="Resource" id="Resource_51gsk"]
+script = ExtResource("1_k2mhg")
+clip = "bg3-36/goodberry/goodberry_eat_native"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 1.35
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.25
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"follow_attachment": true,
+"live_endpoints": [{
+"actor": "target",
+"socket": "hand"
+}, {
+"actor": "target",
+"socket": "face"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_36lpf"]
+script = ExtResource("6_fkoud")
+id = "goodberry_eat_native"
+kind = "form"
+selection = "goodberry_eat_native"
+effects = Array[ExtResource("1_k2mhg")]([SubResource("Resource_51gsk")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[sub_resource type="Resource" id="Resource_i22wf"]
+script = ExtResource("1_k2mhg")
+clip = "bg3-36/goodberry/goodberry_healing_blocked_native"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 1.35
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.25
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"follow_attachment": true,
+"live_endpoints": [{
+"actor": "target",
+"socket": "hand"
+}, {
+"actor": "target",
+"socket": "face"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_e8614"]
+script = ExtResource("6_fkoud")
+id = "goodberry_healing_blocked_native"
+kind = "outcome"
+selection = "goodberry_healing_blocked_native"
+effects = Array[ExtResource("1_k2mhg")]([SubResource("Resource_i22wf")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[resource]
+script = ExtResource("4_i54p4")
+id = "spell.goodberry"
+icon = SubResource("Resource_d8w5y")
+delivery = "touch"
+effects = Array[ExtResource("1_k2mhg")]([SubResource("Resource_2diq4")])
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+feedback_ramp = PackedStringArray()
+variants = Array[ExtResource("6_fkoud")]([SubResource("Resource_36lpf"), SubResource("Resource_e8614")])
+applies_conditions = PackedStringArray("condition.spell.goodberry.batch")
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+staging_unported = {
+"selection": "goodberry_native"
+}

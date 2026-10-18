@@ -1,0 +1,143 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_uas6w"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_xsaa7"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_ww7hg"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_l62l6"]
+
+[sub_resource type="Resource" id="Resource_vht3v"]
+script = ExtResource("1_uas6w")
+enabled = false
+colour = Color(0.4392157, 0.69411767, 0.827451, 1)
+
+[sub_resource type="Resource" id="Resource_66ehw"]
+script = ExtResource("3_ww7hg")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_8v4gy"]
+script = ExtResource("2_xsaa7")
+steps = Array[ExtResource("3_ww7hg")]([SubResource("Resource_66ehw")])
+
+[sub_resource type="Resource" id="Resource_o7prj"]
+script = ExtResource("1_uas6w")
+enabled = false
+colour = Color(0.4392157, 0.69411767, 0.827451, 1)
+
+[resource]
+script = ExtResource("4_l62l6")
+id = "condition.spell.blur"
+label = "Blur"
+disposition = "authored"
+lifecycle = PackedStringArray()
+look = SubResource("Resource_8v4gy")
+group = "body"
+priority = 50.0
+max_layers = 3.0
+application_text = SubResource("Resource_vht3v")
+removal_text = SubResource("Resource_o7prj")
+status = "partial"
+unported = {
+"application": {
+"durationMs": 480.0,
+"effects": [{
+"animation": "once",
+"assetId": "persistent.blur.smoke.back",
+"attachment": "body",
+"category": "smoke",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"durationMs": 1500.0,
+"id": "persistent.blur.smoke.back",
+"opacity": 0.7,
+"priority": 50.0
+}, {
+"animation": "once",
+"assetId": "persistent.blur.smoke.front",
+"attachment": "body",
+"category": "smoke",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"durationMs": 1500.0,
+"id": "persistent.blur.smoke.front",
+"opacity": 0.5,
+"priority": 50.0
+}]
+},
+"classification": {
+"presentationDomains": ["body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "persistent.blur",
+"visualIntensity": "primary_dynamic"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.spell.blur",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "fail_transaction",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"bodyDistortion": {
+"bandHeightPx": 2.0,
+"bodyOpacity": 0.8,
+"contours": [{
+"frequency": 9.0,
+"offset": [0.0, -0.04],
+"opacity": 0.42,
+"oscillation": [0.04, 0.0]
+}, {
+"frequency": 7.0,
+"offset": [-0.04, 0.0],
+"opacity": 0.34,
+"oscillation": [0.0, 0.04]
+}],
+"palette": [1783128.0, 3237277.0, 7385555.0, 11984873.0],
+"trails": [{
+"ageMs": 240.0,
+"opacity": 0.105
+}, {
+"ageMs": 160.0,
+"opacity": 0.21
+}, {
+"ageMs": 80.0,
+"opacity": 0.315
+}],
+"waves": [{
+"amplitudePx": 2.8,
+"rowFrequency": 0.22,
+"timeFrequency": -8.0
+}, {
+"amplitudePx": 1.3,
+"rowFrequency": 0.09,
+"timeFrequency": 5.0
+}]
+},
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 350.0,
+"effects": []
+}
+}

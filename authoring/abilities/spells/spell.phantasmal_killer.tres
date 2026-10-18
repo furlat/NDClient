@@ -1,0 +1,192 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="1_x1dmb"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="2_ypcyw"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="3_n1e8q"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="4_1bvcm"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="5_pn0ds"]
+
+[sub_resource type="Resource" id="Resource_n1ti5"]
+script = ExtResource("1_x1dmb")
+clip = "high-level-22/phantasmal-killer/application-readable"
+role = "attached"
+at = "cast"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 1.05
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.3
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "caster",
+"slots": ["head", "helmet"]
+},
+"follow_attachment": true,
+"id": "phantasmal_killer-application-caster-0.0",
+"live_endpoints": [{
+"actor": "caster",
+"socket": "face"
+}, {
+"actor": "caster",
+"socket": "face"
+}],
+"to_actor": "caster"
+}
+
+[sub_resource type="Resource" id="Resource_23vo2"]
+script = ExtResource("1_x1dmb")
+clip = "high-level-22/phantasmal-killer/application-readable"
+role = "attached"
+at = "contact"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 1.05
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.3
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["head", "helmet"]
+},
+"follow_attachment": true,
+"id": "phantasmal_killer-application-target-0.0",
+"live_endpoints": [{
+"actor": "caster",
+"socket": "face"
+}, {
+"actor": "target",
+"socket": "face"
+}],
+"to_actor": "target"
+}
+
+[sub_resource type="Resource" id="Resource_jm8mj"]
+script = ExtResource("1_x1dmb")
+clip = "high-level-22/phantasmal-killer/held-readable"
+role = "attached"
+at = "contact"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 3.2
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.3
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["head", "helmet"]
+},
+"follow_attachment": true,
+"id": "phantasmal_killer-held-target-0.0",
+"live_endpoints": [{
+"actor": "caster",
+"socket": "face"
+}, {
+"actor": "target",
+"socket": "face"
+}],
+"to_actor": "target"
+}
+
+[sub_resource type="Resource" id="Resource_s7f5u"]
+script = ExtResource("1_x1dmb")
+clip = "high-level-22/phantasmal-killer/frightened"
+role = "attached"
+at = "contact"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 3.2
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.3
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"follow_attachment": true,
+"id": "phantasmal_killer-frightened-target-0.0",
+"to_actor": "target"
+}
+
+[sub_resource type="Resource" id="Resource_pjnhk"]
+script = ExtResource("1_x1dmb")
+clip = "high-level-22/phantasmal-killer/psychic_contact-readable"
+role = "attached"
+at = "contact"
+delay = 1.35
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 0.7
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.3
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["head", "helmet"]
+},
+"follow_attachment": true,
+"id": "phantasmal_killer-psychic_contact-target-1.35",
+"live_endpoints": [{
+"actor": "caster",
+"socket": "face"
+}, {
+"actor": "target",
+"socket": "face"
+}],
+"to_actor": "target"
+}
+
+[resource]
+script = ExtResource("3_n1e8q")
+id = "spell.phantasmal_killer"
+delivery = "condition_only"
+effects = Array[ExtResource("1_x1dmb")]([SubResource("Resource_n1ti5"), SubResource("Resource_23vo2"), SubResource("Resource_jm8mj"), SubResource("Resource_s7f5u"), SubResource("Resource_pjnhk")])
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray("condition.spell.phantasmal_killer")
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+staging_unported = {
+"selection": "phantasmal_killer_readable_native"
+}

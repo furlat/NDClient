@@ -1,0 +1,109 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_0bntw"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_2a6wu"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_388r0"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_pmkmq"]
+
+[sub_resource type="Resource" id="Resource_44ecr"]
+script = ExtResource("1_0bntw")
+enabled = false
+colour = Color(0.6392157, 0.34509805, 0.89411765, 1)
+
+[sub_resource type="Resource" id="Resource_ak12v"]
+script = ExtResource("3_388r0")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_l1y3c"]
+script = ExtResource("2_2a6wu")
+steps = Array[ExtResource("3_388r0")]([SubResource("Resource_ak12v")])
+
+[sub_resource type="Resource" id="Resource_f8g3e"]
+script = ExtResource("1_0bntw")
+enabled = false
+colour = Color(0.80784315, 0.15294118, 0.7647059, 1)
+
+[resource]
+script = ExtResource("4_pmkmq")
+id = "class_feature.barbarian.reckless_attacking"
+label = "Reckless Attacking"
+disposition = "authored"
+lifecycle = PackedStringArray()
+look = SubResource("Resource_l1y3c")
+layers = [{
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "original",
+"assetId": "class.marker.reckless",
+"attachment": "head",
+"category": "ClassOriginal",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fps": 32.0,
+"id": "class.marker.reckless",
+"opacity": 0.85,
+"priority": 50.0
+}]
+group = "class-class_feature.barbarian.reckless_attacking"
+priority = 50.0
+max_layers = 3.0
+application_text = SubResource("Resource_44ecr")
+removal_text = SubResource("Resource_f8g3e")
+status = "partial"
+unported = {
+"application": {
+"durationMs": 0.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["body_overlay"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "catalog.class_feature.barbarian.reckless_attacking",
+"visualIntensity": "ambient_passive"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "class_feature.barbarian.reckless_attacking",
+"content_version": 1.0,
+"definition_contract_hash": "2687590eedb36e5161aef83b10fbd3a38f68581b0d93ebdf0e283294ae8c2e6c",
+"definition_kind": "class_feature",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "omit_optional_track",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": true,
+"effect": "apply",
+"evidence": "branch=condition; effect=condition.apply; disposition=neutral; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "action.class.barbarian.reckless_attack",
+"content_version": 1.0,
+"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+"definition_kind": "action",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "action"
+}],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 0.0,
+"effects": []
+}
+}
+notes = "Sent by the pinned engine under this id; not a condition id on the modern branch."

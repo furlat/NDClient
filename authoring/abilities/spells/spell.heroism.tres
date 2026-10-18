@@ -1,0 +1,329 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="1_2dvex"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="2_loe6r"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="3_turj8"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="4_1cjio"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="5_qnf0e"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="6_0he5l"]
+
+[sub_resource type="Resource" id="Resource_pfoei"]
+script = ExtResource("1_2dvex")
+clip = "bg3-36/heroism/apply"
+role = "attached"
+at = "cast"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 0.95
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "caster",
+"slots": ["body", "chest", "belt", "cloak", "head", "helmet", "legs", "shoes"]
+},
+"follow_attachment": true,
+"id": "heroism-apply-caster",
+"to_actor": "caster"
+}
+
+[sub_resource type="Resource" id="Resource_mhmis"]
+script = ExtResource("1_2dvex")
+clip = "bg3-36/heroism/hold"
+role = "attached"
+at = "contact"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 3.2
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.35
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "chest", "belt", "cloak", "head", "helmet", "legs", "shoes"]
+},
+"follow_attachment": true,
+"id": "heroism-hold-target",
+"to_actor": "target"
+}
+
+[sub_resource type="Resource" id="Resource_ewtol"]
+script = ExtResource("1_2dvex")
+clip = "condition_frightened_native"
+role = "attached"
+at = "cast"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 1.11666666666667
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.2
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "chest", "cloak", "legs", "head", "helmet", "shoes"]
+},
+"follow_attachment": true,
+"id": "condition_frightened_native-before-target",
+"to_actor": "target"
+}
+
+[sub_resource type="Resource" id="Resource_xhng0"]
+script = ExtResource("3_turj8")
+path = "art/ui-delivery-20261018/runtime/smooth48/spell.heroism.png"
+native_size = Vector2i(48, 48)
+source = "ui-delivery-20261018"
+
+[sub_resource type="Resource" id="Resource_coj1y"]
+script = ExtResource("1_2dvex")
+clip = "bg3-36/heroism/apply"
+role = "attached"
+at = "cast"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 0.95
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "caster",
+"slots": ["body", "chest", "belt", "cloak", "head", "helmet", "legs", "shoes"]
+},
+"follow_attachment": true,
+"id": "heroism-apply-caster",
+"to_actor": "caster"
+}
+
+[sub_resource type="Resource" id="Resource_usy1x"]
+script = ExtResource("1_2dvex")
+clip = "bg3-36/heroism/hold"
+role = "attached"
+at = "contact"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 3.2
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.35
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "chest", "belt", "cloak", "head", "helmet", "legs", "shoes"]
+},
+"follow_attachment": true,
+"id": "heroism-hold-target",
+"to_actor": "target"
+}
+
+[sub_resource type="Resource" id="Resource_bbrbc"]
+script = ExtResource("1_2dvex")
+clip = "bg3-36/heroism/response"
+role = "attached"
+at = "contact"
+delay = 1.45
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 0.8
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "chest", "belt", "cloak", "head", "helmet", "legs", "shoes"]
+},
+"follow_attachment": true,
+"id": "heroism-response-target",
+"to_actor": "target"
+}
+
+[sub_resource type="Resource" id="Resource_15nhn"]
+script = ExtResource("1_2dvex")
+clip = "condition_frightened_native"
+role = "attached"
+at = "cast"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 1.11666666666667
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.2
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "chest", "cloak", "legs", "head", "helmet", "shoes"]
+},
+"follow_attachment": true,
+"id": "condition_frightened_native-before-target",
+"to_actor": "target"
+}
+
+[sub_resource type="Resource" id="Resource_cuu4p"]
+script = ExtResource("6_0he5l")
+id = "heroism_refresh_native"
+kind = "form"
+selection = "heroism_refresh_native"
+effects = Array[ExtResource("1_2dvex")]([SubResource("Resource_coj1y"), SubResource("Resource_usy1x"), SubResource("Resource_bbrbc"), SubResource("Resource_15nhn")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[sub_resource type="Resource" id="Resource_co7nn"]
+script = ExtResource("1_2dvex")
+clip = "bg3-36/heroism/apply"
+role = "attached"
+at = "cast"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 0.95
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "caster",
+"slots": ["body", "chest", "belt", "cloak", "head", "helmet", "legs", "shoes"]
+},
+"follow_attachment": true,
+"id": "heroism-apply-caster",
+"to_actor": "caster"
+}
+
+[sub_resource type="Resource" id="Resource_ka63s"]
+script = ExtResource("1_2dvex")
+clip = "bg3-36/heroism/hold"
+role = "attached"
+at = "contact"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 3.2
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.35
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "chest", "belt", "cloak", "head", "helmet", "legs", "shoes"]
+},
+"follow_attachment": true,
+"id": "heroism-hold-target",
+"to_actor": "target"
+}
+
+[sub_resource type="Resource" id="Resource_261nb"]
+script = ExtResource("1_2dvex")
+clip = "condition_frightened_native"
+role = "attached"
+at = "cast"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 1.11666666666667
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.2
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "chest", "cloak", "legs", "head", "helmet", "shoes"]
+},
+"follow_attachment": true,
+"id": "condition_frightened_native-before-target",
+"to_actor": "target"
+}
+
+[sub_resource type="Resource" id="Resource_par4j"]
+script = ExtResource("6_0he5l")
+id = "heroism_other_grant_native"
+kind = "form"
+selection = "heroism_other_grant_native"
+effects = Array[ExtResource("1_2dvex")]([SubResource("Resource_co7nn"), SubResource("Resource_ka63s"), SubResource("Resource_261nb")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[resource]
+script = ExtResource("4_1cjio")
+id = "spell.heroism"
+icon = SubResource("Resource_xhng0")
+delivery = "touch"
+effects = Array[ExtResource("1_2dvex")]([SubResource("Resource_pfoei"), SubResource("Resource_mhmis"), SubResource("Resource_ewtol")])
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+feedback_ramp = PackedStringArray()
+variants = Array[ExtResource("6_0he5l")]([SubResource("Resource_cuu4p"), SubResource("Resource_par4j")])
+applies_conditions = PackedStringArray("condition.spell.heroism")
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+staging_unported = {
+"selection": "heroism_native"
+}

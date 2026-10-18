@@ -1,0 +1,103 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="1_tjv00"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="2_6ygkh"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="3_yp3ps"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="4_s7ii5"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="5_dtr5r"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="6_mmgc6"]
+
+[sub_resource type="Resource" id="Resource_mmowu"]
+script = ExtResource("1_tjv00")
+clip = "bg3-36/dancing-lights/scenarios/move_cleanup/apply"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 0.5
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"dynamic_geometry": true,
+"follow_attachment": true,
+"id": "bg3-36/dancing-lights/scenarios/move_cleanup/apply"
+}
+
+[sub_resource type="Resource" id="Resource_pe3yl"]
+script = ExtResource("1_tjv00")
+clip = "bg3-36/dancing-lights/scenarios/move_cleanup/hold"
+role = "attached"
+at = "release"
+delay = 0.5
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 4.0
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"follow_attachment": true,
+"id": "bg3-36/dancing-lights/scenarios/move_cleanup/hold"
+}
+
+[sub_resource type="Resource" id="Resource_tsgvp"]
+script = ExtResource("1_tjv00")
+clip = "bg3-36/dancing-lights/scenarios/move_cleanup/remove"
+role = "attached"
+at = "release"
+delay = 4.5
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 0.5
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"follow_attachment": true,
+"id": "bg3-36/dancing-lights/scenarios/move_cleanup/remove"
+}
+
+[sub_resource type="Resource" id="Resource_ade1q"]
+script = ExtResource("3_yp3ps")
+path = "art/ui-delivery-20261018/runtime/smooth48/spell.dancing_lights.png"
+native_size = Vector2i(48, 48)
+source = "ui-delivery-20261018"
+
+[resource]
+script = ExtResource("4_s7ii5")
+id = "spell.dancing_lights"
+icon = SubResource("Resource_ade1q")
+delivery = "point"
+effects = Array[ExtResource("1_tjv00")]([SubResource("Resource_mmowu"), SubResource("Resource_pe3yl"), SubResource("Resource_tsgvp")])
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 1.0
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray("condition.spell.dancing_lights")
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+staging_unported = {
+"selection": "dancing_lights_native"
+}

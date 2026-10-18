@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="1_jd1x7"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="2_vmsq8"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="3_oy475"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="4_7u3wh"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="5_bmses"]
+
+[resource]
+script = ExtResource("3_oy475")
+id = "spell.fixture.test_bless"
+delivery = "other"
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray()
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()

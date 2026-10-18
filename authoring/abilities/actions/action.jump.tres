@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_l6opg"]
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="2_v2wnf"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_fobvl"]
+
+[sub_resource type="Resource" id="Resource_8ayim"]
+script = ExtResource("1_l6opg")
+path = "art/media/ui/icons/smooth48/action.jump.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:action.jump"
+
+[resource]
+script = ExtResource("2_v2wnf")
+id = "action.jump"
+kind = "action"
+family = "core"
+icon = SubResource("Resource_8ayim")
+effect_sources = PackedStringArray()

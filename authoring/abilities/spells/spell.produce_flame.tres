@@ -1,0 +1,279 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_b78w7"]
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="2_l23c4"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="3_lal5u"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="4_gj6k6"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="5_mnukc"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="6_v0j77"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="7_j5yko"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="8_sbxt6"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="9_24g61"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="10_233c7"]
+
+[sub_resource type="Resource" id="Resource_um01d"]
+script = ExtResource("1_b78w7")
+role = "cast"
+clip = "Attack5"
+markers = Dictionary[String, float]({
+"release": 7.0
+})
+hidden_slots = PackedStringArray()
+unported = {
+"equipment": {
+"kind": "unchanged"
+},
+"recovery": {
+"bodyClip": "Taunt",
+"bodyPlaybackSpeed": 1.0,
+"enabled": false
+}
+}
+
+[sub_resource type="Resource" id="Resource_apfe0"]
+script = ExtResource("2_l23c4")
+roles = Dictionary[String, Color]({
+"primary": Color(1, 0.4, 0, 1),
+"secondary": Color(1, 0.11764706, 0, 1),
+"tertiary": Color(1, 0.8, 0, 1)
+})
+ramp = PackedColorArray()
+
+[sub_resource type="Resource" id="Resource_0mcep"]
+script = ExtResource("3_lal5u")
+clip = "spells/produce_flame/travel_back/travel"
+role = "flight"
+scale = 0.28
+source_launch = 0.25
+source_contact = 0.7
+source_end = 1.2
+charge_seconds = 0.3
+charge_scale_from = 0.2
+stop_emission_at_contact = true
+hide_at_contact = PackedStringArray("effect/Donor/FireTorch_AC8")
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+origin_path = "effect/Donor/FireTorch_AC8"
+opacity_keys = PackedVector2Array()
+staging_from = "client"
+extra = {
+"rotation_degrees": [0.0, 0.0, 0.0]
+}
+
+[sub_resource type="Resource" id="Resource_l6d6k"]
+script = ExtResource("3_lal5u")
+clip = "spells/produce_flame/impact_back/impact"
+role = "impact"
+scale = 0.12
+source_end = 1.0
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "client"
+
+[sub_resource type="Resource" id="Resource_igwrt"]
+script = ExtResource("5_mnukc")
+kind = "palette_ramp"
+colours = PackedColorArray(0.4, 0.15294118, 0.09411765, 1, 0.654902, 0.23921569, 0.10980392, 1, 0.85882354, 0.40392157, 0.13333334, 1, 0.9372549, 0.59607846, 0.20392157, 1, 0.94509804, 0.7411765, 0.34901962, 1, 0.9764706, 0.8666667, 0.5686275, 1)
+ramp_floor = 0.02
+uses_luma = false
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_34emd"]
+script = ExtResource("4_gj6k6")
+steps = Array[ExtResource("5_mnukc")]([SubResource("Resource_igwrt")])
+
+[sub_resource type="Resource" id="Resource_kdt5m"]
+script = ExtResource("5_mnukc")
+kind = "palette_ramp"
+colours = PackedColorArray(1, 0.8, 0, 1, 1, 0.4, 0, 1, 1, 0.11764706, 0, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_yqk7u"]
+script = ExtResource("4_gj6k6")
+steps = Array[ExtResource("5_mnukc")]([SubResource("Resource_kdt5m")])
+
+[sub_resource type="Resource" id="Resource_jy15b"]
+script = ExtResource("6_v0j77")
+category = "Magic2"
+sheet = "/spritesheets/Magic2/Attack5.png"
+look = SubResource("Resource_yqk7u")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 16737792.0
+},
+"id": "cast-weaponGlow",
+"palette": {},
+"role": "hand_magic",
+"slot": "weaponGlow"
+}
+
+[sub_resource type="Resource" id="Resource_dwee8"]
+script = ExtResource("7_j5yko")
+path = "art/media/ui/icons/smooth48/spell.produce_flame.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:spell.produce_flame"
+
+[resource]
+script = ExtResource("8_sbxt6")
+id = "spell.produce_flame"
+icon = SubResource("Resource_dwee8")
+delivery = "projectile"
+body = SubResource("Resource_um01d")
+hand_layers = Array[ExtResource("6_v0j77")]([SubResource("Resource_jy15b")])
+sockets = "measured/abilities/spells/spell.produce_flame.sockets.json"
+effects = Array[ExtResource("3_lal5u")]([SubResource("Resource_0mcep"), SubResource("Resource_l6d6k")])
+native_staging = true
+effect_scope = "single"
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_colour = "ef9834"
+flight_tiles_per_second = 7.03125
+minimum_travel_seconds = 0.28
+stagger_seconds = 0.0
+impact_delay = 0.0
+flash_frame = 0.0
+flash_duration = 0.15
+number_frame = 7.0
+number_duration = 1.0
+body_material = {
+"clip": "spells/produce_flame/travel_back/travel",
+"clock_parameter": "source_clock",
+"node": "effect/Donor/FireTorch_AC8",
+"parameter_overrides": {
+"wobble_strength": 0.0
+},
+"status": "available",
+"surface": 0.0
+}
+colours = SubResource("Resource_apfe0")
+finish = SubResource("Resource_34emd")
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray()
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "client"
+status = "ready"
+bounds = "measured/abilities/spells/spell.produce_flame.bounds.json"
+staging_unported = {
+"palette": {
+"palette": ["662718", "a73d1c", "db6722", "ef9834", "f1bd59", "f9dd91"],
+"parameters": {
+"alpha_cutoff": 0.035,
+"color_boost": 1.0,
+"energy_ceiling": 0.5,
+"energy_floor": 0.18,
+"palette_energy_floor": 0.0,
+"palette_luma_floor": 0.0,
+"ramp_ceiling": 1.0,
+"rgb_block_pixels": 3.0
+},
+"shader": "res://assets/native_effects/sandbox/projectiles/factory/shaders/energy_palette_v1.gdshader"
+},
+"source": "sandbox/staging.json:/spells/produce_flame"
+}
+unported = {
+"condition": {
+"anchor": "effect",
+"delayMs": 0.0,
+"feedbackEnabled": false
+},
+"contact": {
+"cellsByFacing": null
+},
+"damage": {
+"death": {
+"enabled": true,
+"frame": 12.0
+},
+"floatingNumber": {
+"color": 16557624.0,
+"enabled": true,
+"label": "Fire"
+},
+"hitFlash": {
+"color": 16557624.0,
+"enabled": true
+}
+},
+"definitionRef": {
+"content_id": "spell.produce_flame",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"projectile": {
+"depthMode": "world",
+"fps": 32.0,
+"geometry": {
+"enabled": false,
+"primitive": "orb",
+"renderer": "geometry_projectile"
+},
+"impact": {
+"assetId": "nature.produce.delivery",
+"assetPhase": "impact",
+"enabled": true,
+"fps": 32.0,
+"onMiss": "omit"
+},
+"orientation": {
+"directionSource": "tangent",
+"fineRotation": "none",
+"rotationOffsetDeg": 0.0,
+"rowSource": "targetVector"
+},
+"prepare": {
+"assetPhase": "cast",
+"enabled": false,
+"startFrame": 4.0
+},
+"requireAttackOutcome": true,
+"scale": 0.5555555555555556,
+"sourceAnchor": {
+"axisPx": 0.0,
+"basis": "rigRoot",
+"forwardPx": 0.0,
+"liftY": 0.0,
+"sidePx": 0.0
+},
+"sprite": {
+"alpha": 1.0,
+"assetId": "nature.produce.travel.directional",
+"blendMode": "normal",
+"geometryComposition": "replace_geometry",
+"mediaFailurePolicy": "fail_transaction",
+"offsetX": 0.0,
+"offsetY": 0.0,
+"renderer": "sprite_projectile",
+"tint": 16777215.0
+},
+"targetAnchor": {
+"basis": "body",
+"forwardPx": 0.0,
+"liftY": 0.0
+},
+"trajectory": {
+"sameTargetSpread": false,
+"type": "straight"
+},
+"travel": {
+"assetPhase": "travel",
+"enabled": true,
+"fineRotation": "isometricHybrid",
+"fps": 32.0
+}
+}
+}

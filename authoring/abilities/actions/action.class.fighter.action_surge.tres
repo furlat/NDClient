@@ -1,0 +1,68 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_0tl2a"]
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="2_m4xri"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_nli3s"]
+
+[sub_resource type="Resource" id="Resource_fh3h3"]
+script = ExtResource("1_0tl2a")
+role = "act"
+clip = "Idle4"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"effect": 0.0,
+"recover": 14.0
+})
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_3aihv"]
+script = ExtResource("3_nli3s")
+cue = "action_surge"
+at = "body.impact"
+
+[resource]
+script = ExtResource("2_m4xri")
+id = "action.class.fighter.action_surge"
+kind = "action"
+disposition = "authored"
+body = SubResource("Resource_fh3h3")
+effect_sources = PackedStringArray("class.action_surge")
+sounds = Array[ExtResource("3_nli3s")]([SubResource("Resource_3aihv")])
+status = "ready"
+unported = {
+"actionFeedback": null,
+"actor": {
+"media": []
+},
+"attackFeedback": null,
+"compatibleCueKinds": ["action"],
+"counterspellFeedback": null,
+"definitionRef": {
+"content_id": "action.class.fighter.action_surge",
+"content_version": 1.0,
+"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+"definition_kind": "action",
+"pack_id": "content.srd_5_1_cc"
+},
+"media": [{
+"alpha": 0.9,
+"assetId": "class.action_surge.burst-q0-back",
+"attachment": "source_ground",
+"depth": "behind_body",
+"id": "class.action_surge.burst-q0-back",
+"scale": 0.5,
+"startOffsetMs": 200.0
+}, {
+"alpha": 0.9,
+"assetId": "class.action_surge.burst-q0-front",
+"attachment": "source_ground",
+"depth": "front_body",
+"id": "class.action_surge.burst-q0-front",
+"scale": 0.5,
+"startOffsetMs": 200.0
+}],
+"mediaFailurePolicy": "fail_transaction",
+"previewChildCueKinds": [],
+"projectile": null,
+"variants": []
+}

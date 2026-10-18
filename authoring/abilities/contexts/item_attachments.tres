@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="PresentationContext" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/context.gd" id="1_ijws6"]
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="2_dfqr7"]
+
+[resource]
+script = ExtResource("1_ijws6")
+id = "item_attachments"
+unported = {
+"condition.spell.continual_flame": {
+"fps": 32.0,
+"holdFrames": 64.0,
+"holdStartFrame": 0.0,
+"layers": [{
+"applicationAssetId": "fire.continual_flame.apply.back",
+"assetId": "fire.continual_flame.hold.back",
+"composition": "clump",
+"side": "rear"
+}, {
+"applicationAssetId": "fire.continual_flame.apply.front",
+"assetId": "fire.continual_flame.hold.front",
+"composition": "clump",
+"side": "front"
+}],
+"scale": 0.5
+}
+}

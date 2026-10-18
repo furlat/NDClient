@@ -1,0 +1,380 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_l57lk"]
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="2_up80w"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="3_iwkxs"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="4_8obgw"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="5_ewtqu"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="6_v85he"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="7_xuu1d"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="8_rsjm3"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="9_spxrv"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="10_ytffr"]
+
+[sub_resource type="Resource" id="Resource_jqv4e"]
+script = ExtResource("1_l57lk")
+role = "cast"
+clip = "Special1"
+markers = Dictionary[String, float]({
+"release": 11.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+unported = {
+"recovery": {
+"bodyClip": "Taunt",
+"bodyPlaybackSpeed": 1.0,
+"enabled": false
+}
+}
+
+[sub_resource type="Resource" id="Resource_kjsqs"]
+script = ExtResource("2_up80w")
+roles = Dictionary[String, Color]({
+"primary": Color(0.827451, 0.7176471, 0.9843137, 1),
+"secondary": Color(0.59607846, 0.6156863, 0.6862745, 1),
+"tertiary": Color(0.27450982, 0.07450981, 0.5294118, 1)
+})
+ramp = PackedColorArray()
+
+[sub_resource type="Resource" id="Resource_iktdi"]
+script = ExtResource("3_iwkxs")
+clip = "review/circle_of_death/whole/impact"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+scale = 0.35
+orientation = "world"
+source_end = 2.0
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.25
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0
+}
+
+[sub_resource type="Resource" id="Resource_acojy"]
+script = ExtResource("3_iwkxs")
+clip = "review/circle_of_death/whole/circle_of_death__whole.receive_caster"
+role = "attached"
+at = "release"
+delay = 0.375
+attachment = "recipient_ground"
+scale = 0.44
+orientation = "world"
+source_end = 1.625
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "caster",
+"slots": ["body", "chest", "legs", "head", "helmet", "boots", "gauntlets", "belt", "cloak"]
+},
+"follow_attachment": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "body_center",
+"surface_slots": ["body", "chest", "legs", "head", "helmet", "boots", "gauntlets", "belt", "cloak"]
+}],
+"to_actor": "caster"
+}
+
+[sub_resource type="Resource" id="Resource_ol48r"]
+script = ExtResource("3_iwkxs")
+clip = "review/circle_of_death/whole/circle_of_death__whole.receive_target"
+role = "attached"
+at = "release"
+delay = 0.375
+attachment = "recipient_ground"
+scale = 0.44
+orientation = "world"
+source_end = 1.625
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "chest", "legs", "head", "helmet", "boots", "gauntlets", "belt", "cloak"]
+},
+"follow_attachment": true,
+"live_endpoints": [{
+"actor": "target",
+"socket": "body_center",
+"surface_slots": ["body", "chest", "legs", "head", "helmet", "boots", "gauntlets", "belt", "cloak"]
+}],
+"to_actor": "target"
+}
+
+[sub_resource type="Resource" id="Resource_0ok8r"]
+script = ExtResource("3_iwkxs")
+clip = "review/circle_of_death/whole/circle_of_death__whole.receive_target2"
+role = "attached"
+at = "release"
+delay = 0.375
+attachment = "recipient_ground"
+scale = 0.44
+orientation = "world"
+source_end = 1.625
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target2",
+"slots": ["body", "chest", "legs", "head", "helmet", "boots", "gauntlets", "belt", "cloak"]
+},
+"follow_attachment": true,
+"live_endpoints": [{
+"actor": "target2",
+"socket": "body_center",
+"surface_slots": ["body", "chest", "legs", "head", "helmet", "boots", "gauntlets", "belt", "cloak"]
+}],
+"to_actor": "target2"
+}
+
+[sub_resource type="Resource" id="Resource_q3n60"]
+script = ExtResource("6_v85he")
+kind = "palette_ramp"
+colours = PackedColorArray(0.27450982, 0.07450981, 0.5294118, 1, 0.827451, 0.7176471, 0.9843137, 1, 0.59607846, 0.6156863, 0.6862745, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_fcmrl"]
+script = ExtResource("5_ewtqu")
+steps = Array[ExtResource("6_v85he")]([SubResource("Resource_q3n60")])
+
+[sub_resource type="Resource" id="Resource_tvfsn"]
+script = ExtResource("4_8obgw")
+category = "Magic2"
+sheet = "/spritesheets/Magic2/Special1.png"
+look = SubResource("Resource_fcmrl")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 13875195.0
+},
+"id": "cast-weaponGlow",
+"palette": {},
+"role": "hand_magic",
+"slot": "weaponGlow"
+}
+
+[sub_resource type="Resource" id="Resource_j1jen"]
+script = ExtResource("6_v85he")
+kind = "palette_ramp"
+colours = PackedColorArray(0.27450982, 0.07450981, 0.5294118, 1, 0.827451, 0.7176471, 0.9843137, 1, 0.59607846, 0.6156863, 0.6862745, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_pqj82"]
+script = ExtResource("5_ewtqu")
+steps = Array[ExtResource("6_v85he")]([SubResource("Resource_j1jen")])
+
+[sub_resource type="Resource" id="Resource_p2n65"]
+script = ExtResource("4_8obgw")
+place = "effect"
+category = "Effect3"
+sheet = "/spritesheets/Effect3/Special1.png"
+look = SubResource("Resource_pqj82")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 13875195.0
+},
+"id": "cast-effect",
+"palette": {},
+"role": "effect",
+"slot": "effect"
+}
+
+[sub_resource type="Resource" id="Resource_8fpwm"]
+script = ExtResource("7_xuu1d")
+path = "art/media/ui/icons/smooth48/spell.circle-of-death.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:spell.circle-of-death"
+
+[resource]
+script = ExtResource("8_rsjm3")
+id = "spell.circle_of_death"
+icon = SubResource("Resource_8fpwm")
+delivery = "projectile"
+body = SubResource("Resource_jqv4e")
+hand_layers = Array[ExtResource("4_8obgw")]([SubResource("Resource_tvfsn"), SubResource("Resource_p2n65")])
+sockets = "measured/abilities/spells/spell.circle_of_death.sockets.json"
+effects = Array[ExtResource("3_iwkxs")]([SubResource("Resource_iktdi"), SubResource("Resource_acojy"), SubResource("Resource_ol48r"), SubResource("Resource_0ok8r")])
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+colours = SubResource("Resource_kjsqs")
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray()
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+staging_unported = {
+"selection": "circle_of_death__whole"
+}
+unported = {
+"bodyMaterials": [{
+"id": "spell.circle_of_death.fracture.False",
+"material": {
+"colors": [2240831.0, 14505538.0],
+"mapping": "fracture_wave"
+},
+"points": [{
+"elapsedMs": 0.0,
+"strength": 0.0
+}, {
+"elapsedMs": 100.0,
+"strength": 1.0
+}, {
+"elapsedMs": 900.0,
+"strength": 1.0
+}, {
+"elapsedMs": 1400.0,
+"strength": 0.0
+}],
+"requireDamageApplied": true,
+"requiredSaveSuccess": false,
+"startOffsetMs": 375.0
+}, {
+"id": "spell.circle_of_death.fracture.True",
+"material": {
+"colors": [2240831.0, 14505538.0],
+"mapping": "fracture_wave"
+},
+"points": [{
+"elapsedMs": 0.0,
+"strength": 0.0
+}, {
+"elapsedMs": 100.0,
+"strength": 0.55
+}, {
+"elapsedMs": 900.0,
+"strength": 0.55
+}, {
+"elapsedMs": 1400.0,
+"strength": 0.0
+}],
+"requireDamageApplied": true,
+"requiredSaveSuccess": true,
+"startOffsetMs": 375.0
+}],
+"condition": {
+"anchor": "effect",
+"delayMs": 0.0,
+"feedbackEnabled": false
+},
+"contact": {
+"cellsByFacing": null,
+"delayMs": 375.0
+},
+"definitionRef": {
+"content_id": "spell.circle_of_death",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"media": [{
+"assetId": "necrotic.circle.front",
+"attachment": "area_ground",
+"fps": 32.0,
+"id": "circle.field",
+"scale": 1.4285714285714286
+}, {
+"assetId": "necrotic.blight.back",
+"attachment": "target_ground",
+"depth": "behind_body",
+"effectGroup": {
+"id": "circle_of_death.False",
+"label": "Circle Of Death · Circle of death false"
+},
+"fps": 32.0,
+"id": "circle_of_death.back.False",
+"requireDamageApplied": true,
+"requiredSaveSuccess": false,
+"rigIds": ["neuroclient.modular"],
+"scale": 0.44,
+"scaleWithActor": true,
+"startOffsetMs": 375.0
+}, {
+"assetId": "necrotic.blight.front",
+"attachment": "target_ground",
+"depth": "front_body",
+"effectGroup": {
+"id": "circle_of_death.False",
+"label": "Circle Of Death · Circle of death false"
+},
+"fps": 32.0,
+"id": "circle_of_death.front.False",
+"requireDamageApplied": true,
+"requiredSaveSuccess": false,
+"rigIds": ["neuroclient.modular"],
+"scale": 0.44,
+"scaleWithActor": true,
+"startOffsetMs": 375.0
+}, {
+"alpha": 0.55,
+"assetId": "necrotic.blight.back",
+"attachment": "target_ground",
+"depth": "behind_body",
+"effectGroup": {
+"id": "circle_of_death.True",
+"label": "Circle Of Death · Circle of death true"
+},
+"fps": 32.0,
+"id": "circle_of_death.back.True",
+"requireDamageApplied": true,
+"requiredSaveSuccess": true,
+"rigIds": ["neuroclient.modular"],
+"scale": 0.44,
+"scaleWithActor": true,
+"startOffsetMs": 375.0
+}, {
+"alpha": 0.55,
+"assetId": "necrotic.blight.front",
+"attachment": "target_ground",
+"depth": "front_body",
+"effectGroup": {
+"id": "circle_of_death.True",
+"label": "Circle Of Death · Circle of death true"
+},
+"fps": 32.0,
+"id": "circle_of_death.front.True",
+"requireDamageApplied": true,
+"requiredSaveSuccess": true,
+"rigIds": ["neuroclient.modular"],
+"scale": 0.44,
+"scaleWithActor": true,
+"startOffsetMs": 375.0
+}]
+}

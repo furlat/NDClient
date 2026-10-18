@@ -1,0 +1,197 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_oxo6a"]
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="2_5iluc"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="3_t5lnj"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="4_qdg8x"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="5_bibiw"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="6_w0vlc"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="7_p87tw"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="8_mw4bw"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="9_l83vc"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="10_knpyf"]
+
+[sub_resource type="Resource" id="Resource_du14d"]
+script = ExtResource("1_oxo6a")
+role = "cast"
+clip = "Attack4"
+markers = Dictionary[String, float]({
+"release": 9.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+unported = {
+"recovery": {
+"bodyClip": "Taunt",
+"bodyPlaybackSpeed": 1.0,
+"enabled": false
+}
+}
+
+[sub_resource type="Resource" id="Resource_ub0yv"]
+script = ExtResource("2_5iluc")
+roles = Dictionary[String, Color]({
+"primary": Color(0.3764706, 0.6156863, 0.8156863, 1),
+"secondary": Color(0.8862745, 0.9411765, 1, 1),
+"tertiary": Color(0.08627451, 0.22352941, 0.33333334, 1)
+})
+ramp = PackedColorArray()
+
+[sub_resource type="Resource" id="Resource_3c2df"]
+script = ExtResource("3_t5lnj")
+clip = "wall-native/wall_of_force_panels_back_native/lifecycle"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+scale = 0.471404520693175
+orientation = "world"
+source_end = 6.0
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"review_stationary_ground": [0.0, 0.0, 0.0]
+}
+
+[sub_resource type="Resource" id="Resource_1e1xf"]
+script = ExtResource("6_w0vlc")
+kind = "palette_ramp"
+colours = PackedColorArray(0.08627451, 0.22352941, 0.33333334, 1, 0.3764706, 0.6156863, 0.8156863, 1, 0.8862745, 0.9411765, 1, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_h388j"]
+script = ExtResource("5_bibiw")
+steps = Array[ExtResource("6_w0vlc")]([SubResource("Resource_1e1xf")])
+
+[sub_resource type="Resource" id="Resource_gru3h"]
+script = ExtResource("4_qdg8x")
+category = "Magic2"
+sheet = "/spritesheets/Magic2/Attack4.png"
+look = SubResource("Resource_h388j")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 6331856.0
+},
+"id": "cast-weaponGlow",
+"palette": {},
+"role": "hand_magic",
+"slot": "weaponGlow"
+}
+
+[sub_resource type="Resource" id="Resource_otk8g"]
+script = ExtResource("6_w0vlc")
+kind = "palette_ramp"
+colours = PackedColorArray(0.08627451, 0.22352941, 0.33333334, 1, 0.3764706, 0.6156863, 0.8156863, 1, 0.8862745, 0.9411765, 1, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_hugav"]
+script = ExtResource("5_bibiw")
+steps = Array[ExtResource("6_w0vlc")]([SubResource("Resource_otk8g")])
+
+[sub_resource type="Resource" id="Resource_xqoxe"]
+script = ExtResource("4_qdg8x")
+place = "aura"
+category = "Effect5"
+sheet = "/spritesheets/Effect5/Attack4.png"
+look = SubResource("Resource_hugav")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 6331856.0
+},
+"id": "cast-aura",
+"palette": {},
+"role": "aura",
+"slot": "aura"
+}
+
+[sub_resource type="Resource" id="Resource_pytmu"]
+script = ExtResource("7_p87tw")
+path = "art/media/ui/icons/smooth48/spell.wall_of_force.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:spell.wall_of_force"
+
+[sub_resource type="Resource" id="Resource_yx8c5"]
+script = ExtResource("3_t5lnj")
+clip = "wall-native/wall_of_force_dome_back_native/lifecycle"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+scale = 0.471404520693175
+orientation = "world"
+source_end = 6.0
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"review_stationary_ground": [1.0, 0.0, 0.0]
+}
+
+[sub_resource type="Resource" id="Resource_70hfc"]
+script = ExtResource("10_knpyf")
+id = "wall_of_force_dome_back_native"
+kind = "form"
+selection = "wall_of_force_dome_back_native"
+effects = Array[ExtResource("3_t5lnj")]([SubResource("Resource_yx8c5")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[resource]
+script = ExtResource("8_mw4bw")
+id = "spell.wall_of_force"
+icon = SubResource("Resource_pytmu")
+delivery = "wall"
+body = SubResource("Resource_du14d")
+hand_layers = Array[ExtResource("4_qdg8x")]([SubResource("Resource_gru3h"), SubResource("Resource_xqoxe")])
+sockets = "measured/abilities/spells/spell.wall_of_force.sockets.json"
+effects = Array[ExtResource("3_t5lnj")]([SubResource("Resource_3c2df")])
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+colours = SubResource("Resource_ub0yv")
+feedback_ramp = PackedStringArray()
+variants = Array[ExtResource("10_knpyf")]([SubResource("Resource_70hfc")])
+applies_conditions = PackedStringArray("condition.prone", "condition.spell.wall_of_force.zone", "condition.spell.wall_of_ice.frigid_air", "condition.spell.wall_of_ice.zone", "condition.spell.wall_of_stone.zone")
+applies_surfaces = PackedStringArray("spatial_effect.spell.frigid_air", "spatial_effect.spell.wall_of_force", "spatial_effect.spell.wall_of_ice", "spatial_effect.spell.wall_of_stone")
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+staging_unported = {
+"selection": "wall_of_force_panels_back_native"
+}
+unported = {
+"condition": {
+"anchor": "effect",
+"delayMs": 0.0,
+"feedbackEnabled": false
+},
+"contact": {
+"cellsByFacing": null,
+"delayMs": 850.0
+},
+"definitionRef": {
+"content_id": "spell.wall_of_force",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+}
+}

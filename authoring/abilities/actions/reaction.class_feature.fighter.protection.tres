@@ -1,0 +1,47 @@
+[gd_resource type="Resource" script_class="PresentationAction" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_obe51"]
+[ext_resource type="Script" path="res://presentation/source/abilities/action.gd" id="2_a7e56"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="3_o2msf"]
+
+[sub_resource type="Resource" id="Resource_5h7p2"]
+script = ExtResource("1_obe51")
+role = "act"
+clip = "Idle4"
+markers = Dictionary[String, float]({
+"action_start": 0.0,
+"effect": 0.0,
+"recover": 14.0
+})
+hidden_slots = PackedStringArray()
+
+[resource]
+script = ExtResource("2_a7e56")
+id = "reaction.class_feature.fighter.protection"
+kind = "reaction"
+family = "reaction"
+disposition = "authored"
+body = SubResource("Resource_5h7p2")
+effect_sources = PackedStringArray()
+status = "ready"
+unported = {
+"actionFeedback": null,
+"actor": {
+"media": []
+},
+"attackFeedback": null,
+"compatibleCueKinds": ["action"],
+"counterspellFeedback": null,
+"definitionRef": {
+"content_id": "reaction.class_feature.fighter.protection",
+"content_version": 1.0,
+"definition_contract_hash": "636ffe03ecf4e9d65b406137f0b2812c3a667e4641a56b912c67453ce0790d4b",
+"definition_kind": "reaction",
+"pack_id": "content.srd_5_1_cc"
+},
+"handlerResponse": true,
+"mediaFailurePolicy": "fail_transaction",
+"previewChildCueKinds": [],
+"projectile": null,
+"variants": []
+}

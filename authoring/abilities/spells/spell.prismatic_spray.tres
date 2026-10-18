@@ -1,0 +1,161 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="1_ary3i"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="2_obvg1"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="3_ewbks"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="4_vi20g"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="5_igb3h"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="6_03564"]
+
+[sub_resource type="Resource" id="Resource_42tpb"]
+script = ExtResource("1_ary3i")
+clip = "reaction-prismatic-study/prismatic_spray_two_colors_native_study"
+role = "attached"
+at = "release"
+attachment = "caster_ground"
+orientation = "world"
+source_end = 1.45
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"follow_attachment": false,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "caster",
+"socket": "ground"
+}, {
+"point": [7.0, 0.0, 0.0]
+}, {
+"actor": "target",
+"socket": "body_center"
+}, {
+"actor": "target2",
+"socket": "body_center"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_v75dd"]
+script = ExtResource("3_ewbks")
+path = "art/media/ui/icons/smooth48/spell.prismatic-spray.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:spell.prismatic-spray"
+
+[sub_resource type="Resource" id="Resource_u6e53"]
+script = ExtResource("1_ary3i")
+clip = "reaction-prismatic-study/prismatic_spray_condition_colors_native_study"
+role = "attached"
+at = "release"
+attachment = "caster_ground"
+orientation = "world"
+source_end = 1.45
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"follow_attachment": false,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "caster",
+"socket": "ground"
+}, {
+"point": [7.0, 0.0, 0.0]
+}, {
+"actor": "target",
+"socket": "body_center"
+}, {
+"actor": "target2",
+"socket": "body_center"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_h4tbg"]
+script = ExtResource("6_03564")
+id = "prismatic_spray_condition_colors_native_study"
+kind = "form"
+selection = "prismatic_spray_condition_colors_native_study"
+effects = Array[ExtResource("1_ary3i")]([SubResource("Resource_u6e53")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[sub_resource type="Resource" id="Resource_gevwv"]
+script = ExtResource("1_ary3i")
+clip = "reaction-prismatic-study/prismatic_spray_unapplied_native_study"
+role = "attached"
+at = "release"
+attachment = "caster_ground"
+orientation = "world"
+source_end = 1.45
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"follow_attachment": false,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "caster",
+"socket": "ground"
+}, {
+"point": [7.0, 0.0, 0.0]
+}, {
+"actor": "target",
+"socket": "body_center"
+}, {
+"actor": "target2",
+"socket": "body_center"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_4a7ut"]
+script = ExtResource("6_03564")
+id = "prismatic_spray_unapplied_native_study"
+kind = "form"
+selection = "prismatic_spray_unapplied_native_study"
+effects = Array[ExtResource("1_ary3i")]([SubResource("Resource_gevwv")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[resource]
+script = ExtResource("4_vi20g")
+id = "spell.prismatic_spray"
+icon = SubResource("Resource_v75dd")
+delivery = "cone"
+effects = Array[ExtResource("1_ary3i")]([SubResource("Resource_42tpb")])
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+feedback_ramp = PackedStringArray()
+variants = Array[ExtResource("6_03564")]([SubResource("Resource_h4tbg"), SubResource("Resource_4a7ut")])
+applies_conditions = PackedStringArray("condition.blinded", "condition.restrained", "condition.spell.prismatic_spray.restrained")
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+staging_unported = {
+"selection": "prismatic_spray_two_colors_native_study"
+}

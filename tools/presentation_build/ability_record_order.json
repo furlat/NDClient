@@ -1,0 +1,5835 @@
+{
+	"catalog/condition_recipes.json": {
+		"generic": {
+			"/*": [
+				"definitionRef",
+				"label",
+				"disposition",
+				"mediaFailurePolicy",
+				"relationships",
+				"classification",
+				"composition",
+				"persistent",
+				"application",
+				"removal",
+				"reactionCastBinding",
+				"activation",
+				"responses",
+				"interceptionEffectsByDirection",
+				"_source_fields",
+				"_legacy_source",
+				"_resource_source"
+			],
+			"/*/definitionRef": [
+				"pack_id",
+				"definition_kind",
+				"content_id",
+				"content_version",
+				"definition_contract_hash"
+			],
+			"/*/relationships": [
+				"incomingTriggers",
+				"relatedStates",
+				"grantsActions"
+			],
+			"/*/relationships/incomingTriggers/#": [
+				"effect",
+				"triggerType",
+				"sourceRef",
+				"direct",
+				"evidenceStatus",
+				"evidence"
+			],
+			"/*/relationships/incomingTriggers/#/sourceRef": [
+				"pack_id",
+				"definition_kind",
+				"content_id",
+				"content_version",
+				"definition_contract_hash"
+			],
+			"/*/relationships/relatedStates/#": [
+				"relation",
+				"targetRef",
+				"evidenceStatus"
+			],
+			"/*/relationships/relatedStates/#/targetRef": [
+				"pack_id",
+				"definition_kind",
+				"content_id",
+				"content_version",
+				"definition_contract_hash"
+			],
+			"/*/relationships/grantsActions/#/actionRef": [
+				"pack_id",
+				"definition_kind",
+				"content_id",
+				"content_version",
+				"definition_contract_hash"
+			],
+			"/*/classification": [
+				"runtimeRole",
+				"visualIntensity",
+				"presentationDomains",
+				"visualFamily"
+			],
+			"/*/persistent": [
+				"alphaMultiplier",
+				"bodyColor",
+				"liveCopies",
+				"bodyScale",
+				"bodyDistortion",
+				"absenceEcho",
+				"bodyPose",
+				"frozenPose",
+				"bodyRamp",
+				"equipmentModifiers",
+				"appearanceLayers",
+				"layers",
+				"activityPoses",
+				"bodyOutline"
+			],
+			"/*/persistent/layers/#": [
+				"id",
+				"assetId",
+				"category",
+				"animation",
+				"fps",
+				"attachment",
+				"offsetY",
+				"opacity",
+				"activeDuring",
+				"phaseOffsetMs",
+				"startOffsetMs",
+				"fadeInMs",
+				"priority",
+				"colors",
+				"whenMetamagicMode",
+				"whenEnergyType",
+				"drawOrder",
+				"whenAbility",
+				"lifeStates",
+				"markerGroup",
+				"whenSizeChange"
+			],
+			"/*/application": [
+				"durationMs",
+				"feedbackEnabled",
+				"feedbackColor",
+				"effects",
+				"bodyAnimation",
+				"feedbackPrefix",
+				"feedbackDurationMs"
+			],
+			"/*/removal": [
+				"durationMs",
+				"feedbackEnabled",
+				"feedbackColor",
+				"effects",
+				"bodyAnimation",
+				"feedbackPrefix",
+				"feedbackDurationMs"
+			],
+			"/*/composition": [
+				"group",
+				"exclusiveGroup",
+				"priority",
+				"maxLayers"
+			],
+			"/*/persistent/appearanceLayers/#": [
+				"id",
+				"slot",
+				"category",
+				"tint",
+				"priority",
+				"anatomy",
+				"glowStrength"
+			],
+			"/*/application/effects/#": [
+				"id",
+				"assetId",
+				"category",
+				"animation",
+				"attachment",
+				"opacity",
+				"priority",
+				"colors",
+				"durationMs",
+				"startOffsetMs",
+				"drawOrder",
+				"lifeStates",
+				"whenEnergyType"
+			],
+			"/*/responses/#": [
+				"trigger",
+				"effects"
+			],
+			"/*/responses/#/effects/#": [
+				"id",
+				"assetId",
+				"category",
+				"animation",
+				"attachment",
+				"opacity",
+				"priority",
+				"colors",
+				"durationMs",
+				"drawOrder",
+				"participant",
+				"whenEnergyType"
+			],
+			"/*/persistent/equipmentModifiers/#": [
+				"id",
+				"slots",
+				"alphaMultiplier",
+				"tintRgb",
+				"saturation",
+				"brightness",
+				"priority",
+				"affectedItemOnly",
+				"glint"
+			],
+			"/*/persistent/bodyOutline": [
+				"color",
+				"pulseColor",
+				"alphaThreshold",
+				"opacity",
+				"pulseOpacity",
+				"periodMs",
+				"onsetMs"
+			],
+			"/*/_source_fields": [
+				"persistent/alphaMultiplier",
+				"persistent/bodyColor",
+				"persistent/activityPoses/0/rigId",
+				"persistent/activityPoses/0/activity",
+				"persistent/activityPoses/0/clip",
+				"persistent/activityPoses/0/sampling",
+				"persistent/activityPoses/0/frame",
+				"persistent/activityPoses/0/playbackSpeed",
+				"persistent/activityPoses/1/rigId",
+				"persistent/activityPoses/1/activity",
+				"persistent/activityPoses/1/clip",
+				"persistent/activityPoses/1/sampling",
+				"persistent/activityPoses/1/frame",
+				"persistent/activityPoses/1/playbackSpeed",
+				"persistent/activityPoses",
+				"application/feedbackEnabled",
+				"application/feedbackColor",
+				"application/feedbackPrefix",
+				"application/feedbackDurationMs",
+				"removal/feedbackEnabled",
+				"removal/feedbackColor",
+				"removal/feedbackPrefix",
+				"removal/feedbackDurationMs",
+				"persistent/bodyOutline",
+				"persistent/bodyOutline/color",
+				"persistent/bodyOutline/pulseColor",
+				"persistent/bodyOutline/alphaThreshold",
+				"persistent/bodyOutline/opacity",
+				"persistent/bodyOutline/pulseOpacity",
+				"persistent/bodyOutline/periodMs",
+				"persistent/bodyOutline/onsetMs"
+			],
+			"/*/persistent/frozenPose": [
+				"captureCurrent",
+				"clip",
+				"frame",
+				"framesByRig"
+			],
+			"/*/persistent/absenceEcho": [
+				"dispositions",
+				"back",
+				"front",
+				"scale"
+			],
+			"/*/removal/effects/#": [
+				"id",
+				"assetId",
+				"category",
+				"animation",
+				"attachment",
+				"opacity",
+				"offsetY",
+				"priority",
+				"colors",
+				"durationMs",
+				"drawOrder",
+				"lifeStates"
+			],
+			"/*/persistent/bodyDistortion": [
+				"palette",
+				"waves",
+				"bandHeightPx",
+				"bodyOpacity",
+				"contours",
+				"trails"
+			],
+			"/*/persistent/bodyDistortion/contours/#": [
+				"offset",
+				"opacity",
+				"oscillation",
+				"frequency"
+			],
+			"/*/activation": [
+				"trigger",
+				"effects"
+			],
+			"/*/activation/effects/#": [
+				"id",
+				"assetId",
+				"category",
+				"animation",
+				"attachment",
+				"priority",
+				"colors",
+				"durationMs",
+				"drawOrder",
+				"lifeStates"
+			],
+			"/*/persistent/liveCopies": [
+				"slots",
+				"palette",
+				"opacity",
+				"emergeMs",
+				"dissipateMs",
+				"waveFrequency",
+				"waveSpeed",
+				"minimumOpacity",
+				"applicationEffects",
+				"removalEffects"
+			],
+			"/*/persistent/liveCopies/applicationEffects/#": [
+				"id",
+				"assetId",
+				"category",
+				"animation",
+				"attachment",
+				"opacity",
+				"priority",
+				"colors",
+				"durationMs",
+				"drawOrder"
+			],
+			"/*/persistent/liveCopies/removalEffects/#": [
+				"id",
+				"assetId",
+				"category",
+				"animation",
+				"attachment",
+				"opacity",
+				"priority",
+				"colors",
+				"durationMs",
+				"drawOrder"
+			],
+			"/*/interceptionEffectsByDirection/E/#": [
+				"id",
+				"assetId",
+				"category",
+				"animation",
+				"attachment",
+				"priority",
+				"colors",
+				"durationMs",
+				"drawOrder"
+			],
+			"/*/interceptionEffectsByDirection/N/#": [
+				"id",
+				"assetId",
+				"category",
+				"animation",
+				"attachment",
+				"priority",
+				"colors",
+				"durationMs",
+				"drawOrder"
+			],
+			"/*/interceptionEffectsByDirection/NE/#": [
+				"id",
+				"assetId",
+				"category",
+				"animation",
+				"attachment",
+				"priority",
+				"colors",
+				"durationMs",
+				"drawOrder"
+			],
+			"/*/interceptionEffectsByDirection/NW/#": [
+				"id",
+				"assetId",
+				"category",
+				"animation",
+				"attachment",
+				"priority",
+				"colors",
+				"durationMs",
+				"drawOrder"
+			],
+			"/*/interceptionEffectsByDirection/S/#": [
+				"id",
+				"assetId",
+				"category",
+				"animation",
+				"attachment",
+				"priority",
+				"colors",
+				"durationMs",
+				"drawOrder"
+			],
+			"/*/interceptionEffectsByDirection/SE/#": [
+				"id",
+				"assetId",
+				"category",
+				"animation",
+				"attachment",
+				"priority",
+				"colors",
+				"durationMs",
+				"drawOrder"
+			],
+			"/*/interceptionEffectsByDirection/SW/#": [
+				"id",
+				"assetId",
+				"category",
+				"animation",
+				"attachment",
+				"priority",
+				"colors",
+				"durationMs",
+				"drawOrder"
+			],
+			"/*/interceptionEffectsByDirection/W/#": [
+				"id",
+				"assetId",
+				"category",
+				"animation",
+				"attachment",
+				"priority",
+				"colors",
+				"durationMs",
+				"drawOrder"
+			],
+			"/*/persistent/equipmentModifiers/#/glint": [
+				"periodMs",
+				"startY",
+				"endY",
+				"width",
+				"color",
+				"strength"
+			]
+		},
+		"exact": {
+			"/condition.paralyzed/persistent": [
+				"alphaMultiplier",
+				"bodyColor",
+				"frozenPose",
+				"bodyOutline",
+				"equipmentModifiers",
+				"appearanceLayers",
+				"layers"
+			],
+			"/condition.spell.fire_shield/persistent/layers/0": [
+				"id",
+				"assetId",
+				"category",
+				"animation",
+				"fps",
+				"attachment",
+				"activeDuring",
+				"priority",
+				"colors",
+				"drawOrder",
+				"whenEnergyType"
+			],
+			"/condition.spell.fire_shield/persistent/layers/2": [
+				"id",
+				"assetId",
+				"category",
+				"animation",
+				"fps",
+				"attachment",
+				"activeDuring",
+				"priority",
+				"colors",
+				"drawOrder",
+				"whenEnergyType"
+			],
+			"/condition.spell.protection_from_energy/persistent/layers/0": [
+				"id",
+				"assetId",
+				"category",
+				"animation",
+				"fps",
+				"attachment",
+				"activeDuring",
+				"priority",
+				"colors",
+				"drawOrder",
+				"whenEnergyType"
+			],
+			"/condition.spell.protection_from_energy/persistent/layers/2": [
+				"id",
+				"assetId",
+				"category",
+				"animation",
+				"fps",
+				"attachment",
+				"activeDuring",
+				"priority",
+				"colors",
+				"drawOrder",
+				"whenEnergyType"
+			],
+			"/condition.spell.protection_from_energy/persistent/layers/4": [
+				"id",
+				"assetId",
+				"category",
+				"animation",
+				"fps",
+				"attachment",
+				"activeDuring",
+				"priority",
+				"colors",
+				"drawOrder",
+				"whenEnergyType"
+			],
+			"/condition.spell.protection_from_energy/persistent/layers/6": [
+				"id",
+				"assetId",
+				"category",
+				"animation",
+				"fps",
+				"attachment",
+				"activeDuring",
+				"priority",
+				"colors",
+				"drawOrder",
+				"whenEnergyType"
+			],
+			"/condition.spell.protection_from_energy/persistent/layers/8": [
+				"id",
+				"assetId",
+				"category",
+				"animation",
+				"fps",
+				"attachment",
+				"activeDuring",
+				"priority",
+				"colors",
+				"drawOrder",
+				"whenEnergyType"
+			]
+		}
+	},
+	"catalog/action_playback_rates.json": {
+		"generic": {}
+	},
+	"catalog/body_action_recipes.json": {
+		"generic": {
+			"/*": [
+				"definitionRef",
+				"compatibleCueKinds",
+				"previewChildCueKinds",
+				"disposition",
+				"mediaFailurePolicy",
+				"actor",
+				"anchors",
+				"attackFeedback",
+				"counterspellFeedback",
+				"variants",
+				"projectile",
+				"actionFeedback",
+				"effectAudioCue",
+				"rigId",
+				"_resource_source",
+				"_legacy_source",
+				"_source_fields",
+				"media",
+				"handlerResponse"
+			],
+			"/*/definitionRef": [
+				"pack_id",
+				"definition_kind",
+				"content_id",
+				"content_version",
+				"definition_contract_hash"
+			],
+			"/*/actor": [
+				"enabled",
+				"clip",
+				"playbackSpeed",
+				"hiddenSlots",
+				"media"
+			],
+			"/*/media/#": [
+				"requiredSaveSuccess",
+				"requireAppliedConditionId",
+				"id",
+				"assetId",
+				"assetIdsByCamera",
+				"poseSocket",
+				"whenPresenceMode",
+				"attachment",
+				"startOffsetMs",
+				"durationMs",
+				"loop",
+				"scale",
+				"alpha",
+				"timeMap",
+				"fadeInMs",
+				"fadeOutMs",
+				"fadeCurve",
+				"depth",
+				"requireHealingApplied"
+			],
+			"/*/anchors/#": [
+				"name",
+				"frame"
+			],
+			"/*/counterspellFeedback": [
+				"automatic_success",
+				"check_success",
+				"check_failure"
+			],
+			"/*/counterspellFeedback/automatic_success": [
+				"text",
+				"color"
+			],
+			"/*/counterspellFeedback/check_success": [
+				"text",
+				"color"
+			],
+			"/*/counterspellFeedback/check_failure": [
+				"text",
+				"color"
+			]
+		}
+	},
+	"catalog/shove_recipes.json": {
+		"generic": {
+			"/*": [
+				"definitionRef",
+				"compatibleCueKinds",
+				"previewChildCueKinds",
+				"disposition",
+				"mediaFailurePolicy",
+				"actor",
+				"anchors",
+				"attackFeedback",
+				"counterspellFeedback",
+				"variants",
+				"projectile",
+				"actionFeedback"
+			],
+			"/*/definitionRef": [
+				"pack_id",
+				"definition_kind",
+				"content_id",
+				"content_version",
+				"definition_contract_hash"
+			],
+			"/*/actor": [
+				"enabled",
+				"clip",
+				"playbackSpeed",
+				"hiddenSlots",
+				"media"
+			]
+		}
+	},
+	"catalog/body_action_bindings.json": {
+		"generic": {}
+	},
+	"catalog/action_deliveries.json": {
+		"generic": {}
+	},
+	"catalog/attack_recipes.json": {
+		"generic": {
+			"/*": [
+				"definitionRef",
+				"compatibleCueKinds",
+				"previewChildCueKinds",
+				"disposition",
+				"mediaFailurePolicy",
+				"actor",
+				"anchors",
+				"attackFeedback",
+				"counterspellFeedback",
+				"variants",
+				"projectile",
+				"actionFeedback",
+				"weaponTrail"
+			],
+			"/*/definitionRef": [
+				"pack_id",
+				"definition_kind",
+				"content_id",
+				"content_version",
+				"definition_contract_hash"
+			],
+			"/*/actor": [
+				"enabled",
+				"clip",
+				"playbackSpeed",
+				"hiddenSlots",
+				"media"
+			],
+			"/*/variants/#": [
+				"id",
+				"precedence",
+				"match",
+				"actor",
+				"anchors",
+				"attackVfx",
+				"projectile"
+			],
+			"/*/variants/#/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"rigIds",
+				"sourceItemIds",
+				"sourceKinds"
+			],
+			"/*/variants/#/actor": [
+				"enabled",
+				"clip",
+				"playbackSpeed",
+				"hiddenSlots",
+				"media"
+			],
+			"/*/variants/#/attackVfx": [
+				"onHit",
+				"onMiss",
+				"onCrit"
+			],
+			"/*/variants/#/projectile": [
+				"geometry",
+				"speedPxPerSecond",
+				"minimumTravelDurationMs",
+				"trajectory",
+				"originX",
+				"originY",
+				"sourceForwardPx",
+				"targetY",
+				"targetForwardPx",
+				"depthMode",
+				"debugAnchor",
+				"sourceSocketsByRig"
+			],
+			"/*/variants/#/projectile/geometry": [
+				"renderer",
+				"enabled",
+				"primitive"
+			],
+			"/*/variants/#/projectile/trajectory": [
+				"type",
+				"sameTargetSpread"
+			],
+			"/*/weaponTrail": [
+				"poses",
+				"impactAssetId",
+				"palette",
+				"behaviorIds",
+				"handlerIds",
+				"outcomes"
+			]
+		},
+		"exact": {
+			"/action.attack/variants/10/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.attack/variants/11/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.attack/variants/12/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.attack/variants/13/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.attack/variants/14/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.attack/variants/15/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.attack/variants/16/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.attack/variants/17/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.attack/variants/18/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.attack/variants/19/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.attack/variants/20/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.attack/variants/21/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.attack/variants/22/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.attack/variants/23/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.attack/variants/24/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.attack/variants/25/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.attack/variants/26/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.attack/variants/27/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.attack/variants/28/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.attack/variants/29/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.attack/variants/30/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.attack/variants/31/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.attack/variants/32/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.attack/variants/33/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.attack/variants/34/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.attack/variants/35/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.attack/variants/36/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.attack/variants/37/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.attack/variants/38/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.attack/variants/39/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.attack/variants/40/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.attack/variants/41/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.attack/variants/42/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.attack/variants/43/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.attack/variants/44/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.attack/variants/45/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.attack/variants/46/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.attack/variants/47/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.attack/variants/48/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.attack/variants/49/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.attack/variants/50/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.class.barbarian.frenzied_strike/variants/10/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.class.barbarian.frenzied_strike/variants/11/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.class.barbarian.frenzied_strike/variants/12/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.class.barbarian.frenzied_strike/variants/13/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.class.barbarian.frenzied_strike/variants/14/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.class.barbarian.frenzied_strike/variants/15/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.class.barbarian.frenzied_strike/variants/16/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.class.barbarian.frenzied_strike/variants/17/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.class.barbarian.frenzied_strike/variants/18/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.class.barbarian.frenzied_strike/variants/19/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.class.barbarian.frenzied_strike/variants/20/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.class.barbarian.frenzied_strike/variants/21/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.class.barbarian.frenzied_strike/variants/22/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.class.barbarian.frenzied_strike/variants/23/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.class.barbarian.frenzied_strike/variants/24/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.class.barbarian.frenzied_strike/variants/25/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.class.barbarian.frenzied_strike/variants/26/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.class.barbarian.frenzied_strike/variants/27/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.class.barbarian.frenzied_strike/variants/28/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.class.barbarian.frenzied_strike/variants/29/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.class.barbarian.frenzied_strike/variants/30/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.class.barbarian.frenzied_strike/variants/31/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.class.barbarian.frenzied_strike/variants/32/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.class.barbarian.frenzied_strike/variants/33/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.class.barbarian.frenzied_strike/variants/34/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.class.barbarian.frenzied_strike/variants/35/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.class.barbarian.frenzied_strike/variants/36/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.class.barbarian.frenzied_strike/variants/37/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.class.barbarian.frenzied_strike/variants/38/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.class.barbarian.frenzied_strike/variants/39/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.class.barbarian.frenzied_strike/variants/40/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.class.barbarian.frenzied_strike/variants/41/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.class.barbarian.frenzied_strike/variants/42/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.class.barbarian.frenzied_strike/variants/43/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.class.barbarian.frenzied_strike/variants/44/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.class.barbarian.frenzied_strike/variants/45/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.class.barbarian.frenzied_strike/variants/46/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.class.barbarian.frenzied_strike/variants/47/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.class.barbarian.frenzied_strike/variants/48/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.class.barbarian.frenzied_strike/variants/49/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.class.barbarian.frenzied_strike/variants/50/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.feature.extra_attack/variants/10/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.feature.extra_attack/variants/11/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.feature.extra_attack/variants/12/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.feature.extra_attack/variants/13/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.feature.extra_attack/variants/14/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.feature.extra_attack/variants/15/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.feature.extra_attack/variants/16/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.feature.extra_attack/variants/17/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.feature.extra_attack/variants/18/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.feature.extra_attack/variants/19/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.feature.extra_attack/variants/20/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.feature.extra_attack/variants/21/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.feature.extra_attack/variants/22/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.feature.extra_attack/variants/23/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.feature.extra_attack/variants/24/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.feature.extra_attack/variants/25/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.feature.extra_attack/variants/26/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.feature.extra_attack/variants/27/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.feature.extra_attack/variants/28/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.feature.extra_attack/variants/29/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.feature.extra_attack/variants/30/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.feature.extra_attack/variants/31/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.feature.extra_attack/variants/32/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.feature.extra_attack/variants/33/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.feature.extra_attack/variants/34/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.feature.extra_attack/variants/35/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.feature.extra_attack/variants/36/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.feature.extra_attack/variants/37/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.feature.extra_attack/variants/38/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.feature.extra_attack/variants/39/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.feature.extra_attack/variants/40/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.feature.extra_attack/variants/41/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.feature.extra_attack/variants/42/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.feature.extra_attack/variants/43/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.feature.extra_attack/variants/44/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.feature.extra_attack/variants/45/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.feature.extra_attack/variants/46/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.feature.extra_attack/variants/47/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.feature.extra_attack/variants/48/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.feature.extra_attack/variants/49/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/action.feature.extra_attack/variants/50/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/reaction.opportunity_attack/variants/10/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/reaction.opportunity_attack/variants/11/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/reaction.opportunity_attack/variants/12/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/reaction.opportunity_attack/variants/13/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/reaction.opportunity_attack/variants/14/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/reaction.opportunity_attack/variants/15/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/reaction.opportunity_attack/variants/16/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/reaction.opportunity_attack/variants/17/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/reaction.opportunity_attack/variants/18/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/reaction.opportunity_attack/variants/19/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/reaction.opportunity_attack/variants/20/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/reaction.opportunity_attack/variants/21/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/reaction.opportunity_attack/variants/22/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/reaction.opportunity_attack/variants/23/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/reaction.opportunity_attack/variants/24/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/reaction.opportunity_attack/variants/25/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/reaction.opportunity_attack/variants/26/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/reaction.opportunity_attack/variants/27/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/reaction.opportunity_attack/variants/28/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/reaction.opportunity_attack/variants/29/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/reaction.opportunity_attack/variants/30/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/reaction.opportunity_attack/variants/31/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/reaction.opportunity_attack/variants/32/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/reaction.opportunity_attack/variants/33/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/reaction.opportunity_attack/variants/34/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/reaction.opportunity_attack/variants/35/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/reaction.opportunity_attack/variants/36/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/reaction.opportunity_attack/variants/37/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/reaction.opportunity_attack/variants/38/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/reaction.opportunity_attack/variants/39/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/reaction.opportunity_attack/variants/40/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/reaction.opportunity_attack/variants/41/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/reaction.opportunity_attack/variants/42/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/reaction.opportunity_attack/variants/43/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/reaction.opportunity_attack/variants/44/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/reaction.opportunity_attack/variants/45/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/reaction.opportunity_attack/variants/46/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/reaction.opportunity_attack/variants/47/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/reaction.opportunity_attack/variants/48/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/reaction.opportunity_attack/variants/49/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceItemIds",
+				"sourceKinds",
+				"rigIds"
+			],
+			"/reaction.opportunity_attack/variants/50/match": [
+				"kind",
+				"delivery",
+				"weaponSlots",
+				"outcomes",
+				"primaryDamageTypes",
+				"elemental",
+				"sourceItemRefs",
+				"sourceKinds",
+				"rigIds"
+			]
+		}
+	},
+	"catalog/damage_context.json": {
+		"generic": {
+			"": [
+				"palette",
+				"bodyClip",
+				"bodyPlaybackSpeed",
+				"impactDelayMs",
+				"flashEnabled",
+				"flashFrame",
+				"flashColorMode",
+				"flashColor",
+				"criticalFlashColor",
+				"flashDurationMs",
+				"numberEnabled",
+				"numberFrame",
+				"numberDurationMs",
+				"conditionFrame",
+				"deathFrame"
+			],
+			"/*/untyped": [
+				"label",
+				"elementColors",
+				"impactColor"
+			]
+		}
+	},
+	"catalog/healing_context.json": {
+		"generic": {
+			"": [
+				"bodyClip",
+				"bodyPlaybackSpeed",
+				"feedbackEnabled",
+				"feedbackColor",
+				"feedbackLabel",
+				"feedbackDurationMs",
+				"media"
+			]
+		}
+	},
+	"catalog/death_context.json": {
+		"generic": {
+			"": [
+				"silhouetteDust",
+				"bodyClip",
+				"bodyPlaybackSpeed",
+				"equipmentHideFrame",
+				"hiddenSlots",
+				"media"
+			],
+			"/*": [
+				"erosionMs",
+				"particleLifetimeMs",
+				"particleFadeInMs",
+				"alphaThreshold",
+				"horizontalRankWeight",
+				"velocityX",
+				"velocityY",
+				"gravity",
+				"color",
+				"minimumLuminance",
+				"particleEvery",
+				"particleSize"
+			]
+		}
+	},
+	"catalog/death_save_context.json": {
+		"generic": {
+			"": [
+				"success",
+				"failure",
+				"criticalSuccess",
+				"criticalFailure"
+			]
+		}
+	},
+	"catalog/life_state_context.json": {
+		"generic": {
+			"": [
+				"dying",
+				"stable",
+				"revived",
+				"bodyPoses"
+			],
+			"/*/dying": [
+				"bodyPose",
+				"applicationBody",
+				"removalBody"
+			],
+			"/*/stable": [
+				"bodyPose",
+				"applicationBody",
+				"removalBody"
+			]
+		}
+	},
+	"catalog/number_style.json": {
+		"generic": {
+			"": [
+				"fontFamily",
+				"fontSizePx",
+				"fontWeight",
+				"strokeColor",
+				"strokeWidthPx",
+				"anchorLiftPx",
+				"risePx",
+				"fadeStartFraction",
+				"durationMs"
+			]
+		}
+	},
+	"catalog/badge_style.json": {
+		"generic": {
+			"": [
+				"fontFamily",
+				"fontSizePx",
+				"fontWeight",
+				"strokeColor",
+				"strokeWidthPx",
+				"anchorLiftPx",
+				"risePx",
+				"fadeStartFraction",
+				"durationMs"
+			]
+		}
+	},
+	"catalog/bolt_style.json": {
+		"generic": {
+			"": [
+				"maximumLengthPx",
+				"distanceLengthRatio",
+				"strokeWidthPx",
+				"strokeAlpha",
+				"headRadiusPx",
+				"headAlpha"
+			]
+		}
+	},
+	"catalog/dart_style.json": {
+		"generic": {
+			"": [
+				"trailPointLimit",
+				"trailWidthPx",
+				"trailAlpha",
+				"headRadiusPx",
+				"headAlpha"
+			]
+		}
+	},
+	"catalog/movement_context.json": {
+		"generic": {
+			"": [
+				"walkClip",
+				"walkPlaybackSpeed",
+				"walkStepDurationMs",
+				"walkMedia",
+				"walkRecovery",
+				"jumpClip",
+				"jumpBodyFrames",
+				"jumpSourceFps",
+				"jumpBaseDurationMs",
+				"jumpPerCellDurationMs",
+				"jumpMinDurationMs",
+				"jumpMaxDurationMs",
+				"jumpArcBasePx",
+				"jumpArcPerCellPx",
+				"jumpArcMaxPx",
+				"jumpMedia",
+				"jumpRecovery",
+				"connectorProfiles",
+				"flight"
+			],
+			"/*/#": [
+				"id",
+				"role",
+				"assetId",
+				"attachment",
+				"tint",
+				"tint2",
+				"startFrame",
+				"fps",
+				"loop",
+				"reversed",
+				"scale",
+				"offsetX",
+				"offsetY",
+				"whenConditions",
+				"unlessConditions",
+				"viewFacing",
+				"depth",
+				"fitToMotion",
+				"contactFrame",
+				"emitIntervalMs",
+				"alpha"
+			],
+			"/*": [
+				"clearancePx",
+				"takeoffFraction",
+				"landingFraction",
+				"body",
+				"enabled",
+				"bodyClip",
+				"bodyPlaybackSpeed",
+				"media"
+			],
+			"/*/window": [
+				"animationId",
+				"bodyClip",
+				"durationMs",
+				"arcHeightPx",
+				"passageBodyHeightPx",
+				"passageScale",
+				"passageSocket",
+				"passageHoldFraction",
+				"bodyFrameKeys"
+			],
+			"/*/body/actor": [
+				"enabled",
+				"clip",
+				"playbackSpeed",
+				"hiddenSlots",
+				"media"
+			]
+		}
+	},
+	"catalog/movement_reaction_context.json": {
+		"generic": {
+			"": [
+				"label",
+				"feedbackEnabled",
+				"feedbackColor",
+				"movementLeadInMs",
+				"bodyEnabled",
+				"bodyClip",
+				"bodyPlaybackSpeed",
+				"media",
+				"recovery"
+			],
+			"/*": [
+				"enabled",
+				"bodyClip",
+				"bodyPlaybackSpeed",
+				"media"
+			]
+		}
+	},
+	"catalog/forced_movement_context.json": {
+		"generic": {
+			"": [
+				"label",
+				"feedbackEnabled",
+				"feedbackColor",
+				"motionCurve",
+				"facingPolicy",
+				"durationScale",
+				"playbackSpeedScale",
+				"media",
+				"recovery"
+			],
+			"/*": [
+				"enabled",
+				"bodyClip",
+				"bodyPlaybackSpeed",
+				"media"
+			]
+		}
+	},
+	"catalog/forced_movement_profile.json": {
+		"generic": {
+			"": [
+				"duration_ms",
+				"target_clip",
+				"brace_frame",
+				"playback_speed",
+				"provenance"
+			]
+		}
+	},
+	"catalog/equipment_context.json": {
+		"generic": {
+			"": [
+				"bodyEnabled",
+				"bodyClip",
+				"bodyPlaybackSpeed",
+				"commitFrame",
+				"media"
+			]
+		}
+	},
+	"catalog/interruptions.json": {
+		"generic": {
+			"": [
+				"outcomes",
+				"rules",
+				"reactions"
+			],
+			"/*/#": [
+				"phases",
+				"actionEconomySpent",
+				"anticipationFraction",
+				"travelFraction",
+				"nonProjectileBodyFraction"
+			],
+			"/*/reaction.spell.counterspell": [
+				"successByCamera",
+				"failureByCamera",
+				"dissipationMask",
+				"durationMs",
+				"castLayers"
+			],
+			"/*/reaction.spell.counterspell/castLayers/#": [
+				"id",
+				"slot",
+				"enabled",
+				"hidden",
+				"category",
+				"colors",
+				"sourceSheet"
+			],
+			"/*/reaction.spell.counterspell/castLayers/#/colors": [
+				"source",
+				"primary",
+				"mode"
+			]
+		}
+	},
+	"catalog/body_release_media.json": {
+		"generic": {
+			"/*/#": [
+				"id",
+				"role",
+				"assetId",
+				"attachment",
+				"tint",
+				"tint2",
+				"spellTintStrength",
+				"startFrame",
+				"fps",
+				"loop",
+				"reversed",
+				"scale",
+				"offsetX",
+				"offsetY"
+			]
+		}
+	},
+	"catalog/entity_lifecycle_media.json": {
+		"generic": {
+			"/*": [
+				"durationMs",
+				"tracksByManifestation",
+				"bodyFadeMs"
+			],
+			"/*/tracksByManifestation/fey_spirit/#": [
+				"id",
+				"assetId",
+				"attachment",
+				"fps",
+				"durationMs",
+				"depth",
+				"viewFacing"
+			],
+			"/*/tracksByManifestation/fiend/#": [
+				"id",
+				"assetId",
+				"attachment",
+				"fps",
+				"durationMs",
+				"depth",
+				"viewFacing"
+			],
+			"/*/tracksByManifestation/natural/#": [
+				"id",
+				"assetId",
+				"attachment",
+				"fps",
+				"durationMs",
+				"depth",
+				"viewFacing"
+			]
+		}
+	},
+	"catalog/item_attachments.json": {
+		"generic": {
+			"/*": [
+				"layers",
+				"holdStartFrame",
+				"holdFrames",
+				"fps",
+				"scale"
+			],
+			"/*/layers/#": [
+				"assetId",
+				"applicationAssetId",
+				"side",
+				"composition"
+			]
+		}
+	},
+	"catalog/shove_feedback.json": {
+		"generic": {}
+	},
+	"catalog/relocation_actions.json": {
+		"generic": {}
+	},
+	"catalog/body_materials.json": {
+		"generic": {
+			"/*": [
+				"palette",
+				"alpha"
+			]
+		}
+	},
+	"catalog/action_materials.json": {
+		"generic": {
+			"/*/motes": [
+				"blendMode",
+				"count",
+				"radiusCells",
+				"radialGrowthCells",
+				"heightCells",
+				"depthRatio",
+				"palette",
+				"brightEvery",
+				"alpha",
+				"sizePixels"
+			]
+		}
+	},
+	"catalog/action_intakes.json": {
+		"generic": {
+			"/*": [
+				"blendMode",
+				"socket",
+				"sourceOffsetCells",
+				"count",
+				"delayPerParticle",
+				"arcHeightCells",
+				"palette",
+				"brightEvery",
+				"radiusPixels",
+				"alpha"
+			]
+		}
+	},
+	"catalog/condition_media.json": {
+		"generic": {
+			"/*": [
+				"category",
+				"animation",
+				"images_by_facing",
+				"asset_id",
+				"application_asset_id",
+				"application_fade_ms",
+				"actor_top_clearance_px",
+				"removal_fade_ms",
+				"world_basis",
+				"application_mode",
+				"removal_mask_asset_id",
+				"sustain_start_ms",
+				"removal_asset_id",
+				"removal_crossfade_ms",
+				"loop_crossfade_ms",
+				"scale"
+			],
+			"/*/images_by_facing/E": [
+				"asset_id",
+				"path",
+				"native_size",
+				"pivot",
+				"scale"
+			],
+			"/*/images_by_facing/N": [
+				"asset_id",
+				"path",
+				"native_size",
+				"pivot",
+				"scale"
+			],
+			"/*/images_by_facing/NE": [
+				"asset_id",
+				"path",
+				"native_size",
+				"pivot",
+				"scale"
+			],
+			"/*/images_by_facing/NW": [
+				"asset_id",
+				"path",
+				"native_size",
+				"pivot",
+				"scale"
+			],
+			"/*/images_by_facing/S": [
+				"asset_id",
+				"path",
+				"native_size",
+				"pivot",
+				"scale"
+			],
+			"/*/images_by_facing/SE": [
+				"asset_id",
+				"path",
+				"native_size",
+				"pivot",
+				"scale"
+			],
+			"/*/images_by_facing/SW": [
+				"asset_id",
+				"path",
+				"native_size",
+				"pivot",
+				"scale"
+			],
+			"/*/images_by_facing/W": [
+				"asset_id",
+				"path",
+				"native_size",
+				"pivot",
+				"scale"
+			]
+		},
+		"exact": {
+			"/condition.mark.anti_heal": [
+				"category",
+				"animation",
+				"asset_id",
+				"removal_fade_ms",
+				"scale",
+				"actor_top_clearance_px"
+			],
+			"/condition.mark.field_focus": [
+				"category",
+				"animation",
+				"asset_id",
+				"removal_fade_ms",
+				"scale",
+				"actor_top_clearance_px"
+			],
+			"/condition.mark.guiding_mark": [
+				"category",
+				"animation",
+				"asset_id",
+				"removal_fade_ms",
+				"scale",
+				"actor_top_clearance_px"
+			],
+			"/condition.mark.life_drain": [
+				"category",
+				"animation",
+				"asset_id",
+				"removal_fade_ms",
+				"scale",
+				"actor_top_clearance_px"
+			],
+			"/condition.mark.mark_target": [
+				"category",
+				"animation",
+				"asset_id",
+				"removal_fade_ms",
+				"scale",
+				"actor_top_clearance_px"
+			],
+			"/condition.mark.no_reactions": [
+				"category",
+				"animation",
+				"asset_id",
+				"removal_fade_ms",
+				"scale",
+				"actor_top_clearance_px"
+			],
+			"/condition.marker.bane.overhead": [
+				"category",
+				"animation",
+				"asset_id",
+				"removal_fade_ms",
+				"scale",
+				"actor_top_clearance_px"
+			],
+			"/condition.marker.charmed.overhead": [
+				"category",
+				"animation",
+				"asset_id",
+				"removal_fade_ms",
+				"scale",
+				"actor_top_clearance_px"
+			],
+			"/condition.marker.commanded.overhead": [
+				"category",
+				"animation",
+				"asset_id",
+				"removal_fade_ms",
+				"scale",
+				"actor_top_clearance_px"
+			],
+			"/condition.marker.exhaustion.overhead": [
+				"category",
+				"animation",
+				"asset_id",
+				"removal_fade_ms",
+				"scale",
+				"actor_top_clearance_px"
+			],
+			"/condition.marker.frightened.overhead": [
+				"category",
+				"animation",
+				"asset_id",
+				"removal_fade_ms",
+				"scale",
+				"actor_top_clearance_px"
+			],
+			"/condition.marker.movement_slowed.overhead": [
+				"category",
+				"animation",
+				"asset_id",
+				"removal_fade_ms",
+				"scale",
+				"actor_top_clearance_px"
+			],
+			"/condition.marker.paralyzed.overhead": [
+				"category",
+				"animation",
+				"asset_id",
+				"removal_fade_ms",
+				"scale",
+				"actor_top_clearance_px"
+			],
+			"/condition.marker.petrified.overhead": [
+				"category",
+				"animation",
+				"asset_id",
+				"removal_fade_ms",
+				"scale",
+				"actor_top_clearance_px"
+			],
+			"/condition.marker.poisoned.overhead": [
+				"category",
+				"animation",
+				"asset_id",
+				"removal_fade_ms",
+				"scale",
+				"actor_top_clearance_px"
+			],
+			"/condition.marker.prone.overhead": [
+				"category",
+				"animation",
+				"asset_id",
+				"removal_fade_ms",
+				"scale",
+				"actor_top_clearance_px"
+			],
+			"/condition.marker.reduce.overhead": [
+				"category",
+				"animation",
+				"asset_id",
+				"removal_fade_ms",
+				"scale",
+				"actor_top_clearance_px"
+			],
+			"/condition.marker.sickened.overhead": [
+				"category",
+				"animation",
+				"asset_id",
+				"removal_fade_ms",
+				"scale",
+				"actor_top_clearance_px"
+			],
+			"/condition.marker.slow.overhead": [
+				"category",
+				"animation",
+				"asset_id",
+				"removal_fade_ms",
+				"scale",
+				"actor_top_clearance_px"
+			],
+			"/condition.marker.unconscious.overhead": [
+				"category",
+				"animation",
+				"asset_id",
+				"removal_fade_ms",
+				"scale",
+				"actor_top_clearance_px"
+			],
+			"/control.incapacitated.front": [
+				"category",
+				"animation",
+				"asset_id",
+				"application_asset_id",
+				"removal_fade_ms",
+				"world_basis",
+				"application_mode",
+				"actor_top_clearance_px"
+			],
+			"/control.restrained.mark": [
+				"category",
+				"animation",
+				"asset_id",
+				"removal_fade_ms",
+				"actor_top_clearance_px"
+			],
+			"/control.stunned.back": [
+				"category",
+				"animation",
+				"asset_id",
+				"removal_fade_ms",
+				"actor_top_clearance_px"
+			],
+			"/control.stunned.front": [
+				"category",
+				"animation",
+				"asset_id",
+				"removal_fade_ms",
+				"actor_top_clearance_px"
+			],
+			"/curse.ability.mark.back": [
+				"category",
+				"animation",
+				"asset_id",
+				"application_asset_id",
+				"scale",
+				"world_basis",
+				"application_mode",
+				"loop_crossfade_ms",
+				"actor_top_clearance_px"
+			],
+			"/curse.ability.mark.back.removal": [
+				"category",
+				"animation",
+				"asset_id",
+				"scale",
+				"world_basis",
+				"actor_top_clearance_px"
+			],
+			"/curse.ability.mark.front": [
+				"category",
+				"animation",
+				"asset_id",
+				"application_asset_id",
+				"scale",
+				"world_basis",
+				"application_mode",
+				"loop_crossfade_ms",
+				"actor_top_clearance_px"
+			],
+			"/curse.ability.mark.front.removal": [
+				"category",
+				"animation",
+				"asset_id",
+				"scale",
+				"world_basis",
+				"actor_top_clearance_px"
+			],
+			"/curse.ability.rings.back": [
+				"category",
+				"animation",
+				"asset_id",
+				"application_asset_id",
+				"scale",
+				"world_basis",
+				"application_mode",
+				"loop_crossfade_ms"
+			],
+			"/curse.ability.rings.back.removal": [
+				"category",
+				"animation",
+				"asset_id",
+				"scale",
+				"world_basis"
+			],
+			"/curse.ability.rings.front": [
+				"category",
+				"animation",
+				"asset_id",
+				"application_asset_id",
+				"scale",
+				"world_basis",
+				"application_mode",
+				"loop_crossfade_ms"
+			],
+			"/curse.ability.rings.front.removal": [
+				"category",
+				"animation",
+				"asset_id",
+				"scale",
+				"world_basis"
+			],
+			"/curse.attack.mark.back": [
+				"category",
+				"animation",
+				"asset_id",
+				"application_asset_id",
+				"scale",
+				"world_basis",
+				"application_mode",
+				"loop_crossfade_ms",
+				"actor_top_clearance_px"
+			],
+			"/curse.attack.mark.back.removal": [
+				"category",
+				"animation",
+				"asset_id",
+				"scale",
+				"world_basis",
+				"actor_top_clearance_px"
+			],
+			"/curse.attack.mark.front": [
+				"category",
+				"animation",
+				"asset_id",
+				"application_asset_id",
+				"scale",
+				"world_basis",
+				"application_mode",
+				"loop_crossfade_ms",
+				"actor_top_clearance_px"
+			],
+			"/curse.attack.mark.front.removal": [
+				"category",
+				"animation",
+				"asset_id",
+				"scale",
+				"world_basis",
+				"actor_top_clearance_px"
+			],
+			"/curse.attack.rings.back": [
+				"category",
+				"animation",
+				"asset_id",
+				"application_asset_id",
+				"scale",
+				"world_basis",
+				"application_mode",
+				"loop_crossfade_ms"
+			],
+			"/curse.attack.rings.back.removal": [
+				"category",
+				"animation",
+				"asset_id",
+				"scale",
+				"world_basis"
+			],
+			"/curse.attack.rings.front": [
+				"category",
+				"animation",
+				"asset_id",
+				"application_asset_id",
+				"scale",
+				"world_basis",
+				"application_mode",
+				"loop_crossfade_ms"
+			],
+			"/curse.attack.rings.front.removal": [
+				"category",
+				"animation",
+				"asset_id",
+				"scale",
+				"world_basis"
+			],
+			"/curse.damage.mark.back": [
+				"category",
+				"animation",
+				"asset_id",
+				"application_asset_id",
+				"scale",
+				"world_basis",
+				"application_mode",
+				"loop_crossfade_ms",
+				"actor_top_clearance_px"
+			],
+			"/curse.damage.mark.back.removal": [
+				"category",
+				"animation",
+				"asset_id",
+				"scale",
+				"world_basis",
+				"actor_top_clearance_px"
+			],
+			"/curse.damage.mark.front": [
+				"category",
+				"animation",
+				"asset_id",
+				"application_asset_id",
+				"scale",
+				"world_basis",
+				"application_mode",
+				"loop_crossfade_ms",
+				"actor_top_clearance_px"
+			],
+			"/curse.damage.mark.front.removal": [
+				"category",
+				"animation",
+				"asset_id",
+				"scale",
+				"world_basis",
+				"actor_top_clearance_px"
+			],
+			"/curse.damage.rings.back": [
+				"category",
+				"animation",
+				"asset_id",
+				"application_asset_id",
+				"scale",
+				"world_basis",
+				"application_mode",
+				"loop_crossfade_ms"
+			],
+			"/curse.damage.rings.back.removal": [
+				"category",
+				"animation",
+				"asset_id",
+				"scale",
+				"world_basis"
+			],
+			"/curse.damage.rings.front": [
+				"category",
+				"animation",
+				"asset_id",
+				"application_asset_id",
+				"scale",
+				"world_basis",
+				"application_mode",
+				"loop_crossfade_ms"
+			],
+			"/curse.damage.rings.front.removal": [
+				"category",
+				"animation",
+				"asset_id",
+				"scale",
+				"world_basis"
+			],
+			"/curse.inaction.mark.back": [
+				"category",
+				"animation",
+				"asset_id",
+				"application_asset_id",
+				"scale",
+				"world_basis",
+				"application_mode",
+				"loop_crossfade_ms",
+				"actor_top_clearance_px"
+			],
+			"/curse.inaction.mark.back.removal": [
+				"category",
+				"animation",
+				"asset_id",
+				"scale",
+				"world_basis",
+				"actor_top_clearance_px"
+			],
+			"/curse.inaction.mark.front": [
+				"category",
+				"animation",
+				"asset_id",
+				"application_asset_id",
+				"scale",
+				"world_basis",
+				"application_mode",
+				"loop_crossfade_ms",
+				"actor_top_clearance_px"
+			],
+			"/curse.inaction.mark.front.removal": [
+				"category",
+				"animation",
+				"asset_id",
+				"scale",
+				"world_basis",
+				"actor_top_clearance_px"
+			],
+			"/curse.inaction.rings.back": [
+				"category",
+				"animation",
+				"asset_id",
+				"application_asset_id",
+				"scale",
+				"world_basis",
+				"application_mode",
+				"loop_crossfade_ms"
+			],
+			"/curse.inaction.rings.back.removal": [
+				"category",
+				"animation",
+				"asset_id",
+				"scale",
+				"world_basis"
+			],
+			"/curse.inaction.rings.front": [
+				"category",
+				"animation",
+				"asset_id",
+				"application_asset_id",
+				"scale",
+				"world_basis",
+				"application_mode",
+				"loop_crossfade_ms"
+			],
+			"/curse.inaction.rings.front.removal": [
+				"category",
+				"animation",
+				"asset_id",
+				"scale",
+				"world_basis"
+			],
+			"/displacement.telekinesis.back": [
+				"category",
+				"animation",
+				"asset_id",
+				"application_asset_id",
+				"removal_fade_ms",
+				"scale",
+				"world_basis",
+				"application_mode",
+				"removal_asset_id"
+			],
+			"/displacement.telekinesis.front": [
+				"category",
+				"animation",
+				"asset_id",
+				"application_asset_id",
+				"removal_fade_ms",
+				"scale",
+				"world_basis",
+				"application_mode",
+				"removal_asset_id"
+			],
+			"/fly_wind_back": [
+				"category",
+				"animation",
+				"asset_id",
+				"application_asset_id",
+				"scale",
+				"world_basis",
+				"application_mode",
+				"removal_asset_id",
+				"removal_crossfade_ms"
+			],
+			"/fly_wind_front": [
+				"category",
+				"animation",
+				"asset_id",
+				"application_asset_id",
+				"scale",
+				"world_basis",
+				"application_mode",
+				"removal_asset_id",
+				"removal_crossfade_ms"
+			],
+			"/nature.chill.back": [
+				"category",
+				"animation",
+				"asset_id",
+				"application_asset_id",
+				"application_fade_ms",
+				"removal_fade_ms",
+				"scale",
+				"application_mode",
+				"sustain_start_ms",
+				"removal_asset_id"
+			],
+			"/nature.chill.front": [
+				"category",
+				"animation",
+				"asset_id",
+				"application_asset_id",
+				"application_fade_ms",
+				"removal_fade_ms",
+				"scale",
+				"application_mode",
+				"sustain_start_ms",
+				"removal_asset_id"
+			],
+			"/nature.produce.back": [
+				"category",
+				"animation",
+				"asset_id",
+				"application_asset_id",
+				"application_fade_ms",
+				"removal_fade_ms",
+				"scale",
+				"application_mode",
+				"sustain_start_ms",
+				"removal_asset_id"
+			],
+			"/nature.produce.front": [
+				"category",
+				"animation",
+				"asset_id",
+				"application_asset_id",
+				"application_fade_ms",
+				"removal_fade_ms",
+				"scale",
+				"application_mode",
+				"sustain_start_ms",
+				"removal_asset_id"
+			],
+			"/nature.warm.back": [
+				"category",
+				"animation",
+				"asset_id",
+				"application_asset_id",
+				"application_fade_ms",
+				"removal_fade_ms",
+				"scale",
+				"application_mode",
+				"sustain_start_ms",
+				"removal_asset_id"
+			],
+			"/nature.warm.front": [
+				"category",
+				"animation",
+				"asset_id",
+				"application_asset_id",
+				"application_fade_ms",
+				"removal_fade_ms",
+				"scale",
+				"application_mode",
+				"sustain_start_ms",
+				"removal_asset_id"
+			],
+			"/persistent.blur.smoke.back": [
+				"category",
+				"animation",
+				"asset_id",
+				"scale",
+				"world_basis"
+			],
+			"/persistent.blur.smoke.front": [
+				"category",
+				"animation",
+				"asset_id",
+				"scale",
+				"world_basis"
+			],
+			"/persistent.enlarge_reduce.smoke.back": [
+				"category",
+				"animation",
+				"asset_id",
+				"scale",
+				"world_basis"
+			],
+			"/persistent.enlarge_reduce.smoke.front": [
+				"category",
+				"animation",
+				"asset_id",
+				"scale",
+				"world_basis"
+			],
+			"/persistent.mirror_image.smoke.back": [
+				"category",
+				"animation",
+				"asset_id",
+				"scale",
+				"world_basis"
+			],
+			"/persistent.mirror_image.smoke.front": [
+				"category",
+				"animation",
+				"asset_id",
+				"scale",
+				"world_basis"
+			]
+		}
+	},
+	"sandbox/feedback.json": {
+		"generic": {
+			"/*": [
+				"inherit_hand_material",
+				"envelope",
+				"durationMs",
+				"holdMs",
+				"blendMode"
+			]
+		}
+	},
+	"native_effects/responses.json": {
+		"generic": {
+			"": [
+				"default",
+				"damage_types",
+				"deposit",
+				"scale",
+				"direction_when_undisclosed",
+				"status"
+			]
+		}
+	},
+	"spells": {
+		"generic": {
+			"": [
+				"definitionRef",
+				"elementColors",
+				"castPalettes",
+				"cast",
+				"childAttack",
+				"area",
+				"projectile",
+				"damage",
+				"condition",
+				"media",
+				"bodyMaterials",
+				"displacementLayers",
+				"directed",
+				"cancellationMedia",
+				"arcs",
+				"contact"
+			],
+			"/definitionRef": [
+				"pack_id",
+				"definition_kind",
+				"content_id",
+				"content_version",
+				"definition_contract_hash"
+			],
+			"/cast": [
+				"enabled",
+				"actionClip",
+				"bodyPlaybackSpeed",
+				"releaseFrame",
+				"equipment",
+				"weaponGlow",
+				"aura",
+				"effects",
+				"recovery",
+				"holdReleaseForVolley",
+				"holdUntilContact",
+				"sourceSockets"
+			],
+			"/cast/weaponGlow": [
+				"id",
+				"slot",
+				"enabled",
+				"hidden",
+				"category",
+				"colors",
+				"sourceSheet",
+				"palette",
+				"role"
+			],
+			"/cast/weaponGlow/colors": [
+				"primary",
+				"mode"
+			],
+			"/cast/aura": [
+				"id",
+				"slot",
+				"enabled",
+				"hidden",
+				"category",
+				"colors",
+				"sourceSheet",
+				"palette",
+				"role"
+			],
+			"/cast/aura/colors": [
+				"primary",
+				"mode"
+			],
+			"/cast/recovery": [
+				"enabled",
+				"bodyClip",
+				"bodyPlaybackSpeed"
+			],
+			"/cast/sourceSockets": [
+				"release",
+				"preparation"
+			],
+			"/media/#": [
+				"requireRemovedConditionTag",
+				"requireAppliedConditionId",
+				"requiredLifeState",
+				"requiredSaveSuccess",
+				"requireDamageApplied",
+				"rigIds",
+				"id",
+				"assetId",
+				"composition",
+				"clock",
+				"assetIdsByCamera",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"worldOffsetsByFacing",
+				"durationMs",
+				"scale",
+				"fadeInMs",
+				"scaleWithActor",
+				"alpha",
+				"fadeOutMs",
+				"fadeCurve",
+				"bodyOffsetsClip",
+				"depth",
+				"orientation",
+				"sortDepthByFacing",
+				"viewFacing",
+				"onMiss",
+				"actorTopClearancePx",
+				"timeMap",
+				"bodyOffsetsByFacing",
+				"emissionPointByFacing",
+				"effectGroup"
+			],
+			"/arcs": [
+				"texture",
+				"glow",
+				"star",
+				"streak",
+				"spark",
+				"mode",
+				"coreCount",
+				"widthCells",
+				"secondaryWidthCells",
+				"travelBaseMs",
+				"travelPerCellMs",
+				"maximumTravelMs",
+				"branchDelayMs"
+			],
+			"/contact": [
+				"launchDelayMs",
+				"speedTilesPerSecond",
+				"delayMs",
+				"cellsByFacing"
+			],
+			"/directed": [
+				"material",
+				"geometry",
+				"particles",
+				"sphere",
+				"trailTexture",
+				"noiseTexture",
+				"verticalScale",
+				"sourceEye",
+				"texture",
+				"palette",
+				"nativeUnitsPerCell",
+				"sourceOffsetNativeXYZ",
+				"sourceSocket",
+				"sourcePlaneHeightCells",
+				"targetPlaneHeightCells",
+				"widthCells",
+				"arcHeightCells",
+				"contactFadeMs"
+			],
+			"/directed/sourceEye": [
+				"sizeCells",
+				"replaceLayerIds"
+			],
+			"/cast/effects/#": [
+				"id",
+				"slot",
+				"enabled",
+				"hidden",
+				"category",
+				"colors",
+				"sourceSheet",
+				"palette",
+				"role"
+			],
+			"/cast/effects/#/colors": [
+				"primary",
+				"mode"
+			],
+			"/damage": [
+				"impactDelayMs",
+				"hitFlash",
+				"floatingNumber",
+				"death"
+			],
+			"/damage/hitFlash": [
+				"enabled",
+				"frame",
+				"durationMs",
+				"color",
+				"palette"
+			],
+			"/damage/floatingNumber": [
+				"enabled",
+				"frame",
+				"durationMs",
+				"label",
+				"color"
+			],
+			"/displacementLayers/#": [
+				"id",
+				"assetId",
+				"category",
+				"animation",
+				"fps",
+				"attachment",
+				"offsetY",
+				"activeDuring",
+				"fadeInMs",
+				"priority",
+				"colors",
+				"drawOrder"
+			],
+			"/projectile": [
+				"requireAttackOutcome",
+				"targetLocal",
+				"geometry",
+				"sprite",
+				"prepare",
+				"travel",
+				"impact",
+				"trajectory",
+				"speedPxPerSecond",
+				"minimumTravelDurationMs",
+				"fps",
+				"scale",
+				"depthMode",
+				"orientation",
+				"sourceAnchor",
+				"targetAnchor",
+				"sourceAnchorsByFacing",
+				"sourceSockets",
+				"missileStaggerMs"
+			],
+			"/projectile/geometry": [
+				"renderer",
+				"enabled",
+				"primitive"
+			],
+			"/projectile/sprite": [
+				"renderer",
+				"assetId",
+				"alpha",
+				"tint",
+				"blendMode",
+				"offsetX",
+				"offsetY",
+				"anchor",
+				"geometryComposition",
+				"mediaFailurePolicy"
+			],
+			"/projectile/prepare": [
+				"enabled",
+				"assetId",
+				"assetPhase",
+				"startFrame",
+				"fps",
+				"durationMs",
+				"overlapRelease"
+			],
+			"/projectile/travel": [
+				"enabled",
+				"assetId",
+				"assetPhase",
+				"fps",
+				"fitDuration",
+				"overlapContactMs",
+				"scale",
+				"fineRotation"
+			],
+			"/projectile/impact": [
+				"enabled",
+				"onMiss",
+				"assetId",
+				"assetPhase",
+				"fps",
+				"fineRotation",
+				"scale",
+				"viewFacing",
+				"composition",
+				"supportClipping",
+				"timeMap"
+			],
+			"/projectile/trajectory": [
+				"type",
+				"curvature",
+				"sameTargetSpread"
+			],
+			"/projectile/orientation": [
+				"rowSource",
+				"fineRotation",
+				"directionSource",
+				"rotationOffsetDeg"
+			],
+			"/projectile/sourceAnchor": [
+				"basis",
+				"liftY",
+				"forwardPx",
+				"sidePx",
+				"axisPx"
+			],
+			"/projectile/targetAnchor": [
+				"basis",
+				"liftY",
+				"forwardPx",
+				"axisPx"
+			],
+			"/bodyMaterials/#": [
+				"requiredSaveSuccess",
+				"requireDamageApplied",
+				"id",
+				"material",
+				"clock",
+				"startOffsetMs",
+				"points"
+			],
+			"/bodyMaterials/#/points/#": [
+				"elapsedMs",
+				"strength",
+				"pulse"
+			],
+			"/area": [
+				"shapeSource",
+				"phases",
+				"geometry",
+				"sprite",
+				"surfaceReveal"
+			],
+			"/area/phases": [
+				"shape",
+				"explosion"
+			],
+			"/area/phases/shape": [
+				"enabled",
+				"durationMs",
+				"effectProgress"
+			],
+			"/area/phases/explosion": [
+				"enabled",
+				"durationMs",
+				"effectProgress",
+				"startScale",
+				"endScale",
+				"fillAlphaEnd",
+				"strokeAlphaEnd"
+			],
+			"/area/geometry": [
+				"renderer",
+				"enabled",
+				"depthMode",
+				"startScale",
+				"endScale",
+				"fillAlphaStart",
+				"fillAlphaEnd",
+				"strokeAlphaStart",
+				"strokeAlphaEnd",
+				"strokeWidth"
+			],
+			"/media/#/emissionPointByFacing": [
+				"E",
+				"SE",
+				"S",
+				"SW",
+				"W",
+				"NW",
+				"N",
+				"NE"
+			],
+			"/projectile/targetLocal": [
+				"contactAfterReleaseMs",
+				"approachOffsetTiles",
+				"approachUntilFrame"
+			],
+			"/damage/hitFlash/palette": [
+				"colors",
+				"gamma",
+				"noiseSheet",
+				"untinted"
+			],
+			"/bodyMaterials/#/material": [
+				"colors",
+				"mapping",
+				"texture",
+				"normalTexture"
+			],
+			"/cancellationMedia": [
+				"outcomeCode",
+				"reactionId",
+				"cutoffOffsetMs",
+				"media",
+				"reactionOffsetsByFacing",
+				"successByCamera",
+				"reactionScale"
+			],
+			"/cancellationMedia/media/#": [
+				"id",
+				"assetId",
+				"assetIdsByCamera",
+				"attachment",
+				"fps",
+				"durationMs",
+				"scale",
+				"depth",
+				"timeMap"
+			],
+			"/castPalettes/#": [
+				"whenEnergyType",
+				"spatialContentId",
+				"conditionId",
+				"colors"
+			],
+			"/childAttack/poses/#": [
+				"rigId",
+				"weaponCategory",
+				"clip",
+				"layers"
+			],
+			"/childAttack/poses/#/layers/#": [
+				"id",
+				"slot",
+				"enabled",
+				"hidden",
+				"category",
+				"colors",
+				"sourceSheet",
+				"palette"
+			],
+			"/childAttack/poses/#/layers/#/colors": [
+				"primary",
+				"mode"
+			]
+		}
+	},
+	"spells/action.spell.eyebite.strike.json": {
+		"exact": {
+			"/media/0/emissionPointByFacing": [
+				"E",
+				"N",
+				"NE",
+				"NW",
+				"S",
+				"SE",
+				"SW",
+				"W"
+			],
+			"/media/1/emissionPointByFacing": [
+				"E",
+				"N",
+				"NE",
+				"NW",
+				"S",
+				"SE",
+				"SW",
+				"W"
+			]
+		}
+	},
+	"spells/action.spell.telekinesis.move.json": {
+		"exact": {
+			"/media/0/emissionPointByFacing": [
+				"E",
+				"N",
+				"NE",
+				"NW",
+				"S",
+				"SE",
+				"SW",
+				"W"
+			],
+			"/media/1/emissionPointByFacing": [
+				"E",
+				"N",
+				"NE",
+				"NW",
+				"S",
+				"SE",
+				"SW",
+				"W"
+			]
+		}
+	},
+	"spells/spell.burning_hands.json": {
+		"exact": {
+			"/media/0": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"emissionPointByFacing",
+				"fps"
+			],
+			"/contact": [
+				"delayMs",
+				"speedTilesPerSecond",
+				"cellsByFacing"
+			]
+		}
+	},
+	"spells/spell.color_spray.json": {
+		"exact": {
+			"/media/0/emissionPointByFacing": [
+				"E",
+				"N",
+				"NE",
+				"NW",
+				"S",
+				"SE",
+				"SW",
+				"W"
+			],
+			"/media/1/emissionPointByFacing": [
+				"E",
+				"N",
+				"NE",
+				"NW",
+				"S",
+				"SE",
+				"SW",
+				"W"
+			]
+		}
+	},
+	"spells/spell.cone_of_cold.json": {
+		"exact": {
+			"/contact": [
+				"delayMs",
+				"speedTilesPerSecond",
+				"cellsByFacing"
+			]
+		}
+	},
+	"spells/spell.disintegrate.json": {
+		"exact": {
+			"/directed": [
+				"material",
+				"particles",
+				"sphere",
+				"trailTexture",
+				"noiseTexture",
+				"palette",
+				"nativeUnitsPerCell",
+				"verticalScale",
+				"sourceSocket",
+				"sourcePlaneHeightCells",
+				"targetPlaneHeightCells",
+				"contactFadeMs"
+			]
+		}
+	},
+	"spells/spell.eyebite.json": {
+		"exact": {
+			"/media/0/emissionPointByFacing": [
+				"E",
+				"N",
+				"NE",
+				"NW",
+				"S",
+				"SE",
+				"SW",
+				"W"
+			],
+			"/media/1/emissionPointByFacing": [
+				"E",
+				"N",
+				"NE",
+				"NW",
+				"S",
+				"SE",
+				"SW",
+				"W"
+			]
+		}
+	},
+	"spells/spell.finger_of_death.json": {
+		"exact": {
+			"/media/2": [
+				"requireDamageApplied",
+				"id",
+				"assetId",
+				"assetIdsByCamera",
+				"clock",
+				"attachment",
+				"fps",
+				"durationMs",
+				"scale",
+				"depth",
+				"emissionPointByFacing",
+				"effectGroup"
+			],
+			"/media/2/emissionPointByFacing": [
+				"E",
+				"N",
+				"NE",
+				"NW",
+				"S",
+				"SE",
+				"SW",
+				"W"
+			],
+			"/media/3": [
+				"requireDamageApplied",
+				"id",
+				"assetId",
+				"assetIdsByCamera",
+				"clock",
+				"attachment",
+				"fps",
+				"durationMs",
+				"scale",
+				"depth",
+				"emissionPointByFacing",
+				"effectGroup"
+			],
+			"/media/3/emissionPointByFacing": [
+				"E",
+				"N",
+				"NE",
+				"NW",
+				"S",
+				"SE",
+				"SW",
+				"W"
+			],
+			"/directed": [
+				"material",
+				"geometry",
+				"palette",
+				"nativeUnitsPerCell",
+				"verticalScale",
+				"sourceOffsetNativeXYZ",
+				"targetPlaneHeightCells",
+				"contactFadeMs"
+			]
+		}
+	},
+	"spells/spell.fireball.json": {
+		"exact": {
+			"": [
+				"definitionRef",
+				"elementColors",
+				"cast",
+				"projectile",
+				"area",
+				"damage",
+				"condition"
+			]
+		}
+	},
+	"spells/spell.gust_of_wind.json": {
+		"exact": {
+			"/contact": [
+				"delayMs",
+				"speedTilesPerSecond",
+				"cellsByFacing"
+			]
+		}
+	},
+	"spells/spell.ice_knife.burst.json": {
+		"exact": {
+			"": [
+				"definitionRef",
+				"elementColors",
+				"cast",
+				"projectile",
+				"area",
+				"damage",
+				"condition"
+			]
+		}
+	},
+	"spells/spell.ice_storm.json": {
+		"exact": {
+			"/media/0": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/1": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/2": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/3": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/4": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/5": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/6": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/7": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/8": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/9": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/10": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/11": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/12": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/13": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/14": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/15": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/16": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/17": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/18": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/19": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/20": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/21": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/22": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/23": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/24": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/25": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/26": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/27": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/28": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/29": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/30": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/31": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/32": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/33": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/34": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/35": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/36": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/37": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/38": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/39": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/40": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/41": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/42": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/43": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/44": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/45": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/46": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/47": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/48": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/49": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/50": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/51": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/52": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/53": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/54": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/55": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/56": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/57": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/58": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/59": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/60": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/61": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/62": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/63": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/64": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/65": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/66": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/67": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/68": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/69": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/70": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/71": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/72": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/73": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/74": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/75": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/76": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/77": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/78": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/79": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/80": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/81": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/82": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/83": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/84": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/85": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/86": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/87": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/88": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/89": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/90": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/91": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/92": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/93": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/94": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			],
+			"/media/95": [
+				"id",
+				"assetId",
+				"composition",
+				"attachment",
+				"startOffsetMs",
+				"fps",
+				"scale",
+				"depth",
+				"viewFacing",
+				"worldOffsetsByFacing",
+				"effectGroup"
+			]
+		}
+	},
+	"spells/spell.sleep.json": {
+		"exact": {
+			"": [
+				"definitionRef",
+				"elementColors",
+				"cast",
+				"projectile",
+				"area",
+				"condition"
+			],
+			"/projectile/impact": [
+				"enabled",
+				"assetId",
+				"assetPhase",
+				"fps",
+				"scale",
+				"fineRotation",
+				"viewFacing",
+				"composition",
+				"supportClipping"
+			]
+		}
+	},
+	"spells/spell.telekinesis.json": {
+		"exact": {
+			"/media/0/emissionPointByFacing": [
+				"E",
+				"N",
+				"NE",
+				"NW",
+				"S",
+				"SE",
+				"SW",
+				"W"
+			],
+			"/media/1/emissionPointByFacing": [
+				"E",
+				"N",
+				"NE",
+				"NW",
+				"S",
+				"SE",
+				"SW",
+				"W"
+			]
+		}
+	},
+	"spells/spell.web.json": {
+		"exact": {
+			"": [
+				"definitionRef",
+				"elementColors",
+				"cast",
+				"projectile",
+				"area",
+				"condition"
+			]
+		}
+	}
+}

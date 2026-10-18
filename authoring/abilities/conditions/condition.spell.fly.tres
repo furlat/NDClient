@@ -1,0 +1,121 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_oggpj"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_4yu22"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_72vbr"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_xffcq"]
+
+[sub_resource type="Resource" id="Resource_hwq2r"]
+script = ExtResource("1_oggpj")
+enabled = false
+colour = Color(0.44313726, 0.77254903, 0.8980392, 1)
+
+[sub_resource type="Resource" id="Resource_pxyox"]
+script = ExtResource("3_72vbr")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_6730m"]
+script = ExtResource("2_4yu22")
+steps = Array[ExtResource("3_72vbr")]([SubResource("Resource_pxyox")])
+
+[sub_resource type="Resource" id="Resource_ajcti"]
+script = ExtResource("1_oggpj")
+enabled = false
+colour = Color(0.44313726, 0.77254903, 0.8980392, 1)
+
+[resource]
+script = ExtResource("4_xffcq")
+id = "condition.spell.fly"
+label = "Fly"
+disposition = "authored"
+lifecycle = PackedStringArray()
+look = SubResource("Resource_6730m")
+layers = [{
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "fly_wind_back",
+"attachment": "body",
+"category": "FlyWind",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"fps": 32.0,
+"id": "fly-wind-back",
+"offsetY": -24.0,
+"opacity": 0.95,
+"priority": 20.0
+}, {
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "fly_wind_front",
+"attachment": "body",
+"category": "FlyWind",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fps": 32.0,
+"id": "fly-wind-front",
+"offsetY": -24.0,
+"opacity": 0.95,
+"priority": 20.0
+}]
+group = "flight"
+priority = 70.0
+max_layers = 1.0
+application_text = SubResource("Resource_hwq2r")
+removal_text = SubResource("Resource_ajcti")
+status = "partial"
+unported = {
+"application": {
+"durationMs": 900.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["equipment_weapon", "body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "flight.manifested-wings",
+"visualIntensity": "ambient_passive"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.spell.fly",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "fail_transaction",
+"persistent": {
+"appearanceLayers": [{
+"anatomy": "wings",
+"category": "Bag8",
+"glowStrength": 0.15,
+"id": "fly-wings",
+"priority": 90.0,
+"slot": "backpack",
+"tint": 7456229.0
+}],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 700.0,
+"effects": []
+}
+}

@@ -1,0 +1,286 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_3cke0"]
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="2_wiiep"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="3_kujod"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="4_s50cm"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="5_exben"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="6_2qo6f"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="7_ydocm"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="8_gy3j2"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="9_yf14e"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="10_7cty5"]
+
+[sub_resource type="Resource" id="Resource_yrgx3"]
+script = ExtResource("1_3cke0")
+role = "cast"
+clip = "Attack6"
+markers = Dictionary[String, float]({
+"release": 6.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+unported = {
+"recovery": {
+"bodyClip": "Taunt",
+"bodyPlaybackSpeed": 1.0,
+"enabled": false
+}
+}
+
+[sub_resource type="Resource" id="Resource_v5i62"]
+script = ExtResource("2_wiiep")
+roles = Dictionary[String, Color]({
+"primary": Color(1, 0.8784314, 0.4745098, 1),
+"secondary": Color(1, 0.31764707, 0.11764706, 1),
+"tertiary": Color(0.6784314, 0.14901961, 0.019607844, 1)
+})
+ramp = PackedColorArray()
+
+[sub_resource type="Resource" id="Resource_hf0ia"]
+script = ExtResource("3_kujod")
+clip = "spells/burning_hands_production_xyz/whole/lifecycle"
+role = "attached"
+at = "release"
+attachment = "caster_release"
+scale = 0.5
+rotation_degrees = Vector3(0, 90, 0)
+source_end = 1.5
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+origin_path = "effect/Donor/fire"
+opacity_keys = PackedVector2Array()
+staging_from = "client"
+extra = {
+"delay_seconds": 0.0,
+"orientation": "facing",
+"source_rate": 1.0
+}
+
+[sub_resource type="Resource" id="Resource_wyrtl"]
+script = ExtResource("5_exben")
+kind = "palette_ramp"
+colours = PackedColorArray(0, 0, 0, 1, 0.25882354, 0.011764706, 0, 1, 0.34117648, 0.02745098, 0, 1, 0.3882353, 0.043137256, 0, 1, 0.41960785, 0.05882353, 0, 1, 0.48235294, 0.07450981, 0, 1, 0.53333336, 0.09411765, 0, 1, 0.5803922, 0.10980392, 0.003921569, 1, 0.6784314, 0.14901961, 0.019607844, 1, 0.7882353, 0.19607843, 0.050980393, 1, 0.88235295, 0.23921569, 0.07058824, 1, 0.95686275, 0.27450982, 0.09411765, 1, 1, 0.31764707, 0.11764706, 1, 1, 0.38039216, 0.14901961, 1, 1, 0.4509804, 0.1882353, 1, 1, 0.50980395, 0.22352941, 1, 1, 0.5568628, 0.2509804, 1, 1, 0.62352943, 0.29411766, 1, 1, 0.69411767, 0.3372549, 1, 1, 0.74509805, 0.3764706, 1, 1, 0.7882353, 0.40392157, 1, 1, 0.8235294, 0.42352942, 1, 1, 0.85490197, 0.44313726, 1, 1, 0.8784314, 0.4745098, 1)
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_igjx6"]
+script = ExtResource("4_s50cm")
+steps = Array[ExtResource("5_exben")]([SubResource("Resource_wyrtl")])
+
+[sub_resource type="Resource" id="Resource_p3x8i"]
+script = ExtResource("5_exben")
+kind = "palette_ramp"
+colours = PackedColorArray(0.6784314, 0.14901961, 0.019607844, 1, 1, 0.8784314, 0.4745098, 1, 1, 0.31764707, 0.11764706, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_gveyx"]
+script = ExtResource("4_s50cm")
+steps = Array[ExtResource("5_exben")]([SubResource("Resource_p3x8i")])
+
+[sub_resource type="Resource" id="Resource_vl1s2"]
+script = ExtResource("6_2qo6f")
+category = "Magic2"
+sheet = "/spritesheets/Magic2/Attack6.png"
+look = SubResource("Resource_gveyx")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 16769145.0
+},
+"id": "cast-weaponGlow",
+"palette": {},
+"role": "hand_magic",
+"slot": "weaponGlow"
+}
+
+[sub_resource type="Resource" id="Resource_47a3r"]
+script = ExtResource("5_exben")
+kind = "palette_ramp"
+colours = PackedColorArray(0.6784314, 0.14901961, 0.019607844, 1, 1, 0.8784314, 0.4745098, 1, 1, 0.31764707, 0.11764706, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_ldjx0"]
+script = ExtResource("4_s50cm")
+steps = Array[ExtResource("5_exben")]([SubResource("Resource_47a3r")])
+
+[sub_resource type="Resource" id="Resource_d4rvj"]
+script = ExtResource("6_2qo6f")
+place = "aura"
+category = "Effect5"
+sheet = "/spritesheets/Effect5/Attack6.png"
+enabled = false
+look = SubResource("Resource_ldjx0")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 16769145.0
+},
+"id": "cast-aura",
+"palette": {},
+"role": "aura",
+"slot": "aura"
+}
+
+[sub_resource type="Resource" id="Resource_yi2ki"]
+script = ExtResource("7_ydocm")
+path = "art/media/ui/icons/smooth48/spell.burning-hands.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:spell.burning-hands"
+
+[resource]
+script = ExtResource("8_gy3j2")
+id = "spell.burning_hands"
+icon = SubResource("Resource_yi2ki")
+delivery = "cone"
+body = SubResource("Resource_yrgx3")
+hand_layers = Array[ExtResource("6_2qo6f")]([SubResource("Resource_vl1s2"), SubResource("Resource_d4rvj")])
+sockets = "measured/abilities/spells/spell.burning_hands.sockets.json"
+effects = Array[ExtResource("3_kujod")]([SubResource("Resource_hf0ia")])
+native_staging = true
+effect_scope = "area"
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+impact_delay = 0.0
+flash_frame = 0.0
+flash_duration = 0.15
+flash_look = SubResource("Resource_igjx6")
+number_frame = 7.0
+number_duration = 1.0
+body_material = {
+"clip": "spells/burning_hands_production_xyz/whole/lifecycle",
+"clock_parameter": "",
+"node": "effect/Donor/fire",
+"parameter_overrides": {},
+"reason": "The native fire surface selects a 64-frame sheet from per-particle COLOR.a and multiplies by COLOR.rgb; other source fire layers use INSTANCE_CUSTOM.z. No independent actor-surface clock/particle-age mapping is authored. Replacing those inputs with arbitrary time or a static terminal frame would be a fabricated material adaptation.",
+"status": "unsupported",
+"surface": -1.0
+}
+colours = SubResource("Resource_v5i62")
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray()
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "client"
+status = "ready"
+bounds = "measured/abilities/spells/spell.burning_hands.bounds.json"
+staging_unported = {
+"source": "sandbox/batches/combat.json:/spells/burning_hands/staging"
+}
+unported = {
+"area": {
+"geometry": {
+"depthMode": "ground",
+"enabled": false,
+"endScale": 1.0,
+"fillAlphaEnd": 0.0,
+"fillAlphaStart": 0.0,
+"renderer": "geometry_area",
+"startScale": 1.0,
+"strokeAlphaEnd": 0.0,
+"strokeAlphaStart": 0.0,
+"strokeWidth": 0.0
+},
+"phases": {
+"explosion": {
+"durationMs": 0.0,
+"effectProgress": 0.0,
+"enabled": false,
+"endScale": 1.0,
+"fillAlphaEnd": 0.0,
+"startScale": 1.0,
+"strokeAlphaEnd": 0.0
+},
+"shape": {
+"durationMs": 0.0,
+"effectProgress": 0.0,
+"enabled": true
+}
+},
+"shapeSource": "authoritative_cue",
+"sprite": null
+},
+"condition": {
+"anchor": "effect",
+"delayMs": 0.0,
+"feedbackEnabled": true
+},
+"contact": {
+"cellsByFacing": null,
+"delayMs": 30.0,
+"speedTilesPerSecond": 8.0
+},
+"damage": {
+"death": {
+"enabled": true,
+"frame": 12.0
+},
+"floatingNumber": {
+"color": 16769145.0,
+"enabled": true,
+"label": "Fire"
+},
+"hitFlash": {
+"color": 16769145.0,
+"enabled": true,
+"palette": {}
+}
+},
+"definitionRef": {
+"content_id": "spell.burning_hands",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"media": [{
+"assetId": "area.burning_hands.v9",
+"attachment": "source_hand",
+"composition": "paired_depth",
+"emissionPointByFacing": {
+"E": {
+"x": 41.8962973,
+"y": -61.506737856
+},
+"N": {
+"x": -7.302299358,
+"y": -87.417905585
+},
+"NE": {
+"x": 25.458435233,
+"y": -83.089834339
+},
+"NW": {
+"x": -34.229863886,
+"y": -76.609691707
+},
+"S": {
+"x": 10.26826173,
+"y": -22.795914845
+},
+"SE": {
+"x": 36.972871214,
+"y": -36.130325939
+},
+"SW": {
+"x": -22.453130796,
+"y": -27.704088337
+},
+"W": {
+"x": -41.370693128,
+"y": -49.258163031
+}
+},
+"fps": 32.0,
+"id": "whole-flame"
+}]
+}

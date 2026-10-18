@@ -1,0 +1,105 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="1_1han3"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="2_6gxmu"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="3_i0tpi"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="4_wykjf"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="5_h4561"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="6_hh7bg"]
+
+[sub_resource type="Resource" id="Resource_m1cog"]
+script = ExtResource("1_1han3")
+clip = "bg3-36/create-or-destroy-water/create"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 3.5
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+
+[sub_resource type="Resource" id="Resource_kqhhe"]
+script = ExtResource("1_1han3")
+clip = "bg3-36/create-or-destroy-water/rain-wet"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 3.5
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "chest", "head", "hands", "legs", "cloak"]
+},
+"follow_attachment": true,
+"to_actor": "target"
+}
+
+[sub_resource type="Resource" id="Resource_rj6o6"]
+script = ExtResource("3_i0tpi")
+path = "art/ui-delivery-20261018/runtime/smooth48/spell.create_or_destroy_water.png"
+native_size = Vector2i(48, 48)
+source = "ui-delivery-20261018"
+
+[sub_resource type="Resource" id="Resource_gd7ma"]
+script = ExtResource("1_1han3")
+clip = "bg3-36/create-or-destroy-water/destroy"
+role = "attached"
+at = "release"
+delay = -0.733333333333333
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 1.93333333333333
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+
+[sub_resource type="Resource" id="Resource_esmpd"]
+script = ExtResource("6_hh7bg")
+id = "destroy_water_native"
+kind = "form"
+selection = "destroy_water_native"
+effects = Array[ExtResource("1_1han3")]([SubResource("Resource_gd7ma")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[resource]
+script = ExtResource("4_wykjf")
+id = "spell.create_or_destroy_water"
+icon = SubResource("Resource_rj6o6")
+delivery = "sphere"
+effects = Array[ExtResource("1_1han3")]([SubResource("Resource_m1cog"), SubResource("Resource_kqhhe")])
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+feedback_ramp = PackedStringArray()
+variants = Array[ExtResource("6_hh7bg")]([SubResource("Resource_esmpd")])
+applies_conditions = PackedStringArray("condition.spell.rain_wet")
+applies_surfaces = PackedStringArray("spatial_effect.material.water_surface")
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+staging_unported = {
+"selection": "create_water_native"
+}

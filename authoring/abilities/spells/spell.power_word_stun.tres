@@ -1,0 +1,216 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_hyt2p"]
+[ext_resource type="Script" path="res://presentation/source/palette.gd" id="2_yo7h8"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="3_u5ecn"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="4_h14tw"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="5_26ler"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="6_cxbww"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="7_pwxpw"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="8_sqg3y"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="9_p2saw"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="10_iyv7r"]
+
+[sub_resource type="Resource" id="Resource_c3ddb"]
+script = ExtResource("1_hyt2p")
+role = "cast"
+clip = "Attack5"
+markers = Dictionary[String, float]({
+"release": 7.0
+})
+hidden_slots = PackedStringArray("weapon", "offhand")
+unported = {
+"recovery": {
+"bodyClip": "Taunt",
+"bodyPlaybackSpeed": 1.0,
+"enabled": false
+}
+}
+
+[sub_resource type="Resource" id="Resource_x410f"]
+script = ExtResource("2_yo7h8")
+roles = Dictionary[String, Color]({
+"primary": Color(0.827451, 0.7176471, 0.9843137, 1),
+"secondary": Color(0.59607846, 0.5568628, 0.9372549, 1),
+"tertiary": Color(0.27450982, 0.047058824, 0.5294118, 1)
+})
+ramp = PackedColorArray()
+
+[sub_resource type="Resource" id="Resource_7ieek"]
+script = ExtResource("3_u5ecn")
+clip = "review/power_word_stun/back/impact"
+role = "attached"
+at = "release"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 1.375
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.25
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0
+}
+
+[sub_resource type="Resource" id="Resource_lvb4s"]
+script = ExtResource("3_u5ecn")
+clip = "review/power_word_stun/recipient/stunned"
+role = "attached"
+at = "contact"
+attachment = "recipient_ground"
+scale = 0.6
+orientation = "world"
+source_end = 3.0
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"follow_attachment": true,
+"live_endpoints": [{
+"actor": "target",
+"socket": "head"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_a3i8k"]
+script = ExtResource("6_cxbww")
+kind = "palette_ramp"
+colours = PackedColorArray(0.27450982, 0.047058824, 0.5294118, 1, 0.827451, 0.7176471, 0.9843137, 1, 0.59607846, 0.5568628, 0.9372549, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_ay2aa"]
+script = ExtResource("5_26ler")
+steps = Array[ExtResource("6_cxbww")]([SubResource("Resource_a3i8k")])
+
+[sub_resource type="Resource" id="Resource_ngw66"]
+script = ExtResource("4_h14tw")
+category = "Magic2"
+sheet = "/spritesheets/Magic2/Attack5.png"
+look = SubResource("Resource_ay2aa")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 13875195.0
+},
+"id": "cast-weaponGlow",
+"palette": {},
+"role": "hand_magic",
+"slot": "weaponGlow"
+}
+
+[sub_resource type="Resource" id="Resource_8mvqg"]
+script = ExtResource("6_cxbww")
+kind = "palette_ramp"
+colours = PackedColorArray(0.27450982, 0.047058824, 0.5294118, 1, 0.827451, 0.7176471, 0.9843137, 1, 0.59607846, 0.5568628, 0.9372549, 1)
+noise = "/spell-palettes/source-hand-noise.png"
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_wr2qm"]
+script = ExtResource("5_26ler")
+steps = Array[ExtResource("6_cxbww")]([SubResource("Resource_8mvqg")])
+
+[sub_resource type="Resource" id="Resource_6b5j5"]
+script = ExtResource("4_h14tw")
+place = "aura"
+category = "Effect5"
+sheet = "/spritesheets/Effect5/Attack5.png"
+look = SubResource("Resource_wr2qm")
+unported = {
+"colors": {
+"mode": "paletteSwap",
+"primary": 13875195.0
+},
+"id": "cast-aura",
+"palette": {},
+"role": "aura",
+"slot": "aura"
+}
+
+[sub_resource type="Resource" id="Resource_juxxj"]
+script = ExtResource("7_pwxpw")
+path = "art/media/ui/icons/smooth48/spell.power-word-stun.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:spell.power-word-stun"
+
+[resource]
+script = ExtResource("8_sqg3y")
+id = "spell.power_word_stun"
+icon = SubResource("Resource_juxxj")
+delivery = "condition_only"
+body = SubResource("Resource_c3ddb")
+hand_layers = Array[ExtResource("4_h14tw")]([SubResource("Resource_ngw66"), SubResource("Resource_6b5j5")])
+sockets = "measured/abilities/spells/spell.power_word_stun.sockets.json"
+effects = Array[ExtResource("3_u5ecn")]([SubResource("Resource_7ieek"), SubResource("Resource_lvb4s")])
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+colours = SubResource("Resource_x410f")
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray("condition.spell.power_word_stun", "condition.stunned")
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+staging_unported = {
+"selection": "power_word_stun__back"
+}
+unported = {
+"condition": {
+"anchor": "effect",
+"delayMs": 0.0,
+"feedbackEnabled": false
+},
+"contact": {
+"cellsByFacing": null,
+"delayMs": 550.0
+},
+"definitionRef": {
+"content_id": "spell.power_word_stun",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"media": [{
+"assetId": "necrotic.stun.back",
+"attachment": "target_ground",
+"depth": "behind_body",
+"effectGroup": {
+"id": "power_word_stun",
+"label": "Power Word Stun"
+},
+"fps": 32.0,
+"id": "power_word_stun.back",
+"requireAppliedConditionId": "condition.spell.power_word_stun",
+"scale": 0.43,
+"scaleWithActor": true
+}, {
+"assetId": "necrotic.stun.front",
+"attachment": "target_ground",
+"depth": "front_body",
+"effectGroup": {
+"id": "power_word_stun",
+"label": "Power Word Stun"
+},
+"fps": 32.0,
+"id": "power_word_stun.front",
+"requireAppliedConditionId": "condition.spell.power_word_stun",
+"scale": 0.43,
+"scaleWithActor": true
+}]
+}

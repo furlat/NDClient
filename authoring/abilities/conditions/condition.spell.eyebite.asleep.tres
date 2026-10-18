@@ -1,0 +1,144 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_vy2j0"]
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="2_6i6oh"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="3_36oty"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="4_70vmj"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="5_0ulm7"]
+
+[sub_resource type="Resource" id="Resource_cse1i"]
+script = ExtResource("1_vy2j0")
+role = "apply"
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_m5suq"]
+script = ExtResource("2_6i6oh")
+colour = Color(0.61960787, 0.89411765, 0.34509805, 1)
+
+[sub_resource type="Resource" id="Resource_f6r5x"]
+script = ExtResource("4_70vmj")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_7erkm"]
+script = ExtResource("4_70vmj")
+kind = "pose"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+pose_role = "rest"
+pose_clip = "Die"
+
+[sub_resource type="Resource" id="Resource_q170u"]
+script = ExtResource("3_36oty")
+steps = Array[ExtResource("4_70vmj")]([SubResource("Resource_f6r5x"), SubResource("Resource_7erkm")])
+
+[sub_resource type="Resource" id="Resource_svxa6"]
+script = ExtResource("1_vy2j0")
+role = "remove"
+clip = "Die"
+playback_speed = 1.5
+reversed = true
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_5krli"]
+script = ExtResource("2_6i6oh")
+colour = Color(0.15294118, 0.80784315, 0.1764706, 1)
+
+[resource]
+script = ExtResource("5_0ulm7")
+id = "condition.spell.eyebite.asleep"
+label = "Asleep"
+disposition = "authored"
+lifecycle = PackedStringArray()
+look = SubResource("Resource_q170u")
+layers = [{
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "control.sleep.sustain.back",
+"attachment": "face",
+"category": "sleep",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"drawOrder": "behind_body",
+"fadeInMs": 350.0,
+"fps": 32.0,
+"id": "control.sleep.sustain.back",
+"lifeStates": ["alive", "dying", "stable"],
+"markerGroup": "asleep",
+"priority": 30.0,
+"startOffsetMs": 1150.0
+}, {
+"activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
+"animation": "loop",
+"assetId": "control.sleep.sustain.front",
+"attachment": "face",
+"category": "sleep",
+"colors": {
+"primary": 16777215.0,
+"secondary": 16777215.0,
+"tertiary": 16777215.0
+},
+"fadeInMs": 350.0,
+"fps": 32.0,
+"id": "control.sleep.sustain.front",
+"lifeStates": ["alive", "dying", "stable"],
+"markerGroup": "asleep",
+"priority": 30.0,
+"startOffsetMs": 1150.0
+}]
+group = "marker.condition.spell.eyebite.asleep"
+priority = 30.0
+max_layers = 3.0
+application_text = SubResource("Resource_m5suq")
+removal_text = SubResource("Resource_5krli")
+application_body = SubResource("Resource_cse1i")
+removal_body = SubResource("Resource_svxa6")
+status = "ready"
+unported = {
+"application": {
+"bodyAnimation": {},
+"durationMs": 220.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "control.sleep",
+"visualIntensity": "secondary_dynamic"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.spell.eyebite.asleep",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "fail_transaction",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [],
+"relatedStates": []
+},
+"removal": {
+"bodyAnimation": {},
+"durationMs": 200.0,
+"effects": []
+}
+}

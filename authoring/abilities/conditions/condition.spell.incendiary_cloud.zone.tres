@@ -1,0 +1,91 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_xf3bi"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_teygw"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_v73xe"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_wlkvx"]
+
+[sub_resource type="Resource" id="Resource_cmnkf"]
+script = ExtResource("1_xf3bi")
+colour = Color(0.89411765, 0.4392157, 0.34509805, 1)
+
+[sub_resource type="Resource" id="Resource_182q6"]
+script = ExtResource("3_v73xe")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_neplq"]
+script = ExtResource("2_teygw")
+steps = Array[ExtResource("3_v73xe")]([SubResource("Resource_182q6")])
+
+[sub_resource type="Resource" id="Resource_log3i"]
+script = ExtResource("1_xf3bi")
+colour = Color(0.80784315, 0.6117647, 0.15294118, 1)
+
+[resource]
+script = ExtResource("4_wlkvx")
+id = "condition.spell.incendiary_cloud.zone"
+label = "Incendiary Cloud Zone"
+disposition = "authored"
+lifecycle = PackedStringArray()
+surface = "spatial_effect.spell.incendiary_cloud"
+look = SubResource("Resource_neplq")
+group = "ground_zone"
+priority = 30.0
+max_layers = 3.0
+application_text = SubResource("Resource_cmnkf")
+removal_text = SubResource("Resource_log3i")
+status = "partial"
+unported = {
+"application": {
+"durationMs": 220.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["ground_zone"],
+"runtimeRole": "zone_or_tile_state",
+"visualFamily": "catalog.condition.spell.incendiary_cloud.zone",
+"visualIntensity": "secondary_dynamic"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.spell.incendiary_cloud.zone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "omit_optional_track",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": true,
+"effect": "apply",
+"evidence": "branch=condition; effect=condition.apply; disposition=harmful; target=world_position; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.incendiary_cloud",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 200.0,
+"effects": []
+}
+}

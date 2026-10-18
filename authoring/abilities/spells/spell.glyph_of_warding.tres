@@ -1,0 +1,1313 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="1_to5aj"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="2_t4cfr"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="3_tdudn"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="4_rc11v"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="5_vp8aw"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="6_ehf5c"]
+
+[sub_resource type="Resource" id="Resource_wf27f"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/hand_to_observed_origin"
+role = "attached"
+at = "release"
+delay = -0.3
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.9
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"point": [1.0, 0.0, 0.0]
+}, {
+"cue_point": "source"
+}],
+"source_launch_local": 0.3
+}
+
+[sub_resource type="Resource" id="Resource_vf6u4"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/neutral_armed"
+role = "attached"
+at = "release"
+delay = 0.45
+attachment = "caster_ground"
+orientation = "world"
+source_end = 4.8
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"point": [1.0, 0.0, 0.0]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_7oqxu"]
+script = ExtResource("3_tdudn")
+path = "art/ui-delivery-20261018/runtime/smooth48/spell.glyph_of_warding.png"
+native_size = Vector2i(48, 48)
+source = "ui-delivery-20261018"
+
+[sub_resource type="Resource" id="Resource_k0nsk"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/hand_to_observed_origin"
+role = "attached"
+at = "release"
+delay = -0.3
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.9
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"point": [1.0, 0.0, 0.0]
+}, {
+"cue_point": "source"
+}],
+"source_launch_local": 0.3
+}
+
+[sub_resource type="Resource" id="Resource_dv4q3"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/acid_armed"
+role = "attached"
+at = "release"
+delay = 0.45
+attachment = "caster_ground"
+orientation = "world"
+source_end = 4.8
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"point": [1.0, 0.0, 0.0]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_gj0ip"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/acid_trigger"
+role = "attached"
+at = "release"
+delay = 2.35
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.7
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"point": [1.0, 0.0, 0.0]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_djqe6"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/acid_target_receiver"
+role = "attached"
+at = "release"
+delay = 2.43
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.4
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "chest", "head", "legs"]
+},
+"live_endpoints": [{
+"actor": "target",
+"socket": "body_center"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_7ts1k"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/acid_target2_receiver"
+role = "attached"
+at = "release"
+delay = 2.43
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.4
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target2",
+"slots": ["body", "chest", "head", "legs"]
+},
+"live_endpoints": [{
+"actor": "target2",
+"socket": "body_center"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_8jtc0"]
+script = ExtResource("6_ehf5c")
+id = "glyph_of_warding_acid_native"
+kind = "element"
+value = "acid"
+selection = "glyph_of_warding_acid_native"
+effects = Array[ExtResource("1_to5aj")]([SubResource("Resource_k0nsk"), SubResource("Resource_dv4q3"), SubResource("Resource_gj0ip"), SubResource("Resource_djqe6"), SubResource("Resource_7ts1k")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[sub_resource type="Resource" id="Resource_n56xa"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/hand_to_observed_origin"
+role = "attached"
+at = "release"
+delay = -0.3
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.9
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"point": [1.0, 0.0, 0.0]
+}, {
+"cue_point": "source"
+}],
+"source_launch_local": 0.3
+}
+
+[sub_resource type="Resource" id="Resource_yeio1"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/cold_armed"
+role = "attached"
+at = "release"
+delay = 0.45
+attachment = "caster_ground"
+orientation = "world"
+source_end = 4.8
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"point": [1.0, 0.0, 0.0]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_ba845"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/cold_trigger"
+role = "attached"
+at = "release"
+delay = 2.35
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.7
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"point": [1.0, 0.0, 0.0]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_njbc8"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/cold_target_receiver"
+role = "attached"
+at = "release"
+delay = 2.43
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.4
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "chest", "head", "legs"]
+},
+"live_endpoints": [{
+"actor": "target",
+"socket": "body_center"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_inmtq"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/cold_target2_receiver"
+role = "attached"
+at = "release"
+delay = 2.43
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.4
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target2",
+"slots": ["body", "chest", "head", "legs"]
+},
+"live_endpoints": [{
+"actor": "target2",
+"socket": "body_center"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_2qh0f"]
+script = ExtResource("6_ehf5c")
+id = "glyph_of_warding_cold_native"
+kind = "element"
+value = "cold"
+selection = "glyph_of_warding_cold_native"
+effects = Array[ExtResource("1_to5aj")]([SubResource("Resource_n56xa"), SubResource("Resource_yeio1"), SubResource("Resource_ba845"), SubResource("Resource_njbc8"), SubResource("Resource_inmtq")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[sub_resource type="Resource" id="Resource_4wj6f"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/hand_to_observed_origin"
+role = "attached"
+at = "release"
+delay = -0.3
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.9
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"point": [1.0, 0.0, 0.0]
+}, {
+"cue_point": "source"
+}],
+"source_launch_local": 0.3
+}
+
+[sub_resource type="Resource" id="Resource_a7s8e"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/fire_armed"
+role = "attached"
+at = "release"
+delay = 0.45
+attachment = "caster_ground"
+orientation = "world"
+source_end = 4.8
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"point": [1.0, 0.0, 0.0]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_fwlb0"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/fire_trigger"
+role = "attached"
+at = "release"
+delay = 2.35
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.7
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"point": [1.0, 0.0, 0.0]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_jvsqh"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/fire_target_receiver"
+role = "attached"
+at = "release"
+delay = 2.43
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.4
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "chest", "head", "legs"]
+},
+"live_endpoints": [{
+"actor": "target",
+"socket": "body_center"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_cqvax"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/fire_target2_receiver"
+role = "attached"
+at = "release"
+delay = 2.43
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.4
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target2",
+"slots": ["body", "chest", "head", "legs"]
+},
+"live_endpoints": [{
+"actor": "target2",
+"socket": "body_center"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_fbxt0"]
+script = ExtResource("6_ehf5c")
+id = "glyph_of_warding_fire_native"
+kind = "element"
+value = "fire"
+selection = "glyph_of_warding_fire_native"
+effects = Array[ExtResource("1_to5aj")]([SubResource("Resource_4wj6f"), SubResource("Resource_a7s8e"), SubResource("Resource_fwlb0"), SubResource("Resource_jvsqh"), SubResource("Resource_cqvax")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[sub_resource type="Resource" id="Resource_kpvew"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/hand_to_observed_origin"
+role = "attached"
+at = "release"
+delay = -0.3
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.9
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"point": [1.0, 0.0, 0.0]
+}, {
+"cue_point": "source"
+}],
+"source_launch_local": 0.3
+}
+
+[sub_resource type="Resource" id="Resource_645rm"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/lightning_armed"
+role = "attached"
+at = "release"
+delay = 0.45
+attachment = "caster_ground"
+orientation = "world"
+source_end = 4.8
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"point": [1.0, 0.0, 0.0]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_3ye4b"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/lightning_trigger"
+role = "attached"
+at = "release"
+delay = 2.35
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.7
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"point": [1.0, 0.0, 0.0]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_2oxra"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/lightning_target_receiver"
+role = "attached"
+at = "release"
+delay = 2.43
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.4
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "chest", "head", "legs"]
+},
+"live_endpoints": [{
+"actor": "target",
+"socket": "body_center"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_687m3"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/lightning_target2_receiver"
+role = "attached"
+at = "release"
+delay = 2.43
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.4
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target2",
+"slots": ["body", "chest", "head", "legs"]
+},
+"live_endpoints": [{
+"actor": "target2",
+"socket": "body_center"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_cf461"]
+script = ExtResource("6_ehf5c")
+id = "glyph_of_warding_lightning_native"
+kind = "element"
+value = "lightning"
+selection = "glyph_of_warding_lightning_native"
+effects = Array[ExtResource("1_to5aj")]([SubResource("Resource_kpvew"), SubResource("Resource_645rm"), SubResource("Resource_3ye4b"), SubResource("Resource_2oxra"), SubResource("Resource_687m3")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[sub_resource type="Resource" id="Resource_5pkbp"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/hand_to_observed_origin"
+role = "attached"
+at = "release"
+delay = -0.3
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.9
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"point": [1.0, 0.0, 0.0]
+}, {
+"cue_point": "source"
+}],
+"source_launch_local": 0.3
+}
+
+[sub_resource type="Resource" id="Resource_sgirr"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/thunder_armed"
+role = "attached"
+at = "release"
+delay = 0.45
+attachment = "caster_ground"
+orientation = "world"
+source_end = 4.8
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"point": [1.0, 0.0, 0.0]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_2yr6s"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/thunder_trigger"
+role = "attached"
+at = "release"
+delay = 2.35
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.7
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"point": [1.0, 0.0, 0.0]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_dohi1"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/thunder_target_receiver"
+role = "attached"
+at = "release"
+delay = 2.43
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.4
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["body", "chest", "head", "legs"]
+},
+"live_endpoints": [{
+"actor": "target",
+"socket": "body_center"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_pbwi6"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/thunder_target2_receiver"
+role = "attached"
+at = "release"
+delay = 2.43
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.4
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target2",
+"slots": ["body", "chest", "head", "legs"]
+},
+"live_endpoints": [{
+"actor": "target2",
+"socket": "body_center"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_aevu0"]
+script = ExtResource("6_ehf5c")
+id = "glyph_of_warding_thunder_native"
+kind = "element"
+value = "thunder"
+selection = "glyph_of_warding_thunder_native"
+effects = Array[ExtResource("1_to5aj")]([SubResource("Resource_5pkbp"), SubResource("Resource_sgirr"), SubResource("Resource_2yr6s"), SubResource("Resource_dohi1"), SubResource("Resource_pbwi6")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[sub_resource type="Resource" id="Resource_o4qa8"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/hand_to_observed_origin"
+role = "attached"
+at = "release"
+delay = -0.3
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.9
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"point": [1.0, 0.0, 0.0]
+}, {
+"cue_point": "source"
+}],
+"source_launch_local": 0.3
+}
+
+[sub_resource type="Resource" id="Resource_5styl"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/sleep_armed"
+role = "attached"
+at = "release"
+delay = 0.45
+attachment = "caster_ground"
+orientation = "world"
+source_end = 4.8
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"point": [1.0, 0.0, 0.0]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_tijd1"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/sleep_trigger"
+role = "attached"
+at = "release"
+delay = 2.35
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.7
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"point": [1.0, 0.0, 0.0]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_0wrat"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/sleep_target_condition"
+role = "attached"
+at = "release"
+delay = 2.35
+attachment = "caster_ground"
+orientation = "world"
+source_end = 2.8
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "target",
+"socket": "face"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_ikl5w"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/sleep_target2_condition"
+role = "attached"
+at = "release"
+delay = 2.35
+attachment = "caster_ground"
+orientation = "world"
+source_end = 2.8
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "target2",
+"socket": "face"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_qy72e"]
+script = ExtResource("6_ehf5c")
+id = "glyph_of_warding_sleep_native"
+kind = "form"
+selection = "glyph_of_warding_sleep_native"
+effects = Array[ExtResource("1_to5aj")]([SubResource("Resource_o4qa8"), SubResource("Resource_5styl"), SubResource("Resource_tijd1"), SubResource("Resource_0wrat"), SubResource("Resource_ikl5w")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[sub_resource type="Resource" id="Resource_ds5mj"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/hand_to_observed_origin"
+role = "attached"
+at = "release"
+delay = -0.3
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.9
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"point": [1.0, 0.0, 0.0]
+}, {
+"cue_point": "source"
+}],
+"source_launch_local": 0.3
+}
+
+[sub_resource type="Resource" id="Resource_015jx"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/sleep_saved_armed"
+role = "attached"
+at = "release"
+delay = 0.45
+attachment = "caster_ground"
+orientation = "world"
+source_end = 4.8
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"point": [1.0, 0.0, 0.0]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_ouhgt"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/sleep_saved_trigger"
+role = "attached"
+at = "release"
+delay = 2.35
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.7
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"point": [1.0, 0.0, 0.0]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_dq2se"]
+script = ExtResource("6_ehf5c")
+id = "glyph_of_warding_sleep_saved_native"
+kind = "outcome"
+selection = "glyph_of_warding_sleep_saved_native"
+effects = Array[ExtResource("1_to5aj")]([SubResource("Resource_ds5mj"), SubResource("Resource_015jx"), SubResource("Resource_ouhgt")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[sub_resource type="Resource" id="Resource_ci370"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/hand_to_observed_origin"
+role = "attached"
+at = "release"
+delay = -0.3
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.9
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"point": [1.0, 0.0, 0.0]
+}, {
+"cue_point": "source"
+}],
+"source_launch_local": 0.3
+}
+
+[sub_resource type="Resource" id="Resource_ayyok"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/detonation_armed"
+role = "attached"
+at = "release"
+delay = 0.45
+attachment = "caster_ground"
+orientation = "world"
+source_end = 4.8
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"point": [1.0, 0.0, 0.0]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_yyoln"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/detonation_trigger"
+role = "attached"
+at = "release"
+delay = 2.35
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.7
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"point": [1.0, 0.0, 0.0]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_rcnge"]
+script = ExtResource("6_ehf5c")
+id = "glyph_of_warding_detonation_native"
+kind = "form"
+selection = "glyph_of_warding_detonation_native"
+effects = Array[ExtResource("1_to5aj")]([SubResource("Resource_ci370"), SubResource("Resource_ayyok"), SubResource("Resource_yyoln")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[sub_resource type="Resource" id="Resource_4sbn2"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/hand_to_observed_origin"
+role = "attached"
+at = "release"
+delay = -0.3
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.9
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"point": [1.0, 0.0, 0.0]
+}, {
+"cue_point": "source"
+}],
+"source_launch_local": 0.3
+}
+
+[sub_resource type="Resource" id="Resource_7srv0"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/detonation_saved_armed"
+role = "attached"
+at = "release"
+delay = 0.45
+attachment = "caster_ground"
+orientation = "world"
+source_end = 4.8
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"point": [1.0, 0.0, 0.0]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_x8oci"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/detonation_saved_trigger"
+role = "attached"
+at = "release"
+delay = 2.35
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.7
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"point": [1.0, 0.0, 0.0]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_a68ow"]
+script = ExtResource("6_ehf5c")
+id = "glyph_of_warding_detonation_saved_native"
+kind = "outcome"
+selection = "glyph_of_warding_detonation_saved_native"
+effects = Array[ExtResource("1_to5aj")]([SubResource("Resource_4sbn2"), SubResource("Resource_7srv0"), SubResource("Resource_x8oci")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[sub_resource type="Resource" id="Resource_gl6ri"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/hand_to_observed_origin"
+role = "attached"
+at = "release"
+delay = -0.3
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.9
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"point": [1.0, 0.0, 0.0]
+}, {
+"cue_point": "source"
+}],
+"source_launch_local": 0.3
+}
+
+[sub_resource type="Resource" id="Resource_loofy"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/rest_armed"
+role = "attached"
+at = "release"
+delay = 0.45
+attachment = "caster_ground"
+orientation = "world"
+source_end = 4.8
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"point": [1.0, 0.0, 0.0]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_iosxa"]
+script = ExtResource("6_ehf5c")
+id = "glyph_of_warding_rest_native"
+kind = "form"
+selection = "glyph_of_warding_rest_native"
+effects = Array[ExtResource("1_to5aj")]([SubResource("Resource_gl6ri"), SubResource("Resource_loofy")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[sub_resource type="Resource" id="Resource_ey7fr"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/hand_to_observed_origin"
+role = "attached"
+at = "release"
+delay = -0.3
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.9
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delivery_timing": true,
+"dynamic_geometry": true,
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"point": [1.0, 0.0, 0.0]
+}, {
+"cue_point": "source"
+}],
+"source_launch_local": 0.3
+}
+
+[sub_resource type="Resource" id="Resource_221ya"]
+script = ExtResource("1_to5aj")
+clip = "bg3-36/glyph-of-warding/suppressed_armed"
+role = "attached"
+at = "release"
+delay = 0.45
+attachment = "caster_ground"
+orientation = "world"
+source_end = 4.8
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"live_endpoints": [{
+"point": [1.0, 0.0, 0.0]
+}]
+}
+
+[sub_resource type="Resource" id="Resource_ka46h"]
+script = ExtResource("6_ehf5c")
+id = "glyph_of_warding_suppressed_native"
+kind = "form"
+selection = "glyph_of_warding_suppressed_native"
+effects = Array[ExtResource("1_to5aj")]([SubResource("Resource_ey7fr"), SubResource("Resource_221ya")])
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+
+[resource]
+script = ExtResource("4_rc11v")
+id = "spell.glyph_of_warding"
+icon = SubResource("Resource_7oqxu")
+delivery = "zone"
+effects = Array[ExtResource("1_to5aj")]([SubResource("Resource_wf27f"), SubResource("Resource_vf6u4")])
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+feedback_ramp = PackedStringArray()
+variants = Array[ExtResource("6_ehf5c")]([SubResource("Resource_8jtc0"), SubResource("Resource_2qh0f"), SubResource("Resource_fbxt0"), SubResource("Resource_cf461"), SubResource("Resource_aevu0"), SubResource("Resource_qy72e"), SubResource("Resource_dq2se"), SubResource("Resource_rcnge"), SubResource("Resource_a68ow"), SubResource("Resource_iosxa"), SubResource("Resource_ka46h")])
+applies_conditions = PackedStringArray("condition.prone", "condition.spell.glyph_of_warding", "condition.spell.glyph_of_warding.sleep")
+applies_surfaces = PackedStringArray("spatial_effect.spell.glyph_of_warding")
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+staging_unported = {
+"selection": "glyph_of_warding_native"
+}

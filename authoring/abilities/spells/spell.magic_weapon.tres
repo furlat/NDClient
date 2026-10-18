@@ -1,0 +1,161 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="1_kqar5"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="2_e5qea"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="3_ht010"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="4_i8jol"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="5_xybgm"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="6_ln82v"]
+
+[sub_resource type="Resource" id="Resource_qc5hc"]
+script = ExtResource("1_kqar5")
+clip = "bg3-36/magic-weapon/magic_weapon_native/windup"
+role = "attached"
+at = "cast"
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.916666666666667
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "caster",
+"slots": ["weapon"]
+},
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_k03jg"]
+script = ExtResource("1_kqar5")
+clip = "bg3-36/magic-weapon/magic_weapon_native/application"
+role = "attached"
+at = "release"
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.62
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "caster",
+"slots": ["weapon"]
+},
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_sbmma"]
+script = ExtResource("1_kqar5")
+clip = "bg3-36/magic-weapon/magic_weapon_native/sustain"
+role = "attached"
+at = "release"
+delay = 0.47
+attachment = "caster_ground"
+orientation = "world"
+source_end = 2.8
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "caster",
+"slots": ["weapon"]
+},
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_5jn0r"]
+script = ExtResource("1_kqar5")
+clip = "bg3-36/magic-weapon/magic_weapon_native/retire"
+role = "attached"
+at = "release"
+delay = 3.12
+attachment = "caster_ground"
+orientation = "world"
+source_end = 0.45
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "caster",
+"slots": ["weapon"]
+},
+"live_endpoints": [{
+"actor": "caster",
+"socket": "cast_hand"
+}, {
+"actor": "target",
+"socket": "body_center"
+}]
+}
+
+[sub_resource type="Resource" id="Resource_1smqy"]
+script = ExtResource("3_ht010")
+path = "art/ui-delivery-20261018/runtime/smooth48/spell.magic_weapon.png"
+native_size = Vector2i(48, 48)
+source = "ui-delivery-20261018"
+
+[resource]
+script = ExtResource("4_i8jol")
+id = "spell.magic_weapon"
+icon = SubResource("Resource_1smqy")
+delivery = "touch"
+effects = Array[ExtResource("1_kqar5")]([SubResource("Resource_qc5hc"), SubResource("Resource_k03jg"), SubResource("Resource_sbmma"), SubResource("Resource_5jn0r")])
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray("condition.spell.magic_weapon")
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+staging_unported = {
+"selection": "magic_weapon_native"
+}

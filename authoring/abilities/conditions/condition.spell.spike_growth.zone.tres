@@ -1,0 +1,91 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_8ny70"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_k7whl"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_spwck"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_7iybt"]
+
+[sub_resource type="Resource" id="Resource_3tvmv"]
+script = ExtResource("1_8ny70")
+colour = Color(0.34509805, 0.4745098, 0.89411765, 1)
+
+[sub_resource type="Resource" id="Resource_sjxwv"]
+script = ExtResource("3_spwck")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_rn43v"]
+script = ExtResource("2_k7whl")
+steps = Array[ExtResource("3_spwck")]([SubResource("Resource_sjxwv")])
+
+[sub_resource type="Resource" id="Resource_darjd"]
+script = ExtResource("1_8ny70")
+colour = Color(0.34901962, 0.15294118, 0.80784315, 1)
+
+[resource]
+script = ExtResource("4_7iybt")
+id = "condition.spell.spike_growth.zone"
+label = "Spike Growth Zone"
+disposition = "authored"
+lifecycle = PackedStringArray()
+surface = "spatial_effect.spell.spike_growth"
+look = SubResource("Resource_rn43v")
+group = "ground_zone"
+priority = 30.0
+max_layers = 3.0
+application_text = SubResource("Resource_3tvmv")
+removal_text = SubResource("Resource_darjd")
+status = "partial"
+unported = {
+"application": {
+"durationMs": 220.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["ground_zone"],
+"runtimeRole": "zone_or_tile_state",
+"visualFamily": "catalog.condition.spell.spike_growth.zone",
+"visualIntensity": "secondary_dynamic"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.spell.spike_growth.zone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "omit_optional_track",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": true,
+"effect": "apply",
+"evidence": "branch=condition; effect=condition.apply; disposition=harmful; target=world_position; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "spell.spike_growth",
+"content_version": 1.0,
+"definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00",
+"definition_kind": "spell",
+"pack_id": "content.srd_5_1_cc"
+},
+"triggerType": "spell"
+}],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 200.0,
+"effects": []
+}
+}

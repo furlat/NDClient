@@ -1,0 +1,76 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_ugik3"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_d2uuu"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_ffm7s"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_7h8br"]
+
+[sub_resource type="Resource" id="Resource_yjep4"]
+script = ExtResource("1_ugik3")
+enabled = false
+
+[sub_resource type="Resource" id="Resource_ysqrx"]
+script = ExtResource("3_ffm7s")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_vpgtk"]
+script = ExtResource("2_d2uuu")
+steps = Array[ExtResource("3_ffm7s")]([SubResource("Resource_ysqrx")])
+
+[sub_resource type="Resource" id="Resource_bdr2n"]
+script = ExtResource("1_ugik3")
+enabled = false
+
+[resource]
+script = ExtResource("4_7h8br")
+id = "trait.magic_resistance"
+label = "Magic Resistance"
+disposition = "state_only"
+lifecycle = PackedStringArray()
+look = SubResource("Resource_vpgtk")
+group = "innate"
+max_layers = 1.0
+application_text = SubResource("Resource_yjep4")
+removal_text = SubResource("Resource_bdr2n")
+unported = {
+"application": {
+"durationMs": 0.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["hud_only"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "innate.magic_resistance",
+"visualIntensity": "state_only"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "trait.magic_resistance",
+"content_version": 1.0,
+"definition_contract_hash": "8b81685f804e251441a0107c1620212c9d441cf2d4c30a29cd5c34d344201c9a",
+"definition_kind": "trait",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "fail_transaction",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 0.0,
+"effects": []
+}
+}
+notes = "Sent by the pinned engine under this id; not a condition id on the modern branch."

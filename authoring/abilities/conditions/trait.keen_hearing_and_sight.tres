@@ -1,0 +1,78 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_d4wjt"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_0yg00"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_unfcv"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_811t3"]
+
+[sub_resource type="Resource" id="Resource_077vx"]
+script = ExtResource("1_d4wjt")
+enabled = false
+colour = Color(0.7490196, 0.89411765, 0.34509805, 1)
+
+[sub_resource type="Resource" id="Resource_p2af6"]
+script = ExtResource("3_unfcv")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_hhjvf"]
+script = ExtResource("2_0yg00")
+steps = Array[ExtResource("3_unfcv")]([SubResource("Resource_p2af6")])
+
+[sub_resource type="Resource" id="Resource_ao7nd"]
+script = ExtResource("1_d4wjt")
+enabled = false
+colour = Color(0.28235295, 0.80784315, 0.15294118, 1)
+
+[resource]
+script = ExtResource("4_811t3")
+id = "trait.keen_hearing_and_sight"
+label = "Keen Hearing and Sight"
+disposition = "state_only"
+lifecycle = PackedStringArray()
+look = SubResource("Resource_hhjvf")
+group = "body"
+max_layers = 3.0
+application_text = SubResource("Resource_077vx")
+removal_text = SubResource("Resource_ao7nd")
+unported = {
+"application": {
+"durationMs": 0.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["hud_only"],
+"runtimeRole": "passive_unlock",
+"visualFamily": "catalog.trait.keen_hearing_and_sight",
+"visualIntensity": "icon_only"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "trait.keen_hearing_and_sight",
+"content_version": 1.0,
+"definition_contract_hash": "8b81685f804e251441a0107c1620212c9d441cf2d4c30a29cd5c34d344201c9a",
+"definition_kind": "trait",
+"pack_id": "content.srd_5_1_cc"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "omit_optional_track",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 0.0,
+"effects": []
+}
+}
+notes = "Sent by the pinned engine under this id; not a condition id on the modern branch."

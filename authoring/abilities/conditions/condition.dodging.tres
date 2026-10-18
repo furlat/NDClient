@@ -1,0 +1,118 @@
+[gd_resource type="Resource" script_class="PresentationCondition" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="1_cj6qw"]
+[ext_resource type="Script" path="res://presentation/source/look.gd" id="2_l8xcu"]
+[ext_resource type="Script" path="res://presentation/source/look_step.gd" id="3_ml2td"]
+[ext_resource type="Script" path="res://presentation/source/abilities/condition.gd" id="4_s70u8"]
+
+[sub_resource type="Resource" id="Resource_4yeik"]
+script = ExtResource("1_cj6qw")
+colour = Color(0.34509805, 0.58431375, 0.89411765, 1)
+
+[sub_resource type="Resource" id="Resource_fvgyk"]
+script = ExtResource("3_ml2td")
+kind = "body_adjust"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+hide = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_goetv"]
+script = ExtResource("3_ml2td")
+kind = "outline"
+colours = PackedColorArray()
+replace_from = PackedColorArray()
+alpha = 0.35
+hide = PackedStringArray()
+fade_in = 0.3
+
+[sub_resource type="Resource" id="Resource_ud3v1"]
+script = ExtResource("2_l8xcu")
+steps = Array[ExtResource("3_ml2td")]([SubResource("Resource_fvgyk"), SubResource("Resource_goetv")])
+
+[sub_resource type="Resource" id="Resource_l7hdd"]
+script = ExtResource("1_cj6qw")
+colour = Color(0.21960784, 0.15294118, 0.80784315, 1)
+
+[resource]
+script = ExtResource("4_s70u8")
+id = "condition.dodging"
+label = "Dodging"
+disposition = "authored"
+lifecycle = PackedStringArray()
+look = SubResource("Resource_ud3v1")
+group = "body"
+priority = 30.0
+max_layers = 3.0
+application_text = SubResource("Resource_4yeik")
+removal_text = SubResource("Resource_l7hdd")
+status = "ready"
+unported = {
+"_legacy_source": "catalog/condition_recipes.json:/condition.dodging",
+"_resource_source": "res://authoring/presentation/conditions/dodging.tres",
+"_source_fields": {
+"persistent/bodyOutline": "res://authoring/presentation/conditions/dodging.tres::body_outline",
+"persistent/bodyOutline/alphaThreshold": "res://authoring/presentation/conditions/dodging.tres::body_outline/alpha_threshold",
+"persistent/bodyOutline/color": "res://authoring/presentation/conditions/dodging.tres::body_outline/color",
+"persistent/bodyOutline/onsetMs": "res://authoring/presentation/conditions/dodging.tres::body_outline/onset_ms",
+"persistent/bodyOutline/opacity": "res://authoring/presentation/conditions/dodging.tres::body_outline/opacity",
+"persistent/bodyOutline/periodMs": "res://authoring/presentation/conditions/dodging.tres::body_outline/period_ms",
+"persistent/bodyOutline/pulseColor": "res://authoring/presentation/conditions/dodging.tres::body_outline/pulse_color",
+"persistent/bodyOutline/pulseOpacity": "res://authoring/presentation/conditions/dodging.tres::body_outline/pulse_opacity"
+},
+"application": {
+"durationMs": 220.0,
+"effects": []
+},
+"classification": {
+"presentationDomains": ["body"],
+"runtimeRole": "active_combat_state",
+"visualFamily": "catalog.condition.dodging",
+"visualIntensity": "secondary_dynamic"
+},
+"composition": {
+"exclusiveGroup": null
+},
+"definitionRef": {
+"content_id": "condition.dodging",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"interceptionEffectsByDirection": {},
+"mediaFailurePolicy": "omit_optional_track",
+"persistent": {
+"appearanceLayers": [],
+"bodyColor": null,
+"bodyOutline": {
+"alphaThreshold": 100,
+"color": 5805540,
+"periodMs": 1400.0,
+"pulseColor": 5805540,
+"pulseOpacity": 0.0
+},
+"equipmentModifiers": []
+},
+"relationships": {
+"grantsActions": [],
+"incomingTriggers": [{
+"direct": true,
+"effect": "apply",
+"evidence": "branch=condition; effect=condition.apply; disposition=beneficial; target=actor; gates=automatic",
+"evidenceStatus": "verified_catalog_effect_profile",
+"sourceRef": {
+"content_id": "action.dodge",
+"content_version": 1.0,
+"definition_contract_hash": "b348fe0a75aa991c675bf8a82df5884e50463d9a5181b6c224f631857506a8b0",
+"definition_kind": "action",
+"pack_id": "core.rules"
+},
+"triggerType": "action"
+}],
+"relatedStates": []
+},
+"removal": {
+"durationMs": 200.0,
+"effects": []
+}
+}

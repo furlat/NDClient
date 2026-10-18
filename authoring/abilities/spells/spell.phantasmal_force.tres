@@ -1,0 +1,140 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="1_s2d5c"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="2_oxa1i"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="3_cykuh"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="4_5ynjh"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="5_x00oy"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="6_372hc"]
+
+[sub_resource type="Resource" id="Resource_j148u"]
+script = ExtResource("1_s2d5c")
+clip = "bg3-36/phantasmal-force/apply"
+role = "attached"
+at = "cast"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 0.95
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "caster",
+"slots": ["head", "helmet"]
+},
+"follow_attachment": true,
+"id": "phantasmal_force-apply-caster",
+"live_endpoints": [{
+"actor": "caster",
+"socket": "face"
+}, {
+"actor": "caster",
+"socket": "face"
+}],
+"to_actor": "caster"
+}
+
+[sub_resource type="Resource" id="Resource_6rfb0"]
+script = ExtResource("1_s2d5c")
+clip = "bg3-36/phantasmal-force/hold"
+role = "attached"
+at = "contact"
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 3.2
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+fade_out = 0.35
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"delay_seconds": 0.0,
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["head", "helmet"]
+},
+"follow_attachment": true,
+"id": "phantasmal_force-hold-target",
+"live_endpoints": [{
+"actor": "caster",
+"socket": "face"
+}, {
+"actor": "target",
+"socket": "face"
+}],
+"to_actor": "target"
+}
+
+[sub_resource type="Resource" id="Resource_5sdqr"]
+script = ExtResource("1_s2d5c")
+clip = "bg3-36/phantasmal-force/tick_psychic"
+role = "attached"
+at = "contact"
+delay = 1.35
+attachment = "recipient_ground"
+orientation = "world"
+source_end = 0.75
+duration_policy = "authored"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+extra = {
+"dynamic_geometry": true,
+"entity_geometry": {
+"actor": "target",
+"slots": ["head", "helmet"]
+},
+"follow_attachment": true,
+"id": "phantasmal_force-tick_psychic-target",
+"live_endpoints": [{
+"actor": "caster",
+"socket": "face"
+}, {
+"actor": "target",
+"socket": "face"
+}],
+"to_actor": "target"
+}
+
+[sub_resource type="Resource" id="Resource_kb14q"]
+script = ExtResource("3_cykuh")
+path = "art/ui-delivery-20261018/runtime/smooth48/spell.phantasmal_force.png"
+native_size = Vector2i(48, 48)
+source = "ui-delivery-20261018"
+
+[resource]
+script = ExtResource("4_5ynjh")
+id = "spell.phantasmal_force"
+icon = SubResource("Resource_kb14q")
+delivery = "condition_only"
+effects = Array[ExtResource("1_s2d5c")]([SubResource("Resource_j148u"), SubResource("Resource_6rfb0"), SubResource("Resource_5sdqr")])
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+light_multiplier = 0.0
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray("condition.spell.phantasmal_force")
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+status = "partial"
+staging_unported = {
+"selection": "phantasmal_force_native"
+}

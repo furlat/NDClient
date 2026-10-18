@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="PresentationSpell" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="1_y1gaj"]
+[ext_resource type="Script" path="res://presentation/source/abilities/cast_layer.gd" id="2_ypjsk"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="3_ytf6m"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell.gd" id="4_xijfh"]
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="5_qjdgw"]
+[ext_resource type="Script" path="res://presentation/source/abilities/spell_variant.gd" id="6_nqbgg"]
+
+[sub_resource type="Resource" id="Resource_fvqbe"]
+script = ExtResource("3_ytf6m")
+path = "art/media/ui/icons/smooth48/spell.necrotic-bless.png"
+native_size = Vector2i(48, 48)
+source = "ui/resources.json icon:spell.necrotic-bless"
+
+[resource]
+script = ExtResource("4_xijfh")
+id = "spell.necrotic_bless"
+icon = SubResource("Resource_fvqbe")
+delivery = "condition_only"
+effect_roles = PackedStringArray()
+event_cues = PackedInt32Array()
+excluded_cues = PackedInt32Array()
+owner_ids = PackedStringArray()
+owner_cues = PackedInt32Array()
+contact_cues = PackedInt32Array()
+feedback_ramp = PackedStringArray()
+applies_conditions = PackedStringArray("condition.spell.bane", "condition.spell.bless")
+applies_surfaces = PackedStringArray()
+summons = PackedStringArray()

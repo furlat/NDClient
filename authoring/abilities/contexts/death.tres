@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="PresentationContext" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/abilities/body_use.gd" id="1_4v1f3"]
+[ext_resource type="Script" path="res://presentation/source/abilities/context.gd" id="2_5hs2p"]
+[ext_resource type="Script" path="res://presentation/source/abilities/feedback.gd" id="3_603ka"]
+
+[sub_resource type="Resource" id="Resource_pil1e"]
+script = ExtResource("1_4v1f3")
+role = "death"
+clip = "Die"
+hidden_slots = PackedStringArray()
+
+[resource]
+script = ExtResource("2_5hs2p")
+id = "death"
+body = SubResource("Resource_pil1e")
+unported = {
+"equipmentHideFrame": 10.0,
+"media": [],
+"silhouetteDust": {
+"alphaThreshold": 24.0,
+"color": 7514249.0,
+"erosionMs": 1150.0,
+"gravity": 15.0,
+"horizontalRankWeight": 0.32,
+"minimumLuminance": 0.6,
+"particleEvery": 3.0,
+"particleFadeInMs": 80.0,
+"particleLifetimeMs": 1350.0,
+"particleSize": 0.55,
+"velocityX": 18.0,
+"velocityY": [-10.0, -12.0]
+}
+}
