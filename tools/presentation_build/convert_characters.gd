@@ -8,6 +8,11 @@ extends SceneTree
 ## game uses now, which convert exactly; the full deliveries under assets/art
 ## and authoring/server_ids.json for everything else.
 ##   --headless --script res://tools/presentation_build/convert_characters.gd
+## It has run: its old-table inputs (catalog/creature_rigs.json, root_rig.json,
+## characters/sheet-components.json, materials/source-palettes.json, the
+## generated geometry and normal-profile tables, presentation/clips) were then
+## removed, so the entries in authoring/characters are the only authority. It
+## is kept as the record of how they were made.
 const Root = preload("res://presentation/source/source_root.gd")
 const ArtSource = preload("res://presentation/source/art_source.gd")
 const ImageRef = preload("res://presentation/source/image_ref.gd")

@@ -20,7 +20,8 @@ static func invalidate()->void:
 static func _current_index(path:String)->Index:
     _admission_mutex.lock()
     if not _attempted or path!=_current_path:
-        _current=ResourceLoader.load(path,"",ResourceLoader.CACHE_MODE_REUSE) as Index
+        _current=ResourceLoader.load(path,"",ResourceLoader.CACHE_MODE_REUSE) as Index if FileAccess.file_exists(path) else null
+        if _current==null:push_error("No built characters body sources at "+path+": run tools/build_presentation.gd -- --only=characters")
         _current_path=path;_attempted=true
     var result:Index=_current
     _admission_mutex.unlock()

@@ -9,17 +9,15 @@ const GROUPS = ["Base", "Class", "Spells", "Items"]
 ## "portraits" (portrait id -> image), "creature_portraits" (creature id ->
 ## portrait id). An image is a res:// path, a path relative to res://assets/,
 ## or {"path": ..., "rect": [x, y, w, h]}. Ids are server ids (weapon.longsword,
-## spell.fire_bolt) or common.<control>. A file with none of these fields is a
-## flat id -> image icon map. The maps merge in domain-name order.
+## spell.fire_bolt), <owner content id>#<facet>=<value> for an action variant,
+## or common.<control>. A file with none of these fields is a flat id -> image
+## icon map. The maps merge in domain-name order. They are the only source of
+## HUD images: a missing map or id shows no image and warns once.
 const ICON_MAPS = "res://build/presentation"
 const SLOTS = ["Head", "Amulet", "Cloak", "Body", "Hands", "Legs", "Left Ring", "Right Ring", "Backpack", "Feet", "MELEE_MAIN", "MELEE_OFF", "RANGED_MAIN", "RANGED_OFF"]
 
 static func authored(cache: Dictionary) -> Dictionary:
-    if not cache.has("player_ui"):
-        var index = Catalog.read_file("ui/index.json", cache)
-        cache.player_ui = {"presentation":Catalog.read_file(index.ui_presentation,cache), "resources":Catalog.read_file(index.ui_resources,cache),
-            "choices":JSON.parse_string(FileAccess.get_file_as_string(str(ProjectSettings.get_setting("source_data/authoring_root")).path_join(index.ui_choices))),
-            "maps":icon_maps()}
+    if not cache.has("player_ui"):cache.player_ui = {"maps":icon_maps()}
     return cache.player_ui
 
 static func _image(value: Variant) -> Dictionary:
@@ -35,6 +33,7 @@ static func _image(value: Variant) -> Dictionary:
 static func icon_maps() -> Dictionary:
     var merged = {"icons":{}, "portraits":{}, "creature_portraits":{}}
     var domains: Array = Array(DirAccess.get_directories_at(ICON_MAPS)); domains.sort()
+    if not FileAccess.file_exists(ICON_MAPS.path_join("characters/icons.json")):push_error("No built characters icon map: run tools/build_presentation.gd")
     for domain in domains:
         for extension in ["json", "res", "tres"]:
             var path: String = ICON_MAPS.path_join(domain).path_join("icons." + extension)
@@ -59,17 +58,10 @@ static func icon_maps() -> Dictionary:
             break
     return merged
 
-## The image an icon or portrait key names: a built map entry, else the
-## earlier ui/resources.json selection (still read for ids no built map holds).
+## The built image an icon or portrait id names.
 static func _resource(key: String, portrait: bool, cache: Dictionary) -> Dictionary:
     var ui = authored(cache)
-    var built: Dictionary = ui.maps.portraits.get(key, {}) if portrait else ui.maps.icons.get(key, {})
-    if not built.is_empty(): return built
-    var legacy: Dictionary = ui.resources.get(("portrait:" if portrait else "icon:") + key, {})
-    if legacy.is_empty(): return {}
-    var result = legacy.duplicate()
-    if str(result.path).begins_with("/media/"): result.path = "res://assets/art/media/" + str(result.path).trim_prefix("/media/")
-    return result
+    return ui.maps.portraits.get(key, {}) if portrait else ui.maps.icons.get(key, {})
 
 static func descriptor(state: Dictionary, id: String, exact = null) -> Dictionary:
     # Full ContentRef identities always contain their @version suffix. Most HUD
@@ -95,51 +87,34 @@ static func action_key(row: Dictionary, state: Dictionary, cache: Dictionary, va
     if row.get("action_category") == "attack" and row.get("weapon_slot") != null:
         var weapon: Dictionary = equipped(actor).get(row.weapon_slot,{})
         if not weapon.is_empty(): return item_key(weapon,state,cache)
+    # The client's own binding by server id: the action's content id, a variant
+    # facet of it, or the feature that provides it.
     var configured = row.get("configured_action_ref")
     var entry = descriptor(state,str(row.get("behavior_id","")),configured)
     var owner = entry.get("ref") if configured == null else configured
-    if variant and owner != null:
-        var facets = {}
-        for facet in row.get("variant_facets",[]): facets[facet.key] = facet.value
-        for choice in authored(cache).choices:
-            if not Interaction.same_content_ref(choice.owner,owner) or not facets.has(choice.facet) or facets[choice.facet] != choice.value: continue
-            var matches = true
-            for requirement in choice.requirements:
-                if facets.get(requirement) != choice.requirements[requirement]: matches = false
-            if matches: return str(choice.icon_key)
-    # The client's own binding by server id, when a built domain map holds it.
     var icons: Dictionary = authored(cache).maps.icons
-    var id: String = str(entry.get("ref",{}).get("content_id","")) if not entry.is_empty() else str(row.get("behavior_id",""))
+    var id: String = str(owner.get("content_id","")) if owner is Dictionary else str(row.get("behavior_id",""))
+    if variant:
+        for facet in row.get("variant_facets",[]):
+            var key: String = id + "#" + str(facet.key) + "=" + str(facet.value)
+            if icons.has(key): return key
     if icons.has(id): return id
-    if entry.is_empty() and configured == null:
-        var provided: String = str(row.get("provided_by_id",row.get("behavior_id","")))
-        if icons.has(provided): return provided
-        entry = authored(cache).presentation.direct_features.get(provided,{})
-    return str(entry.get("presentation",{}).get("icon_key","") if entry.get("presentation",{}).get("icon_key") != null else "")
+    var provided: String = str(row.get("provided_by_id",row.get("behavior_id","")))
+    return provided if icons.has(provided) else id
 
-static func item_key(item: Dictionary, state: Dictionary, cache: Dictionary) -> String:
-    if authored(cache).maps.icons.has(str(item.get("item_id",""))): return str(item.item_id)
-    var entry = descriptor(state,str(item.get("item_id","")))
-    if entry.is_empty(): entry = authored(cache).presentation.direct_items.get(item.get("item_id",""),{})
-    var key = entry.get("presentation",{}).get("icon_key")
-    return "" if key == null else str(key)
+static func item_key(item: Dictionary, _state: Dictionary, _cache: Dictionary) -> String:
+    return str(item.get("item_id",""))
 
-static func common_key(id: String, cache: Dictionary) -> String:
-    if authored(cache).maps.icons.has("common." + id): return "common." + id
-    var key = authored(cache).presentation.common.get(id,{}).get("presentation",{}).get("icon_key")
-    return "" if key == null else str(key)
+static func common_key(id: String, _cache: Dictionary) -> String:
+    return "common." + id
 
 ## A creature shows the portrait the client binds to its server id; the
 ## player's own portrait is the choice saved with its appearance.
-static func portrait_key(actor: Dictionary, sheet: Dictionary, state: Dictionary, cache: Dictionary = {}) -> String:
-    if actor.get("creature_content_ref") != null and not cache.is_empty():
-        var bound = authored(cache).maps.creature_portraits.get(str(actor.creature_content_ref).get_slice(":",2).get_slice("@",0),"")
-        if not str(bound).is_empty(): return str(bound)
+static func portrait_key(actor: Dictionary, sheet: Dictionary, _state: Dictionary, cache: Dictionary = {}) -> String:
+    if actor.get("creature_content_ref") != null:
+        # PlayerActor carries ContentRef.identity_key (pack:creature:id@version).
+        return str(authored(cache).maps.creature_portraits.get(str(actor.creature_content_ref).get_slice(":",2).get_slice("@",0),""))
     var key = actor.get("appearance",{}).get("portrait_key",sheet.get("portrait_key"))
-    if key == null and actor.get("creature_content_ref") != null:
-        # PlayerActor carries ContentRef.identity_key, unlike configured actions'
-        # full ContentRef. Resolve that key through the admitted descriptors.
-        key = descriptor(state,actor.creature_content_ref).get("presentation",{}).get("portrait_key")
     return "" if key == null else str(key)
 
 static func texture(key: String, cache: Dictionary, portrait: bool = false) -> Texture2D:
@@ -149,7 +124,7 @@ static func texture(key: String, cache: Dictionary, portrait: bool = false) -> T
     if not cache.has(texture_key):
         var resource = _resource(key,portrait,cache)
         if resource.is_empty():
-            push_warning("Missing authored UI resource: " + resource_key)
+            push_warning("No built HUD image for " + resource_key)
             cache[texture_key] = null
         else:
             if not cache.has("ui_media"):
@@ -269,7 +244,7 @@ static func item_name(item: Dictionary, state: Dictionary, cache: Dictionary) ->
     if item.has("name"): return str(item.name)
     var entry = descriptor(state,str(item.get("item_id","")))
     if not entry.is_empty(): return str(entry.display_name)
-    return str(authored(cache).presentation.direct_items.get(item.get("item_id",""),{}).get("label","Undisclosed item"))
+    return str(item.get("item_id","Undisclosed item"))
 
 static func slot_label(slot: String) -> String:
     return {"MELEE_MAIN":"Melee · main","MELEE_OFF":"Melee · off","RANGED_MAIN":"Ranged · main","RANGED_OFF":"Ranged · off"}.get(slot,slot)

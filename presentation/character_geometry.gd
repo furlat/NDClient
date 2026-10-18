@@ -4,9 +4,6 @@ extends RefCounted
 const SourceMaterial=preload("res://presentation/source_material.gd")
 const BodySources=preload("res://presentation/body_sources.gd")
 const Placement = preload("res://placement.gd")
-const TABLE = "res://generated/character_geometry.json"
-const PROFILE_TABLE = "res://generated/normal_profiles.json"
-const CREATURE_TABLE = "res://generated/creature_geometry.json"
 const PROFILES = ["original","gentle","reference"]
 const PARAMETERS = {"depth":"component_depth", "normal":"component_normal",
     "support":"component_support", "normal_valid":"component_normal_valid"}

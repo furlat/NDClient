@@ -1,14 +1,9 @@
 extends RefCounted
 ## Small, baked optical samples for authored attachment points. GPU receivers
 ## still use the original textures; only the CPU attachment queries use these.
+## The samples are measured data (assets/measured/characters/parts) carried
+## by the built body descriptors.
 const BodySources=preload("res://presentation/body_sources.gd")
-const ROOT = "res://.derived/surface-sockets/"
-const MANIFEST = ROOT + "manifest.json"
-
-static func file_for(path: String, source: Dictionary) -> String:
-    var identity: String = source.get("media",path)
-    if not identity.begins_with("/media/"): return ""
-    return ROOT + identity.trim_prefix("/media/").get_basename() + ".json"
 
 static func _baked(path:String,source:Dictionary,cache:Dictionary)->Dictionary:
     var slots:Array=source.get("slots",[])

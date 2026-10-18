@@ -182,7 +182,7 @@ static func build(cache:Dictionary={})->Dictionary:
     # owner is a worklist entry even if it has no external sprite identity.
     for definition in [
         ["world_animations","world_animation"],["devices","device"],["device_wrecks","device_wreck"],
-        ["portals","portal"],["rigs","rig"],["creature_rigs","creature_rig"],
+        ["portals","portal"],
         ["body_materials","body_material"],["action_materials","action_material"],["action_intakes","action_intake"],
         ["condition_media","condition_media"],["item_attachments","item_attachment"]]:
         if index.get(definition[0]) is String:_owners(entries,index[definition[0]],definition[1],cache)

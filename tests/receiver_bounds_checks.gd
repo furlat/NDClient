@@ -33,8 +33,8 @@ func run()->void:
     var node=MeshInstance3D.new();node.mesh=QuadMesh.new();node.mesh.size=Vector2.ONE*128*2/Placement.PIXELS_PER_UNIT
     node.mesh.center_offset=Vector3(0,23*2/Placement.PIXELS_PER_UNIT,0);view.add_child(node)
     var mat=ShaderMaterial.new();mat.shader=load("res://modular.gdshader");node.material_override=mat
-    var path="/media/smallscale/modular/Head15/Idle.png";var source=Geometry.record(path,"helmet",cache)
-    var root_path:String=ProjectSettings.get_setting("source_data/character_geometry_root")
+    var path="res://assets/art/media/smallscale/modular/Head15/Idle.png";var source=Geometry.record(path,"helmet",cache)
+    var root_path:String=Geometry._root(source)
     var depth=Image.load_from_file(root_path.path_join(source.files.depth));var normal=Image.load_from_file(root_path.path_join(source.files.normal))
     var raw=Image.load_from_file(root_path.path_join(source.files.support));var valid=Image.load_from_file(root_path.path_join(source.files.normal_valid))
     # Choose an opaque supported original texel, then exercise the admitted

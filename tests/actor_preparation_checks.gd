@@ -88,7 +88,7 @@ func worker_isolation(index:Dictionary)->void:
     check(candidate.result.get("complete",false),"Actual reveal passive world worker completes actor selection")
     check(host.catalog_cache.__creature_shadow_rigs=={"prior-immutable-result":true},"Worker creature-shadow memo never mutates the live owner's directory")
     var catalog:Dictionary=Catalog.read_file("catalog-index.json",host.catalog_cache)
-    var creatures:Dictionary=Catalog.read_file(catalog.creature_rigs,host.catalog_cache)
+    var creatures:Dictionary={"content.neurodragon:creature:creature.goblin@1":"smallscale.goblin01"}
     var creature:String="content.neurodragon:creature:creature.goblin@1"
     var worker_cache:Dictionary=Construction.source_cache(host.catalog_cache)
     Characters._generated_creature_shadow({"creature_content_ref":creature},host.rigs[creatures[creature]],worker_cache)
