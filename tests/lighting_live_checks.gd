@@ -3,6 +3,8 @@ extends SceneTree
 const Player = preload("res://play.tscn")
 const Interaction = preload("res://presentation/interaction.gd")
 const Journal = preload("res://sdk/journal.gd")
+const FLAME = "res://presentation/fixture_flame.gdshader"
+const SHADOW = "res://presentation/shadow_composite.gdshader"
 var scene: Node
 var checks := 0
 var failures: Array = []
@@ -44,6 +46,10 @@ func run() -> void:
     check(scene.source_lighting.sources.filter(func(source):return source.actor_uuid.is_empty()).size() == 2,"Visual object contacts supply both native wall torches")
     check(scene.get_children().filter(func(child):return child is DirectionalLight3D).is_empty(),"Empty directional authoring adds no unconditional key light")
     for entry in scene.static_entries+scene.actor_entries:
+        # Two unshaded materials have no base-light term at all: the authored
+        # torch flame is the emitter's own artwork, a generated shadow only darkens.
+        var shader: String = entry.material.shader.resource_path
+        if shader == FLAME and entry.has("flame_frame") or shader == SHADOW and entry.role == "shadow": continue
         check(entry.material.get_shader_parameter("authored_base_light") == 0.0,"Live sprite has no base emission: "+entry.id)
     var first := await capture()
     var owner: String = scene.available_actions.entity_uuid
@@ -61,7 +67,10 @@ func run() -> void:
         var items: Array = scene.timeline.state.actors[owner].controlled_items
         var item: Dictionary = items.filter(func(value):return value.item_uuid == torch_id)[0]
         check(item.is_lit == lit,"Displayed authoritative item activation matches native command")
-        check(scene.source_lighting.sources.any(func(source):return source.item_uuid == torch_id) == lit,"GPU source membership follows displayed activation")
+        # Sensed light sources have their own ids (a new one per ignition) and
+        # name the carrying actor, not the item: count the actor's sources.
+        var carried: int = scene.source_lighting.sources.filter(func(source):return source.actor_uuid == owner).size()
+        check(carried == items.filter(func(value):return value.get("is_lit") == true).size() and (carried > 0) == lit,"GPU source membership follows displayed activation")
         check(scene.source_lighting.sources.size() == count-(0 if lit else 1),"Only the affected source changes")
         var picture := await capture()
         if not lit:
