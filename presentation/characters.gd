@@ -17,11 +17,16 @@ static func _read(path: String, cache: Dictionary) -> Variant:
 static func _error(message: String) -> Dictionary:
     return {"ok":false, "error":{"kind":"authoring", "message":message, "retryable":false}}
 
+## The server's creature id inside a ContentRef identity key (pack:creature:id@version).
+static func content_id(ref: Variant) -> String:
+    var text:String=str(ref)
+    return text.get_slice(":",2).get_slice("@",0) if text.count(":")>=2 else text
+
 static func rig_id(actor: Dictionary, cache: Dictionary) -> String:
     var admitted=BodySources.index(cache)
     if admitted==null:return ""
     var creature:Variant=actor.get("creature_content_ref")
-    return admitted.root_rig if creature==null else admitted.creature_rigs.get(creature,"")
+    return admitted.root_rig if creature==null else admitted.creature_rigs.get(content_id(creature),"")
 
 static func rigs(cache:Dictionary)->Dictionary:
     var admitted=BodySources.index(cache)
@@ -74,16 +79,20 @@ static func _select_layers(actor: Dictionary, rig: Dictionary, modular: bool, ca
     else:
         var appearance: Dictionary = actor.appearance
         if appearance.presentation_kind != "layered": return _error("Root rig requires layered actor appearance")
+        # The built appearance mapping: AppearanceConfig fields and equipment slots -> rig slots and parts.
+        var mapping: Dictionary = BodySources.index(cache).appearance
+        var visual_slots: Dictionary = mapping.equipment_slots
+        var weapon_sets: Dictionary = mapping.weapon_sets
         # Modular shadows are generated from original component geometry.
         selected.body = _layer(appearance.body_category, int(appearance.skin_tint))
         if appearance.head_category != null: selected.head = _layer(appearance.head_category, int(appearance.hair_tint))
-        if appearance.has_beard: selected.beard = _layer("Head2", int(appearance.beard_tint))
+        if appearance.has_beard: selected.beard = _layer(mapping.flag_parts.has_beard, int(appearance.beard_tint))
         var loadout: Dictionary = actor.visual_loadout
         for item in loadout.layers:
-            if not VISUAL_SLOT.has(item.slot): continue
-            if WEAPON_SET.has(item.slot) and WEAPON_SET[item.slot] != loadout.active_weapon_set: continue
+            if not visual_slots.has(item.slot): continue
+            if weapon_sets.has(item.slot) and weapon_sets[item.slot] != loadout.active_weapon_set: continue
             if item.equipped_visual_policy == "hidden": continue
-            var authored = BodySources.equipment(item,VISUAL_SLOT[item.slot],cache)
+            var authored = BodySources.equipment(item,visual_slots[item.slot],cache)
             if not authored.ok: return authored
             for layer in authored.value:
                 if layer.render_layer in EFFECT_SLOTS: continue

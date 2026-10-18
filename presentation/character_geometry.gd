@@ -15,7 +15,7 @@ static func record(path:String,slot:String,cache:Dictionary)->Dictionary:
     return BodySources.descriptor(path,slot,cache).get("geometry",{})
 
 static func _root(source: Dictionary) -> String:
-    return source.get("_source_root",ProjectSettings.get_setting("source_data/creature_geometry_root" if source.has("normal_profiles") else "source_data/character_geometry_root"))
+    return source.get("_source_root","res://assets")
 
 static func display_path(path: String, slot: String, cache: Dictionary) -> String:
     var source = record(path,slot,cache)

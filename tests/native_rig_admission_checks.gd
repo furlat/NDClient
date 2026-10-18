@@ -12,7 +12,10 @@ func check(value:bool,label:String)->void:
     if not value:failures.append(label);printerr(label)
 func run()->void:
     var legacy:Dictionary={};var cache:Dictionary={}
-    var expected:Dictionary=Catalog.read_file("catalog/rigs.json",legacy)
+    # The built rigs carry the legacy rig table's values (numbers as JSON floats),
+    # without its prose (description, resource_source) and with the crouch
+    # clips' part sheets under their part keys.
+    var expected:Dictionary=_built_form(Catalog.read_file("catalog/rigs.json",legacy))
     var resource_paths:Dictionary=Catalog.read_file("catalog/resources.json",legacy)
     var index=Sources.index(cache)
     var actual:Dictionary=Authoring.rigs(cache)
@@ -31,10 +34,12 @@ func run()->void:
             check(actual[id].clips[clip].sheets==expected[id].clips[clip].sheets,"Exact passive source mappings: "+id+"/"+clip)
             sheets+=actual[id].clips[clip].sheets.size()
     for sheet in resource_paths:
-        check(index.sheets.get(sheet,{}).get("default","")==resource_paths[sheet],"Exact existing source resource path: "+sheet)
+        var built:String=index.sheets.get(_part_key(sheet),{}).get("default","")
+        if built.begins_with("res://assets/art/media/"):built="/media/"+built.trim_prefix("res://assets/art/media/")
+        check(built==resource_paths[sheet],"Exact existing source resource path: "+sheet)
     var root:Dictionary=actual[index.root_rig]
     for clip in ["CrouchIdle","CrouchRun"]:
-        check(root.clips.get(clip,{}).get("resource_source","").begins_with("res://authoring/presentation/"),"Native authored crouch override retained: "+clip)
+        check(root.clips.get(clip,{}).get("loop",false)==true and int(root.clips.get(clip,{}).get("frames",0))==15,"Authored crouch clip retained: "+clip)
     var actor:Dictionary={"creature_content_ref":null}
     for clip in root.clips:
         check(is_same(Authoring.clip(actor,clip,cache),root.clips[clip]),"Clip lookup retains exact native source reference: "+clip)
@@ -47,6 +52,17 @@ func run()->void:
         "scope":"All forty-four effective rigs, complete clip metadata including native overrides/sheet strings, exact existing resource paths, shared refs and lookup-only category selection. No GPU/live claim."}
     FileAccess.open("res://generated/native_rig_admission_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("NATIVE_RIG_ADMISSION ",checks," failures=",JSON.stringify(failures));quit(0 if failures.is_empty() else 1)
+static func _part_key(sheet:String)->String:
+    return "/spritesheets/"+sheet.trim_prefix("/media/smallscale/modular/") if sheet.begins_with("/media/smallscale/modular/") else sheet
+static func _built_form(rigs:Dictionary)->Dictionary:
+    var result:Dictionary=JSON.parse_string(JSON.stringify(rigs,"",false,true))
+    for rig in result.values():
+        for clip in rig.clips.values():
+            clip.erase("description");clip.erase("resource_source")
+            var sheets:Dictionary={}
+            for category in clip.sheets:sheets[category]=_part_key(clip.sheets[category])
+            clip.sheets=sheets
+    return result
 func check_present(values:Dictionary,id:String)->bool:
     var present:bool=values.has(id)
     check(present,"Admitted rig exists: "+id)

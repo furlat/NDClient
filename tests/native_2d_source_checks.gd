@@ -179,7 +179,7 @@ func linear_alpha_reference(straight: Image,flipped_alpha: Image=null) -> Image:
     return expected
 
 func modular(category: String,slot: String,row: int,profile: String,mirror: bool) -> Dictionary:
-    var path="/media/smallscale/modular/"+category+"/Idle.png"
+    var path="res://assets/art/media/smallscale/modular/"+category+"/Idle.png"
     # Media preparation admits the body metadata before any descriptor read.
     Geometry.BodySources.prepare_descriptor(path,slot,cache)
     var material=ShaderMaterial.new();material.shader=Modular
@@ -192,7 +192,7 @@ func modular(category: String,slot: String,row: int,profile: String,mirror: bool
     Geometry.bind(entry,path,cache,texture,true,true,profile)
     var source=Geometry.record(path,slot,cache)
     var normals=Geometry.normal_paths(path,slot,cache)
-    var geometry_root: String=ProjectSettings.get_setting("source_data/character_geometry_root")
+    var geometry_root: String=Geometry._root(source)
     var colour: Image=images[path].get_region(Rect2i(0,row*128,128,128))
     var decoded=Image.create(128,128,false,Image.FORMAT_RGBAF)
     var supported := 0

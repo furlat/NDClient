@@ -23,7 +23,8 @@ static var _documents:Dictionary={}
 static var _documents_mutex:=Mutex.new()
 
 static func media_path(path: String) -> String:
-    if path.begins_with("res://"): return ProjectSettings.globalize_path(path)
+    # Project assets (res://assets/art/...) load by their res:// path.
+    if path.begins_with("res://"): return path
     if path.begins_with("C:/"): return path
     var root: String = ProjectSettings.get_setting("source_data/media_root")
     var absolute = root.path_join(path.trim_prefix("/media/"))
@@ -157,10 +158,11 @@ static func adopt_snapshot(cache:Dictionary,offered:Dictionary)->void:
 
 static func validate_native(cache: Dictionary) -> Array:
     # Passive metadata only. No texture decoding, scene creation or shader upload.
-    for document in ["catalog/condition_recipes.json", "catalog/body_action_recipes.json", "catalog/rigs.json", "catalog/resources.json"]:
+    for document in ["catalog/condition_recipes.json", "catalog/body_action_recipes.json", "catalog/resources.json"]:
         read_file(document, cache)
     if not cache.has("native_references_validated"):
-        var rigs:Dictionary=cache["catalog/rigs.json"]
+        var built:Resource=BodySources.index(cache)
+        var rigs:Dictionary={} if built==null else built.rigs
         for recipe in cache["catalog/body_action_recipes.json"].values():
             if not recipe.has("_resource_source"):continue
             var clip:Dictionary=rigs.get(recipe.rigId,{}).get("clips",{}).get(recipe.actor.clip,{})
