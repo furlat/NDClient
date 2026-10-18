@@ -1,0 +1,67 @@
+[gd_resource type="Resource" script_class="PresentationCharacter" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/character.gd" id="1_fhnhi"]
+
+[resource]
+script = ExtResource("1_fhnhi")
+id = "creature.triceratops"
+identity = "content.neurodragon:creature:creature.triceratops@1"
+rig = "smallscale.triceratops"
+portrait = "creature.triceratops"
+size = "Huge"
+attacks = Array[Dictionary]([{
+"clip": "Attack1",
+"contact": 8,
+"delivery": "melee",
+&"items": ["weapon.creature.triceratops_gore"],
+"recipe": "action.attack",
+"variant": "triceratops-triceratops_gore"
+}, {
+"clip": "Attack1",
+"contact": 8,
+"delivery": "melee",
+"recipe": "action.attack",
+"variant": "fixed-unarmed-attack1-8-12"
+}, {
+"clip": "Attack1",
+"contact": 8,
+"delivery": "melee",
+&"items": ["weapon.creature.triceratops_gore"],
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "triceratops-triceratops_gore"
+}, {
+"clip": "Attack1",
+"contact": 8,
+"delivery": "melee",
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "fixed-unarmed-attack1-8-12"
+}, {
+"clip": "Attack1",
+"contact": 8,
+"delivery": "melee",
+&"items": ["weapon.creature.triceratops_gore"],
+"recipe": "action.feature.extra_attack",
+"variant": "triceratops-triceratops_gore"
+}, {
+"clip": "Attack1",
+"contact": 8,
+"delivery": "melee",
+"recipe": "action.feature.extra_attack",
+"variant": "fixed-unarmed-attack1-8-12"
+}, {
+"clip": "Attack1",
+"contact": 8,
+"delivery": "melee",
+&"items": ["weapon.creature.triceratops_gore"],
+"recipe": "reaction.opportunity_attack",
+"variant": "triceratops-triceratops_gore"
+}, {
+"clip": "Attack1",
+"contact": 8,
+"delivery": "melee",
+"recipe": "reaction.opportunity_attack",
+"variant": "fixed-unarmed-attack1-8-12"
+}])
+death = Dictionary[String, String]({
+"default": "Die"
+})

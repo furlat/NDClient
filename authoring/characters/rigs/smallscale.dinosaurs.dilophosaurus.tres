@@ -1,0 +1,546 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_os1xp"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_b08y3"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_ie8py"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_og41r"]
+
+[sub_resource type="Resource" id="Resource_yrphc"]
+script = ExtResource("2_b08y3")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/attack1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/attack1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/attack1/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/attack1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/attack1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/attack1/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 1.414213562373095
+coverage = 0.9794898039524448
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_s75n2"]
+script = ExtResource("1_os1xp")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Attack1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursDilophosaurus": "/rigs/dinosaurs_dilophosaurus/body/Attack1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/attack1/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/Dilophosaurus/Attack1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_yrphc")
+
+[sub_resource type="Resource" id="Resource_oes12"]
+script = ExtResource("2_b08y3")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/attack2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/attack2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/attack2/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/attack2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/attack2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/attack2/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 1.414213562373095
+coverage = 0.970658544108575
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_rb8xg"]
+script = ExtResource("1_os1xp")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Attack2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursDilophosaurus": "/rigs/dinosaurs_dilophosaurus/body/Attack2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/attack2/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/Dilophosaurus/Attack2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_oes12")
+
+[sub_resource type="Resource" id="Resource_jrhn4"]
+script = ExtResource("2_b08y3")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/attack3/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/attack3/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/attack3/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/attack3/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/attack3/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/attack3/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 1.414213562373095
+coverage = 0.9732615994498603
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_aqhc7"]
+script = ExtResource("1_os1xp")
+name = "Attack3"
+role = "attack_3"
+source_clip = "Attack3"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursDilophosaurus": "/rigs/dinosaurs_dilophosaurus/body/Attack3.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/attack3/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/Dilophosaurus/Attack3.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_jrhn4")
+
+[sub_resource type="Resource" id="Resource_gyte7"]
+script = ExtResource("2_b08y3")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/attack4/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/attack4/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/attack4/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/attack4/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/attack4/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/attack4/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 1.414213562373095
+coverage = 0.9788842049295507
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_x55gh"]
+script = ExtResource("1_os1xp")
+name = "Attack4"
+role = "attack_4"
+source_clip = "Attack4"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursDilophosaurus": "/rigs/dinosaurs_dilophosaurus/body/Attack4.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/attack4/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/Dilophosaurus/Attack4.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_gyte7")
+
+[sub_resource type="Resource" id="Resource_88wtx"]
+script = ExtResource("2_b08y3")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/die/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/die/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/die/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/die/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 1.414213562373095
+coverage = 0.9720910752360644
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_malwu"]
+script = ExtResource("1_os1xp")
+name = "Die"
+role = "die"
+source_clip = "Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursDilophosaurus": "/rigs/dinosaurs_dilophosaurus/body/Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/die/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/Dilophosaurus/Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_88wtx")
+
+[sub_resource type="Resource" id="Resource_1vhfp"]
+script = ExtResource("2_b08y3")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/eating/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/eating/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/eating/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/eating/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/eating/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/eating/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 1.414213562373095
+coverage = 0.9822478296414529
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_65x83"]
+script = ExtResource("1_os1xp")
+name = "Eating"
+role = "eat"
+source_clip = "Eating"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursDilophosaurus": "/rigs/dinosaurs_dilophosaurus/body/Eating.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/eating/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/Dilophosaurus/Eating.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_1vhfp")
+
+[sub_resource type="Resource" id="Resource_abcyc"]
+script = ExtResource("2_b08y3")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/idle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/idle/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/idle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/idle/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 1.414213562373095
+coverage = 0.979442389107136
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_osum3"]
+script = ExtResource("1_os1xp")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursDilophosaurus": "/rigs/dinosaurs_dilophosaurus/body/Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/idle/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/Dilophosaurus/Idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_abcyc")
+
+[sub_resource type="Resource" id="Resource_5v8ny"]
+script = ExtResource("2_b08y3")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/idle-2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/idle-2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/idle-2/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/idle-2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/idle-2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/idle-2/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 1.414213562373095
+coverage = 0.9694414771860216
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_byyxp"]
+script = ExtResource("1_os1xp")
+name = "Idle2"
+role = "idle_alt"
+source_clip = "Idle 2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursDilophosaurus": "/rigs/dinosaurs_dilophosaurus/body/Idle 2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/idle-2/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/Dilophosaurus/Idle 2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_5v8ny")
+
+[sub_resource type="Resource" id="Resource_r31qj"]
+script = ExtResource("2_b08y3")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/run/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/run/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/run/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/run/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 1.414213562373095
+coverage = 0.9816510232343436
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_f7kup"]
+script = ExtResource("1_os1xp")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursDilophosaurus": "/rigs/dinosaurs_dilophosaurus/body/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/run/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/Dilophosaurus/Run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_r31qj")
+
+[sub_resource type="Resource" id="Resource_pw6it"]
+script = ExtResource("2_b08y3")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/shout/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/shout/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/shout/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/shout/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/shout/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/shout/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 1.414213562373095
+coverage = 0.9738227886743492
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_pc7hj"]
+script = ExtResource("1_os1xp")
+name = "Shout"
+role = "shout"
+source_clip = "Shout"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursDilophosaurus": "/rigs/dinosaurs_dilophosaurus/body/Shout.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/shout/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/Dilophosaurus/Shout.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_pw6it")
+
+[sub_resource type="Resource" id="Resource_h2t23"]
+script = ExtResource("2_b08y3")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/spit/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/spit/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/spit/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/spit/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/spit/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/spit/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 1.414213562373095
+coverage = 0.974849935415242
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_c80y4"]
+script = ExtResource("1_os1xp")
+name = "Spit"
+role = "spit"
+source_clip = "Spit"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursDilophosaurus": "/rigs/dinosaurs_dilophosaurus/body/Spit.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/spit/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/Dilophosaurus/Spit.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_h2t23")
+
+[sub_resource type="Resource" id="Resource_amshv"]
+script = ExtResource("2_b08y3")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/takedamage/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/takedamage/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/takedamage/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 1.414213562373095
+coverage = 0.9709777726592193
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_wt8pi"]
+script = ExtResource("1_os1xp")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursDilophosaurus": "/rigs/dinosaurs_dilophosaurus/body/TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/takedamage/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/Dilophosaurus/TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_amshv")
+
+[sub_resource type="Resource" id="Resource_yjyxf"]
+script = ExtResource("2_b08y3")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/walk/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/walk/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/walk/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/walk/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 1.414213562373095
+coverage = 0.9747338914352816
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_488k5"]
+script = ExtResource("1_os1xp")
+name = "Walk"
+role = "walk"
+source_clip = "Walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursDilophosaurus": "/rigs/dinosaurs_dilophosaurus/body/Walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/dilophosaurus/walk/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/Dilophosaurus/Walk.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_yjyxf")
+
+[resource]
+script = ExtResource("4_og41r")
+id = "smallscale.dinosaurs.dilophosaurus"
+pack = "dinosaurs"
+variant = "Dilophosaurus"
+source = "smallscale-authored/dinosaurs"
+cell = Vector2i(64, 64)
+pivot = Vector2(32, 47)
+anchor = Vector2(32, 34)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("DinosaursDilophosaurus")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_os1xp")]([SubResource("Resource_s75n2"), SubResource("Resource_rb8xg"), SubResource("Resource_aqhc7"), SubResource("Resource_x55gh"), SubResource("Resource_malwu"), SubResource("Resource_65x83"), SubResource("Resource_osum3"), SubResource("Resource_byyxp"), SubResource("Resource_f7kup"), SubResource("Resource_pc7hj"), SubResource("Resource_c80y4"), SubResource("Resource_wt8pi"), SubResource("Resource_488k5")])
+hold_clips = PackedStringArray("Die")
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed."

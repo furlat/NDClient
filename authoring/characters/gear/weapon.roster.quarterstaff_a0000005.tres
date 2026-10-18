@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_bbgy0"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_f0fby"]
+
+[sub_resource type="Resource" id="Resource_r0m10"]
+script = ExtResource("1_bbgy0")
+path = "art/media/ui/icons/smooth48/item.quarterstaff.png"
+native_size = Vector2i(48, 48)
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_f0fby")
+id = "weapon.roster.quarterstaff_a0000005"
+kind = "weapon"
+family = "weapon.quarterstaff"
+visual_variant_id = "a0000005"
+icon = SubResource("Resource_r0m10")

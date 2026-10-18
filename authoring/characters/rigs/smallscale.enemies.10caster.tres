@@ -1,0 +1,475 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_bxlq1"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_epv04"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_n8g8q"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_n53bh"]
+
+[sub_resource type="Resource" id="Resource_3ahjr"]
+script = ExtResource("2_epv04")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/10caster/attack1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/10caster/attack1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/10caster/attack1/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/10caster/attack1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/10caster/attack1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/10caster/attack1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 2.82842712474619
+coverage = 0.985429863449391
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_stv5u"]
+script = ExtResource("1_bxlq1")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Attack1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies10Caster": "/rigs/enemies_10caster/body/Attack1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/10caster/attack1/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/10Caster/Attack1.png",
+"mask_material": "art/media/smallscale/authored/enemies/Material masks/With shadow/10Caster/Attack1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_3ahjr")
+
+[sub_resource type="Resource" id="Resource_284wt"]
+script = ExtResource("2_epv04")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/10caster/attack2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/10caster/attack2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/10caster/attack2/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/10caster/attack2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/10caster/attack2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/10caster/attack2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 2.82842712474619
+coverage = 0.9843239300924717
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_8tuju"]
+script = ExtResource("1_bxlq1")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Attack2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies10Caster": "/rigs/enemies_10caster/body/Attack2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/10caster/attack2/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/10Caster/Attack2.png",
+"mask_material": "art/media/smallscale/authored/enemies/Material masks/With shadow/10Caster/Attack2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_284wt")
+
+[sub_resource type="Resource" id="Resource_be8lu"]
+script = ExtResource("2_epv04")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/10caster/attack3/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/10caster/attack3/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/10caster/attack3/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/10caster/attack3/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/10caster/attack3/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/10caster/attack3/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 2.82842712474619
+coverage = 0.986781695706168
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_nhs4n"]
+script = ExtResource("1_bxlq1")
+name = "Attack3"
+role = "attack_3"
+source_clip = "Attack3"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies10Caster": "/rigs/enemies_10caster/body/Attack3.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/10caster/attack3/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/10Caster/Attack3.png",
+"mask_material": "art/media/smallscale/authored/enemies/Material masks/With shadow/10Caster/Attack3.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_be8lu")
+
+[sub_resource type="Resource" id="Resource_oubfr"]
+script = ExtResource("2_epv04")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/10caster/attack4/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/10caster/attack4/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/10caster/attack4/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/10caster/attack4/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/10caster/attack4/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/10caster/attack4/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 2.82842712474619
+coverage = 0.9710098784258197
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_b45ct"]
+script = ExtResource("1_bxlq1")
+name = "Attack4"
+role = "attack_4"
+source_clip = "Attack4"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies10Caster": "/rigs/enemies_10caster/body/Attack4.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/10caster/attack4/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/10Caster/Attack4.png",
+"mask_material": "art/media/smallscale/authored/enemies/Material masks/With shadow/10Caster/Attack4.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_oubfr")
+
+[sub_resource type="Resource" id="Resource_c1qy3"]
+script = ExtResource("2_epv04")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/10caster/die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/10caster/die/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/10caster/die/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/10caster/die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/10caster/die/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/10caster/die/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 2.82842712474619
+coverage = 0.995816906361634
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_sha41"]
+script = ExtResource("1_bxlq1")
+name = "Die"
+role = "die"
+source_clip = "Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies10Caster": "/rigs/enemies_10caster/body/Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/10caster/die/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/10Caster/Die.png",
+"mask_material": "art/media/smallscale/authored/enemies/Material masks/With shadow/10Caster/Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_c1qy3")
+
+[sub_resource type="Resource" id="Resource_q62ss"]
+script = ExtResource("2_epv04")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/10caster/idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/10caster/idle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/10caster/idle/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/10caster/idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/10caster/idle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/10caster/idle/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 2.82842712474619
+coverage = 0.9936215177713736
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_nw4h8"]
+script = ExtResource("1_bxlq1")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies10Caster": "/rigs/enemies_10caster/body/Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/10caster/idle/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/10Caster/Idle.png",
+"mask_material": "art/media/smallscale/authored/enemies/Material masks/With shadow/10Caster/Idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_q62ss")
+
+[sub_resource type="Resource" id="Resource_m2ek3"]
+script = ExtResource("2_epv04")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/10caster/idle2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/10caster/idle2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/10caster/idle2/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/10caster/idle2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/10caster/idle2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/10caster/idle2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 2.82842712474619
+coverage = 0.9952970951535528
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_5v6qd"]
+script = ExtResource("1_bxlq1")
+name = "Idle2"
+role = "idle_alt"
+source_clip = "Idle2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies10Caster": "/rigs/enemies_10caster/body/Idle2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/10caster/idle2/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/10Caster/Idle2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_m2ek3")
+
+[sub_resource type="Resource" id="Resource_ctx61"]
+script = ExtResource("2_epv04")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/10caster/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/10caster/run/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/10caster/run/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/10caster/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/10caster/run/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/10caster/run/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 2.82842712474619
+coverage = 0.9948532577676756
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_wr6j5"]
+script = ExtResource("1_bxlq1")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies10Caster": "/rigs/enemies_10caster/body/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/10caster/run/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/10Caster/Run.png",
+"mask_material": "art/media/smallscale/authored/enemies/Material masks/With shadow/10Caster/Run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_ctx61")
+
+[sub_resource type="Resource" id="Resource_rrkb3"]
+script = ExtResource("2_epv04")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/10caster/takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/10caster/takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/10caster/takedamage/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/10caster/takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/10caster/takedamage/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/10caster/takedamage/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 2.82842712474619
+coverage = 0.9959597977175126
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_cmrqy"]
+script = ExtResource("1_bxlq1")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies10Caster": "/rigs/enemies_10caster/body/TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/10caster/takedamage/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/10Caster/TakeDamage.png",
+"mask_material": "art/media/smallscale/authored/enemies/Material masks/With shadow/10Caster/TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_rrkb3")
+
+[sub_resource type="Resource" id="Resource_lvvwj"]
+script = ExtResource("2_epv04")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/10caster/taunt/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/10caster/taunt/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/10caster/taunt/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/10caster/taunt/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/10caster/taunt/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/10caster/taunt/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 2.82842712474619
+coverage = 0.9954201114469898
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_ftyi8"]
+script = ExtResource("1_bxlq1")
+name = "Taunt"
+role = "taunt"
+source_clip = "Taunt"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies10Caster": "/rigs/enemies_10caster/body/Taunt.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/10caster/taunt/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/10Caster/Taunt.png",
+"mask_material": "art/media/smallscale/authored/enemies/Material masks/With shadow/10Caster/Taunt.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_lvvwj")
+
+[sub_resource type="Resource" id="Resource_5m3s8"]
+script = ExtResource("2_epv04")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/10caster/walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/10caster/walk/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/10caster/walk/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/10caster/walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/10caster/walk/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/10caster/walk/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 2.82842712474619
+coverage = 0.9951589182122722
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_nmaqx"]
+script = ExtResource("1_bxlq1")
+name = "Walk"
+role = "walk"
+source_clip = "Walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies10Caster": "/rigs/enemies_10caster/body/Walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/10caster/walk/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/10Caster/Walk.png",
+"mask_material": "art/media/smallscale/authored/enemies/Material masks/With shadow/10Caster/Walk.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_5m3s8")
+
+[resource]
+script = ExtResource("4_n53bh")
+id = "smallscale.enemies.10caster"
+pack = "enemies"
+variant = "10Caster"
+source = "smallscale-authored/enemies"
+pivot = Vector2(64, 94)
+anchor = Vector2(64, 63)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("Enemies10Caster")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_bxlq1")]([SubResource("Resource_stv5u"), SubResource("Resource_8tuju"), SubResource("Resource_nhs4n"), SubResource("Resource_b45ct"), SubResource("Resource_sha41"), SubResource("Resource_nw4h8"), SubResource("Resource_5v6qd"), SubResource("Resource_wr6j5"), SubResource("Resource_cmrqy"), SubResource("Resource_ftyi8"), SubResource("Resource_nmaqx")])
+hold_clips = PackedStringArray("Die")
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed."

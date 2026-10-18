@@ -1,0 +1,170 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_kqws3"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_yfkx8"]
+
+[sub_resource type="Resource" id="Resource_ssan0"]
+script = ExtResource("1_kqws3")
+path = "art/media/ui/icons/smooth48/item.iron-helmet.png"
+native_size = Vector2i(48, 48)
+reuses = "item.iron-helmet"
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_yfkx8")
+id = "apparel.horned_helmet"
+kind = "armor"
+slots = Dictionary[String, Dictionary]({
+"helmet": {
+"layers": [{
+"part": "Head14",
+"slot": "helmet",
+"tint": "#8899aa"
+}],
+"variants": {
+"h000000b": [{
+"part": "Head18",
+"slot": "helmet",
+"tint": "#8899aa"
+}],
+"h000000c": [{
+"part": "Head19",
+"slot": "helmet",
+"tint": "#8899aa"
+}],
+"h000000d": [{
+"part": "Head20",
+"slot": "helmet",
+"tint": "#778899"
+}],
+"roster.464dd84d9f9c": [{
+"part": "Head14",
+"slot": "helmet",
+"tint": "#c2a661"
+}],
+"roster.5d7242e6fb50": [{
+"part": "Head14",
+"slot": "helmet",
+"tint": "#b7b6b2"
+}],
+"roster.b4fa7ef2670f": [{
+"part": "Head14",
+"slot": "helmet",
+"tint": "#c6c3aa"
+}],
+"roster.d0ba4b5081a4": [{
+"part": "Head14",
+"slot": "helmet",
+"tint": "#353436"
+}]
+}
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Head14",
+"pivots_by_camera": [[63.0, 56.5], [58.5, 47.5], [68.0, 45.0], [72.0, 52.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#8899aa",
+"variant": ""
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Head18",
+"pivots_by_camera": [[63.0, 53.0], [59.0, 46.0], [68.0, 43.5], [72.0, 49.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#8899aa",
+"variant": "h000000b"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Head19",
+"pivots_by_camera": [[63.0, 55.0], [59.0, 47.0], [67.5, 44.0], [71.5, 51.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#8899aa",
+"variant": "h000000c"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Head20",
+"pivots_by_camera": [[62.0, 55.5], [57.0, 49.5], [68.0, 44.5], [73.0, 52.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#778899",
+"variant": "h000000d"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Head14",
+"pivots_by_camera": [[63.0, 56.5], [58.5, 47.5], [68.0, 45.0], [72.0, 52.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#c2a661",
+"variant": "roster.464dd84d9f9c"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Head14",
+"pivots_by_camera": [[63.0, 56.5], [58.5, 47.5], [68.0, 45.0], [72.0, 52.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#c6c3aa",
+"variant": "roster.b4fa7ef2670f"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Head14",
+"pivots_by_camera": [[63.0, 56.5], [58.5, 47.5], [68.0, 45.0], [72.0, 52.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#353436",
+"variant": "roster.d0ba4b5081a4"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Head14",
+"pivots_by_camera": [[63.0, 56.5], [58.5, 47.5], [68.0, 45.0], [72.0, 52.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#b7b6b2",
+"variant": "roster.5d7242e6fb50"
+}])
+icon = SubResource("Resource_ssan0")
+notes = "Visual name Horned Helmet; Horned helmet — partial face visible
+Icon: Shares an existing icon for the native equipment slot."

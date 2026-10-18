@@ -1,0 +1,506 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_e6qvd"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_gbr3e"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_ugf3a"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_h3ump"]
+
+[sub_resource type="Resource" id="Resource_y2jdq"]
+script = ExtResource("2_gbr3e")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/husky/attack1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/husky/attack1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/husky/attack1/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/husky/attack1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/husky/attack1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/husky/attack1/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.992889967918148
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_4ob16"]
+script = ExtResource("1_e6qvd")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Attack1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsHusky": "/rigs/animals_husky/body/Attack1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/husky/attack1/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Husky/Attack1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_y2jdq")
+
+[sub_resource type="Resource" id="Resource_vj3fc"]
+script = ExtResource("2_gbr3e")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/husky/attack2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/husky/attack2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/husky/attack2/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/husky/attack2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/husky/attack2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/husky/attack2/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9871318531943816
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_v8pfr"]
+script = ExtResource("1_e6qvd")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Attack2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsHusky": "/rigs/animals_husky/body/Attack2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/husky/attack2/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Husky/Attack2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_vj3fc")
+
+[sub_resource type="Resource" id="Resource_o3lu4"]
+script = ExtResource("2_gbr3e")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/husky/attack3/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/husky/attack3/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/husky/attack3/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/husky/attack3/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/husky/attack3/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/husky/attack3/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.992503501112118
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_dunry"]
+script = ExtResource("1_e6qvd")
+name = "Attack3"
+role = "attack_3"
+source_clip = "Attack3"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsHusky": "/rigs/animals_husky/body/Attack3.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/husky/attack3/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Husky/Attack3.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_o3lu4")
+
+[sub_resource type="Resource" id="Resource_a1h7r"]
+script = ExtResource("2_gbr3e")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/husky/attack4/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/husky/attack4/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/husky/attack4/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/husky/attack4/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/husky/attack4/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/husky/attack4/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9912815224524234
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_ebsva"]
+script = ExtResource("1_e6qvd")
+name = "Attack4"
+role = "attack_4"
+source_clip = "Attack4"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsHusky": "/rigs/animals_husky/body/Attack4.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/husky/attack4/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Husky/Attack4.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_a1h7r")
+
+[sub_resource type="Resource" id="Resource_kyvr0"]
+script = ExtResource("2_gbr3e")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/husky/die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/husky/die/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/husky/die/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/husky/die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/husky/die/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/husky/die/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9911299013512394
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_hna1t"]
+script = ExtResource("1_e6qvd")
+name = "Die"
+role = "die"
+source_clip = "Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsHusky": "/rigs/animals_husky/body/Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/husky/die/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Husky/Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_kyvr0")
+
+[sub_resource type="Resource" id="Resource_3uesp"]
+script = ExtResource("2_gbr3e")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/husky/howl/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/husky/howl/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/husky/howl/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/husky/howl/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/husky/howl/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/husky/howl/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.993574297188755
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_1onbn"]
+script = ExtResource("1_e6qvd")
+name = "Howl"
+role = "howl"
+source_clip = "Howl"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsHusky": "/rigs/animals_husky/body/Howl.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/husky/howl/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Husky/Howl.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_3uesp")
+
+[sub_resource type="Resource" id="Resource_xj7mr"]
+script = ExtResource("2_gbr3e")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/husky/idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/husky/idle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/husky/idle/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/husky/idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/husky/idle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/husky/idle/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.995009193590754
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_thtvj"]
+script = ExtResource("1_e6qvd")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsHusky": "/rigs/animals_husky/body/Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/husky/idle/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Husky/Idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_xj7mr")
+
+[sub_resource type="Resource" id="Resource_cganl"]
+script = ExtResource("2_gbr3e")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/husky/idlesit/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/husky/idlesit/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/husky/idlesit/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/husky/idlesit/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/husky/idlesit/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/husky/idlesit/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9961560097506094
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_racq0"]
+script = ExtResource("1_e6qvd")
+name = "IdleSit"
+role = "idlesit"
+source_clip = "IdleSit"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsHusky": "/rigs/animals_husky/body/IdleSit.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/husky/idlesit/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Husky/IdleSit.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_cganl")
+
+[sub_resource type="Resource" id="Resource_ahnys"]
+script = ExtResource("2_gbr3e")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/husky/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/husky/run/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/husky/run/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/husky/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/husky/run/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/husky/run/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9923335343268154
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_yb5uc"]
+script = ExtResource("1_e6qvd")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsHusky": "/rigs/animals_husky/body/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/husky/run/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Husky/Run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_ahnys")
+
+[sub_resource type="Resource" id="Resource_ihokj"]
+script = ExtResource("2_gbr3e")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/husky/sneak/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/husky/sneak/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/husky/sneak/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/husky/sneak/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/husky/sneak/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/husky/sneak/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9931859875950032
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_6vip2"]
+script = ExtResource("1_e6qvd")
+name = "Sneak"
+role = "sneak"
+source_clip = "Sneak"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsHusky": "/rigs/animals_husky/body/Sneak.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/husky/sneak/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Husky/Sneak.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_ihokj")
+
+[sub_resource type="Resource" id="Resource_1pfsu"]
+script = ExtResource("2_gbr3e")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/husky/takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/husky/takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/husky/takedamage/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/husky/takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/husky/takedamage/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/husky/takedamage/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9891873337338024
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_tmtfm"]
+script = ExtResource("1_e6qvd")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsHusky": "/rigs/animals_husky/body/TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/husky/takedamage/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Husky/TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_1pfsu")
+
+[sub_resource type="Resource" id="Resource_7hbic"]
+script = ExtResource("2_gbr3e")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/husky/walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/husky/walk/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/husky/walk/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/husky/walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/husky/walk/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/husky/walk/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9924965893587996
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_82fbg"]
+script = ExtResource("1_e6qvd")
+name = "Walk"
+role = "walk"
+source_clip = "Walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsHusky": "/rigs/animals_husky/body/Walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/husky/walk/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Husky/Walk.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_7hbic")
+
+[resource]
+script = ExtResource("4_h3ump")
+id = "smallscale.animals.husky"
+pack = "animals"
+variant = "Husky"
+source = "smallscale-authored/animals"
+cell = Vector2i(64, 64)
+pivot = Vector2(32, 43)
+anchor = Vector2(32, 36)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("AnimalsHusky")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_e6qvd")]([SubResource("Resource_4ob16"), SubResource("Resource_v8pfr"), SubResource("Resource_dunry"), SubResource("Resource_ebsva"), SubResource("Resource_hna1t"), SubResource("Resource_1onbn"), SubResource("Resource_thtvj"), SubResource("Resource_racq0"), SubResource("Resource_yb5uc"), SubResource("Resource_6vip2"), SubResource("Resource_tmtfm"), SubResource("Resource_82fbg")])
+hold_clips = PackedStringArray("Die")
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed."

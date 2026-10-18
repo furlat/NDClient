@@ -1,0 +1,158 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_tl2j0"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_fteyg"]
+
+[sub_resource type="Resource" id="Resource_7c50s"]
+script = ExtResource("1_tl2j0")
+path = "art/media/ui/icons/smooth48/item.leather-armor.png"
+native_size = Vector2i(48, 48)
+reuses = "item.leather-armor"
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_fteyg")
+id = "apparel.costume"
+kind = "armor"
+slots = Dictionary[String, Dictionary]({
+"body_armor": {
+"layers": [{
+"part": "Chest13",
+"slot": "chest",
+"tint": "#aa3333"
+}, {
+"part": "Legs2",
+"slot": "legs",
+"tint": "#ccaa44"
+}],
+"variants": {
+"85000001": [{
+"part": "Chest19",
+"slot": "chest",
+"tint": "#aa3333"
+}, {
+"part": "Legs2",
+"slot": "legs",
+"tint": "#ccaa44"
+}],
+"85000002": [{
+"part": "Chest13",
+"slot": "chest",
+"tint": "#aa3333"
+}, {
+"part": "Legs3",
+"slot": "legs",
+"tint": "#ccaa44"
+}],
+"85000003": [{
+"part": "Chest2",
+"slot": "chest",
+"tint": "#8b4513"
+}, {
+"part": "Legs6",
+"slot": "legs",
+"tint": "#6b4226"
+}],
+"85000004": [{
+"part": "Chest6",
+"slot": "chest",
+"tint": "#5c2a0e"
+}, {
+"part": "Legs9",
+"slot": "legs",
+"tint": "#6b4226"
+}],
+"85000005": [{
+"part": "Chest10",
+"slot": "chest",
+"tint": "#cd7f32"
+}, {
+"part": "Legs4",
+"slot": "legs",
+"tint": "#8b4513"
+}]
+}
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs2",
+"pivots_by_camera": [[64.0, 71.0], [64.5, 68.0], [66.0, 70.0], [65.5, 67.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#ccaa44",
+"variant": ""
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs2",
+"pivots_by_camera": [[60.5, 71.0], [63.0, 67.5], [70.0, 69.5], [67.5, 68.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#ccaa44",
+"variant": "85000001"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs3",
+"pivots_by_camera": [[64.0, 70.0], [65.0, 67.0], [66.0, 69.5], [65.5, 66.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#ccaa44",
+"variant": "85000002"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs6",
+"pivots_by_camera": [[64.5, 68.5], [63.5, 64.5], [65.5, 66.5], [67.0, 66.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#6b4226",
+"variant": "85000003"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs9",
+"pivots_by_camera": [[63.0, 63.5], [64.0, 59.5], [68.0, 62.5], [67.0, 65.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#6b4226",
+"variant": "85000004"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs4",
+"pivots_by_camera": [[64.0, 71.5], [65.0, 68.5], [66.5, 70.5], [65.5, 67.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#8b4513",
+"variant": "85000005"
+}])
+icon = SubResource("Resource_7c50s")
+notes = "Visual name Costume; Theatrical and performance outfits
+Icon: Shares an existing icon for the native equipment slot."

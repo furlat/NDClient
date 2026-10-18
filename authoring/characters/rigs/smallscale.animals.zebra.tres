@@ -1,0 +1,386 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_bbs1r"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_4vvlv"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_a55bg"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_il6v4"]
+
+[sub_resource type="Resource" id="Resource_jw2fh"]
+script = ExtResource("2_4vvlv")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-120.24621202458748, 164.79393923933998)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/zebra/attack1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/zebra/attack1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/zebra/attack1/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/zebra/attack1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/zebra/attack1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/zebra/attack1/raw-support.png"
+})
+depth_range = Vector2(-120.246216, 164.79395)
+camera_origin = Vector2(42, 63)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.9798152366489497
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_0gqs5"]
+script = ExtResource("1_bbs1r")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Attack1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsZebra": "/rigs/animals_zebra/body/Attack1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/zebra/attack1/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Zebra/Attack1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_jw2fh")
+
+[sub_resource type="Resource" id="Resource_gacc1"]
+script = ExtResource("2_4vvlv")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-120.24621202458748, 164.79393923933998)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/zebra/attack2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/zebra/attack2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/zebra/attack2/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/zebra/attack2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/zebra/attack2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/zebra/attack2/raw-support.png"
+})
+depth_range = Vector2(-120.246216, 164.79395)
+camera_origin = Vector2(42, 63)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.9735509620539704
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_mwcau"]
+script = ExtResource("1_bbs1r")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Attack2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsZebra": "/rigs/animals_zebra/body/Attack2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/zebra/attack2/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Zebra/Attack2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_gacc1")
+
+[sub_resource type="Resource" id="Resource_3npfj"]
+script = ExtResource("2_4vvlv")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-120.24621202458748, 164.79393923933998)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/zebra/attack3/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/zebra/attack3/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/zebra/attack3/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/zebra/attack3/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/zebra/attack3/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/zebra/attack3/raw-support.png"
+})
+depth_range = Vector2(-120.246216, 164.79395)
+camera_origin = Vector2(42, 63)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.9749657794676806
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_grxmj"]
+script = ExtResource("1_bbs1r")
+name = "Attack3"
+role = "attack_3"
+source_clip = "Attack3"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsZebra": "/rigs/animals_zebra/body/Attack3.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/zebra/attack3/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Zebra/Attack3.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_3npfj")
+
+[sub_resource type="Resource" id="Resource_wtd5x"]
+script = ExtResource("2_4vvlv")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-120.24621202458748, 164.79393923933998)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/zebra/die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/zebra/die/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/zebra/die/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/zebra/die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/zebra/die/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/zebra/die/raw-support.png"
+})
+depth_range = Vector2(-120.246216, 164.79395)
+camera_origin = Vector2(42, 63)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.976114220718968
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_pxnn5"]
+script = ExtResource("1_bbs1r")
+name = "Die"
+role = "die"
+source_clip = "Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsZebra": "/rigs/animals_zebra/body/Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/zebra/die/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Zebra/Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_wtd5x")
+
+[sub_resource type="Resource" id="Resource_7cp8o"]
+script = ExtResource("2_4vvlv")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-120.24621202458748, 164.79393923933998)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/zebra/idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/zebra/idle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/zebra/idle/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/zebra/idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/zebra/idle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/zebra/idle/raw-support.png"
+})
+depth_range = Vector2(-120.246216, 164.79395)
+camera_origin = Vector2(42, 63)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.9755985408172648
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_gn5rn"]
+script = ExtResource("1_bbs1r")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsZebra": "/rigs/animals_zebra/body/Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/zebra/idle/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Zebra/Idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_7cp8o")
+
+[sub_resource type="Resource" id="Resource_kbhll"]
+script = ExtResource("2_4vvlv")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-120.24621202458748, 164.79393923933998)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/zebra/idle2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/zebra/idle2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/zebra/idle2/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/zebra/idle2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/zebra/idle2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/zebra/idle2/raw-support.png"
+})
+depth_range = Vector2(-120.246216, 164.79395)
+camera_origin = Vector2(42, 63)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.9791815248768893
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_js6wt"]
+script = ExtResource("1_bbs1r")
+name = "Idle2"
+role = "idle_alt"
+source_clip = "Idle2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsZebra": "/rigs/animals_zebra/body/Idle2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/zebra/idle2/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Zebra/Idle2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_kbhll")
+
+[sub_resource type="Resource" id="Resource_s3o8e"]
+script = ExtResource("2_4vvlv")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-120.24621202458748, 164.79393923933998)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/zebra/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/zebra/run/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/zebra/run/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/zebra/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/zebra/run/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/zebra/run/raw-support.png"
+})
+depth_range = Vector2(-120.246216, 164.79395)
+camera_origin = Vector2(42, 63)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.980511192055042
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_gb8vw"]
+script = ExtResource("1_bbs1r")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsZebra": "/rigs/animals_zebra/body/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/zebra/run/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Zebra/Run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_s3o8e")
+
+[sub_resource type="Resource" id="Resource_po4ll"]
+script = ExtResource("2_4vvlv")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-120.24621202458748, 164.79393923933998)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/zebra/takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/zebra/takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/zebra/takedamage/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/zebra/takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/zebra/takedamage/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/zebra/takedamage/raw-support.png"
+})
+depth_range = Vector2(-120.246216, 164.79395)
+camera_origin = Vector2(42, 63)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.9731638835525344
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_cyh7h"]
+script = ExtResource("1_bbs1r")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsZebra": "/rigs/animals_zebra/body/TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/zebra/takedamage/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Zebra/TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_po4ll")
+
+[sub_resource type="Resource" id="Resource_cowdb"]
+script = ExtResource("2_4vvlv")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-120.24621202458748, 164.79393923933998)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/zebra/walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/zebra/walk/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/zebra/walk/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/zebra/walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/zebra/walk/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/zebra/walk/raw-support.png"
+})
+depth_range = Vector2(-120.246216, 164.79395)
+camera_origin = Vector2(42, 63)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.9790947212629502
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_lnx1c"]
+script = ExtResource("1_bbs1r")
+name = "Walk"
+role = "walk"
+source_clip = "Walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsZebra": "/rigs/animals_zebra/body/Walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/zebra/walk/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Zebra/Walk.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_cowdb")
+
+[resource]
+script = ExtResource("4_il6v4")
+id = "smallscale.animals.zebra"
+pack = "animals"
+variant = "Zebra"
+source = "smallscale-authored/animals"
+cell = Vector2i(84, 84)
+pivot = Vector2(42, 59)
+anchor = Vector2(42, 46)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("AnimalsZebra")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_bbs1r")]([SubResource("Resource_0gqs5"), SubResource("Resource_mwcau"), SubResource("Resource_grxmj"), SubResource("Resource_pxnn5"), SubResource("Resource_gn5rn"), SubResource("Resource_js6wt"), SubResource("Resource_gb8vw"), SubResource("Resource_cyh7h"), SubResource("Resource_lnx1c")])
+hold_clips = PackedStringArray("Die")
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed."

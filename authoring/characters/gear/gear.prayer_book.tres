@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_acolg"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_h33yv"]
+
+[sub_resource type="Resource" id="Resource_x5x4k"]
+script = ExtResource("1_acolg")
+path = "art/media/ui/icons/smooth48/item.prayer-book.png"
+native_size = Vector2i(48, 48)
+reuses = "item.prayer-book"
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_h33yv")
+id = "gear.prayer_book"
+kind = "item"
+icon = SubResource("Resource_x5x4k")
+status = "partial"
+notes = "No worn look authored.
+Icon: Recovered matching base-item icon."

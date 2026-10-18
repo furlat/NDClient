@@ -1,0 +1,1209 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_4m6lq"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_palkp"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_kbm6m"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_0d0sf"]
+
+[sub_resource type="Resource" id="Resource_qm6fp"]
+script = ExtResource("2_palkp")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/4berserker/180turn/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/4berserker/180turn/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/4berserker/180turn/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/4berserker/180turn/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/4berserker/180turn/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/4berserker/180turn/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.695977149568885
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_mmql5"]
+script = ExtResource("1_4m6lq")
+name = "180Turn"
+role = "turn"
+source_clip = "180Turn"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead4Berserker": "/rigs/undead_4berserker/body/180Turn.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/4berserker/180turn/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/4Berserker/180Turn.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/4Berserker/180Turn.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_qm6fp")
+
+[sub_resource type="Resource" id="Resource_1obnf"]
+script = ExtResource("2_palkp")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/4berserker/attack1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/4berserker/attack1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/4berserker/attack1/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/4berserker/attack1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/4berserker/attack1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/4berserker/attack1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.8845645469231899
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_we0m4"]
+script = ExtResource("1_4m6lq")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Attack1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead4Berserker": "/rigs/undead_4berserker/body/Attack1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/4berserker/attack1/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/4Berserker/Attack1.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/4Berserker/Attack1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_1obnf")
+
+[sub_resource type="Resource" id="Resource_4xaje"]
+script = ExtResource("2_palkp")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/4berserker/attack2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/4berserker/attack2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/4berserker/attack2/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/4berserker/attack2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/4berserker/attack2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/4berserker/attack2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.8786795255961524
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_w7150"]
+script = ExtResource("1_4m6lq")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Attack2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead4Berserker": "/rigs/undead_4berserker/body/Attack2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/4berserker/attack2/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/4Berserker/Attack2.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/4Berserker/Attack2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_4xaje")
+
+[sub_resource type="Resource" id="Resource_lu3cv"]
+script = ExtResource("2_palkp")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/4berserker/attack3/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/4berserker/attack3/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/4berserker/attack3/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/4berserker/attack3/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/4berserker/attack3/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/4berserker/attack3/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.8363010906632465
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_yaos5"]
+script = ExtResource("1_4m6lq")
+name = "Attack3"
+role = "attack_3"
+source_clip = "Attack3"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead4Berserker": "/rigs/undead_4berserker/body/Attack3.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/4berserker/attack3/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/4Berserker/Attack3.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/4Berserker/Attack3.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_lu3cv")
+
+[sub_resource type="Resource" id="Resource_14piy"]
+script = ExtResource("2_palkp")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/4berserker/attackrun/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/4berserker/attackrun/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/4berserker/attackrun/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/4berserker/attackrun/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/4berserker/attackrun/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/4berserker/attackrun/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.7057854364736387
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_p5v6y"]
+script = ExtResource("1_4m6lq")
+name = "AttackRun"
+role = "attack_run"
+source_clip = "AttackRun"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead4Berserker": "/rigs/undead_4berserker/body/AttackRun.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/4berserker/attackrun/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/4Berserker/AttackRun.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_14piy")
+
+[sub_resource type="Resource" id="Resource_elw7q"]
+script = ExtResource("2_palkp")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/4berserker/blockmid/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/4berserker/blockmid/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/4berserker/blockmid/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/4berserker/blockmid/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/4berserker/blockmid/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/4berserker/blockmid/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.9072677194779312
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_p4lwq"]
+script = ExtResource("1_4m6lq")
+name = "Block"
+role = "block_hold"
+source_clip = "BlockMid"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead4Berserker": "/rigs/undead_4berserker/body/BlockMid.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/4berserker/blockmid/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/4Berserker/BlockMid.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/4Berserker/BlockMid.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_elw7q")
+
+[sub_resource type="Resource" id="Resource_ym17y"]
+script = ExtResource("2_palkp")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/4berserker/blockstart/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/4berserker/blockstart/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/4berserker/blockstart/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/4berserker/blockstart/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/4berserker/blockstart/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/4berserker/blockstart/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.9205380165865216
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_olwdn"]
+script = ExtResource("1_4m6lq")
+name = "BlockStart"
+role = "block_start"
+source_clip = "BlockStart"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead4Berserker": "/rigs/undead_4berserker/body/BlockStart.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/4berserker/blockstart/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/4Berserker/BlockStart.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/4Berserker/BlockStart.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_ym17y")
+
+[sub_resource type="Resource" id="Resource_qjehq"]
+script = ExtResource("2_palkp")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/4berserker/castspell/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/4berserker/castspell/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/4berserker/castspell/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/4berserker/castspell/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/4berserker/castspell/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/4berserker/castspell/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.9172110720659103
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_0tjo7"]
+script = ExtResource("1_4m6lq")
+name = "CastSpell"
+role = "cast"
+source_clip = "CastSpell"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead4Berserker": "/rigs/undead_4berserker/body/CastSpell.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/4berserker/castspell/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/4Berserker/CastSpell.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/4Berserker/CastSpell.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_qjehq")
+
+[sub_resource type="Resource" id="Resource_v8ati"]
+script = ExtResource("2_palkp")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/4berserker/crouchidle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/4berserker/crouchidle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/4berserker/crouchidle/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/4berserker/crouchidle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/4berserker/crouchidle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/4berserker/crouchidle/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.9111768278192908
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_c7ed3"]
+script = ExtResource("1_4m6lq")
+name = "Crouch"
+role = "crouch_idle"
+source_clip = "CrouchIdle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead4Berserker": "/rigs/undead_4berserker/body/CrouchIdle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/4berserker/crouchidle/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/4Berserker/CrouchIdle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_v8ati")
+
+[sub_resource type="Resource" id="Resource_nyyra"]
+script = ExtResource("2_palkp")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/4berserker/crouchrun/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/4berserker/crouchrun/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/4berserker/crouchrun/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/4berserker/crouchrun/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/4berserker/crouchrun/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/4berserker/crouchrun/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.9185687935904088
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_0vyiw"]
+script = ExtResource("1_4m6lq")
+name = "CrouchWalk"
+role = "crouch_move"
+source_clip = "CrouchRun"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead4Berserker": "/rigs/undead_4berserker/body/CrouchRun.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/4berserker/crouchrun/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/4Berserker/CrouchRun.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/4Berserker/CrouchRun.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_nyyra")
+
+[sub_resource type="Resource" id="Resource_k5e0v"]
+script = ExtResource("2_palkp")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/4berserker/die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/4berserker/die/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/4berserker/die/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/4berserker/die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/4berserker/die/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/4berserker/die/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.8811027430387618
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_3vf1l"]
+script = ExtResource("1_4m6lq")
+name = "Die"
+role = "die"
+source_clip = "Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead4Berserker": "/rigs/undead_4berserker/body/Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/4berserker/die/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/4Berserker/Die.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/4Berserker/Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_k5e0v")
+
+[sub_resource type="Resource" id="Resource_4i73k"]
+script = ExtResource("2_palkp")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/4berserker/frontflip/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/4berserker/frontflip/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/4berserker/frontflip/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/4berserker/frontflip/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/4berserker/frontflip/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/4berserker/frontflip/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.6998504957247023
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_yk1sw"]
+script = ExtResource("1_4m6lq")
+name = "BackFlip"
+role = "flip"
+source_clip = "FrontFlip"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead4Berserker": "/rigs/undead_4berserker/body/FrontFlip.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/4berserker/frontflip/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/4Berserker/FrontFlip.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/4Berserker/FrontFlip.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_4i73k")
+
+[sub_resource type="Resource" id="Resource_qy0u0"]
+script = ExtResource("2_palkp")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/4berserker/idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/4berserker/idle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/4berserker/idle/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/4berserker/idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/4berserker/idle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/4berserker/idle/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.892328670951018
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_3ao5p"]
+script = ExtResource("1_4m6lq")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead4Berserker": "/rigs/undead_4berserker/body/Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/4berserker/idle/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/4Berserker/Idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_qy0u0")
+
+[sub_resource type="Resource" id="Resource_gxhft"]
+script = ExtResource("2_palkp")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/4berserker/idle2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/4berserker/idle2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/4berserker/idle2/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/4berserker/idle2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/4berserker/idle2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/4berserker/idle2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.880984141099748
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_6uyv8"]
+script = ExtResource("1_4m6lq")
+name = "Idle2"
+role = "idle_alt"
+source_clip = "Idle2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead4Berserker": "/rigs/undead_4berserker/body/Idle2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/4berserker/idle2/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/4Berserker/Idle2.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/4Berserker/Idle2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_gxhft")
+
+[sub_resource type="Resource" id="Resource_cb82c"]
+script = ExtResource("2_palkp")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/4berserker/kick/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/4berserker/kick/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/4berserker/kick/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/4berserker/kick/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/4berserker/kick/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/4berserker/kick/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.9024473684210528
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_4oqo6"]
+script = ExtResource("1_4m6lq")
+name = "Kick"
+role = "kick"
+source_clip = "Kick"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead4Berserker": "/rigs/undead_4berserker/body/Kick.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/4berserker/kick/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/4Berserker/Kick.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/4Berserker/Kick.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_cb82c")
+
+[sub_resource type="Resource" id="Resource_hk5pf"]
+script = ExtResource("2_palkp")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/4berserker/pummel/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/4berserker/pummel/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/4berserker/pummel/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/4berserker/pummel/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/4berserker/pummel/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/4berserker/pummel/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.9023954283328548
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_xad8c"]
+script = ExtResource("1_4m6lq")
+name = "Pummel"
+role = "pummel"
+source_clip = "Pummel"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead4Berserker": "/rigs/undead_4berserker/body/Pummel.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/4berserker/pummel/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/4Berserker/Pummel.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/4Berserker/Pummel.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_hk5pf")
+
+[sub_resource type="Resource" id="Resource_p6x7k"]
+script = ExtResource("2_palkp")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/4berserker/quickshot/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/4berserker/quickshot/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/4berserker/quickshot/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/4berserker/quickshot/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/4berserker/quickshot/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/4berserker/quickshot/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.671799328229964
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_1fexh"]
+script = ExtResource("1_4m6lq")
+name = "QuickShot"
+role = "shoot"
+source_clip = "QuickShot"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead4Berserker": "/rigs/undead_4berserker/body/QuickShot.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/4berserker/quickshot/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/4Berserker/QuickShot.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/4Berserker/QuickShot.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_p6x7k")
+
+[sub_resource type="Resource" id="Resource_h8xm5"]
+script = ExtResource("2_palkp")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent", "source_pose_empty")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/4berserker/quickslide/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/4berserker/quickslide/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/4berserker/quickslide/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/4berserker/quickslide/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/4berserker/quickslide/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/4berserker/quickslide/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.7568977269359571
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_ho5vd"]
+script = ExtResource("1_4m6lq")
+name = "QuickSlide"
+role = "slide"
+source_clip = "QuickSlide"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead4Berserker": "/rigs/undead_4berserker/body/QuickSlide.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/4berserker/quickslide/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/4Berserker/QuickSlide.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/4Berserker/QuickSlide.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_h8xm5")
+
+[sub_resource type="Resource" id="Resource_k8u16"]
+script = ExtResource("2_palkp")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/4berserker/rolling/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/4berserker/rolling/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/4berserker/rolling/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/4berserker/rolling/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/4berserker/rolling/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/4berserker/rolling/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.7247776673204546
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_q17up"]
+script = ExtResource("1_4m6lq")
+name = "Rolling"
+role = "roll"
+source_clip = "Rolling"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead4Berserker": "/rigs/undead_4berserker/body/Rolling.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/4berserker/rolling/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/4Berserker/Rolling.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/4Berserker/Rolling.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_k8u16")
+
+[sub_resource type="Resource" id="Resource_1pysx"]
+script = ExtResource("2_palkp")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/4berserker/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/4berserker/run/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/4berserker/run/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/4berserker/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/4berserker/run/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/4berserker/run/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.7168662133411206
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_tiupm"]
+script = ExtResource("1_4m6lq")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead4Berserker": "/rigs/undead_4berserker/body/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/4berserker/run/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/4Berserker/Run.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/4Berserker/Run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_1pysx")
+
+[sub_resource type="Resource" id="Resource_04uv3"]
+script = ExtResource("2_palkp")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/4berserker/runbackwards/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/4berserker/runbackwards/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/4berserker/runbackwards/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/4berserker/runbackwards/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/4berserker/runbackwards/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/4berserker/runbackwards/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.7333188584766118
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_w7y62"]
+script = ExtResource("1_4m6lq")
+name = "RunBackwards"
+role = "run_back"
+source_clip = "RunBackwards"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead4Berserker": "/rigs/undead_4berserker/body/RunBackwards.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/4berserker/runbackwards/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/4Berserker/RunBackwards.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/4Berserker/RunBackwards.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_04uv3")
+
+[sub_resource type="Resource" id="Resource_6d3kf"]
+script = ExtResource("2_palkp")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/4berserker/sittingchair/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/4berserker/sittingchair/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/4berserker/sittingchair/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/4berserker/sittingchair/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/4berserker/sittingchair/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/4berserker/sittingchair/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.9181582766568964
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_fwktn"]
+script = ExtResource("1_4m6lq")
+name = "SittingChair"
+role = "sit"
+source_clip = "SittingChair"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead4Berserker": "/rigs/undead_4berserker/body/SittingChair.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/4berserker/sittingchair/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/4Berserker/SittingChair.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/4Berserker/SittingChair.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_6d3kf")
+
+[sub_resource type="Resource" id="Resource_rttf8"]
+script = ExtResource("2_palkp")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent", "source_pose_empty")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/4berserker/special1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/4berserker/special1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/4berserker/special1/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/4berserker/special1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/4berserker/special1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/4berserker/special1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.817007736461193
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_kmmpn"]
+script = ExtResource("1_4m6lq")
+name = "Special1"
+role = "special_1"
+source_clip = "Special1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead4Berserker": "/rigs/undead_4berserker/body/Special1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/4berserker/special1/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/4Berserker/Special1.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/4Berserker/Special1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_rttf8")
+
+[sub_resource type="Resource" id="Resource_26yan"]
+script = ExtResource("2_palkp")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/4berserker/special2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/4berserker/special2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/4berserker/special2/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/4berserker/special2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/4berserker/special2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/4berserker/special2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.9058021832616606
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_b6bci"]
+script = ExtResource("1_4m6lq")
+name = "Special2"
+role = "special_2"
+source_clip = "Special2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead4Berserker": "/rigs/undead_4berserker/body/Special2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/4berserker/special2/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/4Berserker/Special2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_26yan")
+
+[sub_resource type="Resource" id="Resource_bgjlf"]
+script = ExtResource("2_palkp")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/4berserker/strafeleft/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/4berserker/strafeleft/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/4berserker/strafeleft/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/4berserker/strafeleft/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/4berserker/strafeleft/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/4berserker/strafeleft/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.7091711956521739
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_xx0nq"]
+script = ExtResource("1_4m6lq")
+name = "StrafeLeft"
+role = "strafe_left"
+source_clip = "StrafeLeft"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead4Berserker": "/rigs/undead_4berserker/body/StrafeLeft.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/4berserker/strafeleft/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/4Berserker/StrafeLeft.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/4Berserker/StrafeLeft.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_bgjlf")
+
+[sub_resource type="Resource" id="Resource_pfpdr"]
+script = ExtResource("2_palkp")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/4berserker/straferight/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/4berserker/straferight/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/4berserker/straferight/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/4berserker/straferight/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/4berserker/straferight/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/4berserker/straferight/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.7343427958998598
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_5ws3i"]
+script = ExtResource("1_4m6lq")
+name = "StrafeRight"
+role = "strafe_right"
+source_clip = "StrafeRight"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead4Berserker": "/rigs/undead_4berserker/body/StrafeRight.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/4berserker/straferight/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/4Berserker/StrafeRight.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/4Berserker/StrafeRight.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_pfpdr")
+
+[sub_resource type="Resource" id="Resource_c0fta"]
+script = ExtResource("2_palkp")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/4berserker/takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/4berserker/takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/4berserker/takedamage/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/4berserker/takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/4berserker/takedamage/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/4berserker/takedamage/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.9027711100442738
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_xx4vt"]
+script = ExtResource("1_4m6lq")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead4Berserker": "/rigs/undead_4berserker/body/TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/4berserker/takedamage/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/4Berserker/TakeDamage.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/4Berserker/TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_c0fta")
+
+[sub_resource type="Resource" id="Resource_81hi2"]
+script = ExtResource("2_palkp")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/4berserker/unsheath/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/4berserker/unsheath/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/4berserker/unsheath/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/4berserker/unsheath/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/4berserker/unsheath/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/4berserker/unsheath/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.8763426846834488
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_oegxk"]
+script = ExtResource("1_4m6lq")
+name = "UnSheath"
+role = "unsheath"
+source_clip = "UnSheath"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead4Berserker": "/rigs/undead_4berserker/body/UnSheath.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/4berserker/unsheath/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/4Berserker/UnSheath.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/4Berserker/UnSheath.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_81hi2")
+
+[sub_resource type="Resource" id="Resource_m3bkc"]
+script = ExtResource("2_palkp")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/4berserker/walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/4berserker/walk/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/4berserker/walk/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/4berserker/walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/4berserker/walk/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/4berserker/walk/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.7347284367040683
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_ijf4h"]
+script = ExtResource("1_4m6lq")
+name = "Walk"
+role = "walk"
+source_clip = "Walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead4Berserker": "/rigs/undead_4berserker/body/Walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/4berserker/walk/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/4Berserker/Walk.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_m3bkc")
+
+[resource]
+script = ExtResource("4_0d0sf")
+id = "smallscale.undead.4berserker"
+pack = "undead"
+variant = "4Berserker"
+source = "smallscale-authored/undead"
+pivot = Vector2(64, 87)
+anchor = Vector2(64, 62)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("Undead4Berserker")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_4m6lq")]([SubResource("Resource_mmql5"), SubResource("Resource_we0m4"), SubResource("Resource_w7150"), SubResource("Resource_yaos5"), SubResource("Resource_p5v6y"), SubResource("Resource_p4lwq"), SubResource("Resource_olwdn"), SubResource("Resource_0tjo7"), SubResource("Resource_c7ed3"), SubResource("Resource_0vyiw"), SubResource("Resource_3vf1l"), SubResource("Resource_yk1sw"), SubResource("Resource_3ao5p"), SubResource("Resource_6uyv8"), SubResource("Resource_4oqo6"), SubResource("Resource_xad8c"), SubResource("Resource_1fexh"), SubResource("Resource_ho5vd"), SubResource("Resource_q17up"), SubResource("Resource_tiupm"), SubResource("Resource_w7y62"), SubResource("Resource_fwktn"), SubResource("Resource_kmmpn"), SubResource("Resource_b6bci"), SubResource("Resource_xx0nq"), SubResource("Resource_5ws3i"), SubResource("Resource_xx4vt"), SubResource("Resource_oegxk"), SubResource("Resource_ijf4h")])
+hold_clips = PackedStringArray("Die")
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed."

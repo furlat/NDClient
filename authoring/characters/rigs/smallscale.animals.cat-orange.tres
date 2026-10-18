@@ -1,0 +1,466 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_nkwfb"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_0xw4f"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_cg8jo"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_bkjs4"]
+
+[sub_resource type="Resource" id="Resource_jdgy1"]
+script = ExtResource("2_0xw4f")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/cat-orange/attack1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/cat-orange/attack1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/cat-orange/attack1/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/cat-orange/attack1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/cat-orange/attack1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/cat-orange/attack1/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.9389584037876226
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_3dmcc"]
+script = ExtResource("1_nkwfb")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Attack1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsCatOrange": "/rigs/animals_cat_orange/body/Attack1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/cat-orange/attack1/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Cat Orange/Attack1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_jdgy1")
+
+[sub_resource type="Resource" id="Resource_fa1ha"]
+script = ExtResource("2_0xw4f")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/cat-orange/attack2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/cat-orange/attack2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/cat-orange/attack2/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/cat-orange/attack2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/cat-orange/attack2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/cat-orange/attack2/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.8743726235741445
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_hla46"]
+script = ExtResource("1_nkwfb")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Attack2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsCatOrange": "/rigs/animals_cat_orange/body/Attack2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/cat-orange/attack2/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Cat Orange/Attack2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_fa1ha")
+
+[sub_resource type="Resource" id="Resource_uv1rc"]
+script = ExtResource("2_0xw4f")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/cat-orange/attack3/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/cat-orange/attack3/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/cat-orange/attack3/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/cat-orange/attack3/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/cat-orange/attack3/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/cat-orange/attack3/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.9363860707430764
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_g0rf5"]
+script = ExtResource("1_nkwfb")
+name = "Attack3"
+role = "attack_3"
+source_clip = "Attack3"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsCatOrange": "/rigs/animals_cat_orange/body/Attack3.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/cat-orange/attack3/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Cat Orange/Attack3.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_uv1rc")
+
+[sub_resource type="Resource" id="Resource_mcmtr"]
+script = ExtResource("2_0xw4f")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/cat-orange/die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/cat-orange/die/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/cat-orange/die/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/cat-orange/die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/cat-orange/die/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/cat-orange/die/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.9197598253275108
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_s6vct"]
+script = ExtResource("1_nkwfb")
+name = "Die"
+role = "die"
+source_clip = "Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsCatOrange": "/rigs/animals_cat_orange/body/Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/cat-orange/die/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Cat Orange/Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_mcmtr")
+
+[sub_resource type="Resource" id="Resource_78qsm"]
+script = ExtResource("2_0xw4f")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/cat-orange/idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/cat-orange/idle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/cat-orange/idle/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/cat-orange/idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/cat-orange/idle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/cat-orange/idle/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.9520742848584692
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_hwe3m"]
+script = ExtResource("1_nkwfb")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsCatOrange": "/rigs/animals_cat_orange/body/Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/cat-orange/idle/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Cat Orange/Idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_78qsm")
+
+[sub_resource type="Resource" id="Resource_75xhd"]
+script = ExtResource("2_0xw4f")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/cat-orange/idle2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/cat-orange/idle2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/cat-orange/idle2/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/cat-orange/idle2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/cat-orange/idle2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/cat-orange/idle2/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.9506629663891458
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_1rrmw"]
+script = ExtResource("1_nkwfb")
+name = "Idle2"
+role = "idle_alt"
+source_clip = "Idle2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsCatOrange": "/rigs/animals_cat_orange/body/Idle2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/cat-orange/idle2/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Cat Orange/Idle2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_75xhd")
+
+[sub_resource type="Resource" id="Resource_yodtw"]
+script = ExtResource("2_0xw4f")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/cat-orange/jump/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/cat-orange/jump/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/cat-orange/jump/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/cat-orange/jump/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/cat-orange/jump/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/cat-orange/jump/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.9221838719799184
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_tibas"]
+script = ExtResource("1_nkwfb")
+name = "Jump"
+role = "jump"
+source_clip = "Jump"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsCatOrange": "/rigs/animals_cat_orange/body/Jump.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/cat-orange/jump/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Cat Orange/Jump.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_yodtw")
+
+[sub_resource type="Resource" id="Resource_efh7g"]
+script = ExtResource("2_0xw4f")
+status = "validated_partial"
+flags = PackedStringArray("silhouette_iou_below_75_percent", "source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/cat-orange/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/cat-orange/run/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/cat-orange/run/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/cat-orange/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/cat-orange/run/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/cat-orange/run/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.9499617444529456
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_lf0j5"]
+script = ExtResource("1_nkwfb")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsCatOrange": "/rigs/animals_cat_orange/body/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/cat-orange/run/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Cat Orange/Run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_efh7g")
+
+[sub_resource type="Resource" id="Resource_4tnd3"]
+script = ExtResource("2_0xw4f")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/cat-orange/takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/cat-orange/takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/cat-orange/takedamage/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/cat-orange/takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/cat-orange/takedamage/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/cat-orange/takedamage/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.9587471352177236
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_nsymf"]
+script = ExtResource("1_nkwfb")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsCatOrange": "/rigs/animals_cat_orange/body/TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/cat-orange/takedamage/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Cat Orange/TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_4tnd3")
+
+[sub_resource type="Resource" id="Resource_a3pmm"]
+script = ExtResource("2_0xw4f")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/cat-orange/taunt/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/cat-orange/taunt/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/cat-orange/taunt/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/cat-orange/taunt/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/cat-orange/taunt/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/cat-orange/taunt/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.9248966794926606
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_jasd7"]
+script = ExtResource("1_nkwfb")
+name = "Taunt"
+role = "taunt"
+source_clip = "Taunt"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsCatOrange": "/rigs/animals_cat_orange/body/Taunt.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/cat-orange/taunt/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Cat Orange/Taunt.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_a3pmm")
+
+[sub_resource type="Resource" id="Resource_2ij8u"]
+script = ExtResource("2_0xw4f")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/cat-orange/walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/cat-orange/walk/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/cat-orange/walk/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/cat-orange/walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/cat-orange/walk/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/cat-orange/walk/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.9519427402862984
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_s65p0"]
+script = ExtResource("1_nkwfb")
+name = "Walk"
+role = "walk"
+source_clip = "Walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsCatOrange": "/rigs/animals_cat_orange/body/Walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/cat-orange/walk/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Cat Orange/Walk.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_2ij8u")
+
+[resource]
+script = ExtResource("4_bkjs4")
+id = "smallscale.animals.cat-orange"
+pack = "animals"
+variant = "Cat Orange"
+source = "smallscale-authored/animals"
+cell = Vector2i(64, 64)
+pivot = Vector2(32, 42)
+anchor = Vector2(32, 38)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("AnimalsCatOrange")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_nkwfb")]([SubResource("Resource_3dmcc"), SubResource("Resource_hla46"), SubResource("Resource_g0rf5"), SubResource("Resource_s6vct"), SubResource("Resource_hwe3m"), SubResource("Resource_1rrmw"), SubResource("Resource_tibas"), SubResource("Resource_lf0j5"), SubResource("Resource_nsymf"), SubResource("Resource_jasd7"), SubResource("Resource_s65p0")])
+hold_clips = PackedStringArray("Die")
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed."

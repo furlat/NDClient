@@ -1,0 +1,466 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_d0bxf"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_fmk4n"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_vgfsj"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_bsyjy"]
+
+[sub_resource type="Resource" id="Resource_26mbw"]
+script = ExtResource("2_fmk4n")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/8brawler/attack1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/8brawler/attack1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/8brawler/attack1/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/8brawler/attack1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/8brawler/attack1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/8brawler/attack1/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 16.97056274847714
+coverage = 0.9512789717118544
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_n1nay"]
+script = ExtResource("1_d0bxf")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Attack1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies8Brawler": "/rigs/enemies_8brawler/body/Attack1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/8brawler/attack1/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/8Brawler/Attack1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_26mbw")
+
+[sub_resource type="Resource" id="Resource_8taxq"]
+script = ExtResource("2_fmk4n")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/8brawler/attack2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/8brawler/attack2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/8brawler/attack2/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/8brawler/attack2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/8brawler/attack2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/8brawler/attack2/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 16.97056274847714
+coverage = 0.9469649853020132
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_01mr6"]
+script = ExtResource("1_d0bxf")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Attack2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies8Brawler": "/rigs/enemies_8brawler/body/Attack2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/8brawler/attack2/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/8Brawler/Attack2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_8taxq")
+
+[sub_resource type="Resource" id="Resource_xnjgx"]
+script = ExtResource("2_fmk4n")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/8brawler/attack3/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/8brawler/attack3/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/8brawler/attack3/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/8brawler/attack3/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/8brawler/attack3/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/8brawler/attack3/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 16.97056274847714
+coverage = 0.9448472705471204
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_26fc6"]
+script = ExtResource("1_d0bxf")
+name = "Attack3"
+role = "attack_3"
+source_clip = "Attack3"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies8Brawler": "/rigs/enemies_8brawler/body/Attack3.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/8brawler/attack3/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/8Brawler/Attack3.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_xnjgx")
+
+[sub_resource type="Resource" id="Resource_rykwx"]
+script = ExtResource("2_fmk4n")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/8brawler/attack4/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/8brawler/attack4/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/8brawler/attack4/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/8brawler/attack4/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/8brawler/attack4/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/8brawler/attack4/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 16.97056274847714
+coverage = 0.9521949734980092
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_ehpgj"]
+script = ExtResource("1_d0bxf")
+name = "Attack4"
+role = "attack_4"
+source_clip = "Attack4"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies8Brawler": "/rigs/enemies_8brawler/body/Attack4.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/8brawler/attack4/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/8Brawler/Attack4.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_rykwx")
+
+[sub_resource type="Resource" id="Resource_s2ftd"]
+script = ExtResource("2_fmk4n")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/8brawler/die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/8brawler/die/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/8brawler/die/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/8brawler/die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/8brawler/die/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/8brawler/die/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 16.97056274847714
+coverage = 0.9569984529656498
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_2h0dq"]
+script = ExtResource("1_d0bxf")
+name = "Die"
+role = "die"
+source_clip = "Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies8Brawler": "/rigs/enemies_8brawler/body/Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/8brawler/die/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/8Brawler/Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_s2ftd")
+
+[sub_resource type="Resource" id="Resource_uq4eh"]
+script = ExtResource("2_fmk4n")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/8brawler/idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/8brawler/idle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/8brawler/idle/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/8brawler/idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/8brawler/idle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/8brawler/idle/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 16.97056274847714
+coverage = 0.9379387086737088
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_oa3k7"]
+script = ExtResource("1_d0bxf")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies8Brawler": "/rigs/enemies_8brawler/body/Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/8brawler/idle/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/8Brawler/Idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_uq4eh")
+
+[sub_resource type="Resource" id="Resource_7cqq0"]
+script = ExtResource("2_fmk4n")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/8brawler/idle2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/8brawler/idle2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/8brawler/idle2/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/8brawler/idle2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/8brawler/idle2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/8brawler/idle2/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 16.97056274847714
+coverage = 0.9291436195347028
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_06655"]
+script = ExtResource("1_d0bxf")
+name = "Idle2"
+role = "idle_alt"
+source_clip = "Idle2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies8Brawler": "/rigs/enemies_8brawler/body/Idle2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/8brawler/idle2/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/8Brawler/Idle2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_7cqq0")
+
+[sub_resource type="Resource" id="Resource_sgxel"]
+script = ExtResource("2_fmk4n")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/8brawler/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/8brawler/run/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/8brawler/run/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/8brawler/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/8brawler/run/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/8brawler/run/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 16.97056274847714
+coverage = 0.9574601188614326
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_j8nh4"]
+script = ExtResource("1_d0bxf")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies8Brawler": "/rigs/enemies_8brawler/body/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/8brawler/run/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/8Brawler/Run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_sgxel")
+
+[sub_resource type="Resource" id="Resource_ue8ct"]
+script = ExtResource("2_fmk4n")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/8brawler/takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/8brawler/takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/8brawler/takedamage/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/8brawler/takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/8brawler/takedamage/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/8brawler/takedamage/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 16.97056274847714
+coverage = 0.9524581164821012
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_un2ep"]
+script = ExtResource("1_d0bxf")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies8Brawler": "/rigs/enemies_8brawler/body/TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/8brawler/takedamage/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/8Brawler/TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_ue8ct")
+
+[sub_resource type="Resource" id="Resource_ag2lj"]
+script = ExtResource("2_fmk4n")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/8brawler/taunt/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/8brawler/taunt/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/8brawler/taunt/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/8brawler/taunt/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/8brawler/taunt/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/8brawler/taunt/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 16.97056274847714
+coverage = 0.94313016577941
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_1dpcj"]
+script = ExtResource("1_d0bxf")
+name = "Taunt"
+role = "taunt"
+source_clip = "Taunt"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies8Brawler": "/rigs/enemies_8brawler/body/Taunt.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/8brawler/taunt/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/8Brawler/Taunt.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_ag2lj")
+
+[sub_resource type="Resource" id="Resource_fkngf"]
+script = ExtResource("2_fmk4n")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/8brawler/walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/8brawler/walk/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/8brawler/walk/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/8brawler/walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/8brawler/walk/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/8brawler/walk/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 16.97056274847714
+coverage = 0.9509817608871248
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_rtspm"]
+script = ExtResource("1_d0bxf")
+name = "Walk"
+role = "walk"
+source_clip = "Walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies8Brawler": "/rigs/enemies_8brawler/body/Walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/8brawler/walk/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/8Brawler/Walk.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_fkngf")
+
+[resource]
+script = ExtResource("4_bsyjy")
+id = "smallscale.enemies.8brawler"
+pack = "enemies"
+variant = "8Brawler"
+source = "smallscale-authored/enemies"
+cell = Vector2i(192, 192)
+pivot = Vector2(96, 132)
+anchor = Vector2(96, 99)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("Enemies8Brawler")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_d0bxf")]([SubResource("Resource_n1nay"), SubResource("Resource_01mr6"), SubResource("Resource_26fc6"), SubResource("Resource_ehpgj"), SubResource("Resource_2h0dq"), SubResource("Resource_oa3k7"), SubResource("Resource_06655"), SubResource("Resource_j8nh4"), SubResource("Resource_un2ep"), SubResource("Resource_1dpcj"), SubResource("Resource_rtspm")])
+hold_clips = PackedStringArray("Die")
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed."

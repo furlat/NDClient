@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_dfu4v"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_xmsaw"]
+
+[sub_resource type="Resource" id="Resource_72st1"]
+script = ExtResource("1_dfu4v")
+path = "art/media/ui/icons/smooth48/item.greatsword.png"
+native_size = Vector2i(48, 48)
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_xmsaw")
+id = "weapon.roster.ember_greatsword"
+kind = "weapon"
+family = "weapon.greatsword"
+icon = SubResource("Resource_72st1")

@@ -1,0 +1,114 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_ghx48"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_11ew8"]
+
+[sub_resource type="Resource" id="Resource_j3may"]
+script = ExtResource("1_ghx48")
+path = "art/media/ui/icons/smooth48/item.shortbow.png"
+native_size = Vector2i(48, 48)
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_11ew8")
+id = "weapon.shortbow"
+kind = "weapon"
+slots = Dictionary[String, Dictionary]({
+"weapon_ranged_main": {
+"layers": [{
+"part": "Ranged1",
+"slot": "weapon",
+"tint": "#8b6914"
+}],
+"variants": {
+"20000001": [{
+"part": "Ranged1",
+"slot": "weapon",
+"tint": "#aa8833"
+}],
+"20000002": [{
+"part": "Ranged1",
+"slot": "weapon",
+"tint": "#5c3317"
+}],
+"a0000006": [{
+"part": "Ranged2",
+"slot": "weapon",
+"tint": "#8b6914"
+}],
+"a0000007": [{
+"part": "Ranged7",
+"slot": "weapon",
+"tint": "#5c3317"
+}]
+}
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Ranged1",
+"pivots_by_camera": [[57.5, 62.5], [69.0, 59.0], [71.0, 64.5], [63.0, 69.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#8b6914",
+"variant": ""
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Ranged1",
+"pivots_by_camera": [[57.5, 62.5], [69.0, 59.0], [71.0, 64.5], [63.0, 69.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#aa8833",
+"variant": "20000001"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Ranged1",
+"pivots_by_camera": [[57.5, 62.5], [69.0, 59.0], [71.0, 64.5], [63.0, 69.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#5c3317",
+"variant": "20000002"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Ranged2",
+"pivots_by_camera": [[61.0, 59.0], [68.0, 58.0], [69.5, 63.5], [62.5, 68.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#8b6914",
+"variant": "a0000006"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Ranged7",
+"pivots_by_camera": [[59.5, 61.5], [68.0, 59.5], [71.0, 64.5], [64.0, 69.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#5c3317",
+"variant": "a0000007"
+}])
+icon = SubResource("Resource_j3may")
+notes = "Visual name Shortbow; Exact shortbow match"

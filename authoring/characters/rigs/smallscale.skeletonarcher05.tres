@@ -1,0 +1,137 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_ppt4l"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="2_kf7o3"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="3_hks2s"]
+
+[sub_resource type="Resource" id="Resource_lys65"]
+script = ExtResource("1_ppt4l")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"SkeletonArcher05": "/rigs/skeletonarcher05/body/Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/undead/With shadow/5Archer/Idle.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/5Archer/Idle.png"
+})
+effect_parts = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_p36yy"]
+script = ExtResource("1_ppt4l")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"SkeletonArcher05": "/rigs/skeletonarcher05/body/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/undead/With shadow/5Archer/Run.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/5Archer/Run.png"
+})
+effect_parts = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_ln7mm"]
+script = ExtResource("1_ppt4l")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"SkeletonArcher05": "/rigs/skeletonarcher05/body/TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/undead/With shadow/5Archer/TakeDamage.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/5Archer/TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_0mqtr"]
+script = ExtResource("1_ppt4l")
+name = "Die"
+role = "die"
+source_clip = "Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"SkeletonArcher05": "/rigs/skeletonarcher05/body/Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/undead/With shadow/5Archer/Die.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/5Archer/Die.png"
+})
+effect_parts = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_7v32c"]
+script = ExtResource("1_ppt4l")
+name = "Rolling"
+role = "roll"
+source_clip = "Rolling"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"SkeletonArcher05": "/rigs/skeletonarcher05/body/Rolling.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/undead/With shadow/5Archer/Rolling.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/5Archer/Rolling.png"
+})
+effect_parts = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_pji78"]
+script = ExtResource("1_ppt4l")
+name = "Attack3"
+role = "attack_3"
+source_clip = "QuickShot"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"SkeletonArcher05": "/rigs/skeletonarcher05/body/QuickShot.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/undead/With shadow/5Archer/QuickShot.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/5Archer/QuickShot.png"
+})
+effect_parts = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_l7wyr"]
+script = ExtResource("2_kf7o3")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "flying",
+"trajectory": "path"
+}
+clip = "Idle"
+hidden_slots = PackedStringArray()
+playback = "once"
+frame_keys = [[0.0, 0.0], [1.0, 0.0]]
+
+[resource]
+script = ExtResource("3_hks2s")
+id = "smallscale.skeletonarcher05"
+pack = "undead"
+variant = "5Archer"
+source = "smallscale-authored/undead"
+pivot = Vector2(64, 92)
+anchor = Vector2(64, 73)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("SkeletonArcher05")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_ppt4l")]([SubResource("Resource_lys65"), SubResource("Resource_p36yy"), SubResource("Resource_ln7mm"), SubResource("Resource_0mqtr"), SubResource("Resource_7v32c"), SubResource("Resource_pji78")])
+contexts = Array[ExtResource("2_kf7o3")]([SubResource("Resource_l7wyr")])
+shadow = "baked"
+hold_clips = PackedStringArray("Die")
+measurements = "measured/characters/rigs/smallscale.skeletonarcher05.json"
+status = "partial"
+notes = "Shadow is baked into the delivered sheet and no geometry is loaded for this rig."

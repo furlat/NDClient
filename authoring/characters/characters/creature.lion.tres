@@ -1,0 +1,95 @@
+[gd_resource type="Resource" script_class="PresentationCharacter" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/character.gd" id="1_1f7rg"]
+
+[resource]
+script = ExtResource("1_1f7rg")
+id = "creature.lion"
+identity = "content.neurodragon:creature:creature.lion@1"
+rig = "smallscale.lion"
+portrait = "creature.lion"
+size = "Large"
+attacks = Array[Dictionary]([{
+"clip": "Attack2",
+"contact": 7,
+"delivery": "melee",
+"recipe": "action.attack",
+"variant": "fixed-unarmed-attack2-7-11"
+}, {
+"clip": "Attack2",
+"contact": 7,
+"delivery": "melee",
+&"items": ["weapon.creature.lion_claws"],
+"recipe": "action.attack",
+"variant": "lion-lion_claws"
+}, {
+"clip": "Attack3",
+"contact": 8,
+"delivery": "melee",
+&"items": ["weapon.creature.lion_bite"],
+"recipe": "action.attack",
+"variant": "lion-lion_bite"
+}, {
+"clip": "Attack2",
+"contact": 7,
+"delivery": "melee",
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "fixed-unarmed-attack2-7-11"
+}, {
+"clip": "Attack2",
+"contact": 7,
+"delivery": "melee",
+&"items": ["weapon.creature.lion_claws"],
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "lion-lion_claws"
+}, {
+"clip": "Attack3",
+"contact": 8,
+"delivery": "melee",
+&"items": ["weapon.creature.lion_bite"],
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "lion-lion_bite"
+}, {
+"clip": "Attack2",
+"contact": 7,
+"delivery": "melee",
+"recipe": "action.feature.extra_attack",
+"variant": "fixed-unarmed-attack2-7-11"
+}, {
+"clip": "Attack2",
+"contact": 7,
+"delivery": "melee",
+&"items": ["weapon.creature.lion_claws"],
+"recipe": "action.feature.extra_attack",
+"variant": "lion-lion_claws"
+}, {
+"clip": "Attack3",
+"contact": 8,
+"delivery": "melee",
+&"items": ["weapon.creature.lion_bite"],
+"recipe": "action.feature.extra_attack",
+"variant": "lion-lion_bite"
+}, {
+"clip": "Attack2",
+"contact": 7,
+"delivery": "melee",
+"recipe": "reaction.opportunity_attack",
+"variant": "fixed-unarmed-attack2-7-11"
+}, {
+"clip": "Attack2",
+"contact": 7,
+"delivery": "melee",
+&"items": ["weapon.creature.lion_claws"],
+"recipe": "reaction.opportunity_attack",
+"variant": "lion-lion_claws"
+}, {
+"clip": "Attack3",
+"contact": 8,
+"delivery": "melee",
+&"items": ["weapon.creature.lion_bite"],
+"recipe": "reaction.opportunity_attack",
+"variant": "lion-lion_bite"
+}])
+death = Dictionary[String, String]({
+"default": "Die"
+})

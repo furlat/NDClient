@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_aouvy"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_15t4b"]
+
+[sub_resource type="Resource" id="Resource_lyj83"]
+script = ExtResource("1_aouvy")
+path = "art/media/ui/icons/smooth48/item.sling.png"
+native_size = Vector2i(48, 48)
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_15t4b")
+id = "weapon.creature.kobold_sling"
+kind = "weapon"
+family = "weapon.sling"
+icon = SubResource("Resource_lyj83")

@@ -1,0 +1,50 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_qjf4i"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_ed5jh"]
+
+[sub_resource type="Resource" id="Resource_ptfha"]
+script = ExtResource("1_qjf4i")
+path = "art/media/ui/icons/smooth48/item.longsword.png"
+native_size = Vector2i(48, 48)
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_ed5jh")
+id = "weapon.circus.longsword_plus_one"
+kind = "weapon"
+slots = Dictionary[String, Dictionary]({
+"weapon_melee_main": {
+"layers": [{
+"part": "Melee2",
+"slot": "weapon",
+"tint": "#d4d4d4"
+}],
+"variants": {}
+}
+})
+hands = Dictionary[String, Dictionary]({
+"weapon_melee_off": {
+"": [{
+"part": "Offhand1",
+"slot": "offhand",
+"tint": "#d4d4d4"
+}]
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee2",
+"pivots_by_camera": [[54.5, 69.0], [57.5, 56.0], [75.5, 59.0], [73.0, 71.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#d4d4d4",
+"variant": ""
+}])
+icon = SubResource("Resource_ptfha")
+notes = "Visual name Longsword +1; Polished magical longsword"

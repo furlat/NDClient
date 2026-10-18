@@ -1,0 +1,67 @@
+[gd_resource type="Resource" script_class="PresentationCharacter" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/character.gd" id="1_7g3fe"]
+
+[resource]
+script = ExtResource("1_7g3fe")
+id = "creature.boar"
+identity = "content.neurodragon:creature:creature.boar@1"
+rig = "smallscale.boar"
+portrait = "creature.boar"
+size = "Medium"
+attacks = Array[Dictionary]([{
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+&"items": ["weapon.creature.boar_tusk"],
+"recipe": "action.attack",
+"variant": "boar-boar_tusk"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.attack",
+"variant": "fixed-unarmed-attack2-6-12"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+&"items": ["weapon.creature.boar_tusk"],
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "boar-boar_tusk"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "fixed-unarmed-attack2-6-12"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+&"items": ["weapon.creature.boar_tusk"],
+"recipe": "action.feature.extra_attack",
+"variant": "boar-boar_tusk"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.feature.extra_attack",
+"variant": "fixed-unarmed-attack2-6-12"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+&"items": ["weapon.creature.boar_tusk"],
+"recipe": "reaction.opportunity_attack",
+"variant": "boar-boar_tusk"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+"recipe": "reaction.opportunity_attack",
+"variant": "fixed-unarmed-attack2-6-12"
+}])
+death = Dictionary[String, String]({
+"default": "Die"
+})

@@ -1,0 +1,426 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_3a18a"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_8m77s"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_21xc5"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_2kn7v"]
+
+[sub_resource type="Resource" id="Resource_8xmtm"]
+script = ExtResource("2_8m77s")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/jak/attack1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/jak/attack1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/jak/attack1/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/jak/attack1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/jak/attack1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/jak/attack1/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.9888227549509024
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_inbxl"]
+script = ExtResource("1_3a18a")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Attack1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsJak": "/rigs/animals_jak/body/Attack1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/jak/attack1/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Jak/Attack1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_8xmtm")
+
+[sub_resource type="Resource" id="Resource_vy1jr"]
+script = ExtResource("2_8m77s")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/jak/attack2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/jak/attack2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/jak/attack2/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/jak/attack2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/jak/attack2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/jak/attack2/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.988237677049726
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_ike4c"]
+script = ExtResource("1_3a18a")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Attack2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsJak": "/rigs/animals_jak/body/Attack2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/jak/attack2/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Jak/Attack2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_vy1jr")
+
+[sub_resource type="Resource" id="Resource_yq6bt"]
+script = ExtResource("2_8m77s")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/jak/attack3/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/jak/attack3/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/jak/attack3/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/jak/attack3/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/jak/attack3/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/jak/attack3/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.988399291518503
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_2tjmj"]
+script = ExtResource("1_3a18a")
+name = "Attack3"
+role = "attack_3"
+source_clip = "Attack3"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsJak": "/rigs/animals_jak/body/Attack3.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/jak/attack3/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Jak/Attack3.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_yq6bt")
+
+[sub_resource type="Resource" id="Resource_bewm3"]
+script = ExtResource("2_8m77s")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/jak/die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/jak/die/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/jak/die/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/jak/die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/jak/die/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/jak/die/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.9901444169412764
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_md57s"]
+script = ExtResource("1_3a18a")
+name = "Die"
+role = "die"
+source_clip = "Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsJak": "/rigs/animals_jak/body/Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/jak/die/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Jak/Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_bewm3")
+
+[sub_resource type="Resource" id="Resource_gkvr3"]
+script = ExtResource("2_8m77s")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/jak/idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/jak/idle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/jak/idle/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/jak/idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/jak/idle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/jak/idle/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.9868860171422692
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_1n81x"]
+script = ExtResource("1_3a18a")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsJak": "/rigs/animals_jak/body/Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/jak/idle/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Jak/Idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_gkvr3")
+
+[sub_resource type="Resource" id="Resource_wtb66"]
+script = ExtResource("2_8m77s")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/jak/idle2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/jak/idle2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/jak/idle2/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/jak/idle2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/jak/idle2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/jak/idle2/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.9869531390268718
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_kxg2h"]
+script = ExtResource("1_3a18a")
+name = "Idle2"
+role = "idle_alt"
+source_clip = "Idle2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsJak": "/rigs/animals_jak/body/Idle2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/jak/idle2/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Jak/Idle2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_wtb66")
+
+[sub_resource type="Resource" id="Resource_212qb"]
+script = ExtResource("2_8m77s")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/jak/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/jak/run/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/jak/run/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/jak/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/jak/run/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/jak/run/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.9867259896577631
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_ys77b"]
+script = ExtResource("1_3a18a")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsJak": "/rigs/animals_jak/body/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/jak/run/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Jak/Run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_212qb")
+
+[sub_resource type="Resource" id="Resource_oy8hj"]
+script = ExtResource("2_8m77s")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/jak/takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/jak/takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/jak/takedamage/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/jak/takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/jak/takedamage/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/jak/takedamage/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.988538976285513
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_wwkhl"]
+script = ExtResource("1_3a18a")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsJak": "/rigs/animals_jak/body/TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/jak/takedamage/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Jak/TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_oy8hj")
+
+[sub_resource type="Resource" id="Resource_kfmxb"]
+script = ExtResource("2_8m77s")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/jak/taunt/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/jak/taunt/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/jak/taunt/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/jak/taunt/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/jak/taunt/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/jak/taunt/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.9861889511609288
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_bwabv"]
+script = ExtResource("1_3a18a")
+name = "Taunt"
+role = "taunt"
+source_clip = "Taunt"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsJak": "/rigs/animals_jak/body/Taunt.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/jak/taunt/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Jak/Taunt.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_kfmxb")
+
+[sub_resource type="Resource" id="Resource_6awiv"]
+script = ExtResource("2_8m77s")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/jak/walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/jak/walk/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/jak/walk/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/jak/walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/jak/walk/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/jak/walk/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.98890442335723
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_ekeix"]
+script = ExtResource("1_3a18a")
+name = "Walk"
+role = "walk"
+source_clip = "Walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsJak": "/rigs/animals_jak/body/Walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/jak/walk/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Jak/Walk.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_6awiv")
+
+[resource]
+script = ExtResource("4_2kn7v")
+id = "smallscale.animals.jak"
+pack = "animals"
+variant = "Jak"
+source = "smallscale-authored/animals"
+cell = Vector2i(96, 96)
+pivot = Vector2(48, 68)
+anchor = Vector2(48, 52)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("AnimalsJak")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_3a18a")]([SubResource("Resource_inbxl"), SubResource("Resource_ike4c"), SubResource("Resource_2tjmj"), SubResource("Resource_md57s"), SubResource("Resource_1n81x"), SubResource("Resource_kxg2h"), SubResource("Resource_ys77b"), SubResource("Resource_wwkhl"), SubResource("Resource_bwabv"), SubResource("Resource_ekeix")])
+hold_clips = PackedStringArray("Die")
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed."

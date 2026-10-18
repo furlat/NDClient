@@ -1,0 +1,520 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_f8ca3"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_47gio"]
+
+[sub_resource type="Resource" id="Resource_ulgx7"]
+script = ExtResource("1_f8ca3")
+path = "art/media/ui/icons/smooth48/item.leather-armor.png"
+native_size = Vector2i(48, 48)
+reuses = "item.leather-armor"
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_47gio")
+id = "apparel.robes"
+kind = "armor"
+slots = Dictionary[String, Dictionary]({
+"body_armor": {
+"layers": [{
+"part": "Belt2",
+"slot": "belt",
+"tint": "#ccaa44"
+}, {
+"part": "Chest14",
+"slot": "chest",
+"tint": "#ccccbb"
+}, {
+"part": "Legs2",
+"slot": "legs",
+"tint": "#ccbbaa"
+}],
+"variants": {
+"81000001": [{
+"part": "Belt2",
+"slot": "belt",
+"tint": "#ccaa44"
+}, {
+"part": "Chest14",
+"slot": "chest",
+"tint": "#3366aa"
+}, {
+"part": "Legs3",
+"slot": "legs",
+"tint": "#223366"
+}],
+"81000002": [{
+"part": "Belt2",
+"slot": "belt",
+"tint": "#553377"
+}, {
+"part": "Chest13",
+"slot": "chest",
+"tint": "#553377"
+}, {
+"part": "Legs2",
+"slot": "legs",
+"tint": "#222233"
+}],
+"81000003": [{
+"part": "Belt2",
+"slot": "belt",
+"tint": "#ccaa44"
+}, {
+"part": "Chest14",
+"slot": "chest",
+"tint": "#ccccbb"
+}, {
+"part": "Legs3",
+"slot": "legs",
+"tint": "#ccaa44"
+}],
+"81000004": [{
+"part": "Belt2",
+"slot": "belt",
+"tint": "#2a2a3a"
+}, {
+"part": "Chest14",
+"slot": "chest",
+"tint": "#222233"
+}, {
+"part": "Legs3",
+"slot": "legs",
+"tint": "#2a2a3a"
+}],
+"81000005": [{
+"part": "Belt2",
+"slot": "belt",
+"tint": "#ccaa44"
+}, {
+"part": "Chest14",
+"slot": "chest",
+"tint": "#aa3333"
+}, {
+"part": "Legs1",
+"slot": "legs",
+"tint": "#662222"
+}],
+"81000006": [{
+"part": "Belt2",
+"slot": "belt",
+"tint": "#8b4513"
+}, {
+"part": "Chest14",
+"slot": "chest",
+"tint": "#223366"
+}, {
+"part": "Legs3",
+"slot": "legs",
+"tint": "#ccbbaa"
+}],
+"81000007": [{
+"part": "Belt1",
+"slot": "belt",
+"tint": "#8b4513"
+}, {
+"part": "Chest14",
+"slot": "chest",
+"tint": "#ccccbb"
+}, {
+"part": "Legs1",
+"slot": "legs",
+"tint": "#8b4513"
+}],
+"81000008": [{
+"part": "Belt2",
+"slot": "belt",
+"tint": "#553377"
+}, {
+"part": "Chest13",
+"slot": "chest",
+"tint": "#2a2a3a"
+}, {
+"part": "Legs3",
+"slot": "legs",
+"tint": "#222233"
+}],
+"81000009": [{
+"part": "Belt2",
+"slot": "belt",
+"tint": "#ddcc77"
+}, {
+"part": "Chest14",
+"slot": "chest",
+"tint": "#ccaa44"
+}, {
+"part": "Legs3",
+"slot": "legs",
+"tint": "#ddcc77"
+}],
+"8100000a": [{
+"part": "Belt2",
+"slot": "belt",
+"tint": "#aabbcc"
+}, {
+"part": "Chest14",
+"slot": "chest",
+"tint": "#5588cc"
+}, {
+"part": "Legs2",
+"slot": "legs",
+"tint": "#3366aa"
+}],
+"8100000b": [{
+"part": "Belt1",
+"slot": "belt",
+"tint": "#5c2a0e"
+}, {
+"part": "Chest14",
+"slot": "chest",
+"tint": "#553377"
+}, {
+"part": "Legs6",
+"slot": "legs",
+"tint": "#223366"
+}],
+"roster.039a46b7e3a0": [{
+"part": "Legs2",
+"slot": "legs",
+"tint": "#344b73"
+}, {
+"part": "Chest14",
+"slot": "chest",
+"tint": "#344b73"
+}, {
+"part": "Belt2",
+"slot": "belt",
+"tint": "#353436"
+}],
+"roster.51a81ec5104c": [{
+"part": "Legs2",
+"slot": "legs",
+"tint": "#353436"
+}, {
+"part": "Chest14",
+"slot": "chest",
+"tint": "#353436"
+}, {
+"part": "Belt2",
+"slot": "belt",
+"tint": "#353436"
+}],
+"roster.828dfafaac2b": [{
+"part": "Legs2",
+"slot": "legs",
+"tint": "#202025"
+}, {
+"part": "Chest14",
+"slot": "chest",
+"tint": "#202025"
+}, {
+"part": "Belt2",
+"slot": "belt",
+"tint": "#202025"
+}],
+"roster.8b96d8a2913a": [{
+"part": "Legs2",
+"slot": "legs",
+"tint": "#654733"
+}, {
+"part": "Chest14",
+"slot": "chest",
+"tint": "#654733"
+}, {
+"part": "Belt2",
+"slot": "belt",
+"tint": "#7c2434"
+}],
+"roster.ac042c42155f": [{
+"part": "Legs2",
+"slot": "legs",
+"tint": "#344b73"
+}, {
+"part": "Chest14",
+"slot": "chest",
+"tint": "#344b73"
+}, {
+"part": "Belt2",
+"slot": "belt",
+"tint": "#344b73"
+}],
+"roster.ac36c74adec6": [{
+"part": "Legs2",
+"slot": "legs",
+"tint": "#5b286d"
+}, {
+"part": "Chest14",
+"slot": "chest",
+"tint": "#5b286d"
+}, {
+"part": "Belt2",
+"slot": "belt",
+"tint": "#5b286d"
+}],
+"roster.ff5115c38bc8": [{
+"part": "Legs2",
+"slot": "legs",
+"tint": "#b16b2e"
+}, {
+"part": "Chest14",
+"slot": "chest",
+"tint": "#b16b2e"
+}, {
+"part": "Belt2",
+"slot": "belt",
+"tint": "#b16b2e"
+}]
+}
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs2",
+"pivots_by_camera": [[64.5, 70.5], [64.5, 68.0], [66.5, 69.5], [66.0, 67.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#ccbbaa",
+"variant": ""
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs3",
+"pivots_by_camera": [[64.5, 69.5], [65.0, 67.0], [66.5, 69.0], [65.5, 66.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#223366",
+"variant": "81000001"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs2",
+"pivots_by_camera": [[64.0, 71.0], [64.5, 68.0], [66.0, 70.0], [65.5, 67.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#222233",
+"variant": "81000002"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs3",
+"pivots_by_camera": [[64.5, 69.5], [65.0, 67.0], [66.5, 69.0], [65.5, 66.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#ccaa44",
+"variant": "81000003"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs3",
+"pivots_by_camera": [[64.5, 69.5], [65.0, 67.0], [66.5, 69.0], [65.5, 66.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#2a2a3a",
+"variant": "81000004"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs1",
+"pivots_by_camera": [[64.5, 70.5], [64.5, 67.5], [66.5, 69.5], [66.0, 67.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#662222",
+"variant": "81000005"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs3",
+"pivots_by_camera": [[64.5, 69.5], [65.0, 67.0], [66.5, 69.0], [65.5, 66.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#ccbbaa",
+"variant": "81000006"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs1",
+"pivots_by_camera": [[64.5, 70.5], [64.5, 67.5], [66.5, 69.5], [66.0, 67.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#8b4513",
+"variant": "81000007"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs3",
+"pivots_by_camera": [[64.0, 70.0], [65.0, 67.0], [66.0, 69.5], [65.5, 66.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#222233",
+"variant": "81000008"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs3",
+"pivots_by_camera": [[64.5, 69.5], [65.0, 67.0], [66.5, 69.0], [65.5, 66.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#ddcc77",
+"variant": "81000009"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs2",
+"pivots_by_camera": [[64.5, 70.5], [64.5, 68.0], [66.5, 69.5], [66.0, 67.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#3366aa",
+"variant": "8100000a"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs6",
+"pivots_by_camera": [[64.5, 68.0], [63.0, 64.5], [66.5, 66.0], [67.5, 66.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#223366",
+"variant": "8100000b"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest14",
+"pivots_by_camera": [[64.5, 70.5], [64.5, 68.0], [66.5, 69.5], [66.0, 67.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#654733",
+"variant": "roster.8b96d8a2913a"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest14",
+"pivots_by_camera": [[64.5, 70.5], [64.5, 68.0], [66.5, 69.5], [66.0, 67.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#344b73",
+"variant": "roster.ac042c42155f"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest14",
+"pivots_by_camera": [[64.5, 70.5], [64.5, 68.0], [66.5, 69.5], [66.0, 67.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#344b73",
+"variant": "roster.039a46b7e3a0"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest14",
+"pivots_by_camera": [[64.5, 70.5], [64.5, 68.0], [66.5, 69.5], [66.0, 67.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#5b286d",
+"variant": "roster.ac36c74adec6"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest14",
+"pivots_by_camera": [[64.5, 70.5], [64.5, 68.0], [66.5, 69.5], [66.0, 67.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#353436",
+"variant": "roster.51a81ec5104c"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest14",
+"pivots_by_camera": [[64.5, 70.5], [64.5, 68.0], [66.5, 69.5], [66.0, 67.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#b16b2e",
+"variant": "roster.ff5115c38bc8"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest14",
+"pivots_by_camera": [[64.5, 70.5], [64.5, 68.0], [66.5, 69.5], [66.0, 67.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#202025",
+"variant": "roster.828dfafaac2b"
+}])
+icon = SubResource("Resource_ulgx7")
+notes = "Visual name Robes; Long flowing robes — Legs2 open skirt, Legs3 covered in front
+Icon: Shares an existing icon for the native equipment slot."

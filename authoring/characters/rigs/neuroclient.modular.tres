@@ -1,0 +1,339 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_2iho2"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="2_227yq"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="3_ch1uv"]
+
+[sub_resource type="Resource" id="Resource_1akdu"]
+script = ExtResource("1_2iho2")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Attack1"
+frames = 15
+fps = 12.0
+markers = Dictionary[String, int]({
+"prepare": 3,
+"recover": 10,
+"release": 6
+})
+effect_parts = PackedStringArray("Effect5", "Magic2", "Shadow", "Slash1", "Slash2", "Magic1", "Magic3")
+notes = "Winds an arm overhead, brings the upper body and hand down through a chopping stroke, then recovers.
+Effect4: Broader bright contour/afterimage follows the moving body and limbs.
+Effect5: Tighter, finer patterned body contour follows the action with less surrounding spread.
+Magic1: Fine flickering particles attached to the hands; sparse, airy detail. This sheet follows overhead chop.
+Magic2: Broader smoky/ribbon-like wisps around moving hands; more trailing energy. This sheet follows overhead chop.
+Magic3: Compact, bright hand glows with shorter surrounding flecks. This sheet follows overhead chop."
+
+[sub_resource type="Resource" id="Resource_7bdl1"]
+script = ExtResource("1_2iho2")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Attack2"
+frames = 15
+fps = 12.0
+effect_parts = PackedStringArray("Magic2", "Shadow", "Slash1", "Slash2", "Magic1", "Magic3")
+notes = "Drops into a low, wide stance and sweeps through a lateral body turn, then returns upright.
+Effect4: Broader bright contour/afterimage follows the moving body and limbs.
+Effect5: Tighter, finer patterned body contour follows the action with less surrounding spread.
+Magic1: Fine flickering particles attached to the hands; sparse, airy detail. This sheet follows low sweeping lunge.
+Magic2: Broader smoky/ribbon-like wisps around moving hands; more trailing energy. This sheet follows low sweeping lunge.
+Magic3: Compact, bright hand glows with shorter surrounding flecks. This sheet follows low sweeping lunge."
+
+[sub_resource type="Resource" id="Resource_32uy5"]
+script = ExtResource("1_2iho2")
+name = "Attack3"
+role = "attack_3"
+source_clip = "Attack3"
+frames = 15
+fps = 12.0
+effect_parts = PackedStringArray("Magic2", "Shadow", "Slash1", "Magic1", "Magic3")
+notes = "Sets one arm toward the target, draws the other toward the head/shoulder, releases and lowers/repositions the arms.
+Effect4: Broader bright contour/afterimage follows the moving body and limbs.
+Effect5: Tighter, finer patterned body contour follows the action with less surrounding spread.
+Magic1: Fine flickering particles attached to the hands; sparse, airy detail. This sheet follows bow draw and release.
+Magic2: Broader smoky/ribbon-like wisps around moving hands; more trailing energy. This sheet follows bow draw and release.
+Magic3: Compact, bright hand glows with shorter surrounding flecks. This sheet follows bow draw and release."
+
+[sub_resource type="Resource" id="Resource_nf5qs"]
+script = ExtResource("1_2iho2")
+name = "Attack4"
+role = "attack_4"
+source_clip = "Attack4"
+frames = 15
+fps = 12.0
+markers = Dictionary[String, int]({
+"prepare": 6,
+"recover": 11,
+"release": 9
+})
+effect_parts = PackedStringArray("Effect1", "Effect2", "Effect3", "Effect4", "Effect5", "Magic2", "Shadow", "Slash1", "Slash2", "Magic1", "Magic3")
+notes = "Holds an arm high, sinks into a deep knee bend, and drives the hand/body down toward the ground.
+Effect1: Fine particles precede a foot-centered circle that expands into a broad flashing ring after the downward motion.
+Effect2: Several radii of tall upward spikes surround the figure through the overhead-to-ground motion.
+Effect3: Energy descends toward the body, then a segmented radial burst spreads from the feet.
+Effect4: Broader bright contour/afterimage follows the moving body and limbs.
+Effect5: Tighter, finer patterned body contour follows the action with less surrounding spread.
+Magic1: Fine flickering particles attached to the hands; sparse, airy detail. This sheet follows overhead into ground.
+Magic2: Broader smoky/ribbon-like wisps around moving hands; more trailing energy. This sheet follows overhead into ground.
+Magic3: Compact, bright hand glows with shorter surrounding flecks. This sheet follows overhead into ground."
+
+[sub_resource type="Resource" id="Resource_rkhdw"]
+script = ExtResource("1_2iho2")
+name = "Attack5"
+role = "attack_5"
+source_clip = "Attack5"
+frames = 15
+fps = 12.0
+markers = Dictionary[String, int]({
+"prepare": 4,
+"recover": 11,
+"release": 7
+})
+effect_parts = PackedStringArray("Effect1", "Effect3", "Effect4", "Effect5", "Magic2", "Shadow", "Slash1", "Slash2", "Magic1", "Magic3")
+notes = "Keeps a mostly upright stance, brings a hand forward and extends it toward the target, then retracts.
+Effect1: Small directional flare/ring at the forward/off-hand region; it follows the pointing sequence and disappears.
+Effect2: Two large bright bodies orbit around the caster with long curved trails, then fade.
+Effect3: A large directional skull grows in front of/over the figure and dissolves.
+Effect4: Broader bright contour/afterimage follows the moving body and limbs.
+Effect5: Tighter, finer patterned body contour follows the action with less surrounding spread.
+Magic1: Fine flickering particles attached to the hands; sparse, airy detail. This sheet follows pointed hand release.
+Magic2: Broader smoky/ribbon-like wisps around moving hands; more trailing energy. This sheet follows pointed hand release.
+Magic3: Compact, bright hand glows with shorter surrounding flecks. This sheet follows pointed hand release."
+
+[sub_resource type="Resource" id="Resource_7ny7f"]
+script = ExtResource("1_2iho2")
+name = "Attack6"
+role = "attack_6"
+source_clip = "Attack6"
+frames = 15
+fps = 12.0
+markers = Dictionary[String, int]({
+"prepare": 3,
+"recover": 9,
+"release": 6
+})
+effect_parts = PackedStringArray("Effect1", "Effect4", "Effect5", "Magic2", "Shadow", "Slash1", "Slash2", "Magic1", "Magic3")
+notes = "Leans into a low forward lunge with a punching/thrusting arm motion, then straightens and recovers.
+Effect1: Brief narrow directional flare at the thrusting hand during the low lunge.
+Effect2: A narrower group of tall spikes is strong during preparation, then mostly fades to scattered sparks around the thrust/recovery.
+Effect3: Descending energy in preparation leads to a segmented foot-centered radial burst after the thrust.
+Effect4: Broader bright contour/afterimage follows the moving body and limbs.
+Effect5: Tighter, finer patterned body contour follows the action with less surrounding spread.
+Magic1: Fine flickering particles attached to the hands; sparse, airy detail. This sheet follows low forward thrust.
+Magic2: Broader smoky/ribbon-like wisps around moving hands; more trailing energy. This sheet follows low forward thrust.
+Magic3: Compact, bright hand glows with shorter surrounding flecks. This sheet follows low forward thrust."
+
+[sub_resource type="Resource" id="Resource_4vgyr"]
+script = ExtResource("1_2iho2")
+name = "AttackRun"
+role = "attack_run"
+source_clip = "AttackRun"
+frames = 15
+fps = 12.0
+effect_parts = PackedStringArray("Magic2", "Shadow", "Slash1", "Slash2", "Magic1", "Magic3")
+notes = "Running stride combined with a raised-arm chopping attack.
+Effect4: Broader bright contour/afterimage follows the moving body and limbs.
+Effect5: Tighter, finer patterned body contour follows the action with less surrounding spread.
+Magic1: Source pixels are present; sampled non-core contacts do not establish a full-cycle, layer-specific shape description for this motion.
+Magic2: Source pixels are present; sampled non-core contacts do not establish a full-cycle, layer-specific shape description for this motion.
+Magic3: Source pixels are present; sampled non-core contacts do not establish a full-cycle, layer-specific shape description for this motion."
+
+[sub_resource type="Resource" id="Resource_0f0jh"]
+script = ExtResource("1_2iho2")
+name = "Die"
+role = "die"
+source_clip = "Die"
+frames = 15
+fps = 12.0
+effect_parts = PackedStringArray("Shadow", "Magic1", "Magic2", "Magic3")
+notes = "Loses upright posture and falls back to a sprawled terminal pose.
+Magic1: Source pixels are present; sampled non-core contacts do not establish a full-cycle, layer-specific shape description for this motion.
+Magic2: Source pixels are present; sampled non-core contacts do not establish a full-cycle, layer-specific shape description for this motion.
+Magic3: Source pixels are present; sampled non-core contacts do not establish a full-cycle, layer-specific shape description for this motion."
+
+[sub_resource type="Resource" id="Resource_bqwrl"]
+script = ExtResource("1_2iho2")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+effect_parts = PackedStringArray("Shadow", "Magic1", "Magic2", "Magic3")
+notes = "Small standing weight and arm changes.
+Magic1: Nonzero source alpha, but sampled SW frames 5 and 11 show little or no readily discernible accent. Its per-motion style is not visually established.
+Magic2: Nonzero source alpha, but sampled SW frames 5 and 11 show little or no readily discernible accent. Its per-motion style is not visually established.
+Magic3: Nonzero source alpha, but sampled SW frames 5 and 11 show little or no readily discernible accent. Its per-motion style is not visually established."
+
+[sub_resource type="Resource" id="Resource_rf6hk"]
+script = ExtResource("1_2iho2")
+name = "Idle2"
+role = "idle_alt"
+source_clip = "Idle2"
+frames = 15
+fps = 12.0
+effect_parts = PackedStringArray("Shadow", "Magic1", "Magic2", "Magic3")
+notes = "Bent knees and a guarded arm position with slight shifts.
+Magic1: Nonzero source alpha, but sampled SW frames 5 and 11 show little or no readily discernible accent. Its per-motion style is not visually established.
+Magic2: Nonzero source alpha, but sampled SW frames 5 and 11 show little or no readily discernible accent. Its per-motion style is not visually established.
+Magic3: Nonzero source alpha, but sampled SW frames 5 and 11 show little or no readily discernible accent. Its per-motion style is not visually established."
+
+[sub_resource type="Resource" id="Resource_jsmaw"]
+script = ExtResource("1_2iho2")
+name = "Idle4"
+role = "idle_4"
+source_clip = "Idle4"
+frames = 15
+fps = 12.0
+effect_parts = PackedStringArray("Shadow", "Magic1", "Magic2", "Magic3")
+notes = "Bent-arm ready stance and small weight shifts.
+Magic1: Nonzero source alpha, but sampled SW frames 5 and 11 show little or no readily discernible accent. Its per-motion style is not visually established.
+Magic2: Nonzero source alpha, but sampled SW frames 5 and 11 show little or no readily discernible accent. Its per-motion style is not visually established.
+Magic3: Nonzero source alpha, but sampled SW frames 5 and 11 show little or no readily discernible accent. Its per-motion style is not visually established."
+
+[sub_resource type="Resource" id="Resource_wgj8f"]
+script = ExtResource("1_2iho2")
+name = "Kick"
+role = "kick"
+source_clip = "Kick"
+frames = 15
+fps = 12.0
+effect_parts = PackedStringArray("Shadow", "Magic1", "Magic2", "Magic3")
+notes = "Lifts a knee, extends the foot and returns to stance.
+Magic1: Source pixels are present; sampled non-core contacts do not establish a full-cycle, layer-specific shape description for this motion.
+Magic2: Source pixels are present; sampled non-core contacts do not establish a full-cycle, layer-specific shape description for this motion.
+Magic3: Source pixels are present; sampled non-core contacts do not establish a full-cycle, layer-specific shape description for this motion."
+
+[sub_resource type="Resource" id="Resource_1w644"]
+script = ExtResource("1_2iho2")
+name = "Rolling"
+role = "roll"
+source_clip = "Rolling"
+frames = 15
+fps = 12.0
+effect_parts = PackedStringArray("Shadow", "Magic1", "Magic2", "Magic3")
+notes = "Drops and rotates the body through a low horizontal roll, then rises.
+Magic1: Source pixels are present; sampled non-core contacts do not establish a full-cycle, layer-specific shape description for this motion.
+Magic2: Source pixels are present; sampled non-core contacts do not establish a full-cycle, layer-specific shape description for this motion.
+Magic3: Source pixels are present; sampled non-core contacts do not establish a full-cycle, layer-specific shape description for this motion."
+
+[sub_resource type="Resource" id="Resource_1bf2c"]
+script = ExtResource("1_2iho2")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+effect_parts = PackedStringArray("Shadow", "Magic1", "Magic2", "Magic3")
+notes = "Forward-leaning long stride and stronger arm motion.
+Magic1: Nonzero source alpha, but sampled SW frames 5 and 11 show little or no readily discernible accent. Its per-motion style is not visually established.
+Magic2: Nonzero source alpha, but sampled SW frames 5 and 11 show little or no readily discernible accent. Its per-motion style is not visually established.
+Magic3: Nonzero source alpha, but sampled SW frames 5 and 11 show little or no readily discernible accent. Its per-motion style is not visually established."
+
+[sub_resource type="Resource" id="Resource_144xq"]
+script = ExtResource("1_2iho2")
+name = "Special1"
+role = "special_1"
+source_clip = "Special1"
+frames = 15
+fps = 12.0
+markers = Dictionary[String, int]({
+"prepare": 8,
+"recover": 13,
+"release": 11
+})
+effect_parts = PackedStringArray("Effect3", "Effect4", "Effect5", "Magic2", "Magic3", "Shadow", "Magic1")
+notes = "Raises/gathers the hands, dips through the knees with arms forward, then rises and opens the arms upward/outward before settling.
+Effect1: A small ring forms at the feet, then becomes a broad multi-line ground circle and upward radial flare as the arms open.
+Effect2: Loose concentric particle spirals surround preparation; a field of upward energy spikes appears around the arm-open phase.
+Effect3: A wide ring of small particles builds, followed by a relatively narrow vertical cage/column around the rising body.
+Effect4: Broader bright contour/afterimage follows the moving body and limbs.
+Effect5: Tighter, finer patterned body contour follows the action with less surrounding spread.
+Magic1: Fine flickering particles attached to the hands; sparse, airy detail. This sheet follows gather, dip and open.
+Magic2: Broader smoky/ribbon-like wisps around moving hands; more trailing energy. This sheet follows gather, dip and open.
+Magic3: Compact, bright hand glows with shorter surrounding flecks. This sheet follows gather, dip and open."
+
+[sub_resource type="Resource" id="Resource_yayud"]
+script = ExtResource("1_2iho2")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage"
+frames = 15
+fps = 12.0
+effect_parts = PackedStringArray("Shadow", "Magic1", "Magic2", "Magic3")
+notes = "Brief backward upper-body recoil then recovery.
+Magic1: Source pixels are present; sampled non-core contacts do not establish a full-cycle, layer-specific shape description for this motion.
+Magic2: Source pixels are present; sampled non-core contacts do not establish a full-cycle, layer-specific shape description for this motion.
+Magic3: Source pixels are present; sampled non-core contacts do not establish a full-cycle, layer-specific shape description for this motion."
+
+[sub_resource type="Resource" id="Resource_ervrw"]
+script = ExtResource("1_2iho2")
+name = "Taunt"
+role = "taunt"
+source_clip = "Taunt"
+frames = 15
+fps = 12.0
+effect_parts = PackedStringArray("Shadow", "Magic1", "Magic2", "Magic3")
+notes = "Raises an arm and gestures while standing.
+Magic1: Source pixels are present; sampled non-core contacts do not establish a full-cycle, layer-specific shape description for this motion.
+Magic2: Source pixels are present; sampled non-core contacts do not establish a full-cycle, layer-specific shape description for this motion.
+Magic3: Source pixels are present; sampled non-core contacts do not establish a full-cycle, layer-specific shape description for this motion."
+
+[sub_resource type="Resource" id="Resource_yhqsv"]
+script = ExtResource("1_2iho2")
+name = "CrouchIdle"
+role = "crouch_idle"
+source_clip = "CrouchIdle"
+frames = 15
+fps = 12.0
+loop = "loop"
+effect_parts = PackedStringArray("Shadow", "Magic1", "Magic2", "Magic3")
+
+[sub_resource type="Resource" id="Resource_udptw"]
+script = ExtResource("1_2iho2")
+name = "CrouchRun"
+role = "crouch_move"
+source_clip = "CrouchRun"
+frames = 15
+fps = 12.0
+loop = "loop"
+effect_parts = PackedStringArray("Shadow", "Magic1", "Magic2", "Magic3")
+
+[resource]
+script = ExtResource("3_ch1uv")
+id = "neuroclient.modular"
+kind = "layered"
+pack = "modular"
+source = "smallscale-modular/fantasy-v1.3"
+pivot = Vector2(64, 87)
+anchor = Vector2(64, 60)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("shadow", "body", "legs", "shoes", "mount", "chest", "belt", "hands", "offhand", "weapon", "weaponGlow", "cloak", "backpack", "beard", "head", "helmet", "aura", "slash", "effect", "effect2", "effect3")
+slot_categories = Dictionary[String, PackedStringArray]({
+"aura": PackedStringArray("Effect4", "Effect5"),
+"backpack": PackedStringArray("Bag1", "Bag2", "Bag3", "Bag4", "Bag5", "Bag6", "Bag8"),
+"beard": PackedStringArray("Head2"),
+"belt": PackedStringArray("Belt1", "Belt2"),
+"body": PackedStringArray("NakedBody", "NakedBody2", "NakedBody3"),
+"chest": PackedStringArray("Chest1", "Chest2", "Chest3", "Chest4", "Chest5", "Chest6", "Chest7", "Chest8", "Chest9", "Chest10", "Chest11", "Chest12", "Chest13", "Chest14", "Chest15", "Chest16", "Chest17", "Chest18", "Chest19"),
+"cloak": PackedStringArray("Bag1"),
+"effect": PackedStringArray("Effect1", "Effect2", "Effect3"),
+"effect2": PackedStringArray("Effect1", "Effect2", "Effect3"),
+"effect3": PackedStringArray("Effect1", "Effect2", "Effect3"),
+"hands": PackedStringArray("Hands1", "Hands2", "Hands3", "Hands4"),
+"head": PackedStringArray("Head1", "Head9", "Head10", "Head16", "Head17", "Head22"),
+"helmet": PackedStringArray("Head3", "Head4", "Head5", "Head6", "Head7", "Head8", "Head10", "Head11", "Head12", "Head13", "Head14", "Head15", "Head18", "Head19", "Head20", "Head21", "Head22", "Head23", "Head24"),
+"legs": PackedStringArray("Legs1", "Legs2", "Legs3", "Legs4", "Legs5", "Legs6", "Legs7", "Legs8", "Legs9"),
+"mount": PackedStringArray("Mount1", "Mount2", "Mount3", "Mount4", "Mount5"),
+"offhand": PackedStringArray("Shield1", "Shield2", "Shield3", "Shield4", "Shield5", "Shield6", "Shield7", "Offhand1", "Offhand2"),
+"shadow": PackedStringArray("Shadow"),
+"shoes": PackedStringArray("Shoes1", "Shoes2", "Shoes3", "Shoes4", "Shoes5"),
+"slash": PackedStringArray("Slash1", "Slash2"),
+"weapon": PackedStringArray("Melee1", "Melee2", "Melee3", "Melee4", "Melee5", "Melee6", "Melee7", "Melee8", "Melee9", "Melee10", "Melee11", "Melee12", "Melee13", "Melee14", "Melee15", "Melee16", "Melee17", "Melee18", "Melee19", "Melee20", "Melee21", "Melee22", "Melee23", "Melee24", "Melee25", "Ranged1", "Ranged2", "Ranged3", "Ranged4", "Ranged5", "Ranged6", "Ranged7", "Magic1", "Magic2", "Magic3"),
+"weaponGlow": PackedStringArray("Magic1", "Magic2", "Magic3")
+})
+excluded_categories = PackedStringArray("Magic1", "Magic2", "Magic3")
+clips = Array[ExtResource("1_2iho2")]([SubResource("Resource_1akdu"), SubResource("Resource_7bdl1"), SubResource("Resource_32uy5"), SubResource("Resource_nf5qs"), SubResource("Resource_rkhdw"), SubResource("Resource_7ny7f"), SubResource("Resource_4vgyr"), SubResource("Resource_0f0jh"), SubResource("Resource_bqwrl"), SubResource("Resource_rf6hk"), SubResource("Resource_jsmaw"), SubResource("Resource_wgj8f"), SubResource("Resource_1w644"), SubResource("Resource_1bf2c"), SubResource("Resource_144xq"), SubResource("Resource_yayud"), SubResource("Resource_ervrw"), SubResource("Resource_yhqsv"), SubResource("Resource_udptw")])
+hold_clips = PackedStringArray("Die")
+ground_pixels = 19.0
+measurements = "measured/characters/rigs/neuroclient.modular.json"
+notes = "Modular characters: parts per slot. The 19 px optical ground line is the client's standing assumption (the modular packets carry none)."

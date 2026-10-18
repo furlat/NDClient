@@ -1,0 +1,166 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_fs7q3"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_mqsph"]
+
+[sub_resource type="Resource" id="Resource_g4r80"]
+script = ExtResource("1_fs7q3")
+path = "art/media/ui/icons/smooth48/item.mace.png"
+native_size = Vector2i(48, 48)
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_mqsph")
+id = "weapon.mace"
+kind = "weapon"
+slots = Dictionary[String, Dictionary]({
+"weapon_melee_main": {
+"layers": [{
+"part": "Melee9",
+"slot": "weapon",
+"tint": "#8899aa"
+}],
+"variants": {
+"1000000b": [{
+"part": "Melee9",
+"slot": "weapon",
+"tint": "#ccaa44"
+}],
+"1000000c": [{
+"part": "Melee9",
+"slot": "weapon",
+"tint": "#ddcc77"
+}],
+"1000000d": [{
+"part": "Melee9",
+"slot": "weapon",
+"tint": "#778899"
+}],
+"1000000e": [{
+"part": "Melee9",
+"slot": "weapon",
+"tint": "#334455"
+}],
+"a0000004": [{
+"part": "Melee22",
+"slot": "weapon",
+"tint": "#ccaa44"
+}]
+}
+}
+})
+hands = Dictionary[String, Dictionary]({
+"weapon_melee_off": {
+"": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#8899aa"
+}],
+"1000000b": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#ccaa44"
+}],
+"1000000c": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#ddcc77"
+}],
+"1000000d": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#778899"
+}],
+"1000000e": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#334455"
+}],
+"a0000004": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#ccaa44"
+}]
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee9",
+"pivots_by_camera": [[54.5, 66.5], [62.5, 55.5], [76.5, 61.5], [68.0, 71.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#8899aa",
+"variant": ""
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee9",
+"pivots_by_camera": [[54.5, 66.5], [62.5, 55.5], [76.5, 61.5], [68.0, 71.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#ccaa44",
+"variant": "1000000b"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee9",
+"pivots_by_camera": [[54.5, 66.5], [62.5, 55.5], [76.5, 61.5], [68.0, 71.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#ddcc77",
+"variant": "1000000c"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee9",
+"pivots_by_camera": [[54.5, 66.5], [62.5, 55.5], [76.5, 61.5], [68.0, 71.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#778899",
+"variant": "1000000d"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee9",
+"pivots_by_camera": [[54.5, 66.5], [62.5, 55.5], [76.5, 61.5], [68.0, 71.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#334455",
+"variant": "1000000e"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee22",
+"pivots_by_camera": [[54.0, 66.5], [66.0, 58.0], [75.0, 65.5], [64.5, 71.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#ccaa44",
+"variant": "a0000004"
+}])
+icon = SubResource("Resource_g4r80")
+notes = "Visual name Mace; Standard mace sprite"

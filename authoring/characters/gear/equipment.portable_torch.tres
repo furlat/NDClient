@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_45c5g"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_gv8xq"]
+
+[sub_resource type="Resource" id="Resource_jofyn"]
+script = ExtResource("1_45c5g")
+path = "art/media/ui/icons/smooth48/item.torch.png"
+native_size = Vector2i(48, 48)
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_gv8xq")
+id = "equipment.portable_torch"
+kind = "usable"
+icon = SubResource("Resource_jofyn")
+lights = true
+status = "partial"
+notes = "No worn look authored."

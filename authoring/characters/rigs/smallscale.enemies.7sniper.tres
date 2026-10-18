@@ -1,0 +1,469 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_wdeur"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_gdqv1"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_svl3b"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_ruor3"]
+
+[sub_resource type="Resource" id="Resource_dpgvf"]
+script = ExtResource("2_gdqv1")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/7sniper/attack1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/7sniper/attack1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/7sniper/attack1/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/7sniper/attack1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/7sniper/attack1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/7sniper/attack1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -2.82842712474619
+coverage = 0.984225335249042
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_yhcvu"]
+script = ExtResource("1_wdeur")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Attack1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies7Sniper": "/rigs/enemies_7sniper/body/Attack1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/7sniper/attack1/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/7Sniper/Attack1.png",
+"mask_material": "art/media/smallscale/authored/enemies/Material masks/With shadow/7Sniper/Attack1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_dpgvf")
+
+[sub_resource type="Resource" id="Resource_jwwec"]
+script = ExtResource("2_gdqv1")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/7sniper/attack2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/7sniper/attack2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/7sniper/attack2/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/7sniper/attack2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/7sniper/attack2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/7sniper/attack2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -2.82842712474619
+coverage = 0.9790671577372388
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_w0nwh"]
+script = ExtResource("1_wdeur")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Attack2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies7Sniper": "/rigs/enemies_7sniper/body/Attack2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/7sniper/attack2/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/7Sniper/Attack2.png",
+"mask_material": "art/media/smallscale/authored/enemies/Material masks/With shadow/7Sniper/Attack2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_jwwec")
+
+[sub_resource type="Resource" id="Resource_5oefr"]
+script = ExtResource("2_gdqv1")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/7sniper/attack3/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/7sniper/attack3/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/7sniper/attack3/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/7sniper/attack3/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/7sniper/attack3/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/7sniper/attack3/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -2.82842712474619
+coverage = 0.9801752665767864
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_iptpk"]
+script = ExtResource("1_wdeur")
+name = "Attack3"
+role = "attack_3"
+source_clip = "Attack3"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies7Sniper": "/rigs/enemies_7sniper/body/Attack3.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/7sniper/attack3/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/7Sniper/Attack3.png",
+"mask_material": "art/media/smallscale/authored/enemies/Material masks/With shadow/7Sniper/Attack3.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_5oefr")
+
+[sub_resource type="Resource" id="Resource_wsb2o"]
+script = ExtResource("2_gdqv1")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/7sniper/attack4/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/7sniper/attack4/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/7sniper/attack4/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/7sniper/attack4/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/7sniper/attack4/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/7sniper/attack4/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -2.82842712474619
+coverage = 0.9783764175196756
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_7smnj"]
+script = ExtResource("1_wdeur")
+name = "Attack4"
+role = "attack_4"
+source_clip = "Attack4"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies7Sniper": "/rigs/enemies_7sniper/body/Attack4.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/7sniper/attack4/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/7Sniper/Attack4.png",
+"mask_material": "art/media/smallscale/authored/enemies/Material masks/With shadow/7Sniper/Attack4.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_wsb2o")
+
+[sub_resource type="Resource" id="Resource_ed3pb"]
+script = ExtResource("2_gdqv1")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/7sniper/die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/7sniper/die/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/7sniper/die/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/7sniper/die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/7sniper/die/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/7sniper/die/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -2.82842712474619
+coverage = 0.9732874900819888
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_ymvhb"]
+script = ExtResource("1_wdeur")
+name = "Die"
+role = "die"
+source_clip = "Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies7Sniper": "/rigs/enemies_7sniper/body/Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/7sniper/die/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/7Sniper/Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_ed3pb")
+
+[sub_resource type="Resource" id="Resource_5mscj"]
+script = ExtResource("2_gdqv1")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/7sniper/idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/7sniper/idle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/7sniper/idle/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/7sniper/idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/7sniper/idle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/7sniper/idle/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -2.82842712474619
+coverage = 0.9822725129655824
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_m0y6a"]
+script = ExtResource("1_wdeur")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies7Sniper": "/rigs/enemies_7sniper/body/Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/7sniper/idle/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/7Sniper/Idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_5mscj")
+
+[sub_resource type="Resource" id="Resource_ymjxo"]
+script = ExtResource("2_gdqv1")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/7sniper/idle2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/7sniper/idle2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/7sniper/idle2/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/7sniper/idle2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/7sniper/idle2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/7sniper/idle2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -2.82842712474619
+coverage = 0.9855349470175384
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_b1o4m"]
+script = ExtResource("1_wdeur")
+name = "Idle2"
+role = "idle_alt"
+source_clip = "Idle2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies7Sniper": "/rigs/enemies_7sniper/body/Idle2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/7sniper/idle2/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/7Sniper/Idle2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_ymjxo")
+
+[sub_resource type="Resource" id="Resource_srvt0"]
+script = ExtResource("2_gdqv1")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/7sniper/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/7sniper/run/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/7sniper/run/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/7sniper/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/7sniper/run/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/7sniper/run/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -2.82842712474619
+coverage = 0.9881269399732008
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_vk1no"]
+script = ExtResource("1_wdeur")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies7Sniper": "/rigs/enemies_7sniper/body/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/7sniper/run/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/7Sniper/Run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_srvt0")
+
+[sub_resource type="Resource" id="Resource_2ga56"]
+script = ExtResource("2_gdqv1")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/7sniper/takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/7sniper/takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/7sniper/takedamage/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/7sniper/takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/7sniper/takedamage/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/7sniper/takedamage/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -2.82842712474619
+coverage = 0.985839595245936
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_5mnpc"]
+script = ExtResource("1_wdeur")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies7Sniper": "/rigs/enemies_7sniper/body/TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/7sniper/takedamage/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/7Sniper/TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_2ga56")
+
+[sub_resource type="Resource" id="Resource_giwgw"]
+script = ExtResource("2_gdqv1")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/7sniper/taunt/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/7sniper/taunt/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/7sniper/taunt/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/7sniper/taunt/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/7sniper/taunt/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/7sniper/taunt/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -2.82842712474619
+coverage = 0.9825104952519635
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_puk55"]
+script = ExtResource("1_wdeur")
+name = "Taunt"
+role = "taunt"
+source_clip = "Taunt"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies7Sniper": "/rigs/enemies_7sniper/body/Taunt.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/7sniper/taunt/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/7Sniper/Taunt.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_giwgw")
+
+[sub_resource type="Resource" id="Resource_3dive"]
+script = ExtResource("2_gdqv1")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/7sniper/walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/7sniper/walk/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/7sniper/walk/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/7sniper/walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/7sniper/walk/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/7sniper/walk/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -2.82842712474619
+coverage = 0.9850520937023028
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_fs5uv"]
+script = ExtResource("1_wdeur")
+name = "Walk"
+role = "walk"
+source_clip = "Walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies7Sniper": "/rigs/enemies_7sniper/body/Walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/7sniper/walk/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/7Sniper/Walk.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_3dive")
+
+[resource]
+script = ExtResource("4_ruor3")
+id = "smallscale.enemies.7sniper"
+pack = "enemies"
+variant = "7Sniper"
+source = "smallscale-authored/enemies"
+pivot = Vector2(64, 98)
+anchor = Vector2(64, 74)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("Enemies7Sniper")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_wdeur")]([SubResource("Resource_yhcvu"), SubResource("Resource_w0nwh"), SubResource("Resource_iptpk"), SubResource("Resource_7smnj"), SubResource("Resource_ymvhb"), SubResource("Resource_m0y6a"), SubResource("Resource_b1o4m"), SubResource("Resource_vk1no"), SubResource("Resource_5mnpc"), SubResource("Resource_puk55"), SubResource("Resource_fs5uv")])
+hold_clips = PackedStringArray("Die")
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed."

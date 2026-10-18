@@ -1,0 +1,1108 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_0i71h"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_dw44t"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_eu4cd"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_ptpbg"]
+
+[sub_resource type="Resource" id="Resource_c0lo1"]
+script = ExtResource("2_dw44t")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/imp-9/attack-1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/imp-9/attack-1/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/imp-9/attack-1/normals.png",
+"reference": "art/geometry/creatures/first/actions/imp-9/attack-1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/imp-9/attack-1/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/imp-9/attack-1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 16.97056274847714
+coverage = 0.8860136937863641
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_14v1f"]
+script = ExtResource("1_0i71h")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Attack 1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Imp09": "/rigs/imp09/body/Attack 1.png",
+"Imp09Effect": "/rigs/imp09/effect/Attack 1.png",
+"Imp09Shadow": "/rigs/imp09/shadow/Attack 1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Imp 9/Attack 1.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Imp 9/Attack 1.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Imp 9/Effects/Attack 1.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Imp 9/Shadows/Attack 1.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Imp09Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_c0lo1")
+
+[sub_resource type="Resource" id="Resource_j35tu"]
+script = ExtResource("2_dw44t")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/imp-9/attack-2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/imp-9/attack-2/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/imp-9/attack-2/normals.png",
+"reference": "art/geometry/creatures/first/actions/imp-9/attack-2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/imp-9/attack-2/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/imp-9/attack-2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 16.97056274847714
+coverage = 0.858994463468493
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_o3gmb"]
+script = ExtResource("1_0i71h")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Attack 2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Imp09": "/rigs/imp09/body/Attack 2.png",
+"Imp09Effect": "/rigs/imp09/effect/Attack 2.png",
+"Imp09Shadow": "/rigs/imp09/shadow/Attack 2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Imp 9/Attack 2.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Imp 9/Attack 2.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Imp 9/Effects/Attack 2.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Imp 9/Shadows/Attack 2.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Imp09Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_j35tu")
+
+[sub_resource type="Resource" id="Resource_kvwlh"]
+script = ExtResource("2_dw44t")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/imp-9/attack-3/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/imp-9/attack-3/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/imp-9/attack-3/normals.png",
+"reference": "art/geometry/creatures/first/actions/imp-9/attack-3/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/imp-9/attack-3/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/imp-9/attack-3/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 16.97056274847714
+coverage = 0.8726040353089534
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_2e4do"]
+script = ExtResource("1_0i71h")
+name = "Attack3"
+role = "attack_3"
+source_clip = "Attack 3"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Imp09": "/rigs/imp09/body/Attack 3.png",
+"Imp09Effect": "/rigs/imp09/effect/Attack 3.png",
+"Imp09Shadow": "/rigs/imp09/shadow/Attack 3.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Imp 9/Attack 3.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Imp 9/Attack 3.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Imp 9/Effects/Attack 3.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Imp 9/Shadows/Attack 3.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Imp09Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_kvwlh")
+
+[sub_resource type="Resource" id="Resource_hu0ka"]
+script = ExtResource("2_dw44t")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/imp-9/attack-4/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/imp-9/attack-4/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/imp-9/attack-4/normals.png",
+"reference": "art/geometry/creatures/first/actions/imp-9/attack-4/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/imp-9/attack-4/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/imp-9/attack-4/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 16.97056274847714
+coverage = 0.885816149547119
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_0mhx5"]
+script = ExtResource("1_0i71h")
+name = "Attack4"
+role = "attack_4"
+source_clip = "Attack 4"
+frames = 10
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Imp09": "/rigs/imp09/body/Attack 4.png",
+"Imp09Effect": "/rigs/imp09/effect/Attack 4.png",
+"Imp09Shadow": "/rigs/imp09/shadow/Attack 4.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Imp 9/Attack 4.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Imp 9/Attack 4.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Imp 9/Effects/Attack 4.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Imp 9/Shadows/Attack 4.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Imp09Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_hu0ka")
+
+[sub_resource type="Resource" id="Resource_87h44"]
+script = ExtResource("2_dw44t")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/imp-9/attack-5/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/imp-9/attack-5/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/imp-9/attack-5/normals.png",
+"reference": "art/geometry/creatures/first/actions/imp-9/attack-5/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/imp-9/attack-5/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/imp-9/attack-5/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 16.97056274847714
+coverage = 0.8720210964969397
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_p4vjt"]
+script = ExtResource("1_0i71h")
+name = "Attack5"
+role = "attack_5"
+source_clip = "Attack 5"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Imp09": "/rigs/imp09/body/Attack 5.png",
+"Imp09Effect": "/rigs/imp09/effect/Attack 5.png",
+"Imp09Shadow": "/rigs/imp09/shadow/Attack 5.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Imp 9/Attack 5.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Imp 9/Attack 5.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Imp 9/Effects/Attack 5.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Imp 9/Shadows/Attack 5.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Imp09Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_87h44")
+
+[sub_resource type="Resource" id="Resource_8walg"]
+script = ExtResource("2_dw44t")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/imp-9/attack-6/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/imp-9/attack-6/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/imp-9/attack-6/normals.png",
+"reference": "art/geometry/creatures/first/actions/imp-9/attack-6/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/imp-9/attack-6/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/imp-9/attack-6/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 16.97056274847714
+coverage = 0.8624854527726229
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_h3lw3"]
+script = ExtResource("1_0i71h")
+name = "Attack6"
+role = "attack_6"
+source_clip = "Attack 6"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Imp09": "/rigs/imp09/body/Attack 6.png",
+"Imp09Effect": "/rigs/imp09/effect/Attack 6.png",
+"Imp09Shadow": "/rigs/imp09/shadow/Attack 6.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Imp 9/Attack 6.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Imp 9/Attack 6.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Imp 9/Effects/Attack 6.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Imp 9/Shadows/Attack 6.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Imp09Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_8walg")
+
+[sub_resource type="Resource" id="Resource_bwofh"]
+script = ExtResource("2_dw44t")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/imp-9/attack-run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/imp-9/attack-run/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/imp-9/attack-run/normals.png",
+"reference": "art/geometry/creatures/first/actions/imp-9/attack-run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/imp-9/attack-run/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/imp-9/attack-run/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 16.97056274847714
+coverage = 0.8428867744378231
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_3i16p"]
+script = ExtResource("1_0i71h")
+name = "AttackRun"
+role = "attack_run"
+source_clip = "Attack Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Imp09": "/rigs/imp09/body/Attack Run.png",
+"Imp09Effect": "/rigs/imp09/effect/Attack Run.png",
+"Imp09Shadow": "/rigs/imp09/shadow/Attack Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Imp 9/Attack Run.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Imp 9/Attack Run.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Imp 9/Effects/Attack Run.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Imp 9/Shadows/Attack Run.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Imp09Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_bwofh")
+
+[sub_resource type="Resource" id="Resource_kvybv"]
+script = ExtResource("2_dw44t")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/imp-9/block/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/imp-9/block/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/imp-9/block/normals.png",
+"reference": "art/geometry/creatures/first/actions/imp-9/block/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/imp-9/block/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/imp-9/block/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 16.97056274847714
+coverage = 0.8635626102292769
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_tvv1f"]
+script = ExtResource("1_0i71h")
+name = "Block"
+role = "block_hold"
+source_clip = "Block"
+frames = 7
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Imp09": "/rigs/imp09/body/Block.png",
+"Imp09Effect": "/rigs/imp09/effect/Block.png",
+"Imp09Shadow": "/rigs/imp09/shadow/Block.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Imp 9/Block.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Imp 9/Block.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Imp 9/Effects/Block.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Imp 9/Shadows/Block.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Imp09Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_kvybv")
+
+[sub_resource type="Resource" id="Resource_2m7gs"]
+script = ExtResource("2_dw44t")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/imp-9/crouch/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/imp-9/crouch/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/imp-9/crouch/normals.png",
+"reference": "art/geometry/creatures/first/actions/imp-9/crouch/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/imp-9/crouch/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/imp-9/crouch/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 16.97056274847714
+coverage = 0.892119610110689
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_4ga7d"]
+script = ExtResource("1_0i71h")
+name = "Crouch"
+role = "crouch_idle"
+source_clip = "Crouch"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Imp09": "/rigs/imp09/body/Crouch.png",
+"Imp09Effect": "/rigs/imp09/effect/Crouch.png",
+"Imp09Shadow": "/rigs/imp09/shadow/Crouch.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Imp 9/Crouch.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Imp 9/Crouch.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Imp 9/Effects/Crouch.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Imp 9/Shadows/Crouch.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Imp09Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_2m7gs")
+
+[sub_resource type="Resource" id="Resource_quike"]
+script = ExtResource("2_dw44t")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/imp-9/crouch-walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/imp-9/crouch-walk/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/imp-9/crouch-walk/normals.png",
+"reference": "art/geometry/creatures/first/actions/imp-9/crouch-walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/imp-9/crouch-walk/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/imp-9/crouch-walk/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 16.97056274847714
+coverage = 0.8859291974328893
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_3qlfo"]
+script = ExtResource("1_0i71h")
+name = "CrouchWalk"
+role = "crouch_move"
+source_clip = "Crouch walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Imp09": "/rigs/imp09/body/Crouch walk.png",
+"Imp09Effect": "/rigs/imp09/effect/Crouch walk.png",
+"Imp09Shadow": "/rigs/imp09/shadow/Crouch walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Imp 9/Crouch walk.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Imp 9/Crouch walk.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Imp 9/Effects/Crouch walk.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Imp 9/Shadows/Crouch walk.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Imp09Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_quike")
+
+[sub_resource type="Resource" id="Resource_kb1y6"]
+script = ExtResource("2_dw44t")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/imp-9/die-1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/imp-9/die-1/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/imp-9/die-1/normals.png",
+"reference": "art/geometry/creatures/first/actions/imp-9/die-1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/imp-9/die-1/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/imp-9/die-1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 16.97056274847714
+coverage = 0.8898470777180365
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_1vtj2"]
+script = ExtResource("1_0i71h")
+name = "Die"
+role = "die"
+source_clip = "Die 1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Imp09": "/rigs/imp09/body/Die 1.png",
+"Imp09Effect": "/rigs/imp09/effect/Die 1.png",
+"Imp09Shadow": "/rigs/imp09/shadow/Die 1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Imp 9/Die 1.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Imp 9/Die 1.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Imp 9/Effects/Die 1.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Imp 9/Shadows/Die 1.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Imp09Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_kb1y6")
+
+[sub_resource type="Resource" id="Resource_rc6hs"]
+script = ExtResource("2_dw44t")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/imp-9/die-2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/imp-9/die-2/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/imp-9/die-2/normals.png",
+"reference": "art/geometry/creatures/first/actions/imp-9/die-2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/imp-9/die-2/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/imp-9/die-2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 16.97056274847714
+coverage = 0.8271916275257699
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_ps8jn"]
+script = ExtResource("1_0i71h")
+name = "Death"
+role = "die_alt"
+source_clip = "Die 2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Imp09": "/rigs/imp09/body/Die 2.png",
+"Imp09Effect": "/rigs/imp09/effect/Die 2.png",
+"Imp09Shadow": "/rigs/imp09/shadow/Die 2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Imp 9/Die 2.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Imp 9/Die 2.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Imp 9/Effects/Die 2.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Imp 9/Shadows/Die 2.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Imp09Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_rc6hs")
+
+[sub_resource type="Resource" id="Resource_mkub2"]
+script = ExtResource("2_dw44t")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/imp-9/explode-copy/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/imp-9/explode-copy/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/imp-9/explode-copy/normals.png",
+"reference": "art/geometry/creatures/first/actions/imp-9/explode-copy/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/imp-9/explode-copy/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/imp-9/explode-copy/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 16.97056274847714
+coverage = 0.6921904315196998
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_03hyp"]
+script = ExtResource("1_0i71h")
+name = "ExplodeCopy"
+role = "explode"
+source_clip = "Explode Copy"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Imp09": "/rigs/imp09/body/Explode Copy.png",
+"Imp09Effect": "/rigs/imp09/effect/Explode Copy.png",
+"Imp09Shadow": "/rigs/imp09/shadow/Explode Copy.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Imp 9/Explode Copy.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Imp 9/Explode Copy.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Imp 9/Effects/Explode Copy.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Imp 9/Shadows/Explode Copy.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Imp09Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_mkub2")
+
+[sub_resource type="Resource" id="Resource_0pw22"]
+script = ExtResource("2_dw44t")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/imp-9/idle-1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/imp-9/idle-1/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/imp-9/idle-1/normals.png",
+"reference": "art/geometry/creatures/first/actions/imp-9/idle-1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/imp-9/idle-1/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/imp-9/idle-1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 16.97056274847714
+coverage = 0.8694303169881329
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_e5hct"]
+script = ExtResource("1_0i71h")
+name = "Idle"
+role = "idle"
+source_clip = "Idle 1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Imp09": "/rigs/imp09/body/Idle 1.png",
+"Imp09Effect": "/rigs/imp09/effect/Idle 1.png",
+"Imp09Shadow": "/rigs/imp09/shadow/Idle 1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Imp 9/Idle 1.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Imp 9/Idle 1.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Imp 9/Effects/Idle 1.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Imp 9/Shadows/Idle 1.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Imp09Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_0pw22")
+
+[sub_resource type="Resource" id="Resource_k52j4"]
+script = ExtResource("2_dw44t")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/imp-9/roll-1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/imp-9/roll-1/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/imp-9/roll-1/normals.png",
+"reference": "art/geometry/creatures/first/actions/imp-9/roll-1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/imp-9/roll-1/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/imp-9/roll-1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 16.97056274847714
+coverage = 0.8928221914757196
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_l7sf4"]
+script = ExtResource("1_0i71h")
+name = "Rolling"
+role = "roll"
+source_clip = "Roll 1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Imp09": "/rigs/imp09/body/Roll 1.png",
+"Imp09Effect": "/rigs/imp09/effect/Roll 1.png",
+"Imp09Shadow": "/rigs/imp09/shadow/Roll 1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Imp 9/Roll 1.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Imp 9/Roll 1.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Imp 9/Effects/Roll 1.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Imp 9/Shadows/Roll 1.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Imp09Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_k52j4")
+
+[sub_resource type="Resource" id="Resource_5x8bb"]
+script = ExtResource("2_dw44t")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/imp-9/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/imp-9/run/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/imp-9/run/normals.png",
+"reference": "art/geometry/creatures/first/actions/imp-9/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/imp-9/run/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/imp-9/run/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 16.97056274847714
+coverage = 0.8833102370038731
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_4813e"]
+script = ExtResource("1_0i71h")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Imp09": "/rigs/imp09/body/Run.png",
+"Imp09Effect": "/rigs/imp09/effect/Run.png",
+"Imp09Shadow": "/rigs/imp09/shadow/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Imp 9/Run.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Imp 9/Run.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Imp 9/Effects/Run.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Imp 9/Shadows/Run.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Imp09Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_5x8bb")
+
+[sub_resource type="Resource" id="Resource_5wvyc"]
+script = ExtResource("2_dw44t")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/imp-9/run-backwards/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/imp-9/run-backwards/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/imp-9/run-backwards/normals.png",
+"reference": "art/geometry/creatures/first/actions/imp-9/run-backwards/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/imp-9/run-backwards/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/imp-9/run-backwards/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 16.97056274847714
+coverage = 0.8496747446830024
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_secnr"]
+script = ExtResource("1_0i71h")
+name = "RunBackwards"
+role = "run_back"
+source_clip = "Run Backwards"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Imp09": "/rigs/imp09/body/Run Backwards.png",
+"Imp09Effect": "/rigs/imp09/effect/Run Backwards.png",
+"Imp09Shadow": "/rigs/imp09/shadow/Run Backwards.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Imp 9/Run Backwards.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Imp 9/Run Backwards.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Imp 9/Effects/Run Backwards.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Imp 9/Shadows/Run Backwards.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Imp09Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_5wvyc")
+
+[sub_resource type="Resource" id="Resource_kae8t"]
+script = ExtResource("2_dw44t")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/imp-9/slide-1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/imp-9/slide-1/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/imp-9/slide-1/normals.png",
+"reference": "art/geometry/creatures/first/actions/imp-9/slide-1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/imp-9/slide-1/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/imp-9/slide-1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 16.97056274847714
+coverage = 0.8728098860624419
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_qgcok"]
+script = ExtResource("1_0i71h")
+name = "Slide1"
+role = "slide"
+source_clip = "Slide 1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Imp09": "/rigs/imp09/body/Slide 1.png",
+"Imp09Effect": "/rigs/imp09/effect/Slide 1.png",
+"Imp09Shadow": "/rigs/imp09/shadow/Slide 1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Imp 9/Slide 1.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Imp 9/Slide 1.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Imp 9/Effects/Slide 1.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Imp 9/Shadows/Slide 1.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Imp09Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_kae8t")
+
+[sub_resource type="Resource" id="Resource_n50yb"]
+script = ExtResource("2_dw44t")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/imp-9/strafe-left/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/imp-9/strafe-left/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/imp-9/strafe-left/normals.png",
+"reference": "art/geometry/creatures/first/actions/imp-9/strafe-left/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/imp-9/strafe-left/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/imp-9/strafe-left/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 16.97056274847714
+coverage = 0.8573006558508802
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_0ypgu"]
+script = ExtResource("1_0i71h")
+name = "StrafeLeft"
+role = "strafe_left"
+source_clip = "Strafe Left"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Imp09": "/rigs/imp09/body/Strafe Left.png",
+"Imp09Effect": "/rigs/imp09/effect/Strafe Left.png",
+"Imp09Shadow": "/rigs/imp09/shadow/Strafe Left.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Imp 9/Strafe Left.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Imp 9/Strafe Left.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Imp 9/Effects/Strafe Left.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Imp 9/Shadows/Strafe Left.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Imp09Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_n50yb")
+
+[sub_resource type="Resource" id="Resource_pk5yt"]
+script = ExtResource("2_dw44t")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/imp-9/strafe-right/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/imp-9/strafe-right/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/imp-9/strafe-right/normals.png",
+"reference": "art/geometry/creatures/first/actions/imp-9/strafe-right/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/imp-9/strafe-right/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/imp-9/strafe-right/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 16.97056274847714
+coverage = 0.8779454955262619
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_0h7i1"]
+script = ExtResource("1_0i71h")
+name = "StrafeRight"
+role = "strafe_right"
+source_clip = "Strafe Right"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Imp09": "/rigs/imp09/body/Strafe Right.png",
+"Imp09Effect": "/rigs/imp09/effect/Strafe Right.png",
+"Imp09Shadow": "/rigs/imp09/shadow/Strafe Right.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Imp 9/Strafe Right.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Imp 9/Strafe Right.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Imp 9/Effects/Strafe Right.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Imp 9/Shadows/Strafe Right.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Imp09Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_pk5yt")
+
+[sub_resource type="Resource" id="Resource_i7171"]
+script = ExtResource("2_dw44t")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/imp-9/takedamage-1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/imp-9/takedamage-1/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/imp-9/takedamage-1/normals.png",
+"reference": "art/geometry/creatures/first/actions/imp-9/takedamage-1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/imp-9/takedamage-1/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/imp-9/takedamage-1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 16.97056274847714
+coverage = 0.8713255684969495
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_gv2a2"]
+script = ExtResource("1_0i71h")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage 1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Imp09": "/rigs/imp09/body/TakeDamage 1.png",
+"Imp09Effect": "/rigs/imp09/effect/TakeDamage 1.png",
+"Imp09Shadow": "/rigs/imp09/shadow/TakeDamage 1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Imp 9/TakeDamage 1.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Imp 9/TakeDamage 1.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Imp 9/Effects/TakeDamage 1.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Imp 9/Shadows/TakeDamage 1.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Imp09Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_i7171")
+
+[sub_resource type="Resource" id="Resource_rmwrt"]
+script = ExtResource("2_dw44t")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/imp-9/taunt/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/imp-9/taunt/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/imp-9/taunt/normals.png",
+"reference": "art/geometry/creatures/first/actions/imp-9/taunt/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/imp-9/taunt/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/imp-9/taunt/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 16.97056274847714
+coverage = 0.8892775460782995
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_6j2pl"]
+script = ExtResource("1_0i71h")
+name = "Taunt"
+role = "taunt"
+source_clip = "Taunt"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Imp09": "/rigs/imp09/body/Taunt.png",
+"Imp09Effect": "/rigs/imp09/effect/Taunt.png",
+"Imp09Shadow": "/rigs/imp09/shadow/Taunt.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Imp 9/Taunt.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Imp 9/Taunt.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Imp 9/Effects/Taunt.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Imp 9/Shadows/Taunt.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Imp09Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_rmwrt")
+
+[sub_resource type="Resource" id="Resource_yuv6l"]
+script = ExtResource("2_dw44t")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/imp-9/walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/imp-9/walk/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/imp-9/walk/normals.png",
+"reference": "art/geometry/creatures/first/actions/imp-9/walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/imp-9/walk/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/imp-9/walk/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 16.97056274847714
+coverage = 0.8492401623670703
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_islpw"]
+script = ExtResource("1_0i71h")
+name = "Walk"
+role = "walk"
+source_clip = "Walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Imp09": "/rigs/imp09/body/Walk.png",
+"Imp09Effect": "/rigs/imp09/effect/Walk.png",
+"Imp09Shadow": "/rigs/imp09/shadow/Walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Imp 9/Walk.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Imp 9/Walk.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Imp 9/Effects/Walk.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Imp 9/Shadows/Walk.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Imp09Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_yuv6l")
+
+[resource]
+script = ExtResource("4_ptpbg")
+id = "smallscale.imp09"
+pack = "demons"
+variant = "Imp 9"
+source = "smallscale-authored/demons"
+pivot = Vector2(64, 84)
+anchor = Vector2(64, 67)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("shadow", "body", "effect")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("Imp09"),
+"effect": PackedStringArray("Imp09Effect"),
+"shadow": PackedStringArray("Imp09Shadow")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_0i71h")]([SubResource("Resource_14v1f"), SubResource("Resource_o3gmb"), SubResource("Resource_2e4do"), SubResource("Resource_0mhx5"), SubResource("Resource_p4vjt"), SubResource("Resource_h3lw3"), SubResource("Resource_3i16p"), SubResource("Resource_tvv1f"), SubResource("Resource_4ga7d"), SubResource("Resource_3qlfo"), SubResource("Resource_1vtj2"), SubResource("Resource_ps8jn"), SubResource("Resource_03hyp"), SubResource("Resource_e5hct"), SubResource("Resource_l7sf4"), SubResource("Resource_4813e"), SubResource("Resource_secnr"), SubResource("Resource_qgcok"), SubResource("Resource_0ypgu"), SubResource("Resource_0h7i1"), SubResource("Resource_gv2a2"), SubResource("Resource_6j2pl"), SubResource("Resource_islpw")])
+hold_clips = PackedStringArray("Die", "Death", "ExplodeCopy")
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed."

@@ -1,0 +1,1336 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_hbpml"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_gb7rk"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_r4i1s"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_gh6ia"]
+
+[sub_resource type="Resource" id="Resource_lhi0k"]
+script = ExtResource("2_gb7rk")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/8necromancer/180turn/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/8necromancer/180turn/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/8necromancer/180turn/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/8necromancer/180turn/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/8necromancer/180turn/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/8necromancer/180turn/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9878655261587428
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_vdvii"]
+script = ExtResource("1_hbpml")
+name = "180Turn"
+role = "turn"
+source_clip = "180Turn"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead8Necromancer": "/rigs/undead_8necromancer/body/180Turn.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/8necromancer/180turn/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/8Necromancer/180Turn.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/8Necromancer/180Turn.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_lhi0k")
+
+[sub_resource type="Resource" id="Resource_grv1x"]
+script = ExtResource("2_gb7rk")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/8necromancer/attack1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/8necromancer/attack1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/8necromancer/attack1/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/8necromancer/attack1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/8necromancer/attack1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/8necromancer/attack1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9787284527880522
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_6261x"]
+script = ExtResource("1_hbpml")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Attack1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead8Necromancer": "/rigs/undead_8necromancer/body/Attack1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/8necromancer/attack1/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/8Necromancer/Attack1.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/8Necromancer/Attack1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_grv1x")
+
+[sub_resource type="Resource" id="Resource_ip35r"]
+script = ExtResource("2_gb7rk")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/8necromancer/attack2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/8necromancer/attack2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/8necromancer/attack2/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/8necromancer/attack2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/8necromancer/attack2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/8necromancer/attack2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9796563941063996
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_n8pg5"]
+script = ExtResource("1_hbpml")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Attack2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead8Necromancer": "/rigs/undead_8necromancer/body/Attack2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/8necromancer/attack2/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/8Necromancer/Attack2.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/8Necromancer/Attack2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_ip35r")
+
+[sub_resource type="Resource" id="Resource_cfuvh"]
+script = ExtResource("2_gb7rk")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/8necromancer/attack3/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/8necromancer/attack3/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/8necromancer/attack3/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/8necromancer/attack3/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/8necromancer/attack3/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/8necromancer/attack3/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9794177135857334
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_emvr1"]
+script = ExtResource("1_hbpml")
+name = "Attack3"
+role = "attack_3"
+source_clip = "Attack3"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead8Necromancer": "/rigs/undead_8necromancer/body/Attack3.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/8necromancer/attack3/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/8Necromancer/Attack3.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/8Necromancer/Attack3.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_cfuvh")
+
+[sub_resource type="Resource" id="Resource_6rwtq"]
+script = ExtResource("2_gb7rk")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/8necromancer/attackrun/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/8necromancer/attackrun/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/8necromancer/attackrun/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/8necromancer/attackrun/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/8necromancer/attackrun/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/8necromancer/attackrun/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9824057188708148
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_n56r4"]
+script = ExtResource("1_hbpml")
+name = "AttackRun"
+role = "attack_run"
+source_clip = "AttackRun"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead8Necromancer": "/rigs/undead_8necromancer/body/AttackRun.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/8necromancer/attackrun/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/8Necromancer/AttackRun.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/8Necromancer/AttackRun.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_6rwtq")
+
+[sub_resource type="Resource" id="Resource_w5ttv"]
+script = ExtResource("2_gb7rk")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/8necromancer/blockmid/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/8necromancer/blockmid/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/8necromancer/blockmid/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/8necromancer/blockmid/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/8necromancer/blockmid/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/8necromancer/blockmid/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9920942912123156
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_xx3rv"]
+script = ExtResource("1_hbpml")
+name = "Block"
+role = "block_hold"
+source_clip = "BlockMid"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead8Necromancer": "/rigs/undead_8necromancer/body/BlockMid.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/8necromancer/blockmid/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/8Necromancer/BlockMid.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/8Necromancer/BlockMid.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_w5ttv")
+
+[sub_resource type="Resource" id="Resource_sy40t"]
+script = ExtResource("2_gb7rk")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/8necromancer/blockstart/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/8necromancer/blockstart/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/8necromancer/blockstart/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/8necromancer/blockstart/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/8necromancer/blockstart/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/8necromancer/blockstart/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9903483541067434
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_hodyc"]
+script = ExtResource("1_hbpml")
+name = "BlockStart"
+role = "block_start"
+source_clip = "BlockStart"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead8Necromancer": "/rigs/undead_8necromancer/body/BlockStart.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/8necromancer/blockstart/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/8Necromancer/BlockStart.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/8Necromancer/BlockStart.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_sy40t")
+
+[sub_resource type="Resource" id="Resource_2vn10"]
+script = ExtResource("2_gb7rk")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/8necromancer/castspell/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/8necromancer/castspell/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/8necromancer/castspell/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/8necromancer/castspell/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/8necromancer/castspell/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/8necromancer/castspell/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9816401119296442
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_piexx"]
+script = ExtResource("1_hbpml")
+name = "CastSpell"
+role = "cast"
+source_clip = "CastSpell"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead8Necromancer": "/rigs/undead_8necromancer/body/CastSpell.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/8necromancer/castspell/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/8Necromancer/CastSpell.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/8Necromancer/CastSpell.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_2vn10")
+
+[sub_resource type="Resource" id="Resource_py7dm"]
+script = ExtResource("2_gb7rk")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/8necromancer/crouchidle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/8necromancer/crouchidle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/8necromancer/crouchidle/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/8necromancer/crouchidle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/8necromancer/crouchidle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/8necromancer/crouchidle/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9887843111533796
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_y6ain"]
+script = ExtResource("1_hbpml")
+name = "Crouch"
+role = "crouch_idle"
+source_clip = "CrouchIdle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead8Necromancer": "/rigs/undead_8necromancer/body/CrouchIdle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/8necromancer/crouchidle/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/8Necromancer/CrouchIdle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_py7dm")
+
+[sub_resource type="Resource" id="Resource_cw7vt"]
+script = ExtResource("2_gb7rk")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/8necromancer/crouchrun/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/8necromancer/crouchrun/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/8necromancer/crouchrun/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/8necromancer/crouchrun/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/8necromancer/crouchrun/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/8necromancer/crouchrun/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9885443764036774
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_apsgb"]
+script = ExtResource("1_hbpml")
+name = "CrouchWalk"
+role = "crouch_move"
+source_clip = "CrouchRun"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead8Necromancer": "/rigs/undead_8necromancer/body/CrouchRun.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/8necromancer/crouchrun/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/8Necromancer/CrouchRun.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/8Necromancer/CrouchRun.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_cw7vt")
+
+[sub_resource type="Resource" id="Resource_iqc2i"]
+script = ExtResource("2_gb7rk")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/8necromancer/die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/8necromancer/die/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/8necromancer/die/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/8necromancer/die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/8necromancer/die/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/8necromancer/die/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9879289425380332
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_vag42"]
+script = ExtResource("1_hbpml")
+name = "Die"
+role = "die"
+source_clip = "Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead8Necromancer": "/rigs/undead_8necromancer/body/Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/8necromancer/die/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/8Necromancer/Die.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/8Necromancer/Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_iqc2i")
+
+[sub_resource type="Resource" id="Resource_ngtut"]
+script = ExtResource("2_gb7rk")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/8necromancer/frontflip/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/8necromancer/frontflip/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/8necromancer/frontflip/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/8necromancer/frontflip/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/8necromancer/frontflip/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/8necromancer/frontflip/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.98278716189068
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_k6lfe"]
+script = ExtResource("1_hbpml")
+name = "BackFlip"
+role = "flip"
+source_clip = "FrontFlip"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead8Necromancer": "/rigs/undead_8necromancer/body/FrontFlip.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/8necromancer/frontflip/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/8Necromancer/FrontFlip.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/8Necromancer/FrontFlip.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_ngtut")
+
+[sub_resource type="Resource" id="Resource_f4337"]
+script = ExtResource("2_gb7rk")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/8necromancer/idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/8necromancer/idle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/8necromancer/idle/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/8necromancer/idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/8necromancer/idle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/8necromancer/idle/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.986324486969258
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_0tung"]
+script = ExtResource("1_hbpml")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead8Necromancer": "/rigs/undead_8necromancer/body/Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/8necromancer/idle/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/8Necromancer/Idle.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/8Necromancer/Idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_f4337")
+
+[sub_resource type="Resource" id="Resource_eeucl"]
+script = ExtResource("2_gb7rk")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/8necromancer/idle2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/8necromancer/idle2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/8necromancer/idle2/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/8necromancer/idle2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/8necromancer/idle2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/8necromancer/idle2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9880170768782948
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_rn2xm"]
+script = ExtResource("1_hbpml")
+name = "Idle2"
+role = "idle_alt"
+source_clip = "Idle2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead8Necromancer": "/rigs/undead_8necromancer/body/Idle2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/8necromancer/idle2/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/8Necromancer/Idle2.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/8Necromancer/Idle2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_eeucl")
+
+[sub_resource type="Resource" id="Resource_h0a3r"]
+script = ExtResource("2_gb7rk")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/8necromancer/kick/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/8necromancer/kick/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/8necromancer/kick/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/8necromancer/kick/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/8necromancer/kick/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/8necromancer/kick/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9797902097902098
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_jl6ne"]
+script = ExtResource("1_hbpml")
+name = "Kick"
+role = "kick"
+source_clip = "Kick"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead8Necromancer": "/rigs/undead_8necromancer/body/Kick.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/8necromancer/kick/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/8Necromancer/Kick.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/8Necromancer/Kick.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_h0a3r")
+
+[sub_resource type="Resource" id="Resource_f4151"]
+script = ExtResource("2_gb7rk")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/8necromancer/pummel/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/8necromancer/pummel/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/8necromancer/pummel/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/8necromancer/pummel/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/8necromancer/pummel/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/8necromancer/pummel/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9893417625007942
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_vfphx"]
+script = ExtResource("1_hbpml")
+name = "Pummel"
+role = "pummel"
+source_clip = "Pummel"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead8Necromancer": "/rigs/undead_8necromancer/body/Pummel.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/8necromancer/pummel/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/8Necromancer/Pummel.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/8Necromancer/Pummel.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_f4151")
+
+[sub_resource type="Resource" id="Resource_s1m1m"]
+script = ExtResource("2_gb7rk")
+status = "validated_partial"
+flags = PackedStringArray("source_pose_empty", "source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/8necromancer/quickshot/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/8necromancer/quickshot/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/8necromancer/quickshot/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/8necromancer/quickshot/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/8necromancer/quickshot/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/8necromancer/quickshot/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9850521348656672
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_17oma"]
+script = ExtResource("1_hbpml")
+name = "QuickShot"
+role = "shoot"
+source_clip = "QuickShot"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead8Necromancer": "/rigs/undead_8necromancer/body/QuickShot.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/8necromancer/quickshot/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/8Necromancer/QuickShot.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/8Necromancer/QuickShot.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_s1m1m")
+
+[sub_resource type="Resource" id="Resource_cql4r"]
+script = ExtResource("2_gb7rk")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/8necromancer/quickslide/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/8necromancer/quickslide/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/8necromancer/quickslide/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/8necromancer/quickslide/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/8necromancer/quickslide/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/8necromancer/quickslide/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9913011960855382
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_jolp1"]
+script = ExtResource("1_hbpml")
+name = "QuickSlide"
+role = "slide"
+source_clip = "QuickSlide"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead8Necromancer": "/rigs/undead_8necromancer/body/QuickSlide.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/8necromancer/quickslide/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/8Necromancer/QuickSlide.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/8Necromancer/QuickSlide.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_cql4r")
+
+[sub_resource type="Resource" id="Resource_fe7tn"]
+script = ExtResource("2_gb7rk")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/8necromancer/rolling/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/8necromancer/rolling/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/8necromancer/rolling/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/8necromancer/rolling/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/8necromancer/rolling/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/8necromancer/rolling/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9837242486399714
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_022xe"]
+script = ExtResource("1_hbpml")
+name = "Rolling"
+role = "roll"
+source_clip = "Rolling"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead8Necromancer": "/rigs/undead_8necromancer/body/Rolling.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/8necromancer/rolling/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/8Necromancer/Rolling.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/8Necromancer/Rolling.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_fe7tn")
+
+[sub_resource type="Resource" id="Resource_xvkpl"]
+script = ExtResource("2_gb7rk")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/8necromancer/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/8necromancer/run/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/8necromancer/run/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/8necromancer/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/8necromancer/run/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/8necromancer/run/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.986170991621248
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_l8qao"]
+script = ExtResource("1_hbpml")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead8Necromancer": "/rigs/undead_8necromancer/body/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/8necromancer/run/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/8Necromancer/Run.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/8Necromancer/Run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_xvkpl")
+
+[sub_resource type="Resource" id="Resource_swwqc"]
+script = ExtResource("2_gb7rk")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/8necromancer/runbackwards/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/8necromancer/runbackwards/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/8necromancer/runbackwards/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/8necromancer/runbackwards/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/8necromancer/runbackwards/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/8necromancer/runbackwards/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.98677912012765
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_h5u4g"]
+script = ExtResource("1_hbpml")
+name = "RunBackwards"
+role = "run_back"
+source_clip = "RunBackwards"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead8Necromancer": "/rigs/undead_8necromancer/body/RunBackwards.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/8necromancer/runbackwards/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/8Necromancer/RunBackwards.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/8Necromancer/RunBackwards.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_swwqc")
+
+[sub_resource type="Resource" id="Resource_2fn34"]
+script = ExtResource("2_gb7rk")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/8necromancer/sittingchair/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/8necromancer/sittingchair/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/8necromancer/sittingchair/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/8necromancer/sittingchair/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/8necromancer/sittingchair/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/8necromancer/sittingchair/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.99029402889999
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_x8xc8"]
+script = ExtResource("1_hbpml")
+name = "SittingChair"
+role = "sit"
+source_clip = "SittingChair"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead8Necromancer": "/rigs/undead_8necromancer/body/SittingChair.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/8necromancer/sittingchair/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/8Necromancer/SittingChair.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/8Necromancer/SittingChair.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_2fn34")
+
+[sub_resource type="Resource" id="Resource_mmp5f"]
+script = ExtResource("2_gb7rk")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/8necromancer/slide/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/8necromancer/slide/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/8necromancer/slide/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/8necromancer/slide/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/8necromancer/slide/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/8necromancer/slide/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9912645788166036
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_lpadd"]
+script = ExtResource("1_hbpml")
+name = "Slide"
+role = "slide"
+source_clip = "Slide"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead8Necromancer": "/rigs/undead_8necromancer/body/Slide.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/8necromancer/slide/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/8Necromancer/Slide.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/8Necromancer/Slide.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_mmp5f")
+
+[sub_resource type="Resource" id="Resource_8t6bq"]
+script = ExtResource("2_gb7rk")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/8necromancer/slideend/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/8necromancer/slideend/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/8necromancer/slideend/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/8necromancer/slideend/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/8necromancer/slideend/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/8necromancer/slideend/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.990965773859408
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_gobnj"]
+script = ExtResource("1_hbpml")
+name = "SlideEnd"
+role = "slide_end"
+source_clip = "SlideEnd"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead8Necromancer": "/rigs/undead_8necromancer/body/SlideEnd.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/8necromancer/slideend/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/8Necromancer/SlideEnd.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/8Necromancer/SlideEnd.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_8t6bq")
+
+[sub_resource type="Resource" id="Resource_r1yrr"]
+script = ExtResource("2_gb7rk")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/8necromancer/slidestart/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/8necromancer/slidestart/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/8necromancer/slidestart/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/8necromancer/slidestart/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/8necromancer/slidestart/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/8necromancer/slidestart/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.99066927773298
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_2borg"]
+script = ExtResource("1_hbpml")
+name = "SlideStart"
+role = "slide_start"
+source_clip = "SlideStart"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead8Necromancer": "/rigs/undead_8necromancer/body/SlideStart.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/8necromancer/slidestart/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/8Necromancer/SlideStart.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/8Necromancer/SlideStart.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_r1yrr")
+
+[sub_resource type="Resource" id="Resource_vo2bf"]
+script = ExtResource("2_gb7rk")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/8necromancer/special1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/8necromancer/special1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/8necromancer/special1/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/8necromancer/special1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/8necromancer/special1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/8necromancer/special1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9853430403548528
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_d7jyh"]
+script = ExtResource("1_hbpml")
+name = "Special1"
+role = "special_1"
+source_clip = "Special1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead8Necromancer": "/rigs/undead_8necromancer/body/Special1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/8necromancer/special1/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/8Necromancer/Special1.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/8Necromancer/Special1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_vo2bf")
+
+[sub_resource type="Resource" id="Resource_mpwrf"]
+script = ExtResource("2_gb7rk")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/8necromancer/special2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/8necromancer/special2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/8necromancer/special2/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/8necromancer/special2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/8necromancer/special2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/8necromancer/special2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9857120471801591
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_pn34c"]
+script = ExtResource("1_hbpml")
+name = "Special2"
+role = "special_2"
+source_clip = "Special2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead8Necromancer": "/rigs/undead_8necromancer/body/Special2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/8necromancer/special2/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/8Necromancer/Special2.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/8Necromancer/Special2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_mpwrf")
+
+[sub_resource type="Resource" id="Resource_2denw"]
+script = ExtResource("2_gb7rk")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/8necromancer/strafeleft/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/8necromancer/strafeleft/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/8necromancer/strafeleft/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/8necromancer/strafeleft/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/8necromancer/strafeleft/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/8necromancer/strafeleft/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9893201822427616
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_ol7k8"]
+script = ExtResource("1_hbpml")
+name = "StrafeLeft"
+role = "strafe_left"
+source_clip = "StrafeLeft"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead8Necromancer": "/rigs/undead_8necromancer/body/StrafeLeft.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/8necromancer/strafeleft/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/8Necromancer/StrafeLeft.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/8Necromancer/StrafeLeft.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_2denw")
+
+[sub_resource type="Resource" id="Resource_od67h"]
+script = ExtResource("2_gb7rk")
+status = "validated_partial"
+flags = PackedStringArray("source_pose_empty", "source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/8necromancer/straferight/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/8necromancer/straferight/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/8necromancer/straferight/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/8necromancer/straferight/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/8necromancer/straferight/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/8necromancer/straferight/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9888149511539006
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_85nev"]
+script = ExtResource("1_hbpml")
+name = "StrafeRight"
+role = "strafe_right"
+source_clip = "StrafeRight"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead8Necromancer": "/rigs/undead_8necromancer/body/StrafeRight.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/8necromancer/straferight/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/8Necromancer/StrafeRight.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/8Necromancer/StrafeRight.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_od67h")
+
+[sub_resource type="Resource" id="Resource_m4yic"]
+script = ExtResource("2_gb7rk")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/8necromancer/takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/8necromancer/takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/8necromancer/takedamage/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/8necromancer/takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/8necromancer/takedamage/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/8necromancer/takedamage/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9883220260887526
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_cvhxv"]
+script = ExtResource("1_hbpml")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead8Necromancer": "/rigs/undead_8necromancer/body/TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/8necromancer/takedamage/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/8Necromancer/TakeDamage.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/8Necromancer/TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_m4yic")
+
+[sub_resource type="Resource" id="Resource_8wbf6"]
+script = ExtResource("2_gb7rk")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/8necromancer/unsheath/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/8necromancer/unsheath/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/8necromancer/unsheath/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/8necromancer/unsheath/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/8necromancer/unsheath/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/8necromancer/unsheath/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.993542218792982
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_qc3tu"]
+script = ExtResource("1_hbpml")
+name = "UnSheath"
+role = "unsheath"
+source_clip = "UnSheath"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead8Necromancer": "/rigs/undead_8necromancer/body/UnSheath.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/8necromancer/unsheath/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/8Necromancer/UnSheath.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/8Necromancer/UnSheath.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_8wbf6")
+
+[sub_resource type="Resource" id="Resource_5ucsu"]
+script = ExtResource("2_gb7rk")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/8necromancer/walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/8necromancer/walk/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/8necromancer/walk/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/8necromancer/walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/8necromancer/walk/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/8necromancer/walk/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9879373130446092
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_yr7a7"]
+script = ExtResource("1_hbpml")
+name = "Walk"
+role = "walk"
+source_clip = "Walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead8Necromancer": "/rigs/undead_8necromancer/body/Walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/8necromancer/walk/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/8Necromancer/Walk.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/8Necromancer/Walk.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_5ucsu")
+
+[resource]
+script = ExtResource("4_gh6ia")
+id = "smallscale.undead.8necromancer"
+pack = "undead"
+variant = "8Necromancer"
+source = "smallscale-authored/undead"
+pivot = Vector2(64, 93)
+anchor = Vector2(64, 67)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("Undead8Necromancer")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_hbpml")]([SubResource("Resource_vdvii"), SubResource("Resource_6261x"), SubResource("Resource_n8pg5"), SubResource("Resource_emvr1"), SubResource("Resource_n56r4"), SubResource("Resource_xx3rv"), SubResource("Resource_hodyc"), SubResource("Resource_piexx"), SubResource("Resource_y6ain"), SubResource("Resource_apsgb"), SubResource("Resource_vag42"), SubResource("Resource_k6lfe"), SubResource("Resource_0tung"), SubResource("Resource_rn2xm"), SubResource("Resource_jl6ne"), SubResource("Resource_vfphx"), SubResource("Resource_17oma"), SubResource("Resource_jolp1"), SubResource("Resource_022xe"), SubResource("Resource_l8qao"), SubResource("Resource_h5u4g"), SubResource("Resource_x8xc8"), SubResource("Resource_lpadd"), SubResource("Resource_gobnj"), SubResource("Resource_2borg"), SubResource("Resource_d7jyh"), SubResource("Resource_pn34c"), SubResource("Resource_ol7k8"), SubResource("Resource_85nev"), SubResource("Resource_cvhxv"), SubResource("Resource_qc3tu"), SubResource("Resource_yr7a7")])
+hold_clips = PackedStringArray("Die")
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed."

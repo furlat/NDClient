@@ -1,0 +1,386 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_0sdug"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_cosro"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_ef3si"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_xr47k"]
+
+[sub_resource type="Resource" id="Resource_tgo6o"]
+script = ExtResource("2_cosro")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/elite-wolf/attack1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/elite-wolf/attack1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/elite-wolf/attack1/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/elite-wolf/attack1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/elite-wolf/attack1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/elite-wolf/attack1/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 9.899494936611665
+coverage = 0.6990152390383452
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_p1eq0"]
+script = ExtResource("1_0sdug")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Attack1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsEliteWolf": "/rigs/animals_elite_wolf/body/Attack1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/elite-wolf/attack1/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/ELITE Wolf/Attack1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_tgo6o")
+
+[sub_resource type="Resource" id="Resource_udahc"]
+script = ExtResource("2_cosro")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/elite-wolf/attack2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/elite-wolf/attack2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/elite-wolf/attack2/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/elite-wolf/attack2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/elite-wolf/attack2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/elite-wolf/attack2/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 9.899494936611665
+coverage = 0.9373710227000048
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_kvqjp"]
+script = ExtResource("1_0sdug")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Attack2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsEliteWolf": "/rigs/animals_elite_wolf/body/Attack2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/elite-wolf/attack2/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/ELITE Wolf/Attack2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_udahc")
+
+[sub_resource type="Resource" id="Resource_vmc3f"]
+script = ExtResource("2_cosro")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/elite-wolf/attack3/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/elite-wolf/attack3/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/elite-wolf/attack3/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/elite-wolf/attack3/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/elite-wolf/attack3/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/elite-wolf/attack3/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 9.899494936611665
+coverage = 0.6472579431887381
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_rcgt4"]
+script = ExtResource("1_0sdug")
+name = "Attack3"
+role = "attack_3"
+source_clip = "Attack3"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsEliteWolf": "/rigs/animals_elite_wolf/body/Attack3.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/elite-wolf/attack3/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/ELITE Wolf/Attack3.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_vmc3f")
+
+[sub_resource type="Resource" id="Resource_003vu"]
+script = ExtResource("2_cosro")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/elite-wolf/die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/elite-wolf/die/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/elite-wolf/die/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/elite-wolf/die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/elite-wolf/die/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/elite-wolf/die/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 9.899494936611665
+coverage = 0.6914639218132668
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_hdho4"]
+script = ExtResource("1_0sdug")
+name = "Die"
+role = "die"
+source_clip = "Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsEliteWolf": "/rigs/animals_elite_wolf/body/Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/elite-wolf/die/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/ELITE Wolf/Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_003vu")
+
+[sub_resource type="Resource" id="Resource_8dg01"]
+script = ExtResource("2_cosro")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/elite-wolf/howl/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/elite-wolf/howl/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/elite-wolf/howl/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/elite-wolf/howl/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/elite-wolf/howl/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/elite-wolf/howl/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 9.899494936611665
+coverage = 0.9686096660886576
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_hxp4a"]
+script = ExtResource("1_0sdug")
+name = "Howl"
+role = "howl"
+source_clip = "Howl"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsEliteWolf": "/rigs/animals_elite_wolf/body/Howl.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/elite-wolf/howl/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/ELITE Wolf/Howl.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_8dg01")
+
+[sub_resource type="Resource" id="Resource_nsqh7"]
+script = ExtResource("2_cosro")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/elite-wolf/idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/elite-wolf/idle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/elite-wolf/idle/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/elite-wolf/idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/elite-wolf/idle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/elite-wolf/idle/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 9.899494936611665
+coverage = 0.9780241406455
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_pten8"]
+script = ExtResource("1_0sdug")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsEliteWolf": "/rigs/animals_elite_wolf/body/Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/elite-wolf/idle/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/ELITE Wolf/Idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_nsqh7")
+
+[sub_resource type="Resource" id="Resource_g2qyn"]
+script = ExtResource("2_cosro")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/elite-wolf/idle2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/elite-wolf/idle2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/elite-wolf/idle2/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/elite-wolf/idle2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/elite-wolf/idle2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/elite-wolf/idle2/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 9.899494936611665
+coverage = 0.9867103694874853
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_oyny3"]
+script = ExtResource("1_0sdug")
+name = "Idle2"
+role = "idle_alt"
+source_clip = "Idle2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsEliteWolf": "/rigs/animals_elite_wolf/body/Idle2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/elite-wolf/idle2/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/ELITE Wolf/Idle2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_g2qyn")
+
+[sub_resource type="Resource" id="Resource_hhj3y"]
+script = ExtResource("2_cosro")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/elite-wolf/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/elite-wolf/run/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/elite-wolf/run/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/elite-wolf/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/elite-wolf/run/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/elite-wolf/run/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 9.899494936611665
+coverage = 0.976978640432509
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_8rb7o"]
+script = ExtResource("1_0sdug")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsEliteWolf": "/rigs/animals_elite_wolf/body/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/elite-wolf/run/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/ELITE Wolf/Run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_hhj3y")
+
+[sub_resource type="Resource" id="Resource_b6kiw"]
+script = ExtResource("2_cosro")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/elite-wolf/takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/elite-wolf/takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/elite-wolf/takedamage/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/elite-wolf/takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/elite-wolf/takedamage/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/elite-wolf/takedamage/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 9.899494936611665
+coverage = 0.9754853111173116
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_53ys4"]
+script = ExtResource("1_0sdug")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsEliteWolf": "/rigs/animals_elite_wolf/body/TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/elite-wolf/takedamage/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/ELITE Wolf/TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_b6kiw")
+
+[resource]
+script = ExtResource("4_xr47k")
+id = "smallscale.animals.elite-wolf"
+pack = "animals"
+variant = "ELITE Wolf"
+source = "smallscale-authored/animals"
+cell = Vector2i(96, 96)
+pivot = Vector2(48, 65)
+anchor = Vector2(48, 52)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("AnimalsEliteWolf")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_0sdug")]([SubResource("Resource_p1eq0"), SubResource("Resource_kvqjp"), SubResource("Resource_rcgt4"), SubResource("Resource_hdho4"), SubResource("Resource_hxp4a"), SubResource("Resource_pten8"), SubResource("Resource_oyny3"), SubResource("Resource_8rb7o"), SubResource("Resource_53ys4")])
+hold_clips = PackedStringArray("Die")
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed."

@@ -1,0 +1,80 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_16kri"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_sdedy"]
+
+[sub_resource type="Resource" id="Resource_r3sxu"]
+script = ExtResource("1_16kri")
+path = "art/media/ui/icons/smooth48/item.gauntlets.png"
+native_size = Vector2i(48, 48)
+reuses = "item.gauntlets"
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_sdedy")
+id = "apparel.monster_hands"
+kind = "armor"
+slots = Dictionary[String, Dictionary]({
+"gauntlets": {
+"layers": [{
+"part": "Hands2",
+"slot": "hands",
+"tint": "#778899"
+}],
+"variants": {
+"g000000a": [{
+"part": "Hands2",
+"slot": "hands",
+"tint": "#96000f"
+}],
+"g000000b": [{
+"part": "Hands2",
+"slot": "hands",
+"tint": "#415f30"
+}]
+}
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Hands2",
+"pivots_by_camera": [[62.5, 71.5], [58.0, 68.5], [68.0, 64.0], [72.5, 70.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#778899",
+"variant": ""
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Hands2",
+"pivots_by_camera": [[62.5, 71.5], [58.0, 68.5], [68.0, 64.0], [72.5, 70.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#96000f",
+"variant": "g000000a"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Hands2",
+"pivots_by_camera": [[62.5, 71.5], [58.0, 68.5], [68.0, 64.0], [72.5, 70.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#415f30",
+"variant": "g000000b"
+}])
+icon = SubResource("Resource_r3sxu")
+notes = "Visual name Monster Hands; Creature appendages — monster/beast hands
+Icon: Shares an existing icon for the native equipment slot."

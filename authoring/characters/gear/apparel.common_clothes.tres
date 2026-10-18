@@ -1,0 +1,1306 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_7jsay"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_5y8fi"]
+
+[sub_resource type="Resource" id="Resource_cq0qm"]
+script = ExtResource("1_7jsay")
+path = "art/media/ui/icons/smooth48/item.leather-armor.png"
+native_size = Vector2i(48, 48)
+reuses = "item.leather-armor"
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_5y8fi")
+id = "apparel.common_clothes"
+kind = "armor"
+slots = Dictionary[String, Dictionary]({
+"body_armor": {
+"layers": [{
+"part": "Chest3",
+"slot": "chest",
+"tint": "#ccbbaa"
+}, {
+"part": "Legs1",
+"slot": "legs",
+"tint": "#8b4513"
+}],
+"variants": {
+"82000001": [{
+"part": "Chest3",
+"slot": "chest",
+"tint": "#aa8466"
+}, {
+"part": "Legs1",
+"slot": "legs",
+"tint": "#5c3317"
+}],
+"82000002": [{
+"part": "Chest1",
+"slot": "chest",
+"tint": "#8b4513"
+}, {
+"part": "Legs4",
+"slot": "legs",
+"tint": "#5c2a0e"
+}],
+"82000003": [{
+"part": "Chest3",
+"slot": "chest",
+"tint": "#ccbbaa"
+}, {
+"part": "Legs4",
+"slot": "legs",
+"tint": "#8b4513"
+}],
+"82000004": [{
+"part": "Chest10",
+"slot": "chest",
+"tint": "#223366"
+}, {
+"part": "Legs1",
+"slot": "legs",
+"tint": "#ccbbaa"
+}],
+"82000005": [{
+"part": "Chest3",
+"slot": "chest",
+"tint": "#aa8466"
+}, {
+"part": "Legs6",
+"slot": "legs",
+"tint": "#8b4513"
+}],
+"82000006": [{
+"part": "Chest3",
+"slot": "chest",
+"tint": "#3366aa"
+}, {
+"part": "Legs6",
+"slot": "legs",
+"tint": "#ccbbaa"
+}],
+"82000007": [{
+"part": "Chest11",
+"slot": "chest",
+"tint": "#448844"
+}, {
+"part": "Legs9",
+"slot": "legs",
+"tint": "#5c3317"
+}],
+"82000008": [{
+"part": "Chest12",
+"slot": "chest",
+"tint": "#778899"
+}, {
+"part": "Legs9",
+"slot": "legs",
+"tint": "#5c2a0e"
+}],
+"82000009": [{
+"part": "Chest1",
+"slot": "chest",
+"tint": "#5c2a0e"
+}, {
+"part": "Legs9",
+"slot": "legs",
+"tint": "#6b4226"
+}],
+"roster.0057edb4295e": [{
+"part": "Legs1",
+"slot": "legs",
+"tint": "#353436"
+}, {
+"part": "Chest3",
+"slot": "chest",
+"tint": "#344b73"
+}, {
+"part": "Belt1",
+"slot": "belt",
+"tint": "#654733"
+}],
+"roster.06f23b28af97": [{
+"part": "Legs1",
+"slot": "legs",
+"tint": "#ad8a36"
+}, {
+"part": "Chest11",
+"slot": "chest",
+"tint": "#654733"
+}],
+"roster.0d05aa170681": [{
+"part": "Legs1",
+"slot": "legs",
+"tint": "#654733"
+}, {
+"part": "Chest3",
+"slot": "chest",
+"tint": "#654733"
+}, {
+"part": "Belt1",
+"slot": "belt",
+"tint": "#654733"
+}],
+"roster.0ed20a989400": [{
+"part": "Legs2",
+"slot": "legs",
+"tint": "#777d35"
+}, {
+"part": "Chest14",
+"slot": "chest",
+"tint": "#777d35"
+}, {
+"part": "Belt2",
+"slot": "belt",
+"tint": "#777d35"
+}],
+"roster.16dea1f65105": [{
+"part": "Legs3",
+"slot": "legs",
+"tint": "#654733"
+}, {
+"part": "Chest6",
+"slot": "chest",
+"tint": "#654733"
+}, {
+"part": "Belt1",
+"slot": "belt",
+"tint": "#654733"
+}],
+"roster.1d61d776333a": [{
+"part": "Legs1",
+"slot": "legs",
+"tint": "#353436"
+}, {
+"part": "Chest11",
+"slot": "chest",
+"tint": "#b16b2e"
+}],
+"roster.21ae119f8607": [{
+"part": "Legs3",
+"slot": "legs",
+"tint": "#73767a"
+}, {
+"part": "Chest6",
+"slot": "chest",
+"tint": "#654733"
+}, {
+"part": "Belt1",
+"slot": "belt",
+"tint": "#654733"
+}],
+"roster.3a96aba2f2e8": [{
+"part": "Legs3",
+"slot": "legs",
+"tint": "#7c2434"
+}, {
+"part": "Chest6",
+"slot": "chest",
+"tint": "#654733"
+}, {
+"part": "Belt1",
+"slot": "belt",
+"tint": "#654733"
+}],
+"roster.3b03cd4905fa": [{
+"part": "Legs3",
+"slot": "legs",
+"tint": "#73767a"
+}, {
+"part": "Belt1",
+"slot": "belt",
+"tint": "#654733"
+}],
+"roster.3b43764e27de": [{
+"part": "Legs1",
+"slot": "legs",
+"tint": "#73767a"
+}, {
+"part": "Chest11",
+"slot": "chest",
+"tint": "#5b286d"
+}],
+"roster.4d3cef9ad848": [{
+"part": "Legs3",
+"slot": "legs",
+"tint": "#654733"
+}, {
+"part": "Belt1",
+"slot": "belt",
+"tint": "#654733"
+}],
+"roster.6849f4bdbbc7": [{
+"part": "Legs1",
+"slot": "legs",
+"tint": "#777d35"
+}, {
+"part": "Chest11",
+"slot": "chest",
+"tint": "#326c70"
+}],
+"roster.705ec0c6dd95": [{
+"part": "Legs1",
+"slot": "legs",
+"tint": "#365836"
+}, {
+"part": "Chest11",
+"slot": "chest",
+"tint": "#7c2434"
+}],
+"roster.71a974f1ab28": [{
+"part": "Legs3",
+"slot": "legs",
+"tint": "#ad8a36"
+}, {
+"part": "Belt1",
+"slot": "belt",
+"tint": "#654733"
+}],
+"roster.731f50d06eb0": [{
+"part": "Legs1",
+"slot": "legs",
+"tint": "#344b73"
+}, {
+"part": "Chest11",
+"slot": "chest",
+"tint": "#c3bdb3"
+}],
+"roster.7485a7fa18d5": [{
+"part": "Legs3",
+"slot": "legs",
+"tint": "#654733"
+}, {
+"part": "Chest6",
+"slot": "chest",
+"tint": "#353436"
+}, {
+"part": "Belt1",
+"slot": "belt",
+"tint": "#654733"
+}],
+"roster.77d3ed985006": [{
+"part": "Chest11",
+"slot": "chest",
+"tint": "#344b73"
+}],
+"roster.7e095b892258": [{
+"part": "Legs3",
+"slot": "legs",
+"tint": "#5b286d"
+}, {
+"part": "Belt1",
+"slot": "belt",
+"tint": "#654733"
+}],
+"roster.8068ff89f025": [{
+"part": "Legs1",
+"slot": "legs",
+"tint": "#5b286d"
+}, {
+"part": "Chest11",
+"slot": "chest",
+"tint": "#73767a"
+}],
+"roster.8a2e4d420ed7": [{
+"part": "Legs1",
+"slot": "legs",
+"tint": "#5b286d"
+}, {
+"part": "Chest11",
+"slot": "chest",
+"tint": "#365836"
+}],
+"roster.9a49593e6d25": [{
+"part": "Legs1",
+"slot": "legs",
+"tint": "#73767a"
+}, {
+"part": "Chest11",
+"slot": "chest",
+"tint": "#365836"
+}],
+"roster.a362994fc0c7": [{
+"part": "Legs3",
+"slot": "legs",
+"tint": "#353436"
+}, {
+"part": "Belt1",
+"slot": "belt",
+"tint": "#654733"
+}],
+"roster.a68bab6659b8": [{
+"part": "Legs3",
+"slot": "legs",
+"tint": "#5b286d"
+}, {
+"part": "Chest6",
+"slot": "chest",
+"tint": "#353436"
+}, {
+"part": "Belt1",
+"slot": "belt",
+"tint": "#654733"
+}],
+"roster.a6b82c5afca2": [{
+"part": "Legs1",
+"slot": "legs",
+"tint": "#654733"
+}, {
+"part": "Chest11",
+"slot": "chest",
+"tint": "#ad8a36"
+}],
+"roster.a7d890606c75": [{
+"part": "Legs3",
+"slot": "legs",
+"tint": "#7c2434"
+}, {
+"part": "Belt1",
+"slot": "belt",
+"tint": "#654733"
+}],
+"roster.b245ce97ab22": [{
+"part": "Legs1",
+"slot": "legs",
+"tint": "#73767a"
+}, {
+"part": "Chest11",
+"slot": "chest",
+"tint": "#73767a"
+}],
+"roster.b35efe0e3757": [{
+"part": "Legs1",
+"slot": "legs",
+"tint": "#353436"
+}, {
+"part": "Chest3",
+"slot": "chest",
+"tint": "#353436"
+}, {
+"part": "Belt1",
+"slot": "belt",
+"tint": "#654733"
+}],
+"roster.b6a76edcbb50": [{
+"part": "Legs1",
+"slot": "legs",
+"tint": "#344b73"
+}, {
+"part": "Chest11",
+"slot": "chest",
+"tint": "#b16b2e"
+}],
+"roster.b9e242c20d61": [{
+"part": "Legs1",
+"slot": "legs",
+"tint": "#344b73"
+}, {
+"part": "Chest11",
+"slot": "chest",
+"tint": "#ad8a36"
+}],
+"roster.c08eb7bb05f3": [{
+"part": "Legs1",
+"slot": "legs",
+"tint": "#353436"
+}, {
+"part": "Chest11",
+"slot": "chest",
+"tint": "#365836"
+}],
+"roster.c2721e75195d": [{
+"part": "Legs1",
+"slot": "legs",
+"tint": "#353436"
+}, {
+"part": "Chest3",
+"slot": "chest",
+"tint": "#7c2434"
+}, {
+"part": "Belt1",
+"slot": "belt",
+"tint": "#654733"
+}],
+"roster.c68d9eb8e61a": [{
+"part": "Legs3",
+"slot": "legs",
+"tint": "#654733"
+}, {
+"part": "Chest6",
+"slot": "chest",
+"tint": "#777d35"
+}, {
+"part": "Belt1",
+"slot": "belt",
+"tint": "#654733"
+}],
+"roster.c6c962ed11e3": [{
+"part": "Legs1",
+"slot": "legs",
+"tint": "#344b73"
+}, {
+"part": "Chest3",
+"slot": "chest",
+"tint": "#ad8a36"
+}],
+"roster.c73653f2b4f3": [{
+"part": "Legs1",
+"slot": "legs",
+"tint": "#777d35"
+}, {
+"part": "Chest11",
+"slot": "chest",
+"tint": "#73767a"
+}],
+"roster.c7c75c0fe69c": [{
+"part": "Legs1",
+"slot": "legs",
+"tint": "#777d35"
+}, {
+"part": "Chest11",
+"slot": "chest",
+"tint": "#654733"
+}],
+"roster.d230e32fd30e": [{
+"part": "Legs2",
+"slot": "legs",
+"tint": "#326c70"
+}, {
+"part": "Chest14",
+"slot": "chest",
+"tint": "#326c70"
+}, {
+"part": "Belt2",
+"slot": "belt",
+"tint": "#326c70"
+}],
+"roster.d5ad2d798da8": [{
+"part": "Legs3",
+"slot": "legs",
+"tint": "#344b73"
+}, {
+"part": "Belt1",
+"slot": "belt",
+"tint": "#654733"
+}],
+"roster.d732540a9089": [{
+"part": "Legs1",
+"slot": "legs",
+"tint": "#73767a"
+}, {
+"part": "Chest11",
+"slot": "chest",
+"tint": "#777d35"
+}],
+"roster.df5f756c224d": [{
+"part": "Legs1",
+"slot": "legs",
+"tint": "#73767a"
+}, {
+"part": "Chest11",
+"slot": "chest",
+"tint": "#353436"
+}],
+"roster.dfdb66d44499": [{
+"part": "Legs1",
+"slot": "legs",
+"tint": "#353436"
+}, {
+"part": "Chest11",
+"slot": "chest",
+"tint": "#728d80"
+}],
+"roster.e1d9d1e35aa0": [{
+"part": "Legs1",
+"slot": "legs",
+"tint": "#326c70"
+}, {
+"part": "Chest3",
+"slot": "chest",
+"tint": "#326c70"
+}],
+"roster.e25e256bbbdc": [{
+"part": "Legs1",
+"slot": "legs",
+"tint": "#654733"
+}, {
+"part": "Chest11",
+"slot": "chest",
+"tint": "#353436"
+}],
+"roster.e2f4afb83dc2": [{
+"part": "Legs1",
+"slot": "legs",
+"tint": "#326c70"
+}, {
+"part": "Chest11",
+"slot": "chest",
+"tint": "#654733"
+}],
+"roster.ecb3ca8a6af3": [{
+"part": "Legs1",
+"slot": "legs",
+"tint": "#365836"
+}, {
+"part": "Chest11",
+"slot": "chest",
+"tint": "#654733"
+}],
+"roster.ed87c828a2a2": [{
+"part": "Legs3",
+"slot": "legs",
+"tint": "#73767a"
+}, {
+"part": "Chest6",
+"slot": "chest",
+"tint": "#777d35"
+}, {
+"part": "Belt1",
+"slot": "belt",
+"tint": "#654733"
+}],
+"roster.f683076c7f92": [{
+"part": "Legs1",
+"slot": "legs",
+"tint": "#bba328"
+}, {
+"part": "Chest3",
+"slot": "chest",
+"tint": "#bba328"
+}]
+}
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs1",
+"pivots_by_camera": [[64.5, 71.5], [65.0, 68.0], [65.5, 70.0], [65.5, 67.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#8b4513",
+"variant": ""
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs1",
+"pivots_by_camera": [[64.5, 71.5], [65.0, 68.0], [65.5, 70.0], [65.5, 67.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#5c3317",
+"variant": "82000001"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs4",
+"pivots_by_camera": [[64.0, 72.0], [65.0, 68.5], [66.5, 71.0], [65.5, 68.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#5c2a0e",
+"variant": "82000002"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs4",
+"pivots_by_camera": [[64.5, 71.5], [65.0, 68.5], [66.0, 70.5], [65.5, 67.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#8b4513",
+"variant": "82000003"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs1",
+"pivots_by_camera": [[64.0, 71.5], [65.0, 68.0], [66.5, 70.0], [65.5, 67.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#ccbbaa",
+"variant": "82000004"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs6",
+"pivots_by_camera": [[64.0, 69.0], [63.5, 65.0], [66.0, 66.5], [67.0, 66.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#8b4513",
+"variant": "82000005"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs6",
+"pivots_by_camera": [[64.0, 69.0], [63.5, 65.0], [66.0, 66.5], [67.0, 66.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#ccbbaa",
+"variant": "82000006"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs9",
+"pivots_by_camera": [[65.0, 65.0], [64.5, 61.5], [65.5, 62.5], [66.5, 63.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#5c3317",
+"variant": "82000007"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs9",
+"pivots_by_camera": [[63.5, 65.0], [64.0, 61.5], [67.0, 61.5], [67.0, 63.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#5c2a0e",
+"variant": "82000008"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs9",
+"pivots_by_camera": [[63.5, 65.5], [64.0, 62.0], [67.0, 63.0], [67.0, 64.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#6b4226",
+"variant": "82000009"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs3",
+"pivots_by_camera": [[65.0, 74.5], [65.0, 71.5], [65.5, 73.5], [65.5, 72.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#ad8a36",
+"variant": "roster.71a974f1ab28"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest3",
+"pivots_by_camera": [[64.5, 71.5], [65.0, 68.0], [65.5, 70.0], [65.5, 67.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#326c70",
+"variant": "roster.e1d9d1e35aa0"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest11",
+"pivots_by_camera": [[65.0, 71.5], [65.0, 67.5], [65.5, 70.0], [65.5, 67.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#365836",
+"variant": "roster.9a49593e6d25"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest14",
+"pivots_by_camera": [[64.5, 70.5], [64.5, 68.0], [66.5, 69.5], [66.0, 67.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#326c70",
+"variant": "roster.d230e32fd30e"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest11",
+"pivots_by_camera": [[65.0, 71.5], [65.0, 67.5], [65.5, 70.0], [65.5, 67.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#b16b2e",
+"variant": "roster.1d61d776333a"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest11",
+"pivots_by_camera": [[65.0, 71.5], [65.0, 67.5], [65.5, 70.0], [65.5, 67.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#326c70",
+"variant": "roster.6849f4bdbbc7"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest6",
+"pivots_by_camera": [[64.5, 69.0], [65.0, 65.0], [66.0, 69.5], [65.5, 68.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#353436",
+"variant": "roster.a68bab6659b8"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest11",
+"pivots_by_camera": [[65.0, 71.5], [65.0, 67.5], [65.5, 70.0], [65.5, 67.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#365836",
+"variant": "roster.8a2e4d420ed7"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest11",
+"pivots_by_camera": [[65.0, 71.5], [65.0, 67.5], [65.5, 70.0], [65.5, 67.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#654733",
+"variant": "roster.e2f4afb83dc2"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest11",
+"pivots_by_camera": [[65.0, 71.5], [65.0, 67.5], [65.5, 70.0], [65.5, 67.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#73767a",
+"variant": "roster.c73653f2b4f3"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs3",
+"pivots_by_camera": [[65.0, 74.5], [65.0, 71.5], [65.5, 73.5], [65.5, 72.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#654733",
+"variant": "roster.4d3cef9ad848"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest3",
+"pivots_by_camera": [[64.5, 71.5], [65.0, 68.0], [65.5, 70.0], [65.5, 67.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#353436",
+"variant": "roster.b35efe0e3757"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest11",
+"pivots_by_camera": [[65.0, 71.5], [65.0, 67.5], [65.5, 70.0], [65.5, 67.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#654733",
+"variant": "roster.c7c75c0fe69c"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest11",
+"pivots_by_camera": [[65.0, 71.5], [65.0, 67.5], [65.5, 70.0], [65.5, 67.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#365836",
+"variant": "roster.c08eb7bb05f3"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest11",
+"pivots_by_camera": [[65.0, 71.5], [65.0, 67.5], [65.5, 70.0], [65.5, 67.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#73767a",
+"variant": "roster.8068ff89f025"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest3",
+"pivots_by_camera": [[64.5, 71.5], [65.0, 68.0], [65.5, 70.0], [65.5, 67.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#654733",
+"variant": "roster.0d05aa170681"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest11",
+"pivots_by_camera": [[65.0, 61.5], [65.0, 60.0], [65.5, 59.5], [66.0, 60.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#344b73",
+"variant": "roster.77d3ed985006"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest11",
+"pivots_by_camera": [[65.0, 71.5], [65.0, 67.5], [65.5, 70.0], [65.5, 67.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#c3bdb3",
+"variant": "roster.731f50d06eb0"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest3",
+"pivots_by_camera": [[64.5, 71.5], [65.0, 68.0], [65.5, 70.0], [65.5, 67.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#344b73",
+"variant": "roster.0057edb4295e"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest11",
+"pivots_by_camera": [[65.0, 71.5], [65.0, 67.5], [65.5, 70.0], [65.5, 67.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#7c2434",
+"variant": "roster.705ec0c6dd95"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest11",
+"pivots_by_camera": [[65.0, 71.5], [65.0, 67.5], [65.5, 70.0], [65.5, 67.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#654733",
+"variant": "roster.06f23b28af97"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest6",
+"pivots_by_camera": [[64.5, 69.0], [65.0, 65.0], [66.0, 69.5], [65.5, 68.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#654733",
+"variant": "roster.3a96aba2f2e8"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest6",
+"pivots_by_camera": [[64.5, 69.0], [65.0, 65.0], [66.0, 69.5], [65.5, 68.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#777d35",
+"variant": "roster.c68d9eb8e61a"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs3",
+"pivots_by_camera": [[65.0, 74.5], [65.0, 71.5], [65.5, 73.5], [65.5, 72.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#5b286d",
+"variant": "roster.7e095b892258"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest11",
+"pivots_by_camera": [[65.0, 71.5], [65.0, 67.5], [65.5, 70.0], [65.5, 67.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#353436",
+"variant": "roster.df5f756c224d"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest11",
+"pivots_by_camera": [[65.0, 71.5], [65.0, 67.5], [65.5, 70.0], [65.5, 67.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#ad8a36",
+"variant": "roster.b9e242c20d61"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest3",
+"pivots_by_camera": [[64.5, 71.5], [65.0, 68.0], [65.5, 70.0], [65.5, 67.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#ad8a36",
+"variant": "roster.c6c962ed11e3"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest11",
+"pivots_by_camera": [[65.0, 71.5], [65.0, 67.5], [65.5, 70.0], [65.5, 67.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#5b286d",
+"variant": "roster.3b43764e27de"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest6",
+"pivots_by_camera": [[64.5, 69.0], [65.0, 65.0], [66.0, 69.5], [65.5, 68.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#654733",
+"variant": "roster.16dea1f65105"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest3",
+"pivots_by_camera": [[64.5, 71.5], [65.0, 68.0], [65.5, 70.0], [65.5, 67.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#7c2434",
+"variant": "roster.c2721e75195d"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest11",
+"pivots_by_camera": [[65.0, 71.5], [65.0, 67.5], [65.5, 70.0], [65.5, 67.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#ad8a36",
+"variant": "roster.a6b82c5afca2"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest6",
+"pivots_by_camera": [[64.5, 69.0], [65.0, 65.0], [66.0, 69.5], [65.5, 68.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#777d35",
+"variant": "roster.ed87c828a2a2"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs3",
+"pivots_by_camera": [[65.0, 74.5], [65.0, 71.5], [65.5, 73.5], [65.5, 72.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#73767a",
+"variant": "roster.3b03cd4905fa"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest11",
+"pivots_by_camera": [[65.0, 71.5], [65.0, 67.5], [65.5, 70.0], [65.5, 67.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#777d35",
+"variant": "roster.d732540a9089"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest3",
+"pivots_by_camera": [[64.5, 71.5], [65.0, 68.0], [65.5, 70.0], [65.5, 67.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#bba328",
+"variant": "roster.f683076c7f92"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs3",
+"pivots_by_camera": [[65.0, 74.5], [65.0, 71.5], [65.5, 73.5], [65.5, 72.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#353436",
+"variant": "roster.a362994fc0c7"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest11",
+"pivots_by_camera": [[65.0, 71.5], [65.0, 67.5], [65.5, 70.0], [65.5, 67.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#654733",
+"variant": "roster.ecb3ca8a6af3"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest14",
+"pivots_by_camera": [[64.5, 70.5], [64.5, 68.0], [66.5, 69.5], [66.0, 67.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#777d35",
+"variant": "roster.0ed20a989400"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest11",
+"pivots_by_camera": [[65.0, 71.5], [65.0, 67.5], [65.5, 70.0], [65.5, 67.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#728d80",
+"variant": "roster.dfdb66d44499"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest6",
+"pivots_by_camera": [[64.5, 69.0], [65.0, 65.0], [66.0, 69.5], [65.5, 68.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#353436",
+"variant": "roster.7485a7fa18d5"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest11",
+"pivots_by_camera": [[65.0, 71.5], [65.0, 67.5], [65.5, 70.0], [65.5, 67.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#353436",
+"variant": "roster.e25e256bbbdc"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest6",
+"pivots_by_camera": [[64.5, 69.0], [65.0, 65.0], [66.0, 69.5], [65.5, 68.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#654733",
+"variant": "roster.21ae119f8607"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest11",
+"pivots_by_camera": [[65.0, 71.5], [65.0, 67.5], [65.5, 70.0], [65.5, 67.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#73767a",
+"variant": "roster.b245ce97ab22"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs3",
+"pivots_by_camera": [[65.0, 74.5], [65.0, 71.5], [65.5, 73.5], [65.5, 72.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#7c2434",
+"variant": "roster.a7d890606c75"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs3",
+"pivots_by_camera": [[65.0, 74.5], [65.0, 71.5], [65.5, 73.5], [65.5, 72.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#344b73",
+"variant": "roster.d5ad2d798da8"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest11",
+"pivots_by_camera": [[65.0, 71.5], [65.0, 67.5], [65.5, 70.0], [65.5, 67.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#b16b2e",
+"variant": "roster.b6a76edcbb50"
+}])
+icon = SubResource("Resource_cq0qm")
+notes = "Visual name Common Clothes; Simple everyday clothing — t-shirt and pants
+Icon: Shares an existing icon for the native equipment slot."

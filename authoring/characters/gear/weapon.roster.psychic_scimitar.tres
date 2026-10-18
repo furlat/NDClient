@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_534wc"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_djo7h"]
+
+[sub_resource type="Resource" id="Resource_wfsem"]
+script = ExtResource("1_534wc")
+path = "art/media/ui/icons/smooth48/item.scimitar.png"
+native_size = Vector2i(48, 48)
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_djo7h")
+id = "weapon.roster.psychic_scimitar"
+kind = "weapon"
+family = "weapon.scimitar"
+icon = SubResource("Resource_wfsem")

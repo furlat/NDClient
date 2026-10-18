@@ -1,0 +1,74 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_j1v3e"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_13tpo"]
+
+[sub_resource type="Resource" id="Resource_8phx6"]
+script = ExtResource("1_j1v3e")
+path = "art/media/ui/icons/smooth48/item.javelin.png"
+native_size = Vector2i(48, 48)
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_13tpo")
+id = "weapon.javelin"
+kind = "weapon"
+slots = Dictionary[String, Dictionary]({
+"weapon_melee_main": {
+"layers": [{
+"part": "Melee24",
+"slot": "weapon",
+"tint": "#8b6914"
+}],
+"variants": {
+"1000000a": [{
+"part": "Melee24",
+"slot": "weapon",
+"tint": "#778899"
+}]
+}
+}
+})
+hands = Dictionary[String, Dictionary]({
+"weapon_melee_off": {
+"": [{
+"part": "Offhand1",
+"slot": "offhand",
+"tint": "#8b6914"
+}],
+"1000000a": [{
+"part": "Offhand1",
+"slot": "offhand",
+"tint": "#778899"
+}]
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee24",
+"pivots_by_camera": [[56.0, 63.5], [66.0, 58.0], [75.0, 65.0], [64.5, 71.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#8b6914",
+"variant": ""
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee24",
+"pivots_by_camera": [[56.0, 63.5], [66.0, 58.0], [75.0, 65.0], [64.5, 71.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#778899",
+"variant": "1000000a"
+}])
+icon = SubResource("Resource_8phx6")
+notes = "Visual name Javelin; First spear sprite — javelin is a throwing spear"

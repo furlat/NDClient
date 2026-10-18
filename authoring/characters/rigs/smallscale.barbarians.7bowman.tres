@@ -1,0 +1,1305 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_6nwvo"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_c2jrw"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_6w1gp"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_gqi3v"]
+
+[sub_resource type="Resource" id="Resource_pmqet"]
+script = ExtResource("2_c2jrw")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/7bowman/180turn/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/7bowman/180turn/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/7bowman/180turn/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/7bowman/180turn/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/7bowman/180turn/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/7bowman/180turn/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.983380082313157
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_ddk7r"]
+script = ExtResource("1_6nwvo")
+name = "180Turn"
+role = "turn"
+source_clip = "180Turn"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians7Bowman": "/rigs/barbarians_7bowman/body/180Turn.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/7bowman/180turn/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/7BowMan/180Turn.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_pmqet")
+
+[sub_resource type="Resource" id="Resource_hhq48"]
+script = ExtResource("2_c2jrw")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/7bowman/attack1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/7bowman/attack1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/7bowman/attack1/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/7bowman/attack1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/7bowman/attack1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/7bowman/attack1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.9841816574815432
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_h0oqj"]
+script = ExtResource("1_6nwvo")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Attack1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians7Bowman": "/rigs/barbarians_7bowman/body/Attack1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/7bowman/attack1/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/7BowMan/Attack1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_hhq48")
+
+[sub_resource type="Resource" id="Resource_7amrm"]
+script = ExtResource("2_c2jrw")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/7bowman/attack2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/7bowman/attack2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/7bowman/attack2/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/7bowman/attack2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/7bowman/attack2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/7bowman/attack2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.9872675881025854
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_hid1j"]
+script = ExtResource("1_6nwvo")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Attack2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians7Bowman": "/rigs/barbarians_7bowman/body/Attack2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/7bowman/attack2/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/7BowMan/Attack2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_7amrm")
+
+[sub_resource type="Resource" id="Resource_idw21"]
+script = ExtResource("2_c2jrw")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/7bowman/attack3/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/7bowman/attack3/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/7bowman/attack3/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/7bowman/attack3/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/7bowman/attack3/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/7bowman/attack3/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.9804297572764528
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_t7nl1"]
+script = ExtResource("1_6nwvo")
+name = "Attack3"
+role = "attack_3"
+source_clip = "Attack3"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians7Bowman": "/rigs/barbarians_7bowman/body/Attack3.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/7bowman/attack3/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/7BowMan/Attack3.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_idw21")
+
+[sub_resource type="Resource" id="Resource_yegdy"]
+script = ExtResource("2_c2jrw")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/7bowman/attackrun/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/7bowman/attackrun/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/7bowman/attackrun/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/7bowman/attackrun/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/7bowman/attackrun/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/7bowman/attackrun/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.9834753455335729
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_vs3je"]
+script = ExtResource("1_6nwvo")
+name = "AttackRun"
+role = "attack_run"
+source_clip = "AttackRun"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians7Bowman": "/rigs/barbarians_7bowman/body/AttackRun.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/7bowman/attackrun/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/7BowMan/AttackRun.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_yegdy")
+
+[sub_resource type="Resource" id="Resource_pdccr"]
+script = ExtResource("2_c2jrw")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/7bowman/blockmid/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/7bowman/blockmid/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/7bowman/blockmid/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/7bowman/blockmid/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/7bowman/blockmid/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/7bowman/blockmid/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.98516123143524
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_sifph"]
+script = ExtResource("1_6nwvo")
+name = "Block"
+role = "block_hold"
+source_clip = "BlockMid"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians7Bowman": "/rigs/barbarians_7bowman/body/BlockMid.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/7bowman/blockmid/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/7BowMan/BlockMid.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_pdccr")
+
+[sub_resource type="Resource" id="Resource_mjviu"]
+script = ExtResource("2_c2jrw")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/7bowman/blockstart/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/7bowman/blockstart/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/7bowman/blockstart/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/7bowman/blockstart/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/7bowman/blockstart/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/7bowman/blockstart/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.9842903089401724
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_esxv2"]
+script = ExtResource("1_6nwvo")
+name = "BlockStart"
+role = "block_start"
+source_clip = "BlockStart"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians7Bowman": "/rigs/barbarians_7bowman/body/BlockStart.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/7bowman/blockstart/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/7BowMan/BlockStart.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_mjviu")
+
+[sub_resource type="Resource" id="Resource_c1f1x"]
+script = ExtResource("2_c2jrw")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/7bowman/castspell/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/7bowman/castspell/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/7bowman/castspell/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/7bowman/castspell/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/7bowman/castspell/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/7bowman/castspell/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.9826522400071536
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_qot11"]
+script = ExtResource("1_6nwvo")
+name = "CastSpell"
+role = "cast"
+source_clip = "CastSpell"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians7Bowman": "/rigs/barbarians_7bowman/body/CastSpell.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/7bowman/castspell/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/7BowMan/CastSpell.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_c1f1x")
+
+[sub_resource type="Resource" id="Resource_tv4do"]
+script = ExtResource("2_c2jrw")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/7bowman/crouchidle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/7bowman/crouchidle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/7bowman/crouchidle/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/7bowman/crouchidle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/7bowman/crouchidle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/7bowman/crouchidle/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.9861930330362102
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_mlog3"]
+script = ExtResource("1_6nwvo")
+name = "Crouch"
+role = "crouch_idle"
+source_clip = "CrouchIdle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians7Bowman": "/rigs/barbarians_7bowman/body/CrouchIdle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/7bowman/crouchidle/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/7BowMan/CrouchIdle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_tv4do")
+
+[sub_resource type="Resource" id="Resource_cikq7"]
+script = ExtResource("2_c2jrw")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/7bowman/crouchrun/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/7bowman/crouchrun/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/7bowman/crouchrun/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/7bowman/crouchrun/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/7bowman/crouchrun/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/7bowman/crouchrun/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.988191190253046
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_8j251"]
+script = ExtResource("1_6nwvo")
+name = "CrouchWalk"
+role = "crouch_move"
+source_clip = "CrouchRun"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians7Bowman": "/rigs/barbarians_7bowman/body/CrouchRun.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/7bowman/crouchrun/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/7BowMan/CrouchRun.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_cikq7")
+
+[sub_resource type="Resource" id="Resource_g00co"]
+script = ExtResource("2_c2jrw")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/7bowman/die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/7bowman/die/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/7bowman/die/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/7bowman/die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/7bowman/die/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/7bowman/die/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.980166557089634
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_csbb5"]
+script = ExtResource("1_6nwvo")
+name = "Die"
+role = "die"
+source_clip = "Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians7Bowman": "/rigs/barbarians_7bowman/body/Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/7bowman/die/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/7BowMan/Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_g00co")
+
+[sub_resource type="Resource" id="Resource_t665y"]
+script = ExtResource("2_c2jrw")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/7bowman/frontflip/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/7bowman/frontflip/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/7bowman/frontflip/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/7bowman/frontflip/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/7bowman/frontflip/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/7bowman/frontflip/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.9825777494489152
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_j77ai"]
+script = ExtResource("1_6nwvo")
+name = "BackFlip"
+role = "flip"
+source_clip = "FrontFlip"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians7Bowman": "/rigs/barbarians_7bowman/body/FrontFlip.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/7bowman/frontflip/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/7BowMan/FrontFlip.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_t665y")
+
+[sub_resource type="Resource" id="Resource_yu32d"]
+script = ExtResource("2_c2jrw")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/7bowman/idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/7bowman/idle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/7bowman/idle/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/7bowman/idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/7bowman/idle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/7bowman/idle/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.9846378744357815
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_84kku"]
+script = ExtResource("1_6nwvo")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians7Bowman": "/rigs/barbarians_7bowman/body/Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/7bowman/idle/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/7BowMan/Idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_yu32d")
+
+[sub_resource type="Resource" id="Resource_jyfww"]
+script = ExtResource("2_c2jrw")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/7bowman/idle2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/7bowman/idle2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/7bowman/idle2/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/7bowman/idle2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/7bowman/idle2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/7bowman/idle2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.9827431533305092
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_1y0sb"]
+script = ExtResource("1_6nwvo")
+name = "Idle2"
+role = "idle_alt"
+source_clip = "Idle2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians7Bowman": "/rigs/barbarians_7bowman/body/Idle2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/7bowman/idle2/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/7BowMan/Idle2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_jyfww")
+
+[sub_resource type="Resource" id="Resource_wa60b"]
+script = ExtResource("2_c2jrw")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/7bowman/kick/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/7bowman/kick/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/7bowman/kick/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/7bowman/kick/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/7bowman/kick/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/7bowman/kick/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.9858112117225188
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_eciql"]
+script = ExtResource("1_6nwvo")
+name = "Kick"
+role = "kick"
+source_clip = "Kick"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians7Bowman": "/rigs/barbarians_7bowman/body/Kick.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/7bowman/kick/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/7BowMan/Kick.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_wa60b")
+
+[sub_resource type="Resource" id="Resource_tuk46"]
+script = ExtResource("2_c2jrw")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/7bowman/pummel/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/7bowman/pummel/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/7bowman/pummel/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/7bowman/pummel/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/7bowman/pummel/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/7bowman/pummel/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.9879365160760988
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_bcprs"]
+script = ExtResource("1_6nwvo")
+name = "Pummel"
+role = "pummel"
+source_clip = "Pummel"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians7Bowman": "/rigs/barbarians_7bowman/body/Pummel.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/7bowman/pummel/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/7BowMan/Pummel.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_tuk46")
+
+[sub_resource type="Resource" id="Resource_802n6"]
+script = ExtResource("2_c2jrw")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/7bowman/quickshot/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/7bowman/quickshot/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/7bowman/quickshot/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/7bowman/quickshot/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/7bowman/quickshot/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/7bowman/quickshot/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.9808751389888156
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_sxthp"]
+script = ExtResource("1_6nwvo")
+name = "QuickShot"
+role = "shoot"
+source_clip = "QuickShot"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians7Bowman": "/rigs/barbarians_7bowman/body/QuickShot.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/7bowman/quickshot/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/7BowMan/QuickShot.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_802n6")
+
+[sub_resource type="Resource" id="Resource_qu7q2"]
+script = ExtResource("2_c2jrw")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/7bowman/quickslide/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/7bowman/quickslide/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/7bowman/quickslide/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/7bowman/quickslide/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/7bowman/quickslide/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/7bowman/quickslide/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.9867991615145806
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_pawml"]
+script = ExtResource("1_6nwvo")
+name = "QuickSlide"
+role = "slide"
+source_clip = "QuickSlide"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians7Bowman": "/rigs/barbarians_7bowman/body/QuickSlide.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/7bowman/quickslide/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/7BowMan/QuickSlide.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_qu7q2")
+
+[sub_resource type="Resource" id="Resource_me31n"]
+script = ExtResource("2_c2jrw")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/7bowman/rolling/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/7bowman/rolling/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/7bowman/rolling/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/7bowman/rolling/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/7bowman/rolling/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/7bowman/rolling/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.988874354026085
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_u6tcu"]
+script = ExtResource("1_6nwvo")
+name = "Rolling"
+role = "roll"
+source_clip = "Rolling"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians7Bowman": "/rigs/barbarians_7bowman/body/Rolling.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/7bowman/rolling/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/7BowMan/Rolling.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_me31n")
+
+[sub_resource type="Resource" id="Resource_uxyki"]
+script = ExtResource("2_c2jrw")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/7bowman/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/7bowman/run/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/7bowman/run/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/7bowman/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/7bowman/run/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/7bowman/run/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.9862132727841304
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_iu2yy"]
+script = ExtResource("1_6nwvo")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians7Bowman": "/rigs/barbarians_7bowman/body/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/7bowman/run/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/7BowMan/Run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_uxyki")
+
+[sub_resource type="Resource" id="Resource_1f2h2"]
+script = ExtResource("2_c2jrw")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/7bowman/runbackwards/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/7bowman/runbackwards/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/7bowman/runbackwards/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/7bowman/runbackwards/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/7bowman/runbackwards/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/7bowman/runbackwards/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.9870615998047034
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_e10k7"]
+script = ExtResource("1_6nwvo")
+name = "RunBackwards"
+role = "run_back"
+source_clip = "RunBackwards"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians7Bowman": "/rigs/barbarians_7bowman/body/RunBackwards.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/7bowman/runbackwards/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/7BowMan/RunBackwards.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_1f2h2")
+
+[sub_resource type="Resource" id="Resource_pw3n2"]
+script = ExtResource("2_c2jrw")
+status = "validated_partial"
+flags = PackedStringArray("source_pose_empty", "source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/7bowman/sittingchair/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/7bowman/sittingchair/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/7bowman/sittingchair/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/7bowman/sittingchair/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/7bowman/sittingchair/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/7bowman/sittingchair/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.9870452705294108
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_4vqy2"]
+script = ExtResource("1_6nwvo")
+name = "SittingChair"
+role = "sit"
+source_clip = "SittingChair"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians7Bowman": "/rigs/barbarians_7bowman/body/SittingChair.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/7bowman/sittingchair/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/7BowMan/SittingChair.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_pw3n2")
+
+[sub_resource type="Resource" id="Resource_kxf55"]
+script = ExtResource("2_c2jrw")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/7bowman/slide/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/7bowman/slide/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/7bowman/slide/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/7bowman/slide/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/7bowman/slide/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/7bowman/slide/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.992093176252726
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_2ww36"]
+script = ExtResource("1_6nwvo")
+name = "Slide"
+role = "slide"
+source_clip = "Slide"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians7Bowman": "/rigs/barbarians_7bowman/body/Slide.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/7bowman/slide/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/7BowMan/Slide.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_kxf55")
+
+[sub_resource type="Resource" id="Resource_f32i4"]
+script = ExtResource("2_c2jrw")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/7bowman/slideend/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/7bowman/slideend/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/7bowman/slideend/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/7bowman/slideend/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/7bowman/slideend/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/7bowman/slideend/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.9872020242375816
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_07foy"]
+script = ExtResource("1_6nwvo")
+name = "SlideEnd"
+role = "slide_end"
+source_clip = "SlideEnd"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians7Bowman": "/rigs/barbarians_7bowman/body/SlideEnd.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/7bowman/slideend/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/7BowMan/SlideEnd.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_f32i4")
+
+[sub_resource type="Resource" id="Resource_lfqit"]
+script = ExtResource("2_c2jrw")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/7bowman/slidestart/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/7bowman/slidestart/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/7bowman/slidestart/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/7bowman/slidestart/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/7bowman/slidestart/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/7bowman/slidestart/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.9866536240234768
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_jepac"]
+script = ExtResource("1_6nwvo")
+name = "SlideStart"
+role = "slide_start"
+source_clip = "SlideStart"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians7Bowman": "/rigs/barbarians_7bowman/body/SlideStart.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/7bowman/slidestart/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/7BowMan/SlideStart.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_lfqit")
+
+[sub_resource type="Resource" id="Resource_0q4ml"]
+script = ExtResource("2_c2jrw")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/7bowman/special1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/7bowman/special1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/7bowman/special1/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/7bowman/special1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/7bowman/special1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/7bowman/special1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.983751846381093
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_lbvjp"]
+script = ExtResource("1_6nwvo")
+name = "Special1"
+role = "special_1"
+source_clip = "Special1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians7Bowman": "/rigs/barbarians_7bowman/body/Special1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/7bowman/special1/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/7BowMan/Special1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_0q4ml")
+
+[sub_resource type="Resource" id="Resource_j3e2l"]
+script = ExtResource("2_c2jrw")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/7bowman/special2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/7bowman/special2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/7bowman/special2/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/7bowman/special2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/7bowman/special2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/7bowman/special2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.9844610569761244
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_vri52"]
+script = ExtResource("1_6nwvo")
+name = "Special2"
+role = "special_2"
+source_clip = "Special2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians7Bowman": "/rigs/barbarians_7bowman/body/Special2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/7bowman/special2/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/7BowMan/Special2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_j3e2l")
+
+[sub_resource type="Resource" id="Resource_4qp4t"]
+script = ExtResource("2_c2jrw")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/7bowman/strafeleft/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/7bowman/strafeleft/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/7bowman/strafeleft/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/7bowman/strafeleft/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/7bowman/strafeleft/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/7bowman/strafeleft/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.9883024173184282
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_xmb2g"]
+script = ExtResource("1_6nwvo")
+name = "StrafeLeft"
+role = "strafe_left"
+source_clip = "StrafeLeft"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians7Bowman": "/rigs/barbarians_7bowman/body/StrafeLeft.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/7bowman/strafeleft/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/7BowMan/StrafeLeft.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_4qp4t")
+
+[sub_resource type="Resource" id="Resource_31yyv"]
+script = ExtResource("2_c2jrw")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/7bowman/straferight/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/7bowman/straferight/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/7bowman/straferight/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/7bowman/straferight/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/7bowman/straferight/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/7bowman/straferight/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.983178995824858
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_4shka"]
+script = ExtResource("1_6nwvo")
+name = "StrafeRight"
+role = "strafe_right"
+source_clip = "StrafeRight"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians7Bowman": "/rigs/barbarians_7bowman/body/StrafeRight.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/7bowman/straferight/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/7BowMan/StrafeRight.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_31yyv")
+
+[sub_resource type="Resource" id="Resource_2fawt"]
+script = ExtResource("2_c2jrw")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/7bowman/takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/7bowman/takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/7bowman/takedamage/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/7bowman/takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/7bowman/takedamage/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/7bowman/takedamage/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.9857450687883308
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_aef13"]
+script = ExtResource("1_6nwvo")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians7Bowman": "/rigs/barbarians_7bowman/body/TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/7bowman/takedamage/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/7BowMan/TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_2fawt")
+
+[sub_resource type="Resource" id="Resource_3at5i"]
+script = ExtResource("2_c2jrw")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/7bowman/unsheath/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/7bowman/unsheath/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/7bowman/unsheath/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/7bowman/unsheath/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/7bowman/unsheath/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/7bowman/unsheath/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.9858579757340196
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_ur4jw"]
+script = ExtResource("1_6nwvo")
+name = "UnSheath"
+role = "unsheath"
+source_clip = "UnSheath"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians7Bowman": "/rigs/barbarians_7bowman/body/UnSheath.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/7bowman/unsheath/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/7BowMan/UnSheath.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_3at5i")
+
+[sub_resource type="Resource" id="Resource_mfh11"]
+script = ExtResource("2_c2jrw")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/7bowman/walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/7bowman/walk/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/7bowman/walk/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/7bowman/walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/7bowman/walk/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/7bowman/walk/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.9860884556727008
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_j1w33"]
+script = ExtResource("1_6nwvo")
+name = "Walk"
+role = "walk"
+source_clip = "Walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians7Bowman": "/rigs/barbarians_7bowman/body/Walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/7bowman/walk/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/7BowMan/Walk.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_mfh11")
+
+[resource]
+script = ExtResource("4_gqi3v")
+id = "smallscale.barbarians.7bowman"
+pack = "barbarians"
+variant = "7BowMan"
+source = "smallscale-authored/barbarians"
+pivot = Vector2(64, 99)
+anchor = Vector2(64, 72)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("Barbarians7Bowman")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_6nwvo")]([SubResource("Resource_ddk7r"), SubResource("Resource_h0oqj"), SubResource("Resource_hid1j"), SubResource("Resource_t7nl1"), SubResource("Resource_vs3je"), SubResource("Resource_sifph"), SubResource("Resource_esxv2"), SubResource("Resource_qot11"), SubResource("Resource_mlog3"), SubResource("Resource_8j251"), SubResource("Resource_csbb5"), SubResource("Resource_j77ai"), SubResource("Resource_84kku"), SubResource("Resource_1y0sb"), SubResource("Resource_eciql"), SubResource("Resource_bcprs"), SubResource("Resource_sxthp"), SubResource("Resource_pawml"), SubResource("Resource_u6tcu"), SubResource("Resource_iu2yy"), SubResource("Resource_e10k7"), SubResource("Resource_4vqy2"), SubResource("Resource_2ww36"), SubResource("Resource_07foy"), SubResource("Resource_jepac"), SubResource("Resource_lbvjp"), SubResource("Resource_vri52"), SubResource("Resource_xmb2g"), SubResource("Resource_4shka"), SubResource("Resource_aef13"), SubResource("Resource_ur4jw"), SubResource("Resource_j1w33")])
+hold_clips = PackedStringArray("Die")
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed."

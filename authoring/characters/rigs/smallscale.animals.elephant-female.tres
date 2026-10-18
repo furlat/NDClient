@@ -1,0 +1,426 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_ww2tn"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_vatuk"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_ra47r"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_foe21"]
+
+[sub_resource type="Resource" id="Resource_jupp3"]
+script = ExtResource("2_vatuk")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-167.29825022501575, 229.8772003600252)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/elephant-female/attack1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/elephant-female/attack1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/elephant-female/attack1/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/elephant-female/attack1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/elephant-female/attack1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/elephant-female/attack1/raw-support.png"
+})
+depth_range = Vector2(-167.29825, 229.8772)
+camera_origin = Vector2(59, 88.5)
+optical_ground_pixels = 3.5355339059327373
+coverage = 0.9720167198525776
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_poi7w"]
+script = ExtResource("1_ww2tn")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Attack1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsElephantFemale": "/rigs/animals_elephant_female/body/Attack1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/elephant-female/attack1/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Elephant female/Attack1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_jupp3")
+
+[sub_resource type="Resource" id="Resource_i7eeo"]
+script = ExtResource("2_vatuk")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-167.29825022501575, 229.8772003600252)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/elephant-female/attack2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/elephant-female/attack2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/elephant-female/attack2/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/elephant-female/attack2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/elephant-female/attack2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/elephant-female/attack2/raw-support.png"
+})
+depth_range = Vector2(-167.29825, 229.8772)
+camera_origin = Vector2(59, 88.5)
+optical_ground_pixels = 3.5355339059327373
+coverage = 0.9766560503887692
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_hiqlo"]
+script = ExtResource("1_ww2tn")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Attack2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsElephantFemale": "/rigs/animals_elephant_female/body/Attack2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/elephant-female/attack2/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Elephant female/Attack2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_i7eeo")
+
+[sub_resource type="Resource" id="Resource_jsfql"]
+script = ExtResource("2_vatuk")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-167.29825022501575, 229.8772003600252)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/elephant-female/attack3/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/elephant-female/attack3/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/elephant-female/attack3/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/elephant-female/attack3/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/elephant-female/attack3/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/elephant-female/attack3/raw-support.png"
+})
+depth_range = Vector2(-167.29825, 229.8772)
+camera_origin = Vector2(59, 88.5)
+optical_ground_pixels = 3.5355339059327373
+coverage = 0.979323407165781
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_46arj"]
+script = ExtResource("1_ww2tn")
+name = "Attack3"
+role = "attack_3"
+source_clip = "Attack3"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsElephantFemale": "/rigs/animals_elephant_female/body/Attack3.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/elephant-female/attack3/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Elephant female/Attack3.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_jsfql")
+
+[sub_resource type="Resource" id="Resource_8iup2"]
+script = ExtResource("2_vatuk")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-167.29825022501575, 229.8772003600252)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/elephant-female/die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/elephant-female/die/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/elephant-female/die/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/elephant-female/die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/elephant-female/die/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/elephant-female/die/raw-support.png"
+})
+depth_range = Vector2(-167.29825, 229.8772)
+camera_origin = Vector2(59, 88.5)
+optical_ground_pixels = 3.5355339059327373
+coverage = 0.9782150640706812
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_1102d"]
+script = ExtResource("1_ww2tn")
+name = "Die"
+role = "die"
+source_clip = "Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsElephantFemale": "/rigs/animals_elephant_female/body/Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/elephant-female/die/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Elephant female/Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_8iup2")
+
+[sub_resource type="Resource" id="Resource_cjk83"]
+script = ExtResource("2_vatuk")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-167.29825022501575, 229.8772003600252)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/elephant-female/idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/elephant-female/idle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/elephant-female/idle/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/elephant-female/idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/elephant-female/idle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/elephant-female/idle/raw-support.png"
+})
+depth_range = Vector2(-167.29825, 229.8772)
+camera_origin = Vector2(59, 88.5)
+optical_ground_pixels = 3.5355339059327373
+coverage = 0.9779114725107062
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_xbcpd"]
+script = ExtResource("1_ww2tn")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsElephantFemale": "/rigs/animals_elephant_female/body/Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/elephant-female/idle/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Elephant female/Idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_cjk83")
+
+[sub_resource type="Resource" id="Resource_r0soh"]
+script = ExtResource("2_vatuk")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-167.29825022501575, 229.8772003600252)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/elephant-female/idle2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/elephant-female/idle2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/elephant-female/idle2/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/elephant-female/idle2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/elephant-female/idle2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/elephant-female/idle2/raw-support.png"
+})
+depth_range = Vector2(-167.29825, 229.8772)
+camera_origin = Vector2(59, 88.5)
+optical_ground_pixels = 3.5355339059327373
+coverage = 0.9745378720558864
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_evil5"]
+script = ExtResource("1_ww2tn")
+name = "Idle2"
+role = "idle_alt"
+source_clip = "Idle2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsElephantFemale": "/rigs/animals_elephant_female/body/Idle2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/elephant-female/idle2/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Elephant female/Idle2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_r0soh")
+
+[sub_resource type="Resource" id="Resource_ey3ox"]
+script = ExtResource("2_vatuk")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-167.29825022501575, 229.8772003600252)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/elephant-female/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/elephant-female/run/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/elephant-female/run/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/elephant-female/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/elephant-female/run/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/elephant-female/run/raw-support.png"
+})
+depth_range = Vector2(-167.29825, 229.8772)
+camera_origin = Vector2(59, 88.5)
+optical_ground_pixels = 3.5355339059327373
+coverage = 0.9787534800334428
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_avds6"]
+script = ExtResource("1_ww2tn")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsElephantFemale": "/rigs/animals_elephant_female/body/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/elephant-female/run/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Elephant female/Run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_ey3ox")
+
+[sub_resource type="Resource" id="Resource_f2f6h"]
+script = ExtResource("2_vatuk")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-167.29825022501575, 229.8772003600252)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/elephant-female/takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/elephant-female/takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/elephant-female/takedamage/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/elephant-female/takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/elephant-female/takedamage/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/elephant-female/takedamage/raw-support.png"
+})
+depth_range = Vector2(-167.29825, 229.8772)
+camera_origin = Vector2(59, 88.5)
+optical_ground_pixels = 3.5355339059327373
+coverage = 0.9771504536897424
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_vxaer"]
+script = ExtResource("1_ww2tn")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsElephantFemale": "/rigs/animals_elephant_female/body/TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/elephant-female/takedamage/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Elephant female/TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_f2f6h")
+
+[sub_resource type="Resource" id="Resource_afj0d"]
+script = ExtResource("2_vatuk")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-167.29825022501575, 229.8772003600252)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/elephant-female/taunt/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/elephant-female/taunt/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/elephant-female/taunt/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/elephant-female/taunt/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/elephant-female/taunt/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/elephant-female/taunt/raw-support.png"
+})
+depth_range = Vector2(-167.29825, 229.8772)
+camera_origin = Vector2(59, 88.5)
+optical_ground_pixels = 3.5355339059327373
+coverage = 0.9743502632919994
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_g85fy"]
+script = ExtResource("1_ww2tn")
+name = "Taunt"
+role = "taunt"
+source_clip = "Taunt"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsElephantFemale": "/rigs/animals_elephant_female/body/Taunt.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/elephant-female/taunt/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Elephant female/Taunt.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_afj0d")
+
+[sub_resource type="Resource" id="Resource_3752l"]
+script = ExtResource("2_vatuk")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-167.29825022501575, 229.8772003600252)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/elephant-female/walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/elephant-female/walk/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/elephant-female/walk/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/elephant-female/walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/elephant-female/walk/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/elephant-female/walk/raw-support.png"
+})
+depth_range = Vector2(-167.29825, 229.8772)
+camera_origin = Vector2(59, 88.5)
+optical_ground_pixels = 3.5355339059327373
+coverage = 0.9788059264111426
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_kr83q"]
+script = ExtResource("1_ww2tn")
+name = "Walk"
+role = "walk"
+source_clip = "Walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsElephantFemale": "/rigs/animals_elephant_female/body/Walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/elephant-female/walk/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Elephant female/Walk.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_3752l")
+
+[resource]
+script = ExtResource("4_foe21")
+id = "smallscale.animals.elephant-female"
+pack = "animals"
+variant = "Elephant female"
+source = "smallscale-authored/animals"
+cell = Vector2i(118, 118)
+pivot = Vector2(59, 86)
+anchor = Vector2(59, 64)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("AnimalsElephantFemale")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_ww2tn")]([SubResource("Resource_poi7w"), SubResource("Resource_hiqlo"), SubResource("Resource_46arj"), SubResource("Resource_1102d"), SubResource("Resource_xbcpd"), SubResource("Resource_evil5"), SubResource("Resource_avds6"), SubResource("Resource_vxaer"), SubResource("Resource_g85fy"), SubResource("Resource_kr83q")])
+hold_clips = PackedStringArray("Die")
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed."

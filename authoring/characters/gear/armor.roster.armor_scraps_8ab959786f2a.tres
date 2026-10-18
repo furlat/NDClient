@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_ac6ys"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_lkb34"]
+
+[sub_resource type="Resource" id="Resource_gf0g4"]
+script = ExtResource("1_ac6ys")
+path = "art/media/ui/icons/smooth48/item.leather-armor.png"
+native_size = Vector2i(48, 48)
+reuses = "item.leather-armor"
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_lkb34")
+id = "armor.roster.armor_scraps_8ab959786f2a"
+kind = "armor"
+family = "armor.armor_scraps"
+visual_variant_id = "roster.8ab959786f2a"
+icon = SubResource("Resource_gf0g4")
+notes = "Icon: Shares an existing icon for the native equipment slot."

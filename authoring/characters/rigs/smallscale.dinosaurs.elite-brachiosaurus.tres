@@ -1,0 +1,425 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_ju8sd"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_ugody"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_m3iko"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_oyus8"]
+
+[sub_resource type="Resource" id="Resource_7v411"]
+script = ExtResource("2_ugody")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/attack1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/attack1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/attack1/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/attack1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/attack1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/attack1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.9465885827432292
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_fq5he"]
+script = ExtResource("1_ju8sd")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Attack1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteBrachiosaurus": "/rigs/dinosaurs_elite_brachiosaurus/body/Attack1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/attack1/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE Brachiosaurus/Attack1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_7v411")
+
+[sub_resource type="Resource" id="Resource_om6n6"]
+script = ExtResource("2_ugody")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/attack2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/attack2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/attack2/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/attack2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/attack2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/attack2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.9386752315007926
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_ohb01"]
+script = ExtResource("1_ju8sd")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Attack2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteBrachiosaurus": "/rigs/dinosaurs_elite_brachiosaurus/body/Attack2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/attack2/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE Brachiosaurus/Attack2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_om6n6")
+
+[sub_resource type="Resource" id="Resource_oxtoh"]
+script = ExtResource("2_ugody")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/attack3/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/attack3/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/attack3/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/attack3/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/attack3/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/attack3/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.9477371754825752
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_v1ajt"]
+script = ExtResource("1_ju8sd")
+name = "Attack3"
+role = "attack_3"
+source_clip = "Attack3"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteBrachiosaurus": "/rigs/dinosaurs_elite_brachiosaurus/body/Attack3.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/attack3/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE Brachiosaurus/Attack3.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_oxtoh")
+
+[sub_resource type="Resource" id="Resource_qhndg"]
+script = ExtResource("2_ugody")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/attack4/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/attack4/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/attack4/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/attack4/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/attack4/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/attack4/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.9284431087456556
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_6mnbu"]
+script = ExtResource("1_ju8sd")
+name = "Attack4"
+role = "attack_4"
+source_clip = "Attack4"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteBrachiosaurus": "/rigs/dinosaurs_elite_brachiosaurus/body/Attack4.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/attack4/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE Brachiosaurus/Attack4.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_qhndg")
+
+[sub_resource type="Resource" id="Resource_dkje5"]
+script = ExtResource("2_ugody")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/die/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/die/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/die/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/die/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.952879405216953
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_i7xlw"]
+script = ExtResource("1_ju8sd")
+name = "Die"
+role = "die"
+source_clip = "Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteBrachiosaurus": "/rigs/dinosaurs_elite_brachiosaurus/body/Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/die/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE Brachiosaurus/Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_dkje5")
+
+[sub_resource type="Resource" id="Resource_od6ep"]
+script = ExtResource("2_ugody")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/idle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/idle/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/idle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/idle/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.9266200101523688
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_65ol7"]
+script = ExtResource("1_ju8sd")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteBrachiosaurus": "/rigs/dinosaurs_elite_brachiosaurus/body/Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/idle/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE Brachiosaurus/Idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_od6ep")
+
+[sub_resource type="Resource" id="Resource_6w0je"]
+script = ExtResource("2_ugody")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/idle2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/idle2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/idle2/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/idle2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/idle2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/idle2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.9544086556398458
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_txhx3"]
+script = ExtResource("1_ju8sd")
+name = "Idle2"
+role = "idle_alt"
+source_clip = "Idle2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteBrachiosaurus": "/rigs/dinosaurs_elite_brachiosaurus/body/Idle2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/idle2/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE Brachiosaurus/Idle2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_6w0je")
+
+[sub_resource type="Resource" id="Resource_c2pcn"]
+script = ExtResource("2_ugody")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/takedamage/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/takedamage/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/takedamage/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.9261723806046928
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_a535y"]
+script = ExtResource("1_ju8sd")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteBrachiosaurus": "/rigs/dinosaurs_elite_brachiosaurus/body/TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/takedamage/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE Brachiosaurus/TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_c2pcn")
+
+[sub_resource type="Resource" id="Resource_wnerw"]
+script = ExtResource("2_ugody")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/taunt/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/taunt/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/taunt/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/taunt/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/taunt/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/taunt/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.9310341923530404
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_tj882"]
+script = ExtResource("1_ju8sd")
+name = "Taunt"
+role = "taunt"
+source_clip = "Taunt"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteBrachiosaurus": "/rigs/dinosaurs_elite_brachiosaurus/body/Taunt.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/taunt/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE Brachiosaurus/Taunt.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_wnerw")
+
+[sub_resource type="Resource" id="Resource_3nagb"]
+script = ExtResource("2_ugody")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/walk/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/walk/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/walk/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/walk/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.931366303436714
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_f8nwy"]
+script = ExtResource("1_ju8sd")
+name = "Walk"
+role = "walk"
+source_clip = "Walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteBrachiosaurus": "/rigs/dinosaurs_elite_brachiosaurus/body/Walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-brachiosaurus/walk/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE Brachiosaurus/Walk.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_3nagb")
+
+[resource]
+script = ExtResource("4_oyus8")
+id = "smallscale.dinosaurs.elite-brachiosaurus"
+pack = "dinosaurs"
+variant = "ELITE Brachiosaurus"
+source = "smallscale-authored/dinosaurs"
+pivot = Vector2(64, 99)
+anchor = Vector2(64, 63)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("DinosaursEliteBrachiosaurus")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_ju8sd")]([SubResource("Resource_fq5he"), SubResource("Resource_ohb01"), SubResource("Resource_v1ajt"), SubResource("Resource_6mnbu"), SubResource("Resource_i7xlw"), SubResource("Resource_65ol7"), SubResource("Resource_txhx3"), SubResource("Resource_a535y"), SubResource("Resource_tj882"), SubResource("Resource_f8nwy")])
+hold_clips = PackedStringArray("Die")
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed."

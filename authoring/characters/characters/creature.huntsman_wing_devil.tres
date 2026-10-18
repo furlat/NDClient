@@ -1,0 +1,68 @@
+[gd_resource type="Resource" script_class="PresentationCharacter" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/character.gd" id="1_yjppq"]
+
+[resource]
+script = ExtResource("1_yjppq")
+id = "creature.huntsman_wing_devil"
+identity = "content.neurodragon:creature:creature.huntsman_wing_devil@1"
+rig = "smallscale.demonbeast05"
+portrait = "creature.huntsman_wing_devil"
+size = "Medium"
+attacks = Array[Dictionary]([{
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.attack",
+"variant": "fixed-unarmed-attack2-6-11"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+&"items": ["weapon.creature.huntsman_wing_devil_claws"],
+"recipe": "action.attack",
+"variant": "demonbeast05-huntsman_wing_devil_claws"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "fixed-unarmed-attack2-6-11"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+&"items": ["weapon.creature.huntsman_wing_devil_claws"],
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "demonbeast05-huntsman_wing_devil_claws"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.feature.extra_attack",
+"variant": "fixed-unarmed-attack2-6-11"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+&"items": ["weapon.creature.huntsman_wing_devil_claws"],
+"recipe": "action.feature.extra_attack",
+"variant": "demonbeast05-huntsman_wing_devil_claws"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+"recipe": "reaction.opportunity_attack",
+"variant": "fixed-unarmed-attack2-6-11"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+&"items": ["weapon.creature.huntsman_wing_devil_claws"],
+"recipe": "reaction.opportunity_attack",
+"variant": "demonbeast05-huntsman_wing_devil_claws"
+}])
+death = Dictionary[String, String]({
+"default": "Death"
+})
+notes = "Roster: Huntsman Wing Devil, Y128, kit Claws (2); Fly40; DS."

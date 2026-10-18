@@ -1,0 +1,98 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_uelev"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_800w5"]
+
+[sub_resource type="Resource" id="Resource_t2xyb"]
+script = ExtResource("1_uelev")
+path = "art/media/ui/icons/smooth48/item.iron-helmet.png"
+native_size = Vector2i(48, 48)
+reuses = "item.iron-helmet"
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_800w5")
+id = "apparel.leather_hood"
+kind = "armor"
+slots = Dictionary[String, Dictionary]({
+"helmet": {
+"layers": [{
+"part": "Head12",
+"slot": "helmet",
+"tint": "#5c2a0e"
+}],
+"variants": {
+"h0000004": [{
+"part": "Head7",
+"slot": "helmet",
+"tint": "#222233"
+}],
+"h0000005": [{
+"part": "Head12",
+"slot": "helmet",
+"tint": "#334455"
+}],
+"h0000006": [{
+"part": "Head12",
+"slot": "helmet",
+"tint": "#448844"
+}]
+}
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Head12",
+"pivots_by_camera": [[63.5, 58.5], [61.0, 53.5], [66.5, 48.0], [70.0, 57.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#5c2a0e",
+"variant": ""
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Head7",
+"pivots_by_camera": [[64.0, 55.5], [60.0, 51.0], [67.0, 48.5], [70.0, 53.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#222233",
+"variant": "h0000004"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Head12",
+"pivots_by_camera": [[63.5, 58.5], [61.0, 53.5], [66.5, 48.0], [70.0, 57.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#334455",
+"variant": "h0000005"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Head12",
+"pivots_by_camera": [[63.5, 58.5], [61.0, 53.5], [66.5, 48.0], [70.0, 57.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#448844",
+"variant": "h0000006"
+}])
+icon = SubResource("Resource_t2xyb")
+notes = "Visual name Leather Hood; Leather hood — naked face. Head11 has missing sprites, use Head12.
+Icon: Shares an existing icon for the native equipment slot."

@@ -1,0 +1,43 @@
+[gd_resource type="Resource" script_class="PresentationCharacter" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/character.gd" id="1_s7rgm"]
+
+[resource]
+script = ExtResource("1_s7rgm")
+id = "creature.goblin_buckler_rat"
+identity = "content.neurodragon:creature:creature.goblin_buckler_rat@1"
+rig = "smallscale.goblin04"
+portrait = "creature.goblin_buckler_rat"
+size = "Small"
+attacks = Array[Dictionary]([{
+"clip": "Attack1",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.attack",
+"variant": "goblin04-physical"
+}, {
+"clip": "Attack1",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "goblin04-physical"
+}, {
+"clip": "Attack1",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.feature.extra_attack",
+"variant": "goblin04-physical"
+}, {
+"clip": "Attack1",
+"contact": 6,
+"delivery": "melee",
+"recipe": "reaction.opportunity_attack",
+"variant": "goblin04-physical"
+}])
+reactions = Dictionary[String, String]({
+"block": "Block"
+})
+death = Dictionary[String, String]({
+"default": "Death"
+})
+notes = "Roster: Buckler Rat, Y128, kit Scimitar+wooden shield; NE."

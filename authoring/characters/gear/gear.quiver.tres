@@ -1,0 +1,62 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_8ikvy"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_pm80c"]
+
+[sub_resource type="Resource" id="Resource_tuhx2"]
+script = ExtResource("1_8ikvy")
+path = "art/media/ui/icons/smooth48/item.leather-armor.png"
+native_size = Vector2i(48, 48)
+reuses = "item.leather-armor"
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_pm80c")
+id = "gear.quiver"
+kind = "armor"
+slots = Dictionary[String, Dictionary]({
+"backpack": {
+"layers": [{
+"part": "Bag2",
+"slot": "backpack",
+"tint": "#654733"
+}],
+"variants": {
+"roster.6c39094102d0": [{
+"part": "Bag2",
+"slot": "backpack",
+"tint": "#654733"
+}]
+}
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Bag2",
+"pivots_by_camera": [[69.0, 52.0], [67.5, 56.0], [63.0, 56.0], [63.0, 53.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#654733",
+"variant": "roster.6c39094102d0"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Bag2",
+"pivots_by_camera": [[69.0, 52.0], [67.5, 56.0], [63.0, 56.0], [63.0, 53.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#654733",
+"variant": ""
+}])
+icon = SubResource("Resource_tuhx2")
+notes = "Visual name Quiver; Existing vendor silhouette approximation; does not promise exact wand length, crowbar hook, banner flag, firearm or canister geometry.
+Icon: Shares an existing icon for the native equipment slot."

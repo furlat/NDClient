@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_mf2m1"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_we4nh"]
+
+[sub_resource type="Resource" id="Resource_mhi4q"]
+script = ExtResource("1_mf2m1")
+path = "art/media/ui/icons/smooth48/item.holy-symbol.png"
+native_size = Vector2i(48, 48)
+reuses = "item.holy-symbol"
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_we4nh")
+id = "gear.holy_symbol"
+kind = "item"
+icon = SubResource("Resource_mhi4q")
+status = "partial"
+notes = "No worn look authored.
+Icon: Recovered matching base-item icon."

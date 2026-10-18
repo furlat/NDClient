@@ -1,0 +1,386 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_kp5dh"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_x3c6h"]
+
+[sub_resource type="Resource" id="Resource_ehd2d"]
+script = ExtResource("1_kp5dh")
+path = "art/media/ui/icons/smooth48/item.iron-helmet.png"
+native_size = Vector2i(48, 48)
+reuses = "item.iron-helmet"
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_x3c6h")
+id = "apparel.cloth_hood"
+kind = "armor"
+slots = Dictionary[String, Dictionary]({
+"helmet": {
+"layers": [{
+"part": "Head12",
+"slot": "helmet",
+"tint": "#8b4513"
+}],
+"variants": {
+"h0000001": [{
+"part": "Head12",
+"slot": "helmet",
+"tint": "#222233"
+}],
+"h0000002": [{
+"part": "Head12",
+"slot": "helmet",
+"tint": "#448844"
+}],
+"h0000003": [{
+"part": "Head3",
+"slot": "helmet",
+"tint": "#5588cc"
+}],
+"h0000016": [{
+"part": "Head4",
+"slot": "helmet",
+"tint": "#5c2a0e"
+}],
+"h0000017": [{
+"part": "Head23",
+"slot": "helmet",
+"tint": "#8b4513"
+}],
+"roster.01cafcf32a1c": [{
+"part": "Head3",
+"slot": "helmet",
+"tint": "#654733"
+}],
+"roster.0f70819dd2bd": [{
+"part": "Head8",
+"slot": "helmet",
+"tint": "#7c2434"
+}],
+"roster.23cf9fb19ebf": [{
+"part": "Head12",
+"slot": "helmet",
+"tint": "#344b73"
+}],
+"roster.2c20a1ab7bca": [{
+"part": "Head13",
+"slot": "helmet",
+"tint": "#ad8a36"
+}],
+"roster.44e704af2cf6": [{
+"part": "Head3",
+"slot": "helmet",
+"tint": "#ad8a36"
+}],
+"roster.4adbad8c5427": [{
+"part": "Head3",
+"slot": "helmet",
+"tint": "#728d80"
+}],
+"roster.7d8178761a23": [{
+"part": "Head3",
+"slot": "helmet",
+"tint": "#7c2434"
+}],
+"roster.828192008429": [{
+"part": "Head12",
+"slot": "helmet",
+"tint": "#7c2434"
+}],
+"roster.8d9f11106817": [{
+"part": "Head12",
+"slot": "helmet",
+"tint": "#b16b2e"
+}],
+"roster.b75f7ac8a78e": [{
+"part": "Head3",
+"slot": "helmet",
+"tint": "#344b73"
+}],
+"roster.c457b0699173": [{
+"part": "Head12",
+"slot": "helmet",
+"tint": "#5b286d"
+}],
+"roster.d4d3bfacf257": [{
+"part": "Head3",
+"slot": "helmet",
+"tint": "#a58b5f"
+}],
+"roster.ee8a39ce656d": [{
+"part": "Head3",
+"slot": "helmet",
+"tint": "#326c70"
+}],
+"roster.fd17db816b38": [{
+"part": "Head12",
+"slot": "helmet",
+"tint": "#bba328"
+}]
+}
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Head12",
+"pivots_by_camera": [[63.5, 58.5], [61.0, 53.5], [66.5, 48.0], [70.0, 57.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#8b4513",
+"variant": ""
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Head12",
+"pivots_by_camera": [[63.5, 58.5], [61.0, 53.5], [66.5, 48.0], [70.0, 57.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#222233",
+"variant": "h0000001"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Head12",
+"pivots_by_camera": [[63.5, 58.5], [61.0, 53.5], [66.5, 48.0], [70.0, 57.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#448844",
+"variant": "h0000002"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Head3",
+"pivots_by_camera": [[64.0, 54.5], [59.5, 52.0], [66.5, 48.5], [70.5, 53.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#5588cc",
+"variant": "h0000003"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Head4",
+"pivots_by_camera": [[64.0, 54.5], [60.5, 50.5], [67.0, 48.0], [70.5, 53.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#5c2a0e",
+"variant": "h0000016"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Head23",
+"pivots_by_camera": [[65.0, 57.0], [62.0, 53.0], [66.0, 51.0], [69.0, 55.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#8b4513",
+"variant": "h0000017"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Head12",
+"pivots_by_camera": [[63.5, 58.5], [61.0, 53.5], [66.5, 48.0], [70.0, 57.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#bba328",
+"variant": "roster.fd17db816b38"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Head3",
+"pivots_by_camera": [[64.0, 54.5], [59.5, 52.0], [66.5, 48.5], [70.5, 53.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#344b73",
+"variant": "roster.b75f7ac8a78e"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Head13",
+"pivots_by_camera": [[64.0, 56.0], [60.5, 50.0], [67.0, 47.0], [70.5, 53.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#ad8a36",
+"variant": "roster.2c20a1ab7bca"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Head3",
+"pivots_by_camera": [[64.0, 54.5], [59.5, 52.0], [66.5, 48.5], [70.5, 53.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#ad8a36",
+"variant": "roster.44e704af2cf6"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Head8",
+"pivots_by_camera": [[63.0, 54.5], [58.0, 48.0], [68.0, 44.0], [72.5, 51.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#7c2434",
+"variant": "roster.0f70819dd2bd"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Head3",
+"pivots_by_camera": [[64.0, 54.5], [59.5, 52.0], [66.5, 48.5], [70.5, 53.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#728d80",
+"variant": "roster.4adbad8c5427"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Head3",
+"pivots_by_camera": [[64.0, 54.5], [59.5, 52.0], [66.5, 48.5], [70.5, 53.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#654733",
+"variant": "roster.01cafcf32a1c"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Head12",
+"pivots_by_camera": [[63.5, 58.5], [61.0, 53.5], [66.5, 48.0], [70.0, 57.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#7c2434",
+"variant": "roster.828192008429"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Head12",
+"pivots_by_camera": [[63.5, 58.5], [61.0, 53.5], [66.5, 48.0], [70.0, 57.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#5b286d",
+"variant": "roster.c457b0699173"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Head3",
+"pivots_by_camera": [[64.0, 54.5], [59.5, 52.0], [66.5, 48.5], [70.5, 53.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#326c70",
+"variant": "roster.ee8a39ce656d"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Head12",
+"pivots_by_camera": [[63.5, 58.5], [61.0, 53.5], [66.5, 48.0], [70.0, 57.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#344b73",
+"variant": "roster.23cf9fb19ebf"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Head12",
+"pivots_by_camera": [[63.5, 58.5], [61.0, 53.5], [66.5, 48.0], [70.0, 57.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#b16b2e",
+"variant": "roster.8d9f11106817"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Head3",
+"pivots_by_camera": [[64.0, 54.5], [59.5, 52.0], [66.5, 48.5], [70.5, 53.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#a58b5f",
+"variant": "roster.d4d3bfacf257"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Head3",
+"pivots_by_camera": [[64.0, 54.5], [59.5, 52.0], [66.5, 48.5], [70.5, 53.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#7c2434",
+"variant": "roster.7d8178761a23"
+}])
+icon = SubResource("Resource_ehd2d")
+notes = "Visual name Cloth Hood; Simple cloth hood — naked face. Avoid Head23 (covers shoulders, clips with chest).
+Icon: Shares an existing icon for the native equipment slot."

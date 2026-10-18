@@ -1,0 +1,134 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_hce7y"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_fi10g"]
+
+[sub_resource type="Resource" id="Resource_548vy"]
+script = ExtResource("1_hce7y")
+path = "art/media/ui/icons/smooth48/item.gauntlets.png"
+native_size = Vector2i(48, 48)
+reuses = "item.gauntlets"
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_fi10g")
+id = "apparel.gauntlets"
+kind = "armor"
+slots = Dictionary[String, Dictionary]({
+"gauntlets": {
+"layers": [{
+"part": "Hands4",
+"slot": "hands",
+"tint": "#8899aa"
+}],
+"variants": {
+"g0000007": [{
+"part": "Hands4",
+"slot": "hands",
+"tint": "#ccaa44"
+}],
+"g0000008": [{
+"part": "Hands4",
+"slot": "hands",
+"tint": "#334455"
+}],
+"g0000009": [{
+"part": "Hands4",
+"slot": "hands",
+"tint": "#aabbcc"
+}],
+"roster.b73361b14316": [{
+"part": "Hands4",
+"slot": "hands",
+"tint": "#c6c3aa"
+}],
+"roster.c59f77540e60": [{
+"part": "Hands4",
+"slot": "hands",
+"tint": "#654733"
+}]
+}
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Hands4",
+"pivots_by_camera": [[64.5, 67.0], [62.5, 64.5], [65.5, 63.5], [68.0, 66.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#8899aa",
+"variant": ""
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Hands4",
+"pivots_by_camera": [[64.5, 67.0], [62.5, 64.5], [65.5, 63.5], [68.0, 66.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#ccaa44",
+"variant": "g0000007"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Hands4",
+"pivots_by_camera": [[64.5, 67.0], [62.5, 64.5], [65.5, 63.5], [68.0, 66.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#334455",
+"variant": "g0000008"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Hands4",
+"pivots_by_camera": [[64.5, 67.0], [62.5, 64.5], [65.5, 63.5], [68.0, 66.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#aabbcc",
+"variant": "g0000009"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Hands4",
+"pivots_by_camera": [[64.5, 67.0], [62.5, 64.5], [65.5, 63.5], [68.0, 66.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#c6c3aa",
+"variant": "roster.b73361b14316"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Hands4",
+"pivots_by_camera": [[64.5, 67.0], [62.5, 64.5], [65.5, 63.5], [68.0, 66.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#654733",
+"variant": "roster.c59f77540e60"
+}])
+icon = SubResource("Resource_548vy")
+notes = "Visual name Gauntlets; Armored plate gauntlets — heavy armor tier
+Icon: Shares an existing icon for the native equipment slot."

@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_gpyud"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_5eq1h"]
+
+[sub_resource type="Resource" id="Resource_1d1ae"]
+script = ExtResource("1_gpyud")
+path = "art/media/ui/icons/smooth48/item.leather-boots.png"
+native_size = Vector2i(48, 48)
+reuses = "item.leather-boots"
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_5eq1h")
+id = "apparel.cloth_shoes.blue"
+kind = "armor"
+family = "apparel.cloth_shoes"
+visual_variant_id = "b0000005"
+icon = SubResource("Resource_1d1ae")
+notes = "Icon: Shares an existing icon for the native equipment slot."

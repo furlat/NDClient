@@ -1,0 +1,132 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_ji6e7"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_k8w6b"]
+
+[sub_resource type="Resource" id="Resource_lrtl1"]
+script = ExtResource("1_ji6e7")
+path = "art/media/ui/icons/smooth48/item.greatsword.png"
+native_size = Vector2i(48, 48)
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_k8w6b")
+id = "weapon.greatsword"
+kind = "weapon"
+slots = Dictionary[String, Dictionary]({
+"weapon_melee_main": {
+"layers": [{
+"part": "Melee8",
+"slot": "weapon",
+"tint": "#8899aa"
+}],
+"variants": {
+"30000006": [{
+"part": "Melee8",
+"slot": "weapon",
+"tint": "#ccaa44"
+}],
+"30000007": [{
+"part": "Melee8",
+"slot": "weapon",
+"tint": "#cc4422"
+}],
+"30000008": [{
+"part": "Melee8",
+"slot": "weapon",
+"tint": "#88bbdd"
+}],
+"30000009": [{
+"part": "Melee8",
+"slot": "weapon",
+"tint": "#334455"
+}],
+"roster.b25b1c9931b1": [{
+"part": "Melee8",
+"slot": "weapon",
+"tint": "#b16b2e"
+}]
+}
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee8",
+"pivots_by_camera": [[54.5, 68.0], [59.0, 56.0], [75.5, 59.5], [72.0, 71.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#8899aa",
+"variant": ""
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee8",
+"pivots_by_camera": [[54.5, 68.0], [59.0, 56.0], [75.5, 59.5], [72.0, 71.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#ccaa44",
+"variant": "30000006"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee8",
+"pivots_by_camera": [[54.5, 68.0], [59.0, 56.0], [75.5, 59.5], [72.0, 71.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#cc4422",
+"variant": "30000007"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee8",
+"pivots_by_camera": [[54.5, 68.0], [59.0, 56.0], [75.5, 59.5], [72.0, 71.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#88bbdd",
+"variant": "30000008"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee8",
+"pivots_by_camera": [[54.5, 68.0], [59.0, 56.0], [75.5, 59.5], [72.0, 71.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#334455",
+"variant": "30000009"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee8",
+"pivots_by_camera": [[54.5, 68.0], [59.0, 56.0], [75.5, 59.5], [72.0, 71.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#b16b2e",
+"variant": "roster.b25b1c9931b1"
+}])
+icon = SubResource("Resource_lrtl1")
+notes = "Visual name Greatsword; Exact greatsword match. Tertiary color controls inner blade"

@@ -1,0 +1,625 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_ddrw5"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_q3byx"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_f4xny"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_2dhts"]
+
+[sub_resource type="Resource" id="Resource_r6rgr"]
+script = ExtResource("2_q3byx")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/attack1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/attack1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/attack1/normals.png",
+"reference": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/attack1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/attack1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/attack1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 9.899494936611665
+coverage = 0.9316481709823264
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_1235r"]
+script = ExtResource("1_ddrw5")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Attack1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"ZombiesHdZombiemale5": "/rigs/zombies_hd_zombiemale5/body/Attack1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/attack1/colour.png",
+"combined": "art/media/smallscale/authored/zombies-hd/With shadow/ZombieMale5/Attack1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_r6rgr")
+
+[sub_resource type="Resource" id="Resource_grbmn"]
+script = ExtResource("2_q3byx")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/attack2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/attack2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/attack2/normals.png",
+"reference": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/attack2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/attack2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/attack2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 9.899494936611665
+coverage = 0.9375540600409276
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_q2c1n"]
+script = ExtResource("1_ddrw5")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Attack2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"ZombiesHdZombiemale5": "/rigs/zombies_hd_zombiemale5/body/Attack2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/attack2/colour.png",
+"combined": "art/media/smallscale/authored/zombies-hd/With shadow/ZombieMale5/Attack2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_grbmn")
+
+[sub_resource type="Resource" id="Resource_do3q4"]
+script = ExtResource("2_q3byx")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/attack3/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/attack3/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/attack3/normals.png",
+"reference": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/attack3/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/attack3/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/attack3/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 9.899494936611665
+coverage = 0.929894318300722
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_fu4dw"]
+script = ExtResource("1_ddrw5")
+name = "Attack3"
+role = "attack_3"
+source_clip = "Attack3"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"ZombiesHdZombiemale5": "/rigs/zombies_hd_zombiemale5/body/Attack3.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/attack3/colour.png",
+"combined": "art/media/smallscale/authored/zombies-hd/With shadow/ZombieMale5/Attack3.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_do3q4")
+
+[sub_resource type="Resource" id="Resource_0b8ou"]
+script = ExtResource("2_q3byx")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/attack4/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/attack4/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/attack4/normals.png",
+"reference": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/attack4/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/attack4/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/attack4/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 9.899494936611665
+coverage = 0.9316942722693256
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_qw8du"]
+script = ExtResource("1_ddrw5")
+name = "Attack4"
+role = "attack_4"
+source_clip = "Attack4"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"ZombiesHdZombiemale5": "/rigs/zombies_hd_zombiemale5/body/Attack4.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/attack4/colour.png",
+"combined": "art/media/smallscale/authored/zombies-hd/With shadow/ZombieMale5/Attack4.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_0b8ou")
+
+[sub_resource type="Resource" id="Resource_jbwjc"]
+script = ExtResource("2_q3byx")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/attack5/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/attack5/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/attack5/normals.png",
+"reference": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/attack5/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/attack5/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/attack5/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 9.899494936611665
+coverage = 0.9608267875941372
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_c651y"]
+script = ExtResource("1_ddrw5")
+name = "Attack5"
+role = "attack_5"
+source_clip = "Attack5"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"ZombiesHdZombiemale5": "/rigs/zombies_hd_zombiemale5/body/Attack5.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/attack5/colour.png",
+"combined": "art/media/smallscale/authored/zombies-hd/With shadow/ZombieMale5/Attack5.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_jbwjc")
+
+[sub_resource type="Resource" id="Resource_2b77e"]
+script = ExtResource("2_q3byx")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/crouchrun/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/crouchrun/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/crouchrun/normals.png",
+"reference": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/crouchrun/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/crouchrun/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/crouchrun/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 9.899494936611665
+coverage = 0.9476303194706016
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_n4515"]
+script = ExtResource("1_ddrw5")
+name = "CrouchWalk"
+role = "crouch_move"
+source_clip = "CrouchRun"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"ZombiesHdZombiemale5": "/rigs/zombies_hd_zombiemale5/body/CrouchRun.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/crouchrun/colour.png",
+"combined": "art/media/smallscale/authored/zombies-hd/With shadow/ZombieMale5/CrouchRun.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_2b77e")
+
+[sub_resource type="Resource" id="Resource_5fn1n"]
+script = ExtResource("2_q3byx")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/die/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/die/normals.png",
+"reference": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/die/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/die/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 9.899494936611665
+coverage = 0.5307654284825074
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_76hkd"]
+script = ExtResource("1_ddrw5")
+name = "Die"
+role = "die"
+source_clip = "Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"ZombiesHdZombiemale5": "/rigs/zombies_hd_zombiemale5/body/Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/die/colour.png",
+"combined": "art/media/smallscale/authored/zombies-hd/With shadow/ZombieMale5/Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_5fn1n")
+
+[sub_resource type="Resource" id="Resource_4yo2k"]
+script = ExtResource("2_q3byx")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/die2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/die2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/die2/normals.png",
+"reference": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/die2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/die2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/die2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 9.899494936611665
+coverage = 0.942984496124031
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_ygr83"]
+script = ExtResource("1_ddrw5")
+name = "Death"
+role = "die_alt"
+source_clip = "Die2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"ZombiesHdZombiemale5": "/rigs/zombies_hd_zombiemale5/body/Die2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/die2/colour.png",
+"combined": "art/media/smallscale/authored/zombies-hd/With shadow/ZombieMale5/Die2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_4yo2k")
+
+[sub_resource type="Resource" id="Resource_p3m5l"]
+script = ExtResource("2_q3byx")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/idle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/idle/normals.png",
+"reference": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/idle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/idle/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 9.899494936611665
+coverage = 0.9268039709586604
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_30usg"]
+script = ExtResource("1_ddrw5")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"ZombiesHdZombiemale5": "/rigs/zombies_hd_zombiemale5/body/Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/idle/colour.png",
+"combined": "art/media/smallscale/authored/zombies-hd/With shadow/ZombieMale5/Idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_p3m5l")
+
+[sub_resource type="Resource" id="Resource_4xe0x"]
+script = ExtResource("2_q3byx")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/idle2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/idle2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/idle2/normals.png",
+"reference": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/idle2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/idle2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/idle2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 9.899494936611665
+coverage = 0.9462285420106158
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_1jyjo"]
+script = ExtResource("1_ddrw5")
+name = "Idle2"
+role = "idle_alt"
+source_clip = "Idle2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"ZombiesHdZombiemale5": "/rigs/zombies_hd_zombiemale5/body/Idle2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/idle2/colour.png",
+"combined": "art/media/smallscale/authored/zombies-hd/With shadow/ZombieMale5/Idle2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_4xe0x")
+
+[sub_resource type="Resource" id="Resource_1bkt5"]
+script = ExtResource("2_q3byx")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/run/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/run/normals.png",
+"reference": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/run/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/run/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 9.899494936611665
+coverage = 0.9397103261435864
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_j7tl4"]
+script = ExtResource("1_ddrw5")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"ZombiesHdZombiemale5": "/rigs/zombies_hd_zombiemale5/body/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/run/colour.png",
+"combined": "art/media/smallscale/authored/zombies-hd/With shadow/ZombieMale5/Run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_1bkt5")
+
+[sub_resource type="Resource" id="Resource_4dqsc"]
+script = ExtResource("2_q3byx")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/takedamage/normals.png",
+"reference": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/takedamage/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/takedamage/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 9.899494936611665
+coverage = 0.9302325581395348
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_xmahi"]
+script = ExtResource("1_ddrw5")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"ZombiesHdZombiemale5": "/rigs/zombies_hd_zombiemale5/body/TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/takedamage/colour.png",
+"combined": "art/media/smallscale/authored/zombies-hd/With shadow/ZombieMale5/TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_4dqsc")
+
+[sub_resource type="Resource" id="Resource_klhlv"]
+script = ExtResource("2_q3byx")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/taunt/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/taunt/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/taunt/normals.png",
+"reference": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/taunt/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/taunt/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/taunt/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 9.899494936611665
+coverage = 0.9404503154740552
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_bux3h"]
+script = ExtResource("1_ddrw5")
+name = "Taunt"
+role = "taunt"
+source_clip = "Taunt"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"ZombiesHdZombiemale5": "/rigs/zombies_hd_zombiemale5/body/Taunt.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/taunt/colour.png",
+"combined": "art/media/smallscale/authored/zombies-hd/With shadow/ZombieMale5/Taunt.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_klhlv")
+
+[sub_resource type="Resource" id="Resource_m6ngx"]
+script = ExtResource("2_q3byx")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/wakeup/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/wakeup/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/wakeup/normals.png",
+"reference": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/wakeup/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/wakeup/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/wakeup/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 9.899494936611665
+coverage = 0.9501027769940752
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_fdnxk"]
+script = ExtResource("1_ddrw5")
+name = "WakeUp"
+role = "wake_up"
+source_clip = "WakeUp"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"ZombiesHdZombiemale5": "/rigs/zombies_hd_zombiemale5/body/WakeUp.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/wakeup/colour.png",
+"combined": "art/media/smallscale/authored/zombies-hd/With shadow/ZombieMale5/WakeUp.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_m6ngx")
+
+[sub_resource type="Resource" id="Resource_ac4qc"]
+script = ExtResource("2_q3byx")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/walk/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/walk/normals.png",
+"reference": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/walk/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/walk/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 9.899494936611665
+coverage = 0.9275567905792736
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_pa3kk"]
+script = ExtResource("1_ddrw5")
+name = "Walk"
+role = "walk"
+source_clip = "Walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"ZombiesHdZombiemale5": "/rigs/zombies_hd_zombiemale5/body/Walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/zombies-hd/zombiemale5/walk/colour.png",
+"combined": "art/media/smallscale/authored/zombies-hd/With shadow/ZombieMale5/Walk.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_ac4qc")
+
+[resource]
+script = ExtResource("4_2dhts")
+id = "smallscale.zombies-hd.zombiemale5"
+pack = "zombies-hd"
+variant = "ZombieMale5"
+source = "smallscale-authored/zombies-hd"
+pivot = Vector2(64, 89)
+anchor = Vector2(64, 69)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("ZombiesHdZombiemale5")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_ddrw5")]([SubResource("Resource_1235r"), SubResource("Resource_q2c1n"), SubResource("Resource_fu4dw"), SubResource("Resource_qw8du"), SubResource("Resource_c651y"), SubResource("Resource_n4515"), SubResource("Resource_76hkd"), SubResource("Resource_ygr83"), SubResource("Resource_30usg"), SubResource("Resource_1jyjo"), SubResource("Resource_j7tl4"), SubResource("Resource_xmahi"), SubResource("Resource_bux3h"), SubResource("Resource_fdnxk"), SubResource("Resource_pa3kk")])
+hold_clips = PackedStringArray("Die", "Death")
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed."

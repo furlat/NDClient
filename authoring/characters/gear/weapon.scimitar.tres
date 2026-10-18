@@ -1,0 +1,191 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_uo1js"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_j2fxi"]
+
+[sub_resource type="Resource" id="Resource_to20c"]
+script = ExtResource("1_uo1js")
+path = "art/media/ui/icons/smooth48/item.scimitar.png"
+native_size = Vector2i(48, 48)
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_j2fxi")
+id = "weapon.scimitar"
+kind = "weapon"
+slots = Dictionary[String, Dictionary]({
+"weapon_melee_main": {
+"layers": [{
+"part": "Melee4",
+"slot": "weapon",
+"tint": "#8899aa"
+}],
+"variants": {
+"30000016": [{
+"part": "Melee4",
+"slot": "weapon",
+"tint": "#ccaa44"
+}],
+"30000017": [{
+"part": "Melee4",
+"slot": "weapon",
+"tint": "#cc4422"
+}],
+"30000018": [{
+"part": "Melee4",
+"slot": "weapon",
+"tint": "#cd7f32"
+}],
+"a0000001": [{
+"part": "Melee7",
+"slot": "weapon",
+"tint": "#8899aa"
+}],
+"roster.04d42f39cbd2": [{
+"part": "Melee4",
+"slot": "weapon",
+"tint": "#5b286d"
+}]
+}
+},
+"weapon_melee_off": {
+"layers": [{
+"part": "Offhand1",
+"slot": "offhand",
+"tint": "#8899aa"
+}],
+&"look": "Off-hand Scimitar",
+"variants": {
+"oh000007": [{
+"part": "Offhand1",
+"slot": "offhand",
+"tint": "#778899"
+}],
+"oh000008": [{
+"part": "Offhand1",
+"slot": "offhand",
+"tint": "#d8b808"
+}],
+"roster.6dc3343e03cc": [{
+"part": "Offhand1",
+"slot": "offhand",
+"tint": "#5b286d"
+}]
+}
+}
+})
+hands = Dictionary[String, Dictionary]({
+"weapon_melee_off": {
+"": [{
+"part": "Offhand1",
+"slot": "offhand",
+"tint": "#8899aa"
+}],
+"30000016": [{
+"part": "Offhand1",
+"slot": "offhand",
+"tint": "#d8b808"
+}],
+"30000017": [{
+"part": "Offhand1",
+"slot": "offhand",
+"tint": "#cc4422"
+}],
+"30000018": [{
+"part": "Offhand1",
+"slot": "offhand",
+"tint": "#cd7f32"
+}],
+"a0000001": [{
+"part": "Offhand1",
+"slot": "offhand",
+"tint": "#8899aa"
+}],
+"roster.04d42f39cbd2": [{
+"part": "Offhand1",
+"slot": "offhand",
+"tint": "#5b286d"
+}]
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee4",
+"pivots_by_camera": [[53.5, 65.5], [62.5, 54.5], [77.0, 60.0], [68.5, 71.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#8899aa",
+"variant": ""
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee4",
+"pivots_by_camera": [[53.5, 65.5], [62.5, 54.5], [77.0, 60.0], [68.5, 71.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#ccaa44",
+"variant": "30000016"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee4",
+"pivots_by_camera": [[53.5, 65.5], [62.5, 54.5], [77.0, 60.0], [68.5, 71.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#cc4422",
+"variant": "30000017"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee4",
+"pivots_by_camera": [[53.5, 65.5], [62.5, 54.5], [77.0, 60.0], [68.5, 71.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#cd7f32",
+"variant": "30000018"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee7",
+"pivots_by_camera": [[53.5, 65.5], [62.0, 53.5], [76.5, 61.0], [68.0, 71.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#8899aa",
+"variant": "a0000001"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee4",
+"pivots_by_camera": [[53.5, 65.5], [62.5, 54.5], [77.0, 60.0], [68.5, 71.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#5b286d",
+"variant": "roster.04d42f39cbd2"
+}])
+icon = SubResource("Resource_to20c")
+notes = "Visual name Scimitar; Exact scimitar match"

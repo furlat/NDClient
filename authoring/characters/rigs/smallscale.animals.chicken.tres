@@ -1,0 +1,427 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_r0ch6"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_b7y4l"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_evat1"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_ybgxh"]
+
+[sub_resource type="Resource" id="Resource_0ltu1"]
+script = ExtResource("2_b7y4l")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/chicken/attack1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/chicken/attack1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/chicken/attack1/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/chicken/attack1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/chicken/attack1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/chicken/attack1/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 9.899494936611665
+coverage = 0.970517448856799
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_sdxfo"]
+script = ExtResource("1_r0ch6")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Attack1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsChicken": "/rigs/animals_chicken/body/Attack1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/chicken/attack1/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Chicken/Attack1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_0ltu1")
+
+[sub_resource type="Resource" id="Resource_tgik8"]
+script = ExtResource("2_b7y4l")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/chicken/attack2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/chicken/attack2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/chicken/attack2/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/chicken/attack2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/chicken/attack2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/chicken/attack2/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 9.899494936611665
+coverage = 0.9493760301389216
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_3ld6t"]
+script = ExtResource("1_r0ch6")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Attack2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsChicken": "/rigs/animals_chicken/body/Attack2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/chicken/attack2/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Chicken/Attack2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_tgik8")
+
+[sub_resource type="Resource" id="Resource_ili0x"]
+script = ExtResource("2_b7y4l")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/chicken/attack3/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/chicken/attack3/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/chicken/attack3/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/chicken/attack3/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/chicken/attack3/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/chicken/attack3/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 9.899494936611665
+coverage = 0.9567089213106912
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_xqsm6"]
+script = ExtResource("1_r0ch6")
+name = "Attack3"
+role = "attack_3"
+source_clip = "Attack3"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsChicken": "/rigs/animals_chicken/body/Attack3.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/chicken/attack3/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Chicken/Attack3.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_ili0x")
+
+[sub_resource type="Resource" id="Resource_8thrg"]
+script = ExtResource("2_b7y4l")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent", "nonempty_source_has_no_common_surface", "partially_empty_source_views")
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/chicken/die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/chicken/die/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/chicken/die/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/chicken/die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/chicken/die/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/chicken/die/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 9.899494936611665
+coverage = 0.8825641025641026
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_1svh8"]
+script = ExtResource("1_r0ch6")
+name = "Die"
+role = "die"
+source_clip = "Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsChicken": "/rigs/animals_chicken/body/Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/chicken/die/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Chicken/Die.png",
+"mask_material": "art/media/smallscale/authored/animals/Material masks/With shadow/Chicken/Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_8thrg")
+
+[sub_resource type="Resource" id="Resource_6qmqa"]
+script = ExtResource("2_b7y4l")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/chicken/fly/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/chicken/fly/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/chicken/fly/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/chicken/fly/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/chicken/fly/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/chicken/fly/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 9.899494936611665
+coverage = 0.9631120053655264
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_727vp"]
+script = ExtResource("1_r0ch6")
+name = "Fly"
+role = "fly"
+source_clip = "Fly"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsChicken": "/rigs/animals_chicken/body/Fly.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/chicken/fly/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Chicken/Fly.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_6qmqa")
+
+[sub_resource type="Resource" id="Resource_ma58w"]
+script = ExtResource("2_b7y4l")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/chicken/idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/chicken/idle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/chicken/idle/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/chicken/idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/chicken/idle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/chicken/idle/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 9.899494936611665
+coverage = 0.9680875844397856
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_5escf"]
+script = ExtResource("1_r0ch6")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsChicken": "/rigs/animals_chicken/body/Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/chicken/idle/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Chicken/Idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_ma58w")
+
+[sub_resource type="Resource" id="Resource_wriqu"]
+script = ExtResource("2_b7y4l")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/chicken/idle2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/chicken/idle2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/chicken/idle2/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/chicken/idle2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/chicken/idle2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/chicken/idle2/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 9.899494936611665
+coverage = 0.9842931937172776
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_3jjnv"]
+script = ExtResource("1_r0ch6")
+name = "Idle2"
+role = "idle_alt"
+source_clip = "Idle2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsChicken": "/rigs/animals_chicken/body/Idle2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/chicken/idle2/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Chicken/Idle2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_wriqu")
+
+[sub_resource type="Resource" id="Resource_qno2f"]
+script = ExtResource("2_b7y4l")
+status = "validated_partial"
+flags = PackedStringArray("silhouette_iou_below_75_percent", "source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/chicken/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/chicken/run/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/chicken/run/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/chicken/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/chicken/run/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/chicken/run/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 9.899494936611665
+coverage = 0.9686402995553476
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_pb2sb"]
+script = ExtResource("1_r0ch6")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsChicken": "/rigs/animals_chicken/body/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/chicken/run/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Chicken/Run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_qno2f")
+
+[sub_resource type="Resource" id="Resource_qwu7x"]
+script = ExtResource("2_b7y4l")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/chicken/takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/chicken/takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/chicken/takedamage/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/chicken/takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/chicken/takedamage/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/chicken/takedamage/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 9.899494936611665
+coverage = 0.9572841726618704
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_voddb"]
+script = ExtResource("1_r0ch6")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsChicken": "/rigs/animals_chicken/body/TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/chicken/takedamage/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Chicken/TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_qwu7x")
+
+[sub_resource type="Resource" id="Resource_fxr22"]
+script = ExtResource("2_b7y4l")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/chicken/walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/chicken/walk/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/chicken/walk/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/chicken/walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/chicken/walk/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/chicken/walk/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 9.899494936611665
+coverage = 0.9704355675919656
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_rngjq"]
+script = ExtResource("1_r0ch6")
+name = "Walk"
+role = "walk"
+source_clip = "Walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsChicken": "/rigs/animals_chicken/body/Walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/chicken/walk/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Chicken/Walk.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_fxr22")
+
+[resource]
+script = ExtResource("4_ybgxh")
+id = "smallscale.animals.chicken"
+pack = "animals"
+variant = "Chicken"
+source = "smallscale-authored/animals"
+cell = Vector2i(64, 64)
+pivot = Vector2(32, 41)
+anchor = Vector2(32, 38)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("AnimalsChicken")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_r0ch6")]([SubResource("Resource_sdxfo"), SubResource("Resource_3ld6t"), SubResource("Resource_xqsm6"), SubResource("Resource_1svh8"), SubResource("Resource_727vp"), SubResource("Resource_5escf"), SubResource("Resource_3jjnv"), SubResource("Resource_pb2sb"), SubResource("Resource_voddb"), SubResource("Resource_rngjq")])
+hold_clips = PackedStringArray("Die")
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed."

@@ -1,0 +1,96 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_thkct"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_rgvyp"]
+
+[sub_resource type="Resource" id="Resource_l0qbf"]
+script = ExtResource("1_thkct")
+path = "art/media/ui/icons/smooth48/item.greataxe.png"
+native_size = Vector2i(48, 48)
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_rgvyp")
+id = "weapon.greataxe"
+kind = "weapon"
+slots = Dictionary[String, Dictionary]({
+"weapon_melee_main": {
+"layers": [{
+"part": "Melee14",
+"slot": "weapon",
+"tint": "#8899aa"
+}],
+"variants": {
+"3000000a": [{
+"part": "Melee14",
+"slot": "weapon",
+"tint": "#cd7f32"
+}],
+"3000000b": [{
+"part": "Melee14",
+"slot": "weapon",
+"tint": "#556677"
+}],
+"roster.e2e34fdcf4d3": [{
+"part": "Melee14",
+"slot": "weapon",
+"tint": "#5b286d"
+}]
+}
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee14",
+"pivots_by_camera": [[53.5, 67.5], [63.0, 56.0], [77.0, 62.5], [67.0, 73.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#8899aa",
+"variant": ""
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee14",
+"pivots_by_camera": [[53.5, 67.5], [63.0, 56.0], [77.0, 62.5], [67.0, 73.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#cd7f32",
+"variant": "3000000a"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee14",
+"pivots_by_camera": [[53.5, 67.5], [63.0, 56.0], [77.0, 62.5], [67.0, 73.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#556677",
+"variant": "3000000b"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee14",
+"pivots_by_camera": [[53.5, 67.5], [63.0, 56.0], [77.0, 62.5], [67.0, 73.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#5b286d",
+"variant": "roster.e2e34fdcf4d3"
+}])
+icon = SubResource("Resource_l0qbf")
+notes = "Visual name Greataxe; Double-edge axe — large two-handed"

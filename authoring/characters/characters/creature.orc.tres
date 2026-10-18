@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PresentationCharacter" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/character.gd" id="1_tdv46"]
+
+[resource]
+script = ExtResource("1_tdv46")
+id = "creature.orc"
+identity = "content.srd_5_1_cc:creature:creature.orc@1"
+rig = "smallscale.orc01"
+portrait = "creature.orc"
+size = "Medium"
+death = Dictionary[String, String]({
+"default": "Die"
+})
+kit_mismatch = "Art shows a scimitar and shield; the kit is a greataxe and thrown javelins."
+notes = "Roster: Orc, Y128, kit Greataxe, thrown Javelin, Hide; Agg (art shows Scimitar+Shield: recorded mismatch)."

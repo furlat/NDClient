@@ -1,0 +1,98 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_s5qpj"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_lrt33"]
+
+[sub_resource type="Resource" id="Resource_4uq5j"]
+script = ExtResource("1_s5qpj")
+path = "art/media/ui/icons/smooth48/item.iron-helmet.png"
+native_size = Vector2i(48, 48)
+reuses = "item.iron-helmet"
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_lrt33")
+id = "apparel.wizard_hat"
+kind = "armor"
+slots = Dictionary[String, Dictionary]({
+"helmet": {
+"layers": [{
+"part": "Head15",
+"slot": "helmet",
+"tint": "#5588cc"
+}],
+"variants": {
+"h0000010": [{
+"part": "Head15",
+"slot": "helmet",
+"tint": "#222233"
+}],
+"h0000011": [{
+"part": "Head15",
+"slot": "helmet",
+"tint": "#aa3333"
+}],
+"h0000012": [{
+"part": "Head15",
+"slot": "helmet",
+"tint": "#448844"
+}]
+}
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Head15",
+"pivots_by_camera": [[63.5, 55.5], [59.5, 46.5], [67.5, 44.5], [71.5, 52.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#5588cc",
+"variant": ""
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Head15",
+"pivots_by_camera": [[63.5, 55.5], [59.5, 46.5], [67.5, 44.5], [71.5, 52.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#222233",
+"variant": "h0000010"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Head15",
+"pivots_by_camera": [[63.5, 55.5], [59.5, 46.5], [67.5, 44.5], [71.5, 52.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#aa3333",
+"variant": "h0000011"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Head15",
+"pivots_by_camera": [[63.5, 55.5], [59.5, 46.5], [67.5, 44.5], [71.5, 52.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#448844",
+"variant": "h0000012"
+}])
+icon = SubResource("Resource_4uq5j")
+notes = "Visual name Wizard's Hat; Pointy wizard hat — covers face
+Icon: Shares an existing icon for the native equipment slot."

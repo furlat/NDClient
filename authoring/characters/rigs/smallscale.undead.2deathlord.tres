@@ -1,0 +1,1295 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_6e47h"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_8ktb7"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_oaatt"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_x28hw"]
+
+[sub_resource type="Resource" id="Resource_tngmr"]
+script = ExtResource("2_8ktb7")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/2deathlord/180turn/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/2deathlord/180turn/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/2deathlord/180turn/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/2deathlord/180turn/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/2deathlord/180turn/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/2deathlord/180turn/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.989022221407356
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_ithva"]
+script = ExtResource("1_6e47h")
+name = "180Turn"
+role = "turn"
+source_clip = "180Turn"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead2Deathlord": "/rigs/undead_2deathlord/body/180Turn.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/2deathlord/180turn/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/2DeathLord/180Turn.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/2DeathLord/180Turn.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_tngmr")
+
+[sub_resource type="Resource" id="Resource_5jufb"]
+script = ExtResource("2_8ktb7")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/2deathlord/attack1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/2deathlord/attack1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/2deathlord/attack1/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/2deathlord/attack1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/2deathlord/attack1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/2deathlord/attack1/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9794803302574066
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_fkdrb"]
+script = ExtResource("1_6e47h")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Attack1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead2Deathlord": "/rigs/undead_2deathlord/body/Attack1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/2deathlord/attack1/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/2DeathLord/Attack1.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/2DeathLord/Attack1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_5jufb")
+
+[sub_resource type="Resource" id="Resource_5ucs3"]
+script = ExtResource("2_8ktb7")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/2deathlord/attack2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/2deathlord/attack2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/2deathlord/attack2/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/2deathlord/attack2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/2deathlord/attack2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/2deathlord/attack2/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9860493689806462
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_xt248"]
+script = ExtResource("1_6e47h")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Attack2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead2Deathlord": "/rigs/undead_2deathlord/body/Attack2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/2deathlord/attack2/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/2DeathLord/Attack2.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/2DeathLord/Attack2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_5ucs3")
+
+[sub_resource type="Resource" id="Resource_o3vg6"]
+script = ExtResource("2_8ktb7")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/2deathlord/attack3/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/2deathlord/attack3/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/2deathlord/attack3/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/2deathlord/attack3/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/2deathlord/attack3/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/2deathlord/attack3/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.8607049569793104
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_21w0k"]
+script = ExtResource("1_6e47h")
+name = "Attack3"
+role = "attack_3"
+source_clip = "Attack3"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead2Deathlord": "/rigs/undead_2deathlord/body/Attack3.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/2deathlord/attack3/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/2DeathLord/Attack3.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/2DeathLord/Attack3.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_o3vg6")
+
+[sub_resource type="Resource" id="Resource_l6u3s"]
+script = ExtResource("2_8ktb7")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/2deathlord/attackrun/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/2deathlord/attackrun/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/2deathlord/attackrun/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/2deathlord/attackrun/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/2deathlord/attackrun/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/2deathlord/attackrun/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.8201432533970016
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_canhh"]
+script = ExtResource("1_6e47h")
+name = "AttackRun"
+role = "attack_run"
+source_clip = "AttackRun"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead2Deathlord": "/rigs/undead_2deathlord/body/AttackRun.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/2deathlord/attackrun/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/2DeathLord/AttackRun.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/2DeathLord/AttackRun.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_l6u3s")
+
+[sub_resource type="Resource" id="Resource_1x4q0"]
+script = ExtResource("2_8ktb7")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/2deathlord/blockmid/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/2deathlord/blockmid/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/2deathlord/blockmid/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/2deathlord/blockmid/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/2deathlord/blockmid/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/2deathlord/blockmid/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.984739339382055
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_68gsf"]
+script = ExtResource("1_6e47h")
+name = "Block"
+role = "block_hold"
+source_clip = "BlockMid"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead2Deathlord": "/rigs/undead_2deathlord/body/BlockMid.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/2deathlord/blockmid/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/2DeathLord/BlockMid.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_1x4q0")
+
+[sub_resource type="Resource" id="Resource_ltu4f"]
+script = ExtResource("2_8ktb7")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/2deathlord/blockstart/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/2deathlord/blockstart/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/2deathlord/blockstart/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/2deathlord/blockstart/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/2deathlord/blockstart/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/2deathlord/blockstart/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9853490693323568
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_mfhk8"]
+script = ExtResource("1_6e47h")
+name = "BlockStart"
+role = "block_start"
+source_clip = "BlockStart"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead2Deathlord": "/rigs/undead_2deathlord/body/BlockStart.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/2deathlord/blockstart/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/2DeathLord/BlockStart.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/2DeathLord/BlockStart.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_ltu4f")
+
+[sub_resource type="Resource" id="Resource_4sl47"]
+script = ExtResource("2_8ktb7")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/2deathlord/castspell/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/2deathlord/castspell/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/2deathlord/castspell/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/2deathlord/castspell/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/2deathlord/castspell/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/2deathlord/castspell/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.8155417555805979
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_fj8jc"]
+script = ExtResource("1_6e47h")
+name = "CastSpell"
+role = "cast"
+source_clip = "CastSpell"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead2Deathlord": "/rigs/undead_2deathlord/body/CastSpell.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/2deathlord/castspell/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/2DeathLord/CastSpell.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/2DeathLord/CastSpell.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_4sl47")
+
+[sub_resource type="Resource" id="Resource_7bvpn"]
+script = ExtResource("2_8ktb7")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/2deathlord/crouchidle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/2deathlord/crouchidle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/2deathlord/crouchidle/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/2deathlord/crouchidle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/2deathlord/crouchidle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/2deathlord/crouchidle/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9911600840281312
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_abybv"]
+script = ExtResource("1_6e47h")
+name = "Crouch"
+role = "crouch_idle"
+source_clip = "CrouchIdle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead2Deathlord": "/rigs/undead_2deathlord/body/CrouchIdle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/2deathlord/crouchidle/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/2DeathLord/CrouchIdle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_7bvpn")
+
+[sub_resource type="Resource" id="Resource_bimn3"]
+script = ExtResource("2_8ktb7")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/2deathlord/crouchrun/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/2deathlord/crouchrun/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/2deathlord/crouchrun/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/2deathlord/crouchrun/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/2deathlord/crouchrun/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/2deathlord/crouchrun/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9922939654999564
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_4tnpy"]
+script = ExtResource("1_6e47h")
+name = "CrouchWalk"
+role = "crouch_move"
+source_clip = "CrouchRun"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead2Deathlord": "/rigs/undead_2deathlord/body/CrouchRun.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/2deathlord/crouchrun/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/2DeathLord/CrouchRun.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/2DeathLord/CrouchRun.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_bimn3")
+
+[sub_resource type="Resource" id="Resource_wk5cy"]
+script = ExtResource("2_8ktb7")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/2deathlord/die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/2deathlord/die/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/2deathlord/die/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/2deathlord/die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/2deathlord/die/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/2deathlord/die/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9889834060045118
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_3e8rj"]
+script = ExtResource("1_6e47h")
+name = "Die"
+role = "die"
+source_clip = "Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead2Deathlord": "/rigs/undead_2deathlord/body/Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/2deathlord/die/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/2DeathLord/Die.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/2DeathLord/Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_wk5cy")
+
+[sub_resource type="Resource" id="Resource_cvjbj"]
+script = ExtResource("2_8ktb7")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/2deathlord/frontflip/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/2deathlord/frontflip/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/2deathlord/frontflip/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/2deathlord/frontflip/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/2deathlord/frontflip/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/2deathlord/frontflip/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.8505448593903729
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_grdlt"]
+script = ExtResource("1_6e47h")
+name = "BackFlip"
+role = "flip"
+source_clip = "FrontFlip"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead2Deathlord": "/rigs/undead_2deathlord/body/FrontFlip.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/2deathlord/frontflip/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/2DeathLord/FrontFlip.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/2DeathLord/FrontFlip.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_cvjbj")
+
+[sub_resource type="Resource" id="Resource_jfljv"]
+script = ExtResource("2_8ktb7")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/2deathlord/idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/2deathlord/idle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/2deathlord/idle/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/2deathlord/idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/2deathlord/idle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/2deathlord/idle/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9912343620920788
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_1qkyk"]
+script = ExtResource("1_6e47h")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead2Deathlord": "/rigs/undead_2deathlord/body/Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/2deathlord/idle/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/2DeathLord/Idle.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/2DeathLord/Idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_jfljv")
+
+[sub_resource type="Resource" id="Resource_87te1"]
+script = ExtResource("2_8ktb7")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/2deathlord/idle2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/2deathlord/idle2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/2deathlord/idle2/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/2deathlord/idle2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/2deathlord/idle2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/2deathlord/idle2/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9822363926212708
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_6f3w3"]
+script = ExtResource("1_6e47h")
+name = "Idle2"
+role = "idle_alt"
+source_clip = "Idle2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead2Deathlord": "/rigs/undead_2deathlord/body/Idle2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/2deathlord/idle2/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/2DeathLord/Idle2.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/2DeathLord/Idle2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_87te1")
+
+[sub_resource type="Resource" id="Resource_db1mb"]
+script = ExtResource("2_8ktb7")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/2deathlord/pummel/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/2deathlord/pummel/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/2deathlord/pummel/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/2deathlord/pummel/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/2deathlord/pummel/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/2deathlord/pummel/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.8257676557291496
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_hkn33"]
+script = ExtResource("1_6e47h")
+name = "Pummel"
+role = "pummel"
+source_clip = "Pummel"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead2Deathlord": "/rigs/undead_2deathlord/body/Pummel.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/2deathlord/pummel/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/2DeathLord/Pummel.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/2DeathLord/Pummel.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_db1mb")
+
+[sub_resource type="Resource" id="Resource_gp6eu"]
+script = ExtResource("2_8ktb7")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/2deathlord/quickshot/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/2deathlord/quickshot/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/2deathlord/quickshot/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/2deathlord/quickshot/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/2deathlord/quickshot/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/2deathlord/quickshot/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.8211480589475265
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_nhilq"]
+script = ExtResource("1_6e47h")
+name = "QuickShot"
+role = "shoot"
+source_clip = "QuickShot"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead2Deathlord": "/rigs/undead_2deathlord/body/QuickShot.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/2deathlord/quickshot/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/2DeathLord/QuickShot.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/2DeathLord/QuickShot.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_gp6eu")
+
+[sub_resource type="Resource" id="Resource_08gkp"]
+script = ExtResource("2_8ktb7")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/2deathlord/quickslide/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/2deathlord/quickslide/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/2deathlord/quickslide/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/2deathlord/quickslide/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/2deathlord/quickslide/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/2deathlord/quickslide/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.8543850411712911
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_xhs4w"]
+script = ExtResource("1_6e47h")
+name = "QuickSlide"
+role = "slide"
+source_clip = "QuickSlide"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead2Deathlord": "/rigs/undead_2deathlord/body/QuickSlide.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/2deathlord/quickslide/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/2DeathLord/QuickSlide.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/2DeathLord/QuickSlide.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_08gkp")
+
+[sub_resource type="Resource" id="Resource_hb3eo"]
+script = ExtResource("2_8ktb7")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/2deathlord/rolling/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/2deathlord/rolling/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/2deathlord/rolling/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/2deathlord/rolling/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/2deathlord/rolling/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/2deathlord/rolling/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.8564654198075656
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_gvyrh"]
+script = ExtResource("1_6e47h")
+name = "Rolling"
+role = "roll"
+source_clip = "Rolling"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead2Deathlord": "/rigs/undead_2deathlord/body/Rolling.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/2deathlord/rolling/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/2DeathLord/Rolling.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/2DeathLord/Rolling.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_hb3eo")
+
+[sub_resource type="Resource" id="Resource_pqw4c"]
+script = ExtResource("2_8ktb7")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/2deathlord/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/2deathlord/run/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/2deathlord/run/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/2deathlord/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/2deathlord/run/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/2deathlord/run/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9887799765735774
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_kjj8d"]
+script = ExtResource("1_6e47h")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead2Deathlord": "/rigs/undead_2deathlord/body/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/2deathlord/run/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/2DeathLord/Run.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/2DeathLord/Run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_pqw4c")
+
+[sub_resource type="Resource" id="Resource_x1cqi"]
+script = ExtResource("2_8ktb7")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/2deathlord/runbackwards/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/2deathlord/runbackwards/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/2deathlord/runbackwards/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/2deathlord/runbackwards/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/2deathlord/runbackwards/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/2deathlord/runbackwards/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9852119160334452
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_to6de"]
+script = ExtResource("1_6e47h")
+name = "RunBackwards"
+role = "run_back"
+source_clip = "RunBackwards"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead2Deathlord": "/rigs/undead_2deathlord/body/RunBackwards.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/2deathlord/runbackwards/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/2DeathLord/RunBackwards.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/2DeathLord/RunBackwards.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_x1cqi")
+
+[sub_resource type="Resource" id="Resource_i836j"]
+script = ExtResource("2_8ktb7")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/2deathlord/sittingchair/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/2deathlord/sittingchair/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/2deathlord/sittingchair/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/2deathlord/sittingchair/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/2deathlord/sittingchair/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/2deathlord/sittingchair/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.989622589156438
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_uyc3p"]
+script = ExtResource("1_6e47h")
+name = "SittingChair"
+role = "sit"
+source_clip = "SittingChair"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead2Deathlord": "/rigs/undead_2deathlord/body/SittingChair.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/2deathlord/sittingchair/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/2DeathLord/SittingChair.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/2DeathLord/SittingChair.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_i836j")
+
+[sub_resource type="Resource" id="Resource_tf2uy"]
+script = ExtResource("2_8ktb7")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/2deathlord/slide/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/2deathlord/slide/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/2deathlord/slide/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/2deathlord/slide/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/2deathlord/slide/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/2deathlord/slide/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9920609254510424
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_n5rmn"]
+script = ExtResource("1_6e47h")
+name = "Slide"
+role = "slide"
+source_clip = "Slide"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead2Deathlord": "/rigs/undead_2deathlord/body/Slide.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/2deathlord/slide/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/2DeathLord/Slide.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/2DeathLord/Slide.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_tf2uy")
+
+[sub_resource type="Resource" id="Resource_ubxw1"]
+script = ExtResource("2_8ktb7")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/2deathlord/slideend/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/2deathlord/slideend/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/2deathlord/slideend/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/2deathlord/slideend/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/2deathlord/slideend/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/2deathlord/slideend/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9920616433037814
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_2o62r"]
+script = ExtResource("1_6e47h")
+name = "SlideEnd"
+role = "slide_end"
+source_clip = "SlideEnd"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead2Deathlord": "/rigs/undead_2deathlord/body/SlideEnd.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/2deathlord/slideend/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/2DeathLord/SlideEnd.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/2DeathLord/SlideEnd.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_ubxw1")
+
+[sub_resource type="Resource" id="Resource_drmh2"]
+script = ExtResource("2_8ktb7")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/2deathlord/slidestart/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/2deathlord/slidestart/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/2deathlord/slidestart/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/2deathlord/slidestart/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/2deathlord/slidestart/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/2deathlord/slidestart/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9889072129155456
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_52hm2"]
+script = ExtResource("1_6e47h")
+name = "SlideStart"
+role = "slide_start"
+source_clip = "SlideStart"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead2Deathlord": "/rigs/undead_2deathlord/body/SlideStart.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/2deathlord/slidestart/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/2DeathLord/SlideStart.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/2DeathLord/SlideStart.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_drmh2")
+
+[sub_resource type="Resource" id="Resource_1sk8l"]
+script = ExtResource("2_8ktb7")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/2deathlord/special1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/2deathlord/special1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/2deathlord/special1/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/2deathlord/special1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/2deathlord/special1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/2deathlord/special1/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.8266951289370223
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_1tk12"]
+script = ExtResource("1_6e47h")
+name = "Special1"
+role = "special_1"
+source_clip = "Special1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead2Deathlord": "/rigs/undead_2deathlord/body/Special1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/2deathlord/special1/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/2DeathLord/Special1.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/2DeathLord/Special1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_1sk8l")
+
+[sub_resource type="Resource" id="Resource_l1wn4"]
+script = ExtResource("2_8ktb7")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/2deathlord/special2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/2deathlord/special2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/2deathlord/special2/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/2deathlord/special2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/2deathlord/special2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/2deathlord/special2/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.8288572836141128
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_sho1b"]
+script = ExtResource("1_6e47h")
+name = "Special2"
+role = "special_2"
+source_clip = "Special2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead2Deathlord": "/rigs/undead_2deathlord/body/Special2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/2deathlord/special2/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/2DeathLord/Special2.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/2DeathLord/Special2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_l1wn4")
+
+[sub_resource type="Resource" id="Resource_mixp7"]
+script = ExtResource("2_8ktb7")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/2deathlord/strafeleft/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/2deathlord/strafeleft/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/2deathlord/strafeleft/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/2deathlord/strafeleft/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/2deathlord/strafeleft/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/2deathlord/strafeleft/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9885487592144504
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_njlyg"]
+script = ExtResource("1_6e47h")
+name = "StrafeLeft"
+role = "strafe_left"
+source_clip = "StrafeLeft"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead2Deathlord": "/rigs/undead_2deathlord/body/StrafeLeft.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/2deathlord/strafeleft/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/2DeathLord/StrafeLeft.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/2DeathLord/StrafeLeft.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_mixp7")
+
+[sub_resource type="Resource" id="Resource_l27r8"]
+script = ExtResource("2_8ktb7")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/2deathlord/straferight/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/2deathlord/straferight/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/2deathlord/straferight/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/2deathlord/straferight/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/2deathlord/straferight/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/2deathlord/straferight/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.98072934253051
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_3vw0i"]
+script = ExtResource("1_6e47h")
+name = "StrafeRight"
+role = "strafe_right"
+source_clip = "StrafeRight"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead2Deathlord": "/rigs/undead_2deathlord/body/StrafeRight.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/2deathlord/straferight/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/2DeathLord/StrafeRight.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/2DeathLord/StrafeRight.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_l27r8")
+
+[sub_resource type="Resource" id="Resource_l21o0"]
+script = ExtResource("2_8ktb7")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/2deathlord/takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/2deathlord/takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/2deathlord/takedamage/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/2deathlord/takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/2deathlord/takedamage/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/2deathlord/takedamage/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9909545637642068
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_jnse6"]
+script = ExtResource("1_6e47h")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead2Deathlord": "/rigs/undead_2deathlord/body/TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/2deathlord/takedamage/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/2DeathLord/TakeDamage.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/2DeathLord/TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_l21o0")
+
+[sub_resource type="Resource" id="Resource_f7wei"]
+script = ExtResource("2_8ktb7")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/2deathlord/unsheath/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/2deathlord/unsheath/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/2deathlord/unsheath/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/2deathlord/unsheath/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/2deathlord/unsheath/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/2deathlord/unsheath/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9921654196861466
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_desld"]
+script = ExtResource("1_6e47h")
+name = "UnSheath"
+role = "unsheath"
+source_clip = "UnSheath"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead2Deathlord": "/rigs/undead_2deathlord/body/UnSheath.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/2deathlord/unsheath/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/2DeathLord/UnSheath.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/2DeathLord/UnSheath.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_f7wei")
+
+[sub_resource type="Resource" id="Resource_sc0yu"]
+script = ExtResource("2_8ktb7")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/2deathlord/walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/2deathlord/walk/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/2deathlord/walk/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/2deathlord/walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/2deathlord/walk/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/2deathlord/walk/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.987735776203255
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_c2gat"]
+script = ExtResource("1_6e47h")
+name = "Walk"
+role = "walk"
+source_clip = "Walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Undead2Deathlord": "/rigs/undead_2deathlord/body/Walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/2deathlord/walk/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/2DeathLord/Walk.png",
+"mask_material": "art/media/smallscale/authored/undead/Material masks/With shadow/2DeathLord/Walk.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_sc0yu")
+
+[resource]
+script = ExtResource("4_x28hw")
+id = "smallscale.undead.2deathlord"
+pack = "undead"
+variant = "2DeathLord"
+source = "smallscale-authored/undead"
+cell = Vector2i(192, 192)
+pivot = Vector2(96, 139)
+anchor = Vector2(96, 104)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("Undead2Deathlord")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_6e47h")]([SubResource("Resource_ithva"), SubResource("Resource_fkdrb"), SubResource("Resource_xt248"), SubResource("Resource_21w0k"), SubResource("Resource_canhh"), SubResource("Resource_68gsf"), SubResource("Resource_mfhk8"), SubResource("Resource_fj8jc"), SubResource("Resource_abybv"), SubResource("Resource_4tnpy"), SubResource("Resource_3e8rj"), SubResource("Resource_grdlt"), SubResource("Resource_1qkyk"), SubResource("Resource_6f3w3"), SubResource("Resource_hkn33"), SubResource("Resource_nhilq"), SubResource("Resource_xhs4w"), SubResource("Resource_gvyrh"), SubResource("Resource_kjj8d"), SubResource("Resource_to6de"), SubResource("Resource_uyc3p"), SubResource("Resource_n5rmn"), SubResource("Resource_2o62r"), SubResource("Resource_52hm2"), SubResource("Resource_1tk12"), SubResource("Resource_sho1b"), SubResource("Resource_njlyg"), SubResource("Resource_3vw0i"), SubResource("Resource_jnse6"), SubResource("Resource_desld"), SubResource("Resource_c2gat")])
+hold_clips = PackedStringArray("Die")
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed."

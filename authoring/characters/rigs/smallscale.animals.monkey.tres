@@ -1,0 +1,426 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_y7ckq"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_2tjrr"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_180op"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_xnqtj"]
+
+[sub_resource type="Resource" id="Resource_0l0ob"]
+script = ExtResource("2_2tjrr")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/monkey/attack1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/monkey/attack1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/monkey/attack1/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/monkey/attack1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/monkey/attack1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/monkey/attack1/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 9.899494936611665
+coverage = 0.9705535924617196
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_bx5gm"]
+script = ExtResource("1_y7ckq")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Attack1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsMonkey": "/rigs/animals_monkey/body/Attack1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/monkey/attack1/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Monkey/Attack1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_0l0ob")
+
+[sub_resource type="Resource" id="Resource_hcgo8"]
+script = ExtResource("2_2tjrr")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/monkey/attack2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/monkey/attack2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/monkey/attack2/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/monkey/attack2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/monkey/attack2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/monkey/attack2/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 9.899494936611665
+coverage = 0.9830238303977046
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_7312j"]
+script = ExtResource("1_y7ckq")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Attack2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsMonkey": "/rigs/animals_monkey/body/Attack2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/monkey/attack2/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Monkey/Attack2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_hcgo8")
+
+[sub_resource type="Resource" id="Resource_tdfub"]
+script = ExtResource("2_2tjrr")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/monkey/attack3/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/monkey/attack3/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/monkey/attack3/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/monkey/attack3/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/monkey/attack3/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/monkey/attack3/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 9.899494936611665
+coverage = 0.978168130489335
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_4hwum"]
+script = ExtResource("1_y7ckq")
+name = "Attack3"
+role = "attack_3"
+source_clip = "Attack3"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsMonkey": "/rigs/animals_monkey/body/Attack3.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/monkey/attack3/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Monkey/Attack3.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_tdfub")
+
+[sub_resource type="Resource" id="Resource_3x18j"]
+script = ExtResource("2_2tjrr")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/monkey/attack4/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/monkey/attack4/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/monkey/attack4/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/monkey/attack4/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/monkey/attack4/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/monkey/attack4/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 9.899494936611665
+coverage = 0.958468459043833
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_1c1ic"]
+script = ExtResource("1_y7ckq")
+name = "Attack4"
+role = "attack_4"
+source_clip = "Attack4"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsMonkey": "/rigs/animals_monkey/body/Attack4.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/monkey/attack4/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Monkey/Attack4.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_3x18j")
+
+[sub_resource type="Resource" id="Resource_e8nxs"]
+script = ExtResource("2_2tjrr")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/monkey/die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/monkey/die/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/monkey/die/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/monkey/die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/monkey/die/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/monkey/die/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 9.899494936611665
+coverage = 0.971447325237939
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_c4433"]
+script = ExtResource("1_y7ckq")
+name = "Die"
+role = "die"
+source_clip = "Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsMonkey": "/rigs/animals_monkey/body/Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/monkey/die/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Monkey/Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_e8nxs")
+
+[sub_resource type="Resource" id="Resource_kkye8"]
+script = ExtResource("2_2tjrr")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/monkey/idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/monkey/idle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/monkey/idle/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/monkey/idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/monkey/idle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/monkey/idle/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 9.899494936611665
+coverage = 0.9694590713259932
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_4s505"]
+script = ExtResource("1_y7ckq")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsMonkey": "/rigs/animals_monkey/body/Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/monkey/idle/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Monkey/Idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_kkye8")
+
+[sub_resource type="Resource" id="Resource_2rly2"]
+script = ExtResource("2_2tjrr")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/monkey/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/monkey/run/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/monkey/run/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/monkey/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/monkey/run/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/monkey/run/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 9.899494936611665
+coverage = 0.968686379059622
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_0aekd"]
+script = ExtResource("1_y7ckq")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsMonkey": "/rigs/animals_monkey/body/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/monkey/run/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Monkey/Run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_2rly2")
+
+[sub_resource type="Resource" id="Resource_krlpv"]
+script = ExtResource("2_2tjrr")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/monkey/takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/monkey/takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/monkey/takedamage/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/monkey/takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/monkey/takedamage/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/monkey/takedamage/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 9.899494936611665
+coverage = 0.9777403666292556
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_5xstl"]
+script = ExtResource("1_y7ckq")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsMonkey": "/rigs/animals_monkey/body/TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/monkey/takedamage/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Monkey/TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_krlpv")
+
+[sub_resource type="Resource" id="Resource_6kvm7"]
+script = ExtResource("2_2tjrr")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/monkey/taunt/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/monkey/taunt/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/monkey/taunt/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/monkey/taunt/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/monkey/taunt/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/monkey/taunt/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 9.899494936611665
+coverage = 0.9756451145259496
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_4eii6"]
+script = ExtResource("1_y7ckq")
+name = "Taunt"
+role = "taunt"
+source_clip = "Taunt"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsMonkey": "/rigs/animals_monkey/body/Taunt.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/monkey/taunt/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Monkey/Taunt.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_6kvm7")
+
+[sub_resource type="Resource" id="Resource_sfpgp"]
+script = ExtResource("2_2tjrr")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/monkey/walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/monkey/walk/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/monkey/walk/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/monkey/walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/monkey/walk/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/monkey/walk/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 9.899494936611665
+coverage = 0.97587029089175
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_faquq"]
+script = ExtResource("1_y7ckq")
+name = "Walk"
+role = "walk"
+source_clip = "Walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsMonkey": "/rigs/animals_monkey/body/Walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/monkey/walk/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Monkey/Walk.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_sfpgp")
+
+[resource]
+script = ExtResource("4_xnqtj")
+id = "smallscale.animals.monkey"
+pack = "animals"
+variant = "Monkey"
+source = "smallscale-authored/animals"
+cell = Vector2i(64, 64)
+pivot = Vector2(32, 41)
+anchor = Vector2(32, 35)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("AnimalsMonkey")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_y7ckq")]([SubResource("Resource_bx5gm"), SubResource("Resource_7312j"), SubResource("Resource_4hwum"), SubResource("Resource_1c1ic"), SubResource("Resource_c4433"), SubResource("Resource_4s505"), SubResource("Resource_0aekd"), SubResource("Resource_5xstl"), SubResource("Resource_4eii6"), SubResource("Resource_faquq")])
+hold_clips = PackedStringArray("Die")
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed."

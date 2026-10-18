@@ -1,0 +1,154 @@
+[gd_resource type="Resource" script_class="PresentationPart" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/art_source.gd" id="1_ad1x4"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_cned7"]
+[ext_resource type="Script" path="res://presentation/source/characters/part.gd" id="3_pn52i"]
+
+[sub_resource type="Resource" id="Resource_k22r8"]
+script = ExtResource("2_cned7")
+status = "excluded_non_solid"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array()
+coverage = 0.0
+failed_frames = PackedInt32Array()
+source = "modular-character-geometry-2026-10-11"
+
+[sub_resource type="Resource" id="Resource_i3fig"]
+script = ExtResource("1_ad1x4")
+path = "art/media/smallscale/modular/GunFire3/Attack6.png"
+files = PackedStringArray()
+cell = Vector2i(128, 128)
+frames = 15
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+pivot = Vector2(64, 87)
+anchor = Vector2(64, 60)
+camera_elevation_degrees = 45.0
+surface = SubResource("Resource_k22r8")
+source = "smallscale-modular/fantasy-v1.3"
+
+[sub_resource type="Resource" id="Resource_mfb2k"]
+script = ExtResource("2_cned7")
+status = "excluded_non_solid"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array()
+coverage = 0.0
+failed_frames = PackedInt32Array()
+source = "modular-character-geometry-2026-10-11"
+
+[sub_resource type="Resource" id="Resource_2gdss"]
+script = ExtResource("1_ad1x4")
+path = "art/media/smallscale/modular/GunFire3/Kick.png"
+files = PackedStringArray()
+cell = Vector2i(128, 128)
+frames = 15
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+pivot = Vector2(64, 87)
+anchor = Vector2(64, 60)
+camera_elevation_degrees = 45.0
+surface = SubResource("Resource_mfb2k")
+source = "smallscale-modular/fantasy-v1.3"
+
+[sub_resource type="Resource" id="Resource_brlf3"]
+script = ExtResource("2_cned7")
+status = "excluded_non_solid"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array()
+coverage = 0.0
+failed_frames = PackedInt32Array()
+source = "modular-character-geometry-2026-10-11"
+
+[sub_resource type="Resource" id="Resource_a0q4y"]
+script = ExtResource("1_ad1x4")
+path = "art/media/smallscale/modular/GunFire3/RideIdleAttack1.png"
+files = PackedStringArray()
+cell = Vector2i(128, 128)
+frames = 15
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+pivot = Vector2(64, 87)
+anchor = Vector2(64, 60)
+camera_elevation_degrees = 45.0
+surface = SubResource("Resource_brlf3")
+source = "smallscale-modular/fantasy-v1.3"
+
+[sub_resource type="Resource" id="Resource_dn2g7"]
+script = ExtResource("2_cned7")
+status = "excluded_non_solid"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array()
+coverage = 0.0
+failed_frames = PackedInt32Array()
+source = "modular-character-geometry-2026-10-11"
+
+[sub_resource type="Resource" id="Resource_pve8q"]
+script = ExtResource("1_ad1x4")
+path = "art/media/smallscale/modular/GunFire3/RideRunAttack1.png"
+files = PackedStringArray()
+cell = Vector2i(128, 128)
+frames = 15
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+pivot = Vector2(64, 87)
+anchor = Vector2(64, 60)
+camera_elevation_degrees = 45.0
+surface = SubResource("Resource_dn2g7")
+source = "smallscale-modular/fantasy-v1.3"
+
+[sub_resource type="Resource" id="Resource_5sjx8"]
+script = ExtResource("2_cned7")
+status = "excluded_non_solid"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array()
+coverage = 0.0
+failed_frames = PackedInt32Array()
+source = "modular-character-geometry-2026-10-11"
+
+[sub_resource type="Resource" id="Resource_5v2ce"]
+script = ExtResource("1_ad1x4")
+path = "art/media/smallscale/modular/GunFire3/Rolling.png"
+files = PackedStringArray()
+cell = Vector2i(128, 128)
+frames = 15
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+pivot = Vector2(64, 87)
+anchor = Vector2(64, 60)
+camera_elevation_degrees = 45.0
+surface = SubResource("Resource_5sjx8")
+source = "smallscale-modular/fantasy-v1.3"
+
+[sub_resource type="Resource" id="Resource_2hbwg"]
+script = ExtResource("2_cned7")
+status = "excluded_non_solid"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array()
+coverage = 0.0
+failed_frames = PackedInt32Array()
+source = "modular-character-geometry-2026-10-11"
+
+[sub_resource type="Resource" id="Resource_i6pw5"]
+script = ExtResource("1_ad1x4")
+path = "art/media/smallscale/modular/GunFire3/Slide.png"
+files = PackedStringArray()
+cell = Vector2i(128, 128)
+frames = 15
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+pivot = Vector2(64, 87)
+anchor = Vector2(64, 60)
+camera_elevation_degrees = 45.0
+surface = SubResource("Resource_2hbwg")
+source = "smallscale-modular/fantasy-v1.3"
+
+[resource]
+script = ExtResource("3_pn52i")
+id = "GunFire3"
+family = "GunFire"
+slots = PackedStringArray()
+actions = Dictionary[String, ExtResource("1_ad1x4")]({
+"Attack6": SubResource("Resource_i3fig"),
+"Kick": SubResource("Resource_2gdss"),
+"RideIdleAttack1": SubResource("Resource_a0q4y"),
+"RideRunAttack1": SubResource("Resource_pve8q"),
+"Rolling": SubResource("Resource_5v2ce"),
+"Slide": SubResource("Resource_i6pw5")
+})
+status = "partial"
+notes = "Effect or shadow layer: drawn flat, no depth or normals by design.
+No rig slot accepts this part."

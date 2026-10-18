@@ -1,0 +1,116 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_brqr5"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_evyjw"]
+
+[sub_resource type="Resource" id="Resource_3elxj"]
+script = ExtResource("1_brqr5")
+path = "art/media/ui/icons/smooth48/item.gauntlets.png"
+native_size = Vector2i(48, 48)
+reuses = "item.gauntlets"
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_evyjw")
+id = "apparel.leather_gloves"
+kind = "armor"
+slots = Dictionary[String, Dictionary]({
+"gauntlets": {
+"layers": [{
+"part": "Hands1",
+"slot": "hands",
+"tint": "#5c2a0e"
+}],
+"variants": {
+"g0000004": [{
+"part": "Hands1",
+"slot": "hands",
+"tint": "#222233"
+}],
+"g0000005": [{
+"part": "Hands1",
+"slot": "hands",
+"tint": "#8b4513"
+}],
+"g0000006": [{
+"part": "Hands1",
+"slot": "hands",
+"tint": "#aa3333"
+}],
+"roster.ee40b139ab96": [{
+"part": "Hands1",
+"slot": "hands",
+"tint": "#ad8a36"
+}]
+}
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Hands1",
+"pivots_by_camera": [[64.5, 66.5], [62.5, 65.0], [65.5, 64.0], [68.0, 66.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#5c2a0e",
+"variant": ""
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Hands1",
+"pivots_by_camera": [[64.5, 66.5], [62.5, 65.0], [65.5, 64.0], [68.0, 66.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#222233",
+"variant": "g0000004"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Hands1",
+"pivots_by_camera": [[64.5, 66.5], [62.5, 65.0], [65.5, 64.0], [68.0, 66.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#8b4513",
+"variant": "g0000005"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Hands1",
+"pivots_by_camera": [[64.5, 66.5], [62.5, 65.0], [65.5, 64.0], [68.0, 66.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#aa3333",
+"variant": "g0000006"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Hands1",
+"pivots_by_camera": [[64.5, 66.5], [62.5, 65.0], [65.5, 64.0], [68.0, 66.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#ad8a36",
+"variant": "roster.ee40b139ab96"
+}])
+icon = SubResource("Resource_3elxj")
+notes = "Visual name Leather Gloves; Standard leather gloves — light/medium armor tier
+Icon: Shares an existing icon for the native equipment slot."

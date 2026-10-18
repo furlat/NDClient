@@ -1,0 +1,426 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_wtvs0"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_5k67i"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_hqkcj"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_pp4kk"]
+
+[sub_resource type="Resource" id="Resource_8mlnf"]
+script = ExtResource("2_5k67i")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/brown-horse/attack1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/brown-horse/attack1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/brown-horse/attack1/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/brown-horse/attack1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/brown-horse/attack1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/brown-horse/attack1/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.9713172073827812
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_mel8x"]
+script = ExtResource("1_wtvs0")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Attack1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsBrownHorse": "/rigs/animals_brown_horse/body/Attack1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/brown-horse/attack1/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Brown Horse/Attack1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_8mlnf")
+
+[sub_resource type="Resource" id="Resource_qhaiv"]
+script = ExtResource("2_5k67i")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/brown-horse/attack2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/brown-horse/attack2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/brown-horse/attack2/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/brown-horse/attack2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/brown-horse/attack2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/brown-horse/attack2/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.9631764924679188
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_dxfvx"]
+script = ExtResource("1_wtvs0")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Attack2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsBrownHorse": "/rigs/animals_brown_horse/body/Attack2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/brown-horse/attack2/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Brown Horse/Attack2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_qhaiv")
+
+[sub_resource type="Resource" id="Resource_dfc52"]
+script = ExtResource("2_5k67i")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/brown-horse/attack3/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/brown-horse/attack3/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/brown-horse/attack3/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/brown-horse/attack3/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/brown-horse/attack3/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/brown-horse/attack3/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.9633017163504968
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_858o3"]
+script = ExtResource("1_wtvs0")
+name = "Attack3"
+role = "attack_3"
+source_clip = "Attack3"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsBrownHorse": "/rigs/animals_brown_horse/body/Attack3.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/brown-horse/attack3/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Brown Horse/Attack3.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_dfc52")
+
+[sub_resource type="Resource" id="Resource_iqf7o"]
+script = ExtResource("2_5k67i")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/brown-horse/die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/brown-horse/die/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/brown-horse/die/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/brown-horse/die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/brown-horse/die/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/brown-horse/die/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.9702258256607575
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_w0u7y"]
+script = ExtResource("1_wtvs0")
+name = "Die"
+role = "die"
+source_clip = "Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsBrownHorse": "/rigs/animals_brown_horse/body/Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/brown-horse/die/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Brown Horse/Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_iqf7o")
+
+[sub_resource type="Resource" id="Resource_s5uxs"]
+script = ExtResource("2_5k67i")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/brown-horse/idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/brown-horse/idle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/brown-horse/idle/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/brown-horse/idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/brown-horse/idle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/brown-horse/idle/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.957162103532528
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_3xuby"]
+script = ExtResource("1_wtvs0")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsBrownHorse": "/rigs/animals_brown_horse/body/Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/brown-horse/idle/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Brown Horse/Idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_s5uxs")
+
+[sub_resource type="Resource" id="Resource_cn50d"]
+script = ExtResource("2_5k67i")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/brown-horse/idle2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/brown-horse/idle2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/brown-horse/idle2/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/brown-horse/idle2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/brown-horse/idle2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/brown-horse/idle2/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.982246879334258
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_61o6s"]
+script = ExtResource("1_wtvs0")
+name = "Idle2"
+role = "idle_alt"
+source_clip = "Idle2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsBrownHorse": "/rigs/animals_brown_horse/body/Idle2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/brown-horse/idle2/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Brown Horse/Idle2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_cn50d")
+
+[sub_resource type="Resource" id="Resource_7r3y4"]
+script = ExtResource("2_5k67i")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/brown-horse/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/brown-horse/run/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/brown-horse/run/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/brown-horse/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/brown-horse/run/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/brown-horse/run/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.9695454844438598
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_l4bj2"]
+script = ExtResource("1_wtvs0")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsBrownHorse": "/rigs/animals_brown_horse/body/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/brown-horse/run/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Brown Horse/Run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_7r3y4")
+
+[sub_resource type="Resource" id="Resource_otsc4"]
+script = ExtResource("2_5k67i")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/brown-horse/takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/brown-horse/takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/brown-horse/takedamage/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/brown-horse/takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/brown-horse/takedamage/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/brown-horse/takedamage/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.9602987870342874
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_k5nbd"]
+script = ExtResource("1_wtvs0")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsBrownHorse": "/rigs/animals_brown_horse/body/TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/brown-horse/takedamage/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Brown Horse/TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_otsc4")
+
+[sub_resource type="Resource" id="Resource_p43on"]
+script = ExtResource("2_5k67i")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/brown-horse/taunt/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/brown-horse/taunt/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/brown-horse/taunt/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/brown-horse/taunt/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/brown-horse/taunt/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/brown-horse/taunt/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.9507289611701872
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_rh241"]
+script = ExtResource("1_wtvs0")
+name = "Taunt"
+role = "taunt"
+source_clip = "Taunt"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsBrownHorse": "/rigs/animals_brown_horse/body/Taunt.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/brown-horse/taunt/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Brown Horse/Taunt.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_p43on")
+
+[sub_resource type="Resource" id="Resource_1hkvy"]
+script = ExtResource("2_5k67i")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/brown-horse/walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/brown-horse/walk/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/brown-horse/walk/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/brown-horse/walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/brown-horse/walk/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/brown-horse/walk/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.9673377768615864
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_5a36c"]
+script = ExtResource("1_wtvs0")
+name = "Walk"
+role = "walk"
+source_clip = "Walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsBrownHorse": "/rigs/animals_brown_horse/body/Walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/brown-horse/walk/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Brown Horse/Walk.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_1hkvy")
+
+[resource]
+script = ExtResource("4_pp4kk")
+id = "smallscale.animals.brown-horse"
+pack = "animals"
+variant = "Brown Horse"
+source = "smallscale-authored/animals"
+cell = Vector2i(96, 96)
+pivot = Vector2(48, 66)
+anchor = Vector2(48, 51)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("AnimalsBrownHorse")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_wtvs0")]([SubResource("Resource_mel8x"), SubResource("Resource_dxfvx"), SubResource("Resource_858o3"), SubResource("Resource_w0u7y"), SubResource("Resource_3xuby"), SubResource("Resource_61o6s"), SubResource("Resource_l4bj2"), SubResource("Resource_k5nbd"), SubResource("Resource_rh241"), SubResource("Resource_5a36c")])
+hold_clips = PackedStringArray("Die")
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed."

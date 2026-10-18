@@ -1,0 +1,43 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="1_omu4q"]
+
+[resource]
+script = ExtResource("1_omu4q")
+id = "tool.crowbar"
+kind = "weapon"
+slots = Dictionary[String, Dictionary]({
+"weapon_melee_main": {
+"layers": [{
+"part": "Melee10",
+"slot": "weapon",
+"tint": "#8899aa"
+}],
+"variants": {}
+}
+})
+hands = Dictionary[String, Dictionary]({
+"weapon_melee_off": {
+"": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#8899aa"
+}]
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee10",
+"pivots_by_camera": [[55.0, 65.5], [66.5, 57.5], [75.0, 65.0], [64.0, 73.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#8899aa",
+"variant": ""
+}])
+status = "partial"
+notes = "Visual name Crowbar; Existing vendor silhouette approximation; does not promise exact wand length, crowbar hook, banner flag, firearm or canister geometry."

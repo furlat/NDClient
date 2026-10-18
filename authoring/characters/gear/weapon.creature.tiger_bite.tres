@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_gwrrm"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_lrug3"]
+
+[sub_resource type="Resource" id="Resource_vvyac"]
+script = ExtResource("1_gwrrm")
+path = "art/media/ui/icons/smooth48/item.bite.png"
+native_size = Vector2i(48, 48)
+reuses = "item.bite"
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_lrug3")
+id = "weapon.creature.tiger_bite"
+kind = "weapon"
+icon = SubResource("Resource_vvyac")
+natural = true
+status = "internal"
+notes = "Natural or summoned: drawn by the creature's own body.
+Icon: Shares the existing natural attack-family icon."

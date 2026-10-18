@@ -1,0 +1,78 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_x518h"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_0gu6w"]
+
+[sub_resource type="Resource" id="Resource_4qt7h"]
+script = ExtResource("1_x518h")
+path = "art/media/ui/icons/smooth48/item.double-bladed-sword.png"
+native_size = Vector2i(48, 48)
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_0gu6w")
+id = "weapon.double_bladed_sword"
+kind = "weapon"
+slots = Dictionary[String, Dictionary]({
+"weapon_melee_main": {
+"layers": [{
+"part": "Melee6",
+"slot": "weapon",
+"tint": "#8899aa"
+}],
+"variants": {
+"30000004": [{
+"part": "Melee6",
+"slot": "weapon",
+"tint": "#334455"
+}],
+"30000005": [{
+"part": "Melee6",
+"slot": "weapon",
+"tint": "#cc4422"
+}]
+}
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee6",
+"pivots_by_camera": [[55.5, 67.5], [64.0, 58.0], [74.5, 62.0], [67.0, 71.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#8899aa",
+"variant": ""
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee6",
+"pivots_by_camera": [[55.5, 67.5], [64.0, 58.0], [74.5, 62.0], [67.0, 71.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#334455",
+"variant": "30000004"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee6",
+"pivots_by_camera": [[55.5, 67.5], [64.0, 58.0], [74.5, 62.0], [67.0, 71.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#cc4422",
+"variant": "30000005"
+}])
+icon = SubResource("Resource_4qt7h")
+notes = "Visual name Double-Bladed Sword; Two-bladed sword sprite — exotic/Eberron weapon"

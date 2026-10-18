@@ -1,0 +1,43 @@
+[gd_resource type="Resource" script_class="PresentationCharacter" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/character.gd" id="1_qiqf6"]
+
+[resource]
+script = ExtResource("1_qiqf6")
+id = "creature.goblin_ironhide"
+identity = "content.neurodragon:creature:creature.goblin_ironhide@1"
+rig = "smallscale.goblin06"
+portrait = "creature.goblin_ironhide"
+size = "Small"
+attacks = Array[Dictionary]([{
+"clip": "Attack1",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.attack",
+"variant": "goblin06-physical"
+}, {
+"clip": "Attack1",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "goblin06-physical"
+}, {
+"clip": "Attack1",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.feature.extra_attack",
+"variant": "goblin06-physical"
+}, {
+"clip": "Attack1",
+"contact": 6,
+"delivery": "melee",
+"recipe": "reaction.opportunity_attack",
+"variant": "goblin06-physical"
+}])
+reactions = Dictionary[String, String]({
+"block": "Block"
+})
+death = Dictionary[String, String]({
+"default": "Death"
+})
+notes = "Roster: Ironhide, Y128, kit Shortsword+shield; NE; Prot."

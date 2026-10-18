@@ -1,0 +1,104 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_q8q3h"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_iysfa"]
+
+[sub_resource type="Resource" id="Resource_f4snw"]
+script = ExtResource("1_q8q3h")
+path = "art/media/ui/icons/smooth48/item.leather-armor.png"
+native_size = Vector2i(48, 48)
+reuses = "item.leather-armor"
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_iysfa")
+id = "armor.splint"
+kind = "armor"
+slots = Dictionary[String, Dictionary]({
+"body_armor": {
+"layers": [{
+"part": "Belt2",
+"slot": "belt",
+"tint": "#5c2a0e"
+}, {
+"part": "Chest5",
+"slot": "chest",
+"tint": "#556677"
+}, {
+"part": "Legs7",
+"slot": "legs",
+"tint": "#556677"
+}],
+"variants": {
+"70000005": [{
+"part": "Belt2",
+"slot": "belt",
+"tint": "#5c2a0e"
+}, {
+"part": "Chest5",
+"slot": "chest",
+"tint": "#778899"
+}, {
+"part": "Legs7",
+"slot": "legs",
+"tint": "#778899"
+}],
+"70000006": [{
+"part": "Belt2",
+"slot": "belt",
+"tint": "#ccaa44"
+}, {
+"part": "Chest5",
+"slot": "chest",
+"tint": "#ccaa44"
+}, {
+"part": "Legs7",
+"slot": "legs",
+"tint": "#ccaa44"
+}]
+}
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs7",
+"pivots_by_camera": [[65.0, 71.5], [63.5, 67.5], [65.5, 69.5], [66.5, 68.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#556677",
+"variant": ""
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs7",
+"pivots_by_camera": [[65.0, 71.5], [63.5, 67.5], [65.5, 69.5], [66.5, 68.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#778899",
+"variant": "70000005"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs7",
+"pivots_by_camera": [[65.0, 71.5], [63.5, 67.5], [65.5, 69.5], [66.5, 68.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#ccaa44",
+"variant": "70000006"
+}])
+icon = SubResource("Resource_f4snw")
+notes = "Visual name Splint Armor; Metal strips riveted to chain + drape belt
+Icon: Shares an existing icon for the native equipment slot."

@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_mautx"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_7o3dh"]
+
+[sub_resource type="Resource" id="Resource_1v2wg"]
+script = ExtResource("1_mautx")
+path = "art/media/ui/icons/smooth48/item.iron-helmet.png"
+native_size = Vector2i(48, 48)
+reuses = "item.iron-helmet"
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_7o3dh")
+id = "apparel.iron_helmet.steel"
+kind = "armor"
+family = "apparel.iron_helmet"
+visual_variant_id = "h0000008"
+icon = SubResource("Resource_1v2wg")
+notes = "Icon: Shares an existing icon for the native equipment slot."

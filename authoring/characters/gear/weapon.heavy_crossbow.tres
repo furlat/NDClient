@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_3l4ae"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_mswwl"]
+
+[sub_resource type="Resource" id="Resource_y5jyb"]
+script = ExtResource("1_3l4ae")
+path = "art/media/ui/icons/smooth48/item.heavy-crossbow.png"
+native_size = Vector2i(48, 48)
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_mswwl")
+id = "weapon.heavy_crossbow"
+kind = "weapon"
+slots = Dictionary[String, Dictionary]({
+"weapon_ranged_main": {
+"layers": [{
+"part": "Ranged3",
+"slot": "weapon",
+"tint": "#8b6914"
+}],
+"variants": {}
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Ranged3",
+"pivots_by_camera": [[58.0, 61.5], [67.5, 59.5], [72.5, 65.5], [62.0, 69.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#8b6914",
+"variant": ""
+}])
+icon = SubResource("Resource_y5jyb")
+notes = "Visual name Heavy Crossbow; Heavy crossbow silhouette"

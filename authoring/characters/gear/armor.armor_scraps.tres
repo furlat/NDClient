@@ -1,0 +1,286 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_i3dde"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_76swg"]
+
+[sub_resource type="Resource" id="Resource_hivvj"]
+script = ExtResource("1_i3dde")
+path = "art/media/ui/icons/smooth48/item.leather-armor.png"
+native_size = Vector2i(48, 48)
+reuses = "item.leather-armor"
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_76swg")
+id = "armor.armor_scraps"
+kind = "armor"
+slots = Dictionary[String, Dictionary]({
+"body_armor": {
+"layers": [{
+"part": "Belt1",
+"slot": "belt",
+"tint": "#6c5231"
+}, {
+"part": "Chest15",
+"slot": "chest",
+"tint": "#6c5231"
+}, {
+"part": "Legs9",
+"slot": "legs",
+"tint": "#6c5231"
+}],
+"variants": {
+"roster.0055f3081079": [{
+"part": "Legs3",
+"slot": "legs",
+"tint": "#5b286d"
+}, {
+"part": "Chest17",
+"slot": "chest",
+"tint": "#353436"
+}, {
+"part": "Belt1",
+"slot": "belt",
+"tint": "#654733"
+}],
+"roster.162aaff7464e": [{
+"part": "Legs3",
+"slot": "legs",
+"tint": "#344b73"
+}, {
+"part": "Chest17",
+"slot": "chest",
+"tint": "#654733"
+}, {
+"part": "Belt1",
+"slot": "belt",
+"tint": "#654733"
+}],
+"roster.5b5b6ba7ea35": [{
+"part": "Legs3",
+"slot": "legs",
+"tint": "#73767a"
+}, {
+"part": "Chest17",
+"slot": "chest",
+"tint": "#b7b6b2"
+}, {
+"part": "Belt1",
+"slot": "belt",
+"tint": "#654733"
+}],
+"roster.8ab959786f2a": [{
+"part": "Legs3",
+"slot": "legs",
+"tint": "#654733"
+}, {
+"part": "Chest17",
+"slot": "chest",
+"tint": "#b7b6b2"
+}, {
+"part": "Belt1",
+"slot": "belt",
+"tint": "#654733"
+}],
+"roster.a4aaa95f0362": [{
+"part": "Legs3",
+"slot": "legs",
+"tint": "#7c2434"
+}, {
+"part": "Chest17",
+"slot": "chest",
+"tint": "#654733"
+}, {
+"part": "Belt1",
+"slot": "belt",
+"tint": "#654733"
+}],
+"roster.d6b6c79a6d59": [{
+"part": "Legs3",
+"slot": "legs",
+"tint": "#73767a"
+}, {
+"part": "Chest17",
+"slot": "chest",
+"tint": "#353436"
+}, {
+"part": "Belt1",
+"slot": "belt",
+"tint": "#654733"
+}],
+"roster.d89b12d8d5cf": [{
+"part": "Legs3",
+"slot": "legs",
+"tint": "#7c2434"
+}, {
+"part": "Chest17",
+"slot": "chest",
+"tint": "#c6c3aa"
+}, {
+"part": "Belt1",
+"slot": "belt",
+"tint": "#654733"
+}],
+"roster.dbb702d53310": [{
+"part": "Legs3",
+"slot": "legs",
+"tint": "#7c2434"
+}, {
+"part": "Chest17",
+"slot": "chest",
+"tint": "#353436"
+}, {
+"part": "Belt1",
+"slot": "belt",
+"tint": "#654733"
+}],
+"roster.f8d0f71d39aa": [{
+"part": "Legs3",
+"slot": "legs",
+"tint": "#7c2434"
+}, {
+"part": "Chest17",
+"slot": "chest",
+"tint": "#b7b6b2"
+}, {
+"part": "Belt1",
+"slot": "belt",
+"tint": "#654733"
+}]
+}
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs9",
+"pivots_by_camera": [[65.0, 64.0], [64.5, 61.5], [65.5, 62.0], [66.5, 63.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#6c5231",
+"variant": ""
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest17",
+"pivots_by_camera": [[65.0, 70.0], [65.0, 67.0], [65.5, 69.5], [65.5, 66.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#654733",
+"variant": "roster.a4aaa95f0362"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest17",
+"pivots_by_camera": [[65.0, 70.0], [65.0, 67.0], [65.5, 69.5], [65.5, 66.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#b7b6b2",
+"variant": "roster.f8d0f71d39aa"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest17",
+"pivots_by_camera": [[65.0, 70.0], [65.0, 67.0], [65.5, 69.5], [65.5, 66.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#c6c3aa",
+"variant": "roster.d89b12d8d5cf"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest17",
+"pivots_by_camera": [[65.0, 70.0], [65.0, 67.0], [65.5, 69.5], [65.5, 66.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#353436",
+"variant": "roster.dbb702d53310"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest17",
+"pivots_by_camera": [[65.0, 70.0], [65.0, 67.0], [65.5, 69.5], [65.5, 66.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#b7b6b2",
+"variant": "roster.5b5b6ba7ea35"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest17",
+"pivots_by_camera": [[65.0, 70.0], [65.0, 67.0], [65.5, 69.5], [65.5, 66.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#353436",
+"variant": "roster.d6b6c79a6d59"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest17",
+"pivots_by_camera": [[65.0, 70.0], [65.0, 67.0], [65.5, 69.5], [65.5, 66.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#353436",
+"variant": "roster.0055f3081079"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest17",
+"pivots_by_camera": [[65.0, 70.0], [65.0, 67.0], [65.5, 69.5], [65.5, 66.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#b7b6b2",
+"variant": "roster.8ab959786f2a"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest17",
+"pivots_by_camera": [[65.0, 70.0], [65.0, 67.0], [65.5, 69.5], [65.5, 66.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#654733",
+"variant": "roster.162aaff7464e"
+}])
+icon = SubResource("Resource_hivvj")
+notes = "Visual name Armor Scraps; Goblin armor — tattered armored shirt + torn pants (Chest15 + Legs9)
+Icon: Shares an existing icon for the native equipment slot."

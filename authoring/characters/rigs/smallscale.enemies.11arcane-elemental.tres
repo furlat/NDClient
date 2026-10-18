@@ -1,0 +1,474 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_ygl1i"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_nj80x"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_hoc74"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_jowt3"]
+
+[sub_resource type="Resource" id="Resource_n0735"]
+script = ExtResource("2_nj80x")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/11arcane-elemental/attack1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/attack1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/attack1/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/attack1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/attack1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/attack1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.8798561731454058
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_5gabn"]
+script = ExtResource("1_ygl1i")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Attack1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies11ArcaneElemental": "/rigs/enemies_11arcane_elemental/body/Attack1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/attack1/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/11Arcane elemental/Attack1.png",
+"mask_material": "art/media/smallscale/authored/enemies/Material masks/With shadow/11Arcane elemental/Attack1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_n0735")
+
+[sub_resource type="Resource" id="Resource_j7rjt"]
+script = ExtResource("2_nj80x")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/11arcane-elemental/attack2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/attack2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/attack2/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/attack2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/attack2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/attack2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.9066165236808086
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_80ien"]
+script = ExtResource("1_ygl1i")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Attack2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies11ArcaneElemental": "/rigs/enemies_11arcane_elemental/body/Attack2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/attack2/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/11Arcane elemental/Attack2.png",
+"mask_material": "art/media/smallscale/authored/enemies/Material masks/With shadow/11Arcane elemental/Attack2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_j7rjt")
+
+[sub_resource type="Resource" id="Resource_j687t"]
+script = ExtResource("2_nj80x")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/11arcane-elemental/attack3/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/attack3/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/attack3/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/attack3/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/attack3/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/attack3/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.8797315838627481
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_k7anx"]
+script = ExtResource("1_ygl1i")
+name = "Attack3"
+role = "attack_3"
+source_clip = "Attack3"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies11ArcaneElemental": "/rigs/enemies_11arcane_elemental/body/Attack3.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/attack3/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/11Arcane elemental/Attack3.png",
+"mask_material": "art/media/smallscale/authored/enemies/Material masks/With shadow/11Arcane elemental/Attack3.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_j687t")
+
+[sub_resource type="Resource" id="Resource_feepo"]
+script = ExtResource("2_nj80x")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/11arcane-elemental/attack4/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/attack4/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/attack4/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/attack4/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/attack4/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/attack4/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.5884589682532213
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_yk0xd"]
+script = ExtResource("1_ygl1i")
+name = "Attack4"
+role = "attack_4"
+source_clip = "Attack4"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies11ArcaneElemental": "/rigs/enemies_11arcane_elemental/body/Attack4.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/attack4/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/11Arcane elemental/Attack4.png",
+"mask_material": "art/media/smallscale/authored/enemies/Material masks/With shadow/11Arcane elemental/Attack4.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_feepo")
+
+[sub_resource type="Resource" id="Resource_dn6tj"]
+script = ExtResource("2_nj80x")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/11arcane-elemental/die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/die/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/die/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/die/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/die/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.8906013544696425
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_d4h2h"]
+script = ExtResource("1_ygl1i")
+name = "Die"
+role = "die"
+source_clip = "Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies11ArcaneElemental": "/rigs/enemies_11arcane_elemental/body/Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/die/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/11Arcane elemental/Die.png",
+"mask_material": "art/media/smallscale/authored/enemies/Material masks/With shadow/11Arcane elemental/Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_dn6tj")
+
+[sub_resource type="Resource" id="Resource_soypb"]
+script = ExtResource("2_nj80x")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/11arcane-elemental/idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/idle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/idle/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/idle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/idle/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.886520246728779
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_y0op8"]
+script = ExtResource("1_ygl1i")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies11ArcaneElemental": "/rigs/enemies_11arcane_elemental/body/Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/idle/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/11Arcane elemental/Idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_soypb")
+
+[sub_resource type="Resource" id="Resource_pel0w"]
+script = ExtResource("2_nj80x")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/11arcane-elemental/idle2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/idle2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/idle2/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/idle2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/idle2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/idle2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.8902053206614322
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_igtek"]
+script = ExtResource("1_ygl1i")
+name = "Idle2"
+role = "idle_alt"
+source_clip = "Idle2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies11ArcaneElemental": "/rigs/enemies_11arcane_elemental/body/Idle2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/idle2/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/11Arcane elemental/Idle2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_pel0w")
+
+[sub_resource type="Resource" id="Resource_6ukp8"]
+script = ExtResource("2_nj80x")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/11arcane-elemental/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/run/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/run/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/run/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/run/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.9124917193811942
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_hu4oj"]
+script = ExtResource("1_ygl1i")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies11ArcaneElemental": "/rigs/enemies_11arcane_elemental/body/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/run/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/11Arcane elemental/Run.png",
+"mask_material": "art/media/smallscale/authored/enemies/Material masks/With shadow/11Arcane elemental/Run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_6ukp8")
+
+[sub_resource type="Resource" id="Resource_lghls"]
+script = ExtResource("2_nj80x")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/11arcane-elemental/takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/takedamage/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/takedamage/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/takedamage/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.9125988785421048
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_yxw4s"]
+script = ExtResource("1_ygl1i")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies11ArcaneElemental": "/rigs/enemies_11arcane_elemental/body/TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/takedamage/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/11Arcane elemental/TakeDamage.png",
+"mask_material": "art/media/smallscale/authored/enemies/Material masks/With shadow/11Arcane elemental/TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_lghls")
+
+[sub_resource type="Resource" id="Resource_wocdi"]
+script = ExtResource("2_nj80x")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/11arcane-elemental/taunt/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/taunt/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/taunt/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/taunt/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/taunt/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/taunt/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.8900590704181564
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_dqjyg"]
+script = ExtResource("1_ygl1i")
+name = "Taunt"
+role = "taunt"
+source_clip = "Taunt"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies11ArcaneElemental": "/rigs/enemies_11arcane_elemental/body/Taunt.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/taunt/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/11Arcane elemental/Taunt.png",
+"mask_material": "art/media/smallscale/authored/enemies/Material masks/With shadow/11Arcane elemental/Taunt.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_wocdi")
+
+[sub_resource type="Resource" id="Resource_12myg"]
+script = ExtResource("2_nj80x")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/11arcane-elemental/walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/walk/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/walk/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/walk/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/walk/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.8971831534655395
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_wcs7v"]
+script = ExtResource("1_ygl1i")
+name = "Walk"
+role = "walk"
+source_clip = "Walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies11ArcaneElemental": "/rigs/enemies_11arcane_elemental/body/Walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/11arcane-elemental/walk/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/11Arcane elemental/Walk.png",
+"mask_material": "art/media/smallscale/authored/enemies/Material masks/With shadow/11Arcane elemental/Walk.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_12myg")
+
+[resource]
+script = ExtResource("4_jowt3")
+id = "smallscale.enemies.11arcane-elemental"
+pack = "enemies"
+variant = "11Arcane elemental"
+source = "smallscale-authored/enemies"
+pivot = Vector2(64, 90)
+anchor = Vector2(64, 60)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("Enemies11ArcaneElemental")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_ygl1i")]([SubResource("Resource_5gabn"), SubResource("Resource_80ien"), SubResource("Resource_k7anx"), SubResource("Resource_yk0xd"), SubResource("Resource_d4h2h"), SubResource("Resource_y0op8"), SubResource("Resource_igtek"), SubResource("Resource_hu4oj"), SubResource("Resource_yxw4s"), SubResource("Resource_dqjyg"), SubResource("Resource_wcs7v")])
+hold_clips = PackedStringArray("Die")
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed."

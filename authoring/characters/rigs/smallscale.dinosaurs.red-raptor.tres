@@ -1,0 +1,586 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_hh5av"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_5te48"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_hte17"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_kn34a"]
+
+[sub_resource type="Resource" id="Resource_aejfd"]
+script = ExtResource("2_5te48")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-attack1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-attack1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-attack1/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-attack1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-attack1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-attack1/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 2.82842712474619
+coverage = 0.9830830871342426
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_bfixq"]
+script = ExtResource("1_hh5av")
+name = "RaptorAttack1"
+role = "raptorattack1"
+source_clip = "Raptor Attack1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursRedRaptor": "/rigs/dinosaurs_red_raptor/body/Raptor Attack1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-attack1/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/Red Raptor/Raptor Attack1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_aejfd")
+
+[sub_resource type="Resource" id="Resource_h0cj4"]
+script = ExtResource("2_5te48")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-attack2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-attack2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-attack2/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-attack2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-attack2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-attack2/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 2.82842712474619
+coverage = 0.9732428272623228
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_gnl5w"]
+script = ExtResource("1_hh5av")
+name = "RaptorAttack2"
+role = "raptorattack2"
+source_clip = "Raptor Attack2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursRedRaptor": "/rigs/dinosaurs_red_raptor/body/Raptor Attack2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-attack2/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/Red Raptor/Raptor Attack2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_h0cj4")
+
+[sub_resource type="Resource" id="Resource_c2pw8"]
+script = ExtResource("2_5te48")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-attack3/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-attack3/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-attack3/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-attack3/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-attack3/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-attack3/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 2.82842712474619
+coverage = 0.9791710945802338
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_lubq5"]
+script = ExtResource("1_hh5av")
+name = "RaptorAttack3"
+role = "raptorattack3"
+source_clip = "Raptor Attack3"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursRedRaptor": "/rigs/dinosaurs_red_raptor/body/Raptor Attack3.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-attack3/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/Red Raptor/Raptor Attack3.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_c2pw8")
+
+[sub_resource type="Resource" id="Resource_6ag4k"]
+script = ExtResource("2_5te48")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-attack4/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-attack4/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-attack4/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-attack4/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-attack4/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-attack4/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 2.82842712474619
+coverage = 0.9832465842550424
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_rfut5"]
+script = ExtResource("1_hh5av")
+name = "RaptorAttack4"
+role = "raptorattack4"
+source_clip = "Raptor Attack4"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursRedRaptor": "/rigs/dinosaurs_red_raptor/body/Raptor Attack4.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-attack4/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/Red Raptor/Raptor Attack4.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_6ag4k")
+
+[sub_resource type="Resource" id="Resource_xo20x"]
+script = ExtResource("2_5te48")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-die/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-die/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-die/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-die/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 2.82842712474619
+coverage = 0.975873375703356
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_l5mwj"]
+script = ExtResource("1_hh5av")
+name = "RaptorDie"
+role = "raptordie"
+source_clip = "Raptor Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursRedRaptor": "/rigs/dinosaurs_red_raptor/body/Raptor Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-die/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/Red Raptor/Raptor Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_xo20x")
+
+[sub_resource type="Resource" id="Resource_ywixd"]
+script = ExtResource("2_5te48")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-eating/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-eating/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-eating/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-eating/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-eating/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-eating/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 2.82842712474619
+coverage = 0.9866037985281804
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_s0bml"]
+script = ExtResource("1_hh5av")
+name = "RaptorEating"
+role = "raptoreating"
+source_clip = "Raptor Eating"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursRedRaptor": "/rigs/dinosaurs_red_raptor/body/Raptor Eating.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-eating/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/Red Raptor/Raptor Eating.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_ywixd")
+
+[sub_resource type="Resource" id="Resource_6nm0f"]
+script = ExtResource("2_5te48")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-idle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-idle/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-idle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-idle/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 2.82842712474619
+coverage = 0.9832459446174012
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_40d16"]
+script = ExtResource("1_hh5av")
+name = "RaptorIdle"
+role = "raptoridle"
+source_clip = "Raptor Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursRedRaptor": "/rigs/dinosaurs_red_raptor/body/Raptor Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-idle/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/Red Raptor/Raptor Idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_6nm0f")
+
+[sub_resource type="Resource" id="Resource_aa3iu"]
+script = ExtResource("2_5te48")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-idle-2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-idle-2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-idle-2/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-idle-2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-idle-2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-idle-2/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 2.82842712474619
+coverage = 0.977088948787062
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_64sh8"]
+script = ExtResource("1_hh5av")
+name = "RaptorIdle2"
+role = "raptoridle2"
+source_clip = "Raptor Idle 2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursRedRaptor": "/rigs/dinosaurs_red_raptor/body/Raptor Idle 2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-idle-2/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/Red Raptor/Raptor Idle 2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_aa3iu")
+
+[sub_resource type="Resource" id="Resource_gawdn"]
+script = ExtResource("2_5te48")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-run/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-run/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-run/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-run/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 2.82842712474619
+coverage = 0.9832965385096014
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_mfi0q"]
+script = ExtResource("1_hh5av")
+name = "Raptorrun"
+role = "raptorrun"
+source_clip = "Raptor run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursRedRaptor": "/rigs/dinosaurs_red_raptor/body/Raptor run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-run/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/Red Raptor/Raptor run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_gawdn")
+
+[sub_resource type="Resource" id="Resource_2fjjo"]
+script = ExtResource("2_5te48")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-shout/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-shout/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-shout/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-shout/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-shout/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-shout/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 2.82842712474619
+coverage = 0.9782608695652174
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_nkm6w"]
+script = ExtResource("1_hh5av")
+name = "RaptorShout"
+role = "raptorshout"
+source_clip = "Raptor Shout"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursRedRaptor": "/rigs/dinosaurs_red_raptor/body/Raptor Shout.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-shout/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/Red Raptor/Raptor Shout.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_2fjjo")
+
+[sub_resource type="Resource" id="Resource_enwgk"]
+script = ExtResource("2_5te48")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-shout2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-shout2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-shout2/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-shout2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-shout2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-shout2/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 2.82842712474619
+coverage = 0.9774143611320604
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_ycq4f"]
+script = ExtResource("1_hh5av")
+name = "RaptorShout2"
+role = "raptorshout2"
+source_clip = "Raptor Shout2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursRedRaptor": "/rigs/dinosaurs_red_raptor/body/Raptor Shout2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-shout2/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/Red Raptor/Raptor Shout2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_enwgk")
+
+[sub_resource type="Resource" id="Resource_0rhe4"]
+script = ExtResource("2_5te48")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-spit/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-spit/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-spit/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-spit/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-spit/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-spit/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 2.82842712474619
+coverage = 0.9804080310880828
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_g11wf"]
+script = ExtResource("1_hh5av")
+name = "RaptorSpit"
+role = "raptorspit"
+source_clip = "Raptor Spit"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursRedRaptor": "/rigs/dinosaurs_red_raptor/body/Raptor Spit.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-spit/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/Red Raptor/Raptor Spit.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_0rhe4")
+
+[sub_resource type="Resource" id="Resource_psjdl"]
+script = ExtResource("2_5te48")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-takedamage/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-takedamage/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-takedamage/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 2.82842712474619
+coverage = 0.9775916143941896
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_ldp40"]
+script = ExtResource("1_hh5av")
+name = "RaptorTakeDamage"
+role = "raptortakedamage"
+source_clip = "Raptor TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursRedRaptor": "/rigs/dinosaurs_red_raptor/body/Raptor TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-takedamage/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/Red Raptor/Raptor TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_psjdl")
+
+[sub_resource type="Resource" id="Resource_rc2gi"]
+script = ExtResource("2_5te48")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-walk/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-walk/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-walk/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-walk/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 2.82842712474619
+coverage = 0.980440097799511
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_dp037"]
+script = ExtResource("1_hh5av")
+name = "RaptorWalk"
+role = "raptorwalk"
+source_clip = "Raptor Walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursRedRaptor": "/rigs/dinosaurs_red_raptor/body/Raptor Walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/red-raptor/raptor-walk/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/Red Raptor/Raptor Walk.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_rc2gi")
+
+[resource]
+script = ExtResource("4_kn34a")
+id = "smallscale.dinosaurs.red-raptor"
+pack = "dinosaurs"
+variant = "Red Raptor"
+source = "smallscale-authored/dinosaurs"
+cell = Vector2i(64, 64)
+pivot = Vector2(32, 46)
+anchor = Vector2(32, 34)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("DinosaursRedRaptor")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_hh5av")]([SubResource("Resource_bfixq"), SubResource("Resource_gnl5w"), SubResource("Resource_lubq5"), SubResource("Resource_rfut5"), SubResource("Resource_l5mwj"), SubResource("Resource_s0bml"), SubResource("Resource_40d16"), SubResource("Resource_64sh8"), SubResource("Resource_mfi0q"), SubResource("Resource_nkm6w"), SubResource("Resource_ycq4f"), SubResource("Resource_g11wf"), SubResource("Resource_ldp40"), SubResource("Resource_dp037")])
+hold_clips = PackedStringArray()
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed."

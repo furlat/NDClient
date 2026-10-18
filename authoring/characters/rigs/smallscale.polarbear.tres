@@ -1,0 +1,506 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_6o5sf"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_2b7p1"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_6f5qe"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_3rtva"]
+
+[sub_resource type="Resource" id="Resource_cn1lh"]
+script = ExtResource("2_2b7p1")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/animals/actions/polar_bear/idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/animals/actions/polar_bear/idle/normals-gentle.png",
+"original": "art/geometry/creatures/animals/actions/polar_bear/idle/normals.png",
+"reference": "art/geometry/creatures/animals/actions/polar_bear/idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/animals/actions/polar_bear/idle/normal-valid.png",
+"support": "art/geometry/creatures/animals/actions/polar_bear/idle/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9902204660769612
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_ofqoc"]
+script = ExtResource("1_6o5sf")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"PolarBear": "/rigs/polarbear/body/Idle.png",
+"PolarBearShadow": "/rigs/polarbear/shadow/Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/animals/actions/polar_bear/idle/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Polar Bear/Idle.png",
+"shadow": "art/media/smallscale/authored/animals/Derived shadows/Polar Bear/Idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_cn1lh")
+
+[sub_resource type="Resource" id="Resource_8h0xe"]
+script = ExtResource("2_2b7p1")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/animals/actions/polar_bear/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/animals/actions/polar_bear/run/normals-gentle.png",
+"original": "art/geometry/creatures/animals/actions/polar_bear/run/normals.png",
+"reference": "art/geometry/creatures/animals/actions/polar_bear/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/animals/actions/polar_bear/run/normal-valid.png",
+"support": "art/geometry/creatures/animals/actions/polar_bear/run/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9900741167535292
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_yrlw4"]
+script = ExtResource("1_6o5sf")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"PolarBear": "/rigs/polarbear/body/Run.png",
+"PolarBearShadow": "/rigs/polarbear/shadow/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/animals/actions/polar_bear/run/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Polar Bear/Run.png",
+"shadow": "art/media/smallscale/authored/animals/Derived shadows/Polar Bear/Run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_8h0xe")
+
+[sub_resource type="Resource" id="Resource_iscgw"]
+script = ExtResource("2_2b7p1")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/animals/actions/polar_bear/takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/animals/actions/polar_bear/takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/animals/actions/polar_bear/takedamage/normals.png",
+"reference": "art/geometry/creatures/animals/actions/polar_bear/takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/animals/actions/polar_bear/takedamage/normal-valid.png",
+"support": "art/geometry/creatures/animals/actions/polar_bear/takedamage/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9896141088615396
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_mvc78"]
+script = ExtResource("1_6o5sf")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"PolarBear": "/rigs/polarbear/body/TakeDamage.png",
+"PolarBearShadow": "/rigs/polarbear/shadow/TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/animals/actions/polar_bear/takedamage/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Polar Bear/TakeDamage.png",
+"shadow": "art/media/smallscale/authored/animals/Derived shadows/Polar Bear/TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_iscgw")
+
+[sub_resource type="Resource" id="Resource_1v7mh"]
+script = ExtResource("2_2b7p1")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/animals/actions/polar_bear/die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/animals/actions/polar_bear/die/normals-gentle.png",
+"original": "art/geometry/creatures/animals/actions/polar_bear/die/normals.png",
+"reference": "art/geometry/creatures/animals/actions/polar_bear/die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/animals/actions/polar_bear/die/normal-valid.png",
+"support": "art/geometry/creatures/animals/actions/polar_bear/die/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9888317120369324
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_p0bad"]
+script = ExtResource("1_6o5sf")
+name = "Die"
+role = "die"
+source_clip = "Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"PolarBear": "/rigs/polarbear/body/Die.png",
+"PolarBearShadow": "/rigs/polarbear/shadow/Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/animals/actions/polar_bear/die/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Polar Bear/Die.png",
+"shadow": "art/media/smallscale/authored/animals/Derived shadows/Polar Bear/Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_1v7mh")
+
+[sub_resource type="Resource" id="Resource_e1j86"]
+script = ExtResource("2_2b7p1")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/animals/actions/polar_bear/attack2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/animals/actions/polar_bear/attack2/normals-gentle.png",
+"original": "art/geometry/creatures/animals/actions/polar_bear/attack2/normals.png",
+"reference": "art/geometry/creatures/animals/actions/polar_bear/attack2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/animals/actions/polar_bear/attack2/normal-valid.png",
+"support": "art/geometry/creatures/animals/actions/polar_bear/attack2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.991233127585973
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_sv8gm"]
+script = ExtResource("1_6o5sf")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Attack2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"PolarBear": "/rigs/polarbear/body/Attack2.png",
+"PolarBearShadow": "/rigs/polarbear/shadow/Attack2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/animals/actions/polar_bear/attack2/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Polar Bear/Attack2.png",
+"shadow": "art/media/smallscale/authored/animals/Derived shadows/Polar Bear/Attack2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_e1j86")
+
+[sub_resource type="Resource" id="Resource_sjaxk"]
+script = ExtResource("2_2b7p1")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/animals/actions/polar_bear/attack3/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/animals/actions/polar_bear/attack3/normals-gentle.png",
+"original": "art/geometry/creatures/animals/actions/polar_bear/attack3/normals.png",
+"reference": "art/geometry/creatures/animals/actions/polar_bear/attack3/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/animals/actions/polar_bear/attack3/normal-valid.png",
+"support": "art/geometry/creatures/animals/actions/polar_bear/attack3/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9894931413561632
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_q6qgi"]
+script = ExtResource("1_6o5sf")
+name = "Attack3"
+role = "attack_3"
+source_clip = "Attack3"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"PolarBear": "/rigs/polarbear/body/Attack3.png",
+"PolarBearShadow": "/rigs/polarbear/shadow/Attack3.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/animals/actions/polar_bear/attack3/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Polar Bear/Attack3.png",
+"shadow": "art/media/smallscale/authored/animals/Derived shadows/Polar Bear/Attack3.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_sjaxk")
+
+[sub_resource type="Resource" id="Resource_nflqd"]
+script = ExtResource("3_6f5qe")
+role = "movement"
+qualifier = {
+"kind": "default"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+playback = "loop"
+
+[sub_resource type="Resource" id="Resource_ocbpd"]
+script = ExtResource("3_6f5qe")
+role = "movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_r5h63"]
+script = ExtResource("3_6f5qe")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "direct_arc"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_448tc"]
+script = ExtResource("3_6f5qe")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "connector_transfer"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_y4nkd"]
+script = ExtResource("3_6f5qe")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "direct_arc"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_s7d2m"]
+script = ExtResource("3_6f5qe")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "connector_transfer"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_buknr"]
+script = ExtResource("3_6f5qe")
+role = "shove"
+qualifier = {
+"kind": "default"
+}
+clip = "Attack2"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 6.0,
+"name": "contact"
+}]
+
+[sub_resource type="Resource" id="Resource_r4ey7"]
+script = ExtResource("3_6f5qe")
+role = "forced_movement"
+qualifier = {
+"kind": "default"
+}
+clip = "TakeDamage"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 5.0,
+"name": "brace"
+}]
+
+[sub_resource type="Resource" id="Resource_wopsl"]
+script = ExtResource("3_6f5qe")
+role = "forced_movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_mjgdo"]
+script = ExtResource("3_6f5qe")
+role = "body_action"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_23f6u"]
+script = ExtResource("3_6f5qe")
+role = "body_action_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_fhv3v"]
+script = ExtResource("3_6f5qe")
+role = "equipment"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_peg71"]
+script = ExtResource("3_6f5qe")
+role = "healing"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_wkw8o"]
+script = ExtResource("3_6f5qe")
+role = "save_avoidance"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_h607b"]
+script = ExtResource("3_6f5qe")
+role = "condition_entry"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_8v15r"]
+script = ExtResource("3_6f5qe")
+role = "condition_hold"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+hidden_slots = PackedStringArray()
+playback = "final_rest"
+rest_frame = 14
+
+[sub_resource type="Resource" id="Resource_y6e5v"]
+script = ExtResource("3_6f5qe")
+role = "condition_exit"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+reversed = true
+
+[sub_resource type="Resource" id="Resource_qjtc7"]
+script = ExtResource("3_6f5qe")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "flying",
+"trajectory": "path"
+}
+clip = "Idle"
+hidden_slots = PackedStringArray()
+playback = "once"
+frame_keys = [[0.0, 0.0], [1.0, 0.0]]
+
+[resource]
+script = ExtResource("4_3rtva")
+id = "smallscale.polarbear"
+pack = "animals"
+variant = "Polar Bear"
+source = "smallscale-authored/animals"
+cell = Vector2i(96, 96)
+pivot = Vector2(48, 67)
+anchor = Vector2(48, 53)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("shadow", "body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("PolarBear"),
+"shadow": PackedStringArray("PolarBearShadow")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_6o5sf")]([SubResource("Resource_ofqoc"), SubResource("Resource_yrlw4"), SubResource("Resource_mvc78"), SubResource("Resource_p0bad"), SubResource("Resource_sv8gm"), SubResource("Resource_q6qgi")])
+contexts = Array[ExtResource("3_6f5qe")]([SubResource("Resource_nflqd"), SubResource("Resource_ocbpd"), SubResource("Resource_r5h63"), SubResource("Resource_448tc"), SubResource("Resource_y4nkd"), SubResource("Resource_s7d2m"), SubResource("Resource_buknr"), SubResource("Resource_r4ey7"), SubResource("Resource_wopsl"), SubResource("Resource_mjgdo"), SubResource("Resource_23f6u"), SubResource("Resource_fhv3v"), SubResource("Resource_peg71"), SubResource("Resource_wkw8o"), SubResource("Resource_h607b"), SubResource("Resource_8v15r"), SubResource("Resource_y6e5v"), SubResource("Resource_qjtc7")])
+shadow_alpha = 1.0
+lifecycle_scale = 0.972
+hold_clips = PackedStringArray("Die")
+measurements = "measured/characters/rigs/smallscale.polarbear.json"

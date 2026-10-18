@@ -1,0 +1,426 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_uyvxm"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_oncae"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_ji13r"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_jxv88"]
+
+[sub_resource type="Resource" id="Resource_ej87s"]
+script = ExtResource("2_oncae")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/attack1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/attack1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/attack1/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/attack1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/attack1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/attack1/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9847450262267606
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_prrnf"]
+script = ExtResource("1_uyvxm")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Attack1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteTRex": "/rigs/dinosaurs_elite_t_rex/body/Attack1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/attack1/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE T-Rex/Attack1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_ej87s")
+
+[sub_resource type="Resource" id="Resource_86eb6"]
+script = ExtResource("2_oncae")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/attack2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/attack2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/attack2/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/attack2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/attack2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/attack2/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9813475143327104
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_v28t8"]
+script = ExtResource("1_uyvxm")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Attack2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteTRex": "/rigs/dinosaurs_elite_t_rex/body/Attack2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/attack2/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE T-Rex/Attack2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_86eb6")
+
+[sub_resource type="Resource" id="Resource_ak0tg"]
+script = ExtResource("2_oncae")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/attack3/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/attack3/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/attack3/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/attack3/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/attack3/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/attack3/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.982833149993028
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_plrov"]
+script = ExtResource("1_uyvxm")
+name = "Attack3"
+role = "attack_3"
+source_clip = "Attack3"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteTRex": "/rigs/dinosaurs_elite_t_rex/body/Attack3.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/attack3/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE T-Rex/Attack3.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_ak0tg")
+
+[sub_resource type="Resource" id="Resource_c4e7d"]
+script = ExtResource("2_oncae")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/attack4/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/attack4/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/attack4/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/attack4/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/attack4/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/attack4/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9840613174267204
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_euhtf"]
+script = ExtResource("1_uyvxm")
+name = "Attack4"
+role = "attack_4"
+source_clip = "Attack4"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteTRex": "/rigs/dinosaurs_elite_t_rex/body/Attack4.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/attack4/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE T-Rex/Attack4.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_c4e7d")
+
+[sub_resource type="Resource" id="Resource_40lcj"]
+script = ExtResource("2_oncae")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/die/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/die/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/die/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/die/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9779235734416194
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_dmbdg"]
+script = ExtResource("1_uyvxm")
+name = "Die"
+role = "die"
+source_clip = "Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteTRex": "/rigs/dinosaurs_elite_t_rex/body/Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/die/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE T-Rex/Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_40lcj")
+
+[sub_resource type="Resource" id="Resource_au3qw"]
+script = ExtResource("2_oncae")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/idle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/idle/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/idle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/idle/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9830813705511589
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_mpels"]
+script = ExtResource("1_uyvxm")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteTRex": "/rigs/dinosaurs_elite_t_rex/body/Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/idle/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE T-Rex/Idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_au3qw")
+
+[sub_resource type="Resource" id="Resource_upqeb"]
+script = ExtResource("2_oncae")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/run/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/run/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/run/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/run/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9821929023522372
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_sd2gq"]
+script = ExtResource("1_uyvxm")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteTRex": "/rigs/dinosaurs_elite_t_rex/body/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/run/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE T-Rex/Run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_upqeb")
+
+[sub_resource type="Resource" id="Resource_so1ck"]
+script = ExtResource("2_oncae")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/takedamage/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/takedamage/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/takedamage/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9786645028876904
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_yjnm0"]
+script = ExtResource("1_uyvxm")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteTRex": "/rigs/dinosaurs_elite_t_rex/body/TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/takedamage/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE T-Rex/TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_so1ck")
+
+[sub_resource type="Resource" id="Resource_oq56m"]
+script = ExtResource("2_oncae")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/taunt/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/taunt/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/taunt/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/taunt/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/taunt/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/taunt/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9802369096588625
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_11607"]
+script = ExtResource("1_uyvxm")
+name = "Taunt"
+role = "taunt"
+source_clip = "Taunt"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteTRex": "/rigs/dinosaurs_elite_t_rex/body/Taunt.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/taunt/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE T-Rex/Taunt.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_oq56m")
+
+[sub_resource type="Resource" id="Resource_glpo1"]
+script = ExtResource("2_oncae")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/walk/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/walk/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/walk/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/walk/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.983923183303998
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_y6kpg"]
+script = ExtResource("1_uyvxm")
+name = "Walk"
+role = "walk"
+source_clip = "Walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteTRex": "/rigs/dinosaurs_elite_t_rex/body/Walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-t-rex/walk/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE T-Rex/Walk.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_glpo1")
+
+[resource]
+script = ExtResource("4_jxv88")
+id = "smallscale.dinosaurs.elite-t-rex"
+pack = "dinosaurs"
+variant = "ELITE T-Rex"
+source = "smallscale-authored/dinosaurs"
+cell = Vector2i(96, 96)
+pivot = Vector2(48, 67)
+anchor = Vector2(48, 47)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("DinosaursEliteTRex")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_uyvxm")]([SubResource("Resource_prrnf"), SubResource("Resource_v28t8"), SubResource("Resource_plrov"), SubResource("Resource_euhtf"), SubResource("Resource_dmbdg"), SubResource("Resource_mpels"), SubResource("Resource_sd2gq"), SubResource("Resource_yjnm0"), SubResource("Resource_11607"), SubResource("Resource_y6kpg")])
+hold_clips = PackedStringArray("Die")
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed."

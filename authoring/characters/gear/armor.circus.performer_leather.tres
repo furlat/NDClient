@@ -1,0 +1,51 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_c6wtp"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_futy0"]
+
+[sub_resource type="Resource" id="Resource_whg20"]
+script = ExtResource("1_c6wtp")
+path = "art/media/ui/icons/smooth48/item.leather-armor.png"
+native_size = Vector2i(48, 48)
+reuses = "item.leather-armor"
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_futy0")
+id = "armor.circus.performer_leather"
+kind = "armor"
+slots = Dictionary[String, Dictionary]({
+"body_armor": {
+"layers": [{
+"part": "Belt1",
+"slot": "belt",
+"tint": "#a24b2f"
+}, {
+"part": "Chest5",
+"slot": "chest",
+"tint": "#a24b2f"
+}, {
+"part": "Legs4",
+"slot": "legs",
+"tint": "#a24b2f"
+}],
+"variants": {}
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs4",
+"pivots_by_camera": [[65.0, 70.0], [65.0, 67.5], [65.5, 69.5], [65.5, 66.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#a24b2f",
+"variant": ""
+}])
+icon = SubResource("Resource_whg20")
+notes = "Visual name Performer's Leather Armor; Circus performer's leather armor
+Icon: Shares an existing icon for the native equipment slot."

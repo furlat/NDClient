@@ -1,0 +1,386 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_4xtgp"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_0d08k"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_sm4xk"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_63u28"]
+
+[sub_resource type="Resource" id="Resource_gqc14"]
+script = ExtResource("2_0d08k")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-120.24621202458748, 164.79393923933998)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/toirtois/attack1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/toirtois/attack1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/toirtois/attack1/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/toirtois/attack1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/toirtois/attack1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/toirtois/attack1/raw-support.png"
+})
+depth_range = Vector2(-120.246216, 164.79395)
+camera_origin = Vector2(42, 63)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9906279702040184
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_3k8eb"]
+script = ExtResource("1_4xtgp")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Attack1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsToirtois": "/rigs/animals_toirtois/body/Attack1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/toirtois/attack1/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Toirtois/Attack1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_gqc14")
+
+[sub_resource type="Resource" id="Resource_jwdp0"]
+script = ExtResource("2_0d08k")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-120.24621202458748, 164.79393923933998)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/toirtois/attack2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/toirtois/attack2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/toirtois/attack2/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/toirtois/attack2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/toirtois/attack2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/toirtois/attack2/raw-support.png"
+})
+depth_range = Vector2(-120.246216, 164.79395)
+camera_origin = Vector2(42, 63)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.991679273827534
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_3huan"]
+script = ExtResource("1_4xtgp")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Attack2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsToirtois": "/rigs/animals_toirtois/body/Attack2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/toirtois/attack2/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Toirtois/Attack2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_jwdp0")
+
+[sub_resource type="Resource" id="Resource_gm2cs"]
+script = ExtResource("2_0d08k")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-120.24621202458748, 164.79393923933998)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/toirtois/attack3/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/toirtois/attack3/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/toirtois/attack3/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/toirtois/attack3/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/toirtois/attack3/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/toirtois/attack3/raw-support.png"
+})
+depth_range = Vector2(-120.246216, 164.79395)
+camera_origin = Vector2(42, 63)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9915682207593112
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_biq6a"]
+script = ExtResource("1_4xtgp")
+name = "Attack3"
+role = "attack_3"
+source_clip = "Attack3"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsToirtois": "/rigs/animals_toirtois/body/Attack3.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/toirtois/attack3/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Toirtois/Attack3.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_gm2cs")
+
+[sub_resource type="Resource" id="Resource_r7aqj"]
+script = ExtResource("2_0d08k")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-120.24621202458748, 164.79393923933998)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/toirtois/die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/toirtois/die/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/toirtois/die/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/toirtois/die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/toirtois/die/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/toirtois/die/raw-support.png"
+})
+depth_range = Vector2(-120.246216, 164.79395)
+camera_origin = Vector2(42, 63)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9906785722526016
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_is17t"]
+script = ExtResource("1_4xtgp")
+name = "Die"
+role = "die"
+source_clip = "Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsToirtois": "/rigs/animals_toirtois/body/Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/toirtois/die/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Toirtois/Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_r7aqj")
+
+[sub_resource type="Resource" id="Resource_q2as5"]
+script = ExtResource("2_0d08k")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-120.24621202458748, 164.79393923933998)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/toirtois/idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/toirtois/idle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/toirtois/idle/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/toirtois/idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/toirtois/idle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/toirtois/idle/raw-support.png"
+})
+depth_range = Vector2(-120.246216, 164.79395)
+camera_origin = Vector2(42, 63)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9916400567677844
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_40a50"]
+script = ExtResource("1_4xtgp")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsToirtois": "/rigs/animals_toirtois/body/Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/toirtois/idle/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Toirtois/Idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_q2as5")
+
+[sub_resource type="Resource" id="Resource_ix0li"]
+script = ExtResource("2_0d08k")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-120.24621202458748, 164.79393923933998)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/toirtois/idle2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/toirtois/idle2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/toirtois/idle2/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/toirtois/idle2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/toirtois/idle2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/toirtois/idle2/raw-support.png"
+})
+depth_range = Vector2(-120.246216, 164.79395)
+camera_origin = Vector2(42, 63)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9941965904969168
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_cjbbp"]
+script = ExtResource("1_4xtgp")
+name = "Idle2"
+role = "idle_alt"
+source_clip = "Idle2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsToirtois": "/rigs/animals_toirtois/body/Idle2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/toirtois/idle2/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Toirtois/Idle2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_ix0li")
+
+[sub_resource type="Resource" id="Resource_eo2la"]
+script = ExtResource("2_0d08k")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-120.24621202458748, 164.79393923933998)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/toirtois/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/toirtois/run/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/toirtois/run/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/toirtois/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/toirtois/run/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/toirtois/run/raw-support.png"
+})
+depth_range = Vector2(-120.246216, 164.79395)
+camera_origin = Vector2(42, 63)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.992944180628976
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_sppow"]
+script = ExtResource("1_4xtgp")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsToirtois": "/rigs/animals_toirtois/body/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/toirtois/run/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Toirtois/Run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_eo2la")
+
+[sub_resource type="Resource" id="Resource_mdr3r"]
+script = ExtResource("2_0d08k")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-120.24621202458748, 164.79393923933998)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/toirtois/takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/toirtois/takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/toirtois/takedamage/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/toirtois/takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/toirtois/takedamage/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/toirtois/takedamage/raw-support.png"
+})
+depth_range = Vector2(-120.246216, 164.79395)
+camera_origin = Vector2(42, 63)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9910478461070986
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_ml3jx"]
+script = ExtResource("1_4xtgp")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsToirtois": "/rigs/animals_toirtois/body/TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/toirtois/takedamage/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Toirtois/TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_mdr3r")
+
+[sub_resource type="Resource" id="Resource_a3eer"]
+script = ExtResource("2_0d08k")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-120.24621202458748, 164.79393923933998)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/toirtois/walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/toirtois/walk/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/toirtois/walk/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/toirtois/walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/toirtois/walk/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/toirtois/walk/raw-support.png"
+})
+depth_range = Vector2(-120.246216, 164.79395)
+camera_origin = Vector2(42, 63)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9934841021047918
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_u8dsk"]
+script = ExtResource("1_4xtgp")
+name = "Walk"
+role = "walk"
+source_clip = "Walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsToirtois": "/rigs/animals_toirtois/body/Walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/toirtois/walk/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Toirtois/Walk.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_a3eer")
+
+[resource]
+script = ExtResource("4_63u28")
+id = "smallscale.animals.toirtois"
+pack = "animals"
+variant = "Toirtois"
+source = "smallscale-authored/animals"
+cell = Vector2i(84, 84)
+pivot = Vector2(42, 60)
+anchor = Vector2(42, 50)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("AnimalsToirtois")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_4xtgp")]([SubResource("Resource_3k8eb"), SubResource("Resource_3huan"), SubResource("Resource_biq6a"), SubResource("Resource_is17t"), SubResource("Resource_40a50"), SubResource("Resource_cjbbp"), SubResource("Resource_sppow"), SubResource("Resource_ml3jx"), SubResource("Resource_u8dsk")])
+hold_clips = PackedStringArray("Die")
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed."

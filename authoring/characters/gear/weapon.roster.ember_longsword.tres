@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_2wj00"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_amli1"]
+
+[sub_resource type="Resource" id="Resource_qpk5r"]
+script = ExtResource("1_2wj00")
+path = "art/media/ui/icons/smooth48/item.longsword.png"
+native_size = Vector2i(48, 48)
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_amli1")
+id = "weapon.roster.ember_longsword"
+kind = "weapon"
+family = "weapon.longsword"
+icon = SubResource("Resource_qpk5r")

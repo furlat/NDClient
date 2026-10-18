@@ -1,0 +1,112 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_31376"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_d5h7u"]
+
+[sub_resource type="Resource" id="Resource_1w21n"]
+script = ExtResource("1_31376")
+path = "art/media/ui/icons/smooth48/item.sickle.png"
+native_size = Vector2i(48, 48)
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_d5h7u")
+id = "weapon.sickle"
+kind = "weapon"
+slots = Dictionary[String, Dictionary]({
+"weapon_melee_main": {
+"layers": [{
+"part": "Melee13",
+"slot": "weapon",
+"tint": "#8899aa"
+}],
+"variants": {
+"10000015": [{
+"part": "Melee13",
+"slot": "weapon",
+"tint": "#778899"
+}],
+"10000016": [{
+"part": "Melee13",
+"slot": "weapon",
+"tint": "#448844"
+}]
+}
+},
+"weapon_melee_off": {
+"layers": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#8899aa"
+}],
+&"look": "Off-hand Sickle",
+"variants": {
+"oh00000a": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#778899"
+}]
+}
+}
+})
+hands = Dictionary[String, Dictionary]({
+"weapon_melee_off": {
+"": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#8899aa"
+}],
+"10000015": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#778899"
+}],
+"10000016": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#448844"
+}]
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee13",
+"pivots_by_camera": [[54.5, 68.0], [64.5, 58.0], [75.5, 66.0], [66.5, 73.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#8899aa",
+"variant": ""
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee13",
+"pivots_by_camera": [[54.5, 68.0], [64.5, 58.0], [75.5, 66.0], [66.5, 73.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#778899",
+"variant": "10000015"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee13",
+"pivots_by_camera": [[54.5, 68.0], [64.5, 58.0], [75.5, 66.0], [66.5, 73.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#448844",
+"variant": "10000016"
+}])
+icon = SubResource("Resource_1w21n")
+notes = "Visual name Sickle; Exact sickle match — PHB simple weapon"

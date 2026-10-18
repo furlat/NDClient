@@ -1,0 +1,42 @@
+[gd_resource type="Resource" script_class="PresentationCharacter" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/character.gd" id="1_w2kmq"]
+
+[resource]
+script = ExtResource("1_w2kmq")
+id = "creature.skeleton_archer"
+identity = "content.neurodragon:creature:creature.skeleton_archer@1"
+rig = "smallscale.skeletonarcher05"
+portrait = "creature.skeleton_archer"
+size = "Medium"
+attacks = Array[Dictionary]([{
+"clip": "Attack3",
+"delivery": "projectile",
+"recipe": "action.attack",
+"release": 10,
+"variant": "skeleton-archer-ranged"
+}, {
+"clip": "Attack3",
+"delivery": "projectile",
+"recipe": "action.class.barbarian.frenzied_strike",
+"release": 10,
+"variant": "skeleton-archer-ranged"
+}, {
+"clip": "Attack3",
+"delivery": "projectile",
+"recipe": "action.feature.extra_attack",
+"release": 10,
+"variant": "skeleton-archer-ranged"
+}, {
+"clip": "Attack3",
+"delivery": "projectile",
+"recipe": "reaction.opportunity_attack",
+"release": 10,
+"variant": "skeleton-archer-ranged"
+}])
+death = Dictionary[String, String]({
+"default": "Die"
+})
+status = "partial"
+notes = "Shadow is baked into the delivered sheet and no geometry is loaded for this rig.
+Roster: Skeleton Archer, Y128, kit Shortbow, Dagger x2; Mark Target."

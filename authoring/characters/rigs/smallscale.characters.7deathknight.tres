@@ -1,0 +1,1213 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_kvw5x"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_rpa0s"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_t58p4"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_0i3ti"]
+
+[sub_resource type="Resource" id="Resource_u4bgj"]
+script = ExtResource("2_rpa0s")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/7deathknight/180turn/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/7deathknight/180turn/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/7deathknight/180turn/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/7deathknight/180turn/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/7deathknight/180turn/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/7deathknight/180turn/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.9375778375654786
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_ib10x"]
+script = ExtResource("1_kvw5x")
+name = "180Turn"
+role = "turn"
+source_clip = "180Turn"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters7Deathknight": "/rigs/characters_7deathknight/body/180Turn.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/7deathknight/180turn/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/7DeathKnight/180Turn.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/7DeathKnight/180Turn.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_u4bgj")
+
+[sub_resource type="Resource" id="Resource_7g5ps"]
+script = ExtResource("2_rpa0s")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/7deathknight/castspell/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/7deathknight/castspell/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/7deathknight/castspell/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/7deathknight/castspell/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/7deathknight/castspell/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/7deathknight/castspell/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.9428052344265526
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_arjdq"]
+script = ExtResource("1_kvw5x")
+name = "CastSpell"
+role = "cast"
+source_clip = "CastSpell"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters7Deathknight": "/rigs/characters_7deathknight/body/CastSpell.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/7deathknight/castspell/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/7DeathKnight/CastSpell.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/7DeathKnight/CastSpell.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_7g5ps")
+
+[sub_resource type="Resource" id="Resource_n67cr"]
+script = ExtResource("2_rpa0s")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/7deathknight/crouchidle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/7deathknight/crouchidle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/7deathknight/crouchidle/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/7deathknight/crouchidle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/7deathknight/crouchidle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/7deathknight/crouchidle/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.9091714308720508
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_edd02"]
+script = ExtResource("1_kvw5x")
+name = "Crouch"
+role = "crouch_idle"
+source_clip = "CrouchIdle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters7Deathknight": "/rigs/characters_7deathknight/body/CrouchIdle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/7deathknight/crouchidle/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/7DeathKnight/CrouchIdle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_n67cr")
+
+[sub_resource type="Resource" id="Resource_lj3t1"]
+script = ExtResource("2_rpa0s")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/7deathknight/crouchrun/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/7deathknight/crouchrun/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/7deathknight/crouchrun/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/7deathknight/crouchrun/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/7deathknight/crouchrun/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/7deathknight/crouchrun/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.9306243088783936
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_lnof8"]
+script = ExtResource("1_kvw5x")
+name = "CrouchWalk"
+role = "crouch_move"
+source_clip = "CrouchRun"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters7Deathknight": "/rigs/characters_7deathknight/body/CrouchRun.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/7deathknight/crouchrun/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/7DeathKnight/CrouchRun.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/7DeathKnight/CrouchRun.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_lj3t1")
+
+[sub_resource type="Resource" id="Resource_nru4y"]
+script = ExtResource("2_rpa0s")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/7deathknight/die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/7deathknight/die/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/7deathknight/die/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/7deathknight/die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/7deathknight/die/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/7deathknight/die/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.9331105804588832
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_73jke"]
+script = ExtResource("1_kvw5x")
+name = "Die"
+role = "die"
+source_clip = "Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters7Deathknight": "/rigs/characters_7deathknight/body/Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/7deathknight/die/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/7DeathKnight/Die.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/7DeathKnight/Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_nru4y")
+
+[sub_resource type="Resource" id="Resource_ilgak"]
+script = ExtResource("2_rpa0s")
+status = "validated_partial"
+flags = PackedStringArray("nonempty_source_has_no_common_surface", "partially_empty_source_views", "source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/7deathknight/frontflip/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/7deathknight/frontflip/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/7deathknight/frontflip/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/7deathknight/frontflip/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/7deathknight/frontflip/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/7deathknight/frontflip/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.10263375457659148
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_oj8hc"]
+script = ExtResource("1_kvw5x")
+name = "BackFlip"
+role = "flip"
+source_clip = "FrontFlip"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters7Deathknight": "/rigs/characters_7deathknight/body/FrontFlip.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/7deathknight/frontflip/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/7DeathKnight/FrontFlip.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/7DeathKnight/FrontFlip.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_ilgak")
+
+[sub_resource type="Resource" id="Resource_6hdjp"]
+script = ExtResource("2_rpa0s")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/7deathknight/idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/7deathknight/idle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/7deathknight/idle/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/7deathknight/idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/7deathknight/idle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/7deathknight/idle/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.9320304573341298
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_mwcc3"]
+script = ExtResource("1_kvw5x")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters7Deathknight": "/rigs/characters_7deathknight/body/Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/7deathknight/idle/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/7DeathKnight/Idle.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/7DeathKnight/Idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_6hdjp")
+
+[sub_resource type="Resource" id="Resource_o0lg7"]
+script = ExtResource("2_rpa0s")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/7deathknight/idle2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/7deathknight/idle2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/7deathknight/idle2/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/7deathknight/idle2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/7deathknight/idle2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/7deathknight/idle2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.931428146440325
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_0vk7y"]
+script = ExtResource("1_kvw5x")
+name = "Idle2"
+role = "idle_alt"
+source_clip = "Idle2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters7Deathknight": "/rigs/characters_7deathknight/body/Idle2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/7deathknight/idle2/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/7DeathKnight/Idle2.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/7DeathKnight/Idle2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_o0lg7")
+
+[sub_resource type="Resource" id="Resource_4up1o"]
+script = ExtResource("2_rpa0s")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/7deathknight/kick/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/7deathknight/kick/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/7deathknight/kick/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/7deathknight/kick/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/7deathknight/kick/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/7deathknight/kick/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.9294519391335349
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_j2n4u"]
+script = ExtResource("1_kvw5x")
+name = "Kick"
+role = "kick"
+source_clip = "Kick"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters7Deathknight": "/rigs/characters_7deathknight/body/Kick.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/7deathknight/kick/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/7DeathKnight/Kick.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/7DeathKnight/Kick.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_4up1o")
+
+[sub_resource type="Resource" id="Resource_t4jd7"]
+script = ExtResource("2_rpa0s")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/7deathknight/melee/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/7deathknight/melee/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/7deathknight/melee/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/7deathknight/melee/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/7deathknight/melee/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/7deathknight/melee/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.8501236788846414
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_16ad0"]
+script = ExtResource("1_kvw5x")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Melee"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters7Deathknight": "/rigs/characters_7deathknight/body/Melee.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/7deathknight/melee/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/7DeathKnight/Melee.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/7DeathKnight/Melee.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_t4jd7")
+
+[sub_resource type="Resource" id="Resource_verdi"]
+script = ExtResource("2_rpa0s")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/7deathknight/melee2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/7deathknight/melee2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/7deathknight/melee2/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/7deathknight/melee2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/7deathknight/melee2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/7deathknight/melee2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.8448018955493674
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_dt3jp"]
+script = ExtResource("1_kvw5x")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Melee2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters7Deathknight": "/rigs/characters_7deathknight/body/Melee2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/7deathknight/melee2/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/7DeathKnight/Melee2.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/7DeathKnight/Melee2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_verdi")
+
+[sub_resource type="Resource" id="Resource_q8lg1"]
+script = ExtResource("2_rpa0s")
+status = "validated_partial"
+flags = PackedStringArray("nonempty_source_has_no_common_surface", "source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/7deathknight/meleerun/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/7deathknight/meleerun/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/7deathknight/meleerun/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/7deathknight/meleerun/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/7deathknight/meleerun/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/7deathknight/meleerun/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.07855055523085915
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_5p6jk"]
+script = ExtResource("1_kvw5x")
+name = "AttackRun"
+role = "attack_run"
+source_clip = "MeleeRun"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters7Deathknight": "/rigs/characters_7deathknight/body/MeleeRun.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/7deathknight/meleerun/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/7DeathKnight/MeleeRun.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/7DeathKnight/MeleeRun.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_q8lg1")
+
+[sub_resource type="Resource" id="Resource_w3x3b"]
+script = ExtResource("2_rpa0s")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/7deathknight/meleespin/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/7deathknight/meleespin/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/7deathknight/meleespin/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/7deathknight/meleespin/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/7deathknight/meleespin/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/7deathknight/meleespin/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.8192818274651336
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_xwh3d"]
+script = ExtResource("1_kvw5x")
+name = "Attack3"
+role = "attack_3"
+source_clip = "MeleeSpin"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters7Deathknight": "/rigs/characters_7deathknight/body/MeleeSpin.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/7deathknight/meleespin/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/7DeathKnight/MeleeSpin.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/7DeathKnight/MeleeSpin.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_w3x3b")
+
+[sub_resource type="Resource" id="Resource_8fcf6"]
+script = ExtResource("2_rpa0s")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/7deathknight/pummel/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/7deathknight/pummel/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/7deathknight/pummel/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/7deathknight/pummel/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/7deathknight/pummel/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/7deathknight/pummel/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.9354982206405694
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_l57dr"]
+script = ExtResource("1_kvw5x")
+name = "Pummel"
+role = "pummel"
+source_clip = "Pummel"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters7Deathknight": "/rigs/characters_7deathknight/body/Pummel.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/7deathknight/pummel/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/7DeathKnight/Pummel.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/7DeathKnight/Pummel.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_8fcf6")
+
+[sub_resource type="Resource" id="Resource_opn1g"]
+script = ExtResource("2_rpa0s")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent", "nonempty_source_has_no_common_surface", "partially_empty_source_views")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/7deathknight/rolling/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/7deathknight/rolling/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/7deathknight/rolling/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/7deathknight/rolling/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/7deathknight/rolling/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/7deathknight/rolling/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.0015220700152207
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_w8kjf"]
+script = ExtResource("1_kvw5x")
+name = "Rolling"
+role = "roll"
+source_clip = "Rolling"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters7Deathknight": "/rigs/characters_7deathknight/body/Rolling.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/7deathknight/rolling/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/7DeathKnight/Rolling.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/7DeathKnight/Rolling.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_opn1g")
+
+[sub_resource type="Resource" id="Resource_6blsf"]
+script = ExtResource("2_rpa0s")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/7deathknight/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/7deathknight/run/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/7deathknight/run/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/7deathknight/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/7deathknight/run/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/7deathknight/run/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.9371205124678234
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_6frf3"]
+script = ExtResource("1_kvw5x")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters7Deathknight": "/rigs/characters_7deathknight/body/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/7deathknight/run/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/7DeathKnight/Run.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/7DeathKnight/Run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_6blsf")
+
+[sub_resource type="Resource" id="Resource_84hor"]
+script = ExtResource("2_rpa0s")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/7deathknight/runbackwards/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/7deathknight/runbackwards/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/7deathknight/runbackwards/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/7deathknight/runbackwards/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/7deathknight/runbackwards/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/7deathknight/runbackwards/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.939077054164488
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_7xo3y"]
+script = ExtResource("1_kvw5x")
+name = "RunBackwards"
+role = "run_back"
+source_clip = "RunBackwards"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters7Deathknight": "/rigs/characters_7deathknight/body/RunBackwards.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/7deathknight/runbackwards/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/7DeathKnight/RunBackwards.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/7DeathKnight/RunBackwards.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_84hor")
+
+[sub_resource type="Resource" id="Resource_fp7j1"]
+script = ExtResource("2_rpa0s")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/7deathknight/shieldblockmid/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/7deathknight/shieldblockmid/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/7deathknight/shieldblockmid/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/7deathknight/shieldblockmid/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/7deathknight/shieldblockmid/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/7deathknight/shieldblockmid/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.9263954058407452
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_xq1y3"]
+script = ExtResource("1_kvw5x")
+name = "Block"
+role = "block_hold"
+source_clip = "ShieldBlockMid"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters7Deathknight": "/rigs/characters_7deathknight/body/ShieldBlockMid.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/7deathknight/shieldblockmid/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/7DeathKnight/ShieldBlockMid.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/7DeathKnight/ShieldBlockMid.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_fp7j1")
+
+[sub_resource type="Resource" id="Resource_rhkx1"]
+script = ExtResource("2_rpa0s")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/7deathknight/shieldblockstart/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/7deathknight/shieldblockstart/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/7deathknight/shieldblockstart/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/7deathknight/shieldblockstart/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/7deathknight/shieldblockstart/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/7deathknight/shieldblockstart/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.9320060511102708
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_vs0lp"]
+script = ExtResource("1_kvw5x")
+name = "BlockStart"
+role = "block_start"
+source_clip = "ShieldBlockStart"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters7Deathknight": "/rigs/characters_7deathknight/body/ShieldBlockStart.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/7deathknight/shieldblockstart/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/7DeathKnight/ShieldBlockStart.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/7DeathKnight/ShieldBlockStart.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_rhkx1")
+
+[sub_resource type="Resource" id="Resource_iiv3x"]
+script = ExtResource("2_rpa0s")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/7deathknight/slide/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/7deathknight/slide/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/7deathknight/slide/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/7deathknight/slide/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/7deathknight/slide/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/7deathknight/slide/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.9141144939320024
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_fgp5s"]
+script = ExtResource("1_kvw5x")
+name = "Slide"
+role = "slide"
+source_clip = "Slide"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters7Deathknight": "/rigs/characters_7deathknight/body/Slide.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/7deathknight/slide/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/7DeathKnight/Slide.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/7DeathKnight/Slide.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_iiv3x")
+
+[sub_resource type="Resource" id="Resource_2ngh3"]
+script = ExtResource("2_rpa0s")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/7deathknight/slideend/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/7deathknight/slideend/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/7deathknight/slideend/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/7deathknight/slideend/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/7deathknight/slideend/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/7deathknight/slideend/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.9406136488159256
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_4neiv"]
+script = ExtResource("1_kvw5x")
+name = "SlideEnd"
+role = "slide_end"
+source_clip = "SlideEnd"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters7Deathknight": "/rigs/characters_7deathknight/body/SlideEnd.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/7deathknight/slideend/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/7DeathKnight/SlideEnd.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/7DeathKnight/SlideEnd.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_2ngh3")
+
+[sub_resource type="Resource" id="Resource_hnqd7"]
+script = ExtResource("2_rpa0s")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/7deathknight/slidestart/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/7deathknight/slidestart/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/7deathknight/slidestart/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/7deathknight/slidestart/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/7deathknight/slidestart/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/7deathknight/slidestart/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.9451485539433422
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_651ts"]
+script = ExtResource("1_kvw5x")
+name = "SlideStart"
+role = "slide_start"
+source_clip = "SlideStart"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters7Deathknight": "/rigs/characters_7deathknight/body/SlideStart.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/7deathknight/slidestart/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/7DeathKnight/SlideStart.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/7DeathKnight/SlideStart.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_hnqd7")
+
+[sub_resource type="Resource" id="Resource_jkdeb"]
+script = ExtResource("2_rpa0s")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/7deathknight/special1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/7deathknight/special1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/7deathknight/special1/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/7deathknight/special1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/7deathknight/special1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/7deathknight/special1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.862470754476592
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_m0lxg"]
+script = ExtResource("1_kvw5x")
+name = "Special1"
+role = "special_1"
+source_clip = "Special1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters7Deathknight": "/rigs/characters_7deathknight/body/Special1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/7deathknight/special1/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/7DeathKnight/Special1.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/7DeathKnight/Special1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_jkdeb")
+
+[sub_resource type="Resource" id="Resource_wohnl"]
+script = ExtResource("2_rpa0s")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/7deathknight/special2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/7deathknight/special2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/7deathknight/special2/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/7deathknight/special2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/7deathknight/special2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/7deathknight/special2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.9237231350821574
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_joj8i"]
+script = ExtResource("1_kvw5x")
+name = "Special2"
+role = "special_2"
+source_clip = "Special2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters7Deathknight": "/rigs/characters_7deathknight/body/Special2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/7deathknight/special2/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/7DeathKnight/Special2.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/7DeathKnight/Special2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_wohnl")
+
+[sub_resource type="Resource" id="Resource_kbrnb"]
+script = ExtResource("2_rpa0s")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/7deathknight/strafeleft/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/7deathknight/strafeleft/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/7deathknight/strafeleft/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/7deathknight/strafeleft/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/7deathknight/strafeleft/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/7deathknight/strafeleft/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.9313044078357142
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_v1jbd"]
+script = ExtResource("1_kvw5x")
+name = "StrafeLeft"
+role = "strafe_left"
+source_clip = "StrafeLeft"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters7Deathknight": "/rigs/characters_7deathknight/body/StrafeLeft.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/7deathknight/strafeleft/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/7DeathKnight/StrafeLeft.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/7DeathKnight/StrafeLeft.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_kbrnb")
+
+[sub_resource type="Resource" id="Resource_csdtp"]
+script = ExtResource("2_rpa0s")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/7deathknight/straferight/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/7deathknight/straferight/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/7deathknight/straferight/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/7deathknight/straferight/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/7deathknight/straferight/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/7deathknight/straferight/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.9360776675513932
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_bu4kp"]
+script = ExtResource("1_kvw5x")
+name = "StrafeRight"
+role = "strafe_right"
+source_clip = "StrafeRight"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters7Deathknight": "/rigs/characters_7deathknight/body/StrafeRight.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/7deathknight/straferight/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/7DeathKnight/StrafeRight.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/7DeathKnight/StrafeRight.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_csdtp")
+
+[sub_resource type="Resource" id="Resource_vvhj8"]
+script = ExtResource("2_rpa0s")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/7deathknight/takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/7deathknight/takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/7deathknight/takedamage/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/7deathknight/takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/7deathknight/takedamage/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/7deathknight/takedamage/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.9340695445833712
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_3b3cm"]
+script = ExtResource("1_kvw5x")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters7Deathknight": "/rigs/characters_7deathknight/body/TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/7deathknight/takedamage/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/7DeathKnight/TakeDamage.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/7DeathKnight/TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_vvhj8")
+
+[sub_resource type="Resource" id="Resource_q7qc5"]
+script = ExtResource("2_rpa0s")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/7deathknight/unsheathsword/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/7deathknight/unsheathsword/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/7deathknight/unsheathsword/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/7deathknight/unsheathsword/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/7deathknight/unsheathsword/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/7deathknight/unsheathsword/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.9309179525745128
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_kyils"]
+script = ExtResource("1_kvw5x")
+name = "UnSheathSword"
+role = "unsheath"
+source_clip = "UnSheathSword"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters7Deathknight": "/rigs/characters_7deathknight/body/UnSheathSword.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/7deathknight/unsheathsword/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/7DeathKnight/UnSheathSword.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/7DeathKnight/UnSheathSword.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_q7qc5")
+
+[sub_resource type="Resource" id="Resource_pwrnh"]
+script = ExtResource("2_rpa0s")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/7deathknight/walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/7deathknight/walk/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/7deathknight/walk/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/7deathknight/walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/7deathknight/walk/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/7deathknight/walk/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.92735832707527
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_fr15w"]
+script = ExtResource("1_kvw5x")
+name = "Walk"
+role = "walk"
+source_clip = "Walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters7Deathknight": "/rigs/characters_7deathknight/body/Walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/7deathknight/walk/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/7DeathKnight/Walk.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/7DeathKnight/Walk.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_pwrnh")
+
+[resource]
+script = ExtResource("4_0i3ti")
+id = "smallscale.characters.7deathknight"
+pack = "characters"
+variant = "7DeathKnight"
+source = "smallscale-authored/characters"
+pivot = Vector2(64, 101)
+anchor = Vector2(64, 73)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("Characters7Deathknight")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_kvw5x")]([SubResource("Resource_ib10x"), SubResource("Resource_arjdq"), SubResource("Resource_edd02"), SubResource("Resource_lnof8"), SubResource("Resource_73jke"), SubResource("Resource_oj8hc"), SubResource("Resource_mwcc3"), SubResource("Resource_0vk7y"), SubResource("Resource_j2n4u"), SubResource("Resource_16ad0"), SubResource("Resource_dt3jp"), SubResource("Resource_5p6jk"), SubResource("Resource_xwh3d"), SubResource("Resource_l57dr"), SubResource("Resource_w8kjf"), SubResource("Resource_6frf3"), SubResource("Resource_7xo3y"), SubResource("Resource_xq1y3"), SubResource("Resource_vs0lp"), SubResource("Resource_fgp5s"), SubResource("Resource_4neiv"), SubResource("Resource_651ts"), SubResource("Resource_m0lxg"), SubResource("Resource_joj8i"), SubResource("Resource_v1jbd"), SubResource("Resource_bu4kp"), SubResource("Resource_3b3cm"), SubResource("Resource_kyils"), SubResource("Resource_fr15w")])
+hold_clips = PackedStringArray("Die")
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed."

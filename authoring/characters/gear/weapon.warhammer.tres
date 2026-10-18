@@ -1,0 +1,120 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_rjokd"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_x1swm"]
+
+[sub_resource type="Resource" id="Resource_i1y2k"]
+script = ExtResource("1_rjokd")
+path = "art/media/ui/icons/smooth48/item.warhammer.png"
+native_size = Vector2i(48, 48)
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_x1swm")
+id = "weapon.warhammer"
+kind = "weapon"
+slots = Dictionary[String, Dictionary]({
+"weapon_melee_main": {
+"layers": [{
+"part": "Melee11",
+"slot": "weapon",
+"tint": "#8899aa"
+}],
+"variants": {
+"3000001e": [{
+"part": "Melee11",
+"slot": "weapon",
+"tint": "#ccaa44"
+}],
+"3000001f": [{
+"part": "Melee11",
+"slot": "weapon",
+"tint": "#ddcc77"
+}],
+"30000020": [{
+"part": "Melee11",
+"slot": "weapon",
+"tint": "#334455"
+}]
+}
+}
+})
+hands = Dictionary[String, Dictionary]({
+"weapon_melee_off": {
+"": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#8899aa"
+}],
+"3000001e": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#ccaa44"
+}],
+"3000001f": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#ddcc77"
+}],
+"30000020": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#334455"
+}]
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee11",
+"pivots_by_camera": [[54.5, 67.5], [67.0, 58.5], [73.5, 66.5], [63.0, 73.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#8899aa",
+"variant": ""
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee11",
+"pivots_by_camera": [[54.5, 67.5], [67.0, 58.5], [73.5, 66.5], [63.0, 73.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#ccaa44",
+"variant": "3000001e"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee11",
+"pivots_by_camera": [[54.5, 67.5], [67.0, 58.5], [73.5, 66.5], [63.0, 73.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#ddcc77",
+"variant": "3000001f"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee11",
+"pivots_by_camera": [[54.5, 67.5], [67.0, 58.5], [73.5, 66.5], [63.0, 73.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#334455",
+"variant": "30000020"
+}])
+icon = SubResource("Resource_i1y2k")
+notes = "Visual name Warhammer; Greathammer sprite — heavy war hammer"

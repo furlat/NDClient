@@ -1,0 +1,95 @@
+[gd_resource type="Resource" script_class="PresentationCharacter" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/character.gd" id="1_thmx1"]
+
+[resource]
+script = ExtResource("1_thmx1")
+id = "creature.polar_bear"
+identity = "content.neurodragon:creature:creature.polar_bear@1"
+rig = "smallscale.polarbear"
+portrait = "creature.polar_bear"
+size = "Large"
+attacks = Array[Dictionary]([{
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.attack",
+"variant": "fixed-unarmed-attack2-6-12"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+&"items": ["weapon.creature.polar_bear_claws"],
+"recipe": "action.attack",
+"variant": "polarbear-polar_bear_claws"
+}, {
+"clip": "Attack3",
+"contact": 7,
+"delivery": "melee",
+&"items": ["weapon.creature.polar_bear_bite"],
+"recipe": "action.attack",
+"variant": "polarbear-polar_bear_bite"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "fixed-unarmed-attack2-6-12"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+&"items": ["weapon.creature.polar_bear_claws"],
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "polarbear-polar_bear_claws"
+}, {
+"clip": "Attack3",
+"contact": 7,
+"delivery": "melee",
+&"items": ["weapon.creature.polar_bear_bite"],
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "polarbear-polar_bear_bite"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.feature.extra_attack",
+"variant": "fixed-unarmed-attack2-6-12"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+&"items": ["weapon.creature.polar_bear_claws"],
+"recipe": "action.feature.extra_attack",
+"variant": "polarbear-polar_bear_claws"
+}, {
+"clip": "Attack3",
+"contact": 7,
+"delivery": "melee",
+&"items": ["weapon.creature.polar_bear_bite"],
+"recipe": "action.feature.extra_attack",
+"variant": "polarbear-polar_bear_bite"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+"recipe": "reaction.opportunity_attack",
+"variant": "fixed-unarmed-attack2-6-12"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+&"items": ["weapon.creature.polar_bear_claws"],
+"recipe": "reaction.opportunity_attack",
+"variant": "polarbear-polar_bear_claws"
+}, {
+"clip": "Attack3",
+"contact": 7,
+"delivery": "melee",
+&"items": ["weapon.creature.polar_bear_bite"],
+"recipe": "reaction.opportunity_attack",
+"variant": "polarbear-polar_bear_bite"
+}])
+death = Dictionary[String, String]({
+"default": "Die"
+})

@@ -1,0 +1,97 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_q3isk"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_pl0gi"]
+
+[sub_resource type="Resource" id="Resource_yfhp1"]
+script = ExtResource("1_q3isk")
+path = "art/media/ui/icons/smooth48/item.morningstar.png"
+native_size = Vector2i(48, 48)
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_pl0gi")
+id = "weapon.morningstar"
+kind = "weapon"
+slots = Dictionary[String, Dictionary]({
+"weapon_melee_main": {
+"layers": [{
+"part": "Melee12",
+"slot": "weapon",
+"tint": "#8899aa"
+}],
+"variants": {
+"30000011": [{
+"part": "Melee12",
+"slot": "weapon",
+"tint": "#ccaa44"
+}],
+"30000012": [{
+"part": "Melee12",
+"slot": "weapon",
+"tint": "#334455"
+}]
+}
+}
+})
+hands = Dictionary[String, Dictionary]({
+"weapon_melee_off": {
+"": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#8899aa"
+}],
+"30000011": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#ccaa44"
+}],
+"30000012": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#334455"
+}]
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee12",
+"pivots_by_camera": [[54.5, 65.5], [65.5, 57.5], [75.5, 65.0], [64.5, 72.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#8899aa",
+"variant": ""
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee12",
+"pivots_by_camera": [[54.5, 65.5], [65.5, 57.5], [75.5, 65.0], [64.5, 72.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#ccaa44",
+"variant": "30000011"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee12",
+"pivots_by_camera": [[54.5, 65.5], [65.5, 57.5], [75.5, 65.0], [64.5, 72.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#334455",
+"variant": "30000012"
+}])
+icon = SubResource("Resource_yfhp1")
+notes = "Visual name Morningstar; Exact morningstar/mace match — PHB martial weapon"

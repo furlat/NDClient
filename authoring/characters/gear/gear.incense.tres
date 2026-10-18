@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_0x651"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_1sxm3"]
+
+[sub_resource type="Resource" id="Resource_6i4gv"]
+script = ExtResource("1_0x651")
+path = "art/media/ui/icons/smooth48/item.incense.png"
+native_size = Vector2i(48, 48)
+reuses = "item.incense"
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_1sxm3")
+id = "gear.incense"
+kind = "item"
+icon = SubResource("Resource_6i4gv")
+status = "partial"
+notes = "No worn look authored.
+Icon: Recovered matching base-item icon."

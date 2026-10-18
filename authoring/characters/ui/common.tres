@@ -1,0 +1,76 @@
+[gd_resource type="Resource" script_class="PresentationIconSet" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_2w70p"]
+[ext_resource type="Script" path="res://presentation/source/characters/icons.gd" id="2_6xrpw"]
+
+[sub_resource type="Resource" id="Resource_ltk8q"]
+script = ExtResource("1_2w70p")
+status = "missing"
+
+[sub_resource type="Resource" id="Resource_ljqtv"]
+script = ExtResource("1_2w70p")
+path = "art/media/ui/icons/smooth48/ui.end-turn-medallion.png"
+native_size = Vector2i(48, 48)
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[sub_resource type="Resource" id="Resource_r60tw"]
+script = ExtResource("1_2w70p")
+path = "art/media/ui/icons/smooth48/ui.waiting-medallion.png"
+native_size = Vector2i(48, 48)
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[sub_resource type="Resource" id="Resource_47aiq"]
+script = ExtResource("1_2w70p")
+path = "art/media/ui/icons/smooth48/ui.page-next.png"
+native_size = Vector2i(48, 48)
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[sub_resource type="Resource" id="Resource_n7j40"]
+script = ExtResource("1_2w70p")
+path = "art/media/ui/icons/smooth48/ui.page-previous.png"
+native_size = Vector2i(48, 48)
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[sub_resource type="Resource" id="Resource_dlga4"]
+script = ExtResource("1_2w70p")
+path = "art/media/ui/icons/smooth48/ui.filter-spells.png"
+native_size = Vector2i(48, 48)
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[sub_resource type="Resource" id="Resource_beogm"]
+script = ExtResource("1_2w70p")
+path = "art/media/ui/icons/smooth48/ui.filter-items.png"
+native_size = Vector2i(48, 48)
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[sub_resource type="Resource" id="Resource_c4cfw"]
+script = ExtResource("1_2w70p")
+path = "art/media/ui/icons/smooth48/ui.filter-reactions.png"
+native_size = Vector2i(48, 48)
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_6xrpw")
+id = "common"
+icons = Dictionary[String, ExtResource("1_2w70p")]({
+"abilities": SubResource("Resource_dlga4"),
+"end_turn": SubResource("Resource_ljqtv"),
+"inventory": SubResource("Resource_beogm"),
+"page_next": SubResource("Resource_47aiq"),
+"page_previous": SubResource("Resource_n7j40"),
+"reactions": SubResource("Resource_c4cfw"),
+"unarmed": SubResource("Resource_ltk8q"),
+"waiting": SubResource("Resource_r60tw")
+})
+labels = Dictionary[String, String]({
+"abilities": "Abilities",
+"end_turn": "End Turn",
+"inventory": "Inventory",
+"page_next": "Page Next",
+"page_previous": "Page Previous",
+"reactions": "Reactions",
+"unarmed": "Unarmed",
+"waiting": "Waiting"
+})
+source = "ui-icons-bg3-glyphs-2026-10-07"
+notes = "HUD controls. common.unarmed has no icon of its own."

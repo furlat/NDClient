@@ -1,0 +1,67 @@
+[gd_resource type="Resource" script_class="PresentationCharacter" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/character.gd" id="1_n7bh1"]
+
+[resource]
+script = ExtResource("1_n7bh1")
+id = "creature.goblin_gutterknife"
+identity = "content.neurodragon:creature:creature.goblin_gutterknife@1"
+rig = "smallscale.goblin17"
+portrait = "creature.goblin_gutterknife"
+size = "Small"
+attacks = Array[Dictionary]([{
+"clip": "Attack1",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.attack",
+"variant": "goblin17-physical"
+}, {
+"clip": "Attack5",
+"delivery": "projectile",
+"recipe": "action.attack",
+"release": 5,
+"variant": "goblin17-ranged"
+}, {
+"clip": "Attack1",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "goblin17-physical"
+}, {
+"clip": "Attack5",
+"delivery": "projectile",
+"recipe": "action.class.barbarian.frenzied_strike",
+"release": 5,
+"variant": "goblin17-ranged"
+}, {
+"clip": "Attack1",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.feature.extra_attack",
+"variant": "goblin17-physical"
+}, {
+"clip": "Attack5",
+"delivery": "projectile",
+"recipe": "action.feature.extra_attack",
+"release": 5,
+"variant": "goblin17-ranged"
+}, {
+"clip": "Attack1",
+"contact": 6,
+"delivery": "melee",
+"recipe": "reaction.opportunity_attack",
+"variant": "goblin17-physical"
+}, {
+"clip": "Attack5",
+"delivery": "projectile",
+"recipe": "reaction.opportunity_attack",
+"release": 5,
+"variant": "goblin17-ranged"
+}])
+reactions = Dictionary[String, String]({
+"block": "Block"
+})
+death = Dictionary[String, String]({
+"default": "Death"
+})
+notes = "Roster: Gutterknife, Y128, kit Scimitar, Pistol shot; NE."

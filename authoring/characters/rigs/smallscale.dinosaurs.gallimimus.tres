@@ -1,0 +1,426 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_m7423"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_ndc30"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_e10ak"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_k75se"]
+
+[sub_resource type="Resource" id="Resource_xup6c"]
+script = ExtResource("2_ndc30")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/gallimimus/attack1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/attack1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/attack1/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/attack1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/attack1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/attack1/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9722143330493233
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_lnb0a"]
+script = ExtResource("1_m7423")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Attack1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursGallimimus": "/rigs/dinosaurs_gallimimus/body/Attack1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/attack1/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/Gallimimus/Attack1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_xup6c")
+
+[sub_resource type="Resource" id="Resource_nj16r"]
+script = ExtResource("2_ndc30")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/gallimimus/attack2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/attack2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/attack2/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/attack2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/attack2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/attack2/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.974020211979295
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_w730k"]
+script = ExtResource("1_m7423")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Attack2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursGallimimus": "/rigs/dinosaurs_gallimimus/body/Attack2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/attack2/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/Gallimimus/Attack2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_nj16r")
+
+[sub_resource type="Resource" id="Resource_c0hq4"]
+script = ExtResource("2_ndc30")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/gallimimus/attack3/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/attack3/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/attack3/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/attack3/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/attack3/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/attack3/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9728690733949008
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_onycb"]
+script = ExtResource("1_m7423")
+name = "Attack3"
+role = "attack_3"
+source_clip = "Attack3"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursGallimimus": "/rigs/dinosaurs_gallimimus/body/Attack3.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/attack3/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/Gallimimus/Attack3.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_c0hq4")
+
+[sub_resource type="Resource" id="Resource_7hdmo"]
+script = ExtResource("2_ndc30")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/gallimimus/attack4/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/attack4/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/attack4/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/attack4/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/attack4/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/attack4/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9641293602598504
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_opuvp"]
+script = ExtResource("1_m7423")
+name = "Attack4"
+role = "attack_4"
+source_clip = "Attack4"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursGallimimus": "/rigs/dinosaurs_gallimimus/body/Attack4.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/attack4/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/Gallimimus/Attack4.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_7hdmo")
+
+[sub_resource type="Resource" id="Resource_6uo4w"]
+script = ExtResource("2_ndc30")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/gallimimus/die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/die/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/die/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/die/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/die/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9655542632191106
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_8j32r"]
+script = ExtResource("1_m7423")
+name = "Die"
+role = "die"
+source_clip = "Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursGallimimus": "/rigs/dinosaurs_gallimimus/body/Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/die/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/Gallimimus/Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_6uo4w")
+
+[sub_resource type="Resource" id="Resource_50c2y"]
+script = ExtResource("2_ndc30")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/gallimimus/idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/idle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/idle/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/idle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/idle/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9793269457686316
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_0k7g2"]
+script = ExtResource("1_m7423")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursGallimimus": "/rigs/dinosaurs_gallimimus/body/Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/idle/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/Gallimimus/Idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_50c2y")
+
+[sub_resource type="Resource" id="Resource_6aot4"]
+script = ExtResource("2_ndc30")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/gallimimus/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/run/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/run/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/run/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/run/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9731890241164054
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_n7foe"]
+script = ExtResource("1_m7423")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursGallimimus": "/rigs/dinosaurs_gallimimus/body/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/run/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/Gallimimus/Run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_6aot4")
+
+[sub_resource type="Resource" id="Resource_88t0f"]
+script = ExtResource("2_ndc30")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/gallimimus/takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/takedamage/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/takedamage/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/takedamage/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9736589578735246
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_1o1t8"]
+script = ExtResource("1_m7423")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursGallimimus": "/rigs/dinosaurs_gallimimus/body/TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/takedamage/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/Gallimimus/TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_88t0f")
+
+[sub_resource type="Resource" id="Resource_68jwp"]
+script = ExtResource("2_ndc30")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/gallimimus/taunt/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/taunt/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/taunt/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/taunt/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/taunt/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/taunt/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.976427422597507
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_q4uvj"]
+script = ExtResource("1_m7423")
+name = "Taunt"
+role = "taunt"
+source_clip = "Taunt"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursGallimimus": "/rigs/dinosaurs_gallimimus/body/Taunt.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/taunt/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/Gallimimus/Taunt.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_68jwp")
+
+[sub_resource type="Resource" id="Resource_l6jin"]
+script = ExtResource("2_ndc30")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/gallimimus/walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/walk/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/walk/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/walk/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/walk/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9733590189353004
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_i14ds"]
+script = ExtResource("1_m7423")
+name = "Walk"
+role = "walk"
+source_clip = "Walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursGallimimus": "/rigs/dinosaurs_gallimimus/body/Walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/gallimimus/walk/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/Gallimimus/Walk.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_l6jin")
+
+[resource]
+script = ExtResource("4_k75se")
+id = "smallscale.dinosaurs.gallimimus"
+pack = "dinosaurs"
+variant = "Gallimimus"
+source = "smallscale-authored/dinosaurs"
+cell = Vector2i(64, 64)
+pivot = Vector2(32, 43)
+anchor = Vector2(32, 30)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("DinosaursGallimimus")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_m7423")]([SubResource("Resource_lnb0a"), SubResource("Resource_w730k"), SubResource("Resource_onycb"), SubResource("Resource_opuvp"), SubResource("Resource_8j32r"), SubResource("Resource_0k7g2"), SubResource("Resource_n7foe"), SubResource("Resource_1o1t8"), SubResource("Resource_q4uvj"), SubResource("Resource_i14ds")])
+hold_clips = PackedStringArray("Die")
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed."

@@ -1,0 +1,1335 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_q8akf"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_iitev"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_mnx6g"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_nvjpq"]
+
+[sub_resource type="Resource" id="Resource_032iv"]
+script = ExtResource("2_iitev")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/8witchdoctor/180turn/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/180turn/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/180turn/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/180turn/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/180turn/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/180turn/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9858842884562654
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_3xtew"]
+script = ExtResource("1_q8akf")
+name = "180Turn"
+role = "turn"
+source_clip = "180Turn"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians8Witchdoctor": "/rigs/barbarians_8witchdoctor/body/180Turn.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/180turn/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/8Witchdoctor/180Turn.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/8Witchdoctor/180Turn.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_032iv")
+
+[sub_resource type="Resource" id="Resource_dbf0i"]
+script = ExtResource("2_iitev")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/8witchdoctor/attack1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/attack1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/attack1/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/attack1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/attack1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/attack1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9873625589033272
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_chaxb"]
+script = ExtResource("1_q8akf")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Attack1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians8Witchdoctor": "/rigs/barbarians_8witchdoctor/body/Attack1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/attack1/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/8Witchdoctor/Attack1.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/8Witchdoctor/Attack1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_dbf0i")
+
+[sub_resource type="Resource" id="Resource_imdu5"]
+script = ExtResource("2_iitev")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/8witchdoctor/attack2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/attack2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/attack2/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/attack2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/attack2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/attack2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9896263418662262
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_awgyr"]
+script = ExtResource("1_q8akf")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Attack2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians8Witchdoctor": "/rigs/barbarians_8witchdoctor/body/Attack2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/attack2/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/8Witchdoctor/Attack2.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/8Witchdoctor/Attack2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_imdu5")
+
+[sub_resource type="Resource" id="Resource_8w8gq"]
+script = ExtResource("2_iitev")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/8witchdoctor/attack3/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/attack3/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/attack3/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/attack3/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/attack3/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/attack3/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9885045524466802
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_cclx0"]
+script = ExtResource("1_q8akf")
+name = "Attack3"
+role = "attack_3"
+source_clip = "Attack3"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians8Witchdoctor": "/rigs/barbarians_8witchdoctor/body/Attack3.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/attack3/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/8Witchdoctor/Attack3.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/8Witchdoctor/Attack3.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_8w8gq")
+
+[sub_resource type="Resource" id="Resource_arolf"]
+script = ExtResource("2_iitev")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/8witchdoctor/attackrun/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/attackrun/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/attackrun/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/attackrun/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/attackrun/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/attackrun/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9864847046413502
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_5ipsu"]
+script = ExtResource("1_q8akf")
+name = "AttackRun"
+role = "attack_run"
+source_clip = "AttackRun"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians8Witchdoctor": "/rigs/barbarians_8witchdoctor/body/AttackRun.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/attackrun/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/8Witchdoctor/AttackRun.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/8Witchdoctor/AttackRun.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_arolf")
+
+[sub_resource type="Resource" id="Resource_ahfgv"]
+script = ExtResource("2_iitev")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/8witchdoctor/blockmid/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/blockmid/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/blockmid/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/blockmid/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/blockmid/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/blockmid/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9876325088339224
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_tsuy2"]
+script = ExtResource("1_q8akf")
+name = "Block"
+role = "block_hold"
+source_clip = "BlockMid"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians8Witchdoctor": "/rigs/barbarians_8witchdoctor/body/BlockMid.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/blockmid/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/8Witchdoctor/BlockMid.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_ahfgv")
+
+[sub_resource type="Resource" id="Resource_1oa4b"]
+script = ExtResource("2_iitev")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/8witchdoctor/blockstart/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/blockstart/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/blockstart/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/blockstart/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/blockstart/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/blockstart/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.991633853016188
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_gs3qb"]
+script = ExtResource("1_q8akf")
+name = "BlockStart"
+role = "block_start"
+source_clip = "BlockStart"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians8Witchdoctor": "/rigs/barbarians_8witchdoctor/body/BlockStart.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/blockstart/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/8Witchdoctor/BlockStart.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/8Witchdoctor/BlockStart.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_1oa4b")
+
+[sub_resource type="Resource" id="Resource_hm4ac"]
+script = ExtResource("2_iitev")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/8witchdoctor/castspell/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/castspell/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/castspell/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/castspell/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/castspell/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/castspell/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.989193357559368
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_kuxvm"]
+script = ExtResource("1_q8akf")
+name = "CastSpell"
+role = "cast"
+source_clip = "CastSpell"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians8Witchdoctor": "/rigs/barbarians_8witchdoctor/body/CastSpell.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/castspell/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/8Witchdoctor/CastSpell.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/8Witchdoctor/CastSpell.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_hm4ac")
+
+[sub_resource type="Resource" id="Resource_yuomr"]
+script = ExtResource("2_iitev")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/8witchdoctor/crouchidle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/crouchidle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/crouchidle/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/crouchidle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/crouchidle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/crouchidle/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.990652310778654
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_8uqte"]
+script = ExtResource("1_q8akf")
+name = "Crouch"
+role = "crouch_idle"
+source_clip = "CrouchIdle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians8Witchdoctor": "/rigs/barbarians_8witchdoctor/body/CrouchIdle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/crouchidle/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/8Witchdoctor/CrouchIdle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_yuomr")
+
+[sub_resource type="Resource" id="Resource_ib2lj"]
+script = ExtResource("2_iitev")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/8witchdoctor/crouchrun/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/crouchrun/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/crouchrun/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/crouchrun/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/crouchrun/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/crouchrun/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9949992087355596
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_xqe6r"]
+script = ExtResource("1_q8akf")
+name = "CrouchWalk"
+role = "crouch_move"
+source_clip = "CrouchRun"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians8Witchdoctor": "/rigs/barbarians_8witchdoctor/body/CrouchRun.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/crouchrun/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/8Witchdoctor/CrouchRun.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/8Witchdoctor/CrouchRun.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_ib2lj")
+
+[sub_resource type="Resource" id="Resource_14dkm"]
+script = ExtResource("2_iitev")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/8witchdoctor/die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/die/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/die/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/die/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/die/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9907231257031808
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_i7wde"]
+script = ExtResource("1_q8akf")
+name = "Die"
+role = "die"
+source_clip = "Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians8Witchdoctor": "/rigs/barbarians_8witchdoctor/body/Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/die/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/8Witchdoctor/Die.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/8Witchdoctor/Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_14dkm")
+
+[sub_resource type="Resource" id="Resource_l5otl"]
+script = ExtResource("2_iitev")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/8witchdoctor/frontflip/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/frontflip/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/frontflip/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/frontflip/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/frontflip/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/frontflip/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9810089148412212
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_xvtrb"]
+script = ExtResource("1_q8akf")
+name = "BackFlip"
+role = "flip"
+source_clip = "FrontFlip"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians8Witchdoctor": "/rigs/barbarians_8witchdoctor/body/FrontFlip.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/frontflip/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/8Witchdoctor/FrontFlip.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/8Witchdoctor/FrontFlip.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_l5otl")
+
+[sub_resource type="Resource" id="Resource_81bru"]
+script = ExtResource("2_iitev")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/8witchdoctor/idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/idle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/idle/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/idle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/idle/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9900941422594144
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_xsa51"]
+script = ExtResource("1_q8akf")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians8Witchdoctor": "/rigs/barbarians_8witchdoctor/body/Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/idle/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/8Witchdoctor/Idle.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/8Witchdoctor/Idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_81bru")
+
+[sub_resource type="Resource" id="Resource_oxiuo"]
+script = ExtResource("2_iitev")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/8witchdoctor/idle2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/idle2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/idle2/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/idle2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/idle2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/idle2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.987135631990934
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_ib4ge"]
+script = ExtResource("1_q8akf")
+name = "Idle2"
+role = "idle_alt"
+source_clip = "Idle2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians8Witchdoctor": "/rigs/barbarians_8witchdoctor/body/Idle2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/idle2/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/8Witchdoctor/Idle2.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/8Witchdoctor/Idle2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_oxiuo")
+
+[sub_resource type="Resource" id="Resource_tdmdd"]
+script = ExtResource("2_iitev")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/8witchdoctor/kick/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/kick/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/kick/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/kick/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/kick/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/kick/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.992597168492901
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_n8yef"]
+script = ExtResource("1_q8akf")
+name = "Kick"
+role = "kick"
+source_clip = "Kick"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians8Witchdoctor": "/rigs/barbarians_8witchdoctor/body/Kick.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/kick/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/8Witchdoctor/Kick.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/8Witchdoctor/Kick.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_tdmdd")
+
+[sub_resource type="Resource" id="Resource_5gwl3"]
+script = ExtResource("2_iitev")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/8witchdoctor/pummel/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/pummel/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/pummel/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/pummel/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/pummel/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/pummel/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9727936433171892
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_38g7b"]
+script = ExtResource("1_q8akf")
+name = "Pummel"
+role = "pummel"
+source_clip = "Pummel"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians8Witchdoctor": "/rigs/barbarians_8witchdoctor/body/Pummel.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/pummel/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/8Witchdoctor/Pummel.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/8Witchdoctor/Pummel.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_5gwl3")
+
+[sub_resource type="Resource" id="Resource_0eu70"]
+script = ExtResource("2_iitev")
+status = "validated_partial"
+flags = PackedStringArray("source_pose_empty", "source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/8witchdoctor/quickshot/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/quickshot/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/quickshot/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/quickshot/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/quickshot/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/quickshot/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.99269571872327
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_bf1ja"]
+script = ExtResource("1_q8akf")
+name = "QuickShot"
+role = "shoot"
+source_clip = "QuickShot"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians8Witchdoctor": "/rigs/barbarians_8witchdoctor/body/QuickShot.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/quickshot/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/8Witchdoctor/QuickShot.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/8Witchdoctor/QuickShot.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_0eu70")
+
+[sub_resource type="Resource" id="Resource_yvb04"]
+script = ExtResource("2_iitev")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/8witchdoctor/quickslide/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/quickslide/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/quickslide/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/quickslide/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/quickslide/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/quickslide/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9880531526718423
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_ak84l"]
+script = ExtResource("1_q8akf")
+name = "QuickSlide"
+role = "slide"
+source_clip = "QuickSlide"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians8Witchdoctor": "/rigs/barbarians_8witchdoctor/body/QuickSlide.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/quickslide/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/8Witchdoctor/QuickSlide.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/8Witchdoctor/QuickSlide.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_yvb04")
+
+[sub_resource type="Resource" id="Resource_qoaqk"]
+script = ExtResource("2_iitev")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/8witchdoctor/rolling/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/rolling/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/rolling/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/rolling/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/rolling/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/rolling/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9919048580465905
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_mckkg"]
+script = ExtResource("1_q8akf")
+name = "Rolling"
+role = "roll"
+source_clip = "Rolling"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians8Witchdoctor": "/rigs/barbarians_8witchdoctor/body/Rolling.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/rolling/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/8Witchdoctor/Rolling.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/8Witchdoctor/Rolling.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_qoaqk")
+
+[sub_resource type="Resource" id="Resource_lp50l"]
+script = ExtResource("2_iitev")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/8witchdoctor/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/run/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/run/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/run/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/run/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9895933518484498
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_vvgbs"]
+script = ExtResource("1_q8akf")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians8Witchdoctor": "/rigs/barbarians_8witchdoctor/body/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/run/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/8Witchdoctor/Run.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/8Witchdoctor/Run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_lp50l")
+
+[sub_resource type="Resource" id="Resource_x0gad"]
+script = ExtResource("2_iitev")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/8witchdoctor/runbackwards/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/runbackwards/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/runbackwards/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/runbackwards/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/runbackwards/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/runbackwards/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.990638093575419
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_vsmh1"]
+script = ExtResource("1_q8akf")
+name = "RunBackwards"
+role = "run_back"
+source_clip = "RunBackwards"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians8Witchdoctor": "/rigs/barbarians_8witchdoctor/body/RunBackwards.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/runbackwards/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/8Witchdoctor/RunBackwards.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/8Witchdoctor/RunBackwards.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_x0gad")
+
+[sub_resource type="Resource" id="Resource_wkvr5"]
+script = ExtResource("2_iitev")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/8witchdoctor/sittingchair/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/sittingchair/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/sittingchair/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/sittingchair/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/sittingchair/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/sittingchair/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9883791005742224
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_dgrgw"]
+script = ExtResource("1_q8akf")
+name = "SittingChair"
+role = "sit"
+source_clip = "SittingChair"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians8Witchdoctor": "/rigs/barbarians_8witchdoctor/body/SittingChair.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/sittingchair/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/8Witchdoctor/SittingChair.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/8Witchdoctor/SittingChair.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_wkvr5")
+
+[sub_resource type="Resource" id="Resource_b0eh3"]
+script = ExtResource("2_iitev")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/8witchdoctor/slide/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/slide/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/slide/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/slide/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/slide/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/slide/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9943093811031046
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_luraj"]
+script = ExtResource("1_q8akf")
+name = "Slide"
+role = "slide"
+source_clip = "Slide"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians8Witchdoctor": "/rigs/barbarians_8witchdoctor/body/Slide.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/slide/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/8Witchdoctor/Slide.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/8Witchdoctor/Slide.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_b0eh3")
+
+[sub_resource type="Resource" id="Resource_kmhlw"]
+script = ExtResource("2_iitev")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/8witchdoctor/slideend/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/slideend/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/slideend/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/slideend/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/slideend/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/slideend/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9884574655841863
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_jap36"]
+script = ExtResource("1_q8akf")
+name = "SlideEnd"
+role = "slide_end"
+source_clip = "SlideEnd"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians8Witchdoctor": "/rigs/barbarians_8witchdoctor/body/SlideEnd.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/slideend/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/8Witchdoctor/SlideEnd.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/8Witchdoctor/SlideEnd.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_kmhlw")
+
+[sub_resource type="Resource" id="Resource_ghxhc"]
+script = ExtResource("2_iitev")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/8witchdoctor/slidestart/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/slidestart/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/slidestart/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/slidestart/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/slidestart/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/slidestart/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.98695271353983
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_yeou3"]
+script = ExtResource("1_q8akf")
+name = "SlideStart"
+role = "slide_start"
+source_clip = "SlideStart"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians8Witchdoctor": "/rigs/barbarians_8witchdoctor/body/SlideStart.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/slidestart/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/8Witchdoctor/SlideStart.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/8Witchdoctor/SlideStart.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_ghxhc")
+
+[sub_resource type="Resource" id="Resource_r8t4y"]
+script = ExtResource("2_iitev")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/8witchdoctor/special1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/special1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/special1/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/special1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/special1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/special1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9864822903512948
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_tpt28"]
+script = ExtResource("1_q8akf")
+name = "Special1"
+role = "special_1"
+source_clip = "Special1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians8Witchdoctor": "/rigs/barbarians_8witchdoctor/body/Special1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/special1/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/8Witchdoctor/Special1.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/8Witchdoctor/Special1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_r8t4y")
+
+[sub_resource type="Resource" id="Resource_h5skl"]
+script = ExtResource("2_iitev")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/8witchdoctor/special2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/special2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/special2/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/special2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/special2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/special2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.8428633119109914
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_d1527"]
+script = ExtResource("1_q8akf")
+name = "Special2"
+role = "special_2"
+source_clip = "Special2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians8Witchdoctor": "/rigs/barbarians_8witchdoctor/body/Special2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/special2/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/8Witchdoctor/Special2.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/8Witchdoctor/Special2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_h5skl")
+
+[sub_resource type="Resource" id="Resource_agfwl"]
+script = ExtResource("2_iitev")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/8witchdoctor/strafeleft/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/strafeleft/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/strafeleft/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/strafeleft/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/strafeleft/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/strafeleft/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.98984419830881
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_mfncp"]
+script = ExtResource("1_q8akf")
+name = "StrafeLeft"
+role = "strafe_left"
+source_clip = "StrafeLeft"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians8Witchdoctor": "/rigs/barbarians_8witchdoctor/body/StrafeLeft.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/strafeleft/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/8Witchdoctor/StrafeLeft.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/8Witchdoctor/StrafeLeft.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_agfwl")
+
+[sub_resource type="Resource" id="Resource_jc4m2"]
+script = ExtResource("2_iitev")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/8witchdoctor/straferight/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/straferight/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/straferight/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/straferight/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/straferight/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/straferight/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9889819644593758
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_jxp7c"]
+script = ExtResource("1_q8akf")
+name = "StrafeRight"
+role = "strafe_right"
+source_clip = "StrafeRight"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians8Witchdoctor": "/rigs/barbarians_8witchdoctor/body/StrafeRight.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/straferight/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/8Witchdoctor/StrafeRight.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/8Witchdoctor/StrafeRight.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_jc4m2")
+
+[sub_resource type="Resource" id="Resource_3qfx2"]
+script = ExtResource("2_iitev")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/8witchdoctor/takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/takedamage/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/takedamage/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/takedamage/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.993321492745043
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_twi1x"]
+script = ExtResource("1_q8akf")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians8Witchdoctor": "/rigs/barbarians_8witchdoctor/body/TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/takedamage/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/8Witchdoctor/TakeDamage.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/8Witchdoctor/TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_3qfx2")
+
+[sub_resource type="Resource" id="Resource_3b3mx"]
+script = ExtResource("2_iitev")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/8witchdoctor/unsheath/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/unsheath/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/unsheath/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/unsheath/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/unsheath/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/unsheath/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9891379681189209
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_mpq7l"]
+script = ExtResource("1_q8akf")
+name = "UnSheath"
+role = "unsheath"
+source_clip = "UnSheath"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians8Witchdoctor": "/rigs/barbarians_8witchdoctor/body/UnSheath.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/unsheath/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/8Witchdoctor/UnSheath.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/8Witchdoctor/UnSheath.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_3b3mx")
+
+[sub_resource type="Resource" id="Resource_56t35"]
+script = ExtResource("2_iitev")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/8witchdoctor/walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/walk/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/walk/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/walk/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/walk/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9914429970274524
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_fphjc"]
+script = ExtResource("1_q8akf")
+name = "Walk"
+role = "walk"
+source_clip = "Walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians8Witchdoctor": "/rigs/barbarians_8witchdoctor/body/Walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/8witchdoctor/walk/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/8Witchdoctor/Walk.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/8Witchdoctor/Walk.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_56t35")
+
+[resource]
+script = ExtResource("4_nvjpq")
+id = "smallscale.barbarians.8witchdoctor"
+pack = "barbarians"
+variant = "8Witchdoctor"
+source = "smallscale-authored/barbarians"
+pivot = Vector2(64, 93)
+anchor = Vector2(64, 67)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("Barbarians8Witchdoctor")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_q8akf")]([SubResource("Resource_3xtew"), SubResource("Resource_chaxb"), SubResource("Resource_awgyr"), SubResource("Resource_cclx0"), SubResource("Resource_5ipsu"), SubResource("Resource_tsuy2"), SubResource("Resource_gs3qb"), SubResource("Resource_kuxvm"), SubResource("Resource_8uqte"), SubResource("Resource_xqe6r"), SubResource("Resource_i7wde"), SubResource("Resource_xvtrb"), SubResource("Resource_xsa51"), SubResource("Resource_ib4ge"), SubResource("Resource_n8yef"), SubResource("Resource_38g7b"), SubResource("Resource_bf1ja"), SubResource("Resource_ak84l"), SubResource("Resource_mckkg"), SubResource("Resource_vvgbs"), SubResource("Resource_vsmh1"), SubResource("Resource_dgrgw"), SubResource("Resource_luraj"), SubResource("Resource_jap36"), SubResource("Resource_yeou3"), SubResource("Resource_tpt28"), SubResource("Resource_d1527"), SubResource("Resource_mfncp"), SubResource("Resource_jxp7c"), SubResource("Resource_twi1x"), SubResource("Resource_mpq7l"), SubResource("Resource_fphjc")])
+hold_clips = PackedStringArray("Die")
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed."

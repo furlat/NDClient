@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="PresentationCharacter" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/character.gd" id="1_02wlc"]
+
+[resource]
+script = ExtResource("1_02wlc")
+id = "creature.player.humanoid_body"
+rig = "neuroclient.modular"
+size = "Medium"
+death = Dictionary[String, String]({
+"default": "Die"
+})
+notes = "The player's own body: the layered rig dressed from the server's appearance and loadout; the portrait is the player's saved choice."

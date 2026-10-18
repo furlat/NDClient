@@ -1,0 +1,464 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_uy5fo"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_g4p5x"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_yj5kb"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_ft8ro"]
+
+[sub_resource type="Resource" id="Resource_meyoe"]
+script = ExtResource("2_g4p5x")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/animals/actions/ostrich/idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/animals/actions/ostrich/idle/normals-gentle.png",
+"original": "art/geometry/creatures/animals/actions/ostrich/idle/normals.png",
+"reference": "art/geometry/creatures/animals/actions/ostrich/idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/animals/actions/ostrich/idle/normal-valid.png",
+"support": "art/geometry/creatures/animals/actions/ostrich/idle/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.976014543748534
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_jmpu3"]
+script = ExtResource("1_uy5fo")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Ostrich": "/rigs/ostrich/body/Idle.png",
+"OstrichShadow": "/rigs/ostrich/shadow/Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/animals/actions/ostrich/idle/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Ostrich/Idle.png",
+"shadow": "art/media/smallscale/authored/animals/Derived shadows/Ostrich/Idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_meyoe")
+
+[sub_resource type="Resource" id="Resource_3pspi"]
+script = ExtResource("2_g4p5x")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/animals/actions/ostrich/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/animals/actions/ostrich/run/normals-gentle.png",
+"original": "art/geometry/creatures/animals/actions/ostrich/run/normals.png",
+"reference": "art/geometry/creatures/animals/actions/ostrich/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/animals/actions/ostrich/run/normal-valid.png",
+"support": "art/geometry/creatures/animals/actions/ostrich/run/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.9851323223312518
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_coadt"]
+script = ExtResource("1_uy5fo")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Ostrich": "/rigs/ostrich/body/Run.png",
+"OstrichShadow": "/rigs/ostrich/shadow/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/animals/actions/ostrich/run/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Ostrich/Run.png",
+"shadow": "art/media/smallscale/authored/animals/Derived shadows/Ostrich/Run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_3pspi")
+
+[sub_resource type="Resource" id="Resource_dplo8"]
+script = ExtResource("2_g4p5x")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/animals/actions/ostrich/takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/animals/actions/ostrich/takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/animals/actions/ostrich/takedamage/normals.png",
+"reference": "art/geometry/creatures/animals/actions/ostrich/takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/animals/actions/ostrich/takedamage/normal-valid.png",
+"support": "art/geometry/creatures/animals/actions/ostrich/takedamage/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.9795346062052506
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_423ue"]
+script = ExtResource("1_uy5fo")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Ostrich": "/rigs/ostrich/body/TakeDamage.png",
+"OstrichShadow": "/rigs/ostrich/shadow/TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/animals/actions/ostrich/takedamage/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Ostrich/TakeDamage.png",
+"shadow": "art/media/smallscale/authored/animals/Derived shadows/Ostrich/TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_dplo8")
+
+[sub_resource type="Resource" id="Resource_46fvl"]
+script = ExtResource("2_g4p5x")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/animals/actions/ostrich/die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/animals/actions/ostrich/die/normals-gentle.png",
+"original": "art/geometry/creatures/animals/actions/ostrich/die/normals.png",
+"reference": "art/geometry/creatures/animals/actions/ostrich/die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/animals/actions/ostrich/die/normal-valid.png",
+"support": "art/geometry/creatures/animals/actions/ostrich/die/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.980628395936688
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_lelgp"]
+script = ExtResource("1_uy5fo")
+name = "Die"
+role = "die"
+source_clip = "Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Ostrich": "/rigs/ostrich/body/Die.png",
+"OstrichShadow": "/rigs/ostrich/shadow/Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/animals/actions/ostrich/die/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Ostrich/Die.png",
+"shadow": "art/media/smallscale/authored/animals/Derived shadows/Ostrich/Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_46fvl")
+
+[sub_resource type="Resource" id="Resource_hjk75"]
+script = ExtResource("2_g4p5x")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/animals/actions/ostrich/attack1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/animals/actions/ostrich/attack1/normals-gentle.png",
+"original": "art/geometry/creatures/animals/actions/ostrich/attack1/normals.png",
+"reference": "art/geometry/creatures/animals/actions/ostrich/attack1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/animals/actions/ostrich/attack1/normal-valid.png",
+"support": "art/geometry/creatures/animals/actions/ostrich/attack1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.982620167488815
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_pngc0"]
+script = ExtResource("1_uy5fo")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Attack1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Ostrich": "/rigs/ostrich/body/Attack1.png",
+"OstrichShadow": "/rigs/ostrich/shadow/Attack1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/animals/actions/ostrich/attack1/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Ostrich/Attack1.png",
+"shadow": "art/media/smallscale/authored/animals/Derived shadows/Ostrich/Attack1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_hjk75")
+
+[sub_resource type="Resource" id="Resource_q6xxb"]
+script = ExtResource("3_yj5kb")
+role = "movement"
+qualifier = {
+"kind": "default"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+playback = "loop"
+
+[sub_resource type="Resource" id="Resource_43q3i"]
+script = ExtResource("3_yj5kb")
+role = "movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_c8xl5"]
+script = ExtResource("3_yj5kb")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "direct_arc"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_gcmy8"]
+script = ExtResource("3_yj5kb")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "connector_transfer"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_ni3y1"]
+script = ExtResource("3_yj5kb")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "direct_arc"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_ietyx"]
+script = ExtResource("3_yj5kb")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "connector_transfer"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_er357"]
+script = ExtResource("3_yj5kb")
+role = "shove"
+qualifier = {
+"kind": "default"
+}
+clip = "Attack1"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 6.0,
+"name": "contact"
+}]
+
+[sub_resource type="Resource" id="Resource_tqedo"]
+script = ExtResource("3_yj5kb")
+role = "forced_movement"
+qualifier = {
+"kind": "default"
+}
+clip = "TakeDamage"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 5.0,
+"name": "brace"
+}]
+
+[sub_resource type="Resource" id="Resource_g8hiu"]
+script = ExtResource("3_yj5kb")
+role = "forced_movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_h3hpc"]
+script = ExtResource("3_yj5kb")
+role = "body_action"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_scg14"]
+script = ExtResource("3_yj5kb")
+role = "body_action_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_4k42p"]
+script = ExtResource("3_yj5kb")
+role = "equipment"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_ycbhc"]
+script = ExtResource("3_yj5kb")
+role = "healing"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_uvrlg"]
+script = ExtResource("3_yj5kb")
+role = "save_avoidance"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_hsmmj"]
+script = ExtResource("3_yj5kb")
+role = "condition_entry"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_yjmok"]
+script = ExtResource("3_yj5kb")
+role = "condition_hold"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+hidden_slots = PackedStringArray()
+playback = "final_rest"
+rest_frame = 14
+
+[sub_resource type="Resource" id="Resource_jtity"]
+script = ExtResource("3_yj5kb")
+role = "condition_exit"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+reversed = true
+
+[sub_resource type="Resource" id="Resource_6jwrc"]
+script = ExtResource("3_yj5kb")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "flying",
+"trajectory": "path"
+}
+clip = "Idle"
+hidden_slots = PackedStringArray()
+playback = "once"
+frame_keys = [[0.0, 0.0], [1.0, 0.0]]
+
+[resource]
+script = ExtResource("4_ft8ro")
+id = "smallscale.ostrich"
+pack = "animals"
+variant = "Ostrich"
+source = "smallscale-authored/animals"
+cell = Vector2i(64, 64)
+pivot = Vector2(32, 42)
+anchor = Vector2(32, 34)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("shadow", "body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("Ostrich"),
+"shadow": PackedStringArray("OstrichShadow")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_uy5fo")]([SubResource("Resource_jmpu3"), SubResource("Resource_coadt"), SubResource("Resource_423ue"), SubResource("Resource_lelgp"), SubResource("Resource_pngc0")])
+contexts = Array[ExtResource("3_yj5kb")]([SubResource("Resource_q6xxb"), SubResource("Resource_43q3i"), SubResource("Resource_c8xl5"), SubResource("Resource_gcmy8"), SubResource("Resource_ni3y1"), SubResource("Resource_ietyx"), SubResource("Resource_er357"), SubResource("Resource_tqedo"), SubResource("Resource_g8hiu"), SubResource("Resource_h3hpc"), SubResource("Resource_scg14"), SubResource("Resource_4k42p"), SubResource("Resource_ycbhc"), SubResource("Resource_uvrlg"), SubResource("Resource_hsmmj"), SubResource("Resource_yjmok"), SubResource("Resource_jtity"), SubResource("Resource_6jwrc")])
+shadow_alpha = 1.0
+lifecycle_scale = 0.6
+hold_clips = PackedStringArray("Die")
+measurements = "measured/characters/rigs/smallscale.ostrich.json"

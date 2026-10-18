@@ -1,0 +1,106 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_ey2gp"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_mphed"]
+
+[sub_resource type="Resource" id="Resource_dio4y"]
+script = ExtResource("1_ey2gp")
+path = "art/media/ui/icons/smooth48/item.club.png"
+native_size = Vector2i(48, 48)
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_mphed")
+id = "weapon.club"
+kind = "weapon"
+slots = Dictionary[String, Dictionary]({
+"weapon_melee_main": {
+"layers": [{
+"part": "Melee10",
+"slot": "weapon",
+"tint": "#8b6914"
+}],
+"variants": {
+"10000001": [{
+"part": "Melee10",
+"slot": "weapon",
+"tint": "#778899"
+}],
+"10000002": [{
+"part": "Melee10",
+"slot": "weapon",
+"tint": "#5c3317"
+}]
+}
+},
+"weapon_melee_off": {
+"layers": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#8b6914"
+}],
+&"look": "Off-hand Club",
+"variants": {}
+}
+})
+hands = Dictionary[String, Dictionary]({
+"weapon_melee_off": {
+"": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#8b6914"
+}],
+"10000001": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#778899"
+}],
+"10000002": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#5c3317"
+}]
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee10",
+"pivots_by_camera": [[55.0, 65.5], [66.5, 57.5], [75.0, 65.0], [64.0, 73.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#8b6914",
+"variant": ""
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee10",
+"pivots_by_camera": [[55.0, 65.5], [66.5, 57.5], [75.0, 65.0], [64.0, 73.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#778899",
+"variant": "10000001"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee10",
+"pivots_by_camera": [[55.0, 65.5], [66.5, 57.5], [75.0, 65.0], [64.0, 73.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#5c3317",
+"variant": "10000002"
+}])
+icon = SubResource("Resource_dio4y")
+notes = "Visual name Club; Light hammer sprite as simple wooden bludgeon"

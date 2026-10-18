@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="1_rm2xu"]
+
+[resource]
+script = ExtResource("1_rm2xu")
+id = "tool.banner"
+kind = "weapon"
+slots = Dictionary[String, Dictionary]({
+"weapon_melee_main": {
+"layers": [{
+"part": "Melee25",
+"slot": "weapon",
+"tint": "#5b286d"
+}],
+"variants": {}
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee25",
+"pivots_by_camera": [[55.5, 63.0], [67.5, 58.0], [74.5, 66.5], [62.5, 71.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#5b286d",
+"variant": ""
+}])
+status = "partial"
+notes = "Visual name Banner; Existing vendor silhouette approximation; does not promise exact wand length, crowbar hook, banner flag, firearm or canister geometry."

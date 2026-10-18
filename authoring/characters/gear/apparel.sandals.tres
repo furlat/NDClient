@@ -1,0 +1,80 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_n87df"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_ghpei"]
+
+[sub_resource type="Resource" id="Resource_ktg8c"]
+script = ExtResource("1_n87df")
+path = "art/media/ui/icons/smooth48/item.leather-boots.png"
+native_size = Vector2i(48, 48)
+reuses = "item.leather-boots"
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_ghpei")
+id = "apparel.sandals"
+kind = "armor"
+slots = Dictionary[String, Dictionary]({
+"boots": {
+"layers": [{
+"part": "Shoes3",
+"slot": "shoes",
+"tint": "#8b4513"
+}],
+"variants": {
+"b0000001": [{
+"part": "Shoes3",
+"slot": "shoes",
+"tint": "#334455"
+}],
+"b0000002": [{
+"part": "Shoes3",
+"slot": "shoes",
+"tint": "#5c2a0e"
+}]
+}
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Shoes3",
+"pivots_by_camera": [[63.5, 84.5], [63.5, 82.5], [67.0, 81.5], [67.0, 84.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#8b4513",
+"variant": ""
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Shoes3",
+"pivots_by_camera": [[63.5, 84.5], [63.5, 82.5], [67.0, 81.5], [67.0, 84.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#334455",
+"variant": "b0000001"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Shoes3",
+"pivots_by_camera": [[63.5, 84.5], [63.5, 82.5], [67.0, 81.5], [67.0, 84.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#5c2a0e",
+"variant": "b0000002"
+}])
+icon = SubResource("Resource_ktg8c")
+notes = "Visual name Sandals; Croc-like sandals — monk/druid footwear
+Icon: Shares an existing icon for the native equipment slot."

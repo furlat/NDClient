@@ -1,0 +1,426 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_0e3jp"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_pqilv"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_1ui3r"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_rq3ct"]
+
+[sub_resource type="Resource" id="Resource_e4dn6"]
+script = ExtResource("2_pqilv")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/attack1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/attack1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/attack1/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/attack1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/attack1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/attack1/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 2.82842712474619
+coverage = 0.9791145949199784
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_5uwcx"]
+script = ExtResource("1_0e3jp")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Attack1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteArmoredStegosaurus": "/rigs/dinosaurs_elite_armored_stegosaurus/body/Attack1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/attack1/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE Armored Stegosaurus/Attack1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_e4dn6")
+
+[sub_resource type="Resource" id="Resource_106wb"]
+script = ExtResource("2_pqilv")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/attack2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/attack2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/attack2/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/attack2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/attack2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/attack2/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 2.82842712474619
+coverage = 0.980508863519018
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_wa016"]
+script = ExtResource("1_0e3jp")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Attack2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteArmoredStegosaurus": "/rigs/dinosaurs_elite_armored_stegosaurus/body/Attack2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/attack2/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE Armored Stegosaurus/Attack2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_106wb")
+
+[sub_resource type="Resource" id="Resource_grywm"]
+script = ExtResource("2_pqilv")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/attack3/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/attack3/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/attack3/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/attack3/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/attack3/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/attack3/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 2.82842712474619
+coverage = 0.982260762953219
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_82col"]
+script = ExtResource("1_0e3jp")
+name = "Attack3"
+role = "attack_3"
+source_clip = "Attack3"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteArmoredStegosaurus": "/rigs/dinosaurs_elite_armored_stegosaurus/body/Attack3.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/attack3/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE Armored Stegosaurus/Attack3.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_grywm")
+
+[sub_resource type="Resource" id="Resource_bhy8y"]
+script = ExtResource("2_pqilv")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/die/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/die/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/die/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/die/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 2.82842712474619
+coverage = 0.983244707534865
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_08778"]
+script = ExtResource("1_0e3jp")
+name = "Die"
+role = "die"
+source_clip = "Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteArmoredStegosaurus": "/rigs/dinosaurs_elite_armored_stegosaurus/body/Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/die/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE Armored Stegosaurus/Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_bhy8y")
+
+[sub_resource type="Resource" id="Resource_bdeoj"]
+script = ExtResource("2_pqilv")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/idle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/idle/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/idle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/idle/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 2.82842712474619
+coverage = 0.9831405879894106
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_5rw0a"]
+script = ExtResource("1_0e3jp")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteArmoredStegosaurus": "/rigs/dinosaurs_elite_armored_stegosaurus/body/Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/idle/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE Armored Stegosaurus/Idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_bdeoj")
+
+[sub_resource type="Resource" id="Resource_qu2hv"]
+script = ExtResource("2_pqilv")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/idle2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/idle2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/idle2/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/idle2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/idle2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/idle2/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 2.82842712474619
+coverage = 0.9822495808751072
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_8dse4"]
+script = ExtResource("1_0e3jp")
+name = "Idle2"
+role = "idle_alt"
+source_clip = "Idle2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteArmoredStegosaurus": "/rigs/dinosaurs_elite_armored_stegosaurus/body/Idle2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/idle2/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE Armored Stegosaurus/Idle2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_qu2hv")
+
+[sub_resource type="Resource" id="Resource_rikym"]
+script = ExtResource("2_pqilv")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/run/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/run/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/run/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/run/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 2.82842712474619
+coverage = 0.9814220847012064
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_b6u4x"]
+script = ExtResource("1_0e3jp")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteArmoredStegosaurus": "/rigs/dinosaurs_elite_armored_stegosaurus/body/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/run/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE Armored Stegosaurus/Run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_rikym")
+
+[sub_resource type="Resource" id="Resource_rmgph"]
+script = ExtResource("2_pqilv")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/takedamage/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/takedamage/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/takedamage/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 2.82842712474619
+coverage = 0.9836688526256926
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_dwef1"]
+script = ExtResource("1_0e3jp")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteArmoredStegosaurus": "/rigs/dinosaurs_elite_armored_stegosaurus/body/TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/takedamage/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE Armored Stegosaurus/TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_rmgph")
+
+[sub_resource type="Resource" id="Resource_31fep"]
+script = ExtResource("2_pqilv")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/taunt/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/taunt/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/taunt/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/taunt/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/taunt/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/taunt/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 2.82842712474619
+coverage = 0.9814959282830356
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_2cqsv"]
+script = ExtResource("1_0e3jp")
+name = "Taunt"
+role = "taunt"
+source_clip = "Taunt"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteArmoredStegosaurus": "/rigs/dinosaurs_elite_armored_stegosaurus/body/Taunt.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/taunt/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE Armored Stegosaurus/Taunt.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_31fep")
+
+[sub_resource type="Resource" id="Resource_me346"]
+script = ExtResource("2_pqilv")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/walk/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/walk/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/walk/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/walk/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 2.82842712474619
+coverage = 0.9814927724004776
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_exmy0"]
+script = ExtResource("1_0e3jp")
+name = "Walk"
+role = "walk"
+source_clip = "Walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteArmoredStegosaurus": "/rigs/dinosaurs_elite_armored_stegosaurus/body/Walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-stegosaurus/walk/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE Armored Stegosaurus/Walk.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_me346")
+
+[resource]
+script = ExtResource("4_rq3ct")
+id = "smallscale.dinosaurs.elite-armored-stegosaurus"
+pack = "dinosaurs"
+variant = "ELITE Armored Stegosaurus"
+source = "smallscale-authored/dinosaurs"
+cell = Vector2i(96, 96)
+pivot = Vector2(48, 70)
+anchor = Vector2(48, 53)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("DinosaursEliteArmoredStegosaurus")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_0e3jp")]([SubResource("Resource_5uwcx"), SubResource("Resource_wa016"), SubResource("Resource_82col"), SubResource("Resource_08778"), SubResource("Resource_5rw0a"), SubResource("Resource_8dse4"), SubResource("Resource_b6u4x"), SubResource("Resource_dwef1"), SubResource("Resource_2cqsv"), SubResource("Resource_exmy0")])
+hold_clips = PackedStringArray("Die")
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed."
