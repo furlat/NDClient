@@ -21,7 +21,7 @@ func _run() -> void:
     check(not option.is_empty(),"Actual Crypt offers authored storage chest")
     if option.is_empty(): await finish(); return
     var id: String = option.subject_uuid
-    var pixel = screen_pixel(id)
+    var pixel = await screen_pixel(id)
     check(pixel != Vector2.INF,"Closed chest has selectable sprite pixels")
     if pixel == Vector2.INF: await finish(); return
     var closed = chest_rows(id)
@@ -33,7 +33,7 @@ func _run() -> void:
     capture("opened-chest",opened)
     check(closed.map(func(row):return row.record.path) != opened.map(func(row):return row.record.path),"Open chest selects distinct authored source bank")
     await picture("chest-open")
-    pixel = screen_pixel(id)
+    pixel = await screen_pixel(id)
     check(pixel != Vector2.INF,"Open chest keeps selectable authored pixels")
     if pixel==Vector2.INF: await finish(); return
     click_at(pixel,MOUSE_BUTTON_RIGHT)
