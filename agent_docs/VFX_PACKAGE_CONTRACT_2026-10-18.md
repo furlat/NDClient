@@ -31,6 +31,14 @@ recording). The client keeps playback (`presentation/native_*`,
   `res://presentation/`.
 - Before handing over, the Factory checks its export by loading it in the
   client project: every index entry and every approach loads without error.
+- **What git keeps.** The client commits the package's code and text: scripts,
+  shaders, `.tres`/`.tscn`, `index.json` and other JSON (about 32 MB for
+  `20261018-fa4e64489d2d25a8`). Binary resources (`.res`/`.scn`: recordings,
+  meshes, textures, warmed materials; about 623 MB) are ignored by git and kept
+  as a backup archive per package version, next to the repository in
+  `NDClientGodot-backups/`. So the Factory keeps large data in binary resources
+  and code and parameters in text files. The Factory's exporter itself is
+  Factory code and is committed in the Factory repository.
 - Every file loads with `ResourceLoader.load` in a project that has never seen
   it: `.res`/`.scn`/`.tres`/`.tscn` with textures and meshes saved as
   resources, `.gdshader`, `.gd`. No `.png`/`.jpg`/`.glb` that would need the
