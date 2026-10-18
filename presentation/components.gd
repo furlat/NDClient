@@ -191,8 +191,10 @@ static func _native_interceptions(group:Dictionary,lineage:Dictionary,graph:Dict
         var position:Variant=graph.positions.get(target)
         if position==null:continue
         var at:float=graph.starts.get(node.uuid,0.0)
+        # The interception lands when the attack does: a projectile's arrival,
+        # not the bow release (melee impact equals its contact).
         for track in group.actor_tracks:
-            if track.source_event_uuid==node.uuid:at=track.get("contact_ms",at)
+            if track.source_event_uuid==node.uuid:at=track.get("impact_ms",track.get("contact_ms",at))
         for phase in NativeSpells.contact_phases(selected):
             var parameters=phase.duplicate()
             parameters.merge({"native_spell":true,"intercepted_by_condition_uuid":id,"actor_uuid":target,"target_uuid":target,

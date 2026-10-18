@@ -102,7 +102,7 @@ func crop_boundary(node:Dictionary,source:Dictionary,cast:Dictionary,cache:Dicti
     graph.positions[source.actor_uuid]=[source.from_position[0]+8,source.from_position[1]+8]
     graph.contacts[source.actor_uuid]={"from_elevation_feet":50,"to_elevation_feet":50}
     graph.reaction_contacts={node.uuid:{"position":source.from_position,"contact":contact}}
-    graph.nodes={};graph.ends={};graph.actor_inputs={node.uuid:{source.actor_uuid:source.presentation_actor}}
+    graph.nodes={};graph.ends={};graph.spell_sources={};graph.actor_inputs={node.uuid:{source.actor_uuid:source.presentation_actor}}
     graph.recipes={node.uuid:Compiler.Authoring.load_data("catalog/condition_recipes.json",cache)["condition.spell.shield"]}
     var group={"operation_sequence":2,"actor_tracks":[],"skipped":[],"duration_ms":source.contact_ms,
         "commits":[{"event_uuid":node.uuid,"at_ms":source.contact_ms}]}
