@@ -209,7 +209,11 @@ Not yet used by the client:
 - The new `warm` lists. The client still compiles recorded materials on their first private draw.
 - `node_aliases`. The client resolves old node paths through selection staging.
 
-## 8. Findings for the Factory (18 October, package `20261018-fa4e64489d2d25a8`)
+## 8. Findings for the Factory
+
+The condition work (recorded lifecycles, defects, the 138 visible conditions
+with no effect, Web's spatial hold) is handed off on its own in
+[VFX_CONDITIONS_HANDOFF_2026-10-18.md](VFX_CONDITIONS_HANDOFF_2026-10-18.md). (18 October, package `20261018-fa4e64489d2d25a8`)
 
 Found while loading and playing the package in the client. Evidence:
 `.captures/effect-package/*.png` (one comparison sheet per clip) and the
