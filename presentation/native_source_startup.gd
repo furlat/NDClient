@@ -33,24 +33,28 @@ static func recording_plan(rows:Array)->Array:
         if clip.is_empty():continue
         var key:String=_key(clip)
         if not by_key.has(key):
-            var item={"key":key,"clip":clip,"intervals":[]}
+            # A condition lifecycle warms with the load: its first draw compiles
+            # too much to happen while playing (see requested).
+            var item={"key":key,"clip":clip,"intervals":[],"lifecycle":component.has("lifecycle_phases")}
             by_key[key]=item;result.append(item)
         var span=Vector2(float(row.start_ms),float(row.end_ms))
         if span not in by_key[key].intervals:by_key[key].intervals.append(span)
     result.sort_custom(func(a,b):return a.intervals[0].x<b.intervals[0].x)
     return result
 
-static func source_plan(clips:Array)->Array:
+static func source_plan(clips:Array,lifecycles:Array=[])->Array:
     var result:Array=[];var seen:Dictionary={}
-    for clip in clips:
+    for clip in lifecycles+clips:
         if clip.is_empty():continue
         var key:String=_key(clip)
         if seen.has(key):continue
-        seen[key]=true;result.append({"key":key,"clip":clip})
+        seen[key]=true;result.append({"key":key,"clip":clip,"lifecycle":clip in lifecycles})
     return result
 
+## Sources due at `at_ms` (within `horizon_ms`). Condition lifecycles are
+## always due: they warm before play, never on a later private draw.
 static func requested(plan:Array,at_ms:float,horizon_ms:float=0.0)->Array:
-    return plan.filter(func(item):return item.intervals.any(func(span):return span.x<=at_ms+horizon_ms and span.y>at_ms))
+    return plan.filter(func(item):return item.get("lifecycle",false) or item.get("intervals",[]).any(func(span):return span.x<=at_ms+horizon_ms and span.y>at_ms))
 
 static func _plan(cache:Dictionary)->Array:
     var result:Array=[];var seen:Dictionary={}

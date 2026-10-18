@@ -16,7 +16,7 @@ const EVENT_ROLES={
     "poison_spray":{"cast":1,"spray":1},"produce_flame":{"flight":1,"impact":1},
     "ray_of_frost":{"cast":1,"flight":2,"impact":1},"scorching_ray":{"cast":1,"flight":3,"impact":3},
     "sleep":{"cast":1,"flight":1,"area":1},"web":{"cast":1,"flight":1},
-    "bane":{},"command":{},"mage_armor":{},"sanctuary":{},"shield":{"attached":3},
+    "bane":{},"command":{"attached":1},"mage_armor":{},"sanctuary":{},"shield":{"attached":3},
     "shocking_grasp":{"cast":1,"attached":1},"burning_hands":{"attached":1},"thunderwave":{"attached":1},
     "cure_wounds":{"attached":1},"healing_word":{"attached":1},"guidance":{},"resistance":{},
     "light":{},"thaumaturgy":{"attached":1},"shield_of_faith":{},"true_strike":{"attached":1}}
@@ -25,6 +25,8 @@ const RECORDED_ONLY=["aid","bless","false_life","sacred_flame"]
 # Further real recordings of an included spell, with their own delivery slots.
 const EXTRA_CASES={"native-spell-shield-ranged":{"attached":1},"native-spell-shield-walk":{"attached":1}}
 const OWNED=["bane","command","mage_armor","sanctuary","shield","guidance","resistance","light","shield_of_faith","web"]
+# Bane's condition plays two package lifecycles: its body orbit and its marker.
+const LIFECYCLES={"bane":2}
 var checks:=0
 var failures:Array=[]
 var evidence:Array=[]
@@ -79,7 +81,7 @@ func inspect_case(item:Dictionary,descriptor:Dictionary)->void:
             for event in descriptor.events:check(events.has(event.event_uuid),label+": inventory event belongs to the indexed recording")
         check(native_count>0,label+": selected spell exposes native components through the production pipeline")
         check(roles==EXTRA_CASES.get(item.id,EVENT_ROLES[item.spell_id]),label+": exact authored phase slots for the recorded deliveries; got "+JSON.stringify(roles))
-        check(instances.size()==(1 if item.spell_id in OWNED else 0),label+": exact disclosed persistent instance count")
+        check(instances.size()==LIFECYCLES.get(item.spell_id,1 if item.spell_id in OWNED else 0),label+": exact disclosed persistent instance count")
         native_total+=native_count
         row.perspectives.append({"id":perspective.id,"operations":index.operations,"native_samples":native_count,
             "sources":sources.keys(),"roles":roles,"persistent_instances":instances.keys(),"rows":index.rows.size(),"duration_ms":index.duration_ms})

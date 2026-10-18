@@ -33,7 +33,7 @@ older plan disagree, this one is newer; the plans it replaces are listed in §10
 | Producer | Owns | Reaches the client as | Today |
 |---|---|---|---|
 | **Server** (`dnd_engine`) | Rules, state, outcomes, content IDs (`spell.fire_bolt`, `condition.spell.shield`, pack `content.srd_5_1_cc`), the protocol | Packets at run time; the protocol schema copied into `sdk/` | Schema copied by hand: client has schema 9, the engine's checkout has 15. The pinned engine (`229ce025f`) is what the client is validated against. |
-| **VFX Factory** | Every visual effect: meshes, particles, shaders, lights, their recordings, and (decision D1) their timing and placement | The package `assets/vfx/` (index, clips, recordings) | Since 18 Oct (`presentation/effect_package.gd`) the game and Studio play spell effects from the package, recorded approach by default. Staging still comes from the client's own files through `.derived/native-spells` (§7). Class-action and blood effects are not in the package. |
+| **VFX Factory** | Every visual effect: meshes, particles, shaders, lights, their recordings, and (decision D1) their timing and placement | The package `assets/vfx/` (index, clips, recordings) | Since 18 Oct (`presentation/effect_package.gd`) the game and Studio play spell effects from the package, recorded approach by default, and conditions play the package's lifecycles (§5.3). Spell staging still comes from the client's own files through `.derived/native-spells` (§7). Class-action and blood effects are not in the package. |
 | **Art deliveries** | Character and creature sheets, their geometry and normal profiles; environment art; UI icons and portraits | Today: read at run time from outside the project (`NDClientData/.media`, three `fantasy-unified-catalog` delivery folders, `NDCharacterLight`) | Must become copies inside the project (§6). |
 | **Audio packs** | Sound files and licences | `assets/audio/` plus `authoring/audio/` | Already inside; needs Godot import. |
 | **Client** | How the game presents server events: body animation and cast timing per spell, action/attack/condition recipes, rigs, audio bindings, UI; the runtime; the Studio; tests | `authoring/`, code | Most of `authoring/` is a frozen export of the old Pygame data model (§5). |
@@ -114,7 +114,7 @@ were added beside it from 14 October, not in place of it. So:
 |---|---|---|
 | **Spell presentation** | `spells/spell.<id>.json` (old shape: cast clip, release frame, hand sockets, sprite-sheet layers, projectile speed) → `tools/native_spell_import.gd` → `.derived/native-spells` (30 spells) → game and Studio; sandbox reads raw JSON with its own scheduler | Client owns the body side: cast clip, release frame, body speed, hand sockets, hit feedback, audio. One record per `spell.*` ID. Sprite-sheet fields go once nothing draws them (D7). |
 | **Spell effects and their staging** | Factory recipes copied by `prepare_projectile_sandbox.py`; staging in `sandbox/staging.json` + `batches/*.json`; lifecycle in `native_effects/index.json` | Factory (D1): effect clips and their timing, scale, placement, hold behaviour, in `assets/vfx/index.json` `selections`. The client consumes; Studio reviews. |
-| **Condition visuals** | Lifecycle windows per spell in `native_effects/index.json`; 10 lasting conditions hold one frozen frame; sprite condition layers no longer draw | Factory delivers enter/hold/exit for each condition (animated hold); the client drives them from the server's condition owner (apply, suppress, remove). |
+| **Condition visuals** | Since 18 Oct the package's condition lifecycles (`selections` with a `condition` block: 29, keyed by the server's condition ids) play from the server's condition owner: one occurrence per owner and lifecycle, application at the real application, sustain on the owner's age for as long as it lasts, removal at the real removal (`presentation/native_persistent.gd`, `owner_state` input). The frozen hold is gone for conditions; only Web's spatial net still holds its staged pose (no spatial lifecycle in the package). The client keeps: which spell cue a lifecycle replaces at the cast (`lifecycle.cue_ids`), Shield's interception contact, Light's authoritative light, the spell palette on body lifecycles, the marker turn (one overhead group at a time). Sprite condition layers no longer draw | Factory delivers enter/hold/exit for each condition (animated hold); the client drives them from the server's condition owner (apply, suppress, remove). |
 | **Creatures (own sheets)** | `catalog/rigs.json` + `creature_rigs.json` + `resources.json` (split from one Pygame file per creature) + `generated/creature_geometry.json` → `.derived/body-sources` | One record per creature rig keyed by the server creature ref: clips, sheets, geometry, normals, shadow. Art inside `assets/`. |
 | **Modular characters** | `rigs.json["neuroclient.modular"]`, clip overlays in `presentation/clips/*.tres`, gear in `items/visuals.json` keyed by English names → `.derived/body-sources` | Same model; gear keyed by server item IDs; appearance from the server as today. |
 | **Actions, attacks** | `catalog/body_action_recipes.json`, `attack_recipes.json` (+ `.tres` overlays) | Client; one record per behavior ID; remove the 12 catalog files no code reads. |
@@ -174,7 +174,8 @@ the separately started server, is the check that §1.1 holds.
 3. **Staging exists twice and has already diverged**: of the 14 spells in
    `staging.json`, only Acid Splash and Produce Flame match the package.
 4. **Duplicated runtime logic**: the sandbox's cue scheduler, the Studio
-   thumbnail sampler and three copies of the condition exit window.
+   thumbnail sampler and two copies of the spatial owner's exit window
+   (condition exits now come from the package's removal clips).
 5. **Protocol drift**: the client's schema copy is 9, the engine checkout 15,
    with no sync tool.
 6. **Committed test output**: about 370 report files in `generated/` change on
@@ -205,7 +206,8 @@ the separately started server, is the check that §1.1 holds.
    Studio on the Factory's effects.
 2. **Ownership** (after D1–D7): delete the duplicate copies, move generated
    data out of `authoring/`, retire the sandbox, workshop and Unity tools, the
-   remaining client effect tools; condition holds animated.
+   remaining client effect tools; condition holds animated (done 18 Oct for
+   the package's 29 condition lifecycles; Web's spatial net still holds).
 3. **Self-contained project** (D8): art into `assets/art/`, no absolute paths,
    runtime data from `.derived/` into `build/` via one build command, export
    preset, and a test export played against the server.

@@ -119,8 +119,7 @@ static func _persistent_condition(row: Dictionary, condition: Dictionary, persis
     var prefix = str(condition.behavior_id)+"/persistent/"
     var source = "catalog/condition_recipes.json:/"+prefix.trim_suffix("/")
     var mechanisms: Array=[]
-    var native=NativeSpells.condition(str(condition.behavior_id),cache)
-    var replaced:Array=native.get("lifecycle",{}).get("replaces_media",[])
+    var replaced:Array=NativePersistent.replaced_media(str(condition.behavior_id),{"persistent":persistent})
     for field in ["bodyColor","bodyRamp","bodyOutline","bodyPose","frozenPose"]:
         if persistent.get(field)!=null:mechanisms.append(field)
     if persistent.get("alphaMultiplier",1.0)!=1.0:mechanisms.append("alphaMultiplier")
@@ -148,13 +147,22 @@ static func _persistent_condition(row: Dictionary, condition: Dictionary, persis
         component.merge({"id":key,"trace_track_id":key,"actor_uuid":row.actor_uuid,"mechanism":mechanism,
             "start_ms":row.get("_commit_ms",row._admit_ms),"persistent":true,"status":"playing"},true)
         row.components.append(component)
-    _native_persistent_components(row,native,"condition:"+str(condition.condition_uuid),row.target_uuid,cache)
+    _lifecycle_components(row,condition,row.target_uuid,cache)
     # These authoring mechanisms remain separate requirements until a real
     # implementation emits their exact samples; a body or marker is insufficient.
     for field in ["equipmentModifiers","appearanceLayers"]:
         if not persistent.get(field,[]).is_empty():row.components.append(_component("condition","authored_condition_"+field+"_not_implemented",source+"."+field))
     for field in ["bodyScale","bodyDistortion","liveCopies","absenceEcho"]:
         if persistent.get(field)!=null:row.components.append(_component("condition","authored_condition_"+field+"_not_implemented",source+"."+field))
+
+## The package lifecycles this applied condition plays (one occurrence each).
+static func _lifecycle_components(row:Dictionary,condition:Dictionary,actor_uuid:Variant,cache:Dictionary)->void:
+    var common:Dictionary={"id":"condition:"+str(condition.condition_uuid),"condition_uuid":condition.condition_uuid,"actor_uuid":actor_uuid,"condition":condition,
+        "start_ms":row.get("_commit_ms",row._admit_ms),"absolute_start_ms":row.get("_commit_ms",row._admit_ms),"duration_ms":INF,"age_ms":0.0,"removal_age_ms":null,"initial":false}
+    for sample in NativePersistent.lifecycle_samples(common,NativePersistent.lifecycles(condition),cache):
+        var component=_compiled_component(sample,cache)
+        component.persistent=true
+        row.components.append(component)
 
 static func _native_persistent_components(row:Dictionary,selected:Dictionary,owner_id:String,actor_uuid:Variant,cache:Dictionary)->void:
     var native_index=0
@@ -312,7 +320,7 @@ static func _requirements(row: Dictionary, node: Dictionary, actor: Dictionary, 
                 if change.get("feedbackEnabled",false):
                     _need(row,"feedback_text","authored_condition_feedback_not_implemented",
                         Authoring.Catalog.source_pointer("catalog/condition_recipes.json",key+"/"+phase+"/feedbackEnabled",cache))
-                var replaced:Array=NativeSpells.condition(key,cache).get("lifecycle",{}).get("replaces_media",[])
+                var replaced:Array=NativePersistent.replaced_media(key,recipe)
                 _media_needed(row,change.get("effects",[]),source+".effects",row._commit_ms,"catalog/condition_recipes.json:/"+key+"/"+phase+"/effects",replaced)
                 if phase=="application":_persistent_condition(row,fact.condition,recipe.get("persistent",{}),cache,Authoring.rig_id(actor,cache))
                 if phase=="application" and recipe.get("reactionCastBinding")!=null:

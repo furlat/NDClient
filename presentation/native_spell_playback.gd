@@ -16,16 +16,15 @@ static func path_length(a:Vector3,b:Vector3,bend:Vector2)->float:
 
 static func source_time(cue:Dictionary,time:float)->float:
     if cue.has("lifecycle"):
+        # A spatial owner (Web's net) keeps its deployed pose until removal;
+        # the package has no spatial lifecycle. Conditions play the package's.
         var lifecycle:Dictionary=cue.lifecycle
         var enter:float=lifecycle.get("enter_end_seconds",0)
-        var hold_start:float=lifecycle.get("hold_start_seconds",enter)
-        var hold_end:float=lifecycle.get("hold_end_seconds",hold_start)
+        var hold:float=lifecycle.get("hold_start_seconds",enter)
         if time>=float(cue.get("owner_end_seconds",INF)):
-            return minf(lifecycle.get("exit_end_seconds",hold_end),float(lifecycle.get("exit_start_seconds",hold_end))+time-float(cue.owner_end_seconds))
+            return minf(lifecycle.get("exit_end_seconds",hold),float(lifecycle.get("exit_start_seconds",hold))+time-float(cue.owner_end_seconds))
         if not cue.get("initial",false) and time<enter:return time
-        if lifecycle.get("hold_mode","hold")=="loop" and hold_end>hold_start:
-            return hold_start+fposmod(maxf(0,time-enter),hold_end-hold_start)
-        return hold_start
+        return hold
     if cue.role=="flight":
         if time<cue.launch:
             return cue.source_launch*clampf((time-cue.begin)/maxf(.001,cue.launch-cue.begin),0,1)

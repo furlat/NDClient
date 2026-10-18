@@ -22,6 +22,7 @@ static var revision:int=0
 static var _mutex:Mutex=Mutex.new()
 static var _clips:Dictionary={}
 static var _selections:Dictionary={}
+static var _conditions:Dictionary={}
 static var _client:Dictionary={}
 static var _clock:Script
 static var _loaded:bool=false
@@ -41,7 +42,7 @@ static func set_requested(kind:String)->void:
 ## Reload: the next request reads the package index again.
 static func invalidate()->void:
     _mutex.lock()
-    _loaded=false;_clips={};_selections={};_client={}
+    _loaded=false;_clips={};_selections={};_conditions={};_client={}
     _mutex.unlock()
 
 static func _load()->void:
@@ -51,7 +52,11 @@ static func _load()->void:
         var index:Variant=JSON.parse_string(FileAccess.get_file_as_string(INDEX))
         if index is Dictionary:
             for clip in index.get("clips",[]):_clips[clip.clip_id]=clip
-            for selection in index.get("selections",[]):_selections[str(selection.get("spell_id",selection.key))]=selection
+            for selection in index.get("selections",[]):
+                _selections[str(selection.get("spell_id",selection.key))]=selection
+                for id in selection.get("condition",{}).get("owner_ids",[]):
+                    if not _conditions.has(id):_conditions[id]=[]
+                    _conditions[id].append(selection)
             _clock=load(index.get("runtime",{}).get("clock",""))
         else:push_error("VFX package index cannot be read: "+INDEX)
     _mutex.unlock()
@@ -76,6 +81,26 @@ static func resolve(staged_id:String,spell:String,role:String="")->Dictionary:
         elif roles.size()==1:id=roles[0].clip
         else:return {}
     return clip(id)
+
+## The package's condition lifecycles for a server condition id (selections
+## with a `condition` block: application, sustain and removal clips, their
+## registration and visibility), in package order; [] when it has none.
+static func conditions(condition_id:String)->Array:
+    _load()
+    return _conditions.get(condition_id,[])
+
+## The clip each package condition lifecycle constructs (its application:
+## one occurrence plays all three phases).
+static func lifecycle_clips()->Array:
+    _load()
+    var result:Array=[];var seen:Dictionary={}
+    for selections in _conditions.values():
+        for selection in selections:
+            if seen.has(selection.key):continue
+            seen[selection.key]=true
+            var value:Dictionary=clip(str(selection.condition.phases.application))
+            if not value.is_empty():result.append(value)
+    return result
 
 ## The client's clip record for a package clip: its index fields and whether
 ## its formation is bounded (cue timing does not extend to its animation end).
@@ -243,7 +268,10 @@ static func resolve_paths(handle:Dictionary,cue:Dictionary,spell:String)->Array:
             var path:String=staged[field][at]
             if handle.root.get_node_or_null(NodePath(path))!=null:continue
             var other:Array=package.get(field,[])
+            # A condition registration names its node inside the component.
+            var within:Array=handle.root.get_children().filter(func(child):return child.get_node_or_null(NodePath(path))!=null)
             if at<other.size() and handle.root.get_node_or_null(NodePath(str(other[at])))!=null:aliases[path]=str(other[at])
+            elif within.size()==1:aliases[path]=str(within[0].name)+"/"+path
             else:missing.append(path)
     handle.path_aliases=aliases
     return missing
@@ -267,6 +295,11 @@ static func sample(handle:Dictionary,seconds:float)->void:
     if handle.get("baked",false):Baked.sample(handle,seconds);return
     handle.occurrence.sample(seconds)
     handle.age=seconds;handle.initialized=true
+
+## Supplies a declared input through the clip's setter (no-op when the clip
+## does not declare it).
+static func set_input(handle:Dictionary,input:String,value:Variant)->void:
+    if input in handle.clip.get("inputs",[]) and is_instance_valid(handle.get("occurrence")):handle.occurrence.call(handle.clip.input_setters[input],value)
 
 static func stop_emission(handle:Dictionary,source_seconds:float)->void:
     if handle.get("baked",false):Baked.stop_emission(handle,source_seconds)

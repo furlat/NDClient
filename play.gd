@@ -547,10 +547,12 @@ func _native_startup_request(at_ms:float,optional:bool=false)->Dictionary:
             for component in group.get("components",[])+group.get("native_requirements",[]):
                 if component.get("native_spell",false) and component.get("status")!="missing":clips.append(component.native_clip)
                 elif component.get("kind")=="material_flash" and component.get("native_hit",{}).get("definition",{}).get("status")=="available":clips.append(component.native_hit.clip)
-        native_live_plan=NativeStartup.source_plan(clips)
+        native_live_plan=NativeStartup.source_plan(clips,NativeStartup.Effects.lifecycle_clips())
     # Live occurrence readiness belongs to ComponentRenderer's exact cue. This
     # optional program interest cannot gate unrelated idle/movement or late cues.
-    return {"plan":native_live_plan,"required":[],"priority":native_live_plan,"optional":optional}
+    # Every condition lifecycle the package has warms with the load (any
+    # condition can apply later; its first draw is too costly mid-play).
+    return {"plan":native_live_plan,"required":native_live_plan.filter(func(item):return item.lifecycle),"priority":native_live_plan,"optional":optional}
 
 func _step_native_startup(optional:bool=false)->void:
     if optional and not native_startup_background:return

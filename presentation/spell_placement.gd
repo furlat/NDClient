@@ -117,7 +117,12 @@ static func endpoints(world:Node,component:Dictionary,fixed:Dictionary={},prepar
             target_row.facing=world._facing(-direction) if not direction.is_zero_approx() else "SW"
             received=fixed.get("target",{})
             if received.is_empty():received=body_anchor(world,target_row)
-        else:received=pose_point(world,target_row,"body_center")
+        else:
+            # A condition registers at its declared socket (a marker at the
+            # head); rigs without that socket use their body centre.
+            var anchor:String=str(cue.get("anchor","body_center"))
+            if not world.rigs[target_row.rig].get("pose_sockets",{}).has(anchor):anchor="body_center"
+            received=pose_point(world,target_row,anchor)
         if not received.ready:return received
     if not needs_body and not direction.is_zero_approx() and received.point.is_equal_approx(released.point):
         # Facing-only effects (cones) anchor at the real origin but orient along

@@ -10,6 +10,7 @@ const Playback=preload("res://presentation/native_spell_playback.gd")
 const Sockets=preload("res://presentation/spell_placement.gd")
 const Components=preload("res://presentation/components.gd")
 const Baked=preload("res://presentation/baked_effect.gd")
+const Persistent=preload("res://presentation/native_persistent.gd")
 const FIRST_BIT=1
 const LAST_BIT=12
 const HISTORY_STEP=1.0/60.0
@@ -332,15 +333,23 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
         elif not handle.started and age>expected_step+0.000001:handle.warming=true
         elif handle.started and not handle.warming and age-float(handle.requested_time)>expected_step*2.0+0.000001:handle.warming=true
         var sample_time:float=minf(age,float(handle.sample_time)+maxf(HISTORY_STEP,expected_step*2.0)) if handle.warming else age
-        if component.get("persistent_owner",false) and float(handle.sample_time)>=float(component.lifecycle.get("enter_end_seconds",0)):
-            # Once the authored opening is reconstructed, a held pose has no
-            # unbounded visual history. Jump to the actual owner age/close.
+        var lifecycle:bool=component.has("lifecycle_phases")
+        var opened:float=Persistent.application_end(component) if lifecycle else float(component.lifecycle.get("enter_end_seconds",0)) if component.get("persistent_owner",false) else INF
+        if float(handle.sample_time)>=opened:
+            # Once the application is played, a sustained condition has no
+            # unbounded history to replay: draw the actual owner age (its
+            # geometry and materials seek; particles take one step).
             sample_time=age
         handle.root.show()
         Effects.place(handle,Playback.transform(cue,sample_time,points.hand,1.0))
         if handle.get("baked",false) and not handle.has("emission_stop_set"):
             Baked.stop_emission(handle,_emission_stop(cue));handle.emission_stop_set=true
-        Effects.sample(handle,Playback.source_time(cue,sample_time))
+        if lifecycle:
+            var state:Dictionary=Persistent.lifecycle_state(component,sample_time)
+            if state!=handle.get("owner_state",{}):Effects.set_input(handle,"owner_state",state);handle.owner_state=state
+            Effects.sample(handle,state.owner_age_seconds)
+            handle.lifecycle_phase=state.phase
+        else:Effects.sample(handle,Playback.source_time(cue,sample_time))
         if cue.has("origin_path"):
             var anchor=Effects.node(handle,cue.origin_path)
             if anchor==null:
@@ -363,7 +372,8 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
         var drawn:bool=handle.rendered_once
         var submitted_bounds:bool=submitted_geometry(handle,frustum,int(groups[key].layer_mask))
         diagnostics[id]={"id":id,"status":"rendered" if drawn else "prepared", "reason":"" if caught_up else "native_spell_history_preparing", "age_ms":sample_time*1000.0,"requested_age_ms":age*1000.0,"source_age":handle.age,"group":key,"layer":groups[key].layer_mask,"attachment_support":points.surfaces,"submitted_bounds":submitted_bounds,
-            "effect_clip":str(handle.clip.get("id","")),"effect_kind":handle.effect_kind,"effect_fallback":handle.effect_reason,"missing_staged_paths":handle.missing_paths}
+            "effect_clip":str(component.lifecycle_phases[handle.lifecycle_phase].id) if lifecycle else str(handle.clip.get("id","")),"effect_kind":handle.effect_kind,"effect_fallback":handle.effect_reason,"missing_staged_paths":handle.missing_paths}
+        if lifecycle:diagnostics[id].lifecycle_phase=handle.lifecycle_phase
         if not caught_up:ready=false
         if drawn and caught_up and submitted_bounds:witnesses.append({"id":id,"source_event_uuid":component.get("source_event_uuid",""),"status":"rendered","age_ms":float(handle.drawn_time)*1000.0,"frame":handle.get("drawn_frame",Engine.get_process_frames())})
         if float(handle.drawn_time)!=sample_time:

@@ -165,9 +165,12 @@ func run()->void:
     check(unmatched.rows[0].components.filter(func(c):return c.kind=="weapon_trail")[0].timing.resolved==false,"Missing timing is unresolved rather than fabricated at default zero")
     var unsupported={"components":[],"actor_uuid":"actor","target_uuid":"actor","_admit_ms":0.0}
     Trace._persistent_condition(unsupported,condition,{"bodyScale":{"enlarge":2,"reduce":.5},"equipmentModifiers":[]},cache,"neuroclient.modular")
-    check(unsupported.components.size()==1 and unsupported.components[0].reason=="authored_condition_bodyScale_not_implemented","Structured and array authoring requirements retain independent missing mechanisms")
+    # The package's condition lifecycles follow the server's condition id, not the recipe.
+    var authored:Callable=func(components:Array)->Array:return components.filter(func(c):return not str(c.get("id","")).contains(":lifecycle:"))
+    check(authored.call(unsupported.components).size()==1 and authored.call(unsupported.components)[0].reason=="authored_condition_bodyScale_not_implemented","Structured and array authoring requirements retain independent missing mechanisms")
     var selected_recipe_case=compile(application,[],{"persistent":{},"application":{"feedbackEnabled":false}},false)
-    check(selected_recipe_case.rows[0].components.is_empty(),"Trace consumes the compiler-selected recipe rather than reselecting the catalog recipe")
+    check(authored.call(selected_recipe_case.rows[0].components).is_empty(),"Trace consumes the compiler-selected recipe rather than reselecting the catalog recipe")
+    check(selected_recipe_case.rows[0].components.any(func(c):return c.id=="condition:owner:lifecycle:condition_poisoned_native" and c.persistent),"The package's Poisoned lifecycle is traced from the applied condition id")
     var snapshot=Trace.snapshot(applied.trace,10,"8:event",0)
     snapshot.selected.components.clear()
     check(not Trace.snapshot(applied.trace,10,"8:event",0).selected.components.is_empty(),"Public component diagnostics stay detached")

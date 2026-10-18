@@ -4,6 +4,7 @@ const Authoring=preload("res://presentation/authoring.gd")
 const Catalog=preload("res://source_catalog.gd")
 const NativeSpells=preload("res://presentation/native_spell_authoring.gd")
 const Effects=preload("res://presentation/effect_package.gd")
+const Persistent=preload("res://presentation/native_persistent.gd")
 
 static func _require(entry: Dictionary,phase: String,mechanism: String,source: String,implemented: bool,reason: String="",availability: String="not_required",details: Dictionary={}) -> Dictionary:
     var row={"id":source+"#"+mechanism,"phase":phase,"mechanism":mechanism,"source":source,
@@ -143,12 +144,13 @@ static func _effects(entry: Dictionary,phase: String,effects: Array,pointer: Str
     for i in effects.size():
         if effects[i].get("assetId","") not in replaced:_layer(entry,phase,effects[i],pointer+"/"+str(i),false,cache,availability)
 
-static func _native(entry:Dictionary,selected:Dictionary)->void:
+## The package lifecycles of this condition and the spell's contact source.
+static func _native(entry:Dictionary,recipe:Dictionary,selected:Dictionary,cache:Dictionary)->void:
+    var common:Dictionary={"id":"condition:"+str(entry.id),"actor_uuid":null,"condition":{"behavior_id":entry.id},"start_ms":0.0,"absolute_start_ms":0.0,
+        "duration_ms":INF,"age_ms":0.0,"removal_age_ms":null,"initial":false}
+    for phase in Persistent.lifecycle_samples(common,Effects.conditions(str(entry.id)),cache):
+        _native_phase(entry,phase,"persistent","native:"+str(phase.source_id))
     var index=0
-    for phase in NativeSpells.condition_phases(selected):
-        _native_phase(entry,phase,"persistent","native:"+str(index))
-        index+=1
-    index=0
     for phase in NativeSpells.contact_phases(selected):
         _native_phase(entry,phase,"interception","native_contact:"+str(index))
         index+=1
@@ -157,11 +159,17 @@ static func _native_phase(entry:Dictionary,phase:Dictionary,owner_phase:String,m
     var missing:Array=[]
     for path in Effects.resource_paths(phase.native_clip):
         if not FileAccess.file_exists(path):missing.append(path)
+    var lifecycle:Dictionary=phase.get("lifecycle",{}).duplicate()
+    for name in phase.get("lifecycle_phases",{}):
+        lifecycle[name]=str(phase.lifecycle_phases[name].id)
+        for path in Effects.resource_paths(phase.lifecycle_phases[name]):
+            if not FileAccess.file_exists(path) and path not in missing:missing.append(path)
     var present=not phase.native_clip.is_empty() and missing.is_empty() and phase.get("status")!="missing"
     _require(entry,owner_phase,mechanism,phase.source,true,
         "" if present else phase.get("reason","selected_native_source_missing"),"available" if present else "missing",
         {"component_kind":"native_effect","source_id":phase.source_id,"missing_paths":missing,
-        "lifecycle":phase.get("lifecycle",{}),"label":str(phase.native_cue.role).capitalize()+" · "+str(phase.source_id)})
+        "lifecycle":lifecycle,
+        "label":("Lifecycle · " if phase.has("lifecycle_phases") else str(phase.native_cue.role).capitalize()+" · ")+str(phase.source_id)})
 
 static func _recorded(entry: Dictionary,rows: Array) -> void:
     for row in rows:
@@ -204,13 +212,16 @@ static func build(cache: Dictionary={},recorded_rows: Array=[],condition_ids: Di
         totals.entries+=1
         var recipe:Dictionary=recipes[id]
         var native=NativeSpells.condition(id,cache)
-        var replaced:Array=native.get("lifecycle",{}).get("replaces_media",[])
+        var replaced:Array=Persistent.replaced_media(id,recipe)
+        # The spell's native contact source draws an actual interception.
+        if not NativeSpells.contact_phases(native).is_empty():
+            for effects in recipe.get("interceptionEffectsByDirection",{}).values():replaced.append_array(effects.map(func(effect):return str(effect.get("assetId",""))))
         var source="catalog/condition_recipes.json:/"+id
         var entry={"id":id,"label":recipe.get("label",id),"definition_ref":recipe.get("definitionRef",{}).duplicate(true),
             "source":source,"disposition":recipe.get("disposition",""),"classification":recipe.get("classification",{}).duplicate(true),"requirements":[],"status":"unexercised"}
         _motion_assignments(entry,cache)
         _indicator_assignment(entry,recipe,cache)
-        _native(entry,native)
+        _native(entry,recipe,native,cache)
         var persistent:Dictionary=recipe.get("persistent",{})
         for field in ["bodyColor","bodyOutline","bodyPose","frozenPose"]:
             if persistent.get(field)!=null:_require(entry,"persistent",field,source+"/persistent/"+field,true)

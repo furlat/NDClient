@@ -899,6 +899,11 @@ static func _condition_rows(rows: Array, parent: Dictionary, owner: Dictionary, 
             for at in [track.start_ms,track.start_ms+track.duration_ms,track.group_end_ms]:
                 if at>start and at<end and at not in boundaries:
                     boundaries.append(at);causes[at]=["track:"+str(track.get("trace_track_id",track.get("source_event_uuid","")))]
+        # Each package lifecycle's application ends inside the owner's span.
+        if not owner.initial:
+            for selection in NativePersistent.lifecycles(owner.condition):
+                var at:float=owner.start_ms+float(NativePersistent.Effects.clip(str(selection.condition.phases.application)).get("seconds",0.0))*1000.0
+                if at>start and at<end and at not in boundaries:boundaries.append(at);causes[at]=["lifecycle:application_end"]
         boundaries.append(end);boundaries.sort()
         for i in boundaries.size()-1:
             causes[boundaries[i]].sort()
@@ -934,9 +939,8 @@ static func _condition_rows(rows: Array, parent: Dictionary, owner: Dictionary, 
         var prefix:String=parent.id+":member:"+str(n)+":"
         for sample in samples:
             var sample_end:float=end
-            if sample.get("native_spell",false) and not is_inf(owner.end_ms):
-                var window:Dictionary=sample.lifecycle
-                sample_end=minf(end,float(owner.end_ms)+(float(window.get("exit_end_seconds",0))-float(window.get("exit_start_seconds",0)))*1000.0)
+            if sample.has("lifecycle_phases") and not is_inf(owner.end_ms):
+                sample_end=minf(end,float(owner.end_ms)+float(sample.lifecycle_phases.removal.seconds)*1000.0)
                 if sample_end<=start:continue
             var common={"parent":parent.id,"start_ms":start,"end_ms":end,"owner":sampled_owner,
                 "component":sample,"source":sample.source,"status":sample.status,"source_fps":sample.get("sample_hz",0),
@@ -977,6 +981,11 @@ static func _condition_rows(rows: Array, parent: Dictionary, owner: Dictionary, 
                 component.merge({"id":prefix+sample.id,"kind":sample.kind,"trace_track_id":sample.id,
                     "label":str(sample.native_cue.role).capitalize() if sample.get("native_spell",false) else str(sample.get("cue_id",sample.get("layer",{}).get("id",sample.get("source_id",sample.kind)))),
                     "coverage":{"implementation":"resolved","source":sample.status,"prepared":"not_examined","rendered":"not_witnessed"}})
+                if sample.has("lifecycle_phases"):
+                    # One occurrence plays all three phases; each span names its phase's clip.
+                    var phase:String=NativePersistent.lifecycle_state(sample,(start-float(sample.absolute_start_ms))/1000.0).phase
+                    component.lifecycle_phase=phase;component.effect_clip=str(sample.lifecycle_phases[phase].id)
+                    component.label=phase.capitalize()+" · "+component.effect_clip
                 rows.append(component)
                 if sample.get("native_spell",false):_persistent_native_channels(rows,component,sample)
 

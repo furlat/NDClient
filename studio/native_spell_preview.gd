@@ -4,6 +4,7 @@ extends Node
 const Effects=preload("res://presentation/effect_package.gd")
 const Playback=preload("res://presentation/native_spell_playback.gd")
 const Layer=preload("res://presentation/native_effect_layer.gd")
+const Persistent=preload("res://presentation/native_persistent.gd")
 var viewport:SubViewport
 var output:SubViewport
 var camera:Camera3D
@@ -15,6 +16,7 @@ var drawn:=-1.0
 var drawn_basis:=Basis.IDENTITY
 var rect:TextureRect
 var source_parent:Node3D
+static var _live_built_frame:int=-1
 
 ## A parked swatch keeps its viewports; the next component replaces only its
 ## source and colour finish.
@@ -50,7 +52,12 @@ func configure_component(value:Dictionary)->String:
 func sample(seconds:float,basis:Basis,_position:Vector3,_scale:float,_history:Array,_context:Dictionary)->Dictionary:
     var resources=Effects.prepare([component.native_clip],prepared)
     if not resources.ready:return {"ready":false,"error":"; ".join(resources.errors)}
+    # A live approach (a condition lifecycle's constructor costs tens to
+    # hundreds of ms) is built by one swatch per frame, never several at once.
+    var live:bool=Effects.choice(component.native_clip).kind!="recorded"
+    if handle.is_empty() and live and _live_built_frame==Engine.get_process_frames():return {"ready":false,"error":""}
     if handle.is_empty():
+        if live:_live_built_frame=Engine.get_process_frames()
         source_parent=Node3D.new();viewport.add_child(source_parent)
         var clip:Dictionary=component.native_clip.duplicate(false)
         if component.native_cue.has("opacity_uniform"):clip.opacity_uniform=component.native_cue.opacity_uniform
@@ -61,8 +68,13 @@ func sample(seconds:float,basis:Basis,_position:Vector3,_scale:float,_history:Ar
         handle.root.show()
     camera.global_basis=basis;camera.global_position=basis.z*10.0
     var next:float=minf(seconds,maxf(0.0,sampled)+1.0/60.0)
-    if component.get("persistent_owner",false) and sampled>=float(component.lifecycle.get("enter_end_seconds",0)):next=seconds
-    Effects.sample(handle,Playback.source_time(component.native_cue,next))
+    var lifecycle:bool=component.has("lifecycle_phases")
+    var opened:float=Persistent.application_end(component) if lifecycle else float(component.lifecycle.get("enter_end_seconds",0)) if component.get("persistent_owner",false) else INF
+    if sampled>=opened:next=seconds
+    if lifecycle:
+        var state:Dictionary=Persistent.lifecycle_state(component,next)
+        Effects.set_input(handle,"owner_state",state);Effects.sample(handle,state.owner_age_seconds)
+    else:Effects.sample(handle,Playback.source_time(component.native_cue,next))
     Playback.controls(handle,component.native_cue,next)
     var path:String=component.native_cue.get("origin_path","")
     var anchor:Node3D=Effects.node(handle,path) if not path.is_empty() else null

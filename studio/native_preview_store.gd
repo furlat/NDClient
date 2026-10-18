@@ -49,9 +49,12 @@ static func visual_specification(component:Dictionary,hz:float)->Dictionary:
     # identify or place an occurrence in the game, and are not read by sample.
     for field in ["id","index","source_index","clip","from","to","ground","caster_ground","from_actor","to_actor","actor_uuid","target_uuid","source_event_uuid","source_lineage","application_index","bend","offset","rotation_degrees","orientation","attachment","recipient","target_local","travel_to_target","launch_delay_seconds"]:cue.erase(field)
     # The playing approach kind is part of what a swatch shows.
-    return canonical({"version":VERSION,"clip":component.native_clip,"effect":Effects.key(component.native_clip),"cue":cue,
+    var specification:Dictionary={"version":VERSION,"clip":component.native_clip,"effect":Effects.key(component.native_clip),"cue":cue,
         "finish":component.finish_profile,"persistent":component.get("persistent_owner",false),
-        "lifecycle":component.get("lifecycle",{}),"hz":hz,"size":256,"published_size":128})
+        "lifecycle":component.get("lifecycle",{}),"hz":hz,"size":256,"published_size":128}
+    # A condition lifecycle's phase follows the owner's application.
+    if component.has("lifecycle_key"):specification.merge({"lifecycle_key":component.lifecycle_key,"initial":component.get("initial",false),"removed_ms":var_to_str(component.get("duration_ms",INF))})
+    return canonical(specification)
 
 func descriptor(component:Dictionary,hz:float)->Dictionary:
     var started:int=Time.get_ticks_usec()
@@ -63,7 +66,8 @@ func descriptor(component:Dictionary,hz:float)->Dictionary:
     for path in saved.get("dependencies",{}):dependencies[path]=_stamp(path)
     if saved.is_empty() or dependencies!=saved.get("dependencies",{}):
         dependencies.clear()
-        for path in Effects.resource_paths(component.native_clip)+SAMPLER_FILES:_dependencies(path,dependencies)
+        # A condition lifecycle's swatch also reads its phase clock.
+        for path in Effects.resource_paths(component.native_clip)+SAMPLER_FILES+(["res://presentation/native_persistent.gd"] if component.has("lifecycle_phases") else []):_dependencies(path,dependencies)
     var ordered:Dictionary=canonical(dependencies)
     var signature:String=var_to_bytes([specification,ordered]).hex_encode().sha256_text()
     var result={"signature":signature,"spec_key":spec_key,"specification":specification,"dependencies":ordered,"hz":hz}

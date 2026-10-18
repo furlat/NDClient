@@ -1170,7 +1170,11 @@ static func effect_lines(component:Dictionary)->Array[String]:
         if not Effects.LABELS[approach.kind] in kinds:kinds.append(Effects.LABELS[approach.kind])
     lines.append("Effect version: "+Effects.LABELS.get(chosen.kind,"none")+(" ("+chosen.reason+")" if not chosen.reason.is_empty() else "")+" · package has "+", ".join(kinds))
     var staged:String=str(component.get("native_cue",{}).get("staged_clip",clip.id))
-    lines.append("Package clip: "+str(clip.id)+(" (staged as "+staged+")" if staged!=str(clip.id) else ""))
+    if component.has("lifecycle_phases"):
+        # Conditions are native-only in the package: the row says so instead of failing.
+        lines.append("Condition lifecycle: "+str(component.lifecycle_key)+" · one occurrence plays application, sustain and removal on the owner's clock")
+        for phase in ["application","sustain","removal"]:lines.append(phase.capitalize()+" clip: "+str(component.lifecycle_phases[phase].id))
+    else:lines.append("Package clip: "+str(clip.id)+(" (staged as "+staged+")" if staged!=str(clip.id) else ""))
     for approach in chosen.approaches.slice(0,1):
         lines.append("Approach: "+str(approach.path))
         if not approach.get("gaps",[]).is_empty():lines.append("Recording gaps (Factory): "+", ".join(approach.gaps))

@@ -168,3 +168,19 @@ read.
 - `tests/effect_package_checks.gd` builds, samples (0/25/50/75 %) and draws
   every approach of every staged clip; `tests/studio_effect_version_checks.gd`
   covers the Studio switch.
+- Conditions play the package's 29 condition lifecycles
+  (`EffectPackage.conditions(id)` by the server's condition id, `when`
+  matched against the disclosed state): one occurrence per owner and
+  lifecycle, built from its application clip; each frame its `owner_state`
+  gets the phase (application, sustain, removal), the phase age and the
+  owner's age, and it samples on the owner's age (`NativePersistent`). It is
+  placed at its `registration` (ground, or the head socket for markers; rigs
+  without one use the body centre) and follows the recipient as it walks;
+  `visibility` hides it with an invisible actor, by life state, and markers
+  take turns (one overhead group at a time). A spell's attached cue is not
+  played at the cast when the condition's lifecycle carries the spell's body
+  visual (`body_channel_included`); a marker-only condition keeps the spell's
+  cue (Command). The clips are native-only: the Effect version choice says
+  so on the row. Every lifecycle warms with the load (game) or the recording
+  (Studio). `tests/condition_lifecycle_checks.gd` checks all 29;
+  `tests/condition_lifecycle_frames.gd` captures them in the Studio cases.
