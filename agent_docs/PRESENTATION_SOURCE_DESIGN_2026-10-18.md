@@ -144,7 +144,9 @@ The **effect** is the Factory package `clip_id` or `selection` key (`spells/fire
 
 ### 3.6 Icons, portraits, sound
 
-- **Icon or portrait reference:** the key the server sends (`icon_key`, `portrait_key`) or a client key, plus the image (art source), native size and crop.
+- **Icons and portraits are the client's business.** Each entry binds its icon or portrait directly to an image in our own banks (art source, native size, crop).
+  - The server's `icon_key` and creature `portrait_key` are presentation leaking into the backend. They are not used; at most they serve as a hint when importing the old bindings.
+  - The one exception is the portrait the player picked for their own character. That is part of the player's saved appearance, so the server stores the choice and the client draws it.
 - **Size variants are named:** `hud`, `sheet`, `preview` and so on, for the 7 portrait sizes that exist.
 - **Sound cue reference:** `cue` (an id in `authoring/audio`), `timing` (`at` plus marker), `gain`.
 
@@ -367,9 +369,14 @@ One entry per id: `action.*` (179 on the modern branch), `trait.*` (34), `reacti
 
 ### 7.1 `server_ids.json`
 
-A tool reads the engine read-only (pinned or modern branch) and writes the list of every id per kind, with icon and portrait keys. The client never talks to the server for this. This is the only link, and it goes one way.
+A tool reads the engine read-only (pinned or modern branch) and writes the list of every id per kind. Only ids: no icon, portrait or other presentation keys. The client never talks to the server for this. This is the only link, and it goes one way.
 
-The modern branch sends 647 icon keys, but 283 of them are only a fallback equal to the id, with no art. The coverage report lists those as icons to bind or draw. Protocol 15 changes how items and surfaces arrive (`ItemLook`, `SpatialEffectContent`), but not the ids, so the schema's keys stay the same when the client upgrades.
+Icons are bound in the client from our own banks:
+- the 594-image bank;
+- the 190 icons and 19 portraits of the 18 October combined delivery;
+- the 229 creature portraits and 432 player portraits.
+
+The recovery audit found art for every spell root, every NPC portrait and every new NPC ability. The coverage report checks the client's own bindings against those images, never the server's keys. Protocol 15 changes how items and surfaces arrive (`ItemLook`, `SpatialEffectContent`), but not the ids, so the schema's keys stay the same when the client upgrades.
 
 ### 7.2 One build command
 
