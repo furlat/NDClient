@@ -433,10 +433,11 @@ Studio and the game read only `build/`. The Studio can rebuild one entry and rel
 2. **Game reads `build/`.**
    - Switch the readers one domain at a time; the gate stays byte-identical after each step.
    - Remove `.derived/` from the runtime path and remove the absolute paths from `project.godot`.
-3. **Art inside the project.**
-   - Copy the deliveries into `assets/art/`, with binaries backed up per delivery version.
+3. **Art inside the project, packed by the build.**
+   - Copy the deliveries into `assets/art/`. Done 18 October: 12 GB. The folder is `.gdignore`d, so Godot neither imports nor exports it. It is raw source art only.
    - Load the finished depth for the 85 roster NPCs the client never imported.
-   - Add an export preset and run a test build against the server.
+   - The build packs the art the sources reference into `build/` as ready-to-upload texture bundles: colour plus depth, normals and masks per clip, as the L8 sheet prepack already does (359 clips → 68.7 MB). Only `build/` ships. Until this step, the game in development reads the raw images from `assets/art/`.
+   - Add an export preset and run a test export (the single executable) against the server.
 4. **Fill the coverage.**
    - Rigs and characters for the 123 new NPCs.
    - Spells, conditions and actions from the modern branch's ids.
