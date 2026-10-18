@@ -40,7 +40,16 @@ const CONTEXT_DOCUMENTS := {
 const ACTION_KINDS := ["action", "trait", "reaction", "class_feature", "feat"]
 
 static func build(source: Dictionary, out_dir: String, report: Dictionary) -> void:
-    Common.warn(report, "abilities", "runtime files not written yet")
+    var entries: Dictionary = source.entries
+    _validate(entries, report)
+    var built: Dictionary = documents(entries)
+    DirAccess.make_dir_recursive_absolute(out_dir)
+    for path in built.docs:save_document(out_dir, path, built.docs[path], report)
+    _save_native(out_dir, built.native, report)
+    var icons := FileAccess.open(out_dir.path_join("icons.json"), FileAccess.WRITE)
+    icons.store_string(JSON.stringify({"domain": "abilities", "root": "res://assets/", "icons": built.icons}, "  "))
+    icons.close()
+    _coverage(entries, report)
 
 ## The runtime document file for an old document path (catalog/x.json -> docs/catalog/x.res).
 static func document_file(out_dir: String, path: String) -> String:
