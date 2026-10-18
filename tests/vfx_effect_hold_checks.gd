@@ -73,7 +73,10 @@ func measure(studio:Control,directory:String)->Dictionary:
                 if not captures.is_empty() and not shots.has(clip_id):shots[clip_id]=world.timeline.display_ms+200.0
         var held:bool=world.timeline.waiting_for_media or world.timeline.waiting_for_world
         if held:
-            var reason:String=("world" if world.timeline.waiting_for_world else "media")+" "+str(world.media_issue)+" "+str(world.presentation_errors.slice(0,2))
+            # The media gate names what the group still waits for (native effects included).
+            var gate:Dictionary=world.media_gate
+            var waiting:Array=gate.keys().filter(func(key):return gate[key] is bool and gate[key]==(key=="admitted_world_pending"))
+            var reason:String=("world" if world.timeline.waiting_for_world else "media")+" "+str(waiting)+" initial="+str(world.media_initial_ready)+" native_startup="+str(world.native_startup.get("ready",true))+" "+str(world.media_issue)+(" "+str(world.component_renderer.readiness) if "native" in waiting else "")
             if holds.is_empty() or holds[-1].display_ms!=world.timeline.display_ms or holds[-1].reason!=reason:holds.append({"display_ms":world.timeline.display_ms,"reason":reason,"frames":0})
             holds[-1].frames+=1
         var phases:Dictionary=world.profile.frames[(world.profile.cursor-1+world.profile.frames.size())%maxi(1,world.profile.frames.size())].cpu_ms if not world.profile.frames.is_empty() else {}
