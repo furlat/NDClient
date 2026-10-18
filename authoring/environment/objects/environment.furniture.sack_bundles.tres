@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentObject" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_nv630"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_part.gd" id="2_veyf3"]
+[ext_resource type="Script" path="res://presentation/source/environment/object.gd" id="3_cl1x2"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_state.gd" id="4_tg78a"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_transition.gd" id="5_uphhn"]
+
+[sub_resource type="Resource" id="states_default"]
+script = ExtResource("4_tg78a")
+bank = "prop.interior-sack-bundles.intact"
+
+[resource]
+script = ExtResource("3_cl1x2")
+id = "environment.furniture.sack_bundles"
+kind = "furniture"
+views = PackedStringArray("e", "s", "w", "n")
+states = Dictionary[String, ExtResource("4_tg78a")]({
+"default": SubResource("states_default")
+})
+destructions = Dictionary[String, String]({
+"default": "prop.interior-sack-bundles.break"
+})
+art = PackedStringArray()
+status = "ready"

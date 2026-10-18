@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentArt" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/art_source.gd" id="1_o61hb"]
+[ext_resource type="Script" path="res://presentation/source/environment/art.gd" id="2_ym85c"]
+
+[sub_resource type="Resource" id="art"]
+script = ExtResource("1_o61hb")
+container = "frames_as_files"
+files = PackedStringArray()
+directions = "camera4"
+direction_order = PackedStringArray()
+measurements = "measured/environment/art/created.decal.soot.json"
+source = "environment-geometry-production-2026-10-09"
+
+[resource]
+script = ExtResource("2_ym85c")
+id = "created.decal.soot"
+kind = "samples"
+art = SubResource("art")
+images = PackedStringArray()

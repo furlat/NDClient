@@ -1,0 +1,74 @@
+{
+  "residue_particles": "particles.region.dread",
+  "residue_ground": {
+      "e": "residue.dread_blood.e",
+      "n": "residue.dread_blood.n",
+      "s": "residue.dread_blood.s",
+      "w": "residue.dread_blood.w"
+    },
+  "liquid_surfaces": {
+      "asset_id": "particles.region.dread",
+      "ellipse": {
+        "center": [
+          0.0,
+          0.0
+        ],
+        "radius_x": 0.75,
+        "radius_y": 0.65
+      },
+      "opacity": 1.0
+    },
+  "deposit_media": {
+      "radiusCells": 1,
+      "variants": [
+        {
+          "layers": [
+            {
+              "assetId": "liquid.dread.s0.floor.sustain",
+              "applicationAssetId": "liquid.dread.s0.floor.application"
+            },
+            {
+              "assetId": "liquid.dread.s0.air.sustain",
+              "applicationAssetId": "liquid.dread.s0.air.application"
+            }
+          ],
+          "holdStartFrame": 0,
+          "holdFrames": 288,
+          "fps": 144.0,
+          "scale": 1.0
+        },
+        {
+          "layers": [
+            {
+              "assetId": "liquid.dread.s1.floor.sustain",
+              "applicationAssetId": "liquid.dread.s1.floor.application"
+            },
+            {
+              "assetId": "liquid.dread.s1.air.sustain",
+              "applicationAssetId": "liquid.dread.s1.air.application"
+            }
+          ],
+          "holdStartFrame": 0,
+          "holdFrames": 288,
+          "fps": 144.0,
+          "scale": 1.0
+        },
+        {
+          "layers": [
+            {
+              "assetId": "liquid.dread.s2.floor.sustain",
+              "applicationAssetId": "liquid.dread.s2.floor.application"
+            },
+            {
+              "assetId": "liquid.dread.s2.air.sustain",
+              "applicationAssetId": "liquid.dread.s2.air.application"
+            }
+          ],
+          "holdStartFrame": 0,
+          "holdFrames": 288,
+          "fps": 144.0,
+          "scale": 1.0
+        }
+      ]
+    }
+}

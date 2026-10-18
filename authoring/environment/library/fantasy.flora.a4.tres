@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentObject" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_okxgg"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_part.gd" id="2_hf7lm"]
+[ext_resource type="Script" path="res://presentation/source/environment/object.gd" id="3_qxddx"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_state.gd" id="4_utjnr"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_transition.gd" id="5_dyhkn"]
+
+[resource]
+script = ExtResource("3_qxddx")
+id = "fantasy.flora.a4"
+kind = "flora"
+views = PackedStringArray("e", "n", "s", "w")
+art = PackedStringArray("fantasy.flora.a4")
+catalogue_group = "A"
+label = "Flora A4"
+status = "partial"
+notes = "Catalogue status: Vendor original. Art and geometry are in the source; no server id uses it yet."

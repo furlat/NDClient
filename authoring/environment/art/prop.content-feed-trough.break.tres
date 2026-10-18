@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentArt" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/art_source.gd" id="1_lmpjm"]
+[ext_resource type="Script" path="res://presentation/source/surface.gd" id="2_1livj"]
+[ext_resource type="Script" path="res://presentation/source/environment/art.gd" id="3_s1rh4"]
+
+[sub_resource type="Resource" id="art_surface"]
+script = ExtResource("2_1livj")
+encoding = "rg16_depth_oct_normal"
+failed_frames = PackedInt32Array()
+source = "environment-geometry-production-2026-10-09"
+
+[sub_resource type="Resource" id="art"]
+script = ExtResource("1_lmpjm")
+container = "atlas"
+files = PackedStringArray("art/media/environment/props/content-feed-trough/break/atlas/color-000.png", "art/media/environment/props/content-feed-trough/break/atlas/color-001.png", "art/media/environment/props/content-feed-trough/break/atlas/color-002.png", "art/media/environment/props/content-feed-trough/break/atlas/color-003.png")
+cell = Vector2i(384, 384)
+frames = 20
+fps = 12.0
+directions = "camera4"
+direction_order = PackedStringArray("e", "s", "w", "n")
+scale = 1.0078740157480317
+surface = SubResource("art_surface")
+measurements = "measured/environment/art/prop.content-feed-trough.break.json"
+source = "NDClientData/.media@2026-10-17"
+
+[resource]
+script = ExtResource("3_s1rh4")
+id = "prop.content-feed-trough.break"
+kind = "bank"
+art = SubResource("art")
+images = PackedStringArray()
+state_change_frame = 6

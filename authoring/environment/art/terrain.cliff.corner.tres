@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentArt" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/art_source.gd" id="1_7fsh5"]
+[ext_resource type="Script" path="res://presentation/source/surface.gd" id="2_d25dx"]
+[ext_resource type="Script" path="res://presentation/source/environment/art.gd" id="3_eafiv"]
+
+[sub_resource type="Resource" id="art_surface"]
+script = ExtResource("2_d25dx")
+encoding = "rg16_depth_oct_normal"
+failed_frames = PackedInt32Array()
+source = "environment-geometry-production-2026-10-09"
+
+[sub_resource type="Resource" id="art"]
+script = ExtResource("1_7fsh5")
+container = "views_as_files"
+files = PackedStringArray("art/media/environment/terrain/ground-g13-e.png", "art/media/environment/terrain/ground-g13-n.png", "art/media/environment/terrain/ground-g13-s.png", "art/media/environment/terrain/ground-g13-w.png")
+cell = Vector2i(256, 256)
+frames = 1
+directions = "camera4"
+direction_order = PackedStringArray("e", "n", "s", "w")
+pivot = Vector2(128, 208)
+surface = SubResource("art_surface")
+measurements = "measured/environment/art/terrain.cliff.corner.json"
+source = "NDClientData/.media@2026-10-17"
+
+[resource]
+script = ExtResource("3_eafiv")
+id = "terrain.cliff.corner"
+art = SubResource("art")
+images = PackedStringArray("terrain.cliff.corner.e", "terrain.cliff.corner.n", "terrain.cliff.corner.s", "terrain.cliff.corner.w")

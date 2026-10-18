@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentArt" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/art_source.gd" id="1_chg4g"]
+[ext_resource type="Script" path="res://presentation/source/surface.gd" id="2_edd3c"]
+[ext_resource type="Script" path="res://presentation/source/environment/art.gd" id="3_uy1qq"]
+
+[sub_resource type="Resource" id="art_surface"]
+script = ExtResource("2_edd3c")
+encoding = "rg16_depth_oct_normal"
+failed_frames = PackedInt32Array()
+source = "environment-geometry-production-2026-10-09"
+
+[sub_resource type="Resource" id="art"]
+script = ExtResource("1_chg4g")
+container = "views_as_files"
+files = PackedStringArray("art/media/environment/terrain/ground-g17-e.png", "art/media/environment/terrain/ground-g17-n.png", "art/media/environment/terrain/ground-g17-s.png", "art/media/environment/terrain/ground-g17-w.png")
+cell = Vector2i(256, 256)
+frames = 1
+directions = "camera4"
+direction_order = PackedStringArray("e", "n", "s", "w")
+surface = SubResource("art_surface")
+measurements = "measured/environment/art/terrain.stairs.json"
+source = "NDClientData/.media@2026-10-17"
+
+[resource]
+script = ExtResource("3_uy1qq")
+id = "terrain.stairs"
+art = SubResource("art")
+images = PackedStringArray("terrain.stairs.e", "terrain.stairs.n", "terrain.stairs.s", "terrain.stairs.w")

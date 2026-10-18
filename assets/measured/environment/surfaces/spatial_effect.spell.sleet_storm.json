@@ -1,0 +1,30 @@
+{
+  "spatial_media": {
+      "layers": [
+        {
+          "assetId": "weather.sleet.storm.hold.ground.surface",
+          "applicationAssetId": "weather.sleet.storm.apply.ground.surface",
+          "removalAssetId": "weather.sleet.storm.remove.ground.surface",
+          "composition": "paired_depth"
+        },
+        {
+          "assetId": "weather.sleet.storm.hold.back.surface",
+          "applicationAssetId": "weather.sleet.storm.apply.back.surface",
+          "removalAssetId": "weather.sleet.storm.remove.back.surface",
+          "composition": "paired_depth"
+        },
+        {
+          "assetId": "weather.sleet.storm.hold.front.surface",
+          "applicationAssetId": "weather.sleet.storm.apply.front.surface",
+          "removalAssetId": "weather.sleet.storm.remove.front.surface",
+          "composition": "paired_depth"
+        }
+      ],
+      "holdStartFrame": 0,
+      "holdFrames": 64,
+      "fps": 32.0,
+      "scale": 1.4285714285714286,
+      "formationCommitMs": 968.75,
+      "removalCommitMs": 500.0
+    }
+}

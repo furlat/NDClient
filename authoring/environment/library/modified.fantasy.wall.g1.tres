@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentObject" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_r7h1g"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_part.gd" id="2_sy4xo"]
+[ext_resource type="Script" path="res://presentation/source/environment/object.gd" id="3_4i02a"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_state.gd" id="4_d68hu"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_transition.gd" id="5_0e6aj"]
+
+[resource]
+script = ExtResource("3_4i02a")
+id = "modified.fantasy.wall.g1"
+kind = "wall"
+views = PackedStringArray("e", "s", "w", "n")
+art = PackedStringArray("modified.fantasy.wall.g1")
+catalogue_group = "B"
+label = "wall.fantasy.g1.intact"
+original = "fantasy.wall.g1"
+status = "partial"
+notes = "Catalogue status: Current media binding snapshot. Native ids: environment.wall.fantasy_g1. Art and geometry are in the source; no server id uses it yet."

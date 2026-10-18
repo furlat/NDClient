@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentArt" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/art_source.gd" id="1_ovkf0"]
+[ext_resource type="Script" path="res://presentation/source/surface.gd" id="2_oncvp"]
+[ext_resource type="Script" path="res://presentation/source/environment/art.gd" id="3_7jpoc"]
+
+[sub_resource type="Resource" id="art_surface"]
+script = ExtResource("2_oncvp")
+encoding = "rg16_depth_oct_normal"
+failed_frames = PackedInt32Array()
+source = "environment-geometry-production-2026-10-09"
+
+[sub_resource type="Resource" id="art"]
+script = ExtResource("1_ovkf0")
+container = "atlas"
+files = PackedStringArray("art/media/environment/fixtures/trap-workshop/atlas/crusher/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/crusher/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/crusher/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/crusher/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/crusher/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/crusher/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/crusher/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/crusher/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/crusher/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/crusher/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/crusher/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/crusher/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/crusher/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/crusher/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/crusher/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/crusher/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/crusher/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/crusher/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/crusher/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/crusher/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/crusher/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/crusher/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/crusher/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/crusher/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/crusher/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/crusher/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/crusher/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/crusher/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/crusher/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/crusher/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/crusher/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/crusher/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/crusher/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/crusher/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/crusher/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/crusher/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/crusher/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/crusher/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/crusher/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/crusher/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/crusher/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/crusher/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/crusher/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/crusher/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/crusher/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/crusher/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/crusher/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/crusher/256x256-000.png")
+cell = Vector2i(256, 256)
+frames = 12
+directions = "camera4"
+direction_order = PackedStringArray("e", "n", "s", "w")
+pivot = Vector2(128, 208)
+surface = SubResource("art_surface")
+measurements = "measured/environment/art/trap-workshop.crusher.json"
+source = "NDClientData/.media@2026-10-17"
+notes = "Pre-rendered sprite from the old client; nothing draws it today."
+
+[resource]
+script = ExtResource("3_7jpoc")
+id = "trap-workshop.crusher"
+kind = "sprite"
+art = SubResource("art")
+images = PackedStringArray("trap-workshop.crusher.e.0", "trap-workshop.crusher.e.1", "trap-workshop.crusher.e.10", "trap-workshop.crusher.e.11", "trap-workshop.crusher.e.2", "trap-workshop.crusher.e.3", "trap-workshop.crusher.e.4", "trap-workshop.crusher.e.5", "trap-workshop.crusher.e.6", "trap-workshop.crusher.e.7", "trap-workshop.crusher.e.8", "trap-workshop.crusher.e.9", "trap-workshop.crusher.n.0", "trap-workshop.crusher.n.1", "trap-workshop.crusher.n.10", "trap-workshop.crusher.n.11", "trap-workshop.crusher.n.2", "trap-workshop.crusher.n.3", "trap-workshop.crusher.n.4", "trap-workshop.crusher.n.5", "trap-workshop.crusher.n.6", "trap-workshop.crusher.n.7", "trap-workshop.crusher.n.8", "trap-workshop.crusher.n.9", "trap-workshop.crusher.s.0", "trap-workshop.crusher.s.1", "trap-workshop.crusher.s.10", "trap-workshop.crusher.s.11", "trap-workshop.crusher.s.2", "trap-workshop.crusher.s.3", "trap-workshop.crusher.s.4", "trap-workshop.crusher.s.5", "trap-workshop.crusher.s.6", "trap-workshop.crusher.s.7", "trap-workshop.crusher.s.8", "trap-workshop.crusher.s.9", "trap-workshop.crusher.w.0", "trap-workshop.crusher.w.1", "trap-workshop.crusher.w.10", "trap-workshop.crusher.w.11", "trap-workshop.crusher.w.2", "trap-workshop.crusher.w.3", "trap-workshop.crusher.w.4", "trap-workshop.crusher.w.5", "trap-workshop.crusher.w.6", "trap-workshop.crusher.w.7", "trap-workshop.crusher.w.8", "trap-workshop.crusher.w.9")

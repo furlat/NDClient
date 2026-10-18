@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentArt" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/art_source.gd" id="1_gn6ku"]
+[ext_resource type="Script" path="res://presentation/source/surface.gd" id="2_x6a73"]
+[ext_resource type="Script" path="res://presentation/source/environment/art.gd" id="3_vyb7e"]
+
+[sub_resource type="Resource" id="art_surface"]
+script = ExtResource("2_x6a73")
+encoding = "rg16_depth_oct_normal"
+failed_frames = PackedInt32Array()
+source = "environment-geometry-production-2026-10-09"
+
+[sub_resource type="Resource" id="art"]
+script = ExtResource("1_gn6ku")
+container = "views_as_files"
+files = PackedStringArray("art/media/environment/walls/static/wall-c2-e.png", "art/media/environment/walls/static/wall-c2-n.png", "art/media/environment/walls/static/wall-c2-s.png", "art/media/environment/walls/static/wall-c2-w.png")
+cell = Vector2i(256, 256)
+frames = 1
+directions = "camera4"
+direction_order = PackedStringArray("e", "n", "s", "w")
+pivot = Vector2(128, 208)
+surface = SubResource("art_surface")
+measurements = "measured/environment/art/wood.wall.corner.json"
+source = "NDClientData/.media@2026-10-17"
+
+[resource]
+script = ExtResource("3_vyb7e")
+id = "wood.wall.corner"
+art = SubResource("art")
+images = PackedStringArray("wood.wall.corner.e", "wood.wall.corner.n", "wood.wall.corner.s", "wood.wall.corner.w")

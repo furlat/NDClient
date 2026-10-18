@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentObject" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_g4euf"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_part.gd" id="2_6qevv"]
+[ext_resource type="Script" path="res://presentation/source/environment/object.gd" id="3_vm2jc"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_state.gd" id="4_k00qc"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_transition.gd" id="5_nioc8"]
+
+[resource]
+script = ExtResource("3_vm2jc")
+id = "modified.fantasy.door.a1"
+kind = "door"
+views = PackedStringArray("e", "s", "w", "n")
+art = PackedStringArray("modified.fantasy.door.a1")
+catalogue_group = "B"
+label = "Door A1"
+original = "fantasy.door.a1"
+status = "partial"
+notes = "Catalogue status: Authored animation; current bindings recorded separately. Animated. Native ids: environment.directional_door, environment.door.fantasy_a1. Art and geometry are in the source; no server id uses it yet."

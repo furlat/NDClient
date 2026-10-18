@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentObject" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_txxx0"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_part.gd" id="2_6088t"]
+[ext_resource type="Script" path="res://presentation/source/environment/object.gd" id="3_iqemv"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_state.gd" id="4_0nsh4"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_transition.gd" id="5_oi7xb"]
+
+[resource]
+script = ExtResource("3_iqemv")
+id = "created.trap.vent"
+kind = "traps"
+views = PackedStringArray("e", "s", "w", "n")
+art = PackedStringArray("created.trap.vent")
+catalogue_group = "C"
+label = "vent"
+status = "partial"
+notes = "Catalogue status: Historical authored candidate; variant review and current bindings recorded separately. Animated. Art and geometry are in the source; no server id uses it yet."

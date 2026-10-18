@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentObject" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_owblr"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_part.gd" id="2_oqx12"]
+[ext_resource type="Script" path="res://presentation/source/environment/object.gd" id="3_n8wa7"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_state.gd" id="4_eq3ro"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_transition.gd" id="5_6cyk8"]
+
+[resource]
+script = ExtResource("3_n8wa7")
+id = "environment.blocker.boulder"
+kind = "blocker"
+views = PackedStringArray()
+art = PackedStringArray()
+notes = "The server sends this object; no art is bound, so the game reports it unresolved."

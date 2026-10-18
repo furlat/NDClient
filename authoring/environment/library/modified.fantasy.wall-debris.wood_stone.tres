@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentObject" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_cdagv"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_part.gd" id="2_7owgw"]
+[ext_resource type="Script" path="res://presentation/source/environment/object.gd" id="3_rxysq"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_state.gd" id="4_cwqof"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_transition.gd" id="5_ba3kx"]
+
+[resource]
+script = ExtResource("3_rxysq")
+id = "modified.fantasy.wall-debris.wood_stone"
+kind = "wall"
+views = PackedStringArray("e", "s", "w", "n")
+art = PackedStringArray("modified.fantasy.wall-debris.wood_stone")
+catalogue_group = "B"
+label = "wall.fantasy.debris.wood_stone"
+status = "partial"
+notes = "Catalogue status: Current media binding snapshot. Animated. Native ids: environment.wall.fantasy_d1, environment.wall.fantasy_d8. Art and geometry are in the source; no server id uses it yet."

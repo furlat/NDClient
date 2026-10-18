@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="PresentationGroundSurface" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/environment/surface_operation.gd" id="1_c3ypy"]
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="2_7m7sp"]
+[ext_resource type="Script" path="res://presentation/source/environment/ground_surface.gd" id="3_5ky2e"]
+
+[sub_resource type="Resource" id="operations_0_transition"]
+script = ExtResource("2_7m7sp")
+clip = "web-local-fire"
+selection = "web_ignite_douse"
+role = "transition"
+at = "state_change"
+attachment = "area"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+
+[sub_resource type="Resource" id="operations_0"]
+script = ExtResource("1_c3ypy")
+transition = SubResource("operations_0_transition")
+becomes = "spatial_effect.spell.web.burning"
+
+[resource]
+script = ExtResource("3_5ky2e")
+id = "spatial_effect.spell.web"
+operations = Array[ExtResource("1_c3ypy")]([SubResource("operations_0")])
+art = PackedStringArray("web.field", "web_bound_back", "web_bound_front", "web_tether")
+legacy = "measured/environment/surfaces/spatial_effect.spell.web.json"
+status = "partial"
+notes = "The Web area is drawn today by spell.web's lifecycle (abilities source), clipped to the unsuppressed cells; ignite and burn are not handled."

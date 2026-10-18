@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="PresentationLighting" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/environment/lighting.gd" id="1_i560t"]
+
+[resource]
+script = ExtResource("1_i560t")
+fallback_cookie = "art/lighting/T_basic1_vfx.PNG"
+treatments = Dictionary[String, String]({
+"0": "light.magical_darkness",
+"1": "light.darkness",
+"2": "light.dim",
+"3": "light.bright",
+"4": "light.very_bright",
+"authored": "world.authored",
+"memory": "memory.seen"
+})
+treatment_tints = Dictionary[String, Color]({
+"0": Color(0.22, 0.15, 0.32, 1),
+"1": Color(0.34, 0.38, 0.5, 1),
+"2": Color(0.65, 0.68, 0.78, 1),
+"3": Color(1, 1, 1, 1),
+"4": Color(1.08, 1.08, 1.04, 1),
+"authored": Color(0.62, 0.62, 0.62, 1),
+"memory": Color(0.62, 0.62, 0.62, 1)
+})
+notes = "Light-level treatments are data only today. The fallback cookie is used only without a range profile."

@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentObject" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_tq43n"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_part.gd" id="2_h4obb"]
+[ext_resource type="Script" path="res://presentation/source/environment/object.gd" id="3_61k5h"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_state.gd" id="4_wy08y"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_transition.gd" id="5_etqjn"]
+
+[sub_resource type="Resource" id="states_default"]
+script = ExtResource("4_wy08y")
+bank = "prop.content-notice-board.intact"
+
+[resource]
+script = ExtResource("3_61k5h")
+id = "environment.furniture.notice_board"
+kind = "furniture"
+views = PackedStringArray("e", "s", "w", "n")
+states = Dictionary[String, ExtResource("4_wy08y")]({
+"default": SubResource("states_default")
+})
+destructions = Dictionary[String, String]({
+"default": "prop.content-notice-board.break"
+})
+art = PackedStringArray()
+status = "ready"

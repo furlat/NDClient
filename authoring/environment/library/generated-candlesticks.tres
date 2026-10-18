@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentObject" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_7dgcm"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_part.gd" id="2_jebqh"]
+[ext_resource type="Script" path="res://presentation/source/environment/object.gd" id="3_seh08"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_state.gd" id="4_cug7s"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_transition.gd" id="5_62scf"]
+
+[resource]
+script = ExtResource("3_seh08")
+id = "generated-candlesticks"
+kind = "interiors"
+views = PackedStringArray("e", "s", "w", "n")
+art = PackedStringArray("generated-candlesticks")
+catalogue_group = "C"
+label = "Generated candlesticks"
+status = "partial"
+notes = "Catalogue status: Reviewed artwork. Animated. Native ids: environment.furniture.unlit_candlesticks. Art and geometry are in the source; no server id uses it yet."

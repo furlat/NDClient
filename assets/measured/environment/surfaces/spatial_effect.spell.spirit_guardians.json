@@ -1,0 +1,304 @@
+{
+  "spatial_media": {
+      "layers": [
+        {
+          "assetId": "holy.spirit.radiant",
+          "whenEnergyType": "Radiant",
+          "orbit": {
+            "blendMode": "screen",
+            "count": 7,
+            "radiusCells": 2.65,
+            "heightCells": 0.64,
+            "periodMs": 2000.0,
+            "slotsPerCycle": 3,
+            "sizePixels": 68.0,
+            "formationMs": 1000.0,
+            "trailMs": 400.0,
+            "trailSamples": 24,
+            "bright": 16773072,
+            "middle": 15054940,
+            "mistLow": [
+              203,
+              169,
+              98
+            ],
+            "mistRange": [
+              37,
+              45,
+              49
+            ],
+            "mistRadiusCells": 3.0
+          },
+          "composition": "orbit"
+        },
+        {
+          "assetId": "holy.spirit.necrotic",
+          "whenEnergyType": "Necrotic",
+          "orbit": {
+            "blendMode": "screen",
+            "count": 7,
+            "radiusCells": 2.65,
+            "heightCells": 0.64,
+            "periodMs": 2000.0,
+            "slotsPerCycle": 3,
+            "sizePixels": 68.0,
+            "formationMs": 1000.0,
+            "trailMs": 400.0,
+            "trailSamples": 24,
+            "bright": 11927523,
+            "middle": 5163430,
+            "mistLow": [
+              52,
+              143,
+              122
+            ],
+            "mistRange": [
+              50,
+              65,
+              62
+            ],
+            "mistRadiusCells": 3.0
+          },
+          "composition": "orbit"
+        }
+      ],
+      "holdStartFrame": 0,
+      "holdFrames": 16,
+      "fps": 32.0,
+      "scale": 1.0,
+      "removalFadeMs": 1000.0,
+      "removalEasing": "smoothstep",
+      "damageMaterials": {
+        "Necrotic": {
+          "id": "necrotic-body-contact",
+          "material": {
+            "colors": [
+              2995855,
+              9566929
+            ],
+            "mapping": "energy_burn"
+          },
+          "points": [
+            {
+              "elapsedMs": 0.0,
+              "strength": 0.0
+            },
+            {
+              "elapsedMs": 80.0,
+              "strength": 0.9
+            },
+            {
+              "elapsedMs": 483.0,
+              "strength": 0.9
+            },
+            {
+              "elapsedMs": 1150.0,
+              "strength": 0.0
+            }
+          ]
+        },
+        "Radiant": {
+          "id": "radiant-body-contact",
+          "material": {
+            "colors": [
+              15181114,
+              16772273
+            ],
+            "mapping": "energy_burn"
+          },
+          "points": [
+            {
+              "elapsedMs": 0.0,
+              "strength": 0.0
+            },
+            {
+              "elapsedMs": 80.0,
+              "strength": 0.9
+            },
+            {
+              "elapsedMs": 483.0,
+              "strength": 0.9
+            },
+            {
+              "elapsedMs": 1150.0,
+              "strength": 0.0
+            }
+          ]
+        }
+      },
+      "contactMediaByEnergy": {
+        "Necrotic": [
+          {
+            "id": "holy.contact.necrotic.behind",
+            "assetId": "holy.contact.necrotic",
+            "attachment": "target_ground",
+            "scale": 0.575,
+            "alpha": 0.6,
+            "depth": "behind_body",
+            "emissionPointByFacing": {
+              "E": {
+                "x": 0.0,
+                "y": 6.0
+              },
+              "N": {
+                "x": 0.0,
+                "y": 6.0
+              },
+              "NE": {
+                "x": 0.0,
+                "y": 6.0
+              },
+              "NW": {
+                "x": 0.0,
+                "y": 6.0
+              },
+              "S": {
+                "x": 0.0,
+                "y": 6.0
+              },
+              "SE": {
+                "x": 0.0,
+                "y": 6.0
+              },
+              "SW": {
+                "x": 0.0,
+                "y": 6.0
+              },
+              "W": {
+                "x": 0.0,
+                "y": 6.0
+              }
+            }
+          },
+          {
+            "id": "holy.contact.necrotic.front",
+            "assetId": "holy.contact.necrotic",
+            "attachment": "target_ground",
+            "scale": 0.575,
+            "alpha": 0.38,
+            "depth": "front_body",
+            "emissionPointByFacing": {
+              "E": {
+                "x": 0.0,
+                "y": 6.0
+              },
+              "N": {
+                "x": 0.0,
+                "y": 6.0
+              },
+              "NE": {
+                "x": 0.0,
+                "y": 6.0
+              },
+              "NW": {
+                "x": 0.0,
+                "y": 6.0
+              },
+              "S": {
+                "x": 0.0,
+                "y": 6.0
+              },
+              "SE": {
+                "x": 0.0,
+                "y": 6.0
+              },
+              "SW": {
+                "x": 0.0,
+                "y": 6.0
+              },
+              "W": {
+                "x": 0.0,
+                "y": 6.0
+              }
+            }
+          }
+        ],
+        "Radiant": [
+          {
+            "id": "holy.contact.radiant.behind",
+            "assetId": "holy.contact.radiant",
+            "attachment": "target_ground",
+            "scale": 0.575,
+            "alpha": 0.6,
+            "depth": "behind_body",
+            "emissionPointByFacing": {
+              "E": {
+                "x": 0.0,
+                "y": 6.0
+              },
+              "N": {
+                "x": 0.0,
+                "y": 6.0
+              },
+              "NE": {
+                "x": 0.0,
+                "y": 6.0
+              },
+              "NW": {
+                "x": 0.0,
+                "y": 6.0
+              },
+              "S": {
+                "x": 0.0,
+                "y": 6.0
+              },
+              "SE": {
+                "x": 0.0,
+                "y": 6.0
+              },
+              "SW": {
+                "x": 0.0,
+                "y": 6.0
+              },
+              "W": {
+                "x": 0.0,
+                "y": 6.0
+              }
+            }
+          },
+          {
+            "id": "holy.contact.radiant.front",
+            "assetId": "holy.contact.radiant",
+            "attachment": "target_ground",
+            "scale": 0.575,
+            "alpha": 0.38,
+            "depth": "front_body",
+            "emissionPointByFacing": {
+              "E": {
+                "x": 0.0,
+                "y": 6.0
+              },
+              "N": {
+                "x": 0.0,
+                "y": 6.0
+              },
+              "NE": {
+                "x": 0.0,
+                "y": 6.0
+              },
+              "NW": {
+                "x": 0.0,
+                "y": 6.0
+              },
+              "S": {
+                "x": 0.0,
+                "y": 6.0
+              },
+              "SE": {
+                "x": 0.0,
+                "y": 6.0
+              },
+              "SW": {
+                "x": 0.0,
+                "y": 6.0
+              },
+              "W": {
+                "x": 0.0,
+                "y": 6.0
+              }
+            }
+          }
+        ]
+      }
+    }
+}

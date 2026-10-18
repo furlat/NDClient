@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentObject" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_fthwf"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_part.gd" id="2_fg4o0"]
+[ext_resource type="Script" path="res://presentation/source/environment/object.gd" id="3_eggt0"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_state.gd" id="4_u840j"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_transition.gd" id="5_so8qm"]
+
+[sub_resource type="Resource" id="states_default"]
+script = ExtResource("4_u840j")
+bank = "prop.content-green-market-stall.intact"
+
+[resource]
+script = ExtResource("3_eggt0")
+id = "environment.furniture.green_market_stall"
+kind = "furniture"
+views = PackedStringArray("e", "s", "w", "n")
+states = Dictionary[String, ExtResource("4_u840j")]({
+"default": SubResource("states_default")
+})
+destructions = Dictionary[String, String]({
+"default": "prop.content-green-market-stall.break"
+})
+art = PackedStringArray()
+status = "ready"

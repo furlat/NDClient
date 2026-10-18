@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="PresentationGroundSurface" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/environment/surface_operation.gd" id="1_g6v01"]
+[ext_resource type="Script" path="res://presentation/source/environment/ground_surface.gd" id="2_u73rs"]
+
+[sub_resource type="Resource" id="operations_0"]
+script = ExtResource("1_g6v01")
+operation = "dry"
+
+[sub_resource type="Resource" id="operations_1"]
+script = ExtResource("1_g6v01")
+operation = "vaporize"
+also_creates = "spatial_effect.material.steam"
+
+[resource]
+script = ExtResource("2_u73rs")
+id = "spatial_effect.material.ice"
+operations = Array[ExtResource("1_g6v01")]([SubResource("operations_0"), SubResource("operations_1")])
+art = PackedStringArray()
+notes = "No art and no Factory scenario."

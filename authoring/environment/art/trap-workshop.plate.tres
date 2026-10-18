@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentArt" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/art_source.gd" id="1_t21ek"]
+[ext_resource type="Script" path="res://presentation/source/surface.gd" id="2_bebbf"]
+[ext_resource type="Script" path="res://presentation/source/environment/art.gd" id="3_nq3qp"]
+
+[sub_resource type="Resource" id="art_surface"]
+script = ExtResource("2_bebbf")
+encoding = "rg16_depth_oct_normal"
+failed_frames = PackedInt32Array()
+source = "environment-geometry-production-2026-10-09"
+
+[sub_resource type="Resource" id="art"]
+script = ExtResource("1_t21ek")
+container = "atlas"
+files = PackedStringArray("art/media/environment/fixtures/trap-workshop/atlas/plate/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/plate/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/plate/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/plate/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/plate/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/plate/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/plate/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/plate/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/plate/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/plate/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/plate/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/plate/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/plate/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/plate/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/plate/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/plate/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/plate/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/plate/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/plate/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/plate/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/plate/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/plate/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/plate/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/plate/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/plate/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/plate/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/plate/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/plate/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/plate/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/plate/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/plate/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/plate/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/plate/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/plate/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/plate/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/plate/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/plate/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/plate/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/plate/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/plate/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/plate/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/plate/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/plate/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/plate/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/plate/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/plate/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/plate/256x256-000.png", "art/media/environment/fixtures/trap-workshop/atlas/plate/256x256-000.png")
+cell = Vector2i(256, 256)
+frames = 12
+directions = "camera4"
+direction_order = PackedStringArray("e", "n", "s", "w")
+pivot = Vector2(128, 208)
+surface = SubResource("art_surface")
+measurements = "measured/environment/art/trap-workshop.plate.json"
+source = "NDClientData/.media@2026-10-17"
+notes = "Pre-rendered sprite from the old client; nothing draws it today."
+
+[resource]
+script = ExtResource("3_nq3qp")
+id = "trap-workshop.plate"
+kind = "sprite"
+art = SubResource("art")
+images = PackedStringArray("trap-workshop.plate.e.0", "trap-workshop.plate.e.1", "trap-workshop.plate.e.10", "trap-workshop.plate.e.11", "trap-workshop.plate.e.2", "trap-workshop.plate.e.3", "trap-workshop.plate.e.4", "trap-workshop.plate.e.5", "trap-workshop.plate.e.6", "trap-workshop.plate.e.7", "trap-workshop.plate.e.8", "trap-workshop.plate.e.9", "trap-workshop.plate.n.0", "trap-workshop.plate.n.1", "trap-workshop.plate.n.10", "trap-workshop.plate.n.11", "trap-workshop.plate.n.2", "trap-workshop.plate.n.3", "trap-workshop.plate.n.4", "trap-workshop.plate.n.5", "trap-workshop.plate.n.6", "trap-workshop.plate.n.7", "trap-workshop.plate.n.8", "trap-workshop.plate.n.9", "trap-workshop.plate.s.0", "trap-workshop.plate.s.1", "trap-workshop.plate.s.10", "trap-workshop.plate.s.11", "trap-workshop.plate.s.2", "trap-workshop.plate.s.3", "trap-workshop.plate.s.4", "trap-workshop.plate.s.5", "trap-workshop.plate.s.6", "trap-workshop.plate.s.7", "trap-workshop.plate.s.8", "trap-workshop.plate.s.9", "trap-workshop.plate.w.0", "trap-workshop.plate.w.1", "trap-workshop.plate.w.10", "trap-workshop.plate.w.11", "trap-workshop.plate.w.2", "trap-workshop.plate.w.3", "trap-workshop.plate.w.4", "trap-workshop.plate.w.5", "trap-workshop.plate.w.6", "trap-workshop.plate.w.7", "trap-workshop.plate.w.8", "trap-workshop.plate.w.9")

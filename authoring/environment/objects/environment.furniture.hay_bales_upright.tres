@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentObject" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_lomwd"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_part.gd" id="2_nddal"]
+[ext_resource type="Script" path="res://presentation/source/environment/object.gd" id="3_lenx1"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_state.gd" id="4_o0hif"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_transition.gd" id="5_a0efm"]
+
+[sub_resource type="Resource" id="states_default"]
+script = ExtResource("4_o0hif")
+bank = "prop.content-hay-bales-upright.intact"
+
+[resource]
+script = ExtResource("3_lenx1")
+id = "environment.furniture.hay_bales_upright"
+kind = "furniture"
+views = PackedStringArray("e", "s", "w", "n")
+states = Dictionary[String, ExtResource("4_o0hif")]({
+"default": SubResource("states_default")
+})
+destructions = Dictionary[String, String]({
+"default": "prop.content-hay-bales-upright.break"
+})
+art = PackedStringArray()
+status = "ready"

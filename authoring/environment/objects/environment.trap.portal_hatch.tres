@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentObject" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_smjj4"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_part.gd" id="2_3rb8x"]
+[ext_resource type="Script" path="res://presentation/source/environment/object.gd" id="3_2htp2"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_state.gd" id="4_ggw6q"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_transition.gd" id="5_qnrq7"]
+
+[resource]
+script = ExtResource("3_2htp2")
+id = "environment.trap.portal_hatch"
+kind = "trap"
+views = PackedStringArray()
+art = PackedStringArray()
+notes = "No object art. Its trap field (spatial_effect.environment.*) carries old pre-rendered sprites in the surfaces section."

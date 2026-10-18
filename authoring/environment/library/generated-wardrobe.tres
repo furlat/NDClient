@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentObject" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_0i1rl"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_part.gd" id="2_31m7k"]
+[ext_resource type="Script" path="res://presentation/source/environment/object.gd" id="3_ehq8i"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_state.gd" id="4_a2n7m"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_transition.gd" id="5_pj2ed"]
+
+[resource]
+script = ExtResource("3_ehq8i")
+id = "generated-wardrobe"
+kind = "interiors"
+views = PackedStringArray("e", "s", "w", "n")
+art = PackedStringArray("generated-wardrobe")
+catalogue_group = "C"
+label = "Generated wardrobe"
+status = "partial"
+notes = "Catalogue status: Reviewed artwork. Animated. Native ids: environment.furniture.wardrobe. Art and geometry are in the source; no server id uses it yet."

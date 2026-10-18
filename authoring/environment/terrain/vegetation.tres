@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="PresentationTerrain" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/sound_ref.gd" id="1_2uqr8"]
+[ext_resource type="Script" path="res://presentation/source/environment/terrain.gd" id="2_i8wth"]
+[ext_resource type="Script" path="res://presentation/source/environment/terrain_slope.gd" id="3_8lbng"]
+
+[sub_resource type="Resource" id="footstep"]
+script = ExtResource("1_2uqr8")
+cue = "footstep"
+at = "body.source_frame"
+
+[sub_resource type="Resource" id="slopes_0"]
+script = ExtResource("3_8lbng")
+notes = "Server surface_kind stairs with slope_axis; no art for this material."
+
+[sub_resource type="Resource" id="slopes_1"]
+script = ExtResource("3_8lbng")
+kind = "ramp"
+notes = "Server surface_kind ramp with slope_axis; no art."
+
+[resource]
+script = ExtResource("2_i8wth")
+material = "vegetation"
+variants = PackedStringArray()
+footstep = SubResource("footstep")
+slopes = Array[ExtResource("3_8lbng")]([SubResource("slopes_0"), SubResource("slopes_1")])
+notes = "The server sends this material; no floor art is bound, so the game does not draw these tiles."

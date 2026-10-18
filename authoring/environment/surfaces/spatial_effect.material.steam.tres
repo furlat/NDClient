@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="PresentationGroundSurface" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/effect_use.gd" id="1_tr5w6"]
+[ext_resource type="Script" path="res://presentation/source/environment/surface_operation.gd" id="2_rixau"]
+[ext_resource type="Script" path="res://presentation/source/environment/ground_surface.gd" id="3_pf5x3"]
+
+[sub_resource type="Resource" id="lasting"]
+script = ExtResource("1_tr5w6")
+clip = "steam-maintained-owner"
+selection = "water_vaporize_steam_owner"
+role = "sustain"
+at = "owner_start"
+attachment = "area"
+hide_at_contact = PackedStringArray()
+hide_at_release = PackedStringArray()
+hide_nodes = PackedStringArray()
+show_nodes = PackedStringArray()
+opacity_keys = PackedVector2Array()
+staging_from = "factory@20261018-c3c616e88a6b725f"
+
+[sub_resource type="Resource" id="operations_0"]
+script = ExtResource("2_rixau")
+operation = "dry"
+
+[resource]
+script = ExtResource("3_pf5x3")
+id = "spatial_effect.material.steam"
+layer = "cloud"
+lasting = SubResource("lasting")
+operations = Array[ExtResource("2_rixau")]([SubResource("operations_0")])
+art = PackedStringArray()
+status = "partial"
+notes = "Art or a Factory scenario exists; the game does not draw it."

@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentObject" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_pykp4"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_part.gd" id="2_d71rq"]
+[ext_resource type="Script" path="res://presentation/source/environment/object.gd" id="3_hkpcf"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_state.gd" id="4_b1pfs"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_transition.gd" id="5_ik4ht"]
+
+[sub_resource type="Resource" id="states_default"]
+script = ExtResource("4_b1pfs")
+bank = "prop.interior-wardrobe.intact"
+
+[resource]
+script = ExtResource("3_hkpcf")
+id = "environment.furniture.wardrobe"
+kind = "furniture"
+views = PackedStringArray("e", "s", "w", "n")
+states = Dictionary[String, ExtResource("4_b1pfs")]({
+"default": SubResource("states_default")
+})
+destructions = Dictionary[String, String]({
+"default": "prop.interior-wardrobe.break"
+})
+art = PackedStringArray()
+status = "ready"

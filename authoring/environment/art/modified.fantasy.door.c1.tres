@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentArt" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/art_source.gd" id="1_d36gy"]
+[ext_resource type="Script" path="res://presentation/source/environment/art.gd" id="2_l41bv"]
+
+[sub_resource type="Resource" id="art"]
+script = ExtResource("1_d36gy")
+container = "frames_as_files"
+files = PackedStringArray()
+directions = "camera4"
+direction_order = PackedStringArray()
+measurements = "measured/environment/art/modified.fantasy.door.c1.json"
+source = "environment-geometry-production-2026-10-09"
+
+[resource]
+script = ExtResource("2_l41bv")
+id = "modified.fantasy.door.c1"
+kind = "samples"
+art = SubResource("art")
+images = PackedStringArray()

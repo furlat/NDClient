@@ -1,0 +1,110 @@
+{
+  "spatial_media": {
+      "layers": [
+        {
+          "assetId": "wall.wind_d0.hold.back",
+          "applicationAssetId": "wall.wind_d0.application.back",
+          "removalAssetId": "wall.wind_d0.removal.back",
+          "composition": "wall_assembly",
+          "wallAssembly": {
+            "modules": [
+              {
+                "tangent": [
+                  1.0,
+                  0.0
+                ],
+                "assetId": "wall.wind_d0.hold.back",
+                "applicationAssetId": "wall.wind_d0.application.back",
+                "removalAssetId": "wall.wind_d0.removal.back"
+              },
+              {
+                "tangent": [
+                  0.707106781,
+                  0.707106781
+                ],
+                "assetId": "wall.wind_d1.hold.back",
+                "applicationAssetId": "wall.wind_d1.application.back",
+                "removalAssetId": "wall.wind_d1.removal.back"
+              },
+              {
+                "tangent": [
+                  0.0,
+                  1.0
+                ],
+                "assetId": "wall.wind_d2.hold.back",
+                "applicationAssetId": "wall.wind_d2.application.back",
+                "removalAssetId": "wall.wind_d2.removal.back"
+              },
+              {
+                "tangent": [
+                  -0.707106781,
+                  0.707106781
+                ],
+                "assetId": "wall.wind_d3.hold.back",
+                "applicationAssetId": "wall.wind_d3.application.back",
+                "removalAssetId": "wall.wind_d3.removal.back"
+              },
+              {
+                "tangent": [
+                  -1.0,
+                  0.0
+                ],
+                "assetId": "wall.wind_d4.hold.back",
+                "applicationAssetId": "wall.wind_d4.application.back",
+                "removalAssetId": "wall.wind_d4.removal.back"
+              },
+              {
+                "tangent": [
+                  -0.707106781,
+                  -0.707106781
+                ],
+                "assetId": "wall.wind_d5.hold.back",
+                "applicationAssetId": "wall.wind_d5.application.back",
+                "removalAssetId": "wall.wind_d5.removal.back"
+              },
+              {
+                "tangent": [
+                  -0.0,
+                  -1.0
+                ],
+                "assetId": "wall.wind_d6.hold.back",
+                "applicationAssetId": "wall.wind_d6.application.back",
+                "removalAssetId": "wall.wind_d6.removal.back"
+              },
+              {
+                "tangent": [
+                  0.707106781,
+                  -0.707106781
+                ],
+                "assetId": "wall.wind_d7.hold.back",
+                "applicationAssetId": "wall.wind_d7.application.back",
+                "removalAssetId": "wall.wind_d7.removal.back"
+              }
+            ],
+            "moduleLengthCells": 1.0,
+            "heightFeet": 15.0,
+            "widthFeet": 1.0,
+            "pixelScale": 1.0,
+            "flow": {
+              "material": "wind_streaks",
+              "components": "/wind/flow-components.json",
+              "nativeUnitsPerCell": 2.121320344,
+              "verticalScale": 1.224744871391589,
+              "palette": [
+                4478821,
+                7441564,
+                10862797,
+                14082789,
+                15855578
+              ]
+            }
+          }
+        }
+      ],
+      "holdStartFrame": 0,
+      "holdFrames": 64,
+      "fps": 32.0,
+      "scale": 1.0,
+      "interceptionComponents": "/wind/block-components.json"
+    }
+}

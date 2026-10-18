@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentObject" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_u22mi"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_part.gd" id="2_cfo5t"]
+[ext_resource type="Script" path="res://presentation/source/environment/object.gd" id="3_2b1kt"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_state.gd" id="4_paik6"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_transition.gd" id="5_n27ey"]
+
+[sub_resource type="Resource" id="states_default"]
+script = ExtResource("4_paik6")
+bank = "prop.interior-wooden-bench.intact"
+
+[resource]
+script = ExtResource("3_2b1kt")
+id = "environment.furniture.wooden_bench"
+kind = "furniture"
+views = PackedStringArray("e", "s", "w", "n")
+states = Dictionary[String, ExtResource("4_paik6")]({
+"default": SubResource("states_default")
+})
+destructions = Dictionary[String, String]({
+"default": "prop.interior-wooden-bench.break"
+})
+art = PackedStringArray()
+status = "ready"

@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentArt" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/art_source.gd" id="1_3n7be"]
+[ext_resource type="Script" path="res://presentation/source/surface.gd" id="2_vubif"]
+[ext_resource type="Script" path="res://presentation/source/environment/art.gd" id="3_mrh1q"]
+
+[sub_resource type="Resource" id="art_surface"]
+script = ExtResource("2_vubif")
+encoding = "rg16_depth_oct_normal"
+failed_frames = PackedInt32Array()
+source = "environment-geometry-production-2026-10-09"
+
+[sub_resource type="Resource" id="art"]
+script = ExtResource("1_3n7be")
+container = "atlas"
+files = PackedStringArray("art/media/environment/fixtures/lever/atlas/256x256-000.png", "art/media/environment/fixtures/lever/atlas/256x256-000.png", "art/media/environment/fixtures/lever/atlas/256x256-000.png", "art/media/environment/fixtures/lever/atlas/256x256-000.png", "art/media/environment/fixtures/lever/atlas/256x256-000.png", "art/media/environment/fixtures/lever/atlas/256x256-000.png", "art/media/environment/fixtures/lever/atlas/256x256-000.png", "art/media/environment/fixtures/lever/atlas/256x256-000.png", "art/media/environment/fixtures/lever/atlas/256x256-000.png", "art/media/environment/fixtures/lever/atlas/256x256-000.png", "art/media/environment/fixtures/lever/atlas/256x256-000.png", "art/media/environment/fixtures/lever/atlas/256x256-000.png", "art/media/environment/fixtures/lever/atlas/256x256-000.png", "art/media/environment/fixtures/lever/atlas/256x256-000.png", "art/media/environment/fixtures/lever/atlas/256x256-000.png", "art/media/environment/fixtures/lever/atlas/256x256-000.png", "art/media/environment/fixtures/lever/atlas/256x256-000.png", "art/media/environment/fixtures/lever/atlas/256x256-000.png", "art/media/environment/fixtures/lever/atlas/256x256-000.png", "art/media/environment/fixtures/lever/atlas/256x256-000.png", "art/media/environment/fixtures/lever/atlas/256x256-000.png", "art/media/environment/fixtures/lever/atlas/256x256-000.png", "art/media/environment/fixtures/lever/atlas/256x256-000.png", "art/media/environment/fixtures/lever/atlas/256x256-000.png", "art/media/environment/fixtures/lever/atlas/256x256-000.png", "art/media/environment/fixtures/lever/atlas/256x256-000.png", "art/media/environment/fixtures/lever/atlas/256x256-000.png", "art/media/environment/fixtures/lever/atlas/256x256-000.png")
+cell = Vector2i(256, 256)
+frames = 7
+directions = "camera4"
+direction_order = PackedStringArray("e", "n", "s", "w")
+pivot = Vector2(128, 208)
+surface = SubResource("art_surface")
+measurements = "measured/environment/art/lever.json"
+source = "NDClientData/.media@2026-10-17"
+
+[resource]
+script = ExtResource("3_mrh1q")
+id = "lever"
+art = SubResource("art")
+images = PackedStringArray("lever.e.0", "lever.e.1", "lever.e.2", "lever.e.3", "lever.e.4", "lever.e.5", "lever.e.6", "lever.n.0", "lever.n.1", "lever.n.2", "lever.n.3", "lever.n.4", "lever.n.5", "lever.n.6", "lever.s.0", "lever.s.1", "lever.s.2", "lever.s.3", "lever.s.4", "lever.s.5", "lever.s.6", "lever.w.0", "lever.w.1", "lever.w.2", "lever.w.3", "lever.w.4", "lever.w.5", "lever.w.6")

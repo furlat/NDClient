@@ -1,0 +1,81 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentObject" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_e8vl0"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_part.gd" id="2_el3o1"]
+[ext_resource type="Script" path="res://presentation/source/environment/object.gd" id="3_48hny"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_state.gd" id="4_8xbhd"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_transition.gd" id="5_5np7n"]
+
+[sub_resource type="Resource" id="parts_0"]
+script = ExtResource("2_el3o1")
+depth_split = true
+
+[sub_resource type="Resource" id="parts_1"]
+script = ExtResource("2_el3o1")
+role = "frame"
+
+[sub_resource type="Resource" id="states_closed"]
+script = ExtResource("4_8xbhd")
+bank = "door.indoor-door-elegant-three-panel.outward"
+
+[sub_resource type="Resource" id="states_open_outward"]
+script = ExtResource("4_8xbhd")
+bank = "door.indoor-door-elegant-three-panel.outward"
+frame = -1
+
+[sub_resource type="Resource" id="states_open_inward"]
+script = ExtResource("4_8xbhd")
+bank = "door.indoor-door-elegant-three-panel.inward"
+frame = -1
+
+[sub_resource type="Resource" id="transitions_0"]
+script = ExtResource("5_5np7n")
+from = "closed"
+to = "open.outward"
+bank = "door.indoor-door-elegant-three-panel.outward"
+
+[sub_resource type="Resource" id="transitions_1"]
+script = ExtResource("5_5np7n")
+from = "open.outward"
+to = "closed"
+bank = "door.indoor-door-elegant-three-panel.outward"
+reversed = true
+
+[sub_resource type="Resource" id="transitions_2"]
+script = ExtResource("5_5np7n")
+from = "closed"
+to = "open.inward"
+bank = "door.indoor-door-elegant-three-panel.inward"
+
+[sub_resource type="Resource" id="transitions_3"]
+script = ExtResource("5_5np7n")
+from = "open.inward"
+to = "closed"
+bank = "door.indoor-door-elegant-three-panel.inward"
+reversed = true
+
+[resource]
+script = ExtResource("3_48hny")
+id = "environment.door.indoor_door_elegant_three_panel"
+kind = "door"
+views = PackedStringArray("e", "s", "w", "n")
+select_field = "is_open"
+states = Dictionary[String, ExtResource("4_8xbhd")]({
+"closed": SubResource("states_closed"),
+"open.inward": SubResource("states_open_inward"),
+"open.outward": SubResource("states_open_outward")
+})
+destructions = Dictionary[String, String]({
+"closed.clear": "door.indoor-door-elegant-three-panel.destruction.closed.clear",
+"open.inward.clear": "door.indoor-door-elegant-three-panel.destruction.open.inward.clear",
+"open.outward.clear": "door.indoor-door-elegant-three-panel.destruction.open.outward.clear"
+})
+wrecks = Dictionary[String, String]({
+"environment.door.indoor_door_elegant_three_panel.wreck.clear": "clear"
+})
+transitions = Array[ExtResource("5_5np7n")]([SubResource("transitions_0"), SubResource("transitions_1"), SubResource("transitions_2"), SubResource("transitions_3")])
+parts = Array[ExtResource("2_el3o1")]([SubResource("parts_0"), SubResource("parts_1")])
+art = PackedStringArray()
+measurements = "measured/environment/objects/environment.door.indoor_door_elegant_three_panel.json"
+status = "ready"
+notes = "Open and closed snap to the end poses; the transitions are data only. pose_offset, assembly_variants and the source record are kept as delivered in its measurements."

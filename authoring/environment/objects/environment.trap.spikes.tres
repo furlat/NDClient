@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentObject" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_s38py"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_part.gd" id="2_klap3"]
+[ext_resource type="Script" path="res://presentation/source/environment/object.gd" id="3_1dgd5"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_state.gd" id="4_xqbpy"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_transition.gd" id="5_pero0"]
+
+[resource]
+script = ExtResource("3_1dgd5")
+id = "environment.trap.spikes"
+kind = "trap"
+views = PackedStringArray()
+art = PackedStringArray()
+notes = "No object art. Its trap field (spatial_effect.environment.*) carries old pre-rendered sprites in the surfaces section."

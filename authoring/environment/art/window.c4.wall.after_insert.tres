@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentArt" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/art_source.gd" id="1_nsxae"]
+[ext_resource type="Script" path="res://presentation/source/surface.gd" id="2_tq43v"]
+[ext_resource type="Script" path="res://presentation/source/environment/art.gd" id="3_p04xo"]
+
+[sub_resource type="Resource" id="art_surface"]
+script = ExtResource("2_tq43v")
+encoding = "rg16_depth_oct_normal"
+failed_frames = PackedInt32Array()
+source = "environment-geometry-production-2026-10-09"
+
+[sub_resource type="Resource" id="art"]
+script = ExtResource("1_nsxae")
+container = "atlas"
+files = PackedStringArray("art/media/environment/windows/window.c4.wall.after_insert.e.png", "art/media/environment/windows/window.c4.wall.after_insert.s.png", "art/media/environment/windows/window.c4.wall.after_insert.w.png", "art/media/environment/windows/window.c4.wall.after_insert.n.png")
+cell = Vector2i(320, 320)
+frames = 61
+directions = "camera4"
+direction_order = PackedStringArray("e", "s", "w", "n")
+surface = SubResource("art_surface")
+measurements = "measured/environment/art/window.c4.wall.after_insert.json"
+source = "NDClientData/.media@2026-10-17"
+
+[resource]
+script = ExtResource("3_p04xo")
+id = "window.c4.wall.after_insert"
+kind = "bank"
+art = SubResource("art")
+images = PackedStringArray()
+state_change_frame = 10

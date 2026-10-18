@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="PresentationLightAppearance" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/environment/light_appearance.gd" id="1_xr5v6"]
+
+[resource]
+script = ExtResource("1_xr5v6")
+appearance = "torch"
+colour = Color(0.809372, 0.429306, 0.269121, 1)
+flame = "torch.flame"
+carried_height_steps = 2.5
+item_ids = PackedStringArray("equipment.portable_torch", "environment.wall_torch")
+notes = "Fixture flames flicker by the flame frames' measured energy (build output fixture_optics)."

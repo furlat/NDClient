@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentObject" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_27y7m"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_part.gd" id="2_6f4di"]
+[ext_resource type="Script" path="res://presentation/source/environment/object.gd" id="3_t2j4d"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_state.gd" id="4_rlaoy"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_transition.gd" id="5_cw5vm"]
+
+[resource]
+script = ExtResource("3_t2j4d")
+id = "fantasy.black.tile"
+kind = "black"
+views = PackedStringArray("single")
+art = PackedStringArray("fantasy.black.tile")
+catalogue_group = "A"
+label = "BLACK TILE"
+status = "partial"
+notes = "Catalogue status: Vendor original. Art and geometry are in the source; no server id uses it yet."

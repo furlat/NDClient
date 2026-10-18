@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentArt" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/art_source.gd" id="1_cp62h"]
+[ext_resource type="Script" path="res://presentation/source/surface.gd" id="2_ov6dl"]
+[ext_resource type="Script" path="res://presentation/source/environment/art.gd" id="3_leqh3"]
+
+[sub_resource type="Resource" id="art_surface"]
+script = ExtResource("2_ov6dl")
+failed_frames = PackedInt32Array()
+
+[sub_resource type="Resource" id="art"]
+script = ExtResource("1_cp62h")
+container = "views_as_files"
+files = PackedStringArray("art/media/vfx/actions/residues/bone-e.png", "art/media/vfx/actions/residues/bone-n.png", "art/media/vfx/actions/residues/bone-s.png", "art/media/vfx/actions/residues/bone-w.png")
+cell = Vector2i(256, 256)
+frames = 1
+directions = "camera4"
+direction_order = PackedStringArray("e", "n", "s", "w")
+pivot = Vector2(128, 208)
+surface = SubResource("art_surface")
+measurements = "measured/environment/art/residue.bone_fragments.json"
+source = "NDClientData/.media@2026-10-17"
+notes = "Pre-rendered sprite from the old client; nothing draws it today."
+
+[resource]
+script = ExtResource("3_leqh3")
+id = "residue.bone_fragments"
+kind = "sprite"
+art = SubResource("art")
+images = PackedStringArray("residue.bone_fragments.e", "residue.bone_fragments.n", "residue.bone_fragments.s", "residue.bone_fragments.w")

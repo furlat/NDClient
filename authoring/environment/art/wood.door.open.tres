@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentArt" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/art_source.gd" id="1_731iv"]
+[ext_resource type="Script" path="res://presentation/source/surface.gd" id="2_tk4xj"]
+[ext_resource type="Script" path="res://presentation/source/environment/art.gd" id="3_gao2b"]
+
+[sub_resource type="Resource" id="art_surface"]
+script = ExtResource("2_tk4xj")
+encoding = "rg16_depth_oct_normal"
+failed_frames = PackedInt32Array()
+source = "environment-geometry-production-2026-10-09"
+
+[sub_resource type="Resource" id="art"]
+script = ExtResource("1_731iv")
+container = "views_as_files"
+files = PackedStringArray("art/media/environment/doors/static/door-a2-e.png", "art/media/environment/doors/static/door-a2-n.png", "art/media/environment/doors/static/door-a2-s.png", "art/media/environment/doors/static/door-a2-w.png")
+cell = Vector2i(256, 256)
+frames = 1
+directions = "camera4"
+direction_order = PackedStringArray("e", "n", "s", "w")
+scale = 1.0078740157480317
+surface = SubResource("art_surface")
+measurements = "measured/environment/art/wood.door.open.json"
+source = "NDClientData/.media@2026-10-17"
+
+[resource]
+script = ExtResource("3_gao2b")
+id = "wood.door.open"
+art = SubResource("art")
+images = PackedStringArray("wood.door.open.e", "wood.door.open.n", "wood.door.open.s", "wood.door.open.w")

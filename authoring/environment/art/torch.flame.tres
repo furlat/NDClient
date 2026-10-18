@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentArt" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/art_source.gd" id="1_w8kos"]
+[ext_resource type="Script" path="res://presentation/source/surface.gd" id="2_q2ukw"]
+[ext_resource type="Script" path="res://presentation/source/environment/art.gd" id="3_o73qu"]
+
+[sub_resource type="Resource" id="art_surface"]
+script = ExtResource("2_q2ukw")
+failed_frames = PackedInt32Array()
+
+[sub_resource type="Resource" id="art"]
+script = ExtResource("1_w8kos")
+container = "frames_as_files"
+files = PackedStringArray("art/media/environment/lighting/torch/flame/f52dea0b72342b246a1216e289dc5168.png", "art/media/environment/lighting/torch/flame/d0ad60029a0000444a7857492c6a6c8f.png", "art/media/environment/lighting/torch/flame/40f6c77eb5fc22a469128a41099f5290.png", "art/media/environment/lighting/torch/flame/2276e4f9d5b5375498378d15537db6bb.png", "art/media/environment/lighting/torch/flame/48ecf78b49001774082006e4def7022a.png", "art/media/environment/lighting/torch/flame/23ca28e336270bc458c4e3b626186ca6.png", "art/media/environment/lighting/torch/flame/284115ada2975f1409611751ae8743a7.png", "art/media/environment/lighting/torch/flame/d5227bc3bac87004d8aae57741cc00ce.png", "art/media/environment/lighting/torch/flame/3ceb33c008cf91545b06eb6a6763b90d.png", "art/media/environment/lighting/torch/flame/3a911e83eaeb1714ea0a08180ec0c614.png", "art/media/environment/lighting/torch/flame/1dca70b6deec00a4ab47b04675c4d55f.png", "art/media/environment/lighting/torch/flame/730718fd0c474f54194c2fe0184ca24a.png", "art/media/environment/lighting/torch/flame/e8b3e4d342784df4792e9d60d505de82.png", "art/media/environment/lighting/torch/flame/d4eccfde5037d4d40986d61754bb33d4.png", "art/media/environment/lighting/torch/flame/f09e44a4b6d53e9409a13272d4198c54.png", "art/media/environment/lighting/torch/flame/77c165966e3947c40a3d08440e7f9bf2.png")
+cell = Vector2i(256, 256)
+frames = 16
+fps = 10.0
+directions = "single"
+direction_order = PackedStringArray()
+scale = 1.0078740157480317
+surface = SubResource("art_surface")
+measurements = "measured/environment/art/torch.flame.json"
+source = "NDClientData/.media@2026-10-17"
+
+[resource]
+script = ExtResource("3_o73qu")
+id = "torch.flame"
+art = SubResource("art")
+images = PackedStringArray("torch.flame.00", "torch.flame.01", "torch.flame.02", "torch.flame.03", "torch.flame.04", "torch.flame.05", "torch.flame.06", "torch.flame.07", "torch.flame.08", "torch.flame.09", "torch.flame.10", "torch.flame.11", "torch.flame.12", "torch.flame.13", "torch.flame.14", "torch.flame.15")

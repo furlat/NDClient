@@ -1,0 +1,1008 @@
+{
+  "authoring_record": "environment/source-records/props/fantasy.misc.b13.json",
+  "source_record": {
+  "section": "ambiguous",
+  "record": {
+    "catalog_id": "fantasy.misc.b13",
+    "modified_id": "modified.fantasy.misc.b13",
+    "code": "B13",
+    "identity": {
+      "label": "low planked timber platform with trestle supports",
+      "evidence_kind": "four_view_visual_identification",
+      "confidence": 0.55
+    },
+    "role": "raised surface",
+    "mount": "floor",
+    "footprint": {
+      "coordinate_frame": "local-east; origin is authored physical ground-contact centroid (wall-mounted: mount centroid); +X projects down/right and +Y down/left in east art",
+      "overall_extent_cells": {
+        "value": [
+          0.4,
+          0.95
+        ],
+        "evidence_kind": "visual_estimate_and_content_proposal",
+        "confidence": 0.55,
+        "uncertainty_plus_minus": 0.15,
+        "note": "An envelope for assembly extent, not a filled solid collider."
+      },
+      "overall_bounds_cells": [
+        -0.2,
+        -0.475,
+        0.2,
+        0.475
+      ],
+      "overall_polygon_cells": [
+        [
+          -0.2,
+          0.475
+        ],
+        [
+          -0.2,
+          -0.475
+        ],
+        [
+          0.2,
+          -0.475
+        ],
+        [
+          0.2,
+          0.475
+        ]
+      ],
+      "solid_representation": "union of the listed physical_components in 3D; bounds/polygon alone must not be filled"
+    },
+    "height": {
+      "extent_steps": {
+        "value": 0.18,
+        "evidence_kind": "visual_estimate_and_content_proposal",
+        "confidence": 0.55,
+        "uncertainty_plus_minus": 0.15
+      },
+      "physical_floor_extent_feet": {
+        "value": 0.8999999999999999,
+        "evidence_kind": "visual_estimate_and_content_proposal",
+        "confidence": 0.55,
+        "uncertainty_plus_minus": 0.75
+      }
+    },
+    "physical_components": [
+      {
+        "name": "planked top",
+        "shape": "rectangular_prism",
+        "solid_xy_polygon": [
+          [
+            -0.2,
+            0.475
+          ],
+          [
+            -0.2,
+            -0.475
+          ],
+          [
+            0.2,
+            -0.475
+          ],
+          [
+            0.2,
+            0.475
+          ]
+        ],
+        "z_steps": [
+          0.13,
+          0.18
+        ],
+        "material": "wood",
+        "evidence_kind": "new_content_proposal_from_visible_members",
+        "confidence": 0.6,
+        "long_axis_plane_note": "Canonical E-view tangent along local Y; not a camera-specific rotation."
+      },
+      {
+        "name": "end trestle 1",
+        "shape": "rectangular_prism",
+        "solid_xy_polygon": [
+          [
+            -0.18,
+            0.425
+          ],
+          [
+            -0.18,
+            0.38
+          ],
+          [
+            0.18,
+            0.38
+          ],
+          [
+            0.18,
+            0.425
+          ]
+        ],
+        "z_steps": [
+          0,
+          0.13
+        ],
+        "material": "wood",
+        "evidence_kind": "new_content_proposal_from_visible_members",
+        "confidence": 0.6,
+        "long_axis_plane_note": "Canonical E-view tangent along local Y; not a camera-specific rotation."
+      },
+      {
+        "name": "end trestle 2",
+        "shape": "rectangular_prism",
+        "solid_xy_polygon": [
+          [
+            -0.18,
+            -0.38
+          ],
+          [
+            -0.18,
+            -0.425
+          ],
+          [
+            0.18,
+            -0.425
+          ],
+          [
+            0.18,
+            -0.38
+          ]
+        ],
+        "z_steps": [
+          0,
+          0.13
+        ],
+        "material": "wood",
+        "evidence_kind": "new_content_proposal_from_visible_members",
+        "confidence": 0.6,
+        "long_axis_plane_note": "Canonical E-view tangent along local Y; not a camera-specific rotation."
+      },
+      {
+        "name": "central support",
+        "shape": "rectangular_prism",
+        "solid_xy_polygon": [
+          [
+            -0.18,
+            0.025
+          ],
+          [
+            -0.18,
+            -0.025
+          ],
+          [
+            0.18,
+            -0.025
+          ],
+          [
+            0.18,
+            0.025
+          ]
+        ],
+        "z_steps": [
+          0,
+          0.13
+        ],
+        "material": "wood",
+        "evidence_kind": "new_content_proposal_from_visible_members",
+        "confidence": 0.4,
+        "long_axis_plane_note": "Canonical E-view tangent along local Y; not a camera-specific rotation."
+      }
+    ],
+    "soft_or_empty_regions": [],
+    "blocking": {
+      "evidence_kind": "new_content_proposal",
+      "movement": "actual hard member union; preserve openings and interior voids",
+      "rays": "actual material surfaces at their z; no whole silhouette occluder",
+      "native_selection": "handoff only; no runtime behavior/binding selected"
+    },
+    "source_conflicts": [
+      "Original W/N art visibly has supporting trestles. Preserved animation metadata partitions six pieces as material_behavior=floorboard and the older selected_prop_key is content-loose-floorboards. Neither proves loose boards, nor certifies native support geometry. Keep bank/pivot unchanged; do not recreate bank.",
+      "Four original poses have strongly displaced floor contacts and projection-dependent top exposure; a single generic [128,207.36] pivot is not a physical ground contact."
+    ],
+    "notes": [
+      "Concrete proposal is a low supported platform. Exact use as bench, walkway, or parent-mounted raised board assembly is not proven. Hidden/support count and dimensions remain coarse estimates.",
+      "Local-east dominant width/ridge axis follows the original E up-right/down-left member tangent (local Y). This is a single physical authoring convention; source art, camera rows, pivots and runtime yaw are unchanged."
+    ],
+    "animation_registration": {
+      "evidence_kind": "source_fact",
+      "source_metadata_path": "/home/tommaso/Dev/terrain-prefab-study-2026-09-24/house-prefabs/decor-study/candidates-wood-v6-family-r3/misc-b13/impact-a/metadata.json",
+      "source_metadata_sha256": "e6995748e46585fe9051b243c68f287e07025bf55a7d72d6e3cd42fbae30d76d",
+      "catalog_metadata_path": "/mnt/c/Users/tommaso/Documents/assets/fantasy-unified-catalog/b-animated-versions/decor/candidates-wood-v6-family-r3/misc-b13/impact-a/metadata.json",
+      "catalog_metadata_sha256": "e6995748e46585fe9051b243c68f287e07025bf55a7d72d6e3cd42fbae30d76d",
+      "canvas_px": [
+        384,
+        384
+      ],
+      "pivot_px": [
+        192,
+        271.36
+      ],
+      "rows": [
+        "e",
+        "s",
+        "w",
+        "n"
+      ],
+      "fps": 12,
+      "columns_per_pose": [
+        26,
+        26,
+        26,
+        26
+      ],
+      "columns": 26,
+      "duration_seconds": 2.1666666666666665,
+      "source_profile": "wood",
+      "source_mount": "floor",
+      "immutable": true,
+      "interpretation": "Animation/media registration only, not a contact/footprint/mount height. No offsets or states adjusted."
+    },
+    "source_geometry_limitations": {
+      "method": "Material-specific source masks: separate crate lid/wall planks, table cloth/legs, cart wheels/canvas/cargo/side boards. Thin source-UV painted surfaces, Blender rigid-body support loss for wood and payload; independently folded cloth surface. No common lateral launch or filled interior hull.",
+      "limitation": "Directional 2.5D surfaces, not a universal 3D reconstruction. Member segmentation is authored from projected art; hidden sides use wood-tone paint. Cloth fall/folding authored, not a cloth solver. Fragment mutual collisions excluded at original cut joints to prevent artificial launch; independent visual review required.",
+      "blender_files": [
+        "/home/tommaso/Dev/terrain-prefab-study-2026-09-24/house-prefabs/decor-study/candidates-wood-v6-family-r3/misc-b13/impact-a/destruction-e.blend",
+        "/home/tommaso/Dev/terrain-prefab-study-2026-09-24/house-prefabs/decor-study/candidates-wood-v6-family-r3/misc-b13/impact-a/destruction-s.blend",
+        "/home/tommaso/Dev/terrain-prefab-study-2026-09-24/house-prefabs/decor-study/candidates-wood-v6-family-r3/misc-b13/impact-a/destruction-w.blend",
+        "/home/tommaso/Dev/terrain-prefab-study-2026-09-24/house-prefabs/decor-study/candidates-wood-v6-family-r3/misc-b13/impact-a/destruction-n.blend"
+      ],
+      "blender_inspection": "not opened; no geometry dimensions claimed from Blender; source metadata explicitly describes directional painted surfaces rather than certified native collision"
+    },
+    "source_views": [
+      {
+        "pose": "e",
+        "original_source_path": "/mnt/c/Users/tommaso/Documents/Dev/assets/Fantasy tileset - 2D Isometric V1.1/Fantasy tileset - 2D Isometric/Environment/Misc B13_E.png",
+        "original_source_sha256": "6ac72489b9f82944057fc80869bcd22b1d09bd4306c89ad7be5452592ce1180b",
+        "catalog_source_path": "/mnt/c/Users/tommaso/Documents/assets/fantasy-unified-catalog/a-original/vendor/Fantasy tileset - 2D Isometric/Environment/Misc B13_E.png",
+        "canvas_px": [
+          256,
+          256
+        ],
+        "pixel_coordinate_convention": "top-left origin; integer pixel indices; support centroid may be subpixel/invisible within an opening",
+        "review_contact_sheet": "/mnt/c/Users/tommaso/Documents/assets/fantasy-unified-catalog/data-authoring-2026-10-09/misc-review/contact-01.png",
+        "alpha_bbox_diagnostic_only": [
+          125,
+          107,
+          216,
+          168
+        ],
+        "unity_registration": {
+          "evidence_kind": "source_fact",
+          "sprite_meta_path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Environment/Sprites/Misc B13_E.png.meta",
+          "sprite_meta_sha256": "eced5694ebccfdf6409d09cbcab414b258e3185ce20461f20774792beff9ef44",
+          "normalized_bottom_left_pivot": [
+            0.5,
+            0.18
+          ],
+          "original_top_left_pivot_px": [
+            128.0,
+            209.92000000000002
+          ],
+          "sprite_pixels_to_units": 127.0,
+          "sprite_guid": "eff12e1f91954a24ea491d9f3ec4ff4e",
+          "tile_asset_path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Environment/Tiles/Misc B13_E.asset",
+          "tile_asset_sha256": "0f00229f6d98a8c9827c06d0ffa91d1070a861a1c7f41ed6c9f47dcbe01155e1",
+          "tile_guid": "8df5a7a023bf4b047a3e2bf2792c55ff",
+          "raw_collider_type": 1,
+          "tiledata_path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Example scene/Scripts/Tiles/TileData/DT_Misc B13_E.asset",
+          "tiledata_sha256": "471ccacb23b4b8e75911a57766248055483aed607610a7ea856b9e2c81f71e10",
+          "tiledata_description": "Decorative object",
+          "occurrences": {
+            "scene_path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Example scene/Example scene.unity",
+            "sprite_guid_text_references": 3,
+            "tile_guid_text_references": 3,
+            "interpretation": "References in example scene are provenance only; not native physical dimensions or mount evidence."
+          }
+        },
+        "ground_contact": {
+          "anchor_type": "inferred canonical support-center projected onto ground plane",
+          "same_physical_feature_across_views": "center of the same assembly support layout (B44/B45: the single planted pole foot)",
+          "centroid_px": {
+            "value": [
+              170,
+              146
+            ],
+            "evidence_kind": "visual_estimate_and_content_proposal",
+            "confidence": 0.45,
+            "uncertainty_plus_minus": 8
+          },
+          "centroid_is_sprite_pivot": false,
+          "candidate_points_px": [
+            {
+              "xy": [
+                147,
+                167
+              ],
+              "intended_visual_estimate_px": [
+                147,
+                167
+              ],
+              "pixel_RGBA": [
+                79,
+                63,
+                36,
+                255
+              ],
+              "visible_alpha_over_128": true,
+              "anchor_type": "visible supporting timber tip",
+              "evidence_kind": "visual_contact_estimate_with_measured_pixel_sample",
+              "confidence": 0.55,
+              "uncertainty_px": 4,
+              "adjustment_to_visible_pixel_px": [
+                0,
+                0
+              ],
+              "sample_interpretation": "Visible pixel proves artwork coverage, not the exact 3D contact surface."
+            },
+            {
+              "xy": [
+                128,
+                146
+              ],
+              "intended_visual_estimate_px": [
+                128,
+                146
+              ],
+              "pixel_RGBA": [
+                112,
+                93,
+                58,
+                255
+              ],
+              "visible_alpha_over_128": true,
+              "anchor_type": "visible supporting timber tip",
+              "evidence_kind": "visual_contact_estimate_with_measured_pixel_sample",
+              "confidence": 0.55,
+              "uncertainty_px": 4,
+              "adjustment_to_visible_pixel_px": [
+                0,
+                0
+              ],
+              "sample_interpretation": "Visible pixel proves artwork coverage, not the exact 3D contact surface."
+            }
+          ],
+          "interpretation": "This is an authored estimate of the SAME full support-center across views, including occluded members; never the centroid of only the visible subset. It can lie in an empty interior. Candidate points below are individual observed landmarks and do not define the centroid by arithmetic averaging."
+        },
+        "shadow_exclusion": {
+          "evidence_kind": "four_view_visual_identification",
+          "excluded_from_contacts_and_solids": true,
+          "note": "Cast ground shadows and cloth hems are excluded as hard supporting material."
+        },
+        "registration_conflict_note": "Physical contacts are offset from visual/media pivots; record offset as authoring evidence only, with no animation registration change."
+      },
+      {
+        "pose": "s",
+        "original_source_path": "/mnt/c/Users/tommaso/Documents/Dev/assets/Fantasy tileset - 2D Isometric V1.1/Fantasy tileset - 2D Isometric/Environment/Misc B13_S.png",
+        "original_source_sha256": "21ee77a3bed483cadcd36cf6d29985e0e5ca2c294c323f8791d7ec860861d613",
+        "catalog_source_path": "/mnt/c/Users/tommaso/Documents/assets/fantasy-unified-catalog/a-original/vendor/Fantasy tileset - 2D Isometric/Environment/Misc B13_S.png",
+        "canvas_px": [
+          256,
+          256
+        ],
+        "pixel_coordinate_convention": "top-left origin; integer pixel indices; support centroid may be subpixel/invisible within an opening",
+        "review_contact_sheet": "/mnt/c/Users/tommaso/Documents/assets/fantasy-unified-catalog/data-authoring-2026-10-09/misc-review/contact-01.png",
+        "alpha_bbox_diagnostic_only": [
+          40,
+          107,
+          131,
+          168
+        ],
+        "unity_registration": {
+          "evidence_kind": "source_fact",
+          "sprite_meta_path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Environment/Sprites/Misc B13_S.png.meta",
+          "sprite_meta_sha256": "1ff443fd0db2c4d3447d81c7bd73f3bd975da7480e91e46cf7e60e3d33528eeb",
+          "normalized_bottom_left_pivot": [
+            0.5,
+            0.18
+          ],
+          "original_top_left_pivot_px": [
+            128.0,
+            209.92000000000002
+          ],
+          "sprite_pixels_to_units": 127.0,
+          "sprite_guid": "153aff27a2568dd44933be808b67fd2e",
+          "tile_asset_path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Environment/Tiles/Misc B13_S.asset",
+          "tile_asset_sha256": "50ca7fe1b7a3de5e5d9d4ff93031230b7ce16a6ac08e1f1e3133dea7c7412f03",
+          "tile_guid": "2058cf66c536f7d498ded1eb8f0c2ecb",
+          "raw_collider_type": 1,
+          "tiledata_path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Example scene/Scripts/Tiles/TileData/DT_Misc B13_S.asset",
+          "tiledata_sha256": "a20b3c960ee03a1a9b70004c2f610fc98d4fec7409fcc88b7712f1b46aeab572",
+          "tiledata_description": "Decorative object",
+          "occurrences": {
+            "scene_path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Example scene/Example scene.unity",
+            "sprite_guid_text_references": 2,
+            "tile_guid_text_references": 2,
+            "interpretation": "References in example scene are provenance only; not native physical dimensions or mount evidence."
+          }
+        },
+        "ground_contact": {
+          "anchor_type": "inferred canonical support-center projected onto ground plane",
+          "same_physical_feature_across_views": "center of the same assembly support layout (B44/B45: the single planted pole foot)",
+          "centroid_px": {
+            "value": [
+              86,
+              146
+            ],
+            "evidence_kind": "visual_estimate_and_content_proposal",
+            "confidence": 0.45,
+            "uncertainty_plus_minus": 8
+          },
+          "centroid_is_sprite_pivot": false,
+          "candidate_points_px": [
+            {
+              "xy": [
+                108,
+                167
+              ],
+              "intended_visual_estimate_px": [
+                108,
+                167
+              ],
+              "pixel_RGBA": [
+                79,
+                63,
+                37,
+                255
+              ],
+              "visible_alpha_over_128": true,
+              "anchor_type": "visible supporting timber tip",
+              "evidence_kind": "visual_contact_estimate_with_measured_pixel_sample",
+              "confidence": 0.55,
+              "uncertainty_px": 4,
+              "adjustment_to_visible_pixel_px": [
+                0,
+                0
+              ],
+              "sample_interpretation": "Visible pixel proves artwork coverage, not the exact 3D contact surface."
+            },
+            {
+              "xy": [
+                128,
+                146
+              ],
+              "intended_visual_estimate_px": [
+                128,
+                146
+              ],
+              "pixel_RGBA": [
+                93,
+                76,
+                45,
+                255
+              ],
+              "visible_alpha_over_128": true,
+              "anchor_type": "visible supporting timber tip",
+              "evidence_kind": "visual_contact_estimate_with_measured_pixel_sample",
+              "confidence": 0.55,
+              "uncertainty_px": 4,
+              "adjustment_to_visible_pixel_px": [
+                0,
+                0
+              ],
+              "sample_interpretation": "Visible pixel proves artwork coverage, not the exact 3D contact surface."
+            }
+          ],
+          "interpretation": "This is an authored estimate of the SAME full support-center across views, including occluded members; never the centroid of only the visible subset. It can lie in an empty interior. Candidate points below are individual observed landmarks and do not define the centroid by arithmetic averaging."
+        },
+        "shadow_exclusion": {
+          "evidence_kind": "four_view_visual_identification",
+          "excluded_from_contacts_and_solids": true,
+          "note": "Cast ground shadows and cloth hems are excluded as hard supporting material."
+        },
+        "registration_conflict_note": "Physical contacts are offset from visual/media pivots; record offset as authoring evidence only, with no animation registration change."
+      },
+      {
+        "pose": "w",
+        "original_source_path": "/mnt/c/Users/tommaso/Documents/Dev/assets/Fantasy tileset - 2D Isometric V1.1/Fantasy tileset - 2D Isometric/Environment/Misc B13_W.png",
+        "original_source_sha256": "0227e34878ffa10030e35f9c9d028ca0fd6cd674a07a4bc7a45638cc7db3ce69",
+        "catalog_source_path": "/mnt/c/Users/tommaso/Documents/assets/fantasy-unified-catalog/a-original/vendor/Fantasy tileset - 2D Isometric/Environment/Misc B13_W.png",
+        "canvas_px": [
+          256,
+          256
+        ],
+        "pixel_coordinate_convention": "top-left origin; integer pixel indices; support centroid may be subpixel/invisible within an opening",
+        "review_contact_sheet": "/mnt/c/Users/tommaso/Documents/assets/fantasy-unified-catalog/data-authoring-2026-10-09/misc-review/contact-01.png",
+        "alpha_bbox_diagnostic_only": [
+          40,
+          75,
+          131,
+          124
+        ],
+        "unity_registration": {
+          "evidence_kind": "source_fact",
+          "sprite_meta_path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Environment/Sprites/Misc B13_W.png.meta",
+          "sprite_meta_sha256": "11f1f6b9a694e95893f8698decbe252a523999523ba92ecd0618147274d65df4",
+          "normalized_bottom_left_pivot": [
+            0.5,
+            0.18
+          ],
+          "original_top_left_pivot_px": [
+            128.0,
+            209.92000000000002
+          ],
+          "sprite_pixels_to_units": 127.0,
+          "sprite_guid": "07f3bf46e921f6146b9e54a7a1143bb7",
+          "tile_asset_path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Environment/Tiles/Misc B13_W.asset",
+          "tile_asset_sha256": "7054a5636ee63fa4cc6c72fcf57f90364954ca1dd409def222e40347cce6d8e6",
+          "tile_guid": "83b642e02115fe843b0573d51459cff6",
+          "raw_collider_type": 1,
+          "tiledata_path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Example scene/Scripts/Tiles/TileData/DT_Misc B13_W.asset",
+          "tiledata_sha256": "52c4f054e34eddad1c707985b4ccde853204dcd268ecb6b42fbbbb3ee427ae61",
+          "tiledata_description": "Decorative object",
+          "occurrences": {
+            "scene_path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Example scene/Example scene.unity",
+            "sprite_guid_text_references": 0,
+            "tile_guid_text_references": 0,
+            "interpretation": "References in example scene are provenance only; not native physical dimensions or mount evidence."
+          }
+        },
+        "ground_contact": {
+          "anchor_type": "inferred canonical support-center projected onto ground plane",
+          "same_physical_feature_across_views": "center of the same assembly support layout (B44/B45: the single planted pole foot)",
+          "centroid_px": {
+            "value": [
+              86,
+              107
+            ],
+            "evidence_kind": "visual_estimate_and_content_proposal",
+            "confidence": 0.45,
+            "uncertainty_plus_minus": 8
+          },
+          "centroid_is_sprite_pivot": false,
+          "candidate_points_px": [
+            {
+              "xy": [
+                60,
+                123
+              ],
+              "intended_visual_estimate_px": [
+                60,
+                123
+              ],
+              "pixel_RGBA": [
+                79,
+                63,
+                37,
+                255
+              ],
+              "visible_alpha_over_128": true,
+              "anchor_type": "visible supporting timber tip",
+              "evidence_kind": "visual_contact_estimate_with_measured_pixel_sample",
+              "confidence": 0.55,
+              "uncertainty_px": 4,
+              "adjustment_to_visible_pixel_px": [
+                0,
+                0
+              ],
+              "sample_interpretation": "Visible pixel proves artwork coverage, not the exact 3D contact surface."
+            },
+            {
+              "xy": [
+                128,
+                90
+              ],
+              "intended_visual_estimate_px": [
+                128,
+                90
+              ],
+              "pixel_RGBA": [
+                94,
+                76,
+                46,
+                255
+              ],
+              "visible_alpha_over_128": true,
+              "anchor_type": "visible supporting timber tip",
+              "evidence_kind": "visual_contact_estimate_with_measured_pixel_sample",
+              "confidence": 0.55,
+              "uncertainty_px": 4,
+              "adjustment_to_visible_pixel_px": [
+                0,
+                0
+              ],
+              "sample_interpretation": "Visible pixel proves artwork coverage, not the exact 3D contact surface."
+            }
+          ],
+          "interpretation": "This is an authored estimate of the SAME full support-center across views, including occluded members; never the centroid of only the visible subset. It can lie in an empty interior. Candidate points below are individual observed landmarks and do not define the centroid by arithmetic averaging."
+        },
+        "shadow_exclusion": {
+          "evidence_kind": "four_view_visual_identification",
+          "excluded_from_contacts_and_solids": true,
+          "note": "Cast ground shadows and cloth hems are excluded as hard supporting material."
+        },
+        "registration_conflict_note": "Physical contacts are offset from visual/media pivots; record offset as authoring evidence only, with no animation registration change."
+      },
+      {
+        "pose": "n",
+        "original_source_path": "/mnt/c/Users/tommaso/Documents/Dev/assets/Fantasy tileset - 2D Isometric V1.1/Fantasy tileset - 2D Isometric/Environment/Misc B13_N.png",
+        "original_source_sha256": "b3c87b1ed31987c10f65dc9c0ebaaff72dfe41bddefe997ba467484f99356b05",
+        "catalog_source_path": "/mnt/c/Users/tommaso/Documents/assets/fantasy-unified-catalog/a-original/vendor/Fantasy tileset - 2D Isometric/Environment/Misc B13_N.png",
+        "canvas_px": [
+          256,
+          256
+        ],
+        "pixel_coordinate_convention": "top-left origin; integer pixel indices; support centroid may be subpixel/invisible within an opening",
+        "review_contact_sheet": "/mnt/c/Users/tommaso/Documents/assets/fantasy-unified-catalog/data-authoring-2026-10-09/misc-review/contact-01.png",
+        "alpha_bbox_diagnostic_only": [
+          125,
+          75,
+          216,
+          125
+        ],
+        "unity_registration": {
+          "evidence_kind": "source_fact",
+          "sprite_meta_path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Environment/Sprites/Misc B13_N.png.meta",
+          "sprite_meta_sha256": "14b729a751efa2d141df273ba329206e70c09cf042d08903b7d1c1852c2cda04",
+          "normalized_bottom_left_pivot": [
+            0.5,
+            0.18
+          ],
+          "original_top_left_pivot_px": [
+            128.0,
+            209.92000000000002
+          ],
+          "sprite_pixels_to_units": 127.0,
+          "sprite_guid": "93099b8650e748c478effa4180c47287",
+          "tile_asset_path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Environment/Tiles/Misc B13_N.asset",
+          "tile_asset_sha256": "3a01e0fc01a1b2fce38a5d73fda7dfbf29353384cb193054a525edb8246f2d04",
+          "tile_guid": "f28158977d498e642b88c1bc9529bcfb",
+          "raw_collider_type": 1,
+          "tiledata_path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Example scene/Scripts/Tiles/TileData/DT_Misc B13_N.asset",
+          "tiledata_sha256": "ed06a089664356f2ba605065ce6265589b4662f6e137005587e1a0276bb50715",
+          "tiledata_description": "Decorative object",
+          "occurrences": {
+            "scene_path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Example scene/Example scene.unity",
+            "sprite_guid_text_references": 0,
+            "tile_guid_text_references": 0,
+            "interpretation": "References in example scene are provenance only; not native physical dimensions or mount evidence."
+          }
+        },
+        "ground_contact": {
+          "anchor_type": "inferred canonical support-center projected onto ground plane",
+          "same_physical_feature_across_views": "center of the same assembly support layout (B44/B45: the single planted pole foot)",
+          "centroid_px": {
+            "value": [
+              170,
+              107
+            ],
+            "evidence_kind": "visual_estimate_and_content_proposal",
+            "confidence": 0.45,
+            "uncertainty_plus_minus": 8
+          },
+          "centroid_is_sprite_pivot": false,
+          "candidate_points_px": [
+            {
+              "xy": [
+                195,
+                123
+              ],
+              "intended_visual_estimate_px": [
+                195,
+                124
+              ],
+              "pixel_RGBA": [
+                93,
+                76,
+                45,
+                255
+              ],
+              "visible_alpha_over_128": true,
+              "anchor_type": "visible supporting timber tip",
+              "evidence_kind": "visual_contact_estimate_with_measured_pixel_sample",
+              "confidence": 0.55,
+              "uncertainty_px": 4,
+              "adjustment_to_visible_pixel_px": [
+                0,
+                -1
+              ],
+              "sample_interpretation": "Visible pixel proves artwork coverage, not the exact 3D contact surface."
+            },
+            {
+              "xy": [
+                128,
+                90
+              ],
+              "intended_visual_estimate_px": [
+                128,
+                90
+              ],
+              "pixel_RGBA": [
+                94,
+                76,
+                46,
+                255
+              ],
+              "visible_alpha_over_128": true,
+              "anchor_type": "visible supporting timber tip",
+              "evidence_kind": "visual_contact_estimate_with_measured_pixel_sample",
+              "confidence": 0.55,
+              "uncertainty_px": 4,
+              "adjustment_to_visible_pixel_px": [
+                0,
+                0
+              ],
+              "sample_interpretation": "Visible pixel proves artwork coverage, not the exact 3D contact surface."
+            }
+          ],
+          "interpretation": "This is an authored estimate of the SAME full support-center across views, including occluded members; never the centroid of only the visible subset. It can lie in an empty interior. Candidate points below are individual observed landmarks and do not define the centroid by arithmetic averaging."
+        },
+        "shadow_exclusion": {
+          "evidence_kind": "four_view_visual_identification",
+          "excluded_from_contacts_and_solids": true,
+          "note": "Cast ground shadows and cloth hems are excluded as hard supporting material."
+        },
+        "registration_conflict_note": "Physical contacts are offset from visual/media pivots; record offset as authoring evidence only, with no animation registration change."
+      }
+    ],
+    "contact_by_pose": {
+      "e": {
+        "image_path": "/mnt/c/Users/tommaso/Documents/Dev/assets/Fantasy tileset - 2D Isometric V1.1/Fantasy tileset - 2D Isometric/Environment/Misc B13_E.png",
+        "source_sha256": "6ac72489b9f82944057fc80869bcd22b1d09bd4306c89ad7be5452592ce1180b",
+        "canvas_px": [
+          256,
+          256
+        ],
+        "frame_rect_px": null,
+        "source_pivot_px": [
+          128.0,
+          209.92000000000002
+        ],
+        "animation_source_pivot_px": [
+          128,
+          207.36
+        ],
+        "placement_contact_px": [
+          170,
+          146
+        ],
+        "placement_contact_anchor_type": "inferred canonical support-center projected onto ground plane",
+        "same_physical_feature_across_views": "center of the same assembly support layout (B44/B45: the single planted pole foot)",
+        "placement_contact_evidence_kind": "new_content_proposal_inferred_from_four_views",
+        "placement_contact_confidence": 0.45,
+        "placement_contact_uncertainty_px": 8,
+        "contacts_px": [
+          [
+            147,
+            167
+          ],
+          [
+            128,
+            146
+          ]
+        ],
+        "contacts_semantics": "Observed individual landmarks only; not a canonical origin and not a complete support layout. Full per-point evidence and RGBA samples are in source_views.",
+        "source_pivot_semantics": "Actual Unity sprite import pivot, immutable. Separate animation_source_pivot_px is the preserved 384px bank pivot expressed on centered original256 canvas; it is not a physical contact."
+      },
+      "s": {
+        "image_path": "/mnt/c/Users/tommaso/Documents/Dev/assets/Fantasy tileset - 2D Isometric V1.1/Fantasy tileset - 2D Isometric/Environment/Misc B13_S.png",
+        "source_sha256": "21ee77a3bed483cadcd36cf6d29985e0e5ca2c294c323f8791d7ec860861d613",
+        "canvas_px": [
+          256,
+          256
+        ],
+        "frame_rect_px": null,
+        "source_pivot_px": [
+          128.0,
+          209.92000000000002
+        ],
+        "animation_source_pivot_px": [
+          128,
+          207.36
+        ],
+        "placement_contact_px": [
+          86,
+          146
+        ],
+        "placement_contact_anchor_type": "inferred canonical support-center projected onto ground plane",
+        "same_physical_feature_across_views": "center of the same assembly support layout (B44/B45: the single planted pole foot)",
+        "placement_contact_evidence_kind": "new_content_proposal_inferred_from_four_views",
+        "placement_contact_confidence": 0.45,
+        "placement_contact_uncertainty_px": 8,
+        "contacts_px": [
+          [
+            108,
+            167
+          ],
+          [
+            128,
+            146
+          ]
+        ],
+        "contacts_semantics": "Observed individual landmarks only; not a canonical origin and not a complete support layout. Full per-point evidence and RGBA samples are in source_views.",
+        "source_pivot_semantics": "Actual Unity sprite import pivot, immutable. Separate animation_source_pivot_px is the preserved 384px bank pivot expressed on centered original256 canvas; it is not a physical contact."
+      },
+      "w": {
+        "image_path": "/mnt/c/Users/tommaso/Documents/Dev/assets/Fantasy tileset - 2D Isometric V1.1/Fantasy tileset - 2D Isometric/Environment/Misc B13_W.png",
+        "source_sha256": "0227e34878ffa10030e35f9c9d028ca0fd6cd674a07a4bc7a45638cc7db3ce69",
+        "canvas_px": [
+          256,
+          256
+        ],
+        "frame_rect_px": null,
+        "source_pivot_px": [
+          128.0,
+          209.92000000000002
+        ],
+        "animation_source_pivot_px": [
+          128,
+          207.36
+        ],
+        "placement_contact_px": [
+          86,
+          107
+        ],
+        "placement_contact_anchor_type": "inferred canonical support-center projected onto ground plane",
+        "same_physical_feature_across_views": "center of the same assembly support layout (B44/B45: the single planted pole foot)",
+        "placement_contact_evidence_kind": "new_content_proposal_inferred_from_four_views",
+        "placement_contact_confidence": 0.45,
+        "placement_contact_uncertainty_px": 8,
+        "contacts_px": [
+          [
+            60,
+            123
+          ],
+          [
+            128,
+            90
+          ]
+        ],
+        "contacts_semantics": "Observed individual landmarks only; not a canonical origin and not a complete support layout. Full per-point evidence and RGBA samples are in source_views.",
+        "source_pivot_semantics": "Actual Unity sprite import pivot, immutable. Separate animation_source_pivot_px is the preserved 384px bank pivot expressed on centered original256 canvas; it is not a physical contact."
+      },
+      "n": {
+        "image_path": "/mnt/c/Users/tommaso/Documents/Dev/assets/Fantasy tileset - 2D Isometric V1.1/Fantasy tileset - 2D Isometric/Environment/Misc B13_N.png",
+        "source_sha256": "b3c87b1ed31987c10f65dc9c0ebaaff72dfe41bddefe997ba467484f99356b05",
+        "canvas_px": [
+          256,
+          256
+        ],
+        "frame_rect_px": null,
+        "source_pivot_px": [
+          128.0,
+          209.92000000000002
+        ],
+        "animation_source_pivot_px": [
+          128,
+          207.36
+        ],
+        "placement_contact_px": [
+          170,
+          107
+        ],
+        "placement_contact_anchor_type": "inferred canonical support-center projected onto ground plane",
+        "same_physical_feature_across_views": "center of the same assembly support layout (B44/B45: the single planted pole foot)",
+        "placement_contact_evidence_kind": "new_content_proposal_inferred_from_four_views",
+        "placement_contact_confidence": 0.45,
+        "placement_contact_uncertainty_px": 8,
+        "contacts_px": [
+          [
+            195,
+            123
+          ],
+          [
+            128,
+            90
+          ]
+        ],
+        "contacts_semantics": "Observed individual landmarks only; not a canonical origin and not a complete support layout. Full per-point evidence and RGBA samples are in source_views.",
+        "source_pivot_semantics": "Actual Unity sprite import pivot, immutable. Separate animation_source_pivot_px is the preserved 384px bank pivot expressed on centered original256 canvas; it is not a physical contact."
+      }
+    },
+    "evidence": {
+      "inspected_views": [
+        "e",
+        "s",
+        "w",
+        "n"
+      ],
+      "inspection": "actual vendor original PNGs, contact sheets, Unity sprite/tile/TileData sidecars and example scene text references; accepted animation metadata read without modifications",
+      "physical_values": "All new continuous dimensions/components are explicit visual estimates/content proposals; no native geometry imported from alpha bounds or animation pivot.",
+      "confidence_scale": "0 to 1; confidence below 0.6 marks coarse placement/member reconstruction or ambiguity."
+    },
+    "sources": [
+      {
+        "path": "/mnt/c/Users/tommaso/Documents/Dev/assets/Fantasy tileset - 2D Isometric V1.1/Fantasy tileset - 2D Isometric/Environment/Misc B13_E.png",
+        "sha256": "6ac72489b9f82944057fc80869bcd22b1d09bd4306c89ad7be5452592ce1180b"
+      },
+      {
+        "path": "/mnt/c/Users/tommaso/Documents/assets/fantasy-unified-catalog/a-original/vendor/Fantasy tileset - 2D Isometric/Environment/Misc B13_E.png",
+        "sha256": "6ac72489b9f82944057fc80869bcd22b1d09bd4306c89ad7be5452592ce1180b"
+      },
+      {
+        "path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Environment/Sprites/Misc B13_E.png.meta",
+        "sha256": "eced5694ebccfdf6409d09cbcab414b258e3185ce20461f20774792beff9ef44"
+      },
+      {
+        "path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Environment/Tiles/Misc B13_E.asset",
+        "sha256": "0f00229f6d98a8c9827c06d0ffa91d1070a861a1c7f41ed6c9f47dcbe01155e1"
+      },
+      {
+        "path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Example scene/Scripts/Tiles/TileData/DT_Misc B13_E.asset",
+        "sha256": "471ccacb23b4b8e75911a57766248055483aed607610a7ea856b9e2c81f71e10"
+      },
+      {
+        "path": "/mnt/c/Users/tommaso/Documents/Dev/assets/Fantasy tileset - 2D Isometric V1.1/Fantasy tileset - 2D Isometric/Environment/Misc B13_S.png",
+        "sha256": "21ee77a3bed483cadcd36cf6d29985e0e5ca2c294c323f8791d7ec860861d613"
+      },
+      {
+        "path": "/mnt/c/Users/tommaso/Documents/assets/fantasy-unified-catalog/a-original/vendor/Fantasy tileset - 2D Isometric/Environment/Misc B13_S.png",
+        "sha256": "21ee77a3bed483cadcd36cf6d29985e0e5ca2c294c323f8791d7ec860861d613"
+      },
+      {
+        "path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Environment/Sprites/Misc B13_S.png.meta",
+        "sha256": "1ff443fd0db2c4d3447d81c7bd73f3bd975da7480e91e46cf7e60e3d33528eeb"
+      },
+      {
+        "path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Environment/Tiles/Misc B13_S.asset",
+        "sha256": "50ca7fe1b7a3de5e5d9d4ff93031230b7ce16a6ac08e1f1e3133dea7c7412f03"
+      },
+      {
+        "path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Example scene/Scripts/Tiles/TileData/DT_Misc B13_S.asset",
+        "sha256": "a20b3c960ee03a1a9b70004c2f610fc98d4fec7409fcc88b7712f1b46aeab572"
+      },
+      {
+        "path": "/mnt/c/Users/tommaso/Documents/Dev/assets/Fantasy tileset - 2D Isometric V1.1/Fantasy tileset - 2D Isometric/Environment/Misc B13_W.png",
+        "sha256": "0227e34878ffa10030e35f9c9d028ca0fd6cd674a07a4bc7a45638cc7db3ce69"
+      },
+      {
+        "path": "/mnt/c/Users/tommaso/Documents/assets/fantasy-unified-catalog/a-original/vendor/Fantasy tileset - 2D Isometric/Environment/Misc B13_W.png",
+        "sha256": "0227e34878ffa10030e35f9c9d028ca0fd6cd674a07a4bc7a45638cc7db3ce69"
+      },
+      {
+        "path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Environment/Sprites/Misc B13_W.png.meta",
+        "sha256": "11f1f6b9a694e95893f8698decbe252a523999523ba92ecd0618147274d65df4"
+      },
+      {
+        "path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Environment/Tiles/Misc B13_W.asset",
+        "sha256": "7054a5636ee63fa4cc6c72fcf57f90364954ca1dd409def222e40347cce6d8e6"
+      },
+      {
+        "path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Example scene/Scripts/Tiles/TileData/DT_Misc B13_W.asset",
+        "sha256": "52c4f054e34eddad1c707985b4ccde853204dcd268ecb6b42fbbbb3ee427ae61"
+      },
+      {
+        "path": "/mnt/c/Users/tommaso/Documents/Dev/assets/Fantasy tileset - 2D Isometric V1.1/Fantasy tileset - 2D Isometric/Environment/Misc B13_N.png",
+        "sha256": "b3c87b1ed31987c10f65dc9c0ebaaff72dfe41bddefe997ba467484f99356b05"
+      },
+      {
+        "path": "/mnt/c/Users/tommaso/Documents/assets/fantasy-unified-catalog/a-original/vendor/Fantasy tileset - 2D Isometric/Environment/Misc B13_N.png",
+        "sha256": "b3c87b1ed31987c10f65dc9c0ebaaff72dfe41bddefe997ba467484f99356b05"
+      },
+      {
+        "path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Environment/Sprites/Misc B13_N.png.meta",
+        "sha256": "14b729a751efa2d141df273ba329206e70c09cf042d08903b7d1c1852c2cda04"
+      },
+      {
+        "path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Environment/Tiles/Misc B13_N.asset",
+        "sha256": "3a01e0fc01a1b2fce38a5d73fda7dfbf29353384cb193054a525edb8246f2d04"
+      },
+      {
+        "path": "/mnt/c/Users/tommaso/Documents/UnityProjects/SmallscaleExplore/Assets/SmallScaleInt/Fantasy kingdom Tileset/Example scene/Scripts/Tiles/TileData/DT_Misc B13_N.asset",
+        "sha256": "ed06a089664356f2ba605065ce6265589b4662f6e137005587e1a0276bb50715"
+      },
+      {
+        "path": "/home/tommaso/Dev/terrain-prefab-study-2026-09-24/house-prefabs/decor-study/candidates-wood-v6-family-r3/misc-b13/impact-a/metadata.json",
+        "sha256": "e6995748e46585fe9051b243c68f287e07025bf55a7d72d6e3cd42fbae30d76d"
+      },
+      {
+        "path": "/mnt/c/Users/tommaso/Documents/assets/fantasy-unified-catalog/b-animated-versions/decor/candidates-wood-v6-family-r3/misc-b13/impact-a/metadata.json",
+        "sha256": "e6995748e46585fe9051b243c68f287e07025bf55a7d72d6e3cd42fbae30d76d"
+      }
+    ]
+  },
+  "context": "../context.json",
+  "installed_media": {
+    "a-original/vendor/Fantasy tileset - 2D Isometric/Environment/Misc B13_E.png": "art/media/environment/library/fantasy/Fantasy tileset - 2D Isometric/Environment/Misc B13_E.png",
+    "a-original/vendor/Fantasy tileset - 2D Isometric/Environment/Misc B13_N.png": "art/media/environment/library/fantasy/Fantasy tileset - 2D Isometric/Environment/Misc B13_N.png",
+    "a-original/vendor/Fantasy tileset - 2D Isometric/Environment/Misc B13_S.png": "art/media/environment/library/fantasy/Fantasy tileset - 2D Isometric/Environment/Misc B13_S.png",
+    "a-original/vendor/Fantasy tileset - 2D Isometric/Environment/Misc B13_W.png": "art/media/environment/library/fantasy/Fantasy tileset - 2D Isometric/Environment/Misc B13_W.png",
+    "b-animated-versions/decor/candidates-wood-v6-family-r3/misc-b13/impact-a/intact.png": "art/media/environment/library/animated/decor/candidates-wood-v6-family-r3/misc-b13/impact-a/intact.png",
+    "b-animated-versions/decor/candidates-wood-v6-family-r3/misc-b13/impact-a/sheet-e.png": "art/media/environment/library/animated/decor/candidates-wood-v6-family-r3/misc-b13/impact-a/sheet-e.png",
+    "b-animated-versions/decor/candidates-wood-v6-family-r3/misc-b13/impact-a/sheet-n.png": "art/media/environment/library/animated/decor/candidates-wood-v6-family-r3/misc-b13/impact-a/sheet-n.png",
+    "b-animated-versions/decor/candidates-wood-v6-family-r3/misc-b13/impact-a/sheet-s.png": "art/media/environment/library/animated/decor/candidates-wood-v6-family-r3/misc-b13/impact-a/sheet-s.png",
+    "b-animated-versions/decor/candidates-wood-v6-family-r3/misc-b13/impact-a/sheet-w.png": "art/media/environment/library/animated/decor/candidates-wood-v6-family-r3/misc-b13/impact-a/sheet-w.png",
+    "b-animated-versions/decor/candidates-wood-v6-family-r3/misc-b13/impact-a/sheet.png": "art/media/environment/library/animated/decor/candidates-wood-v6-family-r3/misc-b13/impact-a/sheet.png",
+    "b-animated-versions/decor/candidates-wood-v6-family-r3/misc-b13/impact-a/wreck.png": "art/media/environment/library/animated/decor/candidates-wood-v6-family-r3/misc-b13/impact-a/wreck.png"
+  }
+}
+
+}

@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentObject" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_gjmxt"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_part.gd" id="2_a0t3c"]
+[ext_resource type="Script" path="res://presentation/source/environment/object.gd" id="3_wg6i3"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_state.gd" id="4_snsde"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_transition.gd" id="5_po1ei"]
+
+[resource]
+script = ExtResource("3_wg6i3")
+id = "fantasy.tree.shadow"
+kind = "tree"
+views = PackedStringArray("single")
+art = PackedStringArray("fantasy.tree.shadow")
+catalogue_group = "A"
+label = "Tree Shadow"
+status = "partial"
+notes = "Catalogue status: Vendor original. Art and geometry are in the source; no server id uses it yet."

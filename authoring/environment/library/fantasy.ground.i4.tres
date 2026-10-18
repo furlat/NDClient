@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentObject" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_kp3q2"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_part.gd" id="2_m5u5d"]
+[ext_resource type="Script" path="res://presentation/source/environment/object.gd" id="3_aqdg8"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_state.gd" id="4_wn3p4"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_transition.gd" id="5_ga8fk"]
+
+[resource]
+script = ExtResource("3_aqdg8")
+id = "fantasy.ground.i4"
+kind = "ground"
+views = PackedStringArray("e", "n", "s", "w")
+art = PackedStringArray("fantasy.ground.i4")
+catalogue_group = "A"
+label = "Ground I4"
+status = "partial"
+notes = "Catalogue status: Vendor original. Art and geometry are in the source; no server id uses it yet."

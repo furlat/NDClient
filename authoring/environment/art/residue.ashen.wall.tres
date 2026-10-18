@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentArt" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/art_source.gd" id="1_bido7"]
+[ext_resource type="Script" path="res://presentation/source/surface.gd" id="2_etyie"]
+[ext_resource type="Script" path="res://presentation/source/environment/art.gd" id="3_ch3sp"]
+
+[sub_resource type="Resource" id="art_surface"]
+script = ExtResource("2_etyie")
+failed_frames = PackedInt32Array()
+
+[sub_resource type="Resource" id="art"]
+script = ExtResource("1_bido7")
+container = "views_as_files"
+files = PackedStringArray("art/media/vfx/actions/scorch-wall-atlas-concept-v1.png")
+cell = Vector2i(1254, 1254)
+frames = 1
+directions = "single"
+direction_order = PackedStringArray()
+surface = SubResource("art_surface")
+measurements = "measured/environment/art/residue.ashen.wall.json"
+source = "NDClientData/.media@2026-10-17"
+notes = "Pre-rendered sprite from the old client; nothing draws it today."
+
+[resource]
+script = ExtResource("3_ch3sp")
+id = "residue.ashen.wall"
+kind = "sprite"
+art = SubResource("art")
+images = PackedStringArray("residue.ashen.wall")

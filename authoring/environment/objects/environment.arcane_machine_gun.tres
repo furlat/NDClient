@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentObject" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_sce1w"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_part.gd" id="2_y4hke"]
+[ext_resource type="Script" path="res://presentation/source/environment/object.gd" id="3_qqilf"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_state.gd" id="4_welqy"]
+[ext_resource type="Script" path="res://presentation/source/environment/object_transition.gd" id="5_crey1"]
+
+[resource]
+script = ExtResource("3_qqilf")
+id = "environment.arcane_machine_gun"
+kind = "device"
+views = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+art = PackedStringArray("device.arcane_machine_gun")
+status = "partial"
+notes = "8-direction device banks with firing pitches and a destruction set (old catalog/devices.json); the game does not draw devices yet."

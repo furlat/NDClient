@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentArt" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/art_source.gd" id="1_xmna7"]
+[ext_resource type="Script" path="res://presentation/source/surface.gd" id="2_i464n"]
+[ext_resource type="Script" path="res://presentation/source/environment/art.gd" id="3_6qvq4"]
+
+[sub_resource type="Resource" id="art_surface"]
+script = ExtResource("2_i464n")
+failed_frames = PackedInt32Array()
+
+[sub_resource type="Resource" id="art"]
+script = ExtResource("1_xmna7")
+container = "views_as_files"
+files = PackedStringArray("art/media/vfx/areas/web/web_tether/E.png", "art/media/vfx/areas/web/web_tether/N.png", "art/media/vfx/areas/web/web_tether/NE.png", "art/media/vfx/areas/web/web_tether/NW.png", "art/media/vfx/areas/web/web_tether/S.png", "art/media/vfx/areas/web/web_tether/SE.png", "art/media/vfx/areas/web/web_tether/SW.png", "art/media/vfx/areas/web/web_tether/W.png")
+frames = 1
+direction_order = PackedStringArray("E", "N", "NE", "NW", "S", "SE", "SW", "W")
+surface = SubResource("art_surface")
+measurements = "measured/environment/art/web_tether.json"
+source = "NDClientData/.media@2026-10-17"
+notes = "Pre-rendered sprite from the old client; nothing draws it today."
+
+[resource]
+script = ExtResource("3_6qvq4")
+id = "web_tether"
+kind = "sprite"
+art = SubResource("art")
+images = PackedStringArray("web_tether.E", "web_tether.N", "web_tether.NE", "web_tether.NW", "web_tether.S", "web_tether.SE", "web_tether.SW", "web_tether.W")

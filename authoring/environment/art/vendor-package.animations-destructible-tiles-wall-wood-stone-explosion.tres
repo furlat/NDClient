@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="PresentationEnvironmentArt" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/art_source.gd" id="1_e7221"]
+[ext_resource type="Script" path="res://presentation/source/environment/art.gd" id="2_5ixq0"]
+
+[sub_resource type="Resource" id="art"]
+script = ExtResource("1_e7221")
+container = "frames_as_files"
+files = PackedStringArray()
+directions = "camera4"
+direction_order = PackedStringArray()
+measurements = "measured/environment/art/vendor-package.animations-destructible-tiles-wall-wood-stone-explosion.json"
+source = "environment-geometry-production-2026-10-09"
+
+[resource]
+script = ExtResource("2_5ixq0")
+id = "vendor-package.animations-destructible-tiles-wall-wood-stone-explosion"
+kind = "samples"
+art = SubResource("art")
+images = PackedStringArray()
