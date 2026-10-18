@@ -7,6 +7,9 @@
 !/assets/vfx/
 /assets/vfx/**/*.res
 /assets/vfx/**/*.scn
+# Godot writes .uid files beside the package's scripts on import; the package
+# is kept exactly as the Factory exported it.
+/assets/vfx/**/*.uid
 /.derived/
 /.reference-template/
 *.png
@@ -46,3 +49,6 @@ __pycache__/
 *.py[cod]
 .pytest_cache/
 .venv/
+
+# Presentation build output (tools/build_presentation.gd); rebuilt, never edited.
+/build/
