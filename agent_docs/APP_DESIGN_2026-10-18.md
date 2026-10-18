@@ -33,7 +33,7 @@ older plan disagree, this one is newer; the plans it replaces are listed in §10
 | Producer | Owns | Reaches the client as | Today |
 |---|---|---|---|
 | **Server** (`dnd_engine`) | Rules, state, outcomes, content IDs (`spell.fire_bolt`, `condition.spell.shield`, pack `content.srd_5_1_cc`), the protocol | Packets at run time; the protocol schema copied into `sdk/` | Schema copied by hand: client has schema 9, the engine's checkout has 15. The pinned engine (`229ce025f`) is what the client is validated against. |
-| **VFX Factory** | Every visual effect: meshes, particles, shaders, lights, their recordings, and (decision D1) their timing and placement | The package `assets/vfx/` (index, clips, recordings) | Package delivered (771 clips) but not read yet; the game plays an older copied subset through four client tools (§7). Class-action and blood effects are not in the package. |
+| **VFX Factory** | Every visual effect: meshes, particles, shaders, lights, their recordings, and (decision D1) their timing and placement | The package `assets/vfx/` (index, clips, recordings) | Since 18 Oct (`presentation/effect_package.gd`) the game and Studio play spell effects from the package, recorded approach by default. Staging still comes from the client's own files through `.derived/native-spells` (§7). Class-action and blood effects are not in the package. |
 | **Art deliveries** | Character and creature sheets, their geometry and normal profiles; environment art; UI icons and portraits | Today: read at run time from outside the project (`NDClientData/.media`, three `fantasy-unified-catalog` delivery folders, `NDCharacterLight`) | Must become copies inside the project (§6). |
 | **Audio packs** | Sound files and licences | `assets/audio/` plus `authoring/audio/` | Already inside; needs Godot import. |
 | **Client** | How the game presents server events: body animation and cast timing per spell, action/attack/condition recipes, rigs, audio bindings, UI; the runtime; the Studio; tests | `authoring/`, code | Most of `authoring/` is a frozen export of the old Pygame data model (§5). |
@@ -42,8 +42,8 @@ older plan disagree, this one is newer; the plans it replaces are listed in §10
 
 | App | Scene | Role | Ships | Target |
 |---|---|---|---|---|
-| **Game** | `play.tscn` / `play.gd` | Live play against a server | Yes | Stays; gets the package loader. |
-| **Studio** | `studio.tscn` / `studio/` | Replays real server recordings on the game's own renderer; timeline tracks; review and debugging | No (dev tool; decision D5) | The one review tool for spells and everything else. Gets the effect-version toggle and the 36 lifecycle cases. |
+| **Game** | `play.tscn` / `play.gd` | Live play against a server | Yes | Stays; plays the package (recorded approach by default). |
+| **Studio** | `studio.tscn` / `studio/` | Replays real server recordings on the game's own renderer; timeline tracks; review and debugging | No (dev tool; decision D5) | The one review tool for spells and everything else. Has the effect-version toggle (Inspect → Effect version: Recorded / GPU / Native) and the 36 lifecycle cases. |
 | Spell sandbox | `spell-sandbox.tscn` / `sandbox/` | Offline spell fixture, placement and piece toggles | No | **Retire** (D3): it has its own copy of the cue scheduler that already disagrees with the game's, reads raw JSON the game doesn't, never plays recordings. Its useful authoring moves to the Factory (staging) and the Studio (inspection). |
 | Workshop / exploration demo | `main.tscn`, `demo.tscn` | Older map/catalog authoring; Unity map reconstruction | No | **Delete** (D4), with `compile-grid.cmd`, the Unity tools and their `generated/` data. |
 
@@ -64,7 +64,7 @@ Packet → pixels, in frame order (`play.gd:_process`):
 6. **World** (`world.gd`, `world_preparation.gd`): rooms derived on workers, constructed in budgeted steps, published at their cue.
 7. **Media** (`media_warmup.gd`): sheet decode and residency (L8 replaces PNG decode with prepacked bundles).
 8. **Actors** (`characters.gd`, `actor_construction.gd`, `body_sources.gd`, `modular.gdshader`): layered sprite quads.
-9. **Effects** (`component_renderer.gd` → `native_spell_renderer.gd`, `blood_renderer.gd`, `audio_presenter.gd`): the package loader plugs in here.
+9. **Effects** (`component_renderer.gd` → `native_spell_renderer.gd`, `blood_renderer.gd`, `audio_presenter.gd`); spell effects come from the package through `effect_package.gd`.
 10. **Light, shadows, draw order** (`native_source_lights.gd`, `canvas_shadows.gd`, `grid_order.gd`).
 11. **UI** (`play_hud.gd`, `ui/`, `interaction.gd`).
 
@@ -150,8 +150,10 @@ the separately started server, is the check that §1.1 holds.
 ## 7. Gaps between today and the target
 
 1. **The game can't run from a fresh checkout or an export.**
-   - `presentation/native_factory_source.gd` and `native_source_variants.gd`
-     preload scripts from the git-ignored copied tree `assets/native_effects/`.
+   - Class-action and blood effects load from the git-ignored copied tree
+     `assets/native_effects/` (spells no longer do; the sandbox and offline
+     tools still preload it through `native_factory_source.gd` and
+     `native_source_variants.gd`).
    - `project.godot [source_data]` points at absolute Windows paths:
      `NDClientData/.media` (all character and environment art),
      `fantasy-unified-catalog/{modular-character-geometry,authored-creature-geometry}`,
@@ -161,11 +163,13 @@ the separately started server, is the check that §1.1 holds.
    - Runtime data lives in `.derived/` (native spells, body sources, surface
      sockets, source variants, baked effects, texture layouts), which the
      export skips.
-2. **Effects run through four client tools**, not the package:
-   `prepare_projectile_sandbox.py` → `native_spell_light_intake.gd` →
-   `bake_native_source_variants.gd` → `import_native_spells.gd`, plus the
-   client baker. `prepare_native_effects.py` (class and blood effects)
-   rewrites `native_effects/index.json` as sources only and would erase the
+2. **Spell staging still goes through the old import.** Clips now come from
+   the package (the copier `prepare_projectile_sandbox.py` and the client
+   baker were removed on 18 Oct), but the staging and the finish palette are
+   still read from `.derived/native-spells`, which `native_spell_import.gd`
+   builds from the old manifest and `sandbox/staging.json`.
+   `prepare_native_effects.py` (class and blood effects) rewrites
+   `native_effects/index.json` as sources only and would erase the
    hand-written spell table if re-run.
 3. **Staging exists twice and has already diverged**: of the 14 spells in
    `staging.json`, only Acid Splash and Produce Flame match the package.
@@ -196,12 +200,12 @@ the separately started server, is the check that §1.1 holds.
 
 ## 9. Order of work
 
-1. **Now:** package loader and Studio effect-version toggle (agent running);
+1. **Now:** package loader and Studio effect-version toggle (merged 18 Oct);
    the 36 lifecycle cases (merged). Then the user reviews every spell in the
    Studio on the Factory's effects.
 2. **Ownership** (after D1–D7): delete the duplicate copies, move generated
    data out of `authoring/`, retire the sandbox, workshop and Unity tools, the
-   four client effect tools and the baker; condition holds animated.
+   remaining client effect tools; condition holds animated.
 3. **Self-contained project** (D8): art into `assets/art/`, no absolute paths,
    runtime data from `.derived/` into `build/` via one build command, export
    preset, and a test export played against the server.
