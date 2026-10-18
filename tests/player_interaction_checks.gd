@@ -99,8 +99,8 @@ func _run() -> void:
             if row.behavior_id != "action.move" or not row.can_afford: continue
             for target in Choices.action_options(scene.available_actions,row):
                 var position: Variant = Choices.binding_position(scene.available_actions,target)
-                if position == null or position == standing: continue
-                if position==across: step = {"action":row,"target":target,"position":position}; break
+                if position == null or Interaction.same_position(position,standing): continue
+                if Interaction.same_position(position,across): step = {"action":row,"target":target,"position":position}; break
             if not step.is_empty(): break
         check(not step.is_empty(),"Native movement offers a step clear of doorway")
         if step.is_empty(): await finish(); return
