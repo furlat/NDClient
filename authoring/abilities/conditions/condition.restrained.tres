@@ -29,7 +29,6 @@ script = ExtResource("4_ug6q0")
 id = "condition.restrained"
 label = "Restrained"
 disposition = "authored"
-lifecycle = PackedStringArray("condition_restrained_native")
 look = SubResource("Resource_2lxsg")
 layers = [{
 "activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
@@ -53,7 +52,6 @@ priority = 50.0
 max_layers = 3.0
 application_text = SubResource("Resource_o5tfm")
 removal_text = SubResource("Resource_13ewm")
-status = "ready"
 unported = {
 "application": {
 "durationMs": 200.0,

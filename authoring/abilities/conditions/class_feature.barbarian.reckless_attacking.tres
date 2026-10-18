@@ -31,7 +31,6 @@ script = ExtResource("4_pmkmq")
 id = "class_feature.barbarian.reckless_attacking"
 label = "Reckless Attacking"
 disposition = "authored"
-lifecycle = PackedStringArray()
 look = SubResource("Resource_l1y3c")
 layers = [{
 "activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
@@ -54,7 +53,6 @@ priority = 50.0
 max_layers = 3.0
 application_text = SubResource("Resource_44ecr")
 removal_text = SubResource("Resource_f8g3e")
-status = "partial"
 unported = {
 "application": {
 "durationMs": 0.0,

@@ -31,7 +31,6 @@ script = ExtResource("4_fmt15")
 id = "condition.spell.guiding_bolt.marked"
 label = "Guiding Bolt"
 disposition = "authored"
-lifecycle = PackedStringArray("condition_guiding_mark_native")
 look = SubResource("Resource_vgvqg")
 layers = [{
 "activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
@@ -56,7 +55,6 @@ priority = 35.0
 max_layers = 1.0
 application_text = SubResource("Resource_bydir")
 removal_text = SubResource("Resource_4bbdi")
-status = "ready"
 unported = {
 "application": {
 "durationMs": 200.0,

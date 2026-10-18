@@ -29,7 +29,6 @@ script = ExtResource("4_ekp7j")
 id = "condition.spell.bane"
 label = "Bane"
 disposition = "authored"
-lifecycle = PackedStringArray("condition_bane_native", "condition_bane_retained_native")
 owner_spell = "spell.bane"
 look = SubResource("Resource_nwfcb")
 layers = [{
@@ -84,7 +83,6 @@ priority = 30.0
 max_layers = 3.0
 application_text = SubResource("Resource_2pyor")
 removal_text = SubResource("Resource_eu887")
-status = "ready"
 unported = {
 "application": {
 "durationMs": 220.0,

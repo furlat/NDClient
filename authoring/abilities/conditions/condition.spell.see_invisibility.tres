@@ -29,7 +29,6 @@ script = ExtResource("4_3mhuq")
 id = "condition.spell.see_invisibility"
 label = "See Invisibility"
 disposition = "authored"
-lifecycle = PackedStringArray()
 look = SubResource("Resource_px0xi")
 layers = [{
 "activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
@@ -70,7 +69,6 @@ priority = 50.0
 max_layers = 3.0
 application_text = SubResource("Resource_sl84d")
 removal_text = SubResource("Resource_kwwb7")
-status = "partial"
 unported = {
 "application": {
 "durationMs": 4000.0,

@@ -31,7 +31,6 @@ script = ExtResource("4_cmp16")
 id = "class_feature.sorcerer.elemental_affinity.resistance"
 label = "Elemental Affinity Resistance"
 disposition = "authored"
-lifecycle = PackedStringArray()
 look = SubResource("Resource_exqs5")
 layers = [{
 "activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
@@ -119,7 +118,6 @@ priority = 50.0
 max_layers = 3.0
 application_text = SubResource("Resource_h6a5o")
 removal_text = SubResource("Resource_jstmc")
-status = "partial"
 unported = {
 "application": {
 "durationMs": 1250.0,

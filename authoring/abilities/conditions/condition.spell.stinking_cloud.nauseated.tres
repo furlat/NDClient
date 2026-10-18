@@ -29,7 +29,6 @@ script = ExtResource("4_uixjd")
 id = "condition.spell.stinking_cloud.nauseated"
 label = "Nauseated"
 disposition = "authored"
-lifecycle = PackedStringArray("condition_sickened_native")
 look = SubResource("Resource_dxfby")
 layers = [{
 "activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
@@ -54,7 +53,6 @@ priority = 30.0
 max_layers = 3.0
 application_text = SubResource("Resource_7ovml")
 removal_text = SubResource("Resource_blld3")
-status = "ready"
 unported = {
 "application": {
 "durationMs": 220.0,

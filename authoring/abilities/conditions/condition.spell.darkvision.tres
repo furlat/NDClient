@@ -29,7 +29,6 @@ script = ExtResource("4_iyx21")
 id = "condition.spell.darkvision"
 label = "Darkvision"
 disposition = "authored"
-lifecycle = PackedStringArray()
 look = SubResource("Resource_3xlwk")
 layers = [{
 "activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
@@ -70,7 +69,6 @@ priority = 50.0
 max_layers = 3.0
 application_text = SubResource("Resource_cqur3")
 removal_text = SubResource("Resource_2lnct")
-status = "partial"
 unported = {
 "application": {
 "durationMs": 4000.0,

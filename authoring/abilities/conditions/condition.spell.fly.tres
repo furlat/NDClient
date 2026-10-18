@@ -31,7 +31,6 @@ script = ExtResource("4_xffcq")
 id = "condition.spell.fly"
 label = "Fly"
 disposition = "authored"
-lifecycle = PackedStringArray()
 look = SubResource("Resource_6730m")
 layers = [{
 "activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
@@ -72,7 +71,6 @@ priority = 70.0
 max_layers = 1.0
 application_text = SubResource("Resource_hwq2r")
 removal_text = SubResource("Resource_ajcti")
-status = "partial"
 unported = {
 "application": {
 "durationMs": 900.0,

@@ -29,7 +29,6 @@ script = ExtResource("4_gj7u8")
 id = "condition.spell.sunbeam"
 label = "Sunbeam"
 disposition = "authored"
-lifecycle = PackedStringArray()
 look = SubResource("Resource_okdmv")
 layers = [{
 "activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
@@ -51,7 +50,6 @@ priority = 40.0
 max_layers = 1.0
 application_text = SubResource("Resource_r88bw")
 removal_text = SubResource("Resource_ixnc7")
-status = "partial"
 unported = {
 "application": {
 "durationMs": 0.0,

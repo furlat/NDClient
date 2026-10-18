@@ -31,7 +31,6 @@ script = ExtResource("4_r08x2")
 id = "condition.no_reactions"
 label = "No Reactions"
 disposition = "authored"
-lifecycle = PackedStringArray("condition_no_reactions_native")
 look = SubResource("Resource_fvj05")
 layers = [{
 "activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
@@ -56,7 +55,6 @@ priority = 35.0
 max_layers = 1.0
 application_text = SubResource("Resource_yu1bq")
 removal_text = SubResource("Resource_4edbn")
-status = "ready"
 unported = {
 "application": {
 "durationMs": 200.0,

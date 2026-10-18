@@ -29,7 +29,6 @@ script = ExtResource("4_78qxv")
 id = "condition.spell.spirit_guardians.slowed"
 label = "Spirit Guardians Slowed"
 disposition = "authored"
-lifecycle = PackedStringArray("condition_movement_slowed_native")
 look = SubResource("Resource_1soro")
 layers = [{
 "activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
@@ -54,7 +53,6 @@ priority = 30.0
 max_layers = 3.0
 application_text = SubResource("Resource_r5bms")
 removal_text = SubResource("Resource_yv3xu")
-status = "ready"
 unported = {
 "application": {
 "durationMs": 220.0,

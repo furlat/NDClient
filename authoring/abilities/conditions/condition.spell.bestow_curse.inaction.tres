@@ -31,7 +31,6 @@ script = ExtResource("4_ls7s2")
 id = "condition.spell.bestow_curse.inaction"
 label = "Bestow Curse"
 disposition = "authored"
-lifecycle = PackedStringArray()
 look = SubResource("Resource_qxbtm")
 layers = [{
 "activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
@@ -101,7 +100,6 @@ priority = 60.0
 max_layers = 1.0
 application_text = SubResource("Resource_50e6a")
 removal_text = SubResource("Resource_r54me")
-status = "partial"
 unported = {
 "application": {
 "durationMs": 0.0,

@@ -31,7 +31,6 @@ script = ExtResource("4_4meqf")
 id = "condition.wight.life_drain"
 label = "Life Drain"
 disposition = "authored"
-lifecycle = PackedStringArray("condition_life_drain_native")
 look = SubResource("Resource_7wxge")
 layers = [{
 "activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
@@ -56,7 +55,6 @@ priority = 35.0
 max_layers = 1.0
 application_text = SubResource("Resource_c6t4k")
 removal_text = SubResource("Resource_0gctu")
-status = "ready"
 unported = {
 "application": {
 "durationMs": 200.0,

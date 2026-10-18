@@ -18,9 +18,13 @@ const Feedback = preload("res://presentation/source/abilities/feedback.gd")
 @export var disposition: String = ""
 
 @export_group("Lifecycle")
-## Package condition selections played from the server's condition owner
-## (application, sustain on the owner's age, removal), in package order.
-@export var lifecycle: PackedStringArray = []
+## The application, sustain and removal effects come from the VFX package:
+## its condition selections whose owner_ids name this server id and whose
+## `when` matches the disclosed state, resolved at run time
+## (EffectPackage.conditions). The source never names Factory clips or keys;
+## the coverage report says whether the installed package has one. False
+## keeps the package's lifecycle from playing for this condition.
+@export var play_package_lifecycle: bool = true
 ## The spell whose staging names this condition as its lifecycle owner.
 @export var owner_spell: String = ""
 ## Surface id of a zone condition (its visuals belong to the surface).
@@ -56,7 +60,9 @@ const Feedback = preload("res://presentation/source/abilities/feedback.gd")
 @export var sounds: Dictionary[String, Resource] = {}
 
 @export_group("Status")
-@export_enum("ready", "partial", "stand_in", "missing", "internal") var status: String = "missing"
+## The client side only: internal markers draw nothing; the build's coverage
+## adds whether the installed package has a lifecycle and the look draws.
+@export_enum("ready", "partial", "stand_in", "missing", "internal") var status: String = "ready"
 ## Old-model fields with no typed home, as exported (relationships,
 ## classification, equipment modifiers, appearance layers...).
 @export var unported: Dictionary = {}

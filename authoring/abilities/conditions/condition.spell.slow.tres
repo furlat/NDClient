@@ -31,7 +31,6 @@ script = ExtResource("4_mxf07")
 id = "condition.spell.slow"
 label = "Slow"
 disposition = "authored"
-lifecycle = PackedStringArray("condition_slow_native")
 look = SubResource("Resource_gd6mc")
 layers = [{
 "activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
@@ -87,7 +86,6 @@ priority = 70.0
 max_layers = 3.0
 application_text = SubResource("Resource_4qw75")
 removal_text = SubResource("Resource_h7d3p")
-status = "ready"
 unported = {
 "application": {
 "durationMs": 150.0,

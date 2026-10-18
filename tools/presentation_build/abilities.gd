@@ -4,7 +4,8 @@ extends RefCounted
 ##   build/presentation/abilities/docs/<old document>.res  the record tables the
 ##       game reads, in the shape of the old authoring documents (catalog/*,
 ##       spells/<id>, native_effects/*, sandbox/feedback), so readers keep
-##       their code and every pixel stays;
+##       their code and every pixel stays; condition_lifecycles (the conditions
+##       whose package lifecycle the client turns off) and values;
 ##   build/presentation/abilities/native_spells/  the native spell records
 ##       (staging, treated recipe, hit material, requirements) and their index;
 ##   build/presentation/abilities/icons.json  icon per spell, condition and action;
@@ -21,6 +22,7 @@ const PACKAGE := "res://assets/vfx/index.json"
 const CUES := "res://authoring/audio/cues.json"
 const BINDINGS := "res://authoring/audio/bindings.json"
 const ORDER := "res://tools/presentation_build/ability_record_order.json"
+const Catalog = preload("res://source_catalog.gd")
 
 ## Context entry id -> the old document it is.
 const CONTEXT_DOCUMENTS := {
@@ -111,15 +113,15 @@ static func documents(entries: Dictionary) -> Dictionary:
     # Conditions.
     var recipes := {}
     var rates := {}
-    var lifecycles := {}
+    var suppressed: Array = []
     for id in _sorted(conditions):
         var e: Resource = conditions[id]
         if not e.disposition.is_empty():recipes[id] = R.condition_recipe(e)
         if e.playback_rate != 0.0:rates[id] = e.playback_rate
-        if not e.lifecycle.is_empty():lifecycles[id] = Array(e.lifecycle)
+        if not e.play_package_lifecycle:suppressed.append(id)
     docs["catalog/condition_recipes.json"] = _ordered(order, "catalog/condition_recipes.json", recipes)
     docs["catalog/action_playback_rates.json"] = F.plain(rates)
-    docs["condition_lifecycles.json"] = F.plain(lifecycles)
+    docs["condition_lifecycles.json"] = {"suppressed": suppressed}
     # Actions and attacks.
     var bodies := {}
     var shoves := {}
@@ -257,8 +259,6 @@ static func _validate(entries: Dictionary, report: Dictionary) -> void:
     var package: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(PACKAGE))
     var clips := {}
     for clip in package.get("clips", []):clips[clip.clip_id] = true
-    var selections := {}
-    for selection in package.get("selections", []):selections[selection.key] = true
     var cues: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(CUES)).get("cues", {})
     var bindings: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(BINDINGS))
     for section in entries:
@@ -285,8 +285,6 @@ static func _validate(entries: Dictionary, report: Dictionary) -> void:
         for sound in e.sounds:_check_binding(report, where, bindings.get("spells", {}).get(id), sound)
     for id in entries.get("conditions", {}):
         var e: Resource = entries.conditions[id]
-        for key in e.lifecycle:
-            if not selections.has(key):Common.error(report, "abilities/conditions/" + id, "lifecycle selection not in the package: " + key)
         for phase in e.sounds:_check_binding(report, "abilities/conditions/" + id, bindings.get("conditions", {}).get(id, {}).get(phase), e.sounds[phase])
     for id in entries.get("actions", {}):
         var e: Resource = entries.actions[id]
@@ -299,8 +297,92 @@ static func _validate(entries: Dictionary, report: Dictionary) -> void:
             if sound.at != "effect":_check_binding(report, where, bindings.get("actions", {}).get(id), sound)
     for id in entries.get("damage_types", {}):
         for sound in entries.damage_types[id].sounds:_check_binding(report, "abilities/damage_types/" + id, bindings.get("damage_types", {}).get(id), sound)
+    _validate_rigs(entries, report)
+    for id in entries.get("conditions", {}):_validate_condition(entries.conditions[id], "abilities/conditions/" + id, report)
+
+static func _in(value: float, low: float, high: float) -> bool:
+    return is_finite(value) and value >= low and value <= high
+
+static func _colour(value: Color) -> bool:
+    return _in(value.r, 0, 1) and _in(value.g, 0, 1) and _in(value.b, 0, 1)
+
+## The ranges the old overlay enforced, now checked once at build time: body
+## adjust (alpha 0-1, saturation and brightness 0-2), outline (alpha 0-1,
+## onset up to 10 s, colours), feedback durations, pose speeds.
+static func _validate_condition(e: Resource, where: String, report: Dictionary) -> void:
+    if e.look != null:
+        for step in e.look.steps:
+            match step.kind:
+                "body_adjust":
+                    if not _in(step.alpha, 0, 1) or not _in(step.saturation, 0, 2) or not _in(step.brightness, 0, 2) or not _colour(step.rgb):Common.error(report, where, "body adjust out of range")
+                "outline":
+                    if not _in(step.alpha, 0, 1) or not _in(step.fade_in, 0, 10) or not _colour(step.rgb) or not _colour(step.pulse_colour):Common.error(report, where, "outline out of range")
+                    var outline: Dictionary = e.unported.get("persistent", {}).get("bodyOutline", {})
+                    if outline.has("pulseOpacity") and not _in(float(outline.pulseOpacity), 0, 1):Common.error(report, where, "outline pulse opacity out of range")
+                    if outline.has("periodMs") and not _in(float(outline.periodMs), 1, 10000):Common.error(report, where, "outline period out of range")
+                    if outline.has("alphaThreshold") and not _in(float(outline.alphaThreshold), 1, 255):Common.error(report, where, "outline alpha threshold out of range")
+                "body_film":
+                    if not _in(step.fade_in, 0, 10) or not _in(step.fade_out, 0, 10):Common.error(report, where, "body film fades out of range")
+    for text in [e.application_text, e.removal_text]:
+        if text != null and text.duration != 0.0 and not _in(text.duration, 0.001, 10):Common.error(report, where, "feedback duration out of range")
+## Poses and markers against the rigs' clips (the characters' data as the game
+## reads it): a pose's rig and clip exist, a held frame lies inside the clip,
+## speeds are sane, and a rig-specific action's markers fall inside its clip.
+static func _validate_rigs(entries: Dictionary, report: Dictionary) -> void:
+    var rigs: Dictionary = Catalog.read_file("catalog/rigs.json", {})
+    for id in entries.get("conditions", {}):
+        for pose in entries.conditions[id].poses:
+            var where: String = "abilities/conditions/" + id
+            var clip: Dictionary = rigs.get(str(pose.get("rig", "")), {}).get("clips", {}).get(str(pose.get("clip", "")), {})
+            if clip.is_empty():Common.error(report, where, "pose has no rig clip: " + str(pose.get("rig", "")) + "/" + str(pose.get("clip", "")));continue
+            if pose.get("sampling") == "hold" and float(pose.get("frame", 0)) >= float(clip.frames):Common.error(report, where, "held pose frame outside its clip")
+            var speed := float(pose.get("playback_speed", 1.0))
+            if not is_finite(speed) or speed < 0.01 or speed > 8.0:Common.error(report, where, "pose playback speed out of range")
+    for id in entries.get("actions", {}):
+        var body: Resource = entries.actions[id].body
+        if body == null or body.rig.is_empty():continue
+        var where: String = "abilities/actions/" + id
+        var clip: Dictionary = rigs.get(body.rig, {}).get("clips", {}).get(body.clip, {})
+        if clip.is_empty():Common.error(report, where, "body has no rig clip: " + body.rig + "/" + body.clip);continue
+        if not is_finite(body.playback_speed) or body.playback_speed < 0.01 or body.playback_speed > 8.0:Common.error(report, where, "body playback speed out of range")
+        for name in body.markers:
+            if body.markers[name] > float(clip.frames):Common.error(report, where, "marker " + name + " after the clip's last frame")
 
 ## Sounds mirror the audio library's bindings; the build says when they differ.
+## Condition ids the installed package plays a lifecycle for (owner_ids).
+static func package_lifecycles() -> Dictionary:
+    var result := {}
+    var package: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(PACKAGE))
+    for selection in package.get("selections", []):
+        for id in selection.get("condition", {}).get("owner_ids", []):result[id] = true
+    return result
+
+static func package_version() -> String:
+    return str(JSON.parse_string(FileAccess.get_file_as_string(PACKAGE)).get("version", ""))
+
+## Old sprite media ids a native source draws (their media_ids).
+static func drawn_media(entries: Dictionary) -> Dictionary:
+    var result := {}
+    for id in entries.get("sources", {}):
+        for media in entries.sources[id].record.get("media_ids", []):result[media] = true
+    return result
+
+## Coverage of a condition: the installed package's lifecycle or a client
+## look that draws makes it ready; a recipe with only feedback or old
+## sprite layers, or a zone whose surface draws it, is partial.
+static func condition_coverage(e: Resource, lifecycle: bool, drawn: Dictionary) -> String:
+    if e.status == "internal":return "internal"
+    if (lifecycle and e.play_package_lifecycle) or not e.poses.is_empty() or _visible_look(e.look):return "ready"
+    if e.layers.any(func(layer): return layer is Dictionary and drawn.has(str(layer.get("assetId", "")))):return "ready"
+    if (not e.disposition.is_empty() and e.disposition != "state_only") or not e.surface.is_empty():return "partial"
+    return "missing"
+
+static func _visible_look(look: Resource) -> bool:
+    if look == null:return false
+    for step in look.steps:
+        if step.kind != "body_adjust" or step.alpha < 1.0 or step.rgb != Color.WHITE or step.saturation != 1.0 or step.brightness != 1.0:return true
+    return false
+
 static func _check_binding(report: Dictionary, where: String, binding: Variant, sound: Resource) -> void:
     if not binding is Dictionary:Common.warn(report, where, "sound " + sound.cue + " has no binding in the audio library");return
     if binding.get("cue") != sound.cue or binding.get("timing") != sound.at or binding.get("enabled", true) != sound.enabled:
@@ -308,7 +390,15 @@ static func _check_binding(report: Dictionary, where: String, binding: Variant, 
 
 static func _coverage(entries: Dictionary, report: Dictionary) -> void:
     for id in entries.get("spells", {}):Common.cover(report, "spell", id, entries.spells[id].status)
-    for id in entries.get("conditions", {}):Common.cover(report, "condition", id, entries.conditions[id].status)
+    var lifecycles := package_lifecycles()
+    var drawn := drawn_media(entries)
+    var without := 0
+    for id in entries.get("conditions", {}):
+        var e: Resource = entries.conditions[id]
+        var status := condition_coverage(e, lifecycles.has(id), drawn)
+        if status == "missing":without += 1
+        Common.cover(report, "condition", id, status)
+    Common.warn(report, "abilities", "%d conditions draw nothing yet: no lifecycle in the installed package (%s) and no client look" % [without, package_version()])
     for id in entries.get("actions", {}):
         var e: Resource = entries.actions[id]
         Common.cover(report, e.kind if e.kind in ACTION_KINDS else "action", id, e.status)

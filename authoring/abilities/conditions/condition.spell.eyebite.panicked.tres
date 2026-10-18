@@ -31,7 +31,6 @@ script = ExtResource("4_j1w7q")
 id = "condition.spell.eyebite.panicked"
 label = "Panicked"
 disposition = "authored"
-lifecycle = PackedStringArray("condition_frightened_native")
 look = SubResource("Resource_kdpw3")
 layers = [{
 "activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
@@ -71,7 +70,6 @@ priority = 71.0
 max_layers = 1.0
 application_text = SubResource("Resource_eka71")
 removal_text = SubResource("Resource_ywefc")
-status = "ready"
 unported = {
 "application": {
 "durationMs": 0.0,

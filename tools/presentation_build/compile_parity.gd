@@ -4,9 +4,15 @@ extends SceneTree
 ## rows) and writes one digest per compiled group and timeline row, so two
 ## states of the presentation data can be compared operation by operation.
 ##   --headless --script res://tools/presentation_build/compile_parity.gd -- --output=<json> [--compare=<json>]
+##   [--journal=<one journal>] [--dump=<text file: one canonical group or row per line>]
 const Recording = preload("res://studio/recording.gd")
 const INVENTORIES := ["res://generated/studio_case_inventory.json", "res://generated/studio_spell_case_inventory.json"]
 ## Wall-clock measurements and per-run identities: never part of a digest.
+## Dead fields the abilities source leaves out (provenance prose and notes no
+## reader uses); with --dead they are not part of a digest either.
+const DEAD := ["cue_role", "material_class", "source_note", "light_color_source", "footprint", "registration_note",
+    "timing_note", "source_evidence", "authored_footprints", "clip_by_id", "replaces_media"]
+static var ignore_dead := false
 const VOLATILE := ["compile_ms", "decode_ms", "reduce_ms", "index_ms", "read_ms", "total_ms", "elapsed_ms", "profile",
     "read_profile", "process_uptime_ms", "created_usec", "requested_usec", "cache"]
 
@@ -20,7 +26,7 @@ func canonical(value: Variant) -> String:
             keys.sort()
             var parts := PackedStringArray()
             for key in keys:
-                if key in VOLATILE:continue
+                if key in VOLATILE or (ignore_dead and key in DEAD):continue
                 parts.append(JSON.stringify(key) + ":" + canonical(value[key] if value.has(key) else value[StringName(key)]))
             return "{" + ",".join(parts) + "}"
         TYPE_ARRAY:
@@ -46,12 +52,17 @@ func journals() -> Array:
     return result
 
 func run() -> void:
-    var output := "";var compare := ""
+    var output := "";var compare := "";var dump := "";var only := ""
     for argument in OS.get_cmdline_user_args():
         if argument.begins_with("--output="):output = argument.trim_prefix("--output=")
         elif argument.begins_with("--compare="):compare = argument.trim_prefix("--compare=")
+        elif argument.begins_with("--dump="):dump = argument.trim_prefix("--dump=")
+        elif argument.begins_with("--journal="):only = argument.trim_prefix("--journal=")
+        elif argument == "--dead":ignore_dead = true
     var report := {}
+    var dumped := PackedStringArray()
     for journal in journals():
+        if not only.is_empty() and journal != only:continue
         var index: Dictionary = Recording.read(journal)
         if not index.get("ok", false):report[journal] = {"error": str(index.get("error", ""))};continue
         var groups := PackedStringArray()
@@ -59,9 +70,14 @@ func run() -> void:
         var rows := PackedStringArray()
         for row in index.rows:rows.append(canonical(row).sha256_text().left(16))
         report[journal] = {"groups": groups, "rows": rows, "duration_ms": index.duration_ms}
+        if not dump.is_empty():
+            for group in index.groups:dumped.append(canonical(group))
+            for row in index.rows:dumped.append(canonical(row))
         print("COMPILE_PARITY ", journal, " groups=", groups.size(), " rows=", rows.size())
     if not output.is_empty():
         var file := FileAccess.open(output, FileAccess.WRITE);file.store_string(JSON.stringify(report, "  "));file.close()
+    if not dump.is_empty():
+        var file := FileAccess.open(dump, FileAccess.WRITE);file.store_string("\n".join(dumped));file.close()
     if compare.is_empty():quit(0);return
     var before: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(compare))
     var differences := 0

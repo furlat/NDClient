@@ -50,7 +50,6 @@ script = ExtResource("4_u5hqw")
 id = "condition.paralyzed"
 label = "Paralyzed"
 disposition = "authored"
-lifecycle = PackedStringArray("condition_paralyzed_native")
 look = SubResource("Resource_yvqjs")
 layers = [{
 "activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
@@ -75,7 +74,6 @@ priority = 60.0
 max_layers = 3.0
 application_text = SubResource("Resource_sjuel")
 removal_text = SubResource("Resource_03rec")
-status = "ready"
 unported = {
 "application": {
 "durationMs": 220.0,

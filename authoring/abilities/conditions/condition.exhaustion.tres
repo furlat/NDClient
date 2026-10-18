@@ -29,7 +29,6 @@ script = ExtResource("4_yf0jx")
 id = "condition.exhaustion"
 label = "Exhaustion"
 disposition = "authored"
-lifecycle = PackedStringArray("condition_exhaustion_native")
 look = SubResource("Resource_xsmtf")
 layers = [{
 "activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
@@ -54,7 +53,6 @@ priority = 30.0
 max_layers = 3.0
 application_text = SubResource("Resource_01ps8")
 removal_text = SubResource("Resource_0kmr6")
-status = "ready"
 unported = {
 "application": {
 "durationMs": 220.0,

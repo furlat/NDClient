@@ -31,7 +31,6 @@ script = ExtResource("4_e1msm")
 id = "condition.deafened"
 label = "Deafened"
 disposition = "authored"
-lifecycle = PackedStringArray()
 look = SubResource("Resource_lldmw")
 layers = [{
 "activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
@@ -72,7 +71,6 @@ priority = 30.0
 max_layers = 3.0
 application_text = SubResource("Resource_50758")
 removal_text = SubResource("Resource_gxfhl")
-status = "partial"
 unported = {
 "application": {
 "durationMs": 220.0,

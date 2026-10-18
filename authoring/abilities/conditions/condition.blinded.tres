@@ -31,7 +31,6 @@ script = ExtResource("4_xcare")
 id = "condition.blinded"
 label = "Blinded"
 disposition = "authored"
-lifecycle = PackedStringArray()
 look = SubResource("Resource_pm513")
 layers = [{
 "activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
@@ -72,7 +71,6 @@ priority = 30.0
 max_layers = 3.0
 application_text = SubResource("Resource_51rnj")
 removal_text = SubResource("Resource_h6ift")
-status = "partial"
 unported = {
 "application": {
 "durationMs": 220.0,

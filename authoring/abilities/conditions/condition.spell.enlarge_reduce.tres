@@ -31,7 +31,6 @@ script = ExtResource("4_6i7os")
 id = "condition.spell.enlarge_reduce"
 label = "Enlarge Reduce"
 disposition = "authored"
-lifecycle = PackedStringArray("condition_reduce_native")
 look = SubResource("Resource_8dwmb")
 layers = [{
 "activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
@@ -57,7 +56,6 @@ priority = 50.0
 max_layers = 3.0
 application_text = SubResource("Resource_4ittd")
 removal_text = SubResource("Resource_nidwj")
-status = "ready"
 unported = {
 "application": {
 "durationMs": 480.0,

@@ -31,7 +31,6 @@ script = ExtResource("4_4lil3")
 id = "condition.spell.beacon_of_hope"
 label = "Beacon of Hope"
 disposition = "authored"
-lifecycle = PackedStringArray()
 look = SubResource("Resource_eiw26")
 layers = [{
 "activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
@@ -68,7 +67,6 @@ priority = 30.0
 max_layers = 3.0
 application_text = SubResource("Resource_hh24l")
 removal_text = SubResource("Resource_aas6t")
-status = "partial"
 unported = {
 "application": {
 "durationMs": 220.0,

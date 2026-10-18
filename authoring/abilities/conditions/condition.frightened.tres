@@ -31,7 +31,6 @@ script = ExtResource("4_72qwo")
 id = "condition.frightened"
 label = "Frightened"
 disposition = "authored"
-lifecycle = PackedStringArray("condition_frightened_native")
 look = SubResource("Resource_gx1ph")
 layers = [{
 "activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
@@ -86,7 +85,6 @@ priority = 70.0
 max_layers = 1.0
 application_text = SubResource("Resource_tvkjk")
 removal_text = SubResource("Resource_4jyn5")
-status = "ready"
 unported = {
 "application": {
 "durationMs": 0.0,

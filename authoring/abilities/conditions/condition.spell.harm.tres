@@ -29,7 +29,6 @@ script = ExtResource("4_ix4qq")
 id = "condition.spell.harm"
 label = "Harm"
 disposition = "authored"
-lifecycle = PackedStringArray("condition_life_drain_native")
 look = SubResource("Resource_vcwtn")
 layers = [{
 "activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
@@ -53,7 +52,6 @@ group = "marker.condition.spell.harm"
 max_layers = 1.0
 application_text = SubResource("Resource_bopn2")
 removal_text = SubResource("Resource_bj0hl")
-status = "ready"
 unported = {
 "application": {
 "durationMs": 0.0,

@@ -31,7 +31,6 @@ script = ExtResource("4_4brpc")
 id = "condition.spell.hold_monster"
 label = "Hold Monster"
 disposition = "authored"
-lifecycle = PackedStringArray("condition_paralyzed_native")
 look = SubResource("Resource_78agy")
 layers = [{
 "activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
@@ -68,7 +67,6 @@ priority = 75.0
 max_layers = 3.0
 application_text = SubResource("Resource_g8ybv")
 removal_text = SubResource("Resource_4nqct")
-status = "ready"
 unported = {
 "application": {
 "durationMs": 0.0,

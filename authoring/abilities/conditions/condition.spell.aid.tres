@@ -29,7 +29,6 @@ script = ExtResource("4_mx0aa")
 id = "condition.spell.aid"
 label = "Aid"
 disposition = "authored"
-lifecycle = PackedStringArray("condition_aid_retained_native")
 look = SubResource("Resource_way5g")
 layers = [{
 "activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
@@ -66,7 +65,6 @@ priority = 30.0
 max_layers = 3.0
 application_text = SubResource("Resource_lelf7")
 removal_text = SubResource("Resource_acgwa")
-status = "ready"
 unported = {
 "application": {
 "durationMs": 220.0,

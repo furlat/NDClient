@@ -29,7 +29,6 @@ script = ExtResource("4_vfquc")
 id = "condition.environment.jaw_restrained"
 label = "Jaw restraint"
 disposition = "authored"
-lifecycle = PackedStringArray("condition_restrained_native")
 look = SubResource("Resource_dmyba")
 layers = [{
 "activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
@@ -53,7 +52,6 @@ priority = 50.0
 max_layers = 3.0
 application_text = SubResource("Resource_dsdik")
 removal_text = SubResource("Resource_milpi")
-status = "ready"
 unported = {
 "application": {
 "durationMs": 200.0,

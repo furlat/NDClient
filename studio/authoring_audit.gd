@@ -9,6 +9,7 @@ static func _pointer(key:String)->String:
     return key.replace("~","~0").replace("/","~1")
 
 static func _read(path:String,cache:Dictionary)->Dictionary:
+    if Authoring.AbilityDocuments.owns(path):return Authoring.load_data(path,cache) if Authoring.AbilityDocuments.exists(path) else {}
     var root:String=ProjectSettings.get_setting("source_data/authoring_root")
     return Authoring.load_data(path,cache) if FileAccess.file_exists(root.path_join(path)) else {}
 

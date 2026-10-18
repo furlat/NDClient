@@ -31,7 +31,6 @@ script = ExtResource("4_vrkxs")
 id = "condition.incapacitated"
 label = "Incapacitated"
 disposition = "authored"
-lifecycle = PackedStringArray("condition_incapacitated_native")
 look = SubResource("Resource_3u86e")
 layers = [{
 "activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
@@ -55,7 +54,6 @@ priority = 30.0
 max_layers = 3.0
 application_text = SubResource("Resource_e4gjq")
 removal_text = SubResource("Resource_laq3g")
-status = "ready"
 unported = {
 "application": {
 "durationMs": 312.5,

@@ -29,7 +29,6 @@ script = ExtResource("4_kes1s")
 id = "condition.spell.command.halt"
 label = "Command: Halt"
 disposition = "authored"
-lifecycle = PackedStringArray("condition_commanded_native")
 look = SubResource("Resource_vxi6r")
 layers = [{
 "activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
@@ -87,7 +86,6 @@ priority = 30.0
 max_layers = 3.0
 application_text = SubResource("Resource_vnq80")
 removal_text = SubResource("Resource_dvv7t")
-status = "ready"
 unported = {
 "activation": {
 "effects": [{

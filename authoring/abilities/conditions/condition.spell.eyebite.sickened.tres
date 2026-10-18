@@ -31,7 +31,6 @@ script = ExtResource("4_bks6g")
 id = "condition.spell.eyebite.sickened"
 label = "Sickened"
 disposition = "authored"
-lifecycle = PackedStringArray("condition_sickened_native")
 look = SubResource("Resource_hhdhu")
 layers = [{
 "activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
@@ -85,7 +84,6 @@ priority = 70.0
 max_layers = 3.0
 application_text = SubResource("Resource_m0ylj")
 removal_text = SubResource("Resource_vb4a1")
-status = "ready"
 unported = {
 "application": {
 "durationMs": 0.0,

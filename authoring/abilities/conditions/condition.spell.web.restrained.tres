@@ -29,7 +29,6 @@ script = ExtResource("4_34lah")
 id = "condition.spell.web.restrained"
 label = "Web restraint"
 disposition = "authored"
-lifecycle = PackedStringArray()
 look = SubResource("Resource_6ked2")
 layers = [{
 "activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
@@ -67,7 +66,6 @@ priority = 60.0
 max_layers = 3.0
 application_text = SubResource("Resource_sasww")
 removal_text = SubResource("Resource_2aw06")
-status = "partial"
 unported = {
 "application": {
 "durationMs": 0.0,

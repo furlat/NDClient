@@ -6,8 +6,10 @@ const Conditions=preload("res://presentation/conditions.gd")
 const Coverage=preload("res://presentation/condition_coverage.gd")
 const Journal=preload("res://sdk/journal.gd")
 const Compiler=preload("res://presentation/compiler.gd")
-const ConditionResource=preload("res://presentation/resources/condition_presentation.gd")
-const CatalogResource=preload("res://presentation/resources/catalog.gd")
+const Document=preload("res://presentation/resources/ability_document.gd")
+const AbilityDocuments=preload("res://presentation/ability_documents.gd")
+const Builder=preload("res://tools/presentation_build/abilities.gd")
+const Common=preload("res://tools/presentation_build/common.gd")
 var checks=0
 var failures:Array=[]
 var evidence:Array=[]
@@ -36,8 +38,8 @@ func examine(directory:String,action:String,name:String,color:int)->void:
     check(not action_recipe.actor.enabled,"Body-disabled "+action+" remains body-disabled")
     check(recipe.persistent.bodyOutline.color==color and recipe.persistent.bodyOutline.pulseOpacity==0,"Explicit new palette uses original feedback colour without Paralyzed stripe: "+name)
     check(recipe.persistent.get("bodyColor")==null and recipe.persistent.alphaMultiplier==1 and not recipe.persistent.has("activityPoses"),"Indicator keeps original body pose, colour and alpha: "+name)
-    var legacy=JSON.parse_string(FileAccess.get_file_as_string(str(ProjectSettings.get_setting("source_data/authoring_root")).path_join("catalog/condition_recipes.json")))[id]
-    check(not legacy.persistent.has("bodyOutline"),"Original migration recipe untouched: "+name)
+    var entry:Resource=load("res://authoring/abilities/conditions/"+id+".tres")
+    check(entry!=null and entry.look.steps.any(func(step):return step.kind=="outline"),"The abilities source holds the indicator contour: "+name)
     var rows=index.rows.filter(func(row):return row.kind=="condition_material" and row.owner.condition.behavior_id==id)
     check(not rows.is_empty(),"Recorded owner has indexed persistent contour: "+name)
     var owner={}
@@ -92,22 +94,34 @@ func examine(directory:String,action:String,name:String,color:int)->void:
                     check(a.commits==b.commits and a.duration_ms==b.duration_ms and a.actor_tracks==b.actor_tracks,"Every event commit, body track and duration unchanged "+action+"/"+file+"/"+str(n))
         operation+=1
 func reload_check()->void:
-    var directory="res://.runtime/basic-condition-reload"
-    DirAccess.make_dir_recursive_absolute(directory)
-    var path=directory.path_join("condition.tres");var catalog_path=directory.path_join("catalog.tres")
-    var selected:ConditionResource=ResourceLoader.load("res://authoring/presentation/conditions/dodging.tres","",ResourceLoader.CACHE_MODE_IGNORE_DEEP)
-    var catalog=CatalogResource.new();catalog.condition_recipes["condition.dodging"]=path
-    ResourceSaver.save(catalog,catalog_path);ResourceSaver.save(selected,path)
-    var prior=ProjectSettings.get_setting("source_data/presentation_catalog",Catalog.NativeAuthoring.INDEX)
-    ProjectSettings.set_setting("source_data/presentation_catalog",catalog_path)
-    var cache={};check(Catalog.validate_native(cache).is_empty(),"Valid outline Resource candidate admits")
+    # The build rejects an invalid contour; a rebuilt table never replaces the
+    # snapshot a displayed recording admitted.
+    var entry:Resource=load("res://authoring/abilities/conditions/condition.dodging.tres")
+    var valid:Dictionary=Common.report();Builder._validate_condition(entry,"dodging",valid)
+    check(valid.errors.is_empty(),"Valid outline source admits")
+    var cache={};check(Catalog.validate_native(cache).is_empty(),"Valid outline build admits")
     var retained=Catalog.source_snapshot(cache)
+    var recipes:Dictionary=Catalog.read_file("catalog/condition_recipes.json",cache).duplicate(true)
+    var directory="res://.runtime/basic-condition-reload"
+    var prior=ProjectSettings.get_setting("source_data/abilities_build",AbilityDocuments.ROOT)
     for field in ["opacity","period_ms","alpha_threshold","color"]:
-        var original=selected.body_outline.get(field)
-        selected.body_outline.set(field,Color(NAN,0,0) if field=="color" else (-1 if field=="opacity" else 0))
-        ResourceSaver.save(selected,path)
-        check(not Catalog.validate_native({}).is_empty(),"Invalid outline candidate rejects "+field)
+        var candidate:Resource=entry.duplicate(true)
+        var outline:Resource=candidate.look.steps.filter(func(step):return step.kind=="outline")[0]
+        var persistent:Dictionary=candidate.unported.get("persistent",{})
+        match field:
+            "opacity":outline.alpha=-1.0
+            "color":outline.rgb=Color(NAN,0,0)
+            "period_ms":persistent.bodyOutline.periodMs=0.0
+            "alpha_threshold":persistent.bodyOutline.alphaThreshold=0.0
+        var report:Dictionary=Common.report();Builder._validate_condition(candidate,"dodging",report)
+        check(not report.errors.is_empty(),"Invalid outline candidate rejects "+field)
+        var rebuilt:Dictionary=recipes.duplicate(true);rebuilt["condition.dodging"].persistent.bodyOutline.color=0
+        var document:=Document.new();document.data=rebuilt
+        var file:=directory.path_join("abilities/docs/catalog/condition_recipes.res")
+        DirAccess.make_dir_recursive_absolute(file.get_base_dir());ResourceSaver.save(document,file)
+        ProjectSettings.set_setting("source_data/abilities_build",directory.path_join("abilities"))
+        Catalog.invalidate_source_indexes()
         check(Catalog.validate_native(retained).is_empty() and Catalog.read_file("catalog/condition_recipes.json",retained)["condition.dodging"].persistent.bodyOutline.color==0x5895e4,"Rejected edit retains admitted source snapshot "+field)
-        selected.body_outline.set(field,original)
-    ProjectSettings.set_setting("source_data/presentation_catalog",prior)
-    DirAccess.remove_absolute(path);DirAccess.remove_absolute(catalog_path)
+        ProjectSettings.set_setting("source_data/abilities_build",prior)
+        Catalog.invalidate_source_indexes()
+        DirAccess.remove_absolute(file)

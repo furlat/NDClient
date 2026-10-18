@@ -2,23 +2,33 @@ extends RefCounted
 ## One admitted revision for approved spells and shared passive asset metadata.
 ## Snapshots share immutable Resource refs and replace the small loaded shell.
 ## Historical package/cache names remain stable; neither contains live state.
-const INDEX="res://.derived/native-spells/index.res"
-const CURRENT="res://.derived/native-spells/current"
+## Spells come from the abilities build (build/presentation/abilities); the
+## passive asset metadata (blood regions and other environment media) still
+## comes from the old .derived admission until the environment source owns it.
+const AbilityDocuments=preload("res://presentation/ability_documents.gd")
+const ASSETS_CURRENT="res://.derived/native-spells/current"
 const CACHE_KEY="__native_spell_admission"
 static var _current:Resource
+static var _assets:Resource
 static var _attempted:bool=false
 static var _admission_mutex:Mutex=Mutex.new()
 
+## The marker naming the current native spell index of the abilities build.
+static func current()->String:
+    return AbilityDocuments.root().path_join("native_spells/current")
+
 static func invalidate()->void:
     _admission_mutex.lock()
-    _current=null;_attempted=false
+    _current=null;_assets=null;_attempted=false
     _admission_mutex.unlock()
 
 static func _current_index()->Resource:
     _admission_mutex.lock()
     if not _attempted:
-        var selected:String=FileAccess.get_file_as_string(CURRENT).strip_edges()
+        var selected:String=FileAccess.get_file_as_string(current()).strip_edges()
         _current=ResourceLoader.load(selected,"",ResourceLoader.CACHE_MODE_REUSE)
+        var assets:String=FileAccess.get_file_as_string(ASSETS_CURRENT).strip_edges()
+        _assets=ResourceLoader.load(assets,"",ResourceLoader.CACHE_MODE_REUSE) if not assets.is_empty() else null
         _attempted=true
     var result:Resource=_current
     _admission_mutex.unlock()
@@ -28,7 +38,7 @@ static func admission(cache:Dictionary)->Dictionary:
     if not cache.has(CACHE_KEY):
         var index:Resource=_current_index()
         cache[CACHE_KEY]=make_admission(index,{})
-        if index==null:_load_error(cache,CURRENT)
+        if index==null:_load_error(cache,current())
     return cache[CACHE_KEY]
 
 static func find(behavior_id:String,cache:Dictionary)->Resource:
@@ -47,7 +57,8 @@ static func asset(asset_id:String,cache:Dictionary)->Resource:
     # Explicit preparation only. The key cannot collide with a spell behavior.
     var owner:Dictionary=admission(cache)
     if owner.index==null:return null
-    var path:String=owner.index.asset_metadata.get(asset_id,"")
+    _admission_mutex.lock();var assets:Resource=_assets;_admission_mutex.unlock()
+    var path:String=assets.asset_metadata.get(asset_id,"") if assets!=null else ""
     if path.is_empty():
         _load_error(cache,"asset:"+asset_id)
         return null

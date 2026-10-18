@@ -32,7 +32,6 @@ script = ExtResource("4_kgkxb")
 id = "condition.poisoned"
 label = "Poisoned"
 disposition = "authored"
-lifecycle = PackedStringArray("condition_poisoned_native")
 look = SubResource("Resource_gyemc")
 layers = [{
 "activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
@@ -57,7 +56,6 @@ priority = 30.0
 max_layers = 3.0
 application_text = SubResource("Resource_47ydv")
 removal_text = SubResource("Resource_p4bak")
-status = "ready"
 unported = {
 "application": {
 "durationMs": 220.0,

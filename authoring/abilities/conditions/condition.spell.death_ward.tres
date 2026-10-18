@@ -29,7 +29,6 @@ script = ExtResource("4_pfh2b")
 id = "condition.spell.death_ward"
 label = "Death Ward"
 disposition = "authored"
-lifecycle = PackedStringArray()
 look = SubResource("Resource_yyfpl")
 layers = [{
 "activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
@@ -66,7 +65,6 @@ priority = 30.0
 max_layers = 3.0
 application_text = SubResource("Resource_f7eqg")
 removal_text = SubResource("Resource_0kvjr")
-status = "partial"
 unported = {
 "application": {
 "durationMs": 0.0,

@@ -11,6 +11,9 @@ const Baked=preload("res://presentation/baked_effect.gd")
 const Admission=preload("res://presentation/native_source_admission.gd")
 const Native=preload("res://presentation/native_effects.gd")
 const INDEX:="res://assets/vfx/index.json"
+## Conditions whose package lifecycle the client keeps from playing.
+const LIFECYCLES:="condition_lifecycles.json"
+const AbilityDocuments=preload("res://presentation/ability_documents.gd")
 ## Played when a clip has it and no kind is requested: recorded, else gpu, else native.
 const KINDS:=["recorded","gpu","native"]
 const LABELS:={"recorded":"Recorded","gpu":"GPU","native":"Native"}
@@ -57,6 +60,9 @@ static func _load()->void:
                 for id in selection.get("condition",{}).get("owner_ids",[]):
                     if not _conditions.has(id):_conditions[id]=[]
                     _conditions[id].append(selection)
+            # The client can keep a package lifecycle from playing (abilities source).
+            var listed:Variant=AbilityDocuments.read(LIFECYCLES)
+            for id in (listed.get("suppressed",[]) if listed is Dictionary else []):_conditions.erase(id)
             _clock=load(index.get("runtime",{}).get("clock",""))
         else:push_error("VFX package index cannot be read: "+INDEX)
     _mutex.unlock()

@@ -32,7 +32,6 @@ script = ExtResource("4_6nomw")
 id = "condition.spell.haste"
 label = "Haste"
 disposition = "authored"
-lifecycle = PackedStringArray()
 look = SubResource("Resource_panhp")
 layers = [{
 "activeDuring": ["idle", "move", "jump", "forced_move", "attack", "cast", "act", "hit"],
@@ -100,7 +99,6 @@ max_layers = 1.0
 application_text = SubResource("Resource_k2nem")
 removal_text = SubResource("Resource_5lfoa")
 playback_rate = 1.25
-status = "ready"
 unported = {
 "application": {
 "durationMs": 240.0,

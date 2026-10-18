@@ -15,7 +15,6 @@ const R = preload("res://tools/presentation_build/ability_records.gd")
 const Builder = preload("res://tools/presentation_build/abilities.gd")
 const Common = preload("res://tools/presentation_build/common.gd")
 const NativeAuthoring = preload("res://presentation/native_authoring.gd")
-const Sources = preload("res://presentation/native_presentation_sources.gd")
 const Root = preload("res://presentation/source/source_root.gd")
 const ImageRef = preload("res://presentation/source/image_ref.gd")
 const SoundRef = preload("res://presentation/source/sound_ref.gd")
@@ -57,6 +56,14 @@ var notes: Array = []
 
 func _initialize() -> void:
     run.call_deferred()
+
+## The .derived native spell snapshot the game played before the switch to
+## the abilities build (the old import of spells/*.json and the staging).
+func derived_index() -> Resource:
+    if not cache.has("derived_index"):
+        var marker := FileAccess.get_file_as_string("res://.derived/native-spells/current").strip_edges()
+        cache.derived_index = ResourceLoader.load(marker, "", ResourceLoader.CACHE_MODE_REUSE)
+    return cache.derived_index
 
 func json(path: String) -> Variant:
     return JSON.parse_string(FileAccess.get_file_as_string(AUTHORING + path))
@@ -152,7 +159,7 @@ func spells() -> Dictionary:
         if id.begins_with("spell."):ids[id] = true
         else:drafts[id] = json("spells/" + file)
     for id in server.spell:ids[id] = true
-    var index: Resource = Sources.admission({}).index
+    var index: Resource = derived_index()
     for id in index.spells:ids[id] = true
     var staged := {}
     for path in ["sandbox/staging.json", "sandbox/batches/combat.json", "sandbox/batches/support.json"]:
@@ -270,12 +277,7 @@ func conditions() -> Dictionary:
     var recipes: Dictionary = effective("catalog/condition_recipes.json")
     var rates: Dictionary = json("catalog/action_playback_rates.json")
     var bindings: Dictionary = json("audio/bindings.json").get("conditions", {})
-    var index: Resource = Sources.admission({}).index
-    var lifecycles := {}
-    for selection in package.selections:
-        for owner in selection.get("condition", {}).get("owner_ids", []):
-            if not lifecycles.has(owner):lifecycles[owner] = []
-            lifecycles[owner].append(selection.key)
+    var index: Resource = derived_index()
     var ids := {}
     for id in server.condition:ids[id] = true
     for id in recipes:ids[id] = true
@@ -285,37 +287,14 @@ func conditions() -> Dictionary:
         var e := Condition.new();e.id = id
         var info: Dictionary = server.condition.get(id, {})
         if recipes.has(id):R.condition_from_recipe(e, recipes[id])
-        e.lifecycle = PackedStringArray(lifecycles.get(id, []))
         e.owner_spell = str(index.conditions.get(id, ""))
         e.surface = str(info.get("zone_spatial_effect", "")) if info.get("zone_spatial_effect") != null else ""
         if rates.has(id):e.playback_rate = rates[id]
         for phase in bindings.get(id, {}):e.sounds[phase] = sound(bindings[id][phase])
-        e.status = condition_status(e, info)
+        e.status = "internal" if info.get("category") == "internal" or info.get("kind") == "internal" else "ready"
         if not server.condition.has(id):e.notes = "Sent by the pinned engine under this id; not a condition id on the modern branch."
         result[id] = e
     return result
-
-func condition_status(e: Resource, info: Dictionary) -> String:
-    if info.get("category") == "internal" or info.get("kind") == "internal":return "internal"
-    if not e.lifecycle.is_empty() or not e.poses.is_empty() or visible_look(e.look) or e.layers.any(func(layer): return drawn_layer(str(layer.get("assetId", "")))):return "ready"
-    if not e.disposition.is_empty() and e.disposition != "state_only":return "partial"
-    if not e.surface.is_empty():return "partial"
-    return "missing"
-
-## A look that changes the body (not just the neutral alpha 1).
-func visible_look(look: Resource) -> bool:
-    if look == null:return false
-    for step in look.steps:
-        if step.kind != "body_adjust" or step.alpha < 1.0 or step.rgb != Color.WHITE or step.saturation != 1.0 or step.brightness != 1.0:return true
-    return false
-
-## An old sprite layer that a native source draws (its media id).
-func drawn_layer(asset: String) -> bool:
-    if not cache.has("media_ids"):
-        cache.media_ids = {}
-        for record in json("native_effects/index.json").sources.values():
-            for media in record.get("media_ids", []):cache.media_ids[media] = true
-    return cache.media_ids.has(asset)
 
 # --- Actions ---------------------------------------------------------------------
 
@@ -535,7 +514,7 @@ func verify() -> int:
             ordered += 1
             if OS.get_cmdline_user_args().has("--orders"):print("ABILITIES_ORDER ", path, " ", JSON.stringify(F.order_differences(expected, actual).slice(0, 6)))
     # Native spells: the snapshot the game plays today.
-    var index: Resource = Sources.admission({}).index
+    var index: Resource = derived_index()
     for id in index.spells:
         var today_record: Resource = load(index.spells[id])
         var record: Resource = built.native.records.get(id)
