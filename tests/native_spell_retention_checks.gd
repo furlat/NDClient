@@ -106,7 +106,7 @@ func run()->void:
     recording("res://.runtime/gallery-sorcerer-20261015-seed3-door/amber/journal","Gallery",true)
     var inventory=JSON.parse_string(FileAccess.get_file_as_string("res://generated/studio_spell_case_inventory.json"))
     for name in ["shield","web"]:
-        var specs:Array=inventory.cases.filter(func(item):return item.spell_id==name)
+        var specs:Array=inventory.cases.filter(func(item):return item.id=="native-spell-"+name)
         check(specs.size()==1,name+" actual study exists")
         if specs.is_empty():continue
         for perspective in specs[0].perspectives:recording(perspective.journal,name+"/"+perspective.id)

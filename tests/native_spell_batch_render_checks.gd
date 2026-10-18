@@ -16,7 +16,7 @@ func run()->void:
         if argument.begins_with("--sample-fraction="):sample_fraction=float(argument.trim_prefix("--sample-fraction="))
     for item in inventory.cases:
         if not only.is_empty() and item.spell_id not in only.split(","):continue
-        if not item.get("failures",[]).is_empty():continue
+        if not item.get("failures",[]).is_empty() or not item.get("native_effects_authored",true):continue
         await inspect_spell(item)
     finish()
 func inspect_spell(item:Dictionary)->void:

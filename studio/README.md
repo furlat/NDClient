@@ -251,9 +251,10 @@ source/event rows, faction, camera and rendering errors remain in each receipt.
   --review-fps 12 --output .captures/studio-sequence-review/first-pass
 ```
 
-Use a fresh output directory. `--spells all` selects the30 real recordings in
+Use a fresh output directory. `--spells all` selects every real recording in
 `generated/studio_spell_case_inventory.json`, including their original journal
-paths. Use `--recording res://.../amber/journal` for another existing SDK journal.
+paths; a spell's further cases are named by their case suffix (`shield-ranged`,
+`shield-walk`). Use `--recording res://.../amber/journal` for another existing SDK journal.
 `--row <exact-row-id>` selects an authored occurrence's interval; `--start` and
 `--end` bound a full-recording review. `--at 1.2` instead captures one settled
 still and needs neither ffmpeg nor Pillow, so ordinary `python3` is sufficient.
@@ -306,9 +307,37 @@ The complete batch is selectable under **Spell composition** and the capability
 Library, with original recordings for both audiences in
 `generated/studio_spell_case_inventory.json`. Native condition entry/hold/removal,
 Shield interception, Web ownership, healing and area effects use the same player
-components and are exposed on their owner tracks. Aid, Bless, False Life and
-Sacred Flame are deferred and **not accepted**. Every spell's timing and
+components and are exposed on their owner tracks. Every spell's timing and
 positioning still needs artist tuning.
+
+Since 18 October each inventory case records the spell's whole lifecycle
+(`.runtime/studio-spells-20261018/`): the cast and its impact, the lasting
+condition on its recipient, the recipient walking with it on, the condition
+ending through an ordinary engine rule (expiry by ended turns, dropped
+concentration, donned armour, Shake Awake, the next turn start, damage spending
+False Life's temporary hit points) and a walk of about two seconds afterwards.
+Each case's `lifecycle` rows name those events by journal sequence and event,
+with the published Studio time for both factions (`published_ms`) and the
+event's own presentation rows. `ending` and `lifecycle_gaps` state the rule used
+and what the engine cannot show (a sleeping, restrained or commanded recipient
+cannot walk; Shield and Shocking Grasp end when the recipient's own turn starts;
+Aid has no in-encounter end). Turns take no presentation time, so an expiry at a
+turn boundary appears at the instant the preceding walk arrives. Aid, Bless,
+False Life and Sacred Flame are recorded but have no native effect authoring yet
+(`native_effects_authored: false`). Two further Shield cases show a shortbow
+arrow turned by Shield (`native-spell-shield-ranged`) and Shield cast against an
+opportunity attack, then held for the rest of the walk (`native-spell-shield-walk`).
+Regenerate with the pinned engine copy:
+
+```sh
+E=/home/tommaso/.cache/ndclient/dnd_engine-229ce025f
+cd tools && PYTHONPATH=$E:$E/sdk/python/src /home/tommaso/.cache/dnd-engine/venv/bin/python \
+  studio_spell_lifecycle_capture.py --engine $E \
+  --godot /mnt/c/Users/tommaso/Documents/Dev/Tools/Godot-4.7.2/Godot_v4.7.2-stable_win64_console.exe
+```
+
+`--godot` reads every lifecycle event back through the Studio's own
+single-faction index and seeks to it (`tools/studio_spell_lifecycle_times.gd`).
 
 Hide now has separate selected action and condition recipes. Open **Hide → Apply / move / attack →
 Hide and subsequent attack** to inspect its real paired faction recording.

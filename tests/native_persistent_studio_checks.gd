@@ -101,7 +101,7 @@ func run()->void:
     var inventory:Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://generated/studio_spell_case_inventory.json"))
     var wanted=["bane","command","guidance","light","mage_armor","resistance","sanctuary","shield","shield_of_faith","web"]
     for id in wanted:
-        var matches:Array=inventory.cases.filter(func(case):return case.spell_id==id)
+        var matches:Array=inventory.cases.filter(func(case):return case.id=="native-spell-"+id)
         check(matches.size()==1,id+": actual recording is registered")
         if not matches.is_empty():inspect_case(matches[0])
     area_trace(inventory)
@@ -110,7 +110,7 @@ func run()->void:
     print("NATIVE_PERSISTENT_STUDIO_CHECKS ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)
 
 func area_trace(inventory:Dictionary)->void:
-    var matches:Array=inventory.cases.filter(func(case):return case.spell_id=="ice_knife")
+    var matches:Array=inventory.cases.filter(func(case):return case.id=="native-spell-ice_knife")
     check(matches.size()==1,"Ice Knife actual burst case exists")
     if matches.is_empty():return
     var index=Recording.read(matches[0].perspectives[0].journal)
