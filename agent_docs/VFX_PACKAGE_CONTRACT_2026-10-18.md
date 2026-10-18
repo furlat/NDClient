@@ -168,3 +168,51 @@ read.
 - `tests/effect_package_checks.gd` builds, samples (0/25/50/75 %) and draws
   every approach of every staged clip; `tests/studio_effect_version_checks.gd`
   covers the Studio switch.
+
+## 8. Findings for the Factory (18 October, package `20261018-fa4e64489d2d25a8`)
+
+Found while loading and playing the package in the client. Evidence:
+`.captures/effect-package/*.png` (one comparison sheet per clip) and the
+loader merge `9ac9e20`.
+
+Package defects:
+- **Chill Touch recordings** render the fist dark inside (the same symptom the
+  old client bake had). Its native approach is bright.
+- **Thaumaturgy** draws 0 px at the client's sampled time in both the native
+  and recorded approaches (the old effect drew 80 px). The effect is small and
+  short.
+- **`warm` of recorded approaches** (all 645) lists the live approach's
+  clock-wrapped materials, not the recording's own. The client compiles the
+  recording's materials on its first private draw instead.
+- **`electric_ribbon.gd`** reads `res://factory/...`, outside the package. Not
+  used by the 30 client spells today.
+- **Magic Missile impact**: the node `impact/Donor` the old staging named is
+  now `impact/Source/Donor`.
+
+Staging differences between the client's staging and the package's
+`selections`. These matter if the Factory takes over staging (app design D1):
+- **Shield**: the package stages a finite 3.7 s preview with a probe Fire Bolt
+  1.2 s after release. The client holds the lifecycle by the real condition
+  and plays the hit on real interceptions. The package's separate
+  `condition_shield_retained_native` selection is the one that fits play.
+- **Effect lights**: most selections set `decorative_light_multiplier` 0; the
+  client defaults to 1.
+- **Sleep**: scale 1.0 (client 1.45), emission 0.65 s (client 1.0), opacity
+  keys and `sleep_opacity`, lights hidden in flight and cast, an `asleep`
+  recipient clip.
+- **Web**: source end 3.8 s (client 2.0, hold at 0.8), fade 0.55, opacity
+  uniform, live endpoints for both targets.
+- **Cure Wounds, Healing Word, Guidance, Resistance**: opacity keys, fades and
+  a `support_envelope` uniform. Cure Wounds, Healing Word and Guidance are
+  larger (Cure Wounds 0.62 vs 0.3). Mage Armor's held opacity 0.045 vs 0.16.
+- **Shocking Grasp**: the package puts its second cue at the hand; the client
+  puts it on the recipient's body.
+- **Smaller**: Eldritch Blast cast scale 0.16 vs 0.25; Guiding Bolt impact
+  0.28 vs 0.18; Command delay 0.15 s; Fireball area `duration_policy:
+  authored`.
+- **No package staging**: Fire Bolt, Ice Knife, Poison Spray, Ray of Frost and
+  Scorching Ray have no staging cues; True Strike has no cue for its clip.
+
+Condition lifecycles (29 `selections` with a `condition` block) are native
+only, with Factory-measured construction of 18–54 ms each. The client is
+wiring them in now; per-clip costs measured in play will be added here.
