@@ -565,6 +565,241 @@ art = Dictionary[String, String]({
 effect_parts = PackedStringArray()
 surface = SubResource("Resource_fh2u5")
 
+[sub_resource type="Resource" id="Resource_virdt"]
+script = ExtResource("3_f4mab")
+role = "movement"
+qualifier = {
+"kind": "default"
+}
+clip = "HayenaHowling"
+hidden_slots = PackedStringArray()
+playback = "loop"
+
+[sub_resource type="Resource" id="Resource_nk5rj"]
+script = ExtResource("3_f4mab")
+role = "movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "HayenaHowling"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_tw0t4"]
+script = ExtResource("3_f4mab")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "direct_arc"
+}
+clip = "HayenaHowling"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_gllar"]
+script = ExtResource("3_f4mab")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "connector_transfer"
+}
+clip = "HayenaHowling"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_08khp"]
+script = ExtResource("3_f4mab")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "direct_arc"
+}
+clip = "HayenaHowling"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_51rh0"]
+script = ExtResource("3_f4mab")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "connector_transfer"
+}
+clip = "HayenaHowling"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_p0mng"]
+script = ExtResource("3_f4mab")
+role = "shove"
+qualifier = {
+"kind": "default"
+}
+clip = "HayenaHowling"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 6.0,
+"name": "contact"
+}]
+
+[sub_resource type="Resource" id="Resource_b7e3m"]
+script = ExtResource("3_f4mab")
+role = "forced_movement"
+qualifier = {
+"kind": "default"
+}
+clip = "HayenaHowling"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 5.0,
+"name": "brace"
+}]
+
+[sub_resource type="Resource" id="Resource_ub753"]
+script = ExtResource("3_f4mab")
+role = "forced_movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "HayenaHowling"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_tms5f"]
+script = ExtResource("3_f4mab")
+role = "body_action"
+qualifier = {
+"kind": "default"
+}
+clip = "HayenaHowling"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_ec847"]
+script = ExtResource("3_f4mab")
+role = "body_action_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "HayenaHowling"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_gvoyf"]
+script = ExtResource("3_f4mab")
+role = "equipment"
+qualifier = {
+"kind": "default"
+}
+clip = "HayenaHowling"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_oc0td"]
+script = ExtResource("3_f4mab")
+role = "healing"
+qualifier = {
+"kind": "default"
+}
+clip = "HayenaHowling"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_5g2oj"]
+script = ExtResource("3_f4mab")
+role = "save_avoidance"
+qualifier = {
+"kind": "default"
+}
+clip = "HayenaHowling"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_82tkc"]
+script = ExtResource("3_f4mab")
+role = "condition_entry"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "HayenaHowling"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_pqfh2"]
+script = ExtResource("3_f4mab")
+role = "condition_hold"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "HayenaHowling"
+hidden_slots = PackedStringArray()
+playback = "final_rest"
+rest_frame = 14
+
+[sub_resource type="Resource" id="Resource_eveup"]
+script = ExtResource("3_f4mab")
+role = "condition_exit"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "HayenaHowling"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+reversed = true
+
+[sub_resource type="Resource" id="Resource_dyfhi"]
+script = ExtResource("3_f4mab")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "flying",
+"trajectory": "path"
+}
+clip = "HayenaHowling"
+hidden_slots = PackedStringArray()
+playback = "once"
+frame_keys = [[0.0, 0.0], [1.0, 0.0]]
+
+[sub_resource type="Resource" id="Resource_okld4"]
+script = ExtResource("3_f4mab")
+role = "death"
+qualifier = {
+"kind": "default"
+}
+clip = "HayenaHowling"
+hidden_slots = PackedStringArray()
+playback = "once"
+
 [resource]
 script = ExtResource("4_uftnp")
 id = "smallscale.animals.hayena"
@@ -581,6 +816,30 @@ slot_categories = Dictionary[String, PackedStringArray]({
 })
 excluded_categories = PackedStringArray()
 clips = Array[ExtResource("1_wdv1d")]([SubResource("Resource_xychs"), SubResource("Resource_mmn4h"), SubResource("Resource_8js1p"), SubResource("Resource_hkb3s"), SubResource("Resource_3a0yo"), SubResource("Resource_7usk6"), SubResource("Resource_0i468"), SubResource("Resource_3cxcp"), SubResource("Resource_70gs7"), SubResource("Resource_xvdjk"), SubResource("Resource_pleiw"), SubResource("Resource_dbr7b"), SubResource("Resource_y58gd"), SubResource("Resource_p37d0")])
+fallbacks = Dictionary[String, String]({
+"Attack1": "HayenaHowling",
+"Attack2": "HayenaHowling",
+"Attack3": "HayenaHowling",
+"Attack4": "HayenaHowling",
+"Attack5": "HayenaHowling",
+"Attack6": "HayenaHowling",
+"AttackRun": "HayenaHowling",
+"CrouchWalk": "HayenaHowling",
+"Death": "HayenaHowling",
+"Die": "HayenaHowling",
+"Idle": "HayenaHowling",
+"Idle2": "HayenaHowling",
+"Idle4": "HayenaHowling",
+"Kick": "HayenaHowling",
+"Rolling": "HayenaHowling",
+"Run": "HayenaHowling",
+"Special1": "HayenaHowling",
+"TakeDamage": "HayenaHowling",
+"Taunt": "HayenaHowling",
+"Walk": "HayenaHowling"
+})
+contexts = Array[ExtResource("3_f4mab")]([SubResource("Resource_virdt"), SubResource("Resource_nk5rj"), SubResource("Resource_tw0t4"), SubResource("Resource_gllar"), SubResource("Resource_08khp"), SubResource("Resource_51rh0"), SubResource("Resource_p0mng"), SubResource("Resource_b7e3m"), SubResource("Resource_ub753"), SubResource("Resource_tms5f"), SubResource("Resource_ec847"), SubResource("Resource_gvoyf"), SubResource("Resource_oc0td"), SubResource("Resource_5g2oj"), SubResource("Resource_82tkc"), SubResource("Resource_pqfh2"), SubResource("Resource_eveup"), SubResource("Resource_dyfhi"), SubResource("Resource_okld4")])
 hold_clips = PackedStringArray()
 status = "partial"
-notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed."
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed.
+Stand-in clips: Idle -> HayenaHowling, Idle2 -> HayenaHowling, Idle4 -> HayenaHowling, Run -> HayenaHowling, Walk -> HayenaHowling, TakeDamage -> HayenaHowling, Die -> HayenaHowling, Death -> HayenaHowling, Taunt -> HayenaHowling, Rolling -> HayenaHowling, CrouchWalk -> HayenaHowling, Attack1 -> HayenaHowling, Attack2 -> HayenaHowling, Attack3 -> HayenaHowling, Attack4 -> HayenaHowling, AttackRun -> HayenaHowling, Kick -> HayenaHowling, Special1 -> HayenaHowling, Attack5 -> HayenaHowling, Attack6 -> HayenaHowling."

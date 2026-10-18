@@ -5,6 +5,15 @@
 [resource]
 script = ExtResource("1_scc1w")
 id = "creature.skeleton_warlock"
+rig = "smallscale.undead.8necromancer"
+portrait = "undead--8necromancer"
 size = "Medium"
-status = "missing"
-notes = "No rig: the game has no body for this creature."
+reactions = Dictionary[String, String]({
+"block": "Block"
+})
+death = Dictionary[String, String]({
+"default": "Die"
+})
+status = "stand_in"
+notes = "No art of its own: stands in with the undead pack's 8Necromancer (rig smallscale.undead.8necromancer).
+Portrait stand-in: undead--8necromancer (no portrait of its own)."

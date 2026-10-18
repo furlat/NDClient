@@ -5,6 +5,15 @@
 [resource]
 script = ExtResource("1_rwkm4")
 id = "creature.skeleton"
+rig = "smallscale.undead.6warrior"
+portrait = "undead--6warrior"
 size = "Medium"
-status = "missing"
-notes = "No rig: the game has no body for this creature."
+reactions = Dictionary[String, String]({
+"block": "Block"
+})
+death = Dictionary[String, String]({
+"default": "Die"
+})
+status = "stand_in"
+notes = "No art of its own: stands in with the undead pack's 6Warrior (rig smallscale.undead.6warrior).
+Portrait stand-in: undead--6warrior (no portrait of its own)."

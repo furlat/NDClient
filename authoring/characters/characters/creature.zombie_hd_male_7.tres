@@ -5,7 +5,13 @@
 [resource]
 script = ExtResource("1_plwme")
 id = "creature.zombie_hd_male_7"
+rig = "smallscale.zombies-hd.zombiemale7"
+portrait = "hdz--zombiemale7"
 size = "Medium"
-status = "missing"
-notes = "Delivered art: zombies-hd/ZombieMale7 (rig smallscale.zombies-hd.zombiemale7), not bound to this creature yet.
+death = Dictionary[String, String]({
+"default": "Death"
+})
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed.
+Stand-in clips: Idle4 -> Idle2, Rolling -> Run, AttackRun -> Attack1, Kick -> Attack1, Special1 -> Attack4, Attack6 -> Attack5.
 Roster: Green Vest, Y128, kit Slam; UF."

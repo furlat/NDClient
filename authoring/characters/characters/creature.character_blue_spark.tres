@@ -5,7 +5,16 @@
 [resource]
 script = ExtResource("1_61647")
 id = "creature.character_blue_spark"
+rig = "smallscale.characters.9longbow"
+portrait = "character--9longbow"
 size = "Medium"
-status = "missing"
-notes = "Delivered art: characters/9Longbow (rig smallscale.characters.9longbow), not bound to this creature yet.
+reactions = Dictionary[String, String]({
+"block": "Block"
+})
+death = Dictionary[String, String]({
+"default": "Die"
+})
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed.
+Stand-in clips: Idle4 -> Idle2, Death -> Die, Taunt -> Idle2, Attack4 -> Attack3, Attack5 -> CastSpell, Attack6 -> CastSpell.
 Roster: Blue-spark Arc Marksman, Y128, kit Longbow (2)."

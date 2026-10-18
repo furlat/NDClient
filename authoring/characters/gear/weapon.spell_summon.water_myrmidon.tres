@@ -1,11 +1,20 @@
 [gd_resource type="Resource" script_class="PresentationGear" format=3]
 
-[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="1_vjjes"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_dcibf"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_xo1ne"]
+
+[sub_resource type="Resource" id="Resource_17w6y"]
+script = ExtResource("1_dcibf")
+path = "art/ui-delivery-20261018/runtime/smooth48/srd22.form.water_myrmidon.png"
+native_size = Vector2i(48, 48)
+reuses = "srd22.form.water_myrmidon"
+source = "ui-delivery-20261018"
 
 [resource]
-script = ExtResource("1_vjjes")
+script = ExtResource("2_xo1ne")
 id = "weapon.spell_summon.water_myrmidon"
 kind = "weapon"
+icon = SubResource("Resource_17w6y")
 natural = true
 status = "internal"
 notes = "Natural or summoned: drawn by the creature's own body."

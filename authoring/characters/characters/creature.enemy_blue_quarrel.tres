@@ -5,7 +5,13 @@
 [resource]
 script = ExtResource("1_j1vc4")
 id = "creature.enemy_blue_quarrel"
+rig = "smallscale.enemies.2shooter"
+portrait = "enemy--2shooter"
 size = "Medium"
-status = "missing"
-notes = "Delivered art: enemies/2Shooter (rig smallscale.enemies.2shooter), not bound to this creature yet.
+death = Dictionary[String, String]({
+"default": "Die"
+})
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed.
+Stand-in clips: Idle4 -> Idle2, Death -> Die, Rolling -> Run, CrouchWalk -> Walk, AttackRun -> Attack1, Kick -> Attack1, Special1 -> Attack4, Attack5 -> Attack4, Attack6 -> Attack4.
 Roster: Blue Quarrel, Y128, kit Musket shot; ASN; Warden's Pack."

@@ -5,6 +5,12 @@
 [resource]
 script = ExtResource("1_oso28")
 id = "creature.ghoul"
+rig = "smallscale.zombies-top-down.zombie-decay-02"
+portrait = "top--zombie-decay-02"
 size = "Medium"
-status = "missing"
-notes = "No rig: the game has no body for this creature."
+death = Dictionary[String, String]({
+"default": "Die"
+})
+status = "stand_in"
+notes = "No art of its own: stands in with a decayed zombie (rig smallscale.zombies-top-down.zombie-decay-02).
+Portrait stand-in: top--zombie-decay-02 (no portrait of its own)."

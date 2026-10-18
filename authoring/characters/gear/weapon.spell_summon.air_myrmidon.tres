@@ -1,11 +1,20 @@
 [gd_resource type="Resource" script_class="PresentationGear" format=3]
 
-[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="1_52dno"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_on45p"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_ehuld"]
+
+[sub_resource type="Resource" id="Resource_r0e6y"]
+script = ExtResource("1_on45p")
+path = "art/ui-delivery-20261018/runtime/smooth48/srd22.form.air_myrmidon.png"
+native_size = Vector2i(48, 48)
+reuses = "srd22.form.air_myrmidon"
+source = "ui-delivery-20261018"
 
 [resource]
-script = ExtResource("1_52dno")
+script = ExtResource("2_ehuld")
 id = "weapon.spell_summon.air_myrmidon"
 kind = "weapon"
+icon = SubResource("Resource_r0e6y")
 natural = true
 status = "internal"
 notes = "Natural or summoned: drawn by the creature's own body."

@@ -5,8 +5,14 @@
 [resource]
 script = ExtResource("1_2fto4")
 id = "creature.enemy_gold_knuckle"
+rig = "smallscale.enemies.5bruiser"
+portrait = "enemy--5bruiser"
 size = "Medium"
 size_note = "192 px cells on a Medium creature."
-status = "missing"
-notes = "Delivered art: enemies/5Bruiser (rig smallscale.enemies.5bruiser), not bound to this creature yet.
+death = Dictionary[String, String]({
+"default": "Die"
+})
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed.
+Stand-in clips: Idle4 -> Idle2, Death -> Die, Rolling -> Run, CrouchWalk -> Walk, AttackRun -> Attack1, Kick -> Attack1, Special1 -> Attack4, Attack5 -> Attack4, Attack6 -> Attack4.
 Roster: Gold-knuckle Breaker, Y192, kit Unarmed d8+4 (3); Brave."

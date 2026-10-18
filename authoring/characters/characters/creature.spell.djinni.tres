@@ -5,6 +5,14 @@
 [resource]
 script = ExtResource("1_s6nib")
 id = "creature.spell.djinni"
+rig = "smallscale.characters.6mage"
+portrait = "srd22.portrait.djinni"
 size = "Medium"
-status = "missing"
-notes = "Spell summon: no delivered sheets."
+reactions = Dictionary[String, String]({
+"block": "Block"
+})
+death = Dictionary[String, String]({
+"default": "Die"
+})
+status = "stand_in"
+notes = "No art of its own: stands in with the characters pack's 6Mage (rig smallscale.characters.6mage)."

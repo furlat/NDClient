@@ -5,6 +5,11 @@
 [resource]
 script = ExtResource("1_b1wn1")
 id = "creature.spell.draconic_spirit"
+rig = "smallscale.dinosaurs.elite-armored-t-rex"
+portrait = "srd22.portrait.draconic_spirit"
 size = "Large"
-status = "missing"
-notes = "Spell summon: no delivered sheets."
+death = Dictionary[String, String]({
+"default": "Die"
+})
+status = "stand_in"
+notes = "No art of its own: stands in with an armoured dinosaur (rig smallscale.dinosaurs.elite-armored-t-rex)."

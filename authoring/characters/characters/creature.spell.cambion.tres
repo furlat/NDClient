@@ -5,6 +5,14 @@
 [resource]
 script = ExtResource("1_pyp50")
 id = "creature.spell.cambion"
+rig = "smallscale.demonelite01"
+portrait = "srd22.portrait.cambion"
 size = "Medium"
-status = "missing"
-notes = "Spell summon: no delivered sheets."
+reactions = Dictionary[String, String]({
+"block": "Block"
+})
+death = Dictionary[String, String]({
+"default": "Death"
+})
+status = "stand_in"
+notes = "No art of its own: stands in with a demon elite (rig smallscale.demonelite01)."

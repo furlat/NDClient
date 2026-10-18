@@ -1,10 +1,18 @@
 [gd_resource type="Resource" script_class="PresentationGear" format=3]
 
-[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="1_yeiv7"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_a8h4i"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_oleeg"]
+
+[sub_resource type="Resource" id="Resource_hohwn"]
+script = ExtResource("1_a8h4i")
+path = "art/ui-delivery-20261018/runtime/smooth48/item.bg3_36.goodberry.png"
+native_size = Vector2i(48, 48)
+source = "ui-delivery-20261018"
 
 [resource]
-script = ExtResource("1_yeiv7")
+script = ExtResource("2_oleeg")
 id = "consumable.goodberry"
 kind = "usable"
-status = "missing"
+icon = SubResource("Resource_hohwn")
+status = "partial"
 notes = "No worn look authored."

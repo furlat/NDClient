@@ -5,6 +5,14 @@
 [resource]
 script = ExtResource("1_akav6")
 id = "creature.spell.deva"
+rig = "smallscale.characters.4paladin"
+portrait = "srd22.portrait.deva"
 size = "Medium"
-status = "missing"
-notes = "Spell summon: no delivered sheets."
+reactions = Dictionary[String, String]({
+"block": "Block"
+})
+death = Dictionary[String, String]({
+"default": "Die"
+})
+status = "stand_in"
+notes = "No art of its own: stands in with the characters pack's 4Paladin (rig smallscale.characters.4paladin)."

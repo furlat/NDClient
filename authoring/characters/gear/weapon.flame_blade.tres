@@ -1,10 +1,18 @@
 [gd_resource type="Resource" script_class="PresentationGear" format=3]
 
-[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="1_0yox1"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_olx2d"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_jayge"]
+
+[sub_resource type="Resource" id="Resource_26ro0"]
+script = ExtResource("1_olx2d")
+path = "art/ui-delivery-20261018/runtime/smooth48/item.bg3_36.flame_blade.png"
+native_size = Vector2i(48, 48)
+source = "ui-delivery-20261018"
 
 [resource]
-script = ExtResource("1_0yox1")
+script = ExtResource("2_jayge")
 id = "weapon.flame_blade"
 kind = "weapon"
-status = "missing"
+icon = SubResource("Resource_26ro0")
+status = "partial"
 notes = "No worn look authored."

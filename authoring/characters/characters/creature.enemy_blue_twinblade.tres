@@ -5,7 +5,13 @@
 [resource]
 script = ExtResource("1_hu24r")
 id = "creature.enemy_blue_twinblade"
+rig = "smallscale.enemies.4assassin"
+portrait = "enemy--4assassin"
 size = "Medium"
-status = "missing"
-notes = "Delivered art: enemies/4Assassin (rig smallscale.enemies.4assassin), not bound to this creature yet.
+death = Dictionary[String, String]({
+"default": "Die"
+})
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed.
+Stand-in clips: Idle4 -> Idle2, Death -> Die, Rolling -> Run, CrouchWalk -> Walk, AttackRun -> Attack1, Kick -> Attack1, Special1 -> Attack4, Attack5 -> Attack4, Attack6 -> Attack4.
 Roster: Blue Twinblade Poisoner, Y128, kit Shortsword x2 (1+1); ASN."

@@ -194,3 +194,44 @@ const STAND_INS := {
 }
 ## Spell objects the server models as creatures: drawn by their spell's effect, not a body.
 const EFFECT_BODIES := ["creature.spell.flaming_sphere", "creature.spell.spiritual_weapon"]
+## Item icons the UI bank keyed by another name, the 18 Oct delivery added, or
+## that stand in: item id -> [path under assets/, "art" | "reuse" | "stand_in"].
+const ITEM_ICONS := {
+    "consumable.goodberry": ["art/ui-delivery-20261018/runtime/smooth48/item.bg3_36.goodberry.png", "art"],
+    "weapon.flame_blade": ["art/ui-delivery-20261018/runtime/smooth48/item.bg3_36.flame_blade.png", "art"],
+    "spell_payload.delayed_fireball": ["art/ui-delivery-20261018/runtime/smooth48/srd22.item.delayed_blast_bead.png", "art"],
+    "spell_payload.freezing_sphere": ["art/ui-delivery-20261018/runtime/smooth48/srd22.item.freezing_sphere.png", "art"],
+    "spell_construction.forcecage.section": ["art/ui-delivery-20261018/runtime/smooth48/srd22.choice.forcecage.box.png", "art"],
+    "spell_construction.force.section": ["art/media/ui/icons/smooth48/spell.wall_of_force.png", "reuse"],
+    "spell_construction.ice.section": ["art/media/ui/icons/smooth48/spell.wall_of_ice.png", "reuse"],
+    "spell_construction.stone.section": ["art/media/ui/icons/smooth48/spell.wall_of_stone.png", "reuse"],
+    "consumable.weapon_coat.assassin_poison": ["art/media/ui/icons/smooth48/item.weapon-coat.png", "reuse"],
+    "weapon.devotees_mace": ["art/media/ui/icons/smooth48/item.mace.png", "reuse"],
+    "weapon.roster.silver_longsword": ["art/media/ui/icons/smooth48/item.longsword.png", "reuse"],
+    "weapon.creature.arcane_sentinel_slam": ["art/media/ui/icons/smooth48/item.slam.png", "reuse"],
+    "weapon.creature.wing_regent_devil_claws": ["art/media/ui/icons/smooth48/item.claws.png", "reuse"],
+    "armor.creature.arcane_sentinel_natural": ["art/media/ui/icons/smooth48/item.natural-armor.png", "reuse"],
+    "weapon.spell_summon.air_elemental": ["art/ui-delivery-20261018/runtime/smooth48/srd22.form.air_elemental.png", "reuse"],
+    "weapon.spell_summon.air_myrmidon": ["art/ui-delivery-20261018/runtime/smooth48/srd22.form.air_myrmidon.png", "reuse"],
+    "weapon.spell_summon.deva": ["art/ui-delivery-20261018/runtime/smooth48/srd22.form.deva.png", "reuse"],
+    "weapon.spell_summon.djinni": ["art/ui-delivery-20261018/runtime/smooth48/srd22.form.djinni.png", "reuse"],
+    "weapon.spell_summon.draconic_spirit": ["art/ui-delivery-20261018/runtime/smooth48/srd22.creature_action.draconic_rend.png", "reuse"],
+    "weapon.spell_summon.earth_elemental": ["art/ui-delivery-20261018/runtime/smooth48/srd22.creature_action.soil_clogged_slam.png", "reuse"],
+    "weapon.spell_summon.earth_myrmidon": ["art/ui-delivery-20261018/runtime/smooth48/srd22.form.earth_myrmidon.png", "reuse"],
+    "weapon.spell_summon.fire_elemental": ["art/ui-delivery-20261018/runtime/smooth48/srd22.form.fire_elemental.png", "reuse"],
+    "weapon.spell_summon.fire_myrmidon": ["art/ui-delivery-20261018/runtime/smooth48/srd22.form.fire_myrmidon.png", "reuse"],
+    "weapon.spell_summon.water_elemental": ["art/ui-delivery-20261018/runtime/smooth48/srd22.creature_action.water_slam.png", "reuse"],
+    "weapon.spell_summon.water_myrmidon": ["art/ui-delivery-20261018/runtime/smooth48/srd22.form.water_myrmidon.png", "reuse"],
+    "tool.crowbar": ["art/media/ui/icons/smooth48/item.field-kit.png", "stand_in"],
+    "tool.banner": ["art/media/ui/icons/smooth48/item.field-kit.png", "stand_in"],
+    "gear.saddle": ["art/media/ui/icons/smooth48/item.field-kit.png", "stand_in"],
+}
+const UNARMED_ICON := "art/ui-delivery-20261018/runtime/smooth48/item.unarmed.png"
+## Portraits that stand in for creatures without one: humanoids drawn by the
+## layered rig show a player portrait of their calling.
+const PORTRAIT_STAND_INS := {"acolyte": "cleric--human-white--male", "priest": "cleric--human-white--male", "mage": "wizard--human-white--male",
+    "generic_caster": "sorcerer--human-white--male", "cultist": "warlock--human-white--male", "cult_fanatic": "warlock--human-white--male",
+    "bandit": "rogue--human-white--male", "bandit_captain": "rogue--human-white--male", "spy": "rogue--human-white--male", "thug": "rogue--human-white--male",
+    "scout": "ranger--human-white--male", "berserker": "barbarian--human-white--male", "tribal_warrior": "barbarian--human-white--male",
+    "guard": "fighter--human-white--male", "knight": "paladin--human-white--male", "veteran": "fighter--human-white--male", "commoner": "monk--human-white--male",
+    "spell.flaming_sphere": "srd22.portrait.fire_elemental", "spell.spiritual_weapon": "cleric--human-white--male"}

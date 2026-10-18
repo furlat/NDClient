@@ -1274,6 +1274,241 @@ art = Dictionary[String, String]({
 effect_parts = PackedStringArray()
 surface = SubResource("Resource_sc0yu")
 
+[sub_resource type="Resource" id="Resource_2y1mh"]
+script = ExtResource("3_oaatt")
+role = "movement"
+qualifier = {
+"kind": "default"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+playback = "loop"
+
+[sub_resource type="Resource" id="Resource_1mew4"]
+script = ExtResource("3_oaatt")
+role = "movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_s1drj"]
+script = ExtResource("3_oaatt")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "direct_arc"
+}
+clip = "Rolling"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_cbxjp"]
+script = ExtResource("3_oaatt")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "connector_transfer"
+}
+clip = "CrouchWalk"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_ifdcm"]
+script = ExtResource("3_oaatt")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "direct_arc"
+}
+clip = "Rolling"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_fp0gv"]
+script = ExtResource("3_oaatt")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "connector_transfer"
+}
+clip = "CrouchWalk"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_jqog0"]
+script = ExtResource("3_oaatt")
+role = "shove"
+qualifier = {
+"kind": "default"
+}
+clip = "Attack2"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 6.0,
+"name": "contact"
+}]
+
+[sub_resource type="Resource" id="Resource_behx6"]
+script = ExtResource("3_oaatt")
+role = "forced_movement"
+qualifier = {
+"kind": "default"
+}
+clip = "TakeDamage"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 5.0,
+"name": "brace"
+}]
+
+[sub_resource type="Resource" id="Resource_3tyit"]
+script = ExtResource("3_oaatt")
+role = "forced_movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_vvmvm"]
+script = ExtResource("3_oaatt")
+role = "body_action"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_833wh"]
+script = ExtResource("3_oaatt")
+role = "body_action_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_143rp"]
+script = ExtResource("3_oaatt")
+role = "equipment"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_x6e0y"]
+script = ExtResource("3_oaatt")
+role = "healing"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_tbwev"]
+script = ExtResource("3_oaatt")
+role = "save_avoidance"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_gdwrh"]
+script = ExtResource("3_oaatt")
+role = "condition_entry"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_a1k6s"]
+script = ExtResource("3_oaatt")
+role = "condition_hold"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+hidden_slots = PackedStringArray()
+playback = "final_rest"
+rest_frame = 14
+
+[sub_resource type="Resource" id="Resource_8dl1b"]
+script = ExtResource("3_oaatt")
+role = "condition_exit"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+reversed = true
+
+[sub_resource type="Resource" id="Resource_6mi4w"]
+script = ExtResource("3_oaatt")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "flying",
+"trajectory": "path"
+}
+clip = "Idle"
+hidden_slots = PackedStringArray()
+playback = "once"
+frame_keys = [[0.0, 0.0], [1.0, 0.0]]
+
+[sub_resource type="Resource" id="Resource_8egi5"]
+script = ExtResource("3_oaatt")
+role = "death"
+qualifier = {
+"kind": "default"
+}
+clip = "Die"
+hidden_slots = PackedStringArray()
+playback = "once"
+
 [resource]
 script = ExtResource("4_x28hw")
 id = "smallscale.undead.2deathlord"
@@ -1290,6 +1525,17 @@ slot_categories = Dictionary[String, PackedStringArray]({
 })
 excluded_categories = PackedStringArray()
 clips = Array[ExtResource("1_6e47h")]([SubResource("Resource_ithva"), SubResource("Resource_fkdrb"), SubResource("Resource_xt248"), SubResource("Resource_21w0k"), SubResource("Resource_canhh"), SubResource("Resource_68gsf"), SubResource("Resource_mfhk8"), SubResource("Resource_fj8jc"), SubResource("Resource_abybv"), SubResource("Resource_4tnpy"), SubResource("Resource_3e8rj"), SubResource("Resource_grdlt"), SubResource("Resource_1qkyk"), SubResource("Resource_6f3w3"), SubResource("Resource_hkn33"), SubResource("Resource_nhilq"), SubResource("Resource_xhs4w"), SubResource("Resource_gvyrh"), SubResource("Resource_kjj8d"), SubResource("Resource_to6de"), SubResource("Resource_uyc3p"), SubResource("Resource_n5rmn"), SubResource("Resource_2o62r"), SubResource("Resource_52hm2"), SubResource("Resource_1tk12"), SubResource("Resource_sho1b"), SubResource("Resource_njlyg"), SubResource("Resource_3vw0i"), SubResource("Resource_jnse6"), SubResource("Resource_desld"), SubResource("Resource_c2gat")])
+fallbacks = Dictionary[String, String]({
+"Attack4": "Attack3",
+"Attack5": "CastSpell",
+"Attack6": "CastSpell",
+"Death": "Die",
+"Idle4": "Idle2",
+"Kick": "Attack1",
+"Taunt": "Idle2"
+})
+contexts = Array[ExtResource("3_oaatt")]([SubResource("Resource_2y1mh"), SubResource("Resource_1mew4"), SubResource("Resource_s1drj"), SubResource("Resource_cbxjp"), SubResource("Resource_ifdcm"), SubResource("Resource_fp0gv"), SubResource("Resource_jqog0"), SubResource("Resource_behx6"), SubResource("Resource_3tyit"), SubResource("Resource_vvmvm"), SubResource("Resource_833wh"), SubResource("Resource_143rp"), SubResource("Resource_x6e0y"), SubResource("Resource_tbwev"), SubResource("Resource_gdwrh"), SubResource("Resource_a1k6s"), SubResource("Resource_8dl1b"), SubResource("Resource_6mi4w"), SubResource("Resource_8egi5")])
 hold_clips = PackedStringArray("Die")
 status = "partial"
-notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed."
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed.
+Stand-in clips: Idle4 -> Idle2, Death -> Die, Taunt -> Idle2, Attack4 -> Attack3, Kick -> Attack1, Attack5 -> CastSpell, Attack6 -> CastSpell."

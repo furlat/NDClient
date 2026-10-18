@@ -5,6 +5,11 @@
 [resource]
 script = ExtResource("1_412pm")
 id = "creature.spell.earth_myrmidon"
+rig = "smallscale.enemies.11arcane-elemental"
+portrait = "srd22.portrait.earth_myrmidon"
 size = "Medium"
-status = "missing"
-notes = "Spell summon: no delivered sheets."
+death = Dictionary[String, String]({
+"default": "Die"
+})
+status = "stand_in"
+notes = "No art of its own: stands in with the arcane elemental (rig smallscale.enemies.11arcane-elemental)."

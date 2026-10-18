@@ -5,7 +5,16 @@
 [resource]
 script = ExtResource("1_o4cvg")
 id = "creature.rod_mote_devil"
+rig = "smallscale.imp09"
+portrait = "demons--imp-9"
 size = "Small"
-status = "missing"
-notes = "Delivered art: demons/Imp 9 (rig smallscale.imp09), not bound to this creature yet.
+reactions = Dictionary[String, String]({
+"block": "Block"
+})
+death = Dictionary[String, String]({
+"default": "Death"
+})
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed.
+Stand-in clips: Idle2 -> Idle, Idle4 -> Idle, Kick -> Attack1, Special1 -> Attack4.
 Roster: Rod Mote Devil, Y128 caster, kit Quarterstaff+Dagger; Eldritch Blast (1 beam); Grease 3; Bane 1."

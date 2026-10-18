@@ -992,6 +992,241 @@ effect_layers = Dictionary[String, bool]({
 effect_parts = PackedStringArray()
 surface = SubResource("Resource_syiij")
 
+[sub_resource type="Resource" id="Resource_m8e0y"]
+script = ExtResource("3_fi5wm")
+role = "movement"
+qualifier = {
+"kind": "default"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+playback = "loop"
+
+[sub_resource type="Resource" id="Resource_xi8vn"]
+script = ExtResource("3_fi5wm")
+role = "movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Attack1"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_8q4cr"]
+script = ExtResource("3_fi5wm")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "direct_arc"
+}
+clip = "Rolling"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_q8ug1"]
+script = ExtResource("3_fi5wm")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "connector_transfer"
+}
+clip = "CrouchWalk"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_y3ey7"]
+script = ExtResource("3_fi5wm")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "direct_arc"
+}
+clip = "Rolling"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_k1n8g"]
+script = ExtResource("3_fi5wm")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "connector_transfer"
+}
+clip = "CrouchWalk"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_yy42d"]
+script = ExtResource("3_fi5wm")
+role = "shove"
+qualifier = {
+"kind": "default"
+}
+clip = "Attack2"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 6.0,
+"name": "contact"
+}]
+
+[sub_resource type="Resource" id="Resource_admh5"]
+script = ExtResource("3_fi5wm")
+role = "forced_movement"
+qualifier = {
+"kind": "default"
+}
+clip = "TakeDamage"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 5.0,
+"name": "brace"
+}]
+
+[sub_resource type="Resource" id="Resource_7ri78"]
+script = ExtResource("3_fi5wm")
+role = "forced_movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Attack1"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_xc2ky"]
+script = ExtResource("3_fi5wm")
+role = "body_action"
+qualifier = {
+"kind": "default"
+}
+clip = "Attack1"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_gyllx"]
+script = ExtResource("3_fi5wm")
+role = "body_action_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Attack1"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_yfhrx"]
+script = ExtResource("3_fi5wm")
+role = "equipment"
+qualifier = {
+"kind": "default"
+}
+clip = "Attack1"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_34cnt"]
+script = ExtResource("3_fi5wm")
+role = "healing"
+qualifier = {
+"kind": "default"
+}
+clip = "Attack1"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_7q6q2"]
+script = ExtResource("3_fi5wm")
+role = "save_avoidance"
+qualifier = {
+"kind": "default"
+}
+clip = "Attack1"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_424ws"]
+script = ExtResource("3_fi5wm")
+role = "condition_entry"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_2k8b0"]
+script = ExtResource("3_fi5wm")
+role = "condition_hold"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+hidden_slots = PackedStringArray()
+playback = "final_rest"
+rest_frame = 14
+
+[sub_resource type="Resource" id="Resource_h1c06"]
+script = ExtResource("3_fi5wm")
+role = "condition_exit"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+reversed = true
+
+[sub_resource type="Resource" id="Resource_gvlwj"]
+script = ExtResource("3_fi5wm")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "flying",
+"trajectory": "path"
+}
+clip = "Attack1"
+hidden_slots = PackedStringArray()
+playback = "once"
+frame_keys = [[0.0, 0.0], [1.0, 0.0]]
+
+[sub_resource type="Resource" id="Resource_kycy7"]
+script = ExtResource("3_fi5wm")
+role = "death"
+qualifier = {
+"kind": "default"
+}
+clip = "Death"
+hidden_slots = PackedStringArray()
+playback = "once"
+
 [resource]
 script = ExtResource("4_h8ghf")
 id = "smallscale.imp07"
@@ -1009,6 +1244,17 @@ slot_categories = Dictionary[String, PackedStringArray]({
 })
 excluded_categories = PackedStringArray()
 clips = Array[ExtResource("1_rdgdm")]([SubResource("Resource_4ckbm"), SubResource("Resource_2tqi2"), SubResource("Resource_00j30"), SubResource("Resource_18dsm"), SubResource("Resource_2ybjr"), SubResource("Resource_k6p40"), SubResource("Resource_r62ta"), SubResource("Resource_xe735"), SubResource("Resource_b8acv"), SubResource("Resource_gxjhn"), SubResource("Resource_pawo3"), SubResource("Resource_d5mfv"), SubResource("Resource_iutvu"), SubResource("Resource_74uxa"), SubResource("Resource_nj8ja"), SubResource("Resource_e7xj8"), SubResource("Resource_xwi1a"), SubResource("Resource_iej1q"), SubResource("Resource_m6hu7"), SubResource("Resource_jlbqh"), SubResource("Resource_8e37x")])
+fallbacks = Dictionary[String, String]({
+"Attack5": "Attack4",
+"Attack6": "Attack4",
+"Idle": "Attack1",
+"Idle2": "Attack1",
+"Idle4": "Attack1",
+"Kick": "Attack1",
+"Special1": "Attack4"
+})
+contexts = Array[ExtResource("3_fi5wm")]([SubResource("Resource_m8e0y"), SubResource("Resource_xi8vn"), SubResource("Resource_8q4cr"), SubResource("Resource_q8ug1"), SubResource("Resource_y3ey7"), SubResource("Resource_k1n8g"), SubResource("Resource_yy42d"), SubResource("Resource_admh5"), SubResource("Resource_7ri78"), SubResource("Resource_xc2ky"), SubResource("Resource_gyllx"), SubResource("Resource_yfhrx"), SubResource("Resource_34cnt"), SubResource("Resource_7q6q2"), SubResource("Resource_424ws"), SubResource("Resource_2k8b0"), SubResource("Resource_h1c06"), SubResource("Resource_gvlwj"), SubResource("Resource_kycy7")])
 hold_clips = PackedStringArray("Die", "Death", "ExplodeCopy")
 status = "partial"
-notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed."
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed.
+Stand-in clips: Idle -> Attack1, Idle2 -> Attack1, Idle4 -> Attack1, Kick -> Attack1, Special1 -> Attack4, Attack5 -> Attack4, Attack6 -> Attack4."

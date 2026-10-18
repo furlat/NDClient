@@ -1,11 +1,20 @@
 [gd_resource type="Resource" script_class="PresentationGear" format=3]
 
-[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="1_5fbvj"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_5nlgf"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_gng8p"]
+
+[sub_resource type="Resource" id="Resource_plog7"]
+script = ExtResource("1_5nlgf")
+path = "art/ui-delivery-20261018/runtime/smooth48/srd22.creature_action.water_slam.png"
+native_size = Vector2i(48, 48)
+reuses = "srd22.creature_action.water_slam"
+source = "ui-delivery-20261018"
 
 [resource]
-script = ExtResource("1_5fbvj")
+script = ExtResource("2_gng8p")
 id = "weapon.spell_summon.water_elemental"
 kind = "weapon"
+icon = SubResource("Resource_plog7")
 natural = true
 status = "internal"
 notes = "Natural or summoned: drawn by the creature's own body."

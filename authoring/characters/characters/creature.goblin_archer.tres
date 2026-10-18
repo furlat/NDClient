@@ -5,6 +5,64 @@
 [resource]
 script = ExtResource("1_htuur")
 id = "creature.goblin_archer"
+rig = "smallscale.goblin03"
+portrait = "creature.goblin_reedshot"
 size = "Small"
-status = "missing"
-notes = "No rig: the game has no body for this creature."
+attacks = Array[Dictionary]([{
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.attack",
+"variant": "goblin03-physical"
+}, {
+"clip": "Attack1",
+"delivery": "projectile",
+"recipe": "action.attack",
+"release": 11,
+"variant": "goblin03-ranged"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "goblin03-physical"
+}, {
+"clip": "Attack1",
+"delivery": "projectile",
+"recipe": "action.class.barbarian.frenzied_strike",
+"release": 11,
+"variant": "goblin03-ranged"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.feature.extra_attack",
+"variant": "goblin03-physical"
+}, {
+"clip": "Attack1",
+"delivery": "projectile",
+"recipe": "action.feature.extra_attack",
+"release": 11,
+"variant": "goblin03-ranged"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+"recipe": "reaction.opportunity_attack",
+"variant": "goblin03-physical"
+}, {
+"clip": "Attack1",
+"delivery": "projectile",
+"recipe": "reaction.opportunity_attack",
+"release": 11,
+"variant": "goblin03-ranged"
+}])
+reactions = Dictionary[String, String]({
+"block": "Block"
+})
+death = Dictionary[String, String]({
+"default": "Death"
+})
+status = "stand_in"
+notes = "No art of its own: stands in with the Reedshot archer goblin (rig smallscale.goblin03).
+Portrait stand-in: creature.goblin_reedshot (no portrait of its own)."

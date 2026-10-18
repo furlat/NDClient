@@ -855,6 +855,241 @@ art = Dictionary[String, String]({
 effect_parts = PackedStringArray()
 surface = SubResource("Resource_q4vlr")
 
+[sub_resource type="Resource" id="Resource_41oki"]
+script = ExtResource("3_62vim")
+role = "movement"
+qualifier = {
+"kind": "default"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+playback = "loop"
+
+[sub_resource type="Resource" id="Resource_6yck3"]
+script = ExtResource("3_62vim")
+role = "movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Attack1"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_2hw2x"]
+script = ExtResource("3_62vim")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "direct_arc"
+}
+clip = "Rolling"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_odbbe"]
+script = ExtResource("3_62vim")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "connector_transfer"
+}
+clip = "CrouchWalk"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_p1ssf"]
+script = ExtResource("3_62vim")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "direct_arc"
+}
+clip = "Rolling"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_128pm"]
+script = ExtResource("3_62vim")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "connector_transfer"
+}
+clip = "CrouchWalk"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_d64oy"]
+script = ExtResource("3_62vim")
+role = "shove"
+qualifier = {
+"kind": "default"
+}
+clip = "Attack2"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 6.0,
+"name": "contact"
+}]
+
+[sub_resource type="Resource" id="Resource_icw7c"]
+script = ExtResource("3_62vim")
+role = "forced_movement"
+qualifier = {
+"kind": "default"
+}
+clip = "TakeDamage"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 5.0,
+"name": "brace"
+}]
+
+[sub_resource type="Resource" id="Resource_xbb6p"]
+script = ExtResource("3_62vim")
+role = "forced_movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Attack1"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_n8efc"]
+script = ExtResource("3_62vim")
+role = "body_action"
+qualifier = {
+"kind": "default"
+}
+clip = "Attack1"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_ew1e5"]
+script = ExtResource("3_62vim")
+role = "body_action_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Attack1"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_wncg3"]
+script = ExtResource("3_62vim")
+role = "equipment"
+qualifier = {
+"kind": "default"
+}
+clip = "Attack1"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_5jlv2"]
+script = ExtResource("3_62vim")
+role = "healing"
+qualifier = {
+"kind": "default"
+}
+clip = "Attack1"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_jdbyb"]
+script = ExtResource("3_62vim")
+role = "save_avoidance"
+qualifier = {
+"kind": "default"
+}
+clip = "Attack1"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_dfadp"]
+script = ExtResource("3_62vim")
+role = "condition_entry"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_f1fke"]
+script = ExtResource("3_62vim")
+role = "condition_hold"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+hidden_slots = PackedStringArray()
+playback = "final_rest"
+rest_frame = 14
+
+[sub_resource type="Resource" id="Resource_s4cx0"]
+script = ExtResource("3_62vim")
+role = "condition_exit"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+reversed = true
+
+[sub_resource type="Resource" id="Resource_boj5d"]
+script = ExtResource("3_62vim")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "flying",
+"trajectory": "path"
+}
+clip = "Attack1"
+hidden_slots = PackedStringArray()
+playback = "once"
+frame_keys = [[0.0, 0.0], [1.0, 0.0]]
+
+[sub_resource type="Resource" id="Resource_yue61"]
+script = ExtResource("3_62vim")
+role = "death"
+qualifier = {
+"kind": "default"
+}
+clip = "Death"
+hidden_slots = PackedStringArray()
+playback = "once"
+
 [resource]
 script = ExtResource("4_dvw3e")
 id = "smallscale.orc05"
@@ -872,6 +1107,17 @@ slot_categories = Dictionary[String, PackedStringArray]({
 })
 excluded_categories = PackedStringArray()
 clips = Array[ExtResource("1_5cu10")]([SubResource("Resource_75464"), SubResource("Resource_v414u"), SubResource("Resource_nqutk"), SubResource("Resource_1fm3b"), SubResource("Resource_ime73"), SubResource("Resource_vo34m"), SubResource("Resource_pxtmh"), SubResource("Resource_agnqa"), SubResource("Resource_2h0h4"), SubResource("Resource_f0oyc"), SubResource("Resource_d28fu"), SubResource("Resource_gih0t"), SubResource("Resource_ymfek"), SubResource("Resource_lopin"), SubResource("Resource_1mfr1"), SubResource("Resource_sq8r5"), SubResource("Resource_v3flk"), SubResource("Resource_ek3rb"), SubResource("Resource_wnlbu"), SubResource("Resource_f4faf")])
+fallbacks = Dictionary[String, String]({
+"Attack5": "Attack4",
+"Attack6": "Attack4",
+"Idle": "Attack1",
+"Idle2": "Attack1",
+"Idle4": "Attack1",
+"Kick": "Attack1",
+"Special1": "Attack4"
+})
+contexts = Array[ExtResource("3_62vim")]([SubResource("Resource_41oki"), SubResource("Resource_6yck3"), SubResource("Resource_2hw2x"), SubResource("Resource_odbbe"), SubResource("Resource_p1ssf"), SubResource("Resource_128pm"), SubResource("Resource_d64oy"), SubResource("Resource_icw7c"), SubResource("Resource_xbb6p"), SubResource("Resource_n8efc"), SubResource("Resource_ew1e5"), SubResource("Resource_wncg3"), SubResource("Resource_5jlv2"), SubResource("Resource_jdbyb"), SubResource("Resource_dfadp"), SubResource("Resource_f1fke"), SubResource("Resource_s4cx0"), SubResource("Resource_boj5d"), SubResource("Resource_yue61")])
 hold_clips = PackedStringArray("Die", "Death")
 status = "partial"
-notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed."
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed.
+Stand-in clips: Idle -> Attack1, Idle2 -> Attack1, Idle4 -> Attack1, Kick -> Attack1, Special1 -> Attack4, Attack5 -> Attack4, Attack6 -> Attack4."

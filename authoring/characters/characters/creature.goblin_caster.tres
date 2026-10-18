@@ -5,6 +5,43 @@
 [resource]
 script = ExtResource("1_h4xo4")
 id = "creature.goblin_caster"
+rig = "smallscale.goblin02"
+portrait = "creature.goblin_wispbinder"
 size = "Small"
-status = "missing"
-notes = "No rig: the game has no body for this creature."
+attacks = Array[Dictionary]([{
+"clip": "PhysicalGesture",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.attack",
+"variant": "goblin02-physical"
+}, {
+"clip": "PhysicalGesture",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "goblin02-physical"
+}, {
+"clip": "PhysicalGesture",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.feature.extra_attack",
+"variant": "goblin02-physical"
+}, {
+"clip": "PhysicalGesture",
+"contact": 6,
+"delivery": "melee",
+"recipe": "reaction.opportunity_attack",
+"variant": "goblin02-physical"
+}])
+cast = {
+"clip": "Attack2"
+}
+reactions = Dictionary[String, String]({
+"block": "Block"
+})
+death = Dictionary[String, String]({
+"default": "Death"
+})
+status = "stand_in"
+notes = "No art of its own: stands in with the Wispbinder caster goblin (rig smallscale.goblin02).
+Portrait stand-in: creature.goblin_wispbinder (no portrait of its own)."

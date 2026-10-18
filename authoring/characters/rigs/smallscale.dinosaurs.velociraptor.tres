@@ -526,6 +526,241 @@ art = Dictionary[String, String]({
 effect_parts = PackedStringArray()
 surface = SubResource("Resource_bs37q")
 
+[sub_resource type="Resource" id="Resource_ua1ns"]
+script = ExtResource("3_dce38")
+role = "movement"
+qualifier = {
+"kind": "default"
+}
+clip = "RaptorAttack1"
+hidden_slots = PackedStringArray()
+playback = "loop"
+
+[sub_resource type="Resource" id="Resource_mii5l"]
+script = ExtResource("3_dce38")
+role = "movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "RaptorAttack1"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_fvcxb"]
+script = ExtResource("3_dce38")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "direct_arc"
+}
+clip = "RaptorAttack1"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_87334"]
+script = ExtResource("3_dce38")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "connector_transfer"
+}
+clip = "RaptorAttack1"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_minvq"]
+script = ExtResource("3_dce38")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "direct_arc"
+}
+clip = "RaptorAttack1"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_b5u5y"]
+script = ExtResource("3_dce38")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "connector_transfer"
+}
+clip = "RaptorAttack1"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_whbus"]
+script = ExtResource("3_dce38")
+role = "shove"
+qualifier = {
+"kind": "default"
+}
+clip = "RaptorAttack1"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 6.0,
+"name": "contact"
+}]
+
+[sub_resource type="Resource" id="Resource_bmtlr"]
+script = ExtResource("3_dce38")
+role = "forced_movement"
+qualifier = {
+"kind": "default"
+}
+clip = "RaptorAttack1"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 5.0,
+"name": "brace"
+}]
+
+[sub_resource type="Resource" id="Resource_fp7lj"]
+script = ExtResource("3_dce38")
+role = "forced_movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "RaptorAttack1"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_4v0tg"]
+script = ExtResource("3_dce38")
+role = "body_action"
+qualifier = {
+"kind": "default"
+}
+clip = "RaptorAttack1"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_yc466"]
+script = ExtResource("3_dce38")
+role = "body_action_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "RaptorAttack1"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_glep7"]
+script = ExtResource("3_dce38")
+role = "equipment"
+qualifier = {
+"kind": "default"
+}
+clip = "RaptorAttack1"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_xr2xh"]
+script = ExtResource("3_dce38")
+role = "healing"
+qualifier = {
+"kind": "default"
+}
+clip = "RaptorAttack1"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_ifb8w"]
+script = ExtResource("3_dce38")
+role = "save_avoidance"
+qualifier = {
+"kind": "default"
+}
+clip = "RaptorAttack1"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_un4bt"]
+script = ExtResource("3_dce38")
+role = "condition_entry"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "RaptorAttack1"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_uwvq8"]
+script = ExtResource("3_dce38")
+role = "condition_hold"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "RaptorAttack1"
+hidden_slots = PackedStringArray()
+playback = "final_rest"
+rest_frame = 14
+
+[sub_resource type="Resource" id="Resource_1c4kl"]
+script = ExtResource("3_dce38")
+role = "condition_exit"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "RaptorAttack1"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+reversed = true
+
+[sub_resource type="Resource" id="Resource_eqvyi"]
+script = ExtResource("3_dce38")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "flying",
+"trajectory": "path"
+}
+clip = "RaptorAttack1"
+hidden_slots = PackedStringArray()
+playback = "once"
+frame_keys = [[0.0, 0.0], [1.0, 0.0]]
+
+[sub_resource type="Resource" id="Resource_uejnn"]
+script = ExtResource("3_dce38")
+role = "death"
+qualifier = {
+"kind": "default"
+}
+clip = "RaptorAttack1"
+hidden_slots = PackedStringArray()
+playback = "once"
+
 [resource]
 script = ExtResource("4_dfwl7")
 id = "smallscale.dinosaurs.velociraptor"
@@ -542,6 +777,30 @@ slot_categories = Dictionary[String, PackedStringArray]({
 })
 excluded_categories = PackedStringArray()
 clips = Array[ExtResource("1_ktklk")]([SubResource("Resource_8aqyf"), SubResource("Resource_s2ioh"), SubResource("Resource_qnkj3"), SubResource("Resource_t8shy"), SubResource("Resource_eug4s"), SubResource("Resource_grsra"), SubResource("Resource_okkep"), SubResource("Resource_o1pue"), SubResource("Resource_75t66"), SubResource("Resource_h10j3"), SubResource("Resource_wfv7o"), SubResource("Resource_w2c8e"), SubResource("Resource_nj27h")])
+fallbacks = Dictionary[String, String]({
+"Attack1": "RaptorAttack1",
+"Attack2": "RaptorAttack1",
+"Attack3": "RaptorAttack1",
+"Attack4": "RaptorAttack1",
+"Attack5": "RaptorAttack1",
+"Attack6": "RaptorAttack1",
+"AttackRun": "RaptorAttack1",
+"CrouchWalk": "RaptorAttack1",
+"Death": "RaptorAttack1",
+"Die": "RaptorAttack1",
+"Idle": "RaptorAttack1",
+"Idle2": "RaptorAttack1",
+"Idle4": "RaptorAttack1",
+"Kick": "RaptorAttack1",
+"Rolling": "RaptorAttack1",
+"Run": "RaptorAttack1",
+"Special1": "RaptorAttack1",
+"TakeDamage": "RaptorAttack1",
+"Taunt": "RaptorAttack1",
+"Walk": "RaptorAttack1"
+})
+contexts = Array[ExtResource("3_dce38")]([SubResource("Resource_ua1ns"), SubResource("Resource_mii5l"), SubResource("Resource_fvcxb"), SubResource("Resource_87334"), SubResource("Resource_minvq"), SubResource("Resource_b5u5y"), SubResource("Resource_whbus"), SubResource("Resource_bmtlr"), SubResource("Resource_fp7lj"), SubResource("Resource_4v0tg"), SubResource("Resource_yc466"), SubResource("Resource_glep7"), SubResource("Resource_xr2xh"), SubResource("Resource_ifb8w"), SubResource("Resource_un4bt"), SubResource("Resource_uwvq8"), SubResource("Resource_1c4kl"), SubResource("Resource_eqvyi"), SubResource("Resource_uejnn")])
 hold_clips = PackedStringArray()
 status = "partial"
-notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed."
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed.
+Stand-in clips: Idle -> RaptorAttack1, Idle2 -> RaptorAttack1, Idle4 -> RaptorAttack1, Run -> RaptorAttack1, Walk -> RaptorAttack1, TakeDamage -> RaptorAttack1, Die -> RaptorAttack1, Death -> RaptorAttack1, Taunt -> RaptorAttack1, Rolling -> RaptorAttack1, CrouchWalk -> RaptorAttack1, Attack1 -> RaptorAttack1, Attack2 -> RaptorAttack1, Attack3 -> RaptorAttack1, Attack4 -> RaptorAttack1, AttackRun -> RaptorAttack1, Kick -> RaptorAttack1, Special1 -> RaptorAttack1, Attack5 -> RaptorAttack1, Attack6 -> RaptorAttack1."

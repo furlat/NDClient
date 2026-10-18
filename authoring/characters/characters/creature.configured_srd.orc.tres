@@ -5,7 +5,9 @@
 [resource]
 script = ExtResource("1_uol7f")
 id = "creature.configured_srd.orc"
+rig = "smallscale.orc01"
 portrait = "creature.orc"
 size = "Medium"
-status = "missing"
-notes = "No rig: the game has no body for this creature."
+death = Dictionary[String, String]({
+"default": "Die"
+})

@@ -5,6 +5,12 @@
 [resource]
 script = ExtResource("1_fmtgk")
 id = "creature.configured_srd.bandit"
+rig = "neuroclient.modular"
+portrait = "rogue--human-white--male"
 size = "Medium"
-status = "missing"
-notes = "No rig: the game has no body for this creature."
+death = Dictionary[String, String]({
+"default": "Die"
+})
+status = "stand_in"
+notes = "Drawn by the layered humanoid rig from the server's appearance; no creature art of its own.
+Portrait stand-in: rogue--human-white--male (no portrait of its own)."

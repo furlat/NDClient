@@ -786,11 +786,11 @@ func _place(rig: Rig, family: Dictionary) -> void:
 
 ## The roster NPCs without a rig today stay unbound until they are wired (a
 ## separate change); their delivered variant is named in the entry's notes.
-const BIND_ROSTER := false
+const BIND_ROSTER := true
 
 ## Bind the delivered portraits of the roster NPCs (the bank's pack--variant
 ## art and the 18 Oct delivery) to their creature ids.
-const BIND_PORTRAITS := false
+const BIND_PORTRAITS := true
 const DELIVERED_PORTRAITS := "art/ui-delivery-20261018/runtime/portraits192x256/"
 const PORTRAIT_PACKS := {"orcs-and-goblins": "orcs_goblins", "demons": "demons", "undead": "undead", "enemies": "enemy", "barbarians": "barbarian",
     "characters": "character", "zombies-hd": "hdz", "zombies-top-down": "top", "animals": "animals", "dinosaurs": "dinosaurs"}
@@ -855,6 +855,19 @@ func _characters(current: Dictionary, library: Dictionary) -> void:
         elif BIND_PORTRAITS and id.begins_with("creature.spell.") and delivered_portraits.has("srd22.portrait." + id.trim_prefix("creature.spell.")):
             entry.portrait = "srd22.portrait." + id.trim_prefix("creature.spell.")
         elif BIND_PORTRAITS and delivered != null and ui_resources.has("portrait:" + portrait_key(delivered)):entry.portrait = portrait_key(delivered)
+        var portrait_stand_in := false
+        if BIND_PORTRAITS and entry.portrait.is_empty() and id != PLAYER_BODY:
+            var base_id: String = id.trim_prefix("creature.").trim_prefix("configured_srd.")
+            var drawn: Rig = current.get(entry.rig, library.get(entry.rig))
+            var shared := ""
+            for other in bindings:
+                if bindings[other].rig == entry.rig and ui_resources.has("portrait:" + other):shared = other;break
+            if not shared.is_empty():entry.portrait = shared
+            elif drawn != null and drawn.kind == "fixed" and ui_resources.has("portrait:" + portrait_key(drawn)):entry.portrait = portrait_key(drawn)
+            elif Roster.PORTRAIT_STAND_INS.has(base_id):entry.portrait = Roster.PORTRAIT_STAND_INS[base_id]
+            elif drawn != null and drawn.id == "smallscale.undead.6warrior" or entry.rig == "neuroclient.modular":entry.portrait = "undead--6warrior" if id == "creature.skeleton_warrior" else "fighter--human-white--male"
+            portrait_stand_in = not entry.portrait.is_empty()
+            if entry.portrait.is_empty():fail("No portrait or stand-in for " + id)
         entry.kit_mismatch = Roster.MISMATCH.get(id, "") if not Roster.MISMATCH.get(id, "").begins_with("1") else ""
         if Roster.MISMATCH.get(id, "").contains(" px cells"):entry.size_note = Roster.MISMATCH[id];entry.kit_mismatch = ""
         if rig != null:
@@ -883,6 +896,9 @@ func _characters(current: Dictionary, library: Dictionary) -> void:
         else:
             entry.status = "ready" if rig.status == "ready" and rig.fallbacks.is_empty() else "partial"
             if rig.status != "ready":entry.notes = rig.notes
+        if portrait_stand_in:
+            entry.notes += ("\n" if entry.notes else "") + "Portrait stand-in: " + entry.portrait + " (no portrait of its own)."
+            if entry.status == "ready" or entry.status == "partial":entry.status = "stand_in"
         if BIND_ROSTER and id in Roster.EFFECT_BODIES:
             entry.status = "internal"
             entry.notes = "A spell object the server models as a creature: its spell's effect draws it, not a body."
@@ -978,9 +994,19 @@ func _gear() -> void:
             if direct.get("approximation") != null:
                 gear.icon.reuses = str(key)
                 gear.notes += ("\n" if gear.notes else "") + "Icon: " + str(direct.approximation)
+        if BIND_PORTRAITS and gear.icon == null and Roster.ITEM_ICONS.has(id):
+            var bound: Array = Roster.ITEM_ICONS[id]
+            gear.icon = ImageRef.new()
+            gear.icon.path = bound[0]
+            gear.icon.native_size = png_size(bound[0])
+            gear.icon.source = "ui-delivery-20261018" if bound[0].contains("ui-delivery") else "ui-icons-bg3-glyphs-2026-10-07"
+            if bound[1] != "art":gear.icon.reuses = bound[0].get_file().get_basename()
+            if bound[1] == "stand_in":gear.icon.status = "stand_in"
+            if not exists(bound[0]):fail("Item icon missing: " + bound[0])
         if id == "equipment.portable_torch":gear.lights = true
         var draws: bool = not gear.slots.is_empty() or not gear.hands.is_empty() or not gear.family.is_empty()
-        if gear.natural:gear.status = "internal"
+        if gear.icon != null and gear.icon.status == "stand_in" and not draws:gear.status = "stand_in"
+        elif gear.natural:gear.status = "internal"
         elif draws and gear.icon != null:gear.status = "ready"
         elif draws or gear.icon != null:gear.status = "partial"
         else:gear.status = "missing"
@@ -1085,6 +1111,13 @@ func _icons() -> void:
     for id in ui.common:
         icons.labels[id] = str(ui.common[id].label)
         var key: Variant = ui.common[id].get("presentation", {}).get("icon_key")
+        if key == null and id == "unarmed" and BIND_PORTRAITS:
+            var unarmed := ImageRef.new()
+            unarmed.path = Roster.UNARMED_ICON
+            unarmed.native_size = png_size(unarmed.path)
+            unarmed.source = "ui-delivery-20261018"
+            icons.icons[id] = unarmed
+            continue
         if key == null or not resources.has("icon:" + str(key)):
             var missing := ImageRef.new()
             missing.status = "missing"

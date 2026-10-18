@@ -1,9 +1,18 @@
 [gd_resource type="Resource" script_class="PresentationGear" format=3]
 
-[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="1_omu4q"]
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_t3c1a"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_fop17"]
+
+[sub_resource type="Resource" id="Resource_s4o7o"]
+script = ExtResource("1_t3c1a")
+path = "art/media/ui/icons/smooth48/item.field-kit.png"
+native_size = Vector2i(48, 48)
+reuses = "item.field-kit"
+status = "stand_in"
+source = "ui-icons-bg3-glyphs-2026-10-07"
 
 [resource]
-script = ExtResource("1_omu4q")
+script = ExtResource("2_fop17")
 id = "tool.crowbar"
 kind = "weapon"
 slots = Dictionary[String, Dictionary]({
@@ -39,5 +48,5 @@ ground = Array[Dictionary]([{
 "tint": "#8899aa",
 "variant": ""
 }])
-status = "partial"
+icon = SubResource("Resource_s4o7o")
 notes = "Visual name Crowbar; Existing vendor silhouette approximation; does not promise exact wand length, crowbar hook, banner flag, firearm or canister geometry."
