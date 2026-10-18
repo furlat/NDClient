@@ -1,5 +1,14 @@
 # Baked spell effects in the client: report for the Factory agent
 
+> **Superseded on 18 October 2026** by
+> [VFX_PACKAGE_CONTRACT_2026-10-18.md](VFX_PACKAGE_CONTRACT_2026-10-18.md):
+> recordings are made in the Factory and shipped in `assets/vfx/`; the client
+> baker (`tools/bake_native_effects.gd`, `.derived/baked_effects`) and the
+> `-- --native-effects` flag were removed. The client plays a package clip's
+> `recorded` approach with `presentation/baked_effect.gd` (shaders assigned by
+> each system's role), its `gpu`/`native` approaches live, and
+> `-- --effect-kind=recorded|gpu|native` forces a kind. Kept for history.
+
 17 October 2026. Written for whoever authors spell VFX in
 `C:/Users/tommaso/Documents/assets/VFXFactory`. It describes what the client
 now does with your effects, what that costs, which effects it can't take yet
