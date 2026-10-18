@@ -1,5 +1,14 @@
 # Native VFX runtime contract (17 October 2026)
 
+> **Superseded on 18 October 2026** by
+> [VFX_PACKAGE_CONTRACT_2026-10-18.md](VFX_PACKAGE_CONTRACT_2026-10-18.md):
+> recordings are made in the Factory and shipped in `assets/vfx/`; the client
+> baker (`tools/bake_native_effects.gd`, `.derived/baked_effects`) and the
+> `-- --native-effects` flag were removed. The client plays a package clip's
+> `recorded` approach with `presentation/baked_effect.gd` (shaders assigned by
+> each system's role), its `gpu`/`native` approaches live, and
+> `-- --effect-kind=recorded|gpu|native` forces a kind. Kept for history.
+
 Status: **in use for the spell catalog**: 64 of 72 clips play baked (commits
 25cb447, 8b4db36, 3986abf, 693a694); the clips that still play native, and
 what differs between baked and native, are listed in

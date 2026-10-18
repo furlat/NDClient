@@ -207,17 +207,12 @@ see `.runtime/sandbox-position-checks.json` and `.captures/positions/`.
 2. Select its existing recipe/clip IDs in the client batch or additions data.
    Adjust cue timing/placement using the fields above. Include isolated `placement`
    so inspection does not depend on running the whole sequence first.
-3. Run from the client root:
-
-   ```sh
-   python3 tools/prepare_projectile_sandbox.py --factory /mnt/c/Users/tommaso/Documents/assets/VFXFactory
-   ```
-
-   Then re-record the baked effects the game plays (local generated data in
-   `.derived/baked_effects`; a changed clip plays its native source, with a
-   warning, until it is baked again): run `bake-native-effects.cmd` (all clips,
-   three variants) or `bake-native-effects.cmd --spells=<id>`. See
-   [FACTORY_VFX_BAKING_REPORT_2026-10-17.md](FACTORY_VFX_BAKING_REPORT_2026-10-17.md).
+3. Export the Factory's package into the client's `assets/vfx/`
+   ([VFX_PACKAGE_CONTRACT_2026-10-18.md](VFX_PACKAGE_CONTRACT_2026-10-18.md)).
+   Since 18 October the client has no importer
+   (`tools/prepare_projectile_sandbox.py`) and no baker
+   (`bake-native-effects.cmd`): game and Studio load the package's clips and
+   approaches as delivered (`presentation/effect_package.gd`).
 
 4. Inspect the real fixture in all four views: hand charge/release continuity,
    moving source, contact and receiver, then complete retirement. Check pause,

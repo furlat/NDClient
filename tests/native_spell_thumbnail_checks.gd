@@ -119,7 +119,9 @@ func tail_and_rotation(row:Dictionary)->void:
         await RenderingServer.frame_post_draw
     check(ready,label+": cold tail reconstructs within the finite source-readiness budget")
     if ready:
-        check(before_contact_emitted,label+": seeking to tail still emits the earlier source history")
+        # A recorded (seekable) approach draws the tail directly; only a
+        # simulation must replay its earlier source history.
+        check(before_contact_emitted or preview.handle.get("seekable",false),label+": seeking to tail still emits the earlier source history")
         check(preview.handle.emitters.all(func(emitter):return not emitter.emitting),label+": emission is stopped at actual contact while existing particles drain")
         check(absf(preview.handle.age-Playback.source_time(cue,age))<.00001,label+": tail reaches the phase's exact mapped source clock")
         var history:Dictionary=image_stats(preview.texture().get_image())

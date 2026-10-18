@@ -1,7 +1,10 @@
 extends RefCounted
 ## Selected native phase data. Event ordering/count/recipients stay in Compiler.
+## Staging (cues, timing, lifecycle) is the client's; each cue's effect is the
+## VFX package clip it names (EffectPackage.resolve).
 const Authoring=preload("res://presentation/authoring.gd")
 const Sources=preload("res://presentation/native_presentation_sources.gd")
+const Effects=preload("res://presentation/effect_package.gd")
 
 static func recipe(fact:Dictionary,cache:Dictionary)->Dictionary:
     var behavior:String=str(fact.get("behavior_id",""))
@@ -14,6 +17,16 @@ static func recipe(fact:Dictionary,cache:Dictionary)->Dictionary:
 static func selection(behavior_id:String,cache:Dictionary)->Dictionary:
     var record:Resource=Sources.find(behavior_id,cache)
     return record.selection if record!=null else {}
+
+## The package clips this spell's staged cues play (excluded probes omitted).
+static func effect_clips(selected:Dictionary)->Array:
+    var result:Array=[];var seen:Dictionary={}
+    var cues:Array=selected.get("staging",{}).get("cues",[])
+    for at in cues.size():
+        if at in selected.get("excluded_cue_indices",[]):continue
+        var clip:Dictionary=Effects.resolve(str(cues[at].clip),str(selected.get("id","")),str(cues[at].get("role","")))
+        if not clip.is_empty() and not seen.has(clip.id):seen[clip.id]=true;result.append(clip)
+    return result
 
 static func phases(selected:Dictionary,owner:Dictionary,launch_ms:float,travel_ms:float,application_index:int,include_cast:bool)->Array:
     var rows:Array=[]
@@ -34,10 +47,10 @@ static func _phase(selected:Dictionary,choice:Dictionary,owner:Dictionary,launch
     var preparation:float=owner.get("prepare",owner.get("start",launch_ms))/1000.0
     var source_index:int=choice.get("source_index",choice.source_index)
     var source:String=selected.source+"/cues/"+str(source_index)
-    var clip:Dictionary=selected.clip_by_id.get(choice.clip,{})
+    var clip:Dictionary=Effects.resolve(str(choice.clip),str(selected.id),str(choice.role))
     if clip.is_empty():
         return {"start_ms":launch_ms,"duration_ms":maxf(1.0,travel_ms),"status":"missing",
-            "reason":"native_source_not_imported","native_cue":choice,"native_clip":{},
+            "reason":"effect_not_in_package","native_cue":choice,"native_clip":{},
             "spell_id":selected.id,"source_id":choice.clip,"source":source}
     var cue:Dictionary=choice.duplicate(true)
     var rate:float=float(cue.get("source_rate",1.0))
@@ -66,7 +79,8 @@ static func _phase(selected:Dictionary,choice:Dictionary,owner:Dictionary,launch
         _:
             return {"start_ms":launch_ms,"duration_ms":maxf(1.0,travel_ms),"status":"missing","reason":"native_phase_role_unsupported",
                 "native_cue":cue,"native_clip":clip,"spell_id":selected.id,"source_id":choice.clip,"source":source}
-    var bounds:Dictionary=selected.source_bounds.get(clip.id,{})
+    # Measured bounds belong to the staged clip (client staging, unchanged).
+    var bounds:Dictionary=selected.source_bounds.get(str(choice.clip),{})
     var animation_end:float=bounds.get("animation_end",0.0)
     if cue.get("duration_policy","")!="authored" and not clip.get("bounded_formation",false):
         if cue.role in ["flight","strike"]:end=maxf(end,contact+animation_end-source_contact)
@@ -83,7 +97,7 @@ static func _phase(selected:Dictionary,choice:Dictionary,owner:Dictionary,launch
     var bend:Array=bends[application_index%bends.size()] if not bends.is_empty() else [0,0]
     cue.merge({"begin":0.0,"end":end-begin,"launch":launch-begin,"contact":contact-begin,
         "source_launch":source_launch,"source_contact":source_contact,"bend":Vector2(bend[0],bend[1]),
-        "clip":clip,"index":application_index},true)
+        "clip":clip,"staged_clip":str(choice.clip),"index":application_index},true)
     var row={"start_ms":begin*1000.0,"duration_ms":(end-begin)*1000.0,
         "native_cue":cue,"native_clip":clip,"spell_id":selected.id,"native_lights":bounds.get("lights",[]),
         "source_id":"spell."+selected.id+".native."+str(cue.role),"finish_profile":selected.palette,
@@ -145,4 +159,11 @@ static func contact_phases(selected:Dictionary)->Array:
 
 static func hit(behavior_id:String,cache:Dictionary)->Dictionary:
     var record:Resource=Sources.find(behavior_id,cache)
-    return record.hit if record!=null else {}
+    if record==null:return {}
+    if not record.hit.has("clip"):return record.hit
+    # The material comes from the package clip staged under the same id.
+    var result:Dictionary=record.hit.duplicate(false)
+    var clip:Dictionary=Effects.resolve(str(result.clip.get("id","")),str(result.get("spell_id","")))
+    if clip.is_empty():result.erase("clip")
+    else:result.clip=clip
+    return result

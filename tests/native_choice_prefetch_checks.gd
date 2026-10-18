@@ -2,6 +2,7 @@ extends SceneTree
 const ChoiceResources=preload("res://live/choice_resources.gd")
 const Choices=preload("res://sdk/choices.gd")
 const Catalog=preload("res://source_catalog.gd")
+const NativeAuthoring=preload("res://presentation/native_spell_authoring.gd")
 class World extends Node:
     var catalog_cache:Dictionary={}
 var checks=0
@@ -33,13 +34,10 @@ func run()->void:
     var expected:Dictionary={}
     var behaviors:Dictionary={}
     for action in Choices.all_actions(choices):behaviors[action.behavior_id]=true
+    # The package clips the disclosed spells' staged cues play.
     for behavior in behaviors:
         if not index.spells.has(behavior):continue
-        var entry:Dictionary=index.spells[behavior]
-        var manifest:Dictionary=Catalog.read_file(entry.manifest,world.catalog_cache)
-        for spell in manifest.spells:
-            if spell.id==entry.id:
-                for clip in spell.clips:expected[clip.id]=true
+        for clip in NativeAuthoring.effect_clips(NativeAuthoring.selection(behavior,world.catalog_cache)):expected[clip.id]=true
     var actual:Dictionary={}
     for clip in job.clips:actual[clip.id]=true
     check(actual==expected and not actual.is_empty(),"Only native clips selected by actual disclosed behaviors enter warmup")

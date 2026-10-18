@@ -19,6 +19,16 @@ Opening the project directly selects the same player scene; use the launcher to
 provide its backend connection. The 3D world still receives its painted lighting
 from native Godot 2D lights and authored normal maps.
 
+Spell effects are the VFX Factory's package in `assets/vfx/` (contract:
+`agent_docs/VFX_PACKAGE_CONTRACT_2026-10-18.md`), loaded as delivered; the
+client has no effect importer or baker. Each clip plays its `recorded`
+approach when it has one, else `gpu`, else `native`. A Godot launch argument
+`-- --effect-kind=recorded|gpu|native` (game and Studio) plays that kind
+wherever a clip has it; Studio's **Inspect → Effect version** switches it at
+the current playhead, and an effect row's tooltip and inspector name the kind
+that plays and why when it falls back. `tests/effect_package_checks.gd` builds,
+samples and draws every approach of every clip the spells stage.
+
 ## Live player controls
 
 - **Click** ground to move or a disclosed object to use its native default

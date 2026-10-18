@@ -91,10 +91,18 @@ func run()->void:
             for clip in spell.clips:
                 if not clip in clips:clips.append(clip)
     else:
+        # The old Factory sources the recording's cues are staged with (the
+        # sandbox still plays them; game and Studio play the VFX package).
+        var manifest:Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://authoring/sandbox/projectiles.json"))
+        var staged:Dictionary={}
+        for spell in manifest.spells:
+            for clip in spell.clips:staged[str(spell.id)+"|"+str(clip.id)]=clip
         var index:Dictionary=Recording.read("res://.runtime/gallery-sorcerer-20261015-seed3-door/amber/journal")
         for item in index.groups:
             for component in item.group.components:
-                if component.get("native_spell",false) and not component.native_clip in clips:clips.append(component.native_clip)
+                if not component.get("native_spell",false):continue
+                var clip:Dictionary=staged.get(str(component.spell_id)+"|"+str(component.native_cue.get("staged_clip","")),{})
+                if not clip.is_empty() and not clip in clips:clips.append(clip)
     var cache:Dictionary={};var deadline:int=Time.get_ticks_msec()+120000;var loaded:int=Time.get_ticks_usec();var preparation_calls:Array=[]
     while true:
         var call_start:int=Time.get_ticks_usec()

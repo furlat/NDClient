@@ -32,8 +32,7 @@ func _start(cache:Dictionary)->void:
 static func _resolve(job:Dictionary)->void:
     var seen:Dictionary={}
     for id in job.ids:
-        var selected:Dictionary=NativeAuthoring.selection(id,job.cache)
-        for clip in selected.get("clips",[]):
+        for clip in NativeAuthoring.effect_clips(NativeAuthoring.selection(id,job.cache)):
             if not seen.has(clip.id):job.clips.append(clip);seen[clip.id]=true
 
 func prepare(cache:Dictionary,budget:Dictionary)->void:
@@ -47,7 +46,7 @@ func prepare(cache:Dictionary,budget:Dictionary)->void:
         budget.frame=Engine.get_process_frames();budget.used_usec=0
     while _choice_job.cursor<_choice_job.clips.size() and budget.used_usec<budget.limit_usec:
         var started:int=Time.get_ticks_usec()
-        var result=NativeSpells.Factory.prepare([_choice_job.clips[_choice_job.cursor]],_choice_resource_cache)
+        var result=NativeSpells.Effects.prepare([_choice_job.clips[_choice_job.cursor]],_choice_resource_cache,false)
         budget.used_usec+=Time.get_ticks_usec()-started
         for error in result.errors:
             if error not in choice_preparation.errors:choice_preparation.errors.append(error)

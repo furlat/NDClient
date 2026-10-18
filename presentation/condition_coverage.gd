@@ -3,7 +3,7 @@ extends RefCounted
 const Authoring=preload("res://presentation/authoring.gd")
 const Catalog=preload("res://source_catalog.gd")
 const NativeSpells=preload("res://presentation/native_spell_authoring.gd")
-const NativeFactory=preload("res://presentation/native_factory_source.gd")
+const Effects=preload("res://presentation/effect_package.gd")
 
 static func _require(entry: Dictionary,phase: String,mechanism: String,source: String,implemented: bool,reason: String="",availability: String="not_required",details: Dictionary={}) -> Dictionary:
     var row={"id":source+"#"+mechanism,"phase":phase,"mechanism":mechanism,"source":source,
@@ -155,7 +155,7 @@ static func _native(entry:Dictionary,selected:Dictionary)->void:
 
 static func _native_phase(entry:Dictionary,phase:Dictionary,owner_phase:String,mechanism:String)->void:
     var missing:Array=[]
-    for path in NativeFactory.resource_paths(phase.native_clip):
+    for path in Effects.resource_paths(phase.native_clip):
         if not FileAccess.file_exists(path):missing.append(path)
     var present=not phase.native_clip.is_empty() and missing.is_empty() and phase.get("status")!="missing"
     _require(entry,owner_phase,mechanism,phase.source,true,

@@ -12,6 +12,9 @@ const ViewportLayout=preload("res://studio/viewport_layout.gd")
 const ReplayPanes=preload("res://studio/replay_panes.gd")
 const BackgroundRelease=preload("res://presentation/background_release.gd")
 const ConditionCoverage=preload("res://presentation/condition_coverage.gd")
+const Effects=preload("res://presentation/effect_package.gd")
+## Inspect menu ids of the "Effect version" choices (Effects.KINDS order).
+const EFFECT_VERSION_IDS:={16:"recorded",17:"gpu",18:"native"}
 var world: Node3D
 var viewport: SubViewport
 var preview: TextureRect
@@ -165,6 +168,7 @@ func _ready() -> void:
     diagnostic_menu.add_check_item("Follow active track",13)
     diagnostic_menu.add_check_item("Follow selected actor",14)
     diagnostic_menu.add_check_item("Lighting tracks",15)
+    for id in EFFECT_VERSION_IDS:diagnostic_menu.add_radio_check_item("Effect version: "+Effects.LABELS[EFFECT_VERSION_IDS[id]],id)
     diagnostic_menu.about_to_popup.connect(_diagnostic_menu_state)
     menu.get_popup().id_pressed.connect(func(id):
         if id==13:
@@ -176,6 +180,9 @@ func _ready() -> void:
             return
         if id==14:
             follow_actor_id="" if not follow_actor_id.is_empty() else str(selected_row.get("actor_uuid",""))
+            return
+        if EFFECT_VERSION_IDS.has(id):
+            set_effect_version(EFFECT_VERSION_IDS[id])
             return
         _menu_selected(id)
         if id==6:menu.get_popup().set_item_checked(6,tracks.show_metadata))
@@ -398,6 +405,15 @@ func _diagnostic_menu_state()->void:
     diagnostic_menu.set_item_checked(13,follow_tracks)
     diagnostic_menu.set_item_checked(14,not follow_actor_id.is_empty())
     diagnostic_menu.set_item_disabled(14,follow_actor_id.is_empty() and str(selected_row.get("actor_uuid","")).is_empty())
+    for version in EFFECT_VERSION_IDS:diagnostic_menu.set_item_checked(diagnostic_menu.get_item_index(version),EFFECT_VERSION_IDS[version]==(Effects.requested if not Effects.requested.is_empty() else "recorded"))
+
+## Plays every spell effect from this approach kind where its clip has one
+## (others fall back, see the effect row). The displayed occurrences are
+## rebuilt at the current playhead by an ordinary prepared seek.
+func set_effect_version(kind:String)->void:
+    if kind==(Effects.requested if not Effects.requested.is_empty() else "recorded"):return
+    Effects.set_requested(kind)
+    if not index.is_empty():_seek(world.timeline.display_ms,false,false,true)
 
 func _follow_position(owner:Node3D,fallback:Vector3)->Vector3:
     if follow_actor_id.is_empty():return fallback
@@ -757,13 +773,13 @@ func _start_load()->void:
     loader.start(_read_selection.bind(pending_directory,pending_case_request.get("case",{}),pending_case_request.get("perspective_id",""),loader_token))
     pending_directory="";pending_case_request={};perspective_picker.disabled=true
 
-func _seek(time_ms: float, resume: bool=false, keep_view_anchor:bool=false) -> void:
+func _seek(time_ms: float, resume: bool=false, keep_view_anchor:bool=false, rebuild:bool=false) -> void:
     var source:Dictionary=pending_index if not pending_index.is_empty() else index
     if source.is_empty() or loader!=null:return
     _cancel_loop_preparation()
     var target=clampf(time_ms,0,source.get("presentation_end_ms",source.duration_ms))
     if not tracks.drag_playhead and not is_equal_approx(target,scrub_target):scrub_target=-1.0
-    if is_same(source,index) and not installing and seeker==null and requested_seek<0 and is_equal_approx(target,world.timeline.display_ms):
+    if not rebuild and is_same(source,index) and not installing and seeker==null and requested_seek<0 and is_equal_approx(target,world.timeline.display_ms):
         scrub_target=-1.0
         tracks.prepare_visible()
         world.timeline.paused=not resume
@@ -798,7 +814,7 @@ func _prepare_candidate(restored: Dictionary, source: Dictionary)->void:
         # cache while this recording is still loading. Existing instances keep
         # their own resources until ordinary candidate publication retires them.
         Play.NativeStartup.reset()
-        Play.NativeStartup.Factory.invalidate_authoring()
+        Play.NativeStartup.Effects.invalidate()
         candidate_world._step_native_startup()
     if index.is_empty() and initial_view_size>0:candidate_world.camera.size=initial_view_size
     if not prepared.reused:_listener(candidate_world)
@@ -1141,6 +1157,25 @@ func _unhandled_key_input(event: InputEvent) -> void:
         _: return
     get_viewport().set_input_as_handled()
 
+## Which approach of the package clip plays, and why when it is not the
+## requested kind; the staged clip id when the package renamed it.
+static func effect_lines(component:Dictionary)->Array[String]:
+    var lines:Array[String]=[]
+    var clip:Dictionary=component.get("native_clip",{})
+    if clip.is_empty():
+        lines.append("Effect: no package clip ("+str(component.get("reason",""))+")");return lines
+    var chosen:Dictionary=Effects.choice(clip)
+    var kinds:Array=[]
+    for approach in clip.get("approaches",[]):
+        if not Effects.LABELS[approach.kind] in kinds:kinds.append(Effects.LABELS[approach.kind])
+    lines.append("Effect version: "+Effects.LABELS.get(chosen.kind,"none")+(" ("+chosen.reason+")" if not chosen.reason.is_empty() else "")+" · package has "+", ".join(kinds))
+    var staged:String=str(component.get("native_cue",{}).get("staged_clip",clip.id))
+    lines.append("Package clip: "+str(clip.id)+(" (staged as "+staged+")" if staged!=str(clip.id) else ""))
+    for approach in chosen.approaches.slice(0,1):
+        lines.append("Approach: "+str(approach.path))
+        if not approach.get("gaps",[]).is_empty():lines.append("Recording gaps (Factory): "+", ".join(approach.gaps))
+    return lines
+
 static func provenance_lines(row:Dictionary)->Array[String]:
     var lines:Array[String]=[]
     if row.is_empty():return lines
@@ -1162,6 +1197,7 @@ static func provenance_lines(row:Dictionary)->Array[String]:
         lines.append("Origin: authored presentation of a recorded event or state; the server does not select this clip, effect or sound.")
     var event_id:String=event.get("event_uuid",row.get("source_event_uuid",data.get("source_event_uuid","")))
     if not event_id.is_empty():lines.append("Recorded event: "+event_id)
+    if data.get("native_spell",false):lines.append_array(effect_lines(data))
     if row.has("owner"):
         lines.append("Recorded condition: "+str(row.owner.id)+(" (already active at initialization)" if row.owner.get("initial",false) else ""))
     if row.has("render_method"):

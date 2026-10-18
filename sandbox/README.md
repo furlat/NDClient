@@ -45,12 +45,14 @@ Permanent choices live in:
 - `authoring/sandbox/casting.json`: the five optional casting profiles.
 - `authoring/sandbox/body_materials.json`: native receiver-material selections
   and explicit unsupported-source reasons.
-- `authoring/sandbox/projectiles.json`: generated source dependency manifest.
+- `authoring/sandbox/projectiles.json`: the last generated source dependency
+  manifest of the old import (`assets/native_effects/sandbox/projectiles/`).
 
-Rebuild the manifest and selected dependency closure with
-`python3 tools/prepare_projectile_sandbox.py --factory <VFXFactory>`.
-Factory originals are unchanged; artwork stays gitignored. Only the selected
-closure is copied, not the whole source library. Reload rereads local authoring.
+This sandbox still reads that manifest and the copied sources as they are. The
+importer that produced them (`tools/prepare_projectile_sandbox.py`) was removed
+on 18 October: the game and Studio play the Factory's finished VFX package
+(`assets/vfx/`, see the main README) and nothing regenerates this manifest.
+Reload rereads local authoring.
 
 There are **34 spell capabilities and 78 source phases**. The additional twenty are
 Aid, Bless, Bane, Command, Cure Wounds, Healing Word, Guidance, Resistance, Light,

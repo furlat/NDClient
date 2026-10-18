@@ -1,7 +1,7 @@
 extends RefCounted
 ## Native program preparation. Readiness belongs to the requested source set;
 ## retained program owners are shared, while every live occurrence stays private.
-const Factory=preload("res://presentation/native_factory_source.gd")
+const Effects=preload("res://presentation/effect_package.gd")
 const Authoring=preload("res://presentation/native_spell_authoring.gd")
 const Profile=preload("res://frame_profile.gd")
 const Baked=preload("res://presentation/baked_effect.gd")
@@ -14,9 +14,9 @@ static func _memory()->Dictionary:
     return {"static_mib":Performance.get_monitor(Performance.MEMORY_STATIC)/1048576.0,
         "video_mib":Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED)/1048576.0}
 
+## A clip warms once per playing approach kind (the Studio can switch kinds).
 static func _key(clip:Dictionary)->String:
-    if clip.has("source_identity"):return clip.source_identity+"|"+str(clip.get("opacity_uniform",""))
-    return var_to_bytes(Factory.Variants.canonical(clip)).hex_encode().sha256_text()
+    return Effects.key(clip)
 
 static func recording_plan(rows:Array)->Array:
     # These are already-compiled source occurrences, including disclosed
@@ -58,8 +58,7 @@ static func _plan(cache:Dictionary)->Array:
     if index==null:return result
     var entries:Dictionary=index.spells
     for behavior in entries:
-        var selected:Dictionary=Authoring.selection(behavior,cache)
-        for clip in selected.get("clips",[]):
+        for clip in Authoring.effect_clips(Authoring.selection(behavior,cache)):
             var identity:String=_key(clip)
             if not seen.has(identity):
                 seen[identity]=true;result.append({"key":identity,"clip":clip})
@@ -72,11 +71,13 @@ static func status(request:Dictionary={})->Dictionary:
     var failures:Dictionary=_state.get("failures",{})
     var errors:Array=[];var pending:int=0;var completed:int=0;var background_errors:Array=[]
     for item in required:
-        if failures.has(item.key):errors.append(failures[item.key])
-        if not done.has(item.key):pending+=1
+        var key:String=_key(item.clip)
+        if failures.has(key):errors.append(failures[key])
+        if not done.has(key):pending+=1
     for item in plan:
-        if done.has(item.key):completed+=1
-        if failures.has(item.key):background_errors.append(failures[item.key])
+        var key:String=_key(item.clip)
+        if done.has(key):completed+=1
+        if failures.has(key):background_errors.append(failures[key])
     return {"ready":pending==0 and errors.is_empty(),"errors":errors,"pending":pending,
         "completed":completed,"total":plan.size(),"background_pending":plan.size()-completed,
         "background_errors":background_errors,"required_total":required.size(),
@@ -151,11 +152,12 @@ static func _step(world:Node3D,cache:Dictionary,request:Dictionary,budget:Dictio
             "resource_worker_ms":[],"last_worker_profile":{},"material_owners":[],"memory_before":_memory(),"pipeline_before":Profile.pipeline_compilations()}
     if not request.has("required"):_state.catalog_plan=request.plan
     for item in request.plan:
-        if not _state.known.has(item.key):
-            _state.known[item.key]=true;_state.plan.append(item);_state.ready=false
-            # Every baked file in the plan starts loading on a worker now,
+        # Keys name the playing approach kind; a newly requested kind warms again.
+        if not _state.known.has(_key(item.clip)):
+            _state.known[_key(item.clip)]=true;_state.plan.append(item);_state.ready=false
+            # Every recording in the plan starts loading on a worker now,
             # ahead of the background catalog, not when the warm-up reaches it.
-            Baked.request(item.clip,true)
+            if Effects.choice(item.clip).kind=="recorded":Baked.request(item.clip,true)
     if _state.ready:return status(request)
     var required:Array=request.get("required",request.plan)
     var optional:bool=request.get("optional",true)
@@ -190,45 +192,44 @@ static func _step(world:Node3D,cache:Dictionary,request:Dictionary,budget:Dictio
         _retain_program_owners(_state.active.handle)
         if not _state.active.ages.is_empty():
             var age:float=_state.active.ages.pop_front()
-            Factory.sample(_state.active.handle,age,world.get_process_delta_time())
+            Effects.sample(_state.active.handle,age)
             _state.active.drawn=false
             _state.viewport.render_target_update_mode=SubViewport.UPDATE_ONCE
             RenderingServer.frame_post_draw.connect(_drawn.bind(_state.active),CONNECT_ONE_SHOT)
             return status(request)
-        Factory.close(_state.active.handle)
+        Effects.close(_state.active.handle)
         _state.done[_state.active.key]=true
         _state.active={};_state.completed+=1
     var item:Dictionary={}
     for candidate in eligible:
-        if not _state.done.has(candidate.key) and not _state.failures.has(candidate.key):item=candidate;break
+        if not _state.done.has(_key(candidate.clip)) and not _state.failures.has(_key(candidate.clip)):item=candidate;break
     if item.is_empty():
-        if _state.completed==_state.plan.size():
+        if _state.plan.all(func(entry):return _state.done.has(_key(entry.clip))):
             if is_instance_valid(_state.get("viewport")):_state.viewport.free()
             _state.owner=null;_state.ready=true
             _state.elapsed_ms=(Time.get_ticks_usec()-_state.started)/1000.0
             _state.memory_after=_memory();_state.pipeline_after=Profile.pipeline_compilations()
         return status(request)
     _frame=Engine.get_process_frames()
-    # A baked clip is one file loaded on a worker; its warm draw still
-    # compiles the same programs ahead of play. Native clips admit sources.
-    var bundle:Variant=Baked.ready_for(item.clip,0,required.any(func(entry):return entry.key==item.key))
-    if bundle==null:return status(request)
-    if not bundle is Resource:
-        var loaded:Dictionary=Factory.prepare([item.clip],_state.resources)
-        var worker:Dictionary=Factory.Admission.material_profile
-        if not is_same(worker,_state.last_worker_profile):
-            _state.last_worker_profile=worker
-            if not worker.is_empty():_state.resource_worker_ms.append(worker.worker_ms)
-        if not loaded.errors.is_empty():
-            _state.failures[item.key]="; ".join(loaded.errors)
-            return status(request)
-        if not loaded.ready:return status(request)
+    # A recording is one file loaded on a worker; a live approach loads its
+    # files and compiles its warm materials on workers. Its private warm draw
+    # then compiles the pipelines it draws with, ahead of play.
+    var item_key:String=_key(item.clip)
+    var loaded:Dictionary=Effects.prepare([item.clip],_state.resources,required.any(func(entry):return _key(entry.clip)==item_key))
+    var worker:Dictionary=Effects.Admission.material_profile
+    if not is_same(worker,_state.last_worker_profile):
+        _state.last_worker_profile=worker
+        if not worker.is_empty():_state.resource_worker_ms.append(worker.worker_ms)
+    if not loaded.errors.is_empty():
+        _state.failures[item_key]="; ".join(loaded.errors)
+        return status(request)
+    if not loaded.ready:return status(request)
     if not is_instance_valid(_state.owner):_state.owner=_owner(world)
     var construct_started:int=Time.get_ticks_usec()
-    var handle:Dictionary=Baked.make(_state.owner,bundle,item.clip.duplicate(true),SOURCE_LAYER) if bundle is Resource else Factory.make(_state.owner,item.clip.duplicate(true),SOURCE_LAYER)
-    _state.construction_ms.append({"source":item.clip.id,"ms":(Time.get_ticks_usec()-construct_started)/1000.0,"phases":handle.get("construction_phases",{})})
+    var handle:Dictionary=Effects.make(_state.owner,item.clip.duplicate(false),SOURCE_LAYER)
+    _state.construction_ms.append({"source":item.clip.id,"kind":handle.get("effect_kind",""),"ms":(Time.get_ticks_usec()-construct_started)/1000.0,"phases":handle.get("construction_phases",{})})
     if not handle.error.is_empty():
-        _state.failures[item.key]=handle.error;Factory.close(handle)
+        _state.failures[item_key]=handle.error;Effects.close(handle)
         return status(request)
     # Private native draws admit lazy source pipelines. Actual occurrence
     # transforms, clocks, materials and renderer readiness remain independent.
@@ -242,13 +243,13 @@ static func _step(world:Node3D,cache:Dictionary,request:Dictionary,budget:Dictio
     for age in [.2,.7]:
         var bounded:float=minf(age,maxf(0.0,float(item.clip.get("seconds",age))))
         if bounded>0 and bounded not in ages:ages.append(bounded)
-    _state.active={"key":item.key,"handle":handle,"drawn":false,"ages":ages,"settle":Engine.get_process_frames()+SETTLE_FRAMES}
+    _state.active={"key":item_key,"handle":handle,"drawn":false,"ages":ages,"settle":Engine.get_process_frames()+SETTLE_FRAMES}
     return status(request)
 
 static func reset()->void:
     # Explicit source reload only. Seeking or replacing a Play host does not
     # release the process-owned native program prototypes.
     if not _state.is_empty():
-        if not _state.active.is_empty():Factory.close(_state.active.handle)
+        if not _state.active.is_empty():Effects.close(_state.active.handle)
         if is_instance_valid(_state.get("viewport")):_state.viewport.free()
     _state={};_frame=-1

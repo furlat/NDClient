@@ -1,17 +1,19 @@
 extends RefCounted
-## Baked native clip playback. An occurrence is one instanced scene plus one
-## clock texel: emitters read their recorded particle states at the clock's
-## source time on the GPU, and recorded node/material values are applied by
-## index. There is no simulation, so a late start or a seek draws directly.
+## Recorded effect playback (the package's `recorded` approach). An occurrence
+## is one instanced scene plus one clock texel: emitters read their recorded
+## particle states at the clock's source time on the GPU, and recorded
+## node/material values are applied by index. There is no simulation, so a
+## late start or a seek draws directly. The recordings carry no playback
+## shader: each system names its role and this assigns the client's shader.
 const LightUnits=preload("res://presentation/native_light_units.gd")
-const Bundle=preload("res://presentation/baked_effect_bundle.gd")
-const DIRECTORY:="res://.derived/baked_effects/"
+const FORMAT:="res://assets/vfx/format/recording.gd"
+const PARTICLES=preload("res://presentation/baked_particles.gdshader")
+const TRAILING=preload("res://presentation/baked_trailing_particles.gdshader")
+const PATH_TRAIL=preload("res://presentation/baked_path_trail.gdshader")
 const SLOTS:=256
 ## Extra recording variants (beyond each clip's first) load only while this is
 ## true; Play sets it while no action is playing, so no file lands mid-cast.
 static var background_allowed:bool=true
-## `-- --native-effects` plays every clip from its native source (baselines).
-static var enabled:bool=not OS.get_cmdline_user_args().has("--native-effects")
 static var _clock_image:Image
 static var _clock_texture:ImageTexture
 static var _free_slots:Array=[]
@@ -28,59 +30,31 @@ static var _pumping:bool=false
 static var _uploads:Array=[]
 static var _pump_frame:int=-1
 static var _textures:Dictionary={}
+## Process materials with each bundle's constant parameters, by bundle; an
+## occurrence copies them and sets only its clock slot and path.
+static var _prototypes:Dictionary={}
 static var _still_path:ImageTexture
 ## Columns per second of an occurrence's path history (PATH_RATE in
 ## baked_path.gdshaderinc).
 const PATH_RATE:=60.0
 const MAX_PATH_SECONDS:=40.0
 
-## Each clip has up to MAX_VARIANTS recordings made with different seeds;
-## an occurrence picks one by its effect seed, as the native source varies.
-const MAX_VARIANTS:=4
-
-## Emitter seeds of a recording variant (emitter i uses this plus i, as the
-## renderer seeds native emitters).
-static func bake_seed(variant:int)->int:
-    return 1000+variant*7919
-
-static func path_for(clip_id:String,variant:int=0)->String:
-    return DIRECTORY+clip_id.replace("/","__")+("" if variant==0 else ".v"+str(variant))+".res"
-
-static func clip_hash(clip:Dictionary)->String:
-    return str(JSON.stringify(_canonical(clip),"",true).hash())
-
-## Clip data with objects by identity that survives a process: a resource by
-## its path, any other object by its class (instance IDs depend on load order).
-static func _canonical(value:Variant)->Variant:
-    match typeof(value):
-        TYPE_DICTIONARY:
-            var result:Dictionary={}
-            for key in value:result[str(key)]=_canonical(value[key])
-            return result
-        TYPE_ARRAY:return value.map(func(item):return _canonical(item))
-        TYPE_OBJECT:
-            if value==null:return null
-            return "resource:"+value.resource_path if value is Resource and not value.resource_path.is_empty() else "object:"+value.get_class()
-        TYPE_STRING,TYPE_STRING_NAME,TYPE_FLOAT,TYPE_INT,TYPE_BOOL,TYPE_NIL:return value
-    return var_to_str(value)
-
-## Threaded load of a clip's recordings. Files load one at a time: each
-## carries megabytes of textures, and several finishing together stall the
-## frame that uploads them. Every clip's first variant loads before any
-## further variant, and a clip is usable once one variant is uploaded (more
-## variants join as they arrive). A clip needed now (`urgent`) moves to the
-## front. Returns the usable bundles, null while none is ready yet, and false
-## when there is no current recording for this clip.
+## Threaded load of a clip's recorded variants (the package records three
+## seeds per clip). Files load one at a time: each carries megabytes of
+## states, and several finishing together stall the frame that uploads them.
+## Every clip's first variant loads before any further variant, and a clip is
+## usable once one variant is uploaded (more variants join as they arrive). A
+## clip needed now (`urgent`) moves to the front. Returns the usable bundles,
+## null while none is ready yet, and false when the clip has no recording.
 static func request(clip:Dictionary,urgent:bool=false)->Variant:
-    if not enabled:return false
     var id:String=clip.get("id","")
     if _bundles.has(id):return _bundles[id]
     if not _requested.has(id):
-        var paths:Array=[]
-        for variant in MAX_VARIANTS:
-            if ResourceLoader.exists(path_for(id,variant)):paths.append(path_for(id,variant))
+        var recorded:Array=clip.get("approaches",[]).filter(func(approach):return approach.kind=="recorded")
+        recorded.sort_custom(func(a,b):return int(a.get("variant",0))<int(b.get("variant",0)))
+        var paths:Array=recorded.map(func(approach):return str(approach.path))
         if paths.is_empty():_bundles[id]=false;return false
-        _requested[id]={"paths":paths,"hash":clip_hash(_comparable(clip)),"loaded":[],"done":0}
+        _requested[id]={"paths":paths,"loaded":[],"done":0}
         for path in paths:_owners[path]=id
         _queue_first.append(paths[0]);_queue_rest.append_array(paths.slice(1))
     var owner:Dictionary=_requested[id]
@@ -98,13 +72,6 @@ static func request(clip:Dictionary,urgent:bool=false)->Variant:
         return usable
     if owner.done==owner.paths.size() and owner.loaded.is_empty():_bundles[id]=false;return false
     return null
-
-## Number of recorded variants on disk for this clip.
-static func variants_on_disk(clip_id:String)->int:
-    var count:int=0
-    for variant in MAX_VARIANTS:
-        if ResourceLoader.exists(path_for(clip_id,variant)):count+=1
-    return count
 
 ## True once every texture of these bundles exists.
 static func _uploaded(bundles:Array)->bool:
@@ -126,14 +93,14 @@ static func _pump()->void:
     if not _loading.is_empty():
         var status:int=ResourceLoader.load_threaded_get_status(_loading)
         if status==ResourceLoader.THREAD_LOAD_IN_PROGRESS:return
-        var owner:Dictionary=_requested.get(_owners.get(_loading,""),{"paths":[],"hash":"","loaded":[],"done":0})
+        var owner:Dictionary=_requested.get(_owners.get(_loading,""),{"paths":[],"loaded":[],"done":0})
         owner.done+=1
         if status!=ResourceLoader.THREAD_LOAD_LOADED:
-            push_warning("Baked native clip failed to load (status %d); skipping it: %s"%[status,_loading])
+            push_warning("Recorded effect failed to load (status %d); skipping it: %s"%[status,_loading])
         else:
             var bundle:Resource=ResourceLoader.load_threaded_get(_loading)
-            if bundle==null or bundle.get_script()!=Bundle or bundle.clip_hash!=owner.hash:
-                push_warning("Baked native clip is stale; skipping it: "+_loading)
+            if bundle==null or bundle.get_script()==null or bundle.get_script().resource_path!=FORMAT:
+                push_warning("Not a package recording; skipping it: "+_loading)
             else:
                 owner.loaded.append(bundle)
                 _textures[bundle]=[];_uploads.append(bundle)
@@ -143,25 +110,12 @@ static func _pump()->void:
     _loading=next.pop_front()
     ResourceLoader.load_threaded_request(_loading,"",false)
 
-## The baked recording for this source when it can replace the native one:
-## the bundle for `choice` (an effect seed), null while its files load, false
-## when the native source plays it (a CPU Trail3D mesh has no baked form).
+## The recording for `choice` (an effect seed), null while its files load,
+## false when the clip has none.
 static func ready_for(clip:Dictionary,choice:int=0,urgent:bool=false)->Variant:
     var bundles:Variant=request(clip,urgent)
     if not bundles is Array:return bundles
-    var bundle:Resource=bundles[0]
-    for gap in bundle.gaps:
-        if str(gap).begins_with("script_trail_hidden:"):return false
     return bundles[posmod(choice,bundles.size())]
-
-## Fields the renderer adds per occurrence, and the index revision's own
-## path (`source_identity` names the regenerated index folder), are not part
-## of what was recorded.
-static func _comparable(clip:Dictionary)->Dictionary:
-    var result:Dictionary=clip.duplicate(false)
-    result.erase("opacity_uniform")
-    result.erase("source_identity")
-    return result
 
 static func _ensure_clock()->void:
     if _clock_texture!=null:return
@@ -175,15 +129,38 @@ static func _ensure_clock()->void:
 static func flush()->void:
     if _clock_dirty:_clock_texture.update(_clock_image);_clock_dirty=false
 
+## Process materials for a bundle's systems (by role) and path trails, with
+## the parameters every occurrence shares.
+static func _prototype(bundle:Resource)->Dictionary:
+    if _prototypes.has(bundle):return _prototypes[bundle]
+    var systems:Array=[];var trails:Array=[]
+    for index in bundle.systems.size():
+        var system:Dictionary=bundle.systems[index]
+        var process:=ShaderMaterial.new();process.shader=TRAILING if system.get("role","static")=="trailing" else PARTICLES
+        process.set_shader_parameter("vat_rate",bundle.rate)
+        process.set_shader_parameter("vat_frames",system.vat_image.get_width())
+        process.set_shader_parameter("vat_first",int(system.first))
+        process.set_shader_parameter("vat",_textures[bundle][index])
+        systems.append(process)
+    for trail in bundle.trails:
+        var process:=ShaderMaterial.new();process.shader=PATH_TRAIL
+        # The trail's original process parameters (emitter track or offset,
+        # step, billboard); occurrence path and cue values are set per cast.
+        for name in trail.get("parameters",{}):
+            if trail.parameters[name]!=null:process.set_shader_parameter(name,trail.parameters[name])
+        trails.append(process)
+    _prototypes[bundle]={"systems":systems,"trails":trails}
+    return _prototypes[bundle]
+
 static func make(parent:Node3D,bundle:Resource,clip:Dictionary,layer_mask:int)->Dictionary:
     _ensure_clock()
     var handle={"root":null,"components":{},"players":[],"emitters":[],"scripts":[],"carriers":[],"clocks":[],"geometry":[],
         "opacity_bindings":[],"particle_units":[],"emitter_speeds":{},"light_units":{},"motion_trails":{},"motion_age":0.0,
         "native_animation_end":0.0,"initialized":true,"age":0.0,"error":"","clip":clip.duplicate(false),"layer_mask":layer_mask,
-        "baked":true,"bundle":bundle,"slot":-1,"process_materials":[],"tracks":[],"emission_stop":INF,
+        "baked":true,"seekable":true,"bundle":bundle,"slot":-1,"process_materials":[],"tracks":[],"emission_stop":INF,
         "path_materials":[],"trail_draws":[],"history":null,"history_image":null,"history_filled":-1,"presentation":0.0}
     if _free_slots.is_empty():
-        handle.error="Baked native clock slots exhausted";return handle
+        handle.error="Recorded effect clock slots exhausted";return handle
     var started:int=Time.get_ticks_usec()
     handle.slot=_free_slots.pop_back()
     _clock_image.set_pixel(handle.slot,0,Color(0,0,0,0));_clock_dirty=true
@@ -198,25 +175,28 @@ static func make(parent:Node3D,bundle:Resource,clip:Dictionary,layer_mask:int)->
         copies[index]=copy
         for location in materials[index].locations:_bind(root,location,copy)
     if _still_path==null:_still_path=ImageTexture.create_from_image(Image.create_from_data(1,3,false,Image.FORMAT_RGBAF,PackedFloat32Array([1,0,0,0, 0,1,0,0, 0,0,1,0]).to_byte_array()))
+    var prototype:Dictionary=_prototype(bundle)
     for index in bundle.systems.size():
         var system:Dictionary=bundle.systems[index]
         var particles:GPUParticles3D=root.get_node(system.path)
-        var process:ShaderMaterial=particles.process_material.duplicate()
+        var process:ShaderMaterial=prototype.systems[index].duplicate()
         process.set_shader_parameter("clock_slot",handle.slot)
-        process.set_shader_parameter("vat",_textures[bundle][index])
         particles.process_material=process
+        particles.emitting=true
         handle.process_materials.append(process)
-        if system.get("trailing",false):process.set_shader_parameter("root_history",_still_path);handle.path_materials.append(process)
-    for trail in bundle.get("trails"):
+        if system.get("role","static")=="trailing":process.set_shader_parameter("root_history",_still_path);handle.path_materials.append(process)
+    for index in bundle.trails.size():
+        var trail:Dictionary=bundle.trails[index]
         var node:GPUParticles3D=root.get_node(trail.path)
-        var process:ShaderMaterial=node.process_material.duplicate()
+        var process:ShaderMaterial=prototype.trails[index].duplicate()
         process.set_shader_parameter("clock_slot",handle.slot);process.set_shader_parameter("root_history",_still_path)
         node.process_material=process
+        node.emitting=true
         handle.path_materials.append(process)
         handle.trail_draws.append({"node":node,"scroll":trail.scroll,"motion":trail.motion,"process":process})
     for track in bundle.tracks:
         var target:Object=root.get_node(track.path) if track.kind in ["node","bone"] else copies.get(int(track.material))
-        if target==null:handle.error="Baked track target missing: "+str(track);return handle
+        if target==null:handle.error="Recorded track target missing: "+str(track);return handle
         handle.tracks.append({"target":target,"track":track})
     for node in root.find_children("*","",true,false):
         if node is Light3D:
@@ -234,10 +214,10 @@ static func make(parent:Node3D,bundle:Resource,clip:Dictionary,layer_mask:int)->
             if not material is ShaderMaterial or material.shader==null:continue
             if not material.shader.get_shader_uniform_list().any(func(uniform):return uniform.name==opacity_uniform):continue
             if not copies.has(index):
-                handle.error="Baked opacity control is not private: "+opacity_uniform;return handle
+                handle.error="Recorded opacity control is not private: "+opacity_uniform;return handle
             var value=material.get_shader_parameter(opacity_uniform)
             handle.opacity_bindings.append({"material":material,"uniform":opacity_uniform,"native":1.0 if value==null else float(value)})
-        if handle.opacity_bindings.is_empty():handle.error="Missing native opacity control: "+str(clip.get("id",""))+" / "+opacity_uniform
+        if handle.opacity_bindings.is_empty():handle.error="Missing opacity control: "+str(clip.get("id",""))+" / "+opacity_uniform
     for draw in handle.trail_draws:
         var mesh:Mesh=draw.node.get_draw_pass_mesh(0)
         draw.material=draw.node.material_override if draw.node.material_override!=null else mesh.surface_get_material(0) if mesh!=null else null
@@ -326,11 +306,18 @@ static func release(handle:Dictionary)->void:
 static func _blend(a:Variant,b:Variant,weight:float)->Variant:
     match typeof(a):
         TYPE_FLOAT,TYPE_VECTOR2,TYPE_VECTOR3,TYPE_VECTOR4,TYPE_COLOR:return lerp(a,b,weight)
-        TYPE_TRANSFORM3D:return a.interpolate_with(b,weight)
+        TYPE_TRANSFORM3D:
+            # A node scaled to nothing has no rotation to interpolate: blend
+            # its axes linearly instead (as the Factory's reference player).
+            if is_zero_approx(a.basis.determinant()) or is_zero_approx(b.basis.determinant()):
+                return Transform3D(Basis(a.basis.x.lerp(b.basis.x,weight),a.basis.y.lerp(b.basis.y,weight),a.basis.z.lerp(b.basis.z,weight)),a.origin.lerp(b.origin,weight))
+            return a.interpolate_with(b,weight)
     return a
 
 ## Every material reachable from the scene's geometry, in a stable order, with
-## each place it is bound. Bake and playback use the same traversal.
+## each place it is bound. Recordings index their private and tracked
+## materials in the Factory recorder's order: a node's override, then its
+## mesh surfaces, then its particle draw passes (also those an override hides).
 static func material_locations(root:Node)->Array:
     var order:Array=[]
     var by_material:Dictionary={}
@@ -340,16 +327,14 @@ static func material_locations(root:Node)->Array:
         if not node is GeometryInstance3D:continue
         var path:String=str(root.get_path_to(node))
         var found:Array=[]
-        # An override is the only material such a node draws with; its mesh's
-        # own materials are hidden behind it (and must not be bound over it).
         if node.material_override!=null:
             found.append([{"path":path,"kind":"override"},node.material_override])
-        elif node is MeshInstance3D and node.mesh!=null:
+        if node is MeshInstance3D and node.mesh!=null:
             for surface in node.mesh.get_surface_count():
                 var material:Material=node.get_surface_override_material(surface)
                 if material==null:material=node.mesh.surface_get_material(surface)
                 if material!=null:found.append([{"path":path,"kind":"surface","surface":surface},material])
-        elif node is GPUParticles3D:
+        if node is GPUParticles3D:
             for pass_index in node.draw_passes:
                 var mesh:Mesh=node.get_draw_pass_mesh(pass_index)
                 if mesh==null:continue
@@ -364,16 +349,6 @@ static func material_locations(root:Node)->Array:
             order[by_material[material]].locations.append(pair[0])
     return order
 
-## True when every location of this material can take a private copy without
-## copying vertex data (an ArrayMesh copy reads its buffers back from the GPU).
-static func bindable(root:Node,locations:Array)->bool:
-    for location in locations:
-        if location.kind!="pass":continue
-        var node:GPUParticles3D=root.get_node(location.path)
-        var mesh:Mesh=node.get_draw_pass_mesh(location.pass)
-        if not mesh is PrimitiveMesh and not (node.draw_passes==1 and mesh.get_surface_count()==1):return false
-    return true
-
 static func _bind(root:Node,location:Dictionary,material:Material)->void:
     var node:GeometryInstance3D=root.get_node(location.path)
     match location.kind:
@@ -386,4 +361,6 @@ static func _bind(root:Node,location:Dictionary,material:Material)->void:
                     mesh=mesh.duplicate();mesh.set_meta("baked_private",true)
                     node.set_draw_pass_mesh(location.pass,mesh)
                 mesh.material=material
-            else:node.material_override=material
+            # An override is the only material such a node draws with; a pass
+            # material it hides is never bound over it.
+            elif node.material_override==null:node.material_override=material

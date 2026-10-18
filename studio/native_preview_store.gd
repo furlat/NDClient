@@ -1,12 +1,12 @@
 extends RefCounted
 ## Content-specific disk cache shared by the baker and ordinary Studio requests.
 const Packet=preload("res://studio/native_preview_resource.gd")
-const Factory=preload("res://presentation/native_factory_source.gd")
+const Effects=preload("res://presentation/effect_package.gd")
 const DIRECTORY="res://.derived/studio-native-previews"
 const VERSION=1
 const MEMORY_LIMIT=64*1024*1024
 const CHUNK_FRAMES=64
-const SAMPLER_FILES=["res://studio/native_spell_preview.gd","res://presentation/native_factory_source.gd","res://presentation/native_spell_playback.gd","res://presentation/native_particle_units.gd","res://presentation/native_light_units.gd","res://presentation/native_effect_layer.gd"]
+const SAMPLER_FILES=["res://studio/native_spell_preview.gd","res://presentation/effect_package.gd","res://presentation/baked_effect.gd","res://presentation/native_spell_playback.gd","res://presentation/native_light_units.gd","res://presentation/native_effect_layer.gd"]
 var specifications:Dictionary={}
 var file_digests:Dictionary={}
 var dependency_closures:Dictionary={}
@@ -48,7 +48,8 @@ static func visual_specification(component:Dictionary,hz:float)->Dictionary:
     # Source swatches are stationary native compositions. These fields only
     # identify or place an occurrence in the game, and are not read by sample.
     for field in ["id","index","source_index","clip","from","to","ground","caster_ground","from_actor","to_actor","actor_uuid","target_uuid","source_event_uuid","source_lineage","application_index","bend","offset","rotation_degrees","orientation","attachment","recipient","target_local","travel_to_target","launch_delay_seconds"]:cue.erase(field)
-    return canonical({"version":VERSION,"clip":component.native_clip,"cue":cue,
+    # The playing approach kind is part of what a swatch shows.
+    return canonical({"version":VERSION,"clip":component.native_clip,"effect":Effects.key(component.native_clip),"cue":cue,
         "finish":component.finish_profile,"persistent":component.get("persistent_owner",false),
         "lifecycle":component.get("lifecycle",{}),"hz":hz,"size":256,"published_size":128})
 
@@ -62,7 +63,7 @@ func descriptor(component:Dictionary,hz:float)->Dictionary:
     for path in saved.get("dependencies",{}):dependencies[path]=_stamp(path)
     if saved.is_empty() or dependencies!=saved.get("dependencies",{}):
         dependencies.clear()
-        for path in Factory.resource_paths(component.native_clip)+SAMPLER_FILES:_dependencies(path,dependencies)
+        for path in Effects.resource_paths(component.native_clip)+SAMPLER_FILES:_dependencies(path,dependencies)
     var ordered:Dictionary=canonical(dependencies)
     var signature:String=var_to_bytes([specification,ordered]).hex_encode().sha256_text()
     var result={"signature":signature,"spec_key":spec_key,"specification":specification,"dependencies":ordered,"hz":hz}

@@ -1,7 +1,7 @@
 extends Node
-## Source-only thumbnail. Uses the same Factory sampler and finishing shader;
+## Source-only thumbnail. Uses the same package effect and finishing shader;
 ## the actual replay continues to use NativeSpellRenderer in its player world.
-const Factory=preload("res://presentation/native_factory_source.gd")
+const Effects=preload("res://presentation/effect_package.gd")
 const Playback=preload("res://presentation/native_spell_playback.gd")
 const Layer=preload("res://presentation/native_effect_layer.gd")
 var viewport:SubViewport
@@ -48,24 +48,25 @@ func configure_component(value:Dictionary)->String:
     return ""
 
 func sample(seconds:float,basis:Basis,_position:Vector3,_scale:float,_history:Array,_context:Dictionary)->Dictionary:
-    var resources=Factory.prepare([component.native_clip],prepared)
+    var resources=Effects.prepare([component.native_clip],prepared)
     if not resources.ready:return {"ready":false,"error":"; ".join(resources.errors)}
     if handle.is_empty():
         source_parent=Node3D.new();viewport.add_child(source_parent)
-        var clip:Dictionary=component.native_clip.duplicate(true)
+        var clip:Dictionary=component.native_clip.duplicate(false)
         if component.native_cue.has("opacity_uniform"):clip.opacity_uniform=component.native_cue.opacity_uniform
-        handle=Factory.make(source_parent,clip)
+        handle=Effects.make(source_parent,clip,Layer.LAYER)
+        if handle.error.is_empty():Effects.resolve_paths(handle,component.native_cue,str(component.get("spell_id","")))
         if not handle.error.is_empty():return {"ready":false,"error":handle.error}
         handle.root.scale=Vector3.ONE*float(component.native_cue.get("scale",.18))
         handle.root.show()
     camera.global_basis=basis;camera.global_position=basis.z*10.0
     var next:float=minf(seconds,maxf(0.0,sampled)+1.0/60.0)
     if component.get("persistent_owner",false) and sampled>=float(component.lifecycle.get("enter_end_seconds",0)):next=seconds
-    Factory.view(handle,camera)
-    Factory.sample(handle,Playback.source_time(component.native_cue,next),1.0/60.0,next-component.native_cue.launch)
+    Effects.sample(handle,Playback.source_time(component.native_cue,next))
     Playback.controls(handle,component.native_cue,next)
     var path:String=component.native_cue.get("origin_path","")
-    if not path.is_empty():handle.root.position-=handle.root.get_node(path).global_position
+    var anchor:Node3D=Effects.node(handle,path) if not path.is_empty() else null
+    if anchor!=null:handle.root.position-=anchor.global_position
     sampled=next
     var complete:bool=absf(sampled-seconds)<.00001 and absf(drawn-seconds)<.00001 and drawn_basis.is_equal_approx(basis)
     RenderingServer.frame_post_draw.connect(func():drawn=next;drawn_basis=basis,CONNECT_ONE_SHOT)
@@ -75,7 +76,7 @@ func texture()->Texture2D:return output.get_texture()
 
 ## Park: release the source, stop drawing, keep the viewports for reuse.
 func release()->void:
-    if not handle.is_empty():Factory.close(handle);handle={}
+    if not handle.is_empty():Effects.close(handle);handle={}
     if is_instance_valid(source_parent):source_parent.free()
     component={}
     if is_instance_valid(output):
@@ -83,6 +84,6 @@ func release()->void:
         viewport.render_target_update_mode=SubViewport.UPDATE_DISABLED
 
 func close()->void:
-    if not handle.is_empty():Factory.close(handle);handle={}
+    if not handle.is_empty():Effects.close(handle);handle={}
     if is_instance_valid(output):output.queue_free()
     prepared.clear()

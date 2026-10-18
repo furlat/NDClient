@@ -63,7 +63,7 @@ func run()->void:
     var future_cache:Dictionary={}
     Admission.prepare([future_path],future_cache)
     check(not Admission.loading_path.is_empty(),"Future owner starts one real asynchronous resource load")
-    check(Native.Factory.prepare([],{}).ready,"Empty current constructor demand stays ready during an unrelated load")
+    check(Native.Effects.prepare([],{}).ready,"Empty current constructor demand stays ready during an unrelated load")
     result=native.prepare(rows,index.cache,world,[],budget)
     check(result.ready and is_same(native.handles[native_component.id],prepared),"Promotion to required reuses the same source instance without another constructor")
     native.sample(world,[],0.0)

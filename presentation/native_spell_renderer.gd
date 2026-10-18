@@ -3,7 +3,7 @@ extends RefCounted
 ## instances, receiver depth and appearance passes; no rules or event scheduler.
 const AreaMask=preload("res://presentation/native_area_mask.gd")
 const FrameProfile=preload("res://frame_profile.gd")
-const Factory=preload("res://presentation/native_factory_source.gd")
+const Effects=preload("res://presentation/effect_package.gd")
 const Layer=preload("res://presentation/native_effect_layer.gd")
 const Support=preload("res://presentation/native_scene_support.gd")
 const Playback=preload("res://presentation/native_spell_playback.gd")
@@ -84,14 +84,9 @@ func prepare(compiled_groups:Array,cache:Dictionary,world:Node=null,prefetch_gro
             for component in group.get("components",[]):
                 if not accepts(component) or component.get("status")=="missing":continue
                 pair[1][component.id]=component
-    # A baked clip loads as one file on a worker; only native clips admit.
-    var baked_pending:int=0
     for id in wanted:
         optional.erase(id)
-        if handles.has(id):continue
-        var bundle:Variant=Baked.ready_for(wanted[id].native_clip,0,true)
-        if bundle==null:baked_pending+=1
-        elif not bundle is Resource:clips.append(wanted[id].native_clip)
+        if not handles.has(id):clips.append(wanted[id].native_clip)
     var optical:Dictionary=wanted
     if not optical_groups.is_empty():
         optical={}
@@ -102,11 +97,10 @@ func prepare(compiled_groups:Array,cache:Dictionary,world:Node=null,prefetch_gro
     var started:int=Time.get_ticks_usec()
     var result:Dictionary
     if not clips.is_empty() and not budget.is_empty() and budget.used_usec>=budget.limit_usec:
-        Factory.Admission.can_mutate() # Completion polling never constructs a source.
+        Effects.Admission.can_mutate() # Completion polling never constructs a source.
         result={"ready":false,"pending":clips.size(),"errors":[]}
-    else:result=Factory.prepare(clips,_resource_cache)
+    else:result=Effects.prepare(clips,_resource_cache)
     if not budget.is_empty():budget.used_usec+=Time.get_ticks_usec()-started
-    if baked_pending>0:result.ready=false;result.pending+=baked_pending
     if world!=null:FrameProfile.end_phase(world.profile,"native_prepare_resources",started)
     if world==null:
         if not budget.is_empty():budget.used_usec+=maxi(0,Time.get_ticks_usec()-admission_started-(budget.used_usec-charged_before))
@@ -148,14 +142,11 @@ func prepare(compiled_groups:Array,cache:Dictionary,world:Node=null,prefetch_gro
             if handles.has(id) or _prepare_failures.has(id):continue
             if not budget.is_empty() and budget.used_usec>=budget.limit_usec:break
             started=Time.get_ticks_usec()
-            var bundle:Variant=Baked.ready_for(optional[id].native_clip)
-            if bundle==null:continue
-            if not bundle is Resource:
-                var loading=Factory.prepare([optional[id].native_clip],_resource_cache)
-                if not budget.is_empty():budget.used_usec+=Time.get_ticks_usec()-started
-                FrameProfile.end_phase(world.profile,"native_prepare_resources",started)
-                if not loading.errors.is_empty():_prepare_failures[id]=str(loading.errors);continue
-                if not loading.ready:continue
+            var loading:Dictionary=Effects.prepare([optional[id].native_clip],_resource_cache,false)
+            if not budget.is_empty():budget.used_usec+=Time.get_ticks_usec()-started
+            FrameProfile.end_phase(world.profile,"native_prepare_resources",started)
+            if not loading.errors.is_empty():_prepare_failures[id]=str(loading.errors);continue
+            if not loading.ready:continue
             if not budget.is_empty() and budget.used_usec>=budget.limit_usec:break
             started=Time.get_ticks_usec()
             _construct(optional[id])
@@ -193,9 +184,8 @@ func _construct(component:Dictionary)->String:
     var clip:Dictionary=component.native_clip.duplicate(false)
     if component.native_cue.has("opacity_uniform"):clip.opacity_uniform=component.native_cue.opacity_uniform
     var seed:int=Components.effect_seed(component)
-    var bundle:Variant=Baked.ready_for(clip,seed)
-    var handle=Baked.make(_owner,bundle,clip,0) if bundle is Resource else Factory.make(_owner,clip,0)
-    # Factory already measures its constructor stages. Preserve that breakdown
+    var handle:Dictionary=Effects.make(_owner,clip,0,seed)
+    # Construction stages are measured where they run. Preserve that breakdown
     # in the live frame profile so an indivisible construction overrun is
     # attributable without adding another set of timers around its internals.
     var frame_phases:Dictionary=_owner.get_parent().profile.phases
@@ -203,7 +193,9 @@ func _construct(component:Dictionary)->String:
         var name:String="native_construct_"+str(phase)
         frame_phases[name]=frame_phases.get(name,0.0)+handle.construction_phases[phase]
     if not handle.error.is_empty():
-        var error:String=handle.error;_prepare_failures[component.id]=error;Factory.close(handle);return error
+        var error:String=handle.error;_prepare_failures[component.id]=error;Effects.close(handle);return error
+    # Staged node paths the effect lacks are reported with its diagnostics.
+    handle.missing_paths=Effects.resolve_paths(handle,component.native_cue,str(component.get("spell_id","")))
     for index in handle.emitters.size():
         handle.emitters[index].use_fixed_seed=true;handle.emitters[index].seed=seed+index
     handle.component=component;handle.sample_time=0.0;handle.requested_time=-1.0;handle.drawn_time=-1.0
@@ -293,7 +285,7 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
     var retained=_queued_ids(world)
     for id in active:retained[id]=true
     for id in handles.keys():
-        if not retained.has(id):Factory.close(handles[id]);handles.erase(id);diagnostics.erase(id);preparation_revision+=1
+        if not retained.has(id):Effects.close(handles[id]);handles.erase(id);diagnostics.erase(id);preparation_revision+=1
         elif not active.has(id):handles[id].root.hide()
     FrameProfile.end_phase(world.profile,"native_sample_retention",sample_phase)
     sample_phase=Time.get_ticks_usec()
@@ -320,12 +312,12 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
         cue.merge({"from":points.from,"to":points.to,"ground":points.ground,"caster_ground":points.caster_ground},true)
         if not cue.get("bend",Vector2.ZERO) is Vector2:
             cue.bend=Vector2(cue.bend[0],cue.bend[1])
-        if age+0.000001<float(handle.sample_time) and not handle.get("baked",false):
+        if age+0.000001<float(handle.sample_time) and not handle.get("seekable",false):
             # Normal replay seeks use a fresh presentation epoch. An explicit
             # backwards sample still clears its own particles/trails honestly.
-            Factory.close(handle);handles.erase(id);preparation_revision+=1
+            Effects.close(handle);handles.erase(id);preparation_revision+=1
             ready=false;_pending(component,"native_spell_source_reset_pending");continue
-        Factory.set_layer(handle,int(groups[key].layer_mask))
+        Effects.set_layer(handle,int(groups[key].layer_mask))
         handle.group_key=key
         handle.optical=_optical(component.get("optical",{}))
         if component.get("spatial_owner",false):
@@ -335,8 +327,8 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
         # The bounded pass is only for a cold/seek history. Ordinary live
         # samples must follow the requested component clock at any frame rate.
         var expected_step:float=maxf(HISTORY_STEP,frame_seconds*maxf(1.0,float(world.playback_speed)))
-        # A baked clip draws any age directly; only a simulation has history.
-        if handle.get("baked",false):handle.warming=false
+        # A seekable approach draws any age directly; only a simulation has history.
+        if handle.get("seekable",false):handle.warming=false
         elif not handle.started and age>expected_step+0.000001:handle.warming=true
         elif handle.started and not handle.warming and age-float(handle.requested_time)>expected_step*2.0+0.000001:handle.warming=true
         var sample_time:float=minf(age,float(handle.sample_time)+maxf(HISTORY_STEP,expected_step*2.0)) if handle.warming else age
@@ -345,14 +337,12 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
             # unbounded visual history. Jump to the actual owner age/close.
             sample_time=age
         handle.root.show()
-        handle.root.global_transform=Playback.transform(cue,sample_time,points.hand,1.0)
-        Factory.view(handle,world.camera)
-        var native_advance:float=frame_seconds if frame_seconds>0 else _owner.get_process_delta_time() if handle.warming else 0.0
+        Effects.place(handle,Playback.transform(cue,sample_time,points.hand,1.0))
         if handle.get("baked",false) and not handle.has("emission_stop_set"):
             Baked.stop_emission(handle,_emission_stop(cue));handle.emission_stop_set=true
-        Factory.sample(handle,Playback.source_time(cue,sample_time),native_advance,sample_time-float(cue.launch))
+        Effects.sample(handle,Playback.source_time(cue,sample_time))
         if cue.has("origin_path"):
-            var anchor=handle.root.get_node_or_null(cue.origin_path)
+            var anchor=Effects.node(handle,cue.origin_path)
             if anchor==null:
                 handle.root.hide();_missing(component,"native_spell_origin_missing");continue
             handle.root.global_position+=Playback.transform(cue,sample_time,points.hand,1.0).origin-anchor.global_position
@@ -372,7 +362,8 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
         if caught_up:handle.warming=false
         var drawn:bool=handle.rendered_once
         var submitted_bounds:bool=submitted_geometry(handle,frustum,int(groups[key].layer_mask))
-        diagnostics[id]={"id":id,"status":"rendered" if drawn else "prepared", "reason":"" if caught_up else "native_spell_history_preparing", "age_ms":sample_time*1000.0,"requested_age_ms":age*1000.0,"source_age":handle.age,"group":key,"layer":groups[key].layer_mask,"attachment_support":points.surfaces,"submitted_bounds":submitted_bounds}
+        diagnostics[id]={"id":id,"status":"rendered" if drawn else "prepared", "reason":"" if caught_up else "native_spell_history_preparing", "age_ms":sample_time*1000.0,"requested_age_ms":age*1000.0,"source_age":handle.age,"group":key,"layer":groups[key].layer_mask,"attachment_support":points.surfaces,"submitted_bounds":submitted_bounds,
+            "effect_clip":str(handle.clip.get("id","")),"effect_kind":handle.effect_kind,"effect_fallback":handle.effect_reason,"missing_staged_paths":handle.missing_paths}
         if not caught_up:ready=false
         if drawn and caught_up and submitted_bounds:witnesses.append({"id":id,"source_event_uuid":component.get("source_event_uuid",""),"status":"rendered","age_ms":float(handle.drawn_time)*1000.0,"frame":handle.get("drawn_frame",Engine.get_process_frames())})
         if float(handle.drawn_time)!=sample_time:
@@ -562,7 +553,7 @@ func _pending(component:Dictionary,reason:String)->void:
     diagnostics[component.id]={"id":component.id,"status":"pending","reason":reason}
 
 func close(world:Node=null)->void:
-    for handle in handles.values():Factory.close(handle)
+    for handle in handles.values():Effects.close(handle)
     handles.clear();diagnostics.clear();witnesses.clear();issues.clear();required_images.clear();required_cpu_images.clear()
     for layer in groups.values():Layer.close(layer)
     for layer in spare_layers:Layer.close(layer)

@@ -540,7 +540,7 @@ func _native_startup_request(at_ms:float,optional:bool=false)->Dictionary:
     var owners:Array=[timeline.initialization_revision,timeline.current.get("id",""),timeline.queue.map(func(group):return group.id),selection_media.revision]
     if owners!=native_live_owners:
         native_live_owners=owners
-        var clips:Array=selected.get("clips",[]).duplicate()
+        var clips:Array=NativeStartup.Authoring.effect_clips(selected)
         var groups:Array=timeline.queue.duplicate()
         if not timeline.current.is_empty():groups.push_front(timeline.current)
         for group in groups:

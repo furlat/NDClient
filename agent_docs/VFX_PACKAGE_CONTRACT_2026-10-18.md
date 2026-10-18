@@ -141,3 +141,30 @@ returned to the Factory. The package that follows keeps the winners.
 3. Run the bench, decide per clip or family, report back.
 4. Client: delete the importer, the generated manifest, the copied
    `assets/native_effects/` tree and the client baker.
+
+## 7. Client status (18 October, package `20261018-fa4e64489d2d25a8`)
+
+Step 2 is in place for spells; step 4 is done except the copied tree and the
+generated manifest, which the old spell sandbox (`sandbox/world.gd`) and the
+class/blood sources (`authoring/native_effects/index.json` `sources`) still
+read.
+
+- `presentation/effect_package.gd` reads `index.json` and resolves each staged
+  cue's clip: the same id (51 of the 55 staged cues), else the spell
+  selection's clip renamed from it (`recovered/travel` → one
+  `recovered/travel/source-*` per spell), else the selection's one cue in the
+  same role (Chill Touch's strike, Web's area). Staging stays the client's.
+- Plays `recorded`, else `gpu`, else `native`; `-- --effect-kind=` or the
+  Studio's Inspect → Effect version forces a kind where a clip has it.
+- Recordings play with `presentation/baked_effect.gd`: shaders assigned by
+  role, emission started, source rate and frames from the bundle, variant by
+  the cast's seed. Materials are indexed in the Factory recorder's order
+  (override, mesh surfaces, particle passes, including passes an override
+  hides).
+- Live approaches: `make_component({layer_mask})`, `root_path` through its
+  setter, `sample(source_seconds)`; the shared clock pool exists before any
+  package material loads; `warm` materials compile on a worker during
+  preparation, and the existing private warm-up draw compiles the pipelines.
+- `tests/effect_package_checks.gd` builds, samples (0/25/50/75 %) and draws
+  every approach of every staged clip; `tests/studio_effect_version_checks.gd`
+  covers the Studio switch.
