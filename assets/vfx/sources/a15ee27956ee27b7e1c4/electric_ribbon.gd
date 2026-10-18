@@ -84,7 +84,7 @@ static func prepare_auxiliary(material: ShaderMaterial, kind: String) -> void:
 		var vertex := expression.search(code)
 		assert(vertex != null)
 		code = code.insert(vertex.get_end(), "\ngpu_"+kind+"_deform(VERTEX,NORMAL,COLOR,UV);\n")
-		code = code.insert(vertex.get_start(), VfxPackageIO_a15ee27956.text("res://factory/components/gpu_motion/electric_"+kind+".gdshaderinc")+"\n")
+		code = code.insert(vertex.get_start(), VfxPackageIO_a15ee27956.text("factory-path:factory/components/gpu_motion/electric_"+kind+".gdshaderinc")+"\n")
 		program = Shader.new()
 		program.code = code
 		programs[key] = weakref(program)

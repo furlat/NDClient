@@ -121,7 +121,7 @@ func capture_observation() -> Dictionary:
 			"palette_count": material.get_shader_parameter("native_palette_count"),
 		}
 		if parameters.get("diagnostic_dump_shaders", false):
-			FileAccess.open("res://reviews/blight-"+path.replace(" ","_")+"-diagnostic.gdshader.txt",FileAccess.WRITE).store_string(material.shader.code)
+			FileAccess.open("user://vfxfactory-diagnostics/blight-"+path.replace(" ","_")+"-diagnostic.gdshader.txt",FileAccess.WRITE).store_string(material.shader.code)
 	return {
 		"component": "blight",
 		"coating_style": coating.material_override.get_shader_parameter("style"),

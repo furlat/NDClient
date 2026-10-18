@@ -19,6 +19,8 @@ func run() -> void:
 			pending.append_array(approach.warm)
 	var seen := {}
 	var failures := []
+	var resource_paths := RegEx.new()
+	resource_paths.compile("res://[A-Za-z0-9_.-][^\"'\\\\\\r\\n`]*")
 	while not pending.is_empty():
 		var path: String = str(pending.pop_back()).split("::")[0]
 		if seen.has(path):
@@ -34,6 +36,16 @@ func run() -> void:
 			var raw: String = path.get_basename() + ".raw.res"
 			if FileAccess.file_exists(raw):
 				pending.append(raw)
+		if path.get_extension() in ["gd", "gdshader", "gdshaderinc", "tres", "tscn"]:
+			# ResourceLoader dependencies omit dynamically constructed string
+			# reads. Reject even their literal prefixes outside the package.
+			var bytes: PackedByteArray = FileAccess.get_file_as_bytes(path)
+			var binary: bool = bytes.size() >= 4 and bytes.slice(0, 4).get_string_from_ascii() in ["RSRC", "RSCC"]
+			var text: String = "" if binary else bytes.get_string_from_utf8()
+			for match_value in resource_paths.search_all(text):
+				var literal: String = match_value.get_string()
+				if not literal.begins_with("res://assets/vfx/"):
+					failures.append({"path": path, "error": "external resource literal", "literal": literal})
 		if path.get_extension() in ["json", "gdshaderinc"]:
 			continue
 		if not path.get_extension() in ["res", "scn", "tres", "tscn", "gdshader", "gd"]:
@@ -44,6 +56,6 @@ func run() -> void:
 		var loaded: Resource = ResourceLoader.load(path)
 		if loaded == null:
 			failures.append({"path": path, "error": "ResourceLoader.load failed"})
-	FileAccess.open(arguments[0], FileAccess.WRITE).store_string(JSON.stringify({"files": seen.keys(), "failures": failures}, "  "))
+	FileAccess.open(arguments[0], FileAccess.WRITE).store_string(JSON.stringify({"files": seen.keys(), "failures": failures, "package_version": index.version, "index_sha256": FileAccess.get_sha256("res://assets/vfx/index.json")}, "  "))
 	print("PACKAGE_DEPENDENCY_AUDIT ", seen.size(), " failures=", failures.size())
 	quit(0 if failures.is_empty() else 1)

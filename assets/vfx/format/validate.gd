@@ -145,6 +145,6 @@ func run() -> void:
 			if not row.errors.is_empty():
 				failures.append(row)
 		var report_path: String = options.get("report", "user://vfx-package-validation.json")
-		FileAccess.open(report_path, FileAccess.WRITE).store_string(JSON.stringify({"rows": rows, "failures": failures, "project": ProjectSettings.globalize_path("res://")}, "  "))
+		FileAccess.open(report_path, FileAccess.WRITE).store_string(JSON.stringify({"rows": rows, "failures": failures, "project": ProjectSettings.globalize_path("res://"), "package_version": index.version, "index_sha256": FileAccess.get_sha256("res://assets/vfx/index.json")}, "  "))
 	print("PACKAGE_VALIDATION ", rows.size(), " failures=", failures.size())
 	quit(0 if failures.is_empty() else 1)

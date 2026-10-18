@@ -297,7 +297,7 @@ The Factory already ships oil ignite/douse, web ignite/douse, water and blood fr
 
 ### 6.1 Spell: one entry per spell id
 
-Key space from the modern branch: 181 roots plus 6 composition rows.
+Key space from the modern branch (`codex/npc-abilities-mechanics`, schema 15): 189 spells, of which 58 are new against the pinned engine. The Factory package has a selection for all but 6 (acid_flask, aegis_spark, the test fixture, necrotic_bless, counterspell, hellish_rebuke).
 
 | Field | Meaning |
 |---|---|
@@ -315,6 +315,13 @@ Key space from the modern branch: 181 roots plus 6 composition rows.
 
 ### 6.2 Condition: one entry per condition id
 
+Key space: 235 on the modern branch (107 new). They are:
+- 22 core conditions;
+- spell conditions on the body;
+- 23 spell-zone conditions, which point at their surface (§5.4);
+- class, consumable-coating and summon conditions;
+- internal markers (membership, owner). These still get an entry marked `internal`, which draws nothing.
+
 | Field | Meaning |
 |---|---|
 | `icon` | HUD icon. The game shows no condition icons today |
@@ -329,7 +336,12 @@ Key space from the modern branch: 181 roots plus 6 composition rows.
 
 ### 6.3 Action, trait, reaction, class feature
 
-One entry per id: `action.*` (79), `trait.*`, `reaction.*`, `class_feature.*`, `feat.*`.
+One entry per id: `action.*` (179 on the modern branch), `trait.*` (34), `reaction.*` (9), `class_feature.*`, `feat.*`. This includes:
+- 43 new multiattack configurations;
+- 26 summon-form abilities;
+- spell sub-actions;
+- class actions;
+- about 20 action ids the server sends without a catalogue entry (rage, action surge, second wind, quickened spell and others).
 
 | Field | Meaning |
 |---|---|
@@ -356,6 +368,8 @@ One entry per id: `action.*` (79), `trait.*`, `reaction.*`, `class_feature.*`, `
 ### 7.1 `server_ids.json`
 
 A tool reads the engine read-only (pinned or modern branch) and writes the list of every id per kind, with icon and portrait keys. The client never talks to the server for this. This is the only link, and it goes one way.
+
+The modern branch sends 647 icon keys, but 283 of them are only a fallback equal to the id, with no art. The coverage report lists those as icons to bind or draw. Protocol 15 changes how items and surfaces arrive (`ItemLook`, `SpatialEffectContent`), but not the ids, so the schema's keys stay the same when the client upgrades.
 
 ### 7.2 One build command
 
@@ -390,12 +404,13 @@ Studio and the game read only `build/`. The Studio can rebuild one entry and rel
 | What | Today in the game | Must fit |
 |---|---|---|
 | Character rigs | 44 | All authored packs, 259 art variants incl. 55 animals and 21 dinosaurs; the 3D pilots (89 clips) and the carriage actors |
-| Server creatures | 45 bound | 95 in the pinned engine; 148 roster NPCs on the modern branch |
-| Spells | 30–34 staged | About 187 in the Factory package, 181 roots on the modern branch |
-| Conditions | 160 recipes, few drawn | All server conditions; 29 Factory lifecycles |
-| Items | Keyed by English name | 381 item ids |
+| Server creatures | 45 bound | 232 on the modern branch: 123 new NPCs, 14 spell summons and more |
+| Spells | 30–34 staged | 189 on the modern branch; about 187 in the Factory package |
+| Conditions | 160 recipes, few drawn | 235 on the modern branch; 29 Factory lifecycles |
+| Actions, traits, reactions | 85 body recipes, 5 attack recipes | 179 actions, 34 traits, 9 reactions |
+| Items | Keyed by English name | 388 item ids, plus runtime-created ones: conjured weapons, spell payloads, wall sections |
 | Environment objects | Doors, props, traps, 4 fixtures | 160 `environment.*` ids; 760 catalogued pieces; devices, portals, decals |
-| Surfaces | Blood, Web area | 51 spatial effects, 6 residues, 10 tile materials |
+| Surfaces | Blood, Web area | 67 spatial effects (17 now in the catalogue), 6 residues, 10 tile materials, plus the new `dry` operation |
 | Art conventions | 128 px, 15 frames, 8 rows | 5+ cell sizes, 6–106 frames, 4 direction schemes, 3 cameras, 4 depth/normal encodings, 7 containers |
 
 ## 9. Getting there without changing a pixel

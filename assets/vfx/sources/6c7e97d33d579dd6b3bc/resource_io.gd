@@ -12,7 +12,9 @@ static func resolve(path: String) -> String:
 	if paths.is_empty():
 		paths = JSON.parse_string(FileAccess.get_file_as_string("res://assets/vfx/format/paths.json"))
 	if path.begins_with("factory-path:"):
-		return paths.get(path.trim_prefix("factory-path:"), path)
+		var resolved: String = paths.get(path.trim_prefix("factory-path:"), "")
+		assert(resolved.begins_with("res://assets/vfx/"), "Unresolved package resource alias: " + path)
+		return resolved
 	return path
 
 
