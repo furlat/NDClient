@@ -82,10 +82,8 @@ static func markers(component:Dictionary,offset:float)->Array:
     return result
 
 static func _held_key_times(cue:Dictionary,source:float)->Array:
+    # A spatial owner holds its deployed pose: keys run at entry and close only.
     var window:Dictionary=cue.lifecycle
-    # Repeated source loops require a bounded inspection interval. Current
-    # owner descriptors explicitly hold a measured native pose instead.
-    if window.get("hold_mode","hold")!="hold":return []
     var result:Array=[]
     var enter:float=window.get("enter_end_seconds",0.0)
     var owner_end:float=cue.get("owner_end_seconds",INF)

@@ -122,6 +122,25 @@ func ensure_epoch(world: Node) -> void:
     if epoch!=world.timeline.initialization_revision:
         close(world);epoch=world.timeline.initialization_revision
 
+## Drops requirements compiled for a condition or spatial owner at a cut the
+## display has passed when the timeline has since retired that owner (removed
+## and its removal played): they are not prepared again.
+static func live_requirements(groups:Array,world:Node)->Array:
+    var owners:Dictionary=world.timeline.condition_owners;var areas:Dictionary=world.timeline.spatial_effect_owners
+    var start:float=world.timeline.group_start_ms if not world.timeline.current.is_empty() else world.timeline.display_ms
+    var result:Array=[]
+    for group in groups:
+        start=maxf(start,float(group.get("preview_start_ms",start)))
+        var at:float=start
+        var stale:Callable=func(component):
+            var id:Variant=component.get("condition_uuid",component.get("spatial_effect_uuid"))
+            return component.has("preparation_key") and id!=null and at+float(component.preparation_at_ms)<=world.timeline.display_ms and not owners.has(id) and not areas.has(id)
+        if group.get("components",[]).any(stale):
+            group=group.duplicate();group.components=group.components.filter(func(component):return not stale.call(component))
+        result.append(group)
+        start+=float(group.get("duration_ms",0.0))
+    return result
+
 static func due_groups(groups:Array,world:Node,through_ms:float)->Array:
     if is_inf(through_ms):return groups
     var result:Array=[]
@@ -194,8 +213,8 @@ func prepare(groups: Array,cache: Dictionary,world: Node=null,admission:Dictiona
         # shells. Owner after-values and actual clocks remain Timeline-owned.
         var persistent:Array=Conditions.samples(world.timeline.condition_owners.duplicate(),world.timeline.display_ms,cache,{},false)
         persistent.append_array(Conditions.NativePersistent.spatial_samples(world.timeline.spatial_effect_owners.duplicate(),world.timeline.display_ms,cache))
-        var future:Array=preparation_groups(_native_prefetch(required_groups,world),persistent)
-        var required:Array=preparation_groups(required_groups,persistent)
+        var future:Array=live_requirements(preparation_groups(_native_prefetch(required_groups,world),persistent),world)
+        var required:Array=live_requirements(preparation_groups(required_groups,persistent),world)
         var due:Array=due_groups(required,world,through_ms)
         var due_components:Array=[]
         for group in due:due_components.append_array(group.components)

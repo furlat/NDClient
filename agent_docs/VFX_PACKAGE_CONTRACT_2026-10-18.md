@@ -168,6 +168,22 @@ read.
 - `tests/effect_package_checks.gd` builds, samples (0/25/50/75 %) and draws
   every approach of every staged clip; `tests/studio_effect_version_checks.gd`
   covers the Studio switch.
+- Conditions play the package's 29 condition lifecycles
+  (`EffectPackage.conditions(id)` by the server's condition id, `when`
+  matched against the disclosed state): one occurrence per owner and
+  lifecycle, built from its application clip; each frame its `owner_state`
+  gets the phase (application, sustain, removal), the phase age and the
+  owner's age, and it samples on the owner's age (`NativePersistent`). It is
+  placed at its `registration` (ground, or the head socket for markers; rigs
+  without one use the body centre) and follows the recipient as it walks;
+  `visibility` hides it with an invisible actor, by life state, and markers
+  take turns (one overhead group at a time). A spell's attached cue is not
+  played at the cast when the condition's lifecycle carries the spell's body
+  visual (`body_channel_included`); a marker-only condition keeps the spell's
+  cue (Command). The clips are native-only: the Effect version choice says
+  so on the row. Every lifecycle warms with the load (game) or the recording
+  (Studio). `tests/condition_lifecycle_checks.gd` checks all 29;
+  `tests/condition_lifecycle_frames.gd` captures them in the Studio cases.
 
 ## 8. Findings for the Factory (18 October, package `20261018-fa4e64489d2d25a8`)
 
@@ -213,6 +229,18 @@ Staging differences between the client's staging and the package's
 - **No package staging**: Fire Bolt, Ice Knife, Poison Spray, Ray of Frost and
   Scorching Ray have no staging cues; True Strike has no cue for its clip.
 
-Condition lifecycles (29 `selections` with a `condition` block) are native
-only, with Factory-measured construction of 18–54 ms each. The client is
-wiring them in now; per-clip costs measured in play will be added here.
+Condition lifecycles (merged in the client on 18 October; per-clip numbers
+from `tests/condition_lifecycle_checks.gd`):
+- **All 29 are native-only, and their builds run on the main thread.**
+  - The 19 overhead markers take 23–66 ms on the first build and 9–16 ms on a rebuild.
+  - The 10 body lifecycles take 39–243 ms on the first build. Sanctuary (243/166 ms), Bane (210/160 ms) and Shield of Faith (155/118 ms) are the worst.
+  - These are visible frame spikes in play. Please supply recorded or GPU approaches, or cheaper constructors.
+- **Shield of Faith:** the sustain goes blank after about 5 s. Its emitters fire once and none keeps running (`continuous_emitters` is empty).
+- **Sanctuary:** the sustain drops to about 15% coverage once its ring disappears.
+- **Guidance:** the sustain falls to about 7% of its opening coverage after 2 s.
+- **Aid:** the application draws nothing for its first 0.55 s.
+- **Light and all 19 markers:** the sustain is static (`steady_artwork`), but the user asked for an animated hold.
+- **`occurrence.set_owner_state`:** walks the whole node tree twice on every call, and the phase age has to be sent every frame.
+- **`origin_path` is inconsistent:** markers use `Glyph`, which is inside the component, while body lifecycles use `effect/Retained`, from the root.
+- **Bane:** has two lifecycles on one condition id, and the client plays both. Please document this.
+- **Web:** has no spatial lifecycle. Its net still holds a staged pose.

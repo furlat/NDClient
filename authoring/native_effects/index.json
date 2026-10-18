@@ -1392,25 +1392,10 @@
         "cue_ids": [
           0.0
         ],
-        "cues": {
-          "0": {
-            "enter_end_seconds": 2.99305555555556,
-            "exit_end_seconds": 4.0,
-            "exit_start_seconds": 3.0,
-            "hold_end_seconds": 2.99305555555556,
-            "hold_mode": "hold",
-            "hold_start_seconds": 2.99305555555556,
-            "source_evidence": "Factory recipient/bane.gd begins native close/fade after432/144; its curse glyphs are visible before this boundary. Hold the last pre-close native pose; no finite gameplay hold is inferred."
-          }
-        },
         "owner_ids": [
           "condition.spell.bane"
         ],
-        "owner_kind": "condition",
-        "replaces_media": [
-          "pending.bane.back",
-          "pending.bane.front"
-        ]
+        "owner_kind": "condition"
       },
       "manifest": "sandbox/projectiles.json",
       "source_bounds": {
@@ -1766,36 +1751,6 @@
         "scope": "application"
       },
       "id": "command",
-      "lifecycle": {
-        "cue_ids": [
-          0.0
-        ],
-        "cues": {
-          "0": {
-            "enter_end_seconds": 1.0,
-            "exit_end_seconds": 3.5,
-            "exit_start_seconds": 3.15,
-            "hold_end_seconds": 1.0,
-            "hold_mode": "hold",
-            "hold_start_seconds": 1.0,
-            "source_evidence": "Native control_status.gd supplies a continuous control glyph. Hold the1s native glyph pose; existing authored fade binding supplies the.35s source close. Command condition variant UUID owns actual lifetime."
-          }
-        },
-        "owner_ids": [
-          "condition.spell.command.flee",
-          "condition.spell.command.grovel",
-          "condition.spell.command.halt"
-        ],
-        "owner_kind": "condition",
-        "replaces_media": [
-          "control.command.sustain.back",
-          "control.command.sustain.front",
-          "control.command.application.back",
-          "control.command.application.front",
-          "control.command.removal.back",
-          "control.command.removal.front"
-        ]
-      },
       "manifest": "sandbox/projectiles.json",
       "source_bounds": {
         "spells/command/back/lifecycle": {
@@ -3330,25 +3285,10 @@
         "cue_ids": [
           0.0
         ],
-        "cues": {
-          "0": {
-            "enter_end_seconds": 0.659722222222222,
-            "exit_end_seconds": 2.0,
-            "exit_start_seconds": 0.666666666666667,
-            "hold_end_seconds": 0.659722222222222,
-            "hold_mode": "hold",
-            "hold_start_seconds": 0.659722222222222,
-            "source_evidence": "Factory recipient/base.gd triggers authored close at settings.close=96 ticks, simulation_hz=144; hold the last admitted pre-close source frame. Native open length1s; this is a held native pose, not a claimed seamless sustain loop."
-          }
-        },
         "owner_ids": [
           "condition.spell.guidance"
         ],
-        "owner_kind": "condition",
-        "replaces_media": [
-          "support.guidance.back",
-          "support.guidance.front"
-        ]
+        "owner_kind": "condition"
       },
       "manifest": "sandbox/projectiles.json",
       "source_bounds": {
@@ -4399,26 +4339,11 @@
         "cue_ids": [
           0.0
         ],
-        "cues": {
-          "0": {
-            "enter_end_seconds": 1.0,
-            "exit_end_seconds": 2.0,
-            "exit_start_seconds": 1.65,
-            "hold_end_seconds": 1.0,
-            "hold_mode": "hold",
-            "hold_start_seconds": 1.0,
-            "source_evidence": "Native magic orb main animation completes at1s and leaves source material visible; held at its complete native pose. Existing native alpha/light fade bindings close from1.65 to2s only after actual condition removal."
-          }
-        },
         "optical_owner": "authoritative_light",
         "owner_ids": [
           "condition.spell.light"
         ],
-        "owner_kind": "condition",
-        "replaces_media": [
-          "support.light.back",
-          "support.light.front"
-        ]
+        "owner_kind": "condition"
       },
       "manifest": "sandbox/projectiles.json",
       "source_bounds": {
@@ -4656,25 +4581,10 @@
         "cue_ids": [
           0.0
         ],
-        "cues": {
-          "0": {
-            "enter_end_seconds": 1.2,
-            "exit_end_seconds": 7.2,
-            "exit_start_seconds": 5.0,
-            "hold_end_seconds": 1.2,
-            "hold_mode": "hold",
-            "hold_start_seconds": 1.2,
-            "source_evidence": "Native start_animation ends at.4s; authored opacity reaches its quiet.16 plateau at1.2s. Hold that complete native pose. Imported clip animation_cues starts end_animation and emission stops at5.0s; retained particles and existing final alpha fade end by7.2s only after condition removal."
-          }
-        },
         "owner_ids": [
           "condition.spell.mage_armor"
         ],
-        "owner_kind": "condition",
-        "replaces_media": [
-          "persistent.mage_armor.back",
-          "persistent.mage_armor.front"
-        ]
+        "owner_kind": "condition"
       },
       "manifest": "sandbox/projectiles.json",
       "source_bounds": {
@@ -5898,25 +5808,10 @@
         "cue_ids": [
           0.0
         ],
-        "cues": {
-          "0": {
-            "enter_end_seconds": 0.743055555555556,
-            "exit_end_seconds": 2.85,
-            "exit_start_seconds": 0.75,
-            "hold_end_seconds": 0.743055555555556,
-            "hold_mode": "hold",
-            "hold_start_seconds": 0.743055555555556,
-            "source_evidence": "Factory recipient/base.gd triggers close at108/144; hold the last pre-close source frame. Native close animation length1s and authored fade/source duration2.85s."
-          }
-        },
         "owner_ids": [
           "condition.spell.resistance"
         ],
-        "owner_kind": "condition",
-        "replaces_media": [
-          "support.resistance.back",
-          "support.resistance.front"
-        ]
+        "owner_kind": "condition"
       },
       "manifest": "sandbox/projectiles.json",
       "source_bounds": {
@@ -5994,25 +5889,10 @@
         "cue_ids": [
           0.0
         ],
-        "cues": {
-          "0": {
-            "enter_end_seconds": 4.8,
-            "exit_end_seconds": 5.6,
-            "exit_start_seconds": 4.8,
-            "hold_end_seconds": 4.8,
-            "hold_mode": "hold",
-            "hold_start_seconds": 4.8,
-            "source_evidence": "Factory recipient/protection.gd keeps sanctuary alpha until4.8s then fades native geometry/alpha to5.6s; hold the actual last pre-close pose."
-          }
-        },
         "owner_ids": [
           "condition.spell.sanctuary"
         ],
-        "owner_kind": "condition",
-        "replaces_media": [
-          "persistent.sanctuary.back",
-          "persistent.sanctuary.front"
-        ]
+        "owner_kind": "condition"
       },
       "manifest": "sandbox/projectiles.json",
       "source_bounds": {
@@ -6560,47 +6440,16 @@
       "exclusion_reason": "Offline hostile Fire Bolt and timed Shield contact are sandbox probes, not effects of casting Shield; real interception events own reaction contact.",
       "id": "shield",
       "lifecycle": {
-        "contact_cue_ids": [
-          2.0
-        ],
         "cue_ids": [
           0.0
         ],
-        "cues": {
-          "0": {
-            "enter_end_seconds": 0.6,
-            "exit_end_seconds": 3.7,
-            "exit_start_seconds": 3.0,
-            "hold_end_seconds": 0.6,
-            "hold_mode": "hold",
-            "hold_start_seconds": 0.6,
-            "source_evidence": "Imported clip animation_cues starts native end_animation at3.0s; its native length is.6s. Native start_animation ends at.6s. Hold that complete opening; the condition UUID owns actual removal, then source close3.0..3.7 runs."
-          }
-        },
+        "contact_cue_ids": [
+          2.0
+        ],
         "owner_ids": [
           "condition.spell.shield"
         ],
-        "owner_kind": "condition",
-        "replaces_media": [
-          "persistent.shield.back",
-          "persistent.shield.front",
-          "persistent.shield.hit.E.back",
-          "persistent.shield.hit.E.front",
-          "persistent.shield.hit.N.back",
-          "persistent.shield.hit.N.front",
-          "persistent.shield.hit.NE.back",
-          "persistent.shield.hit.NE.front",
-          "persistent.shield.hit.NW.back",
-          "persistent.shield.hit.NW.front",
-          "persistent.shield.hit.S.back",
-          "persistent.shield.hit.S.front",
-          "persistent.shield.hit.SE.back",
-          "persistent.shield.hit.SE.front",
-          "persistent.shield.hit.SW.back",
-          "persistent.shield.hit.SW.front",
-          "persistent.shield.hit.W.back",
-          "persistent.shield.hit.W.front"
-        ]
+        "owner_kind": "condition"
       },
       "manifest": "sandbox/projectiles.json",
       "source_bounds": {
@@ -6694,25 +6543,10 @@
         "cue_ids": [
           0.0
         ],
-        "cues": {
-          "0": {
-            "enter_end_seconds": 1.49305555555556,
-            "exit_end_seconds": 4.5,
-            "exit_start_seconds": 1.5,
-            "hold_end_seconds": 1.49305555555556,
-            "hold_mode": "hold",
-            "hold_start_seconds": 1.49305555555556,
-            "source_evidence": "Factory recipient/base.gd changes Init to End at authored close216/144; End lasts2.5s. Hold the last pre-close native pose; source close finishes by4.5s."
-          }
-        },
         "owner_ids": [
           "condition.spell.shield_of_faith"
         ],
-        "owner_kind": "condition",
-        "replaces_media": [
-          "support.shield_of_faith.back",
-          "support.shield_of_faith.front"
-        ]
+        "owner_kind": "condition"
       },
       "manifest": "sandbox/projectiles.json",
       "source_bounds": {
@@ -7950,8 +7784,6 @@
             "enter_end_seconds": 0.8,
             "exit_end_seconds": 0.8,
             "exit_start_seconds": 0.8,
-            "hold_end_seconds": 0.8,
-            "hold_mode": "hold",
             "hold_start_seconds": 0.8,
             "source_evidence": "Factory recipient/silk_area.gd completes deploy at.8s and keeps web opacity1. Native source has no authored close; actual spatial-effect removal retires the ground mesh immediately. Recipient restraint overlays remain separate."
           }

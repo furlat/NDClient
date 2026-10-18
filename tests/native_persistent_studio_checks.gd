@@ -37,11 +37,19 @@ func inspect_case(case:Dictionary)->void:
         check(ids.has(row.parent) and row.end_ms>row.start_ms,spell+": native row has a real lifetime parent and finite interval")
         check(row.coverage.rendered=="not_witnessed" and row.coverage.prepared=="not_examined",spell+": source indexing is not rendering evidence")
         check(row.source_start_ms==row.owner.start_ms and row.component.absolute_start_ms==row.owner.start_ms,spell+": split intervals retain actual owner start")
-        check(row.component.native_cue.owner_end_seconds==(row.owner.end_ms-row.owner.start_ms)/1000.0,spell+": source clock closes only at actual owner removal")
-        if not is_inf(row.owner.end_ms):
-            var window:Dictionary=component.lifecycle
-            var close_end:float=row.owner.end_ms+(float(window.exit_end_seconds)-float(window.exit_start_seconds))*1000.0
-            check(row.end_ms<=close_end+.00001,spell+": native track stops at its own source close, not a retained sibling's fade")
+        if component.has("lifecycle_phases"):
+            check(component.duration_ms==row.owner.end_ms-row.owner.start_ms,spell+": lifecycle removal starts only at actual owner removal")
+            check(component.lifecycle_phases.keys()==["application","sustain","removal"] and component.native_clip==component.lifecycle_phases.application,spell+": one occurrence of the package lifecycle plays its three phases")
+            var phase:String=Native.lifecycle_state(component,(row.start_ms-row.source_start_ms)/1000.0).phase
+            check(row.lifecycle_phase==phase and row.effect_clip==component.lifecycle_phases[phase].id and row.label.begins_with(phase.capitalize()),spell+": Studio row names its lifecycle phase and clip")
+            if not is_inf(row.owner.end_ms):
+                check(row.end_ms<=row.owner.end_ms+float(component.lifecycle_phases.removal.seconds)*1000.0+.00001,spell+": lifecycle track stops at its removal's end, not a retained sibling's fade")
+        else:
+            check(row.component.native_cue.owner_end_seconds==(row.owner.end_ms-row.owner.start_ms)/1000.0,spell+": source clock closes only at actual owner removal")
+            if not is_inf(row.owner.end_ms):
+                var window:Dictionary=component.lifecycle
+                var close_end:float=row.owner.end_ms+(float(window.exit_end_seconds)-float(window.exit_start_seconds))*1000.0
+                check(row.end_ms<=close_end+.00001,spell+": native track stops at its own source close, not a retained sibling's fade")
         check(registered.has(row.trace_track_id),spell+": actual condition application or sensory commit registers exact native witness ID")
         if not component.get("spatial_owner",false):
             owners[row.owner.condition.behavior_id]=true
@@ -53,11 +61,10 @@ func inspect_case(case:Dictionary)->void:
             check(child.markers.all(func(marker):return marker.at_ms>=row.start_ms and marker.at_ms<=row.end_ms),spell+": repeated inspection spans do not display keys outside their own interval")
     var entry_report=Coverage.build(index.cache,index.rows,owners) if not owners.is_empty() else {"entries":[]}
     for entry in entry_report.entries:
-        var selected=Native.Spells.condition(entry.id,index.cache)
-        var replaced:Array=selected.lifecycle.replaces_media
+        var replaced:Array=Native.replaced_media(entry.id,Coverage.Authoring.load_data("catalog/condition_recipes.json",index.cache)[entry.id])
         check(not entry.requirements.any(func(requirement):return requirement.get("asset_id","") in replaced),spell+": replaced sprite media creates no obsolete requirements")
         var phases:Array=entry.requirements.filter(func(requirement):return requirement.mechanism.begins_with("native:"))
-        check(phases.size()==Native.Spells.condition_phases(selected).size() and not phases.is_empty(),spell+": every native owner phase has source coverage")
+        check(phases.size()==Native.Effects.conditions(entry.id).size() and not phases.is_empty(),spell+": every package lifecycle of the owner has source coverage")
         check(phases.all(func(requirement):return requirement.status=="implemented" and requirement.availability=="available" and not requirement.rendered),spell+": actual resolved native rows qualify implementation only")
         if entry.id=="condition.spell.shield":shield_requirements(index,entry)
     if not rows.is_empty():
@@ -75,7 +82,10 @@ func inspect_case(case:Dictionary)->void:
             var close:Dictionary=closed[0]
             var begin:float=(close.start_ms-close.source_start_ms)/1000.0
             var finish:float=(close.end_ms-close.source_start_ms)/1000.0
-            check(Playback.source_time(close.component.native_cue,finish)>Playback.source_time(close.component.native_cue,begin),spell+": removal source clock progresses when seeking within close interval")
+            if close.component.has("lifecycle_phases"):
+                var opened:Dictionary=Native.lifecycle_state(close.component,begin);var closing:Dictionary=Native.lifecycle_state(close.component,finish)
+                check(opened.phase=="removal" and closing.phase=="removal" and closing.phase_age_seconds>opened.phase_age_seconds and closing.owner_age_seconds>opened.owner_age_seconds,spell+": removal plays on the owner's age when seeking within it")
+            else:check(Playback.source_time(close.component.native_cue,finish)>Playback.source_time(close.component.native_cue,begin),spell+": removal source clock progresses when seeking within close interval")
     observations.append({"spell":spell,"native_owner_rows":rows.size(),"condition_types":owners.keys(),"journal":case.perspectives[0].journal})
 
 func shield_requirements(index:Dictionary,entry:Dictionary)->void:

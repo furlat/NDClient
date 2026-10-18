@@ -28,7 +28,9 @@ func run()->void:
                 check(requirement.status=="missing" and not requirement.reason.is_empty(),"Unsupported/missing-source mechanism remains explicit "+requirement.id)
         var recipe:Dictionary=recipes[entry.id]
         var selected=Coverage.NativeSpells.condition(entry.id,cache)
-        var replaced:Array=selected.get("lifecycle",{}).get("replaces_media",[])
+        var replaced:Array=Coverage.Persistent.replaced_media(entry.id,recipe)
+        if not Coverage.NativeSpells.contact_phases(selected).is_empty():
+            for effects in recipe.get("interceptionEffectsByDirection",{}).values():replaced.append_array(effects.map(func(effect):return effect.assetId))
         var ramp:Variant=recipe.persistent.get("bodyRamp")
         if ramp!=null:
             var rows=entry.requirements.filter(func(row):return row.mechanism=="bodyRamp")
@@ -44,9 +46,9 @@ func run()->void:
             if recipe.persistent.layers[i].assetId in replaced:
                 check(not entry.requirements.any(func(row):return row.source==pointer),"Explicitly superseded persistent source is replaced in coverage "+pointer)
             else:check(entry.requirements.any(func(row):return row.source==pointer and row.get("asset_id")==recipe.persistent.layers[i].assetId),"Every retained persistent source is enumerated "+pointer)
+        var native_rows=entry.requirements.filter(func(row):return row.mechanism.begins_with("native:"))
+        check(native_rows.size()==Coverage.Effects.conditions(entry.id).size() and native_rows.all(func(row):return row.implementation=="implemented" and row.availability=="available" and row.status=="unexercised"),"Package lifecycles replace media without claiming recorded execution "+entry.id)
         if not selected.is_empty():
-            var native_rows=entry.requirements.filter(func(row):return row.mechanism.begins_with("native:"))
-            check(native_rows.size()==Coverage.NativeSpells.condition_phases(selected).size() and native_rows.all(func(row):return row.implementation=="implemented" and row.availability=="available" and row.status=="unexercised"),"Selected native phases replace media without claiming recorded execution "+entry.id)
             var contacts=entry.requirements.filter(func(row):return row.mechanism.begins_with("native_contact:"))
             check(contacts.size()==Coverage.NativeSpells.contact_phases(selected).size() and contacts.all(func(row):return row.implementation=="implemented" and row.availability=="available" and row.status=="unexercised" and row.evidence.is_empty()),"Native interception source availability does not claim a recorded hit "+entry.id)
         for direction in recipe.get("interceptionEffectsByDirection",{}):
@@ -96,9 +98,10 @@ func run()->void:
     check(entries["condition.spell.darkness.zone"].indicator_assignments.size()==1 and entries["condition.spell.darkness.zone"].indicator_assignments[0].source=="world.json:/spatial_media/spatial_effect.spell.darkness","Cleansing Daylight trigger cannot count as Darkness indicator assignment")
     _assignment_boundaries(cache,recipes)
     check(entries["condition.spell.mirror_image"].requirements.any(func(row):return row.mechanism=="liveCopies" and row.status=="missing"),"Lifecycle capture does not pretend Mirror Image copies are implemented")
-    check(entries["condition.poisoned"].requirements.any(func(row):return row.mechanism.ends_with(":markerGroup") and row.implementation=="implemented"),"Original shared grouping policy is supported without inventing render evidence")
+    check(entries["condition.blinded"].requirements.any(func(row):return row.mechanism.ends_with(":markerGroup") and row.implementation=="implemented"),"Original shared grouping policy is supported without inventing render evidence")
+    check(not entries["condition.poisoned"].requirements.any(func(row):return row.mechanism.ends_with(":markerGroup")) and entries["condition.poisoned"].requirements.any(func(row):return row.mechanism=="native:condition_poisoned_native" and row.status=="unexercised"),"Poisoned's overhead marker is the package lifecycle, not its sprite layer")
     check(entries["condition.charmed"].requirements.any(func(row):return row.get("resolved_asset_id","").begins_with("control.charmed.") and row.reason=="native_source_not_authored" and row.status=="missing"),"Condition metadata aliases name the sprite asset that still needs a native source")
-    check(entries["condition.spell.guidance"].requirements.any(func(row):return row.mechanism=="native:0" and row.availability=="available" and row.implementation=="implemented" and row.status=="unexercised"),"Guidance now uses its actual native owner source instead of the replaced static sprite")
+    check(entries["condition.spell.guidance"].requirements.any(func(row):return row.mechanism=="native:condition_guidance_retained_native" and row.availability=="available" and row.implementation=="implemented" and row.status=="unexercised"),"Guidance now uses its actual native owner source instead of the replaced static sprite")
     for id in ["condition.blinded","condition.spell.bestow_curse.ability"]:
         var offsets=entries[id].requirements.filter(func(row):return row.mechanism.ends_with(":offsetY"))
         check(not offsets.is_empty() and offsets.all(func(row):return row.implementation=="implemented" and row.status=="unexercised" and not row.rendered),"Implemented registered offsets remain unexercised rather than missing "+id)

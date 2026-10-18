@@ -2,6 +2,7 @@ extends SceneTree
 const Spells=preload("res://presentation/native_spell_authoring.gd")
 const Playback=preload("res://presentation/native_spell_playback.gd")
 const Authoring=preload("res://presentation/authoring.gd")
+const Persistent=preload("res://presentation/native_persistent.gd")
 var checks:int=0
 var failures:Array=[]
 var evidence:Array=[]
@@ -28,9 +29,11 @@ func run()->void:
             check(not selected.staging.has(field),id+": offline fixture field does not enter production selection: "+field)
         var before:Dictionary=selected.duplicate(true)
         var phases:Array=Spells.phases(selected,{"start":0.0,"prepare":0.0},1000.0,500.0,1,true)
-        var conditions:Array=Spells.condition_phases(selected)
+        # Spatial owners hold their staged cue; a condition plays the package's lifecycle.
+        var conditions:Array=Spells.condition_phases(selected) if selected.get("lifecycle",{}).get("owner_kind")=="spatial_effect" else []
+        var owned:Array=Spells.owned_cues(selected)
         var contacts:Array=Spells.contact_phases(selected)
-        check(not phases.is_empty() or not conditions.is_empty(),id+": actual event or persistent owner has native phases")
+        check(not phases.is_empty() or not conditions.is_empty() or not owned.is_empty(),id+": actual event or persistent owner has native phases")
         for phase in phases+conditions+contacts:
             var cue:Dictionary=phase.native_cue
             roles[cue.role]=true
@@ -48,24 +51,31 @@ func run()->void:
         for phase in conditions:
             check(is_inf(phase.duration_ms),id+": finite source duration is not the owner's game expiry")
             var window:Dictionary=phase.lifecycle
-            check(window.hold_mode in ["hold","loop"] and not window.source_evidence.is_empty(),id+": source hold has explicit inspected provenance")
-            check(window.enter_end_seconds>=0 and window.hold_start_seconds>=window.enter_end_seconds and window.hold_end_seconds>=window.hold_start_seconds,id+": source entry/hold window is ordered")
-            check(window.exit_start_seconds>=window.hold_end_seconds and window.exit_end_seconds>=window.exit_start_seconds,id+": source close window is ordered")
-            check(not phases.any(func(transient):return transient.source==phase.source),id+": condition-owned application is not duplicated by event phases")
+            check(not window.source_evidence.is_empty(),id+": spatial hold has explicit inspected provenance")
+            check(window.enter_end_seconds>=0 and window.hold_start_seconds>=window.enter_end_seconds,id+": spatial entry/hold window is ordered")
+            check(window.exit_start_seconds>=window.hold_start_seconds and window.exit_end_seconds>=window.exit_start_seconds,id+": spatial close window is ordered")
+            check(not phases.any(func(transient):return transient.source==phase.source),id+": owner-held cue is not duplicated by event phases")
+        for index in owned:
+            check(not phases.any(func(transient):return transient.source==selected.source+"/cues/"+str(index)),id+": the cue the condition lifecycle carries is not played again at the cast")
         var lifecycle:Dictionary=selected.lifecycle
         if lifecycle.get("owner_kind")=="condition":
             for condition_id in lifecycle.owner_ids:
                 check(Spells.condition(condition_id,cache).id==selected.id,id+": exact disclosed condition behavior selects its source")
+                check(not Spells.Effects.conditions(condition_id).is_empty(),id+": the package has a lifecycle for "+condition_id)
+            if owned.is_empty():
+                check(lifecycle.cue_ids.all(func(index):return phases.any(func(transient):return transient.source==selected.source+"/cues/"+str(int(index)))),id+": a marker-only condition keeps the spell's own cue at the cast")
         check(before==selected,id+": phase compilation leaves retained authoring immutable")
-        evidence.append({"spell_id":selected.id,"scope":selected.delivery.scope,"event_phases":phases.size(),"owner_phases":conditions.size(),"interception_phases":contacts.size(),"owners":lifecycle.get("owner_ids",[])})
+        evidence.append({"spell_id":selected.id,"scope":selected.delivery.scope,"event_phases":phases.size(),"owner_phases":conditions.size(),"owned_cues":owned,"interception_phases":contacts.size(),"owners":lifecycle.get("owner_ids",[])})
     for role in ["cast","flight","impact","strike","spray","area","attached"]:check(roles.has(role),"Whole batch covers native role "+role)
     var shield=Spells.selection("spell.shield",cache)
     check(Spells.phases(shield,{"start":0},0,0,0,true).is_empty(),"Shield casting does not invent a hostile projectile or interception")
     var contact=Spells.contact_phases(shield)
     check(contact.size()==1 and contact[0].native_cue.role=="attached","Real Shield interception has exactly its native contact source")
     for field in ["launch_delay_seconds","from_actor","to_actor","travel_to_target"]:check(not contact[0].native_cue.has(field),"Shield interception omits demonstration field "+field)
-    var light=Spells.condition_phases(Spells.selection("spell.light",cache))
+    var lit:Dictionary={"id":"condition:light","actor_uuid":"actor","condition":{"behavior_id":"condition.spell.light","state":{}},"start_ms":0.0,"absolute_start_ms":0.0,"duration_ms":INF,"age_ms":0.0,"removal_age_ms":null,"initial":false}
+    var light=Persistent.lifecycle_samples(lit,Persistent.lifecycles(lit.condition),cache)
     check(light.size()==1 and light[0].optical.energy_multiplier==0 and light[0].optical.owner=="authoritative_light","Native Light visual does not duplicate authoritative optical illumination")
+    check(Spells.owned_cues(shield)==[0] and Spells.owned_cues(Spells.selection("spell.command",cache)).is_empty(),"Shield's bubble is the condition's; Command's glyph stays at its cast beside the marker")
     var ice=Spells.selection("spell.ice_knife",cache)
     check(ice.delivery.effects["spell.ice_knife.burst"].roles==["area"],"Ice Knife burst is separately selected by the actual burst effect ID")
     var report={"checks":checks,"failed":failures.size(),"failures":failures,"spells":evidence,"scope":"All30 existing nondeferred source registrations, authored roles/clocks/tails, real condition behavior selection and exclusion of offline demo facts. This does not replace real-event or native pixel qualification."}

@@ -25,7 +25,9 @@ func sample_case(owners:Dictionary,at:float,label:String)->Array:
     var actual=Conditions.samples(actual_owners,at,cache)
     var native_owners=owners.duplicate(true)
     var native=Conditions.native_samples(native_owners,at,cache)
-    check(native==actual.filter(func(row):return row.get("native_spell",false)),label+" preparation selects the exact native subset")
+    # Display shows a marker group at a time; preparation holds every candidate.
+    check(actual.filter(func(row):return row.get("native_spell",false)).all(func(row):return native.has(row)),label+" displayed native rows are exactly prepared rows")
+    check(native.all(func(row):return row.get("native_spell",false)),label+" preparation selects only native rows")
     check(native_owners==actual_owners,label+" native-only sampling preserves retirement")
     if oracle!=null:
         var expected_owners=owners.duplicate(true)
@@ -36,20 +38,20 @@ func sample_case(owners:Dictionary,at:float,label:String)->Array:
     return actual
 
 func phase_isolation(behavior:String)->void:
-    var selected=Conditions.NativePersistent.Spells.condition(behavior,cache)
-    var phases=Conditions.NativePersistent.Spells.condition_phases(selected)
-    var original=phases.duplicate(true)
-    var common={"id":"condition:one","actor_uuid":"actor","start_ms":100.0,"absolute_start_ms":100.0,
-        "duration_ms":900.0,"age_ms":200.0,"initial":false}
-    var first=Conditions.NativePersistent.phase_samples(common,phases)
+    var selections:Array=Conditions.NativePersistent.Effects.conditions(behavior)
+    var original=selections.duplicate(true)
+    var common={"id":"condition:one","actor_uuid":"actor","condition":{"behavior_id":behavior,"state":{}},"start_ms":100.0,"absolute_start_ms":100.0,
+        "duration_ms":900.0,"age_ms":200.0,"removal_age_ms":null,"initial":false}
+    var first=Conditions.NativePersistent.lifecycle_samples(common,selections,cache)
     var later=common.duplicate();later.id="condition:two";later.actor_uuid="other";later.age_ms=500.0;later.initial=true
-    var second=Conditions.NativePersistent.phase_samples(later,phases)
-    check(not first.is_empty() and not second.is_empty(),behavior+" both owner lifetimes yield native phases")
-    check(phases==original,behavior+" occurrence construction leaves resolved phase descriptions unchanged")
+    var second=Conditions.NativePersistent.lifecycle_samples(later,selections,cache)
+    check(not first.is_empty() and first.size()==second.size(),behavior+" both owner lifetimes yield its package lifecycles")
+    check(selections==original,behavior+" occurrence construction leaves the package selections unchanged")
     if first.is_empty() or second.is_empty():return
     check(first[0].id!=second[0].id and first[0].actor_uuid!=second[0].actor_uuid,behavior+" recipients retain independent occurrence identities")
-    first[0].native_cue.owner_end_seconds=123.0
-    check(second[0].native_cue.owner_end_seconds==.9 and phases==original,behavior+" cue mutation cannot alter another owner or phase description")
+    first[0].native_cue.scale=123.0
+    check(second[0].native_cue.scale!=123.0 and selections==original,behavior+" cue mutation cannot alter another owner or the package selection")
+    check(Conditions.NativePersistent.lifecycle_state(first[0],.95).phase=="removal" and Conditions.NativePersistent.lifecycle_state(second[0],.4).phase=="sustain",behavior+" each owner's own clock selects its phase")
 
 func actual_shield()->void:
     var index=Recording.read("res://.runtime/studio-spells-20261015/shield-seed3/blue/journal")
@@ -80,14 +82,13 @@ func compare_timing(owners:Dictionary)->void:
 func run()->void:
     for argument in OS.get_cmdline_user_args():
         if argument.begins_with("--oracle="):oracle=load(argument.trim_prefix("--oracle="))
-    var index=Conditions.Authoring.load_data("native_effects/index.json",cache)
-    for entry in index.spells.values():
-        var lifecycle:Dictionary=entry.get("lifecycle",{})
-        if lifecycle.get("owner_kind")!="condition":continue
-        native_ids.append_array(lifecycle.owner_ids)
-    check(native_ids.size()==11,"All eleven authored native owner types covered, including three Command outcomes")
+    var index:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(Conditions.NativePersistent.Effects.INDEX))
+    for selection in index.selections:
+        for id in selection.get("condition",{}).get("owner_ids",[]):
+            if id not in native_ids:native_ids.append(id)
+    check(native_ids.size()>=40 and "condition.spell.command.halt" in native_ids and "condition.spell.shield" in native_ids,"Every condition id the package's lifecycles name is covered, including three Command outcomes")
     var mixed:Dictionary={}
-    for behavior in native_ids+["condition.poisoned","condition.paralyzed"]:
+    for behavior in native_ids+["condition.hidden","condition.blinded"]:
         var base=owner(behavior)
         var fade=Conditions.fade_ms(base.condition,cache)
         if oracle!=null:check(fade==oracle.fade_ms(base.condition,oracle_cache),behavior+" exact original native/legacy removal duration")

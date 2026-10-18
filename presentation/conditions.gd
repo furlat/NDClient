@@ -39,15 +39,15 @@ static func suppressed(condition: Dictionary) -> bool:
     return state!=null and not state.get("suppression_provider_uuids",[]).is_empty()
 
 static func fade_ms(condition: Dictionary, cache: Dictionary) -> float:
-    var selected=NativePersistent.Spells.condition(str(condition.get("behavior_id","")),cache)
-    return _fade_ms(recipe(condition,cache),selected,NativePersistent.Spells.condition_phases(selected),cache)
+    return _fade_ms(condition,recipe(condition,cache),NativePersistent.lifecycles(condition),cache)
 
-static func _fade_ms(config:Dictionary,selected:Dictionary,phases:Array,cache:Dictionary)->float:
+static func _fade_ms(condition:Dictionary,config:Dictionary,lifecycles:Array,cache:Dictionary)->float:
     var persistent:Dictionary=config.get("persistent",{})
-    var fade=maxf(float(persistent.get("bodyRamp",{}).get("removalMs",0)),NativePersistent.phase_fade_ms(phases))
+    var fade=maxf(float(persistent.get("bodyRamp",{}).get("removalMs",0)),NativePersistent.removal_ms(lifecycles))
     var media: Dictionary=Authoring.load_data("catalog/condition_media.json",cache)
+    var replaced:Array=NativePersistent.replaced_media(str(condition.get("behavior_id","")),config)
     for layer in persistent.get("layers",[]):
-        if layer.get("assetId","") in selected.get("lifecycle",{}).get("replaces_media",[]):continue
+        if layer.get("assetId","") in replaced:continue
         var metadata:Dictionary=media.get(layer.assetId,{})
         fade=maxf(fade,float(metadata.get("removal_fade_ms",200)))
     return fade
@@ -57,14 +57,15 @@ static func native_samples(owners:Dictionary,at_ms:float,cache:Dictionary,includ
 
 static func samples(owners: Dictionary, at_ms: float, cache: Dictionary, activities: Dictionary={}, select_layers_now: bool=true, native_only: bool=false,include_legacy:bool=false) -> Array:
     var result: Array=[]
+    var lifecycle_rows: Array=[]
+    var invisible: Dictionary={}
     for owner_id in owners.keys():
         var owner: Dictionary=owners[owner_id]
         var config=recipe(owner.condition,cache)
-        var native_selection=NativePersistent.Spells.condition(str(owner.condition.behavior_id),cache)
-        var native_phases=NativePersistent.Spells.condition_phases(native_selection)
-        var fade=0.0 if is_inf(owner.end_ms) else _fade_ms(config,native_selection,native_phases,cache)
+        var lifecycles:Array=NativePersistent.lifecycles(owner.condition)
+        var fade=0.0 if is_inf(owner.end_ms) else _fade_ms(owner.condition,config,lifecycles,cache)
         if at_ms>=owner.end_ms+fade:owners.erase(owner_id);continue
-        if (config.is_empty() or config.get("disposition")=="state_only") and native_selection.is_empty(): continue
+        if (config.is_empty() or config.get("disposition")=="state_only") and lifecycles.is_empty(): continue
         var persistent: Dictionary=config.get("persistent",{})
         var media: Dictionary=Authoring.load_data("catalog/condition_media.json",cache)
         if suppressed(owner.condition): continue
@@ -76,13 +77,16 @@ static func samples(owners: Dictionary, at_ms: float, cache: Dictionary, activit
             "age_ms":age,"initial":owner.initial,"alpha":alpha,"recipe":config,"condition":owner.condition,"sample_hz":32.0}
         common.removal_age_ms=null if is_inf(owner.end_ms) else maxf(0,at_ms-owner.end_ms)
         result.append(common)
-        result.append_array(NativePersistent.phase_samples(common,native_phases))
+        if is_inf(owner.end_ms) and float(persistent.get("alphaMultiplier",1.0))<1.0:invisible[owner.actor_uuid]=true
+        for row in NativePersistent.lifecycle_samples(common,lifecycles,cache):
+            row.life_state=owner.get("life_state","alive");lifecycle_rows.append(row)
         # Keep the common owner rows through the same recipe priority/removal
         # selection below; only audio and native layer construction are skipped.
         if native_only and not include_legacy:continue
         var natives: Dictionary=Authoring.load_data("native_effects/index.json",cache).sources
+        var replaced:Array=NativePersistent.replaced_media(str(owner.condition.behavior_id),config)
         for layer in persistent.get("layers",[]):
-            if layer.get("assetId","") in native_selection.get("lifecycle",{}).get("replaces_media",[]):continue
+            if layer.get("assetId","") in replaced:continue
             var row=common.duplicate();row.id+=":"+layer.id;row.layer=layer;row.attachment=layer.attachment
             row.trace_keys=["condition:"+owner.id+":layer:"+str(layer.id)]
             row.metadata=media.get(layer.assetId,{})
@@ -111,6 +115,9 @@ static func samples(owners: Dictionary, at_ms: float, cache: Dictionary, activit
             sound.absolute_start_ms=sound.start_ms;sound.age_ms=maxf(0,at_ms-sound.start_ms)
             if sound.timing_selector!="condition.interval":sound.status="missing";sound.reason="authored_audio_timing_unavailable"
             result.append(sound)
+    # Every lifecycle is prepared; display selects them by their visibility
+    # and the actor's marker turn.
+    result.append_array(NativePersistent.select_lifecycles(lifecycle_rows,at_ms,activities,invisible) if select_layers_now and not native_only else lifecycle_rows)
     # Native preparation has no output to compose when these owners supply
     # only body effects. Expiry above still runs for every owner.
     if native_only and not result.any(func(sample):return sample.kind=="native_effect"):return []

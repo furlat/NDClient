@@ -28,9 +28,20 @@ static func effect_clips(selected:Dictionary)->Array:
         if not clip.is_empty() and not seen.has(clip.id):seen[clip.id]=true;result.append(clip)
     return result
 
+## Staged cues an owner plays instead of the cast: a spatial owner's cue, and
+## the spell's attached visual when the package's lifecycle of its condition
+## carries it (Shield's bubble opens at the real application, not twice).
+## A condition drawn only by an overhead marker keeps the spell's own cue at
+## the cast (Command's glyph) beside its marker.
+static func owned_cues(selected:Dictionary)->Array:
+    var lifecycle:Dictionary=selected.get("lifecycle",{})
+    var carried:bool=lifecycle.get("owner_kind")=="spatial_effect" or lifecycle.get("owner_ids",[]).any(func(id):
+        return Effects.conditions(str(id)).any(func(selection):return selection.condition.get("body_channel_included",false)))
+    return lifecycle.get("cue_ids",[]).map(func(value):return int(value)) if carried else []
+
 static func phases(selected:Dictionary,owner:Dictionary,launch_ms:float,travel_ms:float,application_index:int,include_cast:bool)->Array:
     var rows:Array=[]
-    var persistent:Array=selected.get("lifecycle",{}).get("cue_ids",[]).map(func(value):return int(value))
+    var persistent:Array=owned_cues(selected)
     for choice in selected.staging.cues:
         var source_index:int=choice.source_index
         if source_index in selected.get("excluded_cue_indices",[]):continue
