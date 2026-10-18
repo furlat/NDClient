@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "nature"
+constructor_script = "res://assets/vfx/sources/bf6d447d0525f84fb79e/goodberry.gd"
+input = {"native_noise": "res://assets/vfx/sources/e1a0e0dfc4cb8c8bc962/texture.res", "native_leaf": "res://assets/vfx/sources/a45c09f25ed6570f7b8f/texture.res", "berry_colours": ["4b283a", "a55569", "d399a3"], "leaf_colour": "86ac65", "mode": "consume", "healing_admitted": false, "item_uuids": ["fixture-goodberry-0"]}
+options = {}
+provenance = "Pinned native selection; catalog/bg3-36-spell-contracts-20261015.json#spell.goodberry"
+
+[resource]
+script = ExtResource("script")
+clip_id = "bg3-36/goodberry/goodberry_healing_blocked_native"
+label = "Goodberry · consumed, healing blocked"
+phase = "lifecycle"
+variant = "goodberry_healing_blocked_native"
+source_recipe = "catalog/bg3-36-spell-contracts-20261015.json#spell.goodberry"
+bindings = [{"component": "nature", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 1.35
+simulation_hz = 60
+components = Array[Resource]([SubResource("part_0")])
+options = {"opacity_uniform": "cue_opacity"}

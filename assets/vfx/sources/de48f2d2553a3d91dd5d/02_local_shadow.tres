@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "shadow"
+constructor_script = "res://assets/vfx/sources/6814b201f9d6a0303075/flow_area.gd"
+input = {"texture": "res://assets/vfx/sources/cbb88db8ccb063022ea0/dark_noise.tres", "diameter": 2.8, "deep": "101c25", "energy": "234656", "emission_strength": 0.0, "opacity_scale": 0.8, "ambient_shadow": true, "seconds": 2.6}
+options = {}
+provenance = "Pinned native selection; backend/conjuration.py:CallLightning"
+
+[resource]
+script = ExtResource("script")
+clip_id = "live/call/local-shadow"
+label = "Transient seven-foot strike cue, not maintained storm"
+phase = "application"
+variant = "backend_local"
+source_recipe = "backend/conjuration.py:CallLightning"
+bindings = [{"component": "shadow", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 2.6
+simulation_hz = 60
+components = Array[Resource]([SubResource("part_0")])
+options = {}

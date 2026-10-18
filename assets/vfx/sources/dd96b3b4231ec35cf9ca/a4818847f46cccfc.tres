@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/sources/0738ff2d24aa41b1b963/native_review_composition.gd"
+input = {"components": [{"script": "res://assets/vfx/sources/ec591a5b9c4c194952ab/color_spray.gd", "input": {"scene": "res://assets/vfx/sources/d5ecd06fc57beb3273b3/effect_root.tscn", "settings": {"animation": "", "kind": "color_spray", "axis": [1, 0], "root": [0.26522, 0.91985, -0.26522], "range_cells": 3.0}, "side": "full", "simulation_hz": 144, "seed": 47291}, "id": "effect", "rotation_degrees": [0, 0, 0]}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": [], "gpu_paths": true}
+options = {}
+provenance = "Pinned native selection; recipes/spells/color_spray.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "review/color_spray/back/lifecycle"
+label = "Lifecycle"
+phase = "lifecycle"
+variant = "back"
+source_recipe = "recipes/spells/color_spray.json"
+bindings = [{"component": "assembly", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 4.0
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"qualification": "Native-context visual review; not production approval", "source_revision": "gpu-remaining-v389-20261018"}

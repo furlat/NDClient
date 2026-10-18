@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/sources/0738ff2d24aa41b1b963/native_review_composition.gd"
+input = {"components": [{"script": "res://assets/vfx/sources/eec63d6a43751cfc0c61/cleansing_peel.gd", "input": {"scene": "res://assets/vfx/sources/f74869b7f2b27cfdfbc5/vfx_status_shard.tscn", "settings": {"id": "remove_curse", "name": "vfx_status_shard", "pack": "binbun-statusfxfull", "animation": "open", "scale": 0.8, "height": 1.0, "hue": 0.67, "frames": 432, "close": 270, "palette": ["303451", "51577b", "737dad", "999dce", "babfdf", "dbdfef"], "title": "Remove Curse", "level": 3, "note": "Finite angular release and violet-blue dissolution. Only an actually removed curse should clear in production; no sustained aura.", "mode": "single", "cell": 512, "alphaGain": 1, "anchor": "target_ground"}, "side": "full", "seed": 47291, "simulation_hz": 144, "material_family": "conditions", "clip_normal": [0.70710678, 0, 0.70710678], "disabled_script_paths": ["res://assets/vfx/sources/f9ee6a8c6e4a152e8639/VFXStatusBB.gd"], "animation_missing_policy": "first_available", "native_palette": ["303451", "51577b", "737dad", "999dce", "babfdf", "dbdfef"]}, "rotation_degrees": [0, 0, 0], "id": "effect"}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": []}
+options = {}
+provenance = "Pinned native selection; recipes/spells/remove_curse.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "review/remove_curse/back/lifecycle"
+label = "Lifecycle"
+phase = "lifecycle"
+variant = "back"
+source_recipe = "recipes/spells/remove_curse.json"
+bindings = [{"component": "assembly", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 3.0
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"qualification": "Native-context visual review; not production approval"}

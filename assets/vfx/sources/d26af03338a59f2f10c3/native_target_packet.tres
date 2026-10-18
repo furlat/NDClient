@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/da9481c1d1d2134a59ab/recipient_contact.gd"
+input = {"kind": "delayed_fire", "source_owner_uuid": "fixture.delayed_fire.concentration_lifetime", "original_caster_uuid": "caster", "recipient_uuid": "target", "event": {"kind": "delayed_fire", "source_owner_uuid": "fixture.delayed_fire.concentration_lifetime", "original_caster_uuid": "caster", "recipient_uuid": "target", "event_uuid": "fixture.native_target_packet.packet", "damage_applied": true, "saved": false}}
+options = {}
+provenance = "Exact high-level22 read-only backend; inspected native material layers and supplied causal owner/area facts."
+
+[resource]
+script = ExtResource("phase")
+clip_id = "high-level-22/delayed-blast-fireball/native_target_packet"
+label = "native_target_packet"
+phase = "native_target_packet"
+variant = "delayed_fire"
+source_recipe = "agent_docs/GODOT_HIGH_LEVEL_22_SPELL_HANDOFF_2026-10-15.md#spell.delayed_blast_fireball"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 0.45
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part")])
+options = {"qualification": "Source candidate; actual GPU/native integration/human approval pending"}

@@ -1,0 +1,570 @@
+[gd_scene format=3]
+
+[sub_resource type="Shader" id="Shader_jqump"]
+code = "shader_type spatial;
+uniform float condition_opacity = 1.0;
+
+uniform float support_clock=0.0;
+uniform float support_envelope=1.0;
+render_mode unshaded, blend_add;
+
+group_uniforms Color;
+uniform vec3 primary_color : source_color = vec3(1.0);
+uniform vec3 secondary_color : source_color = vec3(1.0, 0.8, 0.4);
+uniform float emission = 2.0;
+uniform float emission_mult = 1.0;
+
+group_uniforms Shape;
+uniform float streaks1_count = 5.0;
+uniform float streaks2_count = 11.0;
+uniform float streaks_fade : hint_range(-2.0, 2.0, 0.01) = 0.4;
+uniform float streaks_thickness : hint_range(0.0, 4.0, 0.01) = 0.5;
+uniform float center_radius : hint_range(0.0, 1.0, 0.01) = 0.1;
+uniform float fade_radius : hint_range(0.0, 1.0, 0.01) = 0.4;
+
+group_uniforms Alpha;
+uniform bool proximity_fade = false;
+uniform float proximity_fade_distance : hint_range(0.0, 8.0, 0.1) = 0.5;
+
+uniform sampler2D depth_texture : hint_depth_texture, repeat_disable, filter_nearest;
+
+group_uniforms Billboard;
+uniform bool billboard = false;
+
+float overlay(float base, float blend){
+	float limit = step(0.5, base);
+	return mix(2.0 * base * blend, 1.0 - 2.0 * (1.0 - base) * (1.0 - blend), limit);
+}
+
+void vertex() {
+	if(billboard){
+		MODELVIEW_MATRIX = VIEW_MATRIX * mat4(
+				MAIN_CAM_INV_VIEW_MATRIX[0],
+				MAIN_CAM_INV_VIEW_MATRIX[1],
+				MAIN_CAM_INV_VIEW_MATRIX[2],
+				MODEL_MATRIX[3]);
+	}
+}
+
+void fragment() {
+	vec2 centered_uv = UV - 0.5;
+	float angle = (atan(centered_uv.x, centered_uv.y));
+	float radius = length(centered_uv) * 2.0;
+	
+	float view_offset = (NORMAL.x) * 0.5 + 0.5;
+	
+	if(NORMAL.z > 0.0) {
+		view_offset = 1.0 - view_offset;
+	}
+	
+	view_offset *= TAU;
+	
+	float streaks1 = sin((angle) * streaks1_count + view_offset + support_clock);
+	float streaks2 = sin((angle) * streaks2_count - view_offset - support_clock);
+	
+	float value = overlay(streaks1, streaks2);
+	
+	value -= (1.0 - radius) * streaks_fade;
+	value *= 1.0 - (radius - value * streaks_thickness);
+	
+	float mask = max(1.0 - radius, 0.0);
+	value *= mask;
+	value = min(value, mask);
+	
+	value = smoothstep(0.1, 1.0, value);
+	value *= pow(clamp((radius - center_radius) / (fade_radius - center_radius), 0.0, 1.0), 4.0);
+	
+	ALBEDO = mix(secondary_color, primary_color, value) * COLOR.rgb * emission * emission_mult;
+	
+	ALPHA = value * COLOR.a;
+	
+	// Proximity Fade
+	if(proximity_fade){
+		float proximity_depth_tex = textureLod(depth_texture, SCREEN_UV, 0.0).r;
+		vec4 ndc = OUTPUT_IS_SRGB ? vec4(vec3(SCREEN_UV, proximity_depth_tex) * 2.0 - 1.0, 1.0) : vec4(SCREEN_UV * 2.0 - 1.0, proximity_depth_tex, 1.0);
+		vec4 proximity_view_pos = INV_PROJECTION_MATRIX * ndc;
+		proximity_view_pos.xyz /= proximity_view_pos.w;
+		ALPHA *= clamp(1.0 - smoothstep(proximity_view_pos.z + proximity_fade_distance, proximity_view_pos.z, VERTEX.z), 0.0, 1.0);
+	}
+
+ALPHA *= support_envelope;
+
+ALPHA *= condition_opacity;
+}
+
+
+
+
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3jcxh"]
+resource_local_to_scene = true
+render_priority = 0
+shader = SubResource("Shader_jqump")
+shader_parameter/condition_opacity = null
+shader_parameter/support_clock = null
+shader_parameter/support_envelope = null
+shader_parameter/primary_color = Color(0.9390821, 0.6676874, 0.14086246, 1)
+shader_parameter/secondary_color = Color(0.78161573, 0.573215, 0.16867243, 1)
+shader_parameter/emission = 4.0
+shader_parameter/emission_mult = 1.0
+shader_parameter/streaks1_count = 5.0
+shader_parameter/streaks2_count = 3.0
+shader_parameter/streaks_fade = 0.6999999396496
+shader_parameter/streaks_thickness = 0.02999999932944
+shader_parameter/center_radius = 0.0
+shader_parameter/fade_radius = 0.28999999351792
+shader_parameter/proximity_fade = false
+shader_parameter/proximity_fade_distance = 0.5
+shader_parameter/billboard = false
+
+[sub_resource type="SphereMesh" id="SphereMesh_pjipr"]
+radius = 1.25
+height = 3.0
+radial_segments = 32
+rings = 16
+
+[sub_resource type="Shader" id="Shader_4ab18"]
+code = "shader_type spatial;
+uniform float condition_opacity = 1.0;
+
+uniform float support_clock=0.0;
+uniform float support_envelope=1.0;
+render_mode unshaded, cull_disabled;
+
+group_uniforms Color;
+uniform vec3 primary_color : source_color = vec3(1.0,0.8,0.2);
+uniform vec3 secondary_color : source_color = vec3(1.0,0.4,0.1);
+uniform float emission = 2.0;
+uniform float color_curve = 1.0;
+uniform float hue_variation = 0.1;
+
+group_uniforms Shape;
+uniform sampler2D noise_texture;
+uniform vec2 noise_scale = vec2(3.0, 1.0);
+uniform vec2 noise_scroll = vec2(0.1, 0.4);
+uniform float shape_curve = 2.0;
+
+group_uniforms Transparency;
+uniform float edge_hardness : hint_range(0.0, 1.0, 0.01) = 0.0;
+uniform float edge_position : hint_range(0.0, 1.0, 0.01) = 0.2;
+uniform bool proximity_fade = false;
+uniform float proximity_fade_distance : hint_range(0.0, 4096.0, 0.01);
+uniform sampler2D depth_texture : hint_depth_texture, repeat_disable, filter_nearest;
+
+varying flat int id;
+
+vec3 shift_hue(vec3 color, float shift) {
+	vec3 gray = vec3(0.57735);
+	vec3 projection = gray * dot(gray, color.rgb);
+	vec3 U = color.rgb - projection;
+	vec3 V = cross(gray, U);
+	vec3 shifted = U * cos(shift * 2.0 * PI) + V * sin(shift * 2.0 * PI) + projection;
+	return shifted;
+}
+
+void vertex() {
+	id = INSTANCE_ID;
+}
+
+void fragment() {
+	float noise = texture(noise_texture, (UV + COLOR.r) * 0.3 * noise_scale + (support_clock * noise_scroll)).r;
+	
+	float shape = (1.0 - length(UV * 2.0 - 1.0)) * noise;
+	shape = smoothstep(0.2, 0.8, shape);
+	
+	ALPHA = shape;
+	
+	vec3 color = mix(secondary_color, primary_color, noise);
+	color = shift_hue(color, (COLOR.r - 0.5) * hue_variation);
+	
+	ALBEDO = color * emission;
+	
+	
+	// Proximity Fade: Enabled
+	if(proximity_fade){
+		float proximity_depth_tex = textureLod(depth_texture, SCREEN_UV, 0.0).r;
+		vec4 ndc = OUTPUT_IS_SRGB ? vec4(vec3(SCREEN_UV, proximity_depth_tex) * 2.0 - 1.0, 1.0) : vec4(SCREEN_UV * 2.0 - 1.0, proximity_depth_tex, 1.0);
+		vec4 proximity_view_pos = INV_PROJECTION_MATRIX * ndc;
+		proximity_view_pos.xyz /= proximity_view_pos.w;
+		ALPHA *= clamp(1.0 - smoothstep(proximity_view_pos.z + proximity_fade_distance, proximity_view_pos.z, VERTEX.z), 0.0, 1.0);
+	}
+	
+	ALPHA = clamp((ALPHA - edge_position) / (1.0 - edge_hardness), 0.0, 1.0);
+
+ALPHA *= support_envelope;
+
+ALPHA *= condition_opacity;
+}
+
+
+"
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_fhdug"]
+noise_type = 0
+fractal_octaves = 3
+fractal_lacunarity = 1.5
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_pm7xp"]
+noise = SubResource("FastNoiseLite_fhdug")
+seamless = true
+seamless_blend_skirt = 0.3
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cju4w"]
+resource_local_to_scene = true
+render_priority = 0
+shader = SubResource("Shader_4ab18")
+shader_parameter/condition_opacity = null
+shader_parameter/support_clock = null
+shader_parameter/support_envelope = null
+shader_parameter/primary_color = Color(0.9390821, 0.6676874, 0.14086246, 1)
+shader_parameter/secondary_color = Color(0.78161573, 0.573215, 0.16867243, 1)
+shader_parameter/emission = 4.0
+shader_parameter/color_curve = 1.0
+shader_parameter/hue_variation = 0.05
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_pm7xp")
+shader_parameter/noise_scale = Vector2(1, 1)
+shader_parameter/noise_scroll = Vector2(0, -0.2)
+shader_parameter/shape_curve = 1.5
+shader_parameter/edge_hardness = 0.4
+shader_parameter/edge_position = 0.0
+shader_parameter/proximity_fade = true
+shader_parameter/proximity_fade_distance = 0.5
+
+[sub_resource type="Curve" id="Curve_1qfc0"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -2.6060996, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_0jy15"]
+curve = SubResource("Curve_1qfc0")
+
+[sub_resource type="Gradient" id="Gradient_w4v8d"]
+colors = PackedColorArray(0, 0, 0, 1, 1, 0.71099997, 0.14999998, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_qklci"]
+gradient = SubResource("Gradient_w4v8d")
+
+[sub_resource type="Curve" id="Curve_1qd7p"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, -1), 0.0, 0.0, 0, 0, Vector2(0.25203252, 1), 0.0, 0.0, 0, 0, Vector2(0.5, -1), 0.0, 0.0, 0, 0, Vector2(0.75609756, 1), 0.0, 0.0, 0, 0, Vector2(1, -1), 0.0, 0.0, 0, 0]
+point_count = 5
+
+[sub_resource type="Curve" id="Curve_emm1p"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_nnyo7"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, 1.4901161e-08), 0.0, -12.04334, 0, 0, Vector2(0.1, -1), 0.0, 0.0, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0, Vector2(0.6, -1), 0.0, 0.0, 0, 0, Vector2(0.8, 1), 0.0, 0.0, 0, 0, Vector2(1, 1.4901161e-08), -6.8500214, 0.0, 0, 0]
+point_count = 6
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_eq5n4"]
+curve_x = SubResource("Curve_1qd7p")
+curve_y = SubResource("Curve_emm1p")
+curve_z = SubResource("Curve_nnyo7")
+
+[sub_resource type="Curve" id="Curve_6vc8j"]
+_data = [Vector2(0, 0), 0.0, 2.3937094, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -1.9194763, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_mxgvm"]
+curve = SubResource("Curve_6vc8j")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_i6o5c"]
+particle_flag_align_y = true
+emission_shape_scale = Vector3(1, 0.5, 1)
+emission_shape = 1
+emission_sphere_radius = 0.8
+direction = Vector3(0, 1, 0)
+directional_velocity_min = -0.5000161
+directional_velocity_max = 0.9999839
+directional_velocity_curve = SubResource("CurveXYZTexture_eq5n4")
+radial_velocity_min = -1.0
+radial_velocity_max = -1.0
+gravity = Vector3(0, 0, 0)
+radial_accel_min = -0.5
+radial_accel_max = -0.5
+scale_min = 0.2
+scale_max = 0.4
+scale_curve = SubResource("CurveTexture_mxgvm")
+color_initial_ramp = SubResource("GradientTexture1D_qklci")
+alpha_curve = SubResource("CurveTexture_0jy15")
+
+[sub_resource type="QuadMesh" id="QuadMesh_ujwbf"]
+size = Vector2(0.1, 0.3)
+
+[sub_resource type="Shader" id="Shader_vn1jx"]
+code = "shader_type spatial;
+uniform float condition_opacity = 1.0;
+
+uniform float support_clock=0.0;
+uniform float support_envelope=1.0;
+render_mode unshaded;
+
+group_uniforms Color;
+uniform vec3 primary_color : source_color = vec3(1.0,0.8,0.2);
+uniform vec3 secondary_color : source_color = vec3(1.0,0.4,0.1);
+uniform vec3 tertiary_color : source_color = vec3(0.6,0.1,0.05);
+uniform float emission = 2.0;
+uniform float color_curve = 1.0;
+uniform float hue_variation = 0.1;
+uniform bool use_secondary = false;
+
+group_uniforms Shape;
+uniform sampler2D noise_texture;
+uniform vec2 noise_scale = vec2(0.5);
+uniform vec2 noise_scroll = vec2(0.0, 0.1);
+uniform float shape_curve = 2.0;
+uniform float noise_twist : hint_range(-1.0, 1.0, 0.05) = 0.0;
+uniform float waviness : hint_range(0.0, 1.0, 0.01) = 0.2;
+
+group_uniforms Transparency;
+uniform float edge_hardness : hint_range(0.0, 1.0, 0.01) = 0.0;
+uniform float edge_position : hint_range(0.0, 1.0, 0.01) = 0.0;
+uniform bool proximity_fade = false;
+uniform float proximity_fade_distance : hint_range(0.0, 4096.0, 0.01);
+uniform sampler2D depth_texture : hint_depth_texture, repeat_disable, filter_nearest;
+
+vec3 shift_hue(vec3 color, float shift) {
+	vec3 gray = vec3(0.57735);
+	vec3 projection = gray * dot(gray, color.rgb);
+	vec3 U = color.rgb - projection;
+	vec3 V = cross(gray, U);
+	vec3 shifted = U * cos(shift * 2.0 * PI) + V * sin(shift * 2.0 * PI) + projection;
+	return shifted;
+}
+
+void vertex() {
+	// Called for every vertex the material is visible on.
+}
+
+void fragment() {
+	float r = length(UV * 2.0 - 1.0);
+	
+	vec2 noise_uv = (vec2(UV.x + UV.y * noise_twist, UV.y) + COLOR.r) * noise_scale + (noise_scroll * support_clock);
+	
+	float wave = sin(UV.y * 20.0 + support_clock * 6.0);
+	noise_uv.x += wave * 0.1 * waviness;
+	
+	float noise = texture(noise_texture, noise_uv).r;
+	
+	float value = pow(max(noise - r, 0.0), shape_curve) * COLOR.a;
+	
+	float color_value = pow(value, color_curve);
+	color_value = mix(color_value, floor(color_value * 6.0) / 5.0, edge_hardness);
+	vec3 main_color = use_secondary ? secondary_color : primary_color;
+	vec3 color = mix(tertiary_color, main_color, color_value);
+	color = shift_hue(color, (COLOR.r - 0.5) * hue_variation) * (0.5 + COLOR.r * 0.5);
+	
+	ALBEDO = color * emission;
+	ALPHA = value;
+	
+	// Proximity Fade: Enabled
+	if(proximity_fade){
+		float proximity_depth_tex = textureLod(depth_texture, SCREEN_UV, 0.0).r;
+		vec4 ndc = OUTPUT_IS_SRGB ? vec4(vec3(SCREEN_UV, proximity_depth_tex) * 2.0 - 1.0, 1.0) : vec4(SCREEN_UV * 2.0 - 1.0, proximity_depth_tex, 1.0);
+		vec4 proximity_view_pos = INV_PROJECTION_MATRIX * ndc;
+		proximity_view_pos.xyz /= proximity_view_pos.w;
+		ALPHA *= clamp(1.0 - smoothstep(proximity_view_pos.z + proximity_fade_distance, proximity_view_pos.z, VERTEX.z), 0.0, 1.0);
+	}
+	
+	ALPHA = clamp((ALPHA - edge_position) / (1.0 - edge_hardness), 0.0, 1.0);
+
+ALPHA *= support_envelope;
+
+ALPHA *= condition_opacity;
+}
+
+
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_j7gei"]
+resource_local_to_scene = true
+render_priority = 0
+shader = SubResource("Shader_vn1jx")
+shader_parameter/condition_opacity = null
+shader_parameter/support_clock = null
+shader_parameter/support_envelope = null
+shader_parameter/primary_color = Color(0.9390821, 0.6676874, 0.14086246, 1)
+shader_parameter/secondary_color = Color(0.78161573, 0.573215, 0.16867243, 1)
+shader_parameter/tertiary_color = Color(0.48244298, 0.34326565, 0.07309793, 1)
+shader_parameter/emission = 4.0
+shader_parameter/color_curve = 1.0
+shader_parameter/hue_variation = 0.05
+shader_parameter/use_secondary = false
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_pm7xp")
+shader_parameter/noise_scale = Vector2(1, 1)
+shader_parameter/noise_scroll = Vector2(0, -0.2)
+shader_parameter/shape_curve = 1.5
+shader_parameter/noise_twist = 0.0
+shader_parameter/waviness = 0.51
+shader_parameter/edge_hardness = 0.4
+shader_parameter/edge_position = 0.0
+shader_parameter/proximity_fade = true
+shader_parameter/proximity_fade_distance = 0.5
+
+[sub_resource type="Curve" id="Curve_qdjyr"]
+_data = [Vector2(0, 1), 0.0, -1.0083532, 0, 0, Vector2(1, 0), -0.97778255, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_hv0bm"]
+curve = SubResource("Curve_qdjyr")
+
+[sub_resource type="Gradient" id="Gradient_bcxk0"]
+colors = PackedColorArray(0, 0, 0, 1, 1, 0.71099997, 0.14999998, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_1onga"]
+gradient = SubResource("Gradient_bcxk0")
+
+[sub_resource type="Curve" id="Curve_v0cp7"]
+_data = [Vector2(0, 0.51133645), 0.0, 1.6486821, 0, 0, Vector2(0.48048046, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.5), -2.5442998, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_0h16g"]
+curve = SubResource("Curve_v0cp7")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_vjavh"]
+emission_shape_scale = Vector3(1, 0.5, 1)
+emission_shape = 1
+emission_sphere_radius = 0.8
+direction = Vector3(0, 1, 0)
+radial_velocity_min = -1.0
+radial_velocity_max = -1.0
+gravity = Vector3(0, 0, 0)
+radial_accel_min = -0.5
+radial_accel_max = -0.5
+scale_min = 0.2
+scale_max = 0.4
+scale_curve = SubResource("CurveTexture_0h16g")
+color_initial_ramp = SubResource("GradientTexture1D_1onga")
+alpha_curve = SubResource("CurveTexture_hv0bm")
+
+[sub_resource type="QuadMesh" id="QuadMesh_mse34"]
+size = Vector2(1, 1.5)
+
+[sub_resource type="Animation" id="Animation_cg51r"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Particles:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Aura:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_3b46x"]
+resource_name = "close"
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Particles:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Aura:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_1xmiw"]
+resource_name = "open"
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Particles:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Aura:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_6otin"]
+_data = {
+&"RESET": SubResource("Animation_cg51r"),
+&"close": SubResource("Animation_3b46x"),
+&"open": SubResource("Animation_1xmiw")
+}
+
+[node name="effect" type="Node3D" unique_id=375492648]
+transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, 0, 0, 0)
+
+[node name="Donor" type="Node3D" parent="." unique_id=1764952325]
+transform = Transform3D(0.58, 0, 0, 0, 0.58, 0, 0, 0, 0.58, 0, 1.35, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Donor" unique_id=305887180]
+material_override = SubResource("ShaderMaterial_3jcxh")
+mesh = SubResource("SphereMesh_pjipr")
+
+[node name="Particles" type="GPUParticles3D" parent="Donor" unique_id=1360147731]
+material_override = SubResource("ShaderMaterial_cju4w")
+amount = 3
+lifetime = 0.7
+use_fixed_seed = true
+seed = 47291
+fixed_fps = 60
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_i6o5c")
+draw_pass_1 = SubResource("QuadMesh_ujwbf")
+
+[node name="Aura" type="GPUParticles3D" parent="Donor" unique_id=1150153466]
+material_override = SubResource("ShaderMaterial_j7gei")
+amount = 3
+lifetime = 0.7
+use_fixed_seed = true
+seed = 47292
+fixed_fps = 60
+local_coords = true
+transform_align = 3
+process_material = SubResource("ParticleProcessMaterial_vjavh")
+draw_pass_1 = SubResource("QuadMesh_mse34")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Donor" unique_id=96736201]
+callback_mode_process = 2
+libraries/ = SubResource("AnimationLibrary_6otin")

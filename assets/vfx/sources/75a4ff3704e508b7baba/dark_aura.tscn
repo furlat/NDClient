@@ -1,0 +1,107 @@
+[gd_scene format=3]
+[ext_resource type="Shader" path="res://assets/vfx/sources/b5bc895b480082f8ba67/aura_sphere.gdshader" id="2_f8ky1"]
+[ext_resource type="Shader" path="res://assets/vfx/sources/8a3ea0a59454c9211095/noise_particle.gdshader" id="3_0gvdp"]
+[ext_resource type="Shader" path="res://assets/vfx/sources/86776d58d72b4b07737c/aura_particle.gdshader" id="4_32rnx"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_1pq65"]
+noise_type = 2
+frequency = 0.02
+fractal_octaves = 1
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_f8ky1"]
+noise = SubResource("FastNoiseLite_1pq65")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_agjuw"]
+render_priority = 0
+shader = ExtResource("4_32rnx")
+shader_parameter/primary_color = Color(0.99998623, 0.24513248, 0.49961948, 1)
+shader_parameter/secondary_color = Color(0.5767474, 0.121498175, 0.99999994, 1)
+shader_parameter/tertiary_color = Color(0.08093316, 0, 0.6294542, 1)
+shader_parameter/emission = 4.0
+shader_parameter/color_curve = 1.0
+shader_parameter/hue_variation = 0.05
+shader_parameter/use_secondary = false
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_f8ky1")
+shader_parameter/noise_scale = Vector2(1, 1)
+shader_parameter/noise_scroll = Vector2(0.1, 0.1)
+shader_parameter/shape_curve = 3.0
+shader_parameter/noise_twist = 0.0
+shader_parameter/waviness = 1.0
+shader_parameter/edge_hardness = 0.0
+shader_parameter/edge_position = 0.0
+shader_parameter/proximity_fade = true
+shader_parameter/proximity_fade_distance = 0.5
+
+[sub_resource type="Curve" id="Curve_cq4h8"]
+_data = [Vector2(0, 1), 0.0, -1.0083532, 0, 0, Vector2(1, 0), -0.97778255, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_2shut"]
+curve = SubResource("Curve_cq4h8")
+
+[sub_resource type="Gradient" id="Gradient_g7vfs"]
+colors = PackedColorArray(0, 0, 0, 1, 1, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_6xf26"]
+gradient = SubResource("Gradient_g7vfs")
+
+[sub_resource type="Curve" id="Curve_kyooq"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, 1.4901161e-08), 0.0, 0.0, 0, 0, Vector2(1, 1.4901161e-08), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_ktrj1"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, -1), 0.0, 0.0, 0, 0, Vector2(1, -1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_fgybt"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, 1.4901161e-08), 0.0, 0.0, 0, 0, Vector2(1, 1.4901161e-08), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_nycwf"]
+curve_x = SubResource("Curve_kyooq")
+curve_y = SubResource("Curve_ktrj1")
+curve_z = SubResource("Curve_fgybt")
+
+[sub_resource type="Curve" id="Curve_vbeoq"]
+_data = [Vector2(0, 0.51133645), 0.0, 1.6486821, 0, 0, Vector2(0.48048046, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.5), -2.5442998, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_ry333"]
+curve = SubResource("Curve_vbeoq")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_js4oc"]
+emission_shape_scale = Vector3(0.5, 1, 0.5)
+emission_shape = 1
+emission_sphere_radius = 1.0
+direction = Vector3(0, 1, 0)
+orbit_velocity_min = -1.0
+orbit_velocity_max = 1.0
+orbit_velocity_curve = SubResource("CurveXYZTexture_nycwf")
+radial_velocity_min = 0.1
+radial_velocity_max = 0.1
+gravity = Vector3(0, 0, 0)
+radial_accel_min = 0.5
+radial_accel_max = 0.5
+scale_min = 0.5
+scale_max = 1.1999999
+scale_curve = SubResource("CurveTexture_ry333")
+color_initial_ramp = SubResource("GradientTexture1D_6xf26")
+alpha_curve = SubResource("CurveTexture_2shut")
+
+[sub_resource type="QuadMesh" id="QuadMesh_0n1lf"]
+size = Vector2(2, 2)
+
+[node name="SourceParticles" type="Node3D"]
+
+[node name="Aura" type="GPUParticles3D" parent="." unique_id=924125473]
+material_override = SubResource("ShaderMaterial_agjuw")
+amount = 64
+lifetime = 2.0
+fixed_fps = 60
+transform_align = 1
+process_material = SubResource("ParticleProcessMaterial_js4oc")
+draw_pass_1 = SubResource("QuadMesh_0n1lf")
+

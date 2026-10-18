@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/4a4e8903467f4f83a356/sleep_application.gd"
+input = {"scene": "res://assets/vfx/sources/40f608031220ccf44b5d/VFX_Smoke_z_puff.tscn", "settings": {"animation": "", "particle_count": 16, "particle_lifetime_seconds": 1.25, "emitter_height_units": 0.35, "emission_radius_units": 2.3, "radial_velocity_units_per_second": 0.6, "card_scale_min_units": 2.0, "card_scale_max_units": 3.0, "colour": [0.22, 0.42, 0.41], "footprint_radius_units": 4.0, "opacity": 0.24}, "side": "full", "simulation_hz": 144, "seed": 47291}
+options = {}
+provenance = "Pinned native selection; recipes/spells/sleep.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "spells/sleep/default/lifecycle"
+label = "Lifecycle"
+phase = "lifecycle"
+variant = "default"
+source_recipe = "recipes/spells/sleep.json"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1, "offset_seconds": 0}]
+emitters = []
+seconds = 2
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"bounded_formation": false, "qualification": "native_family_port_candidate; selected production phase equivalence pending", "stage": "impact", "registration_note": "Native sandbox variant: complete unflattened source; choreography and world sizing authored separately.", "opacity_uniform": "sleep_opacity", "review_status": "coded_pending_capture: original smoke masks; bounded radius4, low veil opacity, no native optical light"}

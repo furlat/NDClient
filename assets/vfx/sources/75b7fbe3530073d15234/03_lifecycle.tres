@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/202e244b1441ee62b201/ice_knife_fracture.gd"
+input = {"scene": "res://assets/vfx/sources/a6dbfa906f0d1aaaffe1/VFX_IceHit_BrokenIce.tscn", "settings": {"animation": "Init", "material_component": "debris"}, "side": "full", "simulation_hz": 144, "seed": 47291, "fragment_scale_multiplier": 1.5, "fragment_intensity": 1.45, "flash_color_gain": 0.42, "flash_alpha_gain": 0.55, "muzzle_scale_multiplier": 0.65}
+options = {}
+provenance = "Pinned native selection; recipes/spells/ice_knife_production_xyz_materials.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "spells/ice_knife_production_xyz_materials/debris/lifecycle"
+label = "Native layers · debris"
+phase = "lifecycle"
+variant = "debris"
+source_recipe = "recipes/spells/ice_knife_production_xyz_materials.json"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 2.9722222222222223
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"bounded_formation": false, "qualification": "native_family_port_candidate; selected production phase equivalence pending", "optional": true, "stage": "impact"}

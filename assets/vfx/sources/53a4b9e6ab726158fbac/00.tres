@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/d7435b0a61b906124713/presence_wisps.gd"
+input = {"kind": "presence", "seconds": 4.0, "native_palette": ["183e50", "397f9a", "74b6bb", "c8d9b5", "eee2b3"], "presence_finish": {"fold_start": 0.82, "fold_end": 0.99, "alpha_gain": 0.45}}
+options = {}
+provenance = "Pinned native selection; project_authored_class_action_vfx_proposals_live_authoring_project_70e2fd95"
+
+[resource]
+script = ExtResource("script")
+clip_id = "sorcerer_draconic_presence_native"
+label = "Sorcerer Draconic Presence"
+phase = "lifecycle"
+variant = "presence"
+source_recipe = "project_authored_class_action_vfx_proposals_live_authoring_project_70e2fd95"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 4.0
+simulation_hz = 60
+components = Array[Resource]([SubResource("part_0")])
+options = {}

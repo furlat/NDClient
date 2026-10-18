@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/sources/0738ff2d24aa41b1b963/native_review_composition.gd"
+input = {"components": [{"script": "res://assets/vfx/sources/40d1901e1f9156491a72/sensory_overhead.gd", "input": {"scene": "res://assets/vfx/sources/e1fa156146194fded55d/vfx_status_sleep.tscn", "settings": {"animation": "", "kind": "darkvision", "palette": ["29434b", "567f89", "95c4c9", "d9e9e4"], "glyph_kind": 1}, "side": "full", "simulation_hz": 144, "seed": 47291, "donors": {"purple": "res://assets/vfx/sources/338d04121474c3dc28b0/vfx_status_purple.tscn", "glow": "res://assets/vfx/sources/5545dfd28fc16789e231/vfx_status_glow.tscn"}, "overhead": {"clearance_cells": 0.12}}, "id": "effect", "rotation_degrees": [0, 0, 0]}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": []}
+options = {}
+provenance = "Pinned native selection; recipes/spells/darkvision.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "review/darkvision/back/lifecycle"
+label = "Lifecycle"
+phase = "lifecycle"
+variant = "back"
+source_recipe = "recipes/spells/darkvision.json"
+bindings = [{"component": "assembly", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 8.006944444444445
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"qualification": "Native-context visual review; not production approval"}

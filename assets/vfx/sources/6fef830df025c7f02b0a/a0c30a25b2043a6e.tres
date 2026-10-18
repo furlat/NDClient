@@ -1,0 +1,24 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="art"]
+script = ExtResource("component")
+component_id = "divine_art"
+constructor_script = "res://assets/vfx/sources/b732021946795f4bbdbc/turning.gd"
+input = {"geometry_actor": "target", "endpoint_bindings": [{"actor": "caster", "socket": "cast_hand"}, {"actor": "caster", "socket": "face"}, {"actor": "target", "socket": "body_center"}], "piece_capacity": 8, "source_entity_uuid": "66fbaf89-f570-5462-a3af-5a637b768ca2", "recipient_entity_uuid": "3a8a7bde-9aaf-5bce-9824-67e72fa25fa6", "owner_uuid": "e3a2d8e6-b87d-554b-a0ee-2f7cd550f2f3", "condition_id": "", "event_uuid": "35fd2510-7ebf-59fb-97a2-ef05580272c0", "study_contract": "study.divine.turned", "part": "marker", "mode": "condition_retire", "outcome_kind": "cast", "seconds": 0.4, "apply_seconds": 0.12, "retire_seconds": 0.25, "width_cells": 0.018, "vertex_colour": "ffffff", "vertex_alpha": 0.82, "material": {"texture": "res://assets/vfx/sources/d9693b7f9e0749d03a88/texture.res", "colour": "dfbe75", "grain_strength": 0.2}, "lease": {"owner_uuid": "e3a2d8e6-b87d-554b-a0ee-2f7cd550f2f3", "source_entity_uuid": "66fbaf89-f570-5462-a3af-5a637b768ca2", "target_entity_uuid": "3a8a7bde-9aaf-5bce-9824-67e72fa25fa6", "study_contract": "study.divine.turned", "observed": true, "present": true, "contribution_active": true, "suppressed": false, "supplied_recipient_turns_remaining": 3}, "event": {"uuid": "35fd2510-7ebf-59fb-97a2-ef05580272c0", "source_entity_uuid": "66fbaf89-f570-5462-a3af-5a637b768ca2", "target_entity_uuid": "3a8a7bde-9aaf-5bce-9824-67e72fa25fa6", "canceled": false, "effect_admitted": true, "blocked": false, "actual_healing": 0, "actual_damage": 0, "damage_component_uuid": "", "removed_condition_uuids": ["a98da677-774f-552f-9592-8ca766a5ea5b"], "removed_owner_uuid": "e3a2d8e6-b87d-554b-a0ee-2f7cd550f2f3", "membership_owner_uuid": "e3a2d8e6-b87d-554b-a0ee-2f7cd550f2f3", "membership_feature": "study.divine.turn_unholy", "ordinary_item_admitted": true, "item_uuid": "77bcec78-925a-5d81-8428-06156e194ced", "creation_position_cells": [0.0, 0.0, 0.0], "outcome_source": "explicit_plan_only_fixture", "removal_cause": "supplied_third_recipient_turn", "supplied_recipient_turns_elapsed": 3, "removal_actual_damage_uuid": ""}, "presentation_radius_cells": 6.0, "source_accent_reach_cells": 0.9, "plan_only": true, "gpu_paths": true}
+provenance = "Plan-only native study; no verified new backend behavior identity."
+
+[resource]
+script = ExtResource("phase")
+clip_id = "divine-class-study/divine_turn_unholy_radial_study/2-marker"
+label = "turn_unholy / marker / main"
+phase = "condition_retire"
+variant = "main"
+source_recipe = "res://assets/vfx/sources/6f469c05c8b9c1fbc8e1/feature-matrix.json"
+seconds = 0.4
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("art")])
+bindings = [{"component":"divine_art","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+options = {"opacity_uniform": "support_visibility", "source_revision": "gpu-divine-v386-20261018"}

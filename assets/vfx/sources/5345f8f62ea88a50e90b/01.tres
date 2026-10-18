@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/sources/0738ff2d24aa41b1b963/native_review_composition.gd"
+input = {"components": [{"script": "res://assets/vfx/sources/d90168cefe58abda9ad9/elemental_shield_contact.gd", "input": {"scene": "res://assets/vfx/sources/d5ecd06fc57beb3273b3/effect_root.tscn", "side": "full", "kind": "chill-contact", "settings": {"id": "fire_shield", "animation": ""}, "seed": 27493, "simulation_hz": 144, "donors": {"shield": "res://assets/vfx/sources/756499536c80faba8fde/VFX_Shield_demon.tscn", "reaction": "res://assets/vfx/sources/d2d98b467fbc897eecba/VFX_Hit_sphere_demon.tscn", "contact": "res://assets/vfx/sources/d38a0e0e70e9f424775a/VFX_Hit_fire_3.tscn"}, "animation_missing_policy": "first_available"}, "rotation_degrees": [0, 0, 0], "id": "effect"}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": []}
+options = {}
+provenance = "Pinned native selection; recipes/spells/fire_shield.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "original-repairs/fire-shield-contact/chill/contact"
+label = "Contact"
+phase = "contact"
+variant = "chill_back"
+source_recipe = "recipes/spells/fire_shield.json"
+bindings = [{"component": "assembly", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 1.0
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"qualification": "Native-context visual review; not production approval"}

@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/1f4157265ee040a8fe10/rage_strips.gd"
+input = {"kind": "mantle", "seconds": 4.0, "native_palette": ["43202b", "8b243f", "d56366", "f09d68", "ffad6e"], "strength_multiplier": 0.7, "rise_seconds": 0.14, "return_seconds": 0.35, "frenzied_child_required": true, "owner_projection": {"actor_id": "caster", "owner_uuid": "fixture-raging-A", "behavior_id": "class_feature.barbarian.raging", "admitted": true, "begin_seconds": 0.0, "removed_seconds": 3.65, "frenzied_child": {"owner_uuid": "fixture-frenzied-child-A", "behavior_id": "class_feature.barbarian.frenzied", "parent_owner_uuid": "fixture-raging-A", "admitted": true}}}
+options = {}
+provenance = "Private v176 actual archived strip/seed restoration; preserves source shader/noise and current explicit native palette once. Supplied fixture ownership is not a backend wire contract."
+
+[resource]
+script = ExtResource("script")
+clip_id = "barbarian_frenzy_source_v176"
+label = "Barbarian Frenzy"
+phase = "lifecycle"
+variant = "mantle"
+source_recipe = "project_authored_class_action_vfx_proposals_live_authoring_project_70e2fd95"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 4.0
+simulation_hz = 60
+components = Array[Resource]([SubResource("part_0")])
+options = {"source_revision": "gpu-motion-v369-20261018"}

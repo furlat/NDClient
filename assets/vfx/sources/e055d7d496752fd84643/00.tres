@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/76f25f4672c91e4a4d66/sacred_contact_lifecycle.gd"
+input = {"scene": "res://assets/vfx/sources/06a5a3690f1962e69a35/VFX_Vertical_Hell_beam_blue.tscn", "settings": {"animation": "Init", "kind": "sacred_flame"}, "side": "full", "simulation_hz": 144, "seed": 47291, "contact_flare_scale": 2.0, "column_fade_begin_seconds": 0.58, "column_fade_end_seconds": 1.1}
+options = {}
+provenance = "Pinned native selection; recipes/spells/sacred_flame.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "spells/sacred_flame/back/lifecycle"
+label = "Native lifecycle"
+phase = "lifecycle"
+variant = "back"
+source_recipe = "recipes/spells/sacred_flame.json"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 5
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"bounded_formation": false, "qualification": "native_family_port_candidate; selected production phase equivalence pending", "stage": "attached", "placement": {"role": "attached", "attachment": "recipient_ground", "delay_seconds": 0.0, "source_rate": 1.0, "source_end": 5, "scale": 0.12, "orientation": "world"}, "property_overrides": [{"node": "effect/Donor/floorflash", "property": "layers", "value": 0}, {"node": "effect/Donor/floorflash2", "property": "layers", "value": 0}]}

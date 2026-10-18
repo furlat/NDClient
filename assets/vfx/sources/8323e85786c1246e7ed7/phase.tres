@@ -1,0 +1,22 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+[sub_resource type="Resource" id="artwork"]
+script = ExtResource("component")
+component_id = "counterspell"
+constructor_script = "res://assets/vfx/sources/cc262dc75f07638cfd9a/counterspell_study.gd"
+input = {"observation": {"reaction_uuid": "fixture-counterspell-reaction", "triggered_event_uuid": "fixture-incoming-spell-version", "triggered_lineage_uuid": "fixture-incoming-spell-lineage", "succeeded": true, "present": true, "release_seconds": 0.4, "contact_seconds": 0.6666666666666666, "arrival_seconds": 0.9333333333333333, "source_offset_seconds": 0.0, "fixture_contact_fraction": 0.5, "observation_kind": "actual_CounterspellReactionEvent_fields_plus_proposed_presentation_path_fixture"}, "fragments": {"material": "res://assets/vfx/sources/f0efc0d33a6039e52ea9/m_basic_blueshield1.tres", "palette": ["592d40", "b06059", "da7c72", "f7ab9d"], "scale_cells_per_source_unit": 0.85, "succeeded": true}, "incoming": {"phase_resource": "res://assets/vfx/sources/1645276c53969b688cc8/03_travel.tres", "noise_texture": "res://assets/vfx/sources/9fb31deef39536e38753/texture.res", "scale_cells_per_source_unit": 0.115}}
+provenance = "Original abjuration-review/native/counter and dissipation source mechanisms; supplied exact reaction lineage and presentation fixture."
+[resource]
+script = ExtResource("phase")
+clip_id = "reaction-prismatic-study/counterspell_success_native_study"
+label = "counterspell success native study"
+phase = "lifecycle"
+variant = "counterspell_success_native_study"
+source_recipe = "original-abjuration-counter-and-dissipation"
+components = Array[Resource]([SubResource("artwork")])
+bindings = [{"component": "counterspell", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 1.8
+simulation_hz = 144.0
+options = {}

@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/2f63b2ef0cb2d87dafc6/blessing.gd"
+input = {"scene": "res://assets/vfx/sources/799bcb8e154d12bb68dd/vfx_status_green.tscn", "settings": {"name": "vfx_status_green", "scale": 0.78, "height": 1.7, "hue": 0.52, "palette": ["112830", "20434e", "326574", "498f9f", "69bac7", "93d7dc"], "pack": "binbun-statusfxfull", "animation": "open", "frames": 289, "close": 0, "anchor": "source_ground", "version": 7, "alphaGain": 1.7, "mode": "sustain", "parentSpell": "false_life"}, "side": "full", "seed": 47291, "simulation_hz": 144, "material_family": "support", "clip_normal": [0.70710678, 0, 0.70710678], "animation_missing_policy": "first_available", "disabled_script_paths": ["res://assets/vfx/sources/9973b30d6022cf4d4a87/VFXStatusBB.gd"]}
+options = {"rotation_degrees": [0, 0, 0]}
+provenance = "Pinned native selection; recipes/spells/false_life.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "spells/false_life/back/sustain"
+label = "Native subtle sustain"
+phase = "sustain"
+variant = "back"
+source_recipe = "recipes/spells/false_life.json"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 2.0069444444444446
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"bounded_formation": false, "qualification": "native_family_port_candidate; selected production phase equivalence pending", "stage": "attached", "placement": {"role": "attached", "attachment": "recipient_ground", "delay_seconds": 1.5, "source_rate": 1.0, "source_end": 4.0, "scale": 0.5, "orientation": "world", "duration_policy": "authored", "opacity_keys": [[0, 0], [0.5, 0.25], [3.65, 0.25], [4, 0]], "opacity_uniform": "support_envelope", "body_surface": {"node": "effect/Donor/Mesh", "surface": 0, "scale": 1.5, "strength": 1.0}}}

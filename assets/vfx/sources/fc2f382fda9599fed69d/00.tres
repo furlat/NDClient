@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/sources/0738ff2d24aa41b1b963/native_review_composition.gd"
+input = {"components": [{"script": "res://assets/vfx/sources/fc6f8b4f3c0cf8ba0291/rebuke.gd", "input": {"scene": "res://assets/vfx/sources/8c42fa30a74967c4a5cf/VFX_FireStatic_K1.tscn", "settings": {"animation": "", "pack": "lelu-godot-fire-premium", "name": "VFX_FireStatic_K1", "scale": 1.4, "height": 0.05, "hue": 0.055, "palette": ["392526", "733b30", "ac6040", "dd824a", "eca577", "ffe1ae"], "frames": 120, "close": 26, "anchor": "target_ground", "version": 4, "cell": 384, "alphaGain": 1, "energyGain": 0.85, "captureRoot": "../hellish-refined-pilot/native-v4/hellish_rebuke"}, "side": "full", "simulation_hz": 144, "seed": 47291}, "id": "effect", "rotation_degrees": [0, 0, 0]}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": []}
+options = {}
+provenance = "Pinned native selection; recipes/spells/hellish_rebuke.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "review/hellish_rebuke/back/lifecycle"
+label = "Lifecycle"
+phase = "lifecycle"
+variant = "back"
+source_recipe = "recipes/spells/hellish_rebuke.json"
+bindings = [{"component": "assembly", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 0.8333333333333334
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"qualification": "Native-context visual review; not production approval"}

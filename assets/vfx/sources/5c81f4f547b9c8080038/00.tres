@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "marker"
+constructor_script = "res://assets/vfx/sources/0165fcc2ea9ccd5bde44/attached_overhead.gd"
+input = {"clearance_cells": 0.16, "marker": {"size_cells": [0.36, 0.36], "material": {"shader": "res://assets/vfx/sources/89910c630651ca5636b4/remaining_glyph_source.gdshader", "parameters": {"Alpha_Texture": {"type": "PNGTexture", "path": "res://assets/vfx/sources/0eb37cef1c2801ffa51a/texture.res"}, "Texture_Disolver": {"type": "PNGTexture", "path": "res://assets/vfx/sources/8b50d862e875547c4693/texture.res"}, "Color_1D_gradient": {"type": "GradientTexture1D", "offsets": [0, 0.12, 0.3, 0.68, 1], "colors": ["00000000", "121a1fa6", "bc913f", "bc913f", "f1d49a"]}, "Color_Intensity": 1.2, "Vanishing": 0.001, "glyph_clock": 0.0}}, "source_cutout_as_coverage": true}}
+options = {}
+provenance = "Pinned native selection; catalog/packages/project_temporary_remaining_glyphs_native_project_194f640d.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "condition_guiding_mark_native"
+label = "Steady overhead Guiding Mark"
+phase = "sustain"
+variant = "guiding_mark"
+source_recipe = "catalog/packages/project_temporary_remaining_glyphs_native_project_194f640d.json"
+bindings = [{"component": "marker", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 3.2
+simulation_hz = 60
+components = Array[Resource]([SubResource("part_0")])
+options = {"opacity_uniform": "factory_occurrence_alpha"}

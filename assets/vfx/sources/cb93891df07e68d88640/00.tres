@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/sources/0738ff2d24aa41b1b963/native_review_composition.gd"
+input = {"components": [{"script": "res://assets/vfx/sources/0a6f9152e753968f33d1/divine.gd", "input": {"scene": "res://assets/vfx/sources/ee90eff7c02455c9fc84/magic_orb_small_vfx_01.tscn", "settings": {"pack": "binbun-godotmagicorbsvfx", "name": "magic_orb_small_vfx_01", "animation": "main", "scale": 0.52, "height": 2.2, "hue": 0.13, "frames": 128, "close": 0, "palette": ["574451", "927766", "c3a473", "e4c585", "f2dea8", "f8ebc5"], "mode": "light", "title": "Daylight", "hold": [47, 111], "note": "Compact warm magical source with broad scene illumination; no opaque bubble or damaging beam.", "cell": 512, "alphaGain": 1.0, "fps": 32, "id": "daylight"}, "side": "full", "seed": 47291, "simulation_hz": 144, "material_family": "divine", "clip_normal": [0.70710678, 0, 0.70710678], "animation_missing_policy": "first_available"}, "rotation_degrees": [0, 0, 0], "id": "effect"}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": []}
+options = {}
+provenance = "Pinned native selection; recipes/spells/daylight.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "review/daylight/back/lifecycle"
+label = "Lifecycle"
+phase = "lifecycle"
+variant = "back"
+source_recipe = "recipes/spells/daylight.json"
+bindings = [{"component": "assembly", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 4.0
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"qualification": "Native-context visual review; not production approval"}

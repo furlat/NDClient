@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "stabilization"
+constructor_script = "res://assets/vfx/sources/673af89c2c01f913195f/stabilize_touch.gd"
+input = {"palette": ["27313b", "56616a", "92a0a4", "c9d2cf"], "material_scene": "res://assets/vfx/sources/3d62b9344ab9b2fa9429/VFX_HealPuff_A.tscn", "material_node": "smoke2init2", "gpu_paths": true}
+options = {}
+provenance = "Pinned native selection; agent_docs/GODOT_BG3_36_SPELL_HANDOFF_2026-10-15.md#spare-the-dying"
+
+[resource]
+script = ExtResource("script")
+clip_id = "bg3-36/spare-the-dying/stabilize"
+label = "Touch and stabilization"
+phase = "application"
+variant = "default"
+source_recipe = "agent_docs/GODOT_BG3_36_SPELL_HANDOFF_2026-10-15.md#spare-the-dying"
+bindings = [{"component": "stabilization", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 1.8
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"source_revision": "gpu-minor-v395-20261018"}

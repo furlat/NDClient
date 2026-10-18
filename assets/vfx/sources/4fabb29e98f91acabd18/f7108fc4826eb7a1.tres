@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/7ba5fd40e010d019813f/equipped_enchantment.gd"
+input = {"actor": "caster", "slot": "weapon", "duration_seconds": 1.5, "fade_in_seconds": 0.12, "fade_out_seconds": 0.25, "clearance_cells": 0.008, "enchantment": {"actor": "caster", "present": true, "observed": true, "equipped": true, "suppressed": false}, "material": {"scene": "res://assets/vfx/sources/68fd3cf4456ce9c1a4c6/VFX_Dark_sword.tscn", "node": "PurpleSword", "material_property": "material_overlay", "palette": ["49383a", "826044", "b88c57", "dbc183", "f1dfac", "fff0ca"], "energy_exposure": 1.2, "unshaded_output": true, "uniforms": {"Has_mask": false, "Arua_Power": 3.5, "fresnel": 0, "Aura_Color": [1, 0.75, 0.24, 1], "Aura_Divide": [0.5, 0.5], "Speed": [0.08, -0.65]}}}
+options = {}
+provenance = "Pinned native selection; recipes/spells/true_strike.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "spells/true_strike/back/lifecycle/source-de7fb5137ad74acf"
+label = "Lifecycle"
+phase = "lifecycle"
+variant = "back"
+source_recipe = "recipes/spells/true_strike.json"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 1.5
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"source_revision": "gpu-cached-v382-20261018"}

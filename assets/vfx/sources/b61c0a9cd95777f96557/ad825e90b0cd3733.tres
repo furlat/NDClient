@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part"]
+script = ExtResource("component")
+component_id = "weapon_blessing"
+constructor_script = "res://assets/vfx/sources/186eba16e1adfb8bd821/magic_weapon.gd"
+input = {"phase": "sustain", "seconds": 2.8, "lifecycle_mode": "bounded_fixture", "ownership": {"owner_kind": "item", "owner_uuid": "caster-MELEE_MAIN", "effect_uuid": "fixture.magic_weapon_native.effect", "binding": {"owner_kind": "item", "owner_uuid": "caster-MELEE_MAIN", "effect_uuid": "fixture.magic_weapon_native.effect", "item_uuid": "caster-MELEE_MAIN", "holder_uuid": "caster", "equipment_slot": "MELEE_MAIN", "render_slot": "weapon", "present": true, "equipped": true, "observed": true, "contribution_active": true, "suppressed": false, "decoration_admitted": true, "binding_origin": "explicit_authoring_fixture_not_cold_snapshot"}}, "material": {"shader": "res://assets/vfx/sources/5072b699fd0e367a09e8/s_magic_aura2.tres", "texture": "res://assets/vfx/sources/d9693b7f9e0749d03a88/texture.res", "colour": "649db5", "divide": [0.75, 0.8], "speed": [0.015, -0.085], "power": 1.35, "fresnel": 0.35, "palette": ["172a36", "355b71", "649db5", "95b9be"]}}
+options = {}
+provenance = "res://assets/vfx/sources/873c8d5938f1ba595713/bg3-36-spell-contracts-20261015.json#magic_weapon; explicit fixture ownership, never inferred equipment/rider state."
+
+[resource]
+script = ExtResource("phase")
+clip_id = "bg3-36/magic-weapon/magic_weapon_native/sustain"
+label = "Magic Weapon · sustain"
+phase = "sustain"
+variant = "magic_weapon_native"
+source_recipe = "res://assets/vfx/sources/873c8d5938f1ba595713/bg3-36-spell-contracts-20261015.json#magic_weapon"
+bindings = [{"component": "weapon_blessing", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 2.8
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part")])
+options = {"qualification": "coded_pending_capture; no production ownership/cold-state binding claim", "source_revision": "gpu-cached-v382-20261018"}

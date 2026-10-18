@@ -1,0 +1,168 @@
+[gd_scene load_steps=17 format=3 ]
+
+[ext_resource type="Shader"  path="res://assets/vfx/sources/c4ff638f423dac72df74/s_Disolver_small_Liquid.tres" id="1_j32k3"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/33a1b5146ac72a518c62/texture.res" id="2_6gcfc"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/e2597a3c095800b8b6a2/texture.res" id="3_r1nar"]
+
+[sub_resource type="Gradient" id="Gradient_mm4t8"]
+interpolation_mode = 2
+interpolation_color_space = 1
+offsets = PackedFloat32Array(0.899194, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_5voo8"]
+gradient = SubResource("Gradient_mm4t8")
+fill_from = Vector2(1, 1)
+
+[sub_resource type="Gradient" id="Gradient_dqts0"]
+interpolation_color_space = 1
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0.118581, 0.118581, 0.118581, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_dp606"]
+gradient = SubResource("Gradient_dqts0")
+
+[sub_resource type="Gradient" id="Gradient_ab1vx"]
+interpolation_color_space = 1
+colors = PackedColorArray(0.0430392, 0.0430392, 0.0430392, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_m8qrt"]
+gradient = SubResource("Gradient_ab1vx")
+
+[sub_resource type="Gradient" id="Gradient_u2rsr"]
+interpolation_color_space = 1
+offsets = PackedFloat32Array(0.016129)
+colors = PackedColorArray(0.000113828, 0.000113828, 0.000113828, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_nrr1d"]
+gradient = SubResource("Gradient_u2rsr")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_53n7d"]
+render_priority = 0
+shader = ExtResource("1_j32k3")
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Speed_XY = null
+shader_parameter/ColorParameter = Color(1, 0.11, 0.11, 1)
+shader_parameter/Opacity = 1.0
+shader_parameter/Normal_Map_Depth = 0.5
+shader_parameter/Color_Texture = ExtResource("2_6gcfc")
+shader_parameter/Dissolver_Texture = SubResource("GradientTexture2D_5voo8")
+shader_parameter/Metallic_Texture = SubResource("GradientTexture1D_dp606")
+shader_parameter/Texture_Roughtness = SubResource("GradientTexture1D_nrr1d")
+shader_parameter/Roughtness_1D_Gradient = SubResource("GradientTexture1D_m8qrt")
+shader_parameter/Normal_Texture = ExtResource("3_r1nar")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_md82d"]
+size = Vector2(6, 6)
+
+[sub_resource type="Animation" id="Animation_b2ekx"]
+resource_name = "Init"
+length = 4.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Blood_Animated_1:material_override:shader_parameter/Dissolver_Texture:fill_to")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.166667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 0.987179), Vector2(1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Blood_Animated_1:material_override:shader_parameter/Dissolver_Texture:gradient:offsets")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.0333333, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [PackedFloat32Array(0.354839, 1), PackedFloat32Array(0.899194, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Blood_Animated_1:material_override:shader_parameter/Opacity")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(3.43333, 3.86667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.0, 0.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Blood_Animated_1:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 3.93333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_4xld0"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Blood_Animated_1:material_override:shader_parameter/Dissolver_Texture:fill_to")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Blood_Animated_1:material_override:shader_parameter/Dissolver_Texture:gradient:offsets")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [PackedFloat32Array(0.899194, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Blood_Animated_1:material_override:shader_parameter/Opacity")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_cb8pu"]
+_data = {
+"Init": SubResource("Animation_b2ekx"),
+"RESET": SubResource("Animation_4xld0")
+}
+
+[node name="Decal_Blood_Animated_A1" type="Node3D"]
+
+[node name="Blood_Animated_1" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.49, 0, 0, 0, 0.7, 0, 0, 0, 0.7, 0, 0.0879795, -1.8917)
+layers = 4
+material_override = SubResource("ShaderMaterial_53n7d")
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_md82d")
+skeleton = NodePath("../..")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_cb8pu")
+}
+autoplay = "Init"

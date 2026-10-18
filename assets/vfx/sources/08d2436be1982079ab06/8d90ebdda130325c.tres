@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "revival"
+constructor_script = "res://assets/vfx/sources/71c2cee9dc00229feb63/revivify.gd"
+input = {"scene": "res://assets/vfx/sources/8c885868a10f0b8027cb/VFX_LV_Up_style_d.tscn", "settings": {"animation": "init", "scale": 0.32, "close": 0, "frames": 324, "alphaGain": 1.0}, "side": "full", "seed": 75231, "simulation_hz": 144, "native_palette": ["44331d", "89662b", "b38c40", "dec488", "f0dfb3"]}
+options = {"source_recipe": "agent_docs/GODOT_BG3_36_SPELL_HANDOFF_2026-10-15.md#revivify"}
+provenance = "Pinned native selection; agent_docs/GODOT_BG3_36_SPELL_HANDOFF_2026-10-15.md#revivify"
+
+[resource]
+script = ExtResource("script")
+clip_id = "bg3-36/revivify/application/source-8d90ebdda130325c"
+label = "Revival release"
+phase = "application"
+variant = "in_place"
+source_recipe = "agent_docs/GODOT_BG3_36_SPELL_HANDOFF_2026-10-15.md#revivify"
+bindings = [{"component": "revival", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 2.25
+simulation_hz = 144
+components = Array[Resource]([SubResource("part_0")])
+options = {}

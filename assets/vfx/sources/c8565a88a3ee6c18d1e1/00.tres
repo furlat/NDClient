@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/sources/63efbe77094fc90312ab/item_flame.gd"
+input = {"finish_response": {"kind": "accepted_covered_sample_energy_index_native_derivative", "colors": ["644761", "8f6470", "be9a61", "d7b878", "efd39e", "fff0c8"], "exponent": 1.15, "source_encoding": "forward_plus_linear_albedo", "source_energy_bytes": 255, "source_adapter_sha256": "e5f547262cd56d9fdc0784183b4018e3608606335c6792abaea1fb78c494eda4", "original_finish": "2x2 highest-alpha sample; highest encoded maxRGB tie; rounded pow(energy/255,1.15)*5; alpha bytes untouched", "native_derivative": "Per original material fragment, encoded original ALBEDO times existing ALPHA byte energy; exact original index; shared D65/CIE76 matching of selected exact stop; no block or interfragment covered-sample emulation", "historical_raster_parity": false}, "item_uuid": "target-MELEE_MAIN", "effect_uuid": "fixture-continual-item-condition-v193-A", "behavior_id": "condition.spell.continual_flame", "holder_uuid": "target", "source_definition": {"components": [{"script": "res://assets/vfx/sources/00db8f16d62269816121/anchored_flame.gd", "input": {"scene": "res://assets/vfx/sources/05fd4307bdc7bf3ecca2/VFX_FireSoil_dynamic.tscn", "settings": {"animation": "", "pack": "lelu-godot-fire-premium", "name": "VFX_FireSoil_dynamic", "scale": 0.145, "height": 0, "hue": 0.065, "frames": 112, "palette": ["644761", "8f6470", "be9a61", "d7b878", "efd39e", "fff0c8"], "mode": "tile_varied", "title": "Continual Flame · fixed object socket", "fps": 32, "cell": 512, "alphaGain": 1, "seed": 6245, "hold": [48, 112], "variant": 0, "groundGrowth": true, "growthDirection": [0, 0], "width": 0.12, "depth": 0.12, "amount": 3, "noTips": true, "scaleMin": 1.0, "scaleMax": 1.16, "gentleFlame": true, "fixedFlameBase": true, "id": "continual_anchor_v41_0"}, "side": "full", "simulation_hz": 144, "seed": 47291}, "id": "effect", "rotation_degrees": [0, 0, 0]}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": []}}
+options = {"qualification": "Factory-only actual equipped-item native context qualified; V198 normal host matched reviewed V196. Historical raster finish parity unclaimed."}
+provenance = "Pinned native selection; recipes/spells/continual_flame.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "review/continual_flame/back/lifecycle"
+label = "Lifecycle"
+phase = "lifecycle"
+variant = "back"
+source_recipe = "recipes/spells/continual_flame.json"
+bindings = [{"component": "assembly", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 5.2
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"qualification": "Native-context visual review; not production approval"}

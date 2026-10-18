@@ -1,0 +1,25 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="source"]
+script = ExtResource("component")
+component_id = "receiving"
+constructor_script = "res://assets/vfx/sources/fcd9acfd29de09c82b27/receiving_curves.gd"
+input = {"profile": "split_lens", "mode": "tick", "seconds": 0.75, "layers": [{"scene": "res://assets/vfx/sources/4d2733a0a7bd1c7ebc25/vfx_status_void.tscn", "node": "MeshInstance3D", "replace_vertex": true, "alpha": 0.8, "alpha_power": 0.6, "uv_longitude_bounds": [0.24, 0.76], "uv_latitude_bounds": [0.2, 0.8], "uniforms": {"primary_color": {"type": "Color", "value": "bba778"}, "secondary_color": {"type": "Color", "value": "51493e"}, "emission": 0.85, "emission_mult": 1.0, "proximity_fade": false, "billboard": false, "streaks1_count": 3.0, "streaks2_count": 5.0, "streaks_fade": -0.6, "streaks_thickness": 0.12, "center_radius": 0.05, "fade_radius": 0.42}}, {"scene": "res://assets/vfx/sources/4d2733a0a7bd1c7ebc25/vfx_status_void.tscn", "node": "Particles", "alpha": 0.45, "alpha_power": 0.6, "uv_longitude_bounds": [0.24, 0.76], "uv_latitude_bounds": [0.2, 0.8], "uniforms": {"primary_color": {"type": "Color", "value": "bba778"}, "secondary_color": {"type": "Color", "value": "51493e"}, "emission": 0.8, "hue_variation": 0.0, "proximity_fade": false, "noise_scale": {"type": "Vector2", "value": [1.0, 1.0]}, "noise_scroll": {"type": "Vector2", "value": [0.08, -0.18]}, "edge_position": 0.0}}], "count": 2, "width_cells": 0.05, "camber_cells": 0.025, "motion_rate": 5.0, "colour": "ffffff", "source_alpha": 0.85, "apply_seconds": 0.14, "retire_seconds": 0.28, "phase_offset_seconds": 0.0}
+provenance = "Exact original native material mechanisms on measured open 3D receiving geometry; evidence/parallel-ward-trace-phantasm-v79/REPORT.md."
+
+[resource]
+script = ExtResource("phase")
+clip_id = "bg3-36/phantasmal-force/tick_psychic"
+label = "phantasmal_force · tick_psychic"
+phase = "impact"
+variant = "tick_psychic"
+source_recipe = "evidence/parallel-ward-trace-phantasm-v79/REPORT.md"
+seconds = 0.75
+simulation_hz = 60
+components = Array[Resource]([SubResource("source")])
+bindings = [{"component":"receiving","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+emitters = []
+options = {"opacity_uniform": "receiving_opacity", "source_revision": "gpu-ward-v383-20261018"}

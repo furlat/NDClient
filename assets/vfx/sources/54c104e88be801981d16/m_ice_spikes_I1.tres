@@ -1,0 +1,44 @@
+[gd_resource type="ShaderMaterial" load_steps=9 format=3 ]
+
+[ext_resource type="Shader"  path="res://assets/vfx/sources/a52c1be46153ebe15c06/s_ice_I1.tres" id="1_mv2f2"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/cc3ee322db85204a95aa/texture.res" id="2_iubkl"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/9dd4b1e9c98d16632575/texture.res" id="3_ua5hb"]
+
+[sub_resource type="Gradient" id="Gradient_l7r3p"]
+interpolation_color_space = 2
+offsets = PackedFloat32Array(0, 0.640669, 0.724234, 0.785515, 1)
+colors = PackedColorArray(0.0972, 0.17208, 0.27, 1, 0.424525, 0.485861, 0.584245, 1, 1, 1, 1, 1, 0.3285, 0.3771, 0.45, 1, 0.694884, 0.789944, 0.941747, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_i4ow5"]
+gradient = SubResource("Gradient_l7r3p")
+
+[sub_resource type="Gradient" id="Gradient_h4ccc"]
+interpolation_color_space = 2
+offsets = PackedFloat32Array(0.00561798, 1)
+colors = PackedColorArray(0.779292, 0.779291, 0.779291, 1, 0, 0, 0, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_xues4"]
+frequency = 0.0166
+domain_warp_enabled = true
+domain_warp_frequency = -0.06
+domain_warp_fractal_type = 0
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_m3ekb"]
+seamless = true
+seamless_blend_skirt = 1.0
+color_ramp = SubResource("Gradient_h4ccc")
+noise = SubResource("FastNoiseLite_xues4")
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_mv2f2")
+shader_parameter/fresnelpower = 1.36
+shader_parameter/BreakFactorGlobal = 0.0
+shader_parameter/Texture_add2_offset = Vector2(2.485, 1.02)
+shader_parameter/Details_scale = Vector2(1, 1)
+shader_parameter/Details_speed = Vector2(0, 0.05)
+shader_parameter/ColorIntensity = 2.8
+shader_parameter/AddTexture = ExtResource("2_iubkl")
+shader_parameter/AddTexture2 = ExtResource("3_ua5hb")
+shader_parameter/DetailsTexture = SubResource("NoiseTexture2D_m3ekb")
+shader_parameter/Color1DGradient = SubResource("GradientTexture1D_i4ow5")

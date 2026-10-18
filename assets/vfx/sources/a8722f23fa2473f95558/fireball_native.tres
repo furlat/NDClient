@@ -1,0 +1,60 @@
+[gd_resource type="Resource" load_steps=15 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/ac1decf2973ccb28b9c0/source_bundle.gd" id="bundle"]
+
+[ext_resource type="Shader"  path="res://assets/vfx/sources/47f9bee3c95870027924/s_master_explosion_2.tres" id="3_kxypc"]
+
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/39ddbfd26262ae95b5b6/n_explosionB.tres" id="4_xipy5"]
+
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/59848ac6d6b42d4ce850/texture.res" id="5_vjvxw"]
+
+[ext_resource type="Gradient"  path="res://assets/vfx/sources/df692ee2c7f82430d87c/g_explossive1.tres" id="6_rjiwj"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_e1r87"]
+
+[sub_resource type="Gradient" id="Gradient_w5pbr"]
+offsets = PackedFloat32Array(0.00334448, 0.759197)
+colors = PackedColorArray(0.838211, 0.483362, 0, 1, 0.26, 0.16354, 0.1222, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_mqjqr"]
+gradient = SubResource("Gradient_w5pbr")
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_auu4w"]
+gradient = ExtResource("6_rjiwj")
+use_hdr = true
+
+[sub_resource type="Gradient" id="Gradient_ybadn"]
+offsets = PackedFloat32Array(0.212987, 0.706493)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_7qgtv"]
+gradient = SubResource("Gradient_ybadn")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xgyig"]
+render_priority = 0
+shader = ExtResource("3_kxypc")
+shader_parameter/Displacement_Speed = Vector2(0, 0.6)
+shader_parameter/ProximityFade = 1.0
+shader_parameter/Hard_Shadow_min = 0.0
+shader_parameter/Hard_Shadow_max = 0.1
+shader_parameter/Shadow_Min = 0.1
+shader_parameter/Shadow_Max = 1.0
+shader_parameter/Dissplacement_texture = ExtResource("5_vjvxw")
+shader_parameter/Dark_Color_Gradient_1D = SubResource("GradientTexture1D_mqjqr")
+shader_parameter/Disapear_Noise = ExtResource("4_xipy5")
+shader_parameter/Gradient_1D = SubResource("GradientTexture1D_7qgtv")
+shader_parameter/Emission_Gradient_1D = SubResource("GradientTexture1D_auu4w")
+
+[sub_resource type="Curve" id="Curve_7qss0"]
+_data = [Vector2(0.457143, 0), 0.0, 0.0, 0, 0, Vector2(0.879365, 1), 2.87611, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_s830e"]
+offsets = PackedFloat32Array(0, 0.229965, 0.543554, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0, 0.5, 0, 1, 0.5, 0.7, 1, 1, 1, 1, 1, 1)
+
+[resource]
+script = ExtResource("bundle")
+material = SubResource("ShaderMaterial_xgyig")
+source_color = SubResource("Gradient_s830e")
+source_alpha = SubResource("Curve_7qss0")
+mesh = SubResource("SphereMesh_e1r87")

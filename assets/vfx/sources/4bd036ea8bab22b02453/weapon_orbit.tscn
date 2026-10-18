@@ -1,0 +1,60 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/9f6a8d6964c16adc6951/texture.res" id="5_2gc8e"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0rwpt"]
+blend_mode = 1
+cull_mode = 2
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_texture = ExtResource("5_2gc8e")
+use_particle_trails = true
+
+[sub_resource type="Curve" id="Curve_rpaec"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_o31bh"]
+min_value = -2.0
+max_value = 2.0
+_data = [Vector2(0, 1.33238), 0.0, 0.0, 0, 0, Vector2(1, 0.664765), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_a1om2"]
+_data = [Vector2(0, -0.00285292), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_pqmoy"]
+curve_x = SubResource("Curve_rpaec")
+curve_y = SubResource("Curve_o31bh")
+curve_z = SubResource("Curve_a1om2")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_vx0p6"]
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 0.0
+emission_ring_radius = 0.08
+emission_ring_inner_radius = 0.05
+direction = Vector3(0, 1, 0)
+spread = 0.0
+initial_velocity_min = 0.25
+initial_velocity_max = 0.35
+orbit_velocity_min = 1.0
+orbit_velocity_max = 1.0
+orbit_velocity_curve = SubResource("CurveXYZTexture_pqmoy")
+gravity = Vector3(0, 0, 0)
+color = Color(5, 1.2, 0.427, 1)
+
+[sub_resource type="RibbonTrailMesh" id="RibbonTrailMesh_rrxoh"]
+size = 0.1
+
+[node name="Trails" type="GPUParticles3D"]
+material_override = SubResource("StandardMaterial3D_0rwpt")
+amount = 5
+lifetime = 2.0
+fixed_fps = 60
+local_coords = true
+trail_enabled = true
+trail_lifetime = 0.5
+process_material = SubResource("ParticleProcessMaterial_vx0p6")
+draw_pass_1 = SubResource("RibbonTrailMesh_rrxoh")
+

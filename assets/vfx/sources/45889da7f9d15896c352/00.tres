@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/sources/0738ff2d24aa41b1b963/native_review_composition.gd"
+input = {"components": [{"script": "res://assets/vfx/sources/284e4aabd34d33a7eb56/live_fire_breath.gd", "input": {"scene": "res://assets/vfx/sources/adeac0a07ed5ac7143de/VFX_Flamethrower_B.tscn", "settings": {"animation": "", "shape": "cone", "heading": 1, "range_units": 3.0, "stop_tick": 25}, "side": "full", "simulation_hz": 32, "seed": 4173}, "id": "effect", "rotation_degrees": [0, 0, 0]}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": []}
+options = {}
+provenance = "Pinned native selection; recipes/spells/action_fire_breath.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "native/fire_breath/cone"
+label = "Lifecycle"
+phase = "lifecycle"
+variant = "cone"
+source_recipe = "recipes/spells/action_fire_breath.json"
+bindings = [{"component": "assembly", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 1.5
+simulation_hz = 32.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"qualification": "Native-context visual review; not production approval"}

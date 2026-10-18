@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/sources/0738ff2d24aa41b1b963/native_review_composition.gd"
+input = {"components": [{"script": "res://assets/vfx/sources/88a9f571204f7d54a99c/gaze_impact.gd", "input": {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"mode": "binding", "pack": "binbun-statusfxfull", "name": "vfx_status_dark", "cell": 384, "ortho": 8, "targetY": 1.2, "frames": 48, "animation": "", "adapter": "DreadGazeCapture.gd", "kind": "gaze_hit", "donor": "rot", "palette": ["241c1d", "503035", "854347", "b16b62", "d7a78a", "f0d6af"], "target": [0, 5.65685425], "id": "eyebite_hit_v2", "cameraQuarter": 0, "noise_resource": "res://assets/vfx/sources/494104e1f9bd8717534a/rot_noise.tres", "clip_vector": "vec3(0.70710678,0.0,0.70710678)", "particle_scene": "res://assets/vfx/sources/5b201a226752f0f5b1aa/rot_aura.tscn"}, "side": "full", "simulation_hz": 144, "seed": 47291}, "id": "effect", "rotation_degrees": [0, 0, 0]}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": []}
+options = {}
+provenance = "Pinned native selection; recipes/spells/eyebite.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "live/eyebite/frightened/impact"
+label = "Impact"
+phase = "impact"
+variant = "impact_back"
+source_recipe = "recipes/spells/eyebite.json"
+bindings = [{"component": "assembly", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 1.5
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"qualification": "Native-context visual review; not production approval"}

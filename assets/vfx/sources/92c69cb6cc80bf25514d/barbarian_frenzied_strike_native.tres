@@ -1,0 +1,20 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/1e400e86b7d47eafacbe/spell.gd" id="script"]
+[ext_resource type="Resource" path="res://assets/vfx/sources/2c955a95ebb84a972501/cb7bbe4a8b164495.tres" id="phase_0"]
+
+[ext_resource type="Resource" path="res://assets/vfx/sources/111eb59c5ec543db4a61/01_contact.tres" id="phase_contact"]
+
+[resource]
+script = ExtResource("script")
+spell_id = "barbarian_frenzied_strike_native"
+title = "Barbarian Frenzied Strike · native geometry"
+effect_scale = 0.18
+phases = Array[Resource]([ExtResource("phase_0"), ExtResource("phase_contact")])
+palette = {}
+has_staging_override = true
+staging = {"target_local": true, "target_position": [-0.9, 0, 0], "recipient": "caster", "contact_after_release": 0.0, "camera_focus": [-1.4, 0.55, 0], "camera_size": 3.2, "decorative_light_multiplier": 0.0, "cues": [{"clip": "barbarian_frenzied_strike_native", "role": "attached", "at": "release", "attachment": "caster_ground", "orientation": "world", "source_end": 1.0, "duration_policy": "authored", "scale": 1.0, "follow_attachment": true, "delay_seconds": 0.4, "live_endpoints": [{"actor": "caster", "socket": "hand"}], "entity_geometry": {"actor": "caster", "slots": ["weapon"]}}, {"clip": "class/frenzied_contact_native", "role": "attached", "at": "release", "attachment": "caster_ground", "orientation": "world", "source_end": 0.45, "duration_policy": "authored", "scale": 1.0, "delay_seconds": 0.9833333333333334, "live_endpoints": [{"actor": "target", "socket": "body_center"}]}], "actor_items": {"caster": [{"slot": "MELEE_MAIN", "visual_item_name": "Longsword"}]}, "body_actions": [{"id": "native-frenzied-strike", "actor": "caster", "target": "target", "clip": "Attack6", "after_release": 0.4, "speed": 1.0, "child_attack": true, "contact_frame": 7, "reaction": "TakeDamage"}], "feedback_palette": {"colors": ["402622", "7b2629", "c74439", "ef9763", "ffbc78"]}, "contact_vfx_provenance": {"existing_child_attack": "native-frenzied-strike", "clip": "Attack6", "contact_frame": 7, "actual_rig_fps": 12.0, "after_release_seconds": 0.9833333333333334, "adds_damage_or_body_animation": false}}
+choreography_data = {"runtimeKey": "class.barbarian_frenzied_strike", "elementColors": {"primary": 13345359, "secondary": 15520919, "tertiary": 7887156}, "castPalettes": [], "cast": {"enabled": false, "actionClip": "Idle", "bodyPlaybackSpeed": 1.0, "releaseFrame": 0, "equipment": {"kind": "unchanged"}}, "condition": {"anchor": "effect", "delayMs": 0.0, "feedbackEnabled": true}, "media": [], "bodyMaterials": [], "displacementLayers": []}
+provenance = "Ported original class shader/geometry functions into the shared native contract. No legacy capture scripts or body-film sheets. Action pose and condition owner remain production inputs."
+review_status = "Private native-context review candidate. Original approved artwork remains unchanged."
+options = {"retained_export_palette": {"ramp": ["402622", "7b2629", "c74439", "ef9763", "ffbc78"]}}

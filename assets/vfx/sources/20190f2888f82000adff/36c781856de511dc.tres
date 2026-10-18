@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/82dcbb6479593213885a/payload_item_readable.gd"
+input = {"kind": "delayed_fire", "item_uuid": "fixture.delayed_fire.real_bead", "lifetime_uuid": "fixture.delayed_fire.concentration_lifetime", "original_caster_uuid": "caster", "state": {"present": true, "observed": true, "contributions_active": true, "suppressed": false, "item_uuid": "fixture.delayed_fire.real_bead", "lifetime_uuid": "fixture.delayed_fire.concentration_lifetime", "original_caster_uuid": "caster", "kind": "delayed_fire", "item_id": "spell_payload.delayed_fireball", "dice_count": 12, "spell_dc": 17, "lifetime_present": true, "retired": false, "location_kind": "floor", "location_owner_uuid": "fixture.floor.current"}, "base_power": 12, "anchor_binding": {"item_uuid": "fixture.delayed_fire.real_bead", "location_owner_uuid": "fixture.floor.current", "location_kind": "floor", "observed": true}, "lifecycle_mode": "recorded_fixture", "retire_at_seconds": 2.2}
+options = {}
+provenance = "Exact high-level22 read-only backend; inspected native material layers and supplied causal owner/area facts."
+
+[resource]
+script = ExtResource("phase")
+clip_id = "high-level-22/delayed-blast-fireball/native_floor_bead"
+label = "native_floor_bead"
+phase = "native_floor_bead"
+variant = "delayed_fire"
+source_recipe = "agent_docs/GODOT_HIGH_LEVEL_22_SPELL_HANDOFF_2026-10-15.md#spell.delayed_blast_fireball"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 2.5
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part")])
+options = {"qualification": "Source candidate; actual GPU/native integration/human approval pending", "source_revision": "gpu-payload-v397-20261018"}

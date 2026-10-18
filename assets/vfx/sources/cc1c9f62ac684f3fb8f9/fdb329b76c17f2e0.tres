@@ -1,0 +1,25 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="effect"]
+script = ExtResource("component")
+component_id = "support"
+constructor_script = "res://assets/vfx/sources/e126d7fa58beea3ea923/shared_condition.gd"
+input = {"geometry_actor": "target", "endpoint_bindings": [{"actor": "caster", "socket": "cast_hand"}, {"actor": "caster", "socket": "face"}, {"actor": "target", "socket": "body_center"}], "piece_capacity": 0, "source_entity_uuid": "1a2cc648-c66a-55ae-a595-fd9721997352", "recipient_entity_uuid": "92ef1028-5b2f-56bb-a607-c5d5a237af47", "owner_uuid": "c76ad764-06e9-52fd-88cc-5a28470617c4", "condition_id": "condition.paralyzed", "event_uuid": "3c721992-500c-57cf-9ce2-e26beeba86f7", "part": "shared_condition", "mode": "hold", "seconds": 0.55, "apply_seconds": 0.18, "retire_seconds": 0.165, "width_cells": 0.025, "vertex_colour": "a1bc75", "vertex_alpha": 0.0, "material": {"scene": "res://assets/vfx/sources/e1686bb48a6190ecc3ae/VFX_Healing_Flower.tscn", "node": "external_base_ring2", "alpha": 0.0, "emission_gain": 0.0, "uniforms": {"Enable_Proximity_Fade": false, "Enable_Fresnel": false, "Opacity": 0.95, "Texture2_Scale": {"type": "Vector2", "value": [1.0, 1.0]}, "Dissolver_Scale2": {"type": "Vector2", "value": [1.1, 0.75]}, "Speed_texture": {"type": "Vector2", "value": [0.07, 0.17]}, "Speed_disolver": {"type": "Vector2", "value": [-0.11, 0.08]}}}, "lease": {"observed": true, "condition_state": {"condition_uuid": "c76ad764-06e9-52fd-88cc-5a28470617c4", "behavior_id": "condition.paralyzed", "suppression_provider_uuids": [], "applied_source_event_cursor": 1}, "source_entity_uuid": "2f474de1-cd5b-550c-a974-9394fa3ea92f", "target_entity_uuid": "92ef1028-5b2f-56bb-a607-c5d5a237af47"}, "event": {"uuid": "3c721992-500c-57cf-9ce2-e26beeba86f7", "source_entity_uuid": "1a2cc648-c66a-55ae-a595-fd9721997352", "target_entity_uuid": "92ef1028-5b2f-56bb-a607-c5d5a237af47", "canceled": false}, "lease_source_entity_uuid": "2f474de1-cd5b-550c-a974-9394fa3ea92f", "shared_source_scale": 1.0, "component_script": "shared_condition", "shared_phase": "res://assets/vfx/sources/ffbe019a4dca13d8d9b2/00.tres", "shared_kind": "marker", "shared_source_end": 3.0, "marker_across_cells": -0.24}
+provenance = "Native source mechanisms and actual backend semantics: evidence/parallel-high-level-support-v100/PLAN.md"
+
+[resource]
+script = ExtResource("phase")
+clip_id = "high-level-22/power-word-heal/paralyzed_existing"
+label = "power_word_heal_native · paralyzed_existing"
+phase = "condition"
+variant = "paralyzed_existing"
+source_recipe = "evidence/parallel-high-level-support-v100/PLAN.md"
+seconds = 0.55
+simulation_hz = 60
+components = Array[Resource]([SubResource("effect")])
+bindings = [{"component":"support","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+emitters = []
+options = {"opacity_uniform": "factory_occurrence_alpha", "source_revision": "gpu-cached-v382-20261018"}

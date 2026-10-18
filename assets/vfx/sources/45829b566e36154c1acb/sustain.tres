@@ -1,0 +1,20 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+[sub_resource type="Resource" id="effect"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/7874fd7a46279933d3d5/retained_source.gd"
+input = {"scene": "res://assets/vfx/sources/5b72ceff16d361c170b9/source.tscn", "durations": {"application": 0.35, "sustain": 6.0, "removal": 0.5}, "application_seconds": 0.35, "loop_seconds": 0.0, "hold_animation_seconds": 0.7, "animation": "open", "clock_parameters": ["support_clock", "vfx_clock", "condition_clock"], "gain": 0.805, "body_surface": false, "motion": "bane_orbit", "source_height": 1.4, "source_scale": 0.9, "continuous_emitters": [], "emits_light": false, "light_energy": 0.7, "phase": "sustain", "phase_seconds": 6.0}
+options = {}
+provenance = "Original selected spell resource; retained condition derivative conditions-v367-20261017"
+[resource]
+script = ExtResource("phase")
+clip_id = "conditions/retained/bane/sustain"
+label = "bane · sustain"
+phase = "sustain"
+seconds = 6.0
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("effect")])
+bindings = [{"component":"effect","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+options = {"owner_controls_lifetime":true,"opacity_uniform":"condition_opacity"}

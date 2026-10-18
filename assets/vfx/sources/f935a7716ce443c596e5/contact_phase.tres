@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="hand"]
+script = ExtResource("component")
+component_id = "hand"
+constructor_script = "res://assets/vfx/sources/28a59a4b5a3635f03dc8/telekinetic_contact_v178.gd"
+input = {"scene":"res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings":{"animation":"","clip":"grab"}, "side":"full", "simulation_hz":144, "seed":47291, "model":"res://assets/vfx/sources/609f763eb0139ac79dbe/telekinetic-grip.scn", "grip_close_seconds":0.7}
+options = {}
+provenance = "Original source GLB c87fe7383c887d9cf54af203ec943537eb6c541d06090e6acb84eae30efd1091 with original shader equations/palette plus existing neutral occurrence-alpha multiplier; frozen rigid contact admission."
+
+[resource]
+script = ExtResource("phase")
+clip_id = "assembled/telekinesis_contact_v178"
+label = "Original pinch · actual visible head contact"
+phase = "lifecycle"
+variant = "telekinesis_contact_v178"
+source_recipe = "recipes/spells/telekinesis.json"
+components = Array[Resource]([SubResource("hand")])
+bindings = [{"component":"hand","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+emitters = []
+seconds = 4.0
+simulation_hz = 144
+options = {"opacity_uniform":"factory_occurrence_alpha"}

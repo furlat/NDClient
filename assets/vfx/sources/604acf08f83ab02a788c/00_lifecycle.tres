@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/c0d353db196caa737f35/support.gd"
+input = {"scene": "res://assets/vfx/sources/0816f589a2943116309b/magic_orb_small_vfx_03.tscn", "settings": {"pack": "binbun-godotmagicorbsvfx", "name": "magic_orb_small_vfx_03", "animation": "main", "frames": 288, "scale": 0.18, "height": 2.35, "hue": 0.69, "palette": ["343247", "565571", "7b80a6", "9e9ccb", "cbc8f7", "dedbf6"], "close": 0, "anchor": "target_ground", "loop": true, "version": 7, "id": "light"}, "side": "full", "seed": 47291, "simulation_hz": 144, "material_family": "support", "clip_normal": [0.70710678, 0, 0.70710678], "animation_missing_policy": "first_available"}
+options = {"rotation_degrees": [0, 0, 0]}
+provenance = "Pinned native selection; recipes/spells/light.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "spells/light/back/lifecycle"
+label = "Lifecycle"
+phase = "lifecycle"
+variant = "back"
+source_recipe = "recipes/spells/light.json"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 2.0
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"bounded_formation": false, "qualification": "native_family_port_candidate; selected production phase equivalence pending", "stage": "attached", "optional": false, "placement": {"role": "attached", "attachment": "recipient_ground", "source_rate": 1.0, "source_end": 2.0, "scale": 0.6, "orientation": "world", "fade_out_seconds": 0.35, "emission_seconds": 1.65, "fade_bindings": [{"node": "effect/Donor/Glow", "property": "material_override:shader_parameter/alpha_multiplier", "open": 1.0, "closed": 0.0}, {"node": "effect/Donor/Flare", "property": "material_override:shader_parameter/alpha_multiplier", "open": 1.0, "closed": 0.0}, {"node": "effect/Donor/Light", "property": "light_multiplier", "open": 1.0, "closed": 0.0}]}, "property_overrides": [{"node": "effect/Donor/Light", "property": "base_energy", "value": 3.0}, {"node": "effect/Donor/Light", "property": "omni_range", "value": 13.333333333333334}]}

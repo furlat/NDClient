@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "nature"
+constructor_script = "res://assets/vfx/sources/a9de7d661c4a6a3f12a5/plant_growth.gd"
+input = {"cells": [[-4, 0], [-3, -2], [-3, -1], [-3, 0], [-3, 1], [-3, 2], [-2, -3], [-2, -2], [-2, -1], [-2, 0], [-2, 1], [-2, 2], [-2, 3], [-1, -3], [-1, -2], [-1, -1], [-1, 0], [-1, 1], [-1, 2], [-1, 3], [0, -4], [0, -3], [0, -2], [0, -1], [0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [1, -3], [1, -2], [1, -1], [1, 0], [1, 1], [1, 2], [1, 3], [2, -3], [2, -2], [2, -1], [2, 0], [2, 1], [2, 2], [2, 3], [3, -2], [3, -1], [3, 0], [3, 1], [3, 2], [4, 0]], "source_scene": "res://assets/vfx/sources/f76782e59107504d22e3/VFX_Nature_Vines_Wall.tscn", "source_node": "SmVinePlants11", "colours": ["1c3025", "3d5741", "6c8050", "9d9d6c"], "native_uniforms": {"Intensity": 0.55, "DisolverColorEnergy": 0.7, "SwayAmplitude": 0.05, "SwaySpeed": 1.4, "VertexIntensity": 0.04, "AlphaScissorThreshold": 0.5}, "observed_removals": [], "leaf_texture": "res://assets/vfx/sources/a45c09f25ed6570f7b8f/texture.res", "leaf_tint": "96b875", "clumps_per_cell": 6, "height_cells": 0.5, "gpu_paths": true}
+options = {}
+provenance = "Pinned native selection; catalog/bg3-36-spell-contracts-20261015.json#spell.plant_growth"
+
+[resource]
+script = ExtResource("script")
+clip_id = "bg3-36/plant-growth/plant_growth_native"
+label = "Plant Growth · hold"
+phase = "lifecycle"
+variant = "plant_growth_native"
+source_recipe = "catalog/bg3-36-spell-contracts-20261015.json#spell.plant_growth"
+bindings = [{"component": "nature", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 3.7
+simulation_hz = 60
+components = Array[Resource]([SubResource("part_0")])
+options = {"opacity_uniform": "cue_opacity", "source_revision": "gpu-remaining-v389-20261018"}

@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/sources/0738ff2d24aa41b1b963/native_review_composition.gd"
+input = {"components": [{"id": "impact", "script": "res://assets/vfx/sources/8601d3ad4d9833144e7b/skeletal_impact_support.gd", "input": {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "side": "full", "simulation_hz": 144, "seed": 52917, "clip_normal": [0.70710678, 0, 0.70710678], "material_family": "necrotic", "settings": {"animation": "", "pack": "lelu-portal", "source_path": "res://assets/vfx/sources/5991cf7e3e0a286577ae/VFX_Hit_dark.tscn", "source_scale": 0.92, "height": 1.1, "shell_material": "res://assets/vfx/sources/ce2c15da50308f81a688/shell.tres", "shard_material": "res://assets/vfx/sources/9c884e66e750a862ecb7/shard.tres", "name": "VFX_Hit_dark"}}, "rotation_degrees": [0, 0, 0]}], "bindings": [{"component": "impact", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": []}
+options = {}
+provenance = "Pinned native selection; recipes/spells/finger_of_death.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "native/finger_of_death/impact"
+label = "Lifecycle"
+phase = "lifecycle"
+variant = "normal_back"
+source_recipe = "recipes/spells/finger_of_death.json"
+bindings = [{"component": "assembly", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 2.0
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"qualification": "Native-context visual review; not production approval"}

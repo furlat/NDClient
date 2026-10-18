@@ -1,0 +1,25 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "outline"
+constructor_script = "res://assets/vfx/sources/f3375bb9796ff4166af1/faerie_contour.gd"
+input = {"wind_mask": "res://assets/vfx/sources/8b50d862e875547c4693/texture.res", "flow_mask": "res://assets/vfx/sources/bbbefac0deb7154eff4b/texture.res", "colours": ["19364f", "497eae", "8fb4d1"], "width_cells": 0.014, "dim_range_cells": 2.0, "dim_energy": 0.12, "light_owner_uuid": "fixture-faerie-fire-light-target", "gpu_paths": true}
+options = {}
+provenance = "Pinned native selection; catalog/bg3-36-spell-contracts-20261015.json#spell.faerie_fire"
+
+[resource]
+script = ExtResource("script")
+clip_id = "bg3-36/faerie-fire/moving/observed-outline"
+label = "Actual revealed recipient contour and dim-light owner"
+phase = "sustain"
+source_recipe = "catalog/bg3-36-spell-contracts-20261015.json#spell.faerie_fire"
+bindings = [{"component": "outline", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 3.2
+simulation_hz = 60
+components = Array[Resource]([SubResource("part_0")])
+options = {"opacity_uniform": "cue_opacity", "source_revision": "gpu-remaining-v389-20261018"}

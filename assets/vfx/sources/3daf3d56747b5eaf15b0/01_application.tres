@@ -1,0 +1,23 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+[sub_resource type="Resource" id="application"]
+script = ExtResource("component")
+component_id = "application"
+constructor_script = "res://assets/vfx/sources/3703db29d1bc02194b6c/invisibility_application.gd"
+input = {"scene": "res://assets/vfx/sources/c91a8c1a4c1d4023d5b4/VFX_Puff_Reallistic1.tscn", "settings": {"animation": ""}, "side": "full", "simulation_hz": 144, "seed": 72943, "source_scale": [0.38, 0.38, 0.38], "height_cells": 0.32, "source_opacity": 0.18, "smoke_tint": "85869b", "native_palette": ["322e47", "6c6caa", "888acc", "aabddd", "ccdcff"]}
+options = {}
+provenance = "Explicit native source layers; existing renderer-owned treatment is unchanged."
+[resource]
+script = ExtResource("phase")
+clip_id = "greater_invisibility_native/application"
+label = "Finite local receiving application"
+phase = "application"
+variant = "native"
+source_recipe = "recipes/runtime_spells/invisibility.json"
+bindings = [{"component": "application", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 1.0
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("application")])
+options = {}

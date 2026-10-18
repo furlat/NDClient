@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/23ba344795a148310791/anchored_web.gd"
+input = {"source_shader": "res://assets/vfx/sources/3a1ad1b2f07adba54c86/ContinuousWeb.gdshader", "source_texture": "res://assets/vfx/sources/0b13f8c9f190dd46fcfa/texture.res", "source_size": 10.6, "source_subdivisions": 100, "yaw_degrees": 0.0, "zone_uuid": "preview-web-zone-A", "binding_owners": [{"owner_uuid": "preview-web-A-target", "actor_id": "target", "zone_uuid": "preview-web-zone-A", "condition_identity": "condition.spell.web.restrained", "admitted": true, "begin_seconds": 0.0, "removed_seconds": 2.0}], "rise_seconds": 1.0, "release_seconds": 0.65, "anchor_margin_world_units": 0.2, "return_run_height_ratio": 0.8, "surface_clearance_world_units": 0.012, "surface_columns": 17, "surface_rows": 25, "contact_witness_max_gap_world_units": 0.045, "wrap_height_fraction": 0.78, "raised_strand_alpha": 0.58}
+options = {}
+provenance = "Private unselected derivative of exact ContinuousWeb/T_webnet982; one source topology, prescribed anchored receiving deformation. Original source bytes preserved."
+
+[resource]
+script = ExtResource("script")
+clip_id = "original-repairs/web/continuous-net/lifecycle"
+label = "Continuous source net · prescribed anchored deformation"
+phase = "lifecycle"
+variant = "ground"
+source_recipe = "recipes/spells/web.json"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 3.8
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"bounded_formation": false, "qualification": "private_unselected_continuous_source_net; actual GPU appearance pending", "stage": "impact", "source_revision": "gpu-anchored-web-v371-20261018"}

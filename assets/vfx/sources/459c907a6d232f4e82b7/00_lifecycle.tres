@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/c453b83c4c572aa5c3b6/protection.gd"
+input = {"scene": "res://assets/vfx/sources/f0baa8d386c9528ac848/VFX_Shield_hex.tscn", "settings": {"source": "lelu-shield--vfx-scenes-vfx-shield-hex-framed", "animation": "start_animation", "palette": ["000000", "030710", "060e1f", "091836", "0c2658", "103a84", "1656b2", "227ade", "38a4f6", "56cdff", "85ebff", "cafaff", "ffffff", "062030", "0c4052", "14677a", "2392a0", "47bec7", "7ce2e7", "14141c", "2c303e", "4a5669", "7d94aa", "bedaeb"], "position": "0,1.12,0", "count": 864, "kind": "shield"}, "side": "full", "seed": 47291, "simulation_hz": 144, "animation_missing_policy": "first_available", "refresh_animation_caches": true, "position": [0.0, 1.12, 0.0], "alternating_cohorts": false, "material_clock_period_ticks": 0, "end_animation_tick": 99999999, "clip_normal": [0.612372436, 0.5, 0.612372436], "ground_normal": [0.70710678, 0, 0.70710678]}
+options = {"rotation_degrees": [0, 0, 0]}
+provenance = "Pinned native selection; recipes/spells/shield.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "spells/shield/back/lifecycle"
+label = "Native lifecycle"
+phase = "lifecycle"
+variant = "back"
+source_recipe = "recipes/spells/shield.json"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 3.7
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"bounded_formation": false, "qualification": "native_family_port_candidate; selected production phase equivalence pending", "stage": "attached", "animation_cues": [{"node": "effect/Donor/AnimationPlayer", "at_seconds": 3.0, "animation": "end_animation"}], "placement": {"role": "attached", "attachment": "recipient_ground", "delay_seconds": 0.0, "source_rate": 1.0, "source_end": 3.7, "scale": 0.5, "orientation": "world", "duration_policy": "authored"}}

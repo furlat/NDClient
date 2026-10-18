@@ -1,0 +1,24 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="art"]
+script = ExtResource("component")
+component_id = "divine_art"
+constructor_script = "res://assets/vfx/sources/9741d79e4578df647fec/intervention.gd"
+input = {"geometry_actor": "caster", "endpoint_bindings": [{"actor": "caster", "socket": "cast_hand"}, {"actor": "caster", "socket": "face"}, {"actor": "target", "socket": "body_center"}], "piece_capacity": 8, "source_entity_uuid": "66fbaf89-f570-5462-a3af-5a637b768ca2", "recipient_entity_uuid": "66fbaf89-f570-5462-a3af-5a637b768ca2", "owner_uuid": "8d4fae76-99fa-5d6c-981c-134016038c55", "condition_id": "", "event_uuid": "89e25cbc-3138-5275-9451-1acdc2a797fd", "study_contract": "study.divine.intervention_revival_dead", "part": "invocation", "mode": "instant", "outcome_kind": "cast", "seconds": 0.9, "apply_seconds": 0.12, "retire_seconds": 0.25, "width_cells": 0.018, "vertex_colour": "ffffff", "vertex_alpha": 0.82, "material": {"texture": "res://assets/vfx/sources/d9693b7f9e0749d03a88/texture.res", "colour": "d1ac70", "grain_strength": 0.2, "native_family": "holy_plume", "source_shader": "res://assets/vfx/sources/388327134640b78113bd/7fbb09109872ebd1046994ac5eac8a2775bbeafbabff54c98041d8b9bcbf9ed7.gdshader"}, "lease": {"owner_uuid": "8d4fae76-99fa-5d6c-981c-134016038c55", "source_entity_uuid": "66fbaf89-f570-5462-a3af-5a637b768ca2", "target_entity_uuid": "66fbaf89-f570-5462-a3af-5a637b768ca2", "study_contract": "study.divine.intervention_revival_dead", "observed": true, "present": true, "contribution_active": true, "suppressed": false}, "event": {"uuid": "89e25cbc-3138-5275-9451-1acdc2a797fd", "source_entity_uuid": "66fbaf89-f570-5462-a3af-5a637b768ca2", "target_entity_uuid": "66fbaf89-f570-5462-a3af-5a637b768ca2", "canceled": false, "effect_admitted": true, "blocked": false, "actual_healing": 22, "actual_damage": 14, "damage_component_uuid": "b19bf72f-cb38-52c8-91e0-1ab3cf1c460d", "removed_condition_uuids": ["a98da677-774f-552f-9592-8ca766a5ea5b"], "removed_owner_uuid": "8d4fae76-99fa-5d6c-981c-134016038c55", "membership_owner_uuid": "8d4fae76-99fa-5d6c-981c-134016038c55", "membership_feature": "study.divine.intervention_revival_dead", "ordinary_item_admitted": true, "item_uuid": "a8e3691f-b2df-5b34-b853-52e885629813", "creation_position_cells": [0.0, 0.0, 0.0], "outcome_source": "explicit_plan_only_fixture", "removal_cause": "supplied_exact_owner_retirement"}, "presentation_radius_cells": 6.0, "source_accent_reach_cells": 0.9, "plan_only": true, "gpu_paths": true}
+provenance = "Plan-only native study; no verified new backend behavior identity."
+
+[resource]
+script = ExtResource("phase")
+clip_id = "divine-class-study/divine_intervention_revival_dead_study/0-invocation"
+label = "intervention_revival_dead / invocation / main"
+phase = "instant"
+variant = "main"
+source_recipe = "res://assets/vfx/sources/6f469c05c8b9c1fbc8e1/feature-matrix.json"
+seconds = 0.9
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("art")])
+bindings = [{"component":"divine_art","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+options = {"opacity_uniform": "support_visibility", "source_revision": "gpu-divine-v386-20261018"}

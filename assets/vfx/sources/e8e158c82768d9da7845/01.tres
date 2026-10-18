@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/sources/0738ff2d24aa41b1b963/native_review_composition.gd"
+input = {"components": [{"script": "res://assets/vfx/sources/dbbd11d7b37fd1be2bc0/movement.gd", "input": {"scene": "res://assets/vfx/sources/21a6b10d33a7f22b5543/VFX_WindArea_Jump.tscn", "settings": {"name": "VFX_WindArea_Jump", "pack": "lelu-godot-wind-premium-1", "scale": 0.36, "height": 0, "frames": 288, "version": 1, "palette": ["26483f", "426b59", "65977e", "8dbda0", "b7dbb5", "d8ead1"], "kind": "burst", "parent": "jump", "animation": "Init", "close": 0}, "side": "full", "seed": 47291, "simulation_hz": 144, "animation_missing_policy": "first_available", "clip_normal": [0.70710678, 0, 0.70710678]}, "rotation_degrees": [0, 0, 0], "id": "effect"}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": []}
+options = {}
+provenance = "Pinned native selection; recipes/spells/jump.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "review/jump/back/takeoff"
+label = "Takeoff"
+phase = "takeoff"
+variant = "back"
+source_recipe = "recipes/spells/jump.json"
+bindings = [{"component": "assembly", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 2.0
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"qualification": "Native-context visual review; not production approval"}

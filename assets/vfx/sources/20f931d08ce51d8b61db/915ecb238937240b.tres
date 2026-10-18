@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "wet"
+constructor_script = "res://assets/vfx/sources/cd12c6c1f4bcdd41b2a7/rain_wet.gd"
+input = {"drop_scene": "res://assets/vfx/sources/cb97ea6dc7c9f543d0b9/vfx_water_area_02.tscn", "gpu_paths": true}
+options = {}
+provenance = "Pinned native selection; catalog/bg3-36-spell-contracts-20261015.json#spell.create_or_destroy_water"
+
+[resource]
+script = ExtResource("script")
+clip_id = "bg3-36/create-or-destroy-water/rain-wet"
+label = "Independent admitted rain Wet lease"
+phase = "sustain"
+variant = "wet"
+source_recipe = "catalog/bg3-36-spell-contracts-20261015.json#spell.create_or_destroy_water"
+bindings = [{"component": "wet", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 3.5
+simulation_hz = 60
+components = Array[Resource]([SubResource("part_0")])
+options = {"source_revision": "gpu-minor-v395-20261018"}

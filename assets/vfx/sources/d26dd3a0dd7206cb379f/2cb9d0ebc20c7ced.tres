@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/843204815cdceaac8544/clocked_source.gd"
+input = {"scene": "res://assets/vfx/sources/c6a3a603170696aff312/mprojectile_javelin_vfx_03.tscn", "settings": {"animation": "main"}, "side": "full", "simulation_hz": 144, "seed": 47291}
+options = {}
+provenance = "Pinned native selection; Recovered authored source; see projectile_additions.json evidence"
+
+[resource]
+script = ExtResource("script")
+clip_id = "recovered/travel/source-2cb9d0ebc20c7ced"
+label = "Travel · canonical Javelin03"
+phase = "travel"
+variant = "recovered"
+source_recipe = "Recovered authored source; see projectile_additions.json evidence"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1, "offset_seconds": 0}]
+emitters = []
+seconds = 1.0
+simulation_hz = 144
+components = Array[Resource]([SubResource("part_0")])
+options = {"stage": "travel", "qualification": "Recovered source composition; sandbox review candidate", "carrier_path": "Donor/Core", "source_yaw_degrees": 90}

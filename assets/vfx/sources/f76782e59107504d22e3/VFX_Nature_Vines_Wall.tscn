@@ -1,0 +1,633 @@
+[gd_scene load_steps=46 format=4 ]
+
+[ext_resource type="Shader" path="res://assets/vfx/sources/6cd3220e296b451fe965/ss_vines.gdshader" id="1_sct8s"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/e1a0e0dfc4cb8c8bc962/texture.res" id="2_sowl0"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/c0a2515abc39856316d0/texture.res" id="3_oyci2"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/c3db941ca0009cd4d57e/texture.res" id="4_gs4xr"]
+[ext_resource type="ArrayMesh"  path="res://assets/vfx/sources/d03385d817feb40bac35/sm_vine_plants11.res" id="5_cmjps"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/13b00c11358b19955803/texture.res" id="6_7mwrm"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/2aeb22601424dd330507/texture.res" id="7_toc2l"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/a45c09f25ed6570f7b8f/texture.res" id="8_da3vs"]
+
+[sub_resource type="Gradient" id="Gradient_mxres"]
+colors = PackedColorArray(1.20327e-06, 0.448723, 0.045844, 1, 0.678121, 0.83095, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_v07ym"]
+gradient = SubResource("Gradient_mxres")
+fill_to = Vector2(0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8qi3r"]
+render_priority = 0
+shader = ExtResource("1_sct8s")
+shader_parameter/VineTextureScale = Vector2(1, 3)
+shader_parameter/NoiseScale = Vector2(0.5, 1)
+shader_parameter/NoiseSpeed = Vector2(0.1, 0.3)
+shader_parameter/Intensity = 15.0
+shader_parameter/DisolverColorEnergy = 100.0
+shader_parameter/IsInvertFresnel = false
+shader_parameter/FresnelPower = 1.0
+shader_parameter/Roughtness = 1.0
+shader_parameter/AlphaScissorThreshold = 0.966
+shader_parameter/VinesTexture = ExtResource("4_gs4xr")
+shader_parameter/EnergyColor2DGradient = SubResource("GradientTexture2D_v07ym")
+shader_parameter/DetailsNoiseTexture = ExtResource("2_sowl0")
+shader_parameter/DisolverDetailsScale = Vector2(1, 3)
+shader_parameter/DisolverDetailsSpeed = Vector2(0.1, -0.8)
+shader_parameter/DisolverBaias = 0.05
+shader_parameter/DisolverDetailsTexture = ExtResource("3_oyci2")
+shader_parameter/VertexScale = Vector2(1, 1)
+shader_parameter/VertexSpeed = Vector2(0.3, 0.8)
+shader_parameter/VertexIntensity = 0.5
+shader_parameter/SwaySpeed = 2.0
+shader_parameter/SwayFrequency = 2.0
+shader_parameter/SwayAmplitude = 1.5
+shader_parameter/SwayDirection = Vector3(1, 0, 1)
+shader_parameter/SwayRandomness = 1.0
+shader_parameter/TextureVertex = ExtResource("3_oyci2")
+
+[sub_resource type="Animation" id="Animation_7d6pt"]
+resource_name = "End"
+length = 5.7667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SmVinePlants11:instance_shader_parameters/DisolverSTEP")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.466667, 2.23333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Decal20:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(3.46667, 5.43333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0.6, 0.701961, 0.6, 1), Color(0.595, 0.7, 0.595, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Decal20:albedo_mix")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(3.4, 5.43333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.0, 0.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("debirs_mini_A:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.533333),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("smoke2init:emitting")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.3, 2.16667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("SmVinePlants11:scale")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(1.03333, 2.9),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(1, 1.67467, 1), Vector3(1, 1, 1)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Decal20:visible")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(5.56667),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_xug3i"]
+resource_name = "Init"
+length = 9.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SmVinePlants11:instance_shader_parameters/DisolverSTEP")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.0333333, 1.43333, 4.06667, 5.83333),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [1.0, 0.0, 0.0, 1.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Decal20:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.133333, 0.533333, 6.86667, 8.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(0.595, 0.7, 0.595, 0), Color(0.6, 0.701961, 0.6, 1), Color(0.6, 0.701961, 0.6, 1), Color(0.595, 0.7, 0.595, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Decal20:albedo_mix")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.133333, 0.533333, 6.86667, 8.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 1.0, 1.0, 0.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("debirs_mini_A:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.133333, 4.13333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("smoke2init:emitting")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.0333333, 1, 3.9, 5.76667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [false, true, false, true, false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("leafflowz3:emitting")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.3),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("SmVinePlants11:scale")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.9, 4.63333, 6.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(1, 1, 1), Vector3(1, 1.67467, 1), Vector3(1, 1.67467, 1), Vector3(1, 1, 1)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Decal20:visible")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 8.63333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_m0uhj"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SmVinePlants11:instance_shader_parameters/DisolverSTEP")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+
+[sub_resource type="Animation" id="Animation_4e1uv"]
+resource_name = "Start"
+length = 1.5667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SmVinePlants11:instance_shader_parameters/DisolverSTEP")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.0333333, 1.43333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.0, 0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Decal20:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.133333, 0.533333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0.595, 0.7, 0.595, 0), Color(0.6, 0.701961, 0.6, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Decal20:albedo_mix")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.133333, 0.533333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("debirs_mini_A:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("smoke2init:emitting")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.0333333, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("leafflowz3:emitting")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.3),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("SmVinePlants11:scale")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.9),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(1, 1, 1), Vector3(1, 1.67467, 1)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Decal20:visible")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_shwca"]
+_data = {
+"End": SubResource("Animation_7d6pt"),
+"Init": SubResource("Animation_xug3i"),
+"RESET": SubResource("Animation_m0uhj"),
+"Start": SubResource("Animation_4e1uv")
+}
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_k1oqk"]
+albedo_color = Color(0.44, 0.374513, 0.3564, 1)
+metallic_specular = 0.0
+
+[sub_resource type="Curve" id="Curve_g8wuf"]
+_data = [Vector2(0.101754, 1), 0.0, -2.7981, 0, 0, Vector2(0.480702, 0.295292), -0.710623, -0.710623, 0, 0, Vector2(1, 0.0449358), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_ypldt"]
+curve = SubResource("Curve_g8wuf")
+
+[sub_resource type="Curve" id="Curve_wjjmq"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.64433, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_17cmy"]
+curve = SubResource("Curve_wjjmq")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_5y30b"]
+lifetime_randomness = 0.2
+particle_flag_rotate_y = true
+emission_shape = 3
+emission_box_extents = Vector3(6.5, 1, 2)
+angle_min = -180.0
+angle_max = 180.0
+direction = Vector3(0, 1, 0)
+spread = 12.656
+initial_velocity_min = 3.0
+initial_velocity_max = 7.0
+radial_velocity_min = 0.999978
+radial_velocity_max = 5.99998
+radial_velocity_curve = SubResource("CurveTexture_ypldt")
+gravity = Vector3(0, -25, 0)
+scale_min = 0.14
+scale_max = 0.7
+scale_curve = SubResource("CurveTexture_17cmy")
+color = Color(4, 0.8, 0.3, 1)
+collision_mode = 1
+collision_friction = 0.92
+collision_bounce = 0.08
+collision_use_scale = true
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_ktrga"]
+_surfaces = [{
+"aabb": AABB(-0.35904, -0.211502, -0.387639, 0.60855, 0.481684, 0.729266),
+"attribute_data": PackedByteArray("cv5RIf//kFc6K///Oiv/////kFcAAP//AAD/////kFf/////Fqn//wAA//9uqJBX//8AAP////86K8TUFin///////8AAP////8AAP////8AAP////8AAP////8AAP////8AAP//FqlE2kj0//8AAAAA///emv//ZJ3//wAA///emiBl//8WKf////+7KP//cd7//wAA//+01Uoq/////0Z+/////0oqr5tEhRqKfc7//wAA/////0Qgut+NIf///////wAA/////wAA//8AAP//ZJ1GfriBQov+qFvx//82hf////9S8P//JJm952utrA9S8NpmJJkUWWXwBGWh4wWBjcV0mopl//82hbAOTvH//1vxs4PMW96MCFxBg0RcAXv8ZA58XnSDlJ51GI97Y0lxzsCVo9qDIm2gxCJtoMSVo9qDw35U8f//TvH//4plEsD/c+a6EHY="),
+"format": 34896613399,
+"index_count": 126,
+"index_data": PackedByteArray("AAABAAIAAwAEAAUABgAHAAgACQAKAAsADAANAA4ADgANAA8AEAARABIAEwAUABUAFgAXABgAGQAaABsAGwAaABwAHAAaAB0AHgAfACAAIQAiACMAJAAlACYAJwAoACkAKQAoACoAKgAoACsALAAtAC4ALgAtAC8AMAAxADIAMwA0ADUANQA0ADYANwA4ADkAOQA4ADoAOgA4ADsAPAA9AD4APgA9AD8APwA9AEAAQQBCAEMAQwBCAEQARQBGAEcARwBGAEgASABGAEkASQBGAEoASgBGAEsATABNAE4ATwBQAFEAUQBQAFIAUgBQAFMAUwBQAFQAVABQAFUA"),
+"name": "Material",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 86,
+"vertex_data": PackedByteArray("//+HCtEShfv/////zgaF++9RQRQxBoX771FBFDEG1gD/////zgbWAIV2wMYAANYAhXbAxgAAVPz/////zgZU/C7XLf8ABFT8//+fyWK1P8su1y3/AAQ/y//////OBj/LhXbAxgAA1eW/UbTRlx7V5e9RQRQxBtXlqks4FCoL1eUu1y3/AATs2L9RtNGXHuzYhXbAxgAA7NhUZ/bsZS5z1r9RtNGXHnPWLtct/wAEc9bPmfO3xN8jylRn9uxlLiPKLtct/wAEI8r//5/JYrXcuf//QrMU/dy5Ltct/wAE3LnPmfO3xN/cuVLk/bFI/dy5JapCr7b9nMXPmfO3xN+cxVLk/bFI/ZzFqks4FCoLZOy/UbTRlx5k7AAAwRPWR2Ts6gl4EetgAfPPmfO3xN8B81wN4xCeZgHzz5nzt8Tf58kohKdSiPjnyVwN4xCeZufJaTiuCVit58mYZTA1Ndofyr9RtNGXHu+0z5nzt8Tf77QAAMET1kfvtOoJeBHrYO+0VGf27GUusuvPmfO3xN+y679RtNGXHrLrz5nzt8Tf2L4lqkKvtv3YviiEp1KI+Ni+v4voWf//2L7//81S0PrhqZhlMDU12uGp//9IV1j/4am/i+hZ///hqSiEp1KI+Oip//9IV1j/EMC/i+hZ//+Sz///QrMU/T/LUuT9sUj9iOElqkKvtv373Gk4rglYrSfJmGUwNTXaJ8n//wAA36Ynyf//zVLQ+ifJ//9IV1j/VNX//0KzFP1U1f//zVLQ+lTV//8AAN+mVNX//4cK0RJU1f/////OBlTV//+fyWK13NOqSzgUKgu9FQAAwRPWR70V71FBFDEGvRXvUUEUMQY5xAAAwRPWR5LK//+HCtESbdH//wAA36ZV0Wk4rglYrWfIXA3jEJ5mocrqCXgR62BHyL04aka9OGpGvThqRtO1ozrTtaM607WjOlkWNWZZFjVmWRY1Zm6sV6ZurFembqxXpgrIMskKyDLJCsgyyQrIMsnq+PWZ6vj1mer49ZltzA6tbcwOrW3MDq2urd6lrq3epa6t3qW61AuVu9QLlbvUC5W71AuVu9QLldazMKPWszCj1rMwo2Xc97tl3Pe7Zdz3uyFdc5khXXOZIV1zmX3sRs597EbOfexGzn3sRs6v7EDOiMTQyojE0MqIxNDKiMTQyuTxpTDk8aUw5PGlMHbhv8924b/PduG/z3bhv88CDqKlAg6ipQIOoqUCDqKlFw7epT791gFf/RoBV/1JAXz9cwB2/ZoArSED360hA9+tIQPfrSED36oqqiqqKqoqqiqqKqoqqiqqKqoqqiqqKnoswil/N6Lrfzei6383ouuKGL+sjSMdw64pkc+dKW7P2SCgvZ0jP8OrIEO9")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yi3mm"]
+transparency = 1
+diffuse_mode = 3
+specular_mode = 1
+vertex_color_use_as_albedo = true
+vertex_color_is_srgb = true
+albedo_texture = ExtResource("7_toc2l")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+proximity_fade_enabled = true
+proximity_fade_distance = 0.3
+
+[sub_resource type="Curve" id="Curve_rmx5m"]
+_data = [Vector2(0.452632, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_u5ly7"]
+texture_mode = 1
+curve = SubResource("Curve_rmx5m")
+
+[sub_resource type="Curve" id="Curve_xv16i"]
+_data = [Vector2(0, 0.175824), 0.0, 1.06402, 0, 0, Vector2(1, 1), 0.145355, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_82ucq"]
+curve = SubResource("Curve_xv16i")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_1olkx"]
+lifetime_randomness = 0.1
+particle_flag_rotate_y = true
+emission_shape = 3
+emission_box_extents = Vector3(6, 0.2, 1.7)
+angle_min = -180.0
+angle_max = 180.0
+direction = Vector3(0, 1, 0)
+spread = 0.0
+initial_velocity_max = 0.3
+radial_velocity_min = -0.500022
+radial_velocity_max = 1.49998
+gravity = Vector3(0, 0, 0)
+scale_min = 3.0
+scale_max = 3.5
+scale_curve = SubResource("CurveTexture_82ucq")
+color = Color(0.78, 0.75504, 0.7332, 1)
+alpha_curve = SubResource("CurveTexture_u5ly7")
+
+[sub_resource type="QuadMesh" id="QuadMesh_8q25t"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_y8rcb"]
+transparency = 2
+alpha_scissor_threshold = 0.314
+alpha_antialiasing_mode = 0
+cull_mode = 2
+shading_mode = 0
+diffuse_mode = 2
+vertex_color_use_as_albedo = true
+vertex_color_is_srgb = true
+albedo_texture = ExtResource("8_da3vs")
+
+[sub_resource type="Curve" id="Curve_j8w7a"]
+
+[sub_resource type="Curve" id="Curve_8gbxo"]
+_data = [Vector2(0.0561403, 1), 0.0, -2.95977, 0, 0, Vector2(1, 0.146933), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_eoabs"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0]
+point_count = 1
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_g11ju"]
+curve_x = SubResource("Curve_j8w7a")
+curve_y = SubResource("Curve_8gbxo")
+curve_z = SubResource("Curve_eoabs")
+
+[sub_resource type="Curve" id="Curve_vyt04"]
+_data = [Vector2(0, 0.24893), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_0uxv5"]
+_data = [Vector2(0, 0.721826), 0.0, 0.0, 0, 0, Vector2(0.291228, 0.0912982), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_0l1ou"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0]
+point_count = 1
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_datwd"]
+curve_x = SubResource("Curve_vyt04")
+curve_y = SubResource("Curve_0uxv5")
+curve_z = SubResource("Curve_0l1ou")
+
+[sub_resource type="Curve" id="Curve_p8fxo"]
+_data = [Vector2(0, 0.0820258), 0.0, 1.57131, 0, 0, Vector2(0.975439, 1), 0.396398, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_vj3cj"]
+curve = SubResource("Curve_p8fxo")
+
+[sub_resource type="Curve" id="Curve_leyrw"]
+_data = [Vector2(0.635088, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_2gply"]
+curve = SubResource("Curve_leyrw")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_1k7xo"]
+lifetime_randomness = 0.2
+particle_flag_align_y = true
+emission_shape = 3
+emission_box_extents = Vector3(4, 2, 1)
+angle_min = -180.0
+angle_max = 180.0
+direction = Vector3(0, 1, 0)
+spread = 0.0
+directional_velocity_min = 3.99998
+directional_velocity_max = 12.0
+directional_velocity_curve = SubResource("CurveXYZTexture_g11ju")
+orbit_velocity_min = -0.6
+orbit_velocity_max = 0.6
+orbit_velocity_curve = SubResource("CurveXYZTexture_datwd")
+radial_velocity_min = 0.999978
+radial_velocity_max = 6.99998
+radial_velocity_curve = SubResource("CurveTexture_vj3cj")
+gravity = Vector3(0, 0, 0)
+scale_min = 0.2
+scale_max = 0.33
+scale_curve = SubResource("CurveTexture_2gply")
+color = Color(1, 1.1, 1, 1)
+hue_variation_min = -0.05
+hue_variation_max = 0.1
+
+[sub_resource type="QuadMesh" id="QuadMesh_k7rho"]
+size = Vector2(0.5, 1)
+
+[node name="VFX_Nature_Vines_Wall" type="Node3D"]
+metadata/_edit_group_ = true
+
+[node name="SmVinePlants11" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.310206, 0, 0)
+layers = 4
+material_override = SubResource("ShaderMaterial_8qi3r")
+instance_shader_parameters/DisolverSTEP = 1.0
+mesh = ExtResource("5_cmjps")
+skeleton = NodePath("../..")
+metadata/_edit_lock_ = true
+
+[node name="Decal20" type="Decal" parent="."]
+transform = Transform3D(-0.0434625, 0, 0.999055, 0, 1, 0, -0.999055, 0, -0.0434625, 0.318348, 0, -0.432988)
+layers = 4
+size = Vector3(11.8784, 2, 16.8109)
+texture_albedo = ExtResource("6_7mwrm")
+emission_energy = 0.0
+modulate = Color(0.595, 0.7, 0.595, 0)
+albedo_mix = 0.0
+upper_fade = 0.0445953
+lower_fade = 0.0861525
+metadata/_edit_lock_ = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_shwca")
+}
+autoplay = "Init"
+
+[node name="debirs_mini_A" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00807858, 0.943981, -0.00614262)
+layers = 4
+material_override = SubResource("StandardMaterial3D_k1oqk")
+emitting = false
+amount = 120
+lifetime = 1.3
+one_shot = true
+randomness = 1.0
+fixed_fps = 60
+visibility_aabb = AABB(-7, -2.045, -4.5, 14, 4.56, 9)
+process_material = SubResource("ParticleProcessMaterial_5y30b")
+draw_pass_1 = SubResource("ArrayMesh_ktrga")
+metadata/_edit_lock_ = true
+
+[node name="GPUParticlesCollisionBox3D" type="GPUParticlesCollisionBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.176361, -0.509141, -0.250397)
+size = Vector3(19, 1, 9)
+metadata/_edit_lock_ = true
+
+[node name="smoke2init" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0133312, 0.822672, 0.0489054)
+layers = 4
+material_override = SubResource("StandardMaterial3D_yi3mm")
+cast_shadow = 0
+emitting = false
+amount = 70
+randomness = 1.0
+fixed_fps = 60
+visibility_aabb = AABB(-5, -2.42, -3, 10, 5.045, 6)
+process_material = SubResource("ParticleProcessMaterial_1olkx")
+draw_pass_1 = SubResource("QuadMesh_8q25t")
+metadata/_edit_lock_ = true
+
+[node name="leafflowz3" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.310491, 0.33531, 0.0058198)
+layers = 4
+material_override = SubResource("StandardMaterial3D_y8rcb")
+cast_shadow = 0
+emitting = false
+amount = 120
+lifetime = 1.2
+one_shot = true
+explosiveness = 0.39
+randomness = 1.0
+fixed_fps = 60
+visibility_aabb = AABB(-6, -0.805, -3, 12, 6.46, 6)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_1k7xo")
+draw_pass_1 = SubResource("QuadMesh_k7rho")
+metadata/_edit_lock_ = true

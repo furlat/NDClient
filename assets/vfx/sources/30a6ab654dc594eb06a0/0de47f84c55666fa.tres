@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part"]
+script = ExtResource("component")
+component_id = "owned_contact"
+constructor_script = "res://assets/vfx/sources/c35ca443bf2367a11e75/ensnaring_strike.gd"
+input = {"phase": "application", "seconds": 0.58, "lifecycle_mode": "bounded_fixture", "source_actor_uuid": "caster", "recipient_uuid": "target", "item_uuid": "caster-MELEE_MAIN", "attack_uuid": "fixture.ensnaring_strike_native.attack", "activation_event_uuid": "fixture.ensnaring_strike_native.activation-effect", "equipment_slot": "MELEE_MAIN", "render_slot": "weapon", "behavior_id": "spell.ensnaring_strike", "condition_uuid": "fixture.ensnaring_strike_native.condition", "condition_id": "condition.spell.ensnaring_strike", "owner_uuid": "fixture.vampiric.original-sustain", "owner_id": "condition.spell.vampiric_touch", "material": {"scene": "res://assets/vfx/sources/5122f3721c1db292c7dc/VFX_Nature_Vines_Trap.tscn", "node": "SmVinesTrap001", "unshaded_output": true, "palette": ["514224", "786035", "a08c53", "c1af73"], "uniforms": {"Intensity": 0.45, "DisolverColorEnergy": 0.4, "AlphaScissorThreshold": 0.0, "DisolverSTEP": -0.2, "DisolverDetails": 0.3, "VertexIntensity": 0.002, "SwayAmplitude": 0.003, "SwaySpeed": 1.2, "SwayRandomness": 0.0, "SwayDirection": [1.0, 0.0, 0.0]}}, "strike": {"source_actor_uuid": "caster", "recipient_uuid": "target", "attack_uuid": "fixture.ensnaring_strike_native.attack", "item_uuid": "caster-MELEE_MAIN", "equipment_slot": "MELEE_MAIN", "source_kind": "equipped", "attack_kind": "weapon", "outcome": "hit", "behavior_id": "spell.ensnaring_strike", "payload_applied": true, "damage_type": "base_weapon", "damage_fact_uuid": ""}, "condition": {"condition_uuid": "fixture.ensnaring_strike_native.condition", "condition_id": "condition.spell.ensnaring_strike", "source_actor_uuid": "caster", "recipient_uuid": "target", "present": true, "observed": true, "contribution_active": true, "suppressed": false}, "owner": {"condition_uuid": "fixture.vampiric.original-sustain", "condition_id": "condition.spell.vampiric_touch", "source_actor_uuid": "caster", "recipient_uuid": "caster", "present": false, "observed": true, "contribution_active": false, "suppressed": false}, "tick": {"condition_uuid": "fixture.ensnaring_strike_native.condition", "recipient_uuid": "target", "damage_type": "piercing", "damage_applied": true, "damage_fact_uuid": "fixture.ensnaring_strike_native.actual-piercing-damage"}, "healing": {"source_actor_uuid": "caster", "recipient_uuid": "caster", "parent_event_uuid": "fixture.ensnaring_strike_native.activation-effect", "observed": true, "actual_healing": 0, "was_blocked": false, "healing_fact_uuid": "", "source": "observed_healing_not_total_target_hp_loss"}}
+options = {}
+provenance = "Exact current backend/card; explicit owner/condition/attack/damage/healing fixture."
+
+[resource]
+script = ExtResource("phase")
+clip_id = "bg3-36/ensnaring-strike/ensnaring_strike_native/application"
+label = "Ensnaring Strike · application"
+phase = "application"
+variant = "ensnaring_strike_native"
+source_recipe = "res://assets/vfx/sources/873c8d5938f1ba595713/bg3-36-spell-contracts-20261015.json#spell.ensnaring_strike"
+bindings = [{"component":"owned_contact","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+emitters = []
+seconds = 0.58
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part")])
+options = {"qualification": "coded_pending_capture; actual recipient/hand geometry", "source_revision": "gpu-cached-v382-20261018"}

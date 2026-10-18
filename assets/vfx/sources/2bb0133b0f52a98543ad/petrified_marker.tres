@@ -1,0 +1,22 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+[sub_resource type="Resource" id="source"]
+script = ExtResource("component")
+component_id = "receiving"
+constructor_script = "res://assets/vfx/sources/cc00c6beded94e2ece93/maintained_marker.gd"
+input = {"accepted_phase": "res://assets/vfx/sources/5a8bdc347c74f07e3e8d/00.tres"}
+provenance = "Actual selected native source material mechanism and measured receiving geometry; evidence/parallel-high-level-control-v104/PLAN_REVIEW.md."
+[resource]
+script = ExtResource("phase")
+clip_id = "high-level-22/flesh-to-stone/petrified_marker"
+label = "flesh_to_stone · petrified_marker"
+phase = "sustain"
+variant = "petrified_marker"
+source_recipe = "evidence/parallel-high-level-control-v104/PLAN_REVIEW.md"
+seconds = 3.2
+simulation_hz = 60
+components = Array[Resource]([SubResource("source")])
+bindings = [{"component":"receiving","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+emitters = []
+options = {"opacity_uniform":"marker_tail_opacity"}

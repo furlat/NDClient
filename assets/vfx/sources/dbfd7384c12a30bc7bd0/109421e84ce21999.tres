@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part"]
+script = ExtResource("component")
+component_id = "smite"
+constructor_script = "res://assets/vfx/sources/616d3afb7538708b0f1e/searing_smite.gd"
+input = {"phase": "retire", "seconds": 0.42, "lifecycle_mode": "bounded_fixture", "source_actor_uuid": "caster", "recipient_uuid": "target", "item_uuid": "caster-MELEE_MAIN", "attack_uuid": "fixture.searing_smite_miss_native.attack", "equipment_slot": "MELEE_MAIN", "render_slot": "weapon", "behavior_id": "spell.searing_smite", "condition_uuid": "fixture.searing_smite_miss_native.condition", "condition_id": "condition.spell.searing_smite", "effective_handler_uuid": "fixture.searing_smite_miss_native.effective-handler", "material": {"remove_shadow_catcher": true, "shader": "res://assets/vfx/sources/b79fc4e95cba5450d544/s_basic_typeA7.tres", "source_colour": [1, 0.4, 0.04, 1], "palette": ["431d12", "823515", "b25b20", "d49343"], "uniforms": {"ColorParameter": [1, 0.35, 0.03, 1], "Speed": [0, 0.7], "Distortion_ammount": 2.5, "Distortion_TEx": "res://assets/vfx/sources/5b0a18fdc09c1fcdd677/texture.res", "Main_TEX": "res://assets/vfx/sources/83b8ff6357a4e406a778/texture.res"}}, "strike": {"source_actor_uuid": "caster", "recipient_uuid": "target", "item_uuid": "caster-MELEE_MAIN", "attack_uuid": "fixture.searing_smite_miss_native.attack", "equipment_slot": "MELEE_MAIN", "source_kind": "equipped", "attack_kind": "weapon", "outcome": "miss", "behavior_id": "spell.searing_smite", "effective_handler_uuid": "fixture.searing_smite_miss_native.effective-handler", "payload_applied": false, "damage_component_uuid": "", "selection_origin": "explicit_applied_result_no_local_cost_or_slot_selection"}, "condition": {"condition_uuid": "fixture.searing_smite_miss_native.condition", "condition_id": "condition.spell.searing_smite", "source_actor_uuid": "caster", "recipient_uuid": "target", "present": false, "observed": true, "contribution_active": false, "suppressed": false, "retire_reason": "explicit_example_removal"}, "tick": {"condition_uuid": "fixture.searing_smite_miss_native.condition", "recipient_uuid": "target", "damage_applied": false, "damage_type": "fire", "damage_fact_uuid": "", "source": "explicit_post_save_damage_fact_not_animation_clock"}}
+options = {}
+provenance = "Exact current card/backend; explicit applied attack/condition/damage fixture; no invented armed condition."
+
+[resource]
+script = ExtResource("phase")
+clip_id = "bg3-36/searing-smite/searing_smite_miss_native/retire"
+label = "Searing Smite · retire"
+phase = "retire"
+variant = "searing_smite_miss_native"
+source_recipe = "res://assets/vfx/sources/873c8d5938f1ba595713/bg3-36-spell-contracts-20261015.json#spell.searing_smite"
+bindings = [{"component":"smite","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+emitters = []
+seconds = 0.42
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part")])
+options = {"qualification": "coded_pending_capture; native source material extraction, not whole-scene recolour", "source_revision": "gpu-cached-v382-20261018"}

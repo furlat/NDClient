@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/sources/0738ff2d24aa41b1b963/native_review_composition.gd"
+input = {"components": [{"script": "res://assets/vfx/sources/1f4996c92ad61d6c5518/healing_pulse.gd", "input": {"scene": "res://assets/vfx/sources/e1686bb48a6190ecc3ae/VFX_Healing_Flower.tscn", "settings": {"pack": "lelu-healing-protection", "name": "VFX_Healing_Flower", "animation": "Init", "scale": 0.8, "height": 0, "hue": 0.51, "frames": 576, "close": 390, "palette": ["2c405d", "477c9a", "65b5c7", "8cdde5", "b8eee6", "e2f6dc"], "mode": "group", "level": 9, "title": "Mass Heal", "note": "Native layered flower, crossing leaf ribbons and radial release on each selected recipient; stronger than Mass Cure at equal recipient count.", "cell": 512, "alphaGain": 1.0, "anchor": "target_ground", "id": "mass_heal"}, "side": "full", "seed": 47291, "simulation_hz": 144, "material_family": "healing", "clip_normal": [0.70710678, 0, 0.70710678], "animation_missing_policy": "first_available", "receive_layers": [{"node": "SmConeTypeBa", "alpha": 0.14, "scale": [0.6, 0.5, 0.6], "position_gain": 0.5}, {"node": "VFX_Smoke_B_green", "alpha": 0.3}, {"node": "floorflash5", "alpha": 0.45}]}, "rotation_degrees": [0, 0, 0], "id": "effect"}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": [], "opacity_control": true}
+options = {}
+provenance = "Pinned native selection; recipes/spells/mass_heal.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "review/mass_heal/back/production_impact"
+label = "Production Impact"
+phase = "production_impact"
+variant = "back"
+source_recipe = "recipes/spells/mass_heal.json"
+bindings = [{"component": "assembly", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 4.0
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"qualification": "Native-context visual review; not production approval", "opacity_uniform": "factory_occurrence_alpha"}

@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/sources/676e29203431ee1392a8/gust_live_composition.gd"
+input = {"components": [{"script": "res://assets/vfx/sources/626243423bc6a35d0b0e/gust_strands.gd", "input": {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"animation": "", "hand": [1.102034003571565, 1.35, -0.053368221754690914], "direction": [1, 0], "frames": 432}, "side": "full", "simulation_hz": 144, "seed": 47291, "donor_scene": "res://assets/vfx/sources/f3e524aacc9fef3ca61b/VFX_WindBlow_2.tscn"}, "id": "effect", "rotation_degrees": [0, 0, 0]}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": []}
+options = {}
+provenance = "Pinned native selection; recipes/spells/gust_of_wind.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "review/gust_of_wind/whole/lifecycle"
+label = "Lifecycle"
+phase = "lifecycle"
+variant = "whole"
+source_recipe = "recipes/spells/gust_of_wind.json"
+bindings = [{"component": "assembly", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 3.0
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"qualification": "Native-context visual review; not production approval", "source_revision": "gpu-directed-v373-20261018"}

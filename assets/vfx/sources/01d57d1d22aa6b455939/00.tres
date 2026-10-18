@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/sources/0738ff2d24aa41b1b963/native_review_composition.gd"
+input = {"components": [{"script": "res://assets/vfx/sources/ec9cb8f39586b3f03214/support.gd", "input": {"scene": "res://assets/vfx/sources/2472d7f100f9254a5ad9/VFX_Healing_R1.tscn", "settings": {"pack": "lelu-healing-protection", "name": "VFX_Healing_R1", "animation": "Init", "frames": 432, "scale": 0.9, "height": 0.3, "hue": 0.25, "palette": ["294353", "43799d", "519cad", "69bbc6", "9cdada", "d1f2ef"], "close": 188, "anchor": "each_selected_target_ground", "version": 8, "cell": 384, "alphaGain": 3.0, "id": "prayer_of_healing"}, "side": "full", "seed": 47291, "simulation_hz": 144, "material_family": "support", "clip_normal": [0.70710678, 0, 0.70710678], "animation_missing_policy": "first_available", "preparation_stage": "before_tree"}, "rotation_degrees": [0, 0, 0], "id": "effect"}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": []}
+options = {}
+provenance = "Pinned native selection; recipes/spells/prayer_of_healing.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "review/prayer_of_healing/back/lifecycle"
+label = "Lifecycle"
+phase = "lifecycle"
+variant = "back"
+source_recipe = "recipes/spells/prayer_of_healing.json"
+bindings = [{"component": "assembly", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 3.0
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"qualification": "Native-context visual review; not production approval"}

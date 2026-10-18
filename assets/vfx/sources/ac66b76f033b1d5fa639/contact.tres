@@ -1,0 +1,21 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+[sub_resource type="Resource" id="contact"]
+script = ExtResource("component")
+component_id = "contact"
+constructor_script = "res://assets/vfx/sources/6c2f1f4ebacf2eaa0f07/solar_contact.gd"
+input = {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"animation": "", "source_path": "res://assets/vfx/sources/d1b1783631dc9ae1a7da/VFX_Vertical_Hell_beam_blue.tscn", "heading": 0}, "side": "full", "simulation_hz": 144, "seed": 61703, "contact_scale": 0.23}
+[resource]
+script = ExtResource("script")
+clip_id = "native/sunbeam/contact"
+label = "Supplied recipient solar contact"
+phase = "impact"
+variant = "default"
+source_recipe = "recipes/spells/sunbeam.json"
+seconds = 0.55
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("contact")])
+bindings = [{"component":"contact","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+emitters = []
+options = {}

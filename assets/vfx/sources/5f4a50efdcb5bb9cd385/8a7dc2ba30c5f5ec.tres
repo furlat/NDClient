@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/c92bc18411716d1a304c/false_life_application.gd"
+input = {"material_scene": "res://assets/vfx/sources/cae7aebb8d36f0170ce0/vfx_status_green.tscn", "material_node": "Mesh", "shape": "strands", "seconds": 2.0, "alpha_gain": 1.0, "palette": ["112830", "20434e", "326574", "498f9f", "69bac7", "93d7dc"], "uniforms": {"emission": 1.0, "hue_variation": 0.0, "noise_scale": {"type": "Vector2", "value": [1, 1]}, "noise_scroll": {"type": "Vector2", "value": [0.05, 0.15]}, "proximity_fade": false}, "curves": [{"width_cells": 0.014, "phase": 0, "controls": [[-0.85, 0.4, 0.035], [-0.15, 0.49, 0.045], [0.65, 0.67, 0.04], [0.25, 0.83, 0.03]]}, {"width_cells": 0.012, "phase": 2.1, "controls": [[0.8, 0.42, 0.03], [0.3, 0.55, 0.045], [-0.55, 0.67, 0.04], [-0.2, 0.82, 0.03]]}, {"width_cells": 0.009, "phase": 4.2, "controls": [[-0.65, 0.6, 0.035], [-0.2, 0.57, 0.04], [0.3, 0.61, 0.035], [0.7, 0.67, 0.03]]}], "gpu_paths": true}
+options = {"rotation_degrees": [0, 0, 0]}
+provenance = "Pinned native selection; recipes/spells/false_life.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "spells/false_life/back/lifecycle/source-77124039b32df82b"
+label = "Native application"
+phase = "lifecycle"
+variant = "back"
+source_recipe = "recipes/spells/false_life.json"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 2.0
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"bounded_formation": false, "qualification": "native_family_port_candidate; selected production phase equivalence pending", "stage": "attached", "placement": {"role": "attached", "attachment": "recipient_ground", "delay_seconds": 0.0, "source_rate": 1.0, "source_end": 2.0, "scale": 0.5, "orientation": "world", "duration_policy": "authored", "opacity_keys": [[0, 0.4], [0.3, 0.4], [1.5, 0.25], [2, 0]], "opacity_uniform": "factory_occurrence_alpha"}, "source_revision": "gpu-nested-v392-20261018"}

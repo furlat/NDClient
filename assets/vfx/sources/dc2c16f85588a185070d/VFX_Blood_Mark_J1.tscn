@@ -1,0 +1,112 @@
+[gd_scene load_steps=13 format=3 ]
+
+[ext_resource type="Shader" path="res://assets/vfx/sources/af05dbb590f2d9420e65/ss_decal3double_treshold.gdshader" id="1_dav5g"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/1e8fdb62cf96bd3b631e/texture.res" id="2_gd6nt"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/68ee2643fe401e02a28e/texture.res" id="3_xgl6e"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/01080724dd6b8a11ea03/texture.res" id="4_s35r0"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/f9c8e2fa1dcc62f85965/texture.res" id="5_l042c"]
+
+[sub_resource type="Gradient" id="Gradient_chkta"]
+offsets = PackedFloat32Array(0, 0.851282)
+colors = PackedColorArray(0.42, 0, 0.00699989, 1, 0.75, 0.1425, 0.16275, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_sbdqa"]
+gradient = SubResource("Gradient_chkta")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kmanb"]
+render_priority = 0
+shader = ExtResource("1_dav5g")
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/use_textures_alpha = false
+shader_parameter/cube_half_size = 0.5
+shader_parameter/enable_y_fade = true
+shader_parameter/fade_start = 0.3
+shader_parameter/fade_end = 0.7
+shader_parameter/fade_power = 2.0
+shader_parameter/normal_intensity = 1.0
+shader_parameter/alpha_treshold = 1.0
+shader_parameter/blend_texture2 = 0.0
+shader_parameter/Color_1D_gradient = SubResource("GradientTexture1D_sbdqa")
+shader_parameter/Albedo = ExtResource("2_gd6nt")
+shader_parameter/Albedo_Dissipation = ExtResource("3_xgl6e")
+shader_parameter/Normal = ExtResource("4_s35r0")
+shader_parameter/Roughtness = ExtResource("5_l042c")
+
+[sub_resource type="BoxMesh" id="BoxMesh_wil8o"]
+
+[sub_resource type="Animation" id="Animation_nxouv"]
+resource_name = "Init"
+length = 8.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("mark2:material_override:shader_parameter/alpha_treshold")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.166667, 1, 2.26667, 5.36666, 6.23333, 7.73333, 8),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [1.0, 0.41, 0.0363736, 0.01, 0.01, 0.01, 1.0, 1.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("mark2:material_override:shader_parameter/blend_texture2")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.166667, 0.333333, 5.36666, 6.23333, 7.73333, 8),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 0.46, 0.06, 0.06, 1.0, 1.0, 1.0]
+}
+
+[sub_resource type="Animation" id="Animation_wm3aa"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("mark2:material_override:shader_parameter/alpha_treshold")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("mark2:material_override:shader_parameter/blend_texture2")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_u8a5d"]
+_data = {
+"Init": SubResource("Animation_nxouv"),
+"RESET": SubResource("Animation_wm3aa")
+}
+
+[node name="VFX_Blood_Mark_J1" type="Node3D"]
+
+[node name="mark2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.619, 0, 0, 0, -3.0598e-08, -0.405, 0, 0.7, -1.77031e-08, 0, 1.25342e-08, 0.198233)
+material_override = SubResource("ShaderMaterial_kmanb")
+cast_shadow = 0
+mesh = SubResource("BoxMesh_wil8o")
+skeleton = NodePath("../..")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_u8a5d")
+}
+autoplay = "Init"

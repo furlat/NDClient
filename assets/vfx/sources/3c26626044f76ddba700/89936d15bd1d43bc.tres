@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "field"
+constructor_script = "res://assets/vfx/sources/8c70ca642faba181b8dd/fitted_native_field.gd"
+input = {"material_scene": "res://assets/vfx/sources/d54a92e7968191060328/VFX_Wolven_sword.tscn", "material_node": "WolvenBladeModel", "material_property": "material_overlay", "shape": "weapon_surface", "seconds": 2.3, "clearance_cells": 0.018, "uniforms": {"Has_mask": false, "Arua_Power": 2.0, "Aura_Color": {"type": "Color", "value": "478fd2"}}, "material_resource": "res://assets/vfx/sources/f438b80dca949c8c8f09/wolven_aura.tres", "weapon_orbit_scene": "res://assets/vfx/sources/4bd036ea8bab22b02453/weapon_orbit.tscn", "gpu_paths": true}
+options = {}
+provenance = "Pinned native selection; docs/research/WEAPON_EFFECT_DONORS_2026-10-15.md"
+
+[resource]
+script = ExtResource("script")
+clip_id = "entity-study/fitted/perfect_strike"
+label = "Actual blade displaced aura"
+phase = "sustain"
+variant = "geometry_native"
+source_recipe = "docs/research/WEAPON_EFFECT_DONORS_2026-10-15.md"
+bindings = [{"component": "field", "kind": "sample", "rate": 1, "offset_seconds": 0}]
+emitters = []
+seconds = 2.3
+simulation_hz = 60
+components = Array[Resource]([SubResource("part_0")])
+options = {"source_revision": "gpu-remaining-v389-20261018"}

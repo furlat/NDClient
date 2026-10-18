@@ -1,0 +1,16 @@
+[gd_resource type="StandardMaterial3D" load_steps=3 format=3 ]
+
+[sub_resource type="Gradient" id="Gradient_crkav"]
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_x8sko"]
+gradient = SubResource("Gradient_crkav")
+fill_to = Vector2(0, 1)
+
+[resource]
+transparency = 2
+alpha_scissor_threshold = 0.0759284
+alpha_antialiasing_mode = 0
+shading_mode = 0
+albedo_color = Color(0.8, 1, 2, 1)
+albedo_texture = SubResource("GradientTexture2D_x8sko")

@@ -1,0 +1,22 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+[sub_resource type="Resource" id="visual"]
+script = ExtResource("component")
+component_id = "marker"
+constructor_script = "res://assets/vfx/sources/ed7fc22f644ee87c9dd5/steady_marker.gd"
+input = {"material": {"shader": "res://assets/vfx/sources/c71dc0f132124a0208ed/Glyph.gdshader", "parameters": {"Alpha_Texture": {"type": "Resource", "path": "res://assets/vfx/sources/2427ac63bd69733e13ce/texture.res"}, "Texture_Disolver": {"type": "Resource", "path": "res://assets/vfx/sources/8b50d862e875547c4693/texture.res"}, "Color_1D_gradient": {"type": "GradientTexture1D", "colors": ["00000000", "3f3729", "686144", "92854f", "b9a367", "e0cd94", "f0e5bb"], "offsets": [0, 0.1, 0.278, 0.45599999999999996, 0.634, 0.8119999999999999, 0.99]}, "Color_Intensity": 1.0, "glyph_clock": 0.0}}, "size_cells": [0.4, 0.4], "clock_parameter": "glyph_clock", "durations": {"application": 0.16, "sustain": 2.0, "removal": 0.25}, "steady_source_clock": 0.0, "clearance_cells": 0.16, "application_seconds": 0.16, "loop_seconds": 2.0, "revision": "conditions-v366-20261017", "phase": "sustain", "phase_seconds": 2.0}
+options = {}
+provenance = "Original steady marker; explicit owner lifecycle conditions-v366-20261017"
+[resource]
+script = ExtResource("phase")
+clip_id = "conditions/native_v1/condition_sickened_native/default/sustain"
+label = "condition_sickened_native · sustain"
+phase = "sustain"
+source_recipe = "recipes/conditions/native_v1/condition_sickened_native.json"
+components = Array[Resource]([SubResource("visual")])
+bindings = [{"component":"marker","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+emitters = []
+seconds = 2.0
+simulation_hz = 0.0
+options = {"loop": true, "clock_parameter":"glyph_clock", "owner_controls_lifetime":true}

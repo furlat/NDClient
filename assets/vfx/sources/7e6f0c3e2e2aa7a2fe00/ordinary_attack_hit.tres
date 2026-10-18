@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/40a136ae47ae570e43c9/fire_contact.gd"
+input = {"owner_uuid": "fixture.flame_blade.lifetime", "source_uuid": "caster-MELEE_MAIN", "event": {"owner_uuid": "fixture.flame_blade.lifetime", "source_uuid": "caster-MELEE_MAIN", "damage_component_uuid": "fixture.flame_blade.applied_attack", "trigger": "created_item_spell_attack", "attack_kind": "spell", "outcome": "hit", "applied": true, "recipient_uuid": "target"}, "anchor_height_cells": 0.585}
+options = {}
+provenance = "Exact new36 card/backend and selected native LeLu/Binbun fire sources; explicit observed state fixture."
+
+[resource]
+script = ExtResource("phase")
+clip_id = "bg3-36/flame-blade/ordinary_attack_hit"
+label = "ordinary_attack_hit"
+phase = "ordinary_attack_hit"
+variant = "native"
+source_recipe = "catalog/bg3-36-spell-contracts-20261015.json#spell.flame_blade"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 0.45
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part")])
+options = {"qualification": "Engineering candidate; source/art/native event qualification pending"}

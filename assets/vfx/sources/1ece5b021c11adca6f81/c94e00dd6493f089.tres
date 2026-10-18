@@ -1,0 +1,25 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="source"]
+script = ExtResource("component")
+component_id = "psychic"
+constructor_script = "res://assets/vfx/sources/d7989287f3e6aecf6110/head_accent.gd"
+input = {"shape": "folds", "mode": "saved", "count": 2, "seconds": 0.55, "width_cells": 0.023, "intensity": 0.7, "layers": [{"scene": "res://assets/vfx/sources/02e4ed99a3d209ebd7ed/vfx_status_magic.tscn", "node": "MeshInstance3D", "alpha": 0.8, "uniforms": {"primary_color": {"type": "Color", "value": "cf735d"}, "secondary_color": {"type": "Color", "value": "753f44"}, "emission": 0.85, "emission_mult": 1.0, "billboard": false, "proximity_fade": false, "center_radius": 0.0, "fade_radius": 0.29, "streaks_thickness": 0.06}}, {"scene": "res://assets/vfx/sources/02e4ed99a3d209ebd7ed/vfx_status_magic.tscn", "node": "Aura", "alpha": 0.5, "uniforms": {"primary_color": {"type": "Color", "value": "b57d65"}, "secondary_color": {"type": "Color", "value": "653941"}, "tertiary_color": {"type": "Color", "value": "22313b"}, "emission": 0.75, "hue_variation": 0.0, "shape_curve": 0.8, "edge_hardness": 0.0, "proximity_fade": false, "noise_scroll": {"type": "Vector2", "value": [0.12, -0.35]}}}], "apply_seconds": 0.06, "retire_seconds": 0.28}
+provenance = "Native source extraction and live receiving support; evidence/parallel-psychic-v53/REPORT.md"
+
+[resource]
+script = ExtResource("phase")
+clip_id = "bg3-36/vicious-mockery/saved"
+label = "vicious_mockery · saved"
+phase = "impact"
+variant = "saved"
+source_recipe = "evidence/parallel-psychic-v53/REPORT.md"
+seconds = 0.55
+simulation_hz = 60
+components = Array[Resource]([SubResource("source")])
+bindings = [{"component":"psychic","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+emitters = []
+options = {"opacity_uniform": "psychic_opacity", "source_revision": "gpu-cached-v382-20261018"}

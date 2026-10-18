@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/sources/0738ff2d24aa41b1b963/native_review_composition.gd"
+input = {"components": [{"script": "res://assets/vfx/sources/34c288bbfa76fd9ea2e9/ice_wall_clear_breach.gd", "input": {"scene": "res://assets/vfx/sources/475b77b7024f2636c921/VFX_Ice_Wall_A.tscn", "settings": {"animation": "", "kind": "ice", "shape": "straight", "mode": "lifecycle"}, "side": "full", "simulation_hz": 144, "seed": 47291, "source_breakup": {"source_seed": 47291, "body_mass_kg": 0.3, "velocity_side_source_units_per_second": 0.7, "velocity_rise_source_units_per_second": 0.8, "velocity_rise_step_source_units_per_second": 0.35, "velocity_forward_source_units_per_second": 0.7, "velocity_forward_step_source_units_per_second": 0.2, "angular_velocity_source_radians_per_second": [2.0, 1.6, 1.8], "seeded_yaw": true, "gravity_source_units_per_second_squared": 11.76, "linear_damp_per_second": 0.25, "angular_damp_per_second": 0.7, "friction": 0.8, "bounce": 0.08, "contact_margin_source_units": 0.04, "body_collision_layer": 2097152, "floor_collision_mask": 1}, "fog_noise_resource": "res://assets/vfx/sources/900721c102c94ad02849/texture.res", "debris_clear_interval_seconds": [0.75, 1.45]}, "id": "effect", "rotation_degrees": [0, 0, 0]}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": []}
+options = {}
+provenance = "Private actual Ice assembly transfer; original donor material and cold layers retained."
+
+[resource]
+script = ExtResource("script")
+clip_id = "wall-native/ice_wall_assembly_breakup_native/lifecycle"
+label = "Lifecycle"
+phase = "lifecycle"
+variant = "straight_back"
+source_recipe = "recipes/spells/wall_of_ice.json"
+bindings = [{"component": "assembly", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 7.0
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"qualification": "Native-context visual review; not production approval"}

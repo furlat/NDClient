@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/sources/f95a9864b1f165d83f44/timed_assembly.gd"
+input = {"opacity_control": true, "entries": [{"id": "feast", "composition": {"components": [{"script": "res://assets/vfx/sources/eb6249f0de40e4283583/spectral_feast_layered.gd", "input": {"geometry": "res://assets/vfx/sources/368884231eef7b5f1afc/feast.scn", "material_shader": "res://assets/vfx/sources/cec7533ff06171936253/feast_materialize.gdshader", "material_parameters": {}, "motion_rate": 0.5, "motion_offset_seconds": -0.015625, "role_render_priority": {"Spectral": -3, "Pearl": -2, "Silver": -1}, "role_parameters": {"Pearl": {"feast_role_tint": {"type": "Color", "value": "b8dbcf"}, "feast_value_gain": 0.84}, "Silver": {"feast_role_tint": {"type": "Color", "value": "bcded9"}, "feast_value_gain": 0.68}, "Spectral": {"feast_role_tint": {"type": "Color", "value": "8dc2bc"}, "feast_value_gain": 0.66}, "Bread": {"feast_role_tint": {"type": "Color", "value": "ded4ad"}, "feast_value_gain": 0.82}, "Fruit": {"feast_role_tint": {"type": "Color", "value": "a6c9be"}, "feast_value_gain": 0.72}, "Crust": {"feast_role_tint": {"type": "Color", "value": "c7bc91"}, "feast_value_gain": 0.72}, "Leaf": {"feast_role_tint": {"type": "Color", "value": "7faa98"}, "feast_value_gain": 0.72}, "Flame": {"feast_role_tint": {"type": "Color", "value": "e9e7be"}, "feast_value_gain": 0.95}}}, "rotation_degrees": [0, 0, 0], "id": "feast"}], "bindings": [{"component": "feast", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": []}, "begin": 0.0, "seconds": 4.5, "position": [0, 0, 0], "scale": 1.0}]}
+options = {}
+provenance = "Pinned native selection; recipes/spell.heroes_feast.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "assembled/heroes_feast_native"
+label = "Whole native assembly"
+phase = "lifecycle"
+variant = "heroes_feast_native"
+source_recipe = "recipes/spell.heroes_feast.json"
+bindings = [{"component": "assembly", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 4.5
+simulation_hz = 60
+components = Array[Resource]([SubResource("part_0")])
+options = {"opacity_uniform": "factory_occurrence_alpha"}

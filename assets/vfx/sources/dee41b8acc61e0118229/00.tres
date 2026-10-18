@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/sources/f95a9864b1f165d83f44/timed_assembly.gd"
+input = {"entries": [{"id": "departure", "composition": {"components": [{"script": "res://assets/vfx/sources/8908139b773a8a0602aa/dimension_door.gd", "input": {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"animation": "", "kind": "banish", "source_path": "res://assets/vfx/sources/89195b97d2b19d37b858/VFX_Portal_TypeB.tscn", "source_scale": 1.5, "height": 1.1, "support_opacity": false}, "side": "full", "seed": 61702, "simulation_hz": 144, "clip_normal": [0.70710678, 0, 0.70710678], "layer_shader": "res://assets/vfx/sources/1b57f8e0ddd1f4fa95d3/necrotic_recipient_layer_v3.gdshader", "support_opacity": false}, "rotation_degrees": [0, 0, 0], "id": "effect"}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": []}, "begin": 0.0, "seconds": 2.75, "position": [-2, 0, 0], "scale": 0.62}, {"id": "arrival", "composition": {"components": [{"script": "res://assets/vfx/sources/8908139b773a8a0602aa/dimension_door.gd", "input": {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"animation": "", "kind": "banish", "source_path": "res://assets/vfx/sources/89195b97d2b19d37b858/VFX_Portal_TypeB.tscn", "source_scale": 1.5, "height": 1.1, "support_opacity": false}, "side": "full", "seed": 61702, "simulation_hz": 144, "clip_normal": [0.70710678, 0, 0.70710678], "layer_shader": "res://assets/vfx/sources/1b57f8e0ddd1f4fa95d3/necrotic_recipient_layer_v3.gdshader", "support_opacity": false}, "rotation_degrees": [0, 0, 0], "id": "effect"}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": []}, "begin": 0.0, "seconds": 2.75, "position": [2, 0, 0], "scale": 0.62}]}
+options = {}
+provenance = "Pinned native selection; recipes/spell.dimension_door.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "assembled/dimension_door_native"
+label = "Whole native assembly"
+phase = "lifecycle"
+variant = "dimension_door_native"
+source_recipe = "recipes/spell.dimension_door.json"
+bindings = [{"component": "assembly", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 2.75
+simulation_hz = 60
+components = Array[Resource]([SubResource("part_0")])
+options = {}

@@ -1,0 +1,22 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+[sub_resource type="Resource" id="effect"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/3cb7f9045c39d6e78ccd/pose_probe_clock.gd"
+input = {}
+options = {}
+provenance = "Scoped original identity/body corrective; exact source/bytes in evidence/parallel-original-body-identity-v130/lineage.json"
+[resource]
+script = ExtResource("phase")
+clip_id = "original-repairs/stoneskin/body-window"
+label = "Stoneskin supplied body-material inspection window"
+phase = "recipient"
+variant = "corrective"
+seconds = 4.3
+simulation_hz = 144
+components = Array[Resource]([SubResource("effect")])
+bindings = [{"component":"effect","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+emitters = []
+options = {}

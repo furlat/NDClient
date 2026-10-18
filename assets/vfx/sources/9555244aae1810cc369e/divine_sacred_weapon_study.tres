@@ -1,0 +1,21 @@
+[gd_resource type="Resource" load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/1e400e86b7d47eafacbe/spell.gd" id="spell"]
+[ext_resource type="Resource" path="res://assets/vfx/sources/aa4bc5a2fffe1e07d090/a193583418753c06.tres" id="p0"]
+[ext_resource type="Resource" path="res://assets/vfx/sources/164786cdeda8e1178000/fdb376ceb46cddc9.tres" id="p1"]
+[ext_resource type="Resource" path="res://assets/vfx/sources/f17867f00eb0ba6b07d2/6ee216dd8e2d3cc5.tres" id="p2"]
+
+[resource]
+script = ExtResource("spell")
+spell_id = "divine_sacred_weapon_study"
+title = "Sacred Weapon · main · plan-only study"
+effect_scale = 0.18
+casting_profile = "authored"
+phases = Array[Resource]([ExtResource("p0"), ExtResource("p1"), ExtResource("p2")])
+palette = {}
+has_staging_override = true
+staging = {"target_local": true, "recipient": "target", "target_position": [0.0, 0.0, 0.0], "actor_positions": {"caster": [-0.65, 0.0, 0.1], "target": [0.0, 0.0, 0.0], "target2": [1.5, 0.0, 1.2]}, "camera_focus": [-0.2, 0.65, 0.0], "camera_size": 3.8, "contact_after_release": 0.0, "decorative_light_multiplier": 1.0, "cues": [{"clip": "divine-class-study/divine_sacred_weapon_study/0-application", "id": "divine_sacred_weapon_study-0", "role": "attached", "at": "cast", "to_actor": "caster", "attachment": "recipient_ground", "orientation": "world", "scale": 1.0, "delay_seconds": 0.0, "source_end": 0.6, "duration_policy": "authored", "follow_attachment": true, "fade_out_seconds": 0.18, "dynamic_geometry": true, "entity_geometry": {"actor": "caster", "slots": ["weapon"]}, "live_endpoints": [{"actor": "caster", "socket": "cast_hand"}, {"actor": "caster", "socket": "face"}, {"actor": "target", "socket": "body_center"}]}, {"clip": "divine-class-study/divine_sacred_weapon_study/1-sustain", "id": "divine_sacred_weapon_study-1", "role": "attached", "at": "cast", "to_actor": "caster", "attachment": "recipient_ground", "orientation": "world", "scale": 1.0, "delay_seconds": 0.48, "source_end": 1.65, "duration_policy": "authored", "follow_attachment": true, "fade_out_seconds": 0.18, "dynamic_geometry": true, "entity_geometry": {"actor": "caster", "slots": ["weapon"]}, "live_endpoints": [{"actor": "caster", "socket": "cast_hand"}, {"actor": "caster", "socket": "face"}, {"actor": "target", "socket": "body_center"}]}, {"clip": "divine-class-study/divine_sacred_weapon_study/2-retire", "id": "divine_sacred_weapon_study-2", "role": "attached", "at": "cast", "to_actor": "caster", "attachment": "recipient_ground", "orientation": "world", "scale": 1.0, "delay_seconds": 2.13, "source_end": 0.42, "duration_policy": "authored", "follow_attachment": true, "fade_out_seconds": 0.18, "dynamic_geometry": true, "entity_geometry": {"actor": "caster", "slots": ["weapon"]}, "live_endpoints": [{"actor": "caster", "socket": "cast_hand"}, {"actor": "caster", "socket": "face"}, {"actor": "target", "socket": "body_center"}]}], "review_poses": [{"actor": "caster", "clip": "Special1", "begin_seconds": 0.0, "end_seconds": 0.7, "source_seconds": 0.0, "source_rate": 1.0}], "fixture_inputs": {"plan_only": true, "presentation_adapter_inputs_not_wire_fields": true, "actual_backend_action_condition_ids_not_available": true, "inspection_duration_is_not_mechanical_duration": true, "source_class_contract": "sacred_weapon", "variant": "main", "rules_solver": false, "real_reward_model_missing": false, "reward_not_instantiated_by_vfx": true, "dead_revival_does_not_stand": true, "weapon_is_generic_real_item_not_devotee_mace": true}, "actor_items": {"caster": [{"slot": "MELEE_MAIN", "visual_item_name": "Longsword"}]}}
+choreography_data = {"runtimeKey": "study.divine.sacred_weapon", "cast": {"enabled": false, "actionClip": "Attack5", "bodyPlaybackSpeed": 1.0, "releaseFrame": 0, "equipment": {"kind": "unchanged"}, "effects": [], "recovery": {"enabled": false}, "sourceSockets": {}}, "condition": {"anchor": "effect", "delayMs": 0.0, "feedbackEnabled": false}}
+options = {"qualification":"plan_only_coded_pending_capture"}
+provenance = "Approved class plan sections5-7/9/13/15/16; exact backend audit and source graph in evidence/divine-class-art-v156."
+review_status = "Private plan-only candidate; headless checks and complete recorded-frame review required; no human acceptance."

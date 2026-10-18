@@ -1,0 +1,17 @@
+[gd_resource type="Resource" load_steps=3 format=3]
+[ext_resource type="Script" path="res://assets/vfx/sources/1e400e86b7d47eafacbe/spell.gd" id="definition"]
+[ext_resource type="Resource" path="res://assets/vfx/sources/1683be7bfc616125e05d/ce2c8f2e19448d4c.tres" id="phase"]
+[resource]
+script = ExtResource("definition")
+spell_id = "prismatic_spray_two_colors_native_study"
+title = "Prismatic Spray · two colors · native color study"
+effect_scale = 0.18
+phases = Array[Resource]([ExtResource("phase")])
+palette = {}
+has_staging_override = true
+staging = {"target_local": true, "target_position": [7, 0, 0], "actor_positions": {"caster": [-5, 0, 0], "target": [2, 0, -1.2], "target2": [4, 0, 2.0]}, "extra_targets": true, "contact_after_release": 0.0, "camera_focus": [1, 0.75, 0], "camera_size": 15.0, "decorative_light_multiplier": 0.0, "cues": [{"clip": "reaction-prismatic-study/prismatic_spray_two_colors_native_study", "role": "attached", "at": "release", "attachment": "caster_ground", "orientation": "world", "follow_attachment": false, "source_end": 1.45, "duration_policy": "authored", "scale": 1.0, "live_endpoints": [{"actor": "caster", "socket": "cast_hand"}, {"actor": "caster", "socket": "ground"}, {"point": [7, 0, 0]}, {"actor": "target", "socket": "body_center"}, {"actor": "target2", "socket": "body_center"}], "dynamic_geometry": true}]}
+choreography_data = {"runtimeKey": "spell.prismatic_spray", "cast": {"enabled": true, "actionClip": "Attack5", "bodyPlaybackSpeed": 1.0, "releaseFrame": 7, "equipment": {"kind": "hidden"}, "weaponGlow": {"id": "spray-source-hand", "slot": "weaponGlow", "enabled": true, "hidden": false, "category": "Magic2", "sourceSheet": "/spritesheets/Magic2/Attack5.png", "colors": {"primary": 14862174, "mode": "paletteSwap"}, "palette": {"colors": [14247241, 14063944, 14862174, 6398569, 5872056, 3427458], "noiseSheet": "/spell-palettes/source-hand-noise.png"}, "role": "hand_magic"}, "effects": []}, "condition": {"anchor": "effect", "delayMs": 0.0, "feedbackEnabled": false}, "media": [], "bodyMaterials": [], "displacementLayers": []}
+provenance = "Actual spell.prismatic_spray rank7/60foot cone. Proposed supplied recipient outcome contract; actual backend currently embeds selected colors in status text. Original prism noise mechanism only; new separated 3D strokes rather than reused fan composition."
+review_status = "Private candidate. Violet rule result uses explicit neutral silver/charcoal filament visual treatment under human no-purple constraint. Independent optical review, condition roots and production facts remain open."
+research_notes = "factory-source:docs/REACTION_PRISMATIC_NATIVE_STUDY_2026-10-16.md"
+options = {"study_only": true, "backend_integration": false, "color7_neutral_visual_treatment": true}

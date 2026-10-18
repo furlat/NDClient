@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/9e0b8cdb5ffccc6b3399/ice_projectile.gd"
+input = {"scene": "res://assets/vfx/sources/087f74b95b2d8a0441bd/VFX_Hit_LinearIce_K5.tscn", "settings": {"animation": "Init"}, "side": "full", "simulation_hz": 144, "seed": 47291}
+options = {}
+provenance = "Pinned native selection; recipes/spells/ray_of_frost.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "spells/ray_of_frost/impact/impact"
+label = "Impact"
+phase = "impact"
+variant = "impact"
+source_recipe = "recipes/spells/ray_of_frost.json"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 2.0
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"bounded_formation": false, "qualification": "native_family_port_candidate; selected production phase equivalence pending", "stage": "impact"}

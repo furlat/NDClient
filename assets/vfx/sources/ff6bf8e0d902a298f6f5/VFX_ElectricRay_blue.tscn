@@ -1,0 +1,80 @@
+[gd_scene load_steps=14 format=3 ]
+
+[ext_resource type="ArrayMesh"  path="res://assets/vfx/sources/76ae9feba143a3709db7/thunder2.tres" id="1_2rk53"]
+[ext_resource type="Shader"  path="res://assets/vfx/sources/b0aede33f73724e8a2f4/s_special_shader.tres" id="2_lde1d"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/7dfc32dc0d940271c5f3/texture.res" id="3_7y415"]
+[ext_resource type="ArrayMesh"  path="res://assets/vfx/sources/3dea1139adad5db0d136/sm_chunks.res" id="4_jd5fr"]
+
+[sub_resource type="Gradient" id="Gradient_52peo"]
+offsets = PackedFloat32Array(0.133028, 0.527523, 1)
+colors = PackedColorArray(0.804743, 0.804743, 0.804743, 1, 0.269225, 0.269225, 0.269225, 1, 0.0177324, 0.0177324, 0.0177324, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_x8o4j"]
+gradient = SubResource("Gradient_52peo")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_yub4s"]
+lifetime_randomness = 0.1
+particle_flag_rotate_y = true
+emission_shape = 3
+emission_box_extents = Vector3(4, 0, 4)
+angle_min = -180.0
+angle_max = 180.0
+gravity = Vector3(0, 0, 0)
+scale_max = 1.5
+color_ramp = SubResource("GradientTexture1D_x8o4j")
+
+[sub_resource type="Gradient" id="Gradient_fgehm"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0.245652, 0.521173)
+colors = PackedColorArray(0.1, 0, 4, 1, 0.5, 2, 15, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_yci6u"]
+gradient = SubResource("Gradient_fgehm")
+use_hdr = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1v11r"]
+render_priority = 0
+shader = ExtResource("2_lde1d")
+shader_parameter/Speed = Vector2(0, -1)
+shader_parameter/Texture2DParameter = ExtResource("3_7y415")
+shader_parameter/Texture2DParameter2 = SubResource("GradientTexture1D_yci6u")
+
+[sub_resource type="Gradient" id="Gradient_pm5j0"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_vua8d"]
+gradient = SubResource("Gradient_pm5j0")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_tn0a2"]
+lifetime_randomness = 0.2
+particle_flag_rotate_y = true
+emission_shape = 3
+emission_box_extents = Vector3(5, 9, 5)
+angle_min = -180.0
+angle_max = 180.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.1
+scale_max = 0.3
+color_ramp = SubResource("GradientTexture1D_vua8d")
+hue_variation_max = 0.09
+turbulence_enabled = true
+turbulence_noise_strength = 5.0
+turbulence_noise_scale = 20.0
+
+[node name="VFX_thunder_blue" type="Node3D"]
+
+[node name="CPUParticles3D" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.33954, 0)
+amount = 3
+lifetime = 0.2
+fixed_fps = 60
+process_material = SubResource("ParticleProcessMaterial_yub4s")
+draw_pass_1 = ExtResource("1_2rk53")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.60721, 0)
+material_override = SubResource("ShaderMaterial_1v11r")
+amount = 90
+lifetime = 0.3
+fixed_fps = 60
+process_material = SubResource("ParticleProcessMaterial_tn0a2")
+draw_pass_1 = ExtResource("4_jd5fr")

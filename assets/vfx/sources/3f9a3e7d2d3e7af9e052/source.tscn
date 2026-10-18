@@ -1,0 +1,842 @@
+[gd_scene format=3]
+
+[sub_resource type="Shader" id="Shader_kvtuc"]
+code = "shader_type spatial;
+uniform float condition_opacity = 1.0;
+
+// Shared numerical contract: encoded sRGB -> D65 CIELAB, CIE76 distance.
+// Constants and branch boundaries preserve the selected CodexFX profile.
+// Alpha, RGB snapping, ramps and energy keys belong to the caller.
+float cie_linear_channel(float channel) {
+	return channel <= 0.04045 ? channel / 12.92 : pow((channel + 0.055) / 1.055, 2.4);
+}
+float cie_encoded_channel(float channel) {
+	return channel <= 0.0031308 ? channel * 12.92 : 1.055 * pow(max(channel, 0.0), 1.0 / 2.4) - 0.055;
+}
+float cie_lab_curve(float value) {
+	return value > 0.00885645167 ? pow(value, 1.0 / 3.0) : 7.78703703704 * value + 16.0 / 116.0;
+}
+vec3 cie_lab(vec3 encoded_rgb) {
+	vec3 linear_rgb = vec3(cie_linear_channel(encoded_rgb.r), cie_linear_channel(encoded_rgb.g), cie_linear_channel(encoded_rgb.b));
+	float x = linear_rgb.r * 0.4124564 + linear_rgb.g * 0.3575761 + linear_rgb.b * 0.1804375;
+	float y = linear_rgb.r * 0.2126729 + linear_rgb.g * 0.7151522 + linear_rgb.b * 0.0721750;
+	float z = linear_rgb.r * 0.0193339 + linear_rgb.g * 0.1191920 + linear_rgb.b * 0.9503041;
+	float fx = cie_lab_curve(x / 0.95047);
+	float fy = cie_lab_curve(y);
+	float fz = cie_lab_curve(z / 1.08883);
+	return vec3(116.0 * fy - 16.0, 500.0 * (fx - fy), 200.0 * (fy - fz));
+}
+vec3 cie_nearest(vec3 encoded_rgb, sampler2D palette_texture, int count, float energy_floor, float luma_floor) {
+	vec3 subject_lab = cie_lab(encoded_rgb);
+	float best_distance = 999999.0;
+	vec3 best_rgb = encoded_rgb;
+	for (int index = 0; index < 64; index++) {
+		if (index >= count) { break; }
+		vec3 candidate = texture(palette_texture, vec2((float(index) + 0.5) / float(count), 0.5)).rgb;
+		if (max(max(candidate.r, candidate.g), candidate.b) < energy_floor || dot(candidate, vec3(0.2126, 0.7152, 0.0722)) < luma_floor) { continue; }
+		float candidate_distance = distance(subject_lab, cie_lab(candidate));
+		// Strict less-than deliberately keeps the first palette entry on ties.
+		if (candidate_distance < best_distance) {
+			best_distance = candidate_distance;
+			best_rgb = candidate;
+		}
+	}
+	return best_rgb;
+}
+
+
+uniform sampler2D native_palette_texture:filter_nearest,repeat_disable;
+uniform int native_palette_count=1;
+uniform bool native_palette_quantize=true;
+uniform float native_emission_gain=0.0;
+uniform float native_palette_exposure=1.0;
+uniform float support_clock=0.0;
+uniform float support_envelope=1.0;
+render_mode unshaded, cull_disabled, blend_mix;
+
+group_uniforms Color;
+uniform vec3 primary_color : source_color = vec3(1.0,0.8,0.2);
+uniform vec3 secondary_color : source_color = vec3(1.0,0.4,0.1);
+uniform vec3 tertiary_color : source_color = vec3(0.6,0.1,0.05);
+uniform float emission = 2.0;
+uniform float hue_variation = 0.0;
+uniform float color_curve = 1.0;
+
+group_uniforms Shape;
+uniform sampler2D noise_texture;
+uniform vec2 noise_scale = vec2(3.0, 1.0);
+uniform vec2 noise_scroll = vec2(0.1, 0.4);
+uniform float noise_twist : hint_range(-1.0, 1.0, 0.05) = 1.0;
+uniform float shape_curve = 2.0;
+uniform float waviness : hint_range(0.0, 1.0, 0.01) = 0.2;
+
+group_uniforms Transparency;
+uniform float edge_hardness : hint_range(0.0, 1.0, 0.01) = 0.0;
+uniform float edge_position : hint_range(0.0, 1.0, 0.01) = 0.2;
+uniform bool proximity_fade = false;
+uniform float proximity_fade_distance : hint_range(0.0, 4096.0, 0.01);
+uniform sampler2D depth_texture : hint_depth_texture, repeat_disable, filter_nearest;
+
+vec3 shift_hue(vec3 color, float shift) {
+	vec3 gray = vec3(0.57735);
+	vec3 projection = gray * dot(gray, color.rgb);
+	vec3 U = color.rgb - projection;
+	vec3 V = cross(gray, U);
+	vec3 shifted = U * cos(shift * 2.0 * PI) + V * sin(shift * 2.0 * PI) + projection;
+	return shifted;
+}
+
+float sample_value(vec2 uv){
+	vec2 noise_uv = vec2(uv.x - uv.y * noise_twist, uv.y) * noise_scale + (support_clock * noise_scroll);
+	float noise = texture(noise_texture, noise_uv).r;
+	
+	float mask = pow(max((1.0 - abs(uv.y * 2.0 - 1.0) - 0.5) / 0.5, 0.0), 0.2); 
+	
+	float value = max(noise * mask, 0.0);
+	value = smoothstep(0.38, 0.78, value);
+	
+	return value;
+}
+
+void fragment() {
+	
+	float wave = sin(UV.y * 40.0 - support_clock * 1.0);
+	
+	float value = sample_value(UV + vec2(wave * 0.1 * waviness, 0.0));
+	
+	vec3 color = mix(secondary_color, primary_color, value);
+	
+	if(!FRONT_FACING){
+		color = tertiary_color;
+	}
+	float hue_wave = sin(UV.x * TAU * 4.0 + support_clock) + sin(UV.y * TAU * 5.0 + support_clock);
+	color = shift_hue(color, hue_wave * hue_variation);
+	
+	ALBEDO = color * emission;
+	
+	ALPHA = value;
+	
+	// Proximity Fade: Enabled
+	if(proximity_fade){
+		float proximity_depth_tex = textureLod(depth_texture, SCREEN_UV, 0.0).r;
+		vec4 ndc = OUTPUT_IS_SRGB ? vec4(vec3(SCREEN_UV, proximity_depth_tex) * 2.0 - 1.0, 1.0) : vec4(SCREEN_UV * 2.0 - 1.0, proximity_depth_tex, 1.0);
+		vec4 proximity_view_pos = INV_PROJECTION_MATRIX * ndc;
+		proximity_view_pos.xyz /= proximity_view_pos.w;
+		ALPHA *= clamp(1.0 - smoothstep(proximity_view_pos.z + proximity_fade_distance, proximity_view_pos.z, VERTEX.z), 0.0, 1.0);
+	}
+	
+	ALPHA = clamp((ALPHA - edge_position) / (1.0 - edge_hardness), 0.0, 1.0);
+
+ALPHA *= support_envelope;
+
+	float native_raw_energy = max(max(ALBEDO.r + EMISSION.r, ALBEDO.g + EMISSION.g), ALBEDO.b + EMISSION.b);
+	native_raw_energy *= native_palette_exposure;
+	float native_energy = native_raw_energy / (1.0 + native_raw_energy);
+	float native_position = native_energy * float(native_palette_count - 1);
+	int native_first = int(floor(native_position));
+	int native_second = min(native_first + 1, native_palette_count - 1);
+	vec3 native_a = texture(native_palette_texture, vec2((float(native_first) + 0.5) / float(native_palette_count), 0.5)).rgb;
+	vec3 native_b = texture(native_palette_texture, vec2((float(native_second) + 0.5) / float(native_palette_count), 0.5)).rgb;
+	vec3 native_choice = mix(native_a, native_b, fract(native_position));
+	if (native_palette_quantize) native_choice = cie_nearest(native_choice, native_palette_texture, native_palette_count, 0.0, 0.0);
+	ALBEDO = vec3(cie_linear_channel(native_choice.r), cie_linear_channel(native_choice.g), cie_linear_channel(native_choice.b));
+	EMISSION = ALBEDO * min(native_raw_energy, 2.0) * native_emission_gain;
+	
+ALPHA *= condition_opacity;
+}
+
+
+
+"
+
+[sub_resource type="Image" id="Image_f463u"]
+data = {
+"data": PackedByteArray(52, 57, 76, 255, 88, 92, 130, 255, 115, 141, 158, 255, 164, 193, 199, 255, 203, 234, 239, 255, 224, 241, 239, 255),
+"format": "RGBA8",
+"height": 1,
+"mipmaps": false,
+"width": 6
+}
+
+[sub_resource type="ImageTexture" id="ImageTexture_e2wrb"]
+image = SubResource("Image_f463u")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_b45er"]
+noise_type = 2
+frequency = 0.02
+fractal_octaves = 1
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_kl4te"]
+noise = SubResource("FastNoiseLite_b45er")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tsfyd"]
+resource_local_to_scene = true
+render_priority = 0
+shader = SubResource("Shader_kvtuc")
+shader_parameter/condition_opacity = null
+shader_parameter/native_palette_texture = SubResource("ImageTexture_e2wrb")
+shader_parameter/native_palette_count = 6
+shader_parameter/native_palette_quantize = false
+shader_parameter/native_emission_gain = 0.0
+shader_parameter/native_palette_exposure = 0.8
+shader_parameter/support_clock = null
+shader_parameter/support_envelope = null
+shader_parameter/primary_color = Color(0.3583606, 0.88449377, 0.99998623, 1)
+shader_parameter/secondary_color = Color(0.2532734, 0.8655893, 0.99999994, 1)
+shader_parameter/tertiary_color = Color(0.094418116, 0.53314775, 0.6294542, 1)
+shader_parameter/emission = 0.8
+shader_parameter/hue_variation = 0.0
+shader_parameter/color_curve = 1.0
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_kl4te")
+shader_parameter/noise_scale = Vector2(2, 1.5)
+shader_parameter/noise_scroll = Vector2(0.12, 0.35)
+shader_parameter/noise_twist = 1.4901200051653518e-08
+shader_parameter/shape_curve = 3.0
+shader_parameter/waviness = 1.0
+shader_parameter/edge_hardness = 0.0
+shader_parameter/edge_position = 0.0
+shader_parameter/proximity_fade = false
+shader_parameter/proximity_fade_distance = 0.5
+metadata/native_energy_palette = true
+
+[sub_resource type="SphereMesh" id="SphereMesh_jqxhg"]
+radius = 0.8
+height = 3.4
+
+[sub_resource type="Shader" id="Shader_5jmw2"]
+code = "shader_type spatial;
+uniform float condition_opacity = 1.0;
+
+// Shared numerical contract: encoded sRGB -> D65 CIELAB, CIE76 distance.
+// Constants and branch boundaries preserve the selected CodexFX profile.
+// Alpha, RGB snapping, ramps and energy keys belong to the caller.
+float cie_linear_channel(float channel) {
+	return channel <= 0.04045 ? channel / 12.92 : pow((channel + 0.055) / 1.055, 2.4);
+}
+float cie_encoded_channel(float channel) {
+	return channel <= 0.0031308 ? channel * 12.92 : 1.055 * pow(max(channel, 0.0), 1.0 / 2.4) - 0.055;
+}
+float cie_lab_curve(float value) {
+	return value > 0.00885645167 ? pow(value, 1.0 / 3.0) : 7.78703703704 * value + 16.0 / 116.0;
+}
+vec3 cie_lab(vec3 encoded_rgb) {
+	vec3 linear_rgb = vec3(cie_linear_channel(encoded_rgb.r), cie_linear_channel(encoded_rgb.g), cie_linear_channel(encoded_rgb.b));
+	float x = linear_rgb.r * 0.4124564 + linear_rgb.g * 0.3575761 + linear_rgb.b * 0.1804375;
+	float y = linear_rgb.r * 0.2126729 + linear_rgb.g * 0.7151522 + linear_rgb.b * 0.0721750;
+	float z = linear_rgb.r * 0.0193339 + linear_rgb.g * 0.1191920 + linear_rgb.b * 0.9503041;
+	float fx = cie_lab_curve(x / 0.95047);
+	float fy = cie_lab_curve(y);
+	float fz = cie_lab_curve(z / 1.08883);
+	return vec3(116.0 * fy - 16.0, 500.0 * (fx - fy), 200.0 * (fy - fz));
+}
+vec3 cie_nearest(vec3 encoded_rgb, sampler2D palette_texture, int count, float energy_floor, float luma_floor) {
+	vec3 subject_lab = cie_lab(encoded_rgb);
+	float best_distance = 999999.0;
+	vec3 best_rgb = encoded_rgb;
+	for (int index = 0; index < 64; index++) {
+		if (index >= count) { break; }
+		vec3 candidate = texture(palette_texture, vec2((float(index) + 0.5) / float(count), 0.5)).rgb;
+		if (max(max(candidate.r, candidate.g), candidate.b) < energy_floor || dot(candidate, vec3(0.2126, 0.7152, 0.0722)) < luma_floor) { continue; }
+		float candidate_distance = distance(subject_lab, cie_lab(candidate));
+		// Strict less-than deliberately keeps the first palette entry on ties.
+		if (candidate_distance < best_distance) {
+			best_distance = candidate_distance;
+			best_rgb = candidate;
+		}
+	}
+	return best_rgb;
+}
+
+
+uniform sampler2D native_palette_texture:filter_nearest,repeat_disable;
+uniform int native_palette_count=1;
+uniform bool native_palette_quantize=true;
+uniform float native_emission_gain=0.0;
+uniform float native_palette_exposure=1.0;
+uniform float support_clock=0.0;
+uniform float support_envelope=1.0;
+render_mode unshaded, cull_disabled;
+
+group_uniforms Color;
+uniform vec3 primary_color : source_color = vec3(1.0,0.8,0.2);
+uniform vec3 secondary_color : source_color = vec3(1.0,0.4,0.1);
+uniform float emission = 2.0;
+uniform float color_curve = 1.0;
+uniform float hue_variation = 0.1;
+
+group_uniforms Shape;
+uniform sampler2D noise_texture;
+uniform vec2 noise_scale = vec2(3.0, 1.0);
+uniform vec2 noise_scroll = vec2(0.1, 0.4);
+uniform float shape_curve = 2.0;
+
+group_uniforms Transparency;
+uniform float edge_hardness : hint_range(0.0, 1.0, 0.01) = 0.0;
+uniform float edge_position : hint_range(0.0, 1.0, 0.01) = 0.2;
+uniform bool proximity_fade = false;
+uniform float proximity_fade_distance : hint_range(0.0, 4096.0, 0.01);
+uniform sampler2D depth_texture : hint_depth_texture, repeat_disable, filter_nearest;
+
+varying flat int id;
+
+vec3 shift_hue(vec3 color, float shift) {
+	vec3 gray = vec3(0.57735);
+	vec3 projection = gray * dot(gray, color.rgb);
+	vec3 U = color.rgb - projection;
+	vec3 V = cross(gray, U);
+	vec3 shifted = U * cos(shift * 2.0 * PI) + V * sin(shift * 2.0 * PI) + projection;
+	return shifted;
+}
+
+void vertex() {
+	id = INSTANCE_ID;
+}
+
+void fragment() {
+	float noise = texture(noise_texture, (UV + COLOR.r) * 0.3 * noise_scale + (support_clock * noise_scroll)).r;
+	
+	float shape = (1.0 - length(UV * 2.0 - 1.0)) * noise;
+	shape = smoothstep(0.2, 0.8, shape);
+	
+	ALPHA = shape;
+	
+	vec3 color = mix(secondary_color, primary_color, noise);
+	color = shift_hue(color, (COLOR.r - 0.5) * hue_variation);
+	
+	ALBEDO = color * emission;
+	
+	
+	// Proximity Fade: Enabled
+	if(proximity_fade){
+		float proximity_depth_tex = textureLod(depth_texture, SCREEN_UV, 0.0).r;
+		vec4 ndc = OUTPUT_IS_SRGB ? vec4(vec3(SCREEN_UV, proximity_depth_tex) * 2.0 - 1.0, 1.0) : vec4(SCREEN_UV * 2.0 - 1.0, proximity_depth_tex, 1.0);
+		vec4 proximity_view_pos = INV_PROJECTION_MATRIX * ndc;
+		proximity_view_pos.xyz /= proximity_view_pos.w;
+		ALPHA *= clamp(1.0 - smoothstep(proximity_view_pos.z + proximity_fade_distance, proximity_view_pos.z, VERTEX.z), 0.0, 1.0);
+	}
+	
+	ALPHA = clamp((ALPHA - edge_position) / (1.0 - edge_hardness), 0.0, 1.0);
+
+ALPHA *= support_envelope;
+
+	float native_raw_energy = max(max(ALBEDO.r + EMISSION.r, ALBEDO.g + EMISSION.g), ALBEDO.b + EMISSION.b);
+	native_raw_energy *= native_palette_exposure;
+	float native_energy = native_raw_energy / (1.0 + native_raw_energy);
+	float native_position = native_energy * float(native_palette_count - 1);
+	int native_first = int(floor(native_position));
+	int native_second = min(native_first + 1, native_palette_count - 1);
+	vec3 native_a = texture(native_palette_texture, vec2((float(native_first) + 0.5) / float(native_palette_count), 0.5)).rgb;
+	vec3 native_b = texture(native_palette_texture, vec2((float(native_second) + 0.5) / float(native_palette_count), 0.5)).rgb;
+	vec3 native_choice = mix(native_a, native_b, fract(native_position));
+	if (native_palette_quantize) native_choice = cie_nearest(native_choice, native_palette_texture, native_palette_count, 0.0, 0.0);
+	ALBEDO = vec3(cie_linear_channel(native_choice.r), cie_linear_channel(native_choice.g), cie_linear_channel(native_choice.b));
+	EMISSION = ALBEDO * min(native_raw_energy, 2.0) * native_emission_gain;
+	
+ALPHA *= condition_opacity;
+}
+
+
+
+"
+
+[sub_resource type="Image" id="Image_pvwgy"]
+data = {
+"data": PackedByteArray(52, 57, 76, 255, 88, 92, 130, 255, 115, 141, 158, 255, 164, 193, 199, 255, 203, 234, 239, 255, 224, 241, 239, 255),
+"format": "RGBA8",
+"height": 1,
+"mipmaps": false,
+"width": 6
+}
+
+[sub_resource type="ImageTexture" id="ImageTexture_wkckq"]
+image = SubResource("Image_pvwgy")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ylk6q"]
+resource_local_to_scene = true
+render_priority = 0
+shader = SubResource("Shader_5jmw2")
+shader_parameter/condition_opacity = null
+shader_parameter/native_palette_texture = SubResource("ImageTexture_wkckq")
+shader_parameter/native_palette_count = 6
+shader_parameter/native_palette_quantize = false
+shader_parameter/native_emission_gain = 0.0
+shader_parameter/native_palette_exposure = 0.8
+shader_parameter/support_clock = null
+shader_parameter/support_envelope = null
+shader_parameter/primary_color = Color(0.3583606, 0.88449377, 0.99998623, 1)
+shader_parameter/secondary_color = Color(0.2532734, 0.8655893, 0.99999994, 1)
+shader_parameter/emission = 0.8
+shader_parameter/color_curve = 1.0
+shader_parameter/hue_variation = 0.0
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_kl4te")
+shader_parameter/noise_scale = Vector2(2, 1.5)
+shader_parameter/noise_scroll = Vector2(0.12, 0.35)
+shader_parameter/shape_curve = 3.0
+shader_parameter/edge_hardness = 0.0
+shader_parameter/edge_position = 0.0
+shader_parameter/proximity_fade = false
+shader_parameter/proximity_fade_distance = 0.5
+metadata/native_energy_palette = true
+
+[sub_resource type="Curve" id="Curve_36qwk"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -2.6060996, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_oekss"]
+curve = SubResource("Curve_36qwk")
+
+[sub_resource type="Gradient" id="Gradient_kmcai"]
+colors = PackedColorArray(0, 0, 0, 1, 0.14999998, 0.8470001, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_i7u8v"]
+gradient = SubResource("Gradient_kmcai")
+
+[sub_resource type="Curve" id="Curve_r4u7b"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, -1), 0.0, 0.0, 0, 0, Vector2(0.25203252, 1), 0.0, 0.0, 0, 0, Vector2(0.5, -1), 0.0, 0.0, 0, 0, Vector2(0.75609756, 1), 0.0, 0.0, 0, 0, Vector2(1, -1), 0.0, 0.0, 0, 0]
+point_count = 5
+
+[sub_resource type="Curve" id="Curve_ku81g"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_j58c0"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, 1.4901161e-08), 0.0, -12.04334, 0, 0, Vector2(0.1, -1), 0.0, 0.0, 0, 0, Vector2(0.3, 1), 0.0, 0.0, 0, 0, Vector2(0.6, -1), 0.0, 0.0, 0, 0, Vector2(0.8, 1), 0.0, 0.0, 0, 0, Vector2(1, 1.4901161e-08), -6.8500214, 0.0, 0, 0]
+point_count = 6
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_elt8g"]
+curve_x = SubResource("Curve_r4u7b")
+curve_y = SubResource("Curve_ku81g")
+curve_z = SubResource("Curve_j58c0")
+
+[sub_resource type="Curve" id="Curve_iwvou"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, 1.4901161e-08), 0.0, 0.0, 0, 0, Vector2(1, 1.4901161e-08), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_v8fda"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, -1), 0.0, 0.0, 0, 0, Vector2(1, -1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_i37cr"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, 1.4901161e-08), 0.0, 0.0, 0, 0, Vector2(1, 1.4901161e-08), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_f1g2l"]
+curve_x = SubResource("Curve_iwvou")
+curve_y = SubResource("Curve_v8fda")
+curve_z = SubResource("Curve_i37cr")
+
+[sub_resource type="Curve" id="Curve_1ki1l"]
+_data = [Vector2(0, 0), 0.0, 2.3937094, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -1.9194763, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_wh6v8"]
+curve = SubResource("Curve_1ki1l")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_bg56j"]
+particle_flag_align_y = true
+emission_shape_scale = Vector3(0.5, 1, 0.5)
+emission_shape = 1
+emission_sphere_radius = 1.0
+direction = Vector3(0, 1, 0)
+directional_velocity_min = -0.5000161
+directional_velocity_max = 0.9999839
+directional_velocity_curve = SubResource("CurveXYZTexture_elt8g")
+orbit_velocity_min = -1.0
+orbit_velocity_max = 1.0
+orbit_velocity_curve = SubResource("CurveXYZTexture_f1g2l")
+radial_velocity_min = 0.1
+radial_velocity_max = 0.1
+gravity = Vector3(0, 0, 0)
+radial_accel_min = 0.5
+radial_accel_max = 0.5
+scale_min = 0.5
+scale_max = 1.1999999
+scale_curve = SubResource("CurveTexture_wh6v8")
+color_initial_ramp = SubResource("GradientTexture1D_i7u8v")
+alpha_curve = SubResource("CurveTexture_oekss")
+
+[sub_resource type="QuadMesh" id="QuadMesh_738ms"]
+size = Vector2(0.1, 0.3)
+
+[sub_resource type="Shader" id="Shader_tif26"]
+code = "shader_type spatial;
+uniform float condition_opacity = 1.0;
+
+// Shared numerical contract: encoded sRGB -> D65 CIELAB, CIE76 distance.
+// Constants and branch boundaries preserve the selected CodexFX profile.
+// Alpha, RGB snapping, ramps and energy keys belong to the caller.
+float cie_linear_channel(float channel) {
+	return channel <= 0.04045 ? channel / 12.92 : pow((channel + 0.055) / 1.055, 2.4);
+}
+float cie_encoded_channel(float channel) {
+	return channel <= 0.0031308 ? channel * 12.92 : 1.055 * pow(max(channel, 0.0), 1.0 / 2.4) - 0.055;
+}
+float cie_lab_curve(float value) {
+	return value > 0.00885645167 ? pow(value, 1.0 / 3.0) : 7.78703703704 * value + 16.0 / 116.0;
+}
+vec3 cie_lab(vec3 encoded_rgb) {
+	vec3 linear_rgb = vec3(cie_linear_channel(encoded_rgb.r), cie_linear_channel(encoded_rgb.g), cie_linear_channel(encoded_rgb.b));
+	float x = linear_rgb.r * 0.4124564 + linear_rgb.g * 0.3575761 + linear_rgb.b * 0.1804375;
+	float y = linear_rgb.r * 0.2126729 + linear_rgb.g * 0.7151522 + linear_rgb.b * 0.0721750;
+	float z = linear_rgb.r * 0.0193339 + linear_rgb.g * 0.1191920 + linear_rgb.b * 0.9503041;
+	float fx = cie_lab_curve(x / 0.95047);
+	float fy = cie_lab_curve(y);
+	float fz = cie_lab_curve(z / 1.08883);
+	return vec3(116.0 * fy - 16.0, 500.0 * (fx - fy), 200.0 * (fy - fz));
+}
+vec3 cie_nearest(vec3 encoded_rgb, sampler2D palette_texture, int count, float energy_floor, float luma_floor) {
+	vec3 subject_lab = cie_lab(encoded_rgb);
+	float best_distance = 999999.0;
+	vec3 best_rgb = encoded_rgb;
+	for (int index = 0; index < 64; index++) {
+		if (index >= count) { break; }
+		vec3 candidate = texture(palette_texture, vec2((float(index) + 0.5) / float(count), 0.5)).rgb;
+		if (max(max(candidate.r, candidate.g), candidate.b) < energy_floor || dot(candidate, vec3(0.2126, 0.7152, 0.0722)) < luma_floor) { continue; }
+		float candidate_distance = distance(subject_lab, cie_lab(candidate));
+		// Strict less-than deliberately keeps the first palette entry on ties.
+		if (candidate_distance < best_distance) {
+			best_distance = candidate_distance;
+			best_rgb = candidate;
+		}
+	}
+	return best_rgb;
+}
+
+
+uniform sampler2D native_palette_texture:filter_nearest,repeat_disable;
+uniform int native_palette_count=1;
+uniform bool native_palette_quantize=true;
+uniform float native_emission_gain=0.0;
+uniform float native_palette_exposure=1.0;
+uniform float support_clock=0.0;
+uniform float support_envelope=1.0;
+render_mode unshaded;
+
+group_uniforms Color;
+uniform vec3 primary_color : source_color = vec3(1.0,0.8,0.2);
+uniform vec3 secondary_color : source_color = vec3(1.0,0.4,0.1);
+uniform vec3 tertiary_color : source_color = vec3(0.6,0.1,0.05);
+uniform float emission = 2.0;
+uniform float color_curve = 1.0;
+uniform float hue_variation = 0.1;
+uniform bool use_secondary = false;
+
+group_uniforms Shape;
+uniform sampler2D noise_texture;
+uniform vec2 noise_scale = vec2(0.5);
+uniform vec2 noise_scroll = vec2(0.0, 0.1);
+uniform float shape_curve = 2.0;
+uniform float noise_twist : hint_range(-1.0, 1.0, 0.05) = 0.0;
+uniform float waviness : hint_range(0.0, 1.0, 0.01) = 0.2;
+
+group_uniforms Transparency;
+uniform float edge_hardness : hint_range(0.0, 1.0, 0.01) = 0.0;
+uniform float edge_position : hint_range(0.0, 1.0, 0.01) = 0.0;
+uniform bool proximity_fade = false;
+uniform float proximity_fade_distance : hint_range(0.0, 4096.0, 0.01);
+uniform sampler2D depth_texture : hint_depth_texture, repeat_disable, filter_nearest;
+
+vec3 shift_hue(vec3 color, float shift) {
+	vec3 gray = vec3(0.57735);
+	vec3 projection = gray * dot(gray, color.rgb);
+	vec3 U = color.rgb - projection;
+	vec3 V = cross(gray, U);
+	vec3 shifted = U * cos(shift * 2.0 * PI) + V * sin(shift * 2.0 * PI) + projection;
+	return shifted;
+}
+
+void vertex() {
+	// Called for every vertex the material is visible on.
+}
+
+void fragment() {
+	float r = length(UV * 2.0 - 1.0);
+	
+	vec2 noise_uv = (vec2(UV.x + UV.y * noise_twist, UV.y) + COLOR.r) * noise_scale + (noise_scroll * support_clock);
+	
+	float wave = sin(UV.y * 20.0 + support_clock * 6.0);
+	noise_uv.x += wave * 0.1 * waviness;
+	
+	float noise = texture(noise_texture, noise_uv).r;
+	
+	float value = pow(max(noise - r, 0.0), shape_curve) * COLOR.a;
+	
+	float color_value = pow(value, color_curve);
+	color_value = mix(color_value, floor(color_value * 6.0) / 5.0, edge_hardness);
+	vec3 main_color = use_secondary ? secondary_color : primary_color;
+	vec3 color = mix(tertiary_color, main_color, color_value);
+	color = shift_hue(color, (COLOR.r - 0.5) * hue_variation) * (0.5 + COLOR.r * 0.5);
+	
+	ALBEDO = color * emission;
+	ALPHA = value;
+	
+	// Proximity Fade: Enabled
+	if(proximity_fade){
+		float proximity_depth_tex = textureLod(depth_texture, SCREEN_UV, 0.0).r;
+		vec4 ndc = OUTPUT_IS_SRGB ? vec4(vec3(SCREEN_UV, proximity_depth_tex) * 2.0 - 1.0, 1.0) : vec4(SCREEN_UV * 2.0 - 1.0, proximity_depth_tex, 1.0);
+		vec4 proximity_view_pos = INV_PROJECTION_MATRIX * ndc;
+		proximity_view_pos.xyz /= proximity_view_pos.w;
+		ALPHA *= clamp(1.0 - smoothstep(proximity_view_pos.z + proximity_fade_distance, proximity_view_pos.z, VERTEX.z), 0.0, 1.0);
+	}
+	
+	ALPHA = clamp((ALPHA - edge_position) / (1.0 - edge_hardness), 0.0, 1.0);
+
+ALPHA *= support_envelope;
+
+	float native_raw_energy = max(max(ALBEDO.r + EMISSION.r, ALBEDO.g + EMISSION.g), ALBEDO.b + EMISSION.b);
+	native_raw_energy *= native_palette_exposure;
+	float native_energy = native_raw_energy / (1.0 + native_raw_energy);
+	float native_position = native_energy * float(native_palette_count - 1);
+	int native_first = int(floor(native_position));
+	int native_second = min(native_first + 1, native_palette_count - 1);
+	vec3 native_a = texture(native_palette_texture, vec2((float(native_first) + 0.5) / float(native_palette_count), 0.5)).rgb;
+	vec3 native_b = texture(native_palette_texture, vec2((float(native_second) + 0.5) / float(native_palette_count), 0.5)).rgb;
+	vec3 native_choice = mix(native_a, native_b, fract(native_position));
+	if (native_palette_quantize) native_choice = cie_nearest(native_choice, native_palette_texture, native_palette_count, 0.0, 0.0);
+	ALBEDO = vec3(cie_linear_channel(native_choice.r), cie_linear_channel(native_choice.g), cie_linear_channel(native_choice.b));
+	EMISSION = ALBEDO * min(native_raw_energy, 2.0) * native_emission_gain;
+	
+ALPHA *= condition_opacity;
+}
+
+
+
+"
+
+[sub_resource type="Image" id="Image_40ldv"]
+data = {
+"data": PackedByteArray(52, 57, 76, 255, 88, 92, 130, 255, 115, 141, 158, 255, 164, 193, 199, 255, 203, 234, 239, 255, 224, 241, 239, 255),
+"format": "RGBA8",
+"height": 1,
+"mipmaps": false,
+"width": 6
+}
+
+[sub_resource type="ImageTexture" id="ImageTexture_4lxhh"]
+image = SubResource("Image_40ldv")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dy8jq"]
+resource_local_to_scene = true
+render_priority = 0
+shader = SubResource("Shader_tif26")
+shader_parameter/condition_opacity = null
+shader_parameter/native_palette_texture = SubResource("ImageTexture_4lxhh")
+shader_parameter/native_palette_count = 6
+shader_parameter/native_palette_quantize = false
+shader_parameter/native_emission_gain = 0.0
+shader_parameter/native_palette_exposure = 0.8
+shader_parameter/support_clock = null
+shader_parameter/support_envelope = null
+shader_parameter/primary_color = Color(0.3583606, 0.88449377, 0.99998623, 1)
+shader_parameter/secondary_color = Color(0.2532734, 0.8655893, 0.99999994, 1)
+shader_parameter/tertiary_color = Color(0.094418116, 0.53314775, 0.6294542, 1)
+shader_parameter/emission = 0.8
+shader_parameter/color_curve = 1.0
+shader_parameter/hue_variation = 0.0
+shader_parameter/use_secondary = false
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_kl4te")
+shader_parameter/noise_scale = Vector2(2, 1.5)
+shader_parameter/noise_scroll = Vector2(0.12, 0.35)
+shader_parameter/shape_curve = 3.0
+shader_parameter/noise_twist = 0.0
+shader_parameter/waviness = 1.0
+shader_parameter/edge_hardness = 0.0
+shader_parameter/edge_position = 0.0
+shader_parameter/proximity_fade = false
+shader_parameter/proximity_fade_distance = 0.5
+metadata/native_energy_palette = true
+
+[sub_resource type="Curve" id="Curve_lhlk0"]
+_data = [Vector2(0, 1), 0.0, -1.0083532, 0, 0, Vector2(1, 0), -0.97778255, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_p7foi"]
+curve = SubResource("Curve_lhlk0")
+
+[sub_resource type="Gradient" id="Gradient_phq80"]
+colors = PackedColorArray(0, 0, 0, 1, 0.14999998, 0.8470001, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_3qxfe"]
+gradient = SubResource("Gradient_phq80")
+
+[sub_resource type="Curve" id="Curve_sejrm"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, 1.4901161e-08), 0.0, 0.0, 0, 0, Vector2(1, 1.4901161e-08), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_vslim"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, -1), 0.0, 0.0, 0, 0, Vector2(1, -1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_xjg28"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, 1.4901161e-08), 0.0, 0.0, 0, 0, Vector2(1, 1.4901161e-08), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_na6i0"]
+curve_x = SubResource("Curve_sejrm")
+curve_y = SubResource("Curve_vslim")
+curve_z = SubResource("Curve_xjg28")
+
+[sub_resource type="Curve" id="Curve_n3dw2"]
+_data = [Vector2(0, 0.51133645), 0.0, 1.6486821, 0, 0, Vector2(0.48048046, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.5), -2.5442998, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_23bpg"]
+curve = SubResource("Curve_n3dw2")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_u0p4u"]
+emission_shape_scale = Vector3(0.5, 1, 0.5)
+emission_shape = 1
+emission_sphere_radius = 1.0
+direction = Vector3(0, 1, 0)
+orbit_velocity_min = -1.0
+orbit_velocity_max = 1.0
+orbit_velocity_curve = SubResource("CurveXYZTexture_na6i0")
+radial_velocity_min = 0.1
+radial_velocity_max = 0.1
+gravity = Vector3(0, 0, 0)
+radial_accel_min = 0.5
+radial_accel_max = 0.5
+scale_min = 0.5
+scale_max = 1.1999999
+scale_curve = SubResource("CurveTexture_23bpg")
+color_initial_ramp = SubResource("GradientTexture1D_3qxfe")
+alpha_curve = SubResource("CurveTexture_p7foi")
+
+[sub_resource type="QuadMesh" id="QuadMesh_m0848"]
+size = Vector2(2, 2)
+
+[sub_resource type="Animation" id="Animation_qxrnv"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Particles:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Aura:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_ovqdt"]
+resource_name = "close"
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Particles:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Aura:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_exnt1"]
+resource_name = "open"
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Particles:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Aura:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_p848k"]
+_data = {
+&"RESET": SubResource("Animation_qxrnv"),
+&"close": SubResource("Animation_ovqdt"),
+&"open": SubResource("Animation_exnt1")
+}
+
+[node name="effect" type="Node3D" unique_id=1692902572]
+transform = Transform3D(0.55, 0, 0, 0, 0.55, 0, 0, 0, 0.55, 0, 0, 0)
+
+[node name="Donor" type="Node3D" parent="." unique_id=1267435900]
+transform = Transform3D(0.75, 0, 0, 0, 0.75, 0, 0, 0, 0.75, 0, 0.9, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="Donor" unique_id=1566154043]
+material_override = SubResource("ShaderMaterial_tsfyd")
+mesh = SubResource("SphereMesh_jqxhg")
+
+[node name="Particles" type="GPUParticles3D" parent="Donor" unique_id=568382054]
+material_override = SubResource("ShaderMaterial_ylk6q")
+amount = 64
+lifetime = 2.0
+use_fixed_seed = true
+seed = 47291
+fixed_fps = 60
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_bg56j")
+draw_pass_1 = SubResource("QuadMesh_738ms")
+
+[node name="Aura" type="GPUParticles3D" parent="Donor" unique_id=924125473]
+material_override = SubResource("ShaderMaterial_dy8jq")
+amount = 64
+lifetime = 2.0
+use_fixed_seed = true
+seed = 47292
+fixed_fps = 60
+local_coords = true
+transform_align = 1
+transform_align_channel_filter = 1
+process_material = SubResource("ParticleProcessMaterial_u0p4u")
+draw_pass_1 = SubResource("QuadMesh_m0848")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Donor" unique_id=1785445415]
+callback_mode_process = 2
+libraries/ = SubResource("AnimationLibrary_p848k")

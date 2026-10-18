@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "wall"
+constructor_script = "res://assets/vfx/sources/25f7f037a25e886f4c83/living_thorns_contact.gd"
+input = {"withdrawal_sink_source_units": 0.16, "continuous_withdrawal": true, "bark_ambient_fill": 0.18, "scene": "res://assets/vfx/sources/f76782e59107504d22e3/VFX_Nature_Vines_Wall.tscn", "module_count": 12, "circular": false, "seconds": 5.6, "damage_seconds": 2.5}
+options = {}
+provenance = "Pinned native selection; recipes/spells/wall_of_thorns_complete.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "wall_of_thorns_straight_native"
+label = "Living native thorn wall"
+phase = "lifecycle"
+variant = "straight"
+source_recipe = "recipes/spells/wall_of_thorns_complete.json"
+bindings = [{"component": "wall", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 5.6
+simulation_hz = 60
+components = Array[Resource]([SubResource("part_0")])
+options = {}

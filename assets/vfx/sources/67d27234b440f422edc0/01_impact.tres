@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "impact"
+constructor_script = "res://assets/vfx/sources/4daa34b741baf3b589ee/source_coverage.gd"
+input = {"source": {"constructor_script": "res://assets/vfx/sources/bc5a051eefdba1208e99/selected_projectile.gd", "input": {"scene": "res://assets/vfx/sources/f38669a4126124f65a7c/vfx_impact_04.tscn", "settings": {"animation": "main", "edit": "acid_impact"}, "side": "full", "simulation_hz": 144, "seed": 44020, "material_rules": [{"match": {"blend_mode": 1, "requires_texture": true}, "shader_source": "res://assets/vfx/sources/27a10518b6d22bae56de/source_additive_cards.gdshader", "source_parameters": {"Texture": "albedo_texture"}, "parameters": {"Black_Threshold": 0.08, "Softness": 0.12, "Alpha_Multiplier": 1.0}}]}}, "layers": [{"node_name": "Ground_Impact", "gain": 0.38, "fade_seconds": [0.18, 0.48]}, {"node_name": "Impact_Streaks1", "gain": 0.65, "fade_seconds": [0.18, 0.48]}, {"node_name": "Impact_Streaks2", "gain": 0.65, "fade_seconds": [0.18, 0.48]}]}
+options = {}
+provenance = "Pinned native selection; recipes/spells/acid_splash.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "spells/acid_splash/default/impact"
+label = "Impact"
+phase = "impact"
+variant = "default"
+source_recipe = "recipes/spells/acid_splash.json"
+bindings = [{"component": "impact", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 0.7986111111111112
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"bounded_formation": false, "qualification": "native_family_port_candidate; selected production phase equivalence pending", "stage": "impact"}

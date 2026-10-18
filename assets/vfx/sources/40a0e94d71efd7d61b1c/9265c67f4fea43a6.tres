@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "wisp"
+constructor_script = "res://assets/vfx/sources/6a26750475be495fd6d7/starry_wisp.gd"
+input = {"scene": "res://assets/vfx/sources/6a10c65a9df7a9b13e97/magic_orb_small_vfx_01.tscn", "palette": ["4b2c07", "9b6816", "d8af45", "efd889", "fff0b2"], "phase": "delivery", "source_time_offset": 0, "launch_seconds": 0.28, "travel_seconds": 0.45, "gpu_paths": true}
+options = {}
+provenance = "Pinned native selection; agent_docs/GODOT_BG3_36_SPELL_HANDOFF_2026-10-15.md#starry-wisp"
+
+[resource]
+script = ExtResource("script")
+clip_id = "bg3-36/starry-wisp/delivery"
+label = "Delivery"
+phase = "delivery"
+variant = "default"
+source_recipe = "agent_docs/GODOT_BG3_36_SPELL_HANDOFF_2026-10-15.md#starry-wisp"
+bindings = [{"component": "wisp", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 1.2
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"source_revision": "gpu-minor-v395-20261018"}

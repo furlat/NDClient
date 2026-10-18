@@ -1,0 +1,29 @@
+[gd_resource type="StandardMaterial3D" load_steps=3 format=3 ]
+
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/f1b70bb26db906595e6e/texture.res" id="1_mfumq"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/e568120dd01bd0802542/texture.res" id="2_pj4eq"]
+
+[resource]
+transparency = 2
+alpha_scissor_threshold = 0.067
+alpha_antialiasing_mode = 1
+alpha_antialiasing_edge = 0.06
+cull_mode = 2
+diffuse_mode = 2
+albedo_color = Color(1.2, 1.2, 1.2, 1)
+albedo_texture = ExtResource("1_mfumq")
+metallic_specular = 1.0
+roughness = 0.39
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
+emission_energy_multiplier = 0.1
+normal_enabled = true
+normal_scale = 2.05
+normal_texture = ExtResource("2_pj4eq")
+rim = 0.46
+rim_tint = 0.0
+anisotropy = -1.0
+backlight = Color(0.701644, 0, 0.133063, 1)
+uv1_scale = Vector3(1, 0.22, 1)
+uv1_offset = Vector3(0, 1.725, 0)
+proximity_fade_distance = 0.2

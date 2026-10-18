@@ -1,0 +1,31 @@
+[gd_resource type="ShaderMaterial" load_steps=4 format=3]
+
+[ext_resource type="Shader"  path="res://assets/vfx/sources/4b646657398406ee6b72/projectile_tail.gdshader" id="3_moekt"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_fqdwg"]
+noise_type = 2
+fractal_octaves = 2
+fractal_gain = 1.0
+fractal_weighted_strength = 1.0
+fractal_ping_pong_strength = 1.13
+cellular_distance_function = 2
+cellular_return_type = 6
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_5ukum"]
+noise = SubResource("FastNoiseLite_fqdwg")
+seamless = true
+
+[resource]
+render_priority = 0
+shader = ExtResource("3_moekt")
+shader_parameter/primary_color = Color(0.9999997, 0.73007435, 0.15815756, 1)
+shader_parameter/secondary_color = Color(0.6169255, 0.41122386, 0, 1)
+shader_parameter/tertiary_color = Color(1.6845763e-07, 0.3151075, 0.29967174, 1)
+shader_parameter/emission = 2.0
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_5ukum")
+shader_parameter/noise_scale = Vector2(1, 1)
+shader_parameter/noise_scroll = Vector2(0.1, 0.5)
+shader_parameter/tail_length = 0.7
+shader_parameter/grow_amount = 1.0
+shader_parameter/edge_hardness = 0.0
+shader_parameter/edge_position = 0.2

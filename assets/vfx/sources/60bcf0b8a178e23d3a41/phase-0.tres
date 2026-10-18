@@ -1,0 +1,25 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="artwork"]
+script = ExtResource("component")
+component_id = "wizard_operation"
+constructor_script = "res://assets/vfx/sources/3826977212e273905925/scroll_learning.gd"
+input = {"operation_uuid": "study-learn-operation", "actor_uuid": "study-wizard-owner", "item_uuid": "study-admitted-scroll", "learned_spell_id": "spell.fire_bolt", "seconds": 2.1, "state": {"operation_uuid": "study-learn-operation", "item_uuid": "study-admitted-scroll", "present": true, "suppressed": false, "outcome": "accepted", "observation_kind": "SpellbookChangedEvent-shaped_fixture"}}
+provenance = "Private 16 October native Wizard study; explicit supplied fixture observations, no gameplay event synthesis."
+
+[resource]
+script = ExtResource("phase")
+clip_id = "wizard-class-study/wizard_scroll_learning_accepted_study"
+label = "Wizard scroll learning · accepted · private native study"
+phase = "lifecycle"
+variant = "wizard_scroll_learning_accepted_study"
+source_recipe = "wizard-class-art-v156-authored"
+components = Array[Resource]([SubResource("artwork")])
+bindings = [{"component": "wizard_operation", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 2.1
+simulation_hz = 60.0
+options = {"source_revision": "gpu-finite-v376-20261018"}

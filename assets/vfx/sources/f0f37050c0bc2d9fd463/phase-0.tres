@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/sources/0738ff2d24aa41b1b963/native_review_composition.gd"
+input = {"components": [{"script": "res://assets/vfx/sources/cf995e6631c7778d627a/disintegrate_projectile.gd", "input": {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"animation": "", "shape": "creature", "mode": "lifecycle"}, "side": "spell", "simulation_hz": 144, "seed": 47291}, "id": "effect", "rotation_degrees": [0, 0, 0]}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 3.2}], "emitters": []}
+options = {}
+provenance = "Pinned native selection; recipes/spells/disintegrate.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "remaining/disintegrate_native/lifecycle"
+label = "Lifecycle"
+phase = "lifecycle"
+variant = "spell"
+source_recipe = "recipes/spells/disintegrate.json"
+bindings = [{"component": "assembly", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 6.0
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"qualification": "Native-context visual review; not production approval", "source_revision": "gpu-directed-v373-20261018"}

@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/7d3041f34b4e89eefd8b/sanctuary.gd"
+input = {"scene": "res://assets/vfx/sources/11de38a84ee8a50ed1ef/VFX_YinYang_beam.tscn", "settings": {"source": "lelu-original-godot-vertical-beam-effects-premium--vfx-scenes-vfx-yinyang-beam-wide-context", "animation": "Init", "palette": ["332c40", "47394f", "9a819f", "c4b3bc", "e5ddcb", "fff4dd"], "position": "0,0,0", "count": 864, "kind": "sanctuary"}, "side": "full", "seed": 47291, "simulation_hz": 144, "animation_missing_policy": "first_available", "refresh_animation_caches": true, "position": [0, 0, 0], "alternating_cohorts": false, "material_clock_period_ticks": 0, "end_animation_tick": 99999999, "clip_normal": [0.612372436, 0.5, 0.612372436], "ground_normal": [0.70710678, 0, 0.70710678], "preparation_stage": "before_tree", "mark_direction": [12.0, 9.797958971, 12.0]}
+options = {"rotation_degrees": [0, 0, 0]}
+provenance = "Pinned native selection; recipes/spells/sanctuary.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "spells/sanctuary/back/lifecycle"
+label = "Native lifecycle"
+phase = "lifecycle"
+variant = "back"
+source_recipe = "recipes/spells/sanctuary.json"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 5.6
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"bounded_formation": false, "qualification": "native_family_port_candidate; selected production phase equivalence pending", "stage": "attached", "placement": {"role": "attached", "attachment": "recipient_ground", "delay_seconds": 0.0, "source_rate": 1.0, "source_end": 5.6, "scale": 0.5, "orientation": "world", "duration_policy": "authored", "fade_out_seconds": 0.8, "opacity_keys": [[0, 0.7], [0.4, 0.7], [1.2, 0.3], [5.6, 0.3]], "opacity_uniform": "vfx_alpha"}, "source_revision": "gpu-bake-ready-v368-20261017"}

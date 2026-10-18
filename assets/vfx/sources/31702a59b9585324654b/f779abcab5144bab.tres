@@ -1,0 +1,25 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="source"]
+script = ExtResource("component")
+component_id = "support"
+constructor_script = "res://assets/vfx/sources/aa657804739e3a27829e/receiving_vanes.gd"
+input = {"style": "unfurl", "mode": "apply", "seconds": 0.95, "colour": "648e9b", "count": 4, "layers": [{"scene": "res://assets/vfx/sources/f7d5a777f01aebd9e6a4/VFX_Healing_Orb.tscn", "node": "windimpact3", "alpha": 0.67, "remove_billboard_vertex": false, "uniforms": {}}], "source_alpha": 0.8, "width_cells": 0.078, "motion_rate": 0.9, "apply_seconds": 0.18, "retire_seconds": 0.32, "sheet_animation": true, "sheet_period_seconds": 2.1}
+provenance = "Selected native material mechanism on new measured open support vanes; evidence/parallel-calm-heroism-v60/REPORT.md"
+
+[resource]
+script = ExtResource("phase")
+clip_id = "bg3-36/calm-emotions/apply"
+label = "calm_emotions · apply"
+phase = "impact"
+variant = "apply"
+source_recipe = "evidence/parallel-calm-heroism-v60/REPORT.md"
+seconds = 0.95
+simulation_hz = 60
+components = Array[Resource]([SubResource("source")])
+bindings = [{"component":"support","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+emitters = []
+options = {"opacity_uniform": "support_opacity", "source_revision": "gpu-vanes-v385-20261018"}

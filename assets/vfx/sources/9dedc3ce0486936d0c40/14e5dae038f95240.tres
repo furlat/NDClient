@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/sources/0738ff2d24aa41b1b963/native_review_composition.gd"
+input = {"components": [{"script": "res://assets/vfx/sources/26c98431fd81e43423d8/recorded_swarm.gd", "input": {"scene": "res://assets/vfx/sources/d5ecd06fc57beb3273b3/effect_root.tscn", "settings": {"animation": "", "chitin_colors": {"OliveBody": "404023", "DarkLegs": "252014", "StrawWing": "948151"}}, "side": "full", "simulation_hz": 144, "seed": 47291}, "id": "effect", "rotation_degrees": [0, 0, 0]}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": []}
+options = {}
+provenance = "Pinned native selection; recipes/spells/insect_plague.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "review/insect_plague/default/lifecycle"
+label = "Lifecycle"
+phase = "lifecycle"
+variant = "default"
+source_recipe = "recipes/spells/insect_plague.json"
+bindings = [{"component": "assembly", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 6.0
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"qualification": "Native-context visual review; not production approval", "source_revision": "gpu-swarm-v384-20261018"}

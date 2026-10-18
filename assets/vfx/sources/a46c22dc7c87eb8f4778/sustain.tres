@@ -1,0 +1,20 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+[sub_resource type="Resource" id="effect"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/7874fd7a46279933d3d5/retained_source.gd"
+input = {"scene": "res://assets/vfx/sources/6489ee2642e446746f2f/source.tscn", "durations": {"application": 0.5, "sustain": 2.0, "removal": 0.65}, "application_seconds": 0.5, "loop_seconds": 0.0, "hold_animation_seconds": 0.7, "animation": "Init", "clock_parameters": ["support_clock", "vfx_clock", "condition_clock"], "gain": 0.3, "body_surface": false, "motion": "", "source_height": 0.0, "source_scale": 1.0, "continuous_emitters": ["Donor/Small Sparks", "Donor/Small Sparks2", "Donor/torus2white", "Donor/torus3black"], "emits_light": false, "light_energy": 0.7, "phase": "sustain", "phase_seconds": 2.0}
+options = {}
+provenance = "Original selected spell resource; retained condition derivative conditions-v367-20261017"
+[resource]
+script = ExtResource("phase")
+clip_id = "conditions/retained/sanctuary/sustain"
+label = "sanctuary · sustain"
+phase = "sustain"
+seconds = 2.0
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("effect")])
+bindings = [{"component":"effect","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+options = {"owner_controls_lifetime":true,"opacity_uniform":"condition_opacity"}

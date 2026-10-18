@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/c0d353db196caa737f35/support.gd"
+input = {"scene": "res://assets/vfx/sources/db73bcccaca7c080f180/VFX_Protection_4_Shield.tscn", "settings": {"pack": "lelu-healing-protection", "name": "VFX_Protection_4_Shield", "animation": "Init", "frames": 576, "scale": 0.78, "height": 0, "hue": 0.12, "palette": ["493428", "805435", "b7803c", "ddb65e", "efda93", "fff0c8"], "close": 216, "anchor": "target_ground", "version": 7, "cell": 384, "id": "shield_of_faith"}, "side": "full", "seed": 47291, "simulation_hz": 144, "material_family": "support", "clip_normal": [0.70710678, 0, 0.70710678], "animation_missing_policy": "first_available"}
+options = {"rotation_degrees": [0, 0, 0]}
+provenance = "Pinned native selection; recipes/spells/shield_of_faith.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "spells/shield_of_faith/back/production_impact"
+label = "Impact selection"
+phase = "production_impact"
+variant = "back"
+source_recipe = "recipes/spells/shield_of_faith.json"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 4.5
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"bounded_formation": false, "qualification": "native_family_port_candidate; selected production phase equivalence pending", "stage": "attached", "optional": true, "registration_note": "Original Factory delivery-frame selection retained for phase inspection; source execution is the same complete native lifecycle, not a second simultaneous effect.", "placement": {"role": "attached", "attachment": "recipient_ground", "source_rate": 1.0, "source_end": 4.5, "scale": 0.5, "orientation": "facing"}, "property_overrides": [{"node": "effect/Donor/shield_effect", "property": "position:y", "value": 1.25}, {"node": "effect/Donor/external_base_ring", "property": "layers", "value": 0}, {"node": "effect/Donor/verticalflash2", "property": "layers", "value": 0}, {"node": "effect/Donor/muzzle2", "property": "layers", "value": 0}]}

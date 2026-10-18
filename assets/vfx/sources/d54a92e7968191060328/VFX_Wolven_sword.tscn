@@ -1,0 +1,139 @@
+[gd_scene load_steps=20 format=3 ]
+
+[ext_resource type="Shader"  path="res://assets/vfx/sources/3e113d3ad0f3d6109f04/s_magic_aura3x.tres" id="1_2imcw"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/92fdeff95f37053c86a0/texture.res" id="2_yhbov"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/8bc8bf311494b7cec395/texture.res" id="3_o0mwu"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/1e24a95cba12fe9a56b4/texture.res" id="4_jvos8"]
+[ext_resource type="ArrayMesh"  path="res://assets/vfx/sources/d19bbd8bd15fddd5cdd5/wolven_blade_model.res" id="5_fkv1a"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/7eddd0f4a71d6ddc658c/texture.res" id="6_lf8qv"]
+
+[sub_resource type="Gradient" id="Gradient_pa0qv"]
+offsets = PackedFloat32Array(0.529412, 0.6, 0.635294, 0.711765)
+colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_2kwrb"]
+gradient = SubResource("Gradient_pa0qv")
+fill_from = Vector2(1, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_s042m"]
+render_priority = 0
+shader = ExtResource("1_2imcw")
+shader_parameter/SPEED_Big_Line = 2.0
+shader_parameter/Aura_Color = Color(0, 0.231373, 0.768627, 1)
+shader_parameter/Arua_Power = 15.0
+shader_parameter/fresnel = 0.2
+shader_parameter/Aura_Divide = Vector2(0.2, 0.5)
+shader_parameter/Speed_small_details = Vector2(0.2, 1)
+shader_parameter/Has_mask = true
+shader_parameter/Line_Thunder = SubResource("GradientTexture2D_2kwrb")
+shader_parameter/Distortion_Texture = ExtResource("3_o0mwu")
+shader_parameter/Aura_Texture = ExtResource("2_yhbov")
+shader_parameter/Mask = ExtResource("4_jvos8")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_b1mv8"]
+blend_mode = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+vertex_color_is_srgb = true
+albedo_texture = ExtResource("6_lf8qv")
+albedo_texture_force_srgb = true
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 2
+particles_anim_v_frames = 2
+particles_anim_loop = false
+proximity_fade_enabled = true
+proximity_fade_distance = 0.05
+
+[sub_resource type="Curve" id="Curve_uqcp0"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.17551, 1), 0.0, 0.0, 0, 0, Vector2(0.697959, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_qi4a1"]
+texture_mode = 1
+curve = SubResource("Curve_uqcp0")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_63m6n"]
+emission_shape = 3
+emission_box_extents = Vector3(0.02, 0.25, 0.005)
+angle_min = -10.0
+angle_max = 10.0
+angular_velocity_max = 5.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.1
+scale_max = 0.3
+color = Color(0.1, 1, 2, 1)
+alpha_curve = SubResource("CurveTexture_qi4a1")
+anim_speed_min = 1.0
+anim_speed_max = 1.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_0hhem"]
+size = Vector2(0.7, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ocfgs"]
+blend_mode = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+vertex_color_is_srgb = true
+albedo_texture = ExtResource("6_lf8qv")
+albedo_texture_force_srgb = true
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 2
+particles_anim_v_frames = 2
+particles_anim_loop = false
+proximity_fade_enabled = true
+proximity_fade_distance = 0.05
+
+[sub_resource type="Curve" id="Curve_bhiln"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.489796, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_n4f3n"]
+texture_mode = 1
+curve = SubResource("Curve_bhiln")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_nfe36"]
+emission_shape = 3
+emission_box_extents = Vector3(0.1, 0.21, 0.05)
+angle_min = -180.0
+angle_max = 180.0
+angular_velocity_max = 5.0
+gravity = Vector3(0, 0, 0)
+scale_min = 0.02
+scale_max = 0.07
+color = Color(1, 1.5, 2.5, 1)
+alpha_curve = SubResource("CurveTexture_n4f3n")
+anim_speed_min = 1.0
+anim_speed_max = 1.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_uvwp2"]
+
+[node name="wolven sword" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 0.9, 0, 0, 0, 1, 0, 0, 0)
+
+[node name="WolvenBladeModel" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.33748e-15, 3.0598e-08, 0.7, 0.7, -3.0598e-08, 9.26442e-23, 3.0598e-08, 0.7, -3.0598e-08, 0, 0.116201, 0)
+material_overlay = SubResource("ShaderMaterial_s042m")
+mesh = ExtResource("5_fkv1a")
+skeleton = NodePath("../..")
+
+[node name="electriceffect1" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.311222, 0)
+material_override = SubResource("StandardMaterial3D_b1mv8")
+amount = 3
+lifetime = 0.3
+fixed_fps = 60
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_63m6n")
+draw_pass_1 = SubResource("QuadMesh_0hhem")
+
+[node name="electric2" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.311222, 0)
+material_override = SubResource("StandardMaterial3D_ocfgs")
+amount = 10
+lifetime = 0.2
+fixed_fps = 60
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_nfe36")
+draw_pass_1 = SubResource("QuadMesh_uvwp2")

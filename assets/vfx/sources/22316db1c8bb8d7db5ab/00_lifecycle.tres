@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/2e5d4e20e499a4188da1/bane.gd"
+input = {"scene": "res://assets/vfx/sources/2e5ab3af9b6cb2b7f84f/vfx_status_void.tscn", "settings": {"name": "vfx_status_void", "scale": 0.9, "height": 1.4, "hue": 0.91, "palette": ["160f17", "30151f", "541c29", "782132", "a52d3d", "c34851"], "pack": "binbun-statusfxfull", "animation": "open", "frames": 576, "close": 432, "anchor": "target_ground", "version": 17, "alphaGain": 2.3, "edgeAudit": true, "alphaAwareBlocks": true}, "side": "full", "seed": 47291, "simulation_hz": 144, "material_family": "support", "clip_normal": [0.70710678, 0, 0.70710678], "animation_missing_policy": "first_available", "disabled_script_paths": ["res://assets/vfx/sources/9973b30d6022cf4d4a87/VFXStatusBB.gd"]}
+options = {"rotation_degrees": [0, 0, 0]}
+provenance = "Pinned native selection; recipes/spells/bane.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "spells/bane/back/lifecycle"
+label = "Native lifecycle"
+phase = "lifecycle"
+variant = "back"
+source_recipe = "recipes/spells/bane.json"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 4
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"bounded_formation": false, "qualification": "native_family_port_candidate; selected production phase equivalence pending", "stage": "attached", "placement": {"role": "attached", "attachment": "recipient_ground", "delay_seconds": 0.0, "source_rate": 1.0, "source_end": 4, "scale": 0.5, "orientation": "world", "duration_policy": "authored"}}

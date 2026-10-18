@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/sources/0738ff2d24aa41b1b963/native_review_composition.gd"
+input = {"components": [{"script": "res://assets/vfx/sources/529d93ad9ac310bf78c5/healing_word_flow.gd", "input": {"scene": "res://assets/vfx/sources/175451f651f42e72f567/VFX_Healing_W1.tscn", "settings": {"pack": "lelu-healing-protection", "name": "VFX_Healing_W1", "animation": "Init", "scale": 0.92, "height": 0.3, "hue": 0.5, "frames": 96, "close": 0, "palette": ["303955", "3f638c", "508da5", "70bbc9", "91dadd", "b8ebe6"], "mode": "healing", "title": "Mass Healing Word", "note": "Coordinated compact rising healing responses on selected allies. Unselected actor is unchanged.", "cell": 512, "alphaGain": 1.0, "fps": 32, "id": "mass_healing_word"}, "side": "full", "seed": 47291, "simulation_hz": 144, "material_family": "divine", "clip_normal": [0.70710678, 0, 0.70710678], "animation_missing_policy": "first_available"}, "rotation_degrees": [0, 0, 0], "id": "effect"}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": [], "opacity_control": true}
+options = {}
+provenance = "Pinned native selection; recipes/spells/mass_healing_word.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "review/mass_healing_word/back/lifecycle"
+label = "Lifecycle"
+phase = "lifecycle"
+variant = "back"
+source_recipe = "recipes/spells/mass_healing_word.json"
+bindings = [{"component": "assembly", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 3.0
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"qualification": "Native-context visual review; not production approval", "opacity_uniform": "factory_occurrence_alpha"}

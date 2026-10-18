@@ -1,0 +1,21 @@
+[gd_resource type="ShaderMaterial" load_steps=6 format=3]
+
+[ext_resource type="Shader"  path="res://assets/vfx/sources/dccff5a42b068715ddea/s_magic_circle_erosion_threshold.tres" id="1_36xqu"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/ac0c743a7303d7b1b18f/texture.res" id="2_5dssk"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/8b50d862e875547c4693/texture.res" id="3_qh53u"]
+
+[sub_resource type="Gradient" id="Gradient_7d70c"]
+offsets = PackedFloat32Array(0, 0.639485)
+colors = PackedColorArray(0, 0, 0, 0, 1, 0.32, 0.954667, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_2mmy2"]
+gradient = SubResource("Gradient_7d70c")
+
+[resource]
+render_priority = -2
+shader = ExtResource("1_36xqu")
+shader_parameter/Color_Intensity = 4.0
+shader_parameter/Vanishing = 1.0
+shader_parameter/Alpha_Texture = ExtResource("2_5dssk")
+shader_parameter/Color_1D_gradient = SubResource("GradientTexture1D_2mmy2")
+shader_parameter/Texture_Disolver = ExtResource("3_qh53u")

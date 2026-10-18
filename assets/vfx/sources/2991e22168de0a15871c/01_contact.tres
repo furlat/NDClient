@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "contact"
+constructor_script = "res://assets/vfx/sources/41a3bc76d9238c352dd3/holy_contact.gd"
+input = {"kind": "necrotic"}
+options = {}
+provenance = "Pinned native selection; authored_holy_guardians_study/authoring/ContactCapture.gd"
+
+[resource]
+script = ExtResource("script")
+clip_id = "native/spirit_guardians_necrotic_native/contact"
+label = "Original native contact on actual target"
+phase = "impact"
+variant = "necrotic"
+source_recipe = "authored_holy_guardians_study/authoring/ContactCapture.gd"
+bindings = [{"component": "contact", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 1.5
+simulation_hz = 60
+components = Array[Resource]([SubResource("part_0")])
+options = {}

@@ -1,0 +1,25 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="artwork"]
+script = ExtResource("component")
+component_id = "wizard_operation"
+constructor_script = "res://assets/vfx/sources/036ad73cbd3027c69f39/overchannel.gd"
+input = {"cast_uuid": "study-selected-cast", "source_uuid": "study-wizard-source", "original_spell_id": "spell.fireball", "original_spell_palette": ["821804", "e03e0a", "ffa826", "ffe070"], "necrotic_palette": ["382b35", "694352", "946374"], "charge_enabled": true, "state": {"cast_uuid": "study-selected-cast", "source_uuid": "study-wizard-source", "present": true, "suppressed": false, "accepted_selected_cast": true, "effective_rank": 3, "casting_source": "class.wizard.spellcasting", "observation_kind": "proposed_accepted_overchannel_fixture"}}
+provenance = "Private 16 October native Wizard study; explicit supplied fixture observations, no gameplay event synthesis."
+
+[resource]
+script = ExtResource("phase")
+clip_id = "wizard-class-study/wizard_overchannel_first_study"
+label = "Wizard Overchannel · first · optional private adjunct"
+phase = "lifecycle"
+variant = "wizard_overchannel_first_study"
+source_recipe = "wizard-class-art-v156-authored"
+components = Array[Resource]([SubResource("artwork")])
+bindings = [{"component": "wizard_operation", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 1.5
+simulation_hz = 60.0
+options = {"source_revision": "gpu-finite-v376-20261018"}

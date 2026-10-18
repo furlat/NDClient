@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "marker"
+constructor_script = "res://assets/vfx/sources/0165fcc2ea9ccd5bde44/attached_overhead.gd"
+input = {"clearance_cells": 0.16, "marker": {"size_cells": [0.36, 0.36], "material": {"shader": "res://assets/vfx/sources/f5d04db9fd72a92fe4e6/approved_incapacitated_pause.gdshader", "parameters": {"glyph_clock": 0.0}}}}
+options = {}
+provenance = "Pinned native selection; catalog/packages/authored_control_binding_study.json; incapacitated-approved-preview.js"
+
+[resource]
+script = ExtResource("script")
+clip_id = "condition_incapacitated_native"
+label = "Steady overhead approved pause"
+phase = "sustain"
+variant = "incapacitated"
+source_recipe = "catalog/packages/authored_control_binding_study.json; incapacitated-approved-preview.js"
+bindings = [{"component": "marker", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 3.2
+simulation_hz = 60
+components = Array[Resource]([SubResource("part_0")])
+options = {"opacity_uniform": "factory_occurrence_alpha"}

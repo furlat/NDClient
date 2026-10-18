@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/d4482b1575c069f5544f/command.gd"
+input = {"scene": "res://assets/vfx/sources/0715951e8be28c10c13a/vfx_status_sleep.tscn", "settings": {"animation": "", "kind": "command"}, "side": "full", "simulation_hz": 144, "seed": 47291, "donor_scene": "res://assets/vfx/sources/fd91f78fc378cfcf6273/vfx_status_gem.tscn"}
+options = {}
+provenance = "Pinned native selection; recipes/spells/command.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "spells/command/back/lifecycle"
+label = "Native lifecycle"
+phase = "lifecycle"
+variant = "back"
+source_recipe = "recipes/spells/command.json"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 3.5
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"bounded_formation": false, "qualification": "native_family_port_candidate; selected production phase equivalence pending", "stage": "attached", "placement": {"role": "attached", "attachment": "recipient_ground", "delay_seconds": 0.0, "source_rate": 1.0, "source_end": 3.5, "scale": 0.5, "orientation": "world", "emission_seconds": 2.25, "fade_out_seconds": 0.35, "duration_policy": "authored", "fade_bindings": [{"node": "effect/Donor/ControlGlyph", "property": "mesh:material:shader_parameter/support_envelope", "open": 1.0, "closed": 0.0}]}, "source_revision": "gpu-bake-ready-v368-20261017"}

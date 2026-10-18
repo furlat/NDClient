@@ -1,0 +1,22 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+[sub_resource type="Resource" id="source"]
+script = ExtResource("component")
+component_id = "receiving"
+constructor_script = "res://assets/vfx/sources/798d83cf8e639ee77b17/receiving_forms_readable.gd"
+input = {"profile": "pressure_folds", "count": 2, "width_cells": 0.038, "height_cap_cells": 0.12, "width_cap_cells": 0.17, "motion_rate": 3.2, "layers": [{"scene": "res://assets/vfx/sources/02e4ed99a3d209ebd7ed/vfx_status_magic.tscn", "node": "MeshInstance3D", "alpha": 0.74, "alpha_floor": 0.27, "alpha_power": 0.65, "uv_longitude_bounds": [0.15, 0.85], "uniforms": {"primary_color": {"type": "Color", "value": "d0a36f"}, "secondary_color": {"type": "Color", "value": "805248"}, "emission": 1.1, "emission_mult": 1.0, "proximity_fade": false, "billboard": false, "streaks1_count": 3.0, "streaks2_count": 5.0, "streaks_thickness": 0.16, "streaks_fade": -0.5, "center_radius": 0.02, "fade_radius": 0.45}}, {"scene": "res://assets/vfx/sources/02e4ed99a3d209ebd7ed/vfx_status_magic.tscn", "node": "Aura", "alpha": 0.25, "alpha_floor": 0.27, "alpha_power": 0.65, "uv_longitude_bounds": [0.15, 0.85], "uniforms": {"primary_color": {"type": "Color", "value": "b77c55"}, "secondary_color": {"type": "Color", "value": "805248"}, "tertiary_color": {"type": "Color", "value": "493333"}, "emission": 1.1, "proximity_fade": false, "hue_variation": 0.0, "noise_scale": {"type": "Vector2", "value": [1.2, 0.8]}, "noise_scroll": {"type": "Vector2", "value": [0.11, -0.2]}, "shape_curve": 1.2, "edge_hardness": 0.0, "edge_position": 0.0}}], "seconds": 1.05, "mode": "application", "apply_seconds": 0.15, "retire_seconds": 0.28, "camber_cells": 0.025, "source_alpha": 0.9}
+provenance = "Actual selected native source material mechanism and measured receiving geometry; evidence/parallel-high-level-control-v104/PLAN_REVIEW.md."
+[resource]
+script = ExtResource("phase")
+clip_id = "high-level-22/phantasmal-killer/application-readable"
+label = "phantasmal_killer · application"
+phase = "impact"
+variant = "application"
+source_recipe = "evidence/parallel-high-level-control-v104/PLAN_REVIEW.md"
+seconds = 1.05
+simulation_hz = 60
+components = Array[Resource]([SubResource("source")])
+bindings = [{"component":"receiving","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+emitters = []
+options = {"opacity_uniform": "control_opacity", "source_revision": "gpu-forms-v379-20261018"}

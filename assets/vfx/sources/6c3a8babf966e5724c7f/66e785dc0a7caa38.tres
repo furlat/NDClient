@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "weapon"
+constructor_script = "res://assets/vfx/sources/c9d1d6e8ded305efee38/spiritual_weapon.gd"
+input = {"height_cells": 1.15, "blade_depth_cells": 0.13, "body_alpha_floor": 0.52, "palette": ["162a42", "235a82", "438eb2", "84c6d8", "c4e6e9"], "phase": "retirement", "clock_offset_seconds": 3.5, "mesh": "res://assets/vfx/sources/c124c3960f05842008aa/sword1.res", "material_resource": "res://assets/vfx/sources/f438b80dca949c8c8f09/wolven_aura.tres", "gpu_paths": true}
+options = {}
+provenance = "Pinned native selection; agent_docs/GODOT_BG3_36_SPELL_HANDOFF_2026-10-15.md#spiritual-weapon"
+
+[resource]
+script = ExtResource("script")
+clip_id = "bg3-36/spiritual-weapon/retirement"
+label = "retirement"
+phase = "retirement"
+variant = "spectral_blade"
+source_recipe = "agent_docs/GODOT_BG3_36_SPELL_HANDOFF_2026-10-15.md#spiritual-weapon"
+bindings = [{"component": "weapon", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 0.5
+simulation_hz = 144
+components = Array[Resource]([SubResource("part_0")])
+options = {"source_revision": "gpu-minor-v395-20261018"}

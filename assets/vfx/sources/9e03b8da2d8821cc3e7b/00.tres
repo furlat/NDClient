@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/sources/0738ff2d24aa41b1b963/native_review_composition.gd"
+input = {"components": [{"script": "res://assets/vfx/sources/3713baa2c06c1a594e60/stoneskin.gd", "input": {"scene": "res://assets/vfx/sources/ff312b74e294e9137c7c/earth_hit2.tscn", "settings": {"name": "VFX_Earth_hit2", "pack": "lelu-earth", "animation": "Init", "frames": 288, "scale": 1, "height": 0, "palette": ["44372C", "655039", "866A46", "A18355", "B99B6B"], "title": "Stoneskin chips", "id": "stone_cast"}, "side": "full", "seed": 47291, "simulation_hz": 144, "material_family": "stone", "clip_normal": [0.70710678, 0, 0.70710678], "animation_missing_policy": "first_available", "refresh_animation_caches": true}, "rotation_degrees": [0, 0, 0], "id": "effect"}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": []}
+options = {}
+provenance = "Pinned native selection; recipes/spells/stoneskin.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "review/stoneskin/back/stone_cast"
+label = "Stone Cast"
+phase = "stone_cast"
+variant = "back"
+source_recipe = "recipes/spells/stoneskin.json"
+bindings = [{"component": "assembly", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 2.0
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"qualification": "Native-context visual review; not production approval"}

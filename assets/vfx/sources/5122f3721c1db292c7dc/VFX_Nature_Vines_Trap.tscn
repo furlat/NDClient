@@ -1,0 +1,560 @@
+[gd_scene load_steps=39 format=4 ]
+
+[ext_resource type="Shader" path="res://assets/vfx/sources/6cd3220e296b451fe965/ss_vines.gdshader" id="2_q3n1a"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/e1a0e0dfc4cb8c8bc962/texture.res" id="3_6vo0n"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/c0a2515abc39856316d0/texture.res" id="4_1xtth"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/c3db941ca0009cd4d57e/texture.res" id="5_wtu68"]
+[ext_resource type="ArrayMesh"  path="res://assets/vfx/sources/6cfa2124fad55786db61/sm_vines_trap001.res" id="6_icvk5"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/80f547122b3b9cdc9733/texture.res" id="7_tttss"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/e5209517a5e44b411721/texture.res" id="8_rxtec"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/8dd6c300791a31cf79c2/texture.res" id="9_dx1hr"]
+
+[sub_resource type="Gradient" id="Gradient_mxres"]
+colors = PackedColorArray(1.20327e-06, 0.448723, 0.045844, 1, 0.678121, 0.83095, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_v07ym"]
+gradient = SubResource("Gradient_mxres")
+fill_to = Vector2(0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gd8h0"]
+render_priority = 0
+shader = ExtResource("2_q3n1a")
+shader_parameter/VineTextureScale = Vector2(1, 3)
+shader_parameter/NoiseScale = Vector2(0.5, 1)
+shader_parameter/NoiseSpeed = Vector2(0.1, 0.3)
+shader_parameter/Intensity = 15.0
+shader_parameter/DisolverColorEnergy = 100.0
+shader_parameter/IsInvertFresnel = false
+shader_parameter/FresnelPower = 1.0
+shader_parameter/Roughtness = 1.0
+shader_parameter/AlphaScissorThreshold = 0.966
+shader_parameter/VinesTexture = ExtResource("5_wtu68")
+shader_parameter/EnergyColor2DGradient = SubResource("GradientTexture2D_v07ym")
+shader_parameter/DetailsNoiseTexture = ExtResource("3_6vo0n")
+shader_parameter/DisolverDetailsScale = Vector2(1, 3)
+shader_parameter/DisolverDetailsSpeed = Vector2(0.1, -0.8)
+shader_parameter/DisolverBaias = 0.05
+shader_parameter/DisolverDetailsTexture = ExtResource("4_1xtth")
+shader_parameter/VertexScale = Vector2(1, 1)
+shader_parameter/VertexSpeed = Vector2(0.3, 0.8)
+shader_parameter/VertexIntensity = 0.3
+shader_parameter/SwaySpeed = 5.0
+shader_parameter/SwayFrequency = 10.0
+shader_parameter/SwayAmplitude = 0.15
+shader_parameter/SwayDirection = Vector3(0, 1, 0)
+shader_parameter/SwayRandomness = 0.092
+shader_parameter/TextureVertex = ExtResource("4_1xtth")
+
+[sub_resource type="Gradient" id="Gradient_ilbhn"]
+offsets = PackedFloat32Array(0.858131)
+colors = PackedColorArray(1, 1, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_yntgn"]
+gradient = SubResource("Gradient_ilbhn")
+
+[sub_resource type="Animation" id="Animation_4pl5k"]
+resource_name = "End"
+length = 4.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Decal:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(2.4, 4.13333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Decal:albedo_mix")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(2.4, 4.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.0, 0.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("dustring:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.633333),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("debirs_mini_A:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"update": 1,
+"values": []
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SmVinesTrap001:instance_shader_parameters/DisolverSTEP")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.0666666, 2.1),
+"transitions": PackedFloat32Array(0.353553, 1),
+"update": 0,
+"values": [-0.2, 1.0]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Decal:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(4.3),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("SmVinesTrap001:instance_shader_parameters/DisolverDetails")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"update": 0,
+"values": []
+}
+
+[sub_resource type="Animation" id="Animation_a1l4j"]
+resource_name = "Init"
+length = 8.8
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Decal:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.0333333, 0.3, 6.83333, 8.63333),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Decal:albedo_mix")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.0666667, 0.3, 6.83333, 8.53333),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 1.0, 1.0, 0.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("dustring:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.1, 5.06667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("debirs_mini_A:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.0666667),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SmVinesTrap001:instance_shader_parameters/DisolverSTEP")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.0333333, 1.03333, 4.5, 6.53333),
+"transitions": PackedFloat32Array(1, 0.353553, 0.353553, 1),
+"update": 0,
+"values": [1.0, -0.2, -0.2, 1.0]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Decal:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 8.7),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("SmVinesTrap001:instance_shader_parameters/DisolverDetails")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 1.46667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.2, 0.2]
+}
+
+[sub_resource type="Animation" id="Animation_a3ubc"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SmVinesTrap001:instance_shader_parameters/DisolverSTEP")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [1.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Decal:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_7qf3m"]
+resource_name = "Start"
+length = 1.5333
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Decal:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.0333333, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Decal:albedo_mix")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.0666667, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("dustring:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.1),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("debirs_mini_A:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.0666667),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("SmVinesTrap001:instance_shader_parameters/DisolverSTEP")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.0333333, 1.03333),
+"transitions": PackedFloat32Array(1, 0.353553),
+"update": 0,
+"values": [1.0, -0.2]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Decal:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("SmVinesTrap001:instance_shader_parameters/DisolverDetails")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 1.46667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.2, 0.2]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_xpg6x"]
+_data = {
+"End": SubResource("Animation_4pl5k"),
+"Init": SubResource("Animation_a1l4j"),
+"RESET": SubResource("Animation_a3ubc"),
+"Start": SubResource("Animation_7qf3m")
+}
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_k1oqk"]
+albedo_color = Color(0.44, 0.374513, 0.3564, 1)
+metallic_specular = 0.0
+
+[sub_resource type="Curve" id="Curve_6wxgn"]
+_data = [Vector2(0.101754, 1), 0.0, -2.7981, 0, 0, Vector2(0.480702, 0.295292), -0.710623, -0.710623, 0, 0, Vector2(1, 0.0449358), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_gvtfi"]
+curve = SubResource("Curve_6wxgn")
+
+[sub_resource type="Curve" id="Curve_osnyd"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.64433, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_ml1i3"]
+curve = SubResource("Curve_osnyd")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_bp04m"]
+lifetime_randomness = 0.2
+particle_flag_rotate_y = true
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 0.1
+emission_ring_radius = 0.5
+emission_ring_inner_radius = 0.2
+angle_min = -180.0
+angle_max = 180.0
+direction = Vector3(0, 1, 0)
+spread = 12.656
+initial_velocity_min = 3.0
+initial_velocity_max = 7.0
+radial_velocity_min = 0.999978
+radial_velocity_max = 5.99998
+radial_velocity_curve = SubResource("CurveTexture_gvtfi")
+gravity = Vector3(0, -25, 0)
+scale_min = 0.14
+scale_max = 0.5
+scale_curve = SubResource("CurveTexture_ml1i3")
+color = Color(4, 0.8, 0.3, 1)
+collision_mode = 1
+collision_friction = 0.8
+collision_bounce = 0.3
+collision_use_scale = true
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_ktrga"]
+_surfaces = [{
+"aabb": AABB(-0.35904, -0.211502, -0.387639, 0.60855, 0.481684, 0.729266),
+"attribute_data": PackedByteArray("cv5RIf//kFc6K///Oiv/////kFcAAP//AAD/////kFf/////Fqn//wAA//9uqJBX//8AAP////86K8TUFin///////8AAP////8AAP////8AAP////8AAP////8AAP////8AAP//FqlE2kj0//8AAAAA///emv//ZJ3//wAA///emiBl//8WKf////+7KP//cd7//wAA//+01Uoq/////0Z+/////0oqr5tEhRqKfc7//wAA/////0Qgut+NIf///////wAA/////wAA//8AAP//ZJ1GfriBQov+qFvx//82hf////9S8P//JJm952utrA9S8NpmJJkUWWXwBGWh4wWBjcV0mopl//82hbAOTvH//1vxs4PMW96MCFxBg0RcAXv8ZA58XnSDlJ51GI97Y0lxzsCVo9qDIm2gxCJtoMSVo9qDw35U8f//TvH//4plEsD/c+a6EHY="),
+"format": 34896613399,
+"index_count": 126,
+"index_data": PackedByteArray("AAABAAIAAwAEAAUABgAHAAgACQAKAAsADAANAA4ADgANAA8AEAARABIAEwAUABUAFgAXABgAGQAaABsAGwAaABwAHAAaAB0AHgAfACAAIQAiACMAJAAlACYAJwAoACkAKQAoACoAKgAoACsALAAtAC4ALgAtAC8AMAAxADIAMwA0ADUANQA0ADYANwA4ADkAOQA4ADoAOgA4ADsAPAA9AD4APgA9AD8APwA9AEAAQQBCAEMAQwBCAEQARQBGAEcARwBGAEgASABGAEkASQBGAEoASgBGAEsATABNAE4ATwBQAFEAUQBQAFIAUgBQAFMAUwBQAFQAVABQAFUA"),
+"name": "Material",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 86,
+"vertex_data": PackedByteArray("//+HCtEShfv/////zgaF++9RQRQxBoX771FBFDEG1gD/////zgbWAIV2wMYAANYAhXbAxgAAVPz/////zgZU/C7XLf8ABFT8//+fyWK1P8su1y3/AAQ/y//////OBj/LhXbAxgAA1eW/UbTRlx7V5e9RQRQxBtXlqks4FCoL1eUu1y3/AATs2L9RtNGXHuzYhXbAxgAA7NhUZ/bsZS5z1r9RtNGXHnPWLtct/wAEc9bPmfO3xN8jylRn9uxlLiPKLtct/wAEI8r//5/JYrXcuf//QrMU/dy5Ltct/wAE3LnPmfO3xN/cuVLk/bFI/dy5JapCr7b9nMXPmfO3xN+cxVLk/bFI/ZzFqks4FCoLZOy/UbTRlx5k7AAAwRPWR2Ts6gl4EetgAfPPmfO3xN8B81wN4xCeZgHzz5nzt8Tf58kohKdSiPjnyVwN4xCeZufJaTiuCVit58mYZTA1Ndofyr9RtNGXHu+0z5nzt8Tf77QAAMET1kfvtOoJeBHrYO+0VGf27GUusuvPmfO3xN+y679RtNGXHrLrz5nzt8Tf2L4lqkKvtv3YviiEp1KI+Ni+v4voWf//2L7//81S0PrhqZhlMDU12uGp//9IV1j/4am/i+hZ///hqSiEp1KI+Oip//9IV1j/EMC/i+hZ//+Sz///QrMU/T/LUuT9sUj9iOElqkKvtv373Gk4rglYrSfJmGUwNTXaJ8n//wAA36Ynyf//zVLQ+ifJ//9IV1j/VNX//0KzFP1U1f//zVLQ+lTV//8AAN+mVNX//4cK0RJU1f/////OBlTV//+fyWK13NOqSzgUKgu9FQAAwRPWR70V71FBFDEGvRXvUUEUMQY5xAAAwRPWR5LK//+HCtESbdH//wAA36ZV0Wk4rglYrWfIXA3jEJ5mocrqCXgR62BHyL04aka9OGpGvThqRtO1ozrTtaM607WjOlkWNWZZFjVmWRY1Zm6sV6ZurFembqxXpgrIMskKyDLJCsgyyQrIMsnq+PWZ6vj1mer49ZltzA6tbcwOrW3MDq2urd6lrq3epa6t3qW61AuVu9QLlbvUC5W71AuVu9QLldazMKPWszCj1rMwo2Xc97tl3Pe7Zdz3uyFdc5khXXOZIV1zmX3sRs597EbOfexGzn3sRs6v7EDOiMTQyojE0MqIxNDKiMTQyuTxpTDk8aUw5PGlMHbhv8924b/PduG/z3bhv88CDqKlAg6ipQIOoqUCDqKlFw7epT791gFf/RoBV/1JAXz9cwB2/ZoArSED360hA9+tIQPfrSED36oqqiqqKqoqqiqqKqoqqiqqKqoqqiqqKnoswil/N6Lrfzei6383ouuKGL+sjSMdw64pkc+dKW7P2SCgvZ0jP8OrIEO9")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ue0wg"]
+transparency = 1
+diffuse_mode = 3
+specular_mode = 1
+vertex_color_use_as_albedo = true
+vertex_color_is_srgb = true
+albedo_texture = ExtResource("8_rxtec")
+normal_enabled = true
+normal_scale = 0.3
+normal_texture = ExtResource("9_dx1hr")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 4
+particles_anim_v_frames = 4
+particles_anim_loop = false
+proximity_fade_enabled = true
+
+[sub_resource type="Curve" id="Curve_ok313"]
+_data = [Vector2(0.575439, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_6ej1f"]
+texture_mode = 1
+curve = SubResource("Curve_ok313")
+
+[sub_resource type="Gradient" id="Gradient_byanr"]
+offsets = PackedFloat32Array(0.342412, 0.980545)
+colors = PackedColorArray(0.260705, 0.248086, 0.213386, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_sptho"]
+gradient = SubResource("Gradient_byanr")
+
+[sub_resource type="Curve" id="Curve_e2ayp"]
+_data = [Vector2(0, 0), 0.0, 1.70317, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_2wojo"]
+curve_y = SubResource("Curve_e2ayp")
+
+[sub_resource type="Curve" id="Curve_y4dj4"]
+_data = [Vector2(0.0641509, 1), 0.0, -3.15101, 0, 0, Vector2(1, 0.0634807), -0.0537048, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_sw70w"]
+texture_mode = 1
+curve = SubResource("Curve_y4dj4")
+
+[sub_resource type="Curve" id="Curve_rkqyo"]
+_data = [Vector2(0, 0.351014), 0.0, 1.58071, 0, 0, Vector2(1, 1), 1.0586, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_8ftto"]
+curve = SubResource("Curve_rkqyo")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_rlbo4"]
+lifetime_randomness = 0.1
+particle_flag_rotate_y = true
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 0.0
+emission_ring_radius = 0.3
+emission_ring_inner_radius = 0.1
+angle_min = -180.0
+angle_max = 180.0
+direction = Vector3(0, 1, 0)
+spread = 0.0
+angular_velocity_min = -50.0
+angular_velocity_max = 80.0
+directional_velocity_min = -1.00002
+directional_velocity_max = 1.99998
+directional_velocity_curve = SubResource("CurveXYZTexture_2wojo")
+radial_velocity_min = 1.49998
+radial_velocity_max = 3.99998
+radial_velocity_curve = SubResource("CurveTexture_sw70w")
+gravity = Vector3(0, 0, 0)
+scale_min = 1.5
+scale_max = 2.0
+scale_curve = SubResource("CurveTexture_8ftto")
+color = Color(1.5, 1.5, 1.5, 1)
+color_ramp = SubResource("GradientTexture1D_sptho")
+alpha_curve = SubResource("CurveTexture_6ej1f")
+anim_speed_min = 1.0
+anim_speed_max = 1.0
+
+[sub_resource type="QuadMesh" id="QuadMesh_51pv8"]
+
+[node name="VFX_Nature_Vines_Trap" type="Node3D"]
+metadata/_edit_group_ = true
+
+[node name="SmVinesTrap001" type="MeshInstance3D" parent="."]
+layers = 4
+material_override = SubResource("ShaderMaterial_gd8h0")
+instance_shader_parameters/DisolverDetails = 0.2
+instance_shader_parameters/DisolverSTEP = 1.0
+mesh = ExtResource("6_icvk5")
+skeleton = NodePath("../..")
+metadata/_edit_lock_ = true
+
+[node name="Decal" type="Decal" parent="."]
+transform = Transform3D(-0.997577, 0, -0.0695648, 0, 1, 0, 0.0695648, 0, -0.997577, 0.10063, -4.76837e-07, 0.00490057)
+layers = 4
+size = Vector3(4, 2, 4)
+texture_albedo = ExtResource("7_tttss")
+texture_orm = SubResource("GradientTexture1D_yntgn")
+emission_energy = 0.0
+modulate = Color(1, 1, 1, 0)
+albedo_mix = 0.0
+upper_fade = 0.15
+lower_fade = 0.191184
+cull_mask = 1048571
+metadata/_edit_lock_ = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_xpg6x")
+}
+autoplay = "Init"
+
+[node name="debirs_mini_A" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00807858, 0.391996, -0.00614262)
+material_override = SubResource("StandardMaterial3D_k1oqk")
+emitting = false
+amount = 18
+lifetime = 0.8
+one_shot = true
+explosiveness = 0.57
+randomness = 1.0
+fixed_fps = 60
+process_material = SubResource("ParticleProcessMaterial_bp04m")
+draw_pass_1 = SubResource("ArrayMesh_ktrga")
+metadata/_edit_lock_ = true
+
+[node name="dustring" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.503873, 0)
+layers = 4
+material_override = SubResource("StandardMaterial3D_ue0wg")
+cast_shadow = 0
+emitting = false
+amount = 10
+one_shot = true
+explosiveness = 0.73
+fixed_fps = 60
+visibility_aabb = AABB(-4, -1.145, -4, 8, 4, 8)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_rlbo4")
+draw_pass_1 = SubResource("QuadMesh_51pv8")
+metadata/_edit_lock_ = true

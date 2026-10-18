@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/4bbc6a884fea6c024ae6/element_contact.gd"
+input = {"source_owner_uuid": "fixture.glyph.spatial", "recipient_uuid": "target", "element": "cold", "event": {"source_owner_uuid": "fixture.glyph.spatial", "recipient_uuid": "target", "element": "cold", "event_uuid": "fixture.glyph.cold.target.damage", "damage_applied": true, "saved": false}}
+options = {}
+provenance = "Exact new36 card/read-only backend. Selected actual native source materials and explicit observed owner/outcome fixture."
+
+[resource]
+script = ExtResource("phase")
+clip_id = "bg3-36/glyph-of-warding/cold_target_receiver"
+label = "cold_target_receiver"
+phase = "cold_target_receiver"
+variant = "cold"
+source_recipe = "catalog/bg3-36-spell-contracts-20261015.json#spell.glyph_of_warding"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 0.4
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part")])
+options = {"qualification": "Private source candidate; full GPU sequence/native integration/human approval pending"}

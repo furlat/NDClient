@@ -1,6 +1,12 @@
 # External/private artwork and derived render data stay local.
 /.media/
-/assets/
+/assets/*
+# The Factory's VFX package: its scripts, shaders, text resources and index are
+# versioned here; its binary resources (recordings, meshes, textures, warmed
+# materials) are stored outside git, per package version.
+!/assets/vfx/
+/assets/vfx/**/*.res
+/assets/vfx/**/*.scn
 /.derived/
 /.reference-template/
 *.png

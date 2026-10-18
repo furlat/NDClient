@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "impact"
+constructor_script = "res://assets/vfx/sources/bc5a051eefdba1208e99/selected_projectile.gd"
+input = {"scene": "res://assets/vfx/sources/9db8571fd89b98026f92/EldritchBinbunHit06.tscn", "settings": {"animation": "main", "edit": "unchanged"}, "side": "full", "simulation_hz": 144, "seed": 42020}
+options = {}
+provenance = "Pinned native selection; recipes/spells/eldritch_blast.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "spells/eldritch_blast/default/impact"
+label = "Impact"
+phase = "impact"
+variant = "default"
+source_recipe = "recipes/spells/eldritch_blast.json"
+bindings = [{"component": "impact", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 0.8055555555555556
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"bounded_formation": false, "qualification": "native_family_port_candidate; selected production phase equivalence pending", "stage": "impact"}

@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/6b26571f54f0ae918fa4/bless_open_application.gd"
+input = {"source_input": {"scene": "res://assets/vfx/sources/636cf3be4a77c8ac1b12/vfx_status_divine.tscn", "settings": {"name": "vfx_status_divine", "scale": 0.9, "height": 1.25, "hue": 0.12, "palette": ["453328", "785934", "ab7e39", "cba24f", "ddbd70", "ecd497"], "pack": "binbun-statusfxfull", "animation": "open", "frames": 576, "close": 432, "anchor": "target_ground", "version": 5, "alphaGain": 1.4}, "side": "full", "seed": 47291, "simulation_hz": 144, "material_family": "support", "clip_normal": [0.70710678, 0, 0.70710678], "animation_missing_policy": "first_available", "disabled_script_paths": ["res://assets/vfx/sources/9973b30d6022cf4d4a87/VFXStatusBB.gd"]}, "flow_input": {"material_scene": "res://assets/vfx/sources/636cf3be4a77c8ac1b12/vfx_status_divine.tscn", "material_node": "Mesh", "shape": "petals", "colour": "cba24f", "source_dissolve": 0.18, "alpha_gain": 0.85, "seconds": 2.0, "uniforms": {"primary_color": {"type": "Color", "value": "ddbd70"}, "secondary_color": {"type": "Color", "value": "785934"}, "tertiary_color": {"type": "Color", "value": "785934"}, "noise_scale": {"type": "Vector2", "value": [1.5, 0.45]}, "noise_scroll": {"type": "Vector2", "value": [0.04, -0.15]}, "noise_twist": 0.12, "waviness": 0.05, "hue_variation": 0.0, "emission": 1.0, "proximity_fade": false}, "curves": [{"width_cells": 0.055, "phase": 0, "controls": [[-1, 0.35, 0.06], [-1.1, 0.5, 0.12], [-0.85, 0.68, 0.14], [-0.7, 0.85, 0.1]]}, {"width_cells": 0.05, "phase": 2, "controls": [[0.8, 0.38, 0.06], [1.1, 0.53, 0.12], [0.95, 0.68, 0.14], [0.8, 0.82, 0.1]]}, {"width_cells": 0.035, "phase": 4, "controls": [[0, 0.43, 0.06], [-0.25, 0.58, 0.1], [0.1, 0.73, 0.12], [0, 0.87, 0.1]]}]}, "palette": ["453328", "785934", "ab7e39", "cba24f", "ddbd70", "ecd497"]}
+options = {"rotation_degrees": [0, 0, 0]}
+provenance = "Pinned native selection; recipes/spells/bless.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "spells/bless/back/lifecycle"
+label = "Native application"
+phase = "lifecycle"
+variant = "back"
+source_recipe = "recipes/spells/bless.json"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 5.1
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"bounded_formation": false, "qualification": "native_family_port_candidate; selected production phase equivalence pending", "stage": "attached", "optional": false, "placement": {"role": "attached", "attachment": "recipient_ground", "delay_seconds": 0.0, "source_rate": 1.0, "source_end": 2.0, "scale": 0.55, "orientation": "world", "duration_policy": "authored", "opacity_keys": [[0, 1], [1.5, 1], [2, 0]], "opacity_uniform": "support_envelope"}}

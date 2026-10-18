@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "field"
+constructor_script = "res://assets/vfx/sources/b4406eb67f97fda9fcd6/receiving_flow.gd"
+input = {"seconds": 3.6, "shape": "petals", "colour": "cba24f", "source_dissolve": 0.12, "material_scene": "res://assets/vfx/sources/e1686bb48a6190ecc3ae/VFX_Healing_Flower.tscn", "material_node": "external_base_ring2", "alpha_gain": 0.78, "uniforms": {"Speed_texture": {"type": "Vector2", "value": [0.025, 0.2]}, "Speed_disolver": {"type": "Vector2", "value": [-0.15, 0.24]}, "Opacity": 1.0, "Enable_Proximity_Fade": false, "Enable_Fresnel": false}, "curves": [{"controls": [[-0.1, 0.6, 0.06], [-0.42, 0.7, 0.09], [-0.72, 0.77, 0.095], [-0.55, 0.84, 0.075]], "width_cells": 0.041, "phase": 0.2}, {"controls": [[0.18, 0.61, 0.065], [0.5, 0.69, 0.08], [0.72, 0.78, 0.1], [0.5, 0.85, 0.08]], "width_cells": 0.036, "phase": 2.3}, {"controls": [[0.02, 0.58, 0.07], [-0.15, 0.67, 0.1], [0.04, 0.75, 0.1], [0.12, 0.81, 0.085]], "width_cells": 0.027, "phase": 4.5}]}
+options = {}
+provenance = "Original native material extraction into open spatial receiving curves; evidence/parallel-life-bless-v51/REPORT.md; rejected surface variant preserved."
+
+[resource]
+script = ExtResource("script")
+clip_id = "entity-study/fitted/bless"
+label = "Open gold flowing petals"
+phase = "sustain"
+variant = "geometry_native"
+source_recipe = "evidence/parallel-life-bless-v51/REPORT.md"
+bindings = [{"component": "field", "kind": "sample", "rate": 1, "offset_seconds": 0}]
+emitters = []
+seconds = 3.6
+simulation_hz = 60
+components = Array[Resource]([SubResource("part_0")])
+options = {"source_revision": "gpu-receiving-flow-v372-20261018"}

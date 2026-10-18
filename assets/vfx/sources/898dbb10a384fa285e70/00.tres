@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/sources/0738ff2d24aa41b1b963/native_review_composition.gd"
+input = {"components": [{"script": "res://assets/vfx/sources/a94997293ede91d50273/cloud_billow_formation.gd", "input": {"scene": "res://assets/vfx/sources/e61d478d2aa397acda47/poison_cloud_vfx_02.tscn", "settings": {"animation": "", "spell": "cloudkill", "volume_shader": "res://assets/vfx/sources/17badb06d04adbee704b/ShortCloud32V1_cloudkill_color.gdshader", "carrier_feather_uv": 0.16, "retire_begin_seconds": 10.409722222222221, "retire_seconds": 1.15}, "side": "full", "simulation_hz": 144, "seed": 47291, "macro_mix": 0.0}, "id": "effect", "rotation_degrees": [0, 0, 0]}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": [], "opacity_control": true}
+options = {}
+provenance = "Pinned native selection; recipes/spells/cloudkill.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "review/cloudkill/volume/lifecycle"
+label = "Lifecycle"
+phase = "lifecycle"
+variant = "volume"
+source_recipe = "recipes/spells/cloudkill.json"
+bindings = [{"component": "assembly", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 11.659722222222221
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"qualification": "Native-context visual review; not production approval", "opacity_uniform": "factory_occurrence_alpha"}

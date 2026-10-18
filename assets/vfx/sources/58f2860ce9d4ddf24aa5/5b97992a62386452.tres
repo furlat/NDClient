@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part"]
+script = ExtResource("component")
+component_id = "owned_quarry"
+constructor_script = "res://assets/vfx/sources/a79f812dc5413c9a1bcf/hunters_mark.gd"
+input = {"phase": "application", "seconds": 0.55, "lifecycle_mode": "bounded_fixture", "action_id": "spell.hunters_mark", "source_actor_uuid": "caster", "recipient_uuid": "target", "owner_uuid": "fixture.hunters_mark.original-caster-sustain", "owner_id": "condition.spell.hunters_mark", "condition_uuid": "fixture.hunters_mark_native.current-quarry", "condition_id": "condition.spell.hunters_mark.quarry", "item_uuid": "caster-MELEE_MAIN", "attack_uuid": "fixture.hunters_mark_native.actual-attack", "equipment_slot": "MELEE_MAIN", "render_slot": "weapon", "selected_ability": "", "material": {"scene": "res://assets/vfx/sources/e1686bb48a6190ecc3ae/VFX_Healing_Flower.tscn", "node": "external_base_ring2", "source_colour": [0.8, 0.62, 0.24, 0.65], "energy_exposure": 4.0, "palette": ["746132", "a38d46", "cfb65c", "e0c97a"], "uniforms": {"Opacity": 0.8, "Enable_Proximity_Fade": false, "Enable_Fresnel": false, "Speed_texture": [0.0, 0.23], "Speed_disolver": [-0.15, 0.1]}}, "owner": {"condition_uuid": "fixture.hunters_mark.original-caster-sustain", "condition_id": "condition.spell.hunters_mark", "source_actor_uuid": "caster", "recipient_uuid": "caster", "present": true, "observed": true, "contribution_active": true, "suppressed": false}, "quarry_state": {"sustain_uuid": "fixture.hunters_mark.original-caster-sustain", "source_actor_uuid": "caster", "recipient_uuid": "target", "observed": true, "condition": {"condition_uuid": "fixture.hunters_mark_native.current-quarry", "condition_id": "condition.spell.hunters_mark.quarry", "source_actor_uuid": "caster", "recipient_uuid": "target", "present": true, "observed": true, "contribution_active": true, "suppressed": false}}, "strike": {"sustain_uuid": "fixture.hunters_mark.original-caster-sustain", "quarry_condition_uuid": "fixture.hunters_mark_native.current-quarry", "source_actor_uuid": "caster", "recipient_uuid": "target", "attack_uuid": "fixture.hunters_mark_native.actual-attack", "attack_kind": "weapon", "source_kind": "equipped", "item_uuid": "caster-MELEE_MAIN", "equipment_slot": "MELEE_MAIN", "outcome": "hit", "attack_roll_observed": true, "rider_applied": true, "damage_fact_uuid": "fixture.hunters_mark_native.actual-damage-fact"}}
+options = {}
+provenance = "Exact backend quarry sustain/child and explicit qualified observed damage adapter input."
+
+[resource]
+script = ExtResource("phase")
+clip_id = "bg3-36/hunters-mark/hunters_mark_native/application"
+label = "Hunters Mark · application"
+phase = "application"
+variant = "hunters_mark_native"
+source_recipe = "res://assets/vfx/sources/873c8d5938f1ba595713/bg3-36-spell-contracts-20261015.json#spell.hunters_mark"
+bindings = [{"component":"owned_quarry","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+emitters = []
+seconds = 0.55
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part")])
+options = {"qualification": "coded_pending_capture; actual current quarry body and current source item", "source_revision": "gpu-cached-v382-20261018"}

@@ -1,0 +1,185 @@
+[gd_scene load_steps=23 format=4 ]
+
+[ext_resource type="Shader" path="res://assets/vfx/sources/b9baf190187129686cf9/s_animated_ds_toon.gdshader" id="1_1hvlh"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/17aaebeb3b80e7b187b2/texture.res" id="2_jc11v"]
+[ext_resource type="ArrayMesh"  path="res://assets/vfx/sources/a618c52ce08107f00009/sm_snowplate2.res" id="3_qo2mh"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1b0q5"]
+diffuse_mode = 3
+specular_mode = 1
+vertex_color_use_as_albedo = true
+vertex_color_is_srgb = true
+albedo_color = Color(0.77, 0.885, 1, 1)
+metallic_specular = 0.0
+
+[sub_resource type="Curve" id="Curve_e40pw"]
+_data = [Vector2(0, 1), 0.0, -0.710624, 0, 0, Vector2(0.845361, 0.54945), -0.0361332, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_3x2xo"]
+curve = SubResource("Curve_e40pw")
+
+[sub_resource type="Curve" id="Curve_hqgs0"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.653968, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_nr5wy"]
+curve = SubResource("Curve_hqgs0")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ciu15"]
+lifetime_randomness = 0.2
+particle_flag_rotate_y = true
+emission_shape = 1
+emission_sphere_radius = 0.15
+angle_min = -180.0
+angle_max = 180.0
+direction = Vector3(0, 0.5, -0.5)
+spread = 0.0
+initial_velocity_min = 1.0
+initial_velocity_max = 9.0
+radial_velocity_min = 6.99998
+radial_velocity_max = 9.99998
+radial_velocity_curve = SubResource("CurveTexture_3x2xo")
+gravity = Vector3(0, -25, 0)
+scale_min = 0.07
+scale_max = 0.25
+scale_curve = SubResource("CurveTexture_nr5wy")
+color = Color(1.1, 1.1, 1.2, 1)
+collision_use_scale = true
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_cgunk"]
+_surfaces = [{
+"aabb": AABB(-0.35904, -0.211502, -0.387639, 0.60855, 0.481684, 0.729266),
+"attribute_data": PackedByteArray("cv5RIf//kFc6K///Oiv/////kFcAAP//AAD/////kFf/////Fqn//wAA//9uqJBX//8AAP////86K8TUFin///////8AAP////8AAP////8AAP////8AAP////8AAP////8AAP//FqlE2kj0//8AAAAA///emv//ZJ3//wAA///emiBl//8WKf////+7KP//cd7//wAA//+01Uoq/////0Z+/////0oqr5tEhRqKfc7//wAA/////0Qgut+NIf///////wAA/////wAA//8AAP//ZJ1GfriBQov+qFvx//82hf////9S8P//JJm952utrA9S8NpmJJkUWWXwBGWh4wWBjcV0mopl//82hbAOTvH//1vxs4PMW96MCFxBg0RcAXv8ZA58XnSDlJ51GI97Y0lxzsCVo9qDIm2gxCJtoMSVo9qDw35U8f//TvH//4plEsD/c+a6EHY="),
+"format": 34896613399,
+"index_count": 126,
+"index_data": PackedByteArray("AAABAAIAAwAEAAUABgAHAAgACQAKAAsADAANAA4ADgANAA8AEAARABIAEwAUABUAFgAXABgAGQAaABsAGwAaABwAHAAaAB0AHgAfACAAIQAiACMAJAAlACYAJwAoACkAKQAoACoAKgAoACsALAAtAC4ALgAtAC8AMAAxADIAMwA0ADUANQA0ADYANwA4ADkAOQA4ADoAOgA4ADsAPAA9AD4APgA9AD8APwA9AEAAQQBCAEMAQwBCAEQARQBGAEcARwBGAEgASABGAEkASQBGAEoASgBGAEsATABNAE4ATwBQAFEAUQBQAFIAUgBQAFMAUwBQAFQAVABQAFUA"),
+"name": "Material",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 86,
+"vertex_data": PackedByteArray("//+HCtEShfv/////zgaF++9RQRQxBoX771FBFDEG1gD/////zgbWAIV2wMYAANYAhXbAxgAAVPz/////zgZU/C7XLf8ABFT8//+fyWK1P8su1y3/AAQ/y//////OBj/LhXbAxgAA1eW/UbTRlx7V5e9RQRQxBtXlqks4FCoL1eUu1y3/AATs2L9RtNGXHuzYhXbAxgAA7NhUZ/bsZS5z1r9RtNGXHnPWLtct/wAEc9bPmfO3xN8jylRn9uxlLiPKLtct/wAEI8r//5/JYrXcuf//QrMU/dy5Ltct/wAE3LnPmfO3xN/cuVLk/bFI/dy5JapCr7b9nMXPmfO3xN+cxVLk/bFI/ZzFqks4FCoLZOy/UbTRlx5k7AAAwRPWR2Ts6gl4EetgAfPPmfO3xN8B81wN4xCeZgHzz5nzt8Tf58kohKdSiPjnyVwN4xCeZufJaTiuCVit58mYZTA1Ndofyr9RtNGXHu+0z5nzt8Tf77QAAMET1kfvtOoJeBHrYO+0VGf27GUusuvPmfO3xN+y679RtNGXHrLrz5nzt8Tf2L4lqkKvtv3YviiEp1KI+Ni+v4voWf//2L7//81S0PrhqZhlMDU12uGp//9IV1j/4am/i+hZ///hqSiEp1KI+Oip//9IV1j/EMC/i+hZ//+Sz///QrMU/T/LUuT9sUj9iOElqkKvtv373Gk4rglYrSfJmGUwNTXaJ8n//wAA36Ynyf//zVLQ+ifJ//9IV1j/VNX//0KzFP1U1f//zVLQ+lTV//8AAN+mVNX//4cK0RJU1f/////OBlTV//+fyWK13NOqSzgUKgu9FQAAwRPWR70V71FBFDEGvRXvUUEUMQY5xAAAwRPWR5LK//+HCtESbdH//wAA36ZV0Wk4rglYrWfIXA3jEJ5mocrqCXgR62BHyL04aka9OGpGvThqRtO1ozrTtaM607WjOlkWNWZZFjVmWRY1Zm6sV6ZurFembqxXpgrIMskKyDLJCsgyyQrIMsnq+PWZ6vj1mer49ZltzA6tbcwOrW3MDq2urd6lrq3epa6t3qW61AuVu9QLlbvUC5W71AuVu9QLldazMKPWszCj1rMwo2Xc97tl3Pe7Zdz3uyFdc5khXXOZIV1zmX3sRs597EbOfexGzn3sRs6v7EDOiMTQyojE0MqIxNDKiMTQyuTxpTDk8aUw5PGlMHbhv8924b/PduG/z3bhv88CDqKlAg6ipQIOoqUCDqKlFw7epT791gFf/RoBV/1JAXz9cwB2/ZoArSED360hA9+tIQPfrSED36oqqiqqKqoqqiqqKqoqqiqqKqoqqiqqKnoswil/N6Lrfzei6383ouuKGL+sjSMdw64pkc+dKW7P2SCgvZ0jP8OrIEO9")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_chuxh"]
+render_priority = 1
+shader = ExtResource("1_1hvlh")
+shader_parameter/normal_intensity = 0.0
+shader_parameter/frame_count = Vector2(8, 8)
+shader_parameter/sprite_sheet = ExtResource("2_jc11v")
+
+[sub_resource type="Curve" id="Curve_lltu4"]
+_data = [Vector2(0, 0), 0.0, 1.0, 0, 0, Vector2(1, 1), 1.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_k0meb"]
+texture_mode = 1
+curve = SubResource("Curve_lltu4")
+
+[sub_resource type="Curve" id="Curve_vkpyh"]
+
+[sub_resource type="Curve" id="Curve_ghwil"]
+
+[sub_resource type="Curve" id="Curve_su8du"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.193295), -1.96505, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_g4fcd"]
+curve_x = SubResource("Curve_vkpyh")
+curve_y = SubResource("Curve_ghwil")
+curve_z = SubResource("Curve_su8du")
+
+[sub_resource type="Curve" id="Curve_ack8u"]
+_data = [Vector2(0, 0.461538), 0.0, 1.23786, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_upqce"]
+curve = SubResource("Curve_ack8u")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_i0o1w"]
+lifetime_randomness = 0.1
+particle_flag_rotate_y = true
+angle_min = 1.07288e-05
+angle_max = 1.07288e-05
+direction = Vector3(0, 0, -1)
+spread = 0.0
+directional_velocity_min = -10.0
+directional_velocity_max = -5.00002
+directional_velocity_curve = SubResource("CurveXYZTexture_g4fcd")
+gravity = Vector3(0, 0, 0)
+scale_min = 2.3
+scale_max = 2.7
+scale_curve = SubResource("CurveTexture_upqce")
+color = Color(0.92, 0.976, 1, 1)
+alpha_curve = SubResource("CurveTexture_k0meb")
+
+[sub_resource type="Animation" id="Animation_fr8rk"]
+resource_name = "Init"
+length = 1.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("debirs:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("windimpact3:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ecjpu"]
+_data = {
+"Init": SubResource("Animation_fr8rk")
+}
+
+[node name="VFX_IceHit_T1" type="Node3D"]
+metadata/_edit_group_ = true
+
+[node name="debirs" type="GPUParticles3D" parent="."]
+layers = 4
+material_override = SubResource("StandardMaterial3D_1b0q5")
+emitting = false
+amount = 51
+lifetime = 0.6
+one_shot = true
+explosiveness = 0.84
+randomness = 1.0
+fixed_fps = 60
+process_material = SubResource("ParticleProcessMaterial_ciu15")
+draw_pass_1 = SubResource("ArrayMesh_cgunk")
+metadata/_edit_lock_ = true
+
+[node name="windimpact3" type="GPUParticles3D" parent="."]
+layers = 4
+material_override = SubResource("ShaderMaterial_chuxh")
+emitting = false
+amount = 1
+lifetime = 0.5
+one_shot = true
+explosiveness = 0.8
+fixed_fps = 60
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_i0o1w")
+draw_pass_1 = ExtResource("3_qo2mh")
+metadata/_edit_lock_ = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_ecjpu")
+}
+autoplay = "Init"

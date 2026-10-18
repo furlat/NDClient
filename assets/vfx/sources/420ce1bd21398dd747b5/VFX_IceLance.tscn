@@ -1,0 +1,155 @@
+[gd_scene load_steps=25 format=3 ]
+
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/740ff96c3f0645d72428/texture.res" id="1_2fyhs"]
+[ext_resource type="ArrayMesh"  path="res://assets/vfx/sources/40a0aa4ca6d878ef1a14/sm_rocks_stone4_001.res" id="2_32jke"]
+[ext_resource type="ArrayMesh"  path="res://assets/vfx/sources/70a3d84014cd62b8281d/sm_ice004uv2.res" id="3_aiobc"]
+[ext_resource type="Material"  path="res://assets/vfx/sources/40d1f03cc693449ec7d6/m_ice_prelance.tres" id="3_qjrew"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/2aeb22601424dd330507/texture.res" id="4_puk80"]
+[ext_resource type="Shader" path="res://assets/vfx/sources/ca6be57c2d7ae2d4d684/trail.gdshader" id="5_y34rn"]
+[ext_resource type="Shader" path="res://assets/vfx/sources/6d904f91bbde44f8c698/trail_draw_pass.gdshader" id="6_p28tu"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/0d460ce593b3e760904e/texture.res" id="7_i687q"]
+[ext_resource type="Script" path="res://assets/vfx/sources/a25a05a4435293a9b14c/GPUTrail3D.gd" id="8_hvxy2"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dki5b"]
+diffuse_mode = 3
+albedo_color = Color(0.7, 0.8, 1.6, 1)
+albedo_texture = ExtResource("1_2fyhs")
+rim_enabled = true
+rim_tint = 0.34
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lys0n"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+disable_fog = true
+vertex_color_use_as_albedo = true
+vertex_color_is_srgb = true
+albedo_texture = ExtResource("4_puk80")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+proximity_fade_enabled = true
+proximity_fade_distance = 0.1
+
+[sub_resource type="Gradient" id="Gradient_3wn45"]
+offsets = PackedFloat32Array(0, 0.120623, 0.501945, 1)
+colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 1, 0.654867, 0.654867, 0.654867, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_tvmvc"]
+gradient = SubResource("Gradient_3wn45")
+
+[sub_resource type="Curve" id="Curve_m20no"]
+_data = [Vector2(0, 0.175824), 0.0, 1.06402, 0, 0, Vector2(1, 1), 0.145355, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_h0s38"]
+curve = SubResource("Curve_m20no")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_jb12t"]
+lifetime_randomness = 0.1
+particle_flag_rotate_y = true
+emission_shape = 3
+emission_box_extents = Vector3(0.1, 0.1, 1.5)
+angle_min = -180.0
+angle_max = 180.0
+direction = Vector3(0, 1, 0)
+spread = 0.0
+initial_velocity_max = 0.3
+radial_velocity_min = -2.23517e-05
+radial_velocity_max = 0.299978
+gravity = Vector3(0, 0, 0)
+scale_min = 2.5
+scale_max = 3.5
+scale_curve = SubResource("CurveTexture_h0s38")
+color = Color(0.746103, 0.843551, 0.942218, 1)
+color_ramp = SubResource("GradientTexture1D_tvmvc")
+
+[sub_resource type="QuadMesh" id="QuadMesh_8q25t"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ldw8y"]
+shader = ExtResource("5_y34rn")
+
+[sub_resource type="Gradient" id="Gradient_w7oau"]
+interpolation_color_space = 2
+colors = PackedColorArray(2, 4, 5, 1, 0.508382, 0.676448, 0.936845, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_tbcwt"]
+gradient = SubResource("Gradient_w7oau")
+use_hdr = true
+
+[sub_resource type="Curve" id="Curve_6wkrb"]
+bake_resolution = 16
+_data = [Vector2(0, 1), 0.0, -1.1109, 0, 0, Vector2(1, 0.219688), -0.666542, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_66ups"]
+curve = SubResource("Curve_6wkrb")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hifel"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("6_p28tu")
+shader_parameter/uv_offset = Vector2(0.424902, 0)
+shader_parameter/emmission_transform = Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+shader_parameter/flags = 46
+shader_parameter/tex = ExtResource("7_i687q")
+shader_parameter/color_ramp = SubResource("GradientTexture1D_tbcwt")
+shader_parameter/curve = SubResource("CurveTexture_66ups")
+
+[sub_resource type="QuadMesh" id="QuadMesh_qpew8"]
+material = SubResource("ShaderMaterial_hifel")
+
+[node name="VFX_IceLance" type="Node3D"]
+metadata/_edit_group_ = true
+
+[node name="SmRocksStone4002" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.106021, 0.034069, -0.699553, 0.732217, -0.0509034, 0.101155, -0.0107807, -3.12227, -0.00928237, 3.25755e-10, 0.0279298, 0.304365)
+material_override = SubResource("StandardMaterial3D_dki5b")
+mesh = ExtResource("2_32jke")
+skeleton = NodePath("../..")
+metadata/_edit_lock_ = true
+
+[node name="pre_lan" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.106021, 0.034069, -0.699553, 0.732217, -0.0509034, 0.101155, -0.0107807, -3.12227, -0.00928237, 3.25755e-10, 0.0279298, 0.304365)
+visible = false
+layers = 4
+material_override = ExtResource("3_qjrew")
+mesh = ExtResource("3_aiobc")
+skeleton = NodePath("../..")
+metadata/_edit_lock_ = true
+
+[node name="smoke2init" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.999988, 0.00490435, 0, -0.00490435, 0.999988, 0.00584173, -0.0904059, -0.268196)
+layers = 4
+material_override = SubResource("StandardMaterial3D_lys0n")
+cast_shadow = 0
+lifetime = 3.0
+randomness = 1.0
+fixed_fps = 60
+visibility_aabb = AABB(-1, -1, -3, 2, 2, 6)
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_jb12t")
+draw_pass_1 = SubResource("QuadMesh_8q25t")
+metadata/_edit_lock_ = true
+
+[node name="GPUTrail3D" type="GPUParticles3D" parent="."]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+amount = 42
+lifetime = 42.0
+explosiveness = 1.0
+fixed_fps = 75
+process_material = SubResource("ShaderMaterial_ldw8y")
+draw_pass_1 = SubResource("QuadMesh_qpew8")
+script = ExtResource("8_hvxy2")
+length = 42
+length_seconds = 0.56
+texture = ExtResource("7_i687q")
+scroll = Vector2(4, 0)
+color_ramp = SubResource("GradientTexture1D_tbcwt")
+curve = SubResource("CurveTexture_66ups")
+use_red_as_alpha = true
+billboard = true
+_defaults_have_been_set = true
+metadata/_edit_lock_ = true

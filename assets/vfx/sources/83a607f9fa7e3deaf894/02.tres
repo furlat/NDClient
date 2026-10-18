@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "moonbeam"
+constructor_script = "res://assets/vfx/sources/08327bdb7a95631435c4/moonbeam.gd"
+input = {"scene": "res://assets/vfx/sources/a4698e55b0bceca34d06/VFX_PlasmaBeam_Blue.tscn", "palette": ["202d42", "47647c", "81a5bd", "bfd3de", "e0e8e8"], "radius_cells": 0.6, "layers": [{"node": "in_rays_cylinder", "scale": [0.92, 4.5, 0.92], "position": [0, 0.015, 0], "opacity": 0.55, "uniforms": {"Color_Intensity": 1.3, "Dissolver_edge": 0.35, "Speed_XY": [0.15, -0.5]}, "shaft": true}, {"node": "outter_rays_cylinder", "scale": [1.18, 4.5, 1.18], "position": [0, 0.015, 0], "opacity": 0.35, "uniforms": {"Color_Intensity": 0.9, "Dissolver_edge": 0.43, "Speed_XY": [0.25, -0.5]}, "shaft": true}, {"node": "floorflash", "scale": [0.125, 1, 0.125], "position": [0, 0.025, 0], "opacity": 0.4, "uniforms": {"Transparency": 0.65, "Intensity": 0.8}, "shaft": false}], "phase": "remove", "source_time_offset": 4.45}
+options = {}
+provenance = "Pinned native selection; recipes/data/bg3-36/moonbeam.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "bg3-36/moonbeam/remove"
+label = "Remove"
+phase = "remove"
+variant = "default"
+source_recipe = "recipes/data/bg3-36/moonbeam.json"
+bindings = [{"component": "moonbeam", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 0.55
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {}

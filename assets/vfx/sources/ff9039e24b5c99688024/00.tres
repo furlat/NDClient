@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "interval"
+constructor_script = "res://assets/vfx/sources/2fd2d9b87077a6008fc5/inspection_interval.gd"
+input = {}
+options = {}
+provenance = "Pinned native selection; recipes/runtime_spells/blur.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "blur_native"
+label = "Renderer-owned assembled actor effect"
+phase = "sustain"
+variant = "native"
+source_recipe = "recipes/runtime_spells/blur.json"
+bindings = [{"component": "interval", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 4.2
+simulation_hz = 60
+components = Array[Resource]([SubResource("part_0")])
+options = {}

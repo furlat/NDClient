@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "impact"
+constructor_script = "res://assets/vfx/sources/4daa34b741baf3b589ee/source_coverage.gd"
+input = {"source": {"constructor_script": "res://assets/vfx/sources/1752326f3c319b8e5b52/native_scene_effect.gd", "input": {"material_rules": [{"match": {"blend_mode": 1, "requires_texture": true}, "shader_source": "res://assets/vfx/sources/7ca2c088b64c344a4727/73682ae4aa57cb2f9264cf5550437223fa5c5c0a3129f00096fc640aaefe4091.gdshader", "source_parameters": {"Texture": "albedo_texture"}, "parameters": {"Black_Threshold": 0.08, "Softness": 0.12, "Alpha_Multiplier": 1.0}}], "local_offset": [0, 0, -1.2], "scene": "res://assets/vfx/sources/fae4fb8c82c8a1fb6145/VFX_Hit_cyber.tscn", "scale": [1, 1, 1], "native_animations": [{"path": "AnimationPlayer", "clip": "Init"}]}}, "layers": [{"node_name": "little boxes", "gain": 0.35, "edge_uv": 0.06, "fade_seconds": [0.15, 0.45]}, {"node_name": "Flare", "gain": 0.55, "edge_uv": 0.04, "fade_seconds": [0.18, 0.45]}]}
+options = {"rotation_degrees": [0, 0, 0]}
+provenance = "Pinned native selection; recipes/spells/magic_missile.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "spells/magic_missile/default/impact"
+label = "Impact"
+phase = "impact"
+variant = "default"
+source_recipe = "recipes/spells/magic_missile.json"
+bindings = [{"component": "impact", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = [{"component": "impact", "path": "Source/Donor/Rings", "seed": 42020, "fixed_fps": 60, "restart": false}, {"component": "impact", "path": "Source/Donor/little boxes", "seed": 42021, "fixed_fps": 60, "restart": false}, {"component": "impact", "path": "Source/Donor/Flare", "seed": 42022, "fixed_fps": 60, "restart": false}, {"component": "impact", "path": "Source/Donor/sparks", "seed": 42023, "fixed_fps": 60, "restart": false}]
+seconds = 0.3472222222222222
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"bounded_formation": false, "qualification": "native_recipe_candidate; production material/phase parity pending", "stage": "impact"}

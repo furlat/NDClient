@@ -1,0 +1,25 @@
+[gd_resource type="ShaderMaterial" load_steps=6 format=3 ]
+
+[ext_resource type="Shader"  path="res://assets/vfx/sources/6c76b19faf1900858b36/s_YingYang_Treshold_A.tres" id="1_mu6sa"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/78613bdeb39c2260fe03/texture.res" id="2_byrcy"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/f66d1ab459238535a9d0/texture.res" id="3_gr82u"]
+
+[sub_resource type="Gradient" id="Gradient_vgja0"]
+colors = PackedColorArray(0.678944, 0.678944, 0.678944, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_kgs2m"]
+gradient = SubResource("Gradient_vgja0")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.482906)
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_mu6sa")
+shader_parameter/Color_Intensity = 3.0
+shader_parameter/Scale_XY = Vector2(1, 1)
+shader_parameter/Speed_XY = null
+shader_parameter/Alpha_Treshold = 0.03
+shader_parameter/Base_Texture = ExtResource("2_byrcy")
+shader_parameter/Disolver_Texture = ExtResource("3_gr82u")
+shader_parameter/Disolver_Add_Texture = SubResource("GradientTexture2D_kgs2m")

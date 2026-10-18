@@ -1,0 +1,23 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+[sub_resource type="Resource" id="application"]
+script = ExtResource("component")
+component_id = "application"
+constructor_script = "res://assets/vfx/sources/815501feaa077e7a9692/transmutation_application.gd"
+input = {"source_scene": "res://assets/vfx/sources/9a8e9be5240c42bbbd7e/VFX_MagicCircle_Pk1.tscn", "layers": [{"node": "circle1", "diameter_cells": 1.45, "height_cells": 0.024}, {"node": "circle_aura", "diameter_cells": 1.2, "height_cells": 0.031}], "duration_seconds": 0.72, "direction": 1.0, "opacity": 0.7, "palette": ["302f47", "655780", "979bc0", "e1daf1"]}
+options = {}
+provenance = "Explicit native source layers; existing renderer-owned treatment is unchanged."
+[resource]
+script = ExtResource("phase")
+clip_id = "enlarge_reduce_native/application"
+label = "Finite local receiving application"
+phase = "application"
+variant = "native"
+source_recipe = "recipes/runtime_spells/enlarge_reduce.json"
+bindings = [{"component": "application", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 0.72
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("application")])
+options = {}

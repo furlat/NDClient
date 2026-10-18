@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="ground"]
+script = ExtResource("component")
+component_id = "foot_pressure"
+constructor_script = "res://assets/vfx/sources/0bbbce20d9e5bebc4ff3/ground_strips.gd"
+input = {"source_shader": "res://assets/vfx/sources/83cc1a43d3dc5611cfb9/Flow.gdshader", "source_noise": "res://assets/vfx/sources/33eda53c7d9b78fb8457/flow_noise.tres", "mote_shader": "res://assets/vfx/sources/f22b34fb68ecb979b484/mote.gdshader", "owner_projection": {"actor_id": "caster", "owner_uuid": "fixture-raging-A", "behavior_id": "class_feature.barbarian.raging", "admitted": true, "begin_seconds": 0.0, "removed_seconds": 3.65}, "activation_projection": {"actor_id": "caster", "action_uuid": "fixture-rage-activation-v191-A", "behavior_id": "action.class.barbarian.rage", "admitted": true, "parent_owner_uuid": "fixture-raging-A", "begin_seconds": 0.0}, "requires_frenzied_child": false, "gain": 0.4, "finish": {"kind": "source_scalar_eight_level_three_stop", "source_encoding": "gl_compatibility_unshaded", "ramp": ["7b2629", "c74439", "ec8763"], "neutral_levels": [26, 49, 78, 109, 143, 177, 211, 239], "maximum_byte": 239, "post_raster_2x2_parity": false}}
+options = {}
+provenance = "Exact archived ground7x32 strip/12low mote source and32fps phase. Source preview gate .1/.18/.7/.35 with original gain/palette. Native fragment finishing is explicitly qualified; original 2x2 post-raster packing is not reproduced."
+
+[resource]
+script = ExtResource("script")
+clip_id = "barbarian_rage_onset_v191_pressure"
+label = "Original finite Rage foot pressure"
+phase = "lifecycle"
+variant = "accepted_ground"
+source_recipe = "project_authored_class_action_vfx_proposals_live_authoring_project_70e2fd95"
+bindings = [{"component": "foot_pressure", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 1.1
+simulation_hz = 60
+components = Array[Resource]([SubResource("ground")])
+options = {"source_revision": "gpu-motion-v369-20261018"}

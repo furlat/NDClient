@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/e77d8c5854f094423a79/compact_fire_trail.gd"
+input = {"scene": "res://assets/vfx/sources/02f3c782d635384fa0b3/VFX_FireProjectile_Red_C.tscn", "settings": {"animation": ""}, "side": "full", "simulation_hz": 144, "seed": 47291, "trail_seconds": 0.14, "contact_source_seconds": 0.7}
+options = {}
+provenance = "Pinned native selection; recipes/spells/produce_flame.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "spells/produce_flame/travel_back/travel"
+label = "Travel · travel"
+phase = "travel"
+variant = "travel_back"
+source_recipe = "recipes/spells/produce_flame.json"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1, "offset_seconds": 0}]
+emitters = []
+seconds = 1.2
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"bounded_formation": false, "qualification": "native_family_port_candidate; selected production phase equivalence pending", "stage": "travel", "registration_note": "Native sandbox variant: complete unflattened source; choreography and world sizing authored separately."}

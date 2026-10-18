@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/sources/0738ff2d24aa41b1b963/native_review_composition.gd"
+input = {"components": [{"script": "res://assets/vfx/sources/56627010ca0c7c6a229f/hold_steel_gold.gd", "input": {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"kind": "hold", "width": 1, "mode": "binding", "pack": "binbun-statusfxfull", "name": "vfx_status_purple", "cell": 384, "ortho": 8, "targetY": 1.2, "frames": 224, "animation": "", "palette": ["101923", "30434f", "667f89", "b4ced1", "794314", "d68726", "ffd47c", "fff0c2"], "groundAnchors": [[0.4949747468305833, 0.075, 0.4949747468305832], [-0.4949747468305832, 0.075, 0.4949747468305833], [-0.49497474683058335, 0.075, -0.4949747468305832], [0.4949747468305831, 0.075, -0.49497474683058335]], "occupiedFootprintCells": [1, 1], "worldUnitsPerTile": 1.885618083164127, "singleChain": false, "adapter": "BlenderChainCapture.gd", "anchorRadius": 0.7, "beltRadius": 0.24, "beltHeight": 0.76, "id": "hold_person", "physics_path": "res://assets/vfx/sources/879a935547c4d5180c58/hold_person_physics.json", "clip_vector": "vec3(0.70710678,0.0,0.70710678)"}, "side": "full", "simulation_hz": 144, "seed": 47291, "steel_shadow": "30434f", "steel_highlight": "8da5af", "gold_shadow": "794314", "gold_highlight": "ffd47c"}, "id": "effect", "rotation_degrees": [0, 0, 0]}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": []}
+options = {}
+provenance = "Pinned native selection; recipes/spells/hold_person.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "review/hold_person/back/lifecycle"
+label = "Lifecycle"
+phase = "lifecycle"
+variant = "back"
+source_recipe = "recipes/spells/hold_person.json"
+bindings = [{"component": "assembly", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 7.0
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"qualification": "Native-context visual review; not production approval"}

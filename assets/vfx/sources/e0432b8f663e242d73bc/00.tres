@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/sources/0738ff2d24aa41b1b963/native_review_composition.gd"
+input = {"components": [{"script": "res://assets/vfx/sources/0183bd69c689791fcca1/regenerate_body_flow.gd", "input": {"scene": "res://assets/vfx/sources/61cfb0206de0437f5ee5/vfx_status_nature.tscn", "settings": {"id": "regenerate", "name": "vfx_status_nature", "pack": "binbun-statusfxfull", "animation": "open", "scale": 0.9, "height": 1.05, "hue": 0.43, "frames": 1008, "close": 800, "palette": ["233f3d", "326359", "488f73", "68b993", "94dac0", "c4eed7"], "title": "Regenerate", "level": 7, "note": "Living jade weave. The brighter pulse at demo time 4.5s represents one explicit healing event; quiet motion is not a healing tick.", "mode": "single", "cell": 512, "alphaGain": 1.6, "anchor": "target_ground"}, "side": "full", "seed": 47291, "simulation_hz": 144, "material_family": "conditions", "clip_normal": [0.70710678, 0, 0.70710678], "animation_missing_policy": "first_available", "receiving_buff": {"vertical_origin_gain": 0.75, "vertical_travel_gain": 0.4, "vertical_gravity": -0.08, "aura_size_gain": 0.36, "leaf_size_gain": 0.65, "radial_extent_gain": 0.62, "radial_travel_gain": 0.35, "held_alpha_gain": 0.65}}, "rotation_degrees": [0, 0, 0], "id": "effect"}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": []}
+options = {}
+provenance = "Pinned native selection; recipes/spells/regenerate.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "review/regenerate/back/lifecycle"
+label = "Lifecycle"
+phase = "lifecycle"
+variant = "back"
+source_recipe = "recipes/spells/regenerate.json"
+bindings = [{"component": "assembly", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 7.0
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"qualification": "Native-context visual review; not production approval"}

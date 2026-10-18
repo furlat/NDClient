@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/sources/0738ff2d24aa41b1b963/native_review_composition.gd"
+input = {"components": [{"script": "res://assets/vfx/sources/02e8eda447821da38634/necrotic.gd", "input": {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"kind": "kill", "cell": 384, "ortho": 4.242640687119285, "targetY": 0.8, "frames": 44, "fps": 32, "neutralPalette": ["17232c", "344955", "607784", "8c9ba1", "b4beb8", "e3d9bf", "fff2d2"], "redPalette": ["58232a", "943e3c", "c94b46", "e97561", "ffb79c"], "palette": ["17232c", "344955", "607784", "8c9ba1", "b4beb8", "e3d9bf", "fff2d2", "58232a", "943e3c", "c94b46", "e97561", "ffb79c"], "captureZoom": 1.0, "worldCell": 1, "worldYCorrection": 0.816496580927726, "revision": "native-family-v2", "animation": ""}, "side": "full", "seed": 61702, "simulation_hz": 144, "clip_normal": [0.70710678, 0, 0.70710678], "layer_shader": "res://assets/vfx/sources/3db189876b6b4d1a3f85/necrotic_recipient_layer_v2.gdshader", "support_opacity": false}, "rotation_degrees": [0, 0, 0], "id": "effect"}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": []}
+options = {}
+provenance = "Pinned native selection; recipes/spells/power_word_kill.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "review/power_word_kill/back/impact"
+label = "Impact"
+phase = "impact"
+variant = "back"
+source_recipe = "recipes/spells/power_word_kill.json"
+bindings = [{"component": "assembly", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 1.375
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"qualification": "Native-context visual review; not production approval"}

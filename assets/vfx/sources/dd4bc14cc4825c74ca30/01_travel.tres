@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/843204815cdceaac8544/clocked_source.gd"
+input = {"scene": "res://assets/vfx/sources/12f331175a4512b11664/IceLance.tscn", "settings": {"animation": "flight"}, "side": "full", "simulation_hz": 144, "seed": 47291}
+options = {}
+provenance = "Pinned native selection; recipes/spells/ice_knife.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "spells/ice_knife/travel/travel"
+label = "Travel"
+phase = "travel"
+variant = "travel"
+source_recipe = "recipes/spells/ice_knife.json"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 2.0
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"bounded_formation": false, "qualification": "native_family_port_candidate; selected production phase equivalence pending", "stage": "travel", "registration_note": "Original uniformly scaled IceLance geometry, snow texture, HDR gradient and width curve. Only released flight records ribbon history, with its UV clock independent of the retimed FlightLight. Selected native length_seconds is 0.12 (9 slots at 75 Hz): the donor 0.56-second history spanned 4.48 cells at the sandbox default 8 cells/s, tethering the 0.59-cell knife to the hand; the selected history spans 0.96 cell at that speed. This is explicit sandbox trail-duration authoring, not a source alpha repair.", "motion_trails": ["effect/Donor/GPUTrail3D"], "property_overrides": [{"node": "effect/Donor/GPUTrail3D", "property": "length_seconds", "value": 0.12}]}

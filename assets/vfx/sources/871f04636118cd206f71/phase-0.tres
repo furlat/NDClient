@@ -1,0 +1,25 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "area"
+constructor_script = "res://assets/vfx/sources/45cdddda74ba66163cb1/faerie_seeds.gd"
+input = {"wind_mask": "res://assets/vfx/sources/8b50d862e875547c4693/texture.res", "flow_mask": "res://assets/vfx/sources/bbbefac0deb7154eff4b/texture.res", "colours": ["19364f", "497eae", "8fb4d1"], "cells": [[-4, 0], [-3, -2], [-3, -1], [-3, 0], [-3, 1], [-3, 2], [-2, -3], [-2, -2], [-2, -1], [-2, 0], [-2, 1], [-2, 2], [-2, 3], [-1, -3], [-1, -2], [-1, -1], [-1, 0], [-1, 1], [-1, 2], [-1, 3], [0, -4], [0, -3], [0, -2], [0, -1], [0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [1, -3], [1, -2], [1, -1], [1, 0], [1, 1], [1, 2], [1, 3], [2, -3], [2, -2], [2, -1], [2, 0], [2, 1], [2, 2], [2, 3], [3, -2], [3, -1], [3, 0], [3, 1], [3, 2], [4, 0]]}
+options = {}
+provenance = "Pinned native selection; catalog/bg3-36-spell-contracts-20261015.json#spell.faerie_fire"
+
+[resource]
+script = ExtResource("script")
+clip_id = "bg3-36/faerie-fire/moving/initial-area"
+label = "Finite initial reveal area"
+phase = "application"
+source_recipe = "catalog/bg3-36-spell-contracts-20261015.json#spell.faerie_fire"
+bindings = [{"component": "area", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 1.0
+simulation_hz = 60
+components = Array[Resource]([SubResource("part_0")])
+options = {"source_revision": "gpu-finite-v376-20261018"}

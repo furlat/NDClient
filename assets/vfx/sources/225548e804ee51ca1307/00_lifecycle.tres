@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/1e83a91767b68e67396e/healing.gd"
+input = {"scene": "res://assets/vfx/sources/54a07c1667da0df53a44/vfx_status_divine.tscn", "settings": {"pack": "binbun-statusfxfull", "name": "vfx_status_divine", "animation": "open", "scale": 0.72, "height": 0.9, "hue": 0.49, "frames": 864, "close": 720, "palette": ["293f59", "3b788c", "50aabb", "73d1d8", "aaeae8", "d0f5ed"], "mode": "buff", "level": 2, "title": "Aid", "note": "Three selected recipients; fortifying application, quiet flowing sustain, clear.", "cell": 512, "alphaGain": 0.7, "anchor": "target_ground", "id": "aid", "preserve_native_noise_density": true}, "side": "full", "seed": 47291, "simulation_hz": 144, "material_family": "healing", "clip_normal": [0.70710678, 0, 0.70710678], "animation_missing_policy": "first_available", "native_palette": ["293f59", "3b788c", "50aabb", "73d1d8", "aaeae8", "d0f5ed"]}
+options = {"rotation_degrees": [0, 0, 0]}
+provenance = "Pinned native selection; recipes/spells/aid.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "spells/aid/back/lifecycle"
+label = "Lifecycle"
+phase = "lifecycle"
+variant = "back"
+source_recipe = "recipes/spells/aid.json"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 7.1
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"bounded_formation": false, "qualification": "native_family_port_candidate; selected production phase equivalence pending", "stage": "attached", "optional": false, "placement": {"role": "attached", "attachment": "recipient_ground", "source_rate": 1.0, "source_end": 7.1, "scale": 0.6, "orientation": "world", "opacity_keys": [[0.0, 1.0], [1.1, 1.0], [1.8, 0.2], [7.1, 0.2]], "opacity_uniform": "support_envelope"}, "property_overrides": [{"node": "effect/Donor/Mesh", "property": "position:y", "value": 0.45}]}

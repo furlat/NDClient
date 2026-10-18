@@ -1,0 +1,24 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="art"]
+script = ExtResource("component")
+component_id = "divine_art"
+constructor_script = "res://assets/vfx/sources/9741d79e4578df647fec/intervention.gd"
+input = {"geometry_actor": "target", "endpoint_bindings": [{"actor": "caster", "socket": "cast_hand"}, {"actor": "caster", "socket": "face"}, {"actor": "target", "socket": "body_center"}], "piece_capacity": 8, "source_entity_uuid": "66fbaf89-f570-5462-a3af-5a637b768ca2", "recipient_entity_uuid": "3a8a7bde-9aaf-5bce-9824-67e72fa25fa6", "owner_uuid": "ae2dc6c4-d163-5218-8379-ae65f76936ff", "condition_id": "", "event_uuid": "346070fd-231b-500c-a74d-d64a228386cb", "study_contract": "study.divine.holy_nimbus", "part": "nimbus_contact", "mode": "instant", "outcome_kind": "damage", "seconds": 0.65, "apply_seconds": 0.12, "retire_seconds": 0.25, "width_cells": 0.018, "vertex_colour": "ffffff", "vertex_alpha": 0.82, "material": {"texture": "res://assets/vfx/sources/d9693b7f9e0749d03a88/texture.res", "colour": "d9bd84", "grain_strength": 0.2, "native_family": "holy_plume", "source_shader": "res://assets/vfx/sources/388327134640b78113bd/7fbb09109872ebd1046994ac5eac8a2775bbeafbabff54c98041d8b9bcbf9ed7.gdshader"}, "lease": {"owner_uuid": "ae2dc6c4-d163-5218-8379-ae65f76936ff", "source_entity_uuid": "66fbaf89-f570-5462-a3af-5a637b768ca2", "target_entity_uuid": "3a8a7bde-9aaf-5bce-9824-67e72fa25fa6", "study_contract": "study.divine.holy_nimbus", "observed": true, "present": true, "contribution_active": true, "suppressed": false}, "event": {"uuid": "346070fd-231b-500c-a74d-d64a228386cb", "source_entity_uuid": "66fbaf89-f570-5462-a3af-5a637b768ca2", "target_entity_uuid": "3a8a7bde-9aaf-5bce-9824-67e72fa25fa6", "canceled": false, "effect_admitted": true, "blocked": false, "actual_healing": 22, "actual_damage": 14, "damage_component_uuid": "94a56a98-6784-5df8-bf10-f25cc5a784a4", "removed_condition_uuids": ["a98da677-774f-552f-9592-8ca766a5ea5b"], "removed_owner_uuid": "ae2dc6c4-d163-5218-8379-ae65f76936ff", "membership_owner_uuid": "ae2dc6c4-d163-5218-8379-ae65f76936ff", "membership_feature": "study.divine.holy_nimbus", "ordinary_item_admitted": true, "item_uuid": "d01e9dfd-f484-5a73-ba6e-87198db46b31", "creation_position_cells": [0.0, 0.0, 0.0], "outcome_source": "explicit_plan_only_fixture", "removal_cause": "supplied_exact_owner_retirement"}, "presentation_radius_cells": 6.0, "source_accent_reach_cells": 0.9, "plan_only": true, "gpu_paths": true}
+provenance = "Plan-only native study; no verified new backend behavior identity."
+
+[resource]
+script = ExtResource("phase")
+clip_id = "divine-class-study/divine_holy_nimbus_study/1-nimbus_contact"
+label = "holy_nimbus / nimbus_contact / main"
+phase = "instant"
+variant = "main"
+source_recipe = "res://assets/vfx/sources/6f469c05c8b9c1fbc8e1/feature-matrix.json"
+seconds = 0.65
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("art")])
+bindings = [{"component":"divine_art","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+options = {"opacity_uniform": "support_visibility", "source_revision": "gpu-divine-v386-20261018"}

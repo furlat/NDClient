@@ -1,0 +1,189 @@
+{
+  "status": "initial complete matrix;plan-only except explicitly live reaction",
+  "backend_audit": "New cold class definitions/chassis/prepared grants present;no cleric.py/divine.py;paladin.py implements DivineSmite only. Cold feature labels are exact metadata, not native action/condition IDs.",
+  "rules_evaluated_by_renderer": false,
+  "rows": [
+    {
+      "study_key": "cleric.turn_undead",
+      "category": "new cast + true shared Turned",
+      "contract": "30ft actual eligible undead including friendly;WIS save supplied",
+      "art": "Holy cast; distinct steady overhead Turned marker;3recipient turns;actual damage break;expiry/removal/suppression/overlap;no Frightened reuse",
+      "identity_status": "planned_contract_cold_label_where_present"
+    },
+    {
+      "study_key": "cleric.destroy_undead",
+      "category": "rider contact",
+      "contract": "Only successfully turned targets atCleric5; supplied4d6radiant",
+      "art": "Separate radiant contact before arming new Turned break; saved/immune get no contact; actual death supplied",
+      "identity_status": "planned_contract_cold_label_where_present"
+    },
+    {
+      "study_key": "cleric.preserve_life",
+      "category": "new ally-heal action",
+      "contract": "30ft eligible allies;3\u00d7totalLevel actualheal",
+      "art": "Source branching living-leaf fan; per-recipient low open seam; blocked/zeroheal no success; no full spell copied",
+      "identity_status": "planned_contract_cold_label_where_present"
+    },
+    {
+      "study_key": "cleric.blessed_healer",
+      "category": "true committed self-heal event",
+      "contract": "2+spellRank per other actuallyhealed recipient",
+      "art": "Small source-heart return for actual committed nonspell selfheal only; no invented recursive target links",
+      "identity_status": "planned_contract_cold_label_where_present"
+    },
+    {
+      "study_key": "cleric.divine_strike",
+      "category": "weapon event",
+      "contract": "1d8\u21922d8 once onownturn;exactweapon/contact/rider supplied",
+      "art": "Split lozenge accent; no whole Smite graphic copied;crit/ranged/miss independent supplied",
+      "identity_status": "planned_contract_cold_label_where_present"
+    },
+    {
+      "study_key": "cleric.divine_intervention.sunder",
+      "category": "DI branch",
+      "contract": "50ft enemy8d10WisHalf supplied",
+      "art": "Broken solar clefts rise at actual admitted recipients; distinct source invocation; saved/immune/death separate",
+      "identity_status": "planned_contract_cold_label_where_present"
+    },
+    {
+      "study_key": "cleric.divine_intervention.revival.living",
+      "category": "DI branch recipient path",
+      "contract": "60ftlivingfullHP/slots/restresources supplied",
+      "art": "Flowing full recovery fan; no fake longrest/action/time reset",
+      "identity_status": "planned_contract_cold_label_where_present"
+    },
+    {
+      "study_key": "cleric.divine_intervention.revival.dead",
+      "category": "DI branch recipient path",
+      "contract": "IntactdeadhalfownmaxHP/legalplacement supplied",
+      "art": "Unsealing at currentdownedbody; staysdown without genuinegetupevent; blocked/disintegrated no success",
+      "identity_status": "planned_contract_cold_label_where_present"
+    },
+    {
+      "study_key": "cleric.divine_intervention.arm",
+      "category": "permanent ordinary item creation",
+      "contract": "ActualDevoteeMaceUUID/create/equip result supplied",
+      "art": "Finite item admission accent; EXACT REAL MACE MODEL/EQUIPMENT BINDING GAP; no substitute sword/mace model",
+      "identity_status": "planned_contract_cold_label_where_present"
+    },
+    {
+      "study_key": "item.devotee_mace.healing_aura",
+      "category": "permanent item-owned action",
+      "contract": "Currentwielder;10turn1d4healingaura BA/LR;radius supplied",
+      "art": "Quiet item-owned heal leaf;transfer/expiry/suppression exact;real mace renderer GAP",
+      "identity_status": "planned_contract_cold_label_where_present"
+    },
+    {
+      "study_key": "cleric.divine_intervention.generosity",
+      "category": "permanent ordinary container creation",
+      "contract": "Legalnearbytile;4greaterheal+Haste+GreaterInvisibility+TrueSeeing",
+      "art": "Finite tile admission accent;REAL CONTAINER/7POTION PRESENTATION GAP;no food/gold/randomloot/temporaryprop",
+      "identity_status": "planned_contract_cold_label_where_present"
+    },
+    {
+      "study_key": "paladin.divine_sense",
+      "category": "self action/condition",
+      "contract": "BA;2turnadvantage vsCelestial/Fiend/Undead supplied",
+      "art": "Brow compass/split eye;selfowner;no terrain reveal or eligibility solver",
+      "identity_status": "planned_contract_cold_label_where_present"
+    },
+    {
+      "study_key": "paladin.lay_on_hands.lesser",
+      "category": "touch action",
+      "contract": "2\u00d7Paladinlevel;1charge;exacthand/body sockets supplied",
+      "art": "Open cupped leaf seam;no damage/no full healspell copied",
+      "identity_status": "planned_contract_cold_label_where_present"
+    },
+    {
+      "study_key": "paladin.lay_on_hands.greater",
+      "category": "same true touch family",
+      "contract": "4\u00d7Paladinlevel;2charges",
+      "art": "Two-stage cupped seam;bounded size;actual healed/blocked supplied",
+      "identity_status": "planned_contract_cold_label_where_present"
+    },
+    {
+      "study_key": "paladin.lay_on_hands.cure",
+      "category": "same true touch family",
+      "contract": "2charges;eligible disease/poison removedUUID supplied",
+      "art": "Hand shear;retire exact condition only;true Poisoned shared retirement ifpresent",
+      "identity_status": "planned_contract_cold_label_where_present"
+    },
+    {
+      "study_key": "paladin.divine_smite",
+      "category": "EXISTING runtime reaction",
+      "contract": "reaction.class_feature.paladin.divine_smite exact native ID",
+      "art": "Reuse existing DivineSmite weapon/contact component;5ranks data;no five graphic copies",
+      "identity_status": "verified_runtime_reaction"
+    },
+    {
+      "study_key": "paladin.improved_divine_smite",
+      "category": "distinct actual hit-rider event",
+      "contract": "Eligible melee hit1d8;separatepacket supplied",
+      "art": "Quiet contact furrow;no continuous buff/no duplicated slotSmite",
+      "identity_status": "planned_contract_cold_label_where_present"
+    },
+    {
+      "study_key": "paladin.sacred_weapon",
+      "category": "exact item10turn condition",
+      "contract": "ItemUUID/holder/slot/currentblade/nativeLight grant supplied",
+      "art": "Narrow sunetch on actual equippeditem;application/sustain/swap/handoff/overlap/suppression/resume/removal;native light only actualmechanicalradius",
+      "identity_status": "planned_contract_cold_label_where_present"
+    },
+    {
+      "study_key": "paladin.turn_unholy",
+      "category": "new oath cast + true shared Turned",
+      "contract": "30ftFiend/Undead;PaladinCHA saveSource supplied",
+      "art": "Distinct oath cast;true same Turned marker;no DestroyUndead damage inherited",
+      "identity_status": "planned_contract_cold_label_where_present"
+    },
+    {
+      "study_key": "paladin.aura_of_protection",
+      "category": "quiet actual membership event",
+      "contract": "10ft\u219230ft at18;conscious;winner supplied",
+      "art": "Recipient heel double-notch on actual membership change;overlap/winnerfallback/sourceleave exact;no area cage",
+      "identity_status": "planned_contract_cold_label_where_present"
+    },
+    {
+      "study_key": "paladin.aura_of_devotion",
+      "category": "quiet actual membership event",
+      "contract": "10ft\u219230ft;charmimmunity;clear-onentry supplied",
+      "art": "Small shoulder palm;exact shared charm retirement only suppliedremovedUUID;no stacked cage",
+      "identity_status": "planned_contract_cold_label_where_present"
+    },
+    {
+      "study_key": "paladin.aura_of_courage",
+      "category": "quiet actual membership event",
+      "contract": "10ft\u219230ft;fearimmunity;Turned unaffected",
+      "art": "Open forward chevron;actual Frightened removal only;never Turned removal",
+      "identity_status": "planned_contract_cold_label_where_present"
+    },
+    {
+      "study_key": "paladin.cleansing_touch",
+      "category": "exact recipient-local spellgraph action",
+      "contract": "Touch;chosenlocalrootUUID;admitted removal supplied",
+      "art": "Fingertip fork;stale/veto no success;otherrecipient branches kept;area-onlyunsupported explicit",
+      "identity_status": "planned_contract_cold_label_where_present"
+    },
+    {
+      "study_key": "paladin.purity_of_spirit",
+      "category": "passive defense",
+      "contract": "Protectionequivalent defenses;magicalsuppression supplied",
+      "art": "No new continuous effect;optional actual defense response only if public event supplied",
+      "identity_status": "planned_contract_cold_label_where_present"
+    },
+    {
+      "study_key": "paladin.holy_nimbus",
+      "category": "true light + supplied contact",
+      "contract": "10turn;30bright/60dim;enemystart10radiant supplied",
+      "art": "Open solar rays;moving nativeoptical light;enemycontactonlyactualdamage;noentrytickinvented",
+      "identity_status": "planned_contract_cold_label_where_present"
+    },
+    {
+      "study_key": "cleric_and_paladin.passive_math",
+      "category": "NO EXTRA VFX",
+      "contract": "Spellcasting/preparation/domain/oath/resources/heavyarmor/ASI/styles/ExtraAttack/DivineHealth/Disciple/Supreme",
+      "art": "Existing actual spells retain own art;no bonus labels become new conditions;Protectionstyle reuse actualexistingreaction only",
+      "identity_status": "planned_contract_cold_label_where_present"
+    }
+  ]
+}

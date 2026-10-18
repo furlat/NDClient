@@ -1,0 +1,159 @@
+[gd_scene load_steps=25 format=3 ]
+
+[ext_resource type="Shader"  path="res://assets/vfx/sources/a2519112aef88cc35f2f/T_port1_shader.tres" id="1_m5a8e"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/8bc8bf311494b7cec395/texture.res" id="2_xl1qp"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/d5d50bba1ba09536b64f/texture.res" id="3_6lxqq"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/93f59b9661abf1c98e3f/texture.res" id="4_rge5v"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/92061995bd10015484d4/texture.res" id="5_03lvu"]
+[ext_resource type="Shader"  path="res://assets/vfx/sources/6c93a2a12adaba734684/T_port1_shader_additive.tres" id="6_p0oma"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/d6f87ce1418aa9329d23/texture.res" id="7_tdd8s"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/d462d60675e0f16c8b11/texture.res" id="8_nnwp8"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/dec4af4c09b69f38a775/texture.res" id="9_wdfe0"]
+[ext_resource type="Shader"  path="res://assets/vfx/sources/e87976c6b7b01f7517f9/s_simple_shader_K0.tres" id="10_yr0wf"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/ed5c16ee4c8ffccad493/texture.res" id="11_dvcrn"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_f2hib"]
+render_priority = 0
+shader = ExtResource("1_m5a8e")
+shader_parameter/Color_Intensity = 15.0
+shader_parameter/Speed_X_Y = Vector2(-0.5, 0.3)
+shader_parameter/Enable_Solid_Texture = false
+shader_parameter/Enable_Distortion = true
+shader_parameter/Distortion_Speed_Mask2 = Vector2(0.1, 1)
+shader_parameter/Distortion_Divide_ = 5.0
+shader_parameter/Proximity_Fade = 0.5
+shader_parameter/Main_Texture = ExtResource("3_6lxqq")
+shader_parameter/Mask_Texture = ExtResource("5_03lvu")
+shader_parameter/Distortion_Texture = ExtResource("2_xl1qp")
+shader_parameter/Mask2_Texture = ExtResource("4_rge5v")
+
+[sub_resource type="QuadMesh" id="QuadMesh_40jf8"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_njctk"]
+render_priority = 0
+shader = ExtResource("6_p0oma")
+shader_parameter/Color_Intensity = 5.0
+shader_parameter/Speed_X_Y = Vector2(0.3, 0)
+shader_parameter/Main_Texture = ExtResource("7_tdd8s")
+shader_parameter/Mask_Texture = ExtResource("5_03lvu")
+shader_parameter/Mask2_Texture = ExtResource("8_nnwp8")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tq2li"]
+render_priority = 0
+shader = ExtResource("1_m5a8e")
+shader_parameter/Color_Intensity = 0.0
+shader_parameter/Speed_X_Y = Vector2(-0.5, 0.3)
+shader_parameter/Enable_Solid_Texture = true
+shader_parameter/Enable_Distortion = false
+shader_parameter/Distortion_Speed_Mask2 = null
+shader_parameter/Distortion_Divide_ = 50.0
+shader_parameter/Proximity_Fade = 0.5
+shader_parameter/Main_Texture = ExtResource("9_wdfe0")
+shader_parameter/Mask_Texture = ExtResource("5_03lvu")
+shader_parameter/Mask2_Texture = ExtResource("4_rge5v")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ena4u"]
+render_priority = 0
+shader = ExtResource("10_yr0wf")
+shader_parameter/Texture = ExtResource("11_dvcrn")
+
+[sub_resource type="Curve" id="Curve_tf67b"]
+max_value = 2.0
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_1dcgf"]
+max_value = 2.0
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_686n5"]
+min_value = -2.0
+max_value = 2.0
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_gr1q0"]
+curve_x = SubResource("Curve_tf67b")
+curve_y = SubResource("Curve_1dcgf")
+curve_z = SubResource("Curve_686n5")
+
+[sub_resource type="Curve" id="Curve_mkoah"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_sune0"]
+curve = SubResource("Curve_mkoah")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_nd4oc"]
+emission_shape = 6
+emission_ring_axis = Vector3(0, 0, 1)
+emission_ring_height = 0.0
+emission_ring_radius = 1.0
+emission_ring_inner_radius = 0.0
+direction = Vector3(0, 0, 1)
+spread = 0.0
+initial_velocity_min = 0.5
+initial_velocity_max = 1.5
+orbit_velocity_min = 0.1
+orbit_velocity_max = 0.2
+orbit_velocity_curve = SubResource("CurveXYZTexture_gr1q0")
+gravity = Vector3(0, 0, 0)
+scale_min = 0.1
+scale_max = 0.3
+scale_curve = SubResource("CurveTexture_sune0")
+color = Color(1.2, 0.1, 2, 1)
+turbulence_noise_strength = 0.2
+turbulence_noise_scale = 12.0
+turbulence_noise_speed_random = 0.1
+
+[sub_resource type="QuadMesh" id="QuadMesh_wm3ib"]
+
+[node name="Portal_VFX2" type="Node3D"]
+
+[node name="Big Ring" type="CPUParticles3D" parent="."]
+material_override = SubResource("ShaderMaterial_f2hib")
+amount = 1
+lifetime = 5.0
+local_coords = true
+mesh = SubResource("QuadMesh_40jf8")
+gravity = Vector3(0, 0, 0)
+scale_amount_min = 3.0
+scale_amount_max = 3.0
+color = Color(0.392157, 0, 0.952941, 1)
+
+[node name="InnerRing" type="CPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.01849)
+material_override = SubResource("ShaderMaterial_njctk")
+amount = 1
+lifetime = 5.0
+local_coords = true
+mesh = SubResource("QuadMesh_40jf8")
+gravity = Vector3(0, 0, 0)
+scale_amount_min = 3.0
+scale_amount_max = 3.0
+color = Color(0.392157, 0, 0.952941, 1)
+
+[node name="External Border" type="CPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.105791)
+material_override = SubResource("ShaderMaterial_tq2li")
+amount = 1
+lifetime = 5.0
+local_coords = true
+mesh = SubResource("QuadMesh_40jf8")
+gravity = Vector3(0, 0, 0)
+scale_amount_min = 5.0
+scale_amount_max = 5.0
+color = Color(0.364706, 0, 0.584314, 1)
+
+[node name="Mini particles floating" type="GPUParticles3D" parent="."]
+sorting_offset = 1.0
+material_override = SubResource("ShaderMaterial_ena4u")
+amount = 30
+lifetime = 2.0
+process_material = SubResource("ParticleProcessMaterial_nd4oc")
+draw_pass_1 = SubResource("QuadMesh_wm3ib")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+light_color = Color(0.698039, 0.168627, 1, 1)
+light_energy = 8.0

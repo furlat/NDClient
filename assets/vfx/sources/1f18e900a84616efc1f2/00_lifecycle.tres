@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/0fc7cbcefec25cc2d3d2/thundercrest_translucent.gd"
+input = {"scene": "res://assets/vfx/sources/2641de8bf655092d0a25/VFX_WindBlow_2.tscn", "settings": {"animation": "", "spell": "thunderwave", "direction": [1, 0], "cells": [[0, -1], [0, 0], [0, 1], [1, -1], [1, 0], [1, 1], [2, -1], [2, 0], [2, 1]], "frames": 144, "scale": [1, 1, 1], "emitter": [0, 0, 0], "cell": [0, 0]}, "side": "full", "simulation_hz": 144, "seed": 47291, "pressure_finish": {"crest_gain": 0.52, "echo_gain": 0.12, "mask_floor": 0.04, "mask_full": 0.28}}
+options = {}
+provenance = "Pinned native selection; recipes/spells/thunderwave_production_xyz.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "spells/thunderwave_production_xyz/whole/lifecycle"
+label = "Native lifecycle"
+phase = "lifecycle"
+variant = "whole"
+source_recipe = "recipes/spells/thunderwave_production_xyz.json"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 1
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"bounded_formation": false, "qualification": "native_family_port_candidate; selected production phase equivalence pending", "stage": "attached", "placement": {"role": "attached", "attachment": "caster_ground", "delay_seconds": 0.0, "source_rate": 1.0, "source_end": 1, "scale": 0.5, "orientation": "facing", "rotation_degrees": [0, 90, 0]}}

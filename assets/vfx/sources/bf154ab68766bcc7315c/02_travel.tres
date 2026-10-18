@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "travel"
+constructor_script = "res://assets/vfx/sources/843204815cdceaac8544/clocked_source.gd"
+input = {"scene": "res://assets/vfx/sources/437e012ae1ad6fe13ea7/VFX_Fire_strike.tscn", "settings": {"animation": ""}, "side": "full", "simulation_hz": 144, "seed": 47291, "material_rules": [{"match": {"blend_mode": 1, "requires_texture": true}, "shader_source": "res://assets/vfx/sources/27a10518b6d22bae56de/source_additive_cards.gdshader", "source_parameters": {"Texture": "albedo_texture"}, "parameters": {"Black_Threshold": 0.08, "Softness": 0.12, "Alpha_Multiplier": 1.0}}]}
+options = {}
+provenance = "Pinned native selection; recipes/spells/fire_bolt.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "spells/fire_bolt/default/travel"
+label = "Incoming native test bolt"
+phase = "travel"
+variant = "default"
+source_recipe = "recipes/spells/fire_bolt.json"
+bindings = [{"component": "travel", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 0.7708333333333334
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"bounded_formation": false, "qualification": "native_family_port_candidate; selected production phase equivalence pending", "stage": "flight", "optional": true, "placement": {"role": "flight", "scale": 0.12, "charge_seconds": 0.0, "source_launch": 0.2, "source_contact": 0.65, "source_end": 0.9, "contact_hide": ["travel/Donor/TBHead", "travel/Donor/TBHead_inner", "travel/Donor/Trail1_static", "travel/Donor/Trail1_static2"], "stop_emission_at_contact": true, "from_actor": "target", "to_actor": "caster", "launch_delay_seconds": 1.2, "travel_to_target": true}}

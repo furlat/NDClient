@@ -1,0 +1,24 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="art"]
+script = ExtResource("component")
+component_id = "divine_art"
+constructor_script = "res://assets/vfx/sources/9dfd22b4225ff2693c55/touch.gd"
+input = {"geometry_actor": "caster", "endpoint_bindings": [{"actor": "caster", "socket": "cast_hand"}, {"actor": "caster", "socket": "face"}, {"actor": "target", "socket": "body_center"}], "piece_capacity": 8, "source_entity_uuid": "66fbaf89-f570-5462-a3af-5a637b768ca2", "recipient_entity_uuid": "66fbaf89-f570-5462-a3af-5a637b768ca2", "owner_uuid": "4a98b2d4-a2aa-53e9-a59c-8f03532e732e", "condition_id": "", "event_uuid": "53ac62d7-42cb-58a2-ac5d-6e0cf99c4274", "study_contract": "study.divine.cleansing_touch", "part": "windup", "mode": "instant", "outcome_kind": "cast", "seconds": 0.45, "apply_seconds": 0.12, "retire_seconds": 0.25, "width_cells": 0.018, "vertex_colour": "ffffff", "vertex_alpha": 0.82, "material": {"texture": "res://assets/vfx/sources/d9693b7f9e0749d03a88/texture.res", "colour": "bec7dd", "grain_strength": 0.2, "native_family": "heal", "native_material": {"scene": "res://assets/vfx/sources/b148780f9293f5eb3c26/vfx_status_heal.tscn", "node": "Aura", "alpha": 0.88, "alpha_floor": 0.12, "emission_gain": 0.0, "uniforms": {"primary_color": {"type": "Color", "value": "bec7dd"}, "secondary_color": {"type": "Color", "value": "5c9d88"}, "tertiary_color": {"type": "Color", "value": "31595c"}, "emission": 0.8, "hue_variation": 0.0, "proximity_fade": false, "edge_hardness": 0.0, "edge_position": 0.0, "shape_curve": 0.8, "use_secondary": false, "noise_scale": {"type": "Vector2", "value": [0.8, 0.65]}}, "fragment_uv_scale": [0.22, 0.45]}}, "lease": {"owner_uuid": "4a98b2d4-a2aa-53e9-a59c-8f03532e732e", "source_entity_uuid": "66fbaf89-f570-5462-a3af-5a637b768ca2", "target_entity_uuid": "66fbaf89-f570-5462-a3af-5a637b768ca2", "study_contract": "study.divine.cleansing_touch", "observed": true, "present": true, "contribution_active": true, "suppressed": false}, "event": {"uuid": "53ac62d7-42cb-58a2-ac5d-6e0cf99c4274", "source_entity_uuid": "66fbaf89-f570-5462-a3af-5a637b768ca2", "target_entity_uuid": "66fbaf89-f570-5462-a3af-5a637b768ca2", "canceled": false, "effect_admitted": true, "blocked": false, "actual_healing": 22, "actual_damage": 14, "damage_component_uuid": "980ad98a-9738-55ec-8d80-806eaea85711", "removed_condition_uuids": ["a98da677-774f-552f-9592-8ca766a5ea5b"], "removed_owner_uuid": "4a98b2d4-a2aa-53e9-a59c-8f03532e732e", "membership_owner_uuid": "4a98b2d4-a2aa-53e9-a59c-8f03532e732e", "membership_feature": "study.divine.cleansing_touch", "ordinary_item_admitted": true, "item_uuid": "c838f4bb-d173-59a0-9667-1d7501f9d518", "creation_position_cells": [0.0, 0.0, 0.0], "outcome_source": "explicit_plan_only_fixture", "removal_cause": "supplied_exact_owner_retirement"}, "presentation_radius_cells": 6.0, "source_accent_reach_cells": 0.9, "plan_only": true, "gpu_paths": true}
+provenance = "Plan-only native study; no verified new backend behavior identity."
+
+[resource]
+script = ExtResource("phase")
+clip_id = "divine-class-study/divine_cleansing_touch_study/0-windup"
+label = "cleansing_touch / windup / main"
+phase = "instant"
+variant = "main"
+source_recipe = "res://assets/vfx/sources/6f469c05c8b9c1fbc8e1/feature-matrix.json"
+seconds = 0.45
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("art")])
+bindings = [{"component":"divine_art","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+options = {"opacity_uniform": "support_visibility", "source_revision": "gpu-divine-v386-20261018"}

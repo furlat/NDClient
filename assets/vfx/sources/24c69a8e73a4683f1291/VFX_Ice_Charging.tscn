@@ -1,0 +1,576 @@
+[gd_scene load_steps=53 format=4 ]
+
+[ext_resource type="Material"  path="res://assets/vfx/sources/54c104e88be801981d16/m_ice_spikes_I1.tres" id="1_1q42d"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/d6dd91183cefc1861df5/texture.res" id="2_fvoh0"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/e7e6bb561771ee7aafda/texture.res" id="3_lktls"]
+
+[sub_resource type="Gradient" id="Gradient_nu262"]
+offsets = PackedFloat32Array(0.405405, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_lmrr3"]
+gradient = SubResource("Gradient_nu262")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.512821)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2t62t"]
+transparency = 2
+alpha_scissor_threshold = 0.42
+alpha_antialiasing_mode = 0
+cull_mode = 2
+shading_mode = 0
+vertex_color_use_as_albedo = true
+vertex_color_is_srgb = true
+albedo_color = Color(2.3, 2.3, 2.3, 1)
+albedo_texture = SubResource("GradientTexture2D_lmrr3")
+use_particle_trails = true
+
+[sub_resource type="Curve" id="Curve_pt34i"]
+_data = [Vector2(0, 0.368286), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_5ayf5"]
+_data = [Vector2(0, 1), 0.0, -0.0785866, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_6ytsb"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0]
+point_count = 1
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_b3kqy"]
+curve_x = SubResource("Curve_pt34i")
+curve_y = SubResource("Curve_5ayf5")
+curve_z = SubResource("Curve_6ytsb")
+
+[sub_resource type="Curve" id="Curve_oc47s"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -1.88686, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_v0iwd"]
+curve = SubResource("Curve_oc47s")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_utcri"]
+lifetime_randomness = 0.1
+particle_flag_align_y = true
+emission_shape = 2
+emission_sphere_radius = 5.0
+orbit_velocity_min = -0.5
+orbit_velocity_max = 0.5
+orbit_velocity_curve = SubResource("CurveXYZTexture_b3kqy")
+radial_velocity_min = -20.0
+radial_velocity_max = -9.00002
+radial_velocity_curve = SubResource("CurveTexture_v0iwd")
+gravity = Vector3(0, 0, 0)
+color = Color(0.61, 0.7, 1, 1)
+
+[sub_resource type="RibbonTrailMesh" id="RibbonTrailMesh_uy6as"]
+size = 0.1
+section_length = 0.3
+section_segments = 4
+
+[sub_resource type="Curve" id="Curve_tsbrn"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.409722, 1), 0.0, 0.0, 0, 0, Vector2(0.684028, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_s0dfx"]
+texture_mode = 1
+curve = SubResource("Curve_tsbrn")
+
+[sub_resource type="Curve" id="Curve_7f1ns"]
+min_value = -2.0
+max_value = 2.0
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_yrs0u"]
+curve = SubResource("Curve_7f1ns")
+
+[sub_resource type="Curve" id="Curve_v1x5p"]
+_data = [Vector2(0, 0), 0.0, 0.912401, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_kjraf"]
+curve = SubResource("Curve_v1x5p")
+
+[sub_resource type="Curve" id="Curve_v8wlu"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.398305), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_0wrka"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_c3w8w"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.423729), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_algdm"]
+curve_x = SubResource("Curve_v8wlu")
+curve_y = SubResource("Curve_0wrka")
+curve_z = SubResource("Curve_c3w8w")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_1oe3g"]
+lifetime_randomness = 0.34
+particle_flag_align_y = true
+emission_shape_offset = Vector3(0, 1.5, 0)
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 1)
+emission_ring_height = 4.0
+emission_ring_radius = 10.0
+emission_ring_inner_radius = 10.0
+direction = Vector3(0, 1, 0)
+spread = 0.0
+orbit_velocity_min = -0.0499999
+orbit_velocity_max = 0.0500001
+orbit_velocity_curve = SubResource("CurveTexture_yrs0u")
+radial_velocity_min = -15.0
+radial_velocity_max = -8.00002
+radial_velocity_curve = SubResource("CurveTexture_kjraf")
+gravity = Vector3(0, 0, 0)
+scale_min = 0.3
+scale_max = 0.9
+scale_curve = SubResource("CurveXYZTexture_algdm")
+alpha_curve = SubResource("CurveTexture_s0dfx")
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_cw1m1"]
+_surfaces = [{
+"aabb": AABB(-0.35904, -0.211502, -0.387639, 0.60855, 0.481684, 0.729266),
+"attribute_data": PackedByteArray("cv5RIf//kFc6K///Oiv/////kFcAAP//AAD/////kFf/////Fqn//wAA//9uqJBX//8AAP////86K8TUFin///////8AAP////8AAP////8AAP////8AAP////8AAP////8AAP//FqlE2kj0//8AAAAA///emv//ZJ3//wAA///emiBl//8WKf////+7KP//cd7//wAA//+01Uoq/////0Z+/////0oqr5tEhRqKfc7//wAA/////0Qgut+NIf///////wAA/////wAA//8AAP//ZJ1GfriBQov+qFvx//82hf////9S8P//JJm952utrA9S8NpmJJkUWWXwBGWh4wWBjcV0mopl//82hbAOTvH//1vxs4PMW96MCFxBg0RcAXv8ZA58XnSDlJ51GI97Y0lxzsCVo9qDIm2gxCJtoMSVo9qDw35U8f//TvH//4plEsD/c+a6EHY="),
+"format": 34896613399,
+"index_count": 126,
+"index_data": PackedByteArray("AAABAAIAAwAEAAUABgAHAAgACQAKAAsADAANAA4ADgANAA8AEAARABIAEwAUABUAFgAXABgAGQAaABsAGwAaABwAHAAaAB0AHgAfACAAIQAiACMAJAAlACYAJwAoACkAKQAoACoAKgAoACsALAAtAC4ALgAtAC8AMAAxADIAMwA0ADUANQA0ADYANwA4ADkAOQA4ADoAOgA4ADsAPAA9AD4APgA9AD8APwA9AEAAQQBCAEMAQwBCAEQARQBGAEcARwBGAEgASABGAEkASQBGAEoASgBGAEsATABNAE4ATwBQAFEAUQBQAFIAUgBQAFMAUwBQAFQAVABQAFUA"),
+"name": "Material",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 86,
+"vertex_data": PackedByteArray("//+HCtEShfv/////zgaF++9RQRQxBoX771FBFDEG1gD/////zgbWAIV2wMYAANYAhXbAxgAAVPz/////zgZU/C7XLf8ABFT8//+fyWK1P8su1y3/AAQ/y//////OBj/LhXbAxgAA1eW/UbTRlx7V5e9RQRQxBtXlqks4FCoL1eUu1y3/AATs2L9RtNGXHuzYhXbAxgAA7NhUZ/bsZS5z1r9RtNGXHnPWLtct/wAEc9bPmfO3xN8jylRn9uxlLiPKLtct/wAEI8r//5/JYrXcuf//QrMU/dy5Ltct/wAE3LnPmfO3xN/cuVLk/bFI/dy5JapCr7b9nMXPmfO3xN+cxVLk/bFI/ZzFqks4FCoLZOy/UbTRlx5k7AAAwRPWR2Ts6gl4EetgAfPPmfO3xN8B81wN4xCeZgHzz5nzt8Tf58kohKdSiPjnyVwN4xCeZufJaTiuCVit58mYZTA1Ndofyr9RtNGXHu+0z5nzt8Tf77QAAMET1kfvtOoJeBHrYO+0VGf27GUusuvPmfO3xN+y679RtNGXHrLrz5nzt8Tf2L4lqkKvtv3YviiEp1KI+Ni+v4voWf//2L7//81S0PrhqZhlMDU12uGp//9IV1j/4am/i+hZ///hqSiEp1KI+Oip//9IV1j/EMC/i+hZ//+Sz///QrMU/T/LUuT9sUj9iOElqkKvtv373Gk4rglYrSfJmGUwNTXaJ8n//wAA36Ynyf//zVLQ+ifJ//9IV1j/VNX//0KzFP1U1f//zVLQ+lTV//8AAN+mVNX//4cK0RJU1f/////OBlTV//+fyWK13NOqSzgUKgu9FQAAwRPWR70V71FBFDEGvRXvUUEUMQY5xAAAwRPWR5LK//+HCtESbdH//wAA36ZV0Wk4rglYrWfIXA3jEJ5mocrqCXgR62BHyL04aka9OGpGvThqRtO1ozrTtaM607WjOlkWNWZZFjVmWRY1Zm6sV6ZurFembqxXpgrIMskKyDLJCsgyyQrIMsnq+PWZ6vj1mer49ZltzA6tbcwOrW3MDq2urd6lrq3epa6t3qW61AuVu9QLlbvUC5W71AuVu9QLldazMKPWszCj1rMwo2Xc97tl3Pe7Zdz3uyFdc5khXXOZIV1zmX3sRs597EbOfexGzn3sRs6v7EDOiMTQyojE0MqIxNDKiMTQyuTxpTDk8aUw5PGlMHbhv8924b/PduG/z3bhv88CDqKlAg6ipQIOoqUCDqKlFw7epT791gFf/RoBV/1JAXz9cwB2/ZoArSED360hA9+tIQPfrSED36oqqiqqKqoqqiqqKqoqqiqqKqoqqiqqKnoswil/N6Lrfzei6383ouuKGL+sjSMdw64pkc+dKW7P2SCgvZ0jP8OrIEO9")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kvwyy"]
+render_priority = 2
+blend_mode = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+vertex_color_is_srgb = true
+albedo_texture = ExtResource("2_fvoh0")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="Gradient" id="Gradient_1amqc"]
+offsets = PackedFloat32Array(0, 0.198444, 0.29572, 0.346303, 0.40856, 0.59144, 0.626459, 0.661479, 0.85214, 1)
+colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.180005, 0.180005, 0.180005, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.344076, 0.344076, 0.344076, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_1w4ao"]
+gradient = SubResource("Gradient_1amqc")
+
+[sub_resource type="Curve" id="Curve_qdg8d"]
+
+[sub_resource type="Curve" id="Curve_v7av0"]
+_data = [Vector2(0, 1), 0.0, -5.02512, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_yweoq"]
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_ar4hl"]
+curve_x = SubResource("Curve_qdg8d")
+curve_y = SubResource("Curve_v7av0")
+curve_z = SubResource("Curve_yweoq")
+
+[sub_resource type="Curve" id="Curve_ga8j8"]
+_data = [Vector2(0.0360825, 1), 0.0, -6.5596, 0, 0, Vector2(0.182456, 0.221113), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_hmx6r"]
+curve = SubResource("Curve_ga8j8")
+
+[sub_resource type="Curve" id="Curve_5k6rr"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.149485, 1), 0.0, 0.0, 0, 0, Vector2(0.237113, 0.142857), 0.0, 0.0, 0, 0, Vector2(0.293814, 0.78022), 0.0, 0.0, 0, 0, Vector2(0.386598, 0.340659), 0.0, 0.0, 0, 0, Vector2(0.463917, 0.692308), 0.0, 0.0, 0, 0, Vector2(0.664948, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 8
+
+[sub_resource type="CurveTexture" id="CurveTexture_nfmbs"]
+curve = SubResource("Curve_5k6rr")
+
+[sub_resource type="Curve" id="Curve_pyulj"]
+_data = [Vector2(0, 1), 0.0, -3.05877, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_er1vn"]
+curve = SubResource("Curve_pyulj")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_7f2aq"]
+lifetime_randomness = 0.26
+emission_shape = 1
+emission_sphere_radius = 6.0
+direction = Vector3(0, 1, 0)
+spread = 20.0
+initial_velocity_min = 0.5
+initial_velocity_max = 1.0
+directional_velocity_min = -1.60933e-05
+directional_velocity_max = 0.499984
+directional_velocity_curve = SubResource("CurveXYZTexture_ar4hl")
+radial_velocity_min = -10.0
+radial_velocity_max = -7.00002
+radial_velocity_curve = SubResource("CurveTexture_hmx6r")
+gravity = Vector3(0, -1.5, 0)
+tangential_accel_min = -2.23517e-06
+tangential_accel_max = 5.0
+tangential_accel_curve = SubResource("CurveTexture_er1vn")
+scale_min = 0.1
+scale_max = 0.14
+scale_curve = SubResource("CurveTexture_nfmbs")
+color = Color(1.15, 1.3, 1.6, 1)
+color_ramp = SubResource("GradientTexture1D_1w4ao")
+turbulence_influence_max = 0.5
+turbulence_initial_displacement_min = 1.49012e-06
+turbulence_initial_displacement_max = 0.100001
+
+[sub_resource type="QuadMesh" id="QuadMesh_ww8c3"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dimud"]
+render_priority = 3
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+disable_fog = true
+vertex_color_use_as_albedo = true
+vertex_color_is_srgb = true
+albedo_texture = ExtResource("3_lktls")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+proximity_fade_enabled = true
+proximity_fade_distance = 0.3
+
+[sub_resource type="Curve" id="Curve_ppges"]
+_data = [Vector2(0.301754, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_6ngmt"]
+texture_mode = 1
+curve = SubResource("Curve_ppges")
+
+[sub_resource type="Curve" id="Curve_oop7l"]
+_data = [Vector2(0, 0.944365), 0.0, -2.45389, 0, 0, Vector2(1, 0), -0.191775, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_usg58"]
+curve = SubResource("Curve_oop7l")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_7xqkr"]
+lifetime_randomness = 0.1
+angle_min = -180.0
+angle_max = 180.0
+gravity = Vector3(0, 0, 0)
+scale_min = 5.0
+scale_max = 7.0
+scale_curve = SubResource("CurveTexture_usg58")
+color = Color(0.9, 1.1, 1.3, 1)
+alpha_curve = SubResource("CurveTexture_6ngmt")
+
+[sub_resource type="QuadMesh" id="QuadMesh_kbkry"]
+center_offset = Vector3(0, 0, 0.04)
+
+[sub_resource type="Animation" id="Animation_enfei"]
+resource_name = "End"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("riborns:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.733333),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ice_debris:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.0999999),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("sparkling_details2:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(1.03333),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("filling:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(1.26667),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("OmniLight3D:light_energy")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.866667, 1.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [8.04, 0.0]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("OmniLight3D:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(1.63333),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_qwiil"]
+resource_name = "Init"
+length = 4.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("riborns:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2.76667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ice_debris:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.0666667, 2.13333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("sparkling_details2:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.133333, 3.06667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("filling:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.0666667, 3.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("OmniLight3D:light_energy")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.1, 0.833333, 2.9, 3.53333),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 8.04, 8.04, 0.0]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("OmniLight3D:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.0666667, 3.66667),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
+}
+
+[sub_resource type="Animation" id="Animation_6m8m7"]
+resource_name = "Start"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("riborns:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ice_debris:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.0666667),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("sparkling_details2:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.133333),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("filling:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.0666667),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("OmniLight3D:light_energy")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.1, 0.833333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 8.04]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("OmniLight3D:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.0666667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_saqgw"]
+_data = {
+"End": SubResource("Animation_enfei"),
+"Init": SubResource("Animation_qwiil"),
+"Start": SubResource("Animation_6m8m7")
+}
+
+[node name="VFX_Ice_Charging" type="Node3D"]
+metadata/_edit_group_ = true
+
+[node name="riborns" type="GPUParticles3D" parent="."]
+material_override = SubResource("StandardMaterial3D_2t62t")
+cast_shadow = 0
+amount = 10
+lifetime = 1.3
+fixed_fps = 60
+trail_enabled = true
+process_material = SubResource("ParticleProcessMaterial_utcri")
+draw_pass_1 = SubResource("RibbonTrailMesh_uy6as")
+metadata/_edit_lock_ = true
+
+[node name="ice_debris" type="GPUParticles3D" parent="."]
+layers = 4
+material_override = ExtResource("1_1q42d")
+cast_shadow = 0
+emitting = false
+amount = 40
+lifetime = 1.7
+randomness = 1.0
+fixed_fps = 60
+trail_lifetime = 0.13
+process_material = SubResource("ParticleProcessMaterial_1oe3g")
+draw_pass_1 = SubResource("ArrayMesh_cw1m1")
+metadata/_edit_lock_ = true
+
+[node name="sparkling_details2" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, -3.20597e-10, 0, 5.25233e-11, 1, 0, 0, 5.82077e-11, 1, 0, 0, 0)
+layers = 4
+material_override = SubResource("StandardMaterial3D_kvwyy")
+cast_shadow = 0
+emitting = false
+amount = 120
+randomness = 1.0
+fixed_fps = 60
+process_material = SubResource("ParticleProcessMaterial_7f2aq")
+draw_pass_1 = SubResource("QuadMesh_ww8c3")
+metadata/_edit_lock_ = true
+
+[node name="filling" type="GPUParticles3D" parent="."]
+layers = 4
+material_override = SubResource("StandardMaterial3D_dimud")
+cast_shadow = 0
+amount = 6
+lifetime = 0.6
+fixed_fps = 60
+visibility_aabb = AABB(-2, -2, -2, 4, 4, 4)
+process_material = SubResource("ParticleProcessMaterial_7xqkr")
+draw_pass_1 = SubResource("QuadMesh_kbkry")
+metadata/_edit_lock_ = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_saqgw")
+}
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+visible = false
+light_color = Color(0.502366, 0.800712, 1, 1)
+light_energy = 0.0
+metadata/_edit_lock_ = true

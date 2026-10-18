@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "network"
+constructor_script = "res://assets/vfx/sources/c43d754ae69cc0329592/electric_network.gd"
+input = {"edges": [{"from": 0, "to": 1, "delay": 0.28}], "endpoint_count": 2, "heavy": false, "width": 0.46, "seed": 47291, "speed": 26.0, "core_color": "198fe1", "glow_color": "07499f", "emission": 0.82, "link_width_gain": 1.18, "fork_width_gain": 1.35, "contact_scale_gain": 1.12, "gpu_shape_banks": ["res://assets/vfx/sources/efe6e9560689e62b392c/chain-47291.res"]}
+options = {}
+provenance = "Pinned native selection; recipes/spell.chain_lightning.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "live-electric/chain_live_single"
+label = "Native live electric network"
+phase = "lifecycle"
+variant = "chain_live_single"
+source_recipe = "recipes/spell.chain_lightning.json"
+bindings = [{"component": "network", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 1.25
+simulation_hz = 60
+components = Array[Resource]([SubResource("part_0")])
+options = {"source_revision": "gpu-electric-ribbons-v370-20261018"}

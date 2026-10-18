@@ -1,0 +1,25 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="artwork"]
+script = ExtResource("component")
+component_id = "wizard_operation"
+constructor_script = "res://assets/vfx/sources/6b6bcc25cd0fb4d7786a/arcane_recovery.gd"
+input = {"operation_uuid": "study-recovery-operation", "actor_uuid": "study-wizard-owner", "seconds": 1.8, "palette": ["294961", "4b7795", "6b9caa", "98b7ae"], "state": {"operation_uuid": "study-recovery-operation", "outcome": "accepted", "present": true, "suppressed": false, "restored_slot_ranks": [1, 2], "observation_kind": "proposed_recovery_admission_fixture"}}
+provenance = "Private 16 October native Wizard study; explicit supplied fixture observations, no gameplay event synthesis."
+
+[resource]
+script = ExtResource("phase")
+clip_id = "wizard-class-study/wizard_arcane_recovery_accepted_study"
+label = "Wizard arcane recovery · accepted · private native study"
+phase = "lifecycle"
+variant = "wizard_arcane_recovery_accepted_study"
+source_recipe = "wizard-class-art-v156-authored"
+components = Array[Resource]([SubResource("artwork")])
+bindings = [{"component": "wizard_operation", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 1.8
+simulation_hz = 60.0
+options = {"source_revision": "gpu-finite-v376-20261018"}

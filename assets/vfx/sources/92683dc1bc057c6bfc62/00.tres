@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/sources/0738ff2d24aa41b1b963/native_review_composition.gd"
+input = {"components": [{"script": "res://assets/vfx/sources/eabc1f79d6ef50cb7665/ice_dome_surface_breakup.gd", "input": {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"animation": "", "shape": "ice-dome", "mode": "lifecycle"}, "side": "full", "simulation_hz": 144, "seed": 47291, "surface_partition": {"source_seed": 72510, "chunk_count": 26, "direction_quantization": 100000.0, "centre_source_units": [0.0, 0.0, 0.0]}, "source_breakup": {"source_seed": 72510, "body_mass_kg": 0.3, "radial_velocity_source_units_per_second": 1.2, "vertical_velocity_source_units_per_second": -0.5, "angular_velocity_source_limit_radians_per_second": 1.4, "gravity_source_units_per_second_squared": 9.8, "linear_damp_per_second": 0.15, "angular_damp_per_second": 0.7, "friction": 1.0, "bounce": 0.0, "contact_margin_source_units": 0.002, "body_collision_layer": 2097152, "floor_collision_mask": 1}}, "id": "effect", "rotation_degrees": [0, 0, 0]}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": []}
+options = {}
+provenance = "Private exact intact-surface partition; no added render rims. Original material and full existing retirement clocks retained."
+
+[resource]
+script = ExtResource("script")
+clip_id = "wall-native/ice_dome_surface_breakup_native/lifecycle"
+label = "Lifecycle"
+phase = "lifecycle"
+variant = "dome_back"
+source_recipe = "recipes/spells/wall_of_force.json"
+bindings = [{"component": "assembly", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 8.0
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"qualification": "Native-context visual review; not production approval"}

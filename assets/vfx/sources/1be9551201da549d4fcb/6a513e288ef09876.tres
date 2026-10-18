@@ -1,0 +1,25 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="effect"]
+script = ExtResource("component")
+component_id = "support"
+constructor_script = "res://assets/vfx/sources/977dcd68e3136cafeb33/support_holy_aura.gd"
+input = {"geometry_actor": "target", "endpoint_bindings": [{"actor": "caster", "socket": "cast_hand"}, {"actor": "caster", "socket": "face"}, {"actor": "target", "socket": "body_center"}], "piece_capacity": 6, "source_entity_uuid": "1a2cc648-c66a-55ae-a595-fd9721997352", "recipient_entity_uuid": "92ef1028-5b2f-56bb-a607-c5d5a237af47", "owner_uuid": "98e4e686-a945-5e47-b8ae-2519b0d0aec3", "condition_id": "condition.spell.holy_aura", "event_uuid": "89b6892d-4186-568c-8702-05d4b22b6576", "part": "rays", "mode": "apply", "seconds": 0.9, "apply_seconds": 0.18, "retire_seconds": 0.27, "width_cells": 0.044, "vertex_colour": "d8b25f", "vertex_alpha": 1.0, "material": {"shader": "res://assets/vfx/sources/55f6cd83613c096850b7/holy.gdshader", "spatial_vertex": "void vertex(){v_uv=UV;v_w=(MODEL_MATRIX*vec4(VERTEX,1.0)).xyz;}", "alpha": 0.78, "emission_gain": 0.07, "textures": {"noise_tex": "res://assets/vfx/sources/f66d1ab459238535a9d0/texture.res"}, "uniforms": {"core_color": {"type": "Color", "value": "e9c578"}, "edge_color": {"type": "Color", "value": "a96b2f"}, "intensity": 0.65, "alpha_mult": 0.85, "top_fade": 0.98}}, "lease": {"observed": true, "condition_state": {"condition_uuid": "98e4e686-a945-5e47-b8ae-2519b0d0aec3", "behavior_id": "condition.spell.holy_aura", "suppression_provider_uuids": [], "applied_source_event_cursor": 1}, "source_entity_uuid": "1a2cc648-c66a-55ae-a595-fd9721997352", "target_entity_uuid": "92ef1028-5b2f-56bb-a607-c5d5a237af47", "authoritative_parent_uuid": "d6a08e0e-80a9-5b88-8126-31622ba51a2e"}, "event": {"uuid": "89b6892d-4186-568c-8702-05d4b22b6576", "source_entity_uuid": "1a2cc648-c66a-55ae-a595-fd9721997352", "target_entity_uuid": "92ef1028-5b2f-56bb-a607-c5d5a237af47", "canceled": false}, "parent_owner_uuid": "d6a08e0e-80a9-5b88-8126-31622ba51a2e"}
+provenance = "Native source mechanisms and actual backend semantics: evidence/parallel-high-level-support-v100/PLAN.md"
+
+[resource]
+script = ExtResource("phase")
+clip_id = "high-level-22/holy-aura/application"
+label = "holy_aura_native · application"
+phase = "impact"
+variant = "application"
+source_recipe = "evidence/parallel-high-level-support-v100/PLAN.md"
+seconds = 0.9
+simulation_hz = 60
+components = Array[Resource]([SubResource("effect")])
+bindings = [{"component":"support","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+emitters = []
+options = {"opacity_uniform": "support_visibility", "source_revision": "gpu-support-v380-20261018"}

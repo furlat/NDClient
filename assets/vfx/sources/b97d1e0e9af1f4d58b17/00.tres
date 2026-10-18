@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/sources/0738ff2d24aa41b1b963/native_review_composition.gd"
+input = {"components": [{"script": "res://assets/vfx/sources/0a6f9152e753968f33d1/divine.gd", "input": {"scene": "res://assets/vfx/sources/743219f9e05fa20a08b3/loot_vfx_divine.tscn", "settings": {"pack": "binbun-godotlootvfxextra", "name": "loot_vfx_divine", "animation": "", "scale": 0.65, "height": 0.95, "hue": 0.12, "frames": 192, "close": 0, "palette": ["453052", "745274", "a87e56", "d5ae62", "edcf91", "f4e5b8"], "mode": "blessing", "title": "Beacon of Hope", "hold": [125, 189], "note": "Selected allies receive a tall golden blessing, then restrained ongoing rays/motes; not an immediate heal.", "cell": 512, "alphaGain": 1.0, "fps": 32, "id": "beacon_of_hope"}, "side": "full", "seed": 47291, "simulation_hz": 144, "material_family": "divine", "clip_normal": [0.70710678, 0, 0.70710678], "animation_missing_policy": "first_available"}, "rotation_degrees": [0, 0, 0], "id": "effect"}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": []}
+options = {}
+provenance = "Pinned native selection; recipes/spells/beacon_of_hope.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "review/beacon_of_hope/back/lifecycle"
+label = "Lifecycle"
+phase = "lifecycle"
+variant = "back"
+source_recipe = "recipes/spells/beacon_of_hope.json"
+bindings = [{"component": "assembly", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 6.0
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"qualification": "Native-context visual review; not production approval"}

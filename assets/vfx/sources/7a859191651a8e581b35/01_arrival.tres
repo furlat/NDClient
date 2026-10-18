@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/sources/0738ff2d24aa41b1b963/native_review_composition.gd"
+input = {"components": [{"script": "res://assets/vfx/sources/57b9ea67c1761593cabb/touch_or_puff.gd", "input": {"scene": "res://assets/vfx/sources/e33f783ca1eecf4aae02/VFX_Smoke_z_puff.tscn", "settings": {"animation": "", "pack": "lelu-original-godot-smoke-effects-mega-bundle", "name": "VFX_Smoke_z_puff", "scale": 0.28, "height": 1.2, "hue": 0.69, "palette": ["303047", "4b4b70", "73769f", "9798c0", "b8b6e5", "e1daf1"], "frames": 216, "close": 36, "anchor": "target_ground", "version": 4, "cell": 384, "alphaGain": 0.35, "energyGain": 0.75}, "side": "full", "simulation_hz": 144, "seed": 47291}, "id": "effect", "rotation_degrees": [0, 0, 0]}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": []}
+options = {}
+provenance = "Pinned native selection; recipes/spells/misty_step.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "review/misty_step/arrival/lifecycle"
+label = "Arrival"
+phase = "lifecycle"
+variant = "back"
+source_recipe = "recipes/spells/misty_step.json"
+bindings = [{"component": "assembly", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 1.5
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"qualification": "Native-context visual review; not production approval"}

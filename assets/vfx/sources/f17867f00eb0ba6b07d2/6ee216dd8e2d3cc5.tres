@@ -1,0 +1,24 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="art"]
+script = ExtResource("component")
+component_id = "divine_art"
+constructor_script = "res://assets/vfx/sources/a004796cd36e972d4c2e/sacred_weapon.gd"
+input = {"phase": "retire", "seconds": 0.42, "lifecycle_mode": "bounded_fixture", "ownership": {"owner_kind": "item", "owner_uuid": "caster-MELEE_MAIN", "effect_uuid": "956e55f8-0185-5398-b25f-c73989ee7b92", "binding": {"owner_kind": "item", "owner_uuid": "caster-MELEE_MAIN", "effect_uuid": "956e55f8-0185-5398-b25f-c73989ee7b92", "item_uuid": "caster-MELEE_MAIN", "holder_uuid": "caster", "equipment_slot": "MELEE_MAIN", "render_slot": "weapon", "present": true, "equipped": true, "observed": true, "contribution_active": true, "suppressed": false, "decoration_admitted": true, "binding_origin": "explicit_generic_equipped_item_fixture_not_verified_feature"}}, "material": {"shader": "res://assets/vfx/sources/5072b699fd0e367a09e8/s_magic_aura2.tres", "texture": "res://assets/vfx/sources/d9693b7f9e0749d03a88/texture.res", "colour": "d1b572", "divide": [0.75, 0.8], "speed": [0.01, -0.065], "power": 1.1, "fresnel": 0.25, "palette": ["6b532a", "a17a35", "d3ac55", "ebd196"]}, "light": {"grant_active": true, "radius_cells": 1.2, "colour": "e0c999", "radius_is_fixture_value_not_claimed_game_rule": true}}
+provenance = "Plan-only native study; no verified new backend behavior identity."
+
+[resource]
+script = ExtResource("phase")
+clip_id = "divine-class-study/divine_sacred_weapon_study/2-retire"
+label = "sacred_weapon / retire / main"
+phase = "condition_retire"
+variant = "main"
+source_recipe = "res://assets/vfx/sources/6f469c05c8b9c1fbc8e1/feature-matrix.json"
+seconds = 0.42
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("art")])
+bindings = [{"component":"divine_art","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+options = {"source_revision": "gpu-cached-v382-20261018"}

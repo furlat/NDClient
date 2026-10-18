@@ -1,0 +1,22 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+[sub_resource type="Resource" id="artwork"]
+script = ExtResource("component")
+component_id = "prismatic_spray"
+constructor_script = "res://assets/vfx/sources/85042a209129af2bc7e9/prismatic_spray.gd"
+input = {"cast_uuid": "fixture-prismatic-cast", "source_uuid": "fixture-prismatic-caster", "length_cells": 12.0, "seconds": 1.45, "recipient_capacity": 2, "recipient_bindings": {"fixture-recipient-a": 3, "fixture-recipient-b": 4}, "palette": ["d96549", "d69948", "e2c75e", "61a269", "5999b8", "344c82", "7b858c"], "noise_texture": "res://assets/vfx/sources/c0a2515abc39856316d0/texture.res", "cast_present": true, "supplied_outcomes": [{"recipient_uuid": "fixture-recipient-a", "endpoint_index": 3, "colors": [6], "application_admitted": true, "at_seconds": 0.57, "result": "supplied_CON_failure_restrained_owned_separately"}, {"recipient_uuid": "fixture-recipient-b", "endpoint_index": 4, "colors": [7], "application_admitted": true, "at_seconds": 0.63, "result": "supplied_WIS_failure_Blinded_owned_separately_visual_color7_unresolved"}], "observation_kind": "proposed_typed_per_recipient_outcome_fixture; backend_currently_only_status_text", "shadows": ["572720", "654421", "605627", "233e2d", "253f52", "19243c", "2e3540"], "color7_treatment": "violet rule result, neutral visual treatment", "gpu_paths": true}
+provenance = "Distinct native spectral streak geometry; original authored prism two-scale noise mechanism; no Color Spray fan scene, no dice or game-rule solver. Rule color7 uses the explicit neutral silver/charcoal filament treatment; no purple."
+[resource]
+script = ExtResource("phase")
+clip_id = "reaction-prismatic-study/prismatic_spray_condition_colors_native_study"
+label = "prismatic spray condition colors native study"
+phase = "lifecycle"
+variant = "prismatic_spray_condition_colors_native_study"
+source_recipe = "native-prismatic-spray-explicit-outcome-study"
+components = Array[Resource]([SubResource("artwork")])
+bindings = [{"component": "prismatic_spray", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 1.45
+simulation_hz = 144.0
+options = {"source_revision": "gpu-remaining-v389-20261018"}

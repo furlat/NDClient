@@ -1,0 +1,26 @@
+[gd_resource type="ShaderMaterial" load_steps=5 format=3 ]
+
+[ext_resource type="Shader" path="res://assets/vfx/sources/9e0b35043fb68de245b3/ss_demon_hand_k5.gdshader" id="1_bwj8m"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/136565aa1293a4b1a75c/texture.res" id="3_vwu1v"]
+
+[sub_resource type="Gradient" id="Gradient_0ruu4"]
+interpolation_color_space = 2
+offsets = PackedFloat32Array(0.0571429, 0.814286, 1)
+colors = PackedColorArray(0.02848, 0.0064, 0.08, 1, 0.2112, 0.356107, 0.88, 1, 0.3168, 0.40128, 0.88, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ynvpb"]
+gradient = SubResource("Gradient_0ruu4")
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_bwj8m")
+shader_parameter/fresnelpower = 0.765
+shader_parameter/Details_scale = Vector2(0.5, 1)
+shader_parameter/Details_speed = Vector2(0, -0.05)
+shader_parameter/ColorIntensity = 4.0
+shader_parameter/cutplane = null
+shader_parameter/rim_color = Color(0.3, 0.311667, 1, 1)
+shader_parameter/rim_width = 2.84
+shader_parameter/rim_intensity = 2.0
+shader_parameter/DetailsTexture = ExtResource("3_vwu1v")
+shader_parameter/Color1DGradient = SubResource("GradientTexture1D_ynvpb")

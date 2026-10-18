@@ -1,0 +1,19 @@
+[gd_resource type="Resource" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/1e400e86b7d47eafacbe/spell.gd" id="spell"]
+[ext_resource type="Resource" path="res://assets/vfx/sources/45bdaadfa64a5504cd6b/94749ef07c5bbb3d.tres" id="p0"]
+
+[resource]
+script = ExtResource("spell")
+spell_id = "divine_improved_divine_smite_study"
+title = "Improved Divine Smite · main · plan-only study"
+effect_scale = 0.18
+casting_profile = "authored"
+phases = Array[Resource]([ExtResource("p0")])
+palette = {}
+has_staging_override = true
+staging = {"target_local": true, "recipient": "target", "target_position": [0.0, 0.0, 0.0], "actor_positions": {"caster": [-0.65, 0.0, 0.1], "target": [0.0, 0.0, 0.0], "target2": [1.5, 0.0, 1.2]}, "camera_focus": [-0.2, 0.65, 0.0], "camera_size": 3.8, "contact_after_release": 0.0, "decorative_light_multiplier": 0.0, "cues": [{"clip": "divine-class-study/divine_improved_divine_smite_study/0-improved_smite", "id": "divine_improved_divine_smite_study-0", "role": "attached", "at": "cast", "to_actor": "target", "attachment": "recipient_ground", "orientation": "world", "scale": 1.0, "delay_seconds": 0.45, "source_end": 0.45, "duration_policy": "authored", "follow_attachment": true, "fade_out_seconds": 0.18, "dynamic_geometry": true, "entity_geometry": {"actor": "target", "slots": ["body", "chest", "legs", "head", "helmet", "boots", "gauntlets", "belt", "cloak"]}, "live_endpoints": [{"actor": "caster", "socket": "cast_hand"}, {"actor": "caster", "socket": "face"}, {"actor": "target", "socket": "body_center"}]}], "review_poses": [{"actor": "caster", "clip": "Attack1", "begin_seconds": 0.0, "end_seconds": 1.25, "source_seconds": 0.0, "source_rate": 1.0}], "fixture_inputs": {"plan_only": true, "presentation_adapter_inputs_not_wire_fields": true, "actual_backend_action_condition_ids_not_available": true, "inspection_duration_is_not_mechanical_duration": true, "source_class_contract": "improved_divine_smite", "variant": "main", "rules_solver": false, "real_reward_model_missing": false, "reward_not_instantiated_by_vfx": true, "dead_revival_does_not_stand": true}}
+choreography_data = {"runtimeKey": "study.divine.improved_divine_smite", "cast": {"enabled": false, "actionClip": "Attack5", "bodyPlaybackSpeed": 1.0, "releaseFrame": 0, "equipment": {"kind": "unchanged"}, "effects": [], "recovery": {"enabled": false}, "sourceSockets": {}}, "condition": {"anchor": "effect", "delayMs": 0.0, "feedbackEnabled": false}}
+options = {"qualification":"plan_only_coded_pending_capture"}
+provenance = "Approved class plan sections5-7/9/13/15/16; exact backend audit and source graph in evidence/divine-class-art-v156."
+review_status = "Private plan-only candidate; headless checks and complete recorded-frame review required; no human acceptance."

@@ -1,0 +1,29 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader"  path="res://assets/vfx/sources/3e113d3ad0f3d6109f04/s_magic_aura3x.tres" id="1_2imcw"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/92fdeff95f37053c86a0/texture.res" id="2_yhbov"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/8bc8bf311494b7cec395/texture.res" id="3_o0mwu"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/1e24a95cba12fe9a56b4/texture.res" id="4_jvos8"]
+[sub_resource type="Gradient" id="Gradient_pa0qv"]
+offsets = PackedFloat32Array(0.529412, 0.6, 0.635294, 0.711765)
+colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_2kwrb"]
+gradient = SubResource("Gradient_pa0qv")
+fill_from = Vector2(1, 1)
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_2imcw")
+shader_parameter/SPEED_Big_Line = 2.0
+shader_parameter/Aura_Color = Color(0, 0.231373, 0.768627, 1)
+shader_parameter/Arua_Power = 15.0
+shader_parameter/fresnel = 0.2
+shader_parameter/Aura_Divide = Vector2(0.2, 0.5)
+shader_parameter/Speed_small_details = Vector2(0.2, 1)
+shader_parameter/Has_mask = true
+shader_parameter/Line_Thunder = SubResource("GradientTexture2D_2kwrb")
+shader_parameter/Distortion_Texture = ExtResource("3_o0mwu")
+shader_parameter/Aura_Texture = ExtResource("2_yhbov")
+shader_parameter/Mask = ExtResource("4_jvos8")
+

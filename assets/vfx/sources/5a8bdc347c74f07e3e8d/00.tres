@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "marker"
+constructor_script = "res://assets/vfx/sources/956b2fde8af4cd11d880/overhead_marker.gd"
+input = {"material": {"shader": "res://assets/vfx/sources/c71dc0f132124a0208ed/Glyph.gdshader", "parameters": {"Alpha_Texture": {"type": "Resource", "path": "res://assets/vfx/sources/919857261370d0413539/texture.res"}, "Texture_Disolver": {"type": "Resource", "path": "res://assets/vfx/sources/8b50d862e875547c4693/texture.res"}, "Color_1D_gradient": {"type": "GradientTexture1D", "colors": ["00000000", "303c43", "54616a", "87929a", "b7bcc0", "e2dccc", "f3e5c7"], "offsets": [0, 0.1, 0.278, 0.45599999999999996, 0.634, 0.8119999999999999, 0.99]}, "Color_Intensity": 1.0, "glyph_clock": 0.0}}, "size_cells": [0.4, 0.4], "height_cells": 1.45, "duration_seconds": 3.2}
+options = {}
+provenance = "Pinned native selection; recipes/data/overhead_markers.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "condition_petrified_native"
+label = "Steady overhead petrified"
+phase = "sustain"
+variant = "petrified"
+source_recipe = "recipes/data/overhead_markers.json"
+bindings = [{"component": "marker", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 3.2
+simulation_hz = 60
+components = Array[Resource]([SubResource("part_0")])
+options = {}

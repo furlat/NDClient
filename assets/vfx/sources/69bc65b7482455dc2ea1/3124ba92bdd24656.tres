@@ -1,0 +1,22 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+[sub_resource type="Resource" id="source"]
+script = ExtResource("component")
+component_id = "receiving"
+constructor_script = "res://assets/vfx/sources/2ef1907a408fe4ae0445/receiving_forms.gd"
+input = {"profile": "descending_fronds", "count": 3, "width_cells": 0.055, "height_cap_cells": 0.45, "width_cap_cells": 0.28, "motion_rate": 1.65, "layers": [{"scene": "res://assets/vfx/sources/3d58e2f85565c4b2b53e/VFX_AirFlow.tscn", "node": "windflowz4", "alpha": 0.65, "alpha_floor": 0.12, "alpha_power": 0.65, "uniforms": {"Color1DGradient": {"type": "GradientTexture1D", "colors": ["233d41", "416d70", "7b9b92"], "offsets": [0.0, 0.5, 1.0]}, "speed": {"type": "Vector2", "value": [-0.42, 0]}, "wind_2_speed": {"type": "Vector2", "value": [-0.23, -0.55]}}}, {"scene": "res://assets/vfx/sources/3d58e2f85565c4b2b53e/VFX_AirFlow.tscn", "node": "windflowz3", "alpha": 0.28, "alpha_floor": 0.12, "alpha_power": 0.65, "uniforms": {"Color1DGradient": {"type": "GradientTexture1D", "colors": ["25353d", "42616b", "739198"], "offsets": [0.0, 0.5, 1.0]}, "speed": {"type": "Vector2", "value": [-0.42, 0]}, "wind_2_speed": {"type": "Vector2", "value": [-0.23, -0.55]}}}], "seconds": 1.05, "mode": "application", "apply_seconds": 0.15, "retire_seconds": 0.28, "camber_cells": 0.025, "source_alpha": 0.9}
+provenance = "Actual selected native source material mechanism and measured receiving geometry; evidence/parallel-high-level-control-v104/PLAN_REVIEW.md."
+[resource]
+script = ExtResource("phase")
+clip_id = "high-level-22/weird/application"
+label = "weird · application"
+phase = "impact"
+variant = "application"
+source_recipe = "evidence/parallel-high-level-control-v104/PLAN_REVIEW.md"
+seconds = 1.05
+simulation_hz = 60
+components = Array[Resource]([SubResource("source")])
+bindings = [{"component":"receiving","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+emitters = []
+options = {"opacity_uniform": "control_opacity", "source_revision": "gpu-forms-v379-20261018"}

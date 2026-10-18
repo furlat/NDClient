@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/aecd7e3445900398fcbf/silk_area.gd"
+input = {"scene": "res://assets/vfx/sources/40f608031220ccf44b5d/VFX_Smoke_z_puff.tscn", "settings": {"animation": "", "spell": "sleep", "yaw": 0}, "side": "full", "simulation_hz": 144, "seed": 47291}
+options = {}
+provenance = "Pinned native selection; recipes/spells/sleep_production_xyz.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "spells/sleep_production_xyz/whole/lifecycle"
+label = "Native layers · whole"
+phase = "lifecycle"
+variant = "whole"
+source_recipe = "recipes/spells/sleep_production_xyz.json"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 1.9722222222222223
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"bounded_formation": false, "qualification": "native_family_port_candidate; selected production phase equivalence pending", "optional": true, "stage": "impact"}

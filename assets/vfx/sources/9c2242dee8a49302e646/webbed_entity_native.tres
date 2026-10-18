@@ -1,0 +1,18 @@
+[gd_resource type="Resource" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/1e400e86b7d47eafacbe/spell.gd" id="script"]
+[ext_resource type="Resource" path="res://assets/vfx/sources/5500f9961cd42b3bb052/421020c3a818a3f0.tres" id="phase_0"]
+
+[resource]
+script = ExtResource("script")
+spell_id = "webbed_entity_native"
+title = "Webbed · native wrapping mesh and silk surface"
+effect_scale = 0.18
+phases = Array[Resource]([ExtResource("phase_0")])
+palette = {}
+has_staging_override = true
+staging = {"target_local": true, "recipient": "target", "contact_after_release": 0.0, "target_position": [1, 0, 0], "camera_focus": [0.7, 0.45, 0.1], "camera_size": 4.0, "cues": [{"clip": "entity-study/webbed", "role": "attached", "at": "release", "attachment": "recipient_ground", "orientation": "world", "scale": 0.5, "source_end": 4.6, "duration_policy": "authored", "opacity_keys": [[0, 0], [0.45, 1], [4.1, 1], [4.6, 0]], "entity_geometry": {"actor": "target", "slots": ["body", "legs", "shoes", "chest", "belt", "hands", "head", "helmet", "beard", "cloak", "backpack"]}, "follow_attachment": true, "dynamic_geometry": true}], "review_motion": [{"actor": "target", "points": [[0, [1, 0, 0]], [2.5, [1, 0, 0]], [3.4, [1.6, 0, 0.5]], [4.6, [1.6, 0, 0.5]]]}], "decorative_light_multiplier": 0.0, "review_motion_kind": "attachment_probe"}
+choreography_data = {"cast": {"enabled": true, "actionClip": "Attack5", "bodyPlaybackSpeed": 1, "releaseFrame": 7, "equipment": {"kind": "hidden"}}, "elementColors": {"primary": 13226695, "secondary": 15001302, "tertiary": 6583145}}
+provenance = "LeLu VFX_WebTrapped_character; showcase dummy removed by silk_area."
+review_status = "Private native-context review candidate. Original approved artwork remains unchanged."
+options = {"entity_treatments": []}

@@ -1,0 +1,54 @@
+[gd_resource type="ShaderMaterial" load_steps=13 format=3]
+
+[ext_resource type="Shader"  path="res://assets/vfx/sources/bc5687a9ee27e5b959c3/s_master_fire2_fresnel_ds.tres" id="5_vfpmh"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/a5f322c9a0afd0417634/texture.res" id="6_m2plm"]
+
+[sub_resource type="Gradient" id="Gradient_0lki7"]
+interpolation_color_space = 2
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_co8hk"]
+gradient = SubResource("Gradient_0lki7")
+fill_to = Vector2(0, 1)
+
+[sub_resource type="Gradient" id="Gradient_njwoi"]
+offsets = PackedFloat32Array(0, 0.761029, 0.995633)
+colors = PackedColorArray(0.69, 0.69, 0.69, 0, 0.517486, 0.679154, 0.651083, 1, 0.83, 1, 0.963167, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_6e1wj"]
+gradient = SubResource("Gradient_njwoi")
+
+[sub_resource type="Gradient" id="Gradient_b6fjh"]
+interpolation_color_space = 2
+offsets = PackedFloat32Array(0.146179, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_j78xm"]
+gradient = SubResource("Gradient_b6fjh")
+fill_to = Vector2(0, 1)
+
+[sub_resource type="Gradient" id="Gradient_slbtn"]
+offsets = PackedFloat32Array(0, 0.137255)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_wwf8h"]
+gradient = SubResource("Gradient_slbtn")
+
+[sub_resource type="Gradient" id="Gradient_x3epj"]
+offsets = PackedFloat32Array(0, 0.849265)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_qx41o"]
+gradient = SubResource("Gradient_x3epj")
+
+[resource]
+render_priority = 0
+shader = ExtResource("5_vfpmh")
+shader_parameter/Speed_XY2 = Vector2(0, 1)
+shader_parameter/Scale_XY2 = Vector2(2, 1)
+shader_parameter/Fresnel_Invert = true
+shader_parameter/Fresnel_power = 1.0
+shader_parameter/Color_Intensity2 = 1.0
+shader_parameter/Opacity = 1.0
+shader_parameter/Base_noise2 = ExtResource("6_m2plm")
+shader_parameter/Fresnel_Gradient_Color_1D = SubResource("GradientTexture1D_qx41o")
+shader_parameter/Texture_substract = SubResource("GradientTexture2D_wwf8h")
+shader_parameter/Texture_add = SubResource("GradientTexture2D_j78xm")
+shader_parameter/Gradient_Color_1D2 = SubResource("GradientTexture1D_6e1wj")
+shader_parameter/Texture_substract_end = SubResource("GradientTexture2D_co8hk")

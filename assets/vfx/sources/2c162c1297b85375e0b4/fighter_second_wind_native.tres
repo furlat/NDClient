@@ -1,0 +1,18 @@
+[gd_resource type="Resource" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/1e400e86b7d47eafacbe/spell.gd" id="script"]
+[ext_resource type="Resource" path="res://assets/vfx/sources/3320e0fed06488cf1e2e/af1e7d0d54f71ef2.tres" id="phase_0"]
+
+[resource]
+script = ExtResource("script")
+spell_id = "fighter_second_wind_native"
+title = "Fighter Second Wind · native recovery"
+effect_scale = 0.18
+phases = Array[Resource]([ExtResource("phase_0")])
+palette = {}
+has_staging_override = true
+staging = {"target_local": true, "target_position": [1.1, 0, 0], "recipient": "caster", "contact_after_release": 0.0, "camera_focus": [0, 0.65, 0], "camera_size": 4.0, "decorative_light_multiplier": 0.0, "cues": [{"clip": "fighter_second_wind_source_v190", "role": "attached", "at": "release", "attachment": "caster_ground", "orientation": "world", "source_end": 1.5, "duration_policy": "authored", "scale": 1.0, "follow_attachment": true, "delay_seconds": 0.0, "entity_geometry": {"actor": "caster", "slots": ["body", "legs", "chest", "head", "helmet"]}}], "feedback_palette": {"colors": ["458b83", "75bfa3", "c3dace"]}, "fixture_inputs": {"source_projection_not_wire_packet": true, "owner_projection": {"actor_id": "caster", "actor_uuid": "fixture-fighter-A", "action_uuid": "fixture-second-wind-action-A", "behavior_id": "action.class.fighter.second_wind", "admitted": true, "begin_seconds": 0.0, "healing": {"observed_completion": true, "event_uuid": "fixture-second-wind-heal-A", "parent_event_uuid": "fixture-second-wind-action-A", "source_entity_uuid": "fixture-fighter-A", "target_entity_uuid": "fixture-fighter-A", "actual_healing": 7, "was_blocked": false}}, "rules_solver": false, "accepted_pose": "Idle2", "accepted_pose_age_at_heal_begin": 0.45, "accepted_source_effect_begin_in_old_preview": 0.45, "post_raster_export_parity": false, "source_evidence": "res://assets/vfx/sources/207e1ea75e76fa6229e0/preserved-inputs.json", "review_pose": "Idle2_source_pose_age_then_Idle", "accepted_Idle2_exact_source_media_admitted": true, "pose_media_receipt": "res://assets/vfx/sources/81ba83117c0b037b9018/idle2-media-admission.json"}, "review_poses": [{"actor": "caster", "clip": "Idle2", "begin_seconds": -0.45, "end_seconds": 0.8, "source_seconds": 0.0, "source_rate": 1.0, "toward": [1, 0]}]}
+choreography_data = {"runtimeKey": "class.fighter_second_wind", "elementColors": {"primary": 13345359, "secondary": 15520919, "tertiary": 7887156}, "castPalettes": [], "cast": {"enabled": false, "actionClip": "Idle", "bodyPlaybackSpeed": 1.0, "releaseFrame": 0, "equipment": {"kind": "unchanged"}}, "condition": {"anchor": "effect", "delayMs": 0.0, "feedbackEnabled": true}, "media": [], "bodyMaterials": [], "displacementLayers": []}
+provenance = "Exact captured v190 native recovery source candidate selected for Factory preview. Original heal radial32 frame/Flow/noise and mint3 source finish; live3D per-fragment finishing/native-depth/actorfit derivative differs original postraster export. Accepted Idle2 source media and finite successful self-heal fixture retained. No new human approval or production integration."
+review_status = "Factory preview selection from bounded camera0 v190 capture and352CPU contracts. Original six-column/pulse/pale-highlight read and source smallmote endclip remain P2; exact accepted RGBA/material-finish/full-composition parity is not claimed."
+options = {"accepted_source_palette": ["458b83", "75bfa3", "c3dace"], "native3d_finish_derivative": true, "source_mote_end_clipped_like_original_nonloop": true}

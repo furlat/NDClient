@@ -1,0 +1,25 @@
+[gd_resource type="ShaderMaterial" load_steps=5 format=3]
+
+[ext_resource type="Shader"  path="res://assets/vfx/sources/d9f48c8baa15ec32f335/s_master_fire_fresnel_add.tres" id="1_84k70"]
+[ext_resource type="Texture2D"  path="res://assets/vfx/sources/900721c102c94ad02849/texture.res" id="2_j4b2d"]
+
+[sub_resource type="Gradient" id="Gradient_o0043"]
+offsets = PackedFloat32Array(0, 0.258537, 0.580488, 0.809756, 0.995122)
+colors = PackedColorArray(1, 1, 1, 1, 0.848685, 0.518248, 0.260573, 1, 0.58, 0.14152, 0.0928, 1, 0.49, 0.098, 0.0196, 1, 0.251696, 0.00736011, 0, 1)
+
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_l87nq"]
+gradient = SubResource("Gradient_o0043")
+
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_84k70")
+shader_parameter/Scale_XY = Vector2(1, 2)
+shader_parameter/Speed_XY = Vector2(1.5, 3)
+shader_parameter/Fresnel_Invert = false
+shader_parameter/Fresnel_power = 0.65
+shader_parameter/Color_Intensity = 7.0
+shader_parameter/Base_noise = ExtResource("2_j4b2d")
+shader_parameter/Gradient_Color_1D = SubResource("GradientTexture1D_l87nq")
+

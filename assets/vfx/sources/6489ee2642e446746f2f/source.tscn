@@ -1,0 +1,2446 @@
+[gd_scene format=4]
+
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/a5f322c9a0afd0417634/texture.res" id="1_4ffyt"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/e8084d9fa87a0b9f88e0/texture.res" id="2_fu75w"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/e1a0e0dfc4cb8c8bc962/texture.res" id="3_mpe1e"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/4047d4f7fde5476f98b9/texture.res" id="4_863b5"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/cc6ba7e8e8459eb301a3/texture.res" id="5_w27py"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/5bea29d0cc2766518a8c/texture.res" id="6_5rkbc"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/78613bdeb39c2260fe03/texture.res" id="7_l0ixe"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/f66d1ab459238535a9d0/texture.res" id="8_0evuq"]
+[ext_resource type="Texture2D" path="res://assets/vfx/sources/5b0a18fdc09c1fcdd677/texture.res" id="9_usut8"]
+
+[sub_resource type="Shader" id="Shader_gbet0"]
+code = "shader_type spatial;
+uniform float condition_opacity = 1.0;
+
+render_mode blend_mix, depth_draw_opaque, depth_test_default, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded, fog_disabled;
+
+uniform sampler2D Alpha_Texture : source_color;
+uniform sampler2D Alpha_2_Texture : source_color;
+
+
+
+void vertex() {
+	mat4 n_out2p0;
+// GetBillboardMatrix:2
+	{
+		mat4 __mvm = VIEW_MATRIX * mat4(INV_VIEW_MATRIX[0], MODEL_MATRIX[1], vec4(normalize(cross(INV_VIEW_MATRIX[0].xyz, MODEL_MATRIX[1].xyz)), 0.0), MODEL_MATRIX[3]);
+		__mvm = __mvm * mat4(vec4(length(MODEL_MATRIX[0].xyz), 0.0, 0.0, 0.0), vec4(0.0, 1.0, 0.0, 0.0), vec4(0.0, 0.0, length(MODEL_MATRIX[2].xyz), 0.0), vec4(0.0, 0.0, 0.0, 1.0));
+		n_out2p0 = __mvm;
+	}
+
+
+// Output:0
+	MODELVIEW_MATRIX = n_out2p0;
+
+
+}
+
+void fragment() {
+// Input:4
+	vec4 n_out4p0 = COLOR;
+	float n_out4p4 = n_out4p0.a;
+
+
+	vec4 n_out3p0;
+// Texture2D:3
+	n_out3p0 = texture(Alpha_Texture, UV);
+	float n_out3p1 = n_out3p0.r;
+
+
+	vec4 n_out7p0;
+// Texture2D:7
+	n_out7p0 = texture(Alpha_2_Texture, UV);
+	float n_out7p1 = n_out7p0.r;
+
+
+// FloatOp:8
+	float n_out8p0 = n_out3p1 * n_out7p1;
+
+
+// FloatOp:5
+	float n_out5p0 = n_out4p4 * n_out8p0;
+
+
+// Output:0
+	ALBEDO = vec3(n_out4p0.xyz);
+	ALPHA = n_out5p0;
+
+
+
+ALPHA *= condition_opacity;
+}
+
+
+"
+
+[sub_resource type="Gradient" id="Gradient_l58ew"]
+offsets = PackedFloat32Array(0, 0.0459364)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_3yiw4"]
+gradient = SubResource("Gradient_l58ew")
+fill_from = Vector2(1, 1)
+
+[sub_resource type="Gradient" id="Gradient_2hr6q"]
+offsets = PackedFloat32Array(0, 0.154639, 0.453608, 0.510309, 0.57732, 0.865979, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.828947, 0.828947, 0.828947, 1, 1, 1, 1, 1, 0.255659, 0.255659, 0.255659, 1, 1, 1, 1, 1, 0.797468, 0.797468, 0.797468, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_4e66k"]
+gradient = SubResource("Gradient_2hr6q")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dqkgb"]
+resource_local_to_scene = true
+render_priority = 1
+shader = SubResource("Shader_gbet0")
+shader_parameter/condition_opacity = null
+shader_parameter/Alpha_Texture = SubResource("GradientTexture2D_4e66k")
+shader_parameter/Alpha_2_Texture = SubResource("GradientTexture2D_3yiw4")
+
+[sub_resource type="Curve" id="Curve_bk6na"]
+_limits = [0.0, 8.0, 0.0, 1.0]
+_data = [Vector2(0, 8), 0.0, 0.0, 0, 0, Vector2(0.0542169, 8), 0.0, 0.0, 0, 0, Vector2(0.0722892, 2.70373), 0.0, 0.0, 0, 0, Vector2(0.0933735, 7.07363), 0.0, 0.0, 0, 0, Vector2(0.129518, 3.52241), 0.0, 0.0, 0, 0, Vector2(0.162651, 4.88687), 0.0, 0.0, 0, 0, Vector2(0.23494, 8), 0.0, 0.0, 0, 0, Vector2(0.277108, 4.72313), 0.0, 0.0, 0, 0, Vector2(0.319277, 8), 0.0, 0.0, 0, 0, Vector2(0.394578, 5.92385), 0.0, 0.0, 0, 0, Vector2(0.454819, 8), 0.0, 0.0, 0, 0, Vector2(0.521084, 5.10518), 0.0, 0.0, 0, 0, Vector2(0.539157, 8), 0.0, 0.0, 0, 0, Vector2(0.614458, 5.65096), 0.0, 0.0, 0, 0, Vector2(0.64759, 8), 0.0, 0.0, 0, 0, Vector2(0.783132, 8), 0.0, 0.0, 0, 0, Vector2(0.921687, 8), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 18
+
+[sub_resource type="Curve" id="Curve_rdday"]
+_limits = [0.0, 40.0, 0.0, 1.0]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.0512048, 40), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_4b8fu"]
+curve_x = SubResource("Curve_bk6na")
+curve_y = SubResource("Curve_rdday")
+curve_z = SubResource("Curve_bk6na")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_sl5ip"]
+direction = Vector3(0, 1, 0)
+spread = 0.0
+gravity = Vector3(0, 0, 0)
+scale_curve = SubResource("CurveXYZTexture_4b8fu")
+color = Color(0, 0, 0, 1)
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_4i3ij"]
+_surfaces = [{
+"aabb": AABB(-0.5, 0, 0, 1, 1, 1e-05),
+"format": 34359742465,
+"index_count": 6,
+"index_data": PackedByteArray("AAABAAIAAgABAAMA"),
+"name": "Plane",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray("AAAAPwAAAAAAAAAAAAAAvwAAAAAAAAAAAAAAPwAAgD8AAAAAAAAAvwAAgD8AAAAA")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_tcl73"]
+_surfaces = [{
+"aabb": AABB(-0.5, 0, 0, 1, 1, 1e-05),
+"attribute_data": PackedByteArray("AACAPwAAgD8AAAAAAACAPwAAgD8AAAAAAAAAAAAAAAA="),
+"format": 34359742487,
+"index_count": 6,
+"index_data": PackedByteArray("AAABAAIAAgABAAMA"),
+"name": "Plane",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray("AAAAPwAAAAAAAAAAAAAAvwAAAAAAAAAAAAAAPwAAgD8AAAAAAAAAvwAAgD8AAAAA/3//f////7//f/9/////v/9//3////+//3//f////78=")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_4i3ij")
+
+[sub_resource type="Shader" id="Shader_cou5y"]
+code = "shader_type spatial;
+uniform float condition_opacity = 1.0;
+
+render_mode blend_mix, depth_draw_opaque, depth_test_default, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded, fog_disabled;
+
+uniform bool Fresnel_Invert = false;
+uniform float Fresnel_Power = 1.0;
+uniform sampler2D Gradient_1D_Color : source_color, repeat_disable;
+uniform float Vanishing : hint_range(0.0, 1.0) = 1.0;
+
+
+
+void fragment() {
+// BooleanParameter:4
+	bool n_out4p0 = Fresnel_Invert;
+
+
+// FloatParameter:3
+	float n_out3p0 = Fresnel_Power;
+
+
+// Fresnel:2
+	float n_out2p0 = n_out4p0 ? (pow(clamp(dot(NORMAL, VIEW), 0.0, 1.0), n_out3p0)) : (pow(1.0 - clamp(dot(NORMAL, VIEW), 0.0, 1.0), n_out3p0));
+
+
+	vec4 n_out8p0;
+// Texture2D:8
+	n_out8p0 = texture(Gradient_1D_Color, vec2(n_out2p0));
+	float n_out8p4 = n_out8p0.a;
+
+
+// Input:5
+	vec4 n_out5p0 = COLOR;
+	float n_out5p4 = n_out5p0.a;
+
+
+// VectorOp:9
+	vec3 n_out9p0 = vec3(n_out8p0.xyz) * vec3(n_out5p0.xyz);
+
+
+// FloatOp:6
+	float n_out6p0 = n_out8p4 * n_out5p4;
+
+
+// FloatParameter:11
+	float n_out11p0 = Vanishing;
+
+
+// FloatOp:10
+	float n_out10p0 = n_out6p0 * n_out11p0;
+
+
+// Output:0
+	ALBEDO = n_out9p0;
+	ALPHA = n_out10p0;
+
+
+
+ALPHA *= condition_opacity;
+}
+
+
+"
+
+[sub_resource type="Gradient" id="Gradient_cwpj8"]
+colors = PackedColorArray(0.0846899, 0.0846899, 0.0846899, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_0ljty"]
+gradient = SubResource("Gradient_cwpj8")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_214o2"]
+resource_local_to_scene = true
+render_priority = -1
+shader = SubResource("Shader_cou5y")
+shader_parameter/condition_opacity = null
+shader_parameter/Fresnel_Invert = false
+shader_parameter/Fresnel_Power = 1.0
+shader_parameter/Gradient_1D_Color = SubResource("GradientTexture2D_0ljty")
+shader_parameter/Vanishing = 1.0
+
+[sub_resource type="Curve" id="Curve_shoxv"]
+_limits = [0.0, 7.07, 0.0, 1.0]
+_data = [Vector2(0, 7.07), 0.0, 0.0, 0, 0, Vector2(0.0451807, 7.07), 0.0, 0.0, 0, 0, Vector2(0.0722892, 2.70373), 0.0, 0.0, 0, 0, Vector2(0.0933735, 6.19675), 0.0, 0.0, 0, 0, Vector2(0.129518, 3.52241), 0.0, 0.0, 0, 0, Vector2(0.162651, 4.88687), 0.0, 0.0, 0, 0, Vector2(0.222892, 7.07), 0.0, 0.0, 0, 0, Vector2(0.277108, 4.72313), 0.0, 0.0, 0, 0, Vector2(0.331325, 7.07), 0.0, 0.0, 0, 0, Vector2(0.394578, 5.92385), 0.0, 0.0, 0, 0, Vector2(0.466867, 7.07), 0.0, 0.0, 0, 0, Vector2(0.521084, 5.10518), 0.0, 0.0, 0, 0, Vector2(0.548193, 6.68795), 0.0, 0.0, 0, 0, Vector2(0.614458, 5.65096), 0.0, 0.0, 0, 0, Vector2(0.656627, 6.79711), 0.0, 0.0, 0, 0, Vector2(0.795181, 7.07), 0.0, 0.0, 0, 0, Vector2(0.927711, 7.07), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 18
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_uqyl3"]
+curve_x = SubResource("Curve_shoxv")
+curve_y = SubResource("Curve_rdday")
+curve_z = SubResource("Curve_shoxv")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_bs4qx"]
+direction = Vector3(0, 1, 0)
+spread = 0.0
+gravity = Vector3(0, 0, 0)
+scale_curve = SubResource("CurveXYZTexture_uqyl3")
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_if5qs"]
+_surfaces = [{
+"aabb": AABB(-0.5, 0, -0.5, 1, 1, 1),
+"format": 34896613377,
+"index_count": 144,
+"index_data": PackedByteArray("AAABAAIAAgABAAMABAAAAAIAAQAFAAMABgAAAAQAAwAFAAcACAAGAAQABQAJAAcACgAGAAgABwAJAAsADAAKAAgACQANAAsADgAKAAwACwANAA8AEAAOAAwADQARAA8AEgAOABAADwARABMAFAASABAAEQAVABMAFgASABQAEwAVABcAGAAWABQAFQAZABcAGgAWABgAFwAZABsAHAAaABgAGQAdABsAHgAaABwAGwAdAB8AIAAeABwAHQAhAB8AIgAeACAAHwAhACMAJAAiACAAIQAlACMAJgAiACQAIwAlACcAKAAmACQAJQApACcAKgAmACgAJwApACsALAAqACgAKQAtACsALgAqACwAKwAtAC8ALQAuAC8ALwAuACwA"),
+"name": "Cylinder",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 48,
+"vertex_data": PackedByteArray("IKEAAFwEAAD/fwAAAAAAACCh//9cBAAA/3///wAAAAD/v///JREAAN5eAABcBAAA/78AACURAADeXv//XAQAAIHa//99JQAA/z8AACURAACB2gAAfSUAAP8///8lEQAA2e7///8/AAB9JQAAfSUAANnuAAD/PwAAfSX//30lAACi+///3l4AACURAAD/PwAAovsAAN5eAAAlEf///z8AAP//////fwAAXAQAAN5eAAD//wAA/38AAFwE///eXgAAovv//yChAAAAAAAA/38AAKL7AAAgoQAAAAD///9/AADZ7v///78AAFwEAAAgoQAA2e4AAP+/AABcBP//IKEAAIHa//+B2gAAJREAAP+/AACB2gAAgdoAACUR////vwAA/7///9nuAAB9JQAAgdoAAP+/AADZ7gAAfSX//4HaAAAgof//ovsAAP8/AADZ7gAAIKEAAKL7AAD/P///2e4AAP9//////wAA3l4AAKL7AAD/fwAA//8AAN5e//+i+wAA")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_2je5h"]
+_surfaces = [{
+"aabb": AABB(-0.5, 0, -0.5, 1, 1, 1),
+"attribute_data": PackedByteArray("VPX///////9U9QAA//8AAKnqAACp6v///98AAP/f//9U1QAAVNX//6nKAACpyv///78AAP+///9UtQAAVLX//6qqAACqqv///58AAP+f//9UlQAAVJX//6qKAACqiv///38AAP9///9UdQAAVHX//6pqAACqav///18AAP9f//9UVQAAVFX//6pKAACqSv///z8AAP8///9VNQAAVTX//6oqAACqKv///x8AAP8f//9VFQAAVRX//6oKAACqCv//AAAAAAAA//8="),
+"format": 34896613399,
+"index_count": 144,
+"index_data": PackedByteArray("AAABAAIAAgABAAMABAAAAAIABQAAAAQABgAFAAQABwAFAAYACAAHAAYACQAHAAgACgAJAAgACwAJAAoADAALAAoADQALAAwADgANAAwADwANAA4AEAAPAA4AEQAPABAAEgARABAAEwARABIAFAATABIAFQATABQAFgAVABQAFwAVABYAGAAXABYAGQAXABgAGgAZABgAGwAZABoAHAAbABoAHQAbABwAHgAdABwAHwAdAB4AIAAfAB4AIQAfACAAIgAhACAAIwAhACIAJAAjACIAJQAjACQAJgAlACQAJwAlACYAKAAnACYAKQAnACgAKgApACgAKwApACoALAArACoALQArACwALgAtACwALwAtAC4AMAAvAC4AMQAvADAA"),
+"name": "Cylinder",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 50,
+"vertex_data": PackedByteArray("IKEAAFwEAAD/fwAAAAAAACCh//9cBAAA/3///wAAAAD/v///JREAAP+/AAAlEQAAgdr//30lAACB2gAAfSUAANnu////PwAA2e4AAP8/AACi+///3l4AAKL7AADeXgAA//////9/AAD//wAA/38AAKL7//8goQAAovsAACChAADZ7v///78AANnuAAD/vwAAgdr//4HaAACB2gAAgdoAAP+////Z7gAA/78AANnuAAAgof//ovsAACChAACi+wAA/3//////AAD/fwAA//8AAN5e//+i+wAA3l4AAKL7AAD/P///2e4AAP8/AADZ7gAAfSX//4HaAAB9JQAAgdoAACUR////vwAAJREAAP+/AABcBP//IKEAAFwEAAAgoQAAAAD///9/AAAAAAAA/38AAFwE///eXgAAXAQAAN5eAAAlEf///z8AACURAAD/PwAAfSX//30lAAB9JQAAfSUAAP8///8lEQAA/z8AACURAADeXv//XAQAAN5eAABcBAAA/3///wAAAAD/fwAAAAAAABtx/3//f/9/G3H/f/9//3/yZP9/8mT/f4Ja/3+CWv9/JVH/fyVR/39sSP9/bEj/f/8//3//P/9///+St///krf//9mu///Zrv//fKX//3yl//8Mm///DJv//+OO///jjv///3////9/G/H/fxvx/3/y5P9/8uT/f4Ha/3+B2v9/JdH/fyXR/39syP9/bMj/f/+//3//v/9/krf/f5K3/3/Zrv9/2a7/f3yl/398pf9/DJv/fwyb/3/jjv9/447/f/9//3//f/9/")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_if5qs")
+
+[sub_resource type="Shader" id="Shader_7207j"]
+code = "shader_type spatial;
+uniform float condition_opacity = 1.0;
+
+uniform float condition_clock=0.0;
+
+render_mode blend_mix, depth_draw_opaque, depth_test_default, cull_disabled, diffuse_lambert, specular_schlick_ggx, unshaded, fog_disabled;
+
+uniform float Color_Intensity = 1.0;
+uniform vec2 Scale_XY = vec2(1.000000, 1.000000);
+uniform vec2 Speed_XY;
+uniform sampler2D Base_Texture : source_color;
+uniform sampler2D Add_Texture : source_color, repeat_disable;
+uniform sampler2D Substract_Texture : source_color, hint_default_black, repeat_disable;
+uniform sampler2D Gradient_1D_Color : source_color;
+uniform float Dissolver_edge : hint_range(0.0, 1.0) = 0.0;
+uniform bool Fresnel_Invert = false;
+uniform float Fresnel_Power = 1.0;
+
+
+
+void fragment() {
+// FloatParameter:27
+	float n_out27p0 = Color_Intensity;
+
+
+// Vector2Parameter:13
+	vec2 n_out13p0 = Scale_XY;
+
+
+// UVFunc:9
+	vec2 n_in9p2 = vec2(0.00000, 0.00000);
+	vec2 n_out9p0 = (UV - n_in9p2) * n_out13p0 + n_in9p2;
+
+
+// Vector2Parameter:10
+	vec2 n_out10p0 = Speed_XY;
+
+
+// Input:12
+	float n_out12p0 = condition_clock;
+
+
+// VectorOp:11
+	vec2 n_out11p0 = n_out10p0 * vec2(n_out12p0);
+
+
+// UVFunc:8
+	vec2 n_in8p1 = vec2(1.00000, 1.00000);
+	vec2 n_out8p0 = n_out11p0 * n_in8p1 + n_out9p0;
+
+
+	vec4 n_out3p0;
+// Texture2D:3
+	n_out3p0 = texture(Base_Texture, n_out8p0);
+	float n_out3p1 = n_out3p0.r;
+
+
+	vec4 n_out6p0;
+// Texture2D:6
+	n_out6p0 = texture(Add_Texture, UV);
+	float n_out6p1 = n_out6p0.r;
+
+
+// FloatOp:24
+	float n_out24p0 = n_out3p1 + n_out6p1;
+
+
+	vec4 n_out34p0;
+// Texture2D:34
+	n_out34p0 = texture(Substract_Texture, UV);
+	float n_out34p1 = n_out34p0.r;
+
+
+// FloatOp:36
+	float n_out36p0 = n_out24p0 - n_out34p1;
+
+
+// Clamp:25
+	float n_in25p1 = 0.00000;
+	float n_in25p2 = 1.00000;
+	float n_out25p0 = clamp(n_out36p0, n_in25p1, n_in25p2);
+
+
+	vec4 n_out15p0;
+// Texture2D:15
+	n_out15p0 = texture(Gradient_1D_Color, vec2(n_out25p0));
+	float n_out15p4 = n_out15p0.a;
+
+
+// VectorOp:26
+	vec3 n_out26p0 = vec3(n_out27p0) * vec3(n_out15p0.xyz);
+
+
+// FloatParameter:29
+	float n_out29p0 = Dissolver_edge;
+
+
+// SmoothStep:28
+	float n_in28p1 = 1.00000;
+	float n_out28p0 = smoothstep(n_out29p0, n_in28p1, n_out15p4);
+
+
+// BooleanParameter:33
+	bool n_out33p0 = Fresnel_Invert;
+
+
+// FloatParameter:32
+	float n_out32p0 = Fresnel_Power;
+
+
+// Fresnel:31
+	float n_out31p0 = n_out33p0 ? (pow(clamp(dot(NORMAL, VIEW), 0.0, 1.0), n_out32p0)) : (pow(1.0 - clamp(dot(NORMAL, VIEW), 0.0, 1.0), n_out32p0));
+
+
+// FloatOp:30
+	float n_out30p0 = n_out28p0 * n_out31p0;
+
+
+// Output:0
+	ALBEDO = n_out26p0;
+	ALPHA = n_out30p0;
+
+
+
+ALPHA *= condition_opacity;
+}
+
+
+"
+
+[sub_resource type="Gradient" id="Gradient_7shoc"]
+offsets = PackedFloat32Array(0.731959, 0.953608, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.576923, 0.576923, 0.576923, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_66s0n"]
+gradient = SubResource("Gradient_7shoc")
+fill_to = Vector2(0, 1)
+
+[sub_resource type="Gradient" id="Gradient_2ols3"]
+offsets = PackedFloat32Array(0.0515464, 0.319588, 0.412371, 0.804124)
+colors = PackedColorArray(0, 0, 0, 1, 0.617455, 0.617455, 0.617455, 1, 0.457447, 0.457447, 0.457447, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_fbim6"]
+gradient = SubResource("Gradient_2ols3")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tpv2t"]
+resource_local_to_scene = true
+render_priority = 0
+shader = SubResource("Shader_7207j")
+shader_parameter/condition_opacity = null
+shader_parameter/condition_clock = null
+shader_parameter/Color_Intensity = 5.0
+shader_parameter/Scale_XY = Vector2(1.5, 3)
+shader_parameter/Speed_XY = Vector2(0.5, 3)
+shader_parameter/Base_Texture = ExtResource("1_4ffyt")
+shader_parameter/Add_Texture = SubResource("GradientTexture2D_66s0n")
+shader_parameter/Gradient_1D_Color = SubResource("GradientTexture1D_fbim6")
+shader_parameter/Dissolver_edge = 0.0
+shader_parameter/Fresnel_Invert = false
+shader_parameter/Fresnel_Power = 0.805
+
+[sub_resource type="Curve" id="Curve_7rsd5"]
+_limits = [0.0, 6.8, 0.0, 1.0]
+_data = [Vector2(0, 6.8), 0.0, 0.0, 0, 0, Vector2(0.060241, 6.8), 0.0, 0.0, 0, 0, Vector2(0.0722892, 2.70373), 0.0, 0.0, 0, 0, Vector2(0.0963856, 6.8), 0.0, 0.0, 0, 0, Vector2(0.129518, 3.52241), 0.0, 0.0, 0, 0, Vector2(0.162651, 4.88687), 0.0, 0.0, 0, 0, Vector2(0.21988, 6.8), 0.0, 0.0, 0, 0, Vector2(0.277108, 4.72313), 0.0, 0.0, 0, 0, Vector2(0.316265, 6.8), 0.0, 0.0, 0, 0, Vector2(0.394578, 5.92385), 0.0, 0.0, 0, 0, Vector2(0.460843, 6.8), 0.0, 0.0, 0, 0, Vector2(0.521084, 5.10518), 0.0, 0.0, 0, 0, Vector2(0.554217, 6.19675), 0.0, 0.0, 0, 0, Vector2(0.614458, 5.65096), 0.0, 0.0, 0, 0, Vector2(0.650602, 6.8), 0.0, 0.0, 0, 0, Vector2(0.798193, 6.8), 0.0, 0.0, 0, 0, Vector2(0.924699, 6.14217), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 18
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_18de0"]
+curve_x = SubResource("Curve_7rsd5")
+curve_y = SubResource("Curve_rdday")
+curve_z = SubResource("Curve_7rsd5")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_vxw0p"]
+direction = Vector3(0, 1, 0)
+spread = 0.0
+gravity = Vector3(0, 0, 0)
+scale_curve = SubResource("CurveXYZTexture_18de0")
+
+[sub_resource type="Shader" id="Shader_5bx1b"]
+code = "shader_type spatial;
+uniform float condition_opacity = 1.0;
+
+uniform float condition_clock=0.0;
+
+render_mode blend_mix, depth_draw_opaque, depth_test_default, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded, fog_disabled;
+
+uniform float Color_Intensity = 1.0;
+uniform vec2 Scale_XY = vec2(1.000000, 1.000000);
+uniform vec2 Speed_XY;
+uniform sampler2D Base_Texture : source_color;
+uniform sampler2D Add_Texture : source_color, repeat_disable;
+uniform sampler2D Substract_Texture : source_color, hint_default_black, repeat_disable;
+uniform sampler2D Gradient_1D_Color : source_color;
+uniform float Dissolver_edge : hint_range(0.0, 1.0) = 0.0;
+uniform bool Fresnel_Invert = false;
+uniform float Fresnel_Power = 1.0;
+
+
+
+void fragment() {
+// FloatParameter:27
+	float n_out27p0 = Color_Intensity;
+
+
+// Vector2Parameter:13
+	vec2 n_out13p0 = Scale_XY;
+
+
+// UVFunc:9
+	vec2 n_in9p2 = vec2(0.00000, 0.00000);
+	vec2 n_out9p0 = (UV - n_in9p2) * n_out13p0 + n_in9p2;
+
+
+// Vector2Parameter:10
+	vec2 n_out10p0 = Speed_XY;
+
+
+// Input:12
+	float n_out12p0 = condition_clock;
+
+
+// VectorOp:11
+	vec2 n_out11p0 = n_out10p0 * vec2(n_out12p0);
+
+
+// UVFunc:8
+	vec2 n_in8p1 = vec2(1.00000, 1.00000);
+	vec2 n_out8p0 = n_out11p0 * n_in8p1 + n_out9p0;
+
+
+	vec4 n_out3p0;
+// Texture2D:3
+	n_out3p0 = texture(Base_Texture, n_out8p0);
+	float n_out3p1 = n_out3p0.r;
+
+
+	vec4 n_out6p0;
+// Texture2D:6
+	n_out6p0 = texture(Add_Texture, UV);
+	float n_out6p1 = n_out6p0.r;
+
+
+// FloatOp:24
+	float n_out24p0 = n_out3p1 + n_out6p1;
+
+
+	vec4 n_out34p0;
+// Texture2D:34
+	n_out34p0 = texture(Substract_Texture, UV);
+	float n_out34p1 = n_out34p0.r;
+
+
+// FloatOp:36
+	float n_out36p0 = n_out24p0 - n_out34p1;
+
+
+// Clamp:25
+	float n_in25p1 = 0.00000;
+	float n_in25p2 = 1.00000;
+	float n_out25p0 = clamp(n_out36p0, n_in25p1, n_in25p2);
+
+
+	vec4 n_out15p0;
+// Texture2D:15
+	n_out15p0 = texture(Gradient_1D_Color, vec2(n_out25p0));
+	float n_out15p4 = n_out15p0.a;
+
+
+// VectorOp:26
+	vec3 n_out26p0 = vec3(n_out27p0) * vec3(n_out15p0.xyz);
+
+
+// FloatParameter:29
+	float n_out29p0 = Dissolver_edge;
+
+
+// SmoothStep:28
+	float n_in28p1 = 1.00000;
+	float n_out28p0 = smoothstep(n_out29p0, n_in28p1, n_out15p4);
+
+
+// BooleanParameter:33
+	bool n_out33p0 = Fresnel_Invert;
+
+
+// FloatParameter:32
+	float n_out32p0 = Fresnel_Power;
+
+
+// Fresnel:31
+	float n_out31p0 = n_out33p0 ? (pow(clamp(dot(NORMAL, VIEW), 0.0, 1.0), n_out32p0)) : (pow(1.0 - clamp(dot(NORMAL, VIEW), 0.0, 1.0), n_out32p0));
+
+
+// FloatOp:30
+	float n_out30p0 = n_out28p0 * n_out31p0;
+
+
+// Output:0
+	ALBEDO = n_out26p0;
+	ALPHA = n_out30p0;
+
+
+
+ALPHA *= condition_opacity;
+}
+
+
+"
+
+[sub_resource type="Gradient" id="Gradient_twfkr"]
+offsets = PackedFloat32Array(0.629328, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_apqi0"]
+gradient = SubResource("Gradient_twfkr")
+fill_to = Vector2(0, 1)
+
+[sub_resource type="Gradient" id="Gradient_472eo"]
+offsets = PackedFloat32Array(0, 0.0977597, 0.439919, 0.928717, 1)
+colors = PackedColorArray(0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_mix7t"]
+gradient = SubResource("Gradient_472eo")
+
+[sub_resource type="Gradient" id="Gradient_4qr5w"]
+offsets = PackedFloat32Array(0.303462, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_xtkqs"]
+gradient = SubResource("Gradient_4qr5w")
+fill_from = Vector2(1, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fciom"]
+resource_local_to_scene = true
+render_priority = 1
+shader = SubResource("Shader_5bx1b")
+shader_parameter/condition_opacity = null
+shader_parameter/condition_clock = null
+shader_parameter/Color_Intensity = 2.0
+shader_parameter/Scale_XY = Vector2(2, 1)
+shader_parameter/Speed_XY = Vector2(0, 3)
+shader_parameter/Base_Texture = ExtResource("1_4ffyt")
+shader_parameter/Add_Texture = SubResource("GradientTexture2D_apqi0")
+shader_parameter/Substract_Texture = SubResource("GradientTexture2D_xtkqs")
+shader_parameter/Gradient_1D_Color = SubResource("GradientTexture1D_mix7t")
+shader_parameter/Dissolver_edge = 0.0
+shader_parameter/Fresnel_Invert = true
+shader_parameter/Fresnel_Power = 2.22
+
+[sub_resource type="Curve" id="Curve_6vg7t"]
+_limits = [0.0, 7.5, 0.0, 1.0]
+_data = [Vector2(0, 7.5), 0.0, 0.0, 0, 0, Vector2(0.0512048, 7.5), 0.0, 0.0, 0, 0, Vector2(0.0722892, 2.70373), 0.0, 0.0, 0, 0, Vector2(0.0933735, 7.5), 0.0, 0.0, 0, 0, Vector2(0.129518, 3.52241), 0.0, 0.0, 0, 0, Vector2(0.162651, 4.88687), 0.0, 0.0, 0, 0, Vector2(0.222892, 7.07), 0.0, 0.0, 0, 0, Vector2(0.277108, 4.72313), 0.0, 0.0, 0, 0, Vector2(0.331325, 7.5), 0.0, 0.0, 0, 0, Vector2(0.394578, 5.92385), 0.0, 0.0, 0, 0, Vector2(0.472892, 7.5), 0.0, 0.0, 0, 0, Vector2(0.521084, 5.10518), 0.0, 0.0, 0, 0, Vector2(0.557229, 7.3842), 0.0, 0.0, 0, 0, Vector2(0.614458, 5.65096), 0.0, 0.0, 0, 0, Vector2(0.656627, 7.3842), 0.0, 0.0, 0, 0, Vector2(0.792169, 7.5), 0.0, 0.0, 0, 0, Vector2(0.927711, 7.5), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 18
+
+[sub_resource type="Curve" id="Curve_doryk"]
+_limits = [0.0, 7.0, 0.0, 1.0]
+_data = [Vector2(0, 7), 0.0, 0.0, 0, 0]
+point_count = 1
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_yveul"]
+curve_x = SubResource("Curve_6vg7t")
+curve_y = SubResource("Curve_doryk")
+curve_z = SubResource("Curve_6vg7t")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_va3a8"]
+direction = Vector3(0, 1, 0)
+spread = 0.0
+gravity = Vector3(0, 0, 0)
+scale_curve = SubResource("CurveXYZTexture_yveul")
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_brmal"]
+_surfaces = [{
+"aabb": AABB(-0.5, 0, -0.5, 1, 1, 1),
+"format": 34896613377,
+"index_count": 144,
+"index_data": PackedByteArray("AAABAAIAAgABAAMAAAAEAAEAAgADAAUABgAEAAAABQADAAcABgAIAAQABQAHAAkACgAIAAYACQAHAAsACgAMAAgACQALAA0ADgAMAAoADQALAA8ADgAQAAwADQAPABEAEgAQAA4AEQAPABMAEgAUABAAEQATABUAFgAUABIAFQATABcAFgAYABQAFQAXABkAGgAYABYAGQAXABsAGgAcABgAGQAbAB0AHgAcABoAHQAbAB8AHgAgABwAHQAfACEAIgAgAB4AIQAfACMAIgAkACAAIQAjACUAJgAkACIAJQAjACcAJgAoACQAJQAnACkAKgAoACYAKQAnACsAKgAsACgAKQArAC0ALgAsACoALQArAC8ALgAvACwALQAvAC4A"),
+"name": "Cylinder",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 48,
+"vertex_data": PackedByteArray("/3///wAAAAD/fwAAAAAAACCh//9cBAAAIKEAAFwEAADeXgAAXAQAAP+///8lEQAA3l7//1wEAAD/vwAAJREAAP8/AAAlEQAAgdr//30lAAD/P///JREAAIHaAAB9JQAAfSUAAH0lAADZ7v///z8AAH0l//99JQAA2e4AAP8/AAAlEQAA/z8AAKL7///eXgAAJRH///8/AACi+wAA3l4AAFwEAADeXgAA//////9/AABcBP//3l4AAP//AAD/fwAAAAAAAP9/AACi+///IKEAAAAA////fwAAovsAACChAABcBAAAIKEAANnu////vwAAXAT//yChAADZ7gAA/78AACURAAD/vwAAgdr//4HaAAAlEf///78AAIHaAACB2gAAfSUAAIHaAAD/v///2e4AAH0l//+B2gAA/78AANnuAAD/PwAA2e4AACCh//+i+wAA/z///9nuAAAgoQAAovsAAN5eAACi+wAA/3//////AADeXv//ovsAAP9/AAD//wAA")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_lsctq"]
+_surfaces = [{
+"aabb": AABB(-0.5, 0, -0.5, 1, 1, 1),
+"attribute_data": PackedByteArray("//8AAP////9U9QAAVPX//6nqAACp6v///98AAP/f//9U1QAAVNX//6nKAACpyv///78AAP+///9UtQAAVLX//6qqAACqqv///58AAP+f//9UlQAAVJX//6qKAACqiv///38AAP9///9UdQAAVHX//6pqAACqav///18AAP9f//9UVQAAVFX//6pKAACqSv///z8AAP8///9VNQAAVTX//6oqAACqKv///x8AAP8f//9VFQAAVRX//6oKAACqCv//AAAAAAAA//8="),
+"format": 34896613399,
+"index_count": 144,
+"index_data": PackedByteArray("AAABAAIAAgABAAMAAgADAAQABAADAAUABAAFAAYABgAFAAcABgAHAAgACAAHAAkACAAJAAoACgAJAAsACgALAAwADAALAA0ADAANAA4ADgANAA8ADgAPABAAEAAPABEAEAARABIAEgARABMAEgATABQAFAATABUAFAAVABYAFgAVABcAFgAXABgAGAAXABkAGAAZABoAGgAZABsAGgAbABwAHAAbAB0AHAAdAB4AHgAdAB8AHgAfACAAIAAfACEAIAAhACIAIgAhACMAIgAjACQAJAAjACUAJAAlACYAJgAlACcAJgAnACgAKAAnACkAKAApACoAKgApACsAKgArACwALAArAC0ALAAtAC4ALgAtAC8ALgAvADAAMAAvADEA"),
+"name": "Cylinder",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 50,
+"vertex_data": PackedByteArray("/3///wAA////fwAAAAD//yCh//9cBFT1IKEAAFwEVPX/v///JRGp6v+/AAAlEanqgdr//30l/9+B2gAAfSX/39nu////P1TV2e4AAP8/VNWi+///3l6pyqL7AADeXqnK//////9//7///wAA/3//v6L7//8goVS1ovsAACChVLXZ7v///7+pqtnuAAD/v6mqgdr//4Ha/5+B2gAAgdr/n/+////Z7lSV/78AANnuVJUgof//ovuqiiChAACi+6qK/3//////AID/fwAA//8AgN5e//+i+6qK3l4AAKL7qor/P///2e5Ulf8/AADZ7lSVfSX//4Ha/599JQAAgdr/nyUR////v6mqJREAAP+/qapcBP//IKFUtVwEAAAgoVS1AAD///9//78AAAAA/3//v1wE///eXqnKXAQAAN5eqcolEf///z9U1SURAAD/P1TVfSX//30l/999JQAAfSX/3/8///8lEanq/z8AACURqereXv//XARU9d5eAABcBFT1/3///wAA////fwAAAAD///9/////f////38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f////3////9/////f///")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_brmal")
+
+[sub_resource type="Shader" id="Shader_8hms4"]
+code = "shader_type spatial;
+uniform float condition_opacity = 1.0;
+
+uniform float condition_clock=0.0;
+
+render_mode blend_mix, depth_draw_opaque, depth_test_default, cull_disabled, diffuse_lambert, specular_schlick_ggx, unshaded, fog_disabled;
+
+uniform float Color_Intensity = 1.0;
+uniform vec2 Scale_XY = vec2(1.000000, 1.000000);
+uniform vec2 Speed_XY;
+uniform sampler2D Base_Texture : source_color;
+uniform sampler2D Add_Texture : source_color, repeat_disable;
+uniform sampler2D Substract_Texture : source_color, hint_default_black, repeat_disable;
+uniform sampler2D Gradient_1D_Color : source_color;
+uniform float Dissolver_edge : hint_range(0.0, 1.0) = 0.0;
+
+
+
+void fragment() {
+// FloatParameter:27
+	float n_out27p0 = Color_Intensity;
+
+
+// Vector2Parameter:13
+	vec2 n_out13p0 = Scale_XY;
+
+
+// UVFunc:9
+	vec2 n_in9p2 = vec2(0.00000, 0.00000);
+	vec2 n_out9p0 = (UV - n_in9p2) * n_out13p0 + n_in9p2;
+
+
+// Vector2Parameter:10
+	vec2 n_out10p0 = Speed_XY;
+
+
+// Input:12
+	float n_out12p0 = condition_clock;
+
+
+// VectorOp:11
+	vec2 n_out11p0 = n_out10p0 * vec2(n_out12p0);
+
+
+// UVFunc:8
+	vec2 n_in8p1 = vec2(1.00000, 1.00000);
+	vec2 n_out8p0 = n_out11p0 * n_in8p1 + n_out9p0;
+
+
+	vec4 n_out3p0;
+// Texture2D:3
+	n_out3p0 = texture(Base_Texture, n_out8p0);
+	float n_out3p1 = n_out3p0.r;
+
+
+	vec4 n_out6p0;
+// Texture2D:6
+	n_out6p0 = texture(Add_Texture, UV);
+	float n_out6p1 = n_out6p0.r;
+
+
+// FloatOp:24
+	float n_out24p0 = n_out3p1 + n_out6p1;
+
+
+	vec4 n_out30p0;
+// Texture2D:30
+	n_out30p0 = texture(Substract_Texture, UV);
+	float n_out30p1 = n_out30p0.r;
+
+
+// FloatOp:32
+	float n_out32p0 = n_out24p0 - n_out30p1;
+
+
+// Clamp:25
+	float n_in25p1 = 0.00000;
+	float n_in25p2 = 1.00000;
+	float n_out25p0 = clamp(n_out32p0, n_in25p1, n_in25p2);
+
+
+	vec4 n_out15p0;
+// Texture2D:15
+	n_out15p0 = texture(Gradient_1D_Color, vec2(n_out25p0));
+	float n_out15p4 = n_out15p0.a;
+
+
+// VectorOp:26
+	vec3 n_out26p0 = vec3(n_out27p0) * vec3(n_out15p0.xyz);
+
+
+// FloatParameter:29
+	float n_out29p0 = Dissolver_edge;
+
+
+// SmoothStep:28
+	float n_in28p1 = 1.00000;
+	float n_out28p0 = smoothstep(n_out29p0, n_in28p1, n_out15p4);
+
+
+// Output:0
+	ALBEDO = n_out26p0;
+	ALPHA = n_out28p0;
+
+
+
+ALPHA *= condition_opacity;
+}
+
+
+"
+
+[sub_resource type="Gradient" id="Gradient_l5w34"]
+offsets = PackedFloat32Array(0)
+colors = PackedColorArray(0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_e8njx"]
+gradient = SubResource("Gradient_l5w34")
+
+[sub_resource type="Gradient" id="Gradient_qimvp"]
+offsets = PackedFloat32Array(0, 0.790224, 0.98167, 1)
+colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_1apcm"]
+gradient = SubResource("Gradient_qimvp")
+
+[sub_resource type="Gradient" id="Gradient_mshok"]
+offsets = PackedFloat32Array(0.756329, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_0dj5r"]
+gradient = SubResource("Gradient_mshok")
+fill_from = Vector2(1, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0okfo"]
+resource_local_to_scene = true
+render_priority = 0
+shader = SubResource("Shader_8hms4")
+shader_parameter/condition_opacity = null
+shader_parameter/condition_clock = null
+shader_parameter/Color_Intensity = 10.0
+shader_parameter/Scale_XY = Vector2(2, 6)
+shader_parameter/Speed_XY = Vector2(-5, 0)
+shader_parameter/Base_Texture = ExtResource("2_fu75w")
+shader_parameter/Add_Texture = SubResource("GradientTexture2D_e8njx")
+shader_parameter/Substract_Texture = SubResource("GradientTexture2D_0dj5r")
+shader_parameter/Gradient_1D_Color = SubResource("GradientTexture1D_1apcm")
+shader_parameter/Dissolver_edge = 0.0
+
+[sub_resource type="Curve" id="Curve_liumn"]
+_limits = [0.0, 7.55, 0.0, 1.0]
+_data = [Vector2(0, 7.55), 0.0, 0.0, 0, 0, Vector2(0.0512048, 7.55), 0.0, 0.0, 0, 0, Vector2(0.0813253, 3.237), 0.0, 0.0, 0, 0, Vector2(0.0993976, 6.67574), 0.0, 0.0, 0, 0, Vector2(0.13253, 3.76155), 0.0, 0.0, 0, 0, Vector2(0.168675, 5.80149), 0.0, 0.0, 0, 0, Vector2(0.222892, 7.55), 0.0, 0.0, 0, 0, Vector2(0.28012, 5.21865), 0.0, 0.0, 0, 0, Vector2(0.334337, 7.55), 0.0, 0.0, 0, 0, Vector2(0.394578, 6.20947), 0.0, 0.0, 0, 0, Vector2(0.460843, 7.55), 0.0, 0.0, 0, 0, Vector2(0.512048, 5.51007), -6.02007, -6.02007, 0, 0, Vector2(0.548193, 7.37515), 0.0, 0.0, 0, 0, Vector2(0.620482, 5.97634), 0.0, 0.0, 0, 0, Vector2(0.656627, 7.55), 0.0, 0.0, 0, 0, Vector2(0.71988, 5.7432), 0.0, 0.0, 0, 0, Vector2(0.792169, 7.55), 0.0, 0.0, 0, 0, Vector2(0.921687, 7.55), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 19
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_isr6n"]
+curve_x = SubResource("Curve_liumn")
+curve_y = SubResource("Curve_rdday")
+curve_z = SubResource("Curve_liumn")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_a2vxv"]
+direction = Vector3(0, 1, 0)
+spread = 0.0
+gravity = Vector3(0, 0, 0)
+scale_curve = SubResource("CurveXYZTexture_isr6n")
+
+[sub_resource type="Shader" id="Shader_krwwk"]
+code = "shader_type spatial;
+uniform float condition_opacity = 1.0;
+
+uniform float condition_clock=0.0;
+
+render_mode blend_mix, depth_draw_opaque, depth_test_default, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded, shadows_disabled, fog_disabled;
+
+uniform float Intensity = 1.0;
+uniform bool Enable_Proximity_Fade = true;
+uniform sampler2D Texture_Add : source_color, hint_default_black;
+uniform bool Enable_Distortion = true;
+uniform float Dist_Zoom_Strenght = 1.0;
+uniform float Diost_repeat_strenght = 1.0;
+uniform vec2 Distortion_Speed_XY = vec2(0.000000, 0.000000);
+uniform sampler2D Distortion_Texture : source_color;
+uniform float Distortion_Attenuation = 5.0;
+uniform float Zoom_Strenght = 1.0;
+uniform float repeat = 1.0;
+uniform vec2 Speed_XY = vec2(0.000000, 0.000000);
+uniform sampler2D Texture_Main : source_color, filter_linear;
+uniform float Power = 1.0;
+uniform sampler2D Texture_Substract : source_color, hint_default_black, filter_linear;
+uniform float Proximity_Fade = 0.10000000149012;
+uniform sampler2D depth_tex_frg_30 : hint_depth_texture;
+uniform sampler2D Color_1D_Gradient : source_color, repeat_disable;
+uniform float Transparency : hint_range(0.0, 1.0) = 1.0;
+
+
+
+void fragment() {
+// FloatParameter:54
+	float n_out54p0 = Intensity;
+
+
+// BooleanParameter:34
+	bool n_out34p0 = Enable_Proximity_Fade;
+
+
+	vec4 n_out45p0;
+// Texture2D:45
+	n_out45p0 = texture(Texture_Add, UV);
+	float n_out45p1 = n_out45p0.r;
+
+
+// BooleanParameter:40
+	bool n_out40p0 = Enable_Distortion;
+
+
+// Input:17
+	vec2 n_out17p0 = UV;
+
+
+// FloatParameter:28
+	float n_out28p0 = Dist_Zoom_Strenght;
+
+
+// FloatParameter:27
+	float n_out27p0 = Diost_repeat_strenght;
+
+
+	vec2 n_out29p0;
+// UVPolarCoord:29
+	vec2 n_in29p1 = vec2(0.50000, 0.50000);
+	{
+		vec2 __dir = UV - n_in29p1;
+		float __radius = length(__dir) * 2.0;
+		float __angle = atan(__dir.y, __dir.x) * 1.0 / (PI * 2.0);
+		n_out29p0 = vec2(__radius * n_out28p0, __angle * n_out27p0);
+	}
+
+
+// Input:23
+	float n_out23p0 = condition_clock;
+
+
+// Vector2Parameter:24
+	vec2 n_out24p0 = Distortion_Speed_XY;
+
+
+// VectorOp:25
+	vec2 n_out25p0 = vec2(n_out23p0) * n_out24p0;
+
+
+// UVFunc:26
+	vec2 n_in26p1 = vec2(1.00000, 1.00000);
+	vec2 n_out26p0 = n_out25p0 * n_in26p1 + n_out29p0;
+
+
+	vec4 n_out19p0;
+// Texture2D:19
+	n_out19p0 = texture(Distortion_Texture, n_out26p0);
+	float n_out19p1 = n_out19p0.r;
+
+
+// FloatParameter:21
+	float n_out21p0 = Distortion_Attenuation;
+
+
+// FloatOp:20
+	float n_out20p0 = n_out19p1 / n_out21p0;
+
+
+// VectorOp:22
+	vec2 n_out22p0 = n_out17p0 + vec2(n_out20p0);
+
+
+// Input:42
+	vec2 n_out42p0 = UV;
+
+
+	vec2 n_out41p0;
+// Switch:41
+	n_out41p0 = mix(n_out42p0, n_out22p0, float(n_out40p0));
+
+
+// FloatParameter:13
+	float n_out13p0 = Zoom_Strenght;
+
+
+// FloatParameter:14
+	float n_out14p0 = repeat;
+
+
+	vec2 n_out2p0;
+// UVPolarCoord:2
+	vec2 n_in2p1 = vec2(0.50000, 0.50000);
+	{
+		vec2 __dir = n_out41p0 - n_in2p1;
+		float __radius = length(__dir) * 2.0;
+		float __angle = atan(__dir.y, __dir.x) * 1.0 / (PI * 2.0);
+		n_out2p0 = vec2(__radius * n_out13p0, __angle * n_out14p0);
+	}
+
+
+// Input:5
+	float n_out5p0 = condition_clock;
+
+
+// Vector2Parameter:7
+	vec2 n_out7p0 = Speed_XY;
+
+
+// VectorOp:6
+	vec2 n_out6p0 = vec2(n_out5p0) * n_out7p0;
+
+
+// UVFunc:4
+	vec2 n_in4p1 = vec2(1.00000, 1.00000);
+	vec2 n_out4p0 = n_out6p0 * n_in4p1 + n_out2p0;
+
+
+	vec4 n_out9p0;
+// Texture2D:9
+	n_out9p0 = texture(Texture_Main, n_out4p0);
+	float n_out9p1 = n_out9p0.r;
+
+
+// FloatParameter:16
+	float n_out16p0 = Power;
+
+
+// FloatOp:15
+	float n_out15p0 = pow(n_out9p1, n_out16p0);
+
+
+// FloatOp:46
+	float n_out46p0 = n_out45p1 + n_out15p0;
+
+
+	vec4 n_out11p0;
+// Texture2D:11
+	n_out11p0 = texture(Texture_Substract, UV);
+	float n_out11p1 = n_out11p0.r;
+
+
+// FloatOp:12
+	float n_out12p0 = n_out46p0 - n_out11p1;
+
+
+// Clamp:47
+	float n_in47p1 = 0.00000;
+	float n_in47p2 = 1.00000;
+	float n_out47p0 = clamp(n_out12p0, n_in47p1, n_in47p2);
+
+
+// FloatParameter:32
+	float n_out32p0 = Proximity_Fade;
+
+
+	float n_out30p0;
+// ProximityFade:30
+	{
+		float __depth_tex = texture(depth_tex_frg_30, SCREEN_UV).r;
+		vec4 __depth_world_pos = INV_PROJECTION_MATRIX * vec4(SCREEN_UV * 2.0 - 1.0, __depth_tex, 1.0);
+		__depth_world_pos.xyz /= __depth_world_pos.w;
+		n_out30p0 = clamp(1.0 - smoothstep(__depth_world_pos.z + n_out32p0, __depth_world_pos.z, VERTEX.z), 0.0, 1.0);
+	}
+
+
+// FloatOp:31
+	float n_out31p0 = n_out47p0 * n_out30p0;
+
+
+	float n_out33p0;
+// Switch:33
+	n_out33p0 = mix(n_out47p0, n_out31p0, float(n_out34p0));
+
+
+	vec4 n_out50p0;
+// Texture2D:50
+	n_out50p0 = texture(Color_1D_Gradient, vec2(n_out33p0));
+	float n_out50p4 = n_out50p0.a;
+
+
+// VectorOp:53
+	vec3 n_out53p0 = vec3(n_out54p0) * vec3(n_out50p0.xyz);
+
+
+// FloatParameter:52
+	float n_out52p0 = Transparency;
+
+
+// FloatOp:51
+	float n_out51p0 = n_out50p4 * n_out52p0;
+
+
+// Output:0
+	ALBEDO = n_out53p0;
+	ALPHA = n_out51p0;
+
+
+
+ALPHA *= condition_opacity;
+}
+
+
+"
+
+[sub_resource type="Gradient" id="Gradient_4w2qk"]
+offsets = PackedFloat32Array(0, 0.545825, 0.943299, 1)
+colors = PackedColorArray(0, 0, 0, 0, 0, 0, 0, 1, 0.589096, 0.589096, 0.589095, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_slg2v"]
+gradient = SubResource("Gradient_4w2qk")
+
+[sub_resource type="Gradient" id="Gradient_2y0r2"]
+offsets = PackedFloat32Array(0.207739, 0.907216)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_c8bge"]
+gradient = SubResource("Gradient_2y0r2")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="Gradient" id="Gradient_fnbxu"]
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_nbp2f"]
+gradient = SubResource("Gradient_fnbxu")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_f7ton"]
+resource_local_to_scene = true
+render_priority = -1
+shader = SubResource("Shader_krwwk")
+shader_parameter/condition_opacity = null
+shader_parameter/condition_clock = null
+shader_parameter/Intensity = 2.0
+shader_parameter/Enable_Proximity_Fade = false
+shader_parameter/Texture_Add = SubResource("GradientTexture2D_c8bge")
+shader_parameter/Enable_Distortion = false
+shader_parameter/Dist_Zoom_Strenght = 1.0
+shader_parameter/Diost_repeat_strenght = 1.0
+shader_parameter/Distortion_Speed_XY = Vector2(0, 0)
+shader_parameter/Distortion_Texture = ExtResource("3_mpe1e")
+shader_parameter/Distortion_Attenuation = 5.0
+shader_parameter/Zoom_Strenght = 0.6
+shader_parameter/repeat = 3.0
+shader_parameter/Speed_XY = Vector2(-0.6, 0)
+shader_parameter/Texture_Main = ExtResource("4_863b5")
+shader_parameter/Power = 1.0
+shader_parameter/Texture_Substract = SubResource("GradientTexture2D_nbp2f")
+shader_parameter/Proximity_Fade = 0.1
+shader_parameter/Color_1D_Gradient = SubResource("GradientTexture1D_slg2v")
+shader_parameter/Transparency = 0.0
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_t7fj6"]
+size = Vector2(28, 28)
+
+[sub_resource type="Shader" id="Shader_0plrl"]
+code = "shader_type spatial;
+uniform float condition_opacity = 1.0;
+
+uniform float condition_clock=0.0;
+
+render_mode blend_mix, depth_draw_opaque, depth_test_default, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded;
+
+uniform vec4 Color : source_color;
+uniform bool Use_Proximity_Fade;
+uniform vec2 Scale = vec2(1.000000, 1.000000);
+uniform vec2 Offset = vec2(0.000000, 0.000000);
+uniform sampler2D Texture : source_color, repeat_disable;
+uniform sampler2D Texture_Add : source_color, hint_default_black, repeat_enable;
+uniform float Blinking_speed = 0.0;
+uniform float min_brightness = 0.5;
+uniform float max_brightness2 = 1.0;
+uniform float opacity : hint_range(0.0, 1.0) = 1.0;
+uniform float Proximity_Fade = 0.5;
+uniform sampler2D depth_tex_frg_23 : hint_depth_texture;
+
+
+
+void vertex() {
+	mat4 n_out2p0;
+// GetBillboardMatrix:2
+	{
+		mat4 __wm = mat4(normalize(INV_VIEW_MATRIX[0]), normalize(INV_VIEW_MATRIX[1]), normalize(INV_VIEW_MATRIX[2]), MODEL_MATRIX[3]);
+		__wm = __wm * mat4(vec4(cos(INSTANCE_CUSTOM.x), -sin(INSTANCE_CUSTOM.x), 0.0, 0.0), vec4(sin(INSTANCE_CUSTOM.x), cos(INSTANCE_CUSTOM.x), 0.0, 0.0), vec4(0.0, 0.0, 1.0, 0.0), vec4(0.0, 0.0, 0.0, 1.0));
+		__wm = __wm * mat4(vec4(length(MODEL_MATRIX[0].xyz), 0.0, 0.0, 0.0), vec4(0.0, length(MODEL_MATRIX[1].xyz), 0.0, 0.0), vec4(0.0, 0.0, length(MODEL_MATRIX[2].xyz), 0.0), vec4(0.0, 0.0, 0.0, 1.0));
+		n_out2p0 = VIEW_MATRIX * __wm;
+	}
+
+
+// Output:0
+	MODELVIEW_MATRIX = n_out2p0;
+
+
+}
+
+void fragment() {
+// ColorParameter:10
+	vec4 n_out10p0 = Color;
+
+
+// BooleanParameter:26
+	bool n_out26p0 = Use_Proximity_Fade;
+
+
+// Vector2Parameter:5
+	vec2 n_out5p0 = Scale;
+
+
+// UVFunc:4
+	vec2 n_in4p2 = vec2(0.00000, 0.00000);
+	vec2 n_out4p0 = (UV - n_in4p2) * n_out5p0 + n_in4p2;
+
+
+// Vector2Parameter:9
+	vec2 n_out9p0 = Offset;
+
+
+// UVFunc:6
+	vec2 n_in6p1 = vec2(1.00000, 1.00000);
+	vec2 n_out6p0 = n_out9p0 * n_in6p1 + n_out4p0;
+
+
+	vec4 n_out3p0;
+// Texture2D:3
+	n_out3p0 = texture(Texture, n_out6p0);
+	float n_out3p1 = n_out3p0.r;
+
+
+	vec4 n_out29p0;
+// Texture2D:29
+	n_out29p0 = texture(Texture_Add, UV);
+	float n_out29p1 = n_out29p0.r;
+
+
+// FloatOp:27
+	float n_out27p0 = n_out3p1 + n_out29p1;
+
+
+// Input:13
+	float n_out13p0 = condition_clock;
+
+
+// FloatParameter:15
+	float n_out15p0 = Blinking_speed;
+
+
+// FloatOp:14
+	float n_out14p0 = n_out13p0 * n_out15p0;
+
+
+// FloatFunc:16
+	float n_out16p0 = cos(n_out14p0);
+
+
+// FloatParameter:20
+	float n_out20p0 = min_brightness;
+
+
+// FloatParameter:21
+	float n_out21p0 = max_brightness2;
+
+
+	float n_out17p0;
+// Remap:17
+	float n_in17p1 = -1.00000;
+	float n_in17p2 = 1.00000;
+	{
+		float __input_range = n_in17p2 - n_in17p1;
+		float __output_range = n_out21p0 - n_out20p0;
+		n_out17p0 = n_out20p0 + __output_range * ((n_out16p0 - n_in17p1) / __input_range);
+	}
+
+
+// FloatOp:19
+	float n_out19p0 = n_out27p0 * n_out17p0;
+
+
+// FloatParameter:32
+	float n_out32p0 = opacity;
+
+
+// FloatOp:31
+	float n_out31p0 = n_out19p0 * n_out32p0;
+
+
+// FloatParameter:24
+	float n_out24p0 = Proximity_Fade;
+
+
+	float n_out23p0;
+// ProximityFade:23
+	{
+		float __depth_tex = texture(depth_tex_frg_23, SCREEN_UV).r;
+		vec4 __depth_world_pos = INV_PROJECTION_MATRIX * vec4(SCREEN_UV * 2.0 - 1.0, __depth_tex, 1.0);
+		__depth_world_pos.xyz /= __depth_world_pos.w;
+		n_out23p0 = clamp(1.0 - smoothstep(__depth_world_pos.z + n_out24p0, __depth_world_pos.z, VERTEX.z), 0.0, 1.0);
+	}
+
+
+// FloatOp:22
+	float n_out22p0 = n_out31p0 * n_out23p0;
+
+
+	float n_out25p0;
+// Switch:25
+	n_out25p0 = mix(n_out31p0, n_out22p0, float(n_out26p0));
+
+
+// Output:0
+	ALBEDO = vec3(n_out10p0.xyz);
+	ALPHA = n_out25p0;
+
+
+
+ALPHA *= condition_opacity;
+}
+
+
+"
+
+[sub_resource type="Gradient" id="Gradient_i7wxc"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_0hp6t"]
+gradient = SubResource("Gradient_i7wxc")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.482906)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3fn3m"]
+resource_local_to_scene = true
+render_priority = 1
+shader = SubResource("Shader_0plrl")
+shader_parameter/condition_opacity = null
+shader_parameter/condition_clock = null
+shader_parameter/Color = Color(1.2, 1.2, 1.2, 1)
+shader_parameter/Use_Proximity_Fade = true
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Offset = Vector2(0, 0)
+shader_parameter/Texture = SubResource("GradientTexture2D_0hp6t")
+shader_parameter/Blinking_speed = 40.0
+shader_parameter/min_brightness = 0.2
+shader_parameter/max_brightness2 = 1.0
+shader_parameter/opacity = 0.0
+shader_parameter/Proximity_Fade = 0.5
+
+[sub_resource type="QuadMesh" id="QuadMesh_v0vye"]
+size = Vector2(8, 8)
+
+[sub_resource type="Shader" id="Shader_61tj0"]
+code = "shader_type spatial;
+uniform float condition_opacity = 1.0;
+
+uniform float vfx_clock=0.0;
+uniform float vfx_alpha=1.0; render_mode unshaded,cull_disabled; uniform sampler2D source_tex:source_color; uniform vec4 source_tint:source_color=vec4(1.0); uniform bool use_vertex=true; void fragment(){
+vec3 wp=(INV_VIEW_MATRIX*vec4(VERTEX,1.0)).xyz; 
+vec4 c=texture(source_tex,UV)*source_tint; if(use_vertex)c*=COLOR; ALBEDO=c.rgb; ALPHA=c.a;
+ALPHA *= vfx_alpha;
+
+ALPHA *= condition_opacity;
+}
+
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_40kms"]
+resource_local_to_scene = true
+render_priority = 0
+shader = SubResource("Shader_61tj0")
+shader_parameter/condition_opacity = null
+shader_parameter/vfx_clock = null
+shader_parameter/vfx_alpha = null
+shader_parameter/source_tex = ExtResource("5_w27py")
+shader_parameter/source_tint = Color(1, 1, 1, 1)
+shader_parameter/use_vertex = true
+
+[sub_resource type="Curve" id="Curve_ki8ms"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -1.78322, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_t4kpt"]
+curve = SubResource("Curve_ki8ms")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_uxvwy"]
+particle_flag_align_y = true
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 1.0
+emission_ring_radius = 4.0
+emission_ring_inner_radius = 4.0
+emission_ring_cone_angle = 90.0
+direction = Vector3(0, 1, 0)
+spread = 0.0
+initial_velocity_min = 8.0
+initial_velocity_max = 20.0
+radial_velocity_min = 9.99998
+radial_velocity_max = 12.0
+gravity = Vector3(0, 0, 0)
+scale_max = 1.5
+scale_curve = SubResource("CurveTexture_t4kpt")
+color = Color(3, 3, 3, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_phxw3"]
+size = Vector2(0.18, 0.8)
+
+[sub_resource type="Gradient" id="Gradient_nshiv"]
+offsets = PackedFloat32Array(0.57732, 0.989691)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_4vdh3"]
+gradient = SubResource("Gradient_nshiv")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.521368)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_thtgd"]
+resource_local_to_scene = true
+render_priority = 0
+shader = SubResource("Shader_61tj0")
+shader_parameter/condition_opacity = null
+shader_parameter/vfx_clock = null
+shader_parameter/vfx_alpha = null
+shader_parameter/source_tex = SubResource("GradientTexture2D_4vdh3")
+shader_parameter/source_tint = Color(1, 1, 1, 1)
+shader_parameter/use_vertex = true
+
+[sub_resource type="Curve" id="Curve_odguk"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -1.78322, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_75soo"]
+curve = SubResource("Curve_odguk")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_4sfiv"]
+particle_flag_align_y = true
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 1.0
+emission_ring_radius = 4.0
+emission_ring_inner_radius = 4.0
+emission_ring_cone_angle = 90.0
+direction = Vector3(0, 1, 0)
+spread = 0.0
+initial_velocity_min = 8.0
+initial_velocity_max = 30.0
+radial_velocity_min = 4.99998
+radial_velocity_max = 9.99998
+gravity = Vector3(0, 0, 0)
+scale_min = 1.2
+scale_max = 1.6
+scale_curve = SubResource("CurveTexture_75soo")
+color = Color(0, 0, 0, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_i6q2n"]
+size = Vector2(0.25, 0.8)
+
+[sub_resource type="Shader" id="Shader_hs1dn"]
+code = "shader_type spatial;
+uniform float condition_opacity = 1.0;
+
+uniform float vfx_clock=0.0;
+uniform float vfx_alpha=1.0;
+render_mode blend_mix, unshaded, cull_back;
+
+uniform sampler2D sprite_sheet;
+uniform vec2 frame_count = vec2(4.0, 3.0); // Columns, Rows
+uniform float transition_speed = 0.5; // Controls how fast the transition happens (0-1)
+uniform float time_scale = 1.0; // Global animation speed control
+uniform vec4 color_base : source_color;
+
+varying float transparency; // Global animation speed control
+varying vec2 anim_UV;
+varying vec2 next_anim_UV;
+varying float blend_factor;
+
+void vertex() {
+    // Calculate current and next frame indices
+    float last_cell = (frame_count.x * frame_count.y) - 1.0;
+    float frame_progress = fract(COLOR.a * time_scale);
+    float frame_index = floor(COLOR.a * time_scale * last_cell);
+    float next_frame_index = min(frame_index + 1.0, last_cell);
+    
+    // Calculate frame offsets
+    vec2 frame_size = vec2(1.0) / frame_count;
+    
+    // Current frame offset
+    vec2 frame_offset = vec2(
+        mod(frame_index, frame_count.x) / frame_count.x,
+        floor(frame_index / frame_count.x) / frame_count.y
+    );
+    
+    // Next frame offset
+    vec2 next_frame_offset = vec2(
+        mod(next_frame_index, frame_count.x) / frame_count.x,
+        floor(next_frame_index / frame_count.x) / frame_count.y
+    );
+    
+    // Apply texture scaling
+    anim_UV = (UV * frame_size + frame_offset);
+    next_anim_UV = (UV * frame_size + next_frame_offset);
+    
+    // Calculate blend factor based on progress between frames
+    blend_factor = smoothstep(0.0, transition_speed, frame_progress);
+}
+
+void fragment() {
+    // Sample both current and next frame
+    vec4 current_tex = texture(sprite_sheet, anim_UV);
+    vec4 next_tex = texture(sprite_sheet, next_anim_UV);
+    
+    // Blend between frames
+    vec4 tex = mix(current_tex, next_tex, blend_factor);
+    
+	transparency = COLOR.r;
+	
+    ALBEDO = tex.rgb * color_base.rgb;
+    ALPHA = tex.a * transparency;
+
+ALPHA *= vfx_alpha;
+
+ALPHA *= condition_opacity;
+}
+
+
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8ge3i"]
+resource_local_to_scene = true
+render_priority = 0
+shader = SubResource("Shader_hs1dn")
+shader_parameter/condition_opacity = null
+shader_parameter/vfx_clock = null
+shader_parameter/vfx_alpha = null
+shader_parameter/sprite_sheet = ExtResource("6_5rkbc")
+shader_parameter/frame_count = Vector2(2, 3)
+shader_parameter/transition_speed = 0.8
+shader_parameter/time_scale = 1.0
+shader_parameter/color_base = Color(1, 1, 1, 1)
+
+[sub_resource type="Curve" id="Curve_6whgu"]
+_data = [Vector2(0.168675, 0), 1.67279, 4.49063, 0, 0, Vector2(0.379518, 0.72981), 2.29781, 0.0, 0, 0, Vector2(0.662651, 0.72981), 0.0, 0.0, 0, 0, Vector2(0.855422, 0), -4.06348, 0.0, 0, 0]
+point_count = 4
+
+[sub_resource type="CurveTexture" id="CurveTexture_gphvi"]
+texture_mode = 1
+curve = SubResource("Curve_6whgu")
+
+[sub_resource type="Gradient" id="Gradient_nusqi"]
+offsets = PackedFloat32Array(0, 0.174342, 0.904605, 1)
+colors = PackedColorArray(0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_qpmgq"]
+gradient = SubResource("Gradient_nusqi")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_7qeri"]
+gravity = Vector3(0, 0, 0)
+color_ramp = SubResource("GradientTexture1D_qpmgq")
+alpha_curve = SubResource("CurveTexture_gphvi")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_75a31"]
+size = Vector2(10, 10)
+
+[sub_resource type="Shader" id="Shader_rav7o"]
+code = "shader_type spatial;
+uniform float condition_opacity = 1.0;
+
+uniform float vfx_clock=0.0;
+uniform float vfx_alpha=1.0;
+render_mode blend_mix, depth_draw_opaque, depth_test_default, cull_back, diffuse_lambert, specular_schlick_ggx, unshaded, fog_disabled;
+
+uniform float Color_Intensity = 1.0;
+uniform vec2 Scale_XY = vec2(1.000000, 1.000000);
+uniform vec2 Speed_XY;
+uniform sampler2D Base_Texture : source_color;
+uniform sampler2D Disolver_Texture : source_color, filter_linear, repeat_enable;
+uniform sampler2D Disolver_Add_Texture : source_color, hint_default_black, filter_linear, repeat_disable;
+uniform sampler2D Disolver_Multiply_Texture : source_color, filter_linear, repeat_disable;
+uniform float Alpha_Treshold : hint_range(0.02999999932945, 1.0) = 0.0;
+
+
+
+void fragment() {
+// FloatParameter:27
+	float n_out27p0 = Color_Intensity;
+
+
+// Vector2Parameter:13
+	vec2 n_out13p0 = Scale_XY;
+
+
+// UVFunc:9
+	vec2 n_in9p2 = vec2(0.00000, 0.00000);
+	vec2 n_out9p0 = (UV - n_in9p2) * n_out13p0 + n_in9p2;
+
+
+// Vector2Parameter:10
+	vec2 n_out10p0 = Speed_XY;
+
+
+// Input:12
+	float n_out12p0 = vfx_clock;
+
+
+// VectorOp:11
+	vec2 n_out11p0 = n_out10p0 * vec2(n_out12p0);
+
+
+// UVFunc:8
+	vec2 n_in8p1 = vec2(1.00000, 1.00000);
+	vec2 n_out8p0 = n_out11p0 * n_in8p1 + n_out9p0;
+
+
+	vec4 n_out3p0;
+// Texture2D:3
+	n_out3p0 = texture(Base_Texture, n_out8p0);
+	float n_out3p4 = n_out3p0.a;
+
+
+// VectorOp:26
+	vec3 n_out26p0 = vec3(n_out27p0) * vec3(n_out3p0.xyz);
+
+
+	vec4 n_out31p0;
+// Texture2D:31
+	n_out31p0 = texture(Disolver_Texture, UV);
+	float n_out31p1 = n_out31p0.r;
+
+
+	vec4 n_out42p0;
+// Texture2D:42
+	n_out42p0 = texture(Disolver_Add_Texture, UV);
+	float n_out42p1 = n_out42p0.r;
+
+
+// FloatOp:44
+	float n_out44p0 = n_out31p1 + n_out42p1;
+
+
+	vec4 n_out40p0;
+// Texture2D:40
+	n_out40p0 = texture(Disolver_Multiply_Texture, UV);
+	float n_out40p1 = n_out40p0.r;
+
+
+// FloatOp:39
+	float n_out39p0 = n_out44p0 * n_out40p1;
+
+
+// Clamp:45
+	float n_in45p1 = 0.00000;
+	float n_in45p2 = 1.00000;
+	float n_out45p0 = clamp(n_out39p0, n_in45p1, n_in45p2);
+
+
+// FloatOp:38
+	float n_out38p0 = n_out3p4 * n_out45p0;
+
+
+// FloatParameter:46
+	float n_out46p0 = Alpha_Treshold;
+
+
+// Output:0
+	ALBEDO = n_out26p0;
+	ALPHA = n_out38p0;
+	ALPHA = step(n_out46p0, ALPHA);
+
+
+
+ALBEDO=clamp(ALBEDO,vec3(0.035,0.025,0.045),vec3(1.0));
+
+ALPHA *= vfx_alpha;
+
+ALPHA *= condition_opacity;
+}
+
+
+"
+
+[sub_resource type="Gradient" id="Gradient_gh0dd"]
+colors = PackedColorArray(0.678944, 0.678944, 0.678944, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_wvu3a"]
+gradient = SubResource("Gradient_gh0dd")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.482906)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2egeb"]
+resource_local_to_scene = true
+render_priority = 0
+shader = SubResource("Shader_rav7o")
+shader_parameter/condition_opacity = null
+shader_parameter/vfx_clock = null
+shader_parameter/vfx_alpha = null
+shader_parameter/Color_Intensity = 1.0340423226356505
+shader_parameter/Scale_XY = Vector2(1, 1)
+shader_parameter/Speed_XY = null
+shader_parameter/Base_Texture = ExtResource("7_l0ixe")
+shader_parameter/Disolver_Texture = ExtResource("8_0evuq")
+shader_parameter/Disolver_Add_Texture = SubResource("GradientTexture2D_wvu3a")
+shader_parameter/Alpha_Treshold = 0.18519967854022978
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_nyhen"]
+size = Vector2(3.25, 3.25)
+
+[sub_resource type="Animation" id="Animation_r4wgm"]
+resource_name = "Init"
+length = 9.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("inner_ray:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(3.23333, 3.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("inner_base:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(3.23333, 3.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("outter_rays:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(3.23333, 3.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("outter_rays3:emitting")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(3.23333, 3.43333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("outter_rays2:emitting")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(3.23333, 3.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("YingYang_Base_Circle:emitting")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.1, 0.333333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("YingYang_Kar:material_override:shader_parameter/Alpha_Treshold")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.833333, 6.1, 6.86667),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [1.0, 0.03, 0.03, 1.0]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("YingYang_Kar:material_override:shader_parameter/Color_Intensity")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0.133333, 3.26667, 4.6, 5.86667, 6.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.6, 3.0, 6.0, 3.0, 0.6]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("floorflash:material_override:shader_parameter/Transparency")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(2.93333, 3.5, 5.6, 6.43333),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 1.0, 1.0, 0.0]
+}
+tracks/9/type = "value"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath("itemflash:material_override:shader_parameter/opacity")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(3.3, 3.56667, 5.93333, 6.23333),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 1.0, 1.0, 0.0]
+}
+tracks/10/type = "value"
+tracks/10/imported = false
+tracks/10/enabled = true
+tracks/10/path = NodePath("Small Sparks:emitting")
+tracks/10/interp = 1
+tracks/10/loop_wrap = true
+tracks/10/keys = {
+"times": PackedFloat32Array(0, 3.4, 5.93333),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
+}
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("Small Sparks2:emitting")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0, 3.4, 5.93333),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [false, true, false]
+}
+tracks/12/type = "value"
+tracks/12/imported = false
+tracks/12/enabled = true
+tracks/12/path = NodePath("YingYang_Kar:visible")
+tracks/12/interp = 1
+tracks/12/loop_wrap = true
+tracks/12/keys = {
+"times": PackedFloat32Array(0, 7.23333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("floorflash:visible")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0, 7.06667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("itemflash:visible")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(2.6, 6.73333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/15/type = "value"
+tracks/15/imported = false
+tracks/15/enabled = true
+tracks/15/path = NodePath("OmniLight3D:light_energy")
+tracks/15/interp = 1
+tracks/15/loop_wrap = true
+tracks/15/keys = {
+"times": PackedFloat32Array(0.1, 0.566667, 2.86667, 3.26667, 3.43333, 3.63333, 3.93333, 4.2, 4.43333, 4.9, 5.16667, 5.5, 6, 6.93333, 8.13333),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 1.0, 3.0, 16.0, 12.444, 6.0, 12.444, 6.0, 12.444, 12.444, 6.0, 12.444, 12.444, 1.0, 0.0]
+}
+tracks/16/type = "value"
+tracks/16/imported = false
+tracks/16/enabled = true
+tracks/16/path = NodePath("OmniLight3D:visible")
+tracks/16/interp = 1
+tracks/16/loop_wrap = true
+tracks/16/keys = {
+"times": PackedFloat32Array(0, 8.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/17/type = "value"
+tracks/17/imported = false
+tracks/17/enabled = true
+tracks/17/path = NodePath("torus2white:emitting")
+tracks/17/interp = 1
+tracks/17/loop_wrap = true
+tracks/17/keys = {
+"times": PackedFloat32Array(2.46667, 2.83333, 5.9, 6.76667),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [true, false, true, false]
+}
+tracks/18/type = "value"
+tracks/18/imported = false
+tracks/18/enabled = true
+tracks/18/path = NodePath("torus3black:emitting")
+tracks/18/interp = 1
+tracks/18/loop_wrap = true
+tracks/18/keys = {
+"times": PackedFloat32Array(2.3, 2.7, 5.76667, 6.63333),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [true, false, true, false]
+}
+
+[sub_resource type="Animation" id="Animation_p4b11"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("YingYang_Kar:material_override:shader_parameter/Alpha_Treshold")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.03]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("YingYang_Kar:material_override:shader_parameter/Color_Intensity")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [3.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("OmniLight3D:light_energy")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [12.444]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_tmh5y"]
+_data = {
+&"Init": SubResource("Animation_r4wgm"),
+&"RESET": SubResource("Animation_p4b11")
+}
+
+[sub_resource type="Shader" id="Shader_qcm57"]
+code = "shader_type spatial;
+uniform float condition_opacity = 1.0;
+
+uniform float vfx_clock=0.0;
+uniform float vfx_alpha=1.0;
+render_mode blend_mix, depth_draw_opaque, depth_test_default, cull_disabled, diffuse_lambert, specular_schlick_ggx, unshaded, shadows_disabled, ambient_light_disabled, fog_disabled;
+
+uniform float Intensity = 1.0;
+uniform bool Use_Fresnel = false;
+uniform vec2 Scale = vec2(1.000000, 1.000000);
+uniform vec2 Velocity = vec2(0.000000, 0.000000);
+uniform sampler2D Texture : source_color, filter_linear, repeat_enable;
+uniform sampler2D Add_Texture : source_color, hint_default_black, filter_linear, repeat_disable;
+uniform sampler2D Multiply_Texture : source_color, filter_linear, repeat_disable;
+uniform bool Fresnel_Invert = false;
+uniform float fresnel = 0.0;
+
+
+
+void vertex() {
+// GetBillboardMatrix:2
+	// Node is disabled and code is not generated.
+}
+
+void fragment() {
+vec3 wp=(INV_VIEW_MATRIX*vec4(VERTEX,1.0)).xyz; 
+
+// Input:4
+	vec4 n_out4p0 = COLOR;
+	float n_out4p4 = n_out4p0.a;
+
+
+// FloatParameter:40
+	float n_out40p0 = Intensity;
+
+
+// VectorOp:39
+	vec3 n_out39p0 = vec3(n_out4p0.xyz) * vec3(n_out40p0);
+
+
+// BooleanParameter:46
+	bool n_out46p0 = Use_Fresnel;
+
+
+// Vector2Parameter:16
+	vec2 n_out16p0 = Scale;
+
+
+// UVFunc:15
+	vec2 n_in15p2 = vec2(0.00000, 0.00000);
+	vec2 n_out15p0 = (UV - n_in15p2) * n_out16p0 + n_in15p2;
+
+
+// Input:23
+	float n_out23p0 = vfx_clock;
+
+
+// Vector2Parameter:25
+	vec2 n_out25p0 = Velocity;
+
+
+// VectorOp:24
+	vec2 n_out24p0 = vec2(n_out23p0) * n_out25p0;
+
+
+// UVFunc:17
+	vec2 n_in17p1 = vec2(1.00000, 1.00000);
+	vec2 n_out17p0 = n_out24p0 * n_in17p1 + n_out15p0;
+
+
+	vec4 n_out10p0;
+// Texture2D:10
+	n_out10p0 = texture(Texture, n_out17p0);
+	float n_out10p1 = n_out10p0.r;
+
+
+	vec4 n_out35p0;
+// Texture2D:35
+	n_out35p0 = texture(Add_Texture, UV);
+	float n_out35p1 = n_out35p0.r;
+
+
+// FloatOp:37
+	float n_out37p0 = n_out10p1 + n_out35p1;
+
+
+	vec4 n_out33p0;
+// Texture2D:33
+	n_out33p0 = texture(Multiply_Texture, UV);
+	float n_out33p1 = n_out33p0.r;
+
+
+// FloatOp:32
+	float n_out32p0 = n_out37p0 * n_out33p1;
+
+
+// Clamp:38
+	float n_in38p1 = 0.00000;
+	float n_in38p2 = 1.00000;
+	float n_out38p0 = clamp(n_out32p0, n_in38p1, n_in38p2);
+
+
+// BooleanParameter:44
+	bool n_out44p0 = Fresnel_Invert;
+
+
+// FloatParameter:42
+	float n_out42p0 = fresnel;
+
+
+// Fresnel:43
+	float n_out43p0 = n_out44p0 ? (pow(clamp(dot(NORMAL, VIEW), 0.0, 1.0), n_out42p0)) : (pow(1.0 - clamp(dot(NORMAL, VIEW), 0.0, 1.0), n_out42p0));
+
+
+// FloatOp:41
+	float n_out41p0 = n_out38p0 * n_out43p0;
+
+
+	float n_out45p0;
+// Switch:45
+	n_out45p0 = mix(n_out38p0, n_out41p0, float(n_out46p0));
+
+
+// FloatOp:31
+	float n_out31p0 = n_out4p4 * n_out45p0;
+
+
+// Output:0
+	ALBEDO = n_out39p0;
+	ALPHA = n_out31p0;
+
+
+
+ALPHA *= vfx_alpha;
+
+ALPHA *= condition_opacity;
+}
+
+
+"
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_6eb3v"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yhg16"]
+resource_local_to_scene = true
+render_priority = 1
+shader = SubResource("Shader_qcm57")
+shader_parameter/condition_opacity = null
+shader_parameter/vfx_clock = null
+shader_parameter/vfx_alpha = null
+shader_parameter/Intensity = 10.0
+shader_parameter/Use_Fresnel = true
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Velocity = Vector2(0.5, 0.5)
+shader_parameter/Texture = ExtResource("9_usut8")
+shader_parameter/Multiply_Texture = SubResource("CompressedTexture2D_6eb3v")
+shader_parameter/Fresnel_Invert = true
+shader_parameter/fresnel = 3.0
+
+[sub_resource type="Curve" id="Curve_3f2ak"]
+_data = [Vector2(0, 0.011043), 0.0, 0.0, 0, 0, Vector2(0.236749, 1), -0.0756212, -0.0756212, 0, 0, Vector2(0.692579, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_7m1x4"]
+texture_mode = 1
+curve = SubResource("Curve_3f2ak")
+
+[sub_resource type="Curve" id="Curve_h5ck7"]
+_data = [Vector2(0, 0.0907975), 0.0, 2.51167, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_0f4hv"]
+curve = SubResource("Curve_h5ck7")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_tbx0r"]
+particle_flag_rotate_y = true
+angle_min = -180.0
+angle_max = 180.0
+gravity = Vector3(0, 0, 0)
+scale_min = 1.2
+scale_max = 2.0
+scale_curve = SubResource("CurveTexture_0f4hv")
+color = Color(3, 3, 3, 1)
+alpha_curve = SubResource("CurveTexture_7m1x4")
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_v57na"]
+_surfaces = [{
+"aabb": AABB(-1.383511, -1.038375, -1.059923, 2.767022, 2.010595, 2.100945),
+"format": 34896613377,
+"index_count": 192,
+"index_data": PackedByteArray("AQAjAAAAAAAjACQAAAAkAAMAAQAlACMAIQAlAAEAIwALACQAIwAOAAsAJQAOACMAJAALAAgAJQAQAA4AAwAkAAIAJAAIAAIAAwACAAQAAgAIAAkAJgAQACUAIQAmACUAJgAcABAAIgAmACEAJwAcACYAIgAnACYAJwAeABwAIAAnACIAGgAeACcAIAAaACcAGgAfAB4AHQAaACAAKAAfABoAHQAoABoAKAAZAB8AGwAoAB0AKQAZACgAGwApACgAKQAYABkAFwApABsAKgAYACkAFwAqACkAKgAWABgAFQAqABcAEQAWACoAFQARACoAEQASABYAFAARABUAKwASABEAFAArABEAKwAPABIAEwArABQALAAPACsAEwAsACsALAANAA8ABwAsABMALQANACwABwAtACwALQAMAA0ABgAtAAcALgAMAC0ABgAuAC0ALgAKAAwABQAuAAYALwAKAC4ABQAvAC4ALwAJAAoABAAvAAUAAgAJAC8ABAACAC8A"),
+"lods": [0.57757336, PackedByteArray("AAABAAIAAAACAAMAAwACAAQABAACAAUABQACAAYABgACAAcAAgAIAAkAAgAJAAoAAgALAAgAAgAKAAwAAgAMAAcAAQALAAIABwAMAA0AAQAOAAsABwANAA8AAQAQAA4ABwAPABEAEQAPABIAEwAHABEAEwARABQAFAARABUAEQASABYAFQARABcAEQAWABcAFwAWABgAFwAYABkAFwAZABoAGgAQAAEAGwAXABoAGgAcABAAGwAaAB0AGgAeABwAGgAZAB8AGgAfAB4AHQAaACAAIQAaAAEAIAAaACIAIgAaACEA")],
+"name": "Cylinder",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 48,
+"vertex_data": PackedByteArray("j6fE+Oo8AAD/f///MjUAAIHaINM5JwAAGckv5OVSAACC32HFynMAAGHnC6GYmgAAgt+1fGbBAAAZyeddS+IAAI+nrLa3BwAAGckXorMdAACC30mDmD4AAP9/5r0AAAAAYefzXmZlAACC3506NIwAAG9YrLa3BwAAGcnPGxmtAADlNheisx0AAP9/cAqK/QAAj6c6BxTDAACPp1JJR/gAAP9/GEL//wAAb1hSSUf4AAD/fwAAzMoAAOU2511L4gAAb1g6BxTDAADlNs8bGa0AAAAA/3//fwAAfCC1fGbBAAB8IEmDmD4AAJ0YC6GYmgAAnRjzXmZlAAB8IJ06NIwAAHwgYcXKcwAAb1jE+Oo8AADlNi/k5VIAAP9/jvV0AgAA+7Cc7AIMAAADT5zsAgwAAH0lINM5JwAAvgn8rPRPAAC+CQJTCrAAAH0l3izF2AAAA09iE/zzAAD7sGIT/PMAAIHa3izF2AAAQPYCUwqwAAD///9//38AAED2/Kz0TwAA")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_mboeg"]
+_surfaces = [{
+"aabb": AABB(-1.383511, -1.038375, -1.059923, 2.767022, 2.010595, 2.100945),
+"attribute_data": PackedByteArray("/+8AAP//AAD/3/9////////fAAD/7////88AAP/f////vwAA/8////+vAAD/v////58AAP+v////n////3//f/+P////jwAA/38AAP9vAAD/f////18AAP9v////X////z//f/9P////TwAA/z////8/AAD/L////y8AAP8fAAD/DwAA/x///wAAAAD/D///AAD//////3//7/9//8//f/+//3//r/9//5//f/+P/3//b/9//1//f/9P/3//L/9//x//f/8P/38AAP9/"),
+"format": 34896613399,
+"index_count": 192,
+"index_data": PackedByteArray("AQAlAAAAAAAlACYAJQADACYAAAAmAAQAJgADAAUABAAmAAIAJgAFAAIABAACAAYAAgAFAAcABgACACcAAgAHACcABgAnAAgAJwAHAAkACAAnACgAJwAJACgACAAoAAoAKAAJAAsACgAoACkAKAALACkACgApAAwAKQALAA0ADAApACoAKQANACoADAAqABEAKgANAA4AEQAqACsAKgAOACsAEQArABIAKwAOABAAEgArAA8AKwAQAA8AEgAPABMADwAQABQAEwAPACwADwAUACwAEwAsABUALAAUABYAFQAsAC0ALAAWAC0AFQAtABoALQAWABcAGgAtAC4ALQAXAC4AGgAuABwALgAXABkAHAAuABgALgAZABgAHAAYAB4AGAAZABsAHgAYAC8AGAAbAC8AHgAvAB8ALwAbAB0AHwAvADAALwAdADAAHwAwACAAMAAdACEAIAAwADEAMAAhADEAIAAxACIAMQAhACMAIgAxADIAMQAjADIAMgAjACQA"),
+"lods": [0.57757336, PackedByteArray("AAABAAIAAQADAAIAAAACAAQAAgADAAUABAACAAYAAgAFAAcABgACAAgAAgAHAAkACAACAAoAAgAJAAsACgACAAwAAgALAAwADAALAA0ADAANAA4ADAAOAA8ADwAOABAAEQAMAA8AEQAPABIAEgAPABMADwAQABQAEwAPABUADwAUABUAFQAUABYAFQAWABcAFQAXABgAGAAXABkAGgAVABgAGAAZABsAGgAYABwAGAAbAB0AHAAYAB4AHgAYAB8AHwAYACAAGAAdACEAIAAYACIAGAAhACIAIgAhACMAIgAjACQA")],
+"name": "Cylinder",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 51,
+"vertex_data": PackedByteArray("j6fE+Oo8D/D/f///MjXq/IHaINM5J0ni/3/mvQAA4P8ZyS/k5VId4I+nrLa3B9Pzgt9hxcpzJ9AZyReisx3R52HnC6GYmivAgt9Jg5g+M9yC37V8ZsEqsGHn815mZUHRGcnnXUviJ6CC3506NIxwxxnJzxsZrWe//39wCor9B52PpzoHFMMAuo+nUklH+CmQ/38YQv//34FvWFJJR/gpkP9/AADMyhO45TbnXUviJ6BvWDoHFMMAuuU2zxsZrWe/AAD/f/9/NsV8IJ06NIxwx3wgtXxmwSqwnRjzXmZlQdGdGAuhmJorwHwgSYOYPjPcfCBhxcpzJ9DlNi/k5VId4G9YxPjqPA/w5TYXorMd0ef/f///MjXq/G9YrLa3B9Pz/3/mvQAA4P//f471dALy//uwnOwCDBzxQPb8rPRPmtP///9//382xUD2AlMKsGe3gdreLMXY1Kr7sGIT/PMHoQNPYhP88wehfSXeLMXY1Kq+CQJTCrBnt74J/Kz0T5rTfSUg0zknSeIDT5zsAgwc8f9/jvV0AvL/yEW+APq7DgRWU2QNZofj9UFFdQH7bmEOrUQmAtZinBoNROACklfmJVJDygNNTDcxREJkBRVAmT2HMYVMAAD/fxweo2CtP/QJAAD/fwt2rb8AAP9/mnpEwlwfHJ56M4exQmSEyGZCFMA0fFLDyE5NzB99DMQZWpHX2H2txIp+QMVBf8fFY2XW4g2EA8SdcfruG4pmByqADd0/WNcGO04mFIRIvRt9QTIlpjemMgknpklYNgmnWU2mt8xafMHYazvOmnJW0yh5PtjwoioA")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_v57na")
+
+[sub_resource type="Gradient" id="Gradient_ajvkc"]
+offsets = PackedFloat32Array(1)
+colors = PackedColorArray(1, 1, 1, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_2wk2r"]
+gradient = SubResource("Gradient_ajvkc")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5t1s1"]
+resource_local_to_scene = true
+render_priority = 1
+shader = SubResource("Shader_qcm57")
+shader_parameter/condition_opacity = null
+shader_parameter/vfx_clock = null
+shader_parameter/vfx_alpha = null
+shader_parameter/Intensity = 0.0
+shader_parameter/Use_Fresnel = false
+shader_parameter/Scale = Vector2(1, 1)
+shader_parameter/Velocity = Vector2(0.5, 0.5)
+shader_parameter/Texture = SubResource("GradientTexture2D_2wk2r")
+shader_parameter/Multiply_Texture = SubResource("CompressedTexture2D_6eb3v")
+shader_parameter/Fresnel_Invert = true
+shader_parameter/fresnel = 0.425
+
+[sub_resource type="Curve" id="Curve_d5eji"]
+_data = [Vector2(0, 0.011043), 0.0, 0.0, 0, 0, Vector2(0.236749, 1), -0.0756212, -0.0756212, 0, 0, Vector2(0.692579, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_517k7"]
+texture_mode = 1
+curve = SubResource("Curve_d5eji")
+
+[sub_resource type="Curve" id="Curve_jvww3"]
+_data = [Vector2(0, 0.0907975), 0.0, 2.51167, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_qsg0x"]
+curve = SubResource("Curve_jvww3")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_h6c0w"]
+particle_flag_rotate_y = true
+angle_min = -180.0
+angle_max = 180.0
+gravity = Vector3(0, 0, 0)
+scale_min = 1.2
+scale_max = 2.0
+scale_curve = SubResource("CurveTexture_qsg0x")
+color = Color(0, 0, 0, 1)
+alpha_curve = SubResource("CurveTexture_517k7")
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_1gpxp"]
+_surfaces = [{
+"aabb": AABB(-1.38351, -1.03838, -1.05992, 2.76702, 2.0106, 2.10094),
+"attribute_data": PackedByteArray("//8AAP///3//7wAA/+//f//fAAD/3/9//88AAP/P/3//vwAA/7//f/+vAAD/r/9//58AAP+f/3//jwAA/4//f/9/AAD/f/9//28AAP9v/3//XwAA/1//f/9PAAD/T/9//z8AAP8//3//LwAA/y//f/8fAAD/H/9//w8AAP8P/38AAAAAAAD/f/8P//8AAP///x////8v////P////0////9f////b////3////+P////n////6////+/////z////9/////v////////"),
+"format": 34896613399,
+"index_count": 192,
+"index_data": PackedByteArray("AAABAAIAAgABAAMAAgADAAQABAADAAUABAAFAAYABgAFAAcABgAHAAgACAAHAAkACAAJAAoACgAJAAsACgALAAwADAALAA0ADAANAA4ADgANAA8ADgAPABAAEAAPABEAEAARABIAEgARABMAEgATABQAFAATABUAFAAVABYAFgAVABcAFgAXABgAGAAXABkAGAAZABoAGgAZABsAGgAbABwAHAAbAB0AHAAdAB4AHgAdAB8AHgAfACAAIAAfACEAHwAiACEAIQAiACMAHQAkAB8AHwAkACIAGwAlAB0AHQAlACQAGQAmABsAGwAmACUAFwAnABkAGQAnACYAFQAoABcAFwAoACcAEwApABUAFQApACgAEQAqABMAEwAqACkADwArABEAEQArACoADQAsAA8ADwAsACsACwAtAA0ADQAtACwACQAuAAsACwAuAC0ABwAvAAkACQAvAC4ABQAwAAcABwAwAC8AAwAxAAUABQAxADAAAQAyAAMAAwAyADEA"),
+"name": "Cylinder",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 51,
+"vertex_data": PackedByteArray("/3///zI16vz/f471dALy/4+nxPjqPA/w+7Cc7AIMHPEZyS/k5VId4IHaINM5J0nigt9hxcpzJ9BA9vys9E+a02HnC6GYmivA////f/9/NsWC37V8ZsEqsED2AlMKsGe3GcnnXUviJ6CB2t4sxdjUqo+nUklH+CmQ+7BiE/zzB6H/fxhC///fgf9/cAqK/Qedb1hSSUf4KZADT2IT/PMHoeU2511L4iegfSXeLMXY1Kp8ILV8ZsEqsL4JAlMKsGe3nRgLoZiaK8AAAP9//382xXwgYcXKcyfQvgn8rPRPmtPlNi/k5VId4H0lINM5J0nib1jE+Oo8D/ADT5zsAgwc8f9///8yNer8/3+O9XQC8v9vWKy2twfT8/9/5r0AAOD/5TYXorMd0ed8IEmDmD4z3J0Y815mZUHRfCCdOjSMcMflNs8bGa1nv29YOgcUwwC6/38AAMzKE7iPpzoHFMMAuhnJzxsZrWe/gt+dOjSMcMdh5/NeZmVB0YLfSYOYPjPcGckXorMd0eePp6y2twfT8/9/5r0AAOD/+rsOBCqADd3IRb4AP1jXBkFFdQFWU2QNrUQmAjtOJhQNROAChEi9G1JDygN9QTIlREJkBaY3pjKtP/QJCSemSQAA/38AAP9/C3atv1g2CaeaekTCWU2mtzR8UsPMWnzBH30MxEJkhMjYfa3E2Gs7zop+QMWaclbTQX/HxSh5PtgNhAPE8KIqAJ1x+u4bimYHY2XW4hlakdfITk3MZkIUwHozh7FcHxyeAAD/fxweo2CHMYVMFUCZPU1MNzGSV+Yl1mKcGvtuYQ5mh+P1")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_r6mso"]
+resource_local_to_scene = true
+render_priority = 0
+shader = SubResource("Shader_rav7o")
+shader_parameter/condition_opacity = null
+shader_parameter/vfx_clock = null
+shader_parameter/vfx_alpha = null
+shader_parameter/Color_Intensity = 3.0
+shader_parameter/Scale_XY = Vector2(1, 1)
+shader_parameter/Speed_XY = null
+shader_parameter/Base_Texture = ExtResource("7_l0ixe")
+shader_parameter/Disolver_Texture = ExtResource("8_0evuq")
+shader_parameter/Disolver_Add_Texture = SubResource("GradientTexture2D_wvu3a")
+shader_parameter/Alpha_Treshold = 0.03
+
+[node name="effect" type="Node3D" unique_id=82580915]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+
+[node name="Donor" type="Node3D" parent="." unique_id=1659121227]
+transform = Transform3D(0.24, 0, 0, 0, 0.24, 0, 0, 0, 0.24, 0, 0, 0)
+
+[node name="inner_ray" type="GPUParticles3D" parent="Donor" unique_id=584331387]
+layers = 0
+material_override = SubResource("ShaderMaterial_dqkgb")
+emitting = false
+amount = 1
+lifetime = 3.0
+one_shot = true
+use_fixed_seed = true
+seed = 47291
+fixed_fps = 60
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_sl5ip")
+draw_pass_1 = SubResource("ArrayMesh_tcl73")
+
+[node name="inner_base" type="GPUParticles3D" parent="Donor" unique_id=51429957]
+layers = 0
+material_override = SubResource("ShaderMaterial_214o2")
+cast_shadow = 0
+emitting = false
+amount = 1
+lifetime = 3.0
+one_shot = true
+use_fixed_seed = true
+seed = 47292
+fixed_fps = 60
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_bs4qx")
+draw_pass_1 = SubResource("ArrayMesh_2je5h")
+
+[node name="outter_rays" type="GPUParticles3D" parent="Donor" unique_id=239381013]
+layers = 0
+material_override = SubResource("ShaderMaterial_tpv2t")
+emitting = false
+amount = 1
+lifetime = 3.0
+one_shot = true
+use_fixed_seed = true
+seed = 47293
+fixed_fps = 60
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_vxw0p")
+draw_pass_1 = SubResource("ArrayMesh_2je5h")
+
+[node name="outter_rays3" type="GPUParticles3D" parent="Donor" unique_id=1027664434]
+layers = 0
+material_override = SubResource("ShaderMaterial_fciom")
+emitting = false
+amount = 1
+lifetime = 3.0
+one_shot = true
+use_fixed_seed = true
+seed = 47294
+fixed_fps = 60
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_va3a8")
+draw_pass_1 = SubResource("ArrayMesh_lsctq")
+
+[node name="outter_rays2" type="GPUParticles3D" parent="Donor" unique_id=650788587]
+layers = 0
+material_override = SubResource("ShaderMaterial_0okfo")
+emitting = false
+amount = 1
+lifetime = 3.0
+one_shot = true
+use_fixed_seed = true
+seed = 47295
+fixed_fps = 60
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_a2vxv")
+draw_pass_1 = SubResource("ArrayMesh_2je5h")
+
+[node name="floorflash" type="MeshInstance3D" parent="Donor" unique_id=292440706]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0544062, 0)
+layers = 0
+material_override = SubResource("ShaderMaterial_f7ton")
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_t7fj6")
+skeleton = NodePath("../../../..")
+
+[node name="itemflash" type="MeshInstance3D" parent="Donor" unique_id=414912384]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.42091, 0)
+layers = 0
+material_override = SubResource("ShaderMaterial_3fn3m")
+cast_shadow = 0
+mesh = SubResource("QuadMesh_v0vye")
+skeleton = NodePath("../../..")
+
+[node name="Small Sparks" type="GPUParticles3D" parent="Donor" unique_id=311701889]
+material_override = SubResource("ShaderMaterial_40kms")
+cast_shadow = 0
+emitting = false
+amount = 20
+lifetime = 0.35
+use_fixed_seed = true
+seed = 47291
+fixed_fps = 144
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_uxvwy")
+draw_pass_1 = SubResource("QuadMesh_phxw3")
+
+[node name="Small Sparks2" type="GPUParticles3D" parent="Donor" unique_id=273911774]
+material_override = SubResource("ShaderMaterial_thtgd")
+cast_shadow = 0
+emitting = false
+amount = 12
+lifetime = 0.35
+use_fixed_seed = true
+seed = 47291
+fixed_fps = 144
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_4sfiv")
+draw_pass_1 = SubResource("QuadMesh_i6q2n")
+
+[node name="YingYang_Base_Circle" type="GPUParticles3D" parent="Donor" unique_id=979874295]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.315051, 0)
+material_override = SubResource("ShaderMaterial_8ge3i")
+cast_shadow = 0
+emitting = false
+amount = 1
+lifetime = 4.8
+one_shot = true
+use_fixed_seed = true
+seed = 47291
+fixed_fps = 144
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_7qeri")
+draw_pass_1 = SubResource("PlaneMesh_75a31")
+
+[node name="YingYang_Kar" type="MeshInstance3D" parent="Donor" unique_id=162237959]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.403803, 0)
+material_override = SubResource("ShaderMaterial_2egeb")
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_nyhen")
+skeleton = NodePath("../..")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Donor" unique_id=1176871802]
+callback_mode_process = 2
+libraries/ = SubResource("AnimationLibrary_tmh5y")
+autoplay = &"Init"
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Donor" unique_id=358532891]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75071, 0)
+visible = false
+light_energy = 1.1159415
+omni_range = 10.0
+omni_attenuation = 1.132
+
+[node name="torus2white" type="GPUParticles3D" parent="Donor" unique_id=364577525]
+transform = Transform3D(0.901591, -0.339191, -0.268483, -8.88178e-16, -0.620642, 0.784094, -0.432589, -0.706932, -0.559565, 0.00587463, 1.04434, 0)
+material_override = SubResource("ShaderMaterial_yhg16")
+cast_shadow = 0
+emitting = false
+amount = 4
+randomness = 1.0
+use_fixed_seed = true
+seed = 47291
+fixed_fps = 144
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_tbx0r")
+draw_pass_1 = SubResource("ArrayMesh_mboeg")
+
+[node name="torus3black" type="GPUParticles3D" parent="Donor" unique_id=1130712724]
+transform = Transform3D(0.901591, -0.339191, -0.268483, -8.88178e-16, -0.620642, 0.784094, -0.432589, -0.706932, -0.559565, 0, 0.832783, 0)
+material_override = SubResource("ShaderMaterial_5t1s1")
+cast_shadow = 0
+emitting = false
+amount = 4
+lifetime = 0.9
+explosiveness = 0.1
+randomness = 1.0
+use_fixed_seed = true
+seed = 47291
+fixed_fps = 144
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_h6c0w")
+draw_pass_1 = SubResource("ArrayMesh_1gpxp")
+
+[node name="SanctuaryMark" type="MeshInstance3D" parent="Donor" unique_id=221434142]
+transform = Transform3D(0.525, 0.42866066, -0.17499998, -0.42866066, 0.35, -0.42866066, -0.17499998, 0.42866066, 0.525, 0, 11.25, 0)
+material_override = SubResource("ShaderMaterial_r6mso")
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_nyhen")
+skeleton = NodePath("../..")

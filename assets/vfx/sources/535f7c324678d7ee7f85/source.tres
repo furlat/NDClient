@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/bd83b061fe455bfc4612/trail_source.gd"
+input = {"scene": "res://assets/vfx/sources/e3504848a0e914ad97d3/VFX_Fire_strike.tscn", "settings": {"animation": ""}, "side": "full", "simulation_hz": 144, "seed": 47291}
+options = {}
+provenance = "Pinned native selection; recipes/spells/scorching_ray.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "spells/scorching_ray/back/lifecycle"
+label = "Lifecycle · back"
+phase = "lifecycle"
+variant = "back"
+source_recipe = "recipes/spells/scorching_ray.json"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1, "offset_seconds": 0}]
+emitters = []
+seconds = 1.4
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"bounded_formation": false, "qualification": "native_family_port_candidate; selected production phase equivalence pending", "stage": "travel", "registration_note": "Native sandbox variant: complete unflattened source; choreography and world sizing authored separately.", "source_revision": "gpu-bake-ready-v368-20261017", "motion_trails": ["effect/Donor/Trail2_dynamic"]}

@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/ff81230ba1bf34b128a8/chill_hand_layers.gd"
+input = {"scene": "res://assets/vfx/sources/640425da4c2b8f4788b7/VFX_DemonPunch.tscn", "settings": {"animation": "punch_down_faster", "source_materials_only": true}, "side": "full", "simulation_hz": 144, "seed": 47291, "portal_open_radius": 0.32, "portal_feather": 0.055, "portal_opacity": 0.28, "muzzle_value_cap": 0.55, "muzzle_alpha": 0.18, "wind_opacity": 0.12}
+options = {"material_bindings": [{"node": "Donor/punch/Skeleton3D/demonhand", "surface": 0, "resource": "res://assets/vfx/sources/930a2427b975e845ea3f/m_demon_hand_p3.tres"}], "animation_bindings": [{"node": "Donor/AnimationPlayer", "library": "", "animation": "punch_down_faster", "resource": "res://assets/vfx/sources/7f900889cced84b24aaa/punch_down_daster_(edit).res", "length_seconds": 7.93333339691162, "disabled_tracks": ["OmniLight3D:light_energy"]}], "evidence": ["archive/objects/7d/7dcb1b3ccdb2a7521ae0cd61daaa48f510c8254b35aba5882dba0a36cdfa90d2", "archive/objects/67/677352359251de07010879c8aa5830899796e258282df60c8bc776a0122da0e8"]}
+provenance = "Pinned native selection; recipes/spells/chill_touch.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "original-repairs/chill-touch/contact-layers"
+label = "Original animated Chill hand with bounded native wind and muzzle support"
+phase = "impact"
+variant = "impact"
+source_recipe = "recipes/spells/chill_touch.json"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 5.0
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"bounded_formation": false, "qualification": "native_family_port_candidate; selected production phase equivalence pending", "registration_note": "Original Chill necrotic hand treatment on the recovered DemonPunch source, retaining the requested portal, emerging punch, original smoke and full native lifecycle. Reuse recipes/spells/chill_touch.json -> chill_hand.gd green()/recolor_source(). The copied source_materials_only option bypasses export recentering/rotation, hand/puff enlargement and tick cutoff. Explicit layers=0 restores the original Chill exclusions for debirs_mini_FINAL, debirs_mini_A, SmCrackaura1998, Decal, muzzle2start and muzzle2end: donor ground-slam debris/cracks and portal starbursts obscure the selected spell composition. Portal is the deliberate restored exception requested for the emerging hand. Native punch scale6 is unchanged; staging applies source X90 and recipient-sized world scale once.", "property_overrides": [{"node": "effect/Donor/muzzle", "property": "material_override:no_depth_test", "value": false}, {"node": "effect/Donor/debirs_mini_FINAL", "property": "layers", "value": 0}, {"node": "effect/Donor/debirs_mini_A", "property": "layers", "value": 0}, {"node": "effect/Donor/SmCrackaura1998", "property": "layers", "value": 0}, {"node": "effect/Donor/Decal", "property": "layers", "value": 0}, {"node": "effect/Donor/muzzle2start", "property": "layers", "value": 0}, {"node": "effect/Donor/muzzle2end", "property": "layers", "value": 0}], "depth_note": "The source muzzle intentionally draws through geometry; the sandbox enables its normal native depth test for scene occlusion. Recovered spectral hand material receives the original Chill necrotic recolouring before animation sampling.", "stage": "impact"}

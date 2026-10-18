@@ -1,0 +1,19 @@
+[gd_resource type="Resource" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/1e400e86b7d47eafacbe/spell.gd" id="definition"]
+[ext_resource type="Resource" path="res://assets/vfx/sources/0e0e341664ae3b60c69e/phase-0.tres" id="phase"]
+
+[resource]
+script = ExtResource("definition")
+spell_id = "wizard_overchannel_first_study"
+title = "Wizard Overchannel · first · optional private adjunct"
+effect_scale = 0.18
+phases = Array[Resource]([ExtResource("phase")])
+palette = {}
+has_staging_override = true
+staging = {"target_local": true, "target_position": [1.1, 0, 0], "recipient": "caster", "contact_after_release": 0.0, "camera_focus": [0, 0.65, 0], "camera_size": 3.2, "decorative_light_multiplier": 0.0, "cues": [{"clip": "wizard-class-study/wizard_overchannel_first_study", "role": "attached", "at": "release", "attachment": "caster_ground", "orientation": "world", "follow_attachment": true, "source_end": 1.5, "duration_policy": "authored", "scale": 1.0, "live_endpoints": [{"actor": "caster", "socket": "hand"}, {"actor": "caster", "socket": "body_center"}], "dynamic_geometry": true}]}
+choreography_data = {"runtimeKey": "study.wizard.wizard_overchannel_first_study", "cast": {"enabled": false, "actionClip": "Idle", "bodyPlaybackSpeed": 1.0, "releaseFrame": 0, "equipment": {"kind": "hidden"}, "effects": []}, "condition": {"anchor": "effect", "delayMs": 0.0, "feedbackEnabled": false}, "media": [], "bodyMaterials": [], "displacementLayers": []}
+provenance = "Optional adjunct only. Original selected spell art is a separate retained owner; this isolated fixture never substitutes for that spell. Actual production renderer/wood/actor/pose sockets. Review props are authored depictions; no real inventory book or scroll model is claimed."
+review_status = "Private native study. Runtime feature integration and independent recorded-frame review remain open."
+research_notes = "See docs/WIZARD_CLASS_ART_STUDY_2026-10-16.md for actual source and plan-only boundaries."
+options = {"study_only": true, "backend_integration": false}

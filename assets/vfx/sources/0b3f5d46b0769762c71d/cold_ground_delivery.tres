@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/9632af18c96679529624/chromatic_orb.gd"
+input = {"scene": "res://assets/vfx/sources/f4ec9e055ca01dec6c75/magic_orb_basic_vfx_03.tscn", "element": "cold", "side": "ground", "palette": ["142638", "284e67", "548596", "8db9bf", "c2d8d6"], "phase": "delivery", "attack_outcome": "ground", "launch_seconds": 0.3, "travel_seconds": 0.52}
+options = {}
+provenance = "res://assets/vfx/sources/873c8d5938f1ba595713/bg3-36-spell-contracts-20261015.json#chromatic_orb"
+
+[resource]
+script = ExtResource("phase")
+clip_id = "bg3-36/chromatic-orb/cold/ground-delivery"
+label = "Cold ground-selected orb"
+phase = "delivery"
+variant = "cold"
+source_recipe = "res://assets/vfx/sources/873c8d5938f1ba595713/bg3-36-spell-contracts-20261015.json#chromatic_orb"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 0.94
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part")])
+options = {"qualification": "Private native candidate; GPU/art/event qualification pending"}

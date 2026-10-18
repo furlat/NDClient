@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/f455fe3246a4497f52dc/owned_light.gd"
+input = {"owner_uuid": "fixture.flame_blade.lifetime", "owner_kind": "FlameBladeLifetime", "bright_cells": 2, "dim_extension_cells": 2, "optical_energy": 0.35, "height_cells": 0.65, "state": {"owner_uuid": "fixture.flame_blade.lifetime", "present": true, "observed": true, "suppressed": false}, "lifecycle_mode": "recorded_fixture", "birth_seconds": 0.18, "retire_at_seconds": 3.0}
+options = {}
+provenance = "Exact new36 card/backend and selected native LeLu/Binbun fire sources; explicit observed state fixture."
+
+[resource]
+script = ExtResource("phase")
+clip_id = "bg3-36/flame-blade/native_lifetime_light"
+label = "native_lifetime_light"
+phase = "native_lifetime_light"
+variant = "native"
+source_recipe = "catalog/bg3-36-spell-contracts-20261015.json#spell.flame_blade"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 3.8
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part")])
+options = {"qualification": "Engineering candidate; source/art/native event qualification pending"}

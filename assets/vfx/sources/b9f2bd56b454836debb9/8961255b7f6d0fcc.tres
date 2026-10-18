@@ -1,0 +1,25 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="source"]
+script = ExtResource("component")
+component_id = "support"
+constructor_script = "res://assets/vfx/sources/aa657804739e3a27829e/receiving_vanes.gd"
+input = {"style": "ascending", "mode": "apply", "seconds": 0.95, "colour": "c49757", "count": 4, "layers": [{"scene": "res://assets/vfx/sources/2472d7f100f9254a5ad9/VFX_Healing_R1.tscn", "node": "verticalflash2", "alpha": 0.72, "remove_billboard_vertex": true, "uniforms": {"Use_Proximity_Fade": false}}], "source_alpha": 0.8, "width_cells": 0.047, "motion_rate": 1.8, "apply_seconds": 0.18, "retire_seconds": 0.32, "sheet_animation": false, "sheet_period_seconds": 2.1}
+provenance = "Selected native material mechanism on new measured open support vanes; evidence/parallel-calm-heroism-v60/REPORT.md"
+
+[resource]
+script = ExtResource("phase")
+clip_id = "bg3-36/heroism/apply"
+label = "heroism · apply"
+phase = "impact"
+variant = "apply"
+source_recipe = "evidence/parallel-calm-heroism-v60/REPORT.md"
+seconds = 0.95
+simulation_hz = 60
+components = Array[Resource]([SubResource("source")])
+bindings = [{"component":"support","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+emitters = []
+options = {"opacity_uniform": "support_opacity", "source_revision": "gpu-vanes-v385-20261018"}

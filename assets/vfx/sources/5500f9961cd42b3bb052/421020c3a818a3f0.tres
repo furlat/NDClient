@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/sources/d276426f4ff400d7c7ac/bound_web.gd"
+input = {"scene": "res://assets/vfx/sources/194e51eb8c2d1c03c214/am_web_trap.scn", "material": "res://assets/vfx/sources/3166fc5dfdf9e680414c/m_webtrap_001.tres", "seconds": 4.6, "upper_web_texture": "res://assets/vfx/sources/0b13f8c9f190dd46fcfa/texture.res", "gpu_paths": true}
+options = {}
+provenance = "Pinned native selection; entity-study"
+
+[resource]
+script = ExtResource("script")
+clip_id = "entity-study/webbed"
+label = "webbed"
+phase = "apply_hold_remove"
+variant = "native_candidate"
+source_recipe = "entity-study"
+bindings = [{"component": "assembly", "kind": "sample", "rate": 1, "offset_seconds": 0}]
+emitters = []
+seconds = 4.6
+simulation_hz = 144
+components = Array[Resource]([SubResource("part_0")])
+options = {"source_revision": "gpu-remaining-v389-20261018"}

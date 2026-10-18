@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/sources/0738ff2d24aa41b1b963/native_review_composition.gd"
+input = {"components": [{"script": "res://assets/vfx/sources/1f4996c92ad61d6c5518/healing_pulse.gd", "input": {"scene": "res://assets/vfx/sources/cae7aebb8d36f0170ce0/vfx_status_green.tscn", "settings": {"pack": "binbun-statusfxfull", "name": "vfx_status_green", "animation": "open", "scale": 0.6, "height": 0.95, "hue": 0.49, "frames": 432, "close": 135, "palette": ["263b59", "356879", "4a9fab", "69cdd4", "98e6e4", "c7f4ee"], "mode": "cleanse", "level": 2, "title": "Lesser Restoration", "note": "Compact cleansing response; the preview removes the existing blinded effect at resolution.", "cell": 512, "alphaGain": 1.0, "anchor": "target_ground", "id": "lesser_restoration"}, "side": "full", "seed": 47291, "simulation_hz": 144, "material_family": "healing", "clip_normal": [0.70710678, 0, 0.70710678], "animation_missing_policy": "first_available", "receive_layers": [{"node": "Mesh", "alpha": 0.16}, {"node": "Aura", "alpha": 0.65, "scale": [0.65, 0.75, 0.65]}]}, "rotation_degrees": [0, 0, 0], "id": "effect"}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": [], "opacity_control": true}
+options = {}
+provenance = "Pinned native selection; recipes/spells/lesser_restoration.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "review/lesser_restoration/back/lifecycle"
+label = "Lifecycle"
+phase = "lifecycle"
+variant = "back"
+source_recipe = "recipes/spells/lesser_restoration.json"
+bindings = [{"component": "assembly", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 3.0
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"qualification": "Native-context visual review; not production approval", "opacity_uniform": "factory_occurrence_alpha"}

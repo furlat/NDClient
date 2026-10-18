@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/sources/0738ff2d24aa41b1b963/native_review_composition.gd"
+input = {"components": [{"script": "res://assets/vfx/sources/c7e1caf3b65c90d72ce6/animal_aspect.gd", "input": {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"id": "enhance_owl", "title": "Owl’s Wisdom", "name": "animal_aspect", "pack": "authored-animal-aspect", "animation": "", "scale": 1, "height": 0, "hue": 0.52, "frames": 864, "close": 720, "palette": ["223e51", "326875", "489ba5", "78c4c7", "abdfda", "d6ece2"], "level": 2, "alphaGain": 1, "mode": "single", "cell": 512, "anchor": "target_ground", "application": {"start_seconds": 0.45, "scale": 0.2}, "animal": "owl", "note": "Animal emblem manifests from moving strokes; short original LeLu spark birth. Human rejected body shells/cages. This revision is not approved."}, "side": "full", "seed": 47291, "simulation_hz": 144, "material_family": "enhancement", "clip_normal": [0.70710678, 0, 0.70710678], "animation_missing_policy": "first_available", "application_scene": "res://assets/vfx/sources/5450d65b69ba96b3eac3/VFX_Sparks_Yk1.tscn"}, "rotation_degrees": [0, 0, 0], "id": "effect"}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": []}
+options = {}
+provenance = "Pinned native selection; recipes/spells/enhance_ability.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "review/enhance_ability/owl_back/lifecycle"
+label = "Lifecycle"
+phase = "lifecycle"
+variant = "owl_back"
+source_recipe = "recipes/spells/enhance_ability.json"
+bindings = [{"component": "assembly", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 6.0
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"qualification": "Native-context visual review; not production approval"}

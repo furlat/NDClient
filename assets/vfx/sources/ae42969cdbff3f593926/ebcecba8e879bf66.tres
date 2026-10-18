@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/3d5fa288c2787b2a20a1/ray_of_sickness.gd"
+input = {"scene": "res://assets/vfx/sources/e62ee79ab8325cb6c7dc/beam_vfx_03.tscn", "palette": ["182d16", "36572c", "629243", "9ebd59", "cfda86"], "launch_seconds": 0.3, "travel_seconds": 0.38, "attack_outcome": "miss", "phase": "delivery", "gpu_paths": true}
+options = {}
+provenance = "res://assets/vfx/sources/873c8d5938f1ba595713/bg3-36-spell-contracts-20261015.json#ray_of_sickness"
+
+[resource]
+script = ExtResource("phase")
+clip_id = "bg3-36/ray-of-sickness/miss"
+label = "Missed ray, no Poisoned"
+phase = "delivery"
+variant = "miss"
+source_recipe = "res://assets/vfx/sources/873c8d5938f1ba595713/bg3-36-spell-contracts-20261015.json#ray_of_sickness"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 0.92
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part")])
+options = {"qualification": "Native candidate; full recorded-frame visual review pending", "source_revision": "gpu-remaining-v389-20261018"}

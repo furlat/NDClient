@@ -1,0 +1,17 @@
+[gd_resource type="Resource" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/1e400e86b7d47eafacbe/spell.gd" id="script"]
+[ext_resource type="Resource" path="res://assets/vfx/sources/5c81f4f547b9c8080038/00.tres" id="phase_0"]
+
+[resource]
+script = ExtResource("script")
+spell_id = "condition_guiding_mark_native"
+title = "Guiding Bolt · condition mark"
+effect_scale = 0.18
+phases = Array[Resource]([ExtResource("phase_0")])
+palette = {}
+has_staging_override = true
+staging = {"target_local": true, "recipient": "target", "target_position": [1, 0, 0], "camera_focus": [0.5, 0.7, 0], "camera_size": 4.0, "contact_after_release": 0.0, "decorative_light_multiplier": 0.0, "cues": [{"clip": "condition_guiding_mark_native", "role": "attached", "at": "release", "attachment": "recipient_ground", "orientation": "world", "source_end": 3.2, "duration_policy": "authored", "scale": 1.0, "fade_out_seconds": 0.25, "live_endpoints": [{"actor": "target", "socket": "head"}]}], "fixture_contract": {"condition_id": "condition.spell.guiding_bolt.marked", "applied": true, "removal_at_seconds": 3.2, "example_only": true, "actual_gameplay_expiry": false, "condition_owner_controls_lifetime": true}}
+choreography_data = {"runtimeKey": "condition.spell.guiding_bolt.marked", "cast": {"enabled": false, "actionClip": "Idle", "bodyPlaybackSpeed": 1.0, "releaseFrame": 0, "equipment": {"kind": "unchanged"}}, "condition": {"feedbackEnabled": false, "delayMs": 0, "anchor": "head"}, "media": [], "bodyMaterials": [], "displacementLayers": []}
+provenance = "Existing condition.mark.guiding_mark; original remaining-glyphs authored package194f640d; exact mask/noise/shader and gold gradient."
+review_status = "Private native condition lifecycle; application/steady hold/explicit preview removal; not new gameplay or integration approval."

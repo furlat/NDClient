@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "formation"
+constructor_script = "res://assets/vfx/sources/46af1fe8fc9841307ff7/projectile_formation.gd"
+input = {"source": {"scene": "res://assets/vfx/sources/ec1388c1f8c0f559fce8/VFX_SpiderWeb_muzzle.tscn", "settings": {"animation": "Init"}, "side": "full", "simulation_hz": 144, "seed": 73511, "material_rules": [{"match": {"blend_mode": 1, "requires_texture": true}, "shader_source": "res://assets/vfx/sources/27a10518b6d22bae56de/source_additive_cards.gdshader", "source_parameters": {"Texture": "albedo_texture"}, "parameters": {"Black_Threshold": 0.08, "Softness": 0.12, "Alpha_Multiplier": 1.0}}]}, "formation": "gather", "scale": [0.36, 0.36, 0.36], "duration_seconds": 0.58}
+options = {}
+provenance = "Pinned native selection; recipes/projectile-windups/web.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "projectile-windups/web/default/cast/windup"
+label = "Windup"
+phase = "cast"
+variant = "default"
+source_recipe = "recipes/projectile-windups/web.json"
+bindings = [{"component": "formation", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 0.58
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"bounded_formation": true, "qualification": "new_native_windup_candidate_requires_user_review", "stage": "cast"}

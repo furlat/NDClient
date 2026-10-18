@@ -1,0 +1,100 @@
+[gd_resource type="VisualShader" load_steps=8 format=3 ]
+
+[sub_resource type="VisualShaderNodeInput" id="VisualShaderNodeInput_fx5qq"]
+expanded_output_ports = [0]
+input_name = "color"
+
+[sub_resource type="VisualShaderNodeTexture2DParameter" id="VisualShaderNodeTexture2DParameter_g5o2s"]
+parameter_name = "Hit_texture"
+texture_type = 1
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_l1ne0"]
+expanded_output_ports = [0]
+source = 5
+texture_type = 1
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_badm4"]
+operator = 2
+
+[sub_resource type="VisualShaderNodeProximityFade" id="VisualShaderNodeProximityFade_1e26d"]
+default_input_values = [0, 0.2]
+
+[sub_resource type="VisualShaderNodeFloatOp" id="VisualShaderNodeFloatOp_te2il"]
+operator = 2
+
+[sub_resource type="VisualShaderNodeBillboard" id="VisualShaderNodeBillboard_71tmj"]
+billboard_type = 0
+keep_scale = true
+
+[resource]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_disabled, diffuse_lambert, specular_schlick_ggx, unshaded, shadows_disabled;
+
+uniform sampler2D Hit_texture : source_color;
+uniform sampler2D depth_tex_frg_6 : hint_depth_texture;
+
+
+
+void vertex() {
+// GetBillboardMatrix:2
+	// Node is disabled and code is not generated.
+}
+
+void fragment() {
+// Input:2
+	vec4 n_out2p0 = COLOR;
+	float n_out2p4 = n_out2p0.a;
+
+
+	vec4 n_out4p0;
+// Texture2D:4
+	n_out4p0 = texture(Hit_texture, UV);
+	float n_out4p1 = n_out4p0.r;
+
+
+// FloatOp:5
+	float n_out5p0 = n_out4p1 * n_out2p4;
+
+
+	float n_out6p0;
+// ProximityFade:6
+	float n_in6p0 = 0.20000;
+	{
+		float __depth_tex = texture(depth_tex_frg_6, SCREEN_UV).r;
+		vec4 __depth_world_pos = INV_PROJECTION_MATRIX * vec4(SCREEN_UV * 2.0 - 1.0, __depth_tex, 1.0);
+		__depth_world_pos.xyz /= __depth_world_pos.w;
+		n_out6p0 = clamp(1.0 - smoothstep(__depth_world_pos.z + n_in6p0, __depth_world_pos.z, VERTEX.z), 0.0, 1.0);
+	}
+
+
+// FloatOp:7
+	float n_out7p0 = n_out5p0 * n_out6p0;
+
+
+// Output:0
+	ALBEDO = vec3(n_out2p0.xyz);
+	ALPHA = n_out7p0;
+
+
+}
+"
+modes/cull = 2
+flags/unshaded = true
+flags/shadows_disabled = true
+nodes/vertex/2/node = SubResource("VisualShaderNodeBillboard_71tmj")
+nodes/vertex/2/position = Vector2(60, 340)
+nodes/vertex/connections = PackedInt32Array(2, 0, 0, 10)
+nodes/fragment/0/position = Vector2(680, 140)
+nodes/fragment/2/node = SubResource("VisualShaderNodeInput_fx5qq")
+nodes/fragment/2/position = Vector2(-100, 120)
+nodes/fragment/3/node = SubResource("VisualShaderNodeTexture2DParameter_g5o2s")
+nodes/fragment/3/position = Vector2(-400, 420)
+nodes/fragment/4/node = SubResource("VisualShaderNodeTexture_l1ne0")
+nodes/fragment/4/position = Vector2(-40, 360)
+nodes/fragment/5/node = SubResource("VisualShaderNodeFloatOp_badm4")
+nodes/fragment/5/position = Vector2(220.903, 325.243)
+nodes/fragment/6/node = SubResource("VisualShaderNodeProximityFade_1e26d")
+nodes/fragment/6/position = Vector2(120, 620)
+nodes/fragment/7/node = SubResource("VisualShaderNodeFloatOp_te2il")
+nodes/fragment/7/position = Vector2(440.518, 447.695)
+nodes/fragment/connections = PackedInt32Array(2, 0, 0, 0, 3, 0, 4, 2, 4, 1, 5, 0, 5, 0, 7, 0, 7, 0, 0, 1, 6, 0, 7, 1, 2, 4, 5, 1)

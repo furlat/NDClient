@@ -1,0 +1,25 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="source"]
+script = ExtResource("component")
+component_id = "receiving"
+constructor_script = "res://assets/vfx/sources/fcd9acfd29de09c82b27/receiving_curves.gd"
+input = {"profile": "wake", "mode": "apply", "seconds": 0.95, "layers": [{"scene": "res://assets/vfx/sources/6053c7112539ebb3da8d/VFX_Dark_ShadowRing.tscn", "node": "smokeball", "soft_smoke": true, "alpha": 0.7, "alpha_power": 0.8, "uniforms": {"Dark_Color_Gradient_1D": {"type": "GradientTexture1D", "colors": ["172925", "405a52", "819887"], "offsets": [0.0, 0.5, 1.0]}, "Cloud_Color_Scale": {"type": "Vector2", "value": [0.7, 0.8]}, "Dissapear_scale": {"type": "Vector2", "value": [1.0, 1.0]}, "Noise_color_scale": {"type": "Vector2", "value": [1.0, 1.0]}}}], "count": 2, "width_cells": 0.07, "camber_cells": 0.025, "motion_rate": 2.3, "colour": "587b69", "source_alpha": 0.35, "apply_seconds": 0.14, "retire_seconds": 0.28, "phase_offset_seconds": 0.0}
+provenance = "Exact original native material mechanisms on measured open 3D receiving geometry; evidence/parallel-ward-trace-phantasm-v79/REPORT.md."
+
+[resource]
+script = ExtResource("phase")
+clip_id = "bg3-36/pass-without-trace/apply"
+label = "pass_without_trace · apply"
+phase = "impact"
+variant = "apply"
+source_recipe = "evidence/parallel-ward-trace-phantasm-v79/REPORT.md"
+seconds = 0.95
+simulation_hz = 60
+components = Array[Resource]([SubResource("source")])
+bindings = [{"component":"receiving","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+emitters = []
+options = {"opacity_uniform": "receiving_opacity", "source_revision": "gpu-ward-v383-20261018"}

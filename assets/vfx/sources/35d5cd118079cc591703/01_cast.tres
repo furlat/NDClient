@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "cast"
+constructor_script = "res://assets/vfx/sources/bc5a051eefdba1208e99/selected_projectile.gd"
+input = {"scene": "res://assets/vfx/sources/650e81a1ef091c91cb82/VFX_Anticipation_fire_3.tscn", "settings": {"animation": "", "edit": "unchanged"}, "side": "full", "simulation_hz": 144, "seed": 43000, "material_rules": [{"match": {"blend_mode": 1, "requires_texture": true}, "shader_source": "res://assets/vfx/sources/27a10518b6d22bae56de/source_additive_cards.gdshader", "source_parameters": {"Texture": "albedo_texture"}, "parameters": {"Black_Threshold": 0.08, "Softness": 0.12, "Alpha_Multiplier": 1.0}}]}
+options = {}
+provenance = "Pinned native selection; recipes/spells/guiding_bolt.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "spells/guiding_bolt/default/cast"
+label = "Cast"
+phase = "cast"
+variant = "default"
+source_recipe = "recipes/spells/guiding_bolt.json"
+bindings = [{"component": "cast", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 0.5138888888888888
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"bounded_formation": false, "qualification": "native_family_port_candidate; selected production phase equivalence pending", "stage": "cast"}

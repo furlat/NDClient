@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/sources/0738ff2d24aa41b1b963/native_review_composition.gd"
+input = {"components": [{"script": "res://assets/vfx/sources/7b9e13b7becfbbadb2a5/pressure_front_decaying.gd", "input": {"scene": "res://assets/vfx/sources/edfb67d849359dcf6235/VFX_Anticipation_wave_1.tscn", "settings": {"animation": "Init", "pack": "lelu-portal", "name": "VFX_Anticipation_wave_1", "frames": 108, "cell": 512, "version": 8, "palette": ["211731", "493064", "77529B", "A37ACA", "C4A4E9", "E7D7FA"], "captureRoot": "../shatter-pressure-pilot/native-v8/shatter"}, "side": "full", "simulation_hz": 144, "seed": 47291, "pressure_finish": {"edge_start": 0.28, "edge_end": 0.92, "alpha_cap": 0.32, "band_gain": 0.28, "streak_gain": 0.055, "compression_gain": 0.22}}, "id": "effect", "rotation_degrees": [0, 0, 0]}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": []}
+options = {}
+provenance = "Pinned native selection; recipes/spells/shatter.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "review/shatter/back/lifecycle"
+label = "Lifecycle"
+phase = "lifecycle"
+variant = "back"
+source_recipe = "recipes/spells/shatter.json"
+bindings = [{"component": "assembly", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 0.75
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"qualification": "Native-context visual review; not production approval"}

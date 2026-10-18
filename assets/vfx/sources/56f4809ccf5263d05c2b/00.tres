@@ -1,0 +1,23 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+[sub_resource type="Resource" id="native"]
+script = ExtResource("component")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/sources/0738ff2d24aa41b1b963/native_review_composition.gd"
+input = {"components": [{"id": "proclamation", "script": "res://assets/vfx/sources/edb4416ff06538073fee/divine_word_source_v196.gd", "input": {"role": "proclamation", "geometry_actor": "caster", "owner": {"owner_uuid": "19600000-0000-4000-8000-000000000010", "event_uuid": "19600000-0000-4000-8100-000000000010", "cast_uuid": "19600000-0000-4000-8000-000000000001", "source_entity_uuid": "19619600-0000-4000-8000-000000000001", "target_entity_uuid": "19619600-0000-4000-8000-000000000001"}, "observation": {"event_uuid": "19600000-0000-4000-8100-000000000010", "cast_uuid": "19600000-0000-4000-8000-000000000001", "source_entity_uuid": "19619600-0000-4000-8000-000000000001", "target_entity_uuid": "19619600-0000-4000-8000-000000000001", "admitted": true, "canceled": false, "phase": "completion", "affected": true, "outcome": "proclamation", "fixture_fact": "Supplied resolved presentation outcome, no rule evaluation"}, "source": {"scene": "res://assets/vfx/sources/743219f9e05fa20a08b3/loot_vfx_divine.tscn", "settings": {"pack": "binbun-godotlootvfxextra", "name": "loot_vfx_divine", "animation": "", "scale": 0.85, "height": 1.95, "hue": 0.1, "frames": 64, "close": 0, "palette": ["4d3437", "8d5443", "be8449", "e2b766", "f2d698", "f8e8b7"], "mode": "proclamation", "title": "Divine Word \u00b7 caster release", "note": "Decisive selected-target divine release; native HP result chooses deafness, blindness, stun or death. Not an area damage spell.", "cell": 512, "alphaGain": 1.0, "fps": 32, "id": "divine_proclamation"}, "side": "full", "seed": 47291, "simulation_hz": 144, "material_family": "divine", "clip_normal": [0.70710678, 0, 0.70710678], "animation_missing_policy": "first_available", "refresh_animation_caches": true}, "seconds": 2.0, "remove_at_seconds": 100.0, "clear_seconds": 0.6, "head_clearance_cells": 0.12, "stack_offset_world": [0.09899494936611665, 0.0, -0.09899494936611665]}, "rotation_degrees": [0, 0, 0]}], "bindings": [{"component": "proclamation", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": []}
+provenance = "Original DivineCapture families; actual supplied owner/outcome fixture; no rule solver or new art."
+
+[resource]
+script = ExtResource("phase")
+clip_id = "review/divine_word/back/proclamation"
+label = "proclamation"
+phase = "lifecycle"
+variant = "back"
+source_recipe = "recipes/spells/divine_word.json"
+seconds = 2.0
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("native")])
+bindings = [{"component":"assembly","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+emitters = []
+options = {}

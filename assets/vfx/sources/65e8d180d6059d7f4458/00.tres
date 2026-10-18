@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/sources/0738ff2d24aa41b1b963/native_review_composition.gd"
+input = {"components": [{"script": "res://assets/vfx/sources/8dd3b15bc6ffdcf5641e/elemental_protection.gd", "input": {"scene": "res://assets/vfx/sources/67cfbe24b3e02cd98451/VFX_Shield_green.tscn", "settings": {"animation": "start_animation", "kind": "energy", "source": "lelu-shield--vfx-scenes-vfx-shield-hex-framed", "palette": ["1e2c18", "425e2a", "7c9b43", "b5ca77", "e0e6b1"], "position": "0,1.12,0", "count": 864}, "side": "full", "simulation_hz": 144, "seed": 47291, "position": [0, 1.12, 0]}, "id": "effect", "rotation_degrees": [0, 0, 0]}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": [], "opacity_control": true}
+options = {}
+provenance = "Pinned native selection; recipes/spells/protection_from_energy.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "review/protection_from_energy/acid_back/lifecycle"
+label = "Lifecycle"
+phase = "lifecycle"
+variant = "acid_back"
+source_recipe = "recipes/spells/protection_from_energy.json"
+bindings = [{"component": "assembly", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 6.0
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"qualification": "Native-context visual review; not production approval", "opacity_uniform": "factory_occurrence_alpha"}

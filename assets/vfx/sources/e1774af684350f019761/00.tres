@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/sources/0738ff2d24aa41b1b963/native_review_composition.gd"
+input = {"components": [{"script": "res://assets/vfx/sources/996929182f3738dcfa8f/death_circle_chromatic.gd", "input": {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"kind": "circle", "cell": 896, "ortho": 28.2842712474619, "targetY": 0.5, "frames": 64, "fps": 32, "neutralPalette": ["101821", "22313b", "3a4955", "697b89", "acb1ab", "d8ceb1"], "redPalette": ["24131c", "431c24", "722c34", "a7453d", "cf6851", "e69a77"], "palette": ["101821", "22313b", "3a4955", "697b89", "acb1ab", "d8ceb1", "24131c", "431c24", "722c34", "a7453d", "cf6851", "e69a77"], "captureZoom": 0.35, "worldCell": 1, "worldYCorrection": 0.816496580927726, "revision": "native-fissure-smoke-v9", "animation": ""}, "side": "full", "seed": 61702, "simulation_hz": 144, "clip_normal": [0.70710678, 0, 0.70710678], "layer_shader": "res://assets/vfx/sources/1b57f8e0ddd1f4fa95d3/necrotic_recipient_layer_v3.gdshader", "support_opacity": true, "field_shadow": "24131c", "field_highlight": "943e3c"}, "rotation_degrees": [0, 0, 0], "id": "effect"}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": []}
+options = {}
+provenance = "Pinned native selection; recipes/spells/circle_of_death.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "review/circle_of_death/whole/impact"
+label = "Impact"
+phase = "impact"
+variant = "whole"
+source_recipe = "recipes/spells/circle_of_death.json"
+bindings = [{"component": "assembly", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 2.0
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"qualification": "Native-context visual review; not production approval"}

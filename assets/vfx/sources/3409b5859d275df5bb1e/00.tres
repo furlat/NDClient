@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/c0d353db196caa737f35/support.gd"
+input = {"scene": "res://assets/vfx/sources/7098b0e031aa8ab38a45/VFX_HealPuff_A.tscn", "settings": {"pack": "lelu-healing-protection", "name": "VFX_HealPuff_A", "animation": "Init", "frames": 432, "scale": 0.8, "height": 1.2, "hue": 0.34, "palette": ["334465", "474dab", "508eac", "68c4d1", "7adddf", "83f0f3"], "close": 0, "anchor": "target_ground", "version": 6, "alphaGain": 1.05, "id": "cure_wounds"}, "side": "full", "seed": 47291, "simulation_hz": 144, "material_family": "support", "clip_normal": [0.70710678, 0, 0.70710678], "animation_missing_policy": "first_available"}
+options = {"rotation_degrees": [0, 0, 0]}
+provenance = "Pinned native selection; recipes/spells/cure_wounds.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "spells/cure_wounds/back/lifecycle"
+label = "Lifecycle"
+phase = "lifecycle"
+variant = "back"
+source_recipe = "recipes/spells/cure_wounds.json"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 3.0
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"bounded_formation": false, "qualification": "native_family_port_candidate; selected production phase equivalence pending", "stage": "attached", "optional": false, "placement": {"role": "attached", "attachment": "recipient_body", "source_rate": 1.0, "source_end": 3.0, "scale": 0.62, "orientation": "world", "opacity_keys": [[0, 1], [0.45, 1], [1.1, 0.7], [1.65, 0], [3, 0]], "opacity_uniform": "support_envelope", "fade_out_seconds": 0.25}, "property_overrides": [{"node": "effect/Donor", "property": "position:y", "value": 0.0}], "opacity_uniform": "support_envelope"}

@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/52ec50637e15ae451c88/resistance_ribbons.gd"
+input = {"scene": "res://assets/vfx/sources/f87bd2df04923a0732d5/vfx_status_dark.tscn", "settings": {"pack": "binbun-statusfxfull", "name": "vfx_status_dark", "animation": "open", "frames": 288, "scale": 0.75, "height": 0.9, "hue": 0.53, "palette": ["34394c", "585c82", "738d9e", "a4c1c7", "cbeaef", "e0f1ef"], "close": 108, "anchor": "target_ground", "id": "resistance"}, "side": "full", "seed": 47291, "simulation_hz": 144, "material_family": "support", "clip_normal": [0.70710678, 0, 0.70710678], "animation_missing_policy": "first_available"}
+options = {"rotation_degrees": [0, 0, 0]}
+provenance = "Pinned native selection; recipes/spells/resistance.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "spells/resistance/back/lifecycle"
+label = "Lifecycle"
+phase = "lifecycle"
+variant = "back"
+source_recipe = "recipes/spells/resistance.json"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 2.85
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"bounded_formation": false, "qualification": "native_family_port_candidate; selected production phase equivalence pending", "stage": "attached", "optional": false, "placement": {"role": "attached", "attachment": "recipient_ground", "source_rate": 1.0, "source_end": 2.85, "scale": 0.55, "orientation": "world", "opacity_keys": [[0, 0], [0.12, 0.65], [0.5, 0.65], [0.95, 0.18], [1.7, 0.18], [2.5, 0], [2.85, 0]], "opacity_uniform": "support_envelope", "fade_out_seconds": 0.25}, "opacity_uniform": "support_envelope"}

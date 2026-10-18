@@ -1,0 +1,25 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="effect"]
+script = ExtResource("component")
+component_id = "support"
+constructor_script = "res://assets/vfx/sources/c3eed67edc995b07c7e7/support_aura_of_life.gd"
+input = {"geometry_actor": "target", "endpoint_bindings": [{"actor": "caster", "socket": "cast_hand"}, {"actor": "caster", "socket": "face"}, {"actor": "target", "socket": "body_center"}], "piece_capacity": 4, "source_entity_uuid": "1a2cc648-c66a-55ae-a595-fd9721997352", "recipient_entity_uuid": "92ef1028-5b2f-56bb-a607-c5d5a237af47", "owner_uuid": "4bf69bf3-f242-543c-8ad2-074657b7310b", "condition_id": "condition.spell.aura_of_life.benefit", "event_uuid": "2e2fc163-52da-505c-a1bd-ef13a03cbe78", "part": "member", "mode": "hold", "seconds": 4.4, "apply_seconds": 0.18, "retire_seconds": 0.38, "width_cells": 0.021, "vertex_colour": "a1bc75", "vertex_alpha": 0.0, "material": {"scene": "res://assets/vfx/sources/e1686bb48a6190ecc3ae/VFX_Healing_Flower.tscn", "node": "external_base_ring2", "alpha": 0.48, "emission_gain": 0.0, "uniforms": {"Enable_Proximity_Fade": false, "Enable_Fresnel": false, "Opacity": 0.95, "Texture2_Scale": {"type": "Vector2", "value": [1.0, 1.0]}, "Dissolver_Scale2": {"type": "Vector2", "value": [1.1, 0.75]}, "Speed_texture": {"type": "Vector2", "value": [0.07, 0.17]}, "Speed_disolver": {"type": "Vector2", "value": [-0.11, 0.08]}}}, "lease": {"observed": true, "condition_state": {"condition_uuid": "4bf69bf3-f242-543c-8ad2-074657b7310b", "behavior_id": "condition.spell.aura_of_life.benefit", "suppression_provider_uuids": [], "applied_source_event_cursor": 1}, "source_entity_uuid": "1a2cc648-c66a-55ae-a595-fd9721997352", "target_entity_uuid": "92ef1028-5b2f-56bb-a607-c5d5a237af47"}, "event": {"uuid": "2e2fc163-52da-505c-a1bd-ef13a03cbe78", "source_entity_uuid": "1a2cc648-c66a-55ae-a595-fd9721997352", "target_entity_uuid": "92ef1028-5b2f-56bb-a607-c5d5a237af47", "canceled": false}}
+provenance = "Native source mechanisms and actual backend semantics: evidence/parallel-high-level-support-v100/PLAN.md"
+
+[resource]
+script = ExtResource("phase")
+clip_id = "high-level-22/aura-of-life/member"
+label = "aura_of_life_native · member"
+phase = "sustain"
+variant = "member"
+source_recipe = "evidence/parallel-high-level-support-v100/PLAN.md"
+seconds = 4.4
+simulation_hz = 60
+components = Array[Resource]([SubResource("effect")])
+bindings = [{"component":"support","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+emitters = []
+options = {"opacity_uniform": "support_visibility", "source_revision": "gpu-support-v380-20261018"}

@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/ca544a90d8fc6e83965f/flaming_sphere_volume.gd"
+input = {"entity_uuid": "fixture.flaming_sphere.entity", "existence_condition_uuid": "fixture.flaming_sphere.existence", "state": {"entity_uuid": "fixture.flaming_sphere.entity", "existence_condition_uuid": "fixture.flaming_sphere.existence", "present": true, "observed": true, "suppressed": false, "existence_present": true}, "lifecycle_mode": "recorded_fixture", "birth_seconds": 0.25, "retire_at_seconds": 3.5}
+options = {}
+provenance = "Exact new36 card/backend and selected native LeLu/Binbun fire sources; explicit observed state fixture."
+
+[resource]
+script = ExtResource("phase")
+clip_id = "bg3-36/flaming-sphere/native_body"
+label = "native_body"
+phase = "native_body"
+variant = "native"
+source_recipe = "catalog/bg3-36-spell-contracts-20261015.json#spell.flaming_sphere"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 4.1
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part")])
+options = {"qualification": "Engineering candidate; source/art/native event qualification pending"}

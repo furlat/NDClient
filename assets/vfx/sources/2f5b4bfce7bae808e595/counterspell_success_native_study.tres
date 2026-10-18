@@ -1,0 +1,17 @@
+[gd_resource type="Resource" load_steps=3 format=3]
+[ext_resource type="Script" path="res://assets/vfx/sources/1e400e86b7d47eafacbe/spell.gd" id="definition"]
+[ext_resource type="Resource" path="res://assets/vfx/sources/8323e85786c1246e7ed7/phase.tres" id="phase"]
+[resource]
+script = ExtResource("definition")
+spell_id = "counterspell_success_native_study"
+title = "Counterspell · success · original native source study"
+effect_scale = 0.18
+phases = Array[Resource]([ExtResource("phase")])
+palette = {}
+has_staging_override = true
+staging = {"target_local": true, "target_position": [2, 0, 0], "actor_positions": {"caster": [-2, 0, 0], "target": [2, 0, 0]}, "contact_after_release": 0.0, "camera_focus": [0, 0.75, 0], "camera_size": 6.2, "decorative_light_multiplier": 0.0, "review_poses": [{"actor": "target", "clip": "Attack5", "begin_seconds": -0.6666666666666666, "end_seconds": 0.3, "source_seconds": 0.15, "source_rate": 1.0, "toward": [-2, 0]}], "cues": [{"clip": "reaction-prismatic-study/counterspell_success_native_study", "role": "attached", "at": "cast", "attachment": "caster_ground", "orientation": "world", "follow_attachment": false, "source_end": 1.8, "duration_policy": "authored", "scale": 1.0, "live_endpoints": [{"actor": "caster", "socket": "hand"}, {"actor": "target", "socket": "hand"}, {"actor": "caster", "socket": "body_center"}], "dynamic_geometry": true}]}
+choreography_data = {"runtimeKey": "reaction.spell.counterspell", "cast": {"enabled": true, "actionClip": "Special1", "bodyPlaybackSpeed": 1.0, "releaseFrame": 8, "equipment": {"kind": "hidden"}, "weaponGlow": {"id": "counterspell-hands", "slot": "weaponGlow", "enabled": true, "hidden": false, "category": "Magic3", "sourceSheet": "/spritesheets/Magic3/Special1.png", "colors": {"primary": 14318706, "mode": "paletteSwap"}, "palette": {"colors": [5844288, 11559001, 14318706, 16231325], "gamma": 0.65, "noiseSheet": "/spell-palettes/source-hand-noise.png"}, "role": "hand_magic"}, "effects": [], "recovery": {"enabled": false, "bodyClip": "Special1", "bodyPlaybackSpeed": 1.0}}, "condition": {"anchor": "effect", "delayMs": 0.0, "feedbackEnabled": false}, "media": [], "bodyMaterials": [], "displacementLayers": []}
+provenance = "Original source mechanisms, actual Special1 body / Magic3 hand geometry and original coral ramp. Per-row native palette treatment is an adaptation of preserved precoloured production cast-hands, not a byte-equivalence claim. Original incoming Fireball travel selected by exact native Resource. No Finger of Death cameo."
+review_status = "Private candidate. Engine contracts and optical review separate from production event binding/human approval. Failure continuation destination impact still belongs to the original incoming root, which is omitted in this isolated interruption study."
+research_notes = "factory-source:docs/REACTION_PRISMATIC_NATIVE_STUDY_2026-10-16.md"
+options = {"study_only": true, "backend_integration": false}

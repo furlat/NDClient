@@ -1,0 +1,17 @@
+[gd_resource type="Resource" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/1e400e86b7d47eafacbe/spell.gd" id="script"]
+[ext_resource type="Resource" path="res://assets/vfx/sources/5a8bdc347c74f07e3e8d/00.tres" id="phase_0"]
+
+[resource]
+script = ExtResource("script")
+spell_id = "condition_petrified_native"
+title = "Petrified · steady overhead"
+effect_scale = 0.18
+phases = Array[Resource]([ExtResource("phase_0")])
+palette = {}
+has_staging_override = true
+staging = {"target_local": true, "contact_after_release": 0.0, "target_position": [1, 0, 0], "camera_focus": [0.8, 0.75, 0], "camera_size": 3.5, "decorative_light_multiplier": 0.0, "cues": [{"clip": "condition_petrified_native", "role": "attached", "at": "release", "attachment": "recipient_ground", "orientation": "world", "scale": 1.0, "source_end": 3.2, "duration_policy": "authored"}]}
+choreography_data = {"runtimeKey": "condition.petrified", "definitionRef": {"pack_id": "content.srd_5_1_cc", "definition_kind": "spell", "content_id": "spell.bane", "content_version": 1, "definition_contract_hash": "e4d439f0a9828e38cd3ff0522ba3e140b0d419f4c24de2900d8c3a8e7349cb00"}, "elementColors": {"primary": 7872818, "secondary": 12798033, "tertiary": 3151135}, "castPalettes": [], "cast": {"enabled": false, "actionClip": "Idle", "bodyPlaybackSpeed": 1.0, "releaseFrame": 0, "equipment": {"kind": "unchanged"}}, "condition": {"anchor": "effect", "delayMs": 0.0, "feedbackEnabled": true}, "media": [], "bodyMaterials": [], "displacementLayers": []}
+provenance = "Delivered steady marker material and mask. Original Bane/Charmed body artwork is retained separately. Slow spell and movement_slowed are distinct."
+review_status = "Private native-context review candidate. Original approved artwork remains unchanged."

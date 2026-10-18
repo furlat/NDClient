@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/b82a0d5a067fb8aabb72/delivery.gd"
+input = {"kind": "acid", "caster_uuid": "caster", "acting_holder_uuid": "caster", "cast_or_throw_accepted": true, "release_mode": "supplied_cast_snapshot"}
+options = {}
+provenance = "Exact high-level22 read-only backend; inspected native material layers and supplied causal owner/area facts."
+
+[resource]
+script = ExtResource("phase")
+clip_id = "high-level-22/vitriolic-sphere/native_delivery"
+label = "native_delivery"
+phase = "native_delivery"
+variant = "acid"
+source_recipe = "agent_docs/GODOT_HIGH_LEVEL_22_SPELL_HANDOFF_2026-10-15.md#spell.vitriolic_sphere"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 0.9
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part")])
+options = {"qualification": "Source candidate; actual GPU/native integration/human approval pending", "source_revision": "gpu-payload-v397-20261018"}

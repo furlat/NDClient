@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "assembly"
+constructor_script = "res://assets/vfx/sources/0738ff2d24aa41b1b963/native_review_composition.gd"
+input = {"components": [{"script": "res://assets/vfx/sources/ef1a35639fac2e7e0962/slow.gd", "input": {"scene": "res://assets/vfx/sources/30d97daa0975dde56681/empty_subject.tscn", "settings": {"kind": "loop", "mode": "binding", "pack": "lelu-godot-wind-premium-1", "name": "VFX_WindAura_1", "cell": 384, "ortho": 8, "targetY": 1.2, "frames": 129, "animation": "", "adapter": "SlowArcaneSurfaceCapture.gd", "scale": 1.0, "loopFrames": 128, "loopSeconds": 4, "duplicateEndpoint": 128, "slow": true, "palette": ["292526", "513034", "80383d", "b14e50", "d7807b", "edb7ac"], "id": "slow_crimson_v7", "cameraQuarter": 0, "wind_scene": "res://assets/vfx/sources/523fee6765ef2f9ec8a3/VFX_WindAura_1.tscn", "surface_material": "res://assets/vfx/sources/2f7e0cb7b898eccc2244/m_BlueWild_shield1.tres", "glow_texture": "res://assets/vfx/sources/ed5c16ee4c8ffccad493/texture.res", "clip_vector": "vec3(0.70710678,0.0,0.70710678)", "native_palette_options": {"quantize": false, "energy_exposure": 0.6}}, "side": "full", "simulation_hz": 144, "seed": 47291}, "id": "effect", "rotation_degrees": [0, 0, 0]}], "bindings": [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}], "emitters": [], "opacity_control": true}
+options = {}
+provenance = "Pinned native selection; recipes/spells/slow.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "review/slow/back/sustain"
+label = "Sustain"
+phase = "sustain"
+variant = "back"
+source_recipe = "recipes/spells/slow.json"
+bindings = [{"component": "assembly", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 4.034722222222222
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"qualification": "Native-context visual review; not production approval"}

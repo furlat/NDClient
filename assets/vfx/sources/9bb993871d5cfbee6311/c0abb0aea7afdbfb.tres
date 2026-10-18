@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/9e0b8cdb5ffccc6b3399/ice_projectile.gd"
+input = {"scene": "res://assets/vfx/sources/5945b7f8d2c113248ba3/VFX_SnowProjectile_K1.tscn", "settings": {"animation": ""}, "side": "full", "simulation_hz": 144, "seed": 47291}
+options = {}
+provenance = "Pinned native selection; Recovered authored source; see projectile_additions.json evidence"
+
+[resource]
+script = ExtResource("script")
+clip_id = "recovered/travel/source-c0abb0aea7afdbfb"
+label = "Travel · ice bolt"
+phase = "travel"
+variant = "recovered"
+source_recipe = "Recovered authored source; see projectile_additions.json evidence"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1, "offset_seconds": 0}]
+emitters = []
+seconds = 2
+simulation_hz = 144
+components = Array[Resource]([SubResource("part_0")])
+options = {"stage": "travel", "qualification": "Recovered source composition; sandbox review candidate", "property_overrides": [{"node": "effect/Donor/smallparticles_constant", "property": "material_override:transparency", "value": 1}, {"node": "effect/Donor/smallparticles_constant", "property": "material_override:blend_mode", "value": 4}, {"node": "effect/Donor/smallparticles_constant", "property": "material_override:albedo_color:a", "value": 0.0}], "registration_note": "The flare texture stores additive intensity in RGB and has opaque alpha, including black texels. Native premultiplied blending with zero coverage retains its additive RGB through the transparent effect viewport without opaque black cards. This emitter has constant vertex alpha 1; its source lifetime uses scale_curve. Keep its original texture, billboard, colour and depth tests."}

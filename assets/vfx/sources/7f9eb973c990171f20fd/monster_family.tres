@@ -1,0 +1,22 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="phase"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+[sub_resource type="Resource" id="effect"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/6adf511d299f58a086cf/charmed_identity.gd"
+input = {"actor": "target", "owner_uuid": "preview-charm_monster-A-target", "initial_owner_state": {"owner_uuid": "preview-charm_monster-A-target", "present": true, "observed": true, "suppressed": false}, "source": {"scene": "res://assets/vfx/sources/0715951e8be28c10c13a/vfx_status_sleep.tscn", "settings": {"animation": "", "kind": "charmed"}, "side": "full", "simulation_hz": 144, "seed": 47291, "donor_scene": "res://assets/vfx/sources/fd91f78fc378cfcf6273/vfx_status_gem.tscn", "palette": ["713c66", "954773", "c96491", "ec99ad", "ffecf4"]}, "source_scale": 0.47140452079103173, "marker_texture": "res://assets/vfx/sources/d489b740138d52c688b7/texture.res", "owner_observations": [{"seconds": 3.2, "state": {"present": false, "observed": true, "suppressed": false}}], "seconds": 3.6}
+options = {}
+provenance = "Scoped original identity/body corrective; exact source/bytes in evidence/parallel-original-body-identity-v130/lineage.json"
+[resource]
+script = ExtResource("phase")
+clip_id = "original-repairs/charmed/monster-owner"
+label = "Genuine pink Charmed body hearts and one original overhead symbol"
+phase = "recipient"
+variant = "corrective"
+seconds = 3.6
+simulation_hz = 144
+components = Array[Resource]([SubResource("effect")])
+bindings = [{"component":"effect","kind":"sample","rate":1.0,"offset_seconds":0.0}]
+emitters = []
+options = {}

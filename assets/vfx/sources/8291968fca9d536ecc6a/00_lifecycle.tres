@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://assets/vfx/sources/67ebe8ef4f358cad6a4b/phase.gd" id="script"]
+[ext_resource type="Script" path="res://assets/vfx/sources/d60670fa4c3a03cc8f3a/component.gd" id="component"]
+
+[sub_resource type="Resource" id="part_0"]
+script = ExtResource("component")
+component_id = "effect"
+constructor_script = "res://assets/vfx/sources/36c26f2973d69d2bb92e/flame_cone_eroded.gd"
+input = {"scene": "res://assets/vfx/sources/62a23c3086870c5f318c/VFX_Flamethrower_Anime_B.tscn", "settings": {"animation": "", "spell": "burning_hands", "direction": [1, 0], "cells": [[1, 0], [2, 0], [3, 0], [0, 0]], "frames": 216, "scale": [2.0, 0.82, 0.85], "emitter": [1.102034003571565, 1.35, -0.053368221754690914], "cell": [0, 0]}, "side": "full", "simulation_hz": 144, "seed": 47291, "geometry_registry": "res://assets/vfx/sources/45e38b1d3937fcd2d45b/flame-geometry.json", "flame_flatness": 0.55, "flame_erosion": [0.24, 0.68]}
+options = {}
+provenance = "Pinned native selection; recipes/spells/burning_hands_production_xyz.json"
+
+[resource]
+script = ExtResource("script")
+clip_id = "spells/burning_hands_production_xyz/whole/lifecycle"
+label = "Native lifecycle"
+phase = "lifecycle"
+variant = "whole"
+source_recipe = "recipes/spells/burning_hands_production_xyz.json"
+bindings = [{"component": "effect", "kind": "sample", "rate": 1.0, "offset_seconds": 0.0}]
+emitters = []
+seconds = 1.5
+simulation_hz = 144.0
+components = Array[Resource]([SubResource("part_0")])
+options = {"bounded_formation": false, "qualification": "native_family_port_candidate; selected production phase equivalence pending", "stage": "attached", "placement": {"role": "attached", "attachment": "caster_release", "delay_seconds": 0.0, "source_rate": 1.0, "source_end": 1.5, "scale": 0.5, "orientation": "facing", "rotation_degrees": [0, 90, 0], "origin_path": "effect/Donor/fire"}}
