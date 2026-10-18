@@ -424,6 +424,10 @@ func _start_native(job:Dictionary)->Dictionary:
     return {"kind":"native_effect","job":job,"node":node,"draws":0,"context":context,"started_ms":Time.get_ticks_msec()}
 
 func _sample_native(composite:Dictionary)->bool:
+    # A live approach's constructor (tens to hundreds of ms for a condition
+    # lifecycle) waits until the recording is paused, never during playback.
+    if prewarm_suspended and composite.node.has_method("builds_live") and composite.node.builds_live():
+        composite.started_ms=Time.get_ticks_msec();return false
     var basis=Basis.from_euler(Vector3(-atan(sqrt(.5)),PI/4+composite.job.quarter*PI/2,0))
     var sampled= composite.node.sample(composite.job.native_age_ms/1000.0,basis,Vector3.ZERO,1.0,[],composite.context)
     if sampled.ready and composite.draws>1:

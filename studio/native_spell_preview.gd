@@ -54,8 +54,8 @@ func sample(seconds:float,basis:Basis,_position:Vector3,_scale:float,_history:Ar
     if not resources.ready:return {"ready":false,"error":"; ".join(resources.errors)}
     # A live approach (a condition lifecycle's constructor costs tens to
     # hundreds of ms) is built by one swatch per frame, never several at once.
-    var live:bool=Effects.choice(component.native_clip).kind!="recorded"
-    if handle.is_empty() and live and _live_built_frame==Engine.get_process_frames():return {"ready":false,"error":""}
+    var live:bool=builds_live()
+    if live and _live_built_frame==Engine.get_process_frames():return {"ready":false,"error":""}
     if handle.is_empty():
         if live:_live_built_frame=Engine.get_process_frames()
         source_parent=Node3D.new();viewport.add_child(source_parent)
@@ -83,6 +83,10 @@ func sample(seconds:float,basis:Basis,_position:Vector3,_scale:float,_history:Ar
     var complete:bool=absf(sampled-seconds)<.00001 and absf(drawn-seconds)<.00001 and drawn_basis.is_equal_approx(basis)
     RenderingServer.frame_post_draw.connect(func():drawn=next;drawn_basis=basis,CONNECT_ONE_SHOT)
     return {"ready":complete,"error":""}
+
+## Whether the next sample constructs a live (not recorded) occurrence.
+func builds_live()->bool:
+    return handle.is_empty() and not component.get("native_clip",{}).is_empty() and Effects.choice(component.native_clip).kind!="recorded"
 
 func texture()->Texture2D:return output.get_texture()
 
