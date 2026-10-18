@@ -294,7 +294,7 @@ func _cross_check(library: Dictionary) -> void:
 ## two re-traced weapon sheets, and three creature packets whose unsupported
 ## normal texels now carry alpha 0. The DeathKnight reconstructions in that
 ## delivery are diagnostic only and are not used.
-const REPAIRS := false
+const REPAIRS := true
 const REPAIRS_ROOT := "art/geometry/repairs-20261018/"
 const REPAIRED_PARTS := {"Melee20": ["Attack4", "AttackRun2"]}
 const REPAIRED_SHEETS := {"art/geometry/creatures/first/actions/goblin-09/run-backwards/": "invalid-normals/actions/goblin-09/run-backwards/",
