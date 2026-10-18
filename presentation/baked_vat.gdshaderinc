@@ -1,4 +1,4 @@
-// Recorded particle states (tools/bake_native_effects.gd). Rows per particle
+// Recorded particle states (the VFX package's recordings, made in the Factory). Rows per particle
 // (RGBA half): 0..2 = basis column xyz + origin component, 3 = colour,
 // 4 = custom, 5 = (alive, life start frame); columns are recording frames
 // from `vat_first`. Lives that start after `emission_stop_frame` are hidden,

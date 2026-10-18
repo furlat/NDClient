@@ -8,6 +8,7 @@ const Thumbnails = preload("res://studio/thumbnail_cache.gd")
 const Compact = preload("res://studio/timeline_compact.gd")
 const LightTracks = preload("res://studio/light_tracks.gd")
 const AudioCues=preload("res://presentation/audio_cues.gd")
+const Effects=preload("res://presentation/effect_package.gd")
 var thumbnails = Thumbnails.new()
 var preparation_admission:Dictionary={}
 var light_settings:Dictionary={}
@@ -820,8 +821,15 @@ func _get_tooltip(at:Vector2)->String:
             if row.kind=="missing_group":return row.label+"\n"+row.summary+"\nExpand to inspect every original requirement."
             var movement=_movement_label(row)
             if row.has("movement_allowance"):movement+=" (operation boundary)"
-            return _label(row)+(" · "+row.actor_name if not row.get("actor_name","").is_empty() else "")+"\n"+movement+"\n"+str(row.get("reason",row.get("component",{}).get("reason",""))).replace("_"," ")+"\n"+str(row.get("source",""))
+            return _label(row)+(" · "+row.actor_name if not row.get("actor_name","").is_empty() else "")+"\n"+movement+"\n"+str(row.get("reason",row.get("component",{}).get("reason",""))).replace("_"," ")+"\n"+str(row.get("source",""))+_effect_version(row)
     return ""
+
+## Spell effect rows name the package approach that plays and any fallback.
+static func _effect_version(row:Dictionary)->String:
+    var clip:Dictionary=row.get("component",{}).get("native_clip",{}) if row.get("component",{}).get("native_spell",false) else {}
+    if clip.is_empty():return ""
+    var chosen:Dictionary=Effects.choice(clip)
+    return "\nEffect version: "+Effects.LABELS.get(chosen.kind,"none")+(" ("+chosen.reason+")" if not chosen.reason.is_empty() else "")
 
 func _scrub(x:float,finished:bool)->void:
     playhead_ms=_time(x,published_layout)

@@ -35,14 +35,16 @@ func run()->void:
             var cue:Dictionary=phase.native_cue
             roles[cue.role]=true
             check(phase.get("status","available")!="missing",id+": all chosen clips are imported")
-            check(selected.source_bounds.has(phase.native_clip.id),id+": chosen clip has measured native source bounds")
+            # Measured bounds are keyed by the staged clip id (the package may rename it).
+            var staged:String=str(cue.get("staged_clip",phase.native_clip.get("id","")))
+            check(selected.source_bounds.has(staged),id+": chosen clip has measured native source bounds")
             check(phase.source.begins_with(selected.source+"/cues/"),id+": phase keeps the exact authored cue pointer")
             check(phase.duration_ms>0 and not is_nan(phase.duration_ms),id+": phase duration is positive")
             check(cue.end>cue.begin and is_finite(cue.end),id+": native source has a finite visual interval")
             if cue.role in ["flight","strike"]:
                 check(is_equal_approx(Playback.source_time(cue,cue.contact),cue.source_contact),id+": source contact is aligned with the actual delivery clock")
             if cue.get("stop_emission_at_contact",false):
-                check(cue.end+0.00001>=cue.contact+Spells.retained_particle_tail(selected.source_bounds[phase.native_clip.id],cue,cue.contact),id+": retained source particle tail survives emission cutoff")
+                check(cue.end+0.00001>=cue.contact+Spells.retained_particle_tail(selected.source_bounds[staged],cue,cue.contact),id+": retained source particle tail survives emission cutoff")
         for phase in conditions:
             check(is_inf(phase.duration_ms),id+": finite source duration is not the owner's game expiry")
             var window:Dictionary=phase.lifecycle

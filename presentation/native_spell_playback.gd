@@ -65,15 +65,24 @@ static func transform(cue:Dictionary,time:float,hand:Vector3,scale_multiplier:fl
     # A uniform transform preserves the native geometry's 3D proportions.
     return Transform3D(basis.scaled(Vector3.ONE*scale),origin)
 
+## A staged node the effect lacks is reported at construction
+## (EffectPackage.missing_paths) and skipped here.
+static func _node(handle:Dictionary,path:Variant)->Node:
+    return handle.root.get_node_or_null(NodePath(str(handle.get("path_aliases",{}).get(str(path),path))))
+
+static func _hide(handle:Dictionary,paths:Array)->void:
+    for path in paths:
+        var node:Node=_node(handle,path)
+        if node!=null:node.hide()
+
 static func controls(handle:Dictionary,cue:Dictionary,time:float)->void:
     if cue.has("lifecycle"):time=source_time(cue,time)
     if cue.role=="flight" and cue.get("stop_emission_at_contact",false) and time>=cue.contact:
         for emitter in handle.emitters:emitter.emitting=false
-        for path in cue.get("contact_hide",[]):handle.root.get_node(path).hide()
+        _hide(handle,cue.get("contact_hide",[]))
     if cue.has("emission_stop") and time>=cue.emission_stop:
         for emitter in handle.emitters:emitter.emitting=false
-    if time>=float(cue.get("launch",INF)):
-        for path in cue.get("release_hide",[]):handle.root.get_node(path).hide()
+    if time>=float(cue.get("launch",INF)):_hide(handle,cue.get("release_hide",[]))
     var opacity=1.0-smoothstep(cue.end-float(cue.fade_out_seconds),cue.end,time) if cue.has("fade_out_seconds") else 1.0
     var keys:Array=cue.get("opacity_keys",[])
     if not keys.is_empty():
@@ -90,13 +99,14 @@ static func controls(handle:Dictionary,cue:Dictionary,time:float)->void:
     handle.opacity=1.0 if cue.has("fade_bindings") else opacity
     for binding in handle.light_units.values():binding.node.light_energy=float(binding.energy)*handle.opacity
     for binding in cue.get("fade_bindings",[]):
-        handle.root.get_node(binding.node).set_indexed(NodePath(binding.property),lerpf(float(binding.closed),float(binding.open),opacity))
+        var faded:Node=_node(handle,binding.node)
+        if faded!=null:faded.set_indexed(NodePath(binding.property),lerpf(float(binding.closed),float(binding.open),opacity))
     for binding in handle.opacity_bindings:
         binding.material.set_shader_parameter(binding.uniform,float(binding.native)*opacity)
-    for path in cue.get("hide_nodes",[]):handle.root.get_node(path).hide()
+    _hide(handle,cue.get("hide_nodes",[]))
     for path in cue.get("show_nodes",[]):
-        var node:GeometryInstance3D=handle.root.get_node(path)
-        node.layers=int(handle.layer_mask);node.show()
+        var node:Node=_node(handle,path)
+        if node is GeometryInstance3D:node.layers=int(handle.layer_mask);node.show()
     if (cue.has("fade_out_seconds") or cue.has("opacity_keys")) and not cue.has("fade_bindings") and handle.opacity_bindings.is_empty():
         var transparency:float=1.0-opacity
         for piece in handle.geometry:

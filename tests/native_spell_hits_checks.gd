@@ -3,7 +3,7 @@ extends SceneTree
 ## Event eligibility/ordering is covered separately by native_spell_event_checks.
 const Hits=preload("res://presentation/native_spell_hits.gd")
 const Authoring=preload("res://presentation/native_spell_authoring.gd")
-const Factory=preload("res://presentation/native_factory_source.gd")
+const Effects=preload("res://presentation/effect_package.gd")
 const Conditions=preload("res://presentation/conditions.gd")
 const REPORT="res://.runtime/native-spell-hits-checks.json"
 const CAPTURES="res://.captures/native-spell-hits"
@@ -55,8 +55,9 @@ func clean_sample(sample:Dictionary)->Dictionary:
     return result
 
 func legacy_surface(world:Node3D,hit:Dictionary)->Dictionary:
-    # Frozen old sandbox material/quad boundary, independent of the new helper.
-    var handle=Factory.make(world,hit.clip.duplicate(true))
+    # Frozen old sandbox material/quad boundary, independent of the new helper:
+    # the material of an ordinary occurrence of the clip's playing approach.
+    var handle=Effects.make(world,hit.clip.duplicate(false),0)
     var mesh:MeshInstance3D=handle.root.get_node(hit.definition.node)
     var source:Material=mesh.get_active_material(int(hit.definition.surface)).duplicate(true)
     for key in hit.definition.get("parameter_overrides",{}):source.set_shader_parameter(key,hit.definition.parameter_overrides[key])
@@ -72,7 +73,7 @@ func legacy_surface(world:Node3D,hit:Dictionary)->Dictionary:
     var quad=MeshInstance3D.new();quad.mesh=QuadMesh.new();quad.mesh.size=Vector2(2,2)
     quad.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
     quad.material_override=source.duplicate(true);viewport.add_child(quad)
-    Factory.close(handle)
+    Effects.close(handle)
     return {"viewport":viewport,"material":quad.material_override}
 
 func run()->void:

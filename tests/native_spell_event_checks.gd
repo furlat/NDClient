@@ -43,7 +43,7 @@ func recording(path:String,sequence:int,spell:String,expected_deliveries:int,exp
                 check(events.has(row.source_event_uuid),"Native phase keeps its real source event")
                 check(row.status=="available" and row.duration_ms>0,"Native phase has selected source and finite duration")
                 check(row.native_cue.begin==0 and is_equal_approx(row.native_cue.end*1000.0,row.duration_ms),"Native phase uses the component presentation clock")
-                check(not row.native_clip.components.is_empty(),"Native phase retains the actual Factory inputs")
+                check(not row.native_clip.get("approaches",[]).is_empty(),"Native phase names its VFX package clip and approaches")
             if row.kind=="material_flash" and row.has("native_hit"):
                 hits.append(row)
                 var fact:Dictionary=events[row.source_event_uuid].fact

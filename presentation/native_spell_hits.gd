@@ -1,7 +1,7 @@
 extends RefCounted
 ## Prepares native materials for existing applied-damage flashes. No event,
 ## recipient selection, envelope, or independent presentation clock lives here.
-const Factory=preload("res://presentation/native_factory_source.gd")
+const Effects=preload("res://presentation/effect_package.gd")
 const Surface=preload("res://presentation/native_material_surface.gd")
 const Native=preload("res://presentation/native_effects.gd")
 var records:Dictionary={}
@@ -40,9 +40,9 @@ func prepare(world:Node,components:Array,cache:Dictionary,prefetch:Array=[],budg
     var started:int=Time.get_ticks_usec()
     var loading:Dictionary
     if not clips.is_empty() and not budget.is_empty() and budget.used_usec>=budget.limit_usec:
-        Factory.Admission.can_mutate() # Poll existing work without admitting a new source.
+        Effects.Admission.can_mutate() # Poll existing work without admitting a new source.
         loading={"ready":false,"pending":clips.size(),"errors":[]}
-    else:loading=Factory.prepare(clips,cache)
+    else:loading=Effects.prepare_hits(clips,cache)
     if not budget.is_empty():budget.used_usec+=maxi(0,Time.get_ticks_usec()-admission_started-(budget.used_usec-charged_before))
     issues=[]
     for error in loading.errors:issues.append({"status":"missing","reason":error})
@@ -68,7 +68,7 @@ func prepare(world:Node,components:Array,cache:Dictionary,prefetch:Array=[],budg
             if not budget.is_empty() and budget.used_usec>=budget.limit_usec:break
             var hit:Dictionary=component.native_hit
             if hit.get("definition",{}).get("status")!="available" or not hit.has("clip"):continue
-            started=Time.get_ticks_usec();var source=Factory.prepare([hit.clip],cache)
+            started=Time.get_ticks_usec();var source=Effects.prepare_hits([hit.clip],cache)
             if not budget.is_empty():budget.used_usec+=Time.get_ticks_usec()-started
             if not source.ready:continue
             if not budget.is_empty() and budget.used_usec>=budget.limit_usec:break
@@ -96,30 +96,16 @@ func _make(world:Node,component:Dictionary)->Dictionary:
 
 func _material_template(world:Node,hit:Dictionary)->Dictionary:
     var definition:Dictionary=hit.definition
-    # Factory may extend its local native duration. The admitted authoring is
-    # immutable and can simultaneously be used by another pane or occurrence.
-    var handle:Dictionary=Factory.make(world,hit.clip.duplicate(true))
-    if not str(handle.get("error","")).is_empty():
-        var error:String=handle.error;Factory.close(handle)
-        return {"error":error}
-    var mesh=handle.root.get_node_or_null(str(definition.get("node","")))
-    var material:Material
-    if mesh is MeshInstance3D and mesh.mesh!=null and int(definition.get("surface",-1))>=0 and int(definition.surface)<mesh.mesh.get_surface_count():
-        material=mesh.get_active_material(int(definition.surface))
-    if material==null:
-        Factory.close(handle)
-        return {"error":"Selected native hit material is unavailable"}
-    material=material.duplicate(false)
+    var extracted:Dictionary=Effects.hit_material(world,hit.clip,str(definition.get("node","")),int(definition.get("surface",-1)))
+    if extracted.has("error"):return {"error":extracted.error}
+    var material:Material=extracted.material
     for parameter in definition.get("parameter_overrides",{}):
         if not material is ShaderMaterial:
-            Factory.close(handle)
             return {"error":"Native hit parameter override requires its selected shader material"}
         material.set_shader_parameter(parameter,definition.parameter_overrides[parameter])
     var clock:String=definition.get("clock_parameter","")
     if not clock.is_empty() and (not material is ShaderMaterial or material.shader==null or not material.shader.get_shader_uniform_list().any(func(uniform):return str(uniform.name)==clock)):
-        Factory.close(handle)
         return {"error":"Selected native hit clock is unavailable: "+clock}
-    Factory.close(handle)
     return {"material":material,"clock":clock}
 
 func decorate(_world:Node,samples:Array,full_material:bool=true,spell_colours:bool=true)->Dictionary:
