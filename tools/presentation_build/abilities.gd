@@ -44,7 +44,7 @@ const ACTION_KINDS := ["action", "trait", "reaction", "class_feature", "feat"]
 static func build(source: Dictionary, out_dir: String, report: Dictionary) -> void:
     var entries: Dictionary = source.entries
     _validate(entries, report)
-    var built: Dictionary = documents(entries)
+    var built: Dictionary = documents(entries, source.root.sections)
     DirAccess.make_dir_recursive_absolute(out_dir)
     for path in built.docs:save_document(out_dir, path, built.docs[path], report)
     _save_native(out_dir, built.native, report)
@@ -95,7 +95,7 @@ static func _sorted(map: Dictionary) -> Array:
 
 ## Every runtime document: {docs: {old path: data}, native: {id: NativeSpell},
 ## native_conditions: {condition id: spell id}, icons: {id: row}}.
-static func documents(entries: Dictionary) -> Dictionary:
+static func documents(entries: Dictionary, paths: Dictionary = {}) -> Dictionary:
     var order := _order()
     var docs := {}
     var spells: Dictionary = entries.get("spells", {})
@@ -116,7 +116,7 @@ static func documents(entries: Dictionary) -> Dictionary:
     var suppressed: Array = []
     for id in _sorted(conditions):
         var e: Resource = conditions[id]
-        if not e.disposition.is_empty():recipes[id] = R.condition_recipe(e)
+        if not e.disposition.is_empty():recipes[id] = provenance(R.condition_recipe(e), paths.get("conditions", {}).get(id, ""))
         if e.playback_rate != 0.0:rates[id] = e.playback_rate
         if not e.play_package_lifecycle:suppressed.append(id)
     docs["catalog/condition_recipes.json"] = _ordered(order, "catalog/condition_recipes.json", recipes)
@@ -130,8 +130,8 @@ static func documents(entries: Dictionary) -> Dictionary:
     for id in _sorted(actions):
         var e: Resource = actions[id]
         if not e.disposition.is_empty():
-            if e.shove:shoves[id] = R.action_recipe(e)
-            else:bodies[id] = R.action_recipe(e)
+            if e.shove:shoves[id] = provenance(R.action_recipe(e), paths.get("actions", {}).get(id, ""))
+            else:bodies[id] = provenance(R.action_recipe(e), paths.get("actions", {}).get(id, ""))
         if not e.plays.is_empty():
             var binding := {"source_recipe": e.plays, "action_feedback": null}
             if e.feedback != null and e.disposition.is_empty():binding.action_feedback = {"text": e.feedback.text, "color": F.to_legacy("colour", e.feedback.colour)}
@@ -178,6 +178,28 @@ static func documents(entries: Dictionary) -> Dictionary:
     docs["values.json"] = {"movement_reference_speed_feet": float(movement.values.get("reference_speed_feet", 30.0)) if movement != null else 30.0}
     return {"docs": docs, "native": native, "icons": icons(entries)}
 
+## Old property paths of the retired .tres overlays -> the entry property
+## that holds the value now (for the Studio inspector's source pointers).
+const PROVENANCE := [["body_filter/opacity", "look/steps/0/alpha"], ["body_filter", "look"], ["body_outline", "look"],
+    ["activity_poses", "poses"], ["application_feedback", "application_text"], ["removal_feedback", "removal_text"],
+    ["effect_audio_cue", "sounds/0/cue"], ["effect_frame", "unported/anchors/1/frame"], ["playback_speed", "body/playback_speed"], ["clip", "body/clip"]]
+const PROVENANCE_NAMES := {"rig_id": "rig", "color": "colour", "duration_ms": "duration"}
+
+## A record whose fields an entry's typed properties hold points at that entry.
+static func provenance(record: Dictionary, entry: String) -> Dictionary:
+    if entry.is_empty() or not record.has("_resource_source"):return record
+    record["_resource_source"] = entry
+    var fields: Dictionary = record.get("_source_fields", {})
+    for key in fields:
+        var property: String = str(fields[key]).get_slice("::", 1)
+        for pair in PROVENANCE:
+            if property == pair[0] or property.begins_with(pair[0] + "/"):
+                property = pair[1] + property.trim_prefix(pair[0]);break
+        var parts := property.split("/")
+        for i in parts.size():parts[i] = PROVENANCE_NAMES.get(parts[i], parts[i])
+        fields[key] = entry + "::" + "/".join(parts)
+    return record
+
 ## The old recipe of a spell, with its measured sockets.
 static func raw_recipe(e: Resource) -> Dictionary:
     var sockets: Variant = measured(e.sockets)
@@ -218,7 +240,7 @@ static func _save_native(out_dir: String, native: Dictionary, report: Dictionary
     var root := out_dir.path_join("native_spells")
     var hashed := PackedStringArray()
     for id in _sorted(native.records):hashed.append(JSON.stringify([id, native.records[id].selection, native.records[id].recipe, native.records[id].hit]))
-    var revision := "".join(hashed).sha256_text().left(16)
+    var revision := "".join(hashed).sha256_text().left(12) + "-" + str(int(Time.get_unix_time_from_system()))
     var directory := root.path_join(revision)
     if DirAccess.dir_exists_absolute(root):
         for old in DirAccess.get_directories_at(root):

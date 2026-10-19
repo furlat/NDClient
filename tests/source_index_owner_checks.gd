@@ -4,7 +4,8 @@ extends SceneTree
 const Catalog=preload("res://source_catalog.gd")
 const Spells=preload("res://presentation/native_presentation_sources.gd")
 const Bodies=preload("res://presentation/body_sources.gd")
-const Import=preload("res://tools/native_spell_import.gd")
+const Builder=preload("res://tools/presentation_build/abilities.gd")
+const Common=preload("res://tools/presentation_build/common.gd")
 var checks:int=0
 var failures:Array=[]
 func _initialize()->void:run.call_deferred()
@@ -33,15 +34,16 @@ func run()->void:
         check(is_same(Bodies.index(job.cache),old_body),"Preparation workers share admitted body index")
     var before:Dictionary=Catalog.source_snapshot(first)
     var old_fireball:Resource=Spells.find("spell.fireball",before)
-    var rebuilt:Dictionary=Import.import_all()
-    check(rebuilt.failures.is_empty(),"Current approved metadata import publishes another native revision")
+    var rebuilt:Dictionary=Common.report()
+    Builder.build(Common.load_root("res://authoring/abilities.tres",rebuilt),"res://build/presentation/abilities",rebuilt)
+    check(rebuilt.errors.is_empty(),"A rebuild of the abilities source publishes another native revision")
     Catalog.invalidate_source_indexes()
     var revised:Array=parallel()
     var next_spell:Resource=Spells.admission(revised[0].cache).index
     var next_body:Resource=Bodies.index(revised[0].cache)
     check(next_spell!=null and next_body!=null,"Reload re-admits indexes while old holders remain alive")
     if next_spell==null or next_body==null:finish();return
-    check(not is_same(next_spell,old_spell) and next_spell.revision!=old_spell.revision,"Explicit reload selects newly imported spell revision")
+    check(not is_same(next_spell,old_spell) and next_spell.revision!=old_spell.revision,"Explicit reload selects the newly built spell revision")
     check(is_same(next_body,old_body),"Reload reuses the unchanged immutable body revision")
     for job in revised:
         check(is_same(Spells.admission(job.cache).index,next_spell) and is_same(Bodies.index(job.cache),next_body),"Parallel reload workers share the new indexes")
@@ -61,6 +63,6 @@ func run()->void:
     Bodies.invalidate();DirAccess.remove_absolute(configured_path)
     finish()
 func finish()->void:
-    var report={"checks":checks,"failures":failures,"scope":"Actual native indexes, 24 simultaneous worker admissions, real offline metadata rebuild, explicit reload with old holders alive and source snapshot ownership. No timing/framebuffer claim."}
+    var report={"checks":checks,"failures":failures,"scope":"Actual native indexes, 24 simultaneous worker admissions, real abilities source rebuild, explicit reload with old holders alive and source snapshot ownership. No timing/framebuffer claim."}
     FileAccess.open("res://generated/source_index_owner_checks.json",FileAccess.WRITE).store_string(JSON.stringify(report,"  "))
     print("SOURCE_INDEX_OWNER ",checks," failures=",JSON.stringify(failures));quit(0 if failures.is_empty() else 1)

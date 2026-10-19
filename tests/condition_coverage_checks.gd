@@ -77,7 +77,7 @@ func run()->void:
     for name in ["dodging","disengaging"]:
         var id="condition."+name
         var outline=entries[id].requirements.filter(func(row):return row.mechanism=="bodyOutline")
-        check(outline.size()==1 and outline[0].source=="res://authoring/presentation/conditions/"+name+".tres::body_outline" and outline[0].legacy_source=="catalog/condition_recipes.json:/"+id+"/persistent/bodyOutline","Basic indicator has an actual native assignment with precise provenance: "+id)
+        check(outline.size()==1 and outline[0].source=="res://authoring/abilities/conditions/condition."+name+".tres::look" and outline[0].legacy_source=="catalog/condition_recipes.json:/"+id+"/persistent/bodyOutline","Basic indicator has an actual native assignment with precise provenance: "+id)
         check(outline[0].implementation=="implemented" and outline[0].status=="unexercised" and not outline[0].rendered,"Catalog alone does not manufacture recorded/rendered evidence: "+id)
     for id in ["condition.spell.fear","trait.skeleton_archer_marked","condition.aegis_spark"]:
         var missing:Array=entries[id].requirements.filter(func(row):return row.get("gap_kind")=="authoring_assignment")

@@ -2,7 +2,6 @@ extends SceneTree
 ## Exact passive operands, lazy worker admission and retained source ownership.
 const Sources=preload("res://presentation/native_presentation_sources.gd")
 const Catalog=preload("res://source_catalog.gd")
-const Import=preload("res://tools/native_spell_import.gd")
 var checks:int=0
 var failures:Array=[]
 func _initialize()->void:run.call_deferred()
@@ -13,7 +12,7 @@ func run()->void:
     var empty:Dictionary={}
     check(Catalog.prepared_asset("particles.region.blood",empty).is_empty() and empty.is_empty(),"Lookup-only asset access cannot admit even the index")
     var cache:Dictionary={};var owner:Dictionary=Sources.admission(cache)
-    check(owner.index.asset_metadata.size()==13 and owner.loaded.is_empty(),"The admitted index selects all thirteen assets without loading them")
+    check(Sources._assets!=null and Sources._assets.asset_metadata.size()==13 and owner.loaded.is_empty(),"The admitted asset index selects all thirteen assets without loading them")
     var before:int=Time.get_ticks_usec()
     var blood:Dictionary=Catalog.asset("particles.region.blood",cache)
     var cold_ms:float=(Time.get_ticks_usec()-before)/1000.0
@@ -35,13 +34,12 @@ func run()->void:
     var fireball:Resource=Sources.find("spell.fireball",cache)
     check(fireball!=null and cache[Sources.CACHE_KEY].loaded.size()==14,"Spell lookup cannot collide with any asset owner")
     var retained:Dictionary=Catalog.source_snapshot(cache)
-    var rebuilt:Dictionary=Import.import_all()
-    check(rebuilt.failures.is_empty() and rebuilt.assets.size()==13,"Offline reimport validates all thirteen operands before publishing")
+    # The asset metadata is the environment's (blood regions); its old .derived
+    # admission has no importer here any more, so no new revision is published.
     Catalog.invalidate_source_indexes()
-    var replacement:Dictionary={};var next:Dictionary=Catalog.asset("particles.region.blood",replacement)
-    check(not next.is_empty() and not is_same(next,blood),"A new immutable source revision selects another physical metadata owner")
+    var replacement:Dictionary={}
     Catalog.adopt_snapshot(retained,Catalog.source_snapshot(replacement))
-    check(is_same(Catalog.prepared_asset("particles.region.blood",retained),blood),"New publication cannot replace an old replay's admitted asset")
+    check(is_same(Catalog.prepared_asset("particles.region.blood",retained),blood),"A later publication cannot replace an old replay's admitted asset")
     check(Catalog.asset("unregistered.asset",replacement).is_empty() and not replacement.get("native_authoring_errors",[]).is_empty(),"A genuinely missing selected asset produces the ordinary preparation error")
     var report:Dictionary={"checks":checks,"failures":failures,"cold_selected_blood_ms":cold_ms,"metadata_assets":13,
         "scope":"All current passive asset values, lookup-only sampling seam, lazy per-asset load, disjoint source keys, COW handoff and retained old revisions; no GPU/live timing claim."}

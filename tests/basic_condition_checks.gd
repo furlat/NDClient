@@ -45,7 +45,7 @@ func examine(directory:String,action:String,name:String,color:int)->void:
     var owner={}
     for row in rows:
         owner=row.owner
-        check(row.operations.has("bodyOutline") and row.source_fields.bodyOutline=="res://authoring/presentation/conditions/"+name+".tres::body_outline","Exact editable Resource provenance: "+name)
+        check(row.operations.has("bodyOutline") and row.source_fields.bodyOutline=="res://authoring/abilities/conditions/condition."+name+".tres::look","Exact editable Resource provenance: "+name)
         var at:float=(row.start_ms+row.end_ms)*.5
         var timeline=Recording.restore(index,at)
         var original=timeline.state.duplicate(true)

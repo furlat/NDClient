@@ -34,7 +34,7 @@ func _initialize() -> void:
     check(entry != null and entry.look.steps[0].kind == "body_adjust" and is_equal_approx(entry.look.steps[0].alpha, 0.55) and entry.poses.size() == 2,
         "The abilities source holds Hidden's look and its crouch poses")
     check(hidden.persistent.bodyColor == null, "An explicitly neutral native filter clears inherited legacy colour operations")
-    check(Catalog.source_pointer("catalog/condition_recipes.json", "/condition.hidden/persistent/alphaMultiplier", cache) == "res://authoring/presentation/conditions/hidden.tres::body_filter/opacity", "Inspector resolves selected opacity to its authored property")
+    check(Catalog.source_pointer("catalog/condition_recipes.json", "/condition.hidden/persistent/alphaMultiplier", cache) == "res://authoring/abilities/conditions/condition.hidden.tres::look/steps/0/alpha", "Inspector resolves selected opacity to its authored property")
     check(Catalog.source_pointer("catalog/condition_recipes.json", "/condition.hidden/relationships", cache) == "catalog/condition_recipes.json:/condition.hidden/relationships", "Inherited relationship retains its actual source pointer")
     var rigs = Catalog.read_file("catalog/rigs.json", cache)
     var sources = Catalog.read_file("catalog/resources.json", cache)
@@ -42,7 +42,7 @@ func _initialize() -> void:
     check(action.actor.enabled and action.actor.clip=="CrouchIdle" and action.anchors[1].frame==15,
         "Hide selects a finite authored action and its condition effect boundary")
     check(action.effectAudioCue=="hide_transition", "Hide selects its transition sound at the action effect")
-    check(Catalog.source_pointer("catalog/body_action_recipes.json","/action.hide/actor/clip",cache)=="res://authoring/presentation/actions/hide.tres::clip",
+    check(Catalog.source_pointer("catalog/body_action_recipes.json","/action.hide/actor/clip",cache)=="res://authoring/abilities/actions/action.hide.tres::body/clip",
         "Action source preview links to the authored clip property")
     var hide_entry: Resource = load("res://authoring/abilities/actions/action.hide.tres")
     check(hide_entry != null and hide_entry.body.clip == "CrouchIdle" and hide_entry.unported.anchors[1].name == "effect" and hide_entry.unported.anchors[1].frame == 15 and hide_entry.body.rig == "neuroclient.modular",

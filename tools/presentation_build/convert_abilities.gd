@@ -10,6 +10,9 @@ extends SceneTree
 ## Then it builds the runtime documents from the saved entries and compares
 ## them with today's documents, value by value and type by type.
 ##   --headless --script res://tools/presentation_build/convert_abilities.gd [-- --verify-only]
+## Its inputs (authoring/spells, the catalog recipes and contexts, sandbox
+## staging, native_effects, the overlays) were deleted once the game read the
+## build; it stays as the record of how the source was made.
 const F = preload("res://tools/presentation_build/ability_fields.gd")
 const R = preload("res://tools/presentation_build/ability_records.gd")
 const Builder = preload("res://tools/presentation_build/abilities.gd")

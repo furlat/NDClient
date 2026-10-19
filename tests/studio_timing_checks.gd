@@ -104,12 +104,12 @@ func _recording(directory:String)->Dictionary:
         check(bodies.size()==1 and bodies[0].end_ms>bodies[0].start_ms,"Hide owns its positive-duration action body")
         if bodies.is_empty():continue
         var body:Dictionary=bodies[0]
-        check(body.track.source=="res://authoring/presentation/actions/hide.tres::clip","Actual Hide body retains selected native clip provenance")
+        check(body.track.source=="res://authoring/abilities/actions/action.hide.tres::body/clip","Actual Hide body retains selected native clip provenance")
         var cues:Array=[]
         for item in index.groups:
             for component in item.group.get("components",[]):
                 if component.get("source_event_uuid")==hide.event.event_uuid and component.get("cue_id")=="hide_transition":cues.append(component)
-        check(cues.size()==1 and cues[0].get("assignment_source")=="res://authoring/presentation/actions/hide.tres::effect_audio_cue" and str(cues[0].source).begins_with("audio/cues.json:"),"Actual action audio retains both assignment and selected cue provenance")
+        check(cues.size()==1 and cues[0].get("assignment_source")=="res://authoring/abilities/actions/action.hide.tres::sounds/0/cue" and str(cues[0].source).begins_with("audio/cues.json:"),"Actual action audio retains both assignment and selected cue provenance")
         var actor:String=body.track.actor_uuid
         var owner_rows=index.rows.filter(func(row):return row.kind=="condition" and row.owner.condition.behavior_id=="condition.hidden" and not row.owner.initial)
         check(owner_rows.size()==1,"Real Hidden application has one retained owner")
