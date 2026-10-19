@@ -393,3 +393,22 @@ passes664focused checks plus83Gallery and17two-spell live checks. Its final
 isolated door peak16.585ms and move peak14.250ms are recorded alongside the
 unresolved41.221ms first-Fireball targeting frame; full decomposition/limits
 are in the item-cohort ledger. No owned Godot/test server preview remains open.
+
+
+## Actor-context candidate and Factory follow-up
+
+[Factory runtime handout](FACTORY_RUNTIME_FOLLOWUP_HANDOUT_2026-10-19.md) is
+published for the human to forward. It adds actual Flame Blade construction
+costs, full source preparation scope, actor-copy colour compatibility and two
+observed c494 shader compilation failures with exact reproduction/logs.
+
+[Private actor-context candidate](ACTOR_CONTEXT_PROVIDER_CANDIDATE_2026-10-19.md),
+implementation commit `ba5d0262`, remains isolated from the receiving renderer.
+Five affected existing gates pass 254 checks. Actual forward Mirror replay passes
+34 ownership/context/count/camera/suspension/seek assertions but **fails overall**
+with two source shader errors; no correct-pixel or GPU-readiness claim. The
+reviewer's small-selector and callback-cycle findings are fixed. Immediate
+active-condition restore, real count loss, source colour parity, Blur and
+Banishment remain open. No new art or approved graphics were changed. The full
+migration estimates remain unchanged; this is a candidate checkpoint, not a
+completed provider cohort.
