@@ -54,6 +54,12 @@ func _initialize() -> void:
     for mode in ["solid","translucent","hidden"]:
         check(Reveal.variants(source,{},mode,{"a":true,"b":false})=={"a":1.0,"b":1.0},"%s mixed-current corner uses exact separate originals"%mode)
         check(Reveal.variants(source,{},mode,{"a":false,"b":false})=={"joined":1.0},"%s equally remembered corner keeps exact joined original"%mode)
+    # An engaged trap selects the server's "activated" state, which its owner has.
+    var Catalog=load("res://source_catalog.gd");var cache={}
+    var trap={"placement":{"position":[0,0],"base_height_steps":0,"kind":"center"},"item":{"item_id":"environment.trap.crusher.stone.workshop","is_engaged":true}}
+    var row:Dictionary=World.rows({"tiles":{},"objects":{"trap":trap}},cache).rows[0]
+    var owner:Dictionary=Catalog.owner_for(row,cache)
+    check(row.state=="activated" and owner.state_frames.has(row.state) and Catalog.environment(row,0,cache).frame==int(owner.state_frames.activated),"Engaged trap rests on its activated frame")
     var report={"checks":checks,"failures":failures,"scope":"Pure current-versus-remembered grants, negative-floor painter relation, and original wall member assembly; native pixels tested separately."}
     var file=FileAccess.open("res://generated/scenery_state_checks.json",FileAccess.WRITE);file.store_string(JSON.stringify(report,"  "));file.close()
     print("SCENERY_STATE_CHECKS ",JSON.stringify(report));quit(0 if failures.is_empty() else 1)

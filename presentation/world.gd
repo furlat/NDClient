@@ -45,7 +45,7 @@ static func rows(state: Dictionary, cache: Dictionary) -> Dictionary:
                 if value != null: mode = JSON.stringify(value) if value is bool else str(value)
             row.merge({"kind":"prop","asset":item.item_id,"state":mode})
         elif index.traps.has(item.item_id):
-            row.merge({"kind":"trap","asset":item.item_id,"state":"active" if item.get("is_engaged",false) else "ready"})
+            row.merge({"kind":"trap","asset":item.item_id,"state":"activated" if item.get("is_engaged",false) else "ready"})
         elif item.get("boundary_structure") != null:
             var structure: Dictionary = item.boundary_structure
             # Doors and fences without art of their own draw the material's wall pieces (environment source stand-ins).
