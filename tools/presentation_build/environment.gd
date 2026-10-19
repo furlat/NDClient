@@ -2,12 +2,12 @@ extends RefCounted
 ## Builds the environment runtime files from authoring/environment.tres into
 ## build/presentation/environment/, in the shapes the game reads (binary, so
 ## every delivered number survives as read):
-##   world.res      terrain views, wall and cliff pieces, stairs, fixtures, directional light
+##   world.res      terrain views, wall and cliff pieces, fixtures, directional light
 ##   resources.res  every single image the world draws, the flame animation, the water look
 ##   index.res      door/prop/trap owners, bank and library paths, wall destructions, chest
 ##                  rests, and for the Studio's views: wrecks, old spatial media, portal,
 ##                  world-animation and device ids
-##   banks/<id>.res, library/<id>.res   one bank or library family each
+##   banks/<id>.res, library/<id>.res   one bank each, and the library families rest poses show
 ##   receiving_normals.res, texture_layouts.res + pages/   normal selection and paged packets
 ##   fixture_optics.res   measured flame energy and emission centre per frame
 ##   residues/blood.res   the blood region particles
@@ -51,7 +51,9 @@ static func build(source: Dictionary, out_dir: String, report: Dictionary) -> vo
             if "status" in entries[section][id] and not entries[section][id].status in STATUSES: Common.error(report, "environment/" + section + "/" + id, "unknown status")
     DirAccess.make_dir_recursive_absolute(out_dir)
     var context := {"report": report, "entries": entries, "out": out_dir, "art": entries.art, "resources": {}, "animations": {},
-        "paths": {}, "banks": {}, "library": {}, "normals": {}, "layouts": {}, "selections": {}}
+        "paths": {}, "banks": {}, "library": {}, "normals": {}, "layouts": {}, "selections": {}, "rests": {}}
+    for id in entries.art:
+        if not entries.art[id].rest_library.is_empty(): context.rests[entries.art[id].rest_library] = true
     var package: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://assets/vfx/index.json"))
     for selection in package.selections: context.selections[selection.key] = selection
     _receiving_normals(root, context)
@@ -134,8 +136,10 @@ static func _art(context: Dictionary) -> void:
             "images": _images(context, art, where)
             "samples":
                 var family: Variant = _measured(context, where, art.art.measurements)
+                # Every family's art must resolve; the game reads only the ones a rest pose shows.
                 if family is Dictionary:
                     _collect_paths(context, family)
+                    if not context.rests.has(id): continue
                     var path: String = context.out.path_join("library/" + id + ".res")
                     _write(path, family, report)
                     context.library[id] = path
@@ -295,13 +299,9 @@ static func _terrain(context: Dictionary, world: Dictionary, resources: Dictiona
             world.terrain[material] = {}
         else:
             world.terrain[material] = _view_images(context, terrain.floor, where)
+        # Stairs and ramps stay in the source: the game maps no server surface_kind to them yet.
         for slope in terrain.slopes:
-            if slope.kind != "stairs" or slope.art.is_empty(): continue
-            if world.has("terrain_stairs"): Common.error(report, where, "the runtime draws one stairs set; a second is bound"); continue
-            var contacts := {}
-            for view in slope.contacts: contacts[view] = Array(slope.contacts[view]).map(func(p): return [float(p.x), float(p.y)])
-            world.terrain_stairs = {"rise_steps": float(slope.rise_steps), "poses": _view_images(context, slope.art, where), "contacts_px": contacts,
-                "support_offsets": slope.support_offsets.map(func(o): return [float(o.x), float(o.y), float(o.z)])}
+            if not slope.art.is_empty() and not context.art.has(slope.art): Common.error(report, where, "slope art missing: " + slope.art)
 
 static func _structures(context: Dictionary, world: Dictionary, index: Dictionary) -> void:
     var report: Dictionary = context.report
@@ -412,8 +412,6 @@ static func _prop(context: Dictionary, object: EnvironmentObject, where: String)
             Common.asset(context.report, where, ref.path)
             masks[view] = {"path": runtime_path(ref.path), "rect": [float(ref.rect.position.x), float(ref.rect.position.y), float(ref.rect.size.x), float(ref.rect.size.y)]}
         owner.selection_masks_by_pose = masks
-    for part in object.parts:
-        if part.omit_with_destroyed_parent: owner.omit_with_destroyed_parent = true
     if object.flat_ground: owner.flat_ground = true
     return owner
 

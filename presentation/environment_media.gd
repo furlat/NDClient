@@ -24,9 +24,7 @@ static func animation_pages(row: Dictionary, cache: Dictionary) -> Dictionary:
     # every camera pose remain covered without inventing a playback phase.
     var paths = {}
     var errors: Array = []
-    var source: Dictionary = row.get("break_owner",row)
-    if source.has("source_sprite"): return {"paths":paths,"errors":errors}
-    var bank_id = Catalog.bank_for(source,true,cache)
+    var bank_id = Catalog.bank_for(row,true,cache)
     if bank_id.is_empty(): return {"paths":paths,"errors":errors}
     var bank: Dictionary = Catalog.bank_data(bank_id,cache)
     var layouts = Catalog.texture_layouts(cache)

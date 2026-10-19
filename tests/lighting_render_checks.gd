@@ -3,7 +3,7 @@ extends SceneTree
 # authoring owner with its original packed depth/oct-normal companions.
 const Lighting = preload("res://presentation/lighting.gd")
 const Placement = preload("res://placement.gd")
-class Probe extends "res://main.gd":
+class Probe extends "res://presentation/sprite_sources.gd":
     func _ready() -> void:
         set_process(false); set_process_unhandled_input(false)
         camera = Camera3D.new(); camera.projection = Camera3D.PROJECTION_ORTHOGONAL

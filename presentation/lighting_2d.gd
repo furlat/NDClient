@@ -10,9 +10,9 @@ const RangeProfile = preload("res://presentation/resources/light_range_profile.g
 const LightCookies = preload("res://presentation/light_cookies.gd")
 ## The torch appearance's colour and the items that show it, and the cookie
 ## used without a range profile (environment source lighting entries).
-static var TORCH_COLOUR: Color = Catalog.environment_lighting().get("torch_colour", Color.WHITE)
-static var TORCH_ITEM_IDS: Array = Catalog.environment_lighting().get("torch_item_ids", [])
-static var DEFAULT_COOKIE: String = Catalog.environment_lighting().get("fallback_cookie", "")
+static var TORCH_COLOUR: Color = Catalog.environment_lighting().torch_colour
+static var TORCH_ITEM_IDS: Array = Catalog.environment_lighting().torch_item_ids
+static var DEFAULT_COOKIE: String = Catalog.environment_lighting().fallback_cookie
 var range_profile: RangeProfile = Catalog.light_ranges()
 var cookie_path: String = DEFAULT_COOKIE
 var sources: Array = []

@@ -76,12 +76,7 @@ func v4(values: Array) -> Vector4:
 
 func add_environment_entries(row: Dictionary) -> void:
     var role: String = row.get("sort_role", row.kind if row.kind in ["terrain", "wall", "cliff"] else "body")
-    var separate_shadow = not row.has("source_sprite")
-    if row.has("source_sprite"):
-        var record = record_for(row)
-        separate_shadow = record.get("roles",[]).any(func(part):return part.role=="ground_shadow") or Catalog.break_duration(row,catalog_cache)>0
-    if separate_shadow:
-        add_entry(row, "shadow", int(row.get("layer", 0)) * 10, ENVIRONMENT_SHADER, 0)
+    add_entry(row, "shadow", int(row.get("layer", 0)) * 10, ENVIRONMENT_SHADER, 0)
     if row.kind == "door":
         add_entry(row,role,int(row.get("layer",0))*10,ENVIRONMENT_SHADER,3)
         add_entry(row,role,int(row.get("layer",0))*10+1,ENVIRONMENT_SHADER,2)
@@ -94,13 +89,7 @@ func record_for(row: Dictionary) -> Dictionary:
         var playback: Node = destruction[row.id]
         phase = playback.phase
         time = playback.sample_seconds
-    var source_row = row
-    if row.get("attachment_absent",false): source_row = row
-    var record = Catalog.environment(source_row, quarter, catalog_cache, phase, time)
-    if row.has("parent_id") and destruction.has(row.parent_id) and Catalog.owner_for(row,catalog_cache).get("omit_with_destroyed_parent",false):
-        record = record.duplicate()
-        record.hidden = true
-    return record
+    return Catalog.environment(row, quarter, catalog_cache, phase, time)
 
 ## The shader a sprite of this kind uses here. The workshop substitutes its
 ## 3D-lit variants; the game uses the light-table shaders as given.
@@ -119,7 +108,7 @@ func add_entry(row: Dictionary, role: String, layer: int, shader: Shader, source
     (sprite_parent if sprite_parent != null and row.kind != "actor" else self).add_child(node)
     entries.append({"id": row.id + ":" + str(layer) + ":" + role, "placement": row, "role": role,
         "layer": layer, "source_role": source_role, "node": node, "material": material, "screen_rect": Rect2(),
-        "mobile":row.kind=="actor" or row.has("break_owner")})
+        "mobile":row.kind=="actor"})
     SourceMaterial.initialize(entries.back())
     if row.kind == "actor": actor_entries.append(entries.back())
 

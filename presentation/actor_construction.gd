@@ -13,7 +13,6 @@ const Placement=preload("res://placement.gd")
 const QuadShapes=preload("res://presentation/quad_shapes.gd")
 
 static func source_cache(cache:Dictionary)->Dictionary:
-    Catalog.seal_environment_sources(cache)
     var result:Dictionary=cache.duplicate()
     # Fixed-creature shadow availability is filled lazily by Characters.resolve.
     # Authoring documents and completed selector indexes remain immutable.

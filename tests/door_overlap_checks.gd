@@ -5,7 +5,7 @@ extends SceneTree
 const Catalog = preload("res://source_catalog.gd")
 const Placement = preload("res://placement.gd")
 const Graphs = preload("res://animation/graphs.gd")
-class Probe extends "res://main.gd":
+class Probe extends "res://presentation/sprite_sources.gd":
     func _ready() -> void:
         set_process(false); set_process_unhandled_input(false)
         camera = Camera3D.new(); camera.projection = Camera3D.PROJECTION_ORTHOGONAL

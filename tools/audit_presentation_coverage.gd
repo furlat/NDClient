@@ -61,7 +61,7 @@ func run() -> void:
     var catalog_index=Catalog.read_file("catalog-index.json",cache)
     var inventory={"spell_drafts":catalog_index.drafts.size(),"paired_banks":catalog_index.paired_banks.size(),
         "environment_doors":index.doors.size(),"environment_props":index.props.size(),"environment_traps":index.traps.size()}
-    for name in ["attack_recipes","body_action_recipes","condition_recipes","rigs","resources","world_animations"]:
+    for name in ["attack_recipes","body_action_recipes","condition_recipes","rigs","resources"]:
         inventory[name]=Catalog.read_file(catalog_index[name],cache).size()
     var report={"review_baseline_commit":"0635d5f","recording":recording.get_file(),"last_sequence":session.latest_sequence,"registered_inventory":inventory,
         "terminal":session.terminal,"session_issue":session.issue,"events":events,"retained_destroyed_objects":broken,"engaged_trap_projection":traps,

@@ -36,7 +36,7 @@ func actor(id:String,paths:Array,rig:Dictionary,cache:Dictionary)->Dictionary:
     return {"row":row,"rig":rig,"layers":layers,"entries":[],"new_entries":[],"playback":null,
         "reuse_actor":false,"retained_slots":{},"source_sample":{"clip":"Idle","source_seconds":0.0},"source_bindings":bindings}
 func environment(id:String,path:String)->Dictionary:
-    return {"id":id,"kind":"prop","source_sprite":id,"position":[0,0],"base_height_steps":0,"orientation":"east","material":"stone"}
+    return {"id":id,"kind":"resource","asset":id,"position":[0,0],"base_height_steps":0,"orientation":"east","material":"stone"}
 func run()->void:
     var host=Host.new();root.add_child(host)
     host.rig_config={"TILE_W":128.0,"FACING_CYCLE":["SW"]}
@@ -49,11 +49,11 @@ func run()->void:
     layer.clips={"Idle":{}}
     var clip=Body.Clip.new();layer.clip_sources.Idle="fixture-clip"
     host.catalog_cache[Body.KEY]={"index":index,"loaded":{"fixture":layer,"fixture-clip":clip}}
-    host.catalog_cache["res://generated/unity_sources.json"]={}
+    host.catalog_cache["res://build/presentation/environment/resources.res"]={"resources":{}}
     host.catalog_cache["res://build/presentation/environment/texture_layouts.res"]={"layouts":{}}
     for pair in [["ready",ENV],["late",LATE_ENV]]:
         var record={"path":pair[1],"native_size":[2,2],"pivot":[1,2],"scale":1.0,"roles":[]}
-        host.catalog_cache["res://generated/unity_sources.json"][pair[0]]={"records":[record,record,record,record]}
+        host.catalog_cache["res://build/presentation/environment/resources.res"].resources[pair[0]]=record
     var image=Image.create(2,2,false,Image.FORMAT_RGBA8);image.fill(Color.WHITE)
     var texture=ImageTexture.create_from_image(image)
     for path in [B,ENV]:host.textures[path]=texture;host.source_images[path]=image
