@@ -332,7 +332,7 @@ report = {
         'public_selectors': public_gaps,
         'class_gates': ['Rage/Frenzy holds now use actual condition UUID ownership and unknown-removal clocks. Initial unobserved application, ordinary Rage native output and the separate body-film API remain unqualified.',
                         'Frenzy requires a real child-to-parent condition UUID link, absent from current ConditionState; its legal recorded lifecycle preserves that exact missing input.',
-                        'Second Wind has an original two-faction wounded-fighter/self-heal recording and actual projection checks. Native output qualification remains separate.',
+                        'Second Wind has an original two-faction wounded-fighter/self-heal recording, actual projection checks and a submitted native self-heal draw through seeking/factions/looping. This qualifies that scenario, not all class-native consumers.',
                         'Preserve Life has actual declaration/recipient/native-output qualification; Cleansing Touch, Opulent Revival, Turn Undead and Turn Unholy bindings need their own legal scenario/output qualification.'],
         'unselected_action_programs': ['reaction.spell.counterspell has success/failure studies: needs the actual native outcome selector.',
                                      'action.fire_breath is not an exact current catalogue/typed action ID; do not alias another breath by name.'],
