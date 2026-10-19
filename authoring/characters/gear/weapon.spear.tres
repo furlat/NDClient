@@ -1,0 +1,97 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_bscx3"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_dxbs0"]
+
+[sub_resource type="Resource" id="Resource_lnnlk"]
+script = ExtResource("1_bscx3")
+path = "art/media/ui/icons/smooth48/item.spear.png"
+native_size = Vector2i(48, 48)
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_dxbs0")
+id = "weapon.spear"
+kind = "weapon"
+slots = Dictionary[String, Dictionary]({
+"weapon_melee_main": {
+"layers": [{
+"part": "Melee25",
+"slot": "weapon",
+"tint": "#8b6914"
+}],
+"variants": {
+"10000013": [{
+"part": "Melee25",
+"slot": "weapon",
+"tint": "#778899"
+}],
+"10000014": [{
+"part": "Melee25",
+"slot": "weapon",
+"tint": "#ccaa44"
+}]
+}
+}
+})
+hands = Dictionary[String, Dictionary]({
+"weapon_melee_off": {
+"": [{
+"part": "Offhand1",
+"slot": "offhand",
+"tint": "#8b6914"
+}],
+"10000013": [{
+"part": "Offhand1",
+"slot": "offhand",
+"tint": "#778899"
+}],
+"10000014": [{
+"part": "Offhand1",
+"slot": "offhand",
+"tint": "#ccaa44"
+}]
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee25",
+"pivots_by_camera": [[55.5, 63.0], [67.5, 58.0], [74.5, 66.5], [62.5, 71.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#8b6914",
+"variant": ""
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee25",
+"pivots_by_camera": [[55.5, 63.0], [67.5, 58.0], [74.5, 66.5], [62.5, 71.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#778899",
+"variant": "10000013"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee25",
+"pivots_by_camera": [[55.5, 63.0], [67.5, 58.0], [74.5, 66.5], [62.5, 71.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#ccaa44",
+"variant": "10000014"
+}])
+icon = SubResource("Resource_lnnlk")
+notes = "Visual name Spear; Second spear sprite — distinct from Melee24 used for javelin"

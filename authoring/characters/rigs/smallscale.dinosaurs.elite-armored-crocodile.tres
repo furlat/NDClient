@@ -1,0 +1,677 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_bso0h"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_e7nvo"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_7nq34"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_dr4t3"]
+
+[sub_resource type="Resource" id="Resource_gi8pv"]
+script = ExtResource("2_e7nvo")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/attack1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/attack1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/attack1/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/attack1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/attack1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/attack1/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.9218940135048078
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_emh7b"]
+script = ExtResource("1_bso0h")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Attack1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteArmoredCrocodile": "/rigs/dinosaurs_elite_armored_crocodile/body/Attack1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/attack1/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE Armored Crocodile/Attack1.png",
+"mask_material": "art/media/smallscale/authored/dinosaurs/Material masks/With shadow/ELITE Armored Crocodile/Attack1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_gi8pv")
+
+[sub_resource type="Resource" id="Resource_hi6at"]
+script = ExtResource("2_e7nvo")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/attack2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/attack2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/attack2/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/attack2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/attack2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/attack2/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.9028013536452196
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_wey6v"]
+script = ExtResource("1_bso0h")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Attack2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteArmoredCrocodile": "/rigs/dinosaurs_elite_armored_crocodile/body/Attack2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/attack2/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE Armored Crocodile/Attack2.png",
+"mask_material": "art/media/smallscale/authored/dinosaurs/Material masks/With shadow/ELITE Armored Crocodile/Attack2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_hi6at")
+
+[sub_resource type="Resource" id="Resource_p0yd0"]
+script = ExtResource("2_e7nvo")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/attack3/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/attack3/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/attack3/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/attack3/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/attack3/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/attack3/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.9759468580918198
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_nsr1u"]
+script = ExtResource("1_bso0h")
+name = "Attack3"
+role = "attack_3"
+source_clip = "Attack3"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteArmoredCrocodile": "/rigs/dinosaurs_elite_armored_crocodile/body/Attack3.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/attack3/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE Armored Crocodile/Attack3.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_p0yd0")
+
+[sub_resource type="Resource" id="Resource_pnoi2"]
+script = ExtResource("2_e7nvo")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/attack4/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/attack4/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/attack4/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/attack4/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/attack4/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/attack4/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.979506818606389
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_xw6gg"]
+script = ExtResource("1_bso0h")
+name = "Attack4"
+role = "attack_4"
+source_clip = "Attack4"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteArmoredCrocodile": "/rigs/dinosaurs_elite_armored_crocodile/body/Attack4.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/attack4/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE Armored Crocodile/Attack4.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_pnoi2")
+
+[sub_resource type="Resource" id="Resource_cmknn"]
+script = ExtResource("2_e7nvo")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/die/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/die/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/die/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/die/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.9454358333486484
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_3xlid"]
+script = ExtResource("1_bso0h")
+name = "Die"
+role = "die"
+source_clip = "Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteArmoredCrocodile": "/rigs/dinosaurs_elite_armored_crocodile/body/Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/die/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE Armored Crocodile/Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_cmknn")
+
+[sub_resource type="Resource" id="Resource_f1w4i"]
+script = ExtResource("2_e7nvo")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/idle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/idle/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/idle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/idle/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.9779140237115042
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_grfr2"]
+script = ExtResource("1_bso0h")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteArmoredCrocodile": "/rigs/dinosaurs_elite_armored_crocodile/body/Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/idle/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE Armored Crocodile/Idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_f1w4i")
+
+[sub_resource type="Resource" id="Resource_4jgw5"]
+script = ExtResource("2_e7nvo")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/run/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/run/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/run/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/run/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.980355273198346
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_t4cgf"]
+script = ExtResource("1_bso0h")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteArmoredCrocodile": "/rigs/dinosaurs_elite_armored_crocodile/body/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/run/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE Armored Crocodile/Run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_4jgw5")
+
+[sub_resource type="Resource" id="Resource_1pb17"]
+script = ExtResource("2_e7nvo")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/takedamage/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/takedamage/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/takedamage/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.9790362953692116
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_thlh0"]
+script = ExtResource("1_bso0h")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteArmoredCrocodile": "/rigs/dinosaurs_elite_armored_crocodile/body/TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/takedamage/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE Armored Crocodile/TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_1pb17")
+
+[sub_resource type="Resource" id="Resource_nej2g"]
+script = ExtResource("2_e7nvo")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/taunt/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/taunt/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/taunt/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/taunt/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/taunt/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/taunt/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.9780663076721016
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_hg5x5"]
+script = ExtResource("1_bso0h")
+name = "Taunt"
+role = "taunt"
+source_clip = "Taunt"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteArmoredCrocodile": "/rigs/dinosaurs_elite_armored_crocodile/body/Taunt.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/taunt/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE Armored Crocodile/Taunt.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_nej2g")
+
+[sub_resource type="Resource" id="Resource_gjnnm"]
+script = ExtResource("2_e7nvo")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/walk/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/walk/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/walk/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/walk/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.979737888904674
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_708vf"]
+script = ExtResource("1_bso0h")
+name = "Walk"
+role = "walk"
+source_clip = "Walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteArmoredCrocodile": "/rigs/dinosaurs_elite_armored_crocodile/body/Walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-crocodile/walk/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE Armored Crocodile/Walk.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_gjnnm")
+
+[sub_resource type="Resource" id="Resource_5ld55"]
+script = ExtResource("3_7nq34")
+role = "movement"
+qualifier = {
+"kind": "default"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+playback = "loop"
+
+[sub_resource type="Resource" id="Resource_ut1t1"]
+script = ExtResource("3_7nq34")
+role = "movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_lir3e"]
+script = ExtResource("3_7nq34")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "direct_arc"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_hxnck"]
+script = ExtResource("3_7nq34")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "connector_transfer"
+}
+clip = "Walk"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_gti12"]
+script = ExtResource("3_7nq34")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "direct_arc"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_ce5fb"]
+script = ExtResource("3_7nq34")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "connector_transfer"
+}
+clip = "Walk"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_vtonr"]
+script = ExtResource("3_7nq34")
+role = "shove"
+qualifier = {
+"kind": "default"
+}
+clip = "Attack2"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 6.0,
+"name": "contact"
+}]
+
+[sub_resource type="Resource" id="Resource_5cxf7"]
+script = ExtResource("3_7nq34")
+role = "forced_movement"
+qualifier = {
+"kind": "default"
+}
+clip = "TakeDamage"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 5.0,
+"name": "brace"
+}]
+
+[sub_resource type="Resource" id="Resource_758hb"]
+script = ExtResource("3_7nq34")
+role = "forced_movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_3d3df"]
+script = ExtResource("3_7nq34")
+role = "body_action"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_34hw2"]
+script = ExtResource("3_7nq34")
+role = "body_action_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_76hvj"]
+script = ExtResource("3_7nq34")
+role = "equipment"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_flw1p"]
+script = ExtResource("3_7nq34")
+role = "healing"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_m2rsu"]
+script = ExtResource("3_7nq34")
+role = "save_avoidance"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_ros3s"]
+script = ExtResource("3_7nq34")
+role = "condition_entry"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_h2tks"]
+script = ExtResource("3_7nq34")
+role = "condition_hold"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+hidden_slots = PackedStringArray()
+playback = "final_rest"
+rest_frame = 14
+
+[sub_resource type="Resource" id="Resource_4iflg"]
+script = ExtResource("3_7nq34")
+role = "condition_exit"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+reversed = true
+
+[sub_resource type="Resource" id="Resource_jtoco"]
+script = ExtResource("3_7nq34")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "flying",
+"trajectory": "path"
+}
+clip = "Idle"
+hidden_slots = PackedStringArray()
+playback = "once"
+frame_keys = [[0.0, 0.0], [1.0, 0.0]]
+
+[sub_resource type="Resource" id="Resource_sd0vh"]
+script = ExtResource("3_7nq34")
+role = "death"
+qualifier = {
+"kind": "default"
+}
+clip = "Die"
+hidden_slots = PackedStringArray()
+playback = "once"
+
+[resource]
+script = ExtResource("4_dr4t3")
+id = "smallscale.dinosaurs.elite-armored-crocodile"
+pack = "dinosaurs"
+variant = "ELITE Armored Crocodile"
+source = "smallscale-authored/dinosaurs"
+cell = Vector2i(96, 96)
+pivot = Vector2(48, 77)
+anchor = Vector2(48, 60)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("DinosaursEliteArmoredCrocodile")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_bso0h")]([SubResource("Resource_emh7b"), SubResource("Resource_wey6v"), SubResource("Resource_nsr1u"), SubResource("Resource_xw6gg"), SubResource("Resource_3xlid"), SubResource("Resource_grfr2"), SubResource("Resource_t4cgf"), SubResource("Resource_thlh0"), SubResource("Resource_hg5x5"), SubResource("Resource_708vf")])
+fallbacks = Dictionary[String, String]({
+"Attack5": "Attack4",
+"Attack6": "Attack4",
+"AttackRun": "Attack1",
+"CrouchWalk": "Walk",
+"Death": "Die",
+"Idle2": "Idle",
+"Idle4": "Idle",
+"Kick": "Attack1",
+"Rolling": "Run",
+"Special1": "Attack4"
+})
+contexts = Array[ExtResource("3_7nq34")]([SubResource("Resource_5ld55"), SubResource("Resource_ut1t1"), SubResource("Resource_lir3e"), SubResource("Resource_hxnck"), SubResource("Resource_gti12"), SubResource("Resource_ce5fb"), SubResource("Resource_vtonr"), SubResource("Resource_5cxf7"), SubResource("Resource_758hb"), SubResource("Resource_3d3df"), SubResource("Resource_34hw2"), SubResource("Resource_76hvj"), SubResource("Resource_flw1p"), SubResource("Resource_m2rsu"), SubResource("Resource_ros3s"), SubResource("Resource_h2tks"), SubResource("Resource_4iflg"), SubResource("Resource_jtoco"), SubResource("Resource_sd0vh")])
+hold_clips = PackedStringArray("Die")
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed.
+Stand-in clips: Idle2 -> Idle, Idle4 -> Idle, Death -> Die, Rolling -> Run, CrouchWalk -> Walk, AttackRun -> Attack1, Kick -> Attack1, Special1 -> Attack4, Attack5 -> Attack4, Attack6 -> Attack4."

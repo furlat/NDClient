@@ -1,0 +1,506 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_qksmk"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_ie8bg"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_tgkyj"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_jd87w"]
+
+[sub_resource type="Resource" id="Resource_llwmk"]
+script = ExtResource("2_ie8bg")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/animals/actions/blue_raptor/raptor-idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/animals/actions/blue_raptor/raptor-idle/normals-gentle.png",
+"original": "art/geometry/creatures/animals/actions/blue_raptor/raptor-idle/normals.png",
+"reference": "art/geometry/creatures/animals/actions/blue_raptor/raptor-idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/animals/actions/blue_raptor/raptor-idle/normal-valid.png",
+"support": "art/geometry/creatures/animals/actions/blue_raptor/raptor-idle/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.9730565577995408
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_8dhtn"]
+script = ExtResource("1_qksmk")
+name = "Idle"
+role = "raptoridle"
+source_clip = "Raptor Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"BlueRaptor": "/rigs/blueraptor/body/Raptor Idle.png",
+"BlueRaptorShadow": "/rigs/blueraptor/shadow/Raptor Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/animals/actions/blue_raptor/raptor-idle/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/Blue Raptor/Raptor Idle.png",
+"shadow": "art/media/smallscale/authored/dinosaurs/Derived shadows/Blue Raptor/Raptor Idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_llwmk")
+
+[sub_resource type="Resource" id="Resource_p7q0f"]
+script = ExtResource("2_ie8bg")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/animals/actions/blue_raptor/raptor-run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/animals/actions/blue_raptor/raptor-run/normals-gentle.png",
+"original": "art/geometry/creatures/animals/actions/blue_raptor/raptor-run/normals.png",
+"reference": "art/geometry/creatures/animals/actions/blue_raptor/raptor-run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/animals/actions/blue_raptor/raptor-run/normal-valid.png",
+"support": "art/geometry/creatures/animals/actions/blue_raptor/raptor-run/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.9744827912701794
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_xbcm1"]
+script = ExtResource("1_qksmk")
+name = "Run"
+role = "raptorrun"
+source_clip = "Raptor run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"BlueRaptor": "/rigs/blueraptor/body/Raptor run.png",
+"BlueRaptorShadow": "/rigs/blueraptor/shadow/Raptor run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/animals/actions/blue_raptor/raptor-run/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/Blue Raptor/Raptor run.png",
+"shadow": "art/media/smallscale/authored/dinosaurs/Derived shadows/Blue Raptor/Raptor run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_p7q0f")
+
+[sub_resource type="Resource" id="Resource_je17t"]
+script = ExtResource("2_ie8bg")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/animals/actions/blue_raptor/raptor-takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/animals/actions/blue_raptor/raptor-takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/animals/actions/blue_raptor/raptor-takedamage/normals.png",
+"reference": "art/geometry/creatures/animals/actions/blue_raptor/raptor-takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/animals/actions/blue_raptor/raptor-takedamage/normal-valid.png",
+"support": "art/geometry/creatures/animals/actions/blue_raptor/raptor-takedamage/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.9653826254644654
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_dv6is"]
+script = ExtResource("1_qksmk")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "Raptor TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"BlueRaptor": "/rigs/blueraptor/body/Raptor TakeDamage.png",
+"BlueRaptorShadow": "/rigs/blueraptor/shadow/Raptor TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/animals/actions/blue_raptor/raptor-takedamage/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/Blue Raptor/Raptor TakeDamage.png",
+"shadow": "art/media/smallscale/authored/dinosaurs/Derived shadows/Blue Raptor/Raptor TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_je17t")
+
+[sub_resource type="Resource" id="Resource_d40f7"]
+script = ExtResource("2_ie8bg")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/animals/actions/blue_raptor/raptor-die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/animals/actions/blue_raptor/raptor-die/normals-gentle.png",
+"original": "art/geometry/creatures/animals/actions/blue_raptor/raptor-die/normals.png",
+"reference": "art/geometry/creatures/animals/actions/blue_raptor/raptor-die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/animals/actions/blue_raptor/raptor-die/normal-valid.png",
+"support": "art/geometry/creatures/animals/actions/blue_raptor/raptor-die/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.9695473251028808
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_sgxju"]
+script = ExtResource("1_qksmk")
+name = "Die"
+role = "raptordie"
+source_clip = "Raptor Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"BlueRaptor": "/rigs/blueraptor/body/Raptor Die.png",
+"BlueRaptorShadow": "/rigs/blueraptor/shadow/Raptor Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/animals/actions/blue_raptor/raptor-die/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/Blue Raptor/Raptor Die.png",
+"shadow": "art/media/smallscale/authored/dinosaurs/Derived shadows/Blue Raptor/Raptor Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_d40f7")
+
+[sub_resource type="Resource" id="Resource_ma3fc"]
+script = ExtResource("2_ie8bg")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/animals/actions/blue_raptor/raptor-attack1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/animals/actions/blue_raptor/raptor-attack1/normals-gentle.png",
+"original": "art/geometry/creatures/animals/actions/blue_raptor/raptor-attack1/normals.png",
+"reference": "art/geometry/creatures/animals/actions/blue_raptor/raptor-attack1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/animals/actions/blue_raptor/raptor-attack1/normal-valid.png",
+"support": "art/geometry/creatures/animals/actions/blue_raptor/raptor-attack1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.9746964500880526
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_17hck"]
+script = ExtResource("1_qksmk")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Raptor Attack1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"BlueRaptor": "/rigs/blueraptor/body/Raptor Attack1.png",
+"BlueRaptorShadow": "/rigs/blueraptor/shadow/Raptor Attack1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/animals/actions/blue_raptor/raptor-attack1/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/Blue Raptor/Raptor Attack1.png",
+"shadow": "art/media/smallscale/authored/dinosaurs/Derived shadows/Blue Raptor/Raptor Attack1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_ma3fc")
+
+[sub_resource type="Resource" id="Resource_jp573"]
+script = ExtResource("2_ie8bg")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/animals/actions/blue_raptor/raptor-attack2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/animals/actions/blue_raptor/raptor-attack2/normals-gentle.png",
+"original": "art/geometry/creatures/animals/actions/blue_raptor/raptor-attack2/normals.png",
+"reference": "art/geometry/creatures/animals/actions/blue_raptor/raptor-attack2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/animals/actions/blue_raptor/raptor-attack2/normal-valid.png",
+"support": "art/geometry/creatures/animals/actions/blue_raptor/raptor-attack2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.9631793478260868
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_pccut"]
+script = ExtResource("1_qksmk")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Raptor Attack2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"BlueRaptor": "/rigs/blueraptor/body/Raptor Attack2.png",
+"BlueRaptorShadow": "/rigs/blueraptor/shadow/Raptor Attack2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/animals/actions/blue_raptor/raptor-attack2/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/Blue Raptor/Raptor Attack2.png",
+"shadow": "art/media/smallscale/authored/dinosaurs/Derived shadows/Blue Raptor/Raptor Attack2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_jp573")
+
+[sub_resource type="Resource" id="Resource_c3lpr"]
+script = ExtResource("3_tgkyj")
+role = "movement"
+qualifier = {
+"kind": "default"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+playback = "loop"
+
+[sub_resource type="Resource" id="Resource_j20xd"]
+script = ExtResource("3_tgkyj")
+role = "movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_scesu"]
+script = ExtResource("3_tgkyj")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "direct_arc"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_mfq8v"]
+script = ExtResource("3_tgkyj")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "connector_transfer"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_lchg8"]
+script = ExtResource("3_tgkyj")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "direct_arc"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_5yj34"]
+script = ExtResource("3_tgkyj")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "connector_transfer"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_bfprs"]
+script = ExtResource("3_tgkyj")
+role = "shove"
+qualifier = {
+"kind": "default"
+}
+clip = "Attack1"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 6.0,
+"name": "contact"
+}]
+
+[sub_resource type="Resource" id="Resource_uxe1f"]
+script = ExtResource("3_tgkyj")
+role = "forced_movement"
+qualifier = {
+"kind": "default"
+}
+clip = "TakeDamage"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 5.0,
+"name": "brace"
+}]
+
+[sub_resource type="Resource" id="Resource_3mmup"]
+script = ExtResource("3_tgkyj")
+role = "forced_movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_tdyce"]
+script = ExtResource("3_tgkyj")
+role = "body_action"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_d8ugl"]
+script = ExtResource("3_tgkyj")
+role = "body_action_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_7ok06"]
+script = ExtResource("3_tgkyj")
+role = "equipment"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_ogwyk"]
+script = ExtResource("3_tgkyj")
+role = "healing"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_gnhpe"]
+script = ExtResource("3_tgkyj")
+role = "save_avoidance"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_hrgi5"]
+script = ExtResource("3_tgkyj")
+role = "condition_entry"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_jagpu"]
+script = ExtResource("3_tgkyj")
+role = "condition_hold"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+hidden_slots = PackedStringArray()
+playback = "final_rest"
+rest_frame = 14
+
+[sub_resource type="Resource" id="Resource_6wohq"]
+script = ExtResource("3_tgkyj")
+role = "condition_exit"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+reversed = true
+
+[sub_resource type="Resource" id="Resource_fwpnt"]
+script = ExtResource("3_tgkyj")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "flying",
+"trajectory": "path"
+}
+clip = "Idle"
+hidden_slots = PackedStringArray()
+playback = "once"
+frame_keys = [[0.0, 0.0], [1.0, 0.0]]
+
+[resource]
+script = ExtResource("4_jd87w")
+id = "smallscale.blueraptor"
+pack = "dinosaurs"
+variant = "Blue Raptor"
+source = "smallscale-authored/dinosaurs"
+cell = Vector2i(64, 64)
+pivot = Vector2(32, 44)
+anchor = Vector2(32, 38)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("shadow", "body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("BlueRaptor"),
+"shadow": PackedStringArray("BlueRaptorShadow")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_qksmk")]([SubResource("Resource_8dhtn"), SubResource("Resource_xbcm1"), SubResource("Resource_dv6is"), SubResource("Resource_sgxju"), SubResource("Resource_17hck"), SubResource("Resource_pccut")])
+contexts = Array[ExtResource("3_tgkyj")]([SubResource("Resource_c3lpr"), SubResource("Resource_j20xd"), SubResource("Resource_scesu"), SubResource("Resource_mfq8v"), SubResource("Resource_lchg8"), SubResource("Resource_5yj34"), SubResource("Resource_bfprs"), SubResource("Resource_uxe1f"), SubResource("Resource_3mmup"), SubResource("Resource_tdyce"), SubResource("Resource_d8ugl"), SubResource("Resource_7ok06"), SubResource("Resource_ogwyk"), SubResource("Resource_gnhpe"), SubResource("Resource_hrgi5"), SubResource("Resource_jagpu"), SubResource("Resource_6wohq"), SubResource("Resource_fwpnt")])
+shadow_alpha = 1.0
+lifecycle_scale = 0.702
+hold_clips = PackedStringArray("Die")
+measurements = "measured/characters/rigs/smallscale.blueraptor.json"

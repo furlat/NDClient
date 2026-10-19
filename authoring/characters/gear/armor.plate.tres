@@ -1,0 +1,338 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_6wger"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_puay2"]
+
+[sub_resource type="Resource" id="Resource_xlnw1"]
+script = ExtResource("1_6wger")
+path = "art/media/ui/icons/smooth48/item.leather-armor.png"
+native_size = Vector2i(48, 48)
+reuses = "item.leather-armor"
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_puay2")
+id = "armor.plate"
+kind = "armor"
+slots = Dictionary[String, Dictionary]({
+"body_armor": {
+"layers": [{
+"part": "Belt2",
+"slot": "belt",
+"tint": "#5c2a0e"
+}, {
+"part": "Chest8",
+"slot": "chest",
+"tint": "#99aabb"
+}, {
+"part": "Legs8",
+"slot": "legs",
+"tint": "#99aabb"
+}],
+"variants": {
+"70000007": [{
+"part": "Belt2",
+"slot": "belt",
+"tint": "#ccaa44"
+}, {
+"part": "Chest8",
+"slot": "chest",
+"tint": "#ccaa44"
+}, {
+"part": "Legs8",
+"slot": "legs",
+"tint": "#ccaa44"
+}],
+"70000008": [{
+"part": "Belt2",
+"slot": "belt",
+"tint": "#222233"
+}, {
+"part": "Chest8",
+"slot": "chest",
+"tint": "#334455"
+}, {
+"part": "Legs8",
+"slot": "legs",
+"tint": "#334455"
+}],
+"70000009": [{
+"part": "Belt2",
+"slot": "belt",
+"tint": "#aabbcc"
+}, {
+"part": "Chest8",
+"slot": "chest",
+"tint": "#aabbcc"
+}, {
+"part": "Legs8",
+"slot": "legs",
+"tint": "#aabbcc"
+}],
+"7000000a": [{
+"part": "Belt2",
+"slot": "belt",
+"tint": "#ccaa44"
+}, {
+"part": "Chest8",
+"slot": "chest",
+"tint": "#ddcc77"
+}, {
+"part": "Legs8",
+"slot": "legs",
+"tint": "#ddcc77"
+}],
+"7000000b": [{
+"part": "Belt2",
+"slot": "belt",
+"tint": "#222233"
+}, {
+"part": "Chest8",
+"slot": "chest",
+"tint": "#222233"
+}, {
+"part": "Legs8",
+"slot": "legs",
+"tint": "#222233"
+}],
+"roster.13d306686b05": [{
+"part": "Legs8",
+"slot": "legs",
+"tint": "#344b73"
+}, {
+"part": "Chest8",
+"slot": "chest",
+"tint": "#c6c3aa"
+}, {
+"part": "Belt2",
+"slot": "belt",
+"tint": "#654733"
+}],
+"roster.1c7e9a4cf511": [{
+"part": "Legs8",
+"slot": "legs",
+"tint": "#c6c3aa"
+}, {
+"part": "Chest8",
+"slot": "chest",
+"tint": "#c6c3aa"
+}, {
+"part": "Belt2",
+"slot": "belt",
+"tint": "#654733"
+}],
+"roster.22b396342a97": [{
+"part": "Legs8",
+"slot": "legs",
+"tint": "#c2a661"
+}, {
+"part": "Chest8",
+"slot": "chest",
+"tint": "#c2a661"
+}, {
+"part": "Belt2",
+"slot": "belt",
+"tint": "#654733"
+}],
+"roster.8b17d71cf320": [{
+"part": "Legs8",
+"slot": "legs",
+"tint": "#344b73"
+}, {
+"part": "Chest8",
+"slot": "chest",
+"tint": "#654733"
+}, {
+"part": "Belt2",
+"slot": "belt",
+"tint": "#654733"
+}],
+"roster.a89dcf3c4259": [{
+"part": "Legs8",
+"slot": "legs",
+"tint": "#202025"
+}, {
+"part": "Chest8",
+"slot": "chest",
+"tint": "#202025"
+}, {
+"part": "Belt2",
+"slot": "belt",
+"tint": "#654733"
+}],
+"roster.f322fbc40aeb": [{
+"part": "Legs8",
+"slot": "legs",
+"tint": "#b7b6b2"
+}, {
+"part": "Chest8",
+"slot": "chest",
+"tint": "#b7b6b2"
+}, {
+"part": "Belt2",
+"slot": "belt",
+"tint": "#654733"
+}]
+}
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs8",
+"pivots_by_camera": [[65.0, 69.5], [64.5, 65.5], [65.5, 69.0], [65.5, 66.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#99aabb",
+"variant": ""
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs8",
+"pivots_by_camera": [[65.0, 69.5], [64.5, 65.5], [65.5, 69.0], [65.5, 66.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#ccaa44",
+"variant": "70000007"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs8",
+"pivots_by_camera": [[65.0, 69.5], [64.5, 65.5], [65.5, 69.0], [65.5, 66.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#334455",
+"variant": "70000008"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs8",
+"pivots_by_camera": [[65.0, 69.5], [64.5, 65.5], [65.5, 69.0], [65.5, 66.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#aabbcc",
+"variant": "70000009"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs8",
+"pivots_by_camera": [[65.0, 69.5], [64.5, 65.5], [65.5, 69.0], [65.5, 66.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#ddcc77",
+"variant": "7000000a"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs8",
+"pivots_by_camera": [[65.0, 69.5], [64.5, 65.5], [65.5, 69.0], [65.5, 66.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#222233",
+"variant": "7000000b"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest8",
+"pivots_by_camera": [[65.0, 69.5], [64.5, 65.5], [65.5, 69.0], [65.5, 66.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#b7b6b2",
+"variant": "roster.f322fbc40aeb"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest8",
+"pivots_by_camera": [[65.0, 69.5], [64.5, 65.5], [65.5, 69.0], [65.5, 66.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#c6c3aa",
+"variant": "roster.1c7e9a4cf511"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest8",
+"pivots_by_camera": [[65.0, 69.5], [64.5, 65.5], [65.5, 69.0], [65.5, 66.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#c2a661",
+"variant": "roster.22b396342a97"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest8",
+"pivots_by_camera": [[65.0, 69.5], [64.5, 65.5], [65.5, 69.0], [65.5, 66.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#c6c3aa",
+"variant": "roster.13d306686b05"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest8",
+"pivots_by_camera": [[65.0, 69.5], [64.5, 65.5], [65.5, 69.0], [65.5, 66.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#654733",
+"variant": "roster.8b17d71cf320"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Chest8",
+"pivots_by_camera": [[65.0, 69.5], [64.5, 65.5], [65.5, 69.0], [65.5, 66.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#202025",
+"variant": "roster.a89dcf3c4259"
+}])
+icon = SubResource("Resource_xlnw1")
+notes = "Visual name Plate Armor; Full plate + drape belt over plate skirt
+Icon: Shares an existing icon for the native equipment slot."

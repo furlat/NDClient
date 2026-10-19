@@ -4,9 +4,6 @@ extends RefCounted
 const SourceMaterial=preload("res://presentation/source_material.gd")
 const BodySources=preload("res://presentation/body_sources.gd")
 const Placement = preload("res://placement.gd")
-const TABLE = "res://generated/character_geometry.json"
-const PROFILE_TABLE = "res://generated/normal_profiles.json"
-const CREATURE_TABLE = "res://generated/creature_geometry.json"
 const PROFILES = ["original","gentle","reference"]
 const PARAMETERS = {"depth":"component_depth", "normal":"component_normal",
     "support":"component_support", "normal_valid":"component_normal_valid"}
@@ -15,7 +12,7 @@ static func record(path:String,slot:String,cache:Dictionary)->Dictionary:
     return BodySources.descriptor(path,slot,cache).get("geometry",{})
 
 static func _root(source: Dictionary) -> String:
-    return source.get("_source_root",ProjectSettings.get_setting("source_data/creature_geometry_root" if source.has("normal_profiles") else "source_data/character_geometry_root"))
+    return source.get("_source_root","res://assets")
 
 static func display_path(path: String, slot: String, cache: Dictionary) -> String:
     var source = record(path,slot,cache)

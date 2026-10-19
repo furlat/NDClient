@@ -63,7 +63,7 @@ func run() -> void:
         check(has_colour(rendered),"Native light comparison contains rendered receiver pixels")
         var original: Image = scene.source_images[entry.texture_path]
         var source = Geometry.record(entry.texture_path,entry.actor_layer.slot,scene.catalog_cache)
-        var geometry_root: String = ProjectSettings.get_setting("source_data/character_geometry_root")
+        var geometry_root: String = Geometry._root(source)
         # Reference-only CPU reads. Production companions are GPU-only after
         # upload; retaining their decoded images must not be required to render.
         check(source.files.values().all(func(relative):return not scene.source_images.has(geometry_root.path_join(relative)) and scene.textures.has(geometry_root.path_join(relative))),

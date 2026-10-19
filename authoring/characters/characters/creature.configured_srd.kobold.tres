@@ -1,0 +1,44 @@
+[gd_resource type="Resource" script_class="PresentationCharacter" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/character.gd" id="1_c4lus"]
+
+[resource]
+script = ExtResource("1_c4lus")
+id = "creature.configured_srd.kobold"
+rig = "smallscale.goblin01"
+portrait = "creature.goblin"
+size = "Small"
+attacks = Array[Dictionary]([{
+"clip": "Attack1",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.attack",
+"variant": "goblin01-physical"
+}, {
+"clip": "Attack1",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "goblin01-physical"
+}, {
+"clip": "Attack1",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.feature.extra_attack",
+"variant": "goblin01-physical"
+}, {
+"clip": "Attack1",
+"contact": 6,
+"delivery": "melee",
+"recipe": "reaction.opportunity_attack",
+"variant": "goblin01-physical"
+}])
+reactions = Dictionary[String, String]({
+"block": "Block"
+})
+death = Dictionary[String, String]({
+"default": "Death"
+})
+status = "stand_in"
+notes = "No art of its own: stands in with goblin art (rig smallscale.goblin01).
+Portrait stand-in: creature.goblin (no portrait of its own)."

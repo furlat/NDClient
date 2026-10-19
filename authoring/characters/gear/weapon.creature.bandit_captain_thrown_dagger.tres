@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_skke3"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_idfum"]
+
+[sub_resource type="Resource" id="Resource_i5vvf"]
+script = ExtResource("1_skke3")
+path = "art/media/ui/icons/smooth48/item.dagger.png"
+native_size = Vector2i(48, 48)
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_idfum")
+id = "weapon.creature.bandit_captain_thrown_dagger"
+kind = "weapon"
+family = "weapon.dagger"
+icon = SubResource("Resource_i5vvf")

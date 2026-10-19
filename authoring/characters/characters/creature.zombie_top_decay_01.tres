@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="PresentationCharacter" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/character.gd" id="1_sbodi"]
+
+[resource]
+script = ExtResource("1_sbodi")
+id = "creature.zombie_top_decay_01"
+rig = "smallscale.zombies-top-down.zombie-decay-01"
+portrait = "top--zombie-decay-01"
+size = "Medium"
+death = Dictionary[String, String]({
+"default": "Die"
+})
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed.
+Stand-in clips: Idle2 -> Idle, Idle4 -> Idle, Walk -> Run, Death -> Die, Rolling -> Run, CrouchWalk -> Run, Attack3 -> Attack2, Attack4 -> Attack2, AttackRun -> Attack1, Kick -> Attack1, Special1 -> Attack2, Attack5 -> Attack2, Attack6 -> Attack2.
+Roster: Undercrypt One, Y128 alt clips, kit Slam; UF; speed15."

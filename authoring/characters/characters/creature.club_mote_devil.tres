@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="PresentationCharacter" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/character.gd" id="1_up4dx"]
+
+[resource]
+script = ExtResource("1_up4dx")
+id = "creature.club_mote_devil"
+rig = "smallscale.imp02"
+portrait = "demons--imp-2"
+size = "Small"
+reactions = Dictionary[String, String]({
+"block": "Block"
+})
+death = Dictionary[String, String]({
+"default": "Death"
+})
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed.
+Stand-in clips: Idle2 -> Idle, Idle4 -> Idle, Kick -> Attack1, Special1 -> Attack4, Attack5 -> Attack4, Attack6 -> Attack4.
+Roster: Club Mote Devil, Y128, kit Club."

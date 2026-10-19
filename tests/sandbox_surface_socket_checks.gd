@@ -30,7 +30,7 @@ func run() -> void:
     var fixture := Fixture.new()
     root.add_child(fixture)
     fixture.rigs = JSON.parse_string(FileAccess.get_file_as_string("res://authoring/catalog/rigs.json"))
-    fixture.catalog_cache[Geometry.TABLE] = JSON.parse_string(FileAccess.get_file_as_string(Geometry.TABLE))
+    Geometry.BodySources.admission(fixture.catalog_cache)
     var rig: Dictionary = fixture.rigs["neuroclient.modular"]
     fixture.camera = Camera3D.new()
     fixture.camera.projection = Camera3D.PROJECTION_ORTHOGONAL
@@ -55,7 +55,7 @@ func run() -> void:
             "scale":2.0, "pivot":Vector2(64.0, 87.0), "role":"body",
             "actor_layer":{"slot":slot, "alpha":1.0, "paths":{}}}
         for clip in ["Idle", "Attack5"]:
-            var path: String = "/media/smallscale/modular/" + selected[slot] + "/" + clip + ".png"
+            var path: String = "res://assets/art/media/smallscale/modular/" + selected[slot] + "/" + clip + ".png"
             entry.actor_layer.paths[clip] = path
             fixture.source_images[path] = Image.load_from_file(Catalog.media_path(path))
             var record := Geometry.record(path, slot, fixture.catalog_cache)
@@ -92,7 +92,7 @@ func run() -> void:
     check(future.supported and not idle.supported and idle.point == painted, "Future hand release does not borrow transparent Idle geometry")
     var covered_pixel := Vector2(69.5, 71.5)
     var covered := Sockets.resolve(fixture, "caster", "Attack5", 7, "SW", covered_pixel, _painted(anchor, covered_pixel))
-    var source: Dictionary = Geometry.record("/media/smallscale/modular/Legs2/Attack5.png", "legs", fixture.catalog_cache)
+    var source: Dictionary = Geometry.record("res://assets/art/media/smallscale/modular/Legs2/Attack5.png", "legs", fixture.catalog_cache)
     var expected_depth: float = source.depth_range[0] + (118.0 - 32.0) * (source.depth_range[1] - source.depth_range[0]) / 192.0
     check(covered.supported and covered.owner == "caster/legs" and is_equal_approx(covered.depth, expected_depth), "Painted Legs2 byte118 owns the socket instead of hidden NakedBody byte135")
     var uncovered := Sockets.resolve(fixture, "caster", "Attack5", 7, "SW", covered_pixel, _painted(anchor, covered_pixel), ["legs"])
@@ -126,11 +126,11 @@ func run() -> void:
     check(not out_of_bounds.supported and out_of_bounds.point == lifted_painted and out_of_bounds.reason == "socket_outside_source_cell", "Outside-cell socket is not clamped to an invented nearby surface")
     var bad_frame := Sockets.resolve(fixture, "caster", "Attack5", 15, "E", pixel, lifted_painted)
     check(not bad_frame.supported and bad_frame.reason == "source_frame_out_of_bounds", "Unavailable pose is not replaced with the last source frame")
-    var cached: Dictionary = fixture.catalog_cache[Geometry.TABLE]
-    fixture.catalog_cache.erase(Geometry.TABLE)
+    var cached: Dictionary = fixture.catalog_cache[Geometry.BodySources.KEY]
+    fixture.catalog_cache.erase(Geometry.BodySources.KEY)
     var missing_catalog := Sockets.resolve(fixture, "caster", "Attack5", 7, "E", pixel, lifted_painted)
     check(not missing_catalog.supported and missing_catalog.reason == "source_geometry_catalog_not_prepared", "Resolve cannot lazily reload a missing metadata catalog")
-    fixture.catalog_cache[Geometry.TABLE] = cached
+    fixture.catalog_cache[Geometry.BodySources.KEY] = cached
     if "--compact" in OS.get_cmdline_user_args(): compact_samples(fixture,entries,rig)
     var report := {"checks":checks, "failures":failures, "release_surface_samples":evidence,
         "qualification":"Real delivered optical data with source-over ownership; no physical arbitrary-assembly or temporal-consistency claim"}
@@ -147,10 +147,9 @@ func compact_samples(fixture:Fixture,entries:Array,rig:Dictionary)->void:
         for clip in entry.actor_layer.paths:
             var path:String=entry.actor_layer.paths[clip]
             var source:Dictionary=Geometry.record(path,entry.actor_layer.slot,fixture.catalog_cache)
-            var file:String=samples.file_for(path,source)
-            check(FileAccess.file_exists(file),"Actual fixture sidecar exists: "+path)
-            if not FileAccess.file_exists(file):return
-            var sidecar:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(file))
+            var sidecar:Dictionary=Geometry.BodySources.descriptor(path,entry.actor_layer.slot,fixture.catalog_cache).get("sockets",{})
+            check(sidecar.get("valid",false),"Actual fixture carries built socket samples: "+path)
+            if not sidecar.get("valid",false):return
             sidecars[path]={"source":source,"root":Geometry._root(source)}
             if not queries.has(clip):queries[clip]={}
             for key in sidecar.samples:queries[clip][key]=true
@@ -177,7 +176,7 @@ func compact_samples(fixture:Fixture,entries:Array,rig:Dictionary)->void:
                 cases.append([frame,facing,pixel,painted,Sockets.resolve(fixture,"caster",clip,frame,facing,pixel,painted)])
             fixture.catalog_cache=compact_cache;fixture.source_images={}
             for path in original_images:
-                if path.begins_with("/media/"):fixture.source_images[path]=original_images[path]
+                if path.begins_with("res://assets/art/media/"):fixture.source_images[path]=original_images[path]
             for case in cases:
                 var actual=Sockets.resolve(fixture,"caster",clip,case[0],case[1],case[2],case[3])
                 check(actual==case[4],"CPU-free optical sample retains painted owner/mask/depth/point q%d/%s/%s/%d/%s"%[quarter,clip,case[1],case[0],case[2]])

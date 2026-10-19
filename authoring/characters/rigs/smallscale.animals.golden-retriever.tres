@@ -1,0 +1,756 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_hv7rt"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_vjt7e"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_pqsrw"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_dho12"]
+
+[sub_resource type="Resource" id="Resource_b6nmm"]
+script = ExtResource("2_vjt7e")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/golden-retriever/attack1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/golden-retriever/attack1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/golden-retriever/attack1/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/golden-retriever/attack1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/golden-retriever/attack1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/golden-retriever/attack1/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9884051629840298
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_oyr4e"]
+script = ExtResource("1_hv7rt")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Attack1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsGoldenRetriever": "/rigs/animals_golden_retriever/body/Attack1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/golden-retriever/attack1/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Golden Retriever/Attack1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_b6nmm")
+
+[sub_resource type="Resource" id="Resource_me7u3"]
+script = ExtResource("2_vjt7e")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/golden-retriever/attack2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/golden-retriever/attack2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/golden-retriever/attack2/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/golden-retriever/attack2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/golden-retriever/attack2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/golden-retriever/attack2/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9819623161764706
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_4rdko"]
+script = ExtResource("1_hv7rt")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Attack2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsGoldenRetriever": "/rigs/animals_golden_retriever/body/Attack2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/golden-retriever/attack2/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Golden Retriever/Attack2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_me7u3")
+
+[sub_resource type="Resource" id="Resource_0k1er"]
+script = ExtResource("2_vjt7e")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/golden-retriever/attack3/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/golden-retriever/attack3/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/golden-retriever/attack3/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/golden-retriever/attack3/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/golden-retriever/attack3/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/golden-retriever/attack3/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9839650145772596
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_o68qg"]
+script = ExtResource("1_hv7rt")
+name = "Attack3"
+role = "attack_3"
+source_clip = "Attack3"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsGoldenRetriever": "/rigs/animals_golden_retriever/body/Attack3.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/golden-retriever/attack3/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Golden Retriever/Attack3.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_0k1er")
+
+[sub_resource type="Resource" id="Resource_x5344"]
+script = ExtResource("2_vjt7e")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/golden-retriever/attack4/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/golden-retriever/attack4/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/golden-retriever/attack4/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/golden-retriever/attack4/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/golden-retriever/attack4/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/golden-retriever/attack4/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9862835520870284
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_wditk"]
+script = ExtResource("1_hv7rt")
+name = "Attack4"
+role = "attack_4"
+source_clip = "Attack4"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsGoldenRetriever": "/rigs/animals_golden_retriever/body/Attack4.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/golden-retriever/attack4/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Golden Retriever/Attack4.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_x5344")
+
+[sub_resource type="Resource" id="Resource_u843p"]
+script = ExtResource("2_vjt7e")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/golden-retriever/die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/golden-retriever/die/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/golden-retriever/die/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/golden-retriever/die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/golden-retriever/die/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/golden-retriever/die/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9814407046240956
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_867u6"]
+script = ExtResource("1_hv7rt")
+name = "Die"
+role = "die"
+source_clip = "Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsGoldenRetriever": "/rigs/animals_golden_retriever/body/Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/golden-retriever/die/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Golden Retriever/Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_u843p")
+
+[sub_resource type="Resource" id="Resource_iijcw"]
+script = ExtResource("2_vjt7e")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/golden-retriever/howl/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/golden-retriever/howl/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/golden-retriever/howl/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/golden-retriever/howl/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/golden-retriever/howl/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/golden-retriever/howl/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9860232945091514
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_jtxyf"]
+script = ExtResource("1_hv7rt")
+name = "Howl"
+role = "howl"
+source_clip = "Howl"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsGoldenRetriever": "/rigs/animals_golden_retriever/body/Howl.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/golden-retriever/howl/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Golden Retriever/Howl.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_iijcw")
+
+[sub_resource type="Resource" id="Resource_dwimv"]
+script = ExtResource("2_vjt7e")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/golden-retriever/idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/golden-retriever/idle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/golden-retriever/idle/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/golden-retriever/idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/golden-retriever/idle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/golden-retriever/idle/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9887005649717514
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_0r6v8"]
+script = ExtResource("1_hv7rt")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsGoldenRetriever": "/rigs/animals_golden_retriever/body/Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/golden-retriever/idle/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Golden Retriever/Idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_dwimv")
+
+[sub_resource type="Resource" id="Resource_ady4e"]
+script = ExtResource("2_vjt7e")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/golden-retriever/idlesit/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/golden-retriever/idlesit/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/golden-retriever/idlesit/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/golden-retriever/idlesit/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/golden-retriever/idlesit/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/golden-retriever/idlesit/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9855055923305182
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_1n2s7"]
+script = ExtResource("1_hv7rt")
+name = "IdleSit"
+role = "idlesit"
+source_clip = "IdleSit"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsGoldenRetriever": "/rigs/animals_golden_retriever/body/IdleSit.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/golden-retriever/idlesit/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Golden Retriever/IdleSit.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_ady4e")
+
+[sub_resource type="Resource" id="Resource_v3owb"]
+script = ExtResource("2_vjt7e")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/golden-retriever/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/golden-retriever/run/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/golden-retriever/run/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/golden-retriever/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/golden-retriever/run/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/golden-retriever/run/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9892229766138592
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_u0tx7"]
+script = ExtResource("1_hv7rt")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsGoldenRetriever": "/rigs/animals_golden_retriever/body/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/golden-retriever/run/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Golden Retriever/Run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_v3owb")
+
+[sub_resource type="Resource" id="Resource_qba02"]
+script = ExtResource("2_vjt7e")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/golden-retriever/sneak/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/golden-retriever/sneak/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/golden-retriever/sneak/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/golden-retriever/sneak/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/golden-retriever/sneak/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/golden-retriever/sneak/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.986791834952516
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_ddy6y"]
+script = ExtResource("1_hv7rt")
+name = "Sneak"
+role = "sneak"
+source_clip = "Sneak"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsGoldenRetriever": "/rigs/animals_golden_retriever/body/Sneak.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/golden-retriever/sneak/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Golden Retriever/Sneak.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_qba02")
+
+[sub_resource type="Resource" id="Resource_iksx8"]
+script = ExtResource("2_vjt7e")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/golden-retriever/takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/golden-retriever/takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/golden-retriever/takedamage/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/golden-retriever/takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/golden-retriever/takedamage/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/golden-retriever/takedamage/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9903464550037542
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_4fq11"]
+script = ExtResource("1_hv7rt")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsGoldenRetriever": "/rigs/animals_golden_retriever/body/TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/golden-retriever/takedamage/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Golden Retriever/TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_iksx8")
+
+[sub_resource type="Resource" id="Resource_0ebh4"]
+script = ExtResource("2_vjt7e")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/golden-retriever/walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/golden-retriever/walk/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/golden-retriever/walk/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/golden-retriever/walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/golden-retriever/walk/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/golden-retriever/walk/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.988899562386594
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_pkcfr"]
+script = ExtResource("1_hv7rt")
+name = "Walk"
+role = "walk"
+source_clip = "Walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsGoldenRetriever": "/rigs/animals_golden_retriever/body/Walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/golden-retriever/walk/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Golden Retriever/Walk.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_0ebh4")
+
+[sub_resource type="Resource" id="Resource_bnslh"]
+script = ExtResource("3_pqsrw")
+role = "movement"
+qualifier = {
+"kind": "default"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+playback = "loop"
+
+[sub_resource type="Resource" id="Resource_rqslc"]
+script = ExtResource("3_pqsrw")
+role = "movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_qsrj6"]
+script = ExtResource("3_pqsrw")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "direct_arc"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_qhxul"]
+script = ExtResource("3_pqsrw")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "connector_transfer"
+}
+clip = "Walk"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_po4vp"]
+script = ExtResource("3_pqsrw")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "direct_arc"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_xelef"]
+script = ExtResource("3_pqsrw")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "connector_transfer"
+}
+clip = "Walk"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_682nr"]
+script = ExtResource("3_pqsrw")
+role = "shove"
+qualifier = {
+"kind": "default"
+}
+clip = "Attack2"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 6.0,
+"name": "contact"
+}]
+
+[sub_resource type="Resource" id="Resource_1mp3v"]
+script = ExtResource("3_pqsrw")
+role = "forced_movement"
+qualifier = {
+"kind": "default"
+}
+clip = "TakeDamage"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 5.0,
+"name": "brace"
+}]
+
+[sub_resource type="Resource" id="Resource_7cids"]
+script = ExtResource("3_pqsrw")
+role = "forced_movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_pabe0"]
+script = ExtResource("3_pqsrw")
+role = "body_action"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_1dkxx"]
+script = ExtResource("3_pqsrw")
+role = "body_action_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_538g2"]
+script = ExtResource("3_pqsrw")
+role = "equipment"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_e5e1q"]
+script = ExtResource("3_pqsrw")
+role = "healing"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_uuome"]
+script = ExtResource("3_pqsrw")
+role = "save_avoidance"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_s4huk"]
+script = ExtResource("3_pqsrw")
+role = "condition_entry"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_fhb43"]
+script = ExtResource("3_pqsrw")
+role = "condition_hold"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+hidden_slots = PackedStringArray()
+playback = "final_rest"
+rest_frame = 14
+
+[sub_resource type="Resource" id="Resource_fn4cj"]
+script = ExtResource("3_pqsrw")
+role = "condition_exit"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+reversed = true
+
+[sub_resource type="Resource" id="Resource_t8tdf"]
+script = ExtResource("3_pqsrw")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "flying",
+"trajectory": "path"
+}
+clip = "Idle"
+hidden_slots = PackedStringArray()
+playback = "once"
+frame_keys = [[0.0, 0.0], [1.0, 0.0]]
+
+[sub_resource type="Resource" id="Resource_vygl5"]
+script = ExtResource("3_pqsrw")
+role = "death"
+qualifier = {
+"kind": "default"
+}
+clip = "Die"
+hidden_slots = PackedStringArray()
+playback = "once"
+
+[resource]
+script = ExtResource("4_dho12")
+id = "smallscale.animals.golden-retriever"
+pack = "animals"
+variant = "Golden Retriever"
+source = "smallscale-authored/animals"
+cell = Vector2i(64, 64)
+pivot = Vector2(32, 43)
+anchor = Vector2(32, 37)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("AnimalsGoldenRetriever")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_hv7rt")]([SubResource("Resource_oyr4e"), SubResource("Resource_4rdko"), SubResource("Resource_o68qg"), SubResource("Resource_wditk"), SubResource("Resource_867u6"), SubResource("Resource_jtxyf"), SubResource("Resource_0r6v8"), SubResource("Resource_1n2s7"), SubResource("Resource_u0tx7"), SubResource("Resource_ddy6y"), SubResource("Resource_4fq11"), SubResource("Resource_pkcfr")])
+fallbacks = Dictionary[String, String]({
+"Attack5": "Attack4",
+"Attack6": "Attack4",
+"AttackRun": "Attack1",
+"CrouchWalk": "Walk",
+"Death": "Die",
+"Idle2": "Idle",
+"Idle4": "Idle",
+"Kick": "Attack1",
+"Rolling": "Run",
+"Special1": "Attack4",
+"Taunt": "Idle"
+})
+contexts = Array[ExtResource("3_pqsrw")]([SubResource("Resource_bnslh"), SubResource("Resource_rqslc"), SubResource("Resource_qsrj6"), SubResource("Resource_qhxul"), SubResource("Resource_po4vp"), SubResource("Resource_xelef"), SubResource("Resource_682nr"), SubResource("Resource_1mp3v"), SubResource("Resource_7cids"), SubResource("Resource_pabe0"), SubResource("Resource_1dkxx"), SubResource("Resource_538g2"), SubResource("Resource_e5e1q"), SubResource("Resource_uuome"), SubResource("Resource_s4huk"), SubResource("Resource_fhb43"), SubResource("Resource_fn4cj"), SubResource("Resource_t8tdf"), SubResource("Resource_vygl5")])
+hold_clips = PackedStringArray("Die")
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed.
+Stand-in clips: Idle2 -> Idle, Idle4 -> Idle, Death -> Die, Taunt -> Idle, Rolling -> Run, CrouchWalk -> Walk, AttackRun -> Attack1, Kick -> Attack1, Special1 -> Attack4, Attack5 -> Attack4, Attack6 -> Attack4."

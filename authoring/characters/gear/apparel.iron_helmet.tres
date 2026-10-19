@@ -1,0 +1,170 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_iw1j4"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_mmn3c"]
+
+[sub_resource type="Resource" id="Resource_sch7k"]
+script = ExtResource("1_iw1j4")
+path = "art/media/ui/icons/smooth48/item.iron-helmet.png"
+native_size = Vector2i(48, 48)
+reuses = "item.iron-helmet"
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_mmn3c")
+id = "apparel.iron_helmet"
+kind = "armor"
+slots = Dictionary[String, Dictionary]({
+"helmet": {
+"layers": [{
+"part": "Head13",
+"slot": "helmet",
+"tint": "#8899aa"
+}],
+"variants": {
+"h0000008": [{
+"part": "Head13",
+"slot": "helmet",
+"tint": "#99aabb"
+}],
+"h0000009": [{
+"part": "Head13",
+"slot": "helmet",
+"tint": "#ccaa44"
+}],
+"h000000a": [{
+"part": "Head13",
+"slot": "helmet",
+"tint": "#334455"
+}],
+"roster.2f2e5c63d268": [{
+"part": "Head13",
+"slot": "helmet",
+"tint": "#c6c3aa"
+}],
+"roster.6b64ee00bd15": [{
+"part": "Head13",
+"slot": "helmet",
+"tint": "#b7b6b2"
+}],
+"roster.70b201ba7b87": [{
+"part": "Head4",
+"slot": "helmet",
+"tint": "#bba328"
+}],
+"roster.c75568cbe4bb": [{
+"part": "Head13",
+"slot": "helmet",
+"tint": "#c2a661"
+}]
+}
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Head13",
+"pivots_by_camera": [[64.0, 56.0], [60.5, 50.0], [67.0, 47.0], [70.5, 53.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#8899aa",
+"variant": ""
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Head13",
+"pivots_by_camera": [[64.0, 56.0], [60.5, 50.0], [67.0, 47.0], [70.5, 53.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#99aabb",
+"variant": "h0000008"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Head13",
+"pivots_by_camera": [[64.0, 56.0], [60.5, 50.0], [67.0, 47.0], [70.5, 53.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#ccaa44",
+"variant": "h0000009"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Head13",
+"pivots_by_camera": [[64.0, 56.0], [60.5, 50.0], [67.0, 47.0], [70.5, 53.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#334455",
+"variant": "h000000a"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Head13",
+"pivots_by_camera": [[64.0, 56.0], [60.5, 50.0], [67.0, 47.0], [70.5, 53.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#c6c3aa",
+"variant": "roster.2f2e5c63d268"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Head4",
+"pivots_by_camera": [[64.0, 54.5], [60.5, 50.5], [67.0, 48.0], [70.5, 53.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#bba328",
+"variant": "roster.70b201ba7b87"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Head13",
+"pivots_by_camera": [[64.0, 56.0], [60.5, 50.0], [67.0, 47.0], [70.5, 53.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#c2a661",
+"variant": "roster.c75568cbe4bb"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Head13",
+"pivots_by_camera": [[64.0, 56.0], [60.5, 50.0], [67.0, 47.0], [70.5, 53.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#b7b6b2",
+"variant": "roster.6b64ee00bd15"
+}])
+icon = SubResource("Resource_sch7k")
+notes = "Visual name Iron Helmet; Full enclosed metal helmet
+Icon: Shares an existing icon for the native equipment slot."

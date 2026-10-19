@@ -1,0 +1,60 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_epsme"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_y3gbd"]
+
+[sub_resource type="Resource" id="Resource_tjaxl"]
+script = ExtResource("1_epsme")
+path = "art/media/ui/icons/smooth48/item.sling.png"
+native_size = Vector2i(48, 48)
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_y3gbd")
+id = "weapon.sling"
+kind = "weapon"
+slots = Dictionary[String, Dictionary]({
+"weapon_ranged_main": {
+"layers": [{
+"part": "Ranged5",
+"slot": "weapon",
+"tint": "#8b4513"
+}],
+"variants": {
+"20000003": [{
+"part": "Ranged5",
+"slot": "weapon",
+"tint": "#aa7744"
+}]
+}
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Ranged5",
+"pivots_by_camera": [[56.5, 64.0], [73.0, 61.0], [73.5, 69.5], [60.0, 70.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#8b4513",
+"variant": ""
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Ranged5",
+"pivots_by_camera": [[56.5, 64.0], [73.0, 61.0], [73.5, 69.5], [60.0, 70.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#aa7744",
+"variant": "20000003"
+}])
+icon = SubResource("Resource_tjaxl")
+notes = "Visual name Sling; Exact sling match — PHB simple weapon"

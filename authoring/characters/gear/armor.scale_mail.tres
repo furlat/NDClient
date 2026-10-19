@@ -1,0 +1,104 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_i13jm"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_2mfwx"]
+
+[sub_resource type="Resource" id="Resource_2udqq"]
+script = ExtResource("1_i13jm")
+path = "art/media/ui/icons/smooth48/item.leather-armor.png"
+native_size = Vector2i(48, 48)
+reuses = "item.leather-armor"
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_2mfwx")
+id = "armor.scale_mail"
+kind = "armor"
+slots = Dictionary[String, Dictionary]({
+"body_armor": {
+"layers": [{
+"part": "Belt1",
+"slot": "belt",
+"tint": "#5c2a0e"
+}, {
+"part": "Chest7",
+"slot": "chest",
+"tint": "#8899aa"
+}, {
+"part": "Legs5",
+"slot": "legs",
+"tint": "#8899aa"
+}],
+"variants": {
+"60000005": [{
+"part": "Belt1",
+"slot": "belt",
+"tint": "#8b4513"
+}, {
+"part": "Chest7",
+"slot": "chest",
+"tint": "#cd7f32"
+}, {
+"part": "Legs5",
+"slot": "legs",
+"tint": "#cd7f32"
+}],
+"60000006": [{
+"part": "Belt1",
+"slot": "belt",
+"tint": "#ccaa44"
+}, {
+"part": "Chest7",
+"slot": "chest",
+"tint": "#ccaa44"
+}, {
+"part": "Legs5",
+"slot": "legs",
+"tint": "#ccaa44"
+}]
+}
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs5",
+"pivots_by_camera": [[65.0, 70.0], [64.0, 66.0], [66.0, 68.5], [66.0, 66.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#8899aa",
+"variant": ""
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs5",
+"pivots_by_camera": [[65.0, 70.0], [64.0, 66.0], [66.0, 68.5], [66.0, 66.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#cd7f32",
+"variant": "60000005"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs5",
+"pivots_by_camera": [[65.0, 70.0], [64.0, 66.0], [66.0, 68.5], [66.0, 66.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#ccaa44",
+"variant": "60000006"
+}])
+icon = SubResource("Resource_2udqq")
+notes = "Visual name Scale Mail; Scale armor + matching metal pants + leather belt
+Icon: Shares an existing icon for the native equipment slot."

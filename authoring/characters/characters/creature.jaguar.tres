@@ -1,0 +1,95 @@
+[gd_resource type="Resource" script_class="PresentationCharacter" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/character.gd" id="1_2lvou"]
+
+[resource]
+script = ExtResource("1_2lvou")
+id = "creature.jaguar"
+identity = "content.neurodragon:creature:creature.jaguar@1"
+rig = "smallscale.jaguar"
+portrait = "creature.jaguar"
+size = "Medium"
+attacks = Array[Dictionary]([{
+"clip": "Attack2",
+"contact": 7,
+"delivery": "melee",
+"recipe": "action.attack",
+"variant": "fixed-unarmed-attack2-7-11"
+}, {
+"clip": "Attack2",
+"contact": 7,
+"delivery": "melee",
+&"items": ["weapon.creature.jaguar_claws"],
+"recipe": "action.attack",
+"variant": "jaguar-jaguar_claws"
+}, {
+"clip": "Attack3",
+"contact": 8,
+"delivery": "melee",
+&"items": ["weapon.creature.jaguar_bite"],
+"recipe": "action.attack",
+"variant": "jaguar-jaguar_bite"
+}, {
+"clip": "Attack2",
+"contact": 7,
+"delivery": "melee",
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "fixed-unarmed-attack2-7-11"
+}, {
+"clip": "Attack2",
+"contact": 7,
+"delivery": "melee",
+&"items": ["weapon.creature.jaguar_claws"],
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "jaguar-jaguar_claws"
+}, {
+"clip": "Attack3",
+"contact": 8,
+"delivery": "melee",
+&"items": ["weapon.creature.jaguar_bite"],
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "jaguar-jaguar_bite"
+}, {
+"clip": "Attack2",
+"contact": 7,
+"delivery": "melee",
+"recipe": "action.feature.extra_attack",
+"variant": "fixed-unarmed-attack2-7-11"
+}, {
+"clip": "Attack2",
+"contact": 7,
+"delivery": "melee",
+&"items": ["weapon.creature.jaguar_claws"],
+"recipe": "action.feature.extra_attack",
+"variant": "jaguar-jaguar_claws"
+}, {
+"clip": "Attack3",
+"contact": 8,
+"delivery": "melee",
+&"items": ["weapon.creature.jaguar_bite"],
+"recipe": "action.feature.extra_attack",
+"variant": "jaguar-jaguar_bite"
+}, {
+"clip": "Attack2",
+"contact": 7,
+"delivery": "melee",
+"recipe": "reaction.opportunity_attack",
+"variant": "fixed-unarmed-attack2-7-11"
+}, {
+"clip": "Attack2",
+"contact": 7,
+"delivery": "melee",
+&"items": ["weapon.creature.jaguar_claws"],
+"recipe": "reaction.opportunity_attack",
+"variant": "jaguar-jaguar_claws"
+}, {
+"clip": "Attack3",
+"contact": 8,
+"delivery": "melee",
+&"items": ["weapon.creature.jaguar_bite"],
+"recipe": "reaction.opportunity_attack",
+"variant": "jaguar-jaguar_bite"
+}])
+death = Dictionary[String, String]({
+"default": "Die"
+})

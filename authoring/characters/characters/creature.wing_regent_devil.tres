@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="PresentationCharacter" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/character.gd" id="1_ioatj"]
+
+[resource]
+script = ExtResource("1_ioatj")
+id = "creature.wing_regent_devil"
+rig = "smallscale.demonelite03"
+portrait = "demons--demon-elite-3"
+size = "Large"
+size_note = "128 px cells on a Large creature."
+reactions = Dictionary[String, String]({
+"block": "Block"
+})
+death = Dictionary[String, String]({
+"default": "Death"
+})
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed.
+Stand-in clips: Idle2 -> Idle, Idle4 -> Idle, Kick -> Attack1, Special1 -> Attack4, Attack5 -> Attack4, Attack6 -> Attack4.
+Roster: Wing Regent Devil, Y128 (Large), kit Necrotic Claws (3); Fly60; MR; DS; Slow 1/day; Counterspell 3/day."

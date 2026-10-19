@@ -271,7 +271,7 @@ func run()->void:
     renderer.blood.blocked={}
     check(future_wait_cases>0,"Actual Gallery includes a nonempty future-source wait qualification")
     var native=Native.new()
-    var table:Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://generated/character_geometry.json"))
+    var table:Dictionary={"records":preload("res://tests/built_body_records.gd").records({})}
     var selected:Array=[]
     for path in table.records:
         if table.records[path].has("reference") and not table.records[path].slots.is_empty():selected.append(path)

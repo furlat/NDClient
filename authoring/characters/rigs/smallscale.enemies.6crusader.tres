@@ -1,0 +1,722 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_m3hrq"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_j8ojp"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_ude6i"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_40eow"]
+
+[sub_resource type="Resource" id="Resource_bn45u"]
+script = ExtResource("2_j8ojp")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/6crusader/attack1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/6crusader/attack1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/6crusader/attack1/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/6crusader/attack1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/6crusader/attack1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/6crusader/attack1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.9650075274504905
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_cuprr"]
+script = ExtResource("1_m3hrq")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Attack1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies6Crusader": "/rigs/enemies_6crusader/body/Attack1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/6crusader/attack1/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/6Crusader/Attack1.png",
+"mask_material": "art/media/smallscale/authored/enemies/Material masks/With shadow/6Crusader/Attack1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_bn45u")
+
+[sub_resource type="Resource" id="Resource_kd7jw"]
+script = ExtResource("2_j8ojp")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/6crusader/attack2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/6crusader/attack2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/6crusader/attack2/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/6crusader/attack2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/6crusader/attack2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/6crusader/attack2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.9568130962195266
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_03od7"]
+script = ExtResource("1_m3hrq")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Attack2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies6Crusader": "/rigs/enemies_6crusader/body/Attack2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/6crusader/attack2/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/6Crusader/Attack2.png",
+"mask_material": "art/media/smallscale/authored/enemies/Material masks/With shadow/6Crusader/Attack2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_kd7jw")
+
+[sub_resource type="Resource" id="Resource_srb1l"]
+script = ExtResource("2_j8ojp")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/6crusader/attack3/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/6crusader/attack3/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/6crusader/attack3/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/6crusader/attack3/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/6crusader/attack3/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/6crusader/attack3/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.9493960982215714
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_7dnj4"]
+script = ExtResource("1_m3hrq")
+name = "Attack3"
+role = "attack_3"
+source_clip = "Attack3"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies6Crusader": "/rigs/enemies_6crusader/body/Attack3.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/6crusader/attack3/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/6Crusader/Attack3.png",
+"mask_material": "art/media/smallscale/authored/enemies/Material masks/With shadow/6Crusader/Attack3.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_srb1l")
+
+[sub_resource type="Resource" id="Resource_eta66"]
+script = ExtResource("2_j8ojp")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/6crusader/attack4/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/6crusader/attack4/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/6crusader/attack4/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/6crusader/attack4/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/6crusader/attack4/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/6crusader/attack4/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.9646690673139978
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_wrifc"]
+script = ExtResource("1_m3hrq")
+name = "Attack4"
+role = "attack_4"
+source_clip = "Attack4"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies6Crusader": "/rigs/enemies_6crusader/body/Attack4.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/6crusader/attack4/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/6Crusader/Attack4.png",
+"mask_material": "art/media/smallscale/authored/enemies/Material masks/With shadow/6Crusader/Attack4.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_eta66")
+
+[sub_resource type="Resource" id="Resource_6yurs"]
+script = ExtResource("2_j8ojp")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/6crusader/die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/6crusader/die/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/6crusader/die/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/6crusader/die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/6crusader/die/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/6crusader/die/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.9567264837955566
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_ow8wi"]
+script = ExtResource("1_m3hrq")
+name = "Die"
+role = "die"
+source_clip = "Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies6Crusader": "/rigs/enemies_6crusader/body/Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/6crusader/die/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/6Crusader/Die.png",
+"mask_material": "art/media/smallscale/authored/enemies/Material masks/With shadow/6Crusader/Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_6yurs")
+
+[sub_resource type="Resource" id="Resource_p6eul"]
+script = ExtResource("2_j8ojp")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/6crusader/idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/6crusader/idle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/6crusader/idle/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/6crusader/idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/6crusader/idle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/6crusader/idle/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.9566137433637184
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_fwq2j"]
+script = ExtResource("1_m3hrq")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies6Crusader": "/rigs/enemies_6crusader/body/Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/6crusader/idle/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/6Crusader/Idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_p6eul")
+
+[sub_resource type="Resource" id="Resource_yo85c"]
+script = ExtResource("2_j8ojp")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/6crusader/idle2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/6crusader/idle2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/6crusader/idle2/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/6crusader/idle2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/6crusader/idle2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/6crusader/idle2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.962048964298189
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_tq671"]
+script = ExtResource("1_m3hrq")
+name = "Idle2"
+role = "idle_alt"
+source_clip = "Idle2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies6Crusader": "/rigs/enemies_6crusader/body/Idle2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/6crusader/idle2/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/6Crusader/Idle2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_yo85c")
+
+[sub_resource type="Resource" id="Resource_7fmoq"]
+script = ExtResource("2_j8ojp")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/6crusader/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/6crusader/run/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/6crusader/run/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/6crusader/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/6crusader/run/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/6crusader/run/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.96631086087407
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_l2kx4"]
+script = ExtResource("1_m3hrq")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies6Crusader": "/rigs/enemies_6crusader/body/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/6crusader/run/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/6Crusader/Run.png",
+"mask_material": "art/media/smallscale/authored/enemies/Material masks/With shadow/6Crusader/Run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_7fmoq")
+
+[sub_resource type="Resource" id="Resource_aycex"]
+script = ExtResource("2_j8ojp")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/6crusader/takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/6crusader/takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/6crusader/takedamage/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/6crusader/takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/6crusader/takedamage/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/6crusader/takedamage/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.9566809322873212
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_rnh0t"]
+script = ExtResource("1_m3hrq")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies6Crusader": "/rigs/enemies_6crusader/body/TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/6crusader/takedamage/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/6Crusader/TakeDamage.png",
+"mask_material": "art/media/smallscale/authored/enemies/Material masks/With shadow/6Crusader/TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_aycex")
+
+[sub_resource type="Resource" id="Resource_e6vxi"]
+script = ExtResource("2_j8ojp")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/6crusader/taunt/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/6crusader/taunt/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/6crusader/taunt/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/6crusader/taunt/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/6crusader/taunt/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/6crusader/taunt/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.9633470440602342
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_ntao6"]
+script = ExtResource("1_m3hrq")
+name = "Taunt"
+role = "taunt"
+source_clip = "Taunt"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies6Crusader": "/rigs/enemies_6crusader/body/Taunt.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/6crusader/taunt/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/6Crusader/Taunt.png",
+"mask_material": "art/media/smallscale/authored/enemies/Material masks/With shadow/6Crusader/Taunt.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_e6vxi")
+
+[sub_resource type="Resource" id="Resource_cr2lo"]
+script = ExtResource("2_j8ojp")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/6crusader/walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/6crusader/walk/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/6crusader/walk/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/6crusader/walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/6crusader/walk/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/6crusader/walk/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.9742224880382776
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_8pke8"]
+script = ExtResource("1_m3hrq")
+name = "Walk"
+role = "walk"
+source_clip = "Walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies6Crusader": "/rigs/enemies_6crusader/body/Walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/6crusader/walk/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/6Crusader/Walk.png",
+"mask_material": "art/media/smallscale/authored/enemies/Material masks/With shadow/6Crusader/Walk.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_cr2lo")
+
+[sub_resource type="Resource" id="Resource_svj6v"]
+script = ExtResource("3_ude6i")
+role = "movement"
+qualifier = {
+"kind": "default"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+playback = "loop"
+
+[sub_resource type="Resource" id="Resource_gjp0w"]
+script = ExtResource("3_ude6i")
+role = "movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_kr2ww"]
+script = ExtResource("3_ude6i")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "direct_arc"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_hirhr"]
+script = ExtResource("3_ude6i")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "connector_transfer"
+}
+clip = "Walk"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_3m017"]
+script = ExtResource("3_ude6i")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "direct_arc"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_px8b2"]
+script = ExtResource("3_ude6i")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "connector_transfer"
+}
+clip = "Walk"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_vjk2r"]
+script = ExtResource("3_ude6i")
+role = "shove"
+qualifier = {
+"kind": "default"
+}
+clip = "Attack2"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 6.0,
+"name": "contact"
+}]
+
+[sub_resource type="Resource" id="Resource_4tjdb"]
+script = ExtResource("3_ude6i")
+role = "forced_movement"
+qualifier = {
+"kind": "default"
+}
+clip = "TakeDamage"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 5.0,
+"name": "brace"
+}]
+
+[sub_resource type="Resource" id="Resource_6ud8q"]
+script = ExtResource("3_ude6i")
+role = "forced_movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_fgees"]
+script = ExtResource("3_ude6i")
+role = "body_action"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_drlfn"]
+script = ExtResource("3_ude6i")
+role = "body_action_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_cp8nr"]
+script = ExtResource("3_ude6i")
+role = "equipment"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_u6j0i"]
+script = ExtResource("3_ude6i")
+role = "healing"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_7cwmx"]
+script = ExtResource("3_ude6i")
+role = "save_avoidance"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_vaafh"]
+script = ExtResource("3_ude6i")
+role = "condition_entry"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_e8k0x"]
+script = ExtResource("3_ude6i")
+role = "condition_hold"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+hidden_slots = PackedStringArray()
+playback = "final_rest"
+rest_frame = 14
+
+[sub_resource type="Resource" id="Resource_1qyy0"]
+script = ExtResource("3_ude6i")
+role = "condition_exit"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+reversed = true
+
+[sub_resource type="Resource" id="Resource_n5d7k"]
+script = ExtResource("3_ude6i")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "flying",
+"trajectory": "path"
+}
+clip = "Idle"
+hidden_slots = PackedStringArray()
+playback = "once"
+frame_keys = [[0.0, 0.0], [1.0, 0.0]]
+
+[sub_resource type="Resource" id="Resource_4vul8"]
+script = ExtResource("3_ude6i")
+role = "death"
+qualifier = {
+"kind": "default"
+}
+clip = "Die"
+hidden_slots = PackedStringArray()
+playback = "once"
+
+[resource]
+script = ExtResource("4_40eow")
+id = "smallscale.enemies.6crusader"
+pack = "enemies"
+variant = "6Crusader"
+source = "smallscale-authored/enemies"
+pivot = Vector2(64, 101)
+anchor = Vector2(64, 71)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("Enemies6Crusader")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_m3hrq")]([SubResource("Resource_cuprr"), SubResource("Resource_03od7"), SubResource("Resource_7dnj4"), SubResource("Resource_wrifc"), SubResource("Resource_ow8wi"), SubResource("Resource_fwq2j"), SubResource("Resource_tq671"), SubResource("Resource_l2kx4"), SubResource("Resource_rnh0t"), SubResource("Resource_ntao6"), SubResource("Resource_8pke8")])
+fallbacks = Dictionary[String, String]({
+"Attack5": "Attack4",
+"Attack6": "Attack4",
+"AttackRun": "Attack1",
+"CrouchWalk": "Walk",
+"Death": "Die",
+"Idle4": "Idle2",
+"Kick": "Attack1",
+"Rolling": "Run",
+"Special1": "Attack4"
+})
+contexts = Array[ExtResource("3_ude6i")]([SubResource("Resource_svj6v"), SubResource("Resource_gjp0w"), SubResource("Resource_kr2ww"), SubResource("Resource_hirhr"), SubResource("Resource_3m017"), SubResource("Resource_px8b2"), SubResource("Resource_vjk2r"), SubResource("Resource_4tjdb"), SubResource("Resource_6ud8q"), SubResource("Resource_fgees"), SubResource("Resource_drlfn"), SubResource("Resource_cp8nr"), SubResource("Resource_u6j0i"), SubResource("Resource_7cwmx"), SubResource("Resource_vaafh"), SubResource("Resource_e8k0x"), SubResource("Resource_1qyy0"), SubResource("Resource_n5d7k"), SubResource("Resource_4vul8")])
+hold_clips = PackedStringArray("Die")
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed.
+Stand-in clips: Idle4 -> Idle2, Death -> Die, Rolling -> Run, CrouchWalk -> Walk, AttackRun -> Attack1, Kick -> Attack1, Special1 -> Attack4, Attack5 -> Attack4, Attack6 -> Attack4."

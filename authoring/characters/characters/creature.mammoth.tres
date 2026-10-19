@@ -1,0 +1,67 @@
+[gd_resource type="Resource" script_class="PresentationCharacter" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/character.gd" id="1_h8xug"]
+
+[resource]
+script = ExtResource("1_h8xug")
+id = "creature.mammoth"
+identity = "content.neurodragon:creature:creature.mammoth@1"
+rig = "smallscale.mammoth"
+portrait = "creature.mammoth"
+size = "Huge"
+attacks = Array[Dictionary]([{
+"clip": "Attack2",
+"contact": 7,
+"delivery": "melee",
+"recipe": "action.attack",
+"variant": "fixed-unarmed-attack2-7-11"
+}, {
+"clip": "Attack2",
+"contact": 7,
+"delivery": "melee",
+&"items": ["weapon.creature.mammoth_gore"],
+"recipe": "action.attack",
+"variant": "mammoth-mammoth_gore"
+}, {
+"clip": "Attack2",
+"contact": 7,
+"delivery": "melee",
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "fixed-unarmed-attack2-7-11"
+}, {
+"clip": "Attack2",
+"contact": 7,
+"delivery": "melee",
+&"items": ["weapon.creature.mammoth_gore"],
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "mammoth-mammoth_gore"
+}, {
+"clip": "Attack2",
+"contact": 7,
+"delivery": "melee",
+"recipe": "action.feature.extra_attack",
+"variant": "fixed-unarmed-attack2-7-11"
+}, {
+"clip": "Attack2",
+"contact": 7,
+"delivery": "melee",
+&"items": ["weapon.creature.mammoth_gore"],
+"recipe": "action.feature.extra_attack",
+"variant": "mammoth-mammoth_gore"
+}, {
+"clip": "Attack2",
+"contact": 7,
+"delivery": "melee",
+"recipe": "reaction.opportunity_attack",
+"variant": "fixed-unarmed-attack2-7-11"
+}, {
+"clip": "Attack2",
+"contact": 7,
+"delivery": "melee",
+&"items": ["weapon.creature.mammoth_gore"],
+"recipe": "reaction.opportunity_attack",
+"variant": "mammoth-mammoth_gore"
+}])
+death = Dictionary[String, String]({
+"default": "Die"
+})

@@ -1,0 +1,80 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_0exx7"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_521ep"]
+
+[sub_resource type="Resource" id="Resource_low0j"]
+script = ExtResource("1_0exx7")
+path = "art/media/ui/icons/smooth48/item.leather-armor.png"
+native_size = Vector2i(48, 48)
+reuses = "item.leather-armor"
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_521ep")
+id = "apparel.cloak"
+kind = "armor"
+slots = Dictionary[String, Dictionary]({
+"cloak": {
+"layers": [{
+"part": "Bag1",
+"slot": "cloak",
+"tint": "#343436"
+}],
+"variants": {
+"roster.a2f1778d203d": [{
+"part": "Bag1",
+"slot": "cloak",
+"tint": "#353436"
+}],
+"roster.f4b960fafcb0": [{
+"part": "Bag1",
+"slot": "cloak",
+"tint": "#344b73"
+}]
+}
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Bag1",
+"pivots_by_camera": [[66.5, 55.5], [67.0, 59.5], [63.0, 57.0], [64.0, 55.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#344b73",
+"variant": "roster.f4b960fafcb0"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Bag1",
+"pivots_by_camera": [[66.5, 55.5], [67.0, 59.5], [63.0, 57.0], [64.0, 55.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#353436",
+"variant": "roster.a2f1778d203d"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Bag1",
+"pivots_by_camera": [[66.5, 55.5], [67.0, 59.5], [63.0, 57.0], [64.0, 55.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#343436",
+"variant": ""
+}])
+icon = SubResource("Resource_low0j")
+notes = "Visual name Cloak; Ordinary cloth cloak; original vendor back layer.
+Icon: Shares an existing icon for the native equipment slot."

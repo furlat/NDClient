@@ -1,0 +1,43 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_lsfih"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_sx1mq"]
+
+[sub_resource type="Resource" id="Resource_lt2at"]
+script = ExtResource("1_lsfih")
+path = "art/media/ui/icons/smooth48/item.field-kit.png"
+native_size = Vector2i(48, 48)
+reuses = "item.field-kit"
+status = "stand_in"
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_sx1mq")
+id = "tool.banner"
+kind = "weapon"
+slots = Dictionary[String, Dictionary]({
+"weapon_melee_main": {
+"layers": [{
+"part": "Melee25",
+"slot": "weapon",
+"tint": "#5b286d"
+}],
+"variants": {}
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee25",
+"pivots_by_camera": [[55.5, 63.0], [67.5, 58.0], [74.5, 66.5], [62.5, 71.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#5b286d",
+"variant": ""
+}])
+icon = SubResource("Resource_lt2at")
+notes = "Visual name Banner; Existing vendor silhouette approximation; does not promise exact wand length, crowbar hook, banner flag, firearm or canister geometry."

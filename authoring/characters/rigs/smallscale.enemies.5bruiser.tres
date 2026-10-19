@@ -1,0 +1,718 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_eqxxv"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_4saar"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_j1ael"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_sc23l"]
+
+[sub_resource type="Resource" id="Resource_o06fv"]
+script = ExtResource("2_4saar")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/5bruiser/attack1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/5bruiser/attack1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/5bruiser/attack1/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/5bruiser/attack1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/5bruiser/attack1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/5bruiser/attack1/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 16.97056274847714
+coverage = 0.9519136933010708
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_hcxpn"]
+script = ExtResource("1_eqxxv")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Attack1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies5Bruiser": "/rigs/enemies_5bruiser/body/Attack1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/5bruiser/attack1/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/5Bruiser/Attack1.png",
+"mask_material": "art/media/smallscale/authored/enemies/Material masks/With shadow/5Bruiser/Attack1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_o06fv")
+
+[sub_resource type="Resource" id="Resource_ydb7c"]
+script = ExtResource("2_4saar")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/5bruiser/attack2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/5bruiser/attack2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/5bruiser/attack2/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/5bruiser/attack2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/5bruiser/attack2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/5bruiser/attack2/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 16.97056274847714
+coverage = 0.9509072713028752
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_vvs3g"]
+script = ExtResource("1_eqxxv")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Attack2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies5Bruiser": "/rigs/enemies_5bruiser/body/Attack2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/5bruiser/attack2/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/5Bruiser/Attack2.png",
+"mask_material": "art/media/smallscale/authored/enemies/Material masks/With shadow/5Bruiser/Attack2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_ydb7c")
+
+[sub_resource type="Resource" id="Resource_6ayf6"]
+script = ExtResource("2_4saar")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/5bruiser/attack3/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/5bruiser/attack3/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/5bruiser/attack3/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/5bruiser/attack3/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/5bruiser/attack3/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/5bruiser/attack3/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 16.97056274847714
+coverage = 0.949513983552954
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_fmiwu"]
+script = ExtResource("1_eqxxv")
+name = "Attack3"
+role = "attack_3"
+source_clip = "Attack3"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies5Bruiser": "/rigs/enemies_5bruiser/body/Attack3.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/5bruiser/attack3/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/5Bruiser/Attack3.png",
+"mask_material": "art/media/smallscale/authored/enemies/Material masks/With shadow/5Bruiser/Attack3.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_6ayf6")
+
+[sub_resource type="Resource" id="Resource_3vsy5"]
+script = ExtResource("2_4saar")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/5bruiser/attack4/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/5bruiser/attack4/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/5bruiser/attack4/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/5bruiser/attack4/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/5bruiser/attack4/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/5bruiser/attack4/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 16.97056274847714
+coverage = 0.9549293462530402
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_cw1l4"]
+script = ExtResource("1_eqxxv")
+name = "Attack4"
+role = "attack_4"
+source_clip = "Attack4"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies5Bruiser": "/rigs/enemies_5bruiser/body/Attack4.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/5bruiser/attack4/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/5Bruiser/Attack4.png",
+"mask_material": "art/media/smallscale/authored/enemies/Material masks/With shadow/5Bruiser/Attack4.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_3vsy5")
+
+[sub_resource type="Resource" id="Resource_8o5n3"]
+script = ExtResource("2_4saar")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/5bruiser/die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/5bruiser/die/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/5bruiser/die/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/5bruiser/die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/5bruiser/die/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/5bruiser/die/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 16.97056274847714
+coverage = 0.9628306688196951
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_pf6st"]
+script = ExtResource("1_eqxxv")
+name = "Die"
+role = "die"
+source_clip = "Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies5Bruiser": "/rigs/enemies_5bruiser/body/Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/5bruiser/die/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/5Bruiser/Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_8o5n3")
+
+[sub_resource type="Resource" id="Resource_u4k20"]
+script = ExtResource("2_4saar")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/5bruiser/idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/5bruiser/idle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/5bruiser/idle/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/5bruiser/idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/5bruiser/idle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/5bruiser/idle/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 16.97056274847714
+coverage = 0.9485593205153476
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_ptpsp"]
+script = ExtResource("1_eqxxv")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies5Bruiser": "/rigs/enemies_5bruiser/body/Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/5bruiser/idle/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/5Bruiser/Idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_u4k20")
+
+[sub_resource type="Resource" id="Resource_00xtn"]
+script = ExtResource("2_4saar")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/5bruiser/idle2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/5bruiser/idle2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/5bruiser/idle2/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/5bruiser/idle2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/5bruiser/idle2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/5bruiser/idle2/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 16.97056274847714
+coverage = 0.9455373783392008
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_ij8dh"]
+script = ExtResource("1_eqxxv")
+name = "Idle2"
+role = "idle_alt"
+source_clip = "Idle2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies5Bruiser": "/rigs/enemies_5bruiser/body/Idle2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/5bruiser/idle2/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/5Bruiser/Idle2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_00xtn")
+
+[sub_resource type="Resource" id="Resource_jmkw8"]
+script = ExtResource("2_4saar")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/5bruiser/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/5bruiser/run/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/5bruiser/run/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/5bruiser/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/5bruiser/run/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/5bruiser/run/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 16.97056274847714
+coverage = 0.959623998195486
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_1fbik"]
+script = ExtResource("1_eqxxv")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies5Bruiser": "/rigs/enemies_5bruiser/body/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/5bruiser/run/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/5Bruiser/Run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_jmkw8")
+
+[sub_resource type="Resource" id="Resource_u7nsj"]
+script = ExtResource("2_4saar")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/5bruiser/takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/5bruiser/takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/5bruiser/takedamage/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/5bruiser/takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/5bruiser/takedamage/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/5bruiser/takedamage/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 16.97056274847714
+coverage = 0.95782917144954
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_crsn7"]
+script = ExtResource("1_eqxxv")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies5Bruiser": "/rigs/enemies_5bruiser/body/TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/5bruiser/takedamage/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/5Bruiser/TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_u7nsj")
+
+[sub_resource type="Resource" id="Resource_og2hk"]
+script = ExtResource("2_4saar")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/5bruiser/taunt/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/5bruiser/taunt/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/5bruiser/taunt/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/5bruiser/taunt/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/5bruiser/taunt/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/5bruiser/taunt/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 16.97056274847714
+coverage = 0.9482382363248272
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_2u6ld"]
+script = ExtResource("1_eqxxv")
+name = "Taunt"
+role = "taunt"
+source_clip = "Taunt"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies5Bruiser": "/rigs/enemies_5bruiser/body/Taunt.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/5bruiser/taunt/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/5Bruiser/Taunt.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_og2hk")
+
+[sub_resource type="Resource" id="Resource_xpvay"]
+script = ExtResource("2_4saar")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-269.7056274847714, 371.5290039756342)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/5bruiser/walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/5bruiser/walk/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/5bruiser/walk/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/5bruiser/walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/5bruiser/walk/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/5bruiser/walk/raw-support.png"
+})
+depth_range = Vector2(-269.70563, 371.529)
+camera_origin = Vector2(96, 144)
+optical_ground_pixels = 16.97056274847714
+coverage = 0.9579345390690682
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_p7onh"]
+script = ExtResource("1_eqxxv")
+name = "Walk"
+role = "walk"
+source_clip = "Walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies5Bruiser": "/rigs/enemies_5bruiser/body/Walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/5bruiser/walk/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/5Bruiser/Walk.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_xpvay")
+
+[sub_resource type="Resource" id="Resource_5yvsm"]
+script = ExtResource("3_j1ael")
+role = "movement"
+qualifier = {
+"kind": "default"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+playback = "loop"
+
+[sub_resource type="Resource" id="Resource_pbylr"]
+script = ExtResource("3_j1ael")
+role = "movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_s2bfu"]
+script = ExtResource("3_j1ael")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "direct_arc"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_r615j"]
+script = ExtResource("3_j1ael")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "connector_transfer"
+}
+clip = "Walk"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_5a408"]
+script = ExtResource("3_j1ael")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "direct_arc"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_31whs"]
+script = ExtResource("3_j1ael")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "connector_transfer"
+}
+clip = "Walk"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_ehqkh"]
+script = ExtResource("3_j1ael")
+role = "shove"
+qualifier = {
+"kind": "default"
+}
+clip = "Attack2"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 6.0,
+"name": "contact"
+}]
+
+[sub_resource type="Resource" id="Resource_jm14a"]
+script = ExtResource("3_j1ael")
+role = "forced_movement"
+qualifier = {
+"kind": "default"
+}
+clip = "TakeDamage"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 5.0,
+"name": "brace"
+}]
+
+[sub_resource type="Resource" id="Resource_3seou"]
+script = ExtResource("3_j1ael")
+role = "forced_movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_ahm8b"]
+script = ExtResource("3_j1ael")
+role = "body_action"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_mpmi0"]
+script = ExtResource("3_j1ael")
+role = "body_action_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_8bb45"]
+script = ExtResource("3_j1ael")
+role = "equipment"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_1i4dl"]
+script = ExtResource("3_j1ael")
+role = "healing"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_dvtc4"]
+script = ExtResource("3_j1ael")
+role = "save_avoidance"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_plnyo"]
+script = ExtResource("3_j1ael")
+role = "condition_entry"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_wkfuy"]
+script = ExtResource("3_j1ael")
+role = "condition_hold"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+hidden_slots = PackedStringArray()
+playback = "final_rest"
+rest_frame = 14
+
+[sub_resource type="Resource" id="Resource_88wa6"]
+script = ExtResource("3_j1ael")
+role = "condition_exit"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+reversed = true
+
+[sub_resource type="Resource" id="Resource_t1vxq"]
+script = ExtResource("3_j1ael")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "flying",
+"trajectory": "path"
+}
+clip = "Idle"
+hidden_slots = PackedStringArray()
+playback = "once"
+frame_keys = [[0.0, 0.0], [1.0, 0.0]]
+
+[sub_resource type="Resource" id="Resource_pkv3o"]
+script = ExtResource("3_j1ael")
+role = "death"
+qualifier = {
+"kind": "default"
+}
+clip = "Die"
+hidden_slots = PackedStringArray()
+playback = "once"
+
+[resource]
+script = ExtResource("4_sc23l")
+id = "smallscale.enemies.5bruiser"
+pack = "enemies"
+variant = "5Bruiser"
+source = "smallscale-authored/enemies"
+cell = Vector2i(192, 192)
+pivot = Vector2(96, 132)
+anchor = Vector2(96, 99)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("Enemies5Bruiser")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_eqxxv")]([SubResource("Resource_hcxpn"), SubResource("Resource_vvs3g"), SubResource("Resource_fmiwu"), SubResource("Resource_cw1l4"), SubResource("Resource_pf6st"), SubResource("Resource_ptpsp"), SubResource("Resource_ij8dh"), SubResource("Resource_1fbik"), SubResource("Resource_crsn7"), SubResource("Resource_2u6ld"), SubResource("Resource_p7onh")])
+fallbacks = Dictionary[String, String]({
+"Attack5": "Attack4",
+"Attack6": "Attack4",
+"AttackRun": "Attack1",
+"CrouchWalk": "Walk",
+"Death": "Die",
+"Idle4": "Idle2",
+"Kick": "Attack1",
+"Rolling": "Run",
+"Special1": "Attack4"
+})
+contexts = Array[ExtResource("3_j1ael")]([SubResource("Resource_5yvsm"), SubResource("Resource_pbylr"), SubResource("Resource_s2bfu"), SubResource("Resource_r615j"), SubResource("Resource_5a408"), SubResource("Resource_31whs"), SubResource("Resource_ehqkh"), SubResource("Resource_jm14a"), SubResource("Resource_3seou"), SubResource("Resource_ahm8b"), SubResource("Resource_mpmi0"), SubResource("Resource_8bb45"), SubResource("Resource_1i4dl"), SubResource("Resource_dvtc4"), SubResource("Resource_plnyo"), SubResource("Resource_wkfuy"), SubResource("Resource_88wa6"), SubResource("Resource_t1vxq"), SubResource("Resource_pkv3o")])
+hold_clips = PackedStringArray("Die")
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed.
+Stand-in clips: Idle4 -> Idle2, Death -> Die, Rolling -> Run, CrouchWalk -> Walk, AttackRun -> Attack1, Kick -> Attack1, Special1 -> Attack4, Attack5 -> Attack4, Attack6 -> Attack4."

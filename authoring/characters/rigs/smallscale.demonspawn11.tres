@@ -1,0 +1,1351 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_qqx8m"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_p4dxs"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_hiucc"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_vckfq"]
+
+[sub_resource type="Resource" id="Resource_sdfsr"]
+script = ExtResource("2_p4dxs")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/demon-spawn-11/attack-1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/demon-spawn-11/attack-1/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/demon-spawn-11/attack-1/normals.png",
+"reference": "art/geometry/creatures/first/actions/demon-spawn-11/attack-1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/demon-spawn-11/attack-1/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/demon-spawn-11/attack-1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.9533448692415684
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_1vx3s"]
+script = ExtResource("1_qqx8m")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Attack 1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Demonspawn11": "/rigs/demonspawn11/body/Attack 1.png",
+"Demonspawn11Effect": "/rigs/demonspawn11/effect/Attack 1.png",
+"Demonspawn11Shadow": "/rigs/demonspawn11/shadow/Attack 1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Demon Spawn 11/Attack 1.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Demon Spawn 11/Attack 1.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Spawn 11/Effects/Attack 1.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Spawn 11/Shadows/Attack 1.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Demonspawn11Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_sdfsr")
+
+[sub_resource type="Resource" id="Resource_7wiul"]
+script = ExtResource("2_p4dxs")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/demon-spawn-11/attack-2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/demon-spawn-11/attack-2/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/demon-spawn-11/attack-2/normals.png",
+"reference": "art/geometry/creatures/first/actions/demon-spawn-11/attack-2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/demon-spawn-11/attack-2/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/demon-spawn-11/attack-2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.9459773637545308
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_tl6j7"]
+script = ExtResource("1_qqx8m")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Attack 2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Demonspawn11": "/rigs/demonspawn11/body/Attack 2.png",
+"Demonspawn11Effect": "/rigs/demonspawn11/effect/Attack 2.png",
+"Demonspawn11Shadow": "/rigs/demonspawn11/shadow/Attack 2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Demon Spawn 11/Attack 2.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Demon Spawn 11/Attack 2.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Spawn 11/Effects/Attack 2.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Spawn 11/Shadows/Attack 2.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Demonspawn11Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_7wiul")
+
+[sub_resource type="Resource" id="Resource_nv8o6"]
+script = ExtResource("2_p4dxs")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/demon-spawn-11/attack-3/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/demon-spawn-11/attack-3/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/demon-spawn-11/attack-3/normals.png",
+"reference": "art/geometry/creatures/first/actions/demon-spawn-11/attack-3/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/demon-spawn-11/attack-3/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/demon-spawn-11/attack-3/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.9522652353985293
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_bkspr"]
+script = ExtResource("1_qqx8m")
+name = "Attack3"
+role = "attack_3"
+source_clip = "Attack 3"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Demonspawn11": "/rigs/demonspawn11/body/Attack 3.png",
+"Demonspawn11Effect": "/rigs/demonspawn11/effect/Attack 3.png",
+"Demonspawn11Shadow": "/rigs/demonspawn11/shadow/Attack 3.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Demon Spawn 11/Attack 3.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Demon Spawn 11/Attack 3.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Spawn 11/Effects/Attack 3.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Spawn 11/Shadows/Attack 3.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Demonspawn11Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_nv8o6")
+
+[sub_resource type="Resource" id="Resource_tv1jy"]
+script = ExtResource("2_p4dxs")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/demon-spawn-11/attack-4/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/demon-spawn-11/attack-4/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/demon-spawn-11/attack-4/normals.png",
+"reference": "art/geometry/creatures/first/actions/demon-spawn-11/attack-4/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/demon-spawn-11/attack-4/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/demon-spawn-11/attack-4/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.9486333262535332
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_kljkt"]
+script = ExtResource("1_qqx8m")
+name = "Attack4"
+role = "attack_4"
+source_clip = "Attack 4"
+frames = 10
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Demonspawn11": "/rigs/demonspawn11/body/Attack 4.png",
+"Demonspawn11Effect": "/rigs/demonspawn11/effect/Attack 4.png",
+"Demonspawn11Shadow": "/rigs/demonspawn11/shadow/Attack 4.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Demon Spawn 11/Attack 4.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Demon Spawn 11/Attack 4.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Spawn 11/Effects/Attack 4.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Spawn 11/Shadows/Attack 4.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Demonspawn11Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_tv1jy")
+
+[sub_resource type="Resource" id="Resource_ysyge"]
+script = ExtResource("2_p4dxs")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/demon-spawn-11/attack-5/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/demon-spawn-11/attack-5/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/demon-spawn-11/attack-5/normals.png",
+"reference": "art/geometry/creatures/first/actions/demon-spawn-11/attack-5/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/demon-spawn-11/attack-5/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/demon-spawn-11/attack-5/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.9515364279521786
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_qb47e"]
+script = ExtResource("1_qqx8m")
+name = "Attack5"
+role = "attack_5"
+source_clip = "Attack 5"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Demonspawn11": "/rigs/demonspawn11/body/Attack 5.png",
+"Demonspawn11Effect": "/rigs/demonspawn11/effect/Attack 5.png",
+"Demonspawn11Shadow": "/rigs/demonspawn11/shadow/Attack 5.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Demon Spawn 11/Attack 5.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Demon Spawn 11/Attack 5.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Spawn 11/Effects/Attack 5.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Spawn 11/Shadows/Attack 5.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Demonspawn11Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_ysyge")
+
+[sub_resource type="Resource" id="Resource_2pqgn"]
+script = ExtResource("2_p4dxs")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/demon-spawn-11/attack-6/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/demon-spawn-11/attack-6/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/demon-spawn-11/attack-6/normals.png",
+"reference": "art/geometry/creatures/first/actions/demon-spawn-11/attack-6/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/demon-spawn-11/attack-6/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/demon-spawn-11/attack-6/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.9520504403105624
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_rflqd"]
+script = ExtResource("1_qqx8m")
+name = "Attack6"
+role = "attack_6"
+source_clip = "Attack 6"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Demonspawn11": "/rigs/demonspawn11/body/Attack 6.png",
+"Demonspawn11Effect": "/rigs/demonspawn11/effect/Attack 6.png",
+"Demonspawn11Shadow": "/rigs/demonspawn11/shadow/Attack 6.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Demon Spawn 11/Attack 6.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Demon Spawn 11/Attack 6.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Spawn 11/Effects/Attack 6.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Spawn 11/Shadows/Attack 6.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Demonspawn11Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_2pqgn")
+
+[sub_resource type="Resource" id="Resource_gjhyt"]
+script = ExtResource("2_p4dxs")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/demon-spawn-11/attack-run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/demon-spawn-11/attack-run/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/demon-spawn-11/attack-run/normals.png",
+"reference": "art/geometry/creatures/first/actions/demon-spawn-11/attack-run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/demon-spawn-11/attack-run/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/demon-spawn-11/attack-run/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.9391090093474466
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_67hs5"]
+script = ExtResource("1_qqx8m")
+name = "AttackRun"
+role = "attack_run"
+source_clip = "Attack Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Demonspawn11": "/rigs/demonspawn11/body/Attack Run.png",
+"Demonspawn11Effect": "/rigs/demonspawn11/effect/Attack Run.png",
+"Demonspawn11Shadow": "/rigs/demonspawn11/shadow/Attack Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Demon Spawn 11/Attack Run.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Demon Spawn 11/Attack Run.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Spawn 11/Effects/Attack Run.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Spawn 11/Shadows/Attack Run.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Demonspawn11Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_gjhyt")
+
+[sub_resource type="Resource" id="Resource_okwxb"]
+script = ExtResource("2_p4dxs")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/demon-spawn-11/block/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/demon-spawn-11/block/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/demon-spawn-11/block/normals.png",
+"reference": "art/geometry/creatures/first/actions/demon-spawn-11/block/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/demon-spawn-11/block/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/demon-spawn-11/block/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.961919482891871
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_pegxe"]
+script = ExtResource("1_qqx8m")
+name = "Block"
+role = "block_hold"
+source_clip = "Block"
+frames = 7
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Demonspawn11": "/rigs/demonspawn11/body/Block.png",
+"Demonspawn11Effect": "/rigs/demonspawn11/effect/Block.png",
+"Demonspawn11Shadow": "/rigs/demonspawn11/shadow/Block.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Demon Spawn 11/Block.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Demon Spawn 11/Block.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Spawn 11/Effects/Block.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Spawn 11/Shadows/Block.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Demonspawn11Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_okwxb")
+
+[sub_resource type="Resource" id="Resource_yow1x"]
+script = ExtResource("2_p4dxs")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/demon-spawn-11/crouch/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/demon-spawn-11/crouch/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/demon-spawn-11/crouch/normals.png",
+"reference": "art/geometry/creatures/first/actions/demon-spawn-11/crouch/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/demon-spawn-11/crouch/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/demon-spawn-11/crouch/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.9657294164885132
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_7cv2j"]
+script = ExtResource("1_qqx8m")
+name = "Crouch"
+role = "crouch_idle"
+source_clip = "Crouch"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Demonspawn11": "/rigs/demonspawn11/body/Crouch.png",
+"Demonspawn11Effect": "/rigs/demonspawn11/effect/Crouch.png",
+"Demonspawn11Shadow": "/rigs/demonspawn11/shadow/Crouch.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Demon Spawn 11/Crouch.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Demon Spawn 11/Crouch.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Spawn 11/Effects/Crouch.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Spawn 11/Shadows/Crouch.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Demonspawn11Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_yow1x")
+
+[sub_resource type="Resource" id="Resource_4yl6d"]
+script = ExtResource("2_p4dxs")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/demon-spawn-11/crouch-walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/demon-spawn-11/crouch-walk/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/demon-spawn-11/crouch-walk/normals.png",
+"reference": "art/geometry/creatures/first/actions/demon-spawn-11/crouch-walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/demon-spawn-11/crouch-walk/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/demon-spawn-11/crouch-walk/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.9564113510234346
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_so4rf"]
+script = ExtResource("1_qqx8m")
+name = "CrouchWalk"
+role = "crouch_move"
+source_clip = "Crouch walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Demonspawn11": "/rigs/demonspawn11/body/Crouch walk.png",
+"Demonspawn11Effect": "/rigs/demonspawn11/effect/Crouch walk.png",
+"Demonspawn11Shadow": "/rigs/demonspawn11/shadow/Crouch walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Demon Spawn 11/Crouch walk.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Demon Spawn 11/Crouch walk.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Spawn 11/Effects/Crouch walk.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Spawn 11/Shadows/Crouch walk.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Demonspawn11Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_4yl6d")
+
+[sub_resource type="Resource" id="Resource_k7v70"]
+script = ExtResource("2_p4dxs")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/demon-spawn-11/die-1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/demon-spawn-11/die-1/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/demon-spawn-11/die-1/normals.png",
+"reference": "art/geometry/creatures/first/actions/demon-spawn-11/die-1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/demon-spawn-11/die-1/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/demon-spawn-11/die-1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.95088260577727
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_5u1gr"]
+script = ExtResource("1_qqx8m")
+name = "Die"
+role = "die"
+source_clip = "Die 1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Demonspawn11": "/rigs/demonspawn11/body/Die 1.png",
+"Demonspawn11Effect": "/rigs/demonspawn11/effect/Die 1.png",
+"Demonspawn11Shadow": "/rigs/demonspawn11/shadow/Die 1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Demon Spawn 11/Die 1.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Demon Spawn 11/Die 1.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Spawn 11/Effects/Die 1.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Spawn 11/Shadows/Die 1.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Demonspawn11Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_k7v70")
+
+[sub_resource type="Resource" id="Resource_u2c07"]
+script = ExtResource("2_p4dxs")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/demon-spawn-11/die-2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/demon-spawn-11/die-2/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/demon-spawn-11/die-2/normals.png",
+"reference": "art/geometry/creatures/first/actions/demon-spawn-11/die-2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/demon-spawn-11/die-2/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/demon-spawn-11/die-2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.9046872892172632
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_hb6t1"]
+script = ExtResource("1_qqx8m")
+name = "Death"
+role = "die_alt"
+source_clip = "Die 2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Demonspawn11": "/rigs/demonspawn11/body/Die 2.png",
+"Demonspawn11Effect": "/rigs/demonspawn11/effect/Die 2.png",
+"Demonspawn11Shadow": "/rigs/demonspawn11/shadow/Die 2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Demon Spawn 11/Die 2.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Demon Spawn 11/Die 2.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Spawn 11/Effects/Die 2.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Spawn 11/Shadows/Die 2.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Demonspawn11Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_u2c07")
+
+[sub_resource type="Resource" id="Resource_om0b6"]
+script = ExtResource("2_p4dxs")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/demon-spawn-11/explode-copy/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/demon-spawn-11/explode-copy/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/demon-spawn-11/explode-copy/normals.png",
+"reference": "art/geometry/creatures/first/actions/demon-spawn-11/explode-copy/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/demon-spawn-11/explode-copy/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/demon-spawn-11/explode-copy/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.9221667283731404
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_3e14q"]
+script = ExtResource("1_qqx8m")
+name = "ExplodeCopy"
+role = "explode"
+source_clip = "Explode Copy"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Demonspawn11": "/rigs/demonspawn11/body/Explode Copy.png",
+"Demonspawn11Effect": "/rigs/demonspawn11/effect/Explode Copy.png",
+"Demonspawn11Shadow": "/rigs/demonspawn11/shadow/Explode Copy.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Demon Spawn 11/Explode Copy.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Demon Spawn 11/Explode Copy.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Spawn 11/Effects/Explode Copy.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Spawn 11/Shadows/Explode Copy.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Demonspawn11Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_om0b6")
+
+[sub_resource type="Resource" id="Resource_ei1kh"]
+script = ExtResource("2_p4dxs")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/demon-spawn-11/idle-1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/demon-spawn-11/idle-1/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/demon-spawn-11/idle-1/normals.png",
+"reference": "art/geometry/creatures/first/actions/demon-spawn-11/idle-1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/demon-spawn-11/idle-1/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/demon-spawn-11/idle-1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.9492622314263526
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_g0hub"]
+script = ExtResource("1_qqx8m")
+name = "Idle"
+role = "idle"
+source_clip = "Idle 1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Demonspawn11": "/rigs/demonspawn11/body/Idle 1.png",
+"Demonspawn11Effect": "/rigs/demonspawn11/effect/Idle 1.png",
+"Demonspawn11Shadow": "/rigs/demonspawn11/shadow/Idle 1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Demon Spawn 11/Idle 1.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Demon Spawn 11/Idle 1.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Spawn 11/Effects/Idle 1.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Spawn 11/Shadows/Idle 1.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Demonspawn11Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_ei1kh")
+
+[sub_resource type="Resource" id="Resource_l2haq"]
+script = ExtResource("2_p4dxs")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/demon-spawn-11/roll-1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/demon-spawn-11/roll-1/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/demon-spawn-11/roll-1/normals.png",
+"reference": "art/geometry/creatures/first/actions/demon-spawn-11/roll-1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/demon-spawn-11/roll-1/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/demon-spawn-11/roll-1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.9499382737415344
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_m6aqt"]
+script = ExtResource("1_qqx8m")
+name = "Rolling"
+role = "roll"
+source_clip = "Roll 1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Demonspawn11": "/rigs/demonspawn11/body/Roll 1.png",
+"Demonspawn11Effect": "/rigs/demonspawn11/effect/Roll 1.png",
+"Demonspawn11Shadow": "/rigs/demonspawn11/shadow/Roll 1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Demon Spawn 11/Roll 1.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Demon Spawn 11/Roll 1.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Spawn 11/Effects/Roll 1.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Spawn 11/Shadows/Roll 1.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Demonspawn11Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_l2haq")
+
+[sub_resource type="Resource" id="Resource_u5q18"]
+script = ExtResource("2_p4dxs")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/demon-spawn-11/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/demon-spawn-11/run/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/demon-spawn-11/run/normals.png",
+"reference": "art/geometry/creatures/first/actions/demon-spawn-11/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/demon-spawn-11/run/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/demon-spawn-11/run/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.953810487667106
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_ev54v"]
+script = ExtResource("1_qqx8m")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Demonspawn11": "/rigs/demonspawn11/body/Run.png",
+"Demonspawn11Effect": "/rigs/demonspawn11/effect/Run.png",
+"Demonspawn11Shadow": "/rigs/demonspawn11/shadow/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Demon Spawn 11/Run.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Demon Spawn 11/Run.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Spawn 11/Effects/Run.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Spawn 11/Shadows/Run.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Demonspawn11Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_u5q18")
+
+[sub_resource type="Resource" id="Resource_l7omf"]
+script = ExtResource("2_p4dxs")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/demon-spawn-11/run-backwards/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/demon-spawn-11/run-backwards/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/demon-spawn-11/run-backwards/normals.png",
+"reference": "art/geometry/creatures/first/actions/demon-spawn-11/run-backwards/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/demon-spawn-11/run-backwards/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/demon-spawn-11/run-backwards/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.960586308217096
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_xifyt"]
+script = ExtResource("1_qqx8m")
+name = "RunBackwards"
+role = "run_back"
+source_clip = "Run Backwards"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Demonspawn11": "/rigs/demonspawn11/body/Run Backwards.png",
+"Demonspawn11Effect": "/rigs/demonspawn11/effect/Run Backwards.png",
+"Demonspawn11Shadow": "/rigs/demonspawn11/shadow/Run Backwards.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Demon Spawn 11/Run Backwards.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Demon Spawn 11/Run Backwards.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Spawn 11/Effects/Run Backwards.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Spawn 11/Shadows/Run Backwards.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Demonspawn11Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_l7omf")
+
+[sub_resource type="Resource" id="Resource_ab47c"]
+script = ExtResource("2_p4dxs")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/demon-spawn-11/slide-1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/demon-spawn-11/slide-1/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/demon-spawn-11/slide-1/normals.png",
+"reference": "art/geometry/creatures/first/actions/demon-spawn-11/slide-1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/demon-spawn-11/slide-1/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/demon-spawn-11/slide-1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.9504802125195831
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_h1abi"]
+script = ExtResource("1_qqx8m")
+name = "Slide1"
+role = "slide"
+source_clip = "Slide 1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Demonspawn11": "/rigs/demonspawn11/body/Slide 1.png",
+"Demonspawn11Effect": "/rigs/demonspawn11/effect/Slide 1.png",
+"Demonspawn11Shadow": "/rigs/demonspawn11/shadow/Slide 1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Demon Spawn 11/Slide 1.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Demon Spawn 11/Slide 1.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Spawn 11/Effects/Slide 1.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Spawn 11/Shadows/Slide 1.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Demonspawn11Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_ab47c")
+
+[sub_resource type="Resource" id="Resource_bqubu"]
+script = ExtResource("2_p4dxs")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/demon-spawn-11/strafe-left/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/demon-spawn-11/strafe-left/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/demon-spawn-11/strafe-left/normals.png",
+"reference": "art/geometry/creatures/first/actions/demon-spawn-11/strafe-left/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/demon-spawn-11/strafe-left/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/demon-spawn-11/strafe-left/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.9638273439610916
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_h7tu4"]
+script = ExtResource("1_qqx8m")
+name = "StrafeLeft"
+role = "strafe_left"
+source_clip = "Strafe Left"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Demonspawn11": "/rigs/demonspawn11/body/Strafe Left.png",
+"Demonspawn11Effect": "/rigs/demonspawn11/effect/Strafe Left.png",
+"Demonspawn11Shadow": "/rigs/demonspawn11/shadow/Strafe Left.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Demon Spawn 11/Strafe Left.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Demon Spawn 11/Strafe Left.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Spawn 11/Effects/Strafe Left.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Spawn 11/Shadows/Strafe Left.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Demonspawn11Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_bqubu")
+
+[sub_resource type="Resource" id="Resource_ehnto"]
+script = ExtResource("2_p4dxs")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/demon-spawn-11/strafe-right/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/demon-spawn-11/strafe-right/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/demon-spawn-11/strafe-right/normals.png",
+"reference": "art/geometry/creatures/first/actions/demon-spawn-11/strafe-right/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/demon-spawn-11/strafe-right/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/demon-spawn-11/strafe-right/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.9629268620596936
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_llpgu"]
+script = ExtResource("1_qqx8m")
+name = "StrafeRight"
+role = "strafe_right"
+source_clip = "Strafe Right"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Demonspawn11": "/rigs/demonspawn11/body/Strafe Right.png",
+"Demonspawn11Effect": "/rigs/demonspawn11/effect/Strafe Right.png",
+"Demonspawn11Shadow": "/rigs/demonspawn11/shadow/Strafe Right.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Demon Spawn 11/Strafe Right.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Demon Spawn 11/Strafe Right.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Spawn 11/Effects/Strafe Right.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Spawn 11/Shadows/Strafe Right.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Demonspawn11Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_ehnto")
+
+[sub_resource type="Resource" id="Resource_pg8jt"]
+script = ExtResource("2_p4dxs")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/demon-spawn-11/takedamage-1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/demon-spawn-11/takedamage-1/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/demon-spawn-11/takedamage-1/normals.png",
+"reference": "art/geometry/creatures/first/actions/demon-spawn-11/takedamage-1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/demon-spawn-11/takedamage-1/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/demon-spawn-11/takedamage-1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.9576534576534576
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_1ik8s"]
+script = ExtResource("1_qqx8m")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage 1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Demonspawn11": "/rigs/demonspawn11/body/TakeDamage 1.png",
+"Demonspawn11Effect": "/rigs/demonspawn11/effect/TakeDamage 1.png",
+"Demonspawn11Shadow": "/rigs/demonspawn11/shadow/TakeDamage 1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Demon Spawn 11/TakeDamage 1.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Demon Spawn 11/TakeDamage 1.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Spawn 11/Effects/TakeDamage 1.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Spawn 11/Shadows/TakeDamage 1.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Demonspawn11Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_pg8jt")
+
+[sub_resource type="Resource" id="Resource_rsipb"]
+script = ExtResource("2_p4dxs")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/demon-spawn-11/taunt/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/demon-spawn-11/taunt/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/demon-spawn-11/taunt/normals.png",
+"reference": "art/geometry/creatures/first/actions/demon-spawn-11/taunt/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/demon-spawn-11/taunt/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/demon-spawn-11/taunt/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.9622746659084448
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_h08yf"]
+script = ExtResource("1_qqx8m")
+name = "Taunt"
+role = "taunt"
+source_clip = "Taunt"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Demonspawn11": "/rigs/demonspawn11/body/Taunt.png",
+"Demonspawn11Effect": "/rigs/demonspawn11/effect/Taunt.png",
+"Demonspawn11Shadow": "/rigs/demonspawn11/shadow/Taunt.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Demon Spawn 11/Taunt.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Demon Spawn 11/Taunt.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Spawn 11/Effects/Taunt.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Spawn 11/Shadows/Taunt.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Demonspawn11Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_rsipb")
+
+[sub_resource type="Resource" id="Resource_b402n"]
+script = ExtResource("2_p4dxs")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/demon-spawn-11/walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/demon-spawn-11/walk/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/demon-spawn-11/walk/normals.png",
+"reference": "art/geometry/creatures/first/actions/demon-spawn-11/walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/demon-spawn-11/walk/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/demon-spawn-11/walk/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.9600462587152088
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_lbo5j"]
+script = ExtResource("1_qqx8m")
+name = "Walk"
+role = "walk"
+source_clip = "Walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Demonspawn11": "/rigs/demonspawn11/body/Walk.png",
+"Demonspawn11Effect": "/rigs/demonspawn11/effect/Walk.png",
+"Demonspawn11Shadow": "/rigs/demonspawn11/shadow/Walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Demon Spawn 11/Walk.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Demon Spawn 11/Walk.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Spawn 11/Effects/Walk.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Spawn 11/Shadows/Walk.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Demonspawn11Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_b402n")
+
+[sub_resource type="Resource" id="Resource_jk30l"]
+script = ExtResource("3_hiucc")
+role = "movement"
+qualifier = {
+"kind": "default"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+playback = "loop"
+
+[sub_resource type="Resource" id="Resource_pn5ii"]
+script = ExtResource("3_hiucc")
+role = "movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_5bem6"]
+script = ExtResource("3_hiucc")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "direct_arc"
+}
+clip = "Rolling"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_vpmgf"]
+script = ExtResource("3_hiucc")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "connector_transfer"
+}
+clip = "CrouchWalk"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_ptuqk"]
+script = ExtResource("3_hiucc")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "direct_arc"
+}
+clip = "Rolling"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_ss5tl"]
+script = ExtResource("3_hiucc")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "connector_transfer"
+}
+clip = "CrouchWalk"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_qma60"]
+script = ExtResource("3_hiucc")
+role = "shove"
+qualifier = {
+"kind": "default"
+}
+clip = "Attack2"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 6.0,
+"name": "contact"
+}]
+
+[sub_resource type="Resource" id="Resource_dus0d"]
+script = ExtResource("3_hiucc")
+role = "forced_movement"
+qualifier = {
+"kind": "default"
+}
+clip = "TakeDamage"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 5.0,
+"name": "brace"
+}]
+
+[sub_resource type="Resource" id="Resource_pxdv2"]
+script = ExtResource("3_hiucc")
+role = "forced_movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_gcbyb"]
+script = ExtResource("3_hiucc")
+role = "body_action"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_awrdb"]
+script = ExtResource("3_hiucc")
+role = "body_action_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_fuca5"]
+script = ExtResource("3_hiucc")
+role = "equipment"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_r8gvh"]
+script = ExtResource("3_hiucc")
+role = "healing"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_b5d0b"]
+script = ExtResource("3_hiucc")
+role = "save_avoidance"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_g8eaf"]
+script = ExtResource("3_hiucc")
+role = "condition_entry"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_ypn8r"]
+script = ExtResource("3_hiucc")
+role = "condition_hold"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+hidden_slots = PackedStringArray()
+playback = "final_rest"
+rest_frame = 14
+
+[sub_resource type="Resource" id="Resource_2rmjv"]
+script = ExtResource("3_hiucc")
+role = "condition_exit"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+reversed = true
+
+[sub_resource type="Resource" id="Resource_25i0y"]
+script = ExtResource("3_hiucc")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "flying",
+"trajectory": "path"
+}
+clip = "Idle"
+hidden_slots = PackedStringArray()
+playback = "once"
+frame_keys = [[0.0, 0.0], [1.0, 0.0]]
+
+[sub_resource type="Resource" id="Resource_eqseh"]
+script = ExtResource("3_hiucc")
+role = "death"
+qualifier = {
+"kind": "default"
+}
+clip = "Death"
+hidden_slots = PackedStringArray()
+playback = "once"
+
+[resource]
+script = ExtResource("4_vckfq")
+id = "smallscale.demonspawn11"
+pack = "demons"
+variant = "Demon Spawn 11"
+source = "smallscale-authored/demons"
+pivot = Vector2(64, 87)
+anchor = Vector2(64, 62)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("shadow", "body", "effect")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("Demonspawn11"),
+"effect": PackedStringArray("Demonspawn11Effect"),
+"shadow": PackedStringArray("Demonspawn11Shadow")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_qqx8m")]([SubResource("Resource_1vx3s"), SubResource("Resource_tl6j7"), SubResource("Resource_bkspr"), SubResource("Resource_kljkt"), SubResource("Resource_qb47e"), SubResource("Resource_rflqd"), SubResource("Resource_67hs5"), SubResource("Resource_pegxe"), SubResource("Resource_7cv2j"), SubResource("Resource_so4rf"), SubResource("Resource_5u1gr"), SubResource("Resource_hb6t1"), SubResource("Resource_3e14q"), SubResource("Resource_g0hub"), SubResource("Resource_m6aqt"), SubResource("Resource_ev54v"), SubResource("Resource_xifyt"), SubResource("Resource_h1abi"), SubResource("Resource_h7tu4"), SubResource("Resource_llpgu"), SubResource("Resource_1ik8s"), SubResource("Resource_h08yf"), SubResource("Resource_lbo5j")])
+fallbacks = Dictionary[String, String]({
+"Idle2": "Idle",
+"Idle4": "Idle",
+"Kick": "Attack1",
+"Special1": "Attack4"
+})
+contexts = Array[ExtResource("3_hiucc")]([SubResource("Resource_jk30l"), SubResource("Resource_pn5ii"), SubResource("Resource_5bem6"), SubResource("Resource_vpmgf"), SubResource("Resource_ptuqk"), SubResource("Resource_ss5tl"), SubResource("Resource_qma60"), SubResource("Resource_dus0d"), SubResource("Resource_pxdv2"), SubResource("Resource_gcbyb"), SubResource("Resource_awrdb"), SubResource("Resource_fuca5"), SubResource("Resource_r8gvh"), SubResource("Resource_b5d0b"), SubResource("Resource_g8eaf"), SubResource("Resource_ypn8r"), SubResource("Resource_2rmjv"), SubResource("Resource_25i0y"), SubResource("Resource_eqseh")])
+hold_clips = PackedStringArray("Die", "Death", "ExplodeCopy")
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed.
+Stand-in clips: Idle2 -> Idle, Idle4 -> Idle, Kick -> Attack1, Special1 -> Attack4."

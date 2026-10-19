@@ -1,0 +1,50 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_acuvr"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_giv47"]
+
+[sub_resource type="Resource" id="Resource_12csc"]
+script = ExtResource("1_acuvr")
+path = "art/media/ui/icons/smooth48/item.morningstar.png"
+native_size = Vector2i(48, 48)
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_giv47")
+id = "weapon.circus.soul_draining_morningstar"
+kind = "weapon"
+slots = Dictionary[String, Dictionary]({
+"weapon_melee_main": {
+"layers": [{
+"part": "Melee12",
+"slot": "weapon",
+"tint": "#3a2d45"
+}],
+"variants": {}
+}
+})
+hands = Dictionary[String, Dictionary]({
+"weapon_melee_off": {
+"": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#3a2d45"
+}]
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee12",
+"pivots_by_camera": [[54.5, 65.5], [65.5, 57.5], [75.5, 65.0], [64.5, 72.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#3a2d45",
+"variant": ""
+}])
+icon = SubResource("Resource_12csc")
+notes = "Visual name Soul-Draining Morningstar; Cursed morningstar that drains life force"

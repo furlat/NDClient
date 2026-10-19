@@ -1,0 +1,675 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_2o1ph"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_x0f5v"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_jlfhm"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_xdybt"]
+
+[sub_resource type="Resource" id="Resource_n115p"]
+script = ExtResource("2_x0f5v")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/arabian-horse/attack1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/arabian-horse/attack1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/arabian-horse/attack1/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/arabian-horse/attack1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/arabian-horse/attack1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/arabian-horse/attack1/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.971835719567117
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_quy0n"]
+script = ExtResource("1_2o1ph")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Attack1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsArabianHorse": "/rigs/animals_arabian_horse/body/Attack1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/arabian-horse/attack1/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Arabian horse/Attack1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_n115p")
+
+[sub_resource type="Resource" id="Resource_e6o5f"]
+script = ExtResource("2_x0f5v")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/arabian-horse/attack2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/arabian-horse/attack2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/arabian-horse/attack2/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/arabian-horse/attack2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/arabian-horse/attack2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/arabian-horse/attack2/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.9635754088705658
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_s4ehi"]
+script = ExtResource("1_2o1ph")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Attack2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsArabianHorse": "/rigs/animals_arabian_horse/body/Attack2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/arabian-horse/attack2/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Arabian horse/Attack2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_e6o5f")
+
+[sub_resource type="Resource" id="Resource_txtqk"]
+script = ExtResource("2_x0f5v")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/arabian-horse/attack3/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/arabian-horse/attack3/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/arabian-horse/attack3/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/arabian-horse/attack3/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/arabian-horse/attack3/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/arabian-horse/attack3/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.9630923685898144
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_afsvu"]
+script = ExtResource("1_2o1ph")
+name = "Attack3"
+role = "attack_3"
+source_clip = "Attack3"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsArabianHorse": "/rigs/animals_arabian_horse/body/Attack3.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/arabian-horse/attack3/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Arabian horse/Attack3.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_txtqk")
+
+[sub_resource type="Resource" id="Resource_fdvaw"]
+script = ExtResource("2_x0f5v")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/arabian-horse/die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/arabian-horse/die/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/arabian-horse/die/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/arabian-horse/die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/arabian-horse/die/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/arabian-horse/die/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.9707208212452576
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_ewrht"]
+script = ExtResource("1_2o1ph")
+name = "Die"
+role = "die"
+source_clip = "Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsArabianHorse": "/rigs/animals_arabian_horse/body/Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/arabian-horse/die/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Arabian horse/Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_fdvaw")
+
+[sub_resource type="Resource" id="Resource_to11w"]
+script = ExtResource("2_x0f5v")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/arabian-horse/idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/arabian-horse/idle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/arabian-horse/idle/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/arabian-horse/idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/arabian-horse/idle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/arabian-horse/idle/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.956761462565293
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_1xoe3"]
+script = ExtResource("1_2o1ph")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsArabianHorse": "/rigs/animals_arabian_horse/body/Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/arabian-horse/idle/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Arabian horse/Idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_to11w")
+
+[sub_resource type="Resource" id="Resource_nnq5l"]
+script = ExtResource("2_x0f5v")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/arabian-horse/idle2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/arabian-horse/idle2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/arabian-horse/idle2/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/arabian-horse/idle2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/arabian-horse/idle2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/arabian-horse/idle2/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.9830435570044372
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_ytgb8"]
+script = ExtResource("1_2o1ph")
+name = "Idle2"
+role = "idle_alt"
+source_clip = "Idle2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsArabianHorse": "/rigs/animals_arabian_horse/body/Idle2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/arabian-horse/idle2/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Arabian horse/Idle2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_nnq5l")
+
+[sub_resource type="Resource" id="Resource_qo2g1"]
+script = ExtResource("2_x0f5v")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/arabian-horse/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/arabian-horse/run/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/arabian-horse/run/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/arabian-horse/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/arabian-horse/run/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/arabian-horse/run/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.9699552433775188
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_8lapg"]
+script = ExtResource("1_2o1ph")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsArabianHorse": "/rigs/animals_arabian_horse/body/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/arabian-horse/run/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Arabian horse/Run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_qo2g1")
+
+[sub_resource type="Resource" id="Resource_k2olk"]
+script = ExtResource("2_x0f5v")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/arabian-horse/takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/arabian-horse/takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/arabian-horse/takedamage/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/arabian-horse/takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/arabian-horse/takedamage/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/arabian-horse/takedamage/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.9613233715103794
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_lala6"]
+script = ExtResource("1_2o1ph")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsArabianHorse": "/rigs/animals_arabian_horse/body/TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/arabian-horse/takedamage/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Arabian horse/TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_k2olk")
+
+[sub_resource type="Resource" id="Resource_v8ql0"]
+script = ExtResource("2_x0f5v")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/arabian-horse/taunt/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/arabian-horse/taunt/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/arabian-horse/taunt/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/arabian-horse/taunt/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/arabian-horse/taunt/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/arabian-horse/taunt/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.951402219205019
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_op2c2"]
+script = ExtResource("1_2o1ph")
+name = "Taunt"
+role = "taunt"
+source_clip = "Taunt"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsArabianHorse": "/rigs/animals_arabian_horse/body/Taunt.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/arabian-horse/taunt/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Arabian horse/Taunt.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_v8ql0")
+
+[sub_resource type="Resource" id="Resource_deoja"]
+script = ExtResource("2_x0f5v")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/arabian-horse/walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/arabian-horse/walk/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/arabian-horse/walk/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/arabian-horse/walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/arabian-horse/walk/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/arabian-horse/walk/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.9680282603349208
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_sdi64"]
+script = ExtResource("1_2o1ph")
+name = "Walk"
+role = "walk"
+source_clip = "Walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsArabianHorse": "/rigs/animals_arabian_horse/body/Walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/arabian-horse/walk/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Arabian horse/Walk.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_deoja")
+
+[sub_resource type="Resource" id="Resource_ex7xe"]
+script = ExtResource("3_jlfhm")
+role = "movement"
+qualifier = {
+"kind": "default"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+playback = "loop"
+
+[sub_resource type="Resource" id="Resource_oj0pp"]
+script = ExtResource("3_jlfhm")
+role = "movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_epawk"]
+script = ExtResource("3_jlfhm")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "direct_arc"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_bklli"]
+script = ExtResource("3_jlfhm")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "connector_transfer"
+}
+clip = "Walk"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_klhg8"]
+script = ExtResource("3_jlfhm")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "direct_arc"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_88cw6"]
+script = ExtResource("3_jlfhm")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "connector_transfer"
+}
+clip = "Walk"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_x7ix8"]
+script = ExtResource("3_jlfhm")
+role = "shove"
+qualifier = {
+"kind": "default"
+}
+clip = "Attack2"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 6.0,
+"name": "contact"
+}]
+
+[sub_resource type="Resource" id="Resource_5hjgn"]
+script = ExtResource("3_jlfhm")
+role = "forced_movement"
+qualifier = {
+"kind": "default"
+}
+clip = "TakeDamage"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 5.0,
+"name": "brace"
+}]
+
+[sub_resource type="Resource" id="Resource_1gcd2"]
+script = ExtResource("3_jlfhm")
+role = "forced_movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_56u78"]
+script = ExtResource("3_jlfhm")
+role = "body_action"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_6ymrb"]
+script = ExtResource("3_jlfhm")
+role = "body_action_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_7sf8l"]
+script = ExtResource("3_jlfhm")
+role = "equipment"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_h6uct"]
+script = ExtResource("3_jlfhm")
+role = "healing"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_hsqj3"]
+script = ExtResource("3_jlfhm")
+role = "save_avoidance"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_t1w7a"]
+script = ExtResource("3_jlfhm")
+role = "condition_entry"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_4owh5"]
+script = ExtResource("3_jlfhm")
+role = "condition_hold"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+hidden_slots = PackedStringArray()
+playback = "final_rest"
+rest_frame = 14
+
+[sub_resource type="Resource" id="Resource_aticp"]
+script = ExtResource("3_jlfhm")
+role = "condition_exit"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+reversed = true
+
+[sub_resource type="Resource" id="Resource_64kw6"]
+script = ExtResource("3_jlfhm")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "flying",
+"trajectory": "path"
+}
+clip = "Idle"
+hidden_slots = PackedStringArray()
+playback = "once"
+frame_keys = [[0.0, 0.0], [1.0, 0.0]]
+
+[sub_resource type="Resource" id="Resource_5e6r1"]
+script = ExtResource("3_jlfhm")
+role = "death"
+qualifier = {
+"kind": "default"
+}
+clip = "Die"
+hidden_slots = PackedStringArray()
+playback = "once"
+
+[resource]
+script = ExtResource("4_xdybt")
+id = "smallscale.animals.arabian-horse"
+pack = "animals"
+variant = "Arabian horse"
+source = "smallscale-authored/animals"
+cell = Vector2i(96, 96)
+pivot = Vector2(48, 66)
+anchor = Vector2(48, 51)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("AnimalsArabianHorse")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_2o1ph")]([SubResource("Resource_quy0n"), SubResource("Resource_s4ehi"), SubResource("Resource_afsvu"), SubResource("Resource_ewrht"), SubResource("Resource_1xoe3"), SubResource("Resource_ytgb8"), SubResource("Resource_8lapg"), SubResource("Resource_lala6"), SubResource("Resource_op2c2"), SubResource("Resource_sdi64")])
+fallbacks = Dictionary[String, String]({
+"Attack4": "Attack3",
+"Attack5": "Attack3",
+"Attack6": "Attack3",
+"AttackRun": "Attack1",
+"CrouchWalk": "Walk",
+"Death": "Die",
+"Idle4": "Idle2",
+"Kick": "Attack1",
+"Rolling": "Run",
+"Special1": "Attack3"
+})
+contexts = Array[ExtResource("3_jlfhm")]([SubResource("Resource_ex7xe"), SubResource("Resource_oj0pp"), SubResource("Resource_epawk"), SubResource("Resource_bklli"), SubResource("Resource_klhg8"), SubResource("Resource_88cw6"), SubResource("Resource_x7ix8"), SubResource("Resource_5hjgn"), SubResource("Resource_1gcd2"), SubResource("Resource_56u78"), SubResource("Resource_6ymrb"), SubResource("Resource_7sf8l"), SubResource("Resource_h6uct"), SubResource("Resource_hsqj3"), SubResource("Resource_t1w7a"), SubResource("Resource_4owh5"), SubResource("Resource_aticp"), SubResource("Resource_64kw6"), SubResource("Resource_5e6r1")])
+hold_clips = PackedStringArray("Die")
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed.
+Stand-in clips: Idle4 -> Idle2, Death -> Die, Rolling -> Run, CrouchWalk -> Walk, Attack4 -> Attack3, AttackRun -> Attack1, Kick -> Attack1, Special1 -> Attack3, Attack5 -> Attack3, Attack6 -> Attack3."

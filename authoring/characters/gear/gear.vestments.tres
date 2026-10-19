@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_2qnst"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_7bmya"]
+
+[sub_resource type="Resource" id="Resource_2l4k7"]
+script = ExtResource("1_2qnst")
+path = "art/media/ui/icons/smooth48/item.vestments.png"
+native_size = Vector2i(48, 48)
+reuses = "item.vestments"
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_7bmya")
+id = "gear.vestments"
+kind = "item"
+icon = SubResource("Resource_2l4k7")
+status = "partial"
+notes = "No worn look authored.
+Icon: Recovered matching base-item icon."

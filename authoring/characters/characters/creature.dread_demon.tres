@@ -1,0 +1,96 @@
+[gd_resource type="Resource" script_class="PresentationCharacter" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/character.gd" id="1_gm8ty"]
+
+[resource]
+script = ExtResource("1_gm8ty")
+id = "creature.dread_demon"
+identity = "content.neurodragon:creature:creature.dread_demon@1"
+rig = "smallscale.demonbeast03"
+portrait = "creature.dread_demon"
+size = "Small"
+attacks = Array[Dictionary]([{
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+&"items": ["weapon.creature.dretch_bite"],
+"recipe": "action.attack",
+"variant": "fixed-dretch_bite-attack2-6-11"
+}, {
+"clip": "Attack3",
+"contact": 6,
+"delivery": "melee",
+&"items": ["weapon.creature.dretch_claws"],
+"recipe": "action.attack",
+"variant": "fixed-dretch_claws-attack3-6-11"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.attack",
+"variant": "fixed-unarmed-attack2-6-11"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+&"items": ["weapon.creature.dretch_bite"],
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "fixed-dretch_bite-attack2-6-11"
+}, {
+"clip": "Attack3",
+"contact": 6,
+"delivery": "melee",
+&"items": ["weapon.creature.dretch_claws"],
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "fixed-dretch_claws-attack3-6-11"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "fixed-unarmed-attack2-6-11"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+&"items": ["weapon.creature.dretch_bite"],
+"recipe": "action.feature.extra_attack",
+"variant": "fixed-dretch_bite-attack2-6-11"
+}, {
+"clip": "Attack3",
+"contact": 6,
+"delivery": "melee",
+&"items": ["weapon.creature.dretch_claws"],
+"recipe": "action.feature.extra_attack",
+"variant": "fixed-dretch_claws-attack3-6-11"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.feature.extra_attack",
+"variant": "fixed-unarmed-attack2-6-11"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+&"items": ["weapon.creature.dretch_bite"],
+"recipe": "reaction.opportunity_attack",
+"variant": "fixed-dretch_bite-attack2-6-11"
+}, {
+"clip": "Attack3",
+"contact": 6,
+"delivery": "melee",
+&"items": ["weapon.creature.dretch_claws"],
+"recipe": "reaction.opportunity_attack",
+"variant": "fixed-dretch_claws-attack3-6-11"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+"recipe": "reaction.opportunity_attack",
+"variant": "fixed-unarmed-attack2-6-11"
+}])
+death = Dictionary[String, String]({
+"default": "Death"
+})
+notes = "Roster: Dread Demon, Y128, kit Dretch kit + dread blood stain (WIS save/frightened)."

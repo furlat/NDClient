@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PresentationCharacter" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/character.gd" id="1_ut4w5"]
+
+[resource]
+script = ExtResource("1_ut4w5")
+id = "creature.ogre_zombie"
+rig = "smallscale.zombies-hd.zombiehulk1"
+portrait = "hdz--zombiehulk1"
+size = "Large"
+death = Dictionary[String, String]({
+"default": "Death"
+})
+status = "stand_in"
+notes = "No art of its own: stands in with a hulk zombie (rig smallscale.zombies-hd.zombiehulk1).
+Portrait stand-in: hdz--zombiehulk1 (no portrait of its own)."

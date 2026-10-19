@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="PresentationCharacter" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/character.gd" id="1_b1wn1"]
+
+[resource]
+script = ExtResource("1_b1wn1")
+id = "creature.spell.draconic_spirit"
+rig = "smallscale.dinosaurs.elite-armored-t-rex"
+portrait = "srd22.portrait.draconic_spirit"
+size = "Large"
+death = Dictionary[String, String]({
+"default": "Die"
+})
+status = "stand_in"
+notes = "No art of its own: stands in with an armoured dinosaur (rig smallscale.dinosaurs.elite-armored-t-rex)."

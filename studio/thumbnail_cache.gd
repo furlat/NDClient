@@ -201,7 +201,7 @@ func request(row: Dictionary,sample_ms: float,quarter: int,prepare_views: bool=t
     if row.kind=="sprite_layer":
         var layer: Dictionary=component.layer
         var sheet: String=layer.get("sourceSheet",rig.clips[clip_name].sheets.get(layer.category,""))
-        var path: String=Catalog.read_file("catalog/resources.json",cache).get(sheet,"")
+        var path: String=Characters.BodySources.index(cache).sheets.get(sheet,{}).get("default","")
         if path.is_empty():errors[key]="Unresolved layer source: "+layer.category+"/"+clip_name;return key
         layers=[{"slot":layer.slot,"category":layer.category,"tint":0xffffff,"alpha":1.0,"effect":layer,"paths":{clip_name:path}}]
     if row.kind=="part":layers=layers.filter(func(layer):return layer.slot==row.slot)

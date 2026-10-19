@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_6c28i"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_4yshx"]
+
+[sub_resource type="Resource" id="Resource_67wit"]
+script = ExtResource("1_6c28i")
+path = "art/media/ui/icons/smooth48/item.weapon-coat.png"
+native_size = Vector2i(48, 48)
+reuses = "item.weapon-coat"
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_4yshx")
+id = "consumable.weapon_coat.assassin_poison"
+kind = "usable"
+icon = SubResource("Resource_67wit")
+status = "partial"
+notes = "No worn look authored."

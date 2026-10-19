@@ -88,7 +88,7 @@ func _bank(bank: Container, buttons: Dictionary, ids: Array, state: Dictionary, 
             bank.add_child(button); buttons[id]=button
         var actor: Dictionary=state.actors[id]
         var sheet=UI.sheet(state,id)
-        buttons[id].bind(actor,sheet,UI.texture(UI.portrait_key(actor,sheet,state),cache,true),id==state.current_actor_uuid,id==selected,id in controlled)
+        buttons[id].bind(actor,sheet,UI.texture(UI.portrait_key(actor,sheet,state,cache),cache,true),id==state.current_actor_uuid,id==selected,id in controlled)
         bank.move_child(buttons[id],index)
 
 func layout_in(viewport_size: Vector2, bar_y: float, log_rect: Rect2, targeting_rect: Rect2 = Rect2()) -> void:

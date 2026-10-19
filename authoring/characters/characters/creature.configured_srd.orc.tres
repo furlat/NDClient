@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="PresentationCharacter" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/character.gd" id="1_uol7f"]
+
+[resource]
+script = ExtResource("1_uol7f")
+id = "creature.configured_srd.orc"
+rig = "smallscale.orc01"
+portrait = "creature.orc"
+size = "Medium"
+death = Dictionary[String, String]({
+"default": "Die"
+})

@@ -1,0 +1,723 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_h563i"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_04tox"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_05nac"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_bv38k"]
+
+[sub_resource type="Resource" id="Resource_k8n0d"]
+script = ExtResource("2_04tox")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/3footsoldier/attack1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/3footsoldier/attack1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/3footsoldier/attack1/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/3footsoldier/attack1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/3footsoldier/attack1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/3footsoldier/attack1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.9445417920953708
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_ceepd"]
+script = ExtResource("1_h563i")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Attack1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies3Footsoldier": "/rigs/enemies_3footsoldier/body/Attack1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/3footsoldier/attack1/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/3Footsoldier/Attack1.png",
+"mask_material": "art/media/smallscale/authored/enemies/Material masks/With shadow/3Footsoldier/Attack1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_k8n0d")
+
+[sub_resource type="Resource" id="Resource_me8ux"]
+script = ExtResource("2_04tox")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/3footsoldier/attack2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/3footsoldier/attack2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/3footsoldier/attack2/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/3footsoldier/attack2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/3footsoldier/attack2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/3footsoldier/attack2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.9406021399103004
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_2fdvs"]
+script = ExtResource("1_h563i")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Attack2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies3Footsoldier": "/rigs/enemies_3footsoldier/body/Attack2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/3footsoldier/attack2/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/3Footsoldier/Attack2.png",
+"mask_material": "art/media/smallscale/authored/enemies/Material masks/With shadow/3Footsoldier/Attack2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_me8ux")
+
+[sub_resource type="Resource" id="Resource_ndc31"]
+script = ExtResource("2_04tox")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/3footsoldier/attack3/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/3footsoldier/attack3/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/3footsoldier/attack3/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/3footsoldier/attack3/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/3footsoldier/attack3/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/3footsoldier/attack3/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.949905628955257
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_hb2ig"]
+script = ExtResource("1_h563i")
+name = "Attack3"
+role = "attack_3"
+source_clip = "Attack3"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies3Footsoldier": "/rigs/enemies_3footsoldier/body/Attack3.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/3footsoldier/attack3/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/3Footsoldier/Attack3.png",
+"mask_material": "art/media/smallscale/authored/enemies/Material masks/With shadow/3Footsoldier/Attack3.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_ndc31")
+
+[sub_resource type="Resource" id="Resource_srdjq"]
+script = ExtResource("2_04tox")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/3footsoldier/attack4/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/3footsoldier/attack4/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/3footsoldier/attack4/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/3footsoldier/attack4/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/3footsoldier/attack4/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/3footsoldier/attack4/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.943903458987992
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_0dstd"]
+script = ExtResource("1_h563i")
+name = "Attack4"
+role = "attack_4"
+source_clip = "Attack4"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies3Footsoldier": "/rigs/enemies_3footsoldier/body/Attack4.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/3footsoldier/attack4/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/3Footsoldier/Attack4.png",
+"mask_material": "art/media/smallscale/authored/enemies/Material masks/With shadow/3Footsoldier/Attack4.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_srdjq")
+
+[sub_resource type="Resource" id="Resource_iyn8c"]
+script = ExtResource("2_04tox")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/3footsoldier/die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/3footsoldier/die/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/3footsoldier/die/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/3footsoldier/die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/3footsoldier/die/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/3footsoldier/die/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.9441164612371846
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_4jcqw"]
+script = ExtResource("1_h563i")
+name = "Die"
+role = "die"
+source_clip = "Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies3Footsoldier": "/rigs/enemies_3footsoldier/body/Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/3footsoldier/die/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/3Footsoldier/Die.png",
+"mask_material": "art/media/smallscale/authored/enemies/Material masks/With shadow/3Footsoldier/Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_iyn8c")
+
+[sub_resource type="Resource" id="Resource_juiwr"]
+script = ExtResource("2_04tox")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/3footsoldier/idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/3footsoldier/idle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/3footsoldier/idle/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/3footsoldier/idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/3footsoldier/idle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/3footsoldier/idle/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.9440590544115236
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_ai2gx"]
+script = ExtResource("1_h563i")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies3Footsoldier": "/rigs/enemies_3footsoldier/body/Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/3footsoldier/idle/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/3Footsoldier/Idle.png",
+"mask_material": "art/media/smallscale/authored/enemies/Material masks/With shadow/3Footsoldier/Idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_juiwr")
+
+[sub_resource type="Resource" id="Resource_rmo7q"]
+script = ExtResource("2_04tox")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/3footsoldier/idle2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/3footsoldier/idle2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/3footsoldier/idle2/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/3footsoldier/idle2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/3footsoldier/idle2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/3footsoldier/idle2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.938922468472502
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_djx8l"]
+script = ExtResource("1_h563i")
+name = "Idle2"
+role = "idle_alt"
+source_clip = "Idle2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies3Footsoldier": "/rigs/enemies_3footsoldier/body/Idle2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/3footsoldier/idle2/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/3Footsoldier/Idle2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_rmo7q")
+
+[sub_resource type="Resource" id="Resource_y8dl8"]
+script = ExtResource("2_04tox")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/3footsoldier/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/3footsoldier/run/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/3footsoldier/run/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/3footsoldier/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/3footsoldier/run/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/3footsoldier/run/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.9419408048302262
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_fmlq0"]
+script = ExtResource("1_h563i")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies3Footsoldier": "/rigs/enemies_3footsoldier/body/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/3footsoldier/run/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/3Footsoldier/Run.png",
+"mask_material": "art/media/smallscale/authored/enemies/Material masks/With shadow/3Footsoldier/Run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_y8dl8")
+
+[sub_resource type="Resource" id="Resource_86pv1"]
+script = ExtResource("2_04tox")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/3footsoldier/takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/3footsoldier/takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/3footsoldier/takedamage/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/3footsoldier/takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/3footsoldier/takedamage/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/3footsoldier/takedamage/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.939073525810832
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_3f4li"]
+script = ExtResource("1_h563i")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies3Footsoldier": "/rigs/enemies_3footsoldier/body/TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/3footsoldier/takedamage/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/3Footsoldier/TakeDamage.png",
+"mask_material": "art/media/smallscale/authored/enemies/Material masks/With shadow/3Footsoldier/TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_86pv1")
+
+[sub_resource type="Resource" id="Resource_ikopl"]
+script = ExtResource("2_04tox")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/3footsoldier/taunt/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/3footsoldier/taunt/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/3footsoldier/taunt/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/3footsoldier/taunt/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/3footsoldier/taunt/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/3footsoldier/taunt/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.9397854942551136
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_rl56n"]
+script = ExtResource("1_h563i")
+name = "Taunt"
+role = "taunt"
+source_clip = "Taunt"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies3Footsoldier": "/rigs/enemies_3footsoldier/body/Taunt.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/3footsoldier/taunt/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/3Footsoldier/Taunt.png",
+"mask_material": "art/media/smallscale/authored/enemies/Material masks/With shadow/3Footsoldier/Taunt.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_ikopl")
+
+[sub_resource type="Resource" id="Resource_pebb5"]
+script = ExtResource("2_04tox")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/3footsoldier/walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/3footsoldier/walk/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/3footsoldier/walk/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/3footsoldier/walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/3footsoldier/walk/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/3footsoldier/walk/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -7.071067811865475
+coverage = 0.932819501978841
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_p1dt3"]
+script = ExtResource("1_h563i")
+name = "Walk"
+role = "walk"
+source_clip = "Walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies3Footsoldier": "/rigs/enemies_3footsoldier/body/Walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/3footsoldier/walk/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/3Footsoldier/Walk.png",
+"mask_material": "art/media/smallscale/authored/enemies/Material masks/With shadow/3Footsoldier/Walk.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_pebb5")
+
+[sub_resource type="Resource" id="Resource_366hw"]
+script = ExtResource("3_05nac")
+role = "movement"
+qualifier = {
+"kind": "default"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+playback = "loop"
+
+[sub_resource type="Resource" id="Resource_5qgob"]
+script = ExtResource("3_05nac")
+role = "movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_6w5lg"]
+script = ExtResource("3_05nac")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "direct_arc"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_afntj"]
+script = ExtResource("3_05nac")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "connector_transfer"
+}
+clip = "Walk"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_ojf7y"]
+script = ExtResource("3_05nac")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "direct_arc"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_lwnjx"]
+script = ExtResource("3_05nac")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "connector_transfer"
+}
+clip = "Walk"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_yhu3g"]
+script = ExtResource("3_05nac")
+role = "shove"
+qualifier = {
+"kind": "default"
+}
+clip = "Attack2"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 6.0,
+"name": "contact"
+}]
+
+[sub_resource type="Resource" id="Resource_fxf72"]
+script = ExtResource("3_05nac")
+role = "forced_movement"
+qualifier = {
+"kind": "default"
+}
+clip = "TakeDamage"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 5.0,
+"name": "brace"
+}]
+
+[sub_resource type="Resource" id="Resource_tw14w"]
+script = ExtResource("3_05nac")
+role = "forced_movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_10ge5"]
+script = ExtResource("3_05nac")
+role = "body_action"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_0hlgi"]
+script = ExtResource("3_05nac")
+role = "body_action_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_1lfes"]
+script = ExtResource("3_05nac")
+role = "equipment"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_wng4t"]
+script = ExtResource("3_05nac")
+role = "healing"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_fbkho"]
+script = ExtResource("3_05nac")
+role = "save_avoidance"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_kxfcq"]
+script = ExtResource("3_05nac")
+role = "condition_entry"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_ew6j5"]
+script = ExtResource("3_05nac")
+role = "condition_hold"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+hidden_slots = PackedStringArray()
+playback = "final_rest"
+rest_frame = 14
+
+[sub_resource type="Resource" id="Resource_mvpjv"]
+script = ExtResource("3_05nac")
+role = "condition_exit"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+reversed = true
+
+[sub_resource type="Resource" id="Resource_py4dd"]
+script = ExtResource("3_05nac")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "flying",
+"trajectory": "path"
+}
+clip = "Idle"
+hidden_slots = PackedStringArray()
+playback = "once"
+frame_keys = [[0.0, 0.0], [1.0, 0.0]]
+
+[sub_resource type="Resource" id="Resource_ib4jd"]
+script = ExtResource("3_05nac")
+role = "death"
+qualifier = {
+"kind": "default"
+}
+clip = "Die"
+hidden_slots = PackedStringArray()
+playback = "once"
+
+[resource]
+script = ExtResource("4_bv38k")
+id = "smallscale.enemies.3footsoldier"
+pack = "enemies"
+variant = "3Footsoldier"
+source = "smallscale-authored/enemies"
+pivot = Vector2(64, 101)
+anchor = Vector2(64, 71)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("Enemies3Footsoldier")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_h563i")]([SubResource("Resource_ceepd"), SubResource("Resource_2fdvs"), SubResource("Resource_hb2ig"), SubResource("Resource_0dstd"), SubResource("Resource_4jcqw"), SubResource("Resource_ai2gx"), SubResource("Resource_djx8l"), SubResource("Resource_fmlq0"), SubResource("Resource_3f4li"), SubResource("Resource_rl56n"), SubResource("Resource_p1dt3")])
+fallbacks = Dictionary[String, String]({
+"Attack5": "Attack4",
+"Attack6": "Attack4",
+"AttackRun": "Attack1",
+"CrouchWalk": "Walk",
+"Death": "Die",
+"Idle4": "Idle2",
+"Kick": "Attack1",
+"Rolling": "Run",
+"Special1": "Attack4"
+})
+contexts = Array[ExtResource("3_05nac")]([SubResource("Resource_366hw"), SubResource("Resource_5qgob"), SubResource("Resource_6w5lg"), SubResource("Resource_afntj"), SubResource("Resource_ojf7y"), SubResource("Resource_lwnjx"), SubResource("Resource_yhu3g"), SubResource("Resource_fxf72"), SubResource("Resource_tw14w"), SubResource("Resource_10ge5"), SubResource("Resource_0hlgi"), SubResource("Resource_1lfes"), SubResource("Resource_wng4t"), SubResource("Resource_fbkho"), SubResource("Resource_kxfcq"), SubResource("Resource_ew6j5"), SubResource("Resource_mvpjv"), SubResource("Resource_py4dd"), SubResource("Resource_ib4jd")])
+hold_clips = PackedStringArray("Die")
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed.
+Stand-in clips: Idle4 -> Idle2, Death -> Die, Rolling -> Run, CrouchWalk -> Walk, AttackRun -> Attack1, Kick -> Attack1, Special1 -> Attack4, Attack5 -> Attack4, Attack6 -> Attack4."

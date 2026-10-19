@@ -1,0 +1,870 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_jpl41"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_m1wv4"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_61y05"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_cn1nd"]
+
+[sub_resource type="Resource" id="Resource_sr2ug"]
+script = ExtResource("2_m1wv4")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/attack1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/attack1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/attack1/normals.png",
+"reference": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/attack1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/attack1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/attack1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.9362160609107888
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_ojq7t"]
+script = ExtResource("1_jpl41")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Attack1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"ZombiesHdZombiesoldier2": "/rigs/zombies_hd_zombiesoldier2/body/Attack1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/attack1/colour.png",
+"combined": "art/media/smallscale/authored/zombies-hd/With shadow/ZombieSoldier2/Attack1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_sr2ug")
+
+[sub_resource type="Resource" id="Resource_ud0ox"]
+script = ExtResource("2_m1wv4")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/attack2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/attack2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/attack2/normals.png",
+"reference": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/attack2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/attack2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/attack2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.9448063580990848
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_11ayy"]
+script = ExtResource("1_jpl41")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Attack2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"ZombiesHdZombiesoldier2": "/rigs/zombies_hd_zombiesoldier2/body/Attack2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/attack2/colour.png",
+"combined": "art/media/smallscale/authored/zombies-hd/With shadow/ZombieSoldier2/Attack2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_ud0ox")
+
+[sub_resource type="Resource" id="Resource_y1uau"]
+script = ExtResource("2_m1wv4")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/attack3/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/attack3/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/attack3/normals.png",
+"reference": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/attack3/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/attack3/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/attack3/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.9393670272888746
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_4qo6g"]
+script = ExtResource("1_jpl41")
+name = "Attack3"
+role = "attack_3"
+source_clip = "Attack3"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"ZombiesHdZombiesoldier2": "/rigs/zombies_hd_zombiesoldier2/body/Attack3.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/attack3/colour.png",
+"combined": "art/media/smallscale/authored/zombies-hd/With shadow/ZombieSoldier2/Attack3.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_y1uau")
+
+[sub_resource type="Resource" id="Resource_fosmg"]
+script = ExtResource("2_m1wv4")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/attack4/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/attack4/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/attack4/normals.png",
+"reference": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/attack4/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/attack4/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/attack4/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.9405123400956196
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_3hvyu"]
+script = ExtResource("1_jpl41")
+name = "Attack4"
+role = "attack_4"
+source_clip = "Attack4"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"ZombiesHdZombiesoldier2": "/rigs/zombies_hd_zombiesoldier2/body/Attack4.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/attack4/colour.png",
+"combined": "art/media/smallscale/authored/zombies-hd/With shadow/ZombieSoldier2/Attack4.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_fosmg")
+
+[sub_resource type="Resource" id="Resource_45s3h"]
+script = ExtResource("2_m1wv4")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/attack5/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/attack5/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/attack5/normals.png",
+"reference": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/attack5/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/attack5/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/attack5/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.9659435836313072
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_nm1ux"]
+script = ExtResource("1_jpl41")
+name = "Attack5"
+role = "attack_5"
+source_clip = "Attack5"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"ZombiesHdZombiesoldier2": "/rigs/zombies_hd_zombiesoldier2/body/Attack5.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/attack5/colour.png",
+"combined": "art/media/smallscale/authored/zombies-hd/With shadow/ZombieSoldier2/Attack5.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_45s3h")
+
+[sub_resource type="Resource" id="Resource_6mfwx"]
+script = ExtResource("2_m1wv4")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/crouchrun/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/crouchrun/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/crouchrun/normals.png",
+"reference": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/crouchrun/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/crouchrun/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/crouchrun/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.9528025246460188
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_4aceq"]
+script = ExtResource("1_jpl41")
+name = "CrouchWalk"
+role = "crouch_move"
+source_clip = "CrouchRun"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"ZombiesHdZombiesoldier2": "/rigs/zombies_hd_zombiesoldier2/body/CrouchRun.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/crouchrun/colour.png",
+"combined": "art/media/smallscale/authored/zombies-hd/With shadow/ZombieSoldier2/CrouchRun.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_6mfwx")
+
+[sub_resource type="Resource" id="Resource_4dstl"]
+script = ExtResource("2_m1wv4")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/die/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/die/normals.png",
+"reference": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/die/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/die/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.7244153414405987
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_3to1l"]
+script = ExtResource("1_jpl41")
+name = "Die"
+role = "die"
+source_clip = "Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"ZombiesHdZombiesoldier2": "/rigs/zombies_hd_zombiesoldier2/body/Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/die/colour.png",
+"combined": "art/media/smallscale/authored/zombies-hd/With shadow/ZombieSoldier2/Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_4dstl")
+
+[sub_resource type="Resource" id="Resource_dxaqr"]
+script = ExtResource("2_m1wv4")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/die2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/die2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/die2/normals.png",
+"reference": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/die2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/die2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/die2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.9493326780421129
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_yx4ol"]
+script = ExtResource("1_jpl41")
+name = "Death"
+role = "die_alt"
+source_clip = "Die2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"ZombiesHdZombiesoldier2": "/rigs/zombies_hd_zombiesoldier2/body/Die2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/die2/colour.png",
+"combined": "art/media/smallscale/authored/zombies-hd/With shadow/ZombieSoldier2/Die2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_dxaqr")
+
+[sub_resource type="Resource" id="Resource_75k0c"]
+script = ExtResource("2_m1wv4")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/idle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/idle/normals.png",
+"reference": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/idle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/idle/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.9351666063616328
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_mdkms"]
+script = ExtResource("1_jpl41")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"ZombiesHdZombiesoldier2": "/rigs/zombies_hd_zombiesoldier2/body/Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/idle/colour.png",
+"combined": "art/media/smallscale/authored/zombies-hd/With shadow/ZombieSoldier2/Idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_75k0c")
+
+[sub_resource type="Resource" id="Resource_jn4qe"]
+script = ExtResource("2_m1wv4")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/idle2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/idle2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/idle2/normals.png",
+"reference": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/idle2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/idle2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/idle2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.9537953795379538
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_4xet5"]
+script = ExtResource("1_jpl41")
+name = "Idle2"
+role = "idle_alt"
+source_clip = "Idle2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"ZombiesHdZombiesoldier2": "/rigs/zombies_hd_zombiesoldier2/body/Idle2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/idle2/colour.png",
+"combined": "art/media/smallscale/authored/zombies-hd/With shadow/ZombieSoldier2/Idle2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_jn4qe")
+
+[sub_resource type="Resource" id="Resource_o8d60"]
+script = ExtResource("2_m1wv4")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/run/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/run/normals.png",
+"reference": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/run/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/run/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.949635775966038
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_rpwa5"]
+script = ExtResource("1_jpl41")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"ZombiesHdZombiesoldier2": "/rigs/zombies_hd_zombiesoldier2/body/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/run/colour.png",
+"combined": "art/media/smallscale/authored/zombies-hd/With shadow/ZombieSoldier2/Run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_o8d60")
+
+[sub_resource type="Resource" id="Resource_jdpge"]
+script = ExtResource("2_m1wv4")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/takedamage/normals.png",
+"reference": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/takedamage/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/takedamage/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.9362640512052988
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_vc3i7"]
+script = ExtResource("1_jpl41")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"ZombiesHdZombiesoldier2": "/rigs/zombies_hd_zombiesoldier2/body/TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/takedamage/colour.png",
+"combined": "art/media/smallscale/authored/zombies-hd/With shadow/ZombieSoldier2/TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_jdpge")
+
+[sub_resource type="Resource" id="Resource_7wj26"]
+script = ExtResource("2_m1wv4")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/taunt/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/taunt/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/taunt/normals.png",
+"reference": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/taunt/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/taunt/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/taunt/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.9481617106145068
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_2t3vp"]
+script = ExtResource("1_jpl41")
+name = "Taunt"
+role = "taunt"
+source_clip = "Taunt"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"ZombiesHdZombiesoldier2": "/rigs/zombies_hd_zombiesoldier2/body/Taunt.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/taunt/colour.png",
+"combined": "art/media/smallscale/authored/zombies-hd/With shadow/ZombieSoldier2/Taunt.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_7wj26")
+
+[sub_resource type="Resource" id="Resource_lw4c4"]
+script = ExtResource("2_m1wv4")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/wakeup/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/wakeup/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/wakeup/normals.png",
+"reference": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/wakeup/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/wakeup/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/wakeup/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.9548341129456956
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_2cdib"]
+script = ExtResource("1_jpl41")
+name = "WakeUp"
+role = "wake_up"
+source_clip = "WakeUp"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"ZombiesHdZombiesoldier2": "/rigs/zombies_hd_zombiesoldier2/body/WakeUp.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/wakeup/colour.png",
+"combined": "art/media/smallscale/authored/zombies-hd/With shadow/ZombieSoldier2/WakeUp.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_lw4c4")
+
+[sub_resource type="Resource" id="Resource_nnog0"]
+script = ExtResource("2_m1wv4")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/walk/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/walk/normals.png",
+"reference": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/walk/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/walk/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 8.48528137423857
+coverage = 0.9413984326066698
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_5ur7t"]
+script = ExtResource("1_jpl41")
+name = "Walk"
+role = "walk"
+source_clip = "Walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"ZombiesHdZombiesoldier2": "/rigs/zombies_hd_zombiesoldier2/body/Walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/zombies-hd/zombiesoldier2/walk/colour.png",
+"combined": "art/media/smallscale/authored/zombies-hd/With shadow/ZombieSoldier2/Walk.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_nnog0")
+
+[sub_resource type="Resource" id="Resource_57rgq"]
+script = ExtResource("3_61y05")
+role = "movement"
+qualifier = {
+"kind": "default"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+playback = "loop"
+
+[sub_resource type="Resource" id="Resource_44s0o"]
+script = ExtResource("3_61y05")
+role = "movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_vt1mx"]
+script = ExtResource("3_61y05")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "direct_arc"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_uc1sq"]
+script = ExtResource("3_61y05")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "connector_transfer"
+}
+clip = "CrouchWalk"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_3acvx"]
+script = ExtResource("3_61y05")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "direct_arc"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_6hraa"]
+script = ExtResource("3_61y05")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "connector_transfer"
+}
+clip = "CrouchWalk"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_2islp"]
+script = ExtResource("3_61y05")
+role = "shove"
+qualifier = {
+"kind": "default"
+}
+clip = "Attack2"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 6.0,
+"name": "contact"
+}]
+
+[sub_resource type="Resource" id="Resource_rho6h"]
+script = ExtResource("3_61y05")
+role = "forced_movement"
+qualifier = {
+"kind": "default"
+}
+clip = "TakeDamage"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 5.0,
+"name": "brace"
+}]
+
+[sub_resource type="Resource" id="Resource_8k0l8"]
+script = ExtResource("3_61y05")
+role = "forced_movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_xwkaa"]
+script = ExtResource("3_61y05")
+role = "body_action"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_ftxnc"]
+script = ExtResource("3_61y05")
+role = "body_action_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_3uxw5"]
+script = ExtResource("3_61y05")
+role = "equipment"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_2p5r8"]
+script = ExtResource("3_61y05")
+role = "healing"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_bwh7a"]
+script = ExtResource("3_61y05")
+role = "save_avoidance"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_2q2fc"]
+script = ExtResource("3_61y05")
+role = "condition_entry"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_qm38c"]
+script = ExtResource("3_61y05")
+role = "condition_hold"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+hidden_slots = PackedStringArray()
+playback = "final_rest"
+rest_frame = 14
+
+[sub_resource type="Resource" id="Resource_5c5rj"]
+script = ExtResource("3_61y05")
+role = "condition_exit"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+reversed = true
+
+[sub_resource type="Resource" id="Resource_qudii"]
+script = ExtResource("3_61y05")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "flying",
+"trajectory": "path"
+}
+clip = "Idle"
+hidden_slots = PackedStringArray()
+playback = "once"
+frame_keys = [[0.0, 0.0], [1.0, 0.0]]
+
+[sub_resource type="Resource" id="Resource_715yj"]
+script = ExtResource("3_61y05")
+role = "death"
+qualifier = {
+"kind": "default"
+}
+clip = "Death"
+hidden_slots = PackedStringArray()
+playback = "once"
+
+[resource]
+script = ExtResource("4_cn1nd")
+id = "smallscale.zombies-hd.zombiesoldier2"
+pack = "zombies-hd"
+variant = "ZombieSoldier2"
+source = "smallscale-authored/zombies-hd"
+pivot = Vector2(64, 90)
+anchor = Vector2(64, 67)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("ZombiesHdZombiesoldier2")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_jpl41")]([SubResource("Resource_ojq7t"), SubResource("Resource_11ayy"), SubResource("Resource_4qo6g"), SubResource("Resource_3hvyu"), SubResource("Resource_nm1ux"), SubResource("Resource_4aceq"), SubResource("Resource_3to1l"), SubResource("Resource_yx4ol"), SubResource("Resource_mdkms"), SubResource("Resource_4xet5"), SubResource("Resource_rpwa5"), SubResource("Resource_vc3i7"), SubResource("Resource_2t3vp"), SubResource("Resource_2cdib"), SubResource("Resource_5ur7t")])
+fallbacks = Dictionary[String, String]({
+"Attack6": "Attack5",
+"AttackRun": "Attack1",
+"Idle4": "Idle2",
+"Kick": "Attack1",
+"Rolling": "Run",
+"Special1": "Attack4"
+})
+contexts = Array[ExtResource("3_61y05")]([SubResource("Resource_57rgq"), SubResource("Resource_44s0o"), SubResource("Resource_vt1mx"), SubResource("Resource_uc1sq"), SubResource("Resource_3acvx"), SubResource("Resource_6hraa"), SubResource("Resource_2islp"), SubResource("Resource_rho6h"), SubResource("Resource_8k0l8"), SubResource("Resource_xwkaa"), SubResource("Resource_ftxnc"), SubResource("Resource_3uxw5"), SubResource("Resource_2p5r8"), SubResource("Resource_bwh7a"), SubResource("Resource_2q2fc"), SubResource("Resource_qm38c"), SubResource("Resource_5c5rj"), SubResource("Resource_qudii"), SubResource("Resource_715yj")])
+hold_clips = PackedStringArray("Die", "Death")
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed.
+Stand-in clips: Idle4 -> Idle2, Rolling -> Run, AttackRun -> Attack1, Kick -> Attack1, Special1 -> Attack4, Attack6 -> Attack5."

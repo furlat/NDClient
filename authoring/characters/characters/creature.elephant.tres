@@ -1,0 +1,67 @@
+[gd_resource type="Resource" script_class="PresentationCharacter" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/character.gd" id="1_v6ocs"]
+
+[resource]
+script = ExtResource("1_v6ocs")
+id = "creature.elephant"
+identity = "content.neurodragon:creature:creature.elephant@1"
+rig = "smallscale.elephant"
+portrait = "creature.elephant"
+size = "Huge"
+attacks = Array[Dictionary]([{
+"clip": "Attack1",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.attack",
+"variant": "fixed-unarmed-attack1-6-12"
+}, {
+"clip": "Attack1",
+"contact": 6,
+"delivery": "melee",
+&"items": ["weapon.creature.elephant_trunk"],
+"recipe": "action.attack",
+"variant": "elephant-elephant_trunk"
+}, {
+"clip": "Attack1",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "fixed-unarmed-attack1-6-12"
+}, {
+"clip": "Attack1",
+"contact": 6,
+"delivery": "melee",
+&"items": ["weapon.creature.elephant_trunk"],
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "elephant-elephant_trunk"
+}, {
+"clip": "Attack1",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.feature.extra_attack",
+"variant": "fixed-unarmed-attack1-6-12"
+}, {
+"clip": "Attack1",
+"contact": 6,
+"delivery": "melee",
+&"items": ["weapon.creature.elephant_trunk"],
+"recipe": "action.feature.extra_attack",
+"variant": "elephant-elephant_trunk"
+}, {
+"clip": "Attack1",
+"contact": 6,
+"delivery": "melee",
+"recipe": "reaction.opportunity_attack",
+"variant": "fixed-unarmed-attack1-6-12"
+}, {
+"clip": "Attack1",
+"contact": 6,
+"delivery": "melee",
+&"items": ["weapon.creature.elephant_trunk"],
+"recipe": "reaction.opportunity_attack",
+"variant": "elephant-elephant_trunk"
+}])
+death = Dictionary[String, String]({
+"default": "Die"
+})

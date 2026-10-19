@@ -1,0 +1,52 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_t3c1a"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_fop17"]
+
+[sub_resource type="Resource" id="Resource_s4o7o"]
+script = ExtResource("1_t3c1a")
+path = "art/media/ui/icons/smooth48/item.field-kit.png"
+native_size = Vector2i(48, 48)
+reuses = "item.field-kit"
+status = "stand_in"
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_fop17")
+id = "tool.crowbar"
+kind = "weapon"
+slots = Dictionary[String, Dictionary]({
+"weapon_melee_main": {
+"layers": [{
+"part": "Melee10",
+"slot": "weapon",
+"tint": "#8899aa"
+}],
+"variants": {}
+}
+})
+hands = Dictionary[String, Dictionary]({
+"weapon_melee_off": {
+"": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#8899aa"
+}]
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee10",
+"pivots_by_camera": [[55.0, 65.5], [66.5, 57.5], [75.0, 65.0], [64.0, 73.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#8899aa",
+"variant": ""
+}])
+icon = SubResource("Resource_s4o7o")
+notes = "Visual name Crowbar; Existing vendor silhouette approximation; does not promise exact wand length, crowbar hook, banner flag, firearm or canister geometry."

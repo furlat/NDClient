@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="PresentationCharacter" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/character.gd" id="1_4b1wa"]
+
+[resource]
+script = ExtResource("1_4b1wa")
+id = "creature.bastion_magus_devil"
+rig = "smallscale.demonspawn11"
+portrait = "demons--demon-spawn-11"
+size = "Medium"
+reactions = Dictionary[String, String]({
+"block": "Block"
+})
+death = Dictionary[String, String]({
+"default": "Death"
+})
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed.
+Stand-in clips: Idle2 -> Idle, Idle4 -> Idle, Kick -> Attack1, Special1 -> Attack4.
+Roster: Bastion Magus Devil, Y128 caster, kit Wand; Eldritch Blast (2 beams); Bless 3; Web 3; Shield 3."

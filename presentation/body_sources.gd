@@ -1,11 +1,11 @@
 extends RefCounted
-## Native body metadata admission. JSON joins and file inspection live in the
-## offline importer. A fresh catalog cache explicitly admits the current index.
+## Native body metadata admission. The presentation build
+## (tools/build_presentation.gd) writes the index and its layer and clip
+## Resources; a fresh catalog cache explicitly admits that index.
 const Index=preload("res://presentation/resources/body_source_index.gd")
 const Layer=preload("res://presentation/resources/body_source_layer.gd")
 const Clip=preload("res://presentation/resources/body_source_clip.gd")
-const INDEX="res://.derived/body-sources/index.res"
-const CURRENT="res://.derived/body-sources/current"
+const INDEX="res://build/presentation/characters/body-sources/index.res"
 const KEY="__body_source_admission"
 static var _current:Index
 static var _current_path:String=""
@@ -20,8 +20,8 @@ static func invalidate()->void:
 static func _current_index(path:String)->Index:
     _admission_mutex.lock()
     if not _attempted or path!=_current_path:
-        var selected:String=FileAccess.get_file_as_string(CURRENT).strip_edges() if path==INDEX else path
-        _current=ResourceLoader.load(selected,"",ResourceLoader.CACHE_MODE_REUSE) as Index
+        _current=ResourceLoader.load(path,"",ResourceLoader.CACHE_MODE_REUSE) as Index if FileAccess.file_exists(path) else null
+        if _current==null:push_error("No built characters body sources at "+path+": run tools/build_presentation.gd -- --only=characters")
         _current_path=path;_attempted=true
     var result:Index=_current
     _admission_mutex.unlock()
@@ -120,9 +120,12 @@ static func header(path:String,cache:Dictionary)->Dictionary:
     var resource:Layer=prepare_layer(owner[0],cache)
     return {} if resource==null else resource.headers.get(path,{})
 
+## Gear looks are keyed by the server item id's family (the item whose looks
+## it wears) and the visual variant the server sends.
 static func equipment(item:Dictionary,slot:String,cache:Dictionary)->Dictionary:
     var selected:Index=index(cache)
-    if selected==null:return {"ok":false,"error":{"kind":"authoring","message":"Body source index has not been imported"}}
-    var key:Array=[item.visual_item_name,item.visual_variant_id,slot]
+    if selected==null:return {"ok":false,"error":{"kind":"authoring","message":"Body source index has not been built"}}
+    var gear:Array=selected.gear.get(str(item.get("item_id","")),[])
+    var key:Array=["" if gear.is_empty() else gear[0],item.visual_variant_id,slot]
     if selected.equipment.has(key):return {"ok":true,"value":selected.equipment[key]}
-    return {"ok":false,"error":{"kind":"authoring","message":selected.equipment_errors.get(key,"No imported item visual: "+str(key))}}
+    return {"ok":false,"error":{"kind":"authoring","message":selected.equipment_errors.get(key,"No built item visual: "+str([item.get("item_id"),item.visual_variant_id,slot]))}}

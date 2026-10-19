@@ -1,0 +1,754 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_c16hn"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_23srx"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_8w8x4"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_7t3j3"]
+
+[sub_resource type="Resource" id="Resource_ortru"]
+script = ExtResource("2_23srx")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/13shepard/attack1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/13shepard/attack1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/13shepard/attack1/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/13shepard/attack1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/13shepard/attack1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/13shepard/attack1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 11.31370849898476
+coverage = 0.955013026079016
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_k26pw"]
+script = ExtResource("1_c16hn")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Attack1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies13Shepard": "/rigs/enemies_13shepard/body/Attack1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/13shepard/attack1/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/13Shepard/Attack1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_ortru")
+
+[sub_resource type="Resource" id="Resource_o7g0o"]
+script = ExtResource("2_23srx")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/13shepard/attack2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/13shepard/attack2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/13shepard/attack2/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/13shepard/attack2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/13shepard/attack2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/13shepard/attack2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 11.31370849898476
+coverage = 0.9331683864256192
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_1oygk"]
+script = ExtResource("1_c16hn")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Attack2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies13Shepard": "/rigs/enemies_13shepard/body/Attack2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/13shepard/attack2/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/13Shepard/Attack2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_o7g0o")
+
+[sub_resource type="Resource" id="Resource_p2vmf"]
+script = ExtResource("2_23srx")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/13shepard/attack3/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/13shepard/attack3/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/13shepard/attack3/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/13shepard/attack3/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/13shepard/attack3/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/13shepard/attack3/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 11.31370849898476
+coverage = 0.9510550694801851
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_8718a"]
+script = ExtResource("1_c16hn")
+name = "Attack3"
+role = "attack_3"
+source_clip = "Attack3"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies13Shepard": "/rigs/enemies_13shepard/body/Attack3.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/13shepard/attack3/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/13Shepard/Attack3.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_p2vmf")
+
+[sub_resource type="Resource" id="Resource_7eecu"]
+script = ExtResource("2_23srx")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/13shepard/attack4/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/13shepard/attack4/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/13shepard/attack4/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/13shepard/attack4/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/13shepard/attack4/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/13shepard/attack4/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 11.31370849898476
+coverage = 0.9548872180451128
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_6upfr"]
+script = ExtResource("1_c16hn")
+name = "Attack4"
+role = "attack_4"
+source_clip = "Attack4"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies13Shepard": "/rigs/enemies_13shepard/body/Attack4.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/13shepard/attack4/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/13Shepard/Attack4.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_7eecu")
+
+[sub_resource type="Resource" id="Resource_lrgq7"]
+script = ExtResource("2_23srx")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/13shepard/die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/13shepard/die/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/13shepard/die/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/13shepard/die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/13shepard/die/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/13shepard/die/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 11.31370849898476
+coverage = 0.943079114333808
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_w2nll"]
+script = ExtResource("1_c16hn")
+name = "Die"
+role = "die"
+source_clip = "Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies13Shepard": "/rigs/enemies_13shepard/body/Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/13shepard/die/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/13Shepard/Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_lrgq7")
+
+[sub_resource type="Resource" id="Resource_l1upu"]
+script = ExtResource("2_23srx")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/13shepard/howl/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/13shepard/howl/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/13shepard/howl/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/13shepard/howl/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/13shepard/howl/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/13shepard/howl/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 11.31370849898476
+coverage = 0.9425444596443228
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_h673e"]
+script = ExtResource("1_c16hn")
+name = "Howl"
+role = "howl"
+source_clip = "Howl"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies13Shepard": "/rigs/enemies_13shepard/body/Howl.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/13shepard/howl/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/13Shepard/Howl.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_l1upu")
+
+[sub_resource type="Resource" id="Resource_aeeee"]
+script = ExtResource("2_23srx")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/13shepard/idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/13shepard/idle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/13shepard/idle/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/13shepard/idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/13shepard/idle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/13shepard/idle/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 11.31370849898476
+coverage = 0.954165659170898
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_v77mr"]
+script = ExtResource("1_c16hn")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies13Shepard": "/rigs/enemies_13shepard/body/Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/13shepard/idle/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/13Shepard/Idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_aeeee")
+
+[sub_resource type="Resource" id="Resource_0k3ly"]
+script = ExtResource("2_23srx")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/13shepard/idle2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/13shepard/idle2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/13shepard/idle2/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/13shepard/idle2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/13shepard/idle2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/13shepard/idle2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 11.31370849898476
+coverage = 0.9591842547494944
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_p5aal"]
+script = ExtResource("1_c16hn")
+name = "Idle2"
+role = "idle_alt"
+source_clip = "Idle2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies13Shepard": "/rigs/enemies_13shepard/body/Idle2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/13shepard/idle2/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/13Shepard/Idle2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_0k3ly")
+
+[sub_resource type="Resource" id="Resource_hj3yv"]
+script = ExtResource("2_23srx")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/13shepard/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/13shepard/run/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/13shepard/run/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/13shepard/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/13shepard/run/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/13shepard/run/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 11.31370849898476
+coverage = 0.9545768658303212
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_f2b8x"]
+script = ExtResource("1_c16hn")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies13Shepard": "/rigs/enemies_13shepard/body/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/13shepard/run/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/13Shepard/Run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_hj3yv")
+
+[sub_resource type="Resource" id="Resource_5k6fq"]
+script = ExtResource("2_23srx")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/13shepard/sneak/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/13shepard/sneak/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/13shepard/sneak/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/13shepard/sneak/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/13shepard/sneak/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/13shepard/sneak/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 11.31370849898476
+coverage = 0.9520225776105362
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_a6myh"]
+script = ExtResource("1_c16hn")
+name = "Sneak"
+role = "sneak"
+source_clip = "Sneak"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies13Shepard": "/rigs/enemies_13shepard/body/Sneak.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/13shepard/sneak/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/13Shepard/Sneak.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_5k6fq")
+
+[sub_resource type="Resource" id="Resource_lkvwl"]
+script = ExtResource("2_23srx")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/13shepard/takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/13shepard/takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/13shepard/takedamage/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/13shepard/takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/13shepard/takedamage/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/13shepard/takedamage/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 11.31370849898476
+coverage = 0.9479514496210314
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_b46lq"]
+script = ExtResource("1_c16hn")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies13Shepard": "/rigs/enemies_13shepard/body/TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/13shepard/takedamage/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/13Shepard/TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_lkvwl")
+
+[sub_resource type="Resource" id="Resource_7sk2q"]
+script = ExtResource("2_23srx")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/enemies/13shepard/walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/enemies/13shepard/walk/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/enemies/13shepard/walk/normals.png",
+"reference": "art/geometry/creatures/library/actions/enemies/13shepard/walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/enemies/13shepard/walk/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/enemies/13shepard/walk/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 11.31370849898476
+coverage = 0.9534138460723556
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_uolcy"]
+script = ExtResource("1_c16hn")
+name = "Walk"
+role = "walk"
+source_clip = "Walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Enemies13Shepard": "/rigs/enemies_13shepard/body/Walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/enemies/13shepard/walk/colour.png",
+"combined": "art/media/smallscale/authored/enemies/With shadow/13Shepard/Walk.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_7sk2q")
+
+[sub_resource type="Resource" id="Resource_folpp"]
+script = ExtResource("3_8w8x4")
+role = "movement"
+qualifier = {
+"kind": "default"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+playback = "loop"
+
+[sub_resource type="Resource" id="Resource_vxx60"]
+script = ExtResource("3_8w8x4")
+role = "movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_66mc3"]
+script = ExtResource("3_8w8x4")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "direct_arc"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_fnhd8"]
+script = ExtResource("3_8w8x4")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "connector_transfer"
+}
+clip = "Walk"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_xdql3"]
+script = ExtResource("3_8w8x4")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "direct_arc"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_gvgwb"]
+script = ExtResource("3_8w8x4")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "connector_transfer"
+}
+clip = "Walk"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_t38uj"]
+script = ExtResource("3_8w8x4")
+role = "shove"
+qualifier = {
+"kind": "default"
+}
+clip = "Attack2"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 6.0,
+"name": "contact"
+}]
+
+[sub_resource type="Resource" id="Resource_5567d"]
+script = ExtResource("3_8w8x4")
+role = "forced_movement"
+qualifier = {
+"kind": "default"
+}
+clip = "TakeDamage"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 5.0,
+"name": "brace"
+}]
+
+[sub_resource type="Resource" id="Resource_8fb6h"]
+script = ExtResource("3_8w8x4")
+role = "forced_movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_hwgf6"]
+script = ExtResource("3_8w8x4")
+role = "body_action"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_7onqk"]
+script = ExtResource("3_8w8x4")
+role = "body_action_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_um61p"]
+script = ExtResource("3_8w8x4")
+role = "equipment"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_hxuor"]
+script = ExtResource("3_8w8x4")
+role = "healing"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_t7840"]
+script = ExtResource("3_8w8x4")
+role = "save_avoidance"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_mm2q0"]
+script = ExtResource("3_8w8x4")
+role = "condition_entry"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_21m05"]
+script = ExtResource("3_8w8x4")
+role = "condition_hold"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+hidden_slots = PackedStringArray()
+playback = "final_rest"
+rest_frame = 14
+
+[sub_resource type="Resource" id="Resource_5xhd5"]
+script = ExtResource("3_8w8x4")
+role = "condition_exit"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+reversed = true
+
+[sub_resource type="Resource" id="Resource_1sob5"]
+script = ExtResource("3_8w8x4")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "flying",
+"trajectory": "path"
+}
+clip = "Idle"
+hidden_slots = PackedStringArray()
+playback = "once"
+frame_keys = [[0.0, 0.0], [1.0, 0.0]]
+
+[sub_resource type="Resource" id="Resource_ycxax"]
+script = ExtResource("3_8w8x4")
+role = "death"
+qualifier = {
+"kind": "default"
+}
+clip = "Die"
+hidden_slots = PackedStringArray()
+playback = "once"
+
+[resource]
+script = ExtResource("4_7t3j3")
+id = "smallscale.enemies.13shepard"
+pack = "enemies"
+variant = "13Shepard"
+source = "smallscale-authored/enemies"
+pivot = Vector2(64, 88)
+anchor = Vector2(64, 74)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("Enemies13Shepard")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_c16hn")]([SubResource("Resource_k26pw"), SubResource("Resource_1oygk"), SubResource("Resource_8718a"), SubResource("Resource_6upfr"), SubResource("Resource_w2nll"), SubResource("Resource_h673e"), SubResource("Resource_v77mr"), SubResource("Resource_p5aal"), SubResource("Resource_f2b8x"), SubResource("Resource_a6myh"), SubResource("Resource_b46lq"), SubResource("Resource_uolcy")])
+fallbacks = Dictionary[String, String]({
+"Attack5": "Attack4",
+"Attack6": "Attack4",
+"AttackRun": "Attack1",
+"CrouchWalk": "Walk",
+"Death": "Die",
+"Idle4": "Idle2",
+"Kick": "Attack1",
+"Rolling": "Run",
+"Special1": "Attack4",
+"Taunt": "Idle2"
+})
+contexts = Array[ExtResource("3_8w8x4")]([SubResource("Resource_folpp"), SubResource("Resource_vxx60"), SubResource("Resource_66mc3"), SubResource("Resource_fnhd8"), SubResource("Resource_xdql3"), SubResource("Resource_gvgwb"), SubResource("Resource_t38uj"), SubResource("Resource_5567d"), SubResource("Resource_8fb6h"), SubResource("Resource_hwgf6"), SubResource("Resource_7onqk"), SubResource("Resource_um61p"), SubResource("Resource_hxuor"), SubResource("Resource_t7840"), SubResource("Resource_mm2q0"), SubResource("Resource_21m05"), SubResource("Resource_5xhd5"), SubResource("Resource_1sob5"), SubResource("Resource_ycxax")])
+hold_clips = PackedStringArray("Die")
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed.
+Stand-in clips: Idle4 -> Idle2, Death -> Die, Taunt -> Idle2, Rolling -> Run, CrouchWalk -> Walk, AttackRun -> Attack1, Kick -> Attack1, Special1 -> Attack4, Attack5 -> Attack4, Attack6 -> Attack4."

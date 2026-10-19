@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="PresentationCharacter" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/character.gd" id="1_0g6lg"]
+
+[resource]
+script = ExtResource("1_0g6lg")
+id = "creature.ogre"
+rig = "smallscale.barbarians.1ogre"
+portrait = "barbarian--1ogre"
+size = "Large"
+reactions = Dictionary[String, String]({
+"block": "Block"
+})
+death = Dictionary[String, String]({
+"default": "Die"
+})
+status = "stand_in"
+notes = "No art of its own: stands in with the barbarians pack's 1Ogre (rig smallscale.barbarians.1ogre).
+Portrait stand-in: barbarian--1ogre (no portrait of its own)."

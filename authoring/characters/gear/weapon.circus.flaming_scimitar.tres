@@ -1,0 +1,75 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_jqlrf"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_o0xwm"]
+
+[sub_resource type="Resource" id="Resource_yb5ca"]
+script = ExtResource("1_jqlrf")
+path = "art/media/ui/icons/smooth48/item.scimitar.png"
+native_size = Vector2i(48, 48)
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_o0xwm")
+id = "weapon.circus.flaming_scimitar"
+kind = "weapon"
+slots = Dictionary[String, Dictionary]({
+"weapon_melee_main": {
+"layers": [{
+"part": "Melee4",
+"slot": "weapon",
+"tint": "#ff6600"
+}],
+"variants": {}
+},
+"weapon_melee_off": {
+"layers": [{
+"part": "Offhand1",
+"slot": "offhand",
+"tint": "#8899aa"
+}],
+&"look": "Off-hand Scimitar",
+"variants": {
+"oh000007": [{
+"part": "Offhand1",
+"slot": "offhand",
+"tint": "#778899"
+}],
+"oh000008": [{
+"part": "Offhand1",
+"slot": "offhand",
+"tint": "#d8b808"
+}],
+"roster.6dc3343e03cc": [{
+"part": "Offhand1",
+"slot": "offhand",
+"tint": "#5b286d"
+}]
+}
+}
+})
+hands = Dictionary[String, Dictionary]({
+"weapon_melee_off": {
+"": [{
+"part": "Offhand1",
+"slot": "offhand",
+"tint": "#ff6600"
+}]
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee4",
+"pivots_by_camera": [[53.5, 65.5], [62.5, 54.5], [77.0, 60.0], [68.5, 71.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#ff6600",
+"variant": ""
+}])
+icon = SubResource("Resource_yb5ca")
+notes = "Visual name Flaming Scimitar; Scimitar with fiery aura"

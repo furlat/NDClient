@@ -1,0 +1,67 @@
+[gd_resource type="Resource" script_class="PresentationCharacter" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/character.gd" id="1_qokmr"]
+
+[resource]
+script = ExtResource("1_qokmr")
+id = "creature.rhinoceros"
+identity = "content.neurodragon:creature:creature.rhinoceros@1"
+rig = "smallscale.rhino"
+portrait = "creature.rhinoceros"
+size = "Large"
+attacks = Array[Dictionary]([{
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.attack",
+"variant": "fixed-unarmed-attack2-6-12"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+&"items": ["weapon.creature.rhinoceros_gore"],
+"recipe": "action.attack",
+"variant": "rhino-rhinoceros_gore"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "fixed-unarmed-attack2-6-12"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+&"items": ["weapon.creature.rhinoceros_gore"],
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "rhino-rhinoceros_gore"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.feature.extra_attack",
+"variant": "fixed-unarmed-attack2-6-12"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+&"items": ["weapon.creature.rhinoceros_gore"],
+"recipe": "action.feature.extra_attack",
+"variant": "rhino-rhinoceros_gore"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+"recipe": "reaction.opportunity_attack",
+"variant": "fixed-unarmed-attack2-6-12"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+&"items": ["weapon.creature.rhinoceros_gore"],
+"recipe": "reaction.opportunity_attack",
+"variant": "rhino-rhinoceros_gore"
+}])
+death = Dictionary[String, String]({
+"default": "Die"
+})

@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="PresentationCharacter" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/character.gd" id="1_8yb62"]
+
+[resource]
+script = ExtResource("1_8yb62")
+id = "creature.barbarian_cinderplate"
+rig = "smallscale.barbarians.2golem"
+portrait = "barbarian--2golem"
+size = "Medium"
+size_note = "192 px cells on a Medium creature."
+reactions = Dictionary[String, String]({
+"block": "Block"
+})
+death = Dictionary[String, String]({
+"default": "Die"
+})
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed.
+Stand-in clips: Idle4 -> Idle2, Death -> Die, Taunt -> Idle2, Attack4 -> Attack3, Kick -> Attack1, Attack5 -> CastSpell, Attack6 -> CastSpell.
+Roster: Cinderplate Executioner, Y192, kit Ember Greatsword (3); Brute; Brave; Parry+3; Burning Hands 1/day."

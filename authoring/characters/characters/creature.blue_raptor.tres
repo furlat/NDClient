@@ -1,0 +1,92 @@
+[gd_resource type="Resource" script_class="PresentationCharacter" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/character.gd" id="1_2q8xb"]
+
+[resource]
+script = ExtResource("1_2q8xb")
+id = "creature.blue_raptor"
+identity = "content.neurodragon:creature:creature.blue_raptor@1"
+rig = "smallscale.blueraptor"
+portrait = "creature.blue_raptor"
+size = "Large"
+attacks = Array[Dictionary]([{
+"clip": "Attack1",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.attack",
+"variant": "fixed-unarmed-attack1-6-11"
+}, {
+"clip": "Attack1",
+"contact": 6,
+"delivery": "melee",
+&"items": ["weapon.creature.blue_raptor_claws"],
+"recipe": "action.attack",
+"variant": "blueraptor-blue_raptor_claws"
+}, {
+"clip": "Attack2",
+"contact": 7,
+"delivery": "melee",
+&"items": ["weapon.creature.blue_raptor_bite"],
+"recipe": "action.attack",
+"variant": "blueraptor-blue_raptor_bite"
+}, {
+"clip": "Attack1",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "fixed-unarmed-attack1-6-11"
+}, {
+"clip": "Attack1",
+"contact": 6,
+"delivery": "melee",
+&"items": ["weapon.creature.blue_raptor_claws"],
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "blueraptor-blue_raptor_claws"
+}, {
+"clip": "Attack2",
+"contact": 7,
+"delivery": "melee",
+&"items": ["weapon.creature.blue_raptor_bite"],
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "blueraptor-blue_raptor_bite"
+}, {
+"clip": "Attack1",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.feature.extra_attack",
+"variant": "fixed-unarmed-attack1-6-11"
+}, {
+"clip": "Attack1",
+"contact": 6,
+"delivery": "melee",
+&"items": ["weapon.creature.blue_raptor_claws"],
+"recipe": "action.feature.extra_attack",
+"variant": "blueraptor-blue_raptor_claws"
+}, {
+"clip": "Attack2",
+"contact": 7,
+"delivery": "melee",
+&"items": ["weapon.creature.blue_raptor_bite"],
+"recipe": "action.feature.extra_attack",
+"variant": "blueraptor-blue_raptor_bite"
+}, {
+"clip": "Attack1",
+"contact": 6,
+"delivery": "melee",
+"recipe": "reaction.opportunity_attack",
+"variant": "fixed-unarmed-attack1-6-11"
+}, {
+"clip": "Attack1",
+"contact": 6,
+"delivery": "melee",
+&"items": ["weapon.creature.blue_raptor_claws"],
+"recipe": "reaction.opportunity_attack",
+"variant": "blueraptor-blue_raptor_claws"
+}, {
+"clip": "Attack2",
+"contact": 7,
+"delivery": "melee",
+&"items": ["weapon.creature.blue_raptor_bite"],
+"recipe": "reaction.opportunity_attack",
+"variant": "blueraptor-blue_raptor_bite"
+}])

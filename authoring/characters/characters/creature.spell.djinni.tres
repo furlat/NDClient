@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="PresentationCharacter" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/character.gd" id="1_s6nib"]
+
+[resource]
+script = ExtResource("1_s6nib")
+id = "creature.spell.djinni"
+rig = "smallscale.characters.6mage"
+portrait = "srd22.portrait.djinni"
+size = "Medium"
+reactions = Dictionary[String, String]({
+"block": "Block"
+})
+death = Dictionary[String, String]({
+"default": "Die"
+})
+status = "stand_in"
+notes = "No art of its own: stands in with the characters pack's 6Mage (rig smallscale.characters.6mage)."

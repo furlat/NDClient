@@ -1,0 +1,67 @@
+[gd_resource type="Resource" script_class="PresentationCharacter" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/character.gd" id="1_jiqn4"]
+
+[resource]
+script = ExtResource("1_jiqn4")
+id = "creature.bison"
+identity = "content.neurodragon:creature:creature.bison@1"
+rig = "smallscale.bison"
+portrait = "creature.bison"
+size = "Large"
+attacks = Array[Dictionary]([{
+"clip": "Attack3",
+"contact": 6,
+"delivery": "melee",
+&"items": ["weapon.creature.bison_ram"],
+"recipe": "action.attack",
+"variant": "bison-bison_ram"
+}, {
+"clip": "Attack3",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.attack",
+"variant": "bison-unarmed"
+}, {
+"clip": "Attack3",
+"contact": 6,
+"delivery": "melee",
+&"items": ["weapon.creature.bison_ram"],
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "bison-bison_ram"
+}, {
+"clip": "Attack3",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "bison-unarmed"
+}, {
+"clip": "Attack3",
+"contact": 6,
+"delivery": "melee",
+&"items": ["weapon.creature.bison_ram"],
+"recipe": "action.feature.extra_attack",
+"variant": "bison-bison_ram"
+}, {
+"clip": "Attack3",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.feature.extra_attack",
+"variant": "bison-unarmed"
+}, {
+"clip": "Attack3",
+"contact": 6,
+"delivery": "melee",
+&"items": ["weapon.creature.bison_ram"],
+"recipe": "reaction.opportunity_attack",
+"variant": "bison-bison_ram"
+}, {
+"clip": "Attack3",
+"contact": 6,
+"delivery": "melee",
+"recipe": "reaction.opportunity_attack",
+"variant": "bison-unarmed"
+}])
+death = Dictionary[String, String]({
+"default": "Die"
+})

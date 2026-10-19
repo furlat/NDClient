@@ -1,0 +1,43 @@
+[gd_resource type="Resource" script_class="PresentationCharacter" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/character.gd" id="1_6c86b"]
+
+[resource]
+script = ExtResource("1_6c86b")
+id = "creature.goblin_mossbreaker"
+identity = "content.neurodragon:creature:creature.goblin_mossbreaker@1"
+rig = "smallscale.goblin16"
+portrait = "creature.goblin_mossbreaker"
+size = "Small"
+attacks = Array[Dictionary]([{
+"clip": "Attack1",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.attack",
+"variant": "goblin16-physical"
+}, {
+"clip": "Attack1",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "goblin16-physical"
+}, {
+"clip": "Attack1",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.feature.extra_attack",
+"variant": "goblin16-physical"
+}, {
+"clip": "Attack1",
+"contact": 6,
+"delivery": "melee",
+"recipe": "reaction.opportunity_attack",
+"variant": "goblin16-physical"
+}])
+reactions = Dictionary[String, String]({
+"block": "Block"
+})
+death = Dictionary[String, String]({
+"default": "Death"
+})
+notes = "Roster: Mossbreaker, Y128, kit Shortsword+wooden shield; NE."

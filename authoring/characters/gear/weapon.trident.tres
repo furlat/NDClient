@@ -1,0 +1,120 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_8cmgl"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_rr6ta"]
+
+[sub_resource type="Resource" id="Resource_uysc8"]
+script = ExtResource("1_8cmgl")
+path = "art/media/ui/icons/smooth48/item.trident.png"
+native_size = Vector2i(48, 48)
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_rr6ta")
+id = "weapon.trident"
+kind = "weapon"
+slots = Dictionary[String, Dictionary]({
+"weapon_melee_main": {
+"layers": [{
+"part": "Melee23",
+"slot": "weapon",
+"tint": "#8899aa"
+}],
+"variants": {
+"3000001c": [{
+"part": "Melee23",
+"slot": "weapon",
+"tint": "#ccaa44"
+}],
+"3000001d": [{
+"part": "Melee23",
+"slot": "weapon",
+"tint": "#5588cc"
+}],
+"roster.26ceabf2b7f3": [{
+"part": "Melee23",
+"slot": "weapon",
+"tint": "#5b286d"
+}]
+}
+}
+})
+hands = Dictionary[String, Dictionary]({
+"weapon_melee_off": {
+"": [{
+"part": "Offhand1",
+"slot": "offhand",
+"tint": "#8899aa"
+}],
+"3000001c": [{
+"part": "Offhand1",
+"slot": "offhand",
+"tint": "#ccaa44"
+}],
+"3000001d": [{
+"part": "Offhand1",
+"slot": "offhand",
+"tint": "#5588cc"
+}],
+"roster.26ceabf2b7f3": [{
+"part": "Offhand1",
+"slot": "offhand",
+"tint": "#5b286d"
+}]
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee23",
+"pivots_by_camera": [[54.5, 65.0], [67.0, 58.5], [74.5, 66.5], [63.5, 72.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#8899aa",
+"variant": ""
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee23",
+"pivots_by_camera": [[54.5, 65.0], [67.0, 58.5], [74.5, 66.5], [63.5, 72.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#ccaa44",
+"variant": "3000001c"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee23",
+"pivots_by_camera": [[54.5, 65.0], [67.0, 58.5], [74.5, 66.5], [63.5, 72.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#5588cc",
+"variant": "3000001d"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee23",
+"pivots_by_camera": [[54.5, 65.0], [67.0, 58.5], [74.5, 66.5], [63.5, 72.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#5b286d",
+"variant": "roster.26ceabf2b7f3"
+}])
+icon = SubResource("Resource_uysc8")
+notes = "Visual name Trident; Exact trident match — PHB martial weapon"

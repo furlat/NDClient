@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="PresentationCharacter" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/character.gd" id="1_myuij"]
+
+[resource]
+script = ExtResource("1_myuij")
+id = "creature.zombie_hd_female_4"
+rig = "smallscale.zombies-hd.zombiefemale4"
+portrait = "hdz--zombiefemale4"
+size = "Medium"
+death = Dictionary[String, String]({
+"default": "Death"
+})
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed.
+Stand-in clips: Idle4 -> Idle2, Rolling -> Run, AttackRun -> Attack1, Kick -> Attack1, Special1 -> Attack4, Attack6 -> Attack5.
+Roster: Fen Green, Y128, kit Slam; UF."

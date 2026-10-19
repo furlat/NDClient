@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_7rmcx"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_2ffip"]
+
+[sub_resource type="Resource" id="Resource_5tu4w"]
+script = ExtResource("1_7rmcx")
+path = "art/media/ui/icons/smooth48/item.slam.png"
+native_size = Vector2i(48, 48)
+reuses = "item.slam"
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_2ffip")
+id = "weapon.creature.raptor_tail"
+kind = "weapon"
+icon = SubResource("Resource_5tu4w")
+natural = true
+status = "internal"
+notes = "Natural or summoned: drawn by the creature's own body.
+Icon: Shares the existing natural attack-family icon."

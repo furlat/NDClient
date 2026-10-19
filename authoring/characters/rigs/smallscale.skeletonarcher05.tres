@@ -1,0 +1,279 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_kf7o3"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_hks2s"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_lys65"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_p36yy"]
+
+[sub_resource type="Resource" id="Resource_ln7mm"]
+script = ExtResource("2_hks2s")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/5archer/idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/5archer/idle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/5archer/idle/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/5archer/idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/5archer/idle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/5archer/idle/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.9753172588832488
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_0mqtr"]
+script = ExtResource("1_kf7o3")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"SkeletonArcher05": "/rigs/skeletonarcher05/body/Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/5archer/idle/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/5Archer/Idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_ln7mm")
+
+[sub_resource type="Resource" id="Resource_7v32c"]
+script = ExtResource("2_hks2s")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/5archer/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/5archer/run/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/5archer/run/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/5archer/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/5archer/run/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/5archer/run/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.980935914133022
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_pji78"]
+script = ExtResource("1_kf7o3")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"SkeletonArcher05": "/rigs/skeletonarcher05/body/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/5archer/run/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/5Archer/Run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_7v32c")
+
+[sub_resource type="Resource" id="Resource_l7wyr"]
+script = ExtResource("2_hks2s")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/5archer/takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/5archer/takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/5archer/takedamage/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/5archer/takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/5archer/takedamage/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/5archer/takedamage/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.9754658715791716
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_2o25o"]
+script = ExtResource("1_kf7o3")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"SkeletonArcher05": "/rigs/skeletonarcher05/body/TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/5archer/takedamage/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/5Archer/TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_l7wyr")
+
+[sub_resource type="Resource" id="Resource_hqaou"]
+script = ExtResource("2_hks2s")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/5archer/die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/5archer/die/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/5archer/die/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/5archer/die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/5archer/die/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/5archer/die/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.974542298632062
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_jyntg"]
+script = ExtResource("1_kf7o3")
+name = "Die"
+role = "die"
+source_clip = "Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"SkeletonArcher05": "/rigs/skeletonarcher05/body/Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/5archer/die/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/5Archer/Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_hqaou")
+
+[sub_resource type="Resource" id="Resource_db4n5"]
+script = ExtResource("2_hks2s")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/5archer/rolling/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/5archer/rolling/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/5archer/rolling/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/5archer/rolling/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/5archer/rolling/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/5archer/rolling/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.9803638401517436
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_uvbgg"]
+script = ExtResource("1_kf7o3")
+name = "Rolling"
+role = "roll"
+source_clip = "Rolling"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"SkeletonArcher05": "/rigs/skeletonarcher05/body/Rolling.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/5archer/rolling/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/5Archer/Rolling.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_db4n5")
+
+[sub_resource type="Resource" id="Resource_1xxsp"]
+script = ExtResource("2_hks2s")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/undead/5archer/quickshot/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/undead/5archer/quickshot/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/undead/5archer/quickshot/normals.png",
+"reference": "art/geometry/creatures/library/actions/undead/5archer/quickshot/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/undead/5archer/quickshot/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/undead/5archer/quickshot/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.967108893843403
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_fcuod"]
+script = ExtResource("1_kf7o3")
+name = "Attack3"
+role = "attack_3"
+source_clip = "QuickShot"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"SkeletonArcher05": "/rigs/skeletonarcher05/body/QuickShot.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/undead/5archer/quickshot/colour.png",
+"combined": "art/media/smallscale/authored/undead/With shadow/5Archer/QuickShot.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_1xxsp")
+
+[sub_resource type="Resource" id="Resource_e7ywt"]
+script = ExtResource("3_lys65")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "flying",
+"trajectory": "path"
+}
+clip = "Idle"
+hidden_slots = PackedStringArray()
+playback = "once"
+frame_keys = [[0.0, 0.0], [1.0, 0.0]]
+
+[resource]
+script = ExtResource("4_p36yy")
+id = "smallscale.skeletonarcher05"
+pack = "undead"
+variant = "5Archer"
+source = "smallscale-authored/undead"
+pivot = Vector2(64, 92)
+anchor = Vector2(64, 73)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("SkeletonArcher05")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_kf7o3")]([SubResource("Resource_0mqtr"), SubResource("Resource_pji78"), SubResource("Resource_2o25o"), SubResource("Resource_jyntg"), SubResource("Resource_uvbgg"), SubResource("Resource_fcuod")])
+contexts = Array[ExtResource("3_lys65")]([SubResource("Resource_e7ywt")])
+hold_clips = PackedStringArray("Die")
+measurements = "measured/characters/rigs/smallscale.skeletonarcher05.json"

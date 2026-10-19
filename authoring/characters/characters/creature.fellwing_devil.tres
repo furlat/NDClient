@@ -1,0 +1,97 @@
+[gd_resource type="Resource" script_class="PresentationCharacter" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/character.gd" id="1_diglg"]
+
+[resource]
+script = ExtResource("1_diglg")
+id = "creature.fellwing_devil"
+identity = "content.neurodragon:creature:creature.fellwing_devil@1"
+rig = "smallscale.demonbeast04"
+portrait = "creature.fellwing_devil"
+size = "Large"
+size_note = "128 px cells on a Large creature."
+attacks = Array[Dictionary]([{
+"clip": "Attack1",
+"contact": 4,
+"delivery": "melee",
+&"items": ["weapon.creature.fellwing_devil_claws"],
+"recipe": "action.attack",
+"variant": "demonbeast04-fellwing_devil_claws"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+&"items": ["weapon.creature.fellwing_devil_gore"],
+"recipe": "action.attack",
+"variant": "demonbeast04-fellwing_devil_gore"
+}, {
+"clip": "Attack1",
+"contact": 4,
+"delivery": "melee",
+"recipe": "action.attack",
+"variant": "demonbeast04-unarmed"
+}, {
+"clip": "Attack1",
+"contact": 4,
+"delivery": "melee",
+&"items": ["weapon.creature.fellwing_devil_claws"],
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "demonbeast04-fellwing_devil_claws"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+&"items": ["weapon.creature.fellwing_devil_gore"],
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "demonbeast04-fellwing_devil_gore"
+}, {
+"clip": "Attack1",
+"contact": 4,
+"delivery": "melee",
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "demonbeast04-unarmed"
+}, {
+"clip": "Attack1",
+"contact": 4,
+"delivery": "melee",
+&"items": ["weapon.creature.fellwing_devil_claws"],
+"recipe": "action.feature.extra_attack",
+"variant": "demonbeast04-fellwing_devil_claws"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+&"items": ["weapon.creature.fellwing_devil_gore"],
+"recipe": "action.feature.extra_attack",
+"variant": "demonbeast04-fellwing_devil_gore"
+}, {
+"clip": "Attack1",
+"contact": 4,
+"delivery": "melee",
+"recipe": "action.feature.extra_attack",
+"variant": "demonbeast04-unarmed"
+}, {
+"clip": "Attack1",
+"contact": 4,
+"delivery": "melee",
+&"items": ["weapon.creature.fellwing_devil_claws"],
+"recipe": "reaction.opportunity_attack",
+"variant": "demonbeast04-fellwing_devil_claws"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+&"items": ["weapon.creature.fellwing_devil_gore"],
+"recipe": "reaction.opportunity_attack",
+"variant": "demonbeast04-fellwing_devil_gore"
+}, {
+"clip": "Attack1",
+"contact": 4,
+"delivery": "melee",
+"recipe": "reaction.opportunity_attack",
+"variant": "demonbeast04-unarmed"
+}])
+death = Dictionary[String, String]({
+"default": "Death"
+})
+notes = "Roster: Fellwing Devil, Y128 (Large), kit Claws+Gore (2+1); Fly50; MR."

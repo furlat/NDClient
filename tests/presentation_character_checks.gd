@@ -15,7 +15,9 @@ func _initialize() -> void:
     run.call_deferred()
 
 func item(name_: String, slot: String, variant: Variant = null) -> Dictionary:
-    return {"item_uuid":name_+slot, "slot":slot, "visual_item_name":name_,
+    # The server sends the item id with its English visual name; looks are keyed by the item id.
+    var ids = {"Longsword":"weapon.longsword", "Dagger":"weapon.dagger", "Leather Armor":"armor.leather", "Shortbow":"weapon.shortbow"}
+    return {"item_uuid":name_+slot, "slot":slot, "item_id":ids[name_], "visual_item_name":name_,
         "visual_variant_id":variant, "equipped_visual_policy":"visible"}
 
 func actor() -> Dictionary:

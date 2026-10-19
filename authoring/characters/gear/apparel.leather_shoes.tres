@@ -1,0 +1,80 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_nmjed"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_uvgn8"]
+
+[sub_resource type="Resource" id="Resource_74hs1"]
+script = ExtResource("1_nmjed")
+path = "art/media/ui/icons/smooth48/item.leather-boots.png"
+native_size = Vector2i(48, 48)
+reuses = "item.leather-boots"
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_uvgn8")
+id = "apparel.leather_shoes"
+kind = "armor"
+slots = Dictionary[String, Dictionary]({
+"boots": {
+"layers": [{
+"part": "Shoes4",
+"slot": "shoes",
+"tint": "#5c2a0e"
+}],
+"variants": {
+"b0000006": [{
+"part": "Shoes4",
+"slot": "shoes",
+"tint": "#222233"
+}],
+"b0000007": [{
+"part": "Shoes4",
+"slot": "shoes",
+"tint": "#8b4513"
+}]
+}
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Shoes4",
+"pivots_by_camera": [[63.0, 84.0], [63.0, 81.5], [67.5, 81.5], [67.0, 83.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#5c2a0e",
+"variant": ""
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Shoes4",
+"pivots_by_camera": [[63.0, 84.0], [63.0, 81.5], [67.5, 81.5], [67.0, 83.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#222233",
+"variant": "b0000006"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Shoes4",
+"pivots_by_camera": [[63.0, 84.0], [63.0, 81.5], [67.5, 81.5], [67.0, 83.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#8b4513",
+"variant": "b0000007"
+}])
+icon = SubResource("Resource_74hs1")
+notes = "Visual name Leather Shoes; Simple leather shoes — light armor tier
+Icon: Shares an existing icon for the native equipment slot."

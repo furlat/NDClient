@@ -1,0 +1,98 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_bxk6f"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_lwn53"]
+
+[sub_resource type="Resource" id="Resource_wfuxu"]
+script = ExtResource("1_bxk6f")
+path = "art/media/ui/icons/smooth48/item.gauntlets.png"
+native_size = Vector2i(48, 48)
+reuses = "item.gauntlets"
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_lwn53")
+id = "apparel.bracers"
+kind = "armor"
+slots = Dictionary[String, Dictionary]({
+"gauntlets": {
+"layers": [{
+"part": "Hands3",
+"slot": "hands",
+"tint": "#5c2a0e"
+}],
+"variants": {
+"g0000001": [{
+"part": "Hands3",
+"slot": "hands",
+"tint": "#222233"
+}],
+"g0000002": [{
+"part": "Hands3",
+"slot": "hands",
+"tint": "#cd7f32"
+}],
+"g0000003": [{
+"part": "Hands3",
+"slot": "hands",
+"tint": "#778899"
+}]
+}
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Hands3",
+"pivots_by_camera": [[64.5, 63.5], [64.5, 63.5], [66.0, 63.0], [65.5, 63.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#5c2a0e",
+"variant": ""
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Hands3",
+"pivots_by_camera": [[64.5, 63.5], [64.5, 63.5], [66.0, 63.0], [65.5, 63.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#222233",
+"variant": "g0000001"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Hands3",
+"pivots_by_camera": [[64.5, 63.5], [64.5, 63.5], [66.0, 63.0], [65.5, 63.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#cd7f32",
+"variant": "g0000002"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Hands3",
+"pivots_by_camera": [[64.5, 63.5], [64.5, 63.5], [66.0, 63.0], [65.5, 63.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#778899",
+"variant": "g0000003"
+}])
+icon = SubResource("Resource_wfuxu")
+notes = "Visual name Bracers; Exposed-hand bracers — light armor tier
+Icon: Shares an existing icon for the native equipment slot."

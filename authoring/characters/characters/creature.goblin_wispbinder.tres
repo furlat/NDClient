@@ -1,0 +1,46 @@
+[gd_resource type="Resource" script_class="PresentationCharacter" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/character.gd" id="1_1rc84"]
+
+[resource]
+script = ExtResource("1_1rc84")
+id = "creature.goblin_wispbinder"
+identity = "content.neurodragon:creature:creature.goblin_wispbinder@1"
+rig = "smallscale.goblin02"
+portrait = "creature.goblin_wispbinder"
+size = "Small"
+attacks = Array[Dictionary]([{
+"clip": "PhysicalGesture",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.attack",
+"variant": "goblin02-physical"
+}, {
+"clip": "PhysicalGesture",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "goblin02-physical"
+}, {
+"clip": "PhysicalGesture",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.feature.extra_attack",
+"variant": "goblin02-physical"
+}, {
+"clip": "PhysicalGesture",
+"contact": 6,
+"delivery": "melee",
+"recipe": "reaction.opportunity_attack",
+"variant": "goblin02-physical"
+}])
+cast = {
+"clip": "Attack2"
+}
+reactions = Dictionary[String, String]({
+"block": "Block"
+})
+death = Dictionary[String, String]({
+"default": "Death"
+})
+notes = "Roster: Wispbinder, Y128, kit GOBC."

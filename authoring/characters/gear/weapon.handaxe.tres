@@ -1,0 +1,158 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_li2ef"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_3ixuv"]
+
+[sub_resource type="Resource" id="Resource_qjweq"]
+script = ExtResource("1_li2ef")
+path = "art/media/ui/icons/smooth48/item.handaxe.png"
+native_size = Vector2i(48, 48)
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_3ixuv")
+id = "weapon.handaxe"
+kind = "weapon"
+slots = Dictionary[String, Dictionary]({
+"weapon_melee_main": {
+"layers": [{
+"part": "Melee15",
+"slot": "weapon",
+"tint": "#8899aa"
+}],
+"variants": {
+"10000008": [{
+"part": "Melee15",
+"slot": "weapon",
+"tint": "#cd7f32"
+}],
+"10000009": [{
+"part": "Melee15",
+"slot": "weapon",
+"tint": "#334455"
+}],
+"a0000002": [{
+"part": "Melee17",
+"slot": "weapon",
+"tint": "#8899aa"
+}],
+"a0000003": [{
+"part": "Melee18",
+"slot": "weapon",
+"tint": "#778899"
+}]
+}
+},
+"weapon_melee_off": {
+"layers": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#8899aa"
+}],
+&"look": "Off-hand Handaxe",
+"variants": {
+"oh000009": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#778899"
+}]
+}
+}
+})
+hands = Dictionary[String, Dictionary]({
+"weapon_melee_off": {
+"": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#8899aa"
+}],
+"10000008": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#cd7f32"
+}],
+"10000009": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#334455"
+}],
+"a0000002": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#8899aa"
+}],
+"a0000003": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#778899"
+}]
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee15",
+"pivots_by_camera": [[55.5, 67.0], [64.0, 58.0], [75.0, 64.5], [66.5, 74.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#8899aa",
+"variant": ""
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee15",
+"pivots_by_camera": [[55.5, 67.0], [64.0, 58.0], [75.0, 64.5], [66.5, 74.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#cd7f32",
+"variant": "10000008"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee15",
+"pivots_by_camera": [[55.5, 67.0], [64.0, 58.0], [75.0, 64.5], [66.5, 74.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#334455",
+"variant": "10000009"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee17",
+"pivots_by_camera": [[55.0, 67.5], [66.5, 59.0], [75.0, 66.0], [64.0, 73.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#8899aa",
+"variant": "a0000002"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee18",
+"pivots_by_camera": [[56.0, 65.5], [70.5, 60.5], [74.5, 65.5], [63.5, 72.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#778899",
+"variant": "a0000003"
+}])
+icon = SubResource("Resource_qjweq")
+notes = "Visual name Handaxe; Hatchet sprite — visual equivalent of a handaxe"

@@ -32,20 +32,15 @@ static func _priority_clips(actor:Dictionary,rig:Dictionary,index:Dictionary,cac
         if context.role=="movement" and body.get("enabled",false):clips[body.clip]=true
     return clips.keys().filter(func(clip):return rig.clips.has(clip))
 
-## Normal maps of the light profiles not in use for this colour sheet. A
-## profile switch requests its own normals (play.gd media_profile_record).
-static func _unselected_normals(path:String,profile:String,cache:Dictionary)->Dictionary:
+## Normal maps of the light profiles not in use for this colour sheet (the
+## modular parts' profiles, carried by the built layer). A profile switch
+## requests its own normals (play.gd media_profile_record).
+static func _unselected_normals(descriptor:Dictionary,profile:String)->Dictionary:
     var result:Dictionary={}
-    if profile.is_empty():return result
-    if not cache.has("__normal_profile_table"):
-        var parsed:Variant=JSON.parse_string(FileAccess.get_file_as_string(Characters.CharacterGeometry.PROFILE_TABLE))
-        cache.__normal_profile_table=parsed.get("records",{}) if parsed is Dictionary else {}
-    var record:Dictionary=cache.__normal_profile_table.get(path,{})
-    if not record.has(profile):return result
-    for name in record:
-        if name==profile:continue
-        var root:String=ProjectSettings.get_setting("source_data/character_geometry_root" if name=="original" else "source_data/normal_profiles_root")
-        result[root.path_join(record[name])]=true
+    var profiles:Dictionary=descriptor.get("profiles",{})
+    if profile.is_empty() or not profiles.has(profile):return result
+    for name in profiles:
+        if name!=profile:result[profiles[name]]=true
     return result
 
 static func plan(state:Dictionary,environment:Dictionary,fixtures:Dictionary,cache:Dictionary,groups:Array=[],profile:String="")->Dictionary:
@@ -103,7 +98,7 @@ static func plan(state:Dictionary,environment:Dictionary,fixtures:Dictionary,cac
             var descriptor:Dictionary=selected.resource.clips[clip].get(selected.slot,{})
             if descriptor.is_empty():continue
             paths[descriptor.path]=true;cpu_required[descriptor.path]=true
-            var unselected:Dictionary=_unselected_normals(descriptor.path,profile,cache)
+            var unselected:Dictionary=_unselected_normals(descriptor,profile)
             var kept:Dictionary={}
             for companion in descriptor.companions:
                 if not unselected.has(companion):kept[companion]=true

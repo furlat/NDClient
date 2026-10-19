@@ -1,0 +1,40 @@
+[gd_resource type="Resource" script_class="PresentationCharacter" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/character.gd" id="1_p2mub"]
+
+[resource]
+script = ExtResource("1_p2mub")
+id = "creature.goblin_packtrail"
+identity = "content.neurodragon:creature:creature.goblin_packtrail@1"
+rig = "smallscale.goblin11"
+portrait = "creature.goblin_packtrail"
+size = "Medium"
+attacks = Array[Dictionary]([{
+"clip": "Attack1",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.attack",
+"variant": "goblin11-physical"
+}, {
+"clip": "Attack1",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "goblin11-physical"
+}, {
+"clip": "Attack1",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.feature.extra_attack",
+"variant": "goblin11-physical"
+}, {
+"clip": "Attack1",
+"contact": 6,
+"delivery": "melee",
+"recipe": "reaction.opportunity_attack",
+"variant": "goblin11-physical"
+}])
+death = Dictionary[String, String]({
+"default": "Die"
+})
+notes = "Roster: Packtrail, Y128 rider, kit Handaxe+wooden shield, saddle; Prot; speed40."

@@ -1,0 +1,67 @@
+[gd_resource type="Resource" script_class="PresentationCharacter" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/character.gd" id="1_j7crd"]
+
+[resource]
+script = ExtResource("1_j7crd")
+id = "creature.stegosaurus"
+identity = "content.neurodragon:creature:creature.stegosaurus@1"
+rig = "smallscale.stegosaurus"
+portrait = "creature.stegosaurus"
+size = "Huge"
+attacks = Array[Dictionary]([{
+"clip": "Attack3",
+"contact": 8,
+"delivery": "melee",
+&"items": ["weapon.creature.stegosaurus_tail"],
+"recipe": "action.attack",
+"variant": "stegosaurus-stegosaurus_tail"
+}, {
+"clip": "Attack3",
+"contact": 8,
+"delivery": "melee",
+"recipe": "action.attack",
+"variant": "stegosaurus-unarmed"
+}, {
+"clip": "Attack3",
+"contact": 8,
+"delivery": "melee",
+&"items": ["weapon.creature.stegosaurus_tail"],
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "stegosaurus-stegosaurus_tail"
+}, {
+"clip": "Attack3",
+"contact": 8,
+"delivery": "melee",
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "stegosaurus-unarmed"
+}, {
+"clip": "Attack3",
+"contact": 8,
+"delivery": "melee",
+&"items": ["weapon.creature.stegosaurus_tail"],
+"recipe": "action.feature.extra_attack",
+"variant": "stegosaurus-stegosaurus_tail"
+}, {
+"clip": "Attack3",
+"contact": 8,
+"delivery": "melee",
+"recipe": "action.feature.extra_attack",
+"variant": "stegosaurus-unarmed"
+}, {
+"clip": "Attack3",
+"contact": 8,
+"delivery": "melee",
+&"items": ["weapon.creature.stegosaurus_tail"],
+"recipe": "reaction.opportunity_attack",
+"variant": "stegosaurus-stegosaurus_tail"
+}, {
+"clip": "Attack3",
+"contact": 8,
+"delivery": "melee",
+"recipe": "reaction.opportunity_attack",
+"variant": "stegosaurus-unarmed"
+}])
+death = Dictionary[String, String]({
+"default": "Die"
+})

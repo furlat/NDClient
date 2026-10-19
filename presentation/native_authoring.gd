@@ -2,7 +2,6 @@ extends RefCounted
 ## One import boundary: native data Resources become the same passive compiler operands.
 const CatalogResource = preload("res://presentation/resources/catalog.gd")
 const ConditionResource = preload("res://presentation/resources/condition_presentation.gd")
-const ClipResource = preload("res://presentation/resources/body_clip.gd")
 const ActionResource = preload("res://presentation/resources/body_action.gd")
 const CONDITION_FILE = "catalog/condition_recipes.json"
 const ACTION_FILE = "catalog/body_action_recipes.json"
@@ -34,7 +33,7 @@ static func _range(value: float, low: float, high: float) -> bool:
     return is_finite(value) and value >= low and value <= high
 
 static func overlay(document: String, legacy: Variant, cache: Dictionary) -> Variant:
-    if document not in [CONDITION_FILE, ACTION_FILE, "catalog/rigs.json", "catalog/resources.json"]: return legacy
+    if document not in [CONDITION_FILE, ACTION_FILE]: return legacy
     var index = _catalog(cache)
     if index == null: return legacy
     var result = legacy.duplicate()
@@ -139,26 +138,6 @@ static func overlay(document: String, legacy: Variant, cache: Dictionary) -> Var
             recipe._legacy_source = CONDITION_FILE + ":/" + id
             recipe._resource_source = path
             result[id] = recipe
-    else:
-        for path in index.body_clips:
-            var clip = _load(path, cache) as ClipResource
-            if clip == null:
-                _error(cache, "Expected PresentationBodyClip Resource: " + path)
-                continue
-            if clip.frame_count <= 0 or not _range(clip.fps,0.01,240) or clip.clip.is_empty() or clip.sheets.is_empty():
-                _error(cache, "Incomplete source clip in " + path)
-                continue
-            if document == "catalog/resources.json":
-                for source in clip.sheets.values(): result[source] = source
-            elif not legacy.has(clip.rig_id):
-                _error(cache, "Clip Resource has no matching rig: " + path)
-            else:
-                if is_same(result[clip.rig_id], legacy[clip.rig_id]):
-                    result[clip.rig_id] = legacy[clip.rig_id].duplicate()
-                    result[clip.rig_id].clips = legacy[clip.rig_id].clips.duplicate()
-                result[clip.rig_id].clips[clip.clip] = {"source_clip":clip.source_clip,
-                    "frames":clip.frame_count, "fps":clip.fps, "loop":clip.loop, "sheets":clip.sheets.duplicate(),
-                    "resource_source":path}
     return result
 
 static func source_pointer(document: String, pointer: String, data: Dictionary) -> String:

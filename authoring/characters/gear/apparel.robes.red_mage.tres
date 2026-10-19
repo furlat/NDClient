@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_p3uv6"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_eopqp"]
+
+[sub_resource type="Resource" id="Resource_qmil7"]
+script = ExtResource("1_p3uv6")
+path = "art/media/ui/icons/smooth48/item.leather-armor.png"
+native_size = Vector2i(48, 48)
+reuses = "item.leather-armor"
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_eopqp")
+id = "apparel.robes.red_mage"
+kind = "armor"
+family = "apparel.robes"
+visual_variant_id = "81000005"
+icon = SubResource("Resource_qmil7")
+notes = "Icon: Shares an existing icon for the native equipment slot."

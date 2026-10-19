@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_6drrh"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_ksk4i"]
+
+[sub_resource type="Resource" id="Resource_oqk54"]
+script = ExtResource("1_6drrh")
+path = "art/ui-delivery-20261018/runtime/smooth48/srd22.item.freezing_sphere.png"
+native_size = Vector2i(48, 48)
+source = "ui-delivery-20261018"
+
+[resource]
+script = ExtResource("2_ksk4i")
+id = "spell_payload.freezing_sphere"
+kind = "usable"
+icon = SubResource("Resource_oqk54")
+natural = true
+status = "internal"
+notes = "Natural or summoned: drawn by the creature's own body."

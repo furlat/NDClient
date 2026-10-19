@@ -1,0 +1,191 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_u0l41"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_q1jvv"]
+
+[sub_resource type="Resource" id="Resource_cr72y"]
+script = ExtResource("1_u0l41")
+path = "art/media/ui/icons/smooth48/item.dagger.png"
+native_size = Vector2i(48, 48)
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_q1jvv")
+id = "weapon.dagger"
+kind = "weapon"
+slots = Dictionary[String, Dictionary]({
+"weapon_melee_main": {
+"layers": [{
+"part": "Melee1",
+"slot": "weapon",
+"tint": "#8899aa"
+}],
+"variants": {
+"10000003": [{
+"part": "Melee1",
+"slot": "weapon",
+"tint": "#ccaa44"
+}],
+"10000004": [{
+"part": "Melee1",
+"slot": "weapon",
+"tint": "#334455"
+}],
+"10000005": [{
+"part": "Melee1",
+"slot": "weapon",
+"tint": "#88bbdd"
+}],
+"10000006": [{
+"part": "Melee1",
+"slot": "weapon",
+"tint": "#44aa44"
+}],
+"10000007": [{
+"part": "Melee1",
+"slot": "weapon",
+"tint": "#778899"
+}]
+}
+},
+"weapon_melee_off": {
+"layers": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#8899aa"
+}],
+&"look": "Off-hand Dagger",
+"variants": {
+"oh000001": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#778899"
+}],
+"oh000002": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#d8b808"
+}],
+"oh000003": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#334455"
+}]
+}
+}
+})
+hands = Dictionary[String, Dictionary]({
+"weapon_melee_off": {
+"": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#8899aa"
+}],
+"10000003": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#d8b808"
+}],
+"10000004": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#334455"
+}],
+"10000005": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#88bbdd"
+}],
+"10000006": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#44aa44"
+}],
+"10000007": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#778899"
+}]
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee1",
+"pivots_by_camera": [[55.5, 65.5], [65.5, 59.0], [74.5, 65.5], [65.0, 72.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#8899aa",
+"variant": ""
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee1",
+"pivots_by_camera": [[55.5, 65.5], [65.5, 59.0], [74.5, 65.5], [65.0, 72.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#ccaa44",
+"variant": "10000003"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee1",
+"pivots_by_camera": [[55.5, 65.5], [65.5, 59.0], [74.5, 65.5], [65.0, 72.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#334455",
+"variant": "10000004"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee1",
+"pivots_by_camera": [[55.5, 65.5], [65.5, 59.0], [74.5, 65.5], [65.0, 72.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#88bbdd",
+"variant": "10000005"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee1",
+"pivots_by_camera": [[55.5, 65.5], [65.5, 59.0], [74.5, 65.5], [65.0, 72.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#44aa44",
+"variant": "10000006"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee1",
+"pivots_by_camera": [[55.5, 65.5], [65.5, 59.0], [74.5, 65.5], [65.0, 72.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#778899",
+"variant": "10000007"
+}])
+icon = SubResource("Resource_cr72y")
+notes = "Visual name Dagger; Exact dagger match"

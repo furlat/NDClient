@@ -1,0 +1,675 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_pj8bh"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_4loxf"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_fu1q5"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_gayrf"]
+
+[sub_resource type="Resource" id="Resource_qax6g"]
+script = ExtResource("2_4loxf")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/attack1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/attack1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/attack1/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/attack1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/attack1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/attack1/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 1.414213562373095
+coverage = 0.9894730581658142
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_y5q67"]
+script = ExtResource("1_pj8bh")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Attack1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteArmoredTriceratops": "/rigs/dinosaurs_elite_armored_triceratops/body/Attack1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/attack1/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE Armored Triceratops/Attack1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_qax6g")
+
+[sub_resource type="Resource" id="Resource_g6fhu"]
+script = ExtResource("2_4loxf")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/attack2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/attack2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/attack2/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/attack2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/attack2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/attack2/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 1.414213562373095
+coverage = 0.9795235837572558
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_4rp3p"]
+script = ExtResource("1_pj8bh")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Attack2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteArmoredTriceratops": "/rigs/dinosaurs_elite_armored_triceratops/body/Attack2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/attack2/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE Armored Triceratops/Attack2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_g6fhu")
+
+[sub_resource type="Resource" id="Resource_q8mik"]
+script = ExtResource("2_4loxf")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/attack3/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/attack3/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/attack3/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/attack3/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/attack3/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/attack3/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 1.414213562373095
+coverage = 0.9908654463899824
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_aj14i"]
+script = ExtResource("1_pj8bh")
+name = "Attack3"
+role = "attack_3"
+source_clip = "Attack3"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteArmoredTriceratops": "/rigs/dinosaurs_elite_armored_triceratops/body/Attack3.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/attack3/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE Armored Triceratops/Attack3.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_q8mik")
+
+[sub_resource type="Resource" id="Resource_ha6m1"]
+script = ExtResource("2_4loxf")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/attack4/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/attack4/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/attack4/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/attack4/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/attack4/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/attack4/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 1.414213562373095
+coverage = 0.9897278168345052
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_fws1x"]
+script = ExtResource("1_pj8bh")
+name = "Attack4"
+role = "attack_4"
+source_clip = "Attack4"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteArmoredTriceratops": "/rigs/dinosaurs_elite_armored_triceratops/body/Attack4.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/attack4/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE Armored Triceratops/Attack4.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_ha6m1")
+
+[sub_resource type="Resource" id="Resource_pslco"]
+script = ExtResource("2_4loxf")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/die/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/die/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/die/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/die/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 1.414213562373095
+coverage = 0.9900917056339946
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_wymyv"]
+script = ExtResource("1_pj8bh")
+name = "Die"
+role = "die"
+source_clip = "Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteArmoredTriceratops": "/rigs/dinosaurs_elite_armored_triceratops/body/Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/die/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE Armored Triceratops/Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_pslco")
+
+[sub_resource type="Resource" id="Resource_lyvbl"]
+script = ExtResource("2_4loxf")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/idle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/idle/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/idle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/idle/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 1.414213562373095
+coverage = 0.990774843032025
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_u375x"]
+script = ExtResource("1_pj8bh")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteArmoredTriceratops": "/rigs/dinosaurs_elite_armored_triceratops/body/Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/idle/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE Armored Triceratops/Idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_lyvbl")
+
+[sub_resource type="Resource" id="Resource_dlaxk"]
+script = ExtResource("2_4loxf")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/run/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/run/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/run/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/run/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 1.414213562373095
+coverage = 0.9905827919801842
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_br1lu"]
+script = ExtResource("1_pj8bh")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteArmoredTriceratops": "/rigs/dinosaurs_elite_armored_triceratops/body/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/run/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE Armored Triceratops/Run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_dlaxk")
+
+[sub_resource type="Resource" id="Resource_32yi1"]
+script = ExtResource("2_4loxf")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/takedamage/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/takedamage/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/takedamage/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 1.414213562373095
+coverage = 0.9911000977244172
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_l57ot"]
+script = ExtResource("1_pj8bh")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteArmoredTriceratops": "/rigs/dinosaurs_elite_armored_triceratops/body/TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/takedamage/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE Armored Triceratops/TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_32yi1")
+
+[sub_resource type="Resource" id="Resource_3f7vn"]
+script = ExtResource("2_4loxf")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/taunt/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/taunt/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/taunt/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/taunt/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/taunt/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/taunt/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 1.414213562373095
+coverage = 0.9897784539317296
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_i3hio"]
+script = ExtResource("1_pj8bh")
+name = "Taunt"
+role = "taunt"
+source_clip = "Taunt"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteArmoredTriceratops": "/rigs/dinosaurs_elite_armored_triceratops/body/Taunt.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/taunt/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE Armored Triceratops/Taunt.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_3f7vn")
+
+[sub_resource type="Resource" id="Resource_w377d"]
+script = ExtResource("2_4loxf")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/walk/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/walk/normals.png",
+"reference": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/walk/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/walk/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 1.414213562373095
+coverage = 0.9897414806110458
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_pqqi4"]
+script = ExtResource("1_pj8bh")
+name = "Walk"
+role = "walk"
+source_clip = "Walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"DinosaursEliteArmoredTriceratops": "/rigs/dinosaurs_elite_armored_triceratops/body/Walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/dinosaurs/elite-armored-triceratops/walk/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/ELITE Armored Triceratops/Walk.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_w377d")
+
+[sub_resource type="Resource" id="Resource_5up2g"]
+script = ExtResource("3_fu1q5")
+role = "movement"
+qualifier = {
+"kind": "default"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+playback = "loop"
+
+[sub_resource type="Resource" id="Resource_tjbye"]
+script = ExtResource("3_fu1q5")
+role = "movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_4v2t8"]
+script = ExtResource("3_fu1q5")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "direct_arc"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_8xc8u"]
+script = ExtResource("3_fu1q5")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "connector_transfer"
+}
+clip = "Walk"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_e5jsw"]
+script = ExtResource("3_fu1q5")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "direct_arc"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_vxdxu"]
+script = ExtResource("3_fu1q5")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "connector_transfer"
+}
+clip = "Walk"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_t3fu6"]
+script = ExtResource("3_fu1q5")
+role = "shove"
+qualifier = {
+"kind": "default"
+}
+clip = "Attack2"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 6.0,
+"name": "contact"
+}]
+
+[sub_resource type="Resource" id="Resource_xron3"]
+script = ExtResource("3_fu1q5")
+role = "forced_movement"
+qualifier = {
+"kind": "default"
+}
+clip = "TakeDamage"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 5.0,
+"name": "brace"
+}]
+
+[sub_resource type="Resource" id="Resource_upww8"]
+script = ExtResource("3_fu1q5")
+role = "forced_movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_l40ep"]
+script = ExtResource("3_fu1q5")
+role = "body_action"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_c7yyn"]
+script = ExtResource("3_fu1q5")
+role = "body_action_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_6olm6"]
+script = ExtResource("3_fu1q5")
+role = "equipment"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_laddw"]
+script = ExtResource("3_fu1q5")
+role = "healing"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_mh7yi"]
+script = ExtResource("3_fu1q5")
+role = "save_avoidance"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_rks0b"]
+script = ExtResource("3_fu1q5")
+role = "condition_entry"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_wygb3"]
+script = ExtResource("3_fu1q5")
+role = "condition_hold"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+hidden_slots = PackedStringArray()
+playback = "final_rest"
+rest_frame = 14
+
+[sub_resource type="Resource" id="Resource_51qqx"]
+script = ExtResource("3_fu1q5")
+role = "condition_exit"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+reversed = true
+
+[sub_resource type="Resource" id="Resource_mw2ww"]
+script = ExtResource("3_fu1q5")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "flying",
+"trajectory": "path"
+}
+clip = "Idle"
+hidden_slots = PackedStringArray()
+playback = "once"
+frame_keys = [[0.0, 0.0], [1.0, 0.0]]
+
+[sub_resource type="Resource" id="Resource_vsxdx"]
+script = ExtResource("3_fu1q5")
+role = "death"
+qualifier = {
+"kind": "default"
+}
+clip = "Die"
+hidden_slots = PackedStringArray()
+playback = "once"
+
+[resource]
+script = ExtResource("4_gayrf")
+id = "smallscale.dinosaurs.elite-armored-triceratops"
+pack = "dinosaurs"
+variant = "ELITE Armored Triceratops"
+source = "smallscale-authored/dinosaurs"
+cell = Vector2i(96, 96)
+pivot = Vector2(48, 71)
+anchor = Vector2(48, 53)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("DinosaursEliteArmoredTriceratops")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_pj8bh")]([SubResource("Resource_y5q67"), SubResource("Resource_4rp3p"), SubResource("Resource_aj14i"), SubResource("Resource_fws1x"), SubResource("Resource_wymyv"), SubResource("Resource_u375x"), SubResource("Resource_br1lu"), SubResource("Resource_l57ot"), SubResource("Resource_i3hio"), SubResource("Resource_pqqi4")])
+fallbacks = Dictionary[String, String]({
+"Attack5": "Attack4",
+"Attack6": "Attack4",
+"AttackRun": "Attack1",
+"CrouchWalk": "Walk",
+"Death": "Die",
+"Idle2": "Idle",
+"Idle4": "Idle",
+"Kick": "Attack1",
+"Rolling": "Run",
+"Special1": "Attack4"
+})
+contexts = Array[ExtResource("3_fu1q5")]([SubResource("Resource_5up2g"), SubResource("Resource_tjbye"), SubResource("Resource_4v2t8"), SubResource("Resource_8xc8u"), SubResource("Resource_e5jsw"), SubResource("Resource_vxdxu"), SubResource("Resource_t3fu6"), SubResource("Resource_xron3"), SubResource("Resource_upww8"), SubResource("Resource_l40ep"), SubResource("Resource_c7yyn"), SubResource("Resource_6olm6"), SubResource("Resource_laddw"), SubResource("Resource_mh7yi"), SubResource("Resource_rks0b"), SubResource("Resource_wygb3"), SubResource("Resource_51qqx"), SubResource("Resource_mw2ww"), SubResource("Resource_vsxdx")])
+hold_clips = PackedStringArray("Die")
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed.
+Stand-in clips: Idle2 -> Idle, Idle4 -> Idle, Death -> Die, Rolling -> Run, CrouchWalk -> Walk, AttackRun -> Attack1, Kick -> Attack1, Special1 -> Attack4, Attack5 -> Attack4, Attack6 -> Attack4."

@@ -1,0 +1,1495 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_5m4ew"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_u01uu"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_2jx6m"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_1vo2k"]
+
+[sub_resource type="Resource" id="Resource_bgk2m"]
+script = ExtResource("2_u01uu")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/8darklord/180turn/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/8darklord/180turn/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/8darklord/180turn/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/8darklord/180turn/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/8darklord/180turn/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/8darklord/180turn/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9956069054918826
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_fh8xj"]
+script = ExtResource("1_5m4ew")
+name = "180Turn"
+role = "turn"
+source_clip = "180Turn"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters8Darklord": "/rigs/characters_8darklord/body/180Turn.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/8darklord/180turn/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/8DarkLord/180Turn.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/8DarkLord/180Turn.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_bgk2m")
+
+[sub_resource type="Resource" id="Resource_3npbo"]
+script = ExtResource("2_u01uu")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/8darklord/attack1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/8darklord/attack1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/8darklord/attack1/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/8darklord/attack1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/8darklord/attack1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/8darklord/attack1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9839558407850528
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_alcrs"]
+script = ExtResource("1_5m4ew")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Attack1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters8Darklord": "/rigs/characters_8darklord/body/Attack1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/8darklord/attack1/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/8DarkLord/Attack1.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/8DarkLord/Attack1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_3npbo")
+
+[sub_resource type="Resource" id="Resource_aouy5"]
+script = ExtResource("2_u01uu")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/8darklord/attack2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/8darklord/attack2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/8darklord/attack2/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/8darklord/attack2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/8darklord/attack2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/8darklord/attack2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.986181863362857
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_upijy"]
+script = ExtResource("1_5m4ew")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Attack2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters8Darklord": "/rigs/characters_8darklord/body/Attack2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/8darklord/attack2/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/8DarkLord/Attack2.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/8DarkLord/Attack2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_aouy5")
+
+[sub_resource type="Resource" id="Resource_2ndhl"]
+script = ExtResource("2_u01uu")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/8darklord/attack3/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/8darklord/attack3/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/8darklord/attack3/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/8darklord/attack3/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/8darklord/attack3/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/8darklord/attack3/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9798802433608812
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_e367c"]
+script = ExtResource("1_5m4ew")
+name = "Attack3"
+role = "attack_3"
+source_clip = "Attack3"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters8Darklord": "/rigs/characters_8darklord/body/Attack3.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/8darklord/attack3/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/8DarkLord/Attack3.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/8DarkLord/Attack3.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_2ndhl")
+
+[sub_resource type="Resource" id="Resource_rhhbk"]
+script = ExtResource("2_u01uu")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/8darklord/attackrun/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/8darklord/attackrun/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/8darklord/attackrun/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/8darklord/attackrun/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/8darklord/attackrun/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/8darklord/attackrun/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9843035343035345
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_30bhx"]
+script = ExtResource("1_5m4ew")
+name = "AttackRun"
+role = "attack_run"
+source_clip = "AttackRun"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters8Darklord": "/rigs/characters_8darklord/body/AttackRun.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/8darklord/attackrun/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/8DarkLord/AttackRun.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/8DarkLord/AttackRun.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_rhhbk")
+
+[sub_resource type="Resource" id="Resource_ladwi"]
+script = ExtResource("2_u01uu")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/8darklord/blockmid/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/8darklord/blockmid/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/8darklord/blockmid/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/8darklord/blockmid/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/8darklord/blockmid/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/8darklord/blockmid/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9965830650005416
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_xd6da"]
+script = ExtResource("1_5m4ew")
+name = "Block"
+role = "block_hold"
+source_clip = "BlockMid"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters8Darklord": "/rigs/characters_8darklord/body/BlockMid.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/8darklord/blockmid/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/8DarkLord/BlockMid.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_ladwi")
+
+[sub_resource type="Resource" id="Resource_7fxnc"]
+script = ExtResource("2_u01uu")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/8darklord/blockstart/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/8darklord/blockstart/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/8darklord/blockstart/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/8darklord/blockstart/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/8darklord/blockstart/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/8darklord/blockstart/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9963939083873916
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_h7wkc"]
+script = ExtResource("1_5m4ew")
+name = "BlockStart"
+role = "block_start"
+source_clip = "BlockStart"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters8Darklord": "/rigs/characters_8darklord/body/BlockStart.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/8darklord/blockstart/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/8DarkLord/BlockStart.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/8DarkLord/BlockStart.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_7fxnc")
+
+[sub_resource type="Resource" id="Resource_2yivj"]
+script = ExtResource("2_u01uu")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/8darklord/castspell/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/8darklord/castspell/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/8darklord/castspell/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/8darklord/castspell/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/8darklord/castspell/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/8darklord/castspell/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9812010021821708
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_yg6n5"]
+script = ExtResource("1_5m4ew")
+name = "CastSpell"
+role = "cast"
+source_clip = "CastSpell"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters8Darklord": "/rigs/characters_8darklord/body/CastSpell.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/8darklord/castspell/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/8DarkLord/CastSpell.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/8DarkLord/CastSpell.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_2yivj")
+
+[sub_resource type="Resource" id="Resource_iq5en"]
+script = ExtResource("2_u01uu")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/8darklord/crouchidle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/8darklord/crouchidle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/8darklord/crouchidle/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/8darklord/crouchidle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/8darklord/crouchidle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/8darklord/crouchidle/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9964755346556464
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_727uw"]
+script = ExtResource("1_5m4ew")
+name = "Crouch"
+role = "crouch_idle"
+source_clip = "CrouchIdle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters8Darklord": "/rigs/characters_8darklord/body/CrouchIdle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/8darklord/crouchidle/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/8DarkLord/CrouchIdle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_iq5en")
+
+[sub_resource type="Resource" id="Resource_5gxgt"]
+script = ExtResource("2_u01uu")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/8darklord/crouchrun/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/8darklord/crouchrun/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/8darklord/crouchrun/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/8darklord/crouchrun/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/8darklord/crouchrun/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/8darklord/crouchrun/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9960462111130398
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_hg2xc"]
+script = ExtResource("1_5m4ew")
+name = "CrouchWalk"
+role = "crouch_move"
+source_clip = "CrouchRun"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters8Darklord": "/rigs/characters_8darklord/body/CrouchRun.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/8darklord/crouchrun/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/8DarkLord/CrouchRun.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_5gxgt")
+
+[sub_resource type="Resource" id="Resource_pml61"]
+script = ExtResource("2_u01uu")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/8darklord/die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/8darklord/die/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/8darklord/die/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/8darklord/die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/8darklord/die/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/8darklord/die/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9967008028682036
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_xqonc"]
+script = ExtResource("1_5m4ew")
+name = "Die"
+role = "die"
+source_clip = "Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters8Darklord": "/rigs/characters_8darklord/body/Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/8darklord/die/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/8DarkLord/Die.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/8DarkLord/Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_pml61")
+
+[sub_resource type="Resource" id="Resource_hk3ax"]
+script = ExtResource("2_u01uu")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/8darklord/frontflip/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/8darklord/frontflip/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/8darklord/frontflip/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/8darklord/frontflip/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/8darklord/frontflip/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/8darklord/frontflip/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9766372550679968
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_x7l6t"]
+script = ExtResource("1_5m4ew")
+name = "BackFlip"
+role = "flip"
+source_clip = "FrontFlip"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters8Darklord": "/rigs/characters_8darklord/body/FrontFlip.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/8darklord/frontflip/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/8DarkLord/FrontFlip.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/8DarkLord/FrontFlip.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_hk3ax")
+
+[sub_resource type="Resource" id="Resource_8iw21"]
+script = ExtResource("2_u01uu")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/8darklord/idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/8darklord/idle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/8darklord/idle/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/8darklord/idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/8darklord/idle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/8darklord/idle/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9958825064517064
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_3xqge"]
+script = ExtResource("1_5m4ew")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters8Darklord": "/rigs/characters_8darklord/body/Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/8darklord/idle/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/8DarkLord/Idle.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/8DarkLord/Idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_8iw21")
+
+[sub_resource type="Resource" id="Resource_smss6"]
+script = ExtResource("2_u01uu")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/8darklord/idle2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/8darklord/idle2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/8darklord/idle2/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/8darklord/idle2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/8darklord/idle2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/8darklord/idle2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9959988568162332
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_lown7"]
+script = ExtResource("1_5m4ew")
+name = "Idle2"
+role = "idle_alt"
+source_clip = "Idle2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters8Darklord": "/rigs/characters_8darklord/body/Idle2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/8darklord/idle2/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/8DarkLord/Idle2.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/8DarkLord/Idle2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_smss6")
+
+[sub_resource type="Resource" id="Resource_oq1ge"]
+script = ExtResource("2_u01uu")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/8darklord/kick/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/8darklord/kick/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/8darklord/kick/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/8darklord/kick/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/8darklord/kick/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/8darklord/kick/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.984292831442015
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_3xd5i"]
+script = ExtResource("1_5m4ew")
+name = "Kick"
+role = "kick"
+source_clip = "Kick"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters8Darklord": "/rigs/characters_8darklord/body/Kick.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/8darklord/kick/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/8DarkLord/Kick.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/8DarkLord/Kick.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_oq1ge")
+
+[sub_resource type="Resource" id="Resource_p7u8k"]
+script = ExtResource("2_u01uu")
+status = "validated_partial"
+flags = PackedStringArray("source_pose_empty", "source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/8darklord/quickshot/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/8darklord/quickshot/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/8darklord/quickshot/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/8darklord/quickshot/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/8darklord/quickshot/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/8darklord/quickshot/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.987807560016538
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_w3yov"]
+script = ExtResource("1_5m4ew")
+name = "QuickShot"
+role = "shoot"
+source_clip = "QuickShot"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters8Darklord": "/rigs/characters_8darklord/body/QuickShot.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/8darklord/quickshot/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/8DarkLord/QuickShot.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/8DarkLord/QuickShot.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_p7u8k")
+
+[sub_resource type="Resource" id="Resource_u1oyg"]
+script = ExtResource("2_u01uu")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/8darklord/rolling/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/8darklord/rolling/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/8darklord/rolling/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/8darklord/rolling/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/8darklord/rolling/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/8darklord/rolling/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9738167768779256
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_0w6v5"]
+script = ExtResource("1_5m4ew")
+name = "Rolling"
+role = "roll"
+source_clip = "Rolling"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters8Darklord": "/rigs/characters_8darklord/body/Rolling.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/8darklord/rolling/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/8DarkLord/Rolling.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/8DarkLord/Rolling.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_u1oyg")
+
+[sub_resource type="Resource" id="Resource_hdj30"]
+script = ExtResource("2_u01uu")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/8darklord/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/8darklord/run/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/8darklord/run/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/8darklord/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/8darklord/run/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/8darklord/run/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9964558203192826
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_b63t6"]
+script = ExtResource("1_5m4ew")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters8Darklord": "/rigs/characters_8darklord/body/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/8darklord/run/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/8DarkLord/Run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_hdj30")
+
+[sub_resource type="Resource" id="Resource_qtvv5"]
+script = ExtResource("2_u01uu")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/8darklord/runbackwards/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/8darklord/runbackwards/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/8darklord/runbackwards/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/8darklord/runbackwards/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/8darklord/runbackwards/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/8darklord/runbackwards/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9958030770509344
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_df7w8"]
+script = ExtResource("1_5m4ew")
+name = "RunBackwards"
+role = "run_back"
+source_clip = "RunBackwards"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters8Darklord": "/rigs/characters_8darklord/body/RunBackwards.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/8darklord/runbackwards/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/8DarkLord/RunBackwards.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/8DarkLord/RunBackwards.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_qtvv5")
+
+[sub_resource type="Resource" id="Resource_0oyve"]
+script = ExtResource("2_u01uu")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/8darklord/sittingchair/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/8darklord/sittingchair/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/8darklord/sittingchair/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/8darklord/sittingchair/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/8darklord/sittingchair/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/8darklord/sittingchair/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9965098113082114
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_4mq6v"]
+script = ExtResource("1_5m4ew")
+name = "SittingChair"
+role = "sit"
+source_clip = "SittingChair"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters8Darklord": "/rigs/characters_8darklord/body/SittingChair.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/8darklord/sittingchair/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/8DarkLord/SittingChair.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/8DarkLord/SittingChair.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_0oyve")
+
+[sub_resource type="Resource" id="Resource_d7hma"]
+script = ExtResource("2_u01uu")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/8darklord/slide/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/8darklord/slide/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/8darklord/slide/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/8darklord/slide/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/8darklord/slide/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/8darklord/slide/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9945966002643724
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_4paeu"]
+script = ExtResource("1_5m4ew")
+name = "Slide"
+role = "slide"
+source_clip = "Slide"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters8Darklord": "/rigs/characters_8darklord/body/Slide.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/8darklord/slide/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/8DarkLord/Slide.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/8DarkLord/Slide.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_d7hma")
+
+[sub_resource type="Resource" id="Resource_5nls1"]
+script = ExtResource("2_u01uu")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/8darklord/slideend/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/8darklord/slideend/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/8darklord/slideend/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/8darklord/slideend/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/8darklord/slideend/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/8darklord/slideend/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9961445605045328
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_8d637"]
+script = ExtResource("1_5m4ew")
+name = "SlideEnd"
+role = "slide_end"
+source_clip = "SlideEnd"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters8Darklord": "/rigs/characters_8darklord/body/SlideEnd.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/8darklord/slideend/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/8DarkLord/SlideEnd.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/8DarkLord/SlideEnd.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_5nls1")
+
+[sub_resource type="Resource" id="Resource_qnpgh"]
+script = ExtResource("2_u01uu")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/8darklord/slidestart/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/8darklord/slidestart/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/8darklord/slidestart/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/8darklord/slidestart/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/8darklord/slidestart/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/8darklord/slidestart/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9959580208664608
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_bna66"]
+script = ExtResource("1_5m4ew")
+name = "SlideStart"
+role = "slide_start"
+source_clip = "SlideStart"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters8Darklord": "/rigs/characters_8darklord/body/SlideStart.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/8darklord/slidestart/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/8DarkLord/SlideStart.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/8DarkLord/SlideStart.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_qnpgh")
+
+[sub_resource type="Resource" id="Resource_pj6nx"]
+script = ExtResource("2_u01uu")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/8darklord/special1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/8darklord/special1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/8darklord/special1/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/8darklord/special1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/8darklord/special1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/8darklord/special1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9781482565266564
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_j06ig"]
+script = ExtResource("1_5m4ew")
+name = "Special1"
+role = "special_1"
+source_clip = "Special1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters8Darklord": "/rigs/characters_8darklord/body/Special1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/8darklord/special1/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/8DarkLord/Special1.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/8DarkLord/Special1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_pj6nx")
+
+[sub_resource type="Resource" id="Resource_t72xl"]
+script = ExtResource("2_u01uu")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/8darklord/special2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/8darklord/special2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/8darklord/special2/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/8darklord/special2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/8darklord/special2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/8darklord/special2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9822226439863032
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_nca3y"]
+script = ExtResource("1_5m4ew")
+name = "Special2"
+role = "special_2"
+source_clip = "Special2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters8Darklord": "/rigs/characters_8darklord/body/Special2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/8darklord/special2/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/8DarkLord/Special2.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/8DarkLord/Special2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_t72xl")
+
+[sub_resource type="Resource" id="Resource_p57g3"]
+script = ExtResource("2_u01uu")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/8darklord/strafeleft/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/8darklord/strafeleft/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/8darklord/strafeleft/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/8darklord/strafeleft/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/8darklord/strafeleft/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/8darklord/strafeleft/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.996682512390007
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_10ah7"]
+script = ExtResource("1_5m4ew")
+name = "StrafeLeft"
+role = "strafe_left"
+source_clip = "StrafeLeft"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters8Darklord": "/rigs/characters_8darklord/body/StrafeLeft.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/8darklord/strafeleft/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/8DarkLord/StrafeLeft.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/8DarkLord/StrafeLeft.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_p57g3")
+
+[sub_resource type="Resource" id="Resource_8mnyn"]
+script = ExtResource("2_u01uu")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/8darklord/straferight/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/8darklord/straferight/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/8darklord/straferight/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/8darklord/straferight/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/8darklord/straferight/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/8darklord/straferight/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.996971845250152
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_ahqmr"]
+script = ExtResource("1_5m4ew")
+name = "StrafeRight"
+role = "strafe_right"
+source_clip = "StrafeRight"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters8Darklord": "/rigs/characters_8darklord/body/StrafeRight.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/8darklord/straferight/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/8DarkLord/StrafeRight.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_8mnyn")
+
+[sub_resource type="Resource" id="Resource_x6a7c"]
+script = ExtResource("2_u01uu")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/8darklord/takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/8darklord/takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/8darklord/takedamage/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/8darklord/takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/8darklord/takedamage/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/8darklord/takedamage/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9961283817206348
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_15jau"]
+script = ExtResource("1_5m4ew")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters8Darklord": "/rigs/characters_8darklord/body/TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/8darklord/takedamage/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/8DarkLord/TakeDamage.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/8DarkLord/TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_x6a7c")
+
+[sub_resource type="Resource" id="Resource_p28v6"]
+script = ExtResource("2_u01uu")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/8darklord/unsheath/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/8darklord/unsheath/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/8darklord/unsheath/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/8darklord/unsheath/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/8darklord/unsheath/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/8darklord/unsheath/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9958312565136616
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_4ecsm"]
+script = ExtResource("1_5m4ew")
+name = "UnSheath"
+role = "unsheath"
+source_clip = "UnSheath"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters8Darklord": "/rigs/characters_8darklord/body/UnSheath.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/8darklord/unsheath/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/8DarkLord/UnSheath.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/8DarkLord/UnSheath.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_p28v6")
+
+[sub_resource type="Resource" id="Resource_pkik1"]
+script = ExtResource("2_u01uu")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/8darklord/walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/8darklord/walk/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/8darklord/walk/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/8darklord/walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/8darklord/walk/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/8darklord/walk/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9962924756661798
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_c0d8v"]
+script = ExtResource("1_5m4ew")
+name = "Walk"
+role = "walk"
+source_clip = "Walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters8Darklord": "/rigs/characters_8darklord/body/Walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/8darklord/walk/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/8DarkLord/Walk.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/8DarkLord/Walk.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_pkik1")
+
+[sub_resource type="Resource" id="Resource_jxcru"]
+script = ExtResource("3_2jx6m")
+role = "movement"
+qualifier = {
+"kind": "default"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+playback = "loop"
+
+[sub_resource type="Resource" id="Resource_u3ftv"]
+script = ExtResource("3_2jx6m")
+role = "movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_2f17q"]
+script = ExtResource("3_2jx6m")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "direct_arc"
+}
+clip = "Rolling"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_mi01j"]
+script = ExtResource("3_2jx6m")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "connector_transfer"
+}
+clip = "CrouchWalk"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_pfe0a"]
+script = ExtResource("3_2jx6m")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "direct_arc"
+}
+clip = "Rolling"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_0cebp"]
+script = ExtResource("3_2jx6m")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "connector_transfer"
+}
+clip = "CrouchWalk"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_exalr"]
+script = ExtResource("3_2jx6m")
+role = "shove"
+qualifier = {
+"kind": "default"
+}
+clip = "Attack2"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 6.0,
+"name": "contact"
+}]
+
+[sub_resource type="Resource" id="Resource_458rs"]
+script = ExtResource("3_2jx6m")
+role = "forced_movement"
+qualifier = {
+"kind": "default"
+}
+clip = "TakeDamage"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 5.0,
+"name": "brace"
+}]
+
+[sub_resource type="Resource" id="Resource_glyuk"]
+script = ExtResource("3_2jx6m")
+role = "forced_movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_l3bax"]
+script = ExtResource("3_2jx6m")
+role = "body_action"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_q6xg2"]
+script = ExtResource("3_2jx6m")
+role = "body_action_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_7cegk"]
+script = ExtResource("3_2jx6m")
+role = "equipment"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_aydx7"]
+script = ExtResource("3_2jx6m")
+role = "healing"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_e8rri"]
+script = ExtResource("3_2jx6m")
+role = "save_avoidance"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_y7pfn"]
+script = ExtResource("3_2jx6m")
+role = "condition_entry"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_orvu2"]
+script = ExtResource("3_2jx6m")
+role = "condition_hold"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+hidden_slots = PackedStringArray()
+playback = "final_rest"
+rest_frame = 14
+
+[sub_resource type="Resource" id="Resource_w458w"]
+script = ExtResource("3_2jx6m")
+role = "condition_exit"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+reversed = true
+
+[sub_resource type="Resource" id="Resource_ig7d7"]
+script = ExtResource("3_2jx6m")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "flying",
+"trajectory": "path"
+}
+clip = "Idle"
+hidden_slots = PackedStringArray()
+playback = "once"
+frame_keys = [[0.0, 0.0], [1.0, 0.0]]
+
+[sub_resource type="Resource" id="Resource_c8ccf"]
+script = ExtResource("3_2jx6m")
+role = "death"
+qualifier = {
+"kind": "default"
+}
+clip = "Die"
+hidden_slots = PackedStringArray()
+playback = "once"
+
+[resource]
+script = ExtResource("4_1vo2k")
+id = "smallscale.characters.8darklord"
+pack = "characters"
+variant = "8DarkLord"
+source = "smallscale-authored/characters"
+pivot = Vector2(64, 93)
+anchor = Vector2(64, 67)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("Characters8Darklord")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_5m4ew")]([SubResource("Resource_fh8xj"), SubResource("Resource_alcrs"), SubResource("Resource_upijy"), SubResource("Resource_e367c"), SubResource("Resource_30bhx"), SubResource("Resource_xd6da"), SubResource("Resource_h7wkc"), SubResource("Resource_yg6n5"), SubResource("Resource_727uw"), SubResource("Resource_hg2xc"), SubResource("Resource_xqonc"), SubResource("Resource_x7l6t"), SubResource("Resource_3xqge"), SubResource("Resource_lown7"), SubResource("Resource_3xd5i"), SubResource("Resource_w3yov"), SubResource("Resource_0w6v5"), SubResource("Resource_b63t6"), SubResource("Resource_df7w8"), SubResource("Resource_4mq6v"), SubResource("Resource_4paeu"), SubResource("Resource_8d637"), SubResource("Resource_bna66"), SubResource("Resource_j06ig"), SubResource("Resource_nca3y"), SubResource("Resource_10ah7"), SubResource("Resource_ahqmr"), SubResource("Resource_15jau"), SubResource("Resource_4ecsm"), SubResource("Resource_c0d8v")])
+fallbacks = Dictionary[String, String]({
+"Attack4": "Attack3",
+"Attack5": "CastSpell",
+"Attack6": "CastSpell",
+"Death": "Die",
+"Idle4": "Idle2",
+"Taunt": "Idle2"
+})
+contexts = Array[ExtResource("3_2jx6m")]([SubResource("Resource_jxcru"), SubResource("Resource_u3ftv"), SubResource("Resource_2f17q"), SubResource("Resource_mi01j"), SubResource("Resource_pfe0a"), SubResource("Resource_0cebp"), SubResource("Resource_exalr"), SubResource("Resource_458rs"), SubResource("Resource_glyuk"), SubResource("Resource_l3bax"), SubResource("Resource_q6xg2"), SubResource("Resource_7cegk"), SubResource("Resource_aydx7"), SubResource("Resource_e8rri"), SubResource("Resource_y7pfn"), SubResource("Resource_orvu2"), SubResource("Resource_w458w"), SubResource("Resource_ig7d7"), SubResource("Resource_c8ccf")])
+hold_clips = PackedStringArray("Die")
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed.
+Stand-in clips: Idle4 -> Idle2, Death -> Die, Taunt -> Idle2, Attack4 -> Attack3, Attack5 -> CastSpell, Attack6 -> CastSpell."

@@ -1,0 +1,45 @@
+[gd_resource type="Resource" script_class="PresentationAppearance" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/appearance.gd" id="1_7o4jm"]
+
+[resource]
+script = ExtResource("1_7o4jm")
+category_slots = Dictionary[String, String]({
+"body_category": "body",
+"head_category": "head"
+})
+flag_parts = Dictionary[String, String]({
+"has_beard": "Head2"
+})
+tint_slots = Dictionary[String, String]({
+"beard_tint": "beard",
+"hair_tint": "head",
+"skin_tint": "body"
+})
+equipment_slots = Dictionary[String, String]({
+"Backpack": "backpack",
+"Body": "body_armor",
+"Cloak": "cloak",
+"Feet": "boots",
+"Hands": "gauntlets",
+"Head": "helmet",
+"MELEE_MAIN": "weapon_melee_main",
+"MELEE_OFF": "weapon_melee_off",
+"RANGED_MAIN": "weapon_ranged_main",
+"RANGED_OFF": "weapon_ranged_off"
+})
+weapon_sets = Dictionary[String, String]({
+"MELEE_MAIN": "melee",
+"MELEE_OFF": "melee",
+"RANGED_MAIN": "ranged",
+"RANGED_OFF": "ranged"
+})
+effect_slots = PackedStringArray("weaponGlow", "aura", "slash", "effect", "effect2", "effect3")
+rules = Array[Dictionary]([{
+"applies": false,
+"except": ["Head5", "Head8"],
+"notes": "The old workshop hid the hair under any helmet but Head5 and Head8; play keeps both.",
+"rule": "helmet_hides_head"
+}])
+unused_fields = PackedStringArray("placeholder_tint", "Amulet", "Rings", "Legs")
+notes = "presentation_kind must be layered for the layered rig. The equipment slots Amulet, Left/Right Ring and Legs draw nothing."

@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="PresentationCharacter" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/character.gd" id="1_pyp50"]
+
+[resource]
+script = ExtResource("1_pyp50")
+id = "creature.spell.cambion"
+rig = "smallscale.demonelite01"
+portrait = "srd22.portrait.cambion"
+size = "Medium"
+reactions = Dictionary[String, String]({
+"block": "Block"
+})
+death = Dictionary[String, String]({
+"default": "Death"
+})
+status = "stand_in"
+notes = "No art of its own: stands in with a demon elite (rig smallscale.demonelite01)."

@@ -1,0 +1,130 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_lndhs"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_sbckw"]
+
+[sub_resource type="Resource" id="Resource_o20kp"]
+script = ExtResource("1_lndhs")
+path = "art/media/ui/icons/smooth48/item.leather-armor.png"
+native_size = Vector2i(48, 48)
+reuses = "item.leather-armor"
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_sbckw")
+id = "armor.padded"
+kind = "armor"
+slots = Dictionary[String, Dictionary]({
+"body_armor": {
+"layers": [{
+"part": "Belt1",
+"slot": "belt",
+"tint": "#5c2a0e"
+}, {
+"part": "Chest4",
+"slot": "chest",
+"tint": "#ccbbaa"
+}, {
+"part": "Legs1",
+"slot": "legs",
+"tint": "#8b4513"
+}],
+"variants": {
+"50000001": [{
+"part": "Belt1",
+"slot": "belt",
+"tint": "#5c2a0e"
+}, {
+"part": "Chest4",
+"slot": "chest",
+"tint": "#aa7744"
+}, {
+"part": "Legs1",
+"slot": "legs",
+"tint": "#5c2a0e"
+}],
+"50000002": [{
+"part": "Belt1",
+"slot": "belt",
+"tint": "#222233"
+}, {
+"part": "Chest4",
+"slot": "chest",
+"tint": "#223366"
+}, {
+"part": "Legs1",
+"slot": "legs",
+"tint": "#222233"
+}],
+"50000003": [{
+"part": "Belt1",
+"slot": "belt",
+"tint": "#5c2a0e"
+}, {
+"part": "Chest4",
+"slot": "chest",
+"tint": "#448844"
+}, {
+"part": "Legs1",
+"slot": "legs",
+"tint": "#5c2a0e"
+}]
+}
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs1",
+"pivots_by_camera": [[64.5, 71.0], [65.0, 67.0], [66.0, 69.0], [65.5, 67.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#8b4513",
+"variant": ""
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs1",
+"pivots_by_camera": [[64.5, 71.0], [65.0, 67.0], [66.0, 69.0], [65.5, 67.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#5c2a0e",
+"variant": "50000001"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs1",
+"pivots_by_camera": [[64.5, 71.0], [65.0, 67.0], [66.0, 69.0], [65.5, 67.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#222233",
+"variant": "50000002"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs1",
+"pivots_by_camera": [[64.5, 71.0], [65.0, 67.0], [66.0, 69.0], [65.5, 67.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#5c2a0e",
+"variant": "50000003"
+}])
+icon = SubResource("Resource_o20kp")
+notes = "Visual name Padded Armor; Buffed quilted gambeson + leather pants + leather belt
+Icon: Shares an existing icon for the native equipment slot."

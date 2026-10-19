@@ -1,0 +1,676 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_n8efe"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_okh4y"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_sbab8"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_a1u3x"]
+
+[sub_resource type="Resource" id="Resource_pem4f"]
+script = ExtResource("2_okh4y")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-120.24621202458748, 164.79393923933998)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/lioness/attack1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/lioness/attack1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/lioness/attack1/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/lioness/attack1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/lioness/attack1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/lioness/attack1/raw-support.png"
+})
+depth_range = Vector2(-120.246216, 164.79395)
+camera_origin = Vector2(42, 63)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.9811878527277612
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_wlpww"]
+script = ExtResource("1_n8efe")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Attack1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsLioness": "/rigs/animals_lioness/body/Attack1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/lioness/attack1/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Lioness/Attack1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_pem4f")
+
+[sub_resource type="Resource" id="Resource_qmadj"]
+script = ExtResource("2_okh4y")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-120.24621202458748, 164.79393923933998)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/lioness/attack2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/lioness/attack2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/lioness/attack2/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/lioness/attack2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/lioness/attack2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/lioness/attack2/raw-support.png"
+})
+depth_range = Vector2(-120.246216, 164.79395)
+camera_origin = Vector2(42, 63)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.9818235642391948
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_g71ps"]
+script = ExtResource("1_n8efe")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Attack2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsLioness": "/rigs/animals_lioness/body/Attack2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/lioness/attack2/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Lioness/Attack2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_qmadj")
+
+[sub_resource type="Resource" id="Resource_kbjw6"]
+script = ExtResource("2_okh4y")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-120.24621202458748, 164.79393923933998)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/lioness/attack3/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/lioness/attack3/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/lioness/attack3/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/lioness/attack3/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/lioness/attack3/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/lioness/attack3/raw-support.png"
+})
+depth_range = Vector2(-120.246216, 164.79395)
+camera_origin = Vector2(42, 63)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.9823047168177356
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_5pmrn"]
+script = ExtResource("1_n8efe")
+name = "Attack3"
+role = "attack_3"
+source_clip = "Attack3"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsLioness": "/rigs/animals_lioness/body/Attack3.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/lioness/attack3/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Lioness/Attack3.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_kbjw6")
+
+[sub_resource type="Resource" id="Resource_bd6dg"]
+script = ExtResource("2_okh4y")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-120.24621202458748, 164.79393923933998)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/lioness/die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/lioness/die/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/lioness/die/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/lioness/die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/lioness/die/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/lioness/die/raw-support.png"
+})
+depth_range = Vector2(-120.246216, 164.79395)
+camera_origin = Vector2(42, 63)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.9825898021953215
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_tmdqy"]
+script = ExtResource("1_n8efe")
+name = "Die"
+role = "die"
+source_clip = "Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsLioness": "/rigs/animals_lioness/body/Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/lioness/die/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Lioness/Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_bd6dg")
+
+[sub_resource type="Resource" id="Resource_u1rb7"]
+script = ExtResource("2_okh4y")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-120.24621202458748, 164.79393923933998)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/lioness/idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/lioness/idle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/lioness/idle/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/lioness/idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/lioness/idle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/lioness/idle/raw-support.png"
+})
+depth_range = Vector2(-120.246216, 164.79395)
+camera_origin = Vector2(42, 63)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.987480581193457
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_rk5fd"]
+script = ExtResource("1_n8efe")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsLioness": "/rigs/animals_lioness/body/Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/lioness/idle/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Lioness/Idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_u1rb7")
+
+[sub_resource type="Resource" id="Resource_57owm"]
+script = ExtResource("2_okh4y")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-120.24621202458748, 164.79393923933998)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/lioness/idle2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/lioness/idle2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/lioness/idle2/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/lioness/idle2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/lioness/idle2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/lioness/idle2/raw-support.png"
+})
+depth_range = Vector2(-120.246216, 164.79395)
+camera_origin = Vector2(42, 63)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.9866039662160072
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_6b8m1"]
+script = ExtResource("1_n8efe")
+name = "Idle2"
+role = "idle_alt"
+source_clip = "Idle2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsLioness": "/rigs/animals_lioness/body/Idle2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/lioness/idle2/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Lioness/Idle2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_57owm")
+
+[sub_resource type="Resource" id="Resource_c7vm3"]
+script = ExtResource("2_okh4y")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-120.24621202458748, 164.79393923933998)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/lioness/roar/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/lioness/roar/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/lioness/roar/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/lioness/roar/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/lioness/roar/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/lioness/roar/raw-support.png"
+})
+depth_range = Vector2(-120.246216, 164.79395)
+camera_origin = Vector2(42, 63)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.9832426416027702
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_yluvw"]
+script = ExtResource("1_n8efe")
+name = "Roar"
+role = "roar"
+source_clip = "Roar"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsLioness": "/rigs/animals_lioness/body/Roar.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/lioness/roar/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Lioness/Roar.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_c7vm3")
+
+[sub_resource type="Resource" id="Resource_r1att"]
+script = ExtResource("2_okh4y")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-120.24621202458748, 164.79393923933998)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/lioness/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/lioness/run/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/lioness/run/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/lioness/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/lioness/run/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/lioness/run/raw-support.png"
+})
+depth_range = Vector2(-120.246216, 164.79395)
+camera_origin = Vector2(42, 63)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.981752817135434
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_jof5j"]
+script = ExtResource("1_n8efe")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsLioness": "/rigs/animals_lioness/body/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/lioness/run/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Lioness/Run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_r1att")
+
+[sub_resource type="Resource" id="Resource_uc8dm"]
+script = ExtResource("2_okh4y")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-120.24621202458748, 164.79393923933998)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/lioness/takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/lioness/takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/lioness/takedamage/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/lioness/takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/lioness/takedamage/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/lioness/takedamage/raw-support.png"
+})
+depth_range = Vector2(-120.246216, 164.79395)
+camera_origin = Vector2(42, 63)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.983532317826266
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_d11to"]
+script = ExtResource("1_n8efe")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsLioness": "/rigs/animals_lioness/body/TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/lioness/takedamage/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Lioness/TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_uc8dm")
+
+[sub_resource type="Resource" id="Resource_kxxhn"]
+script = ExtResource("2_okh4y")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-120.24621202458748, 164.79393923933998)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/lioness/walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/lioness/walk/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/lioness/walk/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/lioness/walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/lioness/walk/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/lioness/walk/raw-support.png"
+})
+depth_range = Vector2(-120.246216, 164.79395)
+camera_origin = Vector2(42, 63)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.983269369153274
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_y4ih2"]
+script = ExtResource("1_n8efe")
+name = "Walk"
+role = "walk"
+source_clip = "Walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsLioness": "/rigs/animals_lioness/body/Walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/lioness/walk/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Lioness/Walk.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_kxxhn")
+
+[sub_resource type="Resource" id="Resource_byx55"]
+script = ExtResource("3_sbab8")
+role = "movement"
+qualifier = {
+"kind": "default"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+playback = "loop"
+
+[sub_resource type="Resource" id="Resource_e1uam"]
+script = ExtResource("3_sbab8")
+role = "movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_dqnm3"]
+script = ExtResource("3_sbab8")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "direct_arc"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_jkepg"]
+script = ExtResource("3_sbab8")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "connector_transfer"
+}
+clip = "Walk"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_0f0lt"]
+script = ExtResource("3_sbab8")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "direct_arc"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_kw0p0"]
+script = ExtResource("3_sbab8")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "connector_transfer"
+}
+clip = "Walk"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_yuo7r"]
+script = ExtResource("3_sbab8")
+role = "shove"
+qualifier = {
+"kind": "default"
+}
+clip = "Attack2"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 6.0,
+"name": "contact"
+}]
+
+[sub_resource type="Resource" id="Resource_40iq4"]
+script = ExtResource("3_sbab8")
+role = "forced_movement"
+qualifier = {
+"kind": "default"
+}
+clip = "TakeDamage"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 5.0,
+"name": "brace"
+}]
+
+[sub_resource type="Resource" id="Resource_8ugqw"]
+script = ExtResource("3_sbab8")
+role = "forced_movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_xhcew"]
+script = ExtResource("3_sbab8")
+role = "body_action"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_r4lc1"]
+script = ExtResource("3_sbab8")
+role = "body_action_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_peyb8"]
+script = ExtResource("3_sbab8")
+role = "equipment"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_7r2b6"]
+script = ExtResource("3_sbab8")
+role = "healing"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_hdmgt"]
+script = ExtResource("3_sbab8")
+role = "save_avoidance"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_5lfdc"]
+script = ExtResource("3_sbab8")
+role = "condition_entry"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_gws6l"]
+script = ExtResource("3_sbab8")
+role = "condition_hold"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+hidden_slots = PackedStringArray()
+playback = "final_rest"
+rest_frame = 14
+
+[sub_resource type="Resource" id="Resource_hhch7"]
+script = ExtResource("3_sbab8")
+role = "condition_exit"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+reversed = true
+
+[sub_resource type="Resource" id="Resource_ddc66"]
+script = ExtResource("3_sbab8")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "flying",
+"trajectory": "path"
+}
+clip = "Idle"
+hidden_slots = PackedStringArray()
+playback = "once"
+frame_keys = [[0.0, 0.0], [1.0, 0.0]]
+
+[sub_resource type="Resource" id="Resource_4vptd"]
+script = ExtResource("3_sbab8")
+role = "death"
+qualifier = {
+"kind": "default"
+}
+clip = "Die"
+hidden_slots = PackedStringArray()
+playback = "once"
+
+[resource]
+script = ExtResource("4_a1u3x")
+id = "smallscale.animals.lioness"
+pack = "animals"
+variant = "Lioness"
+source = "smallscale-authored/animals"
+cell = Vector2i(84, 84)
+pivot = Vector2(42, 59)
+anchor = Vector2(42, 46)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("AnimalsLioness")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_n8efe")]([SubResource("Resource_wlpww"), SubResource("Resource_g71ps"), SubResource("Resource_5pmrn"), SubResource("Resource_tmdqy"), SubResource("Resource_rk5fd"), SubResource("Resource_6b8m1"), SubResource("Resource_yluvw"), SubResource("Resource_jof5j"), SubResource("Resource_d11to"), SubResource("Resource_y4ih2")])
+fallbacks = Dictionary[String, String]({
+"Attack4": "Attack3",
+"Attack5": "Attack3",
+"Attack6": "Attack3",
+"AttackRun": "Attack1",
+"CrouchWalk": "Walk",
+"Death": "Die",
+"Idle4": "Idle2",
+"Kick": "Attack1",
+"Rolling": "Run",
+"Special1": "Attack3",
+"Taunt": "Idle2"
+})
+contexts = Array[ExtResource("3_sbab8")]([SubResource("Resource_byx55"), SubResource("Resource_e1uam"), SubResource("Resource_dqnm3"), SubResource("Resource_jkepg"), SubResource("Resource_0f0lt"), SubResource("Resource_kw0p0"), SubResource("Resource_yuo7r"), SubResource("Resource_40iq4"), SubResource("Resource_8ugqw"), SubResource("Resource_xhcew"), SubResource("Resource_r4lc1"), SubResource("Resource_peyb8"), SubResource("Resource_7r2b6"), SubResource("Resource_hdmgt"), SubResource("Resource_5lfdc"), SubResource("Resource_gws6l"), SubResource("Resource_hhch7"), SubResource("Resource_ddc66"), SubResource("Resource_4vptd")])
+hold_clips = PackedStringArray("Die")
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed.
+Stand-in clips: Idle4 -> Idle2, Death -> Die, Taunt -> Idle2, Rolling -> Run, CrouchWalk -> Walk, Attack4 -> Attack3, AttackRun -> Attack1, Kick -> Attack1, Special1 -> Attack3, Attack5 -> Attack3, Attack6 -> Attack3."

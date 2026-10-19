@@ -1,0 +1,75 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_w6ite"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_5l6n2"]
+
+[sub_resource type="Resource" id="Resource_olekl"]
+script = ExtResource("1_w6ite")
+path = "art/media/ui/icons/smooth48/item.dagger.png"
+native_size = Vector2i(48, 48)
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_5l6n2")
+id = "weapon.assassin_dagger"
+kind = "weapon"
+slots = Dictionary[String, Dictionary]({
+"weapon_melee_main": {
+"layers": [{
+"part": "Melee1",
+"slot": "weapon",
+"tint": "#334455"
+}],
+"variants": {}
+},
+"weapon_melee_off": {
+"layers": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#8899aa"
+}],
+&"look": "Off-hand Dagger",
+"variants": {
+"oh000001": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#778899"
+}],
+"oh000002": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#d8b808"
+}],
+"oh000003": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#334455"
+}]
+}
+}
+})
+hands = Dictionary[String, Dictionary]({
+"weapon_melee_off": {
+"": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#334455"
+}]
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee1",
+"pivots_by_camera": [[55.5, 65.5], [65.5, 59.0], [74.5, 65.5], [65.0, 72.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#334455",
+"variant": ""
+}])
+icon = SubResource("Resource_olekl")
+notes = "Visual name Assassin's Dagger; Ported from Dagger/Assassin's Dagger sub-item; backend treats as first-class item"

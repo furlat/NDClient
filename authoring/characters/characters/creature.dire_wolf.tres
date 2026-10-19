@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="PresentationCharacter" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/character.gd" id="1_cvtwy"]
+
+[resource]
+script = ExtResource("1_cvtwy")
+id = "creature.dire_wolf"
+rig = "smallscale.animals.elite-wolf"
+portrait = "animals--elite-wolf"
+size = "Large"
+death = Dictionary[String, String]({
+"default": "Die"
+})
+status = "stand_in"
+notes = "No art of its own: stands in with the Elite Wolf variant (rig smallscale.animals.elite-wolf).
+Portrait stand-in: animals--elite-wolf (no portrait of its own)."

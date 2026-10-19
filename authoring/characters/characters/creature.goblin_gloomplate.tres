@@ -1,0 +1,67 @@
+[gd_resource type="Resource" script_class="PresentationCharacter" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/character.gd" id="1_sx0ty"]
+
+[resource]
+script = ExtResource("1_sx0ty")
+id = "creature.goblin_gloomplate"
+identity = "content.neurodragon:creature:creature.goblin_gloomplate@1"
+rig = "smallscale.goblin15"
+portrait = "creature.goblin_gloomplate"
+size = "Medium"
+attacks = Array[Dictionary]([{
+"clip": "Attack1",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.attack",
+"variant": "goblin15-physical"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.attack",
+"variant": "goblin15-second-hand"
+}, {
+"clip": "Attack1",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "goblin15-physical"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "goblin15-second-hand"
+}, {
+"clip": "Attack1",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.feature.extra_attack",
+"variant": "goblin15-physical"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.feature.extra_attack",
+"variant": "goblin15-second-hand"
+}, {
+"clip": "Attack1",
+"contact": 6,
+"delivery": "melee",
+"recipe": "reaction.opportunity_attack",
+"variant": "goblin15-physical"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+"recipe": "reaction.opportunity_attack",
+"variant": "goblin15-second-hand"
+}])
+reactions = Dictionary[String, String]({
+"block": "Block"
+})
+death = Dictionary[String, String]({
+"default": "Death"
+})
+notes = "Roster: Gloomplate, Y128, kit Handaxe x2 (1+1); Brute; Surprise Attack."

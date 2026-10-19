@@ -1,0 +1,903 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_xk0et"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_wac0i"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_bo4ly"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_xi1fh"]
+
+[sub_resource type="Resource" id="Resource_0rwuc"]
+script = ExtResource("2_wac0i")
+status = "validated_partial"
+flags = PackedStringArray("silhouette_iou_below_75_percent", "source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/goblin-03/idle-1-16bit/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/goblin-03/idle-1-16bit/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/goblin-03/idle-1-16bit/normals.png",
+"reference": "art/geometry/creatures/first/actions/goblin-03/idle-1-16bit/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/goblin-03/idle-1-16bit/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/goblin-03/idle-1-16bit/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.8607861689317048
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_quwyk"]
+script = ExtResource("1_xk0et")
+name = "Idle"
+role = "idle116bit"
+source_clip = "Idle 1 16bit"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Goblin03": "/rigs/goblin03/body/Idle 1 16bit.png",
+"Goblin03Shadow": "/rigs/goblin03/shadow/Idle 1 16bit.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/orcs-and-goblins/Bodies/Goblin 03/Idle 1 16bit.png",
+"combined": "art/media/smallscale/authored/orcs-and-goblins/Combined/Goblin 03/Idle 1 16bit.png",
+"shadow": "art/media/smallscale/authored/orcs-and-goblins/Seperate shadows and effects/Goblin 03/Shadows/Idle 1 16bit.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_0rwuc")
+
+[sub_resource type="Resource" id="Resource_plujj"]
+script = ExtResource("2_wac0i")
+status = "validated_partial"
+flags = PackedStringArray("silhouette_iou_below_75_percent", "source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/goblin-03/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/goblin-03/run/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/goblin-03/run/normals.png",
+"reference": "art/geometry/creatures/first/actions/goblin-03/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/goblin-03/run/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/goblin-03/run/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.8646638570237317
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_6rqfp"]
+script = ExtResource("1_xk0et")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Goblin03": "/rigs/goblin03/body/Run.png",
+"Goblin03Shadow": "/rigs/goblin03/shadow/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/orcs-and-goblins/Bodies/Goblin 03/Run.png",
+"combined": "art/media/smallscale/authored/orcs-and-goblins/Combined/Goblin 03/Run.png",
+"shadow": "art/media/smallscale/authored/orcs-and-goblins/Seperate shadows and effects/Goblin 03/Shadows/Run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_plujj")
+
+[sub_resource type="Resource" id="Resource_vdffq"]
+script = ExtResource("2_wac0i")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/goblin-03/walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/goblin-03/walk/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/goblin-03/walk/normals.png",
+"reference": "art/geometry/creatures/first/actions/goblin-03/walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/goblin-03/walk/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/goblin-03/walk/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.8714956811638127
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_dm13b"]
+script = ExtResource("1_xk0et")
+name = "Walk"
+role = "walk"
+source_clip = "Walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Goblin03": "/rigs/goblin03/body/Walk.png",
+"Goblin03Shadow": "/rigs/goblin03/shadow/Walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/orcs-and-goblins/Bodies/Goblin 03/Walk.png",
+"combined": "art/media/smallscale/authored/orcs-and-goblins/Combined/Goblin 03/Walk.png",
+"shadow": "art/media/smallscale/authored/orcs-and-goblins/Seperate shadows and effects/Goblin 03/Shadows/Walk.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_vdffq")
+
+[sub_resource type="Resource" id="Resource_8gkt1"]
+script = ExtResource("2_wac0i")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/goblin-03/crouch-walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/goblin-03/crouch-walk/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/goblin-03/crouch-walk/normals.png",
+"reference": "art/geometry/creatures/first/actions/goblin-03/crouch-walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/goblin-03/crouch-walk/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/goblin-03/crouch-walk/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.8823362878111457
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_oug2e"]
+script = ExtResource("1_xk0et")
+name = "CrouchWalk"
+role = "crouch_move"
+source_clip = "Crouch walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Goblin03": "/rigs/goblin03/body/Crouch walk.png",
+"Goblin03Shadow": "/rigs/goblin03/shadow/Crouch walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/orcs-and-goblins/Bodies/Goblin 03/Crouch walk.png",
+"combined": "art/media/smallscale/authored/orcs-and-goblins/Combined/Goblin 03/Crouch walk.png",
+"shadow": "art/media/smallscale/authored/orcs-and-goblins/Seperate shadows and effects/Goblin 03/Shadows/Crouch walk.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_8gkt1")
+
+[sub_resource type="Resource" id="Resource_jcklc"]
+script = ExtResource("2_wac0i")
+status = "validated_partial"
+flags = PackedStringArray("silhouette_iou_below_75_percent", "source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/goblin-03/takedamage-1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/goblin-03/takedamage-1/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/goblin-03/takedamage-1/normals.png",
+"reference": "art/geometry/creatures/first/actions/goblin-03/takedamage-1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/goblin-03/takedamage-1/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/goblin-03/takedamage-1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.8745687325934239
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_no5e2"]
+script = ExtResource("1_xk0et")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage 1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Goblin03": "/rigs/goblin03/body/TakeDamage 1.png",
+"Goblin03Shadow": "/rigs/goblin03/shadow/TakeDamage 1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/orcs-and-goblins/Bodies/Goblin 03/TakeDamage 1.png",
+"combined": "art/media/smallscale/authored/orcs-and-goblins/Combined/Goblin 03/TakeDamage 1.png",
+"shadow": "art/media/smallscale/authored/orcs-and-goblins/Seperate shadows and effects/Goblin 03/Shadows/TakeDamage 1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_jcklc")
+
+[sub_resource type="Resource" id="Resource_4bvhm"]
+script = ExtResource("2_wac0i")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/goblin-03/die-1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/goblin-03/die-1/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/goblin-03/die-1/normals.png",
+"reference": "art/geometry/creatures/first/actions/goblin-03/die-1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/goblin-03/die-1/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/goblin-03/die-1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.8771503040834058
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_nl1sg"]
+script = ExtResource("1_xk0et")
+name = "Die"
+role = "die"
+source_clip = "Die 1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Goblin03": "/rigs/goblin03/body/Die 1.png",
+"Goblin03Shadow": "/rigs/goblin03/shadow/Die 1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/orcs-and-goblins/Bodies/Goblin 03/Die 1.png",
+"combined": "art/media/smallscale/authored/orcs-and-goblins/Combined/Goblin 03/Die 1.png",
+"shadow": "art/media/smallscale/authored/orcs-and-goblins/Seperate shadows and effects/Goblin 03/Shadows/Die 1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_4bvhm")
+
+[sub_resource type="Resource" id="Resource_eti8n"]
+script = ExtResource("2_wac0i")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/goblin-03/taunt/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/goblin-03/taunt/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/goblin-03/taunt/normals.png",
+"reference": "art/geometry/creatures/first/actions/goblin-03/taunt/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/goblin-03/taunt/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/goblin-03/taunt/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.8747229597770512
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_jirqc"]
+script = ExtResource("1_xk0et")
+name = "Taunt"
+role = "taunt"
+source_clip = "Taunt"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Goblin03": "/rigs/goblin03/body/Taunt.png",
+"Goblin03Shadow": "/rigs/goblin03/shadow/Taunt.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/orcs-and-goblins/Bodies/Goblin 03/Taunt.png",
+"combined": "art/media/smallscale/authored/orcs-and-goblins/Combined/Goblin 03/Taunt.png",
+"shadow": "art/media/smallscale/authored/orcs-and-goblins/Seperate shadows and effects/Goblin 03/Shadows/Taunt.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_eti8n")
+
+[sub_resource type="Resource" id="Resource_wiilm"]
+script = ExtResource("2_wac0i")
+status = "validated_partial"
+flags = PackedStringArray("silhouette_iou_below_75_percent", "source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/goblin-03/attack-1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/goblin-03/attack-1/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/goblin-03/attack-1/normals.png",
+"reference": "art/geometry/creatures/first/actions/goblin-03/attack-1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/goblin-03/attack-1/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/goblin-03/attack-1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.8561377561800126
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_6nnry"]
+script = ExtResource("1_xk0et")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Attack 1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Goblin03": "/rigs/goblin03/body/Attack 1.png",
+"Goblin03Effect": "/rigs/goblin03/effect/Attack 1.png",
+"Goblin03Shadow": "/rigs/goblin03/shadow/Attack 1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/orcs-and-goblins/Bodies/Goblin 03/Attack 1.png",
+"combined": "art/media/smallscale/authored/orcs-and-goblins/Combined/Goblin 03/Attack 1.png",
+"effect": "art/media/smallscale/authored/orcs-and-goblins/Seperate shadows and effects/Goblin 03/Effects/Attack 1.png",
+"shadow": "art/media/smallscale/authored/orcs-and-goblins/Seperate shadows and effects/Goblin 03/Shadows/Attack 1.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Goblin03Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_wiilm")
+
+[sub_resource type="Resource" id="Resource_oous4"]
+script = ExtResource("2_wac0i")
+status = "validated_partial"
+flags = PackedStringArray("silhouette_iou_below_75_percent", "source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/goblin-03/attack-2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/goblin-03/attack-2/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/goblin-03/attack-2/normals.png",
+"reference": "art/geometry/creatures/first/actions/goblin-03/attack-2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/goblin-03/attack-2/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/goblin-03/attack-2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.8697021884319738
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_q1ram"]
+script = ExtResource("1_xk0et")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Attack 2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Goblin03": "/rigs/goblin03/body/Attack 2.png",
+"Goblin03Shadow": "/rigs/goblin03/shadow/Attack 2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/orcs-and-goblins/Bodies/Goblin 03/Attack 2.png",
+"combined": "art/media/smallscale/authored/orcs-and-goblins/Combined/Goblin 03/Attack 2.png",
+"shadow": "art/media/smallscale/authored/orcs-and-goblins/Seperate shadows and effects/Goblin 03/Shadows/Attack 2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_oous4")
+
+[sub_resource type="Resource" id="Resource_vaeiy"]
+script = ExtResource("2_wac0i")
+status = "validated_partial"
+flags = PackedStringArray("silhouette_iou_below_75_percent", "source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/goblin-03/attack-3/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/goblin-03/attack-3/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/goblin-03/attack-3/normals.png",
+"reference": "art/geometry/creatures/first/actions/goblin-03/attack-3/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/goblin-03/attack-3/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/goblin-03/attack-3/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.8523938994859594
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_or5g5"]
+script = ExtResource("1_xk0et")
+name = "Attack3"
+role = "attack_3"
+source_clip = "Attack 3"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Goblin03": "/rigs/goblin03/body/Attack 3.png",
+"Goblin03Shadow": "/rigs/goblin03/shadow/Attack 3.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/orcs-and-goblins/Bodies/Goblin 03/Attack 3.png",
+"combined": "art/media/smallscale/authored/orcs-and-goblins/Combined/Goblin 03/Attack 3.png",
+"shadow": "art/media/smallscale/authored/orcs-and-goblins/Seperate shadows and effects/Goblin 03/Shadows/Attack 3.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_vaeiy")
+
+[sub_resource type="Resource" id="Resource_li74k"]
+script = ExtResource("2_wac0i")
+status = "validated_partial"
+flags = PackedStringArray("silhouette_iou_below_75_percent", "source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/goblin-03/attack-4/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/goblin-03/attack-4/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/goblin-03/attack-4/normals.png",
+"reference": "art/geometry/creatures/first/actions/goblin-03/attack-4/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/goblin-03/attack-4/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/goblin-03/attack-4/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.8594956144963507
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_s7spm"]
+script = ExtResource("1_xk0et")
+name = "Attack4"
+role = "attack_4"
+source_clip = "Attack 4"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Goblin03": "/rigs/goblin03/body/Attack 4.png",
+"Goblin03Effect": "/rigs/goblin03/effect/Attack 4.png",
+"Goblin03Shadow": "/rigs/goblin03/shadow/Attack 4.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/orcs-and-goblins/Bodies/Goblin 03/Attack 4.png",
+"combined": "art/media/smallscale/authored/orcs-and-goblins/Combined/Goblin 03/Attack 4.png",
+"effect": "art/media/smallscale/authored/orcs-and-goblins/Seperate shadows and effects/Goblin 03/Effects/Attack 4.png",
+"shadow": "art/media/smallscale/authored/orcs-and-goblins/Seperate shadows and effects/Goblin 03/Shadows/Attack 4.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Goblin03Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_li74k")
+
+[sub_resource type="Resource" id="Resource_to3aj"]
+script = ExtResource("2_wac0i")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/goblin-03/roll-1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/goblin-03/roll-1/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/goblin-03/roll-1/normals.png",
+"reference": "art/geometry/creatures/first/actions/goblin-03/roll-1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/goblin-03/roll-1/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/goblin-03/roll-1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.8769025711583112
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_nn8n3"]
+script = ExtResource("1_xk0et")
+name = "Rolling"
+role = "roll"
+source_clip = "Roll 1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Goblin03": "/rigs/goblin03/body/Roll 1.png",
+"Goblin03Shadow": "/rigs/goblin03/shadow/Roll 1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/orcs-and-goblins/Bodies/Goblin 03/Roll 1.png",
+"combined": "art/media/smallscale/authored/orcs-and-goblins/Combined/Goblin 03/Roll 1.png",
+"shadow": "art/media/smallscale/authored/orcs-and-goblins/Seperate shadows and effects/Goblin 03/Shadows/Roll 1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_to3aj")
+
+[sub_resource type="Resource" id="Resource_w0sgg"]
+script = ExtResource("2_wac0i")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/goblin-03/block/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/goblin-03/block/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/goblin-03/block/normals.png",
+"reference": "art/geometry/creatures/first/actions/goblin-03/block/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/goblin-03/block/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/goblin-03/block/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.8752073634077165
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_d408l"]
+script = ExtResource("1_xk0et")
+name = "Block"
+role = "block_hold"
+source_clip = "Block"
+frames = 6
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Goblin03": "/rigs/goblin03/body/Block.png",
+"Goblin03Shadow": "/rigs/goblin03/shadow/Block.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/orcs-and-goblins/Bodies/Goblin 03/Block.png",
+"combined": "art/media/smallscale/authored/orcs-and-goblins/Combined/Goblin 03/Block.png",
+"shadow": "art/media/smallscale/authored/orcs-and-goblins/Seperate shadows and effects/Goblin 03/Shadows/Block.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_w0sgg")
+
+[sub_resource type="Resource" id="Resource_xec15"]
+script = ExtResource("2_wac0i")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/goblin-03/crouch/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/goblin-03/crouch/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/goblin-03/crouch/normals.png",
+"reference": "art/geometry/creatures/first/actions/goblin-03/crouch/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/goblin-03/crouch/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/goblin-03/crouch/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.8850456253354804
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_y2s6n"]
+script = ExtResource("1_xk0et")
+name = "Crouch"
+role = "crouch_idle"
+source_clip = "Crouch"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Goblin03": "/rigs/goblin03/body/Crouch.png",
+"Goblin03Shadow": "/rigs/goblin03/shadow/Crouch.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/orcs-and-goblins/Bodies/Goblin 03/Crouch.png",
+"combined": "art/media/smallscale/authored/orcs-and-goblins/Combined/Goblin 03/Crouch.png",
+"shadow": "art/media/smallscale/authored/orcs-and-goblins/Seperate shadows and effects/Goblin 03/Shadows/Crouch.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_xec15")
+
+[sub_resource type="Resource" id="Resource_dffcr"]
+script = ExtResource("2_wac0i")
+status = "validated_partial"
+flags = PackedStringArray("silhouette_iou_below_75_percent", "source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/goblin-03/die-2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/goblin-03/die-2/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/goblin-03/die-2/normals.png",
+"reference": "art/geometry/creatures/first/actions/goblin-03/die-2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/goblin-03/die-2/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/goblin-03/die-2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.8409232324803609
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_bi3qr"]
+script = ExtResource("1_xk0et")
+name = "Death"
+role = "die_alt"
+source_clip = "Die 2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Goblin03": "/rigs/goblin03/body/Die 2.png",
+"Goblin03Shadow": "/rigs/goblin03/shadow/Die 2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/orcs-and-goblins/Bodies/Goblin 03/Die 2.png",
+"combined": "art/media/smallscale/authored/orcs-and-goblins/Combined/Goblin 03/Die 2.png",
+"shadow": "art/media/smallscale/authored/orcs-and-goblins/Seperate shadows and effects/Goblin 03/Shadows/Die 2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_dffcr")
+
+[sub_resource type="Resource" id="Resource_n0aeh"]
+script = ExtResource("3_bo4ly")
+role = "movement"
+qualifier = {
+"kind": "default"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+playback = "loop"
+
+[sub_resource type="Resource" id="Resource_butg0"]
+script = ExtResource("3_bo4ly")
+role = "movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_3vg7w"]
+script = ExtResource("3_bo4ly")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "direct_arc"
+}
+clip = "Rolling"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_un18l"]
+script = ExtResource("3_bo4ly")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "connector_transfer"
+}
+clip = "CrouchWalk"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_76rso"]
+script = ExtResource("3_bo4ly")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "direct_arc"
+}
+clip = "Rolling"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_xb0gk"]
+script = ExtResource("3_bo4ly")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "connector_transfer"
+}
+clip = "CrouchWalk"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_0ywy0"]
+script = ExtResource("3_bo4ly")
+role = "shove"
+qualifier = {
+"kind": "default"
+}
+clip = "Attack2"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 6.0,
+"name": "contact"
+}]
+
+[sub_resource type="Resource" id="Resource_vy116"]
+script = ExtResource("3_bo4ly")
+role = "forced_movement"
+qualifier = {
+"kind": "default"
+}
+clip = "TakeDamage"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 5.0,
+"name": "brace"
+}]
+
+[sub_resource type="Resource" id="Resource_f4q4h"]
+script = ExtResource("3_bo4ly")
+role = "forced_movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_437hg"]
+script = ExtResource("3_bo4ly")
+role = "body_action"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_c2qe7"]
+script = ExtResource("3_bo4ly")
+role = "body_action_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_x8cxw"]
+script = ExtResource("3_bo4ly")
+role = "equipment"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_w2te8"]
+script = ExtResource("3_bo4ly")
+role = "healing"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_wkuh8"]
+script = ExtResource("3_bo4ly")
+role = "save_avoidance"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_kuv4x"]
+script = ExtResource("3_bo4ly")
+role = "condition_entry"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_hsjou"]
+script = ExtResource("3_bo4ly")
+role = "condition_hold"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+hidden_slots = PackedStringArray()
+playback = "final_rest"
+rest_frame = 14
+
+[sub_resource type="Resource" id="Resource_fs11a"]
+script = ExtResource("3_bo4ly")
+role = "condition_exit"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+reversed = true
+
+[sub_resource type="Resource" id="Resource_t16ck"]
+script = ExtResource("3_bo4ly")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "flying",
+"trajectory": "path"
+}
+clip = "Idle"
+hidden_slots = PackedStringArray()
+playback = "once"
+frame_keys = [[0.0, 0.0], [1.0, 0.0]]
+
+[sub_resource type="Resource" id="Resource_nbs47"]
+script = ExtResource("3_bo4ly")
+role = "death"
+qualifier = {
+"kind": "default"
+}
+clip = "Death"
+hidden_slots = PackedStringArray()
+playback = "once"
+
+[resource]
+script = ExtResource("4_xi1fh")
+id = "smallscale.goblin03"
+pack = "orcs-and-goblins"
+variant = "Goblin 03"
+source = "smallscale-authored/orcs-and-goblins"
+pivot = Vector2(64, 87)
+anchor = Vector2(64, 72)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("shadow", "body", "effect")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("Goblin03"),
+"effect": PackedStringArray("Goblin03Effect"),
+"shadow": PackedStringArray("Goblin03Shadow")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_xk0et")]([SubResource("Resource_quwyk"), SubResource("Resource_6rqfp"), SubResource("Resource_dm13b"), SubResource("Resource_oug2e"), SubResource("Resource_no5e2"), SubResource("Resource_nl1sg"), SubResource("Resource_jirqc"), SubResource("Resource_6nnry"), SubResource("Resource_q1ram"), SubResource("Resource_or5g5"), SubResource("Resource_s7spm"), SubResource("Resource_nn8n3"), SubResource("Resource_d408l"), SubResource("Resource_y2s6n"), SubResource("Resource_bi3qr")])
+contexts = Array[ExtResource("3_bo4ly")]([SubResource("Resource_n0aeh"), SubResource("Resource_butg0"), SubResource("Resource_3vg7w"), SubResource("Resource_un18l"), SubResource("Resource_76rso"), SubResource("Resource_xb0gk"), SubResource("Resource_0ywy0"), SubResource("Resource_vy116"), SubResource("Resource_f4q4h"), SubResource("Resource_437hg"), SubResource("Resource_c2qe7"), SubResource("Resource_x8cxw"), SubResource("Resource_w2te8"), SubResource("Resource_wkuh8"), SubResource("Resource_kuv4x"), SubResource("Resource_hsjou"), SubResource("Resource_fs11a"), SubResource("Resource_t16ck"), SubResource("Resource_nbs47")])
+shadow_alpha = 0.5
+hold_clips = PackedStringArray("Die", "Death")
+measurements = "measured/characters/rigs/smallscale.goblin03.json"

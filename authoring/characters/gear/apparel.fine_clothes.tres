@@ -1,0 +1,180 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_et6al"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_eqsby"]
+
+[sub_resource type="Resource" id="Resource_rol2r"]
+script = ExtResource("1_et6al")
+path = "art/media/ui/icons/smooth48/item.leather-armor.png"
+native_size = Vector2i(48, 48)
+reuses = "item.leather-armor"
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_eqsby")
+id = "apparel.fine_clothes"
+kind = "armor"
+slots = Dictionary[String, Dictionary]({
+"body_armor": {
+"layers": [{
+"part": "Chest9",
+"slot": "chest",
+"tint": "#ccbbaa"
+}, {
+"part": "Legs1",
+"slot": "legs",
+"tint": "#aa8466"
+}],
+"variants": {
+"83000001": [{
+"part": "Chest9",
+"slot": "chest",
+"tint": "#ccccbb"
+}, {
+"part": "Legs1",
+"slot": "legs",
+"tint": "#223366"
+}],
+"83000002": [{
+"part": "Chest9",
+"slot": "chest",
+"tint": "#aa7744"
+}, {
+"part": "Legs1",
+"slot": "legs",
+"tint": "#aa8466"
+}],
+"83000003": [{
+"part": "Chest9",
+"slot": "chest",
+"tint": "#223366"
+}, {
+"part": "Legs1",
+"slot": "legs",
+"tint": "#ccaa44"
+}],
+"83000004": [{
+"part": "Chest9",
+"slot": "chest",
+"tint": "#ccaa44"
+}, {
+"part": "Legs2",
+"slot": "legs",
+"tint": "#553377"
+}],
+"83000005": [{
+"part": "Chest13",
+"slot": "chest",
+"tint": "#553377"
+}, {
+"part": "Legs2",
+"slot": "legs",
+"tint": "#ccaa44"
+}],
+"83000006": [{
+"part": "Chest9",
+"slot": "chest",
+"tint": "#aa7744"
+}, {
+"part": "Legs2",
+"slot": "legs",
+"tint": "#ccaa44"
+}]
+}
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs1",
+"pivots_by_camera": [[64.5, 71.5], [65.0, 68.0], [65.5, 70.0], [65.5, 67.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#aa8466",
+"variant": ""
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs1",
+"pivots_by_camera": [[64.5, 71.5], [65.0, 68.0], [65.5, 70.0], [65.5, 67.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#223366",
+"variant": "83000001"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs1",
+"pivots_by_camera": [[64.5, 71.5], [65.0, 68.0], [65.5, 70.0], [65.5, 67.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#aa8466",
+"variant": "83000002"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs1",
+"pivots_by_camera": [[64.5, 71.5], [65.0, 68.0], [65.5, 70.0], [65.5, 67.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#ccaa44",
+"variant": "83000003"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs2",
+"pivots_by_camera": [[64.5, 71.5], [65.0, 68.5], [65.5, 70.0], [65.0, 67.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#553377",
+"variant": "83000004"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs2",
+"pivots_by_camera": [[64.0, 71.0], [64.5, 68.0], [66.0, 70.0], [65.5, 67.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#ccaa44",
+"variant": "83000005"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Legs2",
+"pivots_by_camera": [[64.5, 71.5], [65.0, 68.5], [65.5, 70.0], [65.0, 67.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#ccaa44",
+"variant": "83000006"
+}])
+icon = SubResource("Resource_rol2r")
+notes = "Visual name Fine Clothes; Quality shirt and tailored pants
+Icon: Shares an existing icon for the native equipment slot."

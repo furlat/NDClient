@@ -8,7 +8,6 @@ const Protocol = preload("res://sdk/protocol.gd")
 const Reducer = preload("res://sdk/reducer.gd")
 const Compiler = preload("res://presentation/compiler.gd")
 const MediaWarmup = preload("res://presentation/media_warmup.gd")
-const SocketSamples = preload("res://presentation/surface_socket_samples.gd")
 const Catalog = preload("res://source_catalog.gd")
 var transport = Transport.new()
 var journal = Journal.new()
@@ -196,10 +195,6 @@ func offer_prepared_sources(files:Dictionary,headers:Dictionary={})->void:
     # to the renderer. Give the preparer its own shell, never shared derived
     # caches or action/world state. Existing sources win within this session.
     var offered:Dictionary=Catalog.source_snapshot(files)
-    for path in offered.keys():
-        if path is String and path.begins_with(SocketSamples.ROOT):
-            var record:Dictionary=offered[path]
-            if not record.is_read_only() or not record.get("valid",false):offered.erase(path)
     mutex.lock()
     if not cancelled:
         Catalog.adopt_snapshot(source_files_pending,offered)

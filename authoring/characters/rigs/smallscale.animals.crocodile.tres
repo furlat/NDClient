@@ -1,0 +1,675 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_6ehwq"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_ocf2a"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_a5wt5"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_ldqtg"]
+
+[sub_resource type="Resource" id="Resource_gc1y5"]
+script = ExtResource("2_ocf2a")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/crocodile/attack1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/crocodile/attack1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/crocodile/attack1/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/crocodile/attack1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/crocodile/attack1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/crocodile/attack1/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.9869546055531072
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_kaf2u"]
+script = ExtResource("1_6ehwq")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Attack1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsCrocodile": "/rigs/animals_crocodile/body/Attack1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/crocodile/attack1/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Crocodile/Attack1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_gc1y5")
+
+[sub_resource type="Resource" id="Resource_j7i18"]
+script = ExtResource("2_ocf2a")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/crocodile/attack2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/crocodile/attack2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/crocodile/attack2/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/crocodile/attack2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/crocodile/attack2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/crocodile/attack2/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.9875910553955616
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_e02aj"]
+script = ExtResource("1_6ehwq")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Attack2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsCrocodile": "/rigs/animals_crocodile/body/Attack2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/crocodile/attack2/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Crocodile/Attack2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_j7i18")
+
+[sub_resource type="Resource" id="Resource_xd6k2"]
+script = ExtResource("2_ocf2a")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/crocodile/attack3/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/crocodile/attack3/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/crocodile/attack3/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/crocodile/attack3/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/crocodile/attack3/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/crocodile/attack3/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.9401665156809456
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_ohd7c"]
+script = ExtResource("1_6ehwq")
+name = "Attack3"
+role = "attack_3"
+source_clip = "Attack3"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsCrocodile": "/rigs/animals_crocodile/body/Attack3.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/crocodile/attack3/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Crocodile/Attack3.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_xd6k2")
+
+[sub_resource type="Resource" id="Resource_mb348"]
+script = ExtResource("2_ocf2a")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/crocodile/attack4/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/crocodile/attack4/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/crocodile/attack4/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/crocodile/attack4/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/crocodile/attack4/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/crocodile/attack4/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.9100710956259712
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_ffiew"]
+script = ExtResource("1_6ehwq")
+name = "Attack4"
+role = "attack_4"
+source_clip = "Attack4"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsCrocodile": "/rigs/animals_crocodile/body/Attack4.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/crocodile/attack4/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Crocodile/Attack4.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_mb348")
+
+[sub_resource type="Resource" id="Resource_kon3p"]
+script = ExtResource("2_ocf2a")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/crocodile/die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/crocodile/die/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/crocodile/die/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/crocodile/die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/crocodile/die/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/crocodile/die/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.9554551895147008
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_hn3hn"]
+script = ExtResource("1_6ehwq")
+name = "Die"
+role = "die"
+source_clip = "Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsCrocodile": "/rigs/animals_crocodile/body/Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/crocodile/die/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Crocodile/Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_kon3p")
+
+[sub_resource type="Resource" id="Resource_y1l56"]
+script = ExtResource("2_ocf2a")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/crocodile/idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/crocodile/idle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/crocodile/idle/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/crocodile/idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/crocodile/idle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/crocodile/idle/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.990986777773054
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_y6ge0"]
+script = ExtResource("1_6ehwq")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsCrocodile": "/rigs/animals_crocodile/body/Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/crocodile/idle/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Crocodile/Idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_y1l56")
+
+[sub_resource type="Resource" id="Resource_1cw6w"]
+script = ExtResource("2_ocf2a")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/crocodile/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/crocodile/run/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/crocodile/run/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/crocodile/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/crocodile/run/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/crocodile/run/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.987980666410026
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_rak3l"]
+script = ExtResource("1_6ehwq")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsCrocodile": "/rigs/animals_crocodile/body/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/crocodile/run/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Crocodile/Run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_1cw6w")
+
+[sub_resource type="Resource" id="Resource_6xveo"]
+script = ExtResource("2_ocf2a")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/crocodile/takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/crocodile/takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/crocodile/takedamage/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/crocodile/takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/crocodile/takedamage/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/crocodile/takedamage/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.986710816777042
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_64jr8"]
+script = ExtResource("1_6ehwq")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsCrocodile": "/rigs/animals_crocodile/body/TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/crocodile/takedamage/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Crocodile/TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_6xveo")
+
+[sub_resource type="Resource" id="Resource_ijaxa"]
+script = ExtResource("2_ocf2a")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/crocodile/taunt/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/crocodile/taunt/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/crocodile/taunt/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/crocodile/taunt/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/crocodile/taunt/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/crocodile/taunt/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.987645381726026
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_s20l4"]
+script = ExtResource("1_6ehwq")
+name = "Taunt"
+role = "taunt"
+source_clip = "Taunt"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsCrocodile": "/rigs/animals_crocodile/body/Taunt.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/crocodile/taunt/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Crocodile/Taunt.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_ijaxa")
+
+[sub_resource type="Resource" id="Resource_q8a0b"]
+script = ExtResource("2_ocf2a")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/crocodile/walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/crocodile/walk/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/crocodile/walk/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/crocodile/walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/crocodile/walk/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/crocodile/walk/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = -4.242640687119285
+coverage = 0.987431298197776
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_81lug"]
+script = ExtResource("1_6ehwq")
+name = "Walk"
+role = "walk"
+source_clip = "Walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsCrocodile": "/rigs/animals_crocodile/body/Walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/crocodile/walk/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Crocodile/Walk.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_q8a0b")
+
+[sub_resource type="Resource" id="Resource_t0mv4"]
+script = ExtResource("3_a5wt5")
+role = "movement"
+qualifier = {
+"kind": "default"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+playback = "loop"
+
+[sub_resource type="Resource" id="Resource_x3ww8"]
+script = ExtResource("3_a5wt5")
+role = "movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_083mh"]
+script = ExtResource("3_a5wt5")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "direct_arc"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_r66nf"]
+script = ExtResource("3_a5wt5")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "connector_transfer"
+}
+clip = "Walk"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_wdi7i"]
+script = ExtResource("3_a5wt5")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "direct_arc"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_d5rj8"]
+script = ExtResource("3_a5wt5")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "connector_transfer"
+}
+clip = "Walk"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_f68tw"]
+script = ExtResource("3_a5wt5")
+role = "shove"
+qualifier = {
+"kind": "default"
+}
+clip = "Attack2"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 6.0,
+"name": "contact"
+}]
+
+[sub_resource type="Resource" id="Resource_1x00q"]
+script = ExtResource("3_a5wt5")
+role = "forced_movement"
+qualifier = {
+"kind": "default"
+}
+clip = "TakeDamage"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 5.0,
+"name": "brace"
+}]
+
+[sub_resource type="Resource" id="Resource_qk5tw"]
+script = ExtResource("3_a5wt5")
+role = "forced_movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_05oxi"]
+script = ExtResource("3_a5wt5")
+role = "body_action"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_0oeku"]
+script = ExtResource("3_a5wt5")
+role = "body_action_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_mt0s1"]
+script = ExtResource("3_a5wt5")
+role = "equipment"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_k4la3"]
+script = ExtResource("3_a5wt5")
+role = "healing"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_6pld3"]
+script = ExtResource("3_a5wt5")
+role = "save_avoidance"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_bq1qk"]
+script = ExtResource("3_a5wt5")
+role = "condition_entry"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_uso0m"]
+script = ExtResource("3_a5wt5")
+role = "condition_hold"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+hidden_slots = PackedStringArray()
+playback = "final_rest"
+rest_frame = 14
+
+[sub_resource type="Resource" id="Resource_x4hfg"]
+script = ExtResource("3_a5wt5")
+role = "condition_exit"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+reversed = true
+
+[sub_resource type="Resource" id="Resource_opdx1"]
+script = ExtResource("3_a5wt5")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "flying",
+"trajectory": "path"
+}
+clip = "Idle"
+hidden_slots = PackedStringArray()
+playback = "once"
+frame_keys = [[0.0, 0.0], [1.0, 0.0]]
+
+[sub_resource type="Resource" id="Resource_sno8h"]
+script = ExtResource("3_a5wt5")
+role = "death"
+qualifier = {
+"kind": "default"
+}
+clip = "Die"
+hidden_slots = PackedStringArray()
+playback = "once"
+
+[resource]
+script = ExtResource("4_ldqtg")
+id = "smallscale.animals.crocodile"
+pack = "animals"
+variant = "Crocodile"
+source = "smallscale-authored/animals"
+cell = Vector2i(64, 64)
+pivot = Vector2(32, 51)
+anchor = Vector2(32, 40)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("AnimalsCrocodile")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_6ehwq")]([SubResource("Resource_kaf2u"), SubResource("Resource_e02aj"), SubResource("Resource_ohd7c"), SubResource("Resource_ffiew"), SubResource("Resource_hn3hn"), SubResource("Resource_y6ge0"), SubResource("Resource_rak3l"), SubResource("Resource_64jr8"), SubResource("Resource_s20l4"), SubResource("Resource_81lug")])
+fallbacks = Dictionary[String, String]({
+"Attack5": "Attack4",
+"Attack6": "Attack4",
+"AttackRun": "Attack1",
+"CrouchWalk": "Walk",
+"Death": "Die",
+"Idle2": "Idle",
+"Idle4": "Idle",
+"Kick": "Attack1",
+"Rolling": "Run",
+"Special1": "Attack4"
+})
+contexts = Array[ExtResource("3_a5wt5")]([SubResource("Resource_t0mv4"), SubResource("Resource_x3ww8"), SubResource("Resource_083mh"), SubResource("Resource_r66nf"), SubResource("Resource_wdi7i"), SubResource("Resource_d5rj8"), SubResource("Resource_f68tw"), SubResource("Resource_1x00q"), SubResource("Resource_qk5tw"), SubResource("Resource_05oxi"), SubResource("Resource_0oeku"), SubResource("Resource_mt0s1"), SubResource("Resource_k4la3"), SubResource("Resource_6pld3"), SubResource("Resource_bq1qk"), SubResource("Resource_uso0m"), SubResource("Resource_x4hfg"), SubResource("Resource_opdx1"), SubResource("Resource_sno8h")])
+hold_clips = PackedStringArray("Die")
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed.
+Stand-in clips: Idle2 -> Idle, Idle4 -> Idle, Death -> Die, Rolling -> Run, CrouchWalk -> Walk, AttackRun -> Attack1, Kick -> Attack1, Special1 -> Attack4, Attack5 -> Attack4, Attack6 -> Attack4."

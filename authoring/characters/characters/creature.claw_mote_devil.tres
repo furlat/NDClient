@@ -1,0 +1,68 @@
+[gd_resource type="Resource" script_class="PresentationCharacter" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/character.gd" id="1_5i7y4"]
+
+[resource]
+script = ExtResource("1_5i7y4")
+id = "creature.claw_mote_devil"
+identity = "content.neurodragon:creature:creature.claw_mote_devil@1"
+rig = "smallscale.imp05"
+portrait = "creature.claw_mote_devil"
+size = "Small"
+attacks = Array[Dictionary]([{
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.attack",
+"variant": "fixed-unarmed-attack2-6-11"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+&"items": ["weapon.creature.claw_mote_devil_claws"],
+"recipe": "action.attack",
+"variant": "imp05-claw_mote_devil_claws"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "fixed-unarmed-attack2-6-11"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+&"items": ["weapon.creature.claw_mote_devil_claws"],
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "imp05-claw_mote_devil_claws"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+"recipe": "action.feature.extra_attack",
+"variant": "fixed-unarmed-attack2-6-11"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+&"items": ["weapon.creature.claw_mote_devil_claws"],
+"recipe": "action.feature.extra_attack",
+"variant": "imp05-claw_mote_devil_claws"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+"recipe": "reaction.opportunity_attack",
+"variant": "fixed-unarmed-attack2-6-11"
+}, {
+"clip": "Attack2",
+"contact": 6,
+"delivery": "melee",
+&"items": ["weapon.creature.claw_mote_devil_claws"],
+"recipe": "reaction.opportunity_attack",
+"variant": "imp05-claw_mote_devil_claws"
+}])
+death = Dictionary[String, String]({
+"default": "Death"
+})
+notes = "Roster: Claw Mote Devil, Y128, kit Claws."

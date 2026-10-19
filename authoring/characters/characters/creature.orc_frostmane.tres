@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="PresentationCharacter" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/character.gd" id="1_eu4rj"]
+
+[resource]
+script = ExtResource("1_eu4rj")
+id = "creature.orc_frostmane"
+rig = "smallscale.orc06"
+portrait = "orcs_goblins--orc-06"
+size = "Medium"
+reactions = Dictionary[String, String]({
+"block": "Block"
+})
+death = Dictionary[String, String]({
+"default": "Death"
+})
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed.
+Stand-in clips: Idle2 -> Idle, Idle4 -> Idle, Kick -> Attack1, Special1 -> Attack4.
+Roster: Frostmane, Y128, kit Quarterstaff; MAGE+Web."

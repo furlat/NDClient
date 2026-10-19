@@ -1,0 +1,95 @@
+[gd_resource type="Resource" script_class="PresentationCharacter" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/character.gd" id="1_rhs72"]
+
+[resource]
+script = ExtResource("1_rhs72")
+id = "creature.raptor"
+identity = "content.neurodragon:creature:creature.raptor@1"
+rig = "smallscale.tyrannosaurus"
+portrait = "creature.raptor"
+size = "Large"
+attacks = Array[Dictionary]([{
+"clip": "Attack1",
+"contact": 8,
+"delivery": "melee",
+"recipe": "action.attack",
+"variant": "fixed-unarmed-attack1-8-12"
+}, {
+"clip": "Attack1",
+"contact": 8,
+"delivery": "melee",
+&"items": ["weapon.creature.raptor_bite"],
+"recipe": "action.attack",
+"variant": "tyrannosaurus-raptor_bite"
+}, {
+"clip": "Attack2",
+"contact": 7,
+"delivery": "melee",
+&"items": ["weapon.creature.raptor_tail"],
+"recipe": "action.attack",
+"variant": "tyrannosaurus-raptor_tail"
+}, {
+"clip": "Attack1",
+"contact": 8,
+"delivery": "melee",
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "fixed-unarmed-attack1-8-12"
+}, {
+"clip": "Attack1",
+"contact": 8,
+"delivery": "melee",
+&"items": ["weapon.creature.raptor_bite"],
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "tyrannosaurus-raptor_bite"
+}, {
+"clip": "Attack2",
+"contact": 7,
+"delivery": "melee",
+&"items": ["weapon.creature.raptor_tail"],
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "tyrannosaurus-raptor_tail"
+}, {
+"clip": "Attack1",
+"contact": 8,
+"delivery": "melee",
+"recipe": "action.feature.extra_attack",
+"variant": "fixed-unarmed-attack1-8-12"
+}, {
+"clip": "Attack1",
+"contact": 8,
+"delivery": "melee",
+&"items": ["weapon.creature.raptor_bite"],
+"recipe": "action.feature.extra_attack",
+"variant": "tyrannosaurus-raptor_bite"
+}, {
+"clip": "Attack2",
+"contact": 7,
+"delivery": "melee",
+&"items": ["weapon.creature.raptor_tail"],
+"recipe": "action.feature.extra_attack",
+"variant": "tyrannosaurus-raptor_tail"
+}, {
+"clip": "Attack1",
+"contact": 8,
+"delivery": "melee",
+"recipe": "reaction.opportunity_attack",
+"variant": "fixed-unarmed-attack1-8-12"
+}, {
+"clip": "Attack1",
+"contact": 8,
+"delivery": "melee",
+&"items": ["weapon.creature.raptor_bite"],
+"recipe": "reaction.opportunity_attack",
+"variant": "tyrannosaurus-raptor_bite"
+}, {
+"clip": "Attack2",
+"contact": 7,
+"delivery": "melee",
+&"items": ["weapon.creature.raptor_tail"],
+"recipe": "reaction.opportunity_attack",
+"variant": "tyrannosaurus-raptor_tail"
+}])
+death = Dictionary[String, String]({
+"default": "Die"
+})

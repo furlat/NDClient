@@ -1,0 +1,845 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_wdv1d"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_gc2jc"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_f4mab"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_uftnp"]
+
+[sub_resource type="Resource" id="Resource_3dp2k"]
+script = ExtResource("2_gc2jc")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/hayena/hayena-howling/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/hayena/hayena-howling/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/hayena/hayena-howling/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/hayena/hayena-howling/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/hayena/hayena-howling/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/hayena/hayena-howling/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9915677247395204
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_xychs"]
+script = ExtResource("1_wdv1d")
+name = "HayenaHowling"
+role = "hayenahowling"
+source_clip = "Hayena Howling"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsHayena": "/rigs/animals_hayena/body/Hayena Howling.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/hayena/hayena-howling/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Hayena/Hayena Howling.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_3dp2k")
+
+[sub_resource type="Resource" id="Resource_0x888"]
+script = ExtResource("2_gc2jc")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/hayena/hyena-attacking/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/hayena/hyena-attacking/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/hayena/hyena-attacking/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/hayena/hyena-attacking/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/hayena/hyena-attacking/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/hayena/hyena-attacking/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9918086335996784
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_mmn4h"]
+script = ExtResource("1_wdv1d")
+name = "HyenaAttacking"
+role = "hyenaattacking"
+source_clip = "Hyena Attacking"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsHayena": "/rigs/animals_hayena/body/Hyena Attacking.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/hayena/hyena-attacking/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Hayena/Hyena Attacking.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_0x888")
+
+[sub_resource type="Resource" id="Resource_r1beb"]
+script = ExtResource("2_gc2jc")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/hayena/hyena-die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/hayena/hyena-die/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/hayena/hyena-die/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/hayena/hyena-die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/hayena/hyena-die/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/hayena/hyena-die/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.991695569341996
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_8js1p"]
+script = ExtResource("1_wdv1d")
+name = "HyenaDie"
+role = "hyenadie"
+source_clip = "Hyena Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsHayena": "/rigs/animals_hayena/body/Hyena Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/hayena/hyena-die/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Hayena/Hyena Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_r1beb")
+
+[sub_resource type="Resource" id="Resource_gk3ce"]
+script = ExtResource("2_gc2jc")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/hayena/hyena-drinking-water/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/hayena/hyena-drinking-water/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/hayena/hyena-drinking-water/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/hayena/hyena-drinking-water/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/hayena/hyena-drinking-water/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/hayena/hyena-drinking-water/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9930015552099534
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_hkb3s"]
+script = ExtResource("1_wdv1d")
+name = "HyenaDrinkingwater"
+role = "hyenadrinkingwater"
+source_clip = "Hyena Drinking water"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsHayena": "/rigs/animals_hayena/body/Hyena Drinking water.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/hayena/hyena-drinking-water/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Hayena/Hyena Drinking water.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_gk3ce")
+
+[sub_resource type="Resource" id="Resource_d472h"]
+script = ExtResource("2_gc2jc")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/hayena/hyena-eating/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/hayena/hyena-eating/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/hayena/hyena-eating/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/hayena/hyena-eating/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/hayena/hyena-eating/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/hayena/hyena-eating/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9928985431570152
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_3a0yo"]
+script = ExtResource("1_wdv1d")
+name = "HyenaEating"
+role = "hyenaeating"
+source_clip = "Hyena Eating"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsHayena": "/rigs/animals_hayena/body/Hyena Eating.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/hayena/hyena-eating/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Hayena/Hyena Eating.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_d472h")
+
+[sub_resource type="Resource" id="Resource_ecfii"]
+script = ExtResource("2_gc2jc")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/hayena/hyena-fast-walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/hayena/hyena-fast-walk/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/hayena/hyena-fast-walk/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/hayena/hyena-fast-walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/hayena/hyena-fast-walk/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/hayena/hyena-fast-walk/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9875752091180356
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_7usk6"]
+script = ExtResource("1_wdv1d")
+name = "HyenaFastwalk"
+role = "hyenafastwalk"
+source_clip = "Hyena Fast walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsHayena": "/rigs/animals_hayena/body/Hyena Fast walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/hayena/hyena-fast-walk/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Hayena/Hyena Fast walk.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_ecfii")
+
+[sub_resource type="Resource" id="Resource_sbtuv"]
+script = ExtResource("2_gc2jc")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/hayena/hyena-idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/hayena/hyena-idle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/hayena/hyena-idle/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/hayena/hyena-idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/hayena/hyena-idle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/hayena/hyena-idle/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9969145325516816
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_0i468"]
+script = ExtResource("1_wdv1d")
+name = "Hyenaidle"
+role = "hyenaidle"
+source_clip = "Hyena idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsHayena": "/rigs/animals_hayena/body/Hyena idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/hayena/hyena-idle/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Hayena/Hyena idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_sbtuv")
+
+[sub_resource type="Resource" id="Resource_57608"]
+script = ExtResource("2_gc2jc")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/hayena/hyena-jump/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/hayena/hyena-jump/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/hayena/hyena-jump/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/hayena/hyena-jump/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/hayena/hyena-jump/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/hayena/hyena-jump/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.990164243023201
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_3cxcp"]
+script = ExtResource("1_wdv1d")
+name = "HyenaJump"
+role = "hyenajump"
+source_clip = "Hyena Jump"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsHayena": "/rigs/animals_hayena/body/Hyena Jump.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/hayena/hyena-jump/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Hayena/Hyena Jump.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_57608")
+
+[sub_resource type="Resource" id="Resource_fw4tt"]
+script = ExtResource("2_gc2jc")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/hayena/hyena-jump-attack/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/hayena/hyena-jump-attack/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/hayena/hyena-jump-attack/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/hayena/hyena-jump-attack/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/hayena/hyena-jump-attack/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/hayena/hyena-jump-attack/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9906144125995788
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_70gs7"]
+script = ExtResource("1_wdv1d")
+name = "HyenaJumpattack"
+role = "hyenajumpattack"
+source_clip = "Hyena Jump attack"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsHayena": "/rigs/animals_hayena/body/Hyena Jump attack.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/hayena/hyena-jump-attack/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Hayena/Hyena Jump attack.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_fw4tt")
+
+[sub_resource type="Resource" id="Resource_obtbt"]
+script = ExtResource("2_gc2jc")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/hayena/hyena-resting/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/hayena/hyena-resting/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/hayena/hyena-resting/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/hayena/hyena-resting/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/hayena/hyena-resting/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/hayena/hyena-resting/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9940210782326712
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_xvdjk"]
+script = ExtResource("1_wdv1d")
+name = "Hyenaresting"
+role = "hyenaresting"
+source_clip = "Hyena resting"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsHayena": "/rigs/animals_hayena/body/Hyena resting.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/hayena/hyena-resting/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Hayena/Hyena resting.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_obtbt")
+
+[sub_resource type="Resource" id="Resource_jlbor"]
+script = ExtResource("2_gc2jc")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/hayena/hyena-run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/hayena/hyena-run/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/hayena/hyena-run/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/hayena/hyena-run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/hayena/hyena-run/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/hayena/hyena-run/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9877329783187524
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_pleiw"]
+script = ExtResource("1_wdv1d")
+name = "Hyenarun"
+role = "hyenarun"
+source_clip = "Hyena run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsHayena": "/rigs/animals_hayena/body/Hyena run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/hayena/hyena-run/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Hayena/Hyena run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_jlbor")
+
+[sub_resource type="Resource" id="Resource_5tlec"]
+script = ExtResource("2_gc2jc")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/hayena/hyena-sleep/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/hayena/hyena-sleep/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/hayena/hyena-sleep/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/hayena/hyena-sleep/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/hayena/hyena-sleep/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/hayena/hyena-sleep/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9980439362022268
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_dbr7b"]
+script = ExtResource("1_wdv1d")
+name = "Hyenasleep"
+role = "hyenasleep"
+source_clip = "Hyena sleep"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsHayena": "/rigs/animals_hayena/body/Hyena sleep.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/hayena/hyena-sleep/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Hayena/Hyena sleep.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_5tlec")
+
+[sub_resource type="Resource" id="Resource_8dtlu"]
+script = ExtResource("2_gc2jc")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/hayena/hyena-sneaking/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/hayena/hyena-sneaking/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/hayena/hyena-sneaking/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/hayena/hyena-sneaking/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/hayena/hyena-sneaking/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/hayena/hyena-sneaking/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.993578661397876
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_y58gd"]
+script = ExtResource("1_wdv1d")
+name = "HyenaSneaking"
+role = "hyenasneaking"
+source_clip = "Hyena Sneaking"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsHayena": "/rigs/animals_hayena/body/Hyena Sneaking.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/hayena/hyena-sneaking/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Hayena/Hyena Sneaking.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_8dtlu")
+
+[sub_resource type="Resource" id="Resource_fh2u5"]
+script = ExtResource("2_gc2jc")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-92.5685424949238, 126.50966799187808)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/hayena/hyena-takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/hayena/hyena-takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/hayena/hyena-takedamage/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/hayena/hyena-takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/hayena/hyena-takedamage/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/hayena/hyena-takedamage/raw-support.png"
+})
+depth_range = Vector2(-92.56854, 126.50967)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9933195559186812
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_p37d0"]
+script = ExtResource("1_wdv1d")
+name = "HyenaTakeDamage"
+role = "hyenatakedamage"
+source_clip = "Hyena TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsHayena": "/rigs/animals_hayena/body/Hyena TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/hayena/hyena-takedamage/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Hayena/Hyena TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_fh2u5")
+
+[sub_resource type="Resource" id="Resource_virdt"]
+script = ExtResource("3_f4mab")
+role = "movement"
+qualifier = {
+"kind": "default"
+}
+clip = "HayenaHowling"
+hidden_slots = PackedStringArray()
+playback = "loop"
+
+[sub_resource type="Resource" id="Resource_nk5rj"]
+script = ExtResource("3_f4mab")
+role = "movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "HayenaHowling"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_tw0t4"]
+script = ExtResource("3_f4mab")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "direct_arc"
+}
+clip = "HayenaHowling"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_gllar"]
+script = ExtResource("3_f4mab")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "connector_transfer"
+}
+clip = "HayenaHowling"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_08khp"]
+script = ExtResource("3_f4mab")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "direct_arc"
+}
+clip = "HayenaHowling"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_51rh0"]
+script = ExtResource("3_f4mab")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "connector_transfer"
+}
+clip = "HayenaHowling"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_p0mng"]
+script = ExtResource("3_f4mab")
+role = "shove"
+qualifier = {
+"kind": "default"
+}
+clip = "HayenaHowling"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 6.0,
+"name": "contact"
+}]
+
+[sub_resource type="Resource" id="Resource_b7e3m"]
+script = ExtResource("3_f4mab")
+role = "forced_movement"
+qualifier = {
+"kind": "default"
+}
+clip = "HayenaHowling"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 5.0,
+"name": "brace"
+}]
+
+[sub_resource type="Resource" id="Resource_ub753"]
+script = ExtResource("3_f4mab")
+role = "forced_movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "HayenaHowling"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_tms5f"]
+script = ExtResource("3_f4mab")
+role = "body_action"
+qualifier = {
+"kind": "default"
+}
+clip = "HayenaHowling"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_ec847"]
+script = ExtResource("3_f4mab")
+role = "body_action_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "HayenaHowling"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_gvoyf"]
+script = ExtResource("3_f4mab")
+role = "equipment"
+qualifier = {
+"kind": "default"
+}
+clip = "HayenaHowling"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_oc0td"]
+script = ExtResource("3_f4mab")
+role = "healing"
+qualifier = {
+"kind": "default"
+}
+clip = "HayenaHowling"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_5g2oj"]
+script = ExtResource("3_f4mab")
+role = "save_avoidance"
+qualifier = {
+"kind": "default"
+}
+clip = "HayenaHowling"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_82tkc"]
+script = ExtResource("3_f4mab")
+role = "condition_entry"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "HayenaHowling"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_pqfh2"]
+script = ExtResource("3_f4mab")
+role = "condition_hold"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "HayenaHowling"
+hidden_slots = PackedStringArray()
+playback = "final_rest"
+rest_frame = 14
+
+[sub_resource type="Resource" id="Resource_eveup"]
+script = ExtResource("3_f4mab")
+role = "condition_exit"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "HayenaHowling"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+reversed = true
+
+[sub_resource type="Resource" id="Resource_dyfhi"]
+script = ExtResource("3_f4mab")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "flying",
+"trajectory": "path"
+}
+clip = "HayenaHowling"
+hidden_slots = PackedStringArray()
+playback = "once"
+frame_keys = [[0.0, 0.0], [1.0, 0.0]]
+
+[sub_resource type="Resource" id="Resource_okld4"]
+script = ExtResource("3_f4mab")
+role = "death"
+qualifier = {
+"kind": "default"
+}
+clip = "HayenaHowling"
+hidden_slots = PackedStringArray()
+playback = "once"
+
+[resource]
+script = ExtResource("4_uftnp")
+id = "smallscale.animals.hayena"
+pack = "animals"
+variant = "Hayena"
+source = "smallscale-authored/animals"
+cell = Vector2i(64, 64)
+pivot = Vector2(32, 45)
+anchor = Vector2(32, 35)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("AnimalsHayena")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_wdv1d")]([SubResource("Resource_xychs"), SubResource("Resource_mmn4h"), SubResource("Resource_8js1p"), SubResource("Resource_hkb3s"), SubResource("Resource_3a0yo"), SubResource("Resource_7usk6"), SubResource("Resource_0i468"), SubResource("Resource_3cxcp"), SubResource("Resource_70gs7"), SubResource("Resource_xvdjk"), SubResource("Resource_pleiw"), SubResource("Resource_dbr7b"), SubResource("Resource_y58gd"), SubResource("Resource_p37d0")])
+fallbacks = Dictionary[String, String]({
+"Attack1": "HayenaHowling",
+"Attack2": "HayenaHowling",
+"Attack3": "HayenaHowling",
+"Attack4": "HayenaHowling",
+"Attack5": "HayenaHowling",
+"Attack6": "HayenaHowling",
+"AttackRun": "HayenaHowling",
+"CrouchWalk": "HayenaHowling",
+"Death": "HayenaHowling",
+"Die": "HayenaHowling",
+"Idle": "HayenaHowling",
+"Idle2": "HayenaHowling",
+"Idle4": "HayenaHowling",
+"Kick": "HayenaHowling",
+"Rolling": "HayenaHowling",
+"Run": "HayenaHowling",
+"Special1": "HayenaHowling",
+"TakeDamage": "HayenaHowling",
+"Taunt": "HayenaHowling",
+"Walk": "HayenaHowling"
+})
+contexts = Array[ExtResource("3_f4mab")]([SubResource("Resource_virdt"), SubResource("Resource_nk5rj"), SubResource("Resource_tw0t4"), SubResource("Resource_gllar"), SubResource("Resource_08khp"), SubResource("Resource_51rh0"), SubResource("Resource_p0mng"), SubResource("Resource_b7e3m"), SubResource("Resource_ub753"), SubResource("Resource_tms5f"), SubResource("Resource_ec847"), SubResource("Resource_gvoyf"), SubResource("Resource_oc0td"), SubResource("Resource_5g2oj"), SubResource("Resource_82tkc"), SubResource("Resource_pqfh2"), SubResource("Resource_eveup"), SubResource("Resource_dyfhi"), SubResource("Resource_okld4")])
+hold_clips = PackedStringArray()
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed.
+Stand-in clips: Idle -> HayenaHowling, Idle2 -> HayenaHowling, Idle4 -> HayenaHowling, Run -> HayenaHowling, Walk -> HayenaHowling, TakeDamage -> HayenaHowling, Die -> HayenaHowling, Death -> HayenaHowling, Taunt -> HayenaHowling, Rolling -> HayenaHowling, CrouchWalk -> HayenaHowling, Attack1 -> HayenaHowling, Attack2 -> HayenaHowling, Attack3 -> HayenaHowling, Attack4 -> HayenaHowling, AttackRun -> HayenaHowling, Kick -> HayenaHowling, Special1 -> HayenaHowling, Attack5 -> HayenaHowling, Attack6 -> HayenaHowling."

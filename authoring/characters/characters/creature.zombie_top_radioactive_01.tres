@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="PresentationCharacter" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/character.gd" id="1_w07v2"]
+
+[resource]
+script = ExtResource("1_w07v2")
+id = "creature.zombie_top_radioactive_01"
+rig = "smallscale.zombies-top-down.zombie-radioactive-01"
+portrait = "creature.zombie_top_radioactive_01"
+size = "Medium"
+death = Dictionary[String, String]({
+"default": "Die"
+})
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed.
+Stand-in clips: Idle4 -> Idle2, Death -> Die, Rolling -> Run, CrouchWalk -> Walk, Attack3 -> Attack2, Attack4 -> Attack2, Kick -> Attack1, Special1 -> Attack2, Attack5 -> Attack2, Attack6 -> Attack2.
+Roster: Marshglass One, Y128, kit Slam; UF."

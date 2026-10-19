@@ -22,14 +22,14 @@ func run()->void:
     var original:PackedByteArray=var_to_bytes([index.initialization,index.groups])
     var plan:Dictionary=RecordingMedia.plan(index)
     check(plan.errors.is_empty(),"Exact recorded source closure has no missing assets")
-    var geometry:Dictionary=JSON.parse_string(FileAccess.get_file_as_string(Geometry.TABLE))
+    var geometry:Dictionary={"records":preload("res://tests/built_body_records.gd").records(index.cache)}
     var expected:Dictionary={};var slots:Dictionary={}
     for path in plan.paths:
         var record:Dictionary=geometry.records.get(path,{})
         if not record.has("reference"):continue
         # Independent oracle: the registered source packet names its channels
         # and allowed slots. It does not repeat MediaWarmup's slot resolution.
-        var root_path:String=ProjectSettings.get_setting("source_data/character_geometry_root")
+        var root_path:String=Geometry._root(record)
         var paths:Array=[path,root_path.path_join(record.files.depth),root_path.path_join(record.files.support),root_path.path_join(record.reference).get_base_dir().path_join("solid-valid.png")]
         for slot in record.slots:slots[slot]=true
         for required in paths:

@@ -1,0 +1,143 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_s4ywa"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_nalao"]
+
+[sub_resource type="Resource" id="Resource_663bo"]
+script = ExtResource("1_s4ywa")
+path = "art/media/ui/icons/smooth48/item.battleaxe.png"
+native_size = Vector2i(48, 48)
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_nalao")
+id = "weapon.battleaxe"
+kind = "weapon"
+slots = Dictionary[String, Dictionary]({
+"weapon_melee_main": {
+"layers": [{
+"part": "Melee16",
+"slot": "weapon",
+"tint": "#8899aa"
+}],
+"variants": {
+"30000001": [{
+"part": "Melee16",
+"slot": "weapon",
+"tint": "#ccaa44"
+}],
+"30000002": [{
+"part": "Melee16",
+"slot": "weapon",
+"tint": "#cd7f32"
+}],
+"30000003": [{
+"part": "Melee16",
+"slot": "weapon",
+"tint": "#334455"
+}],
+"roster.b94babfabf15": [{
+"part": "Melee16",
+"slot": "weapon",
+"tint": "#5b286d"
+}]
+}
+}
+})
+hands = Dictionary[String, Dictionary]({
+"weapon_melee_off": {
+"": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#8899aa"
+}],
+"30000001": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#ccaa44"
+}],
+"30000002": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#cd7f32"
+}],
+"30000003": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#334455"
+}],
+"roster.b94babfabf15": [{
+"part": "Offhand2",
+"slot": "offhand",
+"tint": "#5b286d"
+}]
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee16",
+"pivots_by_camera": [[53.5, 68.0], [64.5, 56.5], [75.5, 62.5], [66.0, 74.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#8899aa",
+"variant": ""
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee16",
+"pivots_by_camera": [[53.5, 68.0], [64.5, 56.5], [75.5, 62.5], [66.0, 74.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#ccaa44",
+"variant": "30000001"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee16",
+"pivots_by_camera": [[53.5, 68.0], [64.5, 56.5], [75.5, 62.5], [66.0, 74.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#cd7f32",
+"variant": "30000002"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee16",
+"pivots_by_camera": [[53.5, 68.0], [64.5, 56.5], [75.5, 62.5], [66.0, 74.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#334455",
+"variant": "30000003"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee16",
+"pivots_by_camera": [[53.5, 68.0], [64.5, 56.5], [75.5, 62.5], [66.0, 74.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#5b286d",
+"variant": "roster.b94babfabf15"
+}])
+icon = SubResource("Resource_663bo")
+notes = "Visual name Battleaxe; Battle-axe tagged sprite — exact match"

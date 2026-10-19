@@ -1,7 +1,7 @@
 extends "res://tests/native_2d_source_checks.gd"
 # Reuse the independent native light/CPU-normal oracle, with original creatures,
 # through the production lit modular sprite shader.
-func creature(path: String,frame: int,row: int,profile: String,mirror: bool) -> Dictionary:
+func creature(path: String,frame: int,row: int,profile: String,mirror: bool,label: Dictionary) -> Dictionary:
     # Media preparation admits the body metadata before any descriptor read.
     Geometry.BodySources.prepare_descriptor(path,"body",cache)
     # Production binds and displays the registered sheet itself (no display_path
@@ -17,7 +17,7 @@ func creature(path: String,frame: int,row: int,profile: String,mirror: bool) -> 
     material.set_shader_parameter("material_cell_size",Vector2(cell))
     Geometry.bind(entry,selected,cache,texture,true,true,profile)
     var profiles=Geometry.normal_paths(selected,"body",cache)
-    var geometry_root: String=ProjectSettings.get_setting("source_data/creature_geometry_root")
+    var geometry_root: String=Geometry._root(source)
     var origin=Vector2i(frame*cell.x,row*cell.y)
     var colour: Image=images[selected].get_region(Rect2i(origin,cell))
     var decoded=Image.create(cell.x,cell.y,false,Image.FORMAT_RGBAF)
@@ -34,9 +34,9 @@ func creature(path: String,frame: int,row: int,profile: String,mirror: bool) -> 
             elif colour.get_pixel(x,y).a>0: unsupported+=1
             decoded.set_pixel(x,y,Color(n.x,n.y,n.z,1))
     node.free()
-    check(supported>0,source.family+" selected native frame has delivered support")
-    if source.family=="stag" and source.source_action=="Die":check(unsupported>0,"Repeated-view Stag Die retains visible unsupported pixels")
-    return {"id":"creature-"+source.family+"-"+source.source_action+"-f"+str(frame)+"-r"+str(row)+"-"+profile+("-mirror" if mirror else ""),"material":material,"colour":colour,"normals":decoded,"tint":Color.WHITE,"visible":1.0,"mirror":mirror,"supported":supported,"basis":Basis.IDENTITY}
+    check(supported>0,label.family+" selected native frame has delivered support")
+    if label.family=="stag" and label.clip=="Die":check(unsupported>0,"Repeated-view Stag Die retains visible unsupported pixels")
+    return {"id":"creature-"+label.family+"-"+label.clip+"-f"+str(frame)+"-r"+str(row)+"-"+profile+("-mirror" if mirror else ""),"material":material,"colour":colour,"normals":decoded,"tint":Color.WHITE,"visible":1.0,"mirror":mirror,"supported":supported,"basis":Basis.IDENTITY}
 
 func run() -> void:
     if DisplayServer.get_name()=="headless":quit(2);return
@@ -44,7 +44,17 @@ func run() -> void:
     var one=Image.create(1,1,false,Image.FORMAT_RGBA8);one.fill(Color.WHITE);white=ImageTexture.create_from_image(one)
     cookie=light_cookie();reference_shader=Shader.new();reference_shader.code=REFERENCE
     DirAccess.make_dir_recursive_absolute("res://.captures/native-2d-source")
-    var table: Dictionary=JSON.parse_string(FileAccess.get_file_as_string(Geometry.CREATURE_TABLE))
+    # Every body sheet of the built creature rigs, as production binds them.
+    var index: Resource=Geometry.BodySources.index(cache)
+    var names={"smallscale.goblin15":"goblin-15","smallscale.greywolf":"wolf","smallscale.boar":"boar","smallscale.elephant":"elephant","smallscale.stag":"stag"}
+    var table={"records":{}}
+    for rig_id in index.rigs:
+        if rig_id==index.root_rig:continue
+        for category in index.rigs[rig_id].slot_categories.get("body",[]):
+            var layer: Resource=Geometry.BodySources.prepare_layer(index.layers[rig_id][category],cache)
+            for clip in layer.paths_by_slot.get("body",{}):
+                var path: String=layer.paths_by_slot.body[clip]
+                if not table.records.has(path):table.records[path]={"family":names.get(rig_id,rig_id),"clip":clip,"frames":int(index.rigs[rig_id].clips[clip].frames),"cell_size":[int(index.rigs[rig_id].cell_width)]}
     var selected={}
     var frames_seen={}
     var cells_seen={}
@@ -52,11 +62,10 @@ func run() -> void:
     var unadmitted:=0
     for path in table.records:
         var source: Dictionary=table.records[path]
-        # The geometry table also lists sheets the current body catalog does not
-        # admit (no descriptor); production never binds those, so skip them.
+        # A body sheet without delivered geometry has no descriptor record; production binds it flat.
         Geometry.BodySources.prepare_descriptor(path,"body",cache)
         if Geometry.record(path,"body",cache).is_empty():unadmitted+=1;continue
-        var named: bool=(source.family in ["goblin-15","wolf","boar","elephant"] and source.source_action=="Idle") or (source.family=="stag" and source.source_action=="Die")
+        var named: bool=(source.family in ["goblin-15","wolf","boar","elephant"] and source.clip=="Idle") or (source.family=="stag" and source.clip=="Die")
         if named:named_found[source.family]=true
         var frame_count: int=source.frames
         var width: int=source.cell_size[0]
@@ -67,11 +76,11 @@ func run() -> void:
         var source: Dictionary=table.records[path]
         for profile in ["original","gentle","reference"]:
             var row=0 if profile=="original" else 3 if profile=="gentle" else 7
-            var fixture=creature(path,int(source.frames)-1,row,profile,profile=="reference")
+            var fixture=creature(path,int(source.frames)-1,row,profile,profile=="reference",source)
             await check_source(fixture,true)
             if profile=="original":await check_source(fixture,false)
         if source.family=="stag":
-            for row in [1,2,4,5,6]:await check_source(creature(path,0,row,"reference",false),true)
+            for row in [1,2,4,5,6]:await check_source(creature(path,0,row,"reference",false,source),true)
         # Finite source fixtures should not retain the entire library in GPU RAM.
         textures.clear();images.clear()
     var report={"checks":checks,"failures":failures,"selected_sources":selected.keys(),"unadmitted_table_records":unadmitted,"cell_widths":cells_seen.keys(),"frame_counts":frames_seen.keys(),"comparisons":comparisons,"scope":"Production lit modular creature sprite vs independent CPU-decoded native-light Canvas reference (linear-alpha composite, one RGB byte, exact alpha). Original visible-body alpha and unsupported flat normals retained; original/gentle/reference, final frames and facing/mirror changes. No new gameplay aliases."}

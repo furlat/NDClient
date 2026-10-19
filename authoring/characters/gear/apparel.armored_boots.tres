@@ -1,0 +1,116 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_y81h0"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_krrk8"]
+
+[sub_resource type="Resource" id="Resource_x3id3"]
+script = ExtResource("1_y81h0")
+path = "art/media/ui/icons/smooth48/item.leather-boots.png"
+native_size = Vector2i(48, 48)
+reuses = "item.leather-boots"
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_krrk8")
+id = "apparel.armored_boots"
+kind = "armor"
+slots = Dictionary[String, Dictionary]({
+"boots": {
+"layers": [{
+"part": "Shoes5",
+"slot": "shoes",
+"tint": "#8899aa"
+}],
+"variants": {
+"b000000b": [{
+"part": "Shoes5",
+"slot": "shoes",
+"tint": "#ccaa44"
+}],
+"b000000c": [{
+"part": "Shoes5",
+"slot": "shoes",
+"tint": "#334455"
+}],
+"b000000d": [{
+"part": "Shoes5",
+"slot": "shoes",
+"tint": "#aabbcc"
+}],
+"roster.8cf16a574703": [{
+"part": "Shoes5",
+"slot": "shoes",
+"tint": "#c6c3aa"
+}]
+}
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Shoes5",
+"pivots_by_camera": [[63.5, 81.0], [63.5, 78.0], [67.0, 78.0], [66.5, 80.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#8899aa",
+"variant": ""
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Shoes5",
+"pivots_by_camera": [[63.5, 81.0], [63.5, 78.0], [67.0, 78.0], [66.5, 80.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#ccaa44",
+"variant": "b000000b"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Shoes5",
+"pivots_by_camera": [[63.5, 81.0], [63.5, 78.0], [67.0, 78.0], [66.5, 80.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#334455",
+"variant": "b000000c"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Shoes5",
+"pivots_by_camera": [[63.5, 81.0], [63.5, 78.0], [67.0, 78.0], [66.5, 80.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.6,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#aabbcc",
+"variant": "b000000d"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Shoes5",
+"pivots_by_camera": [[63.5, 81.0], [63.5, 78.0], [67.0, 78.0], [66.5, 80.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#c6c3aa",
+"variant": "roster.8cf16a574703"
+}])
+icon = SubResource("Resource_x3id3")
+notes = "Visual name Armored Boots; Plate boots with greaves — heavy armor tier
+Icon: Shares an existing icon for the native equipment slot."

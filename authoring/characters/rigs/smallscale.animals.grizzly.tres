@@ -1,0 +1,675 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_nerta"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_q44xg"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_m5q40"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_4ax4u"]
+
+[sub_resource type="Resource" id="Resource_4mtbf"]
+script = ExtResource("2_q44xg")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/grizzly/attack1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/grizzly/attack1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/grizzly/attack1/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/grizzly/attack1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/grizzly/attack1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/grizzly/attack1/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.9867968829754652
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_ulsor"]
+script = ExtResource("1_nerta")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Attack1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsGrizzly": "/rigs/animals_grizzly/body/Attack1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/grizzly/attack1/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Grizzly/Attack1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_4mtbf")
+
+[sub_resource type="Resource" id="Resource_xwvk3"]
+script = ExtResource("2_q44xg")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/grizzly/attack2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/grizzly/attack2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/grizzly/attack2/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/grizzly/attack2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/grizzly/attack2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/grizzly/attack2/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.9854827819041188
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_vnr8d"]
+script = ExtResource("1_nerta")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Attack2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsGrizzly": "/rigs/animals_grizzly/body/Attack2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/grizzly/attack2/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Grizzly/Attack2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_xwvk3")
+
+[sub_resource type="Resource" id="Resource_dni0j"]
+script = ExtResource("2_q44xg")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/grizzly/attack3/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/grizzly/attack3/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/grizzly/attack3/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/grizzly/attack3/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/grizzly/attack3/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/grizzly/attack3/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.9859212919015976
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_2skd5"]
+script = ExtResource("1_nerta")
+name = "Attack3"
+role = "attack_3"
+source_clip = "Attack3"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsGrizzly": "/rigs/animals_grizzly/body/Attack3.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/grizzly/attack3/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Grizzly/Attack3.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_dni0j")
+
+[sub_resource type="Resource" id="Resource_fld3g"]
+script = ExtResource("2_q44xg")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/grizzly/die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/grizzly/die/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/grizzly/die/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/grizzly/die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/grizzly/die/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/grizzly/die/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.9832999182356827
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_dq2p6"]
+script = ExtResource("1_nerta")
+name = "Die"
+role = "die"
+source_clip = "Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsGrizzly": "/rigs/animals_grizzly/body/Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/grizzly/die/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Grizzly/Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_fld3g")
+
+[sub_resource type="Resource" id="Resource_fcl8v"]
+script = ExtResource("2_q44xg")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/grizzly/idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/grizzly/idle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/grizzly/idle/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/grizzly/idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/grizzly/idle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/grizzly/idle/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.9869047893028928
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_10slh"]
+script = ExtResource("1_nerta")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsGrizzly": "/rigs/animals_grizzly/body/Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/grizzly/idle/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Grizzly/Idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_fcl8v")
+
+[sub_resource type="Resource" id="Resource_pi62q"]
+script = ExtResource("2_q44xg")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/grizzly/idle2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/grizzly/idle2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/grizzly/idle2/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/grizzly/idle2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/grizzly/idle2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/grizzly/idle2/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.9832462249689186
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_vxrrp"]
+script = ExtResource("1_nerta")
+name = "Idle2"
+role = "idle_alt"
+source_clip = "Idle2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsGrizzly": "/rigs/animals_grizzly/body/Idle2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/grizzly/idle2/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Grizzly/Idle2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_pi62q")
+
+[sub_resource type="Resource" id="Resource_pifdi"]
+script = ExtResource("2_q44xg")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/grizzly/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/grizzly/run/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/grizzly/run/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/grizzly/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/grizzly/run/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/grizzly/run/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.9867298685431136
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_5ro6s"]
+script = ExtResource("1_nerta")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsGrizzly": "/rigs/animals_grizzly/body/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/grizzly/run/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Grizzly/Run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_pifdi")
+
+[sub_resource type="Resource" id="Resource_iqnqo"]
+script = ExtResource("2_q44xg")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/grizzly/takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/grizzly/takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/grizzly/takedamage/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/grizzly/takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/grizzly/takedamage/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/grizzly/takedamage/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.9856063878220468
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_kfff2"]
+script = ExtResource("1_nerta")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsGrizzly": "/rigs/animals_grizzly/body/TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/grizzly/takedamage/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Grizzly/TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_iqnqo")
+
+[sub_resource type="Resource" id="Resource_g7e43"]
+script = ExtResource("2_q44xg")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/grizzly/taunt/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/grizzly/taunt/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/grizzly/taunt/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/grizzly/taunt/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/grizzly/taunt/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/grizzly/taunt/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.9841559076464969
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_mc8n3"]
+script = ExtResource("1_nerta")
+name = "Taunt"
+role = "taunt"
+source_clip = "Taunt"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsGrizzly": "/rigs/animals_grizzly/body/Taunt.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/grizzly/taunt/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Grizzly/Taunt.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_g7e43")
+
+[sub_resource type="Resource" id="Resource_3gyky"]
+script = ExtResource("2_q44xg")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-136.8528137423857, 187.7645019878171)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/animals/grizzly/walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/animals/grizzly/walk/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/animals/grizzly/walk/normals.png",
+"reference": "art/geometry/creatures/library/actions/animals/grizzly/walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/animals/grizzly/walk/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/animals/grizzly/walk/raw-support.png"
+})
+depth_range = Vector2(-136.85281, 187.7645)
+camera_origin = Vector2(48, 72)
+optical_ground_pixels = 5.65685424949238
+coverage = 0.9868712664109168
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_4ewxe"]
+script = ExtResource("1_nerta")
+name = "Walk"
+role = "walk"
+source_clip = "Walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"AnimalsGrizzly": "/rigs/animals_grizzly/body/Walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/animals/grizzly/walk/colour.png",
+"combined": "art/media/smallscale/authored/animals/With shadow/Grizzly/Walk.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_3gyky")
+
+[sub_resource type="Resource" id="Resource_wqgxj"]
+script = ExtResource("3_m5q40")
+role = "movement"
+qualifier = {
+"kind": "default"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+playback = "loop"
+
+[sub_resource type="Resource" id="Resource_lxd0o"]
+script = ExtResource("3_m5q40")
+role = "movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_xy5vr"]
+script = ExtResource("3_m5q40")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "direct_arc"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_mjapu"]
+script = ExtResource("3_m5q40")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "connector_transfer"
+}
+clip = "Walk"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_qxy8w"]
+script = ExtResource("3_m5q40")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "direct_arc"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_q87sb"]
+script = ExtResource("3_m5q40")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "connector_transfer"
+}
+clip = "Walk"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_fmhcb"]
+script = ExtResource("3_m5q40")
+role = "shove"
+qualifier = {
+"kind": "default"
+}
+clip = "Attack2"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 6.0,
+"name": "contact"
+}]
+
+[sub_resource type="Resource" id="Resource_03av8"]
+script = ExtResource("3_m5q40")
+role = "forced_movement"
+qualifier = {
+"kind": "default"
+}
+clip = "TakeDamage"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 5.0,
+"name": "brace"
+}]
+
+[sub_resource type="Resource" id="Resource_my042"]
+script = ExtResource("3_m5q40")
+role = "forced_movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_m0p8i"]
+script = ExtResource("3_m5q40")
+role = "body_action"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_cqh0x"]
+script = ExtResource("3_m5q40")
+role = "body_action_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_rxjpu"]
+script = ExtResource("3_m5q40")
+role = "equipment"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_nwr8b"]
+script = ExtResource("3_m5q40")
+role = "healing"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_qqsax"]
+script = ExtResource("3_m5q40")
+role = "save_avoidance"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_tqcy7"]
+script = ExtResource("3_m5q40")
+role = "condition_entry"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_381c5"]
+script = ExtResource("3_m5q40")
+role = "condition_hold"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+hidden_slots = PackedStringArray()
+playback = "final_rest"
+rest_frame = 14
+
+[sub_resource type="Resource" id="Resource_4wrqg"]
+script = ExtResource("3_m5q40")
+role = "condition_exit"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+reversed = true
+
+[sub_resource type="Resource" id="Resource_32oqd"]
+script = ExtResource("3_m5q40")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "flying",
+"trajectory": "path"
+}
+clip = "Idle"
+hidden_slots = PackedStringArray()
+playback = "once"
+frame_keys = [[0.0, 0.0], [1.0, 0.0]]
+
+[sub_resource type="Resource" id="Resource_jhskb"]
+script = ExtResource("3_m5q40")
+role = "death"
+qualifier = {
+"kind": "default"
+}
+clip = "Die"
+hidden_slots = PackedStringArray()
+playback = "once"
+
+[resource]
+script = ExtResource("4_4ax4u")
+id = "smallscale.animals.grizzly"
+pack = "animals"
+variant = "Grizzly"
+source = "smallscale-authored/animals"
+cell = Vector2i(96, 96)
+pivot = Vector2(48, 68)
+anchor = Vector2(48, 52)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("AnimalsGrizzly")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_nerta")]([SubResource("Resource_ulsor"), SubResource("Resource_vnr8d"), SubResource("Resource_2skd5"), SubResource("Resource_dq2p6"), SubResource("Resource_10slh"), SubResource("Resource_vxrrp"), SubResource("Resource_5ro6s"), SubResource("Resource_kfff2"), SubResource("Resource_mc8n3"), SubResource("Resource_4ewxe")])
+fallbacks = Dictionary[String, String]({
+"Attack4": "Attack3",
+"Attack5": "Attack3",
+"Attack6": "Attack3",
+"AttackRun": "Attack1",
+"CrouchWalk": "Walk",
+"Death": "Die",
+"Idle4": "Idle2",
+"Kick": "Attack1",
+"Rolling": "Run",
+"Special1": "Attack3"
+})
+contexts = Array[ExtResource("3_m5q40")]([SubResource("Resource_wqgxj"), SubResource("Resource_lxd0o"), SubResource("Resource_xy5vr"), SubResource("Resource_mjapu"), SubResource("Resource_qxy8w"), SubResource("Resource_q87sb"), SubResource("Resource_fmhcb"), SubResource("Resource_03av8"), SubResource("Resource_my042"), SubResource("Resource_m0p8i"), SubResource("Resource_cqh0x"), SubResource("Resource_rxjpu"), SubResource("Resource_nwr8b"), SubResource("Resource_qqsax"), SubResource("Resource_tqcy7"), SubResource("Resource_381c5"), SubResource("Resource_4wrqg"), SubResource("Resource_32oqd"), SubResource("Resource_jhskb")])
+hold_clips = PackedStringArray("Die")
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed.
+Stand-in clips: Idle4 -> Idle2, Death -> Die, Rolling -> Run, CrouchWalk -> Walk, Attack4 -> Attack3, AttackRun -> Attack1, Kick -> Attack1, Special1 -> Attack3, Attack5 -> Attack3, Attack6 -> Attack3."

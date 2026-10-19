@@ -1,0 +1,67 @@
+[gd_resource type="Resource" script_class="PresentationCharacter" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/character.gd" id="1_urcdi"]
+
+[resource]
+script = ExtResource("1_urcdi")
+id = "creature.wolf"
+identity = "content.srd_5_1_cc:creature:creature.wolf@1"
+rig = "smallscale.greywolf"
+portrait = "creature.wolf"
+size = "Medium"
+attacks = Array[Dictionary]([{
+"clip": "Attack2",
+"contact": 5,
+"delivery": "melee",
+&"items": ["weapon.creature.wolf_bite"],
+"recipe": "action.attack",
+"variant": "greywolf-wolf_bite"
+}, {
+"clip": "Attack2",
+"contact": 5,
+"delivery": "melee",
+"recipe": "action.attack",
+"variant": "greywolf-unarmed"
+}, {
+"clip": "Attack2",
+"contact": 5,
+"delivery": "melee",
+&"items": ["weapon.creature.wolf_bite"],
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "greywolf-wolf_bite"
+}, {
+"clip": "Attack2",
+"contact": 5,
+"delivery": "melee",
+"recipe": "action.class.barbarian.frenzied_strike",
+"variant": "greywolf-unarmed"
+}, {
+"clip": "Attack2",
+"contact": 5,
+"delivery": "melee",
+&"items": ["weapon.creature.wolf_bite"],
+"recipe": "action.feature.extra_attack",
+"variant": "greywolf-wolf_bite"
+}, {
+"clip": "Attack2",
+"contact": 5,
+"delivery": "melee",
+"recipe": "action.feature.extra_attack",
+"variant": "greywolf-unarmed"
+}, {
+"clip": "Attack2",
+"contact": 5,
+"delivery": "melee",
+&"items": ["weapon.creature.wolf_bite"],
+"recipe": "reaction.opportunity_attack",
+"variant": "greywolf-wolf_bite"
+}, {
+"clip": "Attack2",
+"contact": 5,
+"delivery": "melee",
+"recipe": "reaction.opportunity_attack",
+"variant": "greywolf-unarmed"
+}])
+death = Dictionary[String, String]({
+"default": "Die"
+})

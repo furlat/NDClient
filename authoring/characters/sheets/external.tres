@@ -1,0 +1,55 @@
+[gd_resource type="Resource" script_class="PresentationSheetTable" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/sheet_table.gd" id="1_2vurm"]
+
+[resource]
+script = ExtResource("1_2vurm")
+id = "external"
+sheets = Dictionary[String, String]({
+"/authored-vfx/projectiles/codexfx/lelu.magic-missile.rune-dart-lifecycle-256.godot-cie-lab-force-wine10-capture8-final-block2.temporal16-10-18.v1/sheet.png": "art/media/vfx/spells/magic-missile/lelu.magic-missile.rune-dart-lifecycle-256.godot-cie-lab-force-wine10-capture8-final-block2.temporal16-10-18.v1/sheet.png",
+"/authored-vfx/projectiles/neuroclient_128/lelu_fire_strike_128_pixel_lab_fire24_px8/lelu_fire_strike_128_pixel_lab_fire24_px8.png": "art/media/vfx/spells/fire-bolt/authored-vfx/projectiles/neuroclient_128/lelu_fire_strike_128_pixel_lab_fire24_px8/lelu_fire_strike_128_pixel_lab_fire24_px8.png",
+"/authored-vfx/sleep-projectile.png": "art/media/vfx/shared/sleep/sleep-projectile.png",
+"/cold/freeze-noise.png": "art/media/vfx/areas/cone-of-cold/cold/freeze-noise.png",
+"/cold/freeze-normal.webp": "art/media/vfx/areas/cone-of-cold/cold/freeze-normal.webp",
+"/construction/air-sphere.json": "art/media/vfx/shared/construction/air-sphere.json",
+"/construction/force-motes.json": "art/media/vfx/shared/construction/force/motes.json",
+"/construction/operators.json": "art/media/vfx/shared/construction/components.json",
+"/control/directed/dread-noise.png": "art/media/vfx/spells/eyebite/directed/dread-noise.png",
+"/counterspell-media/cast-hands.png": "art/media/vfx/actions/interruptions/actors/counterspell-hands.png",
+"/debuff-markers-20261005/bane.png": "art/media/vfx/conditions/bane/bane.png",
+"/debuff-markers-20261005/charmed.png": "art/media/vfx/conditions/charmed/charmed.png",
+"/debuff-markers-20261005/commanded.png": "art/media/vfx/conditions/commanded/commanded.png",
+"/debuff-markers-20261005/exhaustion.png": "art/media/vfx/conditions/exhaustion/exhaustion.png",
+"/debuff-markers-20261005/frightened.png": "art/media/vfx/conditions/frightened/frightened.png",
+"/debuff-markers-20261005/movement_slowed.png": "art/media/vfx/conditions/movement-slowed/movement_slowed.png",
+"/debuff-markers-20261005/paralyzed.png": "art/media/vfx/conditions/paralyzed/paralyzed.png",
+"/debuff-markers-20261005/petrified.png": "art/media/vfx/conditions/petrified/petrified.png",
+"/debuff-markers-20261005/poisoned.png": "art/media/vfx/conditions/poisoned/poisoned.png",
+"/debuff-markers-20261005/prone.png": "art/media/vfx/conditions/prone/prone.png",
+"/debuff-markers-20261005/reduce.png": "art/media/vfx/conditions/reduce/reduce.png",
+"/debuff-markers-20261005/sickened.png": "art/media/vfx/conditions/sickened/sickened.png",
+"/debuff-markers-20261005/slow.png": "art/media/vfx/conditions/slow/slow.png",
+"/debuff-markers-20261005/unconscious.png": "art/media/vfx/conditions/unconscious/unconscious.png",
+"/electric/arc-material.png": "art/media/vfx/shared/arc-material/arc-material.png",
+"/electric/glow.png": "art/media/vfx/shared/glow/glow.png",
+"/electric/spark_dot.png": "art/media/vfx/shared/spark-dot/spark_dot.png",
+"/electric/star.png": "art/media/vfx/shared/star/star.png",
+"/electric/streak.png": "art/media/vfx/shared/streak/streak.png",
+"/finger/darkness-mesh.json": "art/media/vfx/spells/finger-of-death/components/darkness-mesh.json",
+"/nature/bark.png": "art/media/vfx/conditions/barkskin/bark.png",
+"/necrotic/blight-noise.png": "art/media/vfx/spells/blight/donor-noise.png",
+"/necrotic/plasma/noise.png": "art/media/vfx/spells/disintegrate/plasma/noise.png",
+"/necrotic/plasma/plasma-particles.json": "art/media/vfx/spells/disintegrate/plasma/plasma-particles.json",
+"/necrotic/plasma/sphere.json": "art/media/vfx/spells/disintegrate/plasma/sphere.json",
+"/necrotic/plasma/trail.jpg": "art/media/vfx/spells/disintegrate/plasma/trail.jpg",
+"/shared-conditions/stone.png": "art/media/vfx/conditions/petrified/earth-rock-color.png",
+"/spell-palettes/source-hand-noise.png": "art/media/vfx/shared/palettes/source-hand-noise.png",
+"/thorns/components.json": "art/media/vfx/areas/wall-of-thorns/operator/thorns-components.json",
+"/wind/block-components.json": "art/media/vfx/areas/wind-wall/wind/block-components.json",
+"/wind/block-texture.png": "art/media/vfx/areas/wind-wall/wind/block-texture.png",
+"/wind/flow-components.json": "art/media/vfx/areas/wind-wall/operator/wind-components.json",
+"class.material.film": "art/media/vfx/shared/class-materials/film-field.png"
+})
+owner = "abilities"
+legacy_media_identity = true
+notes = "Spell and condition images (hand noise, films, markers) that cast layers name by sheet key. They keep their /media/ identity at run time until the abilities readers move to res://assets paths."

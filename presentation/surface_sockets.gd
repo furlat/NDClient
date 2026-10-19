@@ -54,7 +54,6 @@ static func resolve(world: Node, actor_id: String, clip: String, frame: int,
         var condition_alpha: Variant = SourceMaterial.value(entry,"condition_alpha")
         if condition_alpha != null and not is_equal_approx(float(condition_alpha), 1.0):
             return _missing(result, "translucent_display_owner")
-        var table: String = Geometry.TABLE if source_path.begins_with("/media/smallscale/modular/") else Geometry.CREATURE_TABLE
         # Geometry.record normally admits metadata lazily. This playback helper
         # may use only the catalog already prepared by the sandbox media pass.
         if not world.catalog_cache.has(Geometry.BodySources.KEY):
@@ -96,7 +95,8 @@ static func resolve(world: Node, actor_id: String, clip: String, frame: int,
             return _missing(result, "source_pixel_not_solid")
         var optical: Dictionary = source.get("optical_camera", {})
         if optical.is_empty(): return _missing(result, "source_optical_registration_missing")
-        var ground: Variant = source.get("optical_ground_pixels", 19.0 if table == Geometry.TABLE else null)
+        # Modular part packets (no normal profiles of their own) carry no measured ground line.
+        var ground: Variant = source.get("optical_ground_pixels", 19.0 if not source.has("normal_profiles") else null)
         if ground == null: return _missing(result, "source_ground_registration_missing")
         var node: Node3D = entry.node
         if not is_instance_valid(node): return _missing(result, "source_model_unavailable")

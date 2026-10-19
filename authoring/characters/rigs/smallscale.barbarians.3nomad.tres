@@ -1,0 +1,1452 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_37wnu"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_rkplw"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_37kx0"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_nxium"]
+
+[sub_resource type="Resource" id="Resource_exww5"]
+script = ExtResource("2_rkplw")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/3nomad/180turn/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/3nomad/180turn/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/3nomad/180turn/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/3nomad/180turn/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/3nomad/180turn/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/3nomad/180turn/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 14.14213562373095
+coverage = 0.8554548776716859
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_hyh6f"]
+script = ExtResource("1_37wnu")
+name = "180Turn"
+role = "turn"
+source_clip = "180Turn"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians3Nomad": "/rigs/barbarians_3nomad/body/180Turn.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/3nomad/180turn/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/3Nomad/180Turn.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/3Nomad/180Turn.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_exww5")
+
+[sub_resource type="Resource" id="Resource_j8rbp"]
+script = ExtResource("2_rkplw")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/3nomad/attack1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/3nomad/attack1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/3nomad/attack1/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/3nomad/attack1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/3nomad/attack1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/3nomad/attack1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 14.14213562373095
+coverage = 0.951826219291253
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_eulrt"]
+script = ExtResource("1_37wnu")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Attack1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians3Nomad": "/rigs/barbarians_3nomad/body/Attack1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/3nomad/attack1/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/3Nomad/Attack1.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/3Nomad/Attack1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_j8rbp")
+
+[sub_resource type="Resource" id="Resource_eeuht"]
+script = ExtResource("2_rkplw")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/3nomad/attack2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/3nomad/attack2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/3nomad/attack2/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/3nomad/attack2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/3nomad/attack2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/3nomad/attack2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 14.14213562373095
+coverage = 0.9489930805626716
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_e3t0v"]
+script = ExtResource("1_37wnu")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Attack2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians3Nomad": "/rigs/barbarians_3nomad/body/Attack2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/3nomad/attack2/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/3Nomad/Attack2.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/3Nomad/Attack2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_eeuht")
+
+[sub_resource type="Resource" id="Resource_ri5dg"]
+script = ExtResource("2_rkplw")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/3nomad/attack3/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/3nomad/attack3/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/3nomad/attack3/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/3nomad/attack3/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/3nomad/attack3/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/3nomad/attack3/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 14.14213562373095
+coverage = 0.9579963400874209
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_exrrw"]
+script = ExtResource("1_37wnu")
+name = "Attack3"
+role = "attack_3"
+source_clip = "Attack3"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians3Nomad": "/rigs/barbarians_3nomad/body/Attack3.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/3nomad/attack3/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/3Nomad/Attack3.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/3Nomad/Attack3.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_ri5dg")
+
+[sub_resource type="Resource" id="Resource_xur44"]
+script = ExtResource("2_rkplw")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/3nomad/attackrun/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/3nomad/attackrun/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/3nomad/attackrun/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/3nomad/attackrun/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/3nomad/attackrun/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/3nomad/attackrun/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 14.14213562373095
+coverage = 0.8487509846351644
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_3akhd"]
+script = ExtResource("1_37wnu")
+name = "AttackRun"
+role = "attack_run"
+source_clip = "AttackRun"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians3Nomad": "/rigs/barbarians_3nomad/body/AttackRun.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/3nomad/attackrun/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/3Nomad/AttackRun.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/3Nomad/AttackRun.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_xur44")
+
+[sub_resource type="Resource" id="Resource_kkyef"]
+script = ExtResource("2_rkplw")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/3nomad/blockmid/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/3nomad/blockmid/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/3nomad/blockmid/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/3nomad/blockmid/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/3nomad/blockmid/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/3nomad/blockmid/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 14.14213562373095
+coverage = 0.9581678498087168
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_7ip3u"]
+script = ExtResource("1_37wnu")
+name = "Block"
+role = "block_hold"
+source_clip = "BlockMid"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians3Nomad": "/rigs/barbarians_3nomad/body/BlockMid.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/3nomad/blockmid/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/3Nomad/BlockMid.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/3Nomad/BlockMid.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_kkyef")
+
+[sub_resource type="Resource" id="Resource_rpbhi"]
+script = ExtResource("2_rkplw")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/3nomad/blockstart/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/3nomad/blockstart/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/3nomad/blockstart/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/3nomad/blockstart/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/3nomad/blockstart/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/3nomad/blockstart/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 14.14213562373095
+coverage = 0.9617263327060116
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_umyv0"]
+script = ExtResource("1_37wnu")
+name = "BlockStart"
+role = "block_start"
+source_clip = "BlockStart"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians3Nomad": "/rigs/barbarians_3nomad/body/BlockStart.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/3nomad/blockstart/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/3Nomad/BlockStart.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_rpbhi")
+
+[sub_resource type="Resource" id="Resource_gblt6"]
+script = ExtResource("2_rkplw")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/3nomad/castspell/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/3nomad/castspell/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/3nomad/castspell/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/3nomad/castspell/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/3nomad/castspell/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/3nomad/castspell/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 14.14213562373095
+coverage = 0.9547469932937982
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_2g6e2"]
+script = ExtResource("1_37wnu")
+name = "CastSpell"
+role = "cast"
+source_clip = "CastSpell"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians3Nomad": "/rigs/barbarians_3nomad/body/CastSpell.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/3nomad/castspell/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/3Nomad/CastSpell.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/3Nomad/CastSpell.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_gblt6")
+
+[sub_resource type="Resource" id="Resource_0yebv"]
+script = ExtResource("2_rkplw")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/3nomad/crouchidle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/3nomad/crouchidle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/3nomad/crouchidle/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/3nomad/crouchidle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/3nomad/crouchidle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/3nomad/crouchidle/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 14.14213562373095
+coverage = 0.95648750888108
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_qbwic"]
+script = ExtResource("1_37wnu")
+name = "Crouch"
+role = "crouch_idle"
+source_clip = "CrouchIdle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians3Nomad": "/rigs/barbarians_3nomad/body/CrouchIdle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/3nomad/crouchidle/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/3Nomad/CrouchIdle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_0yebv")
+
+[sub_resource type="Resource" id="Resource_73twy"]
+script = ExtResource("2_rkplw")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/3nomad/crouchrun/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/3nomad/crouchrun/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/3nomad/crouchrun/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/3nomad/crouchrun/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/3nomad/crouchrun/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/3nomad/crouchrun/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 14.14213562373095
+coverage = 0.9628478326115852
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_7eq4n"]
+script = ExtResource("1_37wnu")
+name = "CrouchWalk"
+role = "crouch_move"
+source_clip = "CrouchRun"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians3Nomad": "/rigs/barbarians_3nomad/body/CrouchRun.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/3nomad/crouchrun/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/3Nomad/CrouchRun.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/3Nomad/CrouchRun.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_73twy")
+
+[sub_resource type="Resource" id="Resource_a6xhh"]
+script = ExtResource("2_rkplw")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/3nomad/die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/3nomad/die/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/3nomad/die/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/3nomad/die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/3nomad/die/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/3nomad/die/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 14.14213562373095
+coverage = 0.9450086242970432
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_gy4kj"]
+script = ExtResource("1_37wnu")
+name = "Die"
+role = "die"
+source_clip = "Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians3Nomad": "/rigs/barbarians_3nomad/body/Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/3nomad/die/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/3Nomad/Die.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/3Nomad/Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_a6xhh")
+
+[sub_resource type="Resource" id="Resource_3yrnf"]
+script = ExtResource("2_rkplw")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/3nomad/frontflip/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/3nomad/frontflip/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/3nomad/frontflip/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/3nomad/frontflip/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/3nomad/frontflip/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/3nomad/frontflip/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 14.14213562373095
+coverage = 0.8598731407362269
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_yc5m1"]
+script = ExtResource("1_37wnu")
+name = "BackFlip"
+role = "flip"
+source_clip = "FrontFlip"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians3Nomad": "/rigs/barbarians_3nomad/body/FrontFlip.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/3nomad/frontflip/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/3Nomad/FrontFlip.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/3Nomad/FrontFlip.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_3yrnf")
+
+[sub_resource type="Resource" id="Resource_61ffk"]
+script = ExtResource("2_rkplw")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/3nomad/idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/3nomad/idle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/3nomad/idle/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/3nomad/idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/3nomad/idle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/3nomad/idle/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 14.14213562373095
+coverage = 0.9514499513705564
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_64u2r"]
+script = ExtResource("1_37wnu")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians3Nomad": "/rigs/barbarians_3nomad/body/Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/3nomad/idle/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/3Nomad/Idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_61ffk")
+
+[sub_resource type="Resource" id="Resource_kv6et"]
+script = ExtResource("2_rkplw")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/3nomad/idle2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/3nomad/idle2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/3nomad/idle2/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/3nomad/idle2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/3nomad/idle2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/3nomad/idle2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 14.14213562373095
+coverage = 0.9483747991577098
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_weihj"]
+script = ExtResource("1_37wnu")
+name = "Idle2"
+role = "idle_alt"
+source_clip = "Idle2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians3Nomad": "/rigs/barbarians_3nomad/body/Idle2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/3nomad/idle2/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/3Nomad/Idle2.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/3Nomad/Idle2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_kv6et")
+
+[sub_resource type="Resource" id="Resource_ovdge"]
+script = ExtResource("2_rkplw")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/3nomad/kick/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/3nomad/kick/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/3nomad/kick/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/3nomad/kick/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/3nomad/kick/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/3nomad/kick/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 14.14213562373095
+coverage = 0.910056193031365
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_h3a3t"]
+script = ExtResource("1_37wnu")
+name = "Kick"
+role = "kick"
+source_clip = "Kick"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians3Nomad": "/rigs/barbarians_3nomad/body/Kick.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/3nomad/kick/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/3Nomad/Kick.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/3Nomad/Kick.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_ovdge")
+
+[sub_resource type="Resource" id="Resource_e3dq5"]
+script = ExtResource("2_rkplw")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/3nomad/pummel/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/3nomad/pummel/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/3nomad/pummel/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/3nomad/pummel/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/3nomad/pummel/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/3nomad/pummel/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 14.14213562373095
+coverage = 0.9573226639993332
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_5rwfy"]
+script = ExtResource("1_37wnu")
+name = "Pummel"
+role = "pummel"
+source_clip = "Pummel"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians3Nomad": "/rigs/barbarians_3nomad/body/Pummel.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/3nomad/pummel/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/3Nomad/Pummel.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/3Nomad/Pummel.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_e3dq5")
+
+[sub_resource type="Resource" id="Resource_70wbr"]
+script = ExtResource("2_rkplw")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/3nomad/quickshot/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/3nomad/quickshot/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/3nomad/quickshot/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/3nomad/quickshot/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/3nomad/quickshot/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/3nomad/quickshot/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 14.14213562373095
+coverage = 0.9571777235411582
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_o2mi1"]
+script = ExtResource("1_37wnu")
+name = "QuickShot"
+role = "shoot"
+source_clip = "QuickShot"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians3Nomad": "/rigs/barbarians_3nomad/body/QuickShot.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/3nomad/quickshot/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/3Nomad/QuickShot.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/3Nomad/QuickShot.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_70wbr")
+
+[sub_resource type="Resource" id="Resource_6ia2r"]
+script = ExtResource("2_rkplw")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "source_pose_empty", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/3nomad/quickslide/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/3nomad/quickslide/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/3nomad/quickslide/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/3nomad/quickslide/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/3nomad/quickslide/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/3nomad/quickslide/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 14.14213562373095
+coverage = 0.8867114989162452
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_m002c"]
+script = ExtResource("1_37wnu")
+name = "QuickSlide"
+role = "slide"
+source_clip = "QuickSlide"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians3Nomad": "/rigs/barbarians_3nomad/body/QuickSlide.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/3nomad/quickslide/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/3Nomad/QuickSlide.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_6ia2r")
+
+[sub_resource type="Resource" id="Resource_3ismm"]
+script = ExtResource("2_rkplw")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/3nomad/rolling/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/3nomad/rolling/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/3nomad/rolling/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/3nomad/rolling/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/3nomad/rolling/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/3nomad/rolling/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 14.14213562373095
+coverage = 0.8813322521079011
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_mv6tn"]
+script = ExtResource("1_37wnu")
+name = "Rolling"
+role = "roll"
+source_clip = "Rolling"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians3Nomad": "/rigs/barbarians_3nomad/body/Rolling.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/3nomad/rolling/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/3Nomad/Rolling.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_3ismm")
+
+[sub_resource type="Resource" id="Resource_3ciuy"]
+script = ExtResource("2_rkplw")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/3nomad/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/3nomad/run/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/3nomad/run/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/3nomad/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/3nomad/run/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/3nomad/run/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 14.14213562373095
+coverage = 0.8699642121678629
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_xhsos"]
+script = ExtResource("1_37wnu")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians3Nomad": "/rigs/barbarians_3nomad/body/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/3nomad/run/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/3Nomad/Run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_3ciuy")
+
+[sub_resource type="Resource" id="Resource_v720h"]
+script = ExtResource("2_rkplw")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/3nomad/runbackwards/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/3nomad/runbackwards/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/3nomad/runbackwards/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/3nomad/runbackwards/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/3nomad/runbackwards/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/3nomad/runbackwards/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 14.14213562373095
+coverage = 0.8826899441611102
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_8j7vj"]
+script = ExtResource("1_37wnu")
+name = "RunBackwards"
+role = "run_back"
+source_clip = "RunBackwards"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians3Nomad": "/rigs/barbarians_3nomad/body/RunBackwards.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/3nomad/runbackwards/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/3Nomad/RunBackwards.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/3Nomad/RunBackwards.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_v720h")
+
+[sub_resource type="Resource" id="Resource_45mt6"]
+script = ExtResource("2_rkplw")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/3nomad/sittingchair/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/3nomad/sittingchair/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/3nomad/sittingchair/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/3nomad/sittingchair/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/3nomad/sittingchair/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/3nomad/sittingchair/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 14.14213562373095
+coverage = 0.9627485081699176
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_wo1n0"]
+script = ExtResource("1_37wnu")
+name = "SittingChair"
+role = "sit"
+source_clip = "SittingChair"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians3Nomad": "/rigs/barbarians_3nomad/body/SittingChair.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/3nomad/sittingchair/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/3Nomad/SittingChair.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/3Nomad/SittingChair.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_45mt6")
+
+[sub_resource type="Resource" id="Resource_waej5"]
+script = ExtResource("2_rkplw")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "source_pose_empty", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/3nomad/special1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/3nomad/special1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/3nomad/special1/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/3nomad/special1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/3nomad/special1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/3nomad/special1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 14.14213562373095
+coverage = 0.9396869754879824
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_7v8k2"]
+script = ExtResource("1_37wnu")
+name = "Special1"
+role = "special_1"
+source_clip = "Special1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians3Nomad": "/rigs/barbarians_3nomad/body/Special1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/3nomad/special1/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/3Nomad/Special1.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/3Nomad/Special1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_waej5")
+
+[sub_resource type="Resource" id="Resource_psyd7"]
+script = ExtResource("2_rkplw")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/3nomad/special2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/3nomad/special2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/3nomad/special2/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/3nomad/special2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/3nomad/special2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/3nomad/special2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 14.14213562373095
+coverage = 0.9592731129968736
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_p07yw"]
+script = ExtResource("1_37wnu")
+name = "Special2"
+role = "special_2"
+source_clip = "Special2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians3Nomad": "/rigs/barbarians_3nomad/body/Special2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/3nomad/special2/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/3Nomad/Special2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_psyd7")
+
+[sub_resource type="Resource" id="Resource_spe56"]
+script = ExtResource("2_rkplw")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/3nomad/strafeleft/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/3nomad/strafeleft/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/3nomad/strafeleft/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/3nomad/strafeleft/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/3nomad/strafeleft/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/3nomad/strafeleft/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 14.14213562373095
+coverage = 0.8650670996517861
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_2627a"]
+script = ExtResource("1_37wnu")
+name = "StrafeLeft"
+role = "strafe_left"
+source_clip = "StrafeLeft"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians3Nomad": "/rigs/barbarians_3nomad/body/StrafeLeft.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/3nomad/strafeleft/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/3Nomad/StrafeLeft.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/3Nomad/StrafeLeft.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_spe56")
+
+[sub_resource type="Resource" id="Resource_sqpwl"]
+script = ExtResource("2_rkplw")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/3nomad/straferight/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/3nomad/straferight/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/3nomad/straferight/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/3nomad/straferight/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/3nomad/straferight/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/3nomad/straferight/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 14.14213562373095
+coverage = 0.8730692991580477
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_bq6pw"]
+script = ExtResource("1_37wnu")
+name = "StrafeRight"
+role = "strafe_right"
+source_clip = "StrafeRight"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians3Nomad": "/rigs/barbarians_3nomad/body/StrafeRight.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/3nomad/straferight/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/3Nomad/StrafeRight.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/3Nomad/StrafeRight.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_sqpwl")
+
+[sub_resource type="Resource" id="Resource_3d3nu"]
+script = ExtResource("2_rkplw")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/3nomad/takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/3nomad/takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/3nomad/takedamage/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/3nomad/takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/3nomad/takedamage/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/3nomad/takedamage/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 14.14213562373095
+coverage = 0.9572839221562638
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_72oda"]
+script = ExtResource("1_37wnu")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians3Nomad": "/rigs/barbarians_3nomad/body/TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/3nomad/takedamage/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/3Nomad/TakeDamage.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/3Nomad/TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_3d3nu")
+
+[sub_resource type="Resource" id="Resource_8nur2"]
+script = ExtResource("2_rkplw")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/3nomad/unsheath/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/3nomad/unsheath/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/3nomad/unsheath/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/3nomad/unsheath/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/3nomad/unsheath/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/3nomad/unsheath/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 14.14213562373095
+coverage = 0.9464780067671484
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_scgee"]
+script = ExtResource("1_37wnu")
+name = "UnSheath"
+role = "unsheath"
+source_clip = "UnSheath"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians3Nomad": "/rigs/barbarians_3nomad/body/UnSheath.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/3nomad/unsheath/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/3Nomad/UnSheath.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/3Nomad/UnSheath.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_8nur2")
+
+[sub_resource type="Resource" id="Resource_w87ca"]
+script = ExtResource("2_rkplw")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/barbarians/3nomad/walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/barbarians/3nomad/walk/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/barbarians/3nomad/walk/normals.png",
+"reference": "art/geometry/creatures/library/actions/barbarians/3nomad/walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/barbarians/3nomad/walk/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/barbarians/3nomad/walk/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 14.14213562373095
+coverage = 0.8882247931275952
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_bogta"]
+script = ExtResource("1_37wnu")
+name = "Walk"
+role = "walk"
+source_clip = "Walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Barbarians3Nomad": "/rigs/barbarians_3nomad/body/Walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/barbarians/3nomad/walk/colour.png",
+"combined": "art/media/smallscale/authored/barbarians/With shadow/3Nomad/Walk.png",
+"mask_material": "art/media/smallscale/authored/barbarians/Material masks/With shadow/3Nomad/Walk.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_w87ca")
+
+[sub_resource type="Resource" id="Resource_okefc"]
+script = ExtResource("3_37kx0")
+role = "movement"
+qualifier = {
+"kind": "default"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+playback = "loop"
+
+[sub_resource type="Resource" id="Resource_c7hgj"]
+script = ExtResource("3_37kx0")
+role = "movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_b1idg"]
+script = ExtResource("3_37kx0")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "direct_arc"
+}
+clip = "Rolling"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_1j7ef"]
+script = ExtResource("3_37kx0")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "connector_transfer"
+}
+clip = "CrouchWalk"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_paa2a"]
+script = ExtResource("3_37kx0")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "direct_arc"
+}
+clip = "Rolling"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_nrvq1"]
+script = ExtResource("3_37kx0")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "connector_transfer"
+}
+clip = "CrouchWalk"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_5nneo"]
+script = ExtResource("3_37kx0")
+role = "shove"
+qualifier = {
+"kind": "default"
+}
+clip = "Attack2"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 6.0,
+"name": "contact"
+}]
+
+[sub_resource type="Resource" id="Resource_l041n"]
+script = ExtResource("3_37kx0")
+role = "forced_movement"
+qualifier = {
+"kind": "default"
+}
+clip = "TakeDamage"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 5.0,
+"name": "brace"
+}]
+
+[sub_resource type="Resource" id="Resource_6kme5"]
+script = ExtResource("3_37kx0")
+role = "forced_movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_0v0qj"]
+script = ExtResource("3_37kx0")
+role = "body_action"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_myl74"]
+script = ExtResource("3_37kx0")
+role = "body_action_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_vycn6"]
+script = ExtResource("3_37kx0")
+role = "equipment"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_q5k12"]
+script = ExtResource("3_37kx0")
+role = "healing"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_1tlck"]
+script = ExtResource("3_37kx0")
+role = "save_avoidance"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_th75w"]
+script = ExtResource("3_37kx0")
+role = "condition_entry"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_2l3ap"]
+script = ExtResource("3_37kx0")
+role = "condition_hold"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+hidden_slots = PackedStringArray()
+playback = "final_rest"
+rest_frame = 14
+
+[sub_resource type="Resource" id="Resource_i6ume"]
+script = ExtResource("3_37kx0")
+role = "condition_exit"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+reversed = true
+
+[sub_resource type="Resource" id="Resource_wlq10"]
+script = ExtResource("3_37kx0")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "flying",
+"trajectory": "path"
+}
+clip = "Idle"
+hidden_slots = PackedStringArray()
+playback = "once"
+frame_keys = [[0.0, 0.0], [1.0, 0.0]]
+
+[sub_resource type="Resource" id="Resource_qnhbl"]
+script = ExtResource("3_37kx0")
+role = "death"
+qualifier = {
+"kind": "default"
+}
+clip = "Die"
+hidden_slots = PackedStringArray()
+playback = "once"
+
+[resource]
+script = ExtResource("4_nxium")
+id = "smallscale.barbarians.3nomad"
+pack = "barbarians"
+variant = "3Nomad"
+source = "smallscale-authored/barbarians"
+pivot = Vector2(64, 86)
+anchor = Vector2(64, 61)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("Barbarians3Nomad")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_37wnu")]([SubResource("Resource_hyh6f"), SubResource("Resource_eulrt"), SubResource("Resource_e3t0v"), SubResource("Resource_exrrw"), SubResource("Resource_3akhd"), SubResource("Resource_7ip3u"), SubResource("Resource_umyv0"), SubResource("Resource_2g6e2"), SubResource("Resource_qbwic"), SubResource("Resource_7eq4n"), SubResource("Resource_gy4kj"), SubResource("Resource_yc5m1"), SubResource("Resource_64u2r"), SubResource("Resource_weihj"), SubResource("Resource_h3a3t"), SubResource("Resource_5rwfy"), SubResource("Resource_o2mi1"), SubResource("Resource_m002c"), SubResource("Resource_mv6tn"), SubResource("Resource_xhsos"), SubResource("Resource_8j7vj"), SubResource("Resource_wo1n0"), SubResource("Resource_7v8k2"), SubResource("Resource_p07yw"), SubResource("Resource_2627a"), SubResource("Resource_bq6pw"), SubResource("Resource_72oda"), SubResource("Resource_scgee"), SubResource("Resource_bogta")])
+fallbacks = Dictionary[String, String]({
+"Attack4": "Attack3",
+"Attack5": "CastSpell",
+"Attack6": "CastSpell",
+"Death": "Die",
+"Idle4": "Idle2",
+"Taunt": "Idle2"
+})
+contexts = Array[ExtResource("3_37kx0")]([SubResource("Resource_okefc"), SubResource("Resource_c7hgj"), SubResource("Resource_b1idg"), SubResource("Resource_1j7ef"), SubResource("Resource_paa2a"), SubResource("Resource_nrvq1"), SubResource("Resource_5nneo"), SubResource("Resource_l041n"), SubResource("Resource_6kme5"), SubResource("Resource_0v0qj"), SubResource("Resource_myl74"), SubResource("Resource_vycn6"), SubResource("Resource_q5k12"), SubResource("Resource_1tlck"), SubResource("Resource_th75w"), SubResource("Resource_2l3ap"), SubResource("Resource_i6ume"), SubResource("Resource_wlq10"), SubResource("Resource_qnhbl")])
+hold_clips = PackedStringArray("Die")
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed.
+Stand-in clips: Idle4 -> Idle2, Death -> Die, Taunt -> Idle2, Attack4 -> Attack3, Attack5 -> CastSpell, Attack6 -> CastSpell."

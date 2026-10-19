@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_p705v"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_2ra67"]
+
+[sub_resource type="Resource" id="Resource_30em4"]
+script = ExtResource("1_p705v")
+path = "art/media/ui/icons/smooth48/item.leather-armor.png"
+native_size = Vector2i(48, 48)
+reuses = "item.leather-armor"
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_2ra67")
+id = "apparel.costume.pit_fighter_wrap"
+kind = "armor"
+family = "apparel.costume"
+visual_variant_id = "85000004"
+icon = SubResource("Resource_30em4")
+notes = "Icon: Shares an existing icon for the native equipment slot."

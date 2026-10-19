@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_53i2x"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_qu6x3"]
+
+[sub_resource type="Resource" id="Resource_kxntg"]
+script = ExtResource("1_53i2x")
+path = "art/media/ui/icons/smooth48/item.longsword.png"
+native_size = Vector2i(48, 48)
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_qu6x3")
+id = "weapon.roster.psychic_longsword_greater"
+kind = "weapon"
+icon = SubResource("Resource_kxntg")
+status = "partial"
+notes = "No worn look authored."

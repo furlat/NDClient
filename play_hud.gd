@@ -844,7 +844,7 @@ func _refresh_inventory() -> void:
     var centre = VBoxContainer.new()
     body.add_child(centre)
     var picture = TextureRect.new()
-    picture.texture = UI.texture(UI.portrait_key(actor,sheet,state),cache,true)
+    picture.texture = UI.texture(UI.portrait_key(actor,sheet,state,cache),cache,true)
     picture.custom_minimum_size = Vector2(108,144)
     picture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
     picture.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED

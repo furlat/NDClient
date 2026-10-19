@@ -1,0 +1,166 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_xfpyh"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_4ilow"]
+
+[sub_resource type="Resource" id="Resource_cghqu"]
+script = ExtResource("1_xfpyh")
+path = "art/media/ui/icons/smooth48/item.quarterstaff.png"
+native_size = Vector2i(48, 48)
+source = "ui-icons-bg3-glyphs-2026-10-07"
+
+[resource]
+script = ExtResource("2_4ilow")
+id = "weapon.quarterstaff"
+kind = "weapon"
+slots = Dictionary[String, Dictionary]({
+"weapon_melee_main": {
+"layers": [{
+"part": "Melee19",
+"slot": "weapon",
+"tint": "#8b6914"
+}],
+"variants": {
+"1000000f": [{
+"part": "Melee19",
+"slot": "weapon",
+"tint": "#5588cc"
+}],
+"10000010": [{
+"part": "Melee20",
+"slot": "weapon",
+"tint": "#ddcc77"
+}],
+"10000011": [{
+"part": "Melee19",
+"slot": "weapon",
+"tint": "#448844"
+}],
+"10000012": [{
+"part": "Melee19",
+"slot": "weapon",
+"tint": "#553377"
+}],
+"a0000005": [{
+"part": "Melee21",
+"slot": "weapon",
+"tint": "#5c3317"
+}]
+}
+}
+})
+hands = Dictionary[String, Dictionary]({
+"weapon_melee_off": {
+"": [{
+"part": "Offhand1",
+"slot": "offhand",
+"tint": "#8b6914"
+}],
+"1000000f": [{
+"part": "Offhand1",
+"slot": "offhand",
+"tint": "#5588cc"
+}],
+"10000010": [{
+"part": "Offhand1",
+"slot": "offhand",
+"tint": "#ddcc77"
+}],
+"10000011": [{
+"part": "Offhand1",
+"slot": "offhand",
+"tint": "#448844"
+}],
+"10000012": [{
+"part": "Offhand1",
+"slot": "offhand",
+"tint": "#553377"
+}],
+"a0000005": [{
+"part": "Offhand1",
+"slot": "offhand",
+"tint": "#5c3317"
+}]
+}
+})
+ground = Array[Dictionary]([{
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee19",
+"pivots_by_camera": [[58.5, 63.5], [71.0, 62.0], [72.0, 70.0], [60.0, 72.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#8b6914",
+"variant": ""
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee19",
+"pivots_by_camera": [[58.5, 63.5], [71.0, 62.0], [72.0, 70.0], [60.0, 72.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#5588cc",
+"variant": "1000000f"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee20",
+"pivots_by_camera": [[49.5, 66.0], [66.5, 58.0], [75.0, 66.0], [64.5, 73.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#ddcc77",
+"variant": "10000010"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee19",
+"pivots_by_camera": [[58.5, 63.5], [71.0, 62.0], [72.0, 70.0], [60.0, 72.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#448844",
+"variant": "10000011"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee19",
+"pivots_by_camera": [[58.5, 63.5], [71.0, 62.0], [72.0, 70.0], [60.0, 72.5]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#553377",
+"variant": "10000012"
+}, {
+"cell": [128.0, 128.0],
+"clip": "Idle",
+"frame": 0,
+"part": "Melee21",
+"pivots_by_camera": [[56.0, 65.0], [69.5, 60.0], [73.0, 68.5], [60.5, 72.0]],
+"rotation": 0.0,
+"rows_by_camera": [2.0, 4.0, 6.0, 0.0],
+"scale": 0.75,
+"shadow_part": "Shadow",
+"shadow_scale": 0.18,
+"tint": "#5c3317",
+"variant": "a0000005"
+}])
+icon = SubResource("Resource_cghqu")
+notes = "Visual name Quarterstaff; Arcane staff sprite — with wood tint reads as plain quarterstaff"

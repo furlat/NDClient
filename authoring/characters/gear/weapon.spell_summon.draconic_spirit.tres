@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="PresentationGear" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/image_ref.gd" id="1_arbji"]
+[ext_resource type="Script" path="res://presentation/source/characters/gear.gd" id="2_fiw3o"]
+
+[sub_resource type="Resource" id="Resource_20k6g"]
+script = ExtResource("1_arbji")
+path = "art/ui-delivery-20261018/runtime/smooth48/srd22.creature_action.draconic_rend.png"
+native_size = Vector2i(48, 48)
+reuses = "srd22.creature_action.draconic_rend"
+source = "ui-delivery-20261018"
+
+[resource]
+script = ExtResource("2_fiw3o")
+id = "weapon.spell_summon.draconic_spirit"
+kind = "weapon"
+icon = SubResource("Resource_20k6g")
+natural = true
+status = "internal"
+notes = "Natural or summoned: drawn by the creature's own body."

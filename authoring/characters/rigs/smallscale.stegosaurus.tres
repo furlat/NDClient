@@ -1,0 +1,464 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_ue0kg"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_c372f"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_dvgkx"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_s5jix"]
+
+[sub_resource type="Resource" id="Resource_3jlt0"]
+script = ExtResource("2_c372f")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/animals/actions/stegosaurus/idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/animals/actions/stegosaurus/idle/normals-gentle.png",
+"original": "art/geometry/creatures/animals/actions/stegosaurus/idle/normals.png",
+"reference": "art/geometry/creatures/animals/actions/stegosaurus/idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/animals/actions/stegosaurus/idle/normal-valid.png",
+"support": "art/geometry/creatures/animals/actions/stegosaurus/idle/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9802498260895866
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_dl1dq"]
+script = ExtResource("1_ue0kg")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Stegosaurus": "/rigs/stegosaurus/body/Idle.png",
+"StegosaurusShadow": "/rigs/stegosaurus/shadow/Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/animals/actions/stegosaurus/idle/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/Stegosaurus/Idle.png",
+"shadow": "art/media/smallscale/authored/dinosaurs/Derived shadows/Stegosaurus/Idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_3jlt0")
+
+[sub_resource type="Resource" id="Resource_5ruwh"]
+script = ExtResource("2_c372f")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/animals/actions/stegosaurus/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/animals/actions/stegosaurus/run/normals-gentle.png",
+"original": "art/geometry/creatures/animals/actions/stegosaurus/run/normals.png",
+"reference": "art/geometry/creatures/animals/actions/stegosaurus/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/animals/actions/stegosaurus/run/normal-valid.png",
+"support": "art/geometry/creatures/animals/actions/stegosaurus/run/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.979632299927902
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_1gbai"]
+script = ExtResource("1_ue0kg")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Stegosaurus": "/rigs/stegosaurus/body/Run.png",
+"StegosaurusShadow": "/rigs/stegosaurus/shadow/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/animals/actions/stegosaurus/run/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/Stegosaurus/Run.png",
+"shadow": "art/media/smallscale/authored/dinosaurs/Derived shadows/Stegosaurus/Run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_5ruwh")
+
+[sub_resource type="Resource" id="Resource_dtjpp"]
+script = ExtResource("2_c372f")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/animals/actions/stegosaurus/takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/animals/actions/stegosaurus/takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/animals/actions/stegosaurus/takedamage/normals.png",
+"reference": "art/geometry/creatures/animals/actions/stegosaurus/takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/animals/actions/stegosaurus/takedamage/normal-valid.png",
+"support": "art/geometry/creatures/animals/actions/stegosaurus/takedamage/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9790962001401712
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_fog1r"]
+script = ExtResource("1_ue0kg")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Stegosaurus": "/rigs/stegosaurus/body/TakeDamage.png",
+"StegosaurusShadow": "/rigs/stegosaurus/shadow/TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/animals/actions/stegosaurus/takedamage/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/Stegosaurus/TakeDamage.png",
+"shadow": "art/media/smallscale/authored/dinosaurs/Derived shadows/Stegosaurus/TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_dtjpp")
+
+[sub_resource type="Resource" id="Resource_dobcn"]
+script = ExtResource("2_c372f")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/animals/actions/stegosaurus/die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/animals/actions/stegosaurus/die/normals-gentle.png",
+"original": "art/geometry/creatures/animals/actions/stegosaurus/die/normals.png",
+"reference": "art/geometry/creatures/animals/actions/stegosaurus/die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/animals/actions/stegosaurus/die/normal-valid.png",
+"support": "art/geometry/creatures/animals/actions/stegosaurus/die/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9841999169976878
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_incfj"]
+script = ExtResource("1_ue0kg")
+name = "Die"
+role = "die"
+source_clip = "Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Stegosaurus": "/rigs/stegosaurus/body/Die.png",
+"StegosaurusShadow": "/rigs/stegosaurus/shadow/Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/animals/actions/stegosaurus/die/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/Stegosaurus/Die.png",
+"shadow": "art/media/smallscale/authored/dinosaurs/Derived shadows/Stegosaurus/Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_dobcn")
+
+[sub_resource type="Resource" id="Resource_28syu"]
+script = ExtResource("2_c372f")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/animals/actions/stegosaurus/attack3/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/animals/actions/stegosaurus/attack3/normals-gentle.png",
+"original": "art/geometry/creatures/animals/actions/stegosaurus/attack3/normals.png",
+"reference": "art/geometry/creatures/animals/actions/stegosaurus/attack3/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/animals/actions/stegosaurus/attack3/normal-valid.png",
+"support": "art/geometry/creatures/animals/actions/stegosaurus/attack3/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(32, 48)
+optical_ground_pixels = 7.071067811865475
+coverage = 0.9819387567997068
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_8de2r"]
+script = ExtResource("1_ue0kg")
+name = "Attack3"
+role = "attack_3"
+source_clip = "Attack3"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Stegosaurus": "/rigs/stegosaurus/body/Attack3.png",
+"StegosaurusShadow": "/rigs/stegosaurus/shadow/Attack3.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/animals/actions/stegosaurus/attack3/colour.png",
+"combined": "art/media/smallscale/authored/dinosaurs/With shadow/Stegosaurus/Attack3.png",
+"shadow": "art/media/smallscale/authored/dinosaurs/Derived shadows/Stegosaurus/Attack3.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_28syu")
+
+[sub_resource type="Resource" id="Resource_tj3mh"]
+script = ExtResource("3_dvgkx")
+role = "movement"
+qualifier = {
+"kind": "default"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+playback = "loop"
+
+[sub_resource type="Resource" id="Resource_wsf2n"]
+script = ExtResource("3_dvgkx")
+role = "movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_sac6j"]
+script = ExtResource("3_dvgkx")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "direct_arc"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_hfrja"]
+script = ExtResource("3_dvgkx")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "connector_transfer"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_hxk6m"]
+script = ExtResource("3_dvgkx")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "direct_arc"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_12ope"]
+script = ExtResource("3_dvgkx")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "connector_transfer"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_o1xbr"]
+script = ExtResource("3_dvgkx")
+role = "shove"
+qualifier = {
+"kind": "default"
+}
+clip = "Attack3"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 8.0,
+"name": "contact"
+}]
+
+[sub_resource type="Resource" id="Resource_puoto"]
+script = ExtResource("3_dvgkx")
+role = "forced_movement"
+qualifier = {
+"kind": "default"
+}
+clip = "TakeDamage"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 5.0,
+"name": "brace"
+}]
+
+[sub_resource type="Resource" id="Resource_7m5fj"]
+script = ExtResource("3_dvgkx")
+role = "forced_movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_20vqx"]
+script = ExtResource("3_dvgkx")
+role = "body_action"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_m23bn"]
+script = ExtResource("3_dvgkx")
+role = "body_action_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_qg2th"]
+script = ExtResource("3_dvgkx")
+role = "equipment"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_umd2j"]
+script = ExtResource("3_dvgkx")
+role = "healing"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_idcqj"]
+script = ExtResource("3_dvgkx")
+role = "save_avoidance"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_t8482"]
+script = ExtResource("3_dvgkx")
+role = "condition_entry"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_pdmgg"]
+script = ExtResource("3_dvgkx")
+role = "condition_hold"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+hidden_slots = PackedStringArray()
+playback = "final_rest"
+rest_frame = 14
+
+[sub_resource type="Resource" id="Resource_ecwt5"]
+script = ExtResource("3_dvgkx")
+role = "condition_exit"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+reversed = true
+
+[sub_resource type="Resource" id="Resource_sfxnr"]
+script = ExtResource("3_dvgkx")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "flying",
+"trajectory": "path"
+}
+clip = "Idle"
+hidden_slots = PackedStringArray()
+playback = "once"
+frame_keys = [[0.0, 0.0], [1.0, 0.0]]
+
+[resource]
+script = ExtResource("4_s5jix")
+id = "smallscale.stegosaurus"
+pack = "dinosaurs"
+variant = "Stegosaurus"
+source = "smallscale-authored/dinosaurs"
+cell = Vector2i(64, 64)
+pivot = Vector2(32, 43)
+anchor = Vector2(32, 34)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("shadow", "body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("Stegosaurus"),
+"shadow": PackedStringArray("StegosaurusShadow")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_ue0kg")]([SubResource("Resource_dl1dq"), SubResource("Resource_1gbai"), SubResource("Resource_fog1r"), SubResource("Resource_incfj"), SubResource("Resource_8de2r")])
+contexts = Array[ExtResource("3_dvgkx")]([SubResource("Resource_tj3mh"), SubResource("Resource_wsf2n"), SubResource("Resource_sac6j"), SubResource("Resource_hfrja"), SubResource("Resource_hxk6m"), SubResource("Resource_12ope"), SubResource("Resource_o1xbr"), SubResource("Resource_puoto"), SubResource("Resource_7m5fj"), SubResource("Resource_20vqx"), SubResource("Resource_m23bn"), SubResource("Resource_qg2th"), SubResource("Resource_umd2j"), SubResource("Resource_idcqj"), SubResource("Resource_t8482"), SubResource("Resource_pdmgg"), SubResource("Resource_ecwt5"), SubResource("Resource_sfxnr")])
+shadow_alpha = 1.0
+lifecycle_scale = 0.987
+hold_clips = PackedStringArray("Die")
+measurements = "measured/characters/rigs/smallscale.stegosaurus.json"

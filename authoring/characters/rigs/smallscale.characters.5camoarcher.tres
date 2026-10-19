@@ -1,0 +1,1478 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_jv3ux"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_ywoy1"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_alyvv"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_8w152"]
+
+[sub_resource type="Resource" id="Resource_l4pbv"]
+script = ExtResource("2_ywoy1")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/5camoarcher/180turn/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/5camoarcher/180turn/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/5camoarcher/180turn/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/5camoarcher/180turn/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/5camoarcher/180turn/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/5camoarcher/180turn/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -2.82842712474619
+coverage = 0.9871587336176572
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_3mifk"]
+script = ExtResource("1_jv3ux")
+name = "180Turn"
+role = "turn"
+source_clip = "180Turn"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters5Camoarcher": "/rigs/characters_5camoarcher/body/180Turn.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/5camoarcher/180turn/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/5CamoArcher/180Turn.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_l4pbv")
+
+[sub_resource type="Resource" id="Resource_88usa"]
+script = ExtResource("2_ywoy1")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/5camoarcher/attack1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/5camoarcher/attack1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/5camoarcher/attack1/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/5camoarcher/attack1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/5camoarcher/attack1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/5camoarcher/attack1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -2.82842712474619
+coverage = 0.9832406597525928
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_5n8e2"]
+script = ExtResource("1_jv3ux")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Attack1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters5Camoarcher": "/rigs/characters_5camoarcher/body/Attack1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/5camoarcher/attack1/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/5CamoArcher/Attack1.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/5CamoArcher/Attack1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_88usa")
+
+[sub_resource type="Resource" id="Resource_rl2ts"]
+script = ExtResource("2_ywoy1")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/5camoarcher/attack2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/5camoarcher/attack2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/5camoarcher/attack2/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/5camoarcher/attack2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/5camoarcher/attack2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/5camoarcher/attack2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -2.82842712474619
+coverage = 0.9861421824509072
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_mguq6"]
+script = ExtResource("1_jv3ux")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Attack2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters5Camoarcher": "/rigs/characters_5camoarcher/body/Attack2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/5camoarcher/attack2/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/5CamoArcher/Attack2.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/5CamoArcher/Attack2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_rl2ts")
+
+[sub_resource type="Resource" id="Resource_rb3co"]
+script = ExtResource("2_ywoy1")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/5camoarcher/attack3/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/5camoarcher/attack3/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/5camoarcher/attack3/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/5camoarcher/attack3/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/5camoarcher/attack3/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/5camoarcher/attack3/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -2.82842712474619
+coverage = 0.9781482904341144
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_vdam4"]
+script = ExtResource("1_jv3ux")
+name = "Attack3"
+role = "attack_3"
+source_clip = "Attack3"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters5Camoarcher": "/rigs/characters_5camoarcher/body/Attack3.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/5camoarcher/attack3/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/5CamoArcher/Attack3.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/5CamoArcher/Attack3.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_rb3co")
+
+[sub_resource type="Resource" id="Resource_prro2"]
+script = ExtResource("2_ywoy1")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/5camoarcher/attackrun/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/5camoarcher/attackrun/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/5camoarcher/attackrun/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/5camoarcher/attackrun/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/5camoarcher/attackrun/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/5camoarcher/attackrun/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -2.82842712474619
+coverage = 0.9886602870813396
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_6rwhb"]
+script = ExtResource("1_jv3ux")
+name = "AttackRun"
+role = "attack_run"
+source_clip = "AttackRun"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters5Camoarcher": "/rigs/characters_5camoarcher/body/AttackRun.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/5camoarcher/attackrun/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/5CamoArcher/AttackRun.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/5CamoArcher/AttackRun.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_prro2")
+
+[sub_resource type="Resource" id="Resource_ao667"]
+script = ExtResource("2_ywoy1")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/5camoarcher/blockmid/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/5camoarcher/blockmid/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/5camoarcher/blockmid/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/5camoarcher/blockmid/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/5camoarcher/blockmid/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/5camoarcher/blockmid/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -2.82842712474619
+coverage = 0.9904345790746664
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_bpnal"]
+script = ExtResource("1_jv3ux")
+name = "Block"
+role = "block_hold"
+source_clip = "BlockMid"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters5Camoarcher": "/rigs/characters_5camoarcher/body/BlockMid.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/5camoarcher/blockmid/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/5CamoArcher/BlockMid.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_ao667")
+
+[sub_resource type="Resource" id="Resource_82nab"]
+script = ExtResource("2_ywoy1")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/5camoarcher/blockstart/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/5camoarcher/blockstart/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/5camoarcher/blockstart/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/5camoarcher/blockstart/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/5camoarcher/blockstart/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/5camoarcher/blockstart/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -2.82842712474619
+coverage = 0.9894714257252762
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_7g12d"]
+script = ExtResource("1_jv3ux")
+name = "BlockStart"
+role = "block_start"
+source_clip = "BlockStart"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters5Camoarcher": "/rigs/characters_5camoarcher/body/BlockStart.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/5camoarcher/blockstart/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/5CamoArcher/BlockStart.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_82nab")
+
+[sub_resource type="Resource" id="Resource_twspj"]
+script = ExtResource("2_ywoy1")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/5camoarcher/castspell/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/5camoarcher/castspell/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/5camoarcher/castspell/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/5camoarcher/castspell/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/5camoarcher/castspell/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/5camoarcher/castspell/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -2.82842712474619
+coverage = 0.983427260713038
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_678tw"]
+script = ExtResource("1_jv3ux")
+name = "CastSpell"
+role = "cast"
+source_clip = "CastSpell"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters5Camoarcher": "/rigs/characters_5camoarcher/body/CastSpell.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/5camoarcher/castspell/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/5CamoArcher/CastSpell.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_twspj")
+
+[sub_resource type="Resource" id="Resource_0mimb"]
+script = ExtResource("2_ywoy1")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/5camoarcher/crouchidle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/5camoarcher/crouchidle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/5camoarcher/crouchidle/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/5camoarcher/crouchidle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/5camoarcher/crouchidle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/5camoarcher/crouchidle/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -2.82842712474619
+coverage = 0.9908520733134016
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_078fb"]
+script = ExtResource("1_jv3ux")
+name = "Crouch"
+role = "crouch_idle"
+source_clip = "CrouchIdle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters5Camoarcher": "/rigs/characters_5camoarcher/body/CrouchIdle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/5camoarcher/crouchidle/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/5CamoArcher/CrouchIdle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_0mimb")
+
+[sub_resource type="Resource" id="Resource_by0ym"]
+script = ExtResource("2_ywoy1")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/5camoarcher/crouchrun/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/5camoarcher/crouchrun/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/5camoarcher/crouchrun/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/5camoarcher/crouchrun/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/5camoarcher/crouchrun/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/5camoarcher/crouchrun/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -2.82842712474619
+coverage = 0.9895871596262876
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_jij5w"]
+script = ExtResource("1_jv3ux")
+name = "CrouchWalk"
+role = "crouch_move"
+source_clip = "CrouchRun"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters5Camoarcher": "/rigs/characters_5camoarcher/body/CrouchRun.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/5camoarcher/crouchrun/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/5CamoArcher/CrouchRun.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_by0ym")
+
+[sub_resource type="Resource" id="Resource_g78tx"]
+script = ExtResource("2_ywoy1")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/5camoarcher/die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/5camoarcher/die/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/5camoarcher/die/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/5camoarcher/die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/5camoarcher/die/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/5camoarcher/die/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -2.82842712474619
+coverage = 0.9880986480293308
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_u1q8s"]
+script = ExtResource("1_jv3ux")
+name = "Die"
+role = "die"
+source_clip = "Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters5Camoarcher": "/rigs/characters_5camoarcher/body/Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/5camoarcher/die/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/5CamoArcher/Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_g78tx")
+
+[sub_resource type="Resource" id="Resource_fpvtg"]
+script = ExtResource("2_ywoy1")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/5camoarcher/frontflip/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/5camoarcher/frontflip/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/5camoarcher/frontflip/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/5camoarcher/frontflip/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/5camoarcher/frontflip/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/5camoarcher/frontflip/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -2.82842712474619
+coverage = 0.9847547751771112
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_5i1dg"]
+script = ExtResource("1_jv3ux")
+name = "BackFlip"
+role = "flip"
+source_clip = "FrontFlip"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters5Camoarcher": "/rigs/characters_5camoarcher/body/FrontFlip.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/5camoarcher/frontflip/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/5CamoArcher/FrontFlip.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/5CamoArcher/FrontFlip.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_fpvtg")
+
+[sub_resource type="Resource" id="Resource_8e5en"]
+script = ExtResource("2_ywoy1")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/5camoarcher/idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/5camoarcher/idle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/5camoarcher/idle/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/5camoarcher/idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/5camoarcher/idle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/5camoarcher/idle/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -2.82842712474619
+coverage = 0.9903592000122228
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_2gip4"]
+script = ExtResource("1_jv3ux")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters5Camoarcher": "/rigs/characters_5camoarcher/body/Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/5camoarcher/idle/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/5CamoArcher/Idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_8e5en")
+
+[sub_resource type="Resource" id="Resource_umj76"]
+script = ExtResource("2_ywoy1")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/5camoarcher/idle2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/5camoarcher/idle2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/5camoarcher/idle2/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/5camoarcher/idle2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/5camoarcher/idle2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/5camoarcher/idle2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -2.82842712474619
+coverage = 0.9822533425889596
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_cul8x"]
+script = ExtResource("1_jv3ux")
+name = "Idle2"
+role = "idle_alt"
+source_clip = "Idle2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters5Camoarcher": "/rigs/characters_5camoarcher/body/Idle2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/5camoarcher/idle2/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/5CamoArcher/Idle2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_umj76")
+
+[sub_resource type="Resource" id="Resource_q8ab8"]
+script = ExtResource("2_ywoy1")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/5camoarcher/kick/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/5camoarcher/kick/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/5camoarcher/kick/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/5camoarcher/kick/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/5camoarcher/kick/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/5camoarcher/kick/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -2.82842712474619
+coverage = 0.9869626068701128
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_xbngn"]
+script = ExtResource("1_jv3ux")
+name = "Kick"
+role = "kick"
+source_clip = "Kick"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters5Camoarcher": "/rigs/characters_5camoarcher/body/Kick.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/5camoarcher/kick/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/5CamoArcher/Kick.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_q8ab8")
+
+[sub_resource type="Resource" id="Resource_3v5ys"]
+script = ExtResource("2_ywoy1")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/5camoarcher/quickshot/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/5camoarcher/quickshot/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/5camoarcher/quickshot/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/5camoarcher/quickshot/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/5camoarcher/quickshot/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/5camoarcher/quickshot/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -2.82842712474619
+coverage = 0.9816805518229866
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_lcq6s"]
+script = ExtResource("1_jv3ux")
+name = "QuickShot"
+role = "shoot"
+source_clip = "QuickShot"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters5Camoarcher": "/rigs/characters_5camoarcher/body/QuickShot.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/5camoarcher/quickshot/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/5CamoArcher/QuickShot.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/5CamoArcher/QuickShot.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_3v5ys")
+
+[sub_resource type="Resource" id="Resource_lbucj"]
+script = ExtResource("2_ywoy1")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/5camoarcher/rolling/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/5camoarcher/rolling/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/5camoarcher/rolling/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/5camoarcher/rolling/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/5camoarcher/rolling/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/5camoarcher/rolling/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -2.82842712474619
+coverage = 0.9879769353453564
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_dg3qe"]
+script = ExtResource("1_jv3ux")
+name = "Rolling"
+role = "roll"
+source_clip = "Rolling"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters5Camoarcher": "/rigs/characters_5camoarcher/body/Rolling.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/5camoarcher/rolling/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/5CamoArcher/Rolling.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/5CamoArcher/Rolling.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_lbucj")
+
+[sub_resource type="Resource" id="Resource_fe4fq"]
+script = ExtResource("2_ywoy1")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/5camoarcher/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/5camoarcher/run/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/5camoarcher/run/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/5camoarcher/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/5camoarcher/run/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/5camoarcher/run/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -2.82842712474619
+coverage = 0.9898839922335166
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_vvmcl"]
+script = ExtResource("1_jv3ux")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters5Camoarcher": "/rigs/characters_5camoarcher/body/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/5camoarcher/run/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/5CamoArcher/Run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_fe4fq")
+
+[sub_resource type="Resource" id="Resource_l8npn"]
+script = ExtResource("2_ywoy1")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/5camoarcher/runbackwards/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/5camoarcher/runbackwards/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/5camoarcher/runbackwards/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/5camoarcher/runbackwards/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/5camoarcher/runbackwards/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/5camoarcher/runbackwards/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -2.82842712474619
+coverage = 0.9909456905759592
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_387yx"]
+script = ExtResource("1_jv3ux")
+name = "RunBackwards"
+role = "run_back"
+source_clip = "RunBackwards"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters5Camoarcher": "/rigs/characters_5camoarcher/body/RunBackwards.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/5camoarcher/runbackwards/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/5CamoArcher/RunBackwards.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_l8npn")
+
+[sub_resource type="Resource" id="Resource_ik5ej"]
+script = ExtResource("2_ywoy1")
+status = "validated_partial"
+flags = PackedStringArray("source_pose_empty", "source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/5camoarcher/sittingchair/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/5camoarcher/sittingchair/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/5camoarcher/sittingchair/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/5camoarcher/sittingchair/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/5camoarcher/sittingchair/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/5camoarcher/sittingchair/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -2.82842712474619
+coverage = 0.9876840148064752
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_5xno8"]
+script = ExtResource("1_jv3ux")
+name = "SittingChair"
+role = "sit"
+source_clip = "SittingChair"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters5Camoarcher": "/rigs/characters_5camoarcher/body/SittingChair.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/5camoarcher/sittingchair/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/5CamoArcher/SittingChair.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_ik5ej")
+
+[sub_resource type="Resource" id="Resource_881wl"]
+script = ExtResource("2_ywoy1")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/5camoarcher/slide/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/5camoarcher/slide/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/5camoarcher/slide/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/5camoarcher/slide/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/5camoarcher/slide/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/5camoarcher/slide/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -2.82842712474619
+coverage = 0.9901913536498936
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_gsv1r"]
+script = ExtResource("1_jv3ux")
+name = "Slide"
+role = "slide"
+source_clip = "Slide"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters5Camoarcher": "/rigs/characters_5camoarcher/body/Slide.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/5camoarcher/slide/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/5CamoArcher/Slide.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_881wl")
+
+[sub_resource type="Resource" id="Resource_j41jb"]
+script = ExtResource("2_ywoy1")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/5camoarcher/slideend/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/5camoarcher/slideend/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/5camoarcher/slideend/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/5camoarcher/slideend/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/5camoarcher/slideend/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/5camoarcher/slideend/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -2.82842712474619
+coverage = 0.9901351611043496
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_5lbi5"]
+script = ExtResource("1_jv3ux")
+name = "SlideEnd"
+role = "slide_end"
+source_clip = "SlideEnd"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters5Camoarcher": "/rigs/characters_5camoarcher/body/SlideEnd.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/5camoarcher/slideend/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/5CamoArcher/SlideEnd.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_j41jb")
+
+[sub_resource type="Resource" id="Resource_28sw1"]
+script = ExtResource("2_ywoy1")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/5camoarcher/slidestart/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/5camoarcher/slidestart/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/5camoarcher/slidestart/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/5camoarcher/slidestart/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/5camoarcher/slidestart/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/5camoarcher/slidestart/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -2.82842712474619
+coverage = 0.9900734820162432
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_1sckb"]
+script = ExtResource("1_jv3ux")
+name = "SlideStart"
+role = "slide_start"
+source_clip = "SlideStart"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters5Camoarcher": "/rigs/characters_5camoarcher/body/SlideStart.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/5camoarcher/slidestart/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/5CamoArcher/SlideStart.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_28sw1")
+
+[sub_resource type="Resource" id="Resource_16tgx"]
+script = ExtResource("2_ywoy1")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/5camoarcher/special1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/5camoarcher/special1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/5camoarcher/special1/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/5camoarcher/special1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/5camoarcher/special1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/5camoarcher/special1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -2.82842712474619
+coverage = 0.9822802991272852
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_dgf0f"]
+script = ExtResource("1_jv3ux")
+name = "Special1"
+role = "special_1"
+source_clip = "Special1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters5Camoarcher": "/rigs/characters_5camoarcher/body/Special1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/5camoarcher/special1/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/5CamoArcher/Special1.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/5CamoArcher/Special1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_16tgx")
+
+[sub_resource type="Resource" id="Resource_wbu1v"]
+script = ExtResource("2_ywoy1")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/5camoarcher/special2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/5camoarcher/special2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/5camoarcher/special2/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/5camoarcher/special2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/5camoarcher/special2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/5camoarcher/special2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -2.82842712474619
+coverage = 0.9860773732861636
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_ben2t"]
+script = ExtResource("1_jv3ux")
+name = "Special2"
+role = "special_2"
+source_clip = "Special2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters5Camoarcher": "/rigs/characters_5camoarcher/body/Special2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/5camoarcher/special2/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/5CamoArcher/Special2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_wbu1v")
+
+[sub_resource type="Resource" id="Resource_mfnfx"]
+script = ExtResource("2_ywoy1")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/5camoarcher/strafeleft/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/5camoarcher/strafeleft/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/5camoarcher/strafeleft/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/5camoarcher/strafeleft/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/5camoarcher/strafeleft/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/5camoarcher/strafeleft/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -2.82842712474619
+coverage = 0.9892893351211696
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_dhw12"]
+script = ExtResource("1_jv3ux")
+name = "StrafeLeft"
+role = "strafe_left"
+source_clip = "StrafeLeft"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters5Camoarcher": "/rigs/characters_5camoarcher/body/StrafeLeft.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/5camoarcher/strafeleft/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/5CamoArcher/StrafeLeft.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_mfnfx")
+
+[sub_resource type="Resource" id="Resource_sdjed"]
+script = ExtResource("2_ywoy1")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/5camoarcher/straferight/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/5camoarcher/straferight/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/5camoarcher/straferight/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/5camoarcher/straferight/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/5camoarcher/straferight/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/5camoarcher/straferight/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -2.82842712474619
+coverage = 0.9897431781701445
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_f06hw"]
+script = ExtResource("1_jv3ux")
+name = "StrafeRight"
+role = "strafe_right"
+source_clip = "StrafeRight"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters5Camoarcher": "/rigs/characters_5camoarcher/body/StrafeRight.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/5camoarcher/straferight/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/5CamoArcher/StrafeRight.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_sdjed")
+
+[sub_resource type="Resource" id="Resource_kcsjk"]
+script = ExtResource("2_ywoy1")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/5camoarcher/takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/5camoarcher/takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/5camoarcher/takedamage/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/5camoarcher/takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/5camoarcher/takedamage/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/5camoarcher/takedamage/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -2.82842712474619
+coverage = 0.98935474550238
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_7pjkr"]
+script = ExtResource("1_jv3ux")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters5Camoarcher": "/rigs/characters_5camoarcher/body/TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/5camoarcher/takedamage/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/5CamoArcher/TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_kcsjk")
+
+[sub_resource type="Resource" id="Resource_0475v"]
+script = ExtResource("2_ywoy1")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/5camoarcher/unsheath/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/5camoarcher/unsheath/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/5camoarcher/unsheath/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/5camoarcher/unsheath/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/5camoarcher/unsheath/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/5camoarcher/unsheath/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -2.82842712474619
+coverage = 0.9859388051851624
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_su54l"]
+script = ExtResource("1_jv3ux")
+name = "UnSheath"
+role = "unsheath"
+source_clip = "UnSheath"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters5Camoarcher": "/rigs/characters_5camoarcher/body/UnSheath.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/5camoarcher/unsheath/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/5CamoArcher/UnSheath.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_0475v")
+
+[sub_resource type="Resource" id="Resource_mhqcv"]
+script = ExtResource("2_ywoy1")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/5camoarcher/walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/5camoarcher/walk/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/5camoarcher/walk/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/5camoarcher/walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/5camoarcher/walk/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/5camoarcher/walk/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = -2.82842712474619
+coverage = 0.9879001402882286
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_lyx5q"]
+script = ExtResource("1_jv3ux")
+name = "Walk"
+role = "walk"
+source_clip = "Walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters5Camoarcher": "/rigs/characters_5camoarcher/body/Walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/5camoarcher/walk/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/5CamoArcher/Walk.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_mhqcv")
+
+[sub_resource type="Resource" id="Resource_t461o"]
+script = ExtResource("3_alyvv")
+role = "movement"
+qualifier = {
+"kind": "default"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+playback = "loop"
+
+[sub_resource type="Resource" id="Resource_fi1xj"]
+script = ExtResource("3_alyvv")
+role = "movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_uj33d"]
+script = ExtResource("3_alyvv")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "direct_arc"
+}
+clip = "Rolling"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_bfpqq"]
+script = ExtResource("3_alyvv")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "connector_transfer"
+}
+clip = "CrouchWalk"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_celbu"]
+script = ExtResource("3_alyvv")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "direct_arc"
+}
+clip = "Rolling"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_ec3ox"]
+script = ExtResource("3_alyvv")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "connector_transfer"
+}
+clip = "CrouchWalk"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_ds5j0"]
+script = ExtResource("3_alyvv")
+role = "shove"
+qualifier = {
+"kind": "default"
+}
+clip = "Attack2"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 6.0,
+"name": "contact"
+}]
+
+[sub_resource type="Resource" id="Resource_cqib3"]
+script = ExtResource("3_alyvv")
+role = "forced_movement"
+qualifier = {
+"kind": "default"
+}
+clip = "TakeDamage"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 5.0,
+"name": "brace"
+}]
+
+[sub_resource type="Resource" id="Resource_mjb3t"]
+script = ExtResource("3_alyvv")
+role = "forced_movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_3axyh"]
+script = ExtResource("3_alyvv")
+role = "body_action"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_quvs7"]
+script = ExtResource("3_alyvv")
+role = "body_action_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_qlmbw"]
+script = ExtResource("3_alyvv")
+role = "equipment"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_qynee"]
+script = ExtResource("3_alyvv")
+role = "healing"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_057nt"]
+script = ExtResource("3_alyvv")
+role = "save_avoidance"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_pk6hc"]
+script = ExtResource("3_alyvv")
+role = "condition_entry"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_8aw7g"]
+script = ExtResource("3_alyvv")
+role = "condition_hold"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+hidden_slots = PackedStringArray()
+playback = "final_rest"
+rest_frame = 14
+
+[sub_resource type="Resource" id="Resource_72m12"]
+script = ExtResource("3_alyvv")
+role = "condition_exit"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+reversed = true
+
+[sub_resource type="Resource" id="Resource_ekj63"]
+script = ExtResource("3_alyvv")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "flying",
+"trajectory": "path"
+}
+clip = "Idle"
+hidden_slots = PackedStringArray()
+playback = "once"
+frame_keys = [[0.0, 0.0], [1.0, 0.0]]
+
+[sub_resource type="Resource" id="Resource_ygcyb"]
+script = ExtResource("3_alyvv")
+role = "death"
+qualifier = {
+"kind": "default"
+}
+clip = "Die"
+hidden_slots = PackedStringArray()
+playback = "once"
+
+[resource]
+script = ExtResource("4_8w152")
+id = "smallscale.characters.5camoarcher"
+pack = "characters"
+variant = "5CamoArcher"
+source = "smallscale-authored/characters"
+pivot = Vector2(64, 98)
+anchor = Vector2(64, 75)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("Characters5Camoarcher")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_jv3ux")]([SubResource("Resource_3mifk"), SubResource("Resource_5n8e2"), SubResource("Resource_mguq6"), SubResource("Resource_vdam4"), SubResource("Resource_6rwhb"), SubResource("Resource_bpnal"), SubResource("Resource_7g12d"), SubResource("Resource_678tw"), SubResource("Resource_078fb"), SubResource("Resource_jij5w"), SubResource("Resource_u1q8s"), SubResource("Resource_5i1dg"), SubResource("Resource_2gip4"), SubResource("Resource_cul8x"), SubResource("Resource_xbngn"), SubResource("Resource_lcq6s"), SubResource("Resource_dg3qe"), SubResource("Resource_vvmcl"), SubResource("Resource_387yx"), SubResource("Resource_5xno8"), SubResource("Resource_gsv1r"), SubResource("Resource_5lbi5"), SubResource("Resource_1sckb"), SubResource("Resource_dgf0f"), SubResource("Resource_ben2t"), SubResource("Resource_dhw12"), SubResource("Resource_f06hw"), SubResource("Resource_7pjkr"), SubResource("Resource_su54l"), SubResource("Resource_lyx5q")])
+fallbacks = Dictionary[String, String]({
+"Attack4": "Attack3",
+"Attack5": "CastSpell",
+"Attack6": "CastSpell",
+"Death": "Die",
+"Idle4": "Idle2",
+"Taunt": "Idle2"
+})
+contexts = Array[ExtResource("3_alyvv")]([SubResource("Resource_t461o"), SubResource("Resource_fi1xj"), SubResource("Resource_uj33d"), SubResource("Resource_bfpqq"), SubResource("Resource_celbu"), SubResource("Resource_ec3ox"), SubResource("Resource_ds5j0"), SubResource("Resource_cqib3"), SubResource("Resource_mjb3t"), SubResource("Resource_3axyh"), SubResource("Resource_quvs7"), SubResource("Resource_qlmbw"), SubResource("Resource_qynee"), SubResource("Resource_057nt"), SubResource("Resource_pk6hc"), SubResource("Resource_8aw7g"), SubResource("Resource_72m12"), SubResource("Resource_ekj63"), SubResource("Resource_ygcyb")])
+hold_clips = PackedStringArray("Die")
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed.
+Stand-in clips: Idle4 -> Idle2, Death -> Die, Taunt -> Idle2, Attack4 -> Attack3, Attack5 -> CastSpell, Attack6 -> CastSpell."

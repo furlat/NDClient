@@ -1,0 +1,1306 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_0tsk0"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_6fwy2"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_xg1ap"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_2pbyl"]
+
+[sub_resource type="Resource" id="Resource_ycvwm"]
+script = ExtResource("2_6fwy2")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/demon-elite-3/attack-1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/demon-elite-3/attack-1/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/demon-elite-3/attack-1/normals.png",
+"reference": "art/geometry/creatures/first/actions/demon-elite-3/attack-1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/demon-elite-3/attack-1/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/demon-elite-3/attack-1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.94623253752225
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_sux77"]
+script = ExtResource("1_0tsk0")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Attack 1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Demonelite03": "/rigs/demonelite03/body/Attack 1.png",
+"Demonelite03Effect": "/rigs/demonelite03/effect/Attack 1.png",
+"Demonelite03Shadow": "/rigs/demonelite03/shadow/Attack 1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Demon Elite 3/Attack 1.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Demon Elite 3/Attack 1.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Elite 3/Effects/Attack 1.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Elite 3/Shadows/Attack 1.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Demonelite03Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_ycvwm")
+
+[sub_resource type="Resource" id="Resource_87eof"]
+script = ExtResource("2_6fwy2")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/demon-elite-3/attack-2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/demon-elite-3/attack-2/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/demon-elite-3/attack-2/normals.png",
+"reference": "art/geometry/creatures/first/actions/demon-elite-3/attack-2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/demon-elite-3/attack-2/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/demon-elite-3/attack-2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.952151302185308
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_4p33t"]
+script = ExtResource("1_0tsk0")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Attack 2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Demonelite03": "/rigs/demonelite03/body/Attack 2.png",
+"Demonelite03Effect": "/rigs/demonelite03/effect/Attack 2.png",
+"Demonelite03Shadow": "/rigs/demonelite03/shadow/Attack 2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Demon Elite 3/Attack 2.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Demon Elite 3/Attack 2.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Elite 3/Effects/Attack 2.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Elite 3/Shadows/Attack 2.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Demonelite03Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_87eof")
+
+[sub_resource type="Resource" id="Resource_5ql42"]
+script = ExtResource("2_6fwy2")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/demon-elite-3/attack-3/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/demon-elite-3/attack-3/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/demon-elite-3/attack-3/normals.png",
+"reference": "art/geometry/creatures/first/actions/demon-elite-3/attack-3/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/demon-elite-3/attack-3/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/demon-elite-3/attack-3/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.9500457821869428
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_3ddl6"]
+script = ExtResource("1_0tsk0")
+name = "Attack3"
+role = "attack_3"
+source_clip = "Attack 3"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Demonelite03": "/rigs/demonelite03/body/Attack 3.png",
+"Demonelite03Effect": "/rigs/demonelite03/effect/Attack 3.png",
+"Demonelite03Shadow": "/rigs/demonelite03/shadow/Attack 3.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Demon Elite 3/Attack 3.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Demon Elite 3/Attack 3.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Elite 3/Effects/Attack 3.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Elite 3/Shadows/Attack 3.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Demonelite03Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_5ql42")
+
+[sub_resource type="Resource" id="Resource_4vdf8"]
+script = ExtResource("2_6fwy2")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/demon-elite-3/attack-4/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/demon-elite-3/attack-4/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/demon-elite-3/attack-4/normals.png",
+"reference": "art/geometry/creatures/first/actions/demon-elite-3/attack-4/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/demon-elite-3/attack-4/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/demon-elite-3/attack-4/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.951797270183966
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_geo0i"]
+script = ExtResource("1_0tsk0")
+name = "Attack4"
+role = "attack_4"
+source_clip = "Attack 4"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Demonelite03": "/rigs/demonelite03/body/Attack 4.png",
+"Demonelite03Effect": "/rigs/demonelite03/effect/Attack 4.png",
+"Demonelite03Shadow": "/rigs/demonelite03/shadow/Attack 4.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Demon Elite 3/Attack 4.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Demon Elite 3/Attack 4.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Elite 3/Effects/Attack 4.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Elite 3/Shadows/Attack 4.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Demonelite03Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_4vdf8")
+
+[sub_resource type="Resource" id="Resource_xlvtc"]
+script = ExtResource("2_6fwy2")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/demon-elite-3/backflip-1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/demon-elite-3/backflip-1/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/demon-elite-3/backflip-1/normals.png",
+"reference": "art/geometry/creatures/first/actions/demon-elite-3/backflip-1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/demon-elite-3/backflip-1/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/demon-elite-3/backflip-1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.9503677116185631
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_o8q5u"]
+script = ExtResource("1_0tsk0")
+name = "BackFlip"
+role = "flip"
+source_clip = "BackFlip 1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Demonelite03": "/rigs/demonelite03/body/BackFlip 1.png",
+"Demonelite03Effect": "/rigs/demonelite03/effect/BackFlip 1.png",
+"Demonelite03Shadow": "/rigs/demonelite03/shadow/BackFlip 1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Demon Elite 3/BackFlip 1.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Demon Elite 3/BackFlip 1.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Elite 3/Effects/BackFlip 1.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Elite 3/Shadows/BackFlip 1.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Demonelite03Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_xlvtc")
+
+[sub_resource type="Resource" id="Resource_4p26r"]
+script = ExtResource("2_6fwy2")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/demon-elite-3/block/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/demon-elite-3/block/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/demon-elite-3/block/normals.png",
+"reference": "art/geometry/creatures/first/actions/demon-elite-3/block/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/demon-elite-3/block/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/demon-elite-3/block/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.9483515315342678
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_qhnla"]
+script = ExtResource("1_0tsk0")
+name = "Block"
+role = "block_hold"
+source_clip = "Block"
+frames = 7
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Demonelite03": "/rigs/demonelite03/body/Block.png",
+"Demonelite03Effect": "/rigs/demonelite03/effect/Block.png",
+"Demonelite03Shadow": "/rigs/demonelite03/shadow/Block.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Demon Elite 3/Block.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Demon Elite 3/Block.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Elite 3/Effects/Block.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Elite 3/Shadows/Block.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Demonelite03Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_4p26r")
+
+[sub_resource type="Resource" id="Resource_21837"]
+script = ExtResource("2_6fwy2")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/demon-elite-3/crouch/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/demon-elite-3/crouch/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/demon-elite-3/crouch/normals.png",
+"reference": "art/geometry/creatures/first/actions/demon-elite-3/crouch/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/demon-elite-3/crouch/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/demon-elite-3/crouch/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.9555300341059372
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_11vwb"]
+script = ExtResource("1_0tsk0")
+name = "Crouch"
+role = "crouch_idle"
+source_clip = "Crouch"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Demonelite03": "/rigs/demonelite03/body/Crouch.png",
+"Demonelite03Effect": "/rigs/demonelite03/effect/Crouch.png",
+"Demonelite03Shadow": "/rigs/demonelite03/shadow/Crouch.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Demon Elite 3/Crouch.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Demon Elite 3/Crouch.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Elite 3/Effects/Crouch.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Elite 3/Shadows/Crouch.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Demonelite03Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_21837")
+
+[sub_resource type="Resource" id="Resource_jfnew"]
+script = ExtResource("2_6fwy2")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/demon-elite-3/crouch-walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/demon-elite-3/crouch-walk/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/demon-elite-3/crouch-walk/normals.png",
+"reference": "art/geometry/creatures/first/actions/demon-elite-3/crouch-walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/demon-elite-3/crouch-walk/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/demon-elite-3/crouch-walk/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.9582577005780668
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_a1nsl"]
+script = ExtResource("1_0tsk0")
+name = "CrouchWalk"
+role = "crouch_move"
+source_clip = "Crouch walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Demonelite03": "/rigs/demonelite03/body/Crouch walk.png",
+"Demonelite03Effect": "/rigs/demonelite03/effect/Crouch walk.png",
+"Demonelite03Shadow": "/rigs/demonelite03/shadow/Crouch walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Demon Elite 3/Crouch walk.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Demon Elite 3/Crouch walk.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Elite 3/Effects/Crouch walk.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Elite 3/Shadows/Crouch walk.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Demonelite03Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_jfnew")
+
+[sub_resource type="Resource" id="Resource_oku5i"]
+script = ExtResource("2_6fwy2")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/demon-elite-3/die-1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/demon-elite-3/die-1/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/demon-elite-3/die-1/normals.png",
+"reference": "art/geometry/creatures/first/actions/demon-elite-3/die-1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/demon-elite-3/die-1/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/demon-elite-3/die-1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.9222502925022544
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_o78fs"]
+script = ExtResource("1_0tsk0")
+name = "Die"
+role = "die"
+source_clip = "Die 1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Demonelite03": "/rigs/demonelite03/body/Die 1.png",
+"Demonelite03Effect": "/rigs/demonelite03/effect/Die 1.png",
+"Demonelite03Shadow": "/rigs/demonelite03/shadow/Die 1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Demon Elite 3/Die 1.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Demon Elite 3/Die 1.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Elite 3/Effects/Die 1.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Elite 3/Shadows/Die 1.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Demonelite03Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_oku5i")
+
+[sub_resource type="Resource" id="Resource_gvxlp"]
+script = ExtResource("2_6fwy2")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/demon-elite-3/die-2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/demon-elite-3/die-2/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/demon-elite-3/die-2/normals.png",
+"reference": "art/geometry/creatures/first/actions/demon-elite-3/die-2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/demon-elite-3/die-2/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/demon-elite-3/die-2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.9307232026661342
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_n3xuc"]
+script = ExtResource("1_0tsk0")
+name = "Death"
+role = "die_alt"
+source_clip = "Die 2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Demonelite03": "/rigs/demonelite03/body/Die 2.png",
+"Demonelite03Effect": "/rigs/demonelite03/effect/Die 2.png",
+"Demonelite03Shadow": "/rigs/demonelite03/shadow/Die 2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Demon Elite 3/Die 2.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Demon Elite 3/Die 2.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Elite 3/Effects/Die 2.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Elite 3/Shadows/Die 2.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Demonelite03Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_gvxlp")
+
+[sub_resource type="Resource" id="Resource_s5amm"]
+script = ExtResource("2_6fwy2")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/demon-elite-3/explode-copy/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/demon-elite-3/explode-copy/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/demon-elite-3/explode-copy/normals.png",
+"reference": "art/geometry/creatures/first/actions/demon-elite-3/explode-copy/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/demon-elite-3/explode-copy/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/demon-elite-3/explode-copy/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.951077841682399
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_0evis"]
+script = ExtResource("1_0tsk0")
+name = "ExplodeCopy"
+role = "explode"
+source_clip = "Explode Copy"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Demonelite03": "/rigs/demonelite03/body/Explode Copy.png",
+"Demonelite03Effect": "/rigs/demonelite03/effect/Explode Copy.png",
+"Demonelite03Shadow": "/rigs/demonelite03/shadow/Explode Copy.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Demon Elite 3/Explode Copy.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Demon Elite 3/Explode Copy.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Elite 3/Effects/Explode Copy.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Elite 3/Shadows/Explode Copy.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Demonelite03Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_s5amm")
+
+[sub_resource type="Resource" id="Resource_7ivuh"]
+script = ExtResource("2_6fwy2")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/demon-elite-3/idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/demon-elite-3/idle/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/demon-elite-3/idle/normals.png",
+"reference": "art/geometry/creatures/first/actions/demon-elite-3/idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/demon-elite-3/idle/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/demon-elite-3/idle/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.9420563174329856
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_exedo"]
+script = ExtResource("1_0tsk0")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Demonelite03": "/rigs/demonelite03/body/Idle.png",
+"Demonelite03Effect": "/rigs/demonelite03/effect/Idle.png",
+"Demonelite03Shadow": "/rigs/demonelite03/shadow/Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Demon Elite 3/Idle.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Demon Elite 3/Idle.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Elite 3/Effects/Idle.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Elite 3/Shadows/Idle.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Demonelite03Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_7ivuh")
+
+[sub_resource type="Resource" id="Resource_t0xk1"]
+script = ExtResource("2_6fwy2")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/demon-elite-3/roll-1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/demon-elite-3/roll-1/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/demon-elite-3/roll-1/normals.png",
+"reference": "art/geometry/creatures/first/actions/demon-elite-3/roll-1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/demon-elite-3/roll-1/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/demon-elite-3/roll-1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.950625017596216
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_e5ux8"]
+script = ExtResource("1_0tsk0")
+name = "Rolling"
+role = "roll"
+source_clip = "Roll 1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Demonelite03": "/rigs/demonelite03/body/Roll 1.png",
+"Demonelite03Effect": "/rigs/demonelite03/effect/Roll 1.png",
+"Demonelite03Shadow": "/rigs/demonelite03/shadow/Roll 1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Demon Elite 3/Roll 1.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Demon Elite 3/Roll 1.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Elite 3/Effects/Roll 1.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Elite 3/Shadows/Roll 1.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Demonelite03Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_t0xk1")
+
+[sub_resource type="Resource" id="Resource_n4pbt"]
+script = ExtResource("2_6fwy2")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/demon-elite-3/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/demon-elite-3/run/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/demon-elite-3/run/normals.png",
+"reference": "art/geometry/creatures/first/actions/demon-elite-3/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/demon-elite-3/run/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/demon-elite-3/run/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.9565517288478218
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_dxqku"]
+script = ExtResource("1_0tsk0")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Demonelite03": "/rigs/demonelite03/body/Run.png",
+"Demonelite03Effect": "/rigs/demonelite03/effect/Run.png",
+"Demonelite03Shadow": "/rigs/demonelite03/shadow/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Demon Elite 3/Run.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Demon Elite 3/Run.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Elite 3/Effects/Run.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Elite 3/Shadows/Run.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Demonelite03Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_n4pbt")
+
+[sub_resource type="Resource" id="Resource_bcoge"]
+script = ExtResource("2_6fwy2")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/demon-elite-3/run-attack/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/demon-elite-3/run-attack/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/demon-elite-3/run-attack/normals.png",
+"reference": "art/geometry/creatures/first/actions/demon-elite-3/run-attack/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/demon-elite-3/run-attack/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/demon-elite-3/run-attack/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.9560217678419548
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_mw3j4"]
+script = ExtResource("1_0tsk0")
+name = "AttackRun"
+role = "attack_run"
+source_clip = "Run Attack"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Demonelite03": "/rigs/demonelite03/body/Run Attack.png",
+"Demonelite03Effect": "/rigs/demonelite03/effect/Run Attack.png",
+"Demonelite03Shadow": "/rigs/demonelite03/shadow/Run Attack.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Demon Elite 3/Run Attack.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Demon Elite 3/Run Attack.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Elite 3/Effects/Run Attack.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Elite 3/Shadows/Run Attack.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Demonelite03Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_bcoge")
+
+[sub_resource type="Resource" id="Resource_dbbak"]
+script = ExtResource("2_6fwy2")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/demon-elite-3/run-backwards/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/demon-elite-3/run-backwards/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/demon-elite-3/run-backwards/normals.png",
+"reference": "art/geometry/creatures/first/actions/demon-elite-3/run-backwards/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/demon-elite-3/run-backwards/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/demon-elite-3/run-backwards/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.9526458472696546
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_4tqsg"]
+script = ExtResource("1_0tsk0")
+name = "RunBackwards"
+role = "run_back"
+source_clip = "Run Backwards"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Demonelite03": "/rigs/demonelite03/body/Run Backwards.png",
+"Demonelite03Effect": "/rigs/demonelite03/effect/Run Backwards.png",
+"Demonelite03Shadow": "/rigs/demonelite03/shadow/Run Backwards.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Demon Elite 3/Run Backwards.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Demon Elite 3/Run Backwards.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Elite 3/Effects/Run Backwards.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Elite 3/Shadows/Run Backwards.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Demonelite03Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_dbbak")
+
+[sub_resource type="Resource" id="Resource_bismm"]
+script = ExtResource("2_6fwy2")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/demon-elite-3/slide-1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/demon-elite-3/slide-1/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/demon-elite-3/slide-1/normals.png",
+"reference": "art/geometry/creatures/first/actions/demon-elite-3/slide-1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/demon-elite-3/slide-1/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/demon-elite-3/slide-1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.9486171688067198
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_fmtm0"]
+script = ExtResource("1_0tsk0")
+name = "Slide1"
+role = "slide"
+source_clip = "Slide 1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Demonelite03": "/rigs/demonelite03/body/Slide 1.png",
+"Demonelite03Effect": "/rigs/demonelite03/effect/Slide 1.png",
+"Demonelite03Shadow": "/rigs/demonelite03/shadow/Slide 1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Demon Elite 3/Slide 1.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Demon Elite 3/Slide 1.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Elite 3/Effects/Slide 1.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Elite 3/Shadows/Slide 1.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Demonelite03Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_bismm")
+
+[sub_resource type="Resource" id="Resource_kq8cg"]
+script = ExtResource("2_6fwy2")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/demon-elite-3/strafe-left-1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/demon-elite-3/strafe-left-1/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/demon-elite-3/strafe-left-1/normals.png",
+"reference": "art/geometry/creatures/first/actions/demon-elite-3/strafe-left-1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/demon-elite-3/strafe-left-1/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/demon-elite-3/strafe-left-1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.9539958693597508
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_v5am5"]
+script = ExtResource("1_0tsk0")
+name = "StrafeLeft1"
+role = "strafeleft1"
+source_clip = "Strafe Left 1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Demonelite03": "/rigs/demonelite03/body/Strafe Left 1.png",
+"Demonelite03Effect": "/rigs/demonelite03/effect/Strafe Left 1.png",
+"Demonelite03Shadow": "/rigs/demonelite03/shadow/Strafe Left 1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Demon Elite 3/Strafe Left 1.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Demon Elite 3/Strafe Left 1.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Elite 3/Effects/Strafe Left 1.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Elite 3/Shadows/Strafe Left 1.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Demonelite03Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_kq8cg")
+
+[sub_resource type="Resource" id="Resource_7mjdn"]
+script = ExtResource("2_6fwy2")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/demon-elite-3/strafe-right-1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/demon-elite-3/strafe-right-1/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/demon-elite-3/strafe-right-1/normals.png",
+"reference": "art/geometry/creatures/first/actions/demon-elite-3/strafe-right-1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/demon-elite-3/strafe-right-1/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/demon-elite-3/strafe-right-1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.9547198557520948
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_ml2rv"]
+script = ExtResource("1_0tsk0")
+name = "StrafeRight1"
+role = "straferight1"
+source_clip = "Strafe Right 1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Demonelite03": "/rigs/demonelite03/body/Strafe Right 1.png",
+"Demonelite03Effect": "/rigs/demonelite03/effect/Strafe Right 1.png",
+"Demonelite03Shadow": "/rigs/demonelite03/shadow/Strafe Right 1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Demon Elite 3/Strafe Right 1.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Demon Elite 3/Strafe Right 1.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Elite 3/Effects/Strafe Right 1.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Elite 3/Shadows/Strafe Right 1.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Demonelite03Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_7mjdn")
+
+[sub_resource type="Resource" id="Resource_1jn8a"]
+script = ExtResource("2_6fwy2")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/demon-elite-3/takedamage-1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/demon-elite-3/takedamage-1/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/demon-elite-3/takedamage-1/normals.png",
+"reference": "art/geometry/creatures/first/actions/demon-elite-3/takedamage-1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/demon-elite-3/takedamage-1/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/demon-elite-3/takedamage-1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.9562029490870264
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_tu271"]
+script = ExtResource("1_0tsk0")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage 1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Demonelite03": "/rigs/demonelite03/body/TakeDamage 1.png",
+"Demonelite03Effect": "/rigs/demonelite03/effect/TakeDamage 1.png",
+"Demonelite03Shadow": "/rigs/demonelite03/shadow/TakeDamage 1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Demon Elite 3/TakeDamage 1.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Demon Elite 3/TakeDamage 1.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Elite 3/Effects/TakeDamage 1.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Elite 3/Shadows/TakeDamage 1.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Demonelite03Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_1jn8a")
+
+[sub_resource type="Resource" id="Resource_ufas1"]
+script = ExtResource("2_6fwy2")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/demon-elite-3/taunt/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/demon-elite-3/taunt/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/demon-elite-3/taunt/normals.png",
+"reference": "art/geometry/creatures/first/actions/demon-elite-3/taunt/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/demon-elite-3/taunt/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/demon-elite-3/taunt/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.9541321304928676
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_svx7d"]
+script = ExtResource("1_0tsk0")
+name = "Taunt"
+role = "taunt"
+source_clip = "Taunt"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Demonelite03": "/rigs/demonelite03/body/Taunt.png",
+"Demonelite03Effect": "/rigs/demonelite03/effect/Taunt.png",
+"Demonelite03Shadow": "/rigs/demonelite03/shadow/Taunt.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Demon Elite 3/Taunt.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Demon Elite 3/Taunt.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Elite 3/Effects/Taunt.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Elite 3/Shadows/Taunt.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Demonelite03Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_ufas1")
+
+[sub_resource type="Resource" id="Resource_8ltyv"]
+script = ExtResource("2_6fwy2")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/first/actions/demon-elite-3/walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/first/actions/demon-elite-3/walk/normals-gentle.png",
+"original": "art/geometry/creatures/first/actions/demon-elite-3/walk/normals.png",
+"reference": "art/geometry/creatures/first/actions/demon-elite-3/walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/first/actions/demon-elite-3/walk/normal-valid.png",
+"support": "art/geometry/creatures/first/actions/demon-elite-3/walk/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 12.727922061357855
+coverage = 0.9476719641568276
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_qs5rs"]
+script = ExtResource("1_0tsk0")
+name = "Walk"
+role = "walk"
+source_clip = "Walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Demonelite03": "/rigs/demonelite03/body/Walk.png",
+"Demonelite03Effect": "/rigs/demonelite03/effect/Walk.png",
+"Demonelite03Shadow": "/rigs/demonelite03/shadow/Walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/media/smallscale/authored/demons/Bodies/Demon Elite 3/Walk.png",
+"combined": "art/media/smallscale/authored/demons/Combined/Demon Elite 3/Walk.png",
+"effect": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Elite 3/Effects/Walk.png",
+"shadow": "art/media/smallscale/authored/demons/Spritesheets with seperated shadows and effects/Demon Elite 3/Shadows/Walk.png"
+})
+effect_layers = Dictionary[String, bool]({
+"Demonelite03Effect": false
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_8ltyv")
+
+[sub_resource type="Resource" id="Resource_c3qp8"]
+script = ExtResource("3_xg1ap")
+role = "movement"
+qualifier = {
+"kind": "default"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+playback = "loop"
+
+[sub_resource type="Resource" id="Resource_o6mng"]
+script = ExtResource("3_xg1ap")
+role = "movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_rmvs8"]
+script = ExtResource("3_xg1ap")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "direct_arc"
+}
+clip = "Rolling"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_gu3hh"]
+script = ExtResource("3_xg1ap")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "connector_transfer"
+}
+clip = "CrouchWalk"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_j6otj"]
+script = ExtResource("3_xg1ap")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "direct_arc"
+}
+clip = "Rolling"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_ds7gr"]
+script = ExtResource("3_xg1ap")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "connector_transfer"
+}
+clip = "CrouchWalk"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_u5sdn"]
+script = ExtResource("3_xg1ap")
+role = "shove"
+qualifier = {
+"kind": "default"
+}
+clip = "Attack2"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 6.0,
+"name": "contact"
+}]
+
+[sub_resource type="Resource" id="Resource_vbqn2"]
+script = ExtResource("3_xg1ap")
+role = "forced_movement"
+qualifier = {
+"kind": "default"
+}
+clip = "TakeDamage"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 5.0,
+"name": "brace"
+}]
+
+[sub_resource type="Resource" id="Resource_25h72"]
+script = ExtResource("3_xg1ap")
+role = "forced_movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_5ccg3"]
+script = ExtResource("3_xg1ap")
+role = "body_action"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_en5cp"]
+script = ExtResource("3_xg1ap")
+role = "body_action_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_ronbu"]
+script = ExtResource("3_xg1ap")
+role = "equipment"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_bcyrw"]
+script = ExtResource("3_xg1ap")
+role = "healing"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_v228x"]
+script = ExtResource("3_xg1ap")
+role = "save_avoidance"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_qcy7k"]
+script = ExtResource("3_xg1ap")
+role = "condition_entry"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_sshej"]
+script = ExtResource("3_xg1ap")
+role = "condition_hold"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+hidden_slots = PackedStringArray()
+playback = "final_rest"
+rest_frame = 14
+
+[sub_resource type="Resource" id="Resource_nwc0c"]
+script = ExtResource("3_xg1ap")
+role = "condition_exit"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+reversed = true
+
+[sub_resource type="Resource" id="Resource_2mbkx"]
+script = ExtResource("3_xg1ap")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "flying",
+"trajectory": "path"
+}
+clip = "Idle"
+hidden_slots = PackedStringArray()
+playback = "once"
+frame_keys = [[0.0, 0.0], [1.0, 0.0]]
+
+[sub_resource type="Resource" id="Resource_pm0mm"]
+script = ExtResource("3_xg1ap")
+role = "death"
+qualifier = {
+"kind": "default"
+}
+clip = "Death"
+hidden_slots = PackedStringArray()
+playback = "once"
+
+[resource]
+script = ExtResource("4_2pbyl")
+id = "smallscale.demonelite03"
+pack = "demons"
+variant = "Demon Elite 3"
+source = "smallscale-authored/demons"
+pivot = Vector2(64, 87)
+anchor = Vector2(64, 57)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("shadow", "body", "effect")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("Demonelite03"),
+"effect": PackedStringArray("Demonelite03Effect"),
+"shadow": PackedStringArray("Demonelite03Shadow")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_0tsk0")]([SubResource("Resource_sux77"), SubResource("Resource_4p33t"), SubResource("Resource_3ddl6"), SubResource("Resource_geo0i"), SubResource("Resource_o8q5u"), SubResource("Resource_qhnla"), SubResource("Resource_11vwb"), SubResource("Resource_a1nsl"), SubResource("Resource_o78fs"), SubResource("Resource_n3xuc"), SubResource("Resource_0evis"), SubResource("Resource_exedo"), SubResource("Resource_e5ux8"), SubResource("Resource_dxqku"), SubResource("Resource_mw3j4"), SubResource("Resource_4tqsg"), SubResource("Resource_fmtm0"), SubResource("Resource_v5am5"), SubResource("Resource_ml2rv"), SubResource("Resource_tu271"), SubResource("Resource_svx7d"), SubResource("Resource_qs5rs")])
+fallbacks = Dictionary[String, String]({
+"Attack5": "Attack4",
+"Attack6": "Attack4",
+"Idle2": "Idle",
+"Idle4": "Idle",
+"Kick": "Attack1",
+"Special1": "Attack4"
+})
+contexts = Array[ExtResource("3_xg1ap")]([SubResource("Resource_c3qp8"), SubResource("Resource_o6mng"), SubResource("Resource_rmvs8"), SubResource("Resource_gu3hh"), SubResource("Resource_j6otj"), SubResource("Resource_ds7gr"), SubResource("Resource_u5sdn"), SubResource("Resource_vbqn2"), SubResource("Resource_25h72"), SubResource("Resource_5ccg3"), SubResource("Resource_en5cp"), SubResource("Resource_ronbu"), SubResource("Resource_bcyrw"), SubResource("Resource_v228x"), SubResource("Resource_qcy7k"), SubResource("Resource_sshej"), SubResource("Resource_nwc0c"), SubResource("Resource_2mbkx"), SubResource("Resource_pm0mm")])
+hold_clips = PackedStringArray("Die", "Death", "ExplodeCopy")
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed.
+Stand-in clips: Idle2 -> Idle, Idle4 -> Idle, Kick -> Attack1, Special1 -> Attack4, Attack5 -> Attack4, Attack6 -> Attack4."

@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="PresentationCharacter" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/character.gd" id="1_y6lji"]
+
+[resource]
+script = ExtResource("1_y6lji")
+id = "creature.configured_srd.bugbear"
+rig = "smallscale.orc04"
+portrait = "orcs_goblins--orc-04"
+size = "Medium"
+reactions = Dictionary[String, String]({
+"block": "Block"
+})
+death = Dictionary[String, String]({
+"default": "Death"
+})
+status = "stand_in"
+notes = "No art of its own: stands in with orc art (club) (rig smallscale.orc04).
+Portrait stand-in: orcs_goblins--orc-04 (no portrait of its own)."

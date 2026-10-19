@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="PresentationCharacter" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/character.gd" id="1_gli75"]
+
+[resource]
+script = ExtResource("1_gli75")
+id = "creature.undead_ash_crown"
+rig = "smallscale.undead.2deathlord"
+portrait = "undead--2deathlord"
+size = "Medium"
+size_note = "192 px cells on a Medium creature."
+reactions = Dictionary[String, String]({
+"block": "Block"
+})
+death = Dictionary[String, String]({
+"default": "Die"
+})
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed.
+Stand-in clips: Idle4 -> Idle2, Death -> Die, Taunt -> Idle2, Attack4 -> Attack3, Kick -> Attack1, Attack5 -> CastSpell, Attack6 -> CastSpell.
+Roster: Ash-crown Revenant, Y192, kit Ember Longsword+shield (2, one may be LD); LD; SunS."

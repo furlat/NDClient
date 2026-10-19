@@ -1,0 +1,1498 @@
+[gd_resource type="Resource" script_class="PresentationRig" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/rig_clip.gd" id="1_7jumh"]
+[ext_resource type="Script" path="res://presentation/source/characters/body_surface.gd" id="2_5c43s"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig_context.gd" id="3_u7suw"]
+[ext_resource type="Script" path="res://presentation/source/characters/rig.gd" id="4_olh1h"]
+
+[sub_resource type="Resource" id="Resource_b5uib"]
+script = ExtResource("2_5c43s")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/3wizard/180turn/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/3wizard/180turn/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/3wizard/180turn/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/3wizard/180turn/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/3wizard/180turn/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/3wizard/180turn/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9954987377128433
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_ib1b4"]
+script = ExtResource("1_7jumh")
+name = "180Turn"
+role = "turn"
+source_clip = "180Turn"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters3Wizard": "/rigs/characters_3wizard/body/180Turn.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/3wizard/180turn/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/3Wizard/180Turn.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/3Wizard/180Turn.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_b5uib")
+
+[sub_resource type="Resource" id="Resource_pe2if"]
+script = ExtResource("2_5c43s")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/3wizard/attack1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/3wizard/attack1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/3wizard/attack1/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/3wizard/attack1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/3wizard/attack1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/3wizard/attack1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.992841280972417
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_vkdy1"]
+script = ExtResource("1_7jumh")
+name = "Attack1"
+role = "attack_1"
+source_clip = "Attack1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters3Wizard": "/rigs/characters_3wizard/body/Attack1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/3wizard/attack1/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/3Wizard/Attack1.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/3Wizard/Attack1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_pe2if")
+
+[sub_resource type="Resource" id="Resource_dm222"]
+script = ExtResource("2_5c43s")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/3wizard/attack2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/3wizard/attack2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/3wizard/attack2/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/3wizard/attack2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/3wizard/attack2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/3wizard/attack2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9939934312400752
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_al8bv"]
+script = ExtResource("1_7jumh")
+name = "Attack2"
+role = "attack_2"
+source_clip = "Attack2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters3Wizard": "/rigs/characters_3wizard/body/Attack2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/3wizard/attack2/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/3Wizard/Attack2.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/3Wizard/Attack2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_dm222")
+
+[sub_resource type="Resource" id="Resource_552cw"]
+script = ExtResource("2_5c43s")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/3wizard/attack3/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/3wizard/attack3/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/3wizard/attack3/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/3wizard/attack3/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/3wizard/attack3/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/3wizard/attack3/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.989684224814093
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_euaca"]
+script = ExtResource("1_7jumh")
+name = "Attack3"
+role = "attack_3"
+source_clip = "Attack3"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters3Wizard": "/rigs/characters_3wizard/body/Attack3.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/3wizard/attack3/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/3Wizard/Attack3.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/3Wizard/Attack3.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_552cw")
+
+[sub_resource type="Resource" id="Resource_6wepy"]
+script = ExtResource("2_5c43s")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/3wizard/attackrun/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/3wizard/attackrun/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/3wizard/attackrun/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/3wizard/attackrun/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/3wizard/attackrun/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/3wizard/attackrun/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9961610038815336
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_0j5ia"]
+script = ExtResource("1_7jumh")
+name = "AttackRun"
+role = "attack_run"
+source_clip = "AttackRun"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters3Wizard": "/rigs/characters_3wizard/body/AttackRun.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/3wizard/attackrun/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/3Wizard/AttackRun.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/3Wizard/AttackRun.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_6wepy")
+
+[sub_resource type="Resource" id="Resource_jdgfp"]
+script = ExtResource("2_5c43s")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/3wizard/blockmid/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/3wizard/blockmid/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/3wizard/blockmid/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/3wizard/blockmid/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/3wizard/blockmid/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/3wizard/blockmid/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9968941848788214
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_d0e0r"]
+script = ExtResource("1_7jumh")
+name = "Block"
+role = "block_hold"
+source_clip = "BlockMid"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters3Wizard": "/rigs/characters_3wizard/body/BlockMid.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/3wizard/blockmid/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/3Wizard/BlockMid.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/3Wizard/BlockMid.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_jdgfp")
+
+[sub_resource type="Resource" id="Resource_o1c5h"]
+script = ExtResource("2_5c43s")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/3wizard/blockstart/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/3wizard/blockstart/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/3wizard/blockstart/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/3wizard/blockstart/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/3wizard/blockstart/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/3wizard/blockstart/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9959941316630077
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_5vor1"]
+script = ExtResource("1_7jumh")
+name = "BlockStart"
+role = "block_start"
+source_clip = "BlockStart"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters3Wizard": "/rigs/characters_3wizard/body/BlockStart.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/3wizard/blockstart/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/3Wizard/BlockStart.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/3Wizard/BlockStart.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_o1c5h")
+
+[sub_resource type="Resource" id="Resource_miyox"]
+script = ExtResource("2_5c43s")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/3wizard/castspell/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/3wizard/castspell/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/3wizard/castspell/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/3wizard/castspell/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/3wizard/castspell/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/3wizard/castspell/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9935516500189656
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_34l64"]
+script = ExtResource("1_7jumh")
+name = "CastSpell"
+role = "cast"
+source_clip = "CastSpell"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters3Wizard": "/rigs/characters_3wizard/body/CastSpell.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/3wizard/castspell/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/3Wizard/CastSpell.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/3Wizard/CastSpell.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_miyox")
+
+[sub_resource type="Resource" id="Resource_v1xo0"]
+script = ExtResource("2_5c43s")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/3wizard/crouchidle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/3wizard/crouchidle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/3wizard/crouchidle/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/3wizard/crouchidle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/3wizard/crouchidle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/3wizard/crouchidle/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9961935240215468
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_q2vwi"]
+script = ExtResource("1_7jumh")
+name = "Crouch"
+role = "crouch_idle"
+source_clip = "CrouchIdle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters3Wizard": "/rigs/characters_3wizard/body/CrouchIdle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/3wizard/crouchidle/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/3Wizard/CrouchIdle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_v1xo0")
+
+[sub_resource type="Resource" id="Resource_l3db3"]
+script = ExtResource("2_5c43s")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/3wizard/crouchrun/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/3wizard/crouchrun/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/3wizard/crouchrun/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/3wizard/crouchrun/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/3wizard/crouchrun/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/3wizard/crouchrun/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.995874013242926
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_pqwk2"]
+script = ExtResource("1_7jumh")
+name = "CrouchWalk"
+role = "crouch_move"
+source_clip = "CrouchRun"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters3Wizard": "/rigs/characters_3wizard/body/CrouchRun.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/3wizard/crouchrun/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/3Wizard/CrouchRun.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/3Wizard/CrouchRun.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_l3db3")
+
+[sub_resource type="Resource" id="Resource_5bn6x"]
+script = ExtResource("2_5c43s")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/3wizard/die/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/3wizard/die/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/3wizard/die/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/3wizard/die/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/3wizard/die/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/3wizard/die/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9968961880367636
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_rx8cr"]
+script = ExtResource("1_7jumh")
+name = "Die"
+role = "die"
+source_clip = "Die"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters3Wizard": "/rigs/characters_3wizard/body/Die.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/3wizard/die/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/3Wizard/Die.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/3Wizard/Die.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_5bn6x")
+
+[sub_resource type="Resource" id="Resource_wwwl1"]
+script = ExtResource("2_5c43s")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/3wizard/frontflip/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/3wizard/frontflip/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/3wizard/frontflip/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/3wizard/frontflip/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/3wizard/frontflip/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/3wizard/frontflip/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9945017029138749
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_4mt0d"]
+script = ExtResource("1_7jumh")
+name = "BackFlip"
+role = "flip"
+source_clip = "FrontFlip"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters3Wizard": "/rigs/characters_3wizard/body/FrontFlip.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/3wizard/frontflip/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/3Wizard/FrontFlip.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/3Wizard/FrontFlip.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_wwwl1")
+
+[sub_resource type="Resource" id="Resource_l6mt7"]
+script = ExtResource("2_5c43s")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/3wizard/idle/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/3wizard/idle/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/3wizard/idle/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/3wizard/idle/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/3wizard/idle/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/3wizard/idle/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9957854445134428
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_uddg4"]
+script = ExtResource("1_7jumh")
+name = "Idle"
+role = "idle"
+source_clip = "Idle"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters3Wizard": "/rigs/characters_3wizard/body/Idle.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/3wizard/idle/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/3Wizard/Idle.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/3Wizard/Idle.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_l6mt7")
+
+[sub_resource type="Resource" id="Resource_g5pwn"]
+script = ExtResource("2_5c43s")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/3wizard/idle2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/3wizard/idle2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/3wizard/idle2/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/3wizard/idle2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/3wizard/idle2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/3wizard/idle2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9959033395561088
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_v1c0a"]
+script = ExtResource("1_7jumh")
+name = "Idle2"
+role = "idle_alt"
+source_clip = "Idle2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters3Wizard": "/rigs/characters_3wizard/body/Idle2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/3wizard/idle2/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/3Wizard/Idle2.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/3Wizard/Idle2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_g5pwn")
+
+[sub_resource type="Resource" id="Resource_4eidp"]
+script = ExtResource("2_5c43s")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/3wizard/kick/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/3wizard/kick/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/3wizard/kick/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/3wizard/kick/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/3wizard/kick/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/3wizard/kick/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9911630638440672
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_leqg0"]
+script = ExtResource("1_7jumh")
+name = "Kick"
+role = "kick"
+source_clip = "Kick"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters3Wizard": "/rigs/characters_3wizard/body/Kick.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/3wizard/kick/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/3Wizard/Kick.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/3Wizard/Kick.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_4eidp")
+
+[sub_resource type="Resource" id="Resource_xnk28"]
+script = ExtResource("2_5c43s")
+status = "validated_partial"
+flags = PackedStringArray("source_pose_empty", "source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/3wizard/quickshot/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/3wizard/quickshot/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/3wizard/quickshot/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/3wizard/quickshot/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/3wizard/quickshot/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/3wizard/quickshot/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9951793329350446
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_tncgv"]
+script = ExtResource("1_7jumh")
+name = "QuickShot"
+role = "shoot"
+source_clip = "QuickShot"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters3Wizard": "/rigs/characters_3wizard/body/QuickShot.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/3wizard/quickshot/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/3Wizard/QuickShot.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/3Wizard/QuickShot.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_xnk28")
+
+[sub_resource type="Resource" id="Resource_gid6c"]
+script = ExtResource("2_5c43s")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/3wizard/rolling/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/3wizard/rolling/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/3wizard/rolling/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/3wizard/rolling/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/3wizard/rolling/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/3wizard/rolling/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9937948534951032
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_ayi55"]
+script = ExtResource("1_7jumh")
+name = "Rolling"
+role = "roll"
+source_clip = "Rolling"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters3Wizard": "/rigs/characters_3wizard/body/Rolling.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/3wizard/rolling/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/3Wizard/Rolling.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/3Wizard/Rolling.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_gid6c")
+
+[sub_resource type="Resource" id="Resource_evfc8"]
+script = ExtResource("2_5c43s")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent", "silhouette_iou_below_75_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/3wizard/run/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/3wizard/run/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/3wizard/run/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/3wizard/run/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/3wizard/run/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/3wizard/run/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.6492848894021498
+failed_frames = PackedInt32Array()
+repeated_rows = true
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_a8ldf"]
+script = ExtResource("1_7jumh")
+name = "Run"
+role = "run"
+source_clip = "Run"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters3Wizard": "/rigs/characters_3wizard/body/Run.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/3wizard/run/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/3Wizard/Run.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_evfc8")
+
+[sub_resource type="Resource" id="Resource_ifc0n"]
+script = ExtResource("2_5c43s")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/3wizard/runbackwards/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/3wizard/runbackwards/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/3wizard/runbackwards/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/3wizard/runbackwards/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/3wizard/runbackwards/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/3wizard/runbackwards/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9953495463901808
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_wpsfc"]
+script = ExtResource("1_7jumh")
+name = "RunBackwards"
+role = "run_back"
+source_clip = "RunBackwards"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters3Wizard": "/rigs/characters_3wizard/body/RunBackwards.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/3wizard/runbackwards/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/3Wizard/RunBackwards.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/3Wizard/RunBackwards.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_ifc0n")
+
+[sub_resource type="Resource" id="Resource_en38q"]
+script = ExtResource("2_5c43s")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/3wizard/sittingchair/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/3wizard/sittingchair/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/3wizard/sittingchair/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/3wizard/sittingchair/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/3wizard/sittingchair/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/3wizard/sittingchair/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9971998352844283
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_mjtrd"]
+script = ExtResource("1_7jumh")
+name = "SittingChair"
+role = "sit"
+source_clip = "SittingChair"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters3Wizard": "/rigs/characters_3wizard/body/SittingChair.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/3wizard/sittingchair/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/3Wizard/SittingChair.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/3Wizard/SittingChair.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_en38q")
+
+[sub_resource type="Resource" id="Resource_g7snx"]
+script = ExtResource("2_5c43s")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/3wizard/slide/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/3wizard/slide/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/3wizard/slide/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/3wizard/slide/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/3wizard/slide/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/3wizard/slide/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.994567159030712
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_34te5"]
+script = ExtResource("1_7jumh")
+name = "Slide"
+role = "slide"
+source_clip = "Slide"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters3Wizard": "/rigs/characters_3wizard/body/Slide.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/3wizard/slide/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/3Wizard/Slide.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/3Wizard/Slide.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_g7snx")
+
+[sub_resource type="Resource" id="Resource_luee2"]
+script = ExtResource("2_5c43s")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/3wizard/slideend/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/3wizard/slideend/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/3wizard/slideend/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/3wizard/slideend/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/3wizard/slideend/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/3wizard/slideend/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9960651093243792
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_jfa68"]
+script = ExtResource("1_7jumh")
+name = "SlideEnd"
+role = "slide_end"
+source_clip = "SlideEnd"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters3Wizard": "/rigs/characters_3wizard/body/SlideEnd.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/3wizard/slideend/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/3Wizard/SlideEnd.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/3Wizard/SlideEnd.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_luee2")
+
+[sub_resource type="Resource" id="Resource_paiyh"]
+script = ExtResource("2_5c43s")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/3wizard/slidestart/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/3wizard/slidestart/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/3wizard/slidestart/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/3wizard/slidestart/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/3wizard/slidestart/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/3wizard/slidestart/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9962985410623836
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_xntfd"]
+script = ExtResource("1_7jumh")
+name = "SlideStart"
+role = "slide_start"
+source_clip = "SlideStart"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters3Wizard": "/rigs/characters_3wizard/body/SlideStart.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/3wizard/slidestart/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/3Wizard/SlideStart.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/3Wizard/SlideStart.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_paiyh")
+
+[sub_resource type="Resource" id="Resource_aalwe"]
+script = ExtResource("2_5c43s")
+status = "validated_partial"
+flags = PackedStringArray("source_support_below_90_percent")
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/3wizard/special1/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/3wizard/special1/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/3wizard/special1/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/3wizard/special1/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/3wizard/special1/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/3wizard/special1/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.981190691369182
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_qj355"]
+script = ExtResource("1_7jumh")
+name = "Special1"
+role = "special_1"
+source_clip = "Special1"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters3Wizard": "/rigs/characters_3wizard/body/Special1.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/3wizard/special1/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/3Wizard/Special1.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/3Wizard/Special1.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_aalwe")
+
+[sub_resource type="Resource" id="Resource_b3r5i"]
+script = ExtResource("2_5c43s")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/3wizard/special2/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/3wizard/special2/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/3wizard/special2/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/3wizard/special2/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/3wizard/special2/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/3wizard/special2/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.993812420641689
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_77fi6"]
+script = ExtResource("1_7jumh")
+name = "Special2"
+role = "special_2"
+source_clip = "Special2"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters3Wizard": "/rigs/characters_3wizard/body/Special2.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/3wizard/special2/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/3Wizard/Special2.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/3Wizard/Special2.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_b3r5i")
+
+[sub_resource type="Resource" id="Resource_mo8xy"]
+script = ExtResource("2_5c43s")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/3wizard/strafeleft/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/3wizard/strafeleft/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/3wizard/strafeleft/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/3wizard/strafeleft/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/3wizard/strafeleft/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/3wizard/strafeleft/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9967422216562672
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_m74hk"]
+script = ExtResource("1_7jumh")
+name = "StrafeLeft"
+role = "strafe_left"
+source_clip = "StrafeLeft"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters3Wizard": "/rigs/characters_3wizard/body/StrafeLeft.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/3wizard/strafeleft/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/3Wizard/StrafeLeft.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/3Wizard/StrafeLeft.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_mo8xy")
+
+[sub_resource type="Resource" id="Resource_kag1w"]
+script = ExtResource("2_5c43s")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/3wizard/straferight/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/3wizard/straferight/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/3wizard/straferight/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/3wizard/straferight/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/3wizard/straferight/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/3wizard/straferight/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9962806477783984
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_oip1a"]
+script = ExtResource("1_7jumh")
+name = "StrafeRight"
+role = "strafe_right"
+source_clip = "StrafeRight"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters3Wizard": "/rigs/characters_3wizard/body/StrafeRight.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/3wizard/straferight/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/3Wizard/StrafeRight.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_kag1w")
+
+[sub_resource type="Resource" id="Resource_5uu71"]
+script = ExtResource("2_5c43s")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/3wizard/takedamage/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/3wizard/takedamage/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/3wizard/takedamage/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/3wizard/takedamage/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/3wizard/takedamage/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/3wizard/takedamage/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.996675545230609
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_0slps"]
+script = ExtResource("1_7jumh")
+name = "TakeDamage"
+role = "hurt"
+source_clip = "TakeDamage"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters3Wizard": "/rigs/characters_3wizard/body/TakeDamage.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/3wizard/takedamage/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/3Wizard/TakeDamage.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/3Wizard/TakeDamage.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_5uu71")
+
+[sub_resource type="Resource" id="Resource_fdd4t"]
+script = ExtResource("2_5c43s")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/3wizard/unsheath/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/3wizard/unsheath/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/3wizard/unsheath/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/3wizard/unsheath/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/3wizard/unsheath/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/3wizard/unsheath/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.995921362914481
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_6vhyg"]
+script = ExtResource("1_7jumh")
+name = "UnSheath"
+role = "unsheath"
+source_clip = "UnSheath"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters3Wizard": "/rigs/characters_3wizard/body/UnSheath.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/3wizard/unsheath/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/3Wizard/UnSheath.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/3Wizard/UnSheath.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_fdd4t")
+
+[sub_resource type="Resource" id="Resource_08t7e"]
+script = ExtResource("2_5c43s")
+status = "validated_partial"
+flags = PackedStringArray()
+depth_limits = PackedFloat64Array(-181.1370849898476, 249.01933598375615)
+encoding = "normal_rgb_depth_byte"
+depth = "art/geometry/creatures/library/actions/characters/3wizard/walk/depth.png"
+normals = Dictionary[String, String]({
+"gentle": "art/geometry/creatures/library/actions/characters/3wizard/walk/normals-gentle.png",
+"original": "art/geometry/creatures/library/actions/characters/3wizard/walk/normals.png",
+"reference": "art/geometry/creatures/library/actions/characters/3wizard/walk/normals-reference.png"
+})
+masks = Dictionary[String, String]({
+"normal_valid": "art/geometry/creatures/library/actions/characters/3wizard/walk/normal-valid.png",
+"support": "art/geometry/creatures/library/actions/characters/3wizard/walk/raw-support.png"
+})
+depth_range = Vector2(-181.13708, 249.01933)
+camera_origin = Vector2(64, 96)
+optical_ground_pixels = 4.242640687119285
+coverage = 0.9962858001631671
+failed_frames = PackedInt32Array()
+source = "authored-creature-geometry-2026-10-12"
+
+[sub_resource type="Resource" id="Resource_qbaeg"]
+script = ExtResource("1_7jumh")
+name = "Walk"
+role = "walk"
+source_clip = "Walk"
+frames = 15
+fps = 12.0
+sheets = Dictionary[String, String]({
+"Characters3Wizard": "/rigs/characters_3wizard/body/Walk.png"
+})
+art = Dictionary[String, String]({
+"body": "art/geometry/creatures/library/actions/characters/3wizard/walk/colour.png",
+"combined": "art/media/smallscale/authored/characters/With shadow/3Wizard/Walk.png",
+"mask_material": "art/media/smallscale/authored/characters/Material masks/With shadow/3Wizard/Walk.png"
+})
+effect_parts = PackedStringArray()
+surface = SubResource("Resource_08t7e")
+
+[sub_resource type="Resource" id="Resource_qq1kj"]
+script = ExtResource("3_u7suw")
+role = "movement"
+qualifier = {
+"kind": "default"
+}
+clip = "Run"
+hidden_slots = PackedStringArray()
+playback = "loop"
+
+[sub_resource type="Resource" id="Resource_chbid"]
+script = ExtResource("3_u7suw")
+role = "movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_of2ut"]
+script = ExtResource("3_u7suw")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "direct_arc"
+}
+clip = "Rolling"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_01h8f"]
+script = ExtResource("3_u7suw")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": "walking",
+"trajectory": "connector_transfer"
+}
+clip = "CrouchWalk"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_pd0p4"]
+script = ExtResource("3_u7suw")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "direct_arc"
+}
+clip = "Rolling"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.25, 3.0], [0.7, 10.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_ec70f"]
+script = ExtResource("3_u7suw")
+role = "movement"
+qualifier = {
+"connector_presentation_key": "window",
+"kind": "movement",
+"movement_mode": null,
+"trajectory": "connector_transfer"
+}
+clip = "CrouchWalk"
+hidden_slots = PackedStringArray()
+frame_keys = [[0.0, 0.0], [0.28, 3.0], [0.48, 7.0], [0.52, 7.0], [0.72, 11.0], [1.0, 14.0]]
+
+[sub_resource type="Resource" id="Resource_implm"]
+script = ExtResource("3_u7suw")
+role = "shove"
+qualifier = {
+"kind": "default"
+}
+clip = "Attack2"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 6.0,
+"name": "contact"
+}]
+
+[sub_resource type="Resource" id="Resource_8dp8k"]
+script = ExtResource("3_u7suw")
+role = "forced_movement"
+qualifier = {
+"kind": "default"
+}
+clip = "TakeDamage"
+hidden_slots = PackedStringArray()
+anchors = [{
+"frame": 5.0,
+"name": "brace"
+}]
+
+[sub_resource type="Resource" id="Resource_3ynh5"]
+script = ExtResource("3_u7suw")
+role = "forced_movement_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_e8klj"]
+script = ExtResource("3_u7suw")
+role = "body_action"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_ml0ib"]
+script = ExtResource("3_u7suw")
+role = "body_action_recovery"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_dqxpw"]
+script = ExtResource("3_u7suw")
+role = "equipment"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_imkeb"]
+script = ExtResource("3_u7suw")
+role = "healing"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_fy8he"]
+script = ExtResource("3_u7suw")
+role = "save_avoidance"
+qualifier = {
+"kind": "default"
+}
+clip = "Idle"
+enabled = false
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_l5ssc"]
+script = ExtResource("3_u7suw")
+role = "condition_entry"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+
+[sub_resource type="Resource" id="Resource_oagky"]
+script = ExtResource("3_u7suw")
+role = "condition_hold"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+hidden_slots = PackedStringArray()
+playback = "final_rest"
+rest_frame = 14
+
+[sub_resource type="Resource" id="Resource_3o2j6"]
+script = ExtResource("3_u7suw")
+role = "condition_exit"
+qualifier = {
+"contentRef": {
+"content_id": "condition.prone",
+"content_version": 1.0,
+"definition_contract_hash": "230bf50e06127e60dc2313fe14d54ffa41e2c983769dd21428adc9f4082cc1fa",
+"definition_kind": "condition",
+"pack_id": "core.rules"
+},
+"kind": "content"
+}
+clip = "Die"
+playback_speed = 1.5
+hidden_slots = PackedStringArray()
+reversed = true
+
+[sub_resource type="Resource" id="Resource_w0ql5"]
+script = ExtResource("3_u7suw")
+role = "movement"
+qualifier = {
+"connector_presentation_key": null,
+"kind": "movement",
+"movement_mode": "flying",
+"trajectory": "path"
+}
+clip = "Idle"
+hidden_slots = PackedStringArray()
+playback = "once"
+frame_keys = [[0.0, 0.0], [1.0, 0.0]]
+
+[sub_resource type="Resource" id="Resource_861jf"]
+script = ExtResource("3_u7suw")
+role = "death"
+qualifier = {
+"kind": "default"
+}
+clip = "Die"
+hidden_slots = PackedStringArray()
+playback = "once"
+
+[resource]
+script = ExtResource("4_olh1h")
+id = "smallscale.characters.3wizard"
+pack = "characters"
+variant = "3Wizard"
+source = "smallscale-authored/characters"
+pivot = Vector2(64, 93)
+anchor = Vector2(64, 68)
+direction_order = PackedStringArray("E", "SE", "S", "SW", "W", "NW", "N", "NE")
+slot_order = PackedStringArray("body")
+slot_categories = Dictionary[String, PackedStringArray]({
+"body": PackedStringArray("Characters3Wizard")
+})
+excluded_categories = PackedStringArray()
+clips = Array[ExtResource("1_7jumh")]([SubResource("Resource_ib1b4"), SubResource("Resource_vkdy1"), SubResource("Resource_al8bv"), SubResource("Resource_euaca"), SubResource("Resource_0j5ia"), SubResource("Resource_d0e0r"), SubResource("Resource_5vor1"), SubResource("Resource_34l64"), SubResource("Resource_q2vwi"), SubResource("Resource_pqwk2"), SubResource("Resource_rx8cr"), SubResource("Resource_4mt0d"), SubResource("Resource_uddg4"), SubResource("Resource_v1c0a"), SubResource("Resource_leqg0"), SubResource("Resource_tncgv"), SubResource("Resource_ayi55"), SubResource("Resource_a8ldf"), SubResource("Resource_wpsfc"), SubResource("Resource_mjtrd"), SubResource("Resource_34te5"), SubResource("Resource_jfa68"), SubResource("Resource_xntfd"), SubResource("Resource_qj355"), SubResource("Resource_77fi6"), SubResource("Resource_m74hk"), SubResource("Resource_oip1a"), SubResource("Resource_0slps"), SubResource("Resource_6vhyg"), SubResource("Resource_qbaeg")])
+fallbacks = Dictionary[String, String]({
+"Attack4": "Attack3",
+"Attack5": "CastSpell",
+"Attack6": "CastSpell",
+"Death": "Die",
+"Idle4": "Idle2",
+"Taunt": "Idle2"
+})
+contexts = Array[ExtResource("3_u7suw")]([SubResource("Resource_qq1kj"), SubResource("Resource_chbid"), SubResource("Resource_of2ut"), SubResource("Resource_01h8f"), SubResource("Resource_pd0p4"), SubResource("Resource_ec70f"), SubResource("Resource_implm"), SubResource("Resource_8dp8k"), SubResource("Resource_3ynh5"), SubResource("Resource_e8klj"), SubResource("Resource_ml0ib"), SubResource("Resource_dqxpw"), SubResource("Resource_imkeb"), SubResource("Resource_fy8he"), SubResource("Resource_l5ssc"), SubResource("Resource_oagky"), SubResource("Resource_3o2j6"), SubResource("Resource_w0ql5"), SubResource("Resource_861jf")])
+hold_clips = PackedStringArray("Die")
+status = "partial"
+notes = "From the delivery: clip names, frames and art from the files; 12 fps is the client's clock (the delivery has none); pivot and body anchor measured from the Idle body (median opaque extent), not hand-placed.
+Stand-in clips: Idle4 -> Idle2, Death -> Die, Taunt -> Idle2, Attack4 -> Attack3, Attack5 -> CastSpell, Attack6 -> CastSpell."

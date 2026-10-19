@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="PresentationCharacter" format=3]
+
+[ext_resource type="Script" path="res://presentation/source/characters/character.gd" id="1_crc0l"]
+
+[resource]
+script = ExtResource("1_crc0l")
+id = "creature.spell.fire_elemental"
+rig = "smallscale.enemies.11arcane-elemental"
+portrait = "srd22.portrait.fire_elemental"
+size = "Tiny"
+death = Dictionary[String, String]({
+"default": "Die"
+})
+status = "stand_in"
+notes = "No art of its own: stands in with the arcane elemental (rig smallscale.enemies.11arcane-elemental)."
