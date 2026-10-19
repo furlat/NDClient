@@ -142,6 +142,18 @@ in this failed run do **not** qualify these shaders or their output. This is now
 an observed source-package failure in addition to the source-colour parity gap
 above. Client providers and qualification can proceed on independent capabilities.
 
+Latest repeat: `.runtime/tests/20261019T212433Z/` plays the real recording
+forward from ordinary initial state. It passes **34 assertions**, has zero script
+errors, and still fails with the same **two shader errors**. Compositor object
+allocation occurs in existing optional preparation before the application cue.
+At640×480, constructor total9.045ms (`_ready`8.966ms), maximum inclusive
+`native_prepare_actor_context`6.318ms, `native_input_bindings`.093ms and
+`native_spell_sample`5.087ms. These intervals overlap other work and must not be
+summed into a fabricated exclusive total. With failed shaders these numbers do
+not qualify GPU performance, colour or first draw. An immediate restore into an
+already active condition still allocates on its first sample; no readiness or
+100+FPS claim is made for that case.
+
 ## Delivery and qualification
 
 - Keep your existing1–2ms constructor allowance (aim below1ms) and<=250µs
