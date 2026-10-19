@@ -193,13 +193,36 @@ func prepare(compiled_groups:Array,cache:Dictionary,world:Node=null,prefetch_gro
     inputs.prepare(world,wanted.values())
     if allow_optional and (budget.is_empty() or budget.used_usec<budget.limit_usec):inputs.prepare(world,optional.values(),false)
     FrameProfile.end_phase(world.profile,"native_prepare_optical_surfaces",started)
+    for component in wanted.values()+(optional.values() if allow_optional else []):
+        if not handles.has(component.id):continue
+        var handle:Dictionary=handles[component.id]
+        if "actor_context" not in handle.clip.get("inputs",[]) or handle.get("history_allocated",false) or handle.root.is_visible_in_tree():continue
+        if not Inputs.current_pose_history(handle):continue
+        if not budget.is_empty() and budget.used_usec>=budget.limit_usec:break
+        var points:Dictionary=Sockets.endpoints(world,component)
+        if not points.ready:continue
+        started=Time.get_ticks_usec()
+        var bound:Dictionary=inputs.sync(world,handle,component,points,_support.viewport.get_texture())
+        if bound.unavailable.is_empty():
+            # Zero-delay copies can allocate from the actual current private
+            # pose before the cue. No fabricated predecessor or publication.
+            Effects.sample(handle,0.0);handle.history_allocated=true
+        Effects.hide(handle)
+        if not budget.is_empty():budget.used_usec+=Time.get_ticks_usec()-started
+        FrameProfile.end_phase(world.profile,"native_prepare_actor_context",started)
     if not budget.is_empty():budget.used_usec+=maxi(0,Time.get_ticks_usec()-admission_started-(budget.used_usec-charged_before))
     return result
 
 func _construct(component:Dictionary)->String:
     var clip:Dictionary=Effects.occurrence_clip(component)
     var seed:int=Components.effect_seed(component)
-    var handle:Dictionary=Effects.make(_owner,clip,0,seed)
+    var mask:int=0
+    if "actor_context" in clip.get("inputs",[]):
+        var key:String=_profile_key(component.get("finish_profile",{}))
+        var layer:Dictionary=groups.get(key,prepared_layers.get(key,{}))
+        if layer.is_empty():return ""
+        mask=int(layer.layer_mask)
+    var handle:Dictionary=Effects.make(_owner,clip,mask,seed)
     # Construction stages are measured where they run. Preserve that breakdown
     # in the live frame profile so an indivisible construction overrun is
     # attributable without adding another set of timers around its internals.
@@ -282,7 +305,7 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
         if not accepts(component):continue
         active[component.id]=component
         if component.get("status")=="missing":
-            if handles.has(component.id):handles[component.id].root.hide()
+            if handles.has(component.id):Effects.hide(handles[component.id])
             _missing(component,component.get("reason","native_spell_source_missing"));continue
         group_profiles[_profile_key(component.get("finish_profile",{}))]=component.get("finish_profile",{})
     # Publication activates prepared private passes. Recolouring/material and
@@ -303,7 +326,7 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
     for id in active:retained[id]=true
     for id in handles.keys():
         if not retained.has(id):Effects.close(handles[id]);handles.erase(id);diagnostics.erase(id);preparation_revision+=1
-        elif not active.has(id):handles[id].root.hide()
+        elif not active.has(id):Effects.hide(handles[id])
     FrameProfile.end_phase(world.profile,"native_sample_retention",sample_phase)
     sample_phase=Time.get_ticks_usec()
     for id in active:
@@ -319,7 +342,7 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
         var age:float=maxf(0,float(component.age_ms)/1000.0)
         var points=Sockets.endpoints(world,component,handle.endpoint_views.get(world.quarter,{}),age<float(cue.launch))
         if not points.ready:
-            handle.root.hide()
+            Effects.hide(handle)
             if points.get("unavailable",false):_unavailable(component,points.reason)
             elif points.get("pending",false):ready=false;_pending(component,points.reason)
             else:_missing(component,points.reason)
@@ -340,12 +363,12 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
         if component.get("spatial_owner",false) and "admitted_cells" not in handle.clip.get("inputs",[]):
             var mask=AreaMask.publish(handle,component.get("resolved_area_positions",[]))
             if not mask.ready:
-                handle.root.hide();ready=false;_missing(component,"; ".join(mask.errors));continue
+                Effects.hide(handle);ready=false;_missing(component,"; ".join(mask.errors));continue
         # The bounded pass is only for a cold/seek history. Ordinary live
         # samples must follow the requested component clock at any frame rate.
         var expected_step:float=maxf(HISTORY_STEP,frame_seconds*maxf(1.0,float(world.playback_speed)))
         # A seekable approach draws any age directly; only a simulation has history.
-        if handle.get("seekable",false):handle.warming=false
+        if handle.get("seekable",false) or ("actor_context" in handle.clip.get("inputs",[]) and Inputs.current_pose_history(handle)):handle.warming=false
         elif not handle.started and age>expected_step+0.000001:handle.warming=true
         elif handle.started and not handle.warming and age-float(handle.requested_time)>expected_step*2.0+0.000001:handle.warming=true
         var sample_time:float=minf(age,float(handle.sample_time)+maxf(HISTORY_STEP,expected_step*2.0)) if handle.warming else age
@@ -361,12 +384,12 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
         var input_bindings:Dictionary={"supplied":[],"unavailable":{}}
         if not handle.get("baked",false):
             var input_started:int=Time.get_ticks_usec()
-            input_bindings=inputs.sync(world,handle,component,points)
+            input_bindings=inputs.sync(world,handle,component,points,_support.viewport.get_texture())
             FrameProfile.end_phase(world.profile,"native_input_bindings",input_started)
             # A source may carry offline observations for authoring. They are
             # never permission to display a successful gameplay outcome.
             if not input_bindings.unavailable.is_empty():
-                handle.root.hide()
+                Effects.hide(handle)
                 var reasons:PackedStringArray=[]
                 for channel in input_bindings.unavailable:reasons.append(str(channel)+"="+str(input_bindings.unavailable[channel]))
                 _unavailable(component,"native_input_unavailable:"+",".join(reasons),input_bindings)
@@ -382,7 +405,7 @@ func sample(world:Node,components:Array,frame_seconds:float)->void:
         if cue.has("origin_path"):
             var anchor=Effects.node(handle,cue.origin_path)
             if anchor==null:
-                handle.root.hide();_missing(component,"native_spell_origin_missing");continue
+                Effects.hide(handle);_missing(component,"native_spell_origin_missing");continue
             handle.root.global_position+=Playback.transform(cue,sample_time,points.hand,1.0).origin-anchor.global_position
         Playback.controls(handle,cue,sample_time)
         if handle.get("baked",false) and handle.bundle.moving:

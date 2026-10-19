@@ -82,6 +82,32 @@ static func actor_layers(world:Node,actor:String)->Dictionary:
         revision.append([entry.node.get_instance_id(),entry.material.get_instance_id(),entry.get("source_binding_revision",0)])
     return {"actor_uuid":actor,"layers":layers,"revision":revision}
 
+## Actual published layers in their painter order. GPU textures stay on the
+## GPU; revisions describe the current pose/material, never a guessed history.
+static func actor_context(world:Node,actor:String,receiver_depth:Texture2D)->Dictionary:
+    var visual:Dictionary=world.visual_actors.get(actor,{})
+    if not Sockets.displayed(visual):return {"ready":false,"reason":"actor_not_displayed"}
+    if not world.camera is Camera3D or receiver_depth==null:return {"ready":false,"reason":"actor_context_receiver_not_prepared"}
+    var pose:Dictionary=visual.get("sampled_pose",{})
+    if pose.is_empty():return {"ready":false,"reason":"actor_pose_not_sampled"}
+    var layers:Array=[];var revision:Array=[]
+    for entry in visual.entries:
+        if entry.role=="shadow" or not entry.node.is_visible_in_tree():continue
+        var effect:Dictionary=entry.actor_layer.get("effect",{})
+        if not effect.is_empty() and effect.get("kind")!="condition_appearance":continue
+        layers.append({"slot":entry.actor_layer.slot,"node":entry.node,"material":entry.material,
+            "received_material":entry.material,"pivot":entry.pivot,"ground_pixels":entry.get("geometry_ground_pixels",19.0)})
+        revision.append([entry.node.get_instance_id(),entry.material.get_instance_id(),entry.get("source_version",0),entry.get("source_binding_revision",0)])
+    if layers.is_empty():return {"ready":false,"reason":"actor_layers_not_displayed"}
+    return {"ready":true,"packet":{"actor_uuid":actor,"camera":world.camera,"receiver_depth":receiver_depth,
+        "depth_encoding":"rgb24_reversed_z","capture_size":Vector2i(world.get_viewport().get_visible_rect().size),
+        "origin":Sockets.Placement.contact(visual.row),"layers":layers,"pose_key":pose.key,
+        "material_revision":revision}}
+
+static func current_pose_history(handle:Dictionary)->bool:
+    var settings:Dictionary=handle.occurrence.parameters.get("actor_history",{})
+    return settings.get("mirror",false) and not settings.get("capture_departure",false) and not settings.get("specifications",[]).any(func(row):return float(row.get("delay",0.0))>0.0)
+
 static func endpoints(component:Dictionary,points:Dictionary,surface:Dictionary)->Array:
     # Legacy targets forwards to set_live_endpoints (source, recipient).
     # Prepared conditions discover one surface in the same array. Never put a
@@ -197,7 +223,7 @@ static func cell_membership(handle:Dictionary,component:Dictionary,endpoints:Arr
             Effects.set_input(handle,"admitted_cells",local)
     return handle.cell_input_reason
 
-func sync(world:Node,handle:Dictionary,component:Dictionary,points:Dictionary)->Dictionary:
+func sync(world:Node,handle:Dictionary,component:Dictionary,points:Dictionary,receiver_depth:Texture2D=null)->Dictionary:
     var requested:Array=handle.clip.get("inputs",[])
     var supplied:Array=["root_path","binding_owners"]
     if component.has("lifecycle_phases"):supplied.append("owner_state")
@@ -208,6 +234,25 @@ func sync(world:Node,handle:Dictionary,component:Dictionary,points:Dictionary)->
     var weapon:Dictionary={}
     var weapon_gaps:Array=[]
     var weapon_surface:Dictionary={}
+    if "actor_context" in requested:
+        if not current_pose_history(handle):unavailable.actor_context="authentic_actor_history_not_bound"
+        else:
+            var context:Dictionary=actor_context(world,actor,receiver_depth)
+            if context.ready:
+                # The camera/depth texture are live references; source sampling
+                # consumes exact current transforms even if source pixels match.
+                var accepted:bool=handle.occurrence.call(handle.clip.input_setters.actor_context,context.packet)
+                if accepted:handle.actor_context_bound=true;supplied.append("actor_context")
+                else:unavailable.actor_context="actor_context_not_accepted"
+            else:unavailable.actor_context=context.reason
+    if "history_state" in requested:
+        var state:Variant=component.get("condition",{}).get("state",component.get("native_preparation_inputs",{}).get("history_state"))
+        if state is Dictionary and state.has("duplicate_count"):
+            var packet:Dictionary={"duplicate_count":state.duplicate_count}
+            if packet!=handle.get("history_state_input",{}):
+                Effects.set_input(handle,"history_state",packet);handle.history_state_input=packet
+            supplied.append("history_state")
+        else:unavailable.history_state="duplicate_count_not_disclosed"
     if "created_item_binding" in requested:
         if component.get("native_item",false):
             var packet:Dictionary=created_item_binding(component,world.timeline.state,points)

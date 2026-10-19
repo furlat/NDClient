@@ -304,15 +304,17 @@ static func _live(parent:Node3D,value:Dictionary,approach:Dictionary,layer_mask:
     # The occurrence builds its source in _ready (some components create
     # layers there); its geometry starts on the caller's (hidden) layer.
     phase_started=Time.get_ticks_usec()
+    if "actor_context" in value.get("inputs",[]):occurrence.hide()
     parent.add_child(occurrence)
     handle.construction_phases.ready=(Time.get_ticks_usec()-phase_started)/1000.0
     if not str(occurrence.construction_error).is_empty():
         handle.error=str(occurrence.construction_error);return handle
     phase_started=Time.get_ticks_usec()
     var inner:Dictionary=occurrence.handle
-    handle.inner=inner;handle.root=inner.root
+    handle.inner=inner;handle.root=occurrence if "actor_context" in value.get("inputs",[]) else inner.root
     for field in ["geometry","emitters","light_units","opacity_bindings","players"]:handle[field]=inner[field]
     handle.root.hide()
+    if "actor_context" in value.get("inputs",[]):_watch_geometry(handle)
     # No live membership is invented: an input the game does not supply is
     # empty, never the Factory fixture's preview data.
     if "binding_owners" in value.get("inputs",[]):set_input(handle,"binding_owners",[])
@@ -379,6 +381,7 @@ static func place(handle:Dictionary,transform:Transform3D)->void:
 static func sample(handle:Dictionary,seconds:float)->void:
     if handle.get("baked",false):Baked.sample(handle,seconds);return
     handle.occurrence.sample(seconds)
+    if handle.get("geometry_membership",{}).get("dirty",false):_refresh_geometry(handle)
     handle.age=seconds;handle.initialized=true
 
 ## Supplies a declared input through the clip's setter (no-op when the clip
@@ -396,12 +399,53 @@ static func stop_emission(handle:Dictionary,source_seconds:float)->void:
     if handle.get("baked",false):Baked.stop_emission(handle,source_seconds)
 
 static func close(handle:Dictionary)->void:
+    if handle.has("geometry_membership"):
+        var membership:Dictionary=handle.geometry_membership
+        for pair in [[membership.tree.node_added,membership.added],[membership.tree.node_removed,membership.removed]]:
+            if pair[0].is_connected(pair[1]):pair[0].disconnect(pair[1])
+        membership.erase("added");membership.erase("removed")
     if handle.get("baked",false):Baked.release(handle)
     # Native.release keeps every material alive until the whole effect is
     # freed (destroying geometry can flush another pending instance update).
     var owner:Node=handle.get("occurrence") if is_instance_valid(handle.get("occurrence")) else handle.get("root")
     if is_instance_valid(owner):Native.release({"root":owner})
     handle.clear()
+
+## Source-owned compositors add output quads after construction. Track tree
+## membership changes; capture meshes in another World3D are never outputs.
+static func _watch_geometry(handle:Dictionary)->void:
+    var owner:WeakRef=weakref(handle.occurrence)
+    var state:Dictionary={"dirty":true,"ids":{},"tree":handle.occurrence.get_tree()}
+    state.added=func(node:Node):
+        var occurrence:Node=owner.get_ref()
+        if occurrence!=null and occurrence.is_ancestor_of(node):state.dirty=true
+    state.removed=func(node:Node):
+        if state.ids.has(node.get_instance_id()):state.dirty=true
+    state.tree.node_added.connect(state.added)
+    state.tree.node_removed.connect(state.removed)
+    handle.geometry_membership=state
+
+static func _refresh_geometry(handle:Dictionary)->void:
+    var state:Dictionary=handle.geometry_membership
+    state.dirty=false;state.ids.clear();handle.geometry.clear()
+    var owner:Node3D=handle.occurrence
+    var pending:Array=[owner]
+    while not pending.is_empty():
+        var node:Node=pending.pop_back()
+        if node is Viewport:continue
+        if node is GeometryInstance3D and node.get_world_3d()==owner.get_world_3d():
+            var enabled:bool=node.layers!=0
+            handle.geometry.append({"node":node,"layer_enabled":enabled})
+            state.ids[node.get_instance_id()]=true
+            node.layers=handle.layer_mask if enabled else 0
+        pending.append_array(node.get_children())
+
+## Also suspend source-owned capture viewports while a retained owner is idle.
+static func hide(handle:Dictionary)->void:
+    handle.root.hide()
+    if handle.get("actor_context_bound",false):
+        set_input(handle,"actor_context",{})
+        handle.actor_context_bound=false
 
 static func set_layer(handle:Dictionary,mask:int)->void:
     var previous:int=handle.layer_mask

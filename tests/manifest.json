@@ -5003,6 +5003,16 @@
    "timeout": 180,
    "status": "ok",
    "reason": "Actual Flame Blade creation/equip, current native hand binding, framebuffer contribution, absolute clocks and reverse replay."
+  },
+  {
+   "name": "native_actor_context_render_checks",
+   "script": "res://tests/native_actor_context_render_checks.gd",
+   "mode": "gpu",
+   "tier": "gate",
+   "args": [],
+   "timeout": 300,
+   "status": "owned-by-migration",
+   "reason": "c494 serialized actor echo colour/depth shaders fail GPU compilation on preprocessor directives. 33 ownership checks pass; source output/parity, count loss and first-draw readiness remain unqualified. Candidate provider not published to receiving."
   }
  ]
 }

@@ -561,6 +561,12 @@ static func _native_requirement_cut(group: Dictionary, previous: Dictionary, own
         if row.kind!="audio":runtime_fields.append_array(["start_ms","absolute_start_ms","duration_ms"])
         for field in runtime_fields:
             row.erase(field)
+        # Small disclosed selectors can prepare a private compositor before
+        # publication. Never retain the whole condition or its owner clock.
+        if "history_state" in row.get("native_clip",{}).get("inputs",[]):
+            var state:Variant=sample.get("condition",{}).get("state")
+            if state is Dictionary and state.has("duplicate_count"):
+                row.native_preparation_inputs={"history_state":{"duplicate_count":state.duplicate_count}}
         if sample.has("native_cue"):
             row.native_cue = sample.native_cue.duplicate()
             row.native_cue.erase("initial"); row.native_cue.erase("owner_end_seconds")
