@@ -1,0 +1,418 @@
+{
+  "schema": "vfxfactory.construction_readiness.v1",
+  "predecessor": "production-bindings-2081189e43bf0443",
+  "target_main_thread_unit_us": 2000,
+  "scope": "Windows Godot4.7.2 Forward+/Vulkan RTX5090, isolated native source fixture. Not client UI frame timing or whole-library qualification.",
+  "preparation": {
+    "entrypoint": "res://assets/vfx/sources/7dd1897cdd5ee8a903b9/source_readiness.gd",
+    "api": [
+      "begin(actual_clip) -> job",
+      "step(job) -> bounded_step"
+    ],
+    "completion": "Poll one step per allowance; wait while state=waiting. Publish actual occurrence only when job.complete and job.error is empty.",
+    "ownership": "Shared values are native immutable Resources and pending path flags only. Per-job private discovery inputs are discarded on completion. No nodes, owner bindings, clocks or sampled review facts are prepared.",
+    "loading": "Threaded native resource loading; load_threaded_get only after LOADED. Simultaneous jobs join a shared path request. Phase loading and GPU pipeline warm-up are separate costs.",
+    "maximum_measured_step_us": 49,
+    "selective": true,
+    "catalog_startup_preconstruction": false
+  },
+  "material_revisions": {
+    "entrypoint": "res://assets/vfx/sources/59e01d16319a5dcc3e14/constructed_occurrence.gd",
+    "set_material_revision": "Supply a changed immutable revision token when displayed material slots or shader identity change; unchanged pose packets do not force recursive discovery.",
+    "notify_topology_changed": "Call when a source changes topology outside ordinary node add/remove notifications.",
+    "fallback": "Legacy sources use cached displayed-geometry slot identity probes, not recursive resource walks. Declared stable source topology skips these probes.",
+    "immutable_programs": "Do not mutate shader code/includes in place at runtime. Replace shader identity and revision instead. Editor rebuilds invalidate program caches.",
+    "late_binding": "First lazy material, replacement, node addition/removal and clearing retain the same occurrence clock; obsolete materials are retired.",
+    "method_metadata": "Shared immutable script/base-script receiver metadata; live node receivers stay occurrence-private.",
+    "test": {
+      "binding_stats": {
+        "input_scans": 3,
+        "material_scans": 5,
+        "slot_probes": 104
+      },
+      "checks": 26,
+      "failures": [],
+      "pose_total_us": 393,
+      "poses": 100,
+      "same_material_pose_recursive_scans": 0
+    }
+  },
+  "prepared_sources": [
+    {
+      "clip": "sorcerer_quickened_native",
+      "phase": "res://assets/vfx/sources/cb92d9129bf7d1d7b7cd/b9be0f14572585f2.tres",
+      "iterations": 6,
+      "first_ready_us": 1686,
+      "repeated_median_ready_us": 774,
+      "maximum_ready_us": 1686,
+      "exclusive_repeated_median_us": {
+        "clock_preparation": 29,
+        "component_construction": 357,
+        "component_tree_registration": 19,
+        "initial_source_sample": 24,
+        "input_receiver_binding": 15,
+        "occurrence_material_discovery": 1,
+        "occurrence_ready": 85,
+        "phase_resolution": 8,
+        "sampler_material_discovery": 48,
+        "sampler_registration": 71,
+        "source_adaptation": 8,
+        "source_construction": 38,
+        "source_path_normalization": 32
+      }
+    },
+    {
+      "clip": "sorcerer_twinned_native",
+      "phase": "res://assets/vfx/sources/29af741b6fbee72cb255/5cf2296e48ecdf85.tres",
+      "iterations": 6,
+      "first_ready_us": 987,
+      "repeated_median_ready_us": 896,
+      "maximum_ready_us": 987,
+      "exclusive_repeated_median_us": {
+        "clock_preparation": 38,
+        "component_construction": 432,
+        "component_tree_registration": 19,
+        "initial_source_sample": 25,
+        "input_receiver_binding": 16,
+        "occurrence_material_discovery": 1,
+        "occurrence_ready": 85,
+        "phase_resolution": 8,
+        "sampler_material_discovery": 53,
+        "sampler_registration": 70,
+        "source_adaptation": 8,
+        "source_construction": 39,
+        "source_path_normalization": 33
+      }
+    },
+    {
+      "clip": "sorcerer_distant_native",
+      "phase": "res://assets/vfx/sources/9348694bb51e98eaa31d/8fdddf23d51def0f.tres",
+      "iterations": 3,
+      "first_ready_us": 1689,
+      "repeated_median_ready_us": 800.5,
+      "maximum_ready_us": 1689,
+      "exclusive_repeated_median_us": {
+        "clock_preparation": 33.5,
+        "component_construction": 379.5,
+        "component_tree_registration": 19.5,
+        "initial_source_sample": 24.0,
+        "input_receiver_binding": 16.0,
+        "occurrence_material_discovery": 1.5,
+        "occurrence_ready": 83.0,
+        "phase_resolution": 7.5,
+        "sampler_material_discovery": 52.0,
+        "sampler_registration": 72.5,
+        "source_adaptation": 8.0,
+        "source_construction": 37.0,
+        "source_path_normalization": 34.0
+      }
+    }
+  ],
+  "remaining_measured_native_limits": [
+    {
+      "clip": "assembled/wall_of_fire_straight_native",
+      "phase": "res://assets/vfx/sources/7b40927ee73ee4dfeebe/7343d716f93399ca.tres",
+      "iterations": 3,
+      "first_ready_us": 1380714,
+      "repeated_median_ready_us": 1282138.5,
+      "maximum_ready_us": 1380714,
+      "exclusive_repeated_median_us": {
+        "clock_preparation": 1938.5,
+        "component_construction": 152.5,
+        "component_tree_registration": 4.0,
+        "initial_source_sample": 1244735.0,
+        "input_receiver_binding": 41.5,
+        "occurrence_material_discovery": 1.0,
+        "occurrence_ready": 272.5,
+        "phase_resolution": 82.5,
+        "sampler_material_discovery": 21460.5,
+        "sampler_registration": 12636.5,
+        "source_adaptation": 542.5,
+        "source_construction": 131.5,
+        "source_path_normalization": 91.5
+      }
+    },
+    {
+      "clip": "assembled/wall_of_fire_ring_native",
+      "phase": "res://assets/vfx/sources/472277286e121449e8b1/6df755637eaf3027.tres",
+      "iterations": 3,
+      "first_ready_us": 2109603,
+      "repeated_median_ready_us": 2093650.5,
+      "maximum_ready_us": 2116814,
+      "exclusive_repeated_median_us": {
+        "clock_preparation": 3265.0,
+        "component_construction": 238.5,
+        "component_tree_registration": 4.5,
+        "initial_source_sample": 2030829.5,
+        "input_receiver_binding": 59.0,
+        "occurrence_material_discovery": 1.5,
+        "occurrence_ready": 406.0,
+        "phase_resolution": 109.5,
+        "sampler_material_discovery": 37474.0,
+        "sampler_registration": 20025.0,
+        "source_adaptation": 880.5,
+        "source_construction": 167.5,
+        "source_path_normalization": 141.0
+      }
+    },
+    {
+      "clip": "wall-native/wind_wall_corner_native/lifecycle",
+      "phase": "res://assets/vfx/sources/e54b8dbf3b4f3ff5338c/00.tres",
+      "iterations": 3,
+      "first_ready_us": 1218073,
+      "repeated_median_ready_us": 1143853.5,
+      "maximum_ready_us": 1218073,
+      "exclusive_repeated_median_us": {
+        "clock_preparation": 2894.5,
+        "component_construction": 18.5,
+        "component_tree_registration": 3.0,
+        "initial_source_sample": 1116158.5,
+        "input_receiver_binding": 28.0,
+        "occurrence_material_discovery": 1.5,
+        "occurrence_ready": 173.0,
+        "phase_resolution": 9.5,
+        "sampler_material_discovery": 18157.5,
+        "sampler_registration": 4591.5,
+        "source_adaptation": 1585.5,
+        "source_construction": 73.0,
+        "source_path_normalization": 114.5
+      }
+    },
+    {
+      "clip": "wall_of_thorns_circle_native",
+      "phase": "res://assets/vfx/sources/d7953cda75514aae063b/00.tres",
+      "iterations": 3,
+      "first_ready_us": 976646,
+      "repeated_median_ready_us": 953360.0,
+      "maximum_ready_us": 976646,
+      "exclusive_repeated_median_us": {
+        "clock_preparation": 1731.0,
+        "component_construction": 104160.0,
+        "component_tree_registration": 786686.5,
+        "initial_source_sample": 184.0,
+        "input_receiver_binding": 56.0,
+        "occurrence_material_discovery": 1.5,
+        "occurrence_ready": 271.5,
+        "phase_resolution": 8.0,
+        "sampler_material_discovery": 40197.0,
+        "sampler_registration": 16974.5,
+        "source_adaptation": 1346.5,
+        "source_construction": 89.5,
+        "source_path_normalization": 1610.0
+      }
+    },
+    {
+      "clip": "wall-native/wall_of_ice_corner_back_native/lifecycle",
+      "phase": "res://assets/vfx/sources/02608a3c7fbfb816c688/00.tres",
+      "iterations": 3,
+      "first_ready_us": 792118,
+      "repeated_median_ready_us": 693109.0,
+      "maximum_ready_us": 792118,
+      "exclusive_repeated_median_us": {
+        "clock_preparation": 2224.0,
+        "component_construction": 19.0,
+        "component_tree_registration": 3.0,
+        "initial_source_sample": 676666.0,
+        "input_receiver_binding": 31.5,
+        "occurrence_material_discovery": 1.0,
+        "occurrence_ready": 189.5,
+        "phase_resolution": 13.5,
+        "sampler_material_discovery": 8755.5,
+        "sampler_registration": 4004.5,
+        "source_adaptation": 908.5,
+        "source_construction": 73.0,
+        "source_path_normalization": 169.5
+      }
+    },
+    {
+      "clip": "wall-native/wall_of_force_dome_back_native/lifecycle",
+      "phase": "res://assets/vfx/sources/aa6c3e1c663e759a4a4b/8841e1e37200ca08.tres",
+      "iterations": 3,
+      "first_ready_us": 263561,
+      "repeated_median_ready_us": 156733.5,
+      "maximum_ready_us": 263561,
+      "exclusive_repeated_median_us": {
+        "clock_preparation": 496.5,
+        "component_construction": 18.5,
+        "component_tree_registration": 3.0,
+        "initial_source_sample": 133232.5,
+        "input_receiver_binding": 77.5,
+        "occurrence_material_discovery": 1.0,
+        "occurrence_ready": 430.0,
+        "phase_resolution": 11.0,
+        "sampler_material_discovery": 8290.5,
+        "sampler_registration": 13206.0,
+        "source_adaptation": 216.5,
+        "source_construction": 153.5,
+        "source_path_normalization": 546.0
+      }
+    },
+    {
+      "clip": "review/fog_cloud/volume/lifecycle",
+      "phase": "res://assets/vfx/sources/12ce61484d59d32c07dd/00.tres",
+      "iterations": 3,
+      "first_ready_us": 2345183,
+      "repeated_median_ready_us": 2237100.5,
+      "maximum_ready_us": 2345183,
+      "exclusive_repeated_median_us": {
+        "clock_preparation": 7538.0,
+        "component_construction": 20.0,
+        "component_tree_registration": 3.5,
+        "initial_source_sample": 2202354.5,
+        "input_receiver_binding": 28.0,
+        "occurrence_material_discovery": 1.0,
+        "occurrence_ready": 197.5,
+        "phase_resolution": 11.5,
+        "sampler_material_discovery": 18227.5,
+        "sampler_registration": 6642.0,
+        "source_adaptation": 1814.0,
+        "source_construction": 68.5,
+        "source_path_normalization": 147.5
+      }
+    },
+    {
+      "clip": "assembled/cone_of_cold_native",
+      "phase": "res://assets/vfx/sources/73a2ac307dfe517745d0/1be9e12511b6091f.tres",
+      "iterations": 3,
+      "first_ready_us": 12546145,
+      "repeated_median_ready_us": 12832216.5,
+      "maximum_ready_us": 12951032,
+      "exclusive_repeated_median_us": {
+        "clock_preparation": 52095.0,
+        "component_construction": 49.0,
+        "component_tree_registration": 3.5,
+        "initial_source_sample": 12635308.5,
+        "input_receiver_binding": 264.0,
+        "occurrence_material_discovery": 3.0,
+        "occurrence_ready": 1993.5,
+        "phase_resolution": 26.5,
+        "sampler_material_discovery": 55742.0,
+        "sampler_registration": 63991.0,
+        "source_adaptation": 19591.5,
+        "source_construction": 644.5,
+        "source_path_normalization": 2441.0
+      }
+    },
+    {
+      "clip": "sorcerer_affinity_native",
+      "phase": "res://assets/vfx/sources/502f054a11e43820a62f/816c097b31ddfaf3.tres",
+      "iterations": 3,
+      "first_ready_us": 65764,
+      "repeated_median_ready_us": 18258.0,
+      "maximum_ready_us": 65764,
+      "exclusive_repeated_median_us": {
+        "class_build_sample": 89.5,
+        "class_glow_core": 1.0,
+        "class_mote_child": 22.0,
+        "class_mote_material": 5758.0,
+        "class_mote_mesh": 72.0,
+        "class_motes": 54.5,
+        "class_noise_creation": 5.0,
+        "class_piece_program_palette": 176.0,
+        "clock_preparation": 773.5,
+        "component_construction": 167.0,
+        "component_tree_registration": 36.5,
+        "initial_source_sample": 29.5,
+        "input_receiver_binding": 19.5,
+        "occurrence_material_discovery": 1.0,
+        "occurrence_ready": 116.0,
+        "phase_resolution": 10.5,
+        "sampler_material_discovery": 8296.5,
+        "sampler_registration": 2180.0,
+        "source_adaptation": 231.5,
+        "source_construction": 69.5,
+        "source_path_normalization": 84.5
+      }
+    },
+    {
+      "clip": "items/created/flame_blade/appearance",
+      "phase": "res://assets/vfx/sources/f8cacbfe7e8208b3662f/flame_blade_appearance.gd",
+      "iterations": 3,
+      "first_ready_us": 196664,
+      "repeated_median_ready_us": 188616.5,
+      "maximum_ready_us": 196664,
+      "exclusive_repeated_median_us": {
+        "direct_item_ready": 188616.5
+      }
+    },
+    {
+      "clip": "items/created/devotees_mace/appearance",
+      "phase": "res://assets/vfx/sources/5726b1150a7d7a0b9ccb/devotees_mace_appearance.gd",
+      "iterations": 3,
+      "first_ready_us": 6336,
+      "repeated_median_ready_us": 6119.0,
+      "maximum_ready_us": 6491,
+      "exclusive_repeated_median_us": {
+        "direct_item_ready": 6119.0
+      }
+    }
+  ],
+  "remaining_policy": "These live-native source paths are above budget and are not certified for synchronous gameplay construction. Keep their source art available; use separately qualified delivered alternatives where applicable. Further native preparation is required, not clock delay or a catalog-wide warm freeze.",
+  "baseline": [
+    {
+      "clip": "sorcerer_quickened_native",
+      "phase": "res://assets/vfx/sources/cb92d9129bf7d1d7b7cd/b9be0f14572585f2.tres",
+      "iterations": 6,
+      "first_ready_us": 179969,
+      "repeated_median_ready_us": 134179,
+      "maximum_ready_us": 179969,
+      "exclusive_repeated_median_us": {
+        "class_build_sample": 129,
+        "class_glow_core": 12632,
+        "class_motes": 5201,
+        "class_noise_creation": 18,
+        "class_piece_program_palette": 37539,
+        "clock_preparation": 809,
+        "component_construction": 13481,
+        "component_tree_registration": 34,
+        "initial_source_sample": 26,
+        "input_receiver_binding": 82,
+        "occurrence_material_discovery": 4741,
+        "occurrence_ready": 132,
+        "phase_resolution": 7,
+        "sampler_material_discovery": 5141,
+        "sampler_registration": 1777,
+        "source_adaptation": 51999,
+        "source_construction": 63,
+        "source_path_normalization": 69
+      }
+    },
+    {
+      "clip": "sorcerer_twinned_native",
+      "phase": "res://assets/vfx/sources/29af741b6fbee72cb255/5cf2296e48ecdf85.tres",
+      "iterations": 6,
+      "first_ready_us": 174095,
+      "repeated_median_ready_us": 177564,
+      "maximum_ready_us": 180365,
+      "exclusive_repeated_median_us": {
+        "class_build_sample": 134,
+        "class_glow_core": 19476,
+        "class_motes": 5325,
+        "class_noise_creation": 19,
+        "class_piece_program_palette": 50127,
+        "clock_preparation": 1068,
+        "component_construction": 14087,
+        "component_tree_registration": 36,
+        "initial_source_sample": 28,
+        "input_receiver_binding": 86,
+        "occurrence_material_discovery": 5284,
+        "occurrence_ready": 177,
+        "phase_resolution": 9,
+        "sampler_material_discovery": 5721,
+        "sampler_registration": 1928,
+        "source_adaptation": 73196,
+        "source_construction": 69,
+        "source_path_normalization": 78
+      }
+    }
+  ],
+  "pixels": {
+    "pairs": 18,
+    "equal_rgba": true,
+    "maximum_channel_delta": 0,
+    "human_approval_inferred": false,
+    "scope": "18 bounded native samples: Quickened/Twinned sealed-source baseline and Distant original equations vs prepared. No actor context, continuous motion or human approval."
+  },
+  "production_integration_performed": false,
+  "original_art_and_sealed208_preserved": true
+}

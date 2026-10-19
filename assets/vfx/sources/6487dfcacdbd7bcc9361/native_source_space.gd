@@ -1,5 +1,6 @@
 extends RefCounted
 const SourceMaterials = preload("res://assets/vfx/sources/39ced3e79a9833e731fb/source_materials.gd")
+static var programs: Dictionary = {}
 ## Remove only legacy camera-half cuts; retain ground, dissolve and shape masks.
 
 static func whole_shader(code: String) -> String:
@@ -69,18 +70,7 @@ static func _resource(resource: Resource, seen: Dictionary, materials: Array) ->
 	if seen.has(resource):
 		return
 	seen[resource] = true
-	if resource is ShaderMaterial and resource.shader != null:
-		var original: String = resource.shader.code
-		# A generated Shader has no file base. Resolve relative donor includes
-		# before either this adapter or the native clock owner replaces it.
-		var expanded := SourceMaterials.expand_shader(original, resource.shader.resource_path.get_base_dir())
-		var complete := source_shader(whole_shader(expanded))
-		if complete != original:
-			var shader := Shader.new()
-			shader.code = complete
-			SourceMaterials.replace_shader(resource,shader)
-		if complete.contains("uniform mat4 factory_world_to_source"):
-			materials.append(resource)
+	_adapt_material(resource, materials)
 	for property in resource.get_property_list():
 		if int(property.usage) & PROPERTY_USAGE_STORAGE:
 			var value: Variant = resource.get(property.name)
@@ -91,3 +81,36 @@ static func _resource(resource: Resource, seen: Dictionary, materials: Array) ->
 			var material: Material = resource.surface_get_material(index)
 			if material != null:
 				_resource(material, seen, materials)
+
+
+static func adapt_materials(materials: Array) -> Array:
+	var bindings: Array = []
+	for material in materials:
+		_adapt_material(material, bindings)
+	return bindings
+
+
+static func _adapt_material(resource: Resource, materials: Array) -> void:
+	if resource is ShaderMaterial and resource.shader != null:
+		if resource.has_meta("factory_prepared_shader") and resource.get_meta("factory_prepared_shader") == resource.shader:
+			if resource.get_meta("factory_world_space_uniform", false):
+				materials.append(resource)
+			return
+		var original: String = resource.shader.code
+		# A generated Shader has no file base. Resolve relative donor includes
+		# before either this adapter or the native clock owner replaces it.
+		var key: String = resource.shader.resource_path.get_base_dir() + "\n" + original
+		if not programs.has(key):
+			var expanded := SourceMaterials.expand_shader(original, resource.shader.resource_path.get_base_dir())
+			var adapted_code := source_shader(whole_shader(expanded))
+			var shader: Shader = resource.shader
+			if adapted_code != original:
+				shader = Shader.new()
+				shader.code = adapted_code
+			programs[key] = shader
+		var prepared: Shader = programs[key]
+		if prepared != resource.shader:
+			SourceMaterials.replace_shader(resource, prepared)
+		var complete: String = prepared.code
+		if complete.contains("uniform mat4 factory_world_to_source"):
+			materials.append(resource)
